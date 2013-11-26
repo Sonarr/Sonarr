@@ -1,0 +1,6 @@
+C:\Dropbox\Dev\NzbDrone\_output\ServiceInstall.exe.config
+C:\Dropbox\Dev\NzbDrone\_output\ServiceInstall.exe
+C:\Dropbox\Dev\NzbDrone\_output\ServiceInstall.pdb
+C:\Dropbox\Dev\NzbDrone\src\ServiceHelpers\ServiceInstall\obj\x86\Debug\ServiceInstall.csprojResolveAssemblyReference.cache
+C:\Dropbox\Dev\NzbDrone\src\ServiceHelpers\ServiceInstall\obj\x86\Debug\ServiceInstall.exe
+C:\Dropbox\Dev\NzbDrone\src\ServiceHelpers\ServiceInstall\obj\x86\Debug\ServiceInstall.pdb

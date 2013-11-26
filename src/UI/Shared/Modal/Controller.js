@@ -9,7 +9,8 @@ define(
         'Episode/EpisodeDetailsLayout',
         'History/Details/HistoryDetailsView',
         'System/Logs/Table/Details/LogDetailsView',
-    ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsView, LogDetailsView) {
+        'Rename/RenamePreviewLayout'
+    ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsView, LogDetailsView, RenamePreviewLayout) {
 
         return Marionette.AppRouter.extend({
 
@@ -21,6 +22,7 @@ define(
                 vent.on(vent.Commands.ShowEpisodeDetails, this._showEpisode, this);
                 vent.on(vent.Commands.ShowHistoryDetails, this._showHistory, this);
                 vent.on(vent.Commands.ShowLogDetails, this._showLogDetails, this);
+                vent.on(vent.Commands.ShowRenamePreview, this._showRenamePreview, this);
             },
 
             _openModal: function (view) {
@@ -53,6 +55,11 @@ define(
 
             _showLogDetails: function (options) {
                 var view = new LogDetailsView({ model: options.model });
+                AppLayout.modalRegion.show(view);
+            },
+
+            _showRenamePreview: function (options) {
+                var view = new RenamePreviewLayout(options);
                 AppLayout.modalRegion.show(view);
             }
         });

@@ -12,7 +12,7 @@ define(
         'Commands/CommandController',
         'moment',
         'underscore'
-    ], function (vent, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, EpisodeActionsCell, CommandController, Moment,_) {
+    ], function (vent, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, EpisodeActionsCell, CommandController, Moment, _) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -114,7 +114,7 @@ define(
                 CommandController.bindToCommand({
                     element: this.ui.seasonRename,
                     command: {
-                        name        : 'renameSeason',
+                        name        : 'renameFiles',
                         seriesId    : this.series.id,
                         seasonNumber: this.model.get('seasonNumber')
                     }
@@ -131,12 +131,7 @@ define(
             },
 
             _seasonRename: function () {
-
-                CommandController.Execute('renameSeason', {
-                    name        : 'renameSeason',
-                    seriesId    : this.series.id,
-                    seasonNumber: this.model.get('seasonNumber')
-                });
+                vent.trigger(vent.Commands.ShowRenamePreview, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
             },
 
             _seasonMonitored: function () {
@@ -170,11 +165,6 @@ define(
                     this.ui.seasonMonitored.addClass('icon-bookmark-empty');
                     this.ui.seasonMonitored.removeClass('icon-bookmark');
                 }
-            },
-
-
-            _afterRename: function () {
-                vent.trigger(vent.Events.SeasonRenamed, { series: this.series, seasonNumber: this.model.get('seasonNumber') });
             },
 
             _showEpisodes: function () {

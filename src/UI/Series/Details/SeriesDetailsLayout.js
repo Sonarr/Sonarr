@@ -2,6 +2,7 @@
 define(
     [
         'jquery',
+        'underscore',
         'vent',
         'reqres',
         'marionette',
@@ -13,10 +14,21 @@ define(
         'Series/Details/InfoView',
         'Commands/CommandController',
         'Shared/LoadingView',
-        'underscore',
         'backstrech',
         'Mixins/backbone.signalr.mixin'
-    ], function ($,vent,reqres, Marionette, Backbone, EpisodeCollection, EpisodeFileCollection, SeasonCollection, SeasonCollectionView, InfoView, CommandController, LoadingView, _) {
+    ], function ($,
+                 _,
+                 vent,
+                 reqres,
+                 Marionette,
+                 Backbone,
+                 EpisodeCollection,
+                 EpisodeFileCollection,
+                 SeasonCollection,
+                 SeasonCollectionView,
+                 InfoView,
+                 CommandController,
+                 LoadingView) {
         return Marionette.Layout.extend({
 
             itemViewContainer: '.x-series-seasons',
@@ -47,7 +59,6 @@ define(
             initialize: function () {
                 this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
                 this.listenTo(vent, vent.Events.SeriesDeleted, this._onSeriesDeleted);
-                this.listenTo(vent, vent.Events.SeasonRenamed, this._onSeasonRenamed);
 
                 vent.on(vent.Events.CommandComplete, this._commandComplete, this);
             },
@@ -86,7 +97,9 @@ define(
                 CommandController.bindToCommand({
                     element: this.ui.rename,
                     command: {
-                        name: 'renameSeries'
+                        name        : 'renameFiles',
+                        seriesId    : this.model.id,
+                        seasonNumber: -1
                     }
                 });
             },
@@ -154,11 +167,7 @@ define(
             },
 
             _renameSeries: function () {
-                CommandController.Execute('renameSeries', {
-                    name    : 'renameSeries',
-                    seriesId: this.model.id
-                });
-
+                vent.trigger(vent.Commands.ShowRenamePreview, { series: this.model });
             },
 
             _seriesSearch: function () {
@@ -196,14 +205,8 @@ define(
                 this.info.show(new InfoView({ model: this.model }));
             },
 
-            _onSeasonRenamed: function (event) {
-                if (this.model.get('id') === event.series.get('id')) {
-                    this.episodeFileCollection.fetch();
-                }
-            },
-
             _commandComplete: function (options) {
-                if (options.command.get('name') === 'refreshseries' || options.command.get('name') === 'renameseries') {
+                if (options.command.get('name') === 'refreshseries' || options.command.get('name') === 'renamefiles') {
                     if (options.command.get('seriesId') === this.model.get('id')) {
                         this._showSeasons();
                         this._setMonitoredState();

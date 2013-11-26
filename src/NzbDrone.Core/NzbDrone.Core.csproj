@@ -278,9 +278,11 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
+    <Compile Include="MediaFiles\RenameEpisodeFilePreview.cs" />
     <Compile Include="Messaging\Commands\CommandExecutor.cs" />
     <Compile Include="Messaging\Commands\ICommandExecutor.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />
@@ -343,8 +345,6 @@
     <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
     <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
     <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
-    <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
-    <Compile Include="MediaFiles\Commands\RenameSeasonCommand.cs" />
     <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
     <Compile Include="MediaFiles\EpisodeImport\IImportDecisionEngineSpecification.cs" />

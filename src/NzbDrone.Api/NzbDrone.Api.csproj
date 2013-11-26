@@ -95,6 +95,8 @@
     <Compile Include="Directories\DirectoryModule.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
+    <Compile Include="Episodes\RenameEpisodeModule.cs" />
+    <Compile Include="Episodes\RenameEpisodeResource.cs" />
     <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />

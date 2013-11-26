@@ -38,22 +38,14 @@ namespace NzbDrone.Core.Test.MediaFiles
         private void GivenNoEpisodeFiles()
         {
             Mocker.GetMock<IMediaFileService>()
-                  .Setup(s => s.GetFilesBySeries(_series.Id))
-                  .Returns(new List<EpisodeFile>());
-
-            Mocker.GetMock<IMediaFileService>()
-                  .Setup(s => s.GetFilesBySeason(_series.Id, _episodeFiles.First().SeasonNumber))
+                  .Setup(s => s.Get(It.IsAny<IEnumerable<int>>()))
                   .Returns(new List<EpisodeFile>());
         }
 
         private void GivenEpisodeFiles()
         {
             Mocker.GetMock<IMediaFileService>()
-                  .Setup(s => s.GetFilesBySeries(_series.Id))
-                  .Returns(_episodeFiles);
-            
-            Mocker.GetMock<IMediaFileService>()
-                  .Setup(s => s.GetFilesBySeason(_series.Id, _episodeFiles.First().SeasonNumber))
+                  .Setup(s => s.Get(It.IsAny<IEnumerable<int>>()))
                   .Returns(_episodeFiles);
         }
 
@@ -68,7 +60,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenNoEpisodeFiles();
 
-            Subject.Execute(new RenameSeriesCommand(_series.Id));
+            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int>{1}));
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Never());
@@ -83,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<Series>()))
                   .Throws(new SameFilenameException("Same file name", "Filename"));
 
-            Subject.Execute(new RenameSeriesCommand(_series.Id));
+            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int> { 1 }));
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Never());
@@ -95,7 +87,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             GivenEpisodeFiles();
             GivenMovedFiles();
 
-            Subject.Execute(new RenameSeriesCommand(_series.Id));
+            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int> { 1 }));
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Once());
@@ -107,40 +99,24 @@ namespace NzbDrone.Core.Test.MediaFiles
             GivenEpisodeFiles();
             GivenMovedFiles();
 
-            Subject.Execute(new RenameSeriesCommand(_series.Id));
+            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int> { 1 }));
 
             Mocker.GetMock<IMediaFileService>()
                   .Verify(v => v.Update(It.IsAny<EpisodeFile>()), Times.Exactly(2));
         }
 
         [Test]
-        public void rename_season_should_get_episodefiles_for_season()
+        public void should_get_episodefiles_by_ids_only()
         {
             GivenEpisodeFiles();
             GivenMovedFiles();
 
-            Subject.Execute(new RenameSeasonCommand(_series.Id, _episodeFiles.First().SeasonNumber));
+            var files = new List<int> { 1 };
+
+            Subject.Execute(new RenameFilesCommand(_series.Id, files));
 
             Mocker.GetMock<IMediaFileService>()
-                  .Verify(v => v.GetFilesBySeries(_series.Id), Times.Never());
-
-            Mocker.GetMock<IMediaFileService>()
-                  .Verify(v => v.GetFilesBySeason(_series.Id, _episodeFiles.First().SeasonNumber), Times.Once());
-        }
-
-        [Test]
-        public void rename_series_should_get_episodefiles_for_series()
-        {
-            GivenEpisodeFiles();
-            GivenMovedFiles();
-
-            Subject.Execute(new RenameSeriesCommand(_series.Id));
-
-            Mocker.GetMock<IMediaFileService>()
-                  .Verify(v => v.GetFilesBySeries(_series.Id), Times.Once());
-
-            Mocker.GetMock<IMediaFileService>()
-                  .Verify(v => v.GetFilesBySeason(_series.Id, _episodeFiles.First().SeasonNumber), Times.Never());
+                  .Verify(v => v.Get(files), Times.Once());
         }
     }
 }

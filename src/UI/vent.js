@@ -10,7 +10,6 @@ define(
         vent.Events = {
             SeriesAdded    : 'series:added',
             SeriesDeleted  : 'series:deleted',
-            SeasonRenamed  : 'season:renamed',
             CommandComplete: 'command:complete',
             ServerUpdated  : 'server:updated'
         };
@@ -25,7 +24,7 @@ define(
             ShowLogDetails     : 'ShowLogDetails',
             SaveSettings       : 'saveSettings',
             ShowLogFile        : 'showLogFile',
-            ShowNamingWizard   : 'showNamingWizard'
+            ShowRenamePreview  : 'showRenamePreview'
         };
 
         return vent;
