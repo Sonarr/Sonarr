@@ -71,8 +71,6 @@ namespace NzbDrone.Core.Tv
             newSeries.Monitored = true;
             newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
 
-            newSeries.SeasonFolder = _configService.UseSeasonFolder;
-
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
 

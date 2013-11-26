@@ -22,6 +22,7 @@ define(
             ui: {
                 qualityProfile: '.x-quality-profile',
                 rootFolder    : '.x-root-folder',
+                seasonFolder  : '.x-season-folder',
                 addButton     : '.x-add',
                 overview      : '.x-overview',
                 startingSeason: '.x-starting-season'
@@ -30,7 +31,8 @@ define(
             events: {
                 'click .x-add'             : '_addSeries',
                 'change .x-quality-profile': '_qualityProfileChanged',
-                'change .x-root-folder'    : '_rootFolderChanged'
+                'change .x-root-folder'    : '_rootFolderChanged',
+                'change .x-season-folder'  : '_seasonFolderChanged'
             },
 
             initialize: function () {
@@ -51,6 +53,7 @@ define(
 
                 var defaultQuality = Config.getValue(Config.Keys.DefaultQualityProfileId);
                 var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
+                var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
 
                 if (QualityProfiles.get(defaultQuality)) {
                     this.ui.qualityProfile.val(defaultQuality);
@@ -59,6 +62,8 @@ define(
                 if (RootFolders.get(defaultRoot)) {
                     this.ui.rootFolder.val(defaultRoot);
                 }
+
+                this.ui.seasonFolder.prop('checked', useSeasonFolder);
 
                 var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
 
@@ -91,13 +96,22 @@ define(
                 if (options.key === Config.Keys.DefaultQualityProfileId) {
                     this.ui.qualityProfile.val(options.value);
                 }
+
                 else if (options.key === Config.Keys.DefaultRootFolderId) {
                     this.ui.rootFolder.val(options.value);
+                }
+
+                else if (options.key === Config.Keys.UseSeasonFolder) {
+                    this.ui.seasonFolder.prop('checked', options.value);
                 }
             },
 
             _qualityProfileChanged: function () {
                 Config.setValue(Config.Keys.DefaultQualityProfileId, this.ui.qualityProfile.val());
+            },
+
+            _seasonFolderChanged: function () {
+                Config.setValue(Config.Keys.UseSeasonFolder, this.ui.seasonFolder.prop('checked'));
             },
 
             _rootFolderChanged: function () {
@@ -125,15 +139,16 @@ define(
                 var quality = this.ui.qualityProfile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
                 var startingSeason = this.ui.startingSeason.val();
+                var seasonFolder = this.ui.seasonFolder.prop('checked');
 
                 this.model.set('qualityProfileId', quality);
                 this.model.set('rootFolderPath', rootFolderPath);
                 this.model.setSeasonPass(startingSeason);
+                this.model.set('seasonFolder', seasonFolder);
 
                 var self = this;
 
                 SeriesCollection.add(this.model);
-
 
                 var promise = this.model.save();
 
@@ -158,7 +173,6 @@ define(
                 this.render();
             }
         });
-
 
         AsValidatedView.apply(view);
 

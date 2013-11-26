@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
@@ -15,52 +16,38 @@ namespace NzbDrone.Core.Organizer
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile);
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig);
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
-    }
-
-    public interface INamingConfigService
-    {
-        NamingConfig GetConfig();
-        NamingConfig Save(NamingConfig namingConfig);
-    }
-
-    public class NamingConfigService : INamingConfigService
-    {
-        private readonly IBasicRepository<NamingConfig> _repository;
-
-        public NamingConfigService(IBasicRepository<NamingConfig> repository)
-        {
-            _repository = repository;
-        }
-
-        public NamingConfig GetConfig()
-        {
-            var config = _repository.SingleOrDefault();
-
-            if (config == null)
-            {
-                _repository.Insert(NamingConfig.Default);
-                config = _repository.Single();
-            }
-
-            return config;
-        }
-
-        public NamingConfig Save(NamingConfig namingConfig)
-        {
-            return _repository.Upsert(namingConfig);
-        }
+        BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
     }
 
     public class FileNameBuilder : IBuildFileNames
     {
         private readonly IConfigService _configService;
         private readonly INamingConfigService _namingConfigService;
+        private readonly ICached<EpisodeFormat> _patternCache;
         private readonly Logger _logger;
 
-        public FileNameBuilder(INamingConfigService namingConfigService, IConfigService configService, Logger logger)
+        private static readonly Regex TitleRegex = new Regex(@"(?<token>\{(?:\w+)(?<separator>\s|\.|-|_)\w+\})",
+                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
+                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex SeasonRegex = new Regex(@"(?<season>\{season(?:\:0+)?})",
+                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public static readonly Regex SeasonEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<seasonEpisode>s?{season(?:\:0+)?}(?<episodeSeparator>e|x)(?<episode>{episode(?:\:0+)?}))(?<separator>.+?(?={))?",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public FileNameBuilder(INamingConfigService namingConfigService,
+                               IConfigService configService,
+                               ICacheManger cacheManger,
+                               Logger logger)
         {
             _namingConfigService = namingConfigService;
             _configService = configService;
+            _patternCache = cacheManger.GetCache<EpisodeFormat>(GetType());
             _logger = logger;
         }
 
@@ -71,9 +58,9 @@ namespace NzbDrone.Core.Organizer
             return BuildFilename(episodes, series, episodeFile, nameSpec);
         }
 
-        public string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec)
+        public string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig)
         {
-            if (!nameSpec.RenameEpisodes)
+            if (!namingConfig.RenameEpisodes)
             {
                 if (String.IsNullOrWhiteSpace(episodeFile.SceneName))
                 {
@@ -83,86 +70,83 @@ namespace NzbDrone.Core.Organizer
                 return episodeFile.SceneName;
             }
 
-            var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber);
-
-            var numberStyle = GetNumberStyle(nameSpec.NumberStyle);
-
-            var episodeNames = new List<string>
-                {
-                    Parser.Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title)
-                };
-
-            var result = String.Empty;
-
-            if (nameSpec.IncludeSeriesTitle)
+            if (String.IsNullOrWhiteSpace(namingConfig.StandardEpisodeFormat) && series.SeriesType == SeriesTypes.Standard)
             {
-                result += series.Title + nameSpec.Separator;
+                throw new NamingFormatException("Standard episode format cannot be null");
             }
 
-            if (series.SeriesType == SeriesTypes.Standard)
+            if (String.IsNullOrWhiteSpace(namingConfig.DailyEpisodeFormat) && series.SeriesType == SeriesTypes.Daily)
             {
-                result += numberStyle.Pattern.Replace("%0e",
-                                                      String.Format("{0:00}", sortedEpisodes.First().EpisodeNumber));
+                throw new NamingFormatException("Daily episode format cannot be null");
+            }
 
-                if (episodes.Count > 1)
+            var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber).ToList();
+            var pattern = namingConfig.StandardEpisodeFormat;
+            var episodeTitles = new List<string>
+            {
+                Parser.Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title)
+            };
+
+            var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance)
+            {
+                {"{Series Title}", series.Title}
+            };
+
+            if (series.SeriesType == SeriesTypes.Daily)
+            {
+                pattern = namingConfig.DailyEpisodeFormat;
+
+                if (!String.IsNullOrWhiteSpace(episodes.First().AirDate))
                 {
-                    var multiEpisodeStyle =
-                        GetMultiEpisodeStyle(nameSpec.MultiEpisodeStyle);
-
-                    foreach (var episode in sortedEpisodes.Skip(1))
-                    {
-                        if (multiEpisodeStyle.Name == "Duplicate")
-                        {
-                            result += nameSpec.Separator + numberStyle.Pattern;
-                        }
-                        else
-                        {
-                            result += multiEpisodeStyle.Pattern;
-                        }
-
-                        result = result.Replace("%0e", String.Format("{0:00}", episode.EpisodeNumber));
-                        episodeNames.Add(Parser.Parser.CleanupEpisodeTitle(episode.Title));
-                    }
+                    tokenValues.Add("{Air Date}", episodes.First().AirDate.Replace('-', ' '));
                 }
 
-                result = result
-                    .Replace("%s", String.Format("{0}", episodes.First().SeasonNumber))
-                    .Replace("%0s", String.Format("{0:00}", episodes.First().SeasonNumber))
-                    .Replace("%x", numberStyle.EpisodeSeparator)
-                    .Replace("%p", nameSpec.Separator);
+                else {
+                    tokenValues.Add("{Air Date}", "Unknown");
+                }
             }
 
-            else
+            var episodeFormat = GetEpisodeFormat(pattern);
+
+            if (episodeFormat != null)
             {
-                if (!String.IsNullOrEmpty(episodes.First().AirDate))
-                    result += episodes.First().AirDate;
+                pattern = pattern.Replace(episodeFormat.SeasonEpisodePattern, "{Season Episode}");
+                var seasonEpisodePattern = episodeFormat.SeasonEpisodePattern;
 
-                else
-                    result += "Unknown";
-            }
+                foreach (var episode in sortedEpisodes.Skip(1))
+                {
+                    switch ((MultiEpisodeStyle)namingConfig.MultiEpisodeStyle)
+                    {
+                        case MultiEpisodeStyle.Duplicate:
+                            seasonEpisodePattern += episodeFormat.Separator + episodeFormat.SeasonEpisodePattern;
+                            break;
 
-            if (nameSpec.IncludeEpisodeTitle)
-            {
-                if (episodeNames.Distinct().Count() == 1)
-                    result += nameSpec.Separator + episodeNames.First();
+                        case MultiEpisodeStyle.Repeat:
+                            seasonEpisodePattern += episodeFormat.EpisodeSeparator + episodeFormat.EpisodePattern;
+                            break;
 
-                else
-                    result += nameSpec.Separator + String.Join(" + ", episodeNames.Distinct());
-            }
+                        case MultiEpisodeStyle.Scene:
+                            seasonEpisodePattern += "-" + episodeFormat.EpisodeSeparator + episodeFormat.EpisodePattern;
+                            break;
 
-            if (nameSpec.IncludeQuality)
-            {
-                result += String.Format(" [{0}]", episodeFile.Quality.Quality);
+                        //MultiEpisodeStyle.Extend
+                        default:
+                            seasonEpisodePattern += "-" + episodeFormat.EpisodePattern;
+                            break;
+                    }
 
-                if (episodeFile.Quality.Proper)
-                    result += " [Proper]";
-            }
+                    episodeTitles.Add(Parser.Parser.CleanupEpisodeTitle(episode.Title));
+                }
 
-            if (nameSpec.ReplaceSpaces)
-                result = result.Replace(' ', '.');
+                seasonEpisodePattern = ReplaceNumberTokens(seasonEpisodePattern, sortedEpisodes);
+                tokenValues.Add("{Season Episode}", seasonEpisodePattern);
+            }  
+            
+            tokenValues.Add("{Episode Title}", String.Join(" + ", episodeTitles.Distinct()));
+            tokenValues.Add("{Quality Title}", episodeFile.Quality.ToString());
+            
 
-            _logger.Trace("New File Name is: [{0}]", result.Trim());
-            return CleanFilename(result.Trim());
+            return CleanFilename(ReplaceTokens(pattern, tokenValues).Trim());
         }
 
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
@@ -179,18 +163,64 @@ namespace NzbDrone.Core.Organizer
 
                 else
                 {
-                    seasonFolder = _configService.SeasonFolderFormat
-                                                 .Replace("%sn", series.Title)
-                                                 .Replace("%s.n", series.Title.Replace(' ', '.'))
-                                                 .Replace("%s_n", series.Title.Replace(' ', '_'))
-                                                 .Replace("%0s", seasonNumber.ToString("00"))
-                                                 .Replace("%s", seasonNumber.ToString());
+                    var nameSpec = _namingConfigService.GetConfig();
+                    var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
+                    tokenValues.Add("{Series Title}", series.Title);
+                    
+                    seasonFolder = ReplaceSeasonTokens(nameSpec.SeasonFolderFormat, seasonNumber);
+                    seasonFolder = ReplaceTokens(seasonFolder, tokenValues);
                 }
 
                 path = Path.Combine(path, seasonFolder);
             }
 
             return Path.Combine(path, fileName + extension);
+        }
+
+        public BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec)
+        {
+            var episodeFormat = GetEpisodeFormat(nameSpec.StandardEpisodeFormat);
+
+            if (episodeFormat == null)
+            {
+                return new BasicNamingConfig();
+            }
+
+            var basicNamingConfig = new BasicNamingConfig
+                                    {
+                                        Separator = episodeFormat.Separator,
+                                        NumberStyle = episodeFormat.SeasonEpisodePattern
+                                    };
+
+            var titleTokens = TitleRegex.Matches(nameSpec.StandardEpisodeFormat);
+
+            foreach (Match match in titleTokens)
+            {
+                var separator = match.Groups["separator"].Value;
+                var token = match.Groups["token"].Value;
+
+                if (!separator.Equals(" "))
+                {
+                    basicNamingConfig.ReplaceSpaces = true;
+                }
+
+                if (token.StartsWith("{Series", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    basicNamingConfig.IncludeSeriesTitle = true;
+                }
+
+                if (token.StartsWith("{Episode", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    basicNamingConfig.IncludeEpisodeTitle = true;
+                }
+
+                if (token.StartsWith("{Quality", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    basicNamingConfig.IncludeQuality = true;
+                }
+            }
+
+            return basicNamingConfig;
         }
 
         public static string CleanFilename(string name)
@@ -205,76 +235,92 @@ namespace NzbDrone.Core.Organizer
             return result.Trim();
         }
 
-        private static readonly List<EpisodeSortingType> NumberStyles = new List<EpisodeSortingType>
-                                                                            {
-                                                                                new EpisodeSortingType
-                                                                                    {
-                                                                                        Id = 0,
-                                                                                        Name = "1x05",
-                                                                                        Pattern = "%sx%0e",
-                                                                                        EpisodeSeparator = "x"
-
-                                                                                    },
-                                                                                new EpisodeSortingType
-                                                                                    {
-                                                                                        Id = 1,
-                                                                                        Name = "01x05",
-                                                                                        Pattern = "%0sx%0e",
-                                                                                        EpisodeSeparator = "x"
-                                                                                    },
-                                                                                new EpisodeSortingType
-                                                                                    {
-                                                                                        Id = 2,
-                                                                                        Name = "S01E05",
-                                                                                        Pattern = "S%0sE%0e",
-                                                                                        EpisodeSeparator = "E"
-                                                                                    },
-                                                                                new EpisodeSortingType
-                                                                                    {
-                                                                                        Id = 3,
-                                                                                        Name = "s01e05",
-                                                                                        Pattern = "s%0se%0e",
-                                                                                        EpisodeSeparator = "e"
-                                                                                    }
-                                                                            };
-
-        private static readonly List<EpisodeSortingType> MultiEpisodeStyles = new List<EpisodeSortingType>
-                                                                                  {
-                                                                                      new EpisodeSortingType
-                                                                                          {
-                                                                                              Id = 0,
-                                                                                              Name = "Extend",
-                                                                                              Pattern = "-%0e"
-                                                                                          },
-                                                                                      new EpisodeSortingType
-                                                                                          {
-                                                                                              Id = 1,
-                                                                                              Name = "Duplicate",
-                                                                                              Pattern = "%p%0s%x%0e"
-                                                                                          },
-                                                                                      new EpisodeSortingType
-                                                                                          {
-                                                                                              Id = 2,
-                                                                                              Name = "Repeat",
-                                                                                              Pattern = "%x%0e"
-                                                                                          },
-                                                                                        new EpisodeSortingType
-                                                                                          {
-                                                                                              Id = 3,
-                                                                                              Name = "Scene",
-                                                                                              Pattern = "-%x%0e"
-                                                                                          }
-                                                                                  };
-
-
-        private static EpisodeSortingType GetNumberStyle(int id)
+        private string ReplaceTokens(string pattern, Dictionary<string, string> tokenValues)
         {
-            return NumberStyles.Single(s => s.Id == id);
+            return TitleRegex.Replace(pattern, match => ReplaceToken(match, tokenValues));
         }
 
-        private static EpisodeSortingType GetMultiEpisodeStyle(int id)
+        private string ReplaceToken(Match match, Dictionary<string, string> tokenValues)
         {
-            return MultiEpisodeStyles.Single(s => s.Id == id);
+            var separator = match.Groups["separator"].Value;
+            var token = match.Groups["token"].Value;
+            var replacementText = "";
+            var patternTokenArray = token.ToCharArray();
+            if (!tokenValues.TryGetValue(token, out replacementText)) return null;
+
+            if (patternTokenArray.All(t => !Char.IsLetter(t) || Char.IsLower(t)))
+            {
+                replacementText = replacementText.ToLowerInvariant();
+            }
+
+            else if (patternTokenArray.All(t => !Char.IsLetter(t) || Char.IsUpper(t)))
+            {
+                replacementText = replacementText.ToUpper();
+            }
+
+            if (!separator.Equals(" "))
+            {
+                replacementText = replacementText.Replace(" ", separator);
+            }
+
+            return replacementText;
         }
+
+        private string ReplaceNumberTokens(string pattern, List<Episode> episodes)
+        {
+            var episodeIndex = 0;
+            pattern = EpisodeRegex.Replace(pattern, match =>
+            {
+                var episode = episodes[episodeIndex].EpisodeNumber;
+                episodeIndex++;
+
+                return ReplaceNumberToken(match.Groups["episode"].Value, episode);
+            });
+
+            return ReplaceSeasonTokens(pattern, episodes.First().SeasonNumber);
+        }
+
+        private string ReplaceSeasonTokens(string pattern, int seasonNumber)
+        {
+            return SeasonRegex.Replace(pattern, match => ReplaceNumberToken(match.Groups["season"].Value, seasonNumber));
+        }
+
+        private string ReplaceNumberToken(string token, int value)
+        {
+            var split = token.Trim('{', '}').Split(':');
+            if (split.Length == 1) return value.ToString("0");
+
+            return value.ToString(split[1]);
+        }
+
+        private EpisodeFormat GetEpisodeFormat(string pattern)
+        {
+            return _patternCache.Get(pattern, () =>
+            {
+                var match = SeasonEpisodePatternRegex.Match(pattern);
+
+                if (match.Success)
+                {
+                    return new EpisodeFormat
+                    {
+                        EpisodeSeparator = match.Groups["episodeSeparator"].Value,
+                        Separator = match.Groups["separator"].Value,
+                        EpisodePattern = match.Groups["episode"].Value,
+                        SeasonEpisodePattern = match.Groups["seasonEpisode"].Value,
+                    };
+
+                }
+
+                return null;
+            });
+        }
+    }
+
+    public enum MultiEpisodeStyle
+    {
+        Extend = 0,
+        Duplicate = 1,
+        Repeat = 2,
+        Scene = 3
     }
 }

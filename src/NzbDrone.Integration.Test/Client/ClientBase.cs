@@ -87,6 +87,13 @@ namespace NzbDrone.Integration.Test.Client
             return Post<List<dynamic>>(request, HttpStatusCode.BadRequest);
         }
 
+        public List<dynamic> InvalidPut(TResource body)
+        {
+            var request = BuildRequest();
+            request.AddBody(body);
+            return Put<List<dynamic>>(request, HttpStatusCode.BadRequest);
+        }
+
         public RestRequest BuildRequest(string command = "")
         {
             var request = new RestRequest(_resource + "/" + command.Trim('/'))

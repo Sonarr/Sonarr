@@ -10,32 +10,19 @@ namespace NzbDrone.Core.Organizer
             {
                 return new NamingConfig
                     {
-                        RenameEpisodes = true,
-                        Separator = " - ",
-                        NumberStyle = 0,
-                        IncludeSeriesTitle = true,
+                        RenameEpisodes = false,
                         MultiEpisodeStyle = 0,
-                        IncludeEpisodeTitle = true,
-                        IncludeQuality = true,
-                        ReplaceSpaces = false
+                        StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Title}",
+                        DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Title}",
+                        SeasonFolderFormat = "Season {season}"
                     };
             }
         }
 
         public bool RenameEpisodes { get; set; }
-
-        public string Separator { get; set; }
-
-        public int NumberStyle { get; set; }
-
-        public bool IncludeSeriesTitle { get; set; }
-
-        public bool IncludeEpisodeTitle { get; set; }
-
-        public bool IncludeQuality { get; set; }
-
         public int MultiEpisodeStyle { get; set; }
-
-        public bool ReplaceSpaces { get; set; }
+        public string StandardEpisodeFormat { get; set; }
+        public string DailyEpisodeFormat { get; set; }
+        public string SeasonFolderFormat { get; set; }
     }
 }

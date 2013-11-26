@@ -1,26 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
+using FluentValidation.Results;
 using Nancy.Responses;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Api.REST;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Extensions;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Config
 {
     public class NamingModule : NzbDroneRestModule<NamingConfigResource>
     {
         private readonly INamingConfigService _namingConfigService;
-        private readonly IBuildFileNames _buildFileNames;
+        private readonly IFilenameSampleService _filenameSampleService;
+        private readonly IFilenameValidationService _filenameValidationService;
+        private readonly IBuildFileNames _filenameBuilder;
 
-        public NamingModule(INamingConfigService namingConfigService, IBuildFileNames buildFileNames)
+        public NamingModule(INamingConfigService namingConfigService,
+                            IFilenameSampleService filenameSampleService,
+                            IFilenameValidationService filenameValidationService,
+                            IBuildFileNames filenameBuilder)
             : base("config/naming")
         {
             _namingConfigService = namingConfigService;
-            _buildFileNames = buildFileNames;
+            _filenameSampleService = filenameSampleService;
+            _filenameValidationService = filenameValidationService;
+            _filenameBuilder = filenameBuilder;
             GetResourceSingle = GetNamingConfig;
             GetResourceById = GetNamingConfig;
             UpdateResource = UpdateNamingConfig;
@@ -28,18 +37,32 @@ namespace NzbDrone.Api.Config
             Get["/samples"] = x => GetExamples(this.Bind<NamingConfigResource>());
 
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.NumberStyle).InclusiveBetween(0, 3);
-            SharedValidator.RuleFor(c => c.Separator).Matches(@"\s|\s\-\s|\.");
+            SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
+            SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
         {
-            _namingConfigService.Save(resource.InjectTo<NamingConfig>());
+            var nameSpec = resource.InjectTo<NamingConfig>();
+            ValidateFormatResult(nameSpec);
+
+            _namingConfigService.Save(nameSpec);
         }
 
         private NamingConfigResource GetNamingConfig()
         {
-            return _namingConfigService.GetConfig().InjectTo<NamingConfigResource>();
+            var nameSpec = _namingConfigService.GetConfig();
+            var resource = nameSpec.InjectTo<NamingConfigResource>();
+
+            if (String.IsNullOrWhiteSpace(resource.StandardEpisodeFormat))
+            {
+                return resource;
+            }
+
+            var basicConfig = _filenameBuilder.GetBasicNamingConfig(nameSpec);
+            resource.InjectFrom(basicConfig);
+
+            return resource;
         }
 
         private NamingConfigResource GetNamingConfig(int id)
@@ -49,49 +72,59 @@ namespace NzbDrone.Api.Config
 
         private JsonResponse<NamingSampleResource> GetExamples(NamingConfigResource config)
         {
+            //TODO: Validate that the format is valid
             var nameSpec = config.InjectTo<NamingConfig>();
-
-            var series = new Core.Tv.Series
-            {
-                SeriesType = SeriesTypes.Standard,
-                Title = "Series Title"
-            };
-
-            var episode1 = new Episode
-            {
-                SeasonNumber = 1,
-                EpisodeNumber = 1,
-                Title = "Episode Title (1)"
-            };
-
-            var episode2 = new Episode
-            {
-                SeasonNumber = 1,
-                EpisodeNumber = 2,
-                Title = "Episode Title (2)"
-            };
-
-            var episodeFile = new EpisodeFile
-            {
-                Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv"
-            };
-
             var sampleResource = new NamingSampleResource();
+            
+            var singleEpisodeSampleResult = _filenameSampleService.GetStandardSample(nameSpec);
+            var multiEpisodeSampleResult = _filenameSampleService.GetMultiEpisodeSample(nameSpec);
+            var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
 
-            sampleResource.SingleEpisodeExample = _buildFileNames.BuildFilename(new List<Episode> { episode1 },
-                                                                          series,
-                                                                          episodeFile,
-                                                                          nameSpec);
+            sampleResource.SingleEpisodeExample = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult) != null
+                    ? "Invalid format"
+                    : singleEpisodeSampleResult.Filename;
 
-            episodeFile.Path = @"C:\Test\Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv";
+            sampleResource.MultiEpisodeExample = _filenameValidationService.ValidateStandardFilename(multiEpisodeSampleResult) != null
+                    ? "Invalid format"
+                    : multiEpisodeSampleResult.Filename;
 
-            sampleResource.MultiEpisodeExample = _buildFileNames.BuildFilename(new List<Episode> { episode1, episode2 },
-                                                                         series,
-                                                                         episodeFile,
-                                                                         nameSpec);
+            sampleResource.DailyEpisodeExample = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult) != null
+                    ? "Invalid format"
+                    : dailyEpisodeSampleResult.Filename;
 
             return sampleResource.AsResponse();
+        }
+
+        private void ValidateFormatResult(NamingConfig nameSpec)
+        {
+            var singleEpisodeSampleResult = _filenameSampleService.GetStandardSample(nameSpec);
+            var multiEpisodeSampleResult = _filenameSampleService.GetMultiEpisodeSample(nameSpec);
+            var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
+            var singleEpisodeValidationResult = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult);
+            var multiEpisodeValidationResult = _filenameValidationService.ValidateStandardFilename(multiEpisodeSampleResult);
+            var dailyEpisodeValidationResult = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult);
+
+            var validationFailures = new List<ValidationFailure>();
+
+            if (singleEpisodeValidationResult != null)
+            {
+                validationFailures.Add(singleEpisodeValidationResult);
+            }
+
+            if (multiEpisodeValidationResult != null)
+            {
+                validationFailures.Add(multiEpisodeValidationResult);
+            }
+
+            if (dailyEpisodeValidationResult != null)
+            {
+                validationFailures.Add(dailyEpisodeValidationResult);
+            }
+
+            if (validationFailures.Any())
+            {
+                throw new ValidationException(validationFailures.ToArray());
+            }
         }
     }
 }

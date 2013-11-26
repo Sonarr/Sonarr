@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Tv
             string result = Quality.ToString();
             if (Proper)
             {
-                result += " [proper]";
+                result += " Proper";
             }
 
             return result;
