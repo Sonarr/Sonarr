@@ -10,6 +10,7 @@ namespace NzbDrone.Host
 {
     public interface INzbDroneServiceFactory
     {
+        bool  IsServiceStopped { get; }
         ServiceBase Build();
         void Start();
     }
@@ -68,7 +69,10 @@ namespace NzbDrone.Host
             _logger.Info("Attempting to stop application.");
             _hostController.StopServer();
             _logger.Info("Application has finished stop routine.");
+            IsServiceStopped = true;
         }
+
+        public bool IsServiceStopped { get; private set; }
 
         public ServiceBase Build()
         {

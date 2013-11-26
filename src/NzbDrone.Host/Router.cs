@@ -101,12 +101,12 @@ namespace NzbDrone.Host
                 return ApplicationModes.Help;
             }
 
-            if (!OsInfo.IsLinux && _startupArguments.Flags.Contains(StartupArguments.INSTALL_SERVICE))
+            if (!OsInfo.IsLinux && _startupArguments.InstallService)
             {
                 return ApplicationModes.InstallService;
             }
 
-            if (!OsInfo.IsLinux && _startupArguments.Flags.Contains(StartupArguments.UNINSTALL_SERVICE))
+            if (!OsInfo.IsLinux && _startupArguments.UninstallService)
             {
                 return ApplicationModes.UninstallService;
             }
