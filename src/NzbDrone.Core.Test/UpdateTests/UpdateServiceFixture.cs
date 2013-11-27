@@ -22,9 +22,9 @@ namespace NzbDrone.Core.Test.UpdateTests
 
         private readonly UpdatePackage _updatePackage = new UpdatePackage
         {
-            FileName = "NzbDrone.vnext.0.8.1.385.zip",
-            Url = "http://update.nzbdrone.com/v10/master/NzbDrone.master.2.0.0.0.zip",
-            Version = new Version("0.8.1.385")
+            FileName = "NzbDrone.develop.2.0.0.zip",
+            Url = "http://update.nzbdrone.com/v2/develop/NzbDrone.develop.zip",
+            Version = new Version("2.0.0")
         };
 
         [SetUp]
