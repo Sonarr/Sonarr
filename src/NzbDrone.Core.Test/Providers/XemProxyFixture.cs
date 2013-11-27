@@ -46,14 +46,23 @@ namespace NzbDrone.Core.Test.Providers
         }
 
 
-        [Test]
-        public void should_get_mapping()
+        [TestCase(82807)]
+        public void should_get_mapping(int seriesId)
         {
-            var result = Subject.GetSceneTvdbMappings(82807);
+            var result = Subject.GetSceneTvdbMappings(seriesId);
 
             result.Should().NotBeEmpty();
             result.Should().OnlyContain(c => c.Scene != null);
             result.Should().OnlyContain(c => c.Tvdb != null);
+        }
+
+
+        [TestCase(78916)]
+        public void should_filter_out_episodes_without_scene_mapping(int seriesId)
+        {
+            var result = Subject.GetSceneTvdbMappings(seriesId);
+
+            result.Should().NotContain(c => c.Tvdb == null);
         }
     }
 }

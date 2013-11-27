@@ -61,7 +61,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             var response = restClient.ExecuteAndValidate<XemResult<List<XemSceneTvdbMapping>>>(request);
             CheckForFailureResult(response);
 
-            return response.Data;
+            return response.Data.Where(c => c.Scene != null).ToList();
         }
 
         private static void CheckForFailureResult<T>(XemResult<T> response)
