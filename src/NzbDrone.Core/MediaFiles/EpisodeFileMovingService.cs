@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
@@ -59,6 +60,10 @@ namespace NzbDrone.Core.MediaFiles
 
         private void MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
         {
+            Ensure.That(() => episodeFile).IsNotNull();
+            Ensure.That(() => series).IsNotNull();
+            Ensure.That(() => destinationFilename).IsValidPath();
+
             if (!_diskProvider.FileExists(episodeFile.Path))
             {
                 throw new FileNotFoundException("Episode file path does not exist", episodeFile.Path);
