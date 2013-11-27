@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
-                PublishDownloadFailedEvent(historyItems, "Encypted download detected");
+                PublishDownloadFailedEvent(historyItems, "Encrypted download detected");
 
                 if (_configService.RemoveFailedDownloads)
                 {

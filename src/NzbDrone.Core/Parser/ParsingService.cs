@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Parser
                 if (series.SeriesType == SeriesTypes.Standard)
                 {
                     _logger.Warn("Found daily-style episode for non-daily series: {0}.", series);
-                    return null;
+                    return result;
                 }
 
                 var episodeInfo = GetDailyEpisode(series, parsedEpisodeInfo.AirDate, searchCriteria);
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Parser
         }
 
         private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria)
-        {           
+        {
             var tvdbId = _sceneMappingService.GetTvDbId(parsedEpisodeInfo.SeriesTitle);
 
             if (tvdbId.HasValue)
