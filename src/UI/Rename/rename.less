@@ -1,0 +1,55 @@
+@import "../Content/FontAwesome/font-awesome";
+@import "../Content/Bootstrap/variables";
+@import "../Content/variables";
+
+.rename-preview-item {
+  margin-bottom: 5px;
+  padding: 5px;
+  border-bottom: 1px solid #e5e5e5;
+
+  &.do-not-rename {
+    background-color: #aaaaaa;
+    opacity: 0.7;
+  }
+
+  .icon-nd-existing:before {
+    .icon(@minus);
+    color : @errorText;
+  }
+
+  .icon-nd-suggested:before {
+    .icon(@plus);
+    color : @successText;
+  }
+
+  .rename-checkbox {
+    width: 20px;
+    padding-top: 5px;
+    margin-right: 10px;
+
+    .checkbox-button {
+      .btn {
+        text-align: left;
+        min-width: 10px;
+        width: 10px;
+      }
+    }
+  }
+}
+
+.path-info {
+  display: none;
+}
+
+.rename-all-button {
+  display: inline-block;
+
+  .checkbox-button {
+    .btn {
+      text-align: left;
+      min-width: 10px;
+      width: 10px;
+    }
+  }
+}
+

@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             if (replaceSpaces)
                             {
-                                qualityFormat = " [{Quality.Title}]";
+                                qualityFormat = ".[{Quality.Title}]";
                             }
 
                             standardEpisodeFormat += qualityFormat;

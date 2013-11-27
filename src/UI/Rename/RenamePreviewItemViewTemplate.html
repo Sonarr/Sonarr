@@ -1,24 +1,19 @@
 ﻿<div class="rename-preview-item">
     <div class="row">
-        <div class="span1">
-            <label class="checkbox toggle well" title="Rename file">
+        <div class="rename-checkbox span">
+            <label class="checkbox-button" title="Rename File">
                 <input type="checkbox" name="rename"/>
-                <p>
-                    <span>Yes</span>
-                    <span>No</span>
-                </p>
-
-                <div class="btn btn-warning slide-button"/>
+                <div class="btn btn-icon-only">
+                    <i></i>
+                </div>
             </label>
         </div>
         <div class="span9">
             <div class="row">
-                <div class="span1">Existing</div>
-                <div class="span8">{{existingPath}}</div>
+                <div class="span9 file-path"><i class="icon-nd-existing" title="Existing path" /> {{existingPath}}</div>
             </div>
             <div class="row">
-                <div class="span1">Suggested</div>
-                <div class="span8">{{newPath}}</div>
+                <div class="span9 file-path"><i class="icon-nd-suggested" title="Suggested path" /> {{newPath}}</div>
             </div>
         </div>
     </div>
