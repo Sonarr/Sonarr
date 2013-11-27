@@ -7,6 +7,8 @@
 #define ForumsURL "http://forums.nzbdrone.com/"
 #define AppExeName "NzbDrone.exe"
 #define BuildNumber "2.0"
+#define BuildNumber GetEnv('BUILD_NUMBER')
+#define BranchName GetEnv('branch')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -14,7 +16,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{56C1065D-3523-4025-B76D-6F73F67F7F71}
 AppName={#AppName}
-AppVersion={#BuildNumber}
+AppVersion=2.0
 AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
 AppSupportURL={#ForumsURL}
@@ -23,7 +25,7 @@ DefaultDirName={commonprograms}\{#AppName}\bin
 DisableDirPage=yes
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=NzbDroneSetup
+OutputBaseFilename=NzbDrone.{#BranchName}.{#BuildNumber}
 SolidCompression=yes
 AppCopyright=Creative Commons 3.0 License
 AllowUNCPath=False
