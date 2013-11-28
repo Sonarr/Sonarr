@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SQLite;
 using Marr.Data;
 using NLog;
 using NzbDrone.Common.Instrumentation;
@@ -15,28 +14,26 @@ namespace NzbDrone.Core.Datastore
 
     public class Database : IDatabase
     {
-        private readonly string _connectionString;
+        private readonly Func<IDataMapper> _datamapperFactory;
 
         private Logger logger = NzbDroneLogger.GetLogger();
 
-        public Database(string connectionString)
+        public Database(Func<IDataMapper> datamapperFactory)
         {
-            _connectionString = connectionString;
+            _datamapperFactory = datamapperFactory;
         }
+
 
         public IDataMapper GetDataMapper()
         {
-            return new DataMapper(SQLiteFactory.Instance, _connectionString)
-                    {
-                        SqlMode = SqlModes.Text,
-                    };
+            return _datamapperFactory();
         }
 
         public Version Version
         {
             get
             {
-                var version = GetDataMapper().ExecuteScalar("SELECT sqlite_version()").ToString();
+                var version = _datamapperFactory().ExecuteScalar("SELECT sqlite_version()").ToString();
                 return new Version(version);
             }
         }
@@ -45,13 +42,13 @@ namespace NzbDrone.Core.Datastore
         {
             try
             {
-                logger.Info("Vacuuming database " + _connectionString);
-                GetDataMapper().ExecuteNonQuery("Vacuum;");
-                logger.Info("Database Compressed " + _connectionString);
+                logger.Info("Vacuuming database");
+                _datamapperFactory().ExecuteNonQuery("Vacuum;");
+                logger.Info("Database Compressed");
             }
             catch (Exception e)
             {
-                logger.Error("An Error occurred while vacuuming database. " + _connectionString, e);
+                logger.Error("An Error occurred while vacuuming database.", e);
             }
         }
     }
