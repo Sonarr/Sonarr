@@ -6,6 +6,7 @@ using Marr.Data;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Common;
+using NzbDrone.Core.Datastore.Extentions;
 using NzbDrone.Core.Messaging.Events;
 
 

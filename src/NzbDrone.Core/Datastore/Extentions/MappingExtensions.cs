@@ -4,7 +4,7 @@ using Marr.Data;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Reflection;
 
-namespace NzbDrone.Core.Datastore
+namespace NzbDrone.Core.Datastore.Extentions
 {
     public static class MappingExtensions
     {

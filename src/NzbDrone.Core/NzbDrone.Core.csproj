@@ -153,9 +153,11 @@
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
+    <Compile Include="Datastore\Extentions\MappingExtensions.cs" />
+    <Compile Include="Datastore\Extentions\PagingSpecExtensions.cs" />
+    <Compile Include="Datastore\Extentions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
-    <Compile Include="Datastore\MappingExtensions.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
@@ -209,8 +211,8 @@
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationLogger.cs" />
     <Compile Include="Datastore\Migration\001_initialSetup.cs" />
+    <Compile Include="Datastore\Migration\Framework\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
-    <Compile Include="Datastore\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteColumn.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
@@ -219,8 +221,6 @@
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
-    <Compile Include="Datastore\PagingSpecExtensions.cs" />
-    <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
