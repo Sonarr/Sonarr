@@ -1,7 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57A04B72-8088-4F75-A582-1158CF8291F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test.Common", "Test.Common", "{47697CDB-27B6-4B05-B4F8-0CBE6F6EDF97}"
@@ -67,8 +65,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.AspNet.SignalR.Owin", "Microsoft.AspNet.SignalR.Owin\Microsoft.AspNet.SignalR.Owin.csproj", "{2B8C6DAD-4D85-41B1-83FD-248D9F347522}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "NzbDrone.Setup", "NzbDrone.Setup\NzbDrone.Setup.wixproj", "{F5958838-EBE5-4A76-A27F-5AFA9A8D7818}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -172,10 +168,6 @@ Global
 		{2B8C6DAD-4D85-41B1-83FD-248D9F347522}.Debug|x86.Build.0 = Debug|x86
 		{2B8C6DAD-4D85-41B1-83FD-248D9F347522}.Release|x86.ActiveCfg = Release|x86
 		{2B8C6DAD-4D85-41B1-83FD-248D9F347522}.Release|x86.Build.0 = Release|x86
-		{F5958838-EBE5-4A76-A27F-5AFA9A8D7818}.Debug|x86.ActiveCfg = Debug|x86
-		{F5958838-EBE5-4A76-A27F-5AFA9A8D7818}.Debug|x86.Build.0 = Debug|x86
-		{F5958838-EBE5-4A76-A27F-5AFA9A8D7818}.Release|x86.ActiveCfg = Release|x86
-		{F5958838-EBE5-4A76-A27F-5AFA9A8D7818}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
