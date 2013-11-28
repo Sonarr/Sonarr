@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             _fakeMappings[4].ParseTerm = "Cleaned";
         }
 
-   
+
 
         [Test]
         public void UpdateMappings_purge_existing_mapping_and_add_new_ones()
@@ -80,14 +80,14 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         private void AssertNoUpdate()
         {
             Mocker.GetMock<ISceneMappingProxy>().Verify(c => c.Fetch(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(It.IsAny<bool>()), Times.Never());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Never());
         }
 
         private void AssertMappingUpdated()
         {
             Mocker.GetMock<ISceneMappingProxy>().Verify(c => c.Fetch(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(It.IsAny<bool>()), Times.Once());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Once());
 
 
