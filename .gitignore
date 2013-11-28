@@ -118,3 +118,7 @@ wix/*.wixobj
 wix/*.wixpdb
 setup/Output/
 *.~is
+
+#VS outout folders
+bin
+obj

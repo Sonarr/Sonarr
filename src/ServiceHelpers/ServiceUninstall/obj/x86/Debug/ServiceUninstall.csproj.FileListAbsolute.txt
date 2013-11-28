@@ -1,5 +1,0 @@
-C:\Dropbox\Dev\NzbDrone\_output\ServiceUninstall.exe.config
-C:\Dropbox\Dev\NzbDrone\_output\ServiceUninstall.exe
-C:\Dropbox\Dev\NzbDrone\_output\ServiceUninstall.pdb
-C:\Dropbox\Dev\NzbDrone\src\ServiceHelpers\ServiceUninstall\obj\x86\Debug\ServiceUninstall.exe
-C:\Dropbox\Dev\NzbDrone\src\ServiceHelpers\ServiceUninstall\obj\x86\Debug\ServiceUninstall.pdb
