@@ -4,6 +4,7 @@ using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.System
 {
@@ -13,14 +14,16 @@ namespace NzbDrone.Api.System
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IRouteCacheProvider _routeCacheProvider;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IDatabase _database;
 
-        public SystemModule(IAppFolderInfo appFolderInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider, IConfigFileProvider configFileProvider)
+        public SystemModule(IAppFolderInfo appFolderInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider, IConfigFileProvider configFileProvider, IDatabase database)
             : base("system")
         {
             _appFolderInfo = appFolderInfo;
             _runtimeInfo = runtimeInfo;
             _routeCacheProvider = routeCacheProvider;
             _configFileProvider = configFileProvider;
+            _database = database;
             Get["/status"] = x => GetStatus();
             Get["/routes"] = x => GetRoutes();
         }
@@ -43,7 +46,8 @@ namespace NzbDrone.Api.System
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled,
-                    StartOfWeek = (int)OsInfo.FirstDayOfWeek
+                    StartOfWeek = (int)OsInfo.FirstDayOfWeek,
+                    SqliteVersion = _database.Version
                 }.AsResponse();
 
         }

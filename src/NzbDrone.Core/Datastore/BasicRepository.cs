@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Datastore
         void InsertMany(IList<TModel> model);
         void UpdateMany(IList<TModel> model);
         void DeleteMany(List<TModel> model);
-        void Purge();
+        void Purge(bool vacuum = false);
         bool HasItems();
         void DeleteMany(IEnumerable<int> ids);
         void SetFields(TModel model, params Expression<Func<TModel, object>>[] properties);
@@ -183,9 +183,18 @@ namespace NzbDrone.Core.Datastore
             ids.ToList().ForEach(Delete);
         }
 
-        public void Purge()
+        public void Purge(bool vacuum = false)
         {
             DataMapper.Delete<TModel>(c => c.Id > -1);
+            if (vacuum)
+            {
+                Vacuum();
+            }
+        }
+
+        protected void Vacuum()
+        {
+            _database.Vacuum();
         }
 
         public bool HasItems()
@@ -221,11 +230,6 @@ namespace NzbDrone.Core.Datastore
             pagingSpec.TotalRecords = Count();
 
             return pagingSpec;
-        }
-
-        public void DeleteAll()
-        {
-            DataMapper.Delete<TModel>(c => c.Id > 0);
         }
 
         protected void ModelCreated(TModel model)
