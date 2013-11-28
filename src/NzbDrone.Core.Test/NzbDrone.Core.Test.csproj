@@ -106,6 +106,7 @@
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
+    <Compile Include="Datastore\DatabaseFixture.cs" />
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />

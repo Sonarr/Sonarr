@@ -73,15 +73,11 @@ namespace NzbDrone.Core.Datastore
 
             _migrationController.MigrateToLatest(connectionString, migrationType);
 
-            return new Database(() =>
-                {
-                    var dataMapper = new DataMapper(SQLiteFactory.Instance, connectionString)
-                    {
-                        SqlMode = SqlModes.Text,
-                    };
+            var db = new Database(connectionString);
 
-                    return dataMapper;
-                });
+            db.Vacuum();
+
+            return db;
         }
     }
 }
