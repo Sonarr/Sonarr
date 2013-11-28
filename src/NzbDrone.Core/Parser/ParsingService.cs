@@ -52,6 +52,7 @@ namespace NzbDrone.Core.Parser
 
             if (!episodes.Any())
             {
+                _logger.Trace("No matching episodes found for: {0}", parsedEpisodeInfo);
                 return null;
             }
 

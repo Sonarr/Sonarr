@@ -156,7 +156,11 @@ namespace NzbDrone.Core.Parser
                             if (result != null)
                             {
                                 result.Language = ParseLanguage(title);
+                                Logger.Trace("Language parsed: {0}", result.Language);
+
                                 result.Quality = QualityParser.ParseQuality(title);
+                                Logger.Trace("Quality parsed: {0}", result.Quality);
+
                                 return result;
                             }
                         }

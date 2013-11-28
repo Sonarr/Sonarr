@@ -65,6 +65,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         }
 
                         parsedEpisode.Size = _diskProvider.GetFileSize(file);
+                        _logger.Trace("Size: {0}", parsedEpisode.Size);
+
                         decision = GetDecision(parsedEpisode);
                     }
 
