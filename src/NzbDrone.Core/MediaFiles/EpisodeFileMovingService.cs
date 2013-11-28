@@ -18,23 +18,20 @@ namespace NzbDrone.Core.MediaFiles
         string MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
-    public class MoveEpisodeFiles : IMoveEpisodeFiles
+    public class EpisodeFileMovingService : IMoveEpisodeFiles
     {
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
-        private readonly IEventAggregator _eventAggregator;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public MoveEpisodeFiles(IEpisodeService episodeService,
+        public EpisodeFileMovingService(IEpisodeService episodeService,
                                 IBuildFileNames buildFileNames,
-                                IEventAggregator eventAggregator,
                                 IDiskProvider diskProvider,
                                 Logger logger)
         {
             _episodeService = episodeService;
             _buildFileNames = buildFileNames;
-            _eventAggregator = eventAggregator;
             _diskProvider = diskProvider;
             _logger = logger;
         }
@@ -106,10 +103,18 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _diskProvider.InheritFolderPermissions(destinationFilename);
                 }
-                catch (UnauthorizedAccessException ex)
+                catch (Exception ex)
                 {
-                    _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
-                    _logger.TraceException(ex.Message, ex);
+                    if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
+                    {
+                        _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
+                        _logger.TraceException(ex.Message, ex);
+                    }
+
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
         }
