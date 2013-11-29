@@ -5,7 +5,7 @@ define(
     ], function (Backgrid) {
         return Backgrid.Cell.extend({
 
-            class : 'indexer-cell',
+            className : 'indexer-cell',
 
             render: function () {
                 var indexer = this.model.get(this.column.get('name'));

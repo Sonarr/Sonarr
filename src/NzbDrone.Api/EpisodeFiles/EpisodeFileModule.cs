@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NLog;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
@@ -13,14 +14,22 @@ namespace NzbDrone.Api.EpisodeFiles
                                  IHandle<EpisodeFileAddedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
+        private readonly IRecycleBinProvider _recycleBinProvider;
+        private readonly Logger _logger;
 
-        public EpisodeModule(ICommandExecutor commandExecutor, IMediaFileService mediaFileService)
+        public EpisodeModule(ICommandExecutor commandExecutor,
+                             IMediaFileService mediaFileService,
+                             IRecycleBinProvider recycleBinProvider,
+                             Logger logger)
             : base(commandExecutor)
         {
             _mediaFileService = mediaFileService;
+            _recycleBinProvider = recycleBinProvider;
+            _logger = logger;
             GetResourceById = GetEpisodeFile;
             GetResourceAll = GetEpisodeFiles;
             UpdateResource = SetQuality;
+            DeleteResource = DeleteEpisodeFile;
         }
 
         private EpisodeFileResource GetEpisodeFile(int id)
@@ -45,6 +54,15 @@ namespace NzbDrone.Api.EpisodeFiles
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
             _mediaFileService.Update(episodeFile);
+        }
+
+        private void DeleteEpisodeFile(int id)
+        {
+            var episodeFile = _mediaFileService.Get(id);
+
+            _logger.Info("Deleting episode file: {0}", episodeFile.Path);
+            _recycleBinProvider.DeleteFile(episodeFile.Path);
+            _mediaFileService.Delete(episodeFile);
         }
 
         public void Handle(EpisodeFileAddedEvent message)

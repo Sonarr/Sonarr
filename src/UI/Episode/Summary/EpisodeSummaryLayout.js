@@ -8,9 +8,19 @@ define(
         'Series/EpisodeFileCollection',
         'Cells/FileSizeCell',
         'Cells/QualityCell',
+        'Cells/DeleteEpisodeFileCell',
         'Episode/Summary/NoFileView',
         'Shared/LoadingView'
-    ], function (reqres, Marionette, Backgrid, EpisodeFileModel, EpisodeFileCollection, FileSizeCell, QualityCell, NoFileView, LoadingView) {
+    ], function (reqres,
+                 Marionette,
+                 Backgrid,
+                 EpisodeFileModel,
+                 EpisodeFileCollection,
+                 FileSizeCell,
+                 QualityCell,
+                 DeleteEpisodeFileCell,
+                 NoFileView,
+                 LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Summary/EpisodeSummaryLayoutTemplate',
@@ -40,6 +50,12 @@ define(
                         cell    : QualityCell,
                         sortable: false,
                         editable: true
+                    },
+                    {
+                        name    : 'this',
+                        label   : '',
+                        cell    : DeleteEpisodeFileCell,
+                        sortable: false
                     }
                 ],
 
@@ -57,8 +73,10 @@ define(
 
                     if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
                         var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, episodeFileId);
-                        var episodeFileCollection = new EpisodeFileCollection(episodeFile, { seriesId: this.model.get('seriesId') });
-                        this._showTable(episodeFileCollection);
+                        this.episodeFileCollection = new EpisodeFileCollection(episodeFile, { seriesId: this.model.get('seriesId') });
+                        this.listenTo(episodeFile, 'destroy', this._episodeFileDeleted);
+
+                        this._showTable();
                     }
 
                     else {
@@ -66,26 +84,51 @@ define(
 
                         var self = this;
                         var newEpisodeFile = new EpisodeFileModel({ id: episodeFileId });
-                        var newEpisodeFileCollection = new EpisodeFileCollection(newEpisodeFile, { seriesId: this.model.get('seriesId') });
+                        this.episodeFileCollection = new EpisodeFileCollection(newEpisodeFile, { seriesId: this.model.get('seriesId') });
                         var promise = newEpisodeFile.fetch();
+                        this.listenTo(newEpisodeFile, 'destroy', this._episodeFileDeleted);
 
                         promise.done(function () {
-                           self._showTable(newEpisodeFileCollection);
+                           self._showTable();
                         });
                     }
+
+                    this.listenTo(this.episodeFileCollection, 'all', this._collectionChanged);
                 }
 
                 else {
-                    this.activity.show(new NoFileView());
+                    this._showNoFileView();
                 }
             },
 
-            _showTable: function (episodeFileCollection) {
+            _showTable: function () {
                 this.activity.show(new Backgrid.Grid({
-                    collection: episodeFileCollection,
+                    collection: this.episodeFileCollection,
                     columns   : this.columns,
-                    className : 'table table-bordered'
+                    className : 'table table-bordered',
+                    emptyText : 'Nothing to see here!'
                 }));
+            },
+
+            _showNoFileView: function () {
+                this.activity.show(new NoFileView());
+            },
+
+            _collectionChanged: function () {
+                if (!this.episodeFileCollection.any()) {
+                    this._showNoFileView();
+                }
+
+                else {
+                    this._showTable();
+                }
+            },
+
+            _episodeFileDeleted: function () {
+                this.model.set({
+                    episodeFileId: 0,
+                    hasFile      : false
+                });
             }
         });
     });
