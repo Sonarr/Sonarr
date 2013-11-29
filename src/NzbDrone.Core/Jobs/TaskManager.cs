@@ -62,7 +62,6 @@ namespace NzbDrone.Core.Jobs
 
             _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", defaultTasks.Count(), currentTasks.Count());
 
-
             foreach (var job in currentTasks)
             {
                 if (!defaultTasks.Any(c => c.TypeName == job.TypeName))
