@@ -89,6 +89,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("10.Things.You.Dont.Know.About.S02E04.Prohibition.HDTV.XviD-AFG", "10 Things You Dont Know About", 2, 4)]
         [TestCase("30 Rock - S01E01 - Pilot.avi", "30 Rock", 1, 1)]
         [TestCase("666 Park Avenue - S01E01", "666 Park Avenue", 1, 1)]
+        [TestCase("Warehouse 13 - S01E01", "Warehouse 13", 1, 1)]
+        [TestCase("Don't Trust The B---- in Apartment 23.S01E01", "Don't Trust The B---- in Apartment 23", 1, 1)]
+        [TestCase("Warehouse.13.S01E01", "Warehouse.13", 1, 1)]
+        [TestCase("Dont.Trust.The.B----.in.Apartment.23.S01E01", "Dont.Trust.The.B----.in.Apartment.23", 1, 1)]
+        [TestCase("24 S01E01", "24", 1, 1)]
+        [TestCase("24.S01E01", "24", 1, 1)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
