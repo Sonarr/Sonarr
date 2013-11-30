@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Datastore.Migration
             Create.Index().OnTable("Episodes").OnColumn("SeriesId");
             
             Create.Index().OnTable("History").OnColumn("EpisodeId");
+            Create.Index().OnTable("History").OnColumn("Date");
 
             Create.Index().OnTable("Series").OnColumn("Path");
             Create.Index().OnTable("Series").OnColumn("CleanTitle");
