@@ -8,6 +8,11 @@
         <h4>{{title}}</h4>
     </a>
     {{/with}}
-    <p>{{StartTime airDateUtc}} {{ShortDate airDateUtc}}<span class="pull-right">{{seasonNumber}}x{{Pad2 episodeNumber}}</span><br>{{episodeTitle}}</p>
-    <p class="episode-title x-episode-title">{{title}}</p>
+    <p>{{StartTime airDateUtc}} {{ShortDate airDateUtc}}</p>
+    <p>
+        <span class="episode-title x-episode-title">
+            {{title}}
+        </span>
+        <span class="pull-right">{{seasonNumber}}x{{Pad2 episodeNumber}}</span>
+    </p>
 </div>
