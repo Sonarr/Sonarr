@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Blacklisting
 {
     public interface IBlacklistService
     {
-        bool Blacklisted(string sourceTitle);
+        bool Blacklisted(int seriesId,string sourceTitle);
     }
 
     public class BlacklistService : IBlacklistService, IHandle<DownloadFailedEvent>
@@ -20,9 +20,9 @@ namespace NzbDrone.Core.Blacklisting
             _redownloadFailedDownloadService = redownloadFailedDownloadService;
         }
 
-        public bool Blacklisted(string sourceTitle)
+        public bool Blacklisted(int seriesId, string sourceTitle)
         {
-            return _blacklistRepository.Blacklisted(sourceTitle);
+            return _blacklistRepository.Blacklisted(seriesId,sourceTitle);
         }
 
         public void Handle(DownloadFailedEvent message)

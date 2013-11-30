@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.Blacklisting
             _blacklist = new Blacklist
                      {
                          SeriesId = 12345,
-                         EpisodeIds = new List<int> {1},
+                         EpisodeIds = new List<int> { 1 },
                          Quality = new QualityModel(Quality.Bluray720p),
                          SourceTitle = "series.title.s01e01",
                          Date = DateTime.UtcNow
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.Blacklisting
         {
             Subject.Insert(_blacklist);
 
-            Subject.Blacklisted(_blacklist.SourceTitle.ToUpperInvariant()).Should().BeTrue();
+            Subject.Blacklisted(_blacklist.SeriesId, _blacklist.SourceTitle.ToUpperInvariant()).Should().BeTrue();
         }
     }
 }

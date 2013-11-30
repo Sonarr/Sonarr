@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Blacklisting
 {
     public interface IBlacklistRepository : IBasicRepository<Blacklist>
     {
-        bool Blacklisted(string sourceTitle);
+        bool Blacklisted(int seriesId, string sourceTitle);
     }
 
     public class BlacklistRepository : BasicRepository<Blacklist>, IBlacklistRepository
@@ -15,9 +15,9 @@ namespace NzbDrone.Core.Blacklisting
         {
         }
 
-        public bool Blacklisted(string sourceTitle)
+        public bool Blacklisted(int seriesId, string sourceTitle)
         {
-            return Query.Any(e => e.SourceTitle.Contains(sourceTitle));
+            return Query.Any(e => e.SeriesId == seriesId && e.SourceTitle.Contains(sourceTitle));
         }
     }
 }
