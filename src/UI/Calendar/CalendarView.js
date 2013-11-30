@@ -127,7 +127,6 @@ define(
             },
 
             _reloadCalendarEvents: function () {
-                window.alert('collection changed');
                 this.$el.fullCalendar('removeEvents');
                 this._setEventData(this.collection);
             }
