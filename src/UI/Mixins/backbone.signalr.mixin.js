@@ -8,9 +8,10 @@ define(
     ], function (vent, _, Backbone) {
 
         _.extend(Backbone.Collection.prototype, {
-            bindSignalR: function () {
+            bindSignalR: function (bindOptions) {
 
                 var collection = this;
+                bindOptions = bindOptions || {};
 
                 var processMessage = function (options) {
 
@@ -22,6 +23,12 @@ define(
                     }
 
                     var model = new collection.model(options.resource, {parse: true});
+
+                    //updateOnly will prevent the collection from adding a new item
+                    if (bindOptions.updateOnly && !collection.get(model.get('id'))) {
+                        return;
+                    }
+
                     collection.add(model, {merge: true});
                     console.log(options.action + ': {0}}'.format(options.resource));
                 };

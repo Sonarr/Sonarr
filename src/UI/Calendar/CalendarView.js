@@ -16,7 +16,7 @@ define(
 
         return Marionette.ItemView.extend({
             initialize: function () {
-                this.collection = new CalendarCollection().bindSignalR();
+                this.collection = new CalendarCollection().bindSignalR({ updateOnly: true });
                 this.listenTo(this.collection, 'change', this._reloadCalendarEvents);
             },
             render    : function () {

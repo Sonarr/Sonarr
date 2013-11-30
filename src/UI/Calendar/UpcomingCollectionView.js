@@ -11,14 +11,8 @@ define(
             itemView: UpcomingItemView,
 
             initialize: function () {
-                this.collection = new UpcomingCollection().bindSignalR();
+                this.collection = new UpcomingCollection().bindSignalR({ updateOnly: true });
                 this.collection.fetch();
-
-                this.listenTo(this.collection, 'change', this._refresh);
-            },
-
-            _refresh: function () {
-                this.render();
             }
         });
     });

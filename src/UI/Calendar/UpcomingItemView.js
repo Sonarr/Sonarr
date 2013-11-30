@@ -22,6 +22,8 @@ define(
                 this.model.set({
                     end: end.toISOString()
                 });
+
+                this.listenTo(this.model, 'change', this.render);
             },
 
             _showEpisodeDetails: function () {
