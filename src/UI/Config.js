@@ -14,7 +14,7 @@ define(
             },
 
             getValueBoolean: function (key, defaultValue) {
-                return this.getValue(key, defaultValue) === 'true';
+                return this.getValue(key, defaultValue.toString()) === 'true';
             },
 
             getValue: function (key, defaultValue) {
