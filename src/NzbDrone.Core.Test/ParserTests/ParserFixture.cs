@@ -95,6 +95,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Dont.Trust.The.B----.in.Apartment.23.S01E01", "Dont.Trust.The.B----.in.Apartment.23", 1, 1)]
         [TestCase("24 S01E01", "24", 1, 1)]
         [TestCase("24.S01E01", "24", 1, 1)]
+        [TestCase("Homeland - 2x12 - The Choice [HDTV-1080p].mkv", "Homeland", 2, 12)]
+        [TestCase("Homeland - 2x4 - New Car Smell [HDTV-1080p].mkv", "Homeland", 2, 4)]
         public void ParseTitle_single(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
