@@ -2,10 +2,9 @@
 define(
     [
         'marionette',
-        'Calendar/UpcomingCollection',
         'Calendar/UpcomingCollectionView',
-        'Calendar/CalendarView',
-    ], function (Marionette, UpcomingCollection, UpcomingCollectionView, CalendarView) {
+        'Calendar/CalendarView'
+    ], function (Marionette, UpcomingCollectionView, CalendarView) {
         return Marionette.Layout.extend({
             template: 'Calendar/CalendarLayoutTemplate',
 
@@ -14,20 +13,13 @@ define(
                 calendar: '#x-calendar'
             },
 
-            initialize: function () {
-                this.upcomingCollection = new UpcomingCollection();
-                this.upcomingCollection.fetch();
-            },
-
             onShow: function () {
                 this._showUpcoming();
                 this._showCalendar();
             },
 
             _showUpcoming: function () {
-                this.upcoming.show(new UpcomingCollectionView({
-                    collection: this.upcomingCollection
-                }));
+                this.upcoming.show(new UpcomingCollectionView());
             },
 
             _showCalendar: function () {

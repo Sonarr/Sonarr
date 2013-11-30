@@ -20,12 +20,17 @@ define(
         Handlebars.registerHelper('StatusLevel', function () {
 
             var hasFile = this.hasFile;
+            var downloading = require('History/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
             var currentTime = Moment();
             var start = Moment(this.airDateUtc);
             var end = Moment(this.end);
 
             if (hasFile) {
                 return 'success';
+            }
+
+            if (downloading) {
+                return 'purple';
             }
 
             if (currentTime.isAfter(start) && currentTime.isBefore(end)) {

@@ -3,12 +3,11 @@
 define(
     [
         'reqres',
-        'underscore',
         'Cells/NzbDroneCell',
         'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (reqres,  _, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
+    ], function (reqres, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -56,10 +55,7 @@ define(
 
                     else {
                         var model = this.model;
-
-                        var downloading = _.find(QueueCollection.models, function (queueModel) {
-                            return queueModel.get('episode').id === model.get('id');
-                        });
+                        var downloading = QueueCollection.findEpisode(model.get('id'));
 
                         if (downloading || this.model.get('downloading')) {
                             icon = 'icon-nd-downloading';

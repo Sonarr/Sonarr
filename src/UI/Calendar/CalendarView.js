@@ -7,14 +7,17 @@ define(
         'moment',
         'Calendar/Collection',
         'System/StatusModel',
+        'History/Queue/QueueCollection',
+        'Mixins/backbone.signalr.mixin',
         'fullcalendar'
-    ], function (vent, Marionette, moment, CalendarCollection, StatusModel) {
+    ], function (vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection) {
 
         var _instance;
 
         return Marionette.ItemView.extend({
             initialize: function () {
-                this.collection = new CalendarCollection();
+                this.collection = new CalendarCollection().bindSignalR();
+                this.listenTo(this.collection, 'change', this._reloadCalendarEvents);
             },
             render    : function () {
 
@@ -36,7 +39,7 @@ define(
                         prev: '<i class="icon-arrow-left"></i>',
                         next: '<i class="icon-arrow-right"></i>'
                     },
-                    events        : this.getEvents,
+                    viewRender : this._getEvents,
                     eventRender   : function (event, element) {
                         self.$(element).addClass(event.statusLevel);
                         self.$(element).children('.fc-event-inner').addClass(event.statusLevel);
@@ -53,48 +56,59 @@ define(
                 this.$('.fc-button-today').click();
             },
 
-            getEvents: function (start, end, callback) {
-                var startDate = moment(start).toISOString();
-                var endDate = moment(end).toISOString();
+            _getEvents: function (view) {
+                var start = moment(view.visStart).toISOString();
+                var end = moment(view.visEnd).toISOString();
+
+                _instance.$el.fullCalendar('removeEvents');
 
                 _instance.collection.fetch({
-                    data   : { start: startDate, end: endDate },
-                    success: function (calendarCollection) {
-                        calendarCollection.each(function (element) {
-                            var episodeTitle = element.get('title');
-                            var seriesTitle = element.get('series').title;
-                            var start = element.get('airDateUtc');
-                            var runtime = element.get('series').runtime;
-                            var end = moment(start).add('minutes', runtime).toISOString();
-
-
-                            element.set({
-                                title       : seriesTitle,
-                                episodeTitle: episodeTitle,
-                                start       : start,
-                                end         : end,
-                                allDay      : false
-                            });
-
-                            element.set('statusLevel', _instance.getStatusLevel(element));
-                            element.set('model', element);
-                        });
-
-                        callback(calendarCollection.toJSON());
+                    data   : { start: start, end: end },
+                    success: function (collection) {
+                        _instance._setEventData(collection);
                     }
                 });
             },
 
-            getStatusLevel: function (element) {
+            _setEventData: function (collection) {
+                var events = [];
+
+                collection.each(function (model) {
+                    var seriesTitle = model.get('series').title;
+                    var start = model.get('airDateUtc');
+                    var runtime = model.get('series').runtime;
+                    var end = moment(start).add('minutes', runtime).toISOString();
+
+                    var event = {
+                        title       : seriesTitle,
+                        start       : start,
+                        end         : end,
+                        allDay      : false,
+                        statusLevel : _instance._getStatusLevel(model, end),
+                        model       : model
+                    };
+
+                    events.push(event);
+                });
+
+                _instance.$el.fullCalendar('addEventSource', events);
+            },
+
+            _getStatusLevel: function (element, endTime) {
                 var hasFile = element.get('hasFile');
+                var downloading = QueueCollection.findEpisode(element.get('id')) || element.get('downloading');
                 var currentTime = moment();
                 var start = moment(element.get('airDateUtc'));
-                var end = moment(element.get('end'));
+                var end = moment(endTime);
 
                 var statusLevel = 'primary';
 
                 if (hasFile) {
                     statusLevel = 'success';
+                }
+
+                if (downloading) {
+                    statusLevel = 'purple';
                 }
 
                 else if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
@@ -105,13 +119,17 @@ define(
                     statusLevel = 'danger';
                 }
 
-                var test = currentTime.startOf('day').format('LLLL');
-
                 if (end.isBefore(currentTime.startOf('day'))) {
                     statusLevel += ' past';
                 }
 
                 return statusLevel;
+            },
+
+            _reloadCalendarEvents: function () {
+                window.alert('collection changed');
+                this.$el.fullCalendar('removeEvents');
+                this._setEventData(this.collection);
             }
         });
     });

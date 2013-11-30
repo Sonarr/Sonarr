@@ -1,5 +1,5 @@
-﻿/*!
- * FullCalendar v1.6.1 Stylesheet
+/*!
+ * FullCalendar v1.6.4 Stylesheet
  * Docs & License: http://arshaw.com/fullcalendar/
  * (c) 2013 Adam Shaw
  */
@@ -102,11 +102,12 @@ html .fc,
 	
 .fc-content {
 	clear: both;
+	zoom: 1; /* for IE7, gives accurate coordinates for [un]freezeContentHeight */
 	}
 	
 .fc-view {
-	width: 100%; /* needed for view switching (when view is absolute) */
-	/*overflow: hidden;*/
+	width: 100%;
+	overflow: hidden;
 	}
 	
 	
@@ -232,8 +233,9 @@ html .fc,
 
 .fc-state-down,
 .fc-state-active {
-    background : #cccccc none;
-    outline: 0;
+	background-color: #cccccc;
+	background-image: none;
+	outline: 0;
 	box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
 	}
 
@@ -249,6 +251,15 @@ html .fc,
 
 /* Global Event Styles
 ------------------------------------------------------------------------*/
+
+.fc-event-container > * {
+	z-index: 8;
+	}
+
+.fc-event-container > .ui-draggable-dragging,
+.fc-event-container > .ui-resizable-resizing {
+	z-index: 9;
+	}
 	 
 .fc-event {
 	border: 1px solid #3a87ad; /* default BORDER color */
@@ -279,15 +290,8 @@ a.fc-event,
 	
 .fc-event-time,
 .fc-event-title {
-	padding: 0 2px;
-    display: block;
-}
-
-.fc-event-title {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
+	padding: 0 1px;
+	}
 	
 .fc .ui-resizable-handle {
 	display: block;
