@@ -9,11 +9,12 @@ define(
             },
             Keys  : {
                 DefaultQualityProfileId: 'DefaultQualityProfileId',
-                DefaultRootFolderId: 'DefaultRootFolderId',
-                UseSeasonFolder: 'UseSeasonFolder'
+                DefaultRootFolderId    : 'DefaultRootFolderId',
+                UseSeasonFolder        : 'UseSeasonFolder'
             },
 
             getValueBoolean: function (key, defaultValue) {
+                defaultValue = defaultValue || false;
                 return this.getValue(key, defaultValue.toString()) === 'true';
             },
 
