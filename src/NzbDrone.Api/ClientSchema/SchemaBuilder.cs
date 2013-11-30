@@ -12,7 +12,7 @@ namespace NzbDrone.Api.ClientSchema
     {
         public static List<Field> ToSchema(object model)
         {
-            Ensure.That(() => model).IsNotNull();
+            Ensure.That(model, () => model).IsNotNull();
 
             var properties = model.GetType().GetSimpleProperties();
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Api.ClientSchema
 
         public static object ReadFormSchema(List<Field> fields, Type targetType)
         {
-            Ensure.That(() => targetType).IsNotNull();
+            Ensure.That(targetType, () => targetType).IsNotNull();
 
             var properties = targetType.GetSimpleProperties();
 
@@ -96,7 +96,7 @@ namespace NzbDrone.Api.ClientSchema
 
         public static T ReadFormSchema<T>(List<Field> fields)
         {
-            return (T)ReadFormSchema(fields, typeof (T));
+            return (T)ReadFormSchema(fields, typeof(T));
         }
 
         private static List<SelectOption> GetSelectOptions(Type selectOptions)

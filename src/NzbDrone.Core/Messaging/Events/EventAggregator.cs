@@ -23,26 +23,26 @@ namespace NzbDrone.Core.Messaging.Events
 
         public void PublishEvent<TEvent>(TEvent @event) where TEvent : class ,IEvent
         {
-            Ensure.That(() => @event).IsNotNull();
+            Ensure.That(@event, () => @event).IsNotNull();
 
             var eventName = GetEventName(@event.GetType());
 
-/*
-            int workerThreads;
-            int completionPortThreads;
-            ThreadPool.GetAvailableThreads(out workerThreads, out completionPortThreads);
+            /*
+                        int workerThreads;
+                        int completionPortThreads;
+                        ThreadPool.GetAvailableThreads(out workerThreads, out completionPortThreads);
 
-            int maxCompletionPortThreads;
-            int maxWorkerThreads;
-            ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
+                        int maxCompletionPortThreads;
+                        int maxWorkerThreads;
+                        ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
 
 
-            int minCompletionPortThreads;
-            int minWorkerThreads;
-            ThreadPool.GetMinThreads(out minWorkerThreads, out minCompletionPortThreads);
+                        int minCompletionPortThreads;
+                        int minWorkerThreads;
+                        ThreadPool.GetMinThreads(out minWorkerThreads, out minCompletionPortThreads);
 
-            _logger.Warn("Thread pool state WT:{0} PT:{1}  MAXWT:{2} MAXPT:{3} MINWT:{4} MINPT:{5}", workerThreads, completionPortThreads, maxWorkerThreads, maxCompletionPortThreads, minWorkerThreads, minCompletionPortThreads);
-*/
+                        _logger.Warn("Thread pool state WT:{0} PT:{1}  MAXWT:{2} MAXPT:{3} MINWT:{4} MINPT:{5}", workerThreads, completionPortThreads, maxWorkerThreads, maxCompletionPortThreads, minWorkerThreads, minCompletionPortThreads);
+            */
 
             _logger.Trace("Publishing {0}", eventName);
 

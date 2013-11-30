@@ -38,7 +38,7 @@ namespace NzbDrone.Common.Cache
 
         public void Set(string key, T value, TimeSpan? lifetime = null)
         {
-            Ensure.That(() => key).IsNotNullOrWhiteSpace();
+            Ensure.That(key, () => key).IsNotNullOrWhiteSpace();
             _store[key] = new CacheItem(value, lifetime);
         }
 
@@ -69,7 +69,7 @@ namespace NzbDrone.Common.Cache
 
         public T Get(string key, Func<T> function, TimeSpan? lifeTime = null)
         {
-            Ensure.That(() => key).IsNotNullOrWhiteSpace();
+            Ensure.That(key, () => key).IsNotNullOrWhiteSpace();
 
             CacheItem cacheItem;
             T value;

@@ -23,8 +23,8 @@ namespace NzbDrone.Common
 
         public static string CleanFilePath(this string path)
         {
-            Ensure.That(() => path).IsNotNullOrWhiteSpace();
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsNotNullOrWhiteSpace();
+            Ensure.That(path, () => path).IsValidPath();
 
             var info = new FileInfo(path.Trim());
 

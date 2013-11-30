@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void PublishCommand<TCommand>(TCommand command) where TCommand : Command
         {
-            Ensure.That(() => command).IsNotNull();
+            Ensure.That(command, () => command).IsNotNull();
 
             _logger.Trace("Publishing {0}", command.GetType().Name);
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public Command PublishCommandAsync<TCommand>(TCommand command) where TCommand : Command
         {
-            Ensure.That(() => command).IsNotNull();
+            Ensure.That(command, () => command).IsNotNull();
 
             _logger.Trace("Publishing {0}", command.GetType().Name);
 

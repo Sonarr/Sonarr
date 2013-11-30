@@ -57,9 +57,9 @@ namespace NzbDrone.Core.MediaFiles
 
         private void MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
         {
-            Ensure.That(() => episodeFile).IsNotNull();
-            Ensure.That(() => series).IsNotNull();
-            Ensure.That(() => destinationFilename).IsValidPath();
+            Ensure.That(episodeFile, () => episodeFile).IsNotNull();
+            Ensure.That(series,() => series).IsNotNull();
+            Ensure.That(destinationFilename, () => destinationFilename).IsValidPath();
 
             if (!_diskProvider.FileExists(episodeFile.Path))
             {

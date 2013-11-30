@@ -67,7 +67,7 @@ namespace NzbDrone.Common
 
         public DateTime GetLastFolderWrite(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             if (!FolderExists(path))
             {
@@ -87,7 +87,7 @@ namespace NzbDrone.Common
 
         public DateTime GetLastFileWrite(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             if (!FileExists(path))
             {
@@ -107,13 +107,13 @@ namespace NzbDrone.Common
 
         public bool FolderExists(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
             return Directory.Exists(path);
         }
 
         public bool FileExists(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
             return File.Exists(path);
         }
 
@@ -129,28 +129,28 @@ namespace NzbDrone.Common
 
         public string[] GetDirectories(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             return Directory.GetDirectories(path);
         }
 
         public string[] GetFiles(string path, SearchOption searchOption)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             return Directory.GetFiles(path, "*.*", searchOption);
         }
 
         public long GetFolderSize(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             return GetFiles(path, SearchOption.AllDirectories).Sum(e => new FileInfo(e).Length);
         }
 
         public long GetFileSize(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             if (!FileExists(path))
             {
@@ -163,22 +163,22 @@ namespace NzbDrone.Common
 
         public void CreateFolder(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
             Directory.CreateDirectory(path);
         }
 
         public void CopyFolder(string source, string destination)
         {
-            Ensure.That(() => source).IsValidPath();
-            Ensure.That(() => destination).IsValidPath();
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
 
             TransferFolder(source, destination, TransferAction.Copy);
         }
 
         public void MoveFolder(string source, string destination)
         {
-            Ensure.That(() => source).IsValidPath();
-            Ensure.That(() => destination).IsValidPath();
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
 
             try
             {
@@ -195,8 +195,8 @@ namespace NzbDrone.Common
 
         private void TransferFolder(string source, string target, TransferAction transferAction)
         {
-            Ensure.That(() => source).IsValidPath();
-            Ensure.That(() => target).IsValidPath();
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(target, () => target).IsValidPath();
 
             Logger.Trace("{0} {1} -> {2}", transferAction, source, target);
 
@@ -237,7 +237,7 @@ namespace NzbDrone.Common
 
         public void DeleteFile(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
             Logger.Trace("Deleting file: {0}", path);
 
             RemoveReadOnly(path);
@@ -247,8 +247,8 @@ namespace NzbDrone.Common
 
         public void MoveFile(string source, string destination)
         {
-            Ensure.That(() => source).IsValidPath();
-            Ensure.That(() => destination).IsValidPath();
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
 
             if (source.PathEquals(destination))
             {
@@ -267,14 +267,14 @@ namespace NzbDrone.Common
 
         public void DeleteFolder(string path, bool recursive)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             Directory.Delete(path, recursive);
         }
 
         public void InheritFolderPermissions(string filename)
         {
-            Ensure.That(() => filename).IsValidPath();
+            Ensure.That(filename, () => filename).IsValidPath();
 
             try
             {
@@ -293,7 +293,7 @@ namespace NzbDrone.Common
 
         public long? GetAvailableSpace(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             var root = GetPathRoot(path);
 
@@ -319,28 +319,28 @@ namespace NzbDrone.Common
 
         public string ReadAllText(string filePath)
         {
-            Ensure.That(() => filePath).IsValidPath();
+            Ensure.That(filePath, () => filePath).IsValidPath();
 
             return File.ReadAllText(filePath);
         }
 
         public void WriteAllText(string filename, string contents)
         {
-            Ensure.That(() => filename).IsValidPath();
+            Ensure.That(filename, () => filename).IsValidPath();
             RemoveReadOnly(filename);
             File.WriteAllText(filename, contents);
         }
 
         public void FileSetLastWriteTimeUtc(string path, DateTime dateTime)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             File.SetLastWriteTimeUtc(path, dateTime);
         }
 
         public void FolderSetLastWriteTimeUtc(string path, DateTime dateTime)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             Directory.SetLastWriteTimeUtc(path, dateTime);
         }
@@ -362,14 +362,14 @@ namespace NzbDrone.Common
 
         public string GetPathRoot(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             return Path.GetPathRoot(path);
         }
 
         public string GetParentFolder(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             var parent = Directory.GetParent(path);
 
@@ -448,7 +448,7 @@ namespace NzbDrone.Common
 
         public void EmptyFolder(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             foreach (var file in GetFiles(path, SearchOption.TopDirectoryOnly))
             {
@@ -468,7 +468,7 @@ namespace NzbDrone.Common
 
         public long? GetTotalSize(string path)
         {
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
 
             var root = GetPathRoot(path);
 

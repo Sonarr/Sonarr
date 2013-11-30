@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Tv
 
         public Series AddSeries(Series newSeries)
         {
-            Ensure.That(() => newSeries).IsNotNull();
+            Ensure.That(newSeries, () => newSeries).IsNotNull();
 
             if (String.IsNullOrWhiteSpace(newSeries.Path))
             {
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Tv
         public Series UpdateSeries(Series series)
         {
             var storedSeries = GetSeries(series.Id);
-            
+
             foreach (var season in series.Seasons)
             {
                 var storedSeason = storedSeries.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);

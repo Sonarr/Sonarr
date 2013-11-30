@@ -12,7 +12,7 @@ namespace NzbDrone.Common.Test.EnsureTest
         public void EnsureWindowsPath(string path)
         {
             WindowsOnly();
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
         }
 
 
@@ -20,7 +20,7 @@ namespace NzbDrone.Common.Test.EnsureTest
         public void EnsureLinuxPath(string path)
         {
             LinuxOnly();
-            Ensure.That(() => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath();
         }
     }
 }

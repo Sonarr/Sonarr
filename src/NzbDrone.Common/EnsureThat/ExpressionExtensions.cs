@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Common.EnsureThat
 {
@@ -15,30 +16,35 @@ namespace NzbDrone.Common.EnsureThat
             return path + e.Member.Name;
         }
 
-        internal static MemberExpression GetRightMostMember(this Expression e)
+        internal static string GetPath(this Expression expression)
         {
-			if (e is LambdaExpression)
-				return GetRightMostMember(((LambdaExpression)e).Body);
+            return GetRightMostMember(expression).ToPath();
+        }
 
-			if (e is MemberExpression)
-				return (MemberExpression)e;
+        private static MemberExpression GetRightMostMember(Expression e)
+        {
+            if (e is LambdaExpression)
+                return GetRightMostMember(((LambdaExpression)e).Body);
 
-			if (e is MethodCallExpression)
-			{
-				var callExpression = (MethodCallExpression)e;
+            if (e is MemberExpression)
+                return (MemberExpression)e;
 
-				if (callExpression.Object is MethodCallExpression || callExpression.Object is MemberExpression)
-					return GetRightMostMember(callExpression.Object);
+            if (e is MethodCallExpression)
+            {
+                var callExpression = (MethodCallExpression)e;
 
-				var member = callExpression.Arguments.Count > 0 ? callExpression.Arguments[0] : callExpression.Object;
-				return GetRightMostMember(member);
-			}
+                if (callExpression.Object is MethodCallExpression || callExpression.Object is MemberExpression)
+                    return GetRightMostMember(callExpression.Object);
 
-			if (e is UnaryExpression)
-			{
-				var unaryExpression = (UnaryExpression)e;
-				return GetRightMostMember(unaryExpression.Operand);
-			}
+                var member = callExpression.Arguments.Count > 0 ? callExpression.Arguments[0] : callExpression.Object;
+                return GetRightMostMember(member);
+            }
+
+            if (e is UnaryExpression)
+            {
+                var unaryExpression = (UnaryExpression)e;
+                return GetRightMostMember(unaryExpression.Operand);
+            }
 
             return null;
         }

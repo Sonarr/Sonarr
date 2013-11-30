@@ -24,7 +24,7 @@ namespace NzbDrone.Common.Cache
 
         public ICached<T> GetCache<T>(Type host)
         {
-            Ensure.That(() => host).IsNotNull();
+            Ensure.That(host, () => host).IsNotNull();
             return GetCache<T>(host, host.FullName);
         }
 
@@ -37,8 +37,8 @@ namespace NzbDrone.Common.Cache
 
         public ICached<T> GetCache<T>(Type host, string name)
         {
-            Ensure.That(() => host).IsNotNull();
-            Ensure.That(() => name).IsNotNullOrWhiteSpace();
+            Ensure.That(host, () => host).IsNotNull();
+            Ensure.That(name, () => name).IsNotNullOrWhiteSpace();
 
             return (ICached<T>)_cache.Get(host.FullName + "_" + name, () => new Cached<T>());
         }

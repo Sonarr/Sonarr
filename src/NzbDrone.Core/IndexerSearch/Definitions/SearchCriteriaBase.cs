@@ -25,7 +25,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         private static string GetQueryTitle(string title)
         {
-            Ensure.That(() => title).IsNotNullOrWhiteSpace();
+            Ensure.That(title,() => title).IsNotNullOrWhiteSpace();
 
             var cleanTitle = BeginningThe.Replace(title, String.Empty);
 
