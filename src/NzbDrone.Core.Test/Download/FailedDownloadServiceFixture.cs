@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.Download
                   .Setup(s => s.GetHistory(0, 20))
                   .Returns(new List<HistoryItem>());
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             Mocker.GetMock<IHistoryService>()
                   .Verify(s => s.BetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), HistoryEventType.Grabbed),
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.Download
                   .Setup(s => s.GetHistory(0, 20))
                   .Returns(_completed);
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             Mocker.GetMock<IHistoryService>()
                   .Verify(s => s.BetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), HistoryEventType.Grabbed),
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.Download
             GivenNoGrabbedHistory();
             GivenFailedDownloadClientHistory();
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.Download
             history.First().Data.Add("downloadClient", "SabnzbdClient");
             history.First().Data.Add("downloadClientId", _failed.First().Id);
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.Download
             history.First().Data.Add("downloadClient", "SabnzbdClient");
             history.First().Data.Add("downloadClientId", _failed.First().Id);
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             VerifyFailedDownloads();
         }
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.Download
                 h.Data.Add("downloadClientId", _failed.First().Id);
             });
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             VerifyFailedDownloads(2);
         }
@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Test.Download
                   .SetupGet(s => s.EnableFailedDownloadHandling)
                   .Returns(false);
 
-            Subject.Execute(new FailedDownloadCommand());
+            Subject.Execute(new CheckForFailedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }

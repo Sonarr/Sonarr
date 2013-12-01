@@ -233,7 +233,7 @@
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabCommunicationProxy.cs" />
-    <Compile Include="Download\FailedDownloadCommand.cs" />
+    <Compile Include="Download\CheckForFailedDownloadCommand.cs" />
     <Compile Include="Download\HistoryItem.cs" />
     <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadApprovedReports.cs" />

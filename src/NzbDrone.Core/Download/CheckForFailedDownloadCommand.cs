@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.Download
 {
-    public class FailedDownloadCommand : Command
+    public class CheckForFailedDownloadCommand : Command
     {
 
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Download
         void MarkAsFailed(int historyId);
     }
 
-    public class FailedDownloadService : IFailedDownloadService, IExecute<FailedDownloadCommand>
+    public class FailedDownloadService : IFailedDownloadService, IExecute<CheckForFailedDownloadCommand>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IHistoryService _historyService;
@@ -40,22 +41,7 @@ namespace NzbDrone.Core.Download
         public void MarkAsFailed(int historyId)
         {
             var item = _historyService.Get(historyId);
-            PublishDownloadFailedEvent(new List<History.History> {item}, "Manually marked as failed");
-        }
-
-        private void CheckForFailedDownloads()
-        {
-            if (!_configService.EnableFailedDownloadHandling)
-            {
-                _logger.Trace("Failed Download Handling is not enabled");
-                return;
-            }
-
-            var grabbedHistory = _historyService.Grabbed();
-            var failedHistory = _historyService.Failed();
-
-            CheckQueue(grabbedHistory, failedHistory);
-            CheckHistory(grabbedHistory, failedHistory);
+            PublishDownloadFailedEvent(new List<History.History> { item }, "Manually marked as failed");
         }
 
         private void CheckQueue(List<History.History> grabbedHistory, List<History.History> failedHistory)
@@ -163,9 +149,19 @@ namespace NzbDrone.Core.Download
             return _downloadClientProvider.GetDownloadClient();
         }
 
-        public void Execute(FailedDownloadCommand message)
+        public void Execute(CheckForFailedDownloadCommand message)
         {
-            CheckForFailedDownloads();
+            if (!_configService.EnableFailedDownloadHandling)
+            {
+                _logger.Trace("Failed Download Handling is not enabled");
+                return;
+            }
+
+            var grabbedHistory = _historyService.Grabbed();
+            var failedHistory = _historyService.Failed();
+
+            CheckQueue(grabbedHistory, failedHistory);
+            CheckHistory(grabbedHistory, failedHistory);
         }
     }
 }

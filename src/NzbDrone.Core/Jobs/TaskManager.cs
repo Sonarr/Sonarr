@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName},
                     new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName},
-                    new ScheduledTask{ Interval = 1, TypeName = typeof(FailedDownloadCommand).FullName}
+                    new ScheduledTask{ Interval = 1, TypeName = typeof(CheckForFailedDownloadCommand).FullName}
                 };
 
             var currentTasks = _scheduledTaskRepository.All();
