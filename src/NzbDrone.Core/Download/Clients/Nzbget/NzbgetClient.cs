@@ -13,13 +13,19 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
+        private readonly INzbGetCommunicationProxy _proxy;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
-        public NzbgetClient(IConfigService configService, IHttpProvider httpProvider, IParsingService parsingService, Logger logger)
+        public NzbgetClient(IConfigService configService,
+                            IHttpProvider httpProvider,
+                            INzbGetCommunicationProxy proxy,
+                            IParsingService parsingService,
+                            Logger logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
+            _proxy = proxy;
             _parsingService = parsingService;
             _logger = logger;
         }
@@ -32,18 +38,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             string cat = _configService.NzbgetTvCategory;
             int priority = remoteEpisode.IsRecentEpisode() ? (int)_configService.NzbgetRecentTvPriority : (int)_configService.NzbgetOlderTvPriority;
 
-            var command = new JsonRequest
-            {
-                Method = "appendurl",
-                Params = new object[] { title, cat, priority, false, url }
-            };
-
             _logger.Info("Adding report [{0}] to the queue.", title);
-            var response = PostCommand(command.ToJson());
 
-            CheckForError(response);
+            var success = _proxy.AddNzb(title, cat, priority, false, url);
 
-            var success = Json.Deserialize<EnqueueResponse>(response).Result;
             _logger.Debug("Queue Response: [{0}]", success);
 
             return null;
@@ -59,25 +57,16 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public virtual IEnumerable<QueueItem> GetQueue()
         {
-            var command = new JsonRequest
-                {
-                    Method = "listgroups",
-                    Params = null
-                };
+            var items = _proxy.GetQueue();
 
-            var response = PostCommand(command.ToJson());
-
-            CheckForError(response);
-
-            var itmes = Json.Deserialize<NzbGetQueue>(response).QueueItems;
-
-            foreach (var nzbGetQueueItem in itmes)
+            foreach (var nzbGetQueueItem in items)
             {
                 var queueItem = new QueueItem();
                 queueItem.Id = nzbGetQueueItem.NzbId.ToString();
                 queueItem.Title = nzbGetQueueItem.NzbName;
                 queueItem.Size = nzbGetQueueItem.FileSizeMb;
                 queueItem.Sizeleft = nzbGetQueueItem.RemainingSizeMb;
+                queueItem.Status = nzbGetQueueItem.FileSizeMb == nzbGetQueueItem.PausedSizeMb ? "paused" : "queued";
 
                 var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
                 if (parsedEpisodeInfo == null) continue;
@@ -108,6 +97,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public virtual VersionModel GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
+            throw new NotImplementedException();
+
             //Get saved values if any of these are defaults
             if (host == null)
                 host = _configService.NzbgetHost;
@@ -121,16 +112,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             if (password == null)
                 password = _configService.NzbgetPassword;
 
-            var command = new JsonRequest
-            {
-                Method = "version",
-                Params = null
-            };
 
-            var address = String.Format(@"{0}:{1}", host, port);
-            var response = _httpProvider.PostCommand(address, username, password, command.ToJson());
-
-            CheckForError(response);
+            var response = _proxy.GetVersion();
 
             return Json.Deserialize<VersionModel>(response);
         }
@@ -148,23 +131,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
 
             return String.Empty;
-        }
-
-        private string PostCommand(string command)
-        {
-            var url = String.Format(@"{0}:{1}",
-                                 _configService.NzbgetHost,
-                                 _configService.NzbgetPort);
-
-            return _httpProvider.PostCommand(url, _configService.NzbgetUsername, _configService.NzbgetPassword, command);
-        }
-
-        private void CheckForError(string response)
-        {
-            var result = Json.Deserialize<JsonError>(response);
-
-            if (result.Error != null)
-                throw new ApplicationException(result.Error.ToString());
         }
     }
 }

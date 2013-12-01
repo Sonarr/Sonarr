@@ -228,6 +228,8 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
+    <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbGetCommunicationProxy.cs" />
     <Compile Include="Download\Clients\Sabnzbd\ConnectionInfoModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
@@ -435,7 +437,6 @@
     <Compile Include="Download\Clients\Nzbget\EnqueueResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
-    <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbGetQueue.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbGetQueueItem.cs" />
     <Compile Include="Download\Clients\Nzbget\PriorityType.cs" />
@@ -450,6 +451,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />

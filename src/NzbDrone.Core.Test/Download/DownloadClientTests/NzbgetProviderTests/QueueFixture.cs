@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -14,37 +15,30 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
 {
     public class QueueFixture : CoreTest<NzbgetClient>
     {
+        private List<NzbGetQueueItem> _queue;
+
         [SetUp]
         public void Setup()
         {
-            var fakeConfig = Mocker.GetMock<IConfigService>();
-            fakeConfig.SetupGet(c => c.NzbgetHost).Returns("192.168.5.55");
-            fakeConfig.SetupGet(c => c.NzbgetPort).Returns(6789);
-            fakeConfig.SetupGet(c => c.NzbgetUsername).Returns("nzbget");
-            fakeConfig.SetupGet(c => c.NzbgetPassword).Returns("pass");
-            fakeConfig.SetupGet(c => c.NzbgetTvCategory).Returns("TV");
-            fakeConfig.SetupGet(c => c.NzbgetRecentTvPriority).Returns(PriorityType.High);
+            _queue = Builder<NzbGetQueueItem>.CreateListOfSize(5)
+                                             .All()
+                                             .With(q => q.NzbName = "30.Rock.S01E01.Pilot.720p.hdtv.nzb")
+                                             .Build()
+                                             .ToList();
         }
 
         private void WithFullQueue()
         {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(ReadAllText("Files", "Nzbget", "Queue.txt"));
+            Mocker.GetMock<INzbGetCommunicationProxy>()
+                  .Setup(s => s.GetQueue())
+                  .Returns(_queue);
         }
 
         private void WithEmptyQueue()
         {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(ReadAllText("Files", "Nzbget", "Queue_empty.txt"));
-        }
-
-        private void WithFailResponse()
-        {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.PostCommand("192.168.5.55:6789", "nzbget", "pass", It.IsAny<String>()))
-                    .Returns(ReadAllText("Files", "Nzbget", "JsonError.txt"));
+            Mocker.GetMock<INzbGetCommunicationProxy>()
+                  .Setup(s => s.GetQueue())
+                  .Returns(new List<NzbGetQueueItem>());
         }
 
         [Test]
@@ -68,7 +62,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetProviderTests
 
             Subject.GetQueue()
                    .Should()
-                   .HaveCount(1);
+                   .HaveCount(_queue.Count);
         }
     }
 }
