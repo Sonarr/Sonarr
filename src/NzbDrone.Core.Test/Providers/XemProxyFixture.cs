@@ -39,12 +39,12 @@ namespace NzbDrone.Core.Test.Providers
             }
         }
 
-        [Test]
-        public void should_return_empty_when_series_is_not_found()
+        [TestCase(12345, Description = "invalid id")]
+        [TestCase(267440, Description = "no single connection")]
+        public void should_return_empty_when_known_error(int id)
         {
-            Subject.GetSceneTvdbMappings(12345).Should().BeEmpty();
+            Subject.GetSceneTvdbMappings(id).Should().BeEmpty();
         }
-
 
         [TestCase(82807)]
         public void should_get_mapping(int seriesId)

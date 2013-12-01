@@ -20,6 +20,9 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         private const string XEM_BASE_URL = "http://thexem.de/map/";
 
+        private static readonly string[] IgnoredErrors = { "no single connection", "no show with the tvdb_id" };
+
+
         public XemProxy(Logger logger)
         {
             _logger = logger;
@@ -67,10 +70,12 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         private static void CheckForFailureResult<T>(XemResult<T> response)
         {
             if (response.Result.Equals("failure", StringComparison.InvariantCultureIgnoreCase) &&
-                !response.Message.Contains("no show with the tvdb_id"))
+                !IgnoredErrors.Any(knowError => response.Message.Contains(knowError)))
             {
                 throw new Exception("Error response received from Xem: " + response.Message);
             }
         }
+
+
     }
 }
