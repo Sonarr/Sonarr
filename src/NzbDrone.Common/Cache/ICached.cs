@@ -6,6 +6,8 @@ namespace NzbDrone.Common.Cache
     public interface ICached
     {
         void Clear();
+        void Remove(string key);
+        int Count { get; }
     }
 
     public interface ICached<T> : ICached
@@ -13,7 +15,6 @@ namespace NzbDrone.Common.Cache
         void Set(string key, T value, TimeSpan? lifetime = null);
         T Get(string key, Func<T> function, TimeSpan? lifeTime = null);
         T Find(string key);
-        void Remove(string key);
 
         ICollection<T> Values { get; }
     }

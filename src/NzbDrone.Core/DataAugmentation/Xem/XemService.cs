@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {
-    public class XemService : IExecute<UpdateXemMappingsCommand>, IHandle<SeriesUpdatedEvent>, IHandleAsync<ApplicationStartedEvent>
+    public class XemService : IHandle<SeriesUpdatedEvent>
     {
         private readonly IEpisodeService _episodeService;
         private readonly IXemProxy _xemProxy;
@@ -33,63 +30,28 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         }
 
 
-        public void Execute(UpdateXemMappingsCommand message)
-        {
-            UpdateMappings();
-        }
-
         public void Handle(SeriesUpdatedEvent message)
         {
-            UpdateMappings(message.Series);
-        }
-
-        public void HandleAsync(ApplicationStartedEvent message)
-        {
-            GetXemSeriesIds();
-        }
-
-        private void UpdateMappings()
-        {
-            _logger.Trace("Starting scene numbering update");
-
-            try
+            if (_cache.Count == 0)
             {
-                var ids = GetXemSeriesIds();
-                var series = _seriesService.GetAllSeries();
-                var wantedSeries = series.Where(s => ids.Contains(s.TvdbId)).ToList();
-
-                foreach (var ser in wantedSeries)
-                {
-                    PerformUpdate(ser);
-                }
-
-                _logger.Trace("Completed scene numbering update");
+                RefreshCache();
             }
 
-            catch (Exception ex)
+            if (!_cache.Find(message.Series.TvdbId.ToString()))
             {
-                _logger.WarnException("Error updating Scene Mappings", ex);
-                throw;
-            }
-        }
-
-        private void UpdateMappings(Series series)
-        {
-            if (!_cache.Find(series.TvdbId.ToString()))
-            {
-                _logger.Trace("Scene numbering is not available for {0} [{1}]", series.Title, series.TvdbId);
+                _logger.Trace("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
                 return;
             }
 
-            PerformUpdate(series);
+            PerformUpdate(message.Series);
         }
 
         private void PerformUpdate(Series series)
         {
             _logger.Trace("Updating scene numbering mapping for: {0}", series);
+
             try
             {
-                var episodesToUpdate = new List<Episode>();
                 var mappings = _xemProxy.GetSceneTvdbMappings(series.TvdbId);
 
                 if (!mappings.Any())
@@ -100,6 +62,13 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 }
 
                 var episodes = _episodeService.GetEpisodeBySeries(series.Id);
+
+                foreach (var episode in episodes)
+                {
+                    episode.AbsoluteEpisodeNumber = 0;
+                    episode.SceneSeasonNumber = 0;
+                    episode.SceneEpisodeNumber = 0;
+                }
 
                 foreach (var mapping in mappings)
                 {
@@ -116,24 +85,21 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                     episode.AbsoluteEpisodeNumber = mapping.Scene.Absolute;
                     episode.SceneSeasonNumber = mapping.Scene.Season;
                     episode.SceneEpisodeNumber = mapping.Scene.Episode;
-                    episodesToUpdate.Add(episode);
                 }
 
-                _logger.Trace("Committing scene numbering mappings to database for: {0}", series);
-                _episodeService.UpdateEpisodes(episodesToUpdate);
-
-                _logger.Trace("Setting UseSceneMapping for {0}", series);
+                _episodeService.UpdateEpisodes(episodes);
                 series.UseSceneNumbering = true;
                 _seriesService.UpdateSeries(series);
-            }
 
+                _logger.Debug("XEM mapping updated for {0}", series);
+            }
             catch (Exception ex)
             {
                 _logger.ErrorException("Error updating scene numbering mappings for: " + series, ex);
             }
         }
 
-        private List<int> GetXemSeriesIds()
+        private void RefreshCache()
         {
             _cache.Clear();
 
@@ -141,10 +107,8 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             foreach (var id in ids)
             {
-                _cache.Set(id.ToString(), true);
+                _cache.Set(id.ToString(), true, TimeSpan.FromHours(1));
             }
-
-            return ids;
         }
     }
 }

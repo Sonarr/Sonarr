@@ -139,7 +139,6 @@
     <Compile Include="DataAugmentation\Xem\Model\XemResult.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemSceneTvdbMapping.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemValues.cs" />
-    <Compile Include="DataAugmentation\Xem\UpdateXemMappingsCommand.cs" />
     <Compile Include="DataAugmentation\Xem\XemProxy.cs" />
     <Compile Include="DataAugmentation\Xem\XemService.cs" />
     <Compile Include="Datastore\ConnectionStringFactory.cs" />
