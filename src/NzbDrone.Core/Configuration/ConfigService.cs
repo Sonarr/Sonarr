@@ -74,14 +74,14 @@ namespace NzbDrone.Core.Configuration
 
         public String SabHost
         {
-            get { return GetValue("SabHost", "localhost"); }
+            get { return GetValue("SabHost"); }
 
             set { SetValue("SabHost", value); }
         }
 
         public int SabPort
         {
-            get { return GetValueInt("SabPort", 8080); }
+            get { return GetValueInt("SabPort"); }
 
             set { SetValue("SabPort", value); }
         }
