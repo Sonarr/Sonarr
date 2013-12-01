@@ -133,7 +133,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private List<ImportDecision> ProcessFiles(Series series, QualityModel quality, params string[] videoFiles)
         {
-            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles, series, true, quality);
+            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, true, quality);
             return _importApprovedEpisodes.Import(decisions, true);
         }
 

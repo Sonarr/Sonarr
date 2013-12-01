@@ -40,10 +40,12 @@ namespace NzbDrone.Common
         {
             if (OsInfo.IsLinux)
             {
+                if (firstPath.Equals(secondPath)) return true;
                 return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath());
             }
 
-            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.InvariantCultureIgnoreCase);
+            if (firstPath.Equals(secondPath, StringComparison.OrdinalIgnoreCase)) return true;
+            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.OrdinalIgnoreCase);
         }
 
         private static readonly Regex WindowsPathWithDriveRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);

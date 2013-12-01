@@ -38,7 +38,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload = false)
         {
-            var qualifiedImports = GetQualifiedImports(decisions);
+            var qualifiedImports = decisions.Where(c => c.Approved)
+                .OrderByDescending(c => c.LocalEpisode.Quality)
+                .ThenByDescending(c => c.LocalEpisode.Size);
+
             var imported = new List<ImportDecision>();
 
             foreach (var importDecision in qualifiedImports.OrderByDescending(e => e.LocalEpisode.Size))
@@ -48,9 +51,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 try
                 {
+                    //check if already imported
                     if (imported.SelectMany(r => r.LocalEpisode.Episodes)
                                          .Select(e => e.Id)
-                                         .ToList()
                                          .Intersect(localEpisode.Episodes.Select(e => e.Id))
                                          .Any())
                     {
@@ -90,14 +93,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
 
             return imported;
-        }
-
-        private List<ImportDecision> GetQualifiedImports(List<ImportDecision> decisions)
-        {
-            return decisions.Where(c => c.Approved)
-                            .OrderByDescending(c => c.LocalEpisode.Quality)
-                            .ThenByDescending(c => c.LocalEpisode.Size)
-                            .ToList();
         }
     }
 }

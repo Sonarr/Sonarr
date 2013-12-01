@@ -111,7 +111,7 @@ namespace NzbDrone.Core.RootFolders
             }
 
             var seriesFolders = _diskProvider.GetDirectories(path).ToList();
-            var unmappedFolders = seriesFolders.Except(series.Select(s => s.Path), new PathEqualityComparer()).ToList();
+            var unmappedFolders = seriesFolders.Except(series.Select(s => s.Path), PathEqualityComparer.Instance).ToList();
 
             foreach (string unmappedFolder in unmappedFolders)
             {

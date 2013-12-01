@@ -65,11 +65,11 @@ namespace NzbDrone.Core.MediaFiles
 
         public List<string> FilterExistingFiles(List<string> files, int seriesId)
         {
-            var seriesFiles = GetFilesBySeries(seriesId).Select(f => f.Path.CleanFilePath()).ToList();
+            var seriesFiles = GetFilesBySeries(seriesId).Select(f => f.Path).ToList();
 
             if (!seriesFiles.Any()) return files;
 
-            return files.Select(f => f.CleanFilePath()).Except(seriesFiles, new PathEqualityComparer()).ToList();
+            return files.Except(seriesFiles, PathEqualityComparer.Instance).ToList();
         }
 
         public EpisodeFile Get(int id)

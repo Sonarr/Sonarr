@@ -56,14 +56,16 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("Creating missing series folder: {0}", series.Path);
                     _diskProvider.CreateFolder(series.Path);
-                    return;
+                }
+                else
+                {
+                    _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 }
 
-                _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 return;
             }
 
-            var mediaFileList = GetVideoFiles(series.Path);
+            var mediaFileList = GetVideoFiles(series.Path).ToList();
 
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
             _importApprovedEpisodes.Import(decisions);

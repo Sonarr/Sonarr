@@ -13,7 +13,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IMakeImportDecision
     {
-        List<ImportDecision> GetImportDecisions(IEnumerable<String> videoFiles, Series series, bool sceneSource, QualityModel quality = null);
+        List<ImportDecision> GetImportDecisions(List<String> videoFiles, Series series, bool sceneSource, QualityModel quality = null);
     }
 
     public class ImportDecisionMaker : IMakeImportDecision
@@ -38,11 +38,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public List<ImportDecision> GetImportDecisions(IEnumerable<string> videoFiles, Series series, bool sceneSource, QualityModel quality = null)
+        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, bool sceneSource, QualityModel quality = null)
         {
             var newFiles = _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series.Id);
 
-            _logger.Debug("Analysing {0}/{1} files.", newFiles.Count, videoFiles.Count());
+            _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count());
 
             return GetDecisions(newFiles, series, sceneSource, quality).ToList();
         }

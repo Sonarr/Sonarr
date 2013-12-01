@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             imported.Add(new ImportDecision(localEpisode));
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Setup(s => s.GetImportDecisions(It.IsAny<IEnumerable<String>>(), It.IsAny<Series>(), true, null))
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), true, null))
                   .Returns(imported);
 
             Mocker.GetMock<IImportApprovedEpisodes>()
