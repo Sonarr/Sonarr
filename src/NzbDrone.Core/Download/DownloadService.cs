@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Download
         void DownloadReport(RemoteEpisode remoteEpisode);
     }
 
+
     public class DownloadService : IDownloadService
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
