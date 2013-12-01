@@ -44,6 +44,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     return false;
                 }
             }
+            catch (DirectoryNotFoundException ex)
+            {
+                _logger.Error("Unable to check free disk space while importing. " + ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.ErrorException("Unable to check free disk space while importing: " + localEpisode.Path, ex);
