@@ -21,7 +21,6 @@ namespace NzbDrone.Core.Organizer
 
     public class FileNameBuilder : IBuildFileNames
     {
-        private readonly IConfigService _configService;
         private readonly INamingConfigService _namingConfigService;
         private readonly ICached<EpisodeFormat> _patternCache;
         private readonly Logger _logger;
@@ -41,12 +40,10 @@ namespace NzbDrone.Core.Organizer
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
-                               IConfigService configService,
                                ICacheManger cacheManger,
                                Logger logger)
         {
             _namingConfigService = namingConfigService;
-            _configService = configService;
             _patternCache = cacheManger.GetCache<EpisodeFormat>(GetType());
             _logger = logger;
         }
@@ -84,7 +81,7 @@ namespace NzbDrone.Core.Organizer
             var pattern = namingConfig.StandardEpisodeFormat;
             var episodeTitles = new List<string>
             {
-                Parser.Parser.CleanupEpisodeTitle(sortedEpisodes.First().Title)
+                sortedEpisodes.First().Title
             };
 
             var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance)
@@ -135,14 +132,14 @@ namespace NzbDrone.Core.Organizer
                             break;
                     }
 
-                    episodeTitles.Add(Parser.Parser.CleanupEpisodeTitle(episode.Title));
+                    episodeTitles.Add(episode.Title);
                 }
 
                 seasonEpisodePattern = ReplaceNumberTokens(seasonEpisodePattern, sortedEpisodes);
                 tokenValues.Add("{Season Episode}", seasonEpisodePattern);
-            }  
-            
-            tokenValues.Add("{Episode Title}", String.Join(" + ", episodeTitles.Distinct()));
+            }
+
+            tokenValues.Add("{Episode Title}", GetEpisodeTitle(episodeTitles));
             tokenValues.Add("{Quality Title}", episodeFile.Quality.ToString());
             
 
@@ -313,6 +310,16 @@ namespace NzbDrone.Core.Organizer
 
                 return null;
             });
+        }
+
+        private string GetEpisodeTitle(List<string> episodeTitles)
+        {
+            if (episodeTitles.Count == 1)
+            {
+                return episodeTitles.First();
+            }
+
+            return String.Join(" + ", episodeTitles.Select(Parser.Parser.CleanupEpisodeTitle).Distinct());
         }
     }
 

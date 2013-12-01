@@ -332,5 +332,17 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                 .Should().Be("South Park - S15E06-E07 - City Sushi");
         }
+
+        [Test]
+        public void should_not_clean_episode_title_if_there_is_only_one()
+        {
+            var title = "City Sushi (1)";
+            _episode1.Title = title;
+
+            _namingConfig.StandardEpisodeFormat = "{Episode Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(title);
+        }
     }
 }
