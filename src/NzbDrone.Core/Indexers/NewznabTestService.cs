@@ -41,14 +41,14 @@ namespace NzbDrone.Core.Indexers
 
                 NewznabPreProcessor.Process(xml, url);
             }
-            catch (ApiKeyException apiKeyException)
+            catch (ApiKeyException)
             {
                 _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
 
                 var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
                 throw new ValidationException(new List<ValidationFailure> { apiKeyFailure }.ToArray());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _logger.Warn("Indexer doesn't appear to be Newznab based");
 

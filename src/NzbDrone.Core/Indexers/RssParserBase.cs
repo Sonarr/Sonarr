@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Indexers
 {
     public abstract class RssParserBase : IParseFeed
     {
-        private readonly Logger _logger;
+        protected readonly Logger _logger;
 
         protected virtual ReleaseInfo CreateNewReleaseInfo()
         {
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers
             _logger = NzbDroneLogger.GetLogger(this);
         }
 
-        public IEnumerable<ReleaseInfo> Process(string xml, string url)
+        public virtual IEnumerable<ReleaseInfo> Process(string xml, string url)
         {
             PreProcess(xml, url);
 

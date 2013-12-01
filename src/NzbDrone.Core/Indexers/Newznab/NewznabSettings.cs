@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
@@ -10,9 +11,25 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabSettingsValidator : AbstractValidator<NewznabSettings>
     {
+        private static readonly string[] ApiKeyWhiteList =
+        {
+            "nzbs.org",
+            "nzb.su",
+            "dognzb.cr",
+            "nzbplanet.net",
+            "nzbid.org",
+            "nzbndx.com",
+        };
+
+        private static bool ShouldHaveApiKey(NewznabSettings settings)
+        {
+            return ApiKeyWhiteList.Any(c => settings.Url.ToLowerInvariant().Contains(c));
+        }
+
         public NewznabSettingsValidator()
         {
             RuleFor(c => c.Url).ValidRootUrl();
+            RuleFor(c => c.ApiKey).NotEmpty().When(ShouldHaveApiKey);
         }
     }
 

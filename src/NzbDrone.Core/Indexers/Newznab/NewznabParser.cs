@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Core.Parser.Model;
@@ -7,6 +8,12 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabParser : RssParserBase
     {
+
+        private static readonly string[] IgnoredErrors =
+        {
+            "Request limit reached",
+        };
+
         protected override string GetNzbInfoUrl(XElement item)
         {
             return item.Comments().Replace("#comments", "");
@@ -23,6 +30,23 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return ParseSize(item.Description());
+        }
+
+        public override IEnumerable<ReleaseInfo> Process(string xml, string url)
+        {
+            try
+            {
+                return base.Process(xml, url);
+            }
+            catch (NewznabException e)
+            {
+                if (!IgnoredErrors.Any(ignoredError => e.Message.Contains(ignoredError)))
+                {
+                    throw;
+                }
+                _logger.Error(e.Message);
+                return new List<ReleaseInfo>();
+            }
         }
 
         protected override ReleaseInfo PostProcessor(XElement item, ReleaseInfo currentResult)
