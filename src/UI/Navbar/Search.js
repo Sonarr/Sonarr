@@ -10,6 +10,10 @@ define(
                 return;
             }
 
+            if (e.ctrlKey) {
+                return;
+            }
+
             if (e.keyCode === 84) {
                 $('.x-series-search').focus();
                 e.preventDefault();
