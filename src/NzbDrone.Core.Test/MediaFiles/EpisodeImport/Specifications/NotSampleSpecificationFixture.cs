@@ -85,21 +85,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
-        public void should_not_run_runtime_check_on_linux()
+        public void should_use_runtime()
         {
-            LinuxOnly();
-            GivenFileSize(1000.Megabytes());
-
-            Subject.IsSatisfiedBy(_localEpisode);
-            
-            Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<String>()), Times.Never());
-        }
-
-        [Test]
-        public void should_run_runtime_check_on_windows()
-        {
-            WindowsOnly();
-
             GivenRuntime(120);
             GivenFileSize(1000.Megabytes());
 
@@ -111,7 +98,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_runtime_is_less_than_minimum()
         {
-            WindowsOnly();
             GivenRuntime(60);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
@@ -120,32 +106,30 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_true_if_runtime_greater_than_than_minimum()
         {
-            WindowsOnly();
             GivenRuntime(120);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
         }
 
         [Test]
-        public void should_return_false_if_file_size_is_under_minimum()
+        public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_acceptable_size()
         {
-            LinuxOnly();
+            Mocker.GetMock<IVideoFileInfoReader>()
+                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Throws<DllNotFoundException>();
 
-            GivenRuntime(120);
-            GivenFileSize(20.Megabytes());
-
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
+            GivenFileSize(1000.Megabytes());
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
         }
 
         [Test]
-        public void should_return_false_if_file_size_is_under_minimum_for_larger_limits()
+        public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_undersize()
         {
-            LinuxOnly();
+            Mocker.GetMock<IVideoFileInfoReader>()
+                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Throws<DllNotFoundException>();
 
-            GivenRuntime(120);
-            GivenFileSize(120.Megabytes());
-            _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
-
+            GivenFileSize(1.Megabytes());
             Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
         }
     }

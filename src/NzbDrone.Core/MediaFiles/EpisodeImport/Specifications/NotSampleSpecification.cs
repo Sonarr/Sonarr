@@ -61,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return true;
             }
 
-            if (OsInfo.IsWindows)
+            try
             {
                 var runTime = _videoFileInfoReader.GetRunTime(localEpisode.Path);
 
@@ -76,12 +76,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     _logger.Trace("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
                     return false;
                 }
-
-                _logger.Trace("Runtime is over 2 minutes, skipping file size check");
-                return true;
             }
 
-            return CheckSize(localEpisode);
+            catch (DllNotFoundException)
+            {
+                _logger.Trace("Falling back to file size detection");
+
+                return CheckSize(localEpisode);
+            }
+
+            _logger.Trace("Runtime is over 90 seconds");
+            return true;
         }
 
         private bool CheckSize(LocalEpisode localEpisode)
@@ -90,12 +95,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             {
                 if (localEpisode.Size < SampleSizeLimit * 2)
                 {
+                    _logger.Trace("1080p file is less than sample limit");
                     return false;
                 }
             }
 
             if (localEpisode.Size < SampleSizeLimit)
             {
+                _logger.Trace("File is less than sample limit");
                 return false;
             }
 

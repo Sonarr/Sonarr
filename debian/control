@@ -8,5 +8,5 @@ Vcs-Browser: https://github.com/NzbDrone/NzbDrone
 
 Package: nzbdrone
 Architecture: all
-Depends: libmono-cil-dev (>= 2.10.1)
+Depends: libmono-cil-dev (>= 2.10.1), sqlite3 (>= 3.7), mediainfo (>= 0.7.52)
 Description: NZBDrone is a PVR for newsgroup users
