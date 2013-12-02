@@ -21,7 +21,25 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             setting.Validate().IsValid.Should().BeFalse();
             setting.Validate().Errors.Should().Contain(c => c.PropertyName == "ApiKey");
-                
+
+        }
+
+        [TestCase("")]
+        [TestCase("  ")]
+        [TestCase(null)]
+        public void invalid_url_should_not_apikey(string url)
+        {
+            var setting = new NewznabSettings
+            {
+                ApiKey = "",
+                Url = url
+            };
+
+
+            setting.Validate().IsValid.Should().BeFalse();
+            setting.Validate().Errors.Should().NotContain(c => c.PropertyName == "ApiKey");
+            setting.Validate().Errors.Should().Contain(c => c.PropertyName == "Url");
+
         }
 
 
