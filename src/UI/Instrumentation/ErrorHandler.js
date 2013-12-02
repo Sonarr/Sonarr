@@ -79,6 +79,10 @@
                 message.message = xmlHttpRequest.responseJSON.message;
             }
 
+            if (xmlHttpRequest.status === 409) {
+                message.message = xmlHttpRequest.responseJSON.message;
+            }
+
             else {
                 message.message = '[{0}] {1} : {2}'.format(ajaxOptions.type, xmlHttpRequest.statusText, ajaxOptions.url);
             }

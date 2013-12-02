@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SQLite;
 using FluentValidation;
 using NLog;
 using Nancy;
@@ -46,6 +47,21 @@ namespace NzbDrone.Api.ErrorManagement
                     Message = exception.Message,
                     Description = exception.ToString()
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
+            }
+
+
+            if (context.Request.Method == "PUT" || context.Request.Method == "POST")
+            {
+                var sqLiteException = exception as SQLiteException;
+
+                if (sqLiteException != null)
+                {
+                    if (sqLiteException.Message.Contains("constraint failed"))
+                        return new ErrorModel
+                        {
+                            Message = exception.Message,
+                        }.AsResponse(HttpStatusCode.Conflict);
+                }
             }
 
             _logger.FatalException("Request Failed", exception);
