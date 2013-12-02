@@ -23,6 +23,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private static bool ShouldHaveApiKey(NewznabSettings settings)
         {
+            if (settings.Url == null)
+            {
+                return false;
+            }
+
             return ApiKeyWhiteList.Any(c => settings.Url.ToLowerInvariant().Contains(c));
         }
 
