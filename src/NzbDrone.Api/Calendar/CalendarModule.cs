@@ -29,6 +29,12 @@ namespace NzbDrone.Api.Calendar
             _seriesRepository = seriesRepository;
 
             GetResourceAll = GetCalendar;
+            GetResourceById = GetEpisode;
+        }
+
+        private EpisodeResource GetEpisode(int id)
+        {
+            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
         }
 
         private List<EpisodeResource> GetCalendar()

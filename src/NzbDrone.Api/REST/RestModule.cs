@@ -37,10 +37,22 @@ namespace NzbDrone.Api.REST
         protected RestModule(string modulePath)
             : base(modulePath)
         {
+            ValidateModule();
 
             PostValidator = new ResourceValidator<TResource>();
             PutValidator = new ResourceValidator<TResource>();
             SharedValidator = new ResourceValidator<TResource>();
+        }
+
+
+        private void ValidateModule()
+        {
+            if (GetResourceById != null) return;
+
+            if (CreateResource != null || UpdateResource != null)
+            {
+                throw new InvalidOperationException("GetResourceById route must be defined before defining Create/Update routes.");
+            }
         }
 
         protected Action<int> DeleteResource
@@ -137,7 +149,6 @@ namespace NzbDrone.Api.REST
             private get { return _createResource; }
             set
             {
-                EnsureGetByIdRoute();
                 _createResource = value;
                 Post[ROOT_ROUTE] = options =>
                 {
@@ -145,15 +156,6 @@ namespace NzbDrone.Api.REST
                     return GetResourceById(id).AsResponse(HttpStatusCode.Created);
                 };
 
-            }
-        }
-
-        private void EnsureGetByIdRoute()
-        {
-            if (GetResourceById == null)
-            {
-                throw new InvalidOperationException(
-                    "GetResourceById route must be defined before defining Create/Update routes.");
             }
         }
 
