@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             "nzbplanet.net",
             "nzbid.org",
             "nzbndx.com",
+            "nzbindex.in"
         };
 
         private static bool ShouldHaveApiKey(NewznabSettings settings)
