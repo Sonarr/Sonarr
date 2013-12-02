@@ -45,11 +45,12 @@ namespace Marr.Data.Mapping
             // Populate entity fields from data reader
             foreach (ColumnMap dataMap in mappings)
             {
+                object dbValue = null;
                 try
                 {
                     string colName = dataMap.ColumnInfo.GetColumName(useAltName);
                     int ordinal = reader.GetOrdinal(colName);
-                    object dbValue = reader.GetValue(ordinal);
+                    dbValue = reader.GetValue(ordinal);
 
                     // Handle conversions
                     if (dataMap.Converter != null)
@@ -72,8 +73,8 @@ namespace Marr.Data.Mapping
                 }
                 catch (Exception ex)
                 {
-                    string msg = string.Format("The DataMapper was unable to load the following field: '{0}'. {1}",
-                        dataMap.ColumnInfo.Name, ex.Message);
+                    string msg = string.Format("The DataMapper was unable to load the following field: '{0}' value: '{1}'. {2}",
+                        dataMap.ColumnInfo.Name, dbValue, ex.Message);
 
                     throw new DataMappingException(msg, ex);
                 }
