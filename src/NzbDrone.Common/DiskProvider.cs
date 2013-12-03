@@ -506,10 +506,7 @@ namespace NzbDrone.Common
 
         private static long DriveFreeSpaceEx(string folderName)
         {
-            if (string.IsNullOrEmpty(folderName))
-            {
-                throw new ArgumentNullException("folderName");
-            }
+            Ensure.That(folderName, () => folderName).IsValidPath();
 
             if (!folderName.EndsWith("\\"))
             {
@@ -530,10 +527,7 @@ namespace NzbDrone.Common
 
         private static long DriveTotalSizeEx(string folderName)
         {
-            if (string.IsNullOrEmpty(folderName))
-            {
-                throw new ArgumentNullException("folderName");
-            }
+            Ensure.That(folderName, () => folderName).IsValidPath();
 
             if (!folderName.EndsWith("\\"))
             {

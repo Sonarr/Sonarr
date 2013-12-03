@@ -20,7 +20,6 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                            IXemProxy xemProxy,
                            ISeriesService seriesService, ICacheManger cacheManger, Logger logger)
         {
-            if (seriesService == null) throw new ArgumentNullException("seriesService");
             _episodeService = episodeService;
             _xemProxy = xemProxy;
             _seriesService = seriesService;
