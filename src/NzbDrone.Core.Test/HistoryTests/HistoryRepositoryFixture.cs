@@ -41,5 +41,19 @@ namespace NzbDrone.Core.Test.HistoryTests
 
             StoredModel.Data.Should().HaveCount(2);
         }
+
+        [Test]
+        public void grabbed_should_return_grabbed_items()
+        {
+            var history = Builder<History.History>
+                .CreateListOfSize(5)
+                .Random(3)
+                .With(c => c.EventType = HistoryEventType.Grabbed)
+                .BuildListOfNew();
+
+            Subject.InsertMany(history);
+
+            Subject.Grabbed().Should().HaveCount(3);
+        }
     }
 }
