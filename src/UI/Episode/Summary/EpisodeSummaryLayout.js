@@ -93,7 +93,7 @@ define(
                         });
                     }
 
-                    this.listenTo(this.episodeFileCollection, 'all', this._collectionChanged);
+                    this.listenTo(this.episodeFileCollection, 'add remove', this._collectionChanged);
                 }
 
                 else {
