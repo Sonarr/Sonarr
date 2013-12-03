@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Core
 {
@@ -9,8 +10,8 @@ namespace NzbDrone.Core
     {
         public static string WithDefault(this string actual, object defaultValue)
         {
-            if (defaultValue == null)
-                throw new ArgumentNullException("defaultValue");
+            Ensure.That(defaultValue, () => defaultValue).IsNotNull();
+
             if (String.IsNullOrWhiteSpace(actual))
             {
                 return defaultValue.ToString();

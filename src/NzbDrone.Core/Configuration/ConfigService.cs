@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
@@ -305,9 +306,11 @@ namespace NzbDrone.Core.Configuration
 
         public string GetValue(string key, object defaultValue, bool persist = false)
         {
+            key = key.ToLowerInvariant();
+            Ensure.That(key, () => key).IsNotNullOrWhiteSpace();
+
             EnsureCache();
 
-            key = key.ToLowerInvariant();
             string dbValue;
 
             if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
@@ -335,11 +338,6 @@ namespace NzbDrone.Core.Configuration
         public void SetValue(string key, string value)
         {
             key = key.ToLowerInvariant();
-
-            if (String.IsNullOrEmpty(key))
-                throw new ArgumentOutOfRangeException("key");
-            if (value == null)
-                throw new ArgumentNullException("key");
 
             _logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
 
