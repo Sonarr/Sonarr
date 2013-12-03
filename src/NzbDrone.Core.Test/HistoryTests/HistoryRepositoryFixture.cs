@@ -47,6 +47,8 @@ namespace NzbDrone.Core.Test.HistoryTests
         {
             var history = Builder<History.History>
                 .CreateListOfSize(5)
+                .All()
+                .With(c => c.EventType = HistoryEventType.Unknown)
                 .Random(3)
                 .With(c => c.EventType = HistoryEventType.Grabbed)
                 .BuildListOfNew();
