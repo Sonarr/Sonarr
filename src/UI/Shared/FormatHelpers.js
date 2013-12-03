@@ -10,7 +10,7 @@ define(
 
             bytes: function (sourceSize) {
                 var size = Number(sourceSize);
-                return Filesize(size, 1, false);
+                return Filesize(size, { base: 2, round: 1 });
             },
 
             dateHelper: function (sourceDate) {
