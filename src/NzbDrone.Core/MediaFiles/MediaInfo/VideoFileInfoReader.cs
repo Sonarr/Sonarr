@@ -49,12 +49,15 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     int runTime;
                     int streamCount;
                     int audioChannels;
+                    decimal videoFrameRate;
 
                     string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
                     string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out runTime);
+                    Decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), out videoFrameRate);
 
                     string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
                     int aBindex = aBitRate.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
@@ -62,8 +65,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         aBitRate = aBitRate.Remove(aBindex);
 
                     Int32.TryParse(aBitRate, out audioBitRate);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out runTime);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
+                    
 
                     string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
                     int aCindex = audioChannelsStr.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
@@ -71,7 +74,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                         audioChannelsStr = audioChannelsStr.Remove(aCindex);
 
                     string audioLanguages = mediaInfo.Get(StreamKind.General, 0, "Audio_Language_List");
-                    decimal videoFrameRate = Decimal.Parse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"));
                     string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile");
 
                     int aPindex = audioProfile.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
