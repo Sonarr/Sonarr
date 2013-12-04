@@ -171,7 +171,6 @@ define(
             onShow: function () {
                 this._showToolbar();
                 this._renderView();
-                this._fetchCollection();
             },
 
             _fetchCollection: function () {
