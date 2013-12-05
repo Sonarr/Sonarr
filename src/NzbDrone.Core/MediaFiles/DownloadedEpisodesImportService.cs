@@ -100,6 +100,7 @@ namespace NzbDrone.Core.MediaFiles
             var cleanedUpName = GetCleanedUpFolderName(subfolderInfo.Name);
             var series = _parsingService.GetSeries(cleanedUpName);
             var quality = QualityParser.ParseQuality(cleanedUpName);
+            _logger.Trace("{0} folder quality: {1}", cleanedUpName, quality);
 
             if (series == null)
             {
