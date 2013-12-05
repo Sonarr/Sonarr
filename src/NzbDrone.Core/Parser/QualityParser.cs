@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex SourceRegex = new Regex(@"(?<bluray>BluRay)|
                                                                 (?<webdl>WEB-DL|WEBDL|WEB\sDL|WEB\-DL|WebRip)|
                                                                 (?<hdtv>HDTV)|
-                                                                (?<bdrip>BDRiP)|(?<brrip>BRRip)|(?<dvd>\bDVD\b|DVDRip|NTSC|PAL|xvidvd)|
+                                                                (?<bdrip>BDRiP)|(?<brrip>BRRip)|(?<dvd>\b(?:DVD|DVDRip|NTSC|PAL|xvidvd)\b)|
                                                                 (?<dsr>WS\sDSR|WS_DSR|WS\.DSR|DSR)|(?<pdtv>PDTV)|(?<sdtv>SDTV)",
                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
