@@ -61,6 +61,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         if (quality != null && quality > parsedEpisode.Quality)
                         {
+                            _logger.Trace("Using quality from folder: {0}", quality);
                             parsedEpisode.Quality = quality;
                         }
 
