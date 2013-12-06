@@ -46,7 +46,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     int height;
                     int videoBitRate;
                     int audioBitRate;
-                    int runTime;
+                    int audioRuntime;
+                    int videoRuntime;
+                    int generalRuntime;
                     int streamCount;
                     int audioChannels;
                     decimal videoFrameRate;
@@ -56,8 +58,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out runTime);
                     Decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), out videoFrameRate);
+
+                    //Runtime
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
 
                     string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
                     int aBindex = aBitRate.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
@@ -87,10 +93,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                                     VideoBitrate = videoBitRate,
                                                     Height = height,
                                                     Width = width,
-
                                                     AudioFormat = mediaInfo.Get(StreamKind.Audio, 0, "Format"),
                                                     AudioBitrate = audioBitRate,
-                                                    RunTime = TimeSpan.FromMilliseconds(runTime),
+                                                    RunTime = GetBestRuntime(audioRuntime, videoRuntime, generalRuntime),
                                                     AudioStreamCount = streamCount,
                                                     AudioChannels = audioChannels,
                                                     AudioProfile = audioProfile.Trim(),
@@ -100,7 +105,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                                     ScanType = scanType
                                                 };
 
-                    mediaInfo.Close();
                     return mediaInfoModel;
                 }
             }
@@ -134,6 +138,21 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             return info.RunTime;
+        }
+
+        private TimeSpan GetBestRuntime(int audio, int video, int general)
+        {
+            if (video == 0)
+            {
+                if (audio == 0)
+                {
+                    return TimeSpan.FromMilliseconds(general);
+                }
+
+                return TimeSpan.FromMilliseconds(audio);
+            }
+
+            return TimeSpan.FromMilliseconds(video);
         }
     }
 }
