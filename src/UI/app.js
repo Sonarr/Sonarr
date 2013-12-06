@@ -208,7 +208,7 @@ define(
         'AppLayout',
         'Series/SeriesController',
         'Router',
-        'Shared/Modal/Controller',
+        'Shared/Modal/ModalController',
         'System/StatusModel',
         'Instrumentation/StringFormat',
         'LifeCycle'
