@@ -80,9 +80,10 @@ namespace NzbDrone.Host.AccessControl
 
                 var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
                 var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-                var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
 
-                ports.Add(port);
+                //Adds ports for both the current profile and the 'standard' (private) profile
+                mgr.LocalPolicy.GetProfileByType(NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_CURRENT).GloballyOpenPorts.Add(port);
+                mgr.LocalPolicy.GetProfileByType(NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_STANDARD).GloballyOpenPorts.Add(port);
             }
             catch (Exception ex)
             {
