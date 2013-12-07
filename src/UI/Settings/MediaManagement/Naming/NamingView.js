@@ -88,6 +88,7 @@ define(
                 }
 
                 input.val(input.val() + token);
+                input.change();
 
                 this.ui.namingTokenHelper.removeClass('open');
                 input.focus();
