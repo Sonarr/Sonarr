@@ -162,6 +162,9 @@ namespace NzbDrone.Core.Parser
                                 result.Quality = QualityParser.ParseQuality(title);
                                 Logger.Trace("Quality parsed: {0}", result.Quality);
 
+                                result.ReleaseGroup = ParseReleaseGroup(title);
+                                Logger.Trace("Release Group parsed: {0}", result.ReleaseGroup);
+
                                 return result;
                             }
                         }
@@ -212,6 +215,36 @@ namespace NzbDrone.Core.Parser
         {
             //this will remove (1),(2) from the end of multi part episodes.
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
+        }
+
+        public static string ParseReleaseGroup(string title)
+        {
+            const string defaultReleaseGroup = "DRONE";
+
+            title = title.Trim();
+            var index = title.LastIndexOf('-');
+
+            if (index < 0)
+                index = title.LastIndexOf(' ');
+
+            if (index < 0)
+                return defaultReleaseGroup;
+
+            var group = title.Substring(index + 1);
+
+            if (group.Length == title.Length)
+                return String.Empty;
+
+            group = group.Trim('-', ' ', '[', ']');
+
+            if (group.ToLower() == "480p" ||
+                group.ToLower() == "720p" ||
+                group.ToLower() == "1080p")
+            {
+                return defaultReleaseGroup;
+            }
+
+            return group;
         }
 
         private static SeriesTitleInfo GetSeriesTitleInfo(string title)

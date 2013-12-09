@@ -68,6 +68,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.Quality = localEpisode.Quality;
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
+                    episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;
 
                     if (newDownload)
                     {

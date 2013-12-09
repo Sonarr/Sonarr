@@ -28,7 +28,6 @@ namespace NzbDrone.Core.Parser.Model
             }
         }
 
-        public string ReleaseGroup { get; set; }
         public int TvRageId { get; set; }
     }
 }

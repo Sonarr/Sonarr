@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .With(e => e.EpisodeNumber = 7)
                             .Build();
 
-            _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p) };
+            _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "DRONE" };
         }
 
         private void GivenProper()
@@ -343,6 +343,15 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(title);
+        }
+
+        [Test]
+        public void should_should_replace_release_group()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Release Group}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(_episodeFile.ReleaseGroup);
         }
     }
 }

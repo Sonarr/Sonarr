@@ -452,5 +452,19 @@ namespace NzbDrone.Core.Test.ParserTests
             Parser.Parser.ParseTitle(title).Should().BeNull();
             ExceptionVerification.IgnoreWarns();
         }
+
+        [TestCase("Castle.2009.S01E14.English.HDTV.XviD-LOL", "LOL")]
+        [TestCase("Castle 2009 S01E14 English HDTV XviD LOL", "LOL")]
+        [TestCase("Acropolis Now S05 EXTRAS DVDRip XviD RUNNER", "RUNNER")]
+        [TestCase("Punky.Brewster.S01.EXTRAS.DVDRip.XviD-RUNNER", "RUNNER")]
+        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "C4TV")]
+        [TestCase("The.Office.S03E115.DVDRip.XviD-OSiTV", "OSiTV")]
+        [TestCase("The Office - S01E01 - Pilot [HTDV-480p]", "DRONE")]
+        [TestCase("The Office - S01E01 - Pilot [HTDV-720p]", "DRONE")]
+        [TestCase("The Office - S01E01 - Pilot [HTDV-1080p]", "DRONE")]
+        public void parse_releaseGroup(string title, string expected)
+        {
+            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+        }
     }
 }

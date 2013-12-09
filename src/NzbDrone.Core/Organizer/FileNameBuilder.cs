@@ -89,6 +89,8 @@ namespace NzbDrone.Core.Organizer
                 {"{Series Title}", series.Title}
             };
 
+            tokenValues.Add("{Release Group}", episodeFile.ReleaseGroup);
+
             if (series.SeriesType == SeriesTypes.Daily)
             {
                 pattern = namingConfig.DailyEpisodeFormat;
