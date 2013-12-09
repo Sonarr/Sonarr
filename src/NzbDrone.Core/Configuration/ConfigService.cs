@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Configuration
 
         public String NzbgetTvCategory
         {
-            get { return GetValue("NzbgetTvCategory", "nzbget"); }
+            get { return GetValue("NzbgetTvCategory", ""); }
 
             set { SetValue("NzbgetTvCategory", value); }
         }
