@@ -13,9 +13,11 @@ namespace NzbDrone.Host.AccessControl
 
     public class FirewallAdapter : IFirewallAdapter
     {
+        private const NET_FW_PROFILE_TYPE_ FIREWALL_PROFILE = NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_STANDARD;
+        
         private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
-
+        
         public FirewallAdapter(IConfigFileProvider configFileProvider, Logger logger)
         {
             _configFileProvider = configFileProvider;
@@ -47,11 +49,7 @@ namespace NzbDrone.Host.AccessControl
                 var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
 
                 var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-
-                if (!mgr.LocalPolicy.CurrentProfile.FirewallEnabled)
-                    return false;
-
-                var ports = mgr.LocalPolicy.CurrentProfile.GloballyOpenPorts;
+                var ports = mgr.LocalPolicy.GetProfileByType(FIREWALL_PROFILE).GloballyOpenPorts;
 
                 foreach (INetFwOpenPort p in ports)
                 {
@@ -81,9 +79,8 @@ namespace NzbDrone.Host.AccessControl
                 var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
                 var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
 
-                //Adds ports for both the current profile and the 'standard' (private) profile
-                mgr.LocalPolicy.GetProfileByType(NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_CURRENT).GloballyOpenPorts.Add(port);
-                mgr.LocalPolicy.GetProfileByType(NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_STANDARD).GloballyOpenPorts.Add(port);
+                //Open the port for the standard profile, should help when the user has multiple network adapters
+                mgr.LocalPolicy.GetProfileByType(FIREWALL_PROFILE).GloballyOpenPorts.Add(port);
             }
             catch (Exception ex)
             {
@@ -99,7 +96,7 @@ namespace NzbDrone.Host.AccessControl
             {
                 var netFwMgrType = Type.GetTypeFromProgID("HNetCfg.FwMgr", false);
                 var mgr = (INetFwMgr)Activator.CreateInstance(netFwMgrType);
-                return mgr.LocalPolicy.CurrentProfile.FirewallEnabled;
+                return mgr.LocalPolicy.GetProfileByType(FIREWALL_PROFILE).FirewallEnabled;
             }
             catch (Exception ex)
             {
