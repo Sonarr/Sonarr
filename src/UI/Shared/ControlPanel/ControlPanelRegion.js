@@ -3,11 +3,10 @@ define(
     [
         'jquery',
         'backbone',
-        'marionette',
-        'bootstrap'
+        'marionette'
     ], function ($,Backbone, Marionette) {
         var region = Marionette.Region.extend({
-            el: '#modal-region',
+            el: '#control-panel-region',
 
             constructor: function () {
                 Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
@@ -16,27 +15,20 @@ define(
 
             getEl: function (selector) {
                 var $el = $(selector);
-                $el.on('hidden', this.close);
+
                 return $el;
             },
 
             showPanel: function () {
-                this.$el.addClass('modal hide fade');
-
-                //need tab index so close on escape works
-                //https://github.com/twitter/bootstrap/issues/4663
-                this.$el.attr('tabindex', '-1');
-                this.$el.modal({
-                    'show'    : true,
-                    'keyboard': true,
-                    'backdrop': 'static'});
+                $('body').addClass('control-panel-visible');
+                this.$el.animate({ 'margin-bottom': 0, 'opacity': 1 }, { queue: false, duration: 300 });
             },
 
             closePanel: function () {
-                $(this.el).modal('hide');
+                $('body').removeClass('control-panel-visible');
+                this.$el.animate({ 'margin-bottom': -100, 'opacity': 0 }, { queue: false, duration: 300 });
                 this.reset();
             }
-
         });
 
         return region;

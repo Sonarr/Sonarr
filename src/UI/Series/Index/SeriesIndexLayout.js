@@ -110,6 +110,11 @@ define(
                             route  : 'seasonpass'
                         },
                         {
+                            title  : 'Series Editor',
+                            icon   : 'icon-nd-edit',
+                            route  : 'serieseditor'
+                        },
+                        {
                             title         : 'RSS Sync',
                             icon          : 'icon-rss',
                             command       : 'rsssync',

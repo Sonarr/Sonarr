@@ -209,13 +209,15 @@ define(
         'Series/SeriesController',
         'Router',
         'Shared/Modal/ModalController',
+        'Shared/ControlPanel/ControlPanelController',
         'System/StatusModel',
         'Instrumentation/StringFormat',
         'LifeCycle'
-    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, serverStatusModel) {
+    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel) {
 
         new SeriesController();
         new ModalController();
+        new ControlPanelController();
         new Router();
 
         var app = new Marionette.Application();
