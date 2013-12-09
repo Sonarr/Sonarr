@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         public String ApiKey { get; set; }
 
         [FieldDefinition(1, Label = "Device ID")]
-        public Int32 DeviceId { get; set; }
+        public Int64 DeviceId { get; set; }
 
         public bool IsValid
         {
