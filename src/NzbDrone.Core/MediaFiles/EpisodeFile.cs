@@ -12,6 +12,7 @@ namespace NzbDrone.Core.MediaFiles
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
+        public string ReleaseGroup { get; set; }
         public QualityModel Quality { get; set; }
         public LazyList<Episode> Episodes { get; set; }
 

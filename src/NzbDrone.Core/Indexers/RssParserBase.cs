@@ -70,7 +70,6 @@ namespace NzbDrone.Core.Indexers
 
             reportInfo.Title = title;
             reportInfo.PublishDate = item.PublishDate();
-            reportInfo.ReleaseGroup = ParseReleaseGroup(title);
             reportInfo.DownloadUrl = GetNzbUrl(item);
             reportInfo.InfoUrl = GetNzbInfoUrl(item);
 
@@ -112,25 +111,6 @@ namespace NzbDrone.Core.Indexers
         protected virtual ReleaseInfo PostProcessor(XElement item, ReleaseInfo currentResult)
         {
             return currentResult;
-        }
-
-        public static string ParseReleaseGroup(string title)
-        {
-            title = title.Trim();
-            var index = title.LastIndexOf('-');
-
-            if (index < 0)
-                index = title.LastIndexOf(' ');
-
-            if (index < 0)
-                return String.Empty;
-
-            var group = title.Substring(index + 1);
-
-            if (@group.Length == title.Length)
-                return String.Empty;
-
-            return @group.Trim('-', ' ', '[', ']');
         }
 
         private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",

@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Parser.Model
         public String AirDate { get; set; }
         public Language Language { get; set; }
         public bool FullSeason { get; set; }
+        public string ReleaseGroup { get; set; }
 
         public ParsedEpisodeInfo()
         {
