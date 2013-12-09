@@ -7,14 +7,14 @@ namespace NzbDrone.Core.Notifications.PushBullet
 {
     public interface IPushBulletProxy
     {
-        void SendNotification(string title, string message, string apiKey, int deviceId);
+        void SendNotification(string title, string message, string apiKey, long deviceId);
     }
 
     public class PushBulletProxy : IPushBulletProxy, IExecute<TestPushBulletCommand>
     {
         private const string URL = "https://api.pushbullet.com/api/pushes";
 
-        public void SendNotification(string title, string message, string apiKey, int deviceId)
+        public void SendNotification(string title, string message, string apiKey, long deviceId)
         {
             var client = new RestClient(URL);
             var request = new RestRequest(Method.POST);
