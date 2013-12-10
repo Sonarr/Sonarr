@@ -6,6 +6,7 @@ define(
     ], function (Backgrid) {
 
         Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
+
             events: {
                 'click': 'onClick'
             },
@@ -14,87 +15,113 @@ define(
                 this.$el.empty();
                 this.$el.append(this.column.get('label'));
 
-                if (this.column.get('sortable')) {
+                var column = this.column;
+                var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
+
+                if (sortable)
+                {
                     this.$el.addClass('sortable');
                     this.$el.append(' <i class="pull-right"></i>');
+                }
 
-                    if (this.collection.state) {
-                        var sortKey = this.collection.state.sortKey;
-                        var sortDir = this._convertIntToDirection(this.collection.state.order);
+                //Do we need this?
+                this.$el.addClass(column.get('name'));
 
-                        if (sortKey === this.column.get('name')) {
-                            this.$el.children('i').addClass(this._convertDirectionToIcon(sortDir));
-                            this._direction = sortDir;
-                        }
+                this.delegateEvents();
+                this.direction(column.get('direction'));
+
+                if (this.collection.state) {
+                    var key = this.collection.state.sortKey;
+                    var order = this.collection.state.order;
+
+                    if (key === this.column.get('name')) {
+                        this._setSortIcon(order);
                     }
                 }
-                this.delegateEvents();
+
                 return this;
             },
 
             direction: function (dir) {
+                this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
+
                 if (arguments.length) {
-                    if (this._direction) {
-                        this.$el.children('i').removeClass(this._convertDirectionToIcon(this._direction));
+                    if (dir)
+                    {
+                        this._setSortIcon(dir);
                     }
-                    if (dir) {
-                        this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
-                    }
-                    this._direction = dir;
+
+                    this.column.set('direction', dir);
                 }
 
-                return this._direction;
+                var columnDirection = this.column.get('direction');
+
+                if (!columnDirection && this.collection.state) {
+                    var key = this.collection.state.sortKey;
+                    var order = this.collection.state.order;
+
+                    if (key === this.column.get('name')) {
+                        columnDirection = order;
+                    }
+                }
+
+                return columnDirection;
             },
 
             onClick: function (e) {
                 e.preventDefault();
 
-                var columnName = this.column.get('name');
+                var collection = this.collection;
+                var event = 'backgrid:sort';
 
-                if (this.column.get('sortable')) {
-                    if (this.direction() === 'ascending') {
-                        this.sort(columnName, 'descending', function (left, right) {
-                            var leftVal = left.get(columnName);
-                            var rightVal = right.get(columnName);
-                            if (leftVal === rightVal) {
-                                return 0;
-                            }
-                            else if (leftVal > rightVal) {
-                                return -1;
-                            }
-                            return 1;
-                        });
+                function toggleSort(header, col) {
+                    collection.state.sortKey = col.get('name');
+                    var direction = header.direction();
+                    if (direction === 'ascending' || direction === -1)
+                    {
+                        collection.state.order = 'descending';
+                        collection.trigger(event, col, 'descending');
                     }
-                    else {
-                        this.sort(columnName, 'ascending', function (left, right) {
-                            var leftVal = left.get(columnName);
-                            var rightVal = right.get(columnName);
-                            if (leftVal === rightVal) {
-                                return 0;
-                            }
-                            else if (leftVal < rightVal) {
-                                return -1;
-                            }
-                            return 1;
-                        });
+                    else
+                    {
+                        collection.state.order = 'ascending';
+                        collection.trigger(event, col, 'ascending');
                     }
+                }
+
+                var column = this.column;
+                var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
+                if (sortable) {
+                    toggleSort(this, column);
+                }
+            },
+
+            _resetCellDirection: function (columnToSort, direction) {
+                if (columnToSort !== this.column)
+                {
+                    this.direction(null);
+                }
+                else
+                {
+                    this.direction(direction);
                 }
             },
 
             _convertDirectionToIcon: function (dir) {
-                if (dir === 'ascending') {
+                if (dir === 'ascending' || dir === -1) {
                     return 'icon-sort-up';
                 }
 
                 return 'icon-sort-down';
             },
 
-            _convertIntToDirection: function (dir) {
-                if (dir === '-1') {
-                    return 'ascending';
-                }
+            _setSortIcon: function (dir) {
+                this._removeSortIcon();
+                this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
+            },
 
-                return 'descending';
+            _removeSortIcon: function () {
+                this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
             }
         });
 

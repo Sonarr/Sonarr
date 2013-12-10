@@ -165,7 +165,8 @@ require.config({
                             renderable: true,
                             formatter : undefined,
                             cell      : undefined,
-                            headerCell: 'NzbDrone'
+                            headerCell: 'NzbDrone',
+                            sortType  : 'toggle'
                         };
 
                     });

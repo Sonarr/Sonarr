@@ -13,12 +13,12 @@ define(
         'Cells/QualityProfileCell',
         'Cells/EpisodeProgressCell',
         'Cells/SeriesActionsCell',
-        'Shared/Grid/DateHeaderCell',
         'Cells/SeriesStatusCell',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
         'Shared/Toolbar/ToolbarLayout',
-        'underscore'
+        'underscore',
+        'moment'
     ], function (Marionette,
                  Backgrid,
                  PosterCollectionView,
@@ -31,12 +31,12 @@ define(
                  QualityProfileCell,
                  EpisodeProgressCell,
                  SeriesActionsCell,
-                 DateHeaderCell,
                  SeriesStatusCell,
                  FooterView,
                  FooterModel,
                  ToolbarLayout,
-                 _) {
+                 _,
+                 Moment) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -78,7 +78,15 @@ define(
                         name      : 'nextAiring',
                         label     : 'Next Airing',
                         cell      : RelativeDateCell,
-                        headerCell: DateHeaderCell
+                        sortValue : function (model) {
+                            var nextAiring = model.get('nextAiring');
+
+                            if (!nextAiring) {
+                                return Number.MAX_VALUE;
+                            }
+
+                            return Moment(nextAiring).unix();
+                        }
                     },
                     {
                         name     : 'percentOfEpisodes',

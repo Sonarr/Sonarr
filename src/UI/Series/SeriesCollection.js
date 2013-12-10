@@ -16,7 +16,7 @@ define(
 
             state: {
                 sortKey: 'title',
-                order  : -1
+                order  : 'ascending'
             },
 
             save: function () {

@@ -14,7 +14,7 @@ define(
                     throw 'tableName is required';
                 }
 
-                _setState.call(this);
+                _setInitialState.call(this);
 
                 this.on('backgrid:sort', _storeState, this);
 
@@ -23,7 +23,7 @@ define(
                 }
             };
 
-            var _setState = function () {
+            var _setInitialState = function () {
                 var key = Config.getValue('{0}.sortKey'.format(this.tableName), this.state.sortKey);
                 var direction = Config.getValue('{0}.sortDirection'.format(this.tableName), this.state.order);
                 var order = parseInt(direction, 10);
@@ -32,8 +32,9 @@ define(
                 this.state.order = order;
             };
 
-            var _storeState = function (sortKey, sortDirection) {
+            var _storeState = function (column, sortDirection) {
                 var order = _convertDirectionToInt(sortDirection);
+                var sortKey = column.get('name');
 
                 Config.setValue('{0}.sortKey'.format(this.tableName), sortKey);
                 Config.setValue('{0}.sortDirection'.format(this.tableName), order);
