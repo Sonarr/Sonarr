@@ -140,15 +140,11 @@ namespace NzbDrone.Core.IndexerSearch
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
 
-            foreach (var indexer in indexers)
-            {
-                var indexerLocal = indexer;
-
-                taskList.Add(taskFactory.StartNew(() =>
+            Parallel.ForEach(indexers, (indexer) =>
                 {
                     try
                     {
-                        var indexerReports = searchAction(indexerLocal);
+                        var indexerReports = searchAction(indexer);
 
                         lock (reports)
                         {
@@ -159,10 +155,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         _logger.ErrorException("Error while searching for " + criteriaBase, e);
                     }
-                }).LogExceptions());
-            }
-
-            Task.WaitAll(taskList.ToArray());
+                });
 
             _logger.Debug("Total of {0} reports were found for {1} from {2} indexers", reports.Count, criteriaBase, indexers.Count);
 

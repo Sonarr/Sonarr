@@ -39,27 +39,15 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Debug("Available indexers {0}", indexers.Count);
 
-            var taskList = new List<Task>();
-            var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
+            Parallel.ForEach(indexers, (indexer) =>
+                    {
+                        var indexerFeed = _feedFetcher.FetchRss(indexer);
 
-            foreach (var indexer in indexers)
-            {
-                var indexerLocal = indexer;
-
-                var task = taskFactory.StartNew(() =>
-                     {
-                         var indexerFeed = _feedFetcher.FetchRss(indexerLocal);
-
-                         lock (result)
-                         {
-                             result.AddRange(indexerFeed);
-                         }
-                     }).LogExceptions();
-
-                taskList.Add(task);
-            }
-
-            Task.WaitAll(taskList.ToArray());
+                        lock (result)
+                        {
+                            result.AddRange(indexerFeed);
+                        }
+                    });
 
             _logger.Debug("Found {0} reports", result.Count);
 
