@@ -19,6 +19,13 @@ namespace NzbDrone.Integration.Test.Client
             return Get<List<SeriesResource>>(request);
         }
 
+        public List<SeriesResource> Editor(List<SeriesResource> series)
+        {
+            var request = BuildRequest("editor");
+            request.AddBody(series);
+            return Put<List<SeriesResource>>(request);
+        }
+
         public SeriesResource Get(string slug, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             var request = BuildRequest(slug);

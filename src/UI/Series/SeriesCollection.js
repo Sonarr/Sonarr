@@ -38,6 +38,7 @@ define(
 
                 this.listenTo(proxy, 'sync', function (proxyModel, models) {
                     this.add(models, { merge: true });
+                    this.trigger('save', this);
                 });
 
                 return proxy.save();

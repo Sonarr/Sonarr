@@ -24,7 +24,9 @@ namespace NzbDrone.Api.Series
             //Read from request
             var series = Request.Body.FromJson<List<SeriesResource>>().InjectTo<List<Core.Tv.Series>>();
 
-            return _seriesService.UpdateSeries(series).InjectTo<List<SeriesResource>>().AsResponse();
+            return _seriesService.UpdateSeries(series)
+                                 .InjectTo<List<SeriesResource>>()
+                                 .AsResponse(HttpStatusCode.Accepted);
         }
     }
 }

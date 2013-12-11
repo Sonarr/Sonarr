@@ -99,11 +99,6 @@ define(
                     ]
             },
 
-            initialize: function () {
-                this.listenTo(SeriesCollection, 'sync', this._showTable);
-                this.listenTo(SeriesCollection, 'remove', this._showTable);
-            },
-
             onRender: function () {
                 this._showToolbar();
                 this._showTable();

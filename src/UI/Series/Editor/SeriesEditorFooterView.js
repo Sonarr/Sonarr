@@ -94,16 +94,11 @@ define(
 
                         model.set('rootFolderPath', rootFolderPath.get('path'));
                     }
-
-                    model.trigger('backgrid:select', model, false);
                 });
 
-                this.ui.monitored.val('noChange');
-                this.ui.qualityProfile.val('noChange');
-                this.ui.seasonFolder.val('noChange');
-                this.ui.rootFolder.val('noChange');
-
                 SeriesCollection.save();
+
+                this.listenTo(SeriesCollection, 'save', this._afterSave);
             },
 
             _updateInfo: function () {
@@ -145,6 +140,17 @@ define(
                 vent.trigger(vent.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
                 this._rootFolderChanged();
+            },
+
+            _afterSave: function () {
+                this.ui.monitored.val('noChange');
+                this.ui.qualityProfile.val('noChange');
+                this.ui.seasonFolder.val('noChange');
+                this.ui.rootFolder.val('noChange');
+
+                SeriesCollection.each(function (model) {
+                    model.trigger('backgrid:select', model, false);
+                });
             }
         });
     });
