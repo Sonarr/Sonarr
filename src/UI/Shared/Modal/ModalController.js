@@ -15,8 +15,8 @@ define(
         return Marionette.AppRouter.extend({
 
             initialize: function () {
-                vent.on(vent.Commands.OpenModalCommand, this._openModal, this);
-                vent.on(vent.Commands.CloseModalCommand, this._closeModal, this);
+                vent.on(vent.Commands.OpenModalCommand, this._openControlPanel, this);
+                vent.on(vent.Commands.CloseModalCommand, this._closeControlPanel, this);
                 vent.on(vent.Commands.EditSeriesCommand, this._editSeries, this);
                 vent.on(vent.Commands.DeleteSeriesCommand, this._deleteSeries, this);
                 vent.on(vent.Commands.ShowEpisodeDetails, this._showEpisode, this);
@@ -25,12 +25,12 @@ define(
                 vent.on(vent.Commands.ShowRenamePreview, this._showRenamePreview, this);
             },
 
-            _openModal: function (view) {
+            _openControlPanel: function (view) {
                 AppLayout.modalRegion.show(view);
             },
 
-            _closeModal: function () {
-                AppLayout.modalRegion.closeModal();
+            _closeControlPanel: function () {
+                AppLayout.modalRegion.closePanel();
             },
 
             _editSeries: function (options) {

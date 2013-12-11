@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Tv
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
         Series UpdateSeries(Series series);
+        List<Series> UpdateSeries(List<Series> series);
         bool SeriesPathExists(string folder);
     }
 
@@ -136,6 +137,22 @@ namespace NzbDrone.Core.Tv
             }
 
             return _seriesRepository.Update(series);
+        }
+
+        public List<Series> UpdateSeries(List<Series> series)
+        {
+            foreach (var s in series)
+            {
+                if (!String.IsNullOrWhiteSpace(s.RootFolderPath))
+                {
+                    var folderName = new DirectoryInfo(s.Path).Name;
+                    s.Path = Path.Combine(s.RootFolderPath, folderName);
+                }
+            }
+
+            _seriesRepository.UpdateMany(series);
+
+            return series;
         }
 
         public bool SeriesPathExists(string folder)

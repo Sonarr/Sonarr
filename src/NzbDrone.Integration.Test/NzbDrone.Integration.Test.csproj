@@ -102,6 +102,7 @@
     <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
+    <Compile Include="SeriesEditorIntegrationTest.cs" />
     <Compile Include="HistoryIntegrationTest.cs" />
     <Compile Include="NamingConfigTests.cs" />
     <Compile Include="EpisodeIntegrationTests.cs" />
