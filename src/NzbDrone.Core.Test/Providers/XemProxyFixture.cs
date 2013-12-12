@@ -21,7 +21,12 @@ namespace NzbDrone.Core.Test.Providers
         [Test]
         public void get_series_ids()
         {
-            Subject.GetXemSeriesIds().Should().NotBeEmpty();
+            var ids = Subject.GetXemSeriesIds();
+
+
+            ids.Should().NotBeEmpty();
+            ids.Should().Contain(i => i == 73141);
+
         }
 
 
@@ -47,6 +52,7 @@ namespace NzbDrone.Core.Test.Providers
         }
 
         [TestCase(82807)]
+        [TestCase(73141, Description = "American Dad!")]
         public void should_get_mapping(int seriesId)
         {
             var result = Subject.GetSceneTvdbMappings(seriesId);
