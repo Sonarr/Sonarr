@@ -73,14 +73,26 @@ namespace NzbDrone.Api.ClientSchema
 
                     if (propertyInfo.PropertyType == typeof(Int32))
                     {
-                        var intValue = Convert.ToInt32(field.Value);
-                        propertyInfo.SetValue(target, intValue, null);
+                        var value = Convert.ToInt32(field.Value);
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
+                    if (propertyInfo.PropertyType == typeof(Int64))
+                    {
+                        var value = Convert.ToInt64(field.Value);
+                        propertyInfo.SetValue(target, value, null);
                     }
 
                     else if (propertyInfo.PropertyType == typeof(Nullable<Int32>))
                     {
-                        var intValue = field.Value.ToString().ParseInt32();
-                        propertyInfo.SetValue(target, intValue, null);
+                        var value = field.Value.ToString().ParseInt32();
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof(Nullable<Int64>))
+                    {
+                        var value = field.Value.ToString().ParseInt64();
+                        propertyInfo.SetValue(target, value, null);
                     }
 
                     else
