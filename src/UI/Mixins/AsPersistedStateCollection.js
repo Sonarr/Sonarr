@@ -40,7 +40,7 @@ define(
 
             var _storeState = function (column, sortDirection) {
                 var order = _convertDirectionToInt(sortDirection);
-                var sortKey = column.get('name');
+                var sortKey = column.has('sortValue') ? column.get('sortValue') : column.get('name');
 
                 Config.setValue('{0}.sortKey'.format(this.tableName), sortKey);
                 Config.setValue('{0}.sortDirection'.format(this.tableName), order);

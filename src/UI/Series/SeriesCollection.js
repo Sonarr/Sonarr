@@ -47,7 +47,7 @@ define(
             }
         });
 
-        var mixedIn = AsPersistedStateCollection.call(Collection);
-        var collection = new mixedIn(SeriesData);
+        var MixedIn = AsPersistedStateCollection.call(Collection);
+        var collection = new MixedIn(SeriesData);
         return collection;
     });

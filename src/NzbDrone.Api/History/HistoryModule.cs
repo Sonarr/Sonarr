@@ -39,11 +39,6 @@ namespace NzbDrone.Api.History
                 pagingSpec.FilterExpression = h => h.EpisodeId == i;
             }
 
-            if (pagingSpec.SortKey.Equals("series", StringComparison.InvariantCultureIgnoreCase))
-            {
-                pagingSpec.SortKey = "series.title";
-            }
-
             return ApplyToPage(_historyService.Paged, pagingSpec);
         }
 
