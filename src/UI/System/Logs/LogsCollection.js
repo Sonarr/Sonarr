@@ -1,10 +1,16 @@
 ﻿﻿'use strict';
 
-define(['backbone.pageable', 'System/Logs/LogsModel'],
-    function (PagableCollection, LogsModel) {
-    return PagableCollection.extend({
+define(
+    [
+        'backbone.pageable',
+        'System/Logs/LogsModel',
+        'Mixins/AsPersistedStateCollection'
+    ],
+    function (PagableCollection, LogsModel, AsPersistedStateCollection) {
+    var collection = PagableCollection.extend({
         url  : window.NzbDrone.ApiRoot + '/log',
         model: LogsModel,
+        tableName: 'logs',
 
         state: {
             pageSize: 50,
@@ -36,4 +42,6 @@ define(['backbone.pageable', 'System/Logs/LogsModel'],
             return resp;
         }
     });
+
+        return AsPersistedStateCollection.call(collection);
 });

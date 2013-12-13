@@ -3,21 +3,23 @@ define(
     [
         'underscore',
         'backbone',
+        'backbone.pageable',
         'Series/SeriesModel',
-        'api!series'
-    ], function (_, Backbone, SeriesModel, SeriesData) {
+        'api!series',
+        'Mixins/AsPersistedStateCollection'
+    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsPersistedStateCollection) {
         var Collection = Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
-
-            comparator: function (model) {
-                return model.get('title');
-            },
+            tableName: 'series',
 
             state: {
                 sortKey: 'title',
-                order  : 'ascending'
+                order  : -1,
+                pageSize: 1000
             },
+
+            mode: 'client',
 
             save: function () {
                 var self = this;
@@ -31,7 +33,7 @@ define(
                         toJSON: function()
                         {
                             return self.filter(function (model) {
-                                return model.hasChanged();
+                                return model.edited;
                             });
                         }
                     });
@@ -45,6 +47,7 @@ define(
             }
         });
 
-        var collection = new Collection(SeriesData);
+        var mixedIn = AsPersistedStateCollection.call(Collection);
+        var collection = new mixedIn(SeriesData);
         return collection;
     });
