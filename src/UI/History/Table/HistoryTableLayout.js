@@ -80,7 +80,7 @@ define(
 
 
             initialize: function () {
-                this.collection = new HistoryCollection();
+                this.collection = new HistoryCollection({ tableName: 'history' });
                 this.listenTo(this.collection, 'sync', this._showTable);
             },
 

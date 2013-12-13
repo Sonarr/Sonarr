@@ -8,9 +8,15 @@ define(
 
             var originalInit = this.prototype.initialize;
 
-            this.prototype.initialize = function () {
+            this.prototype.initialize = function (options) {
 
-                if (!this.tableName) {
+                options = options || {};
+
+                if (options.tableName) {
+                    this.tableName = options.tableName;
+                }
+
+                if (!this.tableName && !options.tableName) {
                     throw 'tableName is required';
                 }
 
@@ -19,7 +25,7 @@ define(
                 this.on('backgrid:sort', _storeState, this);
 
                 if (originalInit) {
-                    originalInit.call(this);
+                    originalInit.call(this, options);
                 }
             };
 

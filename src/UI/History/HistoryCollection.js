@@ -2,9 +2,10 @@
 define(
     [
         'History/HistoryModel',
-        'backbone.pageable'
-    ], function (HistoryModel, PageableCollection) {
-        return PageableCollection.extend({
+        'backbone.pageable',
+        'Mixins/AsPersistedStateCollection'
+    ], function (HistoryModel, PageableCollection, AsPersistedStateCollection) {
+        var collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/history',
             model: HistoryModel,
 
@@ -48,4 +49,6 @@ define(
                 return resp;
             }
         });
+
+        return AsPersistedStateCollection.apply(collection);
     });
