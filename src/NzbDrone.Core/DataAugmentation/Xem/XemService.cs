@@ -2,13 +2,14 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {
-    public class XemService : IHandle<SeriesUpdatedEvent>
+    public class XemService : IHandle<SeriesUpdatedEvent>, IExecute<RefreshXemCacheCommand>
     {
         private readonly IEpisodeService _episodeService;
         private readonly IXemProxy _xemProxy;
@@ -26,23 +27,6 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             _logger = logger;
             _logger = logger;
             _cache = cacheManger.GetCache<bool>(GetType());
-        }
-
-
-        public void Handle(SeriesUpdatedEvent message)
-        {
-            if (_cache.Count == 0)
-            {
-                RefreshCache();
-            }
-
-            if (!_cache.Find(message.Series.TvdbId.ToString()))
-            {
-                _logger.Trace("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
-                return;
-            }
-
-            PerformUpdate(message.Series);
         }
 
         private void PerformUpdate(Series series)
@@ -108,6 +92,27 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             {
                 _cache.Set(id.ToString(), true, TimeSpan.FromHours(1));
             }
+        }
+
+        public void Handle(SeriesUpdatedEvent message)
+        {
+            if (_cache.Count == 0)
+            {
+                RefreshCache();
+            }
+
+            if (!_cache.Find(message.Series.TvdbId.ToString()))
+            {
+                _logger.Trace("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
+                return;
+            }
+
+            PerformUpdate(message.Series);
+        }
+
+        public void Execute(RefreshXemCacheCommand message)
+        {
+            RefreshCache();
         }
     }
 }
