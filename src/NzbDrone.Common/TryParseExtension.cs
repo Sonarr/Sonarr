@@ -15,5 +15,17 @@ namespace NzbDrone.Common
 
             return null;
         }
+
+        public static Nullable<long> ParseInt64(this string source)
+        {
+            Int64 result = 0;
+
+            if (Int64.TryParse(source, out result))
+            {
+                return result;
+            }
+
+            return null;
+        }
     }
 }

@@ -1,0 +1,50 @@
+﻿<div class="series-editor-footer">
+    <div class="row">
+        <div class="span2">Monitored</div>
+        <div class="span2">Quality Profile</div>
+        <div class="span2">Season Folder</div>
+        <div class="span4">Root Folder</div>
+    </div>
+
+    <div class="row">
+        <div class="span2">
+            <select class="span2 x-monitored">
+                <option value="noChange">No change</option>
+                <option value="true">Monitored</option>
+                <option value="false">Unmonitored</option>
+            </select>
+        </div>
+
+        <div class="span2">
+            <select class="span2 x-quality-profiles">
+                <option value="noChange">No change</option>
+                {{#each qualityProfiles.models}}
+                    <option value="{{id}}">{{attributes.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="span2">
+            <select class="span2 x-season-folder">
+                <option value="noChange">No change</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="span3">
+            <select class="span3 x-root-folder" validation-name="RootFolderPath">
+                <option value="noChange">No change</option>
+                {{#each rootFolders}}
+                    <option value="{{id}}">{{path}}</option>
+                {{/each}}
+                <option value="addNew">Add a different path</option>
+            </select>
+        </div>
+
+        <span class="pull-right">
+            <span class="selected-count x-selected-count">0  series selected</span>
+            <button class="btn btn-primary x-save">Save</button>
+        </span>
+    </div>
+</div>

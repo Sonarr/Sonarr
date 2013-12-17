@@ -16,16 +16,18 @@ define(
         };
 
         vent.Commands = {
-            EditSeriesCommand  : 'EditSeriesCommand',
-            DeleteSeriesCommand: 'DeleteSeriesCommand',
-            OpenModalCommand   : 'OpenModalCommand',
-            CloseModalCommand  : 'CloseModalCommand',
-            ShowEpisodeDetails : 'ShowEpisodeDetails',
-            ShowHistoryDetails : 'ShowHistoryDetails',
-            ShowLogDetails     : 'ShowLogDetails',
-            SaveSettings       : 'saveSettings',
-            ShowLogFile        : 'showLogFile',
-            ShowRenamePreview  : 'showRenamePreview'
+            EditSeriesCommand         : 'EditSeriesCommand',
+            DeleteSeriesCommand       : 'DeleteSeriesCommand',
+            OpenModalCommand          : 'OpenModalCommand',
+            CloseModalCommand         : 'CloseModalCommand',
+            ShowEpisodeDetails        : 'ShowEpisodeDetails',
+            ShowHistoryDetails        : 'ShowHistoryDetails',
+            ShowLogDetails            : 'ShowLogDetails',
+            SaveSettings              : 'saveSettings',
+            ShowLogFile               : 'showLogFile',
+            ShowRenamePreview         : 'showRenamePreview',
+            OpenControlPanelCommand   : 'OpenControlPanelCommand',
+            CloseControlPanelCommand  : 'CloseControlPanelCommand'
         };
 
         return vent;

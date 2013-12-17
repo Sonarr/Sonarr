@@ -152,6 +152,7 @@
     <Compile Include="REST\RestResource.cs" />
     <Compile Include="RootFolders\RootFolderModule.cs" />
     <Compile Include="RootFolders\RootFolderResource.cs" />
+    <Compile Include="Series\SeriesEditorModule.cs" />
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="Series\SeriesModule.cs" />
     <Compile Include="Series\SeriesLookupModule.cs" />

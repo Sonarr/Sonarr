@@ -21,6 +21,7 @@ define(
                 'system'                    : 'system',
                 'system/:action'            : 'system',
                 'seasonpass'                : 'seasonPass',
+                'serieseditor'              : 'seriesEditor',
                 ':whatever'                 : 'showNotFound'
             }
         });

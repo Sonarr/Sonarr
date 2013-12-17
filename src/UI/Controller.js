@@ -12,7 +12,8 @@ define(
         'Release/ReleaseLayout',
         'System/SystemLayout',
         'SeasonPass/SeasonPassLayout',
-        'System/Update/UpdateLayout'
+        'System/Update/UpdateLayout',
+        'Series/Editor/SeriesEditorLayout'
     ], function (NzbDroneController,
                  AppLayout,
                  Marionette,
@@ -24,7 +25,8 @@ define(
                  ReleaseLayout,
                  SystemLayout,
                  SeasonPassLayout,
-                 UpdateLayout) {
+                 UpdateLayout,
+                 SeriesEditorLayout) {
         return NzbDroneController.extend({
 
             addSeries: function (action) {
@@ -72,7 +74,13 @@ define(
             update: function () {
                 this.setTitle('Updates');
                 this.showMainRegion(new UpdateLayout());
+            },
+
+            seriesEditor: function () {
+                this.setTitle('Series Editor');
+                this.showMainRegion(new SeriesEditorLayout());
             }
+
         });
     });
 

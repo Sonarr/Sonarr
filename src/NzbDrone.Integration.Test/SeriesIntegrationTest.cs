@@ -45,7 +45,6 @@ namespace NzbDrone.Integration.Test
             Series.All().Should().BeEmpty();
         }
 
-
         [Test]
         public void should_be_able_to_find_series_by_id()
         {
@@ -60,7 +59,6 @@ namespace NzbDrone.Integration.Test
 
             Series.Get(series.Id).Should().NotBeNull();
         }
-
 
         [Test]
         public void invalid_id_should_return_404()
