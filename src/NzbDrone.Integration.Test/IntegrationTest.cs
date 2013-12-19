@@ -35,6 +35,7 @@ namespace NzbDrone.Integration.Test
         protected IndexerClient Indexers;
         protected EpisodeClient Episodes;
         protected ClientBase<NamingConfigResource> NamingConfig;
+        protected NotificationClient Notifications;
 
         private NzbDroneRunner _runner;
         private List<SignalRMessage> _signalRReceived;
@@ -80,6 +81,7 @@ namespace NzbDrone.Integration.Test
             Indexers = new IndexerClient(RestClient, _runner.ApiKey);
             Episodes = new EpisodeClient(RestClient, _runner.ApiKey);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, _runner.ApiKey, "config/naming");
+            Notifications = new NotificationClient(RestClient, _runner.ApiKey);
         }
 
         [TestFixtureTearDown]
