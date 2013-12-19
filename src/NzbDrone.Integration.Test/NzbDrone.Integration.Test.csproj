@@ -97,11 +97,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\ClientBase.cs" />
+    <Compile Include="Client\NotificationClient.cs" />
     <Compile Include="Client\EpisodeClient.cs" />
     <Compile Include="Client\IndexerClient.cs" />
     <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
+    <Compile Include="NotificationIntegrationFixture.cs" />
     <Compile Include="SeriesEditorIntegrationTest.cs" />
     <Compile Include="HistoryIntegrationTest.cs" />
     <Compile Include="NamingConfigTests.cs" />

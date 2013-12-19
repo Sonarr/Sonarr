@@ -77,7 +77,7 @@ namespace NzbDrone.Api.ClientSchema
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    if (propertyInfo.PropertyType == typeof(Int64))
+                    else if (propertyInfo.PropertyType == typeof(Int64))
                     {
                         var value = Convert.ToInt64(field.Value);
                         propertyInfo.SetValue(target, value, null);
