@@ -268,6 +268,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
         [TestCase(@"Sons.of.Anarchy.S03.720p.BluRay-CLUE\REWARD", "Sons.of.Anarchy", 3)]
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "Adventure Time", 2)]
+        [TestCase("Sealab.2021.S04.iNTERNAL.DVDRip.XviD-VCDVaULT", "Sealab 2021", 4)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

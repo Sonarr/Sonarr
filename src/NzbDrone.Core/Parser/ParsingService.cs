@@ -112,6 +112,11 @@ namespace NzbDrone.Core.Parser
         {
             var result = new List<Episode>();
 
+            if (parsedEpisodeInfo.FullSeason)
+            {
+                return _episodeService.GetEpisodesBySeason(series.Id, parsedEpisodeInfo.SeasonNumber);
+            }
+
             if (parsedEpisodeInfo.IsDaily())
             {
                 if (series.SeriesType == SeriesTypes.Standard)
