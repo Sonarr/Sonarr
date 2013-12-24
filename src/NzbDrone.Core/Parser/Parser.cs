@@ -336,7 +336,8 @@ namespace NzbDrone.Core.Parser
                         var count = last - first + 1;
                         result.AbsoluteEpisodeNumbers = Enumerable.Range(first, count).ToArray();
                     }
-                    else
+
+                    if (!episodeCaptures.Any() && !absoluteEpisodeCaptures.Any())
                     {
                         //Check to see if this is an "Extras" or "SUBPACK" release, if it is, return NULL
                         //Todo: Set a "Extras" flag in EpisodeParseResult if we want to download them ever
