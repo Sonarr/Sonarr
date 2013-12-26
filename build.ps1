@@ -74,6 +74,12 @@ Function PackageMono()
     Write-Host Removing Update Client 
     Remove-Item -Recurse -Force "$outputFolderMono\NzbDrone.Update"
 
+    Write-Host Creating MDBs
+    get-childitem $outputFolderMono -File -Include @("*.exe", "*.dll") -Exclude @("MediaInfo.dll", "sqlite3.dll") -Recurse | foreach ($_) {
+        Write-Host "Creating .mdb for $_"
+        & "tools\pdb2mdb\pdb2mdb.exe" $_.fullname
+    }
+
     Write-Host Removing PDBs
     get-childitem $outputFolderMono -File -Filter *.pdb -Recurse | foreach ($_) {remove-item $_.fullname}
 
@@ -89,8 +95,15 @@ Function PackageMono()
     Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" $outputFolderMono
 
     Write-Host Renaming NzbDrone.Console.exe to NzbDrone.exe
-    get-childitem $outputFolderMono -File -Filter NzbDrone.exe -Recurse  | foreach ($_) {remove-item $_.fullname}
-    Rename-Item "$outputFolderMono\NzbDrone.Console.exe" "NzbDrone.exe"
+    Get-ChildItem $outputFolderMono -File -Filter "NzbDrone.exe*" -Recurse  | foreach ($_) {remove-item $_.fullname}
+
+    Get-ChildItem $outputFolderMono -File -Filter "NzbDrone.Console.exe*" -Recurse  | foreach ($_) {
+        $newName = $_.fullname -Replace ".Console",""
+
+        Rename-Item $_.fullname $newName
+    }
+
+    Remove-Item "$outputFolderMono\NzbDrone.Console.vshost.exe"
 
     Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
 }
