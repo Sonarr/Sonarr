@@ -23,7 +23,6 @@ namespace NzbDrone.Host
         {
             _processPriorityCheckTimer = new Timer(EnsurePriority);
             _processPriorityCheckTimer.Change(TimeSpan.FromSeconds(15), TimeSpan.FromMinutes(30));
-
         }
 
         public virtual void EnsurePriority(object sender)
