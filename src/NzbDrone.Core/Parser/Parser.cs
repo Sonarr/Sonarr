@@ -129,7 +129,10 @@ namespace NzbDrone.Core.Parser
             if (result == null)
             {
                 Logger.Warn("Unable to parse episode info from path {0}", path);
+                return null;
             }
+
+            result.ReleaseGroup = ParseReleaseGroup(fileInfo.Name.Replace(fileInfo.Extension, ""));
 
             return result;
         }

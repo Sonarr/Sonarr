@@ -474,5 +474,13 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
+
+        [Test]
+        public void should_not_include_extension_in_releaseGroup()
+        {
+            const string path = @"C:\Test\Doctor.Who.2005.s01e01.internal.bdrip.x264-archivist.mkv";
+
+            Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
+        }
     }
 }
