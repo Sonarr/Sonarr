@@ -186,15 +186,15 @@ define(
                 this.episodeCollection = new EpisodeCollection({ seriesId: this.model.id }).bindSignalR();
                 this.episodeFileCollection = new EpisodeFileCollection({ seriesId: this.model.id }).bindSignalR();
 
+                reqres.setHandler(reqres.Requests.GetEpisodeFileById, function (episodeFileId) {
+                    return self.episodeFileCollection.get(episodeFileId);
+                });
+
                 $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function () {
                     var seasonCollectionView = new SeasonCollectionView({
                         collection       : self.seasonCollection,
                         episodeCollection: self.episodeCollection,
                         series           : self.model
-                    });
-
-                    reqres.setHandler(reqres.Requests.GetEpisodeFileById, function (episodeFileId) {
-                        return self.episodeFileCollection.get(episodeFileId);
                     });
 
                     self.seasons.show(seasonCollectionView);
