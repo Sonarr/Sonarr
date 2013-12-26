@@ -7,7 +7,7 @@ namespace NzbDrone.Api.Extensions
     {
         public static bool IsApiRequest(this Request request)
         {
-            return request.Path.StartsWith("/api/", StringComparison.InvariantCultureIgnoreCase);
+            return request.Path.StartsWith("/api/", StringComparison.InvariantCultureIgnoreCase) || request.IsLogFileRequest();
         }
 
         public static bool IsSignalRRequest(this Request request)
@@ -20,6 +20,12 @@ namespace NzbDrone.Api.Extensions
             return (request.UserHostAddress.Equals("localhost") ||
                     request.UserHostAddress.Equals("127.0.0.1") ||
                     request.UserHostAddress.Equals("::1"));
+        }
+
+        private static bool IsLogFileRequest(this Request request)
+        {
+            return request.Path.StartsWith("/log/", StringComparison.InvariantCultureIgnoreCase) &&
+                   request.Path.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

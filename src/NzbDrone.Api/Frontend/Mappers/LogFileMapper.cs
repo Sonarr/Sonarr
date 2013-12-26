@@ -25,7 +25,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/log") && resourceUrl.EndsWith(".txt");
+            return resourceUrl.StartsWith("/log/") && resourceUrl.EndsWith(".txt");
         }
     }
 }
