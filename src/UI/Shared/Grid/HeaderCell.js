@@ -11,6 +11,14 @@ define(
                 'click': 'onClick'
             },
 
+            _originalInit: Backgrid.HeaderCell.prototype.initialize,
+
+            initialize: function (options) {
+                this._originalInit.call(this, options);
+
+                this.listenTo(this.collection, 'drone:sort', this.render);
+            },
+
             render: function () {
                 this.$el.empty();
                 this.$el.append(this.column.get('label'));
@@ -36,6 +44,10 @@ define(
 
                     if (key === this.column.get('name')) {
                         this._setSortIcon(order);
+                    }
+
+                    else {
+                        this._removeSortIcon();
                     }
                 }
 

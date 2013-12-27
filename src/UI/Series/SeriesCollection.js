@@ -8,7 +8,7 @@ define(
         'api!series',
         'Mixins/AsPersistedStateCollection'
     ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsPersistedStateCollection) {
-        var Collection = Backbone.Collection.extend({
+        var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
             tableName: 'series',

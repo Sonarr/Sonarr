@@ -6,8 +6,9 @@ define(
         'Shared/Toolbar/ButtonModel',
         'Shared/Toolbar/Radio/RadioButtonCollectionView',
         'Shared/Toolbar/Button/ButtonCollectionView',
+        'Shared/Toolbar/Sorting/SortingButtonCollectionView',
         'underscore'
-    ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView,_) {
+    ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView, SortingButtonCollectionView, _) {
         return Marionette.Layout.extend({
             template: 'Shared/Toolbar/ToolbarLayoutTemplate',
 
@@ -75,6 +76,15 @@ define(
                         buttonGroupView = new RadioButtonCollectionView({
                             collection: groupCollection,
                             menu      : buttonGroup
+                        });
+                        break;
+                    }
+                    case 'sorting':
+                    {
+                        buttonGroupView = new SortingButtonCollectionView({
+                            collection    : groupCollection,
+                            menu          : buttonGroup,
+                            viewCollection: buttonGroup.viewCollection
                         });
                         break;
                     }

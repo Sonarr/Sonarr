@@ -1,8 +1,8 @@
 'use strict';
 
 define(
-    ['Config'],
-    function (Config) {
+    ['underscore', 'Config'],
+    function (_, Config) {
 
         return function () {
 
@@ -22,7 +22,8 @@ define(
 
                 _setInitialState.call(this);
 
-                this.on('backgrid:sort', _storeState, this);
+                this.on('backgrid:sort', _storeStateFromBackgrid, this);
+                this.on('drone:sort', _storeState, this);
 
                 if (originalInit) {
                     originalInit.call(this, options);
@@ -38,9 +39,17 @@ define(
                 this.state.order = order;
             };
 
-            var _storeState = function (column, sortDirection) {
+            var _storeStateFromBackgrid = function (column, sortDirection) {
                 var order = _convertDirectionToInt(sortDirection);
-                var sortKey = column.has('sortValue') ? column.get('sortValue') : column.get('name');
+                var sortKey = column.has('sortValue') && _.isString(column.get('sortValue')) ? column.get('sortValue') : column.get('name');
+
+                Config.setValue('{0}.sortKey'.format(this.tableName), sortKey);
+                Config.setValue('{0}.sortDirection'.format(this.tableName), order);
+            };
+
+            var _storeState = function (sortModel, sortDirection) {
+                var order = _convertDirectionToInt(sortDirection);
+                var sortKey = sortModel.get('name');
 
                 Config.setValue('{0}.sortKey'.format(this.tableName), sortKey);
                 Config.setValue('{0}.sortDirection'.format(this.tableName), order);
