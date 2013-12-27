@@ -147,12 +147,11 @@ define(
                 this.model.set('seasonFolder', seasonFolder);
 
                 var self = this;
-
-                SeriesCollection.add(this.model);
-
                 var promise = this.model.save();
 
                 promise.done(function () {
+                    SeriesCollection.add(self.model);
+
                     self.close();
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
 
