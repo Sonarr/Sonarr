@@ -33,6 +33,13 @@ namespace NzbDrone.Api.History
                                      SortDirection = pagingResource.SortDirection
                                  };
 
+            //This is a hack to deal with backgrid setting the sortKey to the column name instead of sortValue
+            if (pagingSpec.SortKey.Equals("series", StringComparison.InvariantCultureIgnoreCase))
+            {
+                pagingSpec.SortKey = "series.title";
+            }
+
+
             if (episodeId.HasValue)
             {
                 int i = (int)episodeId;
