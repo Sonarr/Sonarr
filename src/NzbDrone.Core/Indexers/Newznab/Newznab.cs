@@ -46,6 +46,14 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Settings = GetSettings("https://dognzb.cr", new List<Int32>())
                 });
 
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "OZnzb.com",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("https://www.oznzb.com", new List<Int32>())
+                });
+
                 return list;
 
             }
