@@ -52,7 +52,7 @@ define(
             },
 
             _navigate:function(route){
-                Backbone.history.navigate(route);
+                Backbone.history.navigate(route, { trigger: true, replace: true });
             },
 
             _showInfo: function (e) {

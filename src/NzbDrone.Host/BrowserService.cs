@@ -38,7 +38,7 @@ namespace NzbDrone.Host
                 }
                 else
                 {
-                    _logger.Debug("none-interactive runtime. Won't attempt to open browser.");
+                    _logger.Debug("non-interactive runtime. Won't attempt to open browser.");
                 }
             }
             catch (Exception e)

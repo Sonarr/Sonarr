@@ -184,7 +184,7 @@ define(
             },
 
             _navigate:function(route){
-                Backbone.history.navigate(route, {trigger:true});
+                Backbone.history.navigate(route, { trigger: true, replace: true });
             },
 
             _save: function () {

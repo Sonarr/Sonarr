@@ -106,6 +106,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
         }
 
         [TestCase(@"z:\tv shows\battlestar galactica (2003)\Season 3\S03E05 - Collaborators.mkv", 3, 5)]
@@ -129,6 +130,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
 
             ExceptionVerification.IgnoreWarns();
         }
@@ -169,6 +172,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
         }
 
 
@@ -190,6 +195,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
             result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
         }
 
         [TestCase("[SubDESU]_High_School_DxD_07_(1280x720_x264-AAC)_[6B7FD717]", "High School DxD", 7, 0, 0)]
@@ -222,8 +229,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.FirstOrDefault().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.FullSeason.Should().BeFalse();
         }
-
 
         [TestCase("Conan {year} {month} {day} Emma Roberts HDTV XviD BFF")]
         [TestCase("The Tonight Show With Jay Leno {year} {month} {day} 1080i HDTV DD5 1 MPEG2 TrollHD")]
@@ -237,7 +244,6 @@ namespace NzbDrone.Core.Test.ParserTests
             var yearTooLow = title.Expand(new { year = 1950, month = 10, day = 14 });
             Parser.Parser.ParseTitle(yearTooLow).Should().BeNull();
         }
-
 
         [TestCase("Conan {year} {month} {day} Emma Roberts HDTV XviD BFF")]
         [TestCase("The Tonight Show With Jay Leno {year} {month} {day} 1080i HDTV DD5 1 MPEG2 TrollHD")]
@@ -268,12 +274,14 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
         [TestCase(@"Sons.of.Anarchy.S03.720p.BluRay-CLUE\REWARD", "Sons.of.Anarchy", 3)]
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "Adventure Time", 2)]
+        [TestCase("Sealab.2021.S04.iNTERNAL.DVDRip.XviD-VCDVaULT", "Sealab 2021", 4)]
         public void full_season_release_parse(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
-            result.EpisodeNumbers.Length.Should().Be(0);
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeTrue();
         }
 
@@ -465,6 +473,14 @@ namespace NzbDrone.Core.Test.ParserTests
         public void parse_releaseGroup(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+        }
+
+        [Test]
+        public void should_not_include_extension_in_releaseGroup()
+        {
+            const string path = @"C:\Test\Doctor.Who.2005.s01e01.internal.bdrip.x264-archivist.mkv";
+
+            Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
         }
     }
 }

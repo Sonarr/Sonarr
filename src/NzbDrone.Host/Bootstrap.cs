@@ -15,17 +15,14 @@ namespace NzbDrone.Host
         private static IContainer _container;
         private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
-
         public static void Start(StartupContext startupContext, IUserAlert userAlert, Action<IContainer> startCallback = null)
         {
             try
             {
-
                 GlobalExceptionHandlers.Register();
                 IgnoreCertErrorPolicy.Register();
 
                 Logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
-
 
                 if (!PlatformValidation.IsValidate(userAlert))
                 {
@@ -92,8 +89,6 @@ namespace NzbDrone.Host
             }
         }
 
-
-
         private static ApplicationModes GetApplicationMode(StartupContext startupContext)
         {
             if (startupContext.Flags.Contains(StartupContext.HELP))
@@ -119,8 +114,6 @@ namespace NzbDrone.Host
             return ApplicationModes.Interactive;
         }
 
-
-
         private static bool IsInUtilityMode(ApplicationModes applicationMode)
         {
             switch (applicationMode)
@@ -137,6 +130,5 @@ namespace NzbDrone.Host
                     }
             }
         }
-
     }
 }

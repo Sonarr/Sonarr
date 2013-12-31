@@ -16,12 +16,10 @@ namespace NzbDrone.Api.Authentication
         private readonly IConfigFileProvider _configFileProvider;
         private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
 
-
         public AuthenticationService(IConfigFileProvider configFileProvider)
         {
             _configFileProvider = configFileProvider;
         }
-
 
         public IUserIdentity Validate(string username, string password)
         {

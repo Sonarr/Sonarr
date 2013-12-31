@@ -38,7 +38,7 @@ namespace NzbDrone.SysTray
 
             _trayIcon.ContextMenu = _trayMenu;
             _trayIcon.Visible = true;
-
+            _trayIcon.DoubleClick += LaunchBrowser;
 
             Application.Run(this);
         }

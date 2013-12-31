@@ -31,7 +31,7 @@ define(
                     var hasAired = Moment(this.model.get('airDateUtc')).isBefore(Moment());
                     var hasFile = this.model.get('hasFile');
 
-                    if (hasFile) {
+                    if (hasFile && reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
                         var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
 
                         this.listenTo(episodeFile, 'change', this._refresh);

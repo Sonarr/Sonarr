@@ -74,16 +74,16 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Supports 1103/1113 naming
-                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                 //Supports Season 01 Episode 03
                 new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?Season\W?)(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)(?:Episode\W)(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Supports 1103/1113 naming
+                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //4-digit episode number
@@ -129,7 +129,10 @@ namespace NzbDrone.Core.Parser
             if (result == null)
             {
                 Logger.Warn("Unable to parse episode info from path {0}", path);
+                return null;
             }
+
+            result.ReleaseGroup = ParseReleaseGroup(fileInfo.Name.Replace(fileInfo.Extension, ""));
 
             return result;
         }
@@ -336,7 +339,8 @@ namespace NzbDrone.Core.Parser
                         var count = last - first + 1;
                         result.AbsoluteEpisodeNumbers = Enumerable.Range(first, count).ToArray();
                     }
-                    else
+
+                    if (!episodeCaptures.Any() && !absoluteEpisodeCaptures.Any())
                     {
                         //Check to see if this is an "Extras" or "SUBPACK" release, if it is, return NULL
                         //Todo: Set a "Extras" flag in EpisodeParseResult if we want to download them ever
