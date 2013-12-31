@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Notifications.Pushover
                 return true;
             }
         }
+
+        public string ApiKey { get; set; }
         public string UserKey { get; set; }
         public int Priority { get; set; }
     }
