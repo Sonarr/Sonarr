@@ -5,6 +5,6 @@
         Quiet = -1,
         Normal = 0,
         High = 1,
-        Emergency = 2
+        //Emergency = 2
     }
 }
