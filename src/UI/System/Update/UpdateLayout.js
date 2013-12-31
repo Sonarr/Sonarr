@@ -16,17 +16,18 @@ define(
 
             initialize: function () {
                 this.updateCollection = new UpdateCollection();
+
+                this.listenTo(this.updateCollection, 'sync', this._showUpdates);
             },
 
             onRender: function () {
                 this.updates.show(new LoadingView());
 
-                var self = this;
-                var promise = this.updateCollection.fetch();
+                this.updateCollection.fetch();
+            },
 
-                promise.done(function (){
-                    self.updates.show(new UpdateCollectionView({ collection: self.updateCollection }));
-                });
+            _showUpdates: function () {
+                this.updates.show(new UpdateCollectionView({ collection: this.updateCollection }));
             }
         });
     });
