@@ -6,10 +6,8 @@ define(
         'Cells/FileSizeCell',
         'Cells/QualityCell',
         'Cells/ApprovalStatusCell',
-        'Release/DownloadReportCell',
-        'Cells/Header/QualityHeaderCell'
-
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, QualityHeaderCell) {
+        'Release/DownloadReportCell'
+    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/ManualLayoutTemplate',
@@ -49,7 +47,9 @@ define(
                         label     : 'Quality',
                         sortable  : true,
                         cell      : QualityCell,
-                        headerCell: QualityHeaderCell
+                        sortValue : function (model) {
+                            return model.get('quality').quality.weight;
+                        }
                     },
 
                     {

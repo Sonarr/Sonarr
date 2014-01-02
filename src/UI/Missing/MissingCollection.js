@@ -2,11 +2,13 @@
 define(
     [
         'Series/EpisodeModel',
-        'backbone.pageable'
-    ], function (EpisodeModel, PagableCollection) {
-        return PagableCollection.extend({
+        'backbone.pageable',
+        'Mixins/AsPersistedStateCollection'
+    ], function (EpisodeModel, PagableCollection, AsPersistedStateCollection) {
+        var collection = PagableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/missing',
             model: EpisodeModel,
+            tableName: 'missing',
 
             state: {
                 pageSize: 15,
@@ -38,4 +40,6 @@ define(
                 return resp;
             }
         });
+
+        return AsPersistedStateCollection.call(collection);
     });
