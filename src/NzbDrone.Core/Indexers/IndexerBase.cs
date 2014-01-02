@@ -48,6 +48,10 @@ namespace NzbDrone.Core.Indexers
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
         public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
+        public virtual IEnumerable<string> GetSearchUrls(string query, int offset, int limit)
+        {
+            return new List<string>();
+        }
 
         public override string ToString()
         {

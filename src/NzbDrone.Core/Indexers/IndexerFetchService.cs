@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -50,6 +51,12 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
 
+            if (result.Count == 0 && searchCriteria.SeasonNumber == 0)
+            {
+                // no results? fetch season special episodes using query
+                return FetchEpisodesUsingQuery(indexer, searchCriteria);
+            }
+
             return result;
         }
 
@@ -77,9 +84,13 @@ namespace NzbDrone.Core.Indexers
 
             var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
             var result = Fetch(indexer, searchUrls);
-
-
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+
+            if (result.Count == 0)
+            {
+                // no results? use search query with episode titles as fallback
+                return FetchEpisodesUsingQuery(indexer, searchCriteria);
+            }
             return result;
         }
 
@@ -91,6 +102,36 @@ namespace NzbDrone.Core.Indexers
             var result = Fetch(indexer, searchUrls);
 
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            return result;
+        }
+
+        private IList<ReleaseInfo> FetchEpisodesUsingQuery(IIndexer indexer, SearchCriteriaBase searchCriteria)
+        {
+            var queryUrls = new List<string>();
+            foreach (var episode in searchCriteria.Episodes)
+            {
+                if (!string.IsNullOrEmpty(episode.Title))
+                {
+                    // build query string for "<series> <episode-title>"
+                    string episodeTitle = Regex.Replace(episode.Title, @"\W+", "+");
+                    string query = searchCriteria.QueryTitle + "+" + episodeTitle;
+                    _logger.Debug("Performing query of {0} for {1}", indexer, query);
+                    queryUrls.AddRange(indexer.GetSearchUrls(query, 0, 1000));
+                }
+
+                if (episode.SeasonNumber != 0)
+                {
+                    // build query string for "<series> S03E08"
+                    string query = searchCriteria.QueryTitle + "+" + string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+                    _logger.Debug("Performing query of {0} for {1}", indexer, query);
+                    queryUrls.AddRange(indexer.GetSearchUrls(query, 0, 1000));
+                }
+            }
+            var result = Fetch(indexer, queryUrls);
+            if (queryUrls.Count > 0)
+            {
+                _logger.Info("Finished searching {0} for {1} using query strings. Found {2}", indexer, searchCriteria, result.Count);
+            }
             return result;
         }
 
