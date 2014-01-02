@@ -2,8 +2,9 @@
 define(
     [
         'backbone',
-        'jquery'
-    ], function (Backbone,$) {
+        'jquery',
+        'System/StatusModel'
+    ], function (Backbone, $, StatusModel) {
         //This module will automatically route all relative links through backbone router rather than
         //causing links to reload pages.
 
@@ -45,7 +46,9 @@ define(
 
 
                 if (!href.startsWith('http')) {
-                    Backbone.history.navigate(href, { trigger: true });
+                    var relativeHref = href.replace(StatusModel.get('urlBase'), '');
+
+                    Backbone.history.navigate(relativeHref, { trigger: true });
                 }
 
                 else {

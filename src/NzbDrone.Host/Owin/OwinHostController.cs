@@ -57,25 +57,21 @@ namespace NzbDrone.Host.Owin
                 _urlAclAdapter.ConfigureUrl();
             }
 
-            var options = new StartOptions(_urlAclAdapter.Url)
+            var options = new StartOptions()
                 {
                     ServerFactory = "Microsoft.Owin.Host.HttpListener"
                 };
 
-            if (_configFileProvider.EnableSsl)
+            _urlAclAdapter.Urls.ForEach(options.Urls.Add);
+
+            _logger.Info("Listening on the following URLs:");
+            foreach (var url in options.Urls)
             {
-                _logger.Trace("SSL enabled, listening on: {0}", _urlAclAdapter.HttpsUrl);
-                options.Urls.Add(_urlAclAdapter.HttpsUrl);
+                _logger.Info("  {0}", url);
             }
-
-            _logger.Info("starting server on {0}", _urlAclAdapter.Url);
-
+            
             try
             {
-            	// options.ServerFactory = new 
-                //_host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
-                //_host = WebApp.Start(options, BuildApp);
-                
                 _host = WebApp.Start(OwinServiceProviderFactory.Create(), options, BuildApp);
             }
             catch (TargetInvocationException ex)

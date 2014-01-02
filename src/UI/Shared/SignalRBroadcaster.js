@@ -31,7 +31,7 @@ define(
                 var messengerId = 'signalR';
                 var reconnectTimeout;
 
-                this.signalRconnection = $.connection('/signalr');
+                this.signalRconnection = $.connection(StatusModel.get('urlBase') + '/signalr');
 
                 this.signalRconnection.stateChanged(function (change) {
                     console.debug('SignalR: [{0}]'.format(getStatus(change.newState)));

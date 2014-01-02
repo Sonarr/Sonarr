@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Configuration
         string ApiKey { get; }
         bool Torrent { get; }
         string SslCertHash { get; }
+        string UrlBase { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -150,6 +151,21 @@ namespace NzbDrone.Core.Configuration
         public string SslCertHash
         {
             get { return GetValue("SslCertHash", ""); }
+        }
+
+        public string UrlBase
+        {
+            get
+            {
+                var urlBase = GetValue("UrlBase", "");
+
+                if (String.IsNullOrEmpty(urlBase))
+                {
+                    return urlBase;
+                }
+
+                return "/" + urlBase.Trim('/').ToLower();
+            }
         }
 
         public int GetValueInt(string key, int defaultValue)
