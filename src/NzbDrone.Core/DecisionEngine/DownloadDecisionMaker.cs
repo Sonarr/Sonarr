@@ -61,7 +61,8 @@ namespace NzbDrone.Core.DecisionEngine
 
                 try
                 {
-                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
+                    // use parsing service to parse episode info (this allows us to do episode title searches against the episode repository)
+                    var parsedEpisodeInfo = _parsingService.ParseTitle(report.Title, (searchCriteria != null) ? searchCriteria.Series : null, true);
 
                     if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {

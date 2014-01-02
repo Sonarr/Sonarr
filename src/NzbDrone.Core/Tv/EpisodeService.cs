@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Tv
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
         void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
+        IEnumerable<Episode> SearchForEpisodes(string episodeTitle, int seriesId);
     }
 
     public class EpisodeService : IEpisodeService,
@@ -87,6 +88,12 @@ namespace NzbDrone.Core.Tv
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
+
+        public IEnumerable<Episode> SearchForEpisodes(string episodeTitle, int seriesId) 
+        { 
+            return _episodeRepository.SearchForEpisodes(episodeTitle, seriesId);
+        }
+
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec)
         {

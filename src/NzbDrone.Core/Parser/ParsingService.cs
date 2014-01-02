@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Parser
 {
     public interface IParsingService
     {
+        ParsedEpisodeInfo ParseTitle(string title, Series series, bool sceneSource);
         LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null);
@@ -39,9 +40,68 @@ namespace NzbDrone.Core.Parser
             _logger = logger;
         }
 
+
+        public ParsedEpisodeInfo ParseTitle(string title, Series series, bool sceneSource)
+        {
+            ParsedEpisodeInfo info = Parser.ParseTitle(title);
+
+            try
+            {
+                if (series == null)
+                {
+                    // find series if we dont have it already
+                    series = _seriesService.FindByTitle(title);
+                    if (series == null)
+                    {
+                        // no series
+                        _logger.Info("Could not find Series for {0}", title);
+                        return null;
+                    }
+                }
+
+                // validate info, if we have low confidence that it is correct we will do an episode search
+                if (info == null || info.FullSeason || info.EpisodeNumbers.Length == 0 || GetEpisodes(info, series, sceneSource).Count == 0)
+                {
+                    // find episode by title using a fuzzy match through episode service
+                    // this will handle most special episodes and incorrect matchess
+                    var episodes = _episodeService.SearchForEpisodes(title, series.Id).ToList();
+                    if (episodes.Count == 1)
+                    {
+                        var episode = episodes.Single();
+
+                        // created parsed info from tv episode that we found
+                        info = new ParsedEpisodeInfo();
+                        info.SeriesTitle = series.Title;
+                        info.SeriesTitleInfo = new SeriesTitleInfo();
+                        info.SeriesTitleInfo.Title = info.SeriesTitle;
+                        info.SeasonNumber = episode.SeasonNumber;
+                        info.EpisodeNumbers = new int[1] { episode.EpisodeNumber };
+                        info.FullSeason = false;
+                        info.Quality = QualityParser.ParseQuality(title);
+                        info.ReleaseGroup = Parser.ParseReleaseGroup(title);
+
+                        _logger.Info("Found episode {0} for title '{1}'", info, title);
+                    }
+                    else if (episodes.Count > 1)
+                    {
+                        // more than one episode with this name?
+                        _logger.Warn("Found multiple episodes in series {0} for title '{1}'", series.Title, title);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("An error has occurred while trying to parse " + title, e);
+            }
+
+            return info;
+        }
+
         public LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource)
         {
-            var parsedEpisodeInfo = Parser.ParsePath(filename);
+            string title = System.IO.Path.GetFileNameWithoutExtension(filename);
+
+            var parsedEpisodeInfo = this.ParseTitle(title, series, sceneSource);
 
             if (parsedEpisodeInfo == null)
             {

@@ -97,7 +97,9 @@ namespace NzbDrone.Core.Tv
                 return FindByTvdbId(tvdbId.Value);
             }
 
-            return _seriesRepository.FindByTitle(Parser.Parser.CleanSeriesTitle(title));
+            // perform a fuzzy match for this series
+            string cleanTitle = Parser.Parser.CleanSeriesTitle(title);
+            return _seriesRepository.SearchByTitle(cleanTitle);
         }
 
         public Series FindByTitle(string title, int year)

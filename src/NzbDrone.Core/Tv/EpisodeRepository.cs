@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Tv
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetFileId(int episodeId, int fileId);
+        IEnumerable<Episode> SearchForEpisodes(string episodeTitle, int seriesId);
     }
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
@@ -68,6 +70,35 @@ namespace NzbDrone.Core.Tv
         public List<Episode> GetEpisodeByFileId(int fileId)
         {
             return Query.Where(e => e.EpisodeFileId == fileId).ToList();
+        }
+
+        private static readonly Regex NormalizeSpacesRegex = new Regex(@"\W+", RegexOptions.Compiled);
+        private static readonly Regex NormalizeWordsRegex = new Regex(@"\b(a|an|the|and|or|of|part)\b\s?",
+                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+
+        private static string NormalizeTitle(string title)
+        {
+            // convert any space-like characters to a single space
+            string normalizedSpaces = NormalizeSpacesRegex.Replace(title, " ").ToLower();
+            // remove common words
+            string normalized = NormalizeWordsRegex.Replace(normalizedSpaces, String.Empty);
+            return normalized;
+        }
+
+        public IEnumerable<Episode> SearchForEpisodes(string episodeTitle, int seriesId)
+        {
+            var search = NormalizeTitle(episodeTitle);
+            var episodes = GetEpisodes(seriesId);
+            return episodes.Where(
+                e => 
+                {
+                    // TODO: can replace this search mechanism with something smarter/faster/better
+                    // normalize episode title
+                    string title = NormalizeTitle(e.Title);
+                    // find episode title within search string
+                    return (title.Length > 0) && search.Contains(title); 
+                });
         }
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
