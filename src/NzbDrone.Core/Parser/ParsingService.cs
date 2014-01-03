@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Parser
                 {
                     // find series if we dont have it already
                     // the series search is able to find a title with an inexact match even though there is release metadata on it
-                    series = _seriesService.FindByTitleInexact(title);
+                    series = _seriesService.FindByTitleInexact((info != null) ? info.SeriesTitle : title);
                     if (series == null)
                     {
                         // no series
@@ -139,13 +139,12 @@ namespace NzbDrone.Core.Parser
         public Series GetSeries(string title)
         {
             var parsedEpisodeInfo = Parser.ParseTitle(title);
-
             if (parsedEpisodeInfo == null)
             {
-                return _seriesService.FindByTitle(title);
+                return _seriesService.FindByTitleInexact(title);
             }
 
-            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+            var series = _seriesService.FindByTitleInexact(parsedEpisodeInfo.SeriesTitle);
 
             if (series == null)
             {
@@ -308,7 +307,7 @@ namespace NzbDrone.Core.Parser
 
         private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
         {
-            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+            var series = _seriesService.FindByTitleInexact(parsedEpisodeInfo.SeriesTitle);
 
             if (series == null && tvRageId > 0)
             {
