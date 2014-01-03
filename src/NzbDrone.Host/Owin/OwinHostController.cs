@@ -53,9 +53,9 @@ namespace NzbDrone.Host.Owin
                     _firewallAdapter.MakeAccessible();
                     _sslAdapter.Register();
                 }
-
-                _urlAclAdapter.ConfigureUrl();
             }
+
+            _urlAclAdapter.ConfigureUrl();
 
             var options = new StartOptions()
                 {
