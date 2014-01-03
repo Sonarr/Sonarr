@@ -50,7 +50,8 @@ namespace NzbDrone.Core.Parser
                 if (series == null)
                 {
                     // find series if we dont have it already
-                    series = _seriesService.FindByTitle(title);
+                    // the series search is able to find a title with an inexact match even though there is release metadata on it
+                    series = _seriesService.FindByTitleInexact(title);
                     if (series == null)
                     {
                         // no series
@@ -59,12 +60,20 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                // validate info, if we have low confidence that it is correct we will do an episode search
-                if (info == null || info.FullSeason || info.EpisodeNumbers.Length == 0 || GetEpisodes(info, series, sceneSource).Count == 0)
+                // validate parsed info using backend, if we have low confidence that it is correct we will do an episode title search
+                //
+                // if no episode numbers we probably have a low confidence parse,
+                //    a "S01" could mean a FullSeason or a single named episode in season 1 with trailing episode title:
+                //              <series>.S01.HDTV-Releaser                 <-- FullSeason release
+                //              <series>.S01.Holiday.Christmas.Special     <-- Special episode release with Season# and title
+                //
+                // we also call GetEpisodes() here to make sure we have these episode numbers in our local episode DB, 
+                //   if not then they may be numbered incorrectly and a title search may find the correct episode
+                if (info == null || info.EpisodeNumbers.Length == 0 || !GetEpisodes(info, series, sceneSource).Any())
                 {
                     // find episode by title using a fuzzy match through episode service
                     // this will handle most special episodes and incorrect matchess
-                    var episodes = _episodeService.SearchForEpisodes(title, series.Id).ToList();
+                    var episodes = _episodeService.FindEpisodeByNameInexact(series.Id, title).ToList();
                     if (episodes.Count == 1)
                     {
                         var episode = episodes.Single();

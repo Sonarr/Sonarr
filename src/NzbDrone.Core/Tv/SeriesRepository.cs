@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Tv
         Series FindByTitle(string cleanTitle, int year);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
-        Series SearchByTitle(string cleanTitle);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
     }
 
@@ -38,25 +37,6 @@ namespace NzbDrone.Core.Tv
         {
             return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle, StringComparison.InvariantCultureIgnoreCase) &&
                                               s.Year == year);
-        }
-
-        public Series SearchByTitle(string cleanTitle)
-        {
-            if (string.IsNullOrWhiteSpace(cleanTitle))
-            {
-                return null;
-            }
-
-            // find exact match first
-            Series exactMatch = FindByTitle(cleanTitle);
-            if (exactMatch != null)
-            {
-                return exactMatch;
-            }
-
-            // do fuzzy search
-            var list = All().Where(s => cleanTitle.Contains(s.CleanTitle)).ToList();
-            return (list.Count == 1) ? list.Single() : null;
         }
 
         public Series FindByTvdbId(int tvdbId)

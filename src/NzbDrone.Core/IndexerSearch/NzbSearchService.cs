@@ -91,6 +91,9 @@ namespace NzbDrone.Core.IndexerSearch
                 searchSpec.SeasonNumber = episode.SeasonNumber;
             }
 
+            // use indexer text search for "special" season
+            searchSpec.UseIndexerTextSearch = (searchSpec.SeasonNumber == 0);
+
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
@@ -110,6 +113,8 @@ namespace NzbDrone.Core.IndexerSearch
 
             var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
             searchSpec.SeasonNumber = seasonNumber;
+            // use indexer text search for "special" season
+            searchSpec.UseIndexerTextSearch = (searchSpec.SeasonNumber == 0);
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }

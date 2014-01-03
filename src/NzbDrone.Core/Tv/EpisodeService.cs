@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
         void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
-        IEnumerable<Episode> SearchForEpisodes(string episodeTitle, int seriesId);
+        IEnumerable<Episode> FindEpisodeByNameInexact(int seriesId, string episodeTitle);
     }
 
     public class EpisodeService : IEpisodeService,
@@ -89,9 +89,19 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public IEnumerable<Episode> SearchForEpisodes(string episodeTitle, int seriesId) 
-        { 
-            return _episodeRepository.SearchForEpisodes(episodeTitle, seriesId);
+        public IEnumerable<Episode> FindEpisodeByNameInexact(int seriesId, string episodeTitle) 
+        {
+            var search = Parser.Parser.NormalizeEpisodeTitle(episodeTitle);
+            var episodes = _episodeRepository.GetEpisodes(seriesId);
+            return episodes.Where(
+                e => 
+                {
+                    // TODO: can replace this search mechanism with something smarter/faster/better
+                    // normalize episode title
+                    string title = Parser.Parser.NormalizeEpisodeTitle(e.Title);
+                    // find episode title within search string
+                    return (title.Length > 0) && search.Contains(title); 
+                });
         }
 
 

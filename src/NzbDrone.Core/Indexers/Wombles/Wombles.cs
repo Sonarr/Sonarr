@@ -41,5 +41,10 @@ namespace NzbDrone.Core.Indexers.Wombles
         {
             return new List<string>();
         }
+
+        public override IEnumerable<string> GetSearchUrls(string query, int offset, int limit)
+        {
+            return new List<string>();
+        }
     }
 }

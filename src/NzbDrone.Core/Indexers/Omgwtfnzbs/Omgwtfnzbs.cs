@@ -66,5 +66,11 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             return searchUrls;
         }
+
+        public override IEnumerable<string> GetSearchUrls(string query, int offset, int limit)
+        {
+            return new List<string>();
+        }
+
     }
 }
