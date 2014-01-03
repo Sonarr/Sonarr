@@ -29,7 +29,7 @@ define(
                 //look down for <a/>
                 var href = event.target.getAttribute('href');
 
-                //if couldn't find it look up
+                //if couldn't find it look up'
                 if (!href && target.parent('a') && target.parent('a')[0]) {
 
                     var linkElement = target.parent('a')[0];

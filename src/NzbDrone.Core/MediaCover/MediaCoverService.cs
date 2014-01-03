@@ -5,6 +5,7 @@ using System.Net;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
@@ -19,16 +20,18 @@ namespace NzbDrone.Core.MediaCover
         private readonly IHttpProvider _httpProvider;
         private readonly IDiskProvider _diskProvider;
         private readonly ICoverExistsSpecification _coverExistsSpecification;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
 
         private readonly string _coverRootFolder;
 
         public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IAppFolderInfo appFolderInfo,
-            ICoverExistsSpecification coverExistsSpecification, Logger logger)
+            ICoverExistsSpecification coverExistsSpecification, IConfigFileProvider configFileProvider, Logger logger)
         {
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
             _coverExistsSpecification = coverExistsSpecification;
+            _configFileProvider = configFileProvider;
             _logger = logger;
 
             _coverRootFolder = appFolderInfo.GetMediaCoverPath();
@@ -96,7 +99,7 @@ namespace NzbDrone.Core.MediaCover
             {
                 var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
 
-                mediaCover.Url = @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
+                mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
 
                 if (_diskProvider.FileExists(filePath))
                 {

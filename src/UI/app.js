@@ -231,7 +231,7 @@ define(
         });
 
         app.addInitializer(function () {
-            Backbone.history.start({ pushState: true });
+            Backbone.history.start({ pushState: true, root: serverStatusModel.get('urlBase') });
             RouteBinder.bind();
             AppLayout.navbarRegion.show(new NavbarView());
             $('body').addClass('started');

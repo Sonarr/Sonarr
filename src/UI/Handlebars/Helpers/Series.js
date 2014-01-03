@@ -2,8 +2,9 @@
 define(
     [
         'handlebars',
+        'System/StatusModel',
         'underscore'
-    ], function (Handlebars, _) {
+    ], function (Handlebars, StatusModel, _) {
         Handlebars.registerHelper('poster', function () {
 
             var poster = _.where(this.images, {coverType: 'poster'});
@@ -32,7 +33,7 @@ define(
         });
 
         Handlebars.registerHelper('route', function () {
-            return '/series/' + this.titleSlug;
+            return StatusModel.get('urlBase') + '/series/' + this.titleSlug;
         });
 
         Handlebars.registerHelper('percentOfEpisodes', function () {

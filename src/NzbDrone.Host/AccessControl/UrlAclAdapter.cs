@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -9,8 +10,7 @@ namespace NzbDrone.Host.AccessControl
     public interface IUrlAclAdapter
     {
         void ConfigureUrl();
-        string Url { get; }
-        string HttpsUrl { get; }
+        List<String> Urls { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
@@ -20,13 +20,7 @@ namespace NzbDrone.Host.AccessControl
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public string Url { get; private set; }
-        public string HttpsUrl { get; private set; }
-
-        private string _localUrl;
-        private string _wildcardUrl;
-        private string _localHttpsUrl;
-        private string _wildcardHttpsUrl;
+        public List<String> Urls { get; private set; }
 
         public UrlAclAdapter(INetshProvider netshProvider,
                              IConfigFileProvider configFileProvider,
@@ -38,26 +32,35 @@ namespace NzbDrone.Host.AccessControl
             _runtimeInfo = runtimeInfo;
             _logger = logger;
 
-            _localUrl = String.Format("http://localhost:{0}/", _configFileProvider.Port);
-            _wildcardUrl = String.Format("http://*:{0}/", _configFileProvider.Port);
-            _localHttpsUrl = String.Format("https://localhost:{0}/", _configFileProvider.SslPort);
-            _wildcardHttpsUrl = String.Format("https://*:{0}/", _configFileProvider.SslPort);
-
-            Url = _wildcardUrl;
-            HttpsUrl = _wildcardHttpsUrl;
+            Urls = new List<String>();
         }
 
         public void ConfigureUrl()
         {
-            if (!_runtimeInfo.IsAdmin)
+            var localHttpUrls = BuildUrls("http", "localhost", _configFileProvider.Port);
+            var wildcardHttpUrls = BuildUrls("http", "*", _configFileProvider.Port);
+
+            var localHttpsUrls = BuildUrls("https", "localhost", _configFileProvider.SslPort);
+            var wildcardHttpsUrls = BuildUrls("https", "*", _configFileProvider.SslPort);
+
+            if (OsInfo.IsWindows && !_runtimeInfo.IsAdmin)
             {
-                if (!IsRegistered(_wildcardUrl)) Url = _localUrl;
-                if (!IsRegistered(_wildcardHttpsUrl)) HttpsUrl = _localHttpsUrl;                
+                var httpUrls = wildcardHttpUrls.All(IsRegistered) ? wildcardHttpUrls : localHttpUrls;
+                var httpsUrls = wildcardHttpsUrls.All(IsRegistered) ? wildcardHttpsUrls : localHttpsUrls;
+
+                Urls.AddRange(httpUrls);
+                Urls.AddRange(httpsUrls);             
             }
 
-            if (_runtimeInfo.IsAdmin)
+            else
             {
-                RefreshRegistration();
+                Urls.AddRange(wildcardHttpUrls);
+                Urls.AddRange(wildcardHttpsUrls);
+
+                if (OsInfo.IsWindows)
+                {
+                    RefreshRegistration();
+                }
             }
         }
 
@@ -66,8 +69,7 @@ namespace NzbDrone.Host.AccessControl
             if (OsInfo.Version.Major < 6)
                 return;
 
-            RegisterUrl(Url);
-            RegisterUrl(HttpsUrl);
+            Urls.ForEach(RegisterUrl);
         }
         
         private bool IsRegistered(string urlAcl)
@@ -84,6 +86,29 @@ namespace NzbDrone.Host.AccessControl
         {
             var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl);
             _netshProvider.Run(arguments);
+        }
+
+        private string BuildUrl(string protocol, string url, int port, string urlBase)
+        {
+            var result = protocol + "://" + url + ":" + port;
+            result += String.IsNullOrEmpty(urlBase) ? "/" : urlBase + "/";
+
+            return result;
+        }
+
+        private List<String> BuildUrls(string protocol, string url, int port)
+        {
+            var urls = new List<String>();
+            var urlBase = _configFileProvider.UrlBase;
+
+            if (!String.IsNullOrEmpty(urlBase))
+            {
+                urls.Add(BuildUrl(protocol, url, port, urlBase));
+            }
+
+            urls.Add(BuildUrl(protocol, url, port, ""));
+
+            return urls;
         }
     }
 }
