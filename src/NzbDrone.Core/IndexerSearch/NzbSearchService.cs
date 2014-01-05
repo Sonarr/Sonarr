@@ -64,6 +64,12 @@ namespace NzbDrone.Core.IndexerSearch
                 return SearchDaily(series, episode);
             }
 
+            if (episode.SeasonNumber == 0)
+            {
+                // search for special episodes in season 0 
+                return SearchSpecial(series, new List<Episode>{episode});
+            }
+
             return SearchSingle(series, episode);
         }
 
@@ -91,9 +97,6 @@ namespace NzbDrone.Core.IndexerSearch
                 searchSpec.SeasonNumber = episode.SeasonNumber;
             }
 
-            // use indexer text search for "special" season
-            searchSpec.UseIndexerTextSearch = (searchSpec.SeasonNumber == 0);
-
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
@@ -106,15 +109,30 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
+        private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes)
+        {
+            var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes);
+            // build list of queries for each episode in the form: "<series> <episode-title>"
+            searchSpec.EpisodeQueryTitles = episodes.Where(e => !String.IsNullOrWhiteSpace(e.Title))
+                                                    .Select(e => searchSpec.QueryTitle + "+" + SearchCriteriaBase.GetQueryTitle(e.Title))
+                                                    .ToArray();
+
+            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+        }
+
         public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
             var series = _seriesService.GetSeries(seriesId);
             var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
 
+            if (seasonNumber == 0)
+            {
+                // search for special episodes in season 0 
+                return SearchSpecial(series, episodes);
+            }
+
             var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
             searchSpec.SeasonNumber = seasonNumber;
-            // use indexer text search for "special" season
-            searchSpec.UseIndexerTextSearch = (searchSpec.SeasonNumber == 0);
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }

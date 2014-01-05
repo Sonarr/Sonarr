@@ -14,8 +14,6 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         public Series Series { get; set; }
         public string SceneTitle { get; set; }
         public List<Episode> Episodes { get; set; }
-        // if this is true, then the indexer can use a text query to search for missing episodes or special named episodes
-        public bool UseIndexerTextSearch { get; set; }
 
         public string QueryTitle
         {
@@ -25,7 +23,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
             }
         }
 
-        private static string GetQueryTitle(string title)
+        public static string GetQueryTitle(string title)
         {
             Ensure.That(title,() => title).IsNotNullOrWhiteSpace();
 
