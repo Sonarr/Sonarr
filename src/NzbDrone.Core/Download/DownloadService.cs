@@ -44,10 +44,10 @@ namespace NzbDrone.Core.Download
 
             var downloadClientId = downloadClient.DownloadNzb(remoteEpisode);
             var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
+            episodeGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
 
             if (!String.IsNullOrWhiteSpace(downloadClientId))
             {
-                episodeGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
                 episodeGrabbedEvent.DownloadClientId = downloadClientId;
             }
 

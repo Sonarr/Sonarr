@@ -132,14 +132,20 @@ namespace NzbDrone.Core.Download
         private void PublishDownloadFailedEvent(List<History.History> historyItems, string message)
         {
             var historyItem = historyItems.First();
+            string downloadClient;
+            string downloadClientId;
+
+            historyItem.Data.TryGetValue(DOWNLOAD_CLIENT, out downloadClient);
+            historyItem.Data.TryGetValue(DOWNLOAD_CLIENT_ID, out downloadClientId);
+
             _eventAggregator.PublishEvent(new DownloadFailedEvent
             {
                 SeriesId = historyItem.SeriesId,
                 EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
                 Quality = historyItem.Quality,
                 SourceTitle = historyItem.SourceTitle,
-                DownloadClient = historyItem.Data[DOWNLOAD_CLIENT],
-                DownloadClientId = historyItem.Data[DOWNLOAD_CLIENT_ID],
+                DownloadClient = downloadClient,
+                DownloadClientId = downloadClientId,
                 Message = message
             });
         }
