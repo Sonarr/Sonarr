@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Instrumentation.Commands;
 using NzbDrone.Core.Messaging.Commands;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Messaging.Events;

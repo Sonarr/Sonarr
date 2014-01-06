@@ -1,5 +1,6 @@
 ﻿using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.MediaCover

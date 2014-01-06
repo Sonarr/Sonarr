@@ -3,6 +3,7 @@ using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using NzbDrone.Update.UpdateEngine;

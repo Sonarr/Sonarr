@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;

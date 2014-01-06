@@ -208,7 +208,6 @@
     <Compile Include="DecisionEngineTests\HistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />

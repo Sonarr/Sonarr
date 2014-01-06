@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;

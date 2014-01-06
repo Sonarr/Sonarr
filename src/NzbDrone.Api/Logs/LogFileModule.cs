@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Logs

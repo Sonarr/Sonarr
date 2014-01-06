@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;

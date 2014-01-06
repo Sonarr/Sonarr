@@ -9,46 +9,9 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Disk
 {
-    public interface IDiskProvider
-    {
-        DateTime GetLastFolderWrite(string path);
-        DateTime GetLastFileWrite(string path);
-        void EnsureFolder(string path);
-        bool FolderExists(string path);
-        bool FileExists(string path);
-        bool FileExists(string path, bool caseSensitive);
-        string[] GetDirectories(string path);
-        string[] GetFiles(string path, SearchOption searchOption);
-        long GetFolderSize(string path);
-        long GetFileSize(string path);
-        void CreateFolder(string path);
-        void CopyFolder(string source, string destination);
-        void MoveFolder(string source, string destination);
-        void DeleteFile(string path);
-        void MoveFile(string source, string destination);
-        void DeleteFolder(string path, bool recursive);
-        void InheritFolderPermissions(string filename);
-        long? GetAvailableSpace(string path);
-        string ReadAllText(string filePath);
-        void WriteAllText(string filename, string contents);
-        void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
-        void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
-        bool IsFileLocked(string path);
-        string GetPathRoot(string path);
-        string GetParentFolder(string path);
-        void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
-        bool IsParent(string parentPath, string childPath);
-        void SetFolderWriteTime(string path, DateTime time);
-        FileAttributes GetFileAttributes(string path);
-        void EmptyFolder(string path);
-        string[] GetFixedDrives();
-        long? GetTotalSize(string path);
-        string GetVolumeLabel(string path);
-    }
-
-    public class DiskProvider : IDiskProvider
+    public abstract class DiskProviderBase : IDiskProvider
     {
         enum TransferAction
         {
@@ -56,14 +19,12 @@ namespace NzbDrone.Common
             Move
         }
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetDiskFreeSpaceEx(string lpDirectoryName,
-        out ulong lpFreeBytesAvailable,
-        out ulong lpTotalNumberOfBytes,
-        out ulong lpTotalNumberOfFreeBytes);
-
         private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+
+        public abstract long? GetAvailableSpace(string path);
+        public abstract void InheritFolderPermissions(string filename);
+        public abstract void SetFilePermissions(string path, string mask);
+        public abstract long? GetTotalSize(string path);
 
         public DateTime GetLastFolderWrite(string path)
         {
@@ -272,51 +233,6 @@ namespace NzbDrone.Common
             Directory.Delete(path, recursive);
         }
 
-        public void InheritFolderPermissions(string filename)
-        {
-            Ensure.That(filename, () => filename).IsValidPath();
-
-            try
-            {
-                var fs = File.GetAccessControl(filename);
-                fs.SetAccessRuleProtection(false, false);
-                File.SetAccessControl(filename, fs);
-            }
-            catch (NotImplementedException)
-            {
-                if (!OsInfo.IsLinux)
-                {
-                    throw;
-                }
-            }
-        }
-
-        public long? GetAvailableSpace(string path)
-        {
-            Ensure.That(path, () => path).IsValidPath();
-
-            var root = GetPathRoot(path);
-
-            if (!FolderExists(root))
-                throw new DirectoryNotFoundException(root);
-
-            if (OsInfo.IsLinux)
-            {
-                try
-                {
-                    return GetDriveInfoLinux(path).AvailableFreeSpace;
-                }
-                catch (InvalidOperationException e)
-                {
-                    Logger.ErrorException("Couldn't get free space for " + path, e);
-                }
-
-                return null;
-            }
-
-            return DriveFreeSpaceEx(root);
-        }
-
         public string ReadAllText(string filePath)
         {
             Ensure.That(filePath, () => filePath).IsValidPath();
@@ -394,7 +310,6 @@ namespace NzbDrone.Common
                                                           InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                                                           PropagationFlags.None, controlType);
 
-
                 directorySecurity.AddAccessRule(accessRule);
                 directoryInfo.SetAccessControl(directorySecurity);
             }
@@ -466,32 +381,6 @@ namespace NzbDrone.Common
             return (DriveInfo.GetDrives().Where(x => x.DriveType == DriveType.Fixed).Select(x => x.Name)).ToArray();
         }
 
-        public long? GetTotalSize(string path)
-        {
-            Ensure.That(path, () => path).IsValidPath();
-
-            var root = GetPathRoot(path);
-
-            if (!FolderExists(root))
-                throw new DirectoryNotFoundException(root);
-
-            if (OsInfo.IsLinux)
-            {
-                try
-                {
-                    return GetDriveInfoLinux(path).TotalSize;
-                }
-                catch (InvalidOperationException e)
-                {
-                    Logger.ErrorException("Couldn't get total space for " + path, e);
-                }
-
-                return null;
-            }
-
-            return DriveTotalSizeEx(root);
-        }
-
         public string GetVolumeLabel(string path)
         {
             var driveInfo = DriveInfo.GetDrives().SingleOrDefault(d => d.Name == path);
@@ -502,59 +391,6 @@ namespace NzbDrone.Common
             }
 
             return driveInfo.VolumeLabel;
-        }
-
-        private static long DriveFreeSpaceEx(string folderName)
-        {
-            Ensure.That(folderName, () => folderName).IsValidPath();
-
-            if (!folderName.EndsWith("\\"))
-            {
-                folderName += '\\';
-            }
-
-            ulong free = 0;
-            ulong dummy1 = 0;
-            ulong dummy2 = 0;
-
-            if (GetDiskFreeSpaceEx(folderName, out free, out dummy1, out dummy2))
-            {
-                return (long)free;
-            }
-
-            return 0;
-        }
-
-        private static long DriveTotalSizeEx(string folderName)
-        {
-            Ensure.That(folderName, () => folderName).IsValidPath();
-
-            if (!folderName.EndsWith("\\"))
-            {
-                folderName += '\\';
-            }
-
-            ulong total = 0;
-            ulong dummy1 = 0;
-            ulong dummy2 = 0;
-
-            if (GetDiskFreeSpaceEx(folderName, out dummy1, out total, out dummy2))
-            {
-                return (long)total;
-            }
-
-            return 0;
-        }
-
-        private DriveInfo GetDriveInfoLinux(string path)
-        {
-            var drives = DriveInfo.GetDrives();
-
-            return
-                drives.Where(drive =>
-                    drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
-                    .OrderByDescending(drive => drive.Name.Length)
-                    .First();
         }
     }
 }

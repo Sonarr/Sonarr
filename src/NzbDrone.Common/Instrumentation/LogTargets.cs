@@ -11,7 +11,7 @@ namespace NzbDrone.Common.Instrumentation
     {
         public static void Register(IStartupContext startupContext, bool updateApp, bool inConsole)
         {
-            var appFolderInfo = new AppFolderInfo(new DiskProvider(), startupContext);
+            var appFolderInfo = new AppFolderInfo(startupContext);
 
             LogManager.Configuration = new LoggingConfiguration();
 
@@ -55,8 +55,7 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
 
-
-        const string FileLogLayout = @"${date:format=yy-M-d HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}${exception:format=ToString}${newline}}";
+        const string FILE_LOG_LAYOUT = @"${date:format=yy-M-d HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}${exception:format=ToString}${newline}}";
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo)
         {
@@ -73,15 +72,13 @@ namespace NzbDrone.Common.Instrumentation
             fileTarget.MaxArchiveFiles = 5;
             fileTarget.EnableFileDelete = true;
             fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
-            fileTarget.Layout = FileLogLayout;
+            fileTarget.Layout = FILE_LOG_LAYOUT;
 
             var loggingRule = new LoggingRule("*", LogLevel.Info, fileTarget);
 
             LogManager.Configuration.AddTarget("appfile", fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
         }
-
-
 
         private static void RegisterUpdateFile(IAppFolderInfo appFolderInfo)
         {
@@ -94,7 +91,7 @@ namespace NzbDrone.Common.Instrumentation
             fileTarget.ConcurrentWrites = false;
             fileTarget.ConcurrentWriteAttemptDelay = 50;
             fileTarget.ConcurrentWriteAttempts = 100;
-            fileTarget.Layout = FileLogLayout;
+            fileTarget.Layout = FILE_LOG_LAYOUT;
 
             var loggingRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
 
@@ -104,14 +101,12 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterExceptron()
         {
-
             var exceptronTarget = new ExceptronTarget();
             var rule = new LoggingRule("*", LogLevel.Warn, exceptronTarget);
 
             LogManager.Configuration.AddTarget("ExceptronTarget", exceptronTarget);
             LogManager.Configuration.LoggingRules.Add(rule);
         }
-
 
         private static void RegisterLoggly()
         {
@@ -122,6 +117,5 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.AddTarget("LogglyLogger", logglyTarger);
             LogManager.Configuration.LoggingRules.Add(rule);
         }
-
     }
 }

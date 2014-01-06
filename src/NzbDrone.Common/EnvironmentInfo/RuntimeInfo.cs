@@ -37,8 +37,6 @@ namespace NzbDrone.Common.EnvironmentInfo
         static RuntimeInfo()
         {
             IsProduction = InternalIsProduction();
-
-
         }
 
         public bool IsAdmin

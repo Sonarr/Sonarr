@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Nancy;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
