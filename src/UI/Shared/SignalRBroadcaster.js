@@ -29,7 +29,6 @@ define(
 
                 var tryingToReconnect = false;
                 var messengerId = 'signalR';
-                var reconnectTimeout;
 
                 this.signalRconnection = $.connection('/signalr');
 
@@ -47,19 +46,9 @@ define(
                     }
 
                     tryingToReconnect = true;
-
-                    reconnectTimeout = window.setTimeout(function () {
-                        Messenger.show({
-                            id        : messengerId,
-                            type      : 'info',
-                            hideAfter : 0,
-                            message   : 'Connection to backend lost, attempting to reconnect'
-                        });
-                    }, 10000);
                 });
 
                 this.signalRconnection.reconnected(function() {
-                    window.clearTimeout(reconnectTimeout);
                     tryingToReconnect = false;
 
                     var currentVersion = StatusModel.get('version');
