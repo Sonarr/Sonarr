@@ -52,6 +52,13 @@ namespace NzbDrone.Core.DecisionEngine
                 _logger.ProgressInfo("No reports found");
             }
 
+            // get series from search criteria
+            Tv.Series series = null;
+            if (searchCriteria != null)
+            {
+                series = searchCriteria.Series;
+            }
+
             var reportNumber = 1;
 
             foreach (var report in reports)
@@ -61,7 +68,20 @@ namespace NzbDrone.Core.DecisionEngine
 
                 try
                 {
+                    // use parsing service to parse episode info (this allows us to do episode title searches against the episode repository)
                     var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
+
+                    // do we have a possible special episode?
+                    if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode())
+                    {
+                        // try to parse as a special episode
+                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(report.Title, series);
+                        if (specialEpisodeInfo != null)
+                        {
+                            // use special episode
+                            parsedEpisodeInfo = specialEpisodeInfo;
+                        }
+                    }
 
                     if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {

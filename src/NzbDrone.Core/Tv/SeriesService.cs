@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
         Series FindByTitle(string title, int year);
+        Series FindByTitleInexact(string title);
         void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
@@ -98,6 +99,55 @@ namespace NzbDrone.Core.Tv
             }
 
             return _seriesRepository.FindByTitle(Parser.Parser.CleanSeriesTitle(title));
+        }
+
+        public Series FindByTitleInexact(string title)
+        {
+            // perform fuzzy matching of series name
+            // TODO: can replace this search mechanism with something smarter/faster/better
+
+            // find any series clean title within the provided release title
+            string cleanTitle = Parser.Parser.CleanSeriesTitle(title);
+            var list = _seriesRepository.All().Where(s => cleanTitle.Contains(s.CleanTitle)).ToList();
+            if (!list.Any())
+            {
+                // no series matched
+                return null;
+            }
+            else if (list.Count == 1)
+            {
+                // return the first series if there is only one 
+                return list.Single();
+            }
+            else 
+            {
+                // build ordered list of series by position in the search string
+                var query = 
+                        list.Select(series => new
+                            {
+                                position = cleanTitle.IndexOf(series.CleanTitle),
+                                length = series.CleanTitle.Length,
+                                series = series
+                            })
+                            .Where(s => (s.position>=0))
+                            .ToList()
+                            .OrderBy(s => s.position)
+                            .ThenByDescending(s => s.length)
+                            .ToList();
+
+                // get the leftmost series that is the longest
+                // series are usually the first thing in release title, so we select the leftmost and longest match
+                // we could have multiple matches for series which have a common prefix like "Love it", "Love it Too" so we pick the longest one
+                var match = query.First().series;
+
+                _logger.Trace("Multiple series matched {0} from title {1}", match.Title, title);
+                foreach (var entry in list)
+                {
+                    _logger.Trace("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
+                }
+
+                return match;
+            }
         }
 
         public Series FindByTitle(string title, int year)
