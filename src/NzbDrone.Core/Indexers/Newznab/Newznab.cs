@@ -104,6 +104,12 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
         }
 
+        public override IEnumerable<string> GetSearchUrls(string query, int offset, int limit)
+        {
+            return RecentFeed.Select(url => String.Format("{0}&offset={1}&limit={2}&q={3}", url.Replace("t=tvsearch", "t=search"), offset, limit, NewsnabifyTitle(query)));
+        }
+
+
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
         {
             if (tvRageId > 0)

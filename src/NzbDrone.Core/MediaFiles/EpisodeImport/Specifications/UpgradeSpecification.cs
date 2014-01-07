@@ -13,7 +13,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason { get { return "Is Sample"; } }
+        public string RejectionReason { get { return "Not an upgrade"; } }
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {

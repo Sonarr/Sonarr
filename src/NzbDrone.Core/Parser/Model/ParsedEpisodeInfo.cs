@@ -33,6 +33,12 @@ namespace NzbDrone.Core.Parser.Model
             return AbsoluteEpisodeNumbers.Any();
         }
 
+        public bool IsPossibleSpecialEpisode()
+        {
+            // if we dont have eny episode numbers we are likely a special episode and need to do a search by episode title
+            return string.IsNullOrEmpty(AirDate) && (EpisodeNumbers.Length == 0 || SeasonNumber == 0 || String.IsNullOrWhiteSpace(SeriesTitle));
+        }
+
         public override string ToString()
         {
             string episodeString = "[Unknown Episode]";

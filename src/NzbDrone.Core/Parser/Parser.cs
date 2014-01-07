@@ -114,6 +114,11 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex NormalizeSpacesRegex = new Regex(@"\W+", RegexOptions.Compiled);
+        private static readonly Regex NormalizeWordsRegex = new Regex(@"\b(a|an|the|and|or|of|part)\b\s?",
+                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
@@ -153,7 +158,7 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
-                        Debug.WriteLine(regex);
+                        Logger.Trace(regex);
                         try
                         {
                             var result = ParseMatchCollection(match);
@@ -218,6 +223,15 @@ namespace NzbDrone.Core.Parser
         {
             //this will remove (1),(2) from the end of multi part episodes.
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
+        }
+
+        public static string NormalizeEpisodeTitle(string title)
+        {
+            // convert any space-like characters to a single space
+            string normalizedSpaces = NormalizeSpacesRegex.Replace(title, " ").ToLower();
+            // remove common words
+            string normalized = NormalizeWordsRegex.Replace(normalizedSpaces, String.Empty);
+            return normalized;
         }
 
         public static string ParseReleaseGroup(string title)

@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Parser
 {
     public interface IParsingService
     {
+        ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, Series series);
         LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null);
@@ -39,9 +40,67 @@ namespace NzbDrone.Core.Parser
             _logger = logger;
         }
 
+        public ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, Series series)
+        {
+            try
+            {
+                if (series == null)
+                {
+                    // find series if we dont have it already
+                    // we use an inexact match here since the series name is often mangled with the episode title
+                    series = _seriesService.FindByTitleInexact(title);
+                    if (series == null)
+                    {
+                        // no series matched
+                        return null;
+                    }
+                }
+
+                // find special episode in series season 0
+                Episode episode = _episodeService.FindEpisodeByName(series.Id, 0, title);
+                if (episode != null)
+                {
+                    // created parsed info from tv episode that we found
+                    var info = new ParsedEpisodeInfo();
+                    info.SeriesTitle = series.Title;
+                    info.SeriesTitleInfo = new SeriesTitleInfo();
+                    info.SeriesTitleInfo.Title = info.SeriesTitle;
+                    info.SeasonNumber = episode.SeasonNumber;
+                    info.EpisodeNumbers = new int[1] { episode.EpisodeNumber };
+                    info.FullSeason = false;
+                    info.Quality = QualityParser.ParseQuality(title);
+                    info.ReleaseGroup = Parser.ParseReleaseGroup(title);
+
+                    _logger.Info("Found special episode {0} for title '{1}'", info, title);
+                    return info;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("An error has occurred while trying to parse special episode " + title, e);
+            }
+
+            return null;
+        }
+
+
+
         public LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource)
         {
             var parsedEpisodeInfo = Parser.ParsePath(filename);
+
+            // do we have a possible special episode?
+            if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode())
+            {
+                // try to parse as a special episode
+                var title = System.IO.Path.GetFileNameWithoutExtension(filename);
+                var specialEpisodeInfo = ParseSpecialEpisodeTitle(title, series);
+                if (specialEpisodeInfo != null)
+                {
+                    // use special episode
+                    parsedEpisodeInfo = specialEpisodeInfo;
+                }
+            }
 
             if (parsedEpisodeInfo == null)
             {
@@ -70,7 +129,6 @@ namespace NzbDrone.Core.Parser
         public Series GetSeries(string title)
         {
             var parsedEpisodeInfo = Parser.ParseTitle(title);
-
             if (parsedEpisodeInfo == null)
             {
                 return _seriesService.FindByTitle(title);

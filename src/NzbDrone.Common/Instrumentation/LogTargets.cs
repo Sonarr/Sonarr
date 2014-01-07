@@ -15,6 +15,11 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration = new LoggingConfiguration();
 
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                RegisterDebugger();
+            }
+
             RegisterExceptron();
 
             if (updateApp)
@@ -34,6 +39,18 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.ReconfigExistingLoggers();
         }
+
+        private static void RegisterDebugger()
+        {
+            DebuggerTarget target = new DebuggerTarget();
+            target.Name = "debuggerLogger";
+            target.Layout = "[${level}] [${threadid}] ${logger}: ${message} ${onexception:inner=${newline}${newline}${exception:format=ToString}${newline}}";
+
+            var loggingRule = new LoggingRule("*", LogLevel.Trace, target);
+            LogManager.Configuration.AddTarget("debugger", target);
+            LogManager.Configuration.LoggingRules.Add(loggingRule);
+        }
+
 
         private static void RegisterConsole()
         {

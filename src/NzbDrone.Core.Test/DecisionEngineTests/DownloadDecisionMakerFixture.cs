@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.GetMock<IParsingService>()
                   .Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
                   .Returns(_remoteEpisode);
+
         }
 
         private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
