@@ -178,7 +178,14 @@ namespace NzbDrone.Core.Tv
                 return null;
             }
 
-            var seriesList = _searchForNewSeries.SearchForNewSeries(searchTitle);
+            var info = Parser.Parser.ParseTitle(searchTitle);
+            if (info == null)
+            {
+                return null;
+            }
+
+
+            var seriesList = _searchForNewSeries.SearchForNewSeries(info.OriginalSeriesTitle);
             if (!seriesList.Any())
             {
                 // none found
@@ -208,7 +215,7 @@ namespace NzbDrone.Core.Tv
                     }
                 }
             }
-
+            
             // could not find existing series...
 
             if (_configService.AutoAddNewSeriesOnImport)
@@ -216,13 +223,20 @@ namespace NzbDrone.Core.Tv
                 // automatically add this as a new series
 
                 // determine clean title from source string
-                var info = Parser.Parser.ParseTitle(searchTitle);
-                string cleanTitle = (info != null) ? info.SeriesTitle : Parser.Parser.CleanSeriesTitle(searchTitle);
+                string cleanTitle = info.SeriesTitle;
 
-                // find the first series with a similar clean title
-                var found = seriesList.FirstOrDefault(
-                        s=> s.CleanTitle.Contains(cleanTitle) || cleanTitle.Contains(s.CleanTitle)
-                        );
+                // find the first series with an exact clean title
+                var found = seriesList.FirstOrDefault(s=> s.CleanTitle == cleanTitle);
+                if (found == null)
+                {
+                    // find the first series that starts with the same clean title
+                    found = seriesList.FirstOrDefault(s => cleanTitle.StartsWith(s.CleanTitle));
+                    if (found == null)
+                    {
+                        // find the first series that contains the same clean title
+                        found = seriesList.FirstOrDefault(s => s.CleanTitle.Contains(cleanTitle) || cleanTitle.Contains(s.CleanTitle));
+                    }
+                }
 
                 if (found != null)
                 {
