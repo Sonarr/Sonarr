@@ -13,7 +13,6 @@ define(
                 'click': 'onClick'
             },
 
-
             initialize: function () {
 
                 this.storageKey = this.model.get('menuKey') + ':' + this.model.get('key');
@@ -53,7 +52,6 @@ define(
                     callback.call(this.model.ownerContext);
                 }
             }
-
         });
     });
 

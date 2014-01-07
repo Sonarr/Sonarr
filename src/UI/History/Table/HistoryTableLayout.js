@@ -45,7 +45,8 @@ define(
                     {
                         name : 'series',
                         label: 'Series',
-                        cell : SeriesTitleCell
+                        cell : SeriesTitleCell,
+                        sortValue: 'series.title'
                     },
                     {
                         name    : 'episode',
@@ -80,7 +81,7 @@ define(
 
 
             initialize: function () {
-                this.collection = new HistoryCollection();
+                this.collection = new HistoryCollection({ tableName: 'history' });
                 this.listenTo(this.collection, 'sync', this._showTable);
             },
 

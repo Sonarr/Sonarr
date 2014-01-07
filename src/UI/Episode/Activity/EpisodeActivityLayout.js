@@ -47,7 +47,7 @@ define(
                 this.model = options.model;
                 this.series = options.series;
 
-                this.collection = new HistoryCollection({ episodeId: this.model.id });
+                this.collection = new HistoryCollection({ episodeId: this.model.id, tableName: 'episodeActivity' });
                 this.collection.fetch();
                 this.listenTo(this.collection, 'sync', this._showTable);
             },
