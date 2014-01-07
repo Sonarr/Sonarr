@@ -284,6 +284,20 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientWorkingFolders", value); }
         }
 
+        public Boolean SearchForNewSeriesOnImport
+        {
+            get { return GetValueBoolean("SearchForNewSeriesOnImport", true); }
+
+            set { SetValue("SearchForNewSeriesOnImport", value); }
+        }
+
+        public Boolean AutoAddNewSeriesOnImport
+        {
+            get { return GetValueBoolean("AutoAddNewSeriesOnImport", true); }
+
+            set { SetValue("AutoAddNewSeriesOnImport", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
