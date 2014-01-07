@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Tv
         Episode GetEpisode(int id);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
         Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
+        Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle);
         Episode GetEpisode(int seriesId, String date);
         Episode FindEpisode(int seriesId, String date);
         List<Episode> GetEpisodeBySeries(int seriesId);
@@ -30,7 +31,6 @@ namespace NzbDrone.Core.Tv
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
         void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
-        IEnumerable<Episode> FindEpisodeByNameInexact(int seriesId, string episodeTitle);
     }
 
     public class EpisodeService : IEpisodeService,
@@ -89,14 +89,13 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
 
-        public IEnumerable<Episode> FindEpisodeByNameInexact(int seriesId, string episodeTitle) 
+        public Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle) 
         {
+            // TODO: can replace this search mechanism with something smarter/faster/better
             var search = Parser.Parser.NormalizeEpisodeTitle(episodeTitle);
-            var episodes = _episodeRepository.GetEpisodes(seriesId);
-            return episodes.Where(
-                e => 
+            return _episodeRepository.GetEpisodes(seriesId, seasonNumber)
+                .FirstOrDefault(e => 
                 {
-                    // TODO: can replace this search mechanism with something smarter/faster/better
                     // normalize episode title
                     string title = Parser.Parser.NormalizeEpisodeTitle(e.Title);
                     // find episode title within search string

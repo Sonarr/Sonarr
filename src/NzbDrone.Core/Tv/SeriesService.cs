@@ -103,14 +103,6 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitleInexact(string title)
         {
-            // find using exact match first
-            Series exactMatch = FindByTitle(title);
-            if (exactMatch != null)
-            {
-                // exact match found
-                return exactMatch;
-            }
-
             // perform fuzzy matching of series name
             // TODO: can replace this search mechanism with something smarter/faster/better
 
