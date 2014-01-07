@@ -7,6 +7,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv.Events;
 
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.Tv
         Series UpdateSeries(Series series);
         List<Series> UpdateSeries(List<Series> series);
         bool SeriesPathExists(string folder);
+        Series SearchForAndAddNewSeries(string searchTitle);
     }
 
     public class SeriesService : ISeriesService
@@ -35,6 +37,8 @@ namespace NzbDrone.Core.Tv
         private readonly IEventAggregator _eventAggregator;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IEpisodeService _episodeService;
+        private readonly ISearchForNewSeries _searchForNewSeries;
+        private readonly IProvideSeriesInfo _provideSeriesInfo;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
@@ -42,6 +46,8 @@ namespace NzbDrone.Core.Tv
                              IEventAggregator eventAggregator,
                              ISceneMappingService sceneMappingService,
                              IEpisodeService episodeService,
+                             ISearchForNewSeries searchForNewSeries,
+                             IProvideSeriesInfo provideSeriesInfo,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
@@ -49,6 +55,8 @@ namespace NzbDrone.Core.Tv
             _eventAggregator = eventAggregator;
             _sceneMappingService = sceneMappingService;
             _episodeService = episodeService;
+            _searchForNewSeries = searchForNewSeries;
+            _provideSeriesInfo = provideSeriesInfo;
             _logger = logger;
         }
 
@@ -70,7 +78,10 @@ namespace NzbDrone.Core.Tv
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
 
             newSeries.Monitored = true;
-            newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
+            if (string.IsNullOrEmpty(newSeries.CleanTitle))
+            {
+                newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
+            }
 
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
@@ -159,5 +170,101 @@ namespace NzbDrone.Core.Tv
         {
             return _seriesRepository.SeriesPathExists(folder);
         }
+
+        public Series SearchForAndAddNewSeries(string searchTitle)
+        {
+            if (!_configService.SearchForNewSeriesOnImport)
+            {
+                return null;
+            }
+
+            var info = Parser.Parser.ParseTitle(searchTitle);
+            if (info == null)
+            {
+                return null;
+            }
+
+
+            var seriesList = _searchForNewSeries.SearchForNewSeries(info.OriginalSeriesTitle);
+            if (!seriesList.Any())
+            {
+                // none found
+                return null;
+            }
+
+            // search for existing series by tvdbid or tvrageid
+            foreach (var found in seriesList)
+            {
+                if (found.TvdbId != 0)
+                {
+                    var series = FindByTvdbId(found.TvdbId);
+                    if (series != null)
+                    {
+                        _logger.Info("Found matching series {0}{1} for {2}", found, found.Title, searchTitle);
+                        return series;
+                    }
+                }
+
+                if (found.TvRageId != 0)
+                {
+                    var series = FindByTvRageId(found.TvRageId);
+                    if (series != null)
+                    {
+                        _logger.Info("Found matching series {0}{1} for {2}", found, found.Title, searchTitle);
+                        return series;
+                    }
+                }
+            }
+            
+            // could not find existing series...
+
+            if (_configService.AutoAddNewSeriesOnImport)
+            {
+                // automatically add this as a new series
+
+                // determine clean title from source string
+                string cleanTitle = info.SeriesTitle;
+
+                // find the first series with an exact clean title
+                var found = seriesList.FirstOrDefault(s=> s.CleanTitle == cleanTitle);
+                if (found == null)
+                {
+                    // find the first series that starts with the same clean title
+                    found = seriesList.FirstOrDefault(s => cleanTitle.StartsWith(s.CleanTitle));
+                    if (found == null)
+                    {
+                        // find the first series that contains the same clean title
+                        found = seriesList.FirstOrDefault(s => s.CleanTitle.Contains(cleanTitle) || cleanTitle.Contains(s.CleanTitle));
+                    }
+                }
+
+                if (found != null)
+                {
+                    // this is a hack, use another series for the defaults for this newly added series
+                    // TODO: determine how to appropriately set these defaults
+                    var defaultSeries = _seriesRepository.All().FirstOrDefault();
+                    if (defaultSeries == null)
+                    {
+                        return null;
+                    }
+
+                    // use clean title that we found from parsing
+                    found.CleanTitle = cleanTitle;
+                    // copy this info from our default series TODO: fix this
+                    found.RootFolderPath = System.IO.Path.GetDirectoryName(defaultSeries.Path);
+                    // copy this info from our default series TODO: fix this
+                    found.QualityProfileId = defaultSeries.QualityProfileId;
+
+                    // add new series and return it
+                    var newSeries = AddSeries(found);
+                    // return new series
+                    return newSeries;
+                }
+            }
+
+            // series not found
+            return null;
+        }
+
     }
 }

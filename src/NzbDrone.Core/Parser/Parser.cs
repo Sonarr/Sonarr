@@ -384,6 +384,7 @@ namespace NzbDrone.Core.Parser
                 };
             }
 
+            result.OriginalSeriesTitle = seriesName;
             result.SeriesTitle = CleanSeriesTitle(seriesName);
             result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
 

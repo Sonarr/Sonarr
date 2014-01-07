@@ -41,6 +41,8 @@ namespace NzbDrone.Core.Configuration
         Boolean RemoveFailedDownloads { get; set; }
         Boolean EnableFailedDownloadHandling { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
+        Boolean SearchForNewSeriesOnImport { get; set; }
+        Boolean AutoAddNewSeriesOnImport { get; set; }
         void SaveValues(Dictionary<string, object> configValues);
     }
 }

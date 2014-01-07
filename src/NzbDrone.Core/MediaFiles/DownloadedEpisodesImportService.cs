@@ -104,8 +104,14 @@ namespace NzbDrone.Core.MediaFiles
 
             if (series == null)
             {
-                _logger.Debug("Unknown Series {0}", cleanedUpName);
-                return new List<ImportDecision>();
+                // search for series if we cant recognize it and optionally add new series if it doesnt exist
+                series = _seriesService.SearchForAndAddNewSeries(cleanedUpName);
+                if (series == null)
+                {
+                    _logger.Debug("Unknown Series {0}", cleanedUpName);
+                    return new List<ImportDecision>();
+                }
+
             }
 
             var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
@@ -115,12 +121,18 @@ namespace NzbDrone.Core.MediaFiles
 
         private void ProcessVideoFile(string videoFile)
         {
-            var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(videoFile));
+            string title = Path.GetFileNameWithoutExtension(videoFile);
+            var series = _parsingService.GetSeries(title);
 
             if (series == null)
             {
-                _logger.Debug("Unknown Series for file: {0}", videoFile);
-                return;
+                // search for series if we cant recognize it and optionally add new series if it doesnt exist
+                series = _seriesService.SearchForAndAddNewSeries(title);
+                if (series == null)
+                {
+                    _logger.Debug("Unknown Series for file: {0}", videoFile);
+                    return;
+                }
             }
 
             if (_diskProvider.IsFileLocked(videoFile))
