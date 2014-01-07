@@ -103,10 +103,10 @@ namespace NzbDrone.Core.History
                 history.Data.Add("NzbInfoUrl", message.Episode.Release.InfoUrl);
                 history.Data.Add("ReleaseGroup", message.Episode.ParsedEpisodeInfo.ReleaseGroup);
                 history.Data.Add("Age", message.Episode.Release.Age.ToString());
+                history.Data.Add("DownloadClient", message.DownloadClient);
 
                 if (!String.IsNullOrWhiteSpace(message.DownloadClientId))
                 {
-                    history.Data.Add("DownloadClient", message.DownloadClient);
                     history.Data.Add("DownloadClientId", message.DownloadClientId);
                 }
 

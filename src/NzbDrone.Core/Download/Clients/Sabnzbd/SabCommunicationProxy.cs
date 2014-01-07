@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
