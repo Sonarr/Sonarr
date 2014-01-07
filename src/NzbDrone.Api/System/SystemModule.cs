@@ -43,7 +43,8 @@ namespace NzbDrone.Api.System
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled,
-                    StartOfWeek = (int)OsInfo.FirstDayOfWeek
+                    StartOfWeek = (int)OsInfo.FirstDayOfWeek,
+                    UrlBase = _configFileProvider.UrlBase
                 }.AsResponse();
 
         }

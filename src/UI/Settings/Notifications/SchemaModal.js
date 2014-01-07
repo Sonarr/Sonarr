@@ -2,15 +2,16 @@
 define([
     'AppLayout',
     'Settings/Notifications/Collection',
-    'Settings/Notifications/AddView'
-], function (AppLayout, NotificationCollection, AddSelectionNotificationView) {
+    'Settings/Notifications/AddView',
+    'System/StatusModel'
+], function (AppLayout, NotificationCollection, AddSelectionNotificationView, StatusModel) {
     return ({
 
         open: function (collection) {
             var schemaCollection = new NotificationCollection();
-            schemaCollection.url = '/api/notification/schema';
+            schemaCollection.url = StatusModel.get('urlBase') + '/api/notification/schema';
             schemaCollection.fetch();
-            schemaCollection.url = '/api/notification';
+            schemaCollection.url = StatusModel.get('urlBase') + '/api/notification';
 
             var view = new AddSelectionNotificationView({ collection: schemaCollection, notificationCollection: collection});
             AppLayout.modalRegion.show(view);

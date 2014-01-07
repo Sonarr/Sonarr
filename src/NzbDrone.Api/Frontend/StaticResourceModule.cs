@@ -1,21 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Nancy.Responses;
 using NLog;
 using Nancy;
 using NzbDrone.Api.Frontend.Mappers;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Frontend
 {
     public class StaticResourceModule : NancyModule
     {
         private readonly IEnumerable<IMapHttpRequestsToDisk> _requestMappers;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
 
 
-        public StaticResourceModule(IEnumerable<IMapHttpRequestsToDisk> requestMappers, Logger logger)
+        public StaticResourceModule(IEnumerable<IMapHttpRequestsToDisk> requestMappers, IConfigFileProvider  configFileProvider, Logger logger)
         {
             _requestMappers = requestMappers;
+            _configFileProvider = configFileProvider;
             _logger = logger;
 
             Get["/{resource*}"] = x => Index();
@@ -34,8 +38,21 @@ namespace NzbDrone.Api.Frontend
                 return new NotFoundResponse();
             }
 
-            var mapper = _requestMappers.SingleOrDefault(m => m.CanHandle(path));
+            //Redirect to the subfolder if the request went to the base URL
+            if (path.Equals("/"))
+            {
+                var urlBase = _configFileProvider.UrlBase;
 
+                if (!String.IsNullOrEmpty(urlBase))
+                {
+                    if (Request.Url.BasePath != urlBase)
+                    {
+                        return new RedirectResponse(urlBase  + "/");
+                    }
+                }
+            }
+
+            var mapper = _requestMappers.SingleOrDefault(m => m.CanHandle(path));
 
             if (mapper != null)
             {
