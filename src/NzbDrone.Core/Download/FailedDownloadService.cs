@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Download
 
         private List<History.History> GetHistoryItems(List<History.History> grabbedHistory, string downloadClientId)
         {
-            return grabbedHistory.Where(h => h.Data.ContainsKey(DOWNLOAD_CLIENT) &&
+            return grabbedHistory.Where(h => h.Data.ContainsKey(DOWNLOAD_CLIENT_ID) &&
                                              h.Data[DOWNLOAD_CLIENT_ID].Equals(downloadClientId))
                                  .ToList();
         }
