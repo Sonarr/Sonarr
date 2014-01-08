@@ -33,7 +33,7 @@ define(
                 schemaCollection.url = StatusModel.get('urlBase') + '/api/indexer/schema';
                 schemaCollection.fetch({
                     success: function (collection) {
-                        collection.url = './api/indexer';
+                        collection.url = StatusModel.get('urlBase') + '/api/indexer';
                         var model = _.first(collection.models);
 
                         model.set({

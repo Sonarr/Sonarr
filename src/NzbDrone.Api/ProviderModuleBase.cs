@@ -43,27 +43,27 @@ namespace NzbDrone.Api
 
         private List<TProviderResource> GetAll()
         {
-            var indexerDefinitions = _providerFactory.All();
+            var providerDefinitions = _providerFactory.All();
 
-            var result = new List<TProviderResource>(indexerDefinitions.Count);
+            var result = new List<TProviderResource>(providerDefinitions.Count);
 
-            foreach (var definition in indexerDefinitions)
+            foreach (var definition in providerDefinitions)
             {
-                var indexerResource = new TProviderResource();
-                indexerResource.InjectFrom(definition);
-                indexerResource.Fields = SchemaBuilder.ToSchema(definition.Settings);
+                var providerResource = new TProviderResource();
+                providerResource.InjectFrom(definition);
+                providerResource.Fields = SchemaBuilder.ToSchema(definition.Settings);
 
-                result.Add(indexerResource);
+                result.Add(providerResource);
             }
 
             return result;
         }
 
-        private int CreateProvider(TProviderResource indexerResource)
+        private int CreateProvider(TProviderResource providerResource)
         {
-            var indexer = GetDefinition(indexerResource);
-            indexer = _providerFactory.Create(indexer);
-            return indexer.Id;
+            var provider = GetDefinition(providerResource);
+            provider = _providerFactory.Create(provider);
+            return provider.Id;
         }
 
         private void UpdateProvider(TProviderResource providerResource)
