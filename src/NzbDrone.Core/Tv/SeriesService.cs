@@ -103,9 +103,6 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitleInexact(string title)
         {
-            // perform fuzzy matching of series name
-            // TODO: can replace this search mechanism with something smarter/faster/better
-
             // find any series clean title within the provided release title
             string cleanTitle = Parser.Parser.CleanSeriesTitle(title);
             var list = _seriesRepository.All().Where(s => cleanTitle.Contains(s.CleanTitle)).ToList();
@@ -137,7 +134,6 @@ namespace NzbDrone.Core.Tv
 
                 // get the leftmost series that is the longest
                 // series are usually the first thing in release title, so we select the leftmost and longest match
-                // we could have multiple matches for series which have a common prefix like "Love it", "Love it Too" so we pick the longest one
                 var match = query.First().series;
 
                 _logger.Trace("Multiple series matched {0} from title {1}", match.Title, title);

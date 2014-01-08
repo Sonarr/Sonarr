@@ -114,8 +114,11 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex NonWordRegex = new Regex(@"\W+", RegexOptions.Compiled);
-        private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of|part)\b\s?",
+        private static readonly Regex WordDelimiterRegex = new Regex(@"(\s|\.|,|_|-|=|\|)+", RegexOptions.Compiled);
+        private static readonly Regex PunctuationRegex = new Regex(@"[^\w\s]", RegexOptions.Compiled);
+        private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of)\b\s?",
+                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?",
                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
 
@@ -227,11 +230,11 @@ namespace NzbDrone.Core.Parser
 
         public static string NormalizeEpisodeTitle(string title)
         {
-            // convert any non-word characters to a single space
-            string normalizedSpaces = NonWordRegex.Replace(title, " ").ToLower();
-            // remove common words
-            string normalized = CommonWordRegex.Replace(normalizedSpaces, String.Empty);
-            return normalized;
+            string singleSpaces  = WordDelimiterRegex.Replace(title, " ");
+            string noPunctuation = PunctuationRegex.Replace(singleSpaces, String.Empty);
+            string noCommonWords = CommonWordRegex.Replace(noPunctuation, String.Empty);
+            string normalized    = SpecialEpisodeWordRegex.Replace(noCommonWords, String.Empty);
+            return normalized.Trim().ToLower();
         }
 
         public static string ParseReleaseGroup(string title)
