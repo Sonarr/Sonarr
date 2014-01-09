@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         public PushBulletSettingsValidator()
         {
             RuleFor(c => c.ApiKey).NotEmpty();
-            RuleFor(c => c.DeviceId).GreaterThan(0);
+            RuleFor(c => c.DeviceId).NotEmpty();
         }
     }
 
@@ -23,13 +23,13 @@ namespace NzbDrone.Core.Notifications.PushBullet
         public String ApiKey { get; set; }
 
         [FieldDefinition(1, Label = "Device ID")]
-        public Int64 DeviceId { get; set; }
+        public String DeviceId { get; set; }
 
         public bool IsValid
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(ApiKey) && DeviceId > 0;
+                return !String.IsNullOrWhiteSpace(ApiKey) && !String.IsNullOrWhiteSpace(DeviceId);
             }
         }
 

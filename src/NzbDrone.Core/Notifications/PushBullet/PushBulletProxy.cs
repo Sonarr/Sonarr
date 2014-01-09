@@ -7,24 +7,42 @@ namespace NzbDrone.Core.Notifications.PushBullet
 {
     public interface IPushBulletProxy
     {
-        void SendNotification(string title, string message, string apiKey, long deviceId);
+        void SendNotification(string title, string message, string apiKey, string deviceId);
     }
 
     public class PushBulletProxy : IPushBulletProxy, IExecute<TestPushBulletCommand>
     {
         private const string URL = "https://api.pushbullet.com/api/pushes";
 
-        public void SendNotification(string title, string message, string apiKey, long deviceId)
+        public void SendNotification(string title, string message, string apiKey, string deviceId)
         {
             var client = new RestClient(URL);
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("device_id", deviceId);
+            var request = BuildRequest(deviceId); 
+            
             request.AddParameter("type", "note");
             request.AddParameter("title", title);
             request.AddParameter("body", message);
 
             client.Authenticator = new HttpBasicAuthenticator(apiKey, String.Empty);
             client.ExecuteAndValidate(request);
+        }
+
+        public RestRequest BuildRequest(string deviceId)
+        {
+            var request = new RestRequest(Method.POST);
+            long integerId;
+
+            if (Int64.TryParse(deviceId, out integerId))
+            {
+                request.AddParameter("device_id", integerId);
+            }
+
+            else
+            {
+                request.AddParameter("device_iden", deviceId);
+            }
+
+            return request;
         }
 
         public void Execute(TestPushBulletCommand message)
