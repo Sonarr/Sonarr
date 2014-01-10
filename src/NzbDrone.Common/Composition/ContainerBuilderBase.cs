@@ -17,8 +17,6 @@ namespace NzbDrone.Common.Composition
 
         protected ContainerBuilderBase(IStartupContext args, params string[] assemblies)
         {
-
-
             _loadedTypes = new List<Type>();
 
             foreach (var assembly in assemblies)
@@ -54,8 +52,6 @@ namespace NzbDrone.Common.Composition
         private void AutoRegisterImplementations(Type contractType)
         {
             var implementations = Container.GetImplementations(contractType).Where(c => !c.IsGenericTypeDefinition).ToList();
-
-
 
             if (implementations.Count == 0)
             {
