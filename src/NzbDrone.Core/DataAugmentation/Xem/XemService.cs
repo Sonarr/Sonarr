@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Web.UI.WebControls;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {
-    public class XemService : IHandle<SeriesUpdatedEvent>, IExecute<RefreshXemCacheCommand>
+    public class XemService : IHandle<SeriesUpdatedEvent>, IHandle<SeriesRefreshStartingEvent>
     {
         private readonly IEpisodeService _episodeService;
         private readonly IXemProxy _xemProxy;
@@ -84,9 +84,12 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         private void RefreshCache()
         {
-            _cache.Clear();
-
             var ids = _xemProxy.GetXemSeriesIds();
+
+            if (ids.Any())
+            {
+                _cache.Clear();
+            }
 
             foreach (var id in ids)
             {
@@ -110,7 +113,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             PerformUpdate(message.Series);
         }
 
-        public void Execute(RefreshXemCacheCommand message)
+        public void Handle(SeriesRefreshStartingEvent message)
         {
             RefreshCache();
         }

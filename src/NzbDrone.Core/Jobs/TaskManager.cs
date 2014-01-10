@@ -53,10 +53,8 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},
-                    new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshXemCacheCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName},
-                    
                 };
 
             var currentTasks = _scheduledTaskRepository.All();
