@@ -46,5 +46,10 @@ namespace NzbDrone.Core.Indexers.Eztv
             //EZTV doesn't support searching based on actual episode airdate. they only support release date.
             return new string[0];
         }
+
+        public override IEnumerable<string> GetSearchUrls(string query, int offset)
+        {
+            return new List<string>();
+        }
     }
 }

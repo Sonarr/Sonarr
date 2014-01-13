@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Parser
 {
     public interface IParsingService
     {
+        ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, int tvRageId, SearchCriteriaBase searchCriteria = null);
+        ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, Series series);
         LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria = null);
@@ -39,9 +41,81 @@ namespace NzbDrone.Core.Parser
             _logger = logger;
         }
 
+        public ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, int tvRageId, SearchCriteriaBase searchCriteria = null)
+        {
+            if (searchCriteria != null)
+            {
+                var tvdbId = _sceneMappingService.GetTvDbId(title);
+                if (tvdbId.HasValue)
+                {
+                    if (searchCriteria.Series.TvdbId == tvdbId)
+                    {
+                        return ParseSpecialEpisodeTitle(title, searchCriteria.Series);
+                    }
+                }
+
+                if (tvRageId == searchCriteria.Series.TvRageId)
+                {
+                    return ParseSpecialEpisodeTitle(title, searchCriteria.Series);
+                }
+            }
+
+            var series = _seriesService.FindByTitleInexact(title);
+            if (series == null && tvRageId > 0)
+            {
+                series = _seriesService.FindByTvRageId(tvRageId);
+            }
+
+            if (series == null)
+            {
+                _logger.Trace("No matching series {0}", title);
+                return null;
+            }
+
+            return ParseSpecialEpisodeTitle(title, series);
+        }
+
+        public ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, Series series)
+        {
+            // find special episode in series season 0
+            var episode = _episodeService.FindEpisodeByName(series.Id, 0, title);
+            if (episode != null)
+            {
+                // create parsed info from tv episode
+                var info = new ParsedEpisodeInfo();
+                info.SeriesTitle = series.Title;
+                info.SeriesTitleInfo = new SeriesTitleInfo();
+                info.SeriesTitleInfo.Title = info.SeriesTitle;
+                info.SeasonNumber = episode.SeasonNumber;
+                info.EpisodeNumbers = new int[1] { episode.EpisodeNumber };
+                info.FullSeason = false;
+                info.Quality = QualityParser.ParseQuality(title);
+                info.ReleaseGroup = Parser.ParseReleaseGroup(title);
+
+                _logger.Info("Found special episode {0} for title '{1}'", info, title);
+                return info;
+            }
+
+            return null;
+        }
+
+
         public LocalEpisode GetEpisodes(string filename, Series series, bool sceneSource)
         {
             var parsedEpisodeInfo = Parser.ParsePath(filename);
+
+            // do we have a possible special episode?
+            if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode())
+            {
+                // try to parse as a special episode
+                var title = System.IO.Path.GetFileNameWithoutExtension(filename);
+                var specialEpisodeInfo = ParseSpecialEpisodeTitle(title, series);
+                if (specialEpisodeInfo != null)
+                {
+                    // use special episode
+                    parsedEpisodeInfo = specialEpisodeInfo;
+                }
+            }
 
             if (parsedEpisodeInfo == null)
             {

@@ -23,7 +23,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
             }
         }
 
-        private static string GetQueryTitle(string title)
+        public static string GetQueryTitle(string title)
         {
             Ensure.That(title,() => title).IsNotNullOrWhiteSpace();
 
