@@ -68,7 +68,15 @@ namespace NzbDrone.SysTray
                 _trayIcon.Dispose();
             }
 
-            base.Dispose(isDisposing);
+            if (InvokeRequired)
+            {
+                base.Invoke(new MethodInvoker(() => Dispose(isDisposing)));
+            }
+
+            else
+            {
+                base.Dispose(isDisposing);
+            }
         }
 
         private void OnExit(object sender, EventArgs e)

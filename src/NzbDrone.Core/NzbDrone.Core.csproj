@@ -290,6 +290,10 @@
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
+    <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
+    <Compile Include="Lifecycle\Commands\RestartCommand.cs" />
+    <Compile Include="Lifecycle\ApplicationRestartRequested.cs" />
+    <Compile Include="Lifecycle\LifestyleService.cs" />
     <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />

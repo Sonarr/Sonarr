@@ -13,30 +13,33 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool IsUserInteractive { get; }
         bool IsAdmin { get; }
         bool IsWindowsService { get; }
+        bool IsConsole { get; }
+        bool IsRunning { get; set; }
     }
 
     public class RuntimeInfo : IRuntimeInfo
     {
         private readonly Logger _logger;
+        private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
         public RuntimeInfo(Logger logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
 
             IsWindowsService = !IsUserInteractive &&
-             OsInfo.IsWindows &&
-             serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
-             serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
-        }
-
-        public bool IsUserInteractive
-        {
-            get { return Environment.UserInteractive; }
+                               OsInfo.IsWindows &&
+                               serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
+                               serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
         }
 
         static RuntimeInfo()
         {
             IsProduction = InternalIsProduction();
+        }
+
+        public bool IsUserInteractive
+        {
+            get { return Environment.UserInteractive; }
         }
 
         public bool IsAdmin
@@ -58,7 +61,18 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public bool IsWindowsService { get; private set; }
 
-        private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
+        public bool IsConsole
+        { 
+            get
+            {
+                return (OsInfo.IsWindows &&
+                        IsUserInteractive &&
+                        ProcessName.Equals("NzbDrone.Console.exe", StringComparison.InvariantCultureIgnoreCase)) ||
+                        OsInfo.IsLinux;
+            } 
+        }
+
+        public bool IsRunning { get; set; }
 
         public static bool IsProduction { get; private set; }
 

@@ -72,9 +72,9 @@ namespace NzbDrone.Host
                 return;
             }
 
-            var serviceFactory = _container.Resolve<INzbDroneServiceFactory>();
+            var runTimeInfo = _container.Resolve<IRuntimeInfo>();
 
-            while (!serviceFactory.IsServiceStopped)
+            while (runTimeInfo.IsRunning)
             {
                 Thread.Sleep(1000);
             }

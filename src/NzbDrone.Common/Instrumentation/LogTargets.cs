@@ -5,6 +5,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -30,7 +31,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             else
             {
-                if (inConsole && (OsInfo.IsLinux || new RuntimeInfo(null, new ServiceProvider()).IsUserInteractive))
+                if (inConsole && (OsInfo.IsLinux || new RuntimeInfo(null, new ServiceProvider(new ProcessProvider())).IsUserInteractive))
                 {
                     RegisterConsole();
                 }
