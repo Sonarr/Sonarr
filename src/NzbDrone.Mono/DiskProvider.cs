@@ -49,8 +49,10 @@ namespace NzbDrone.Mono
             }
         }
 
-        public override void SetFilePermissions(string path, string mask)
+        public override void SetPermissions(string path, string mask)
         {
+            Logger.Trace("Setting permissions: {0} on {1}", mask, path);
+
             var filePermissions = NativeConvert.FromOctalPermissionString(mask);
 
             if (Syscall.chmod(path, filePermissions) < 0)

@@ -27,6 +27,9 @@ Function Build()
 
     AddJsonNet
 
+    Write-Host "Removing Mono.Posix.dll"
+    Remove-Item "$outputFolder\Mono.Posix.dll"
+
     Write-Host "##teamcity[progressFinish 'Build']"    
 }
 

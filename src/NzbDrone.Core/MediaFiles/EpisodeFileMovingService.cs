@@ -6,7 +6,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -24,16 +24,19 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public EpisodeFileMovingService(IEpisodeService episodeService,
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
+                                IConfigService configService,
                                 Logger logger)
         {
             _episodeService = episodeService;
             _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -85,6 +88,7 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _logger.Trace("Setting last write time on series folder: {0}", series.Path);
                 _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
+                SetFolderPermissions(series.Path);
 
                 if (series.SeasonFolder)
                 {
@@ -92,6 +96,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
                     _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
+                    SetFolderPermissions(seasonFolder);
                 }
             }
 
@@ -122,6 +127,33 @@ namespace NzbDrone.Core.MediaFiles
                     }
                 }
             }
+
+            else
+            {
+                SetPermissions(destinationFilename, _configService.FileChmod);
+            }
+        }
+
+        private void SetPermissions(string path, string permissions)
+        {
+            try
+            {
+                _diskProvider.SetPermissions(path, permissions);
+            }
+
+            catch (Exception ex)
+            {
+                if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
+                {
+                    _logger.Debug("Unable to apply permissions to: ", path);
+                    _logger.TraceException(ex.Message, ex);
+                }
+            }
+        }
+
+        private void SetFolderPermissions(string path)
+        {
+            SetPermissions(path, _configService.FolderChmod);
         }
     }
 }

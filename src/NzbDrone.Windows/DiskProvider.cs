@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Windows
@@ -41,9 +40,9 @@ namespace NzbDrone.Windows
             File.SetAccessControl(filename, fs);
         }
 
-        public override void SetFilePermissions(string path, string mask)
+        public override void SetPermissions(string path, string mask)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override long? GetTotalSize(string path)

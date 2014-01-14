@@ -13,6 +13,11 @@ namespace NzbDrone.Common.Disk
 {
     public interface IDiskProvider
     {
+        long? GetAvailableSpace(string path);
+        void InheritFolderPermissions(string filename);
+        void SetPermissions(string path, string mask);
+        long? GetTotalSize(string path);
+
         DateTime GetLastFolderWrite(string path);
         DateTime GetLastFileWrite(string path);
         void EnsureFolder(string path);
@@ -29,8 +34,6 @@ namespace NzbDrone.Common.Disk
         void DeleteFile(string path);
         void MoveFile(string source, string destination);
         void DeleteFolder(string path, bool recursive);
-        void InheritFolderPermissions(string filename);
-        long? GetAvailableSpace(string path);
         string ReadAllText(string filePath);
         void WriteAllText(string filename, string contents);
         void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
@@ -44,7 +47,6 @@ namespace NzbDrone.Common.Disk
         FileAttributes GetFileAttributes(string path);
         void EmptyFolder(string path);
         string[] GetFixedDrives();
-        long? GetTotalSize(string path);
         string GetVolumeLabel(string path);
     }
 }
