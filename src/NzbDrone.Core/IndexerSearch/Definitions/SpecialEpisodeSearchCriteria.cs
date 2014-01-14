@@ -11,18 +11,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            bool delimiter = false;
-            foreach (var title in EpisodeQueryTitles)
-            {
-                if (delimiter)
-                {
-                    sb.Append(',');
-                }
-                sb.Append(title);
-                delimiter = true;
-            }
-            return string.Format("[{0} : {1}]", SceneTitle, sb.ToString());
+            return string.Format("[{0} : {1}]", SceneTitle, String.Join(",", EpisodeQueryTitles));
         }
     }
 }
