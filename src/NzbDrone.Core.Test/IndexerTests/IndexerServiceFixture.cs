@@ -27,7 +27,6 @@ namespace NzbDrone.Core.Test.IndexerTests
             _indexers.Add(new Wombles());
 
             Mocker.SetConstant<IEnumerable<IIndexer>>(_indexers);
-
         }
 
         [Test]
@@ -61,7 +60,6 @@ namespace NzbDrone.Core.Test.IndexerTests
             indexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
         }
 
-
         [Test]
         public void should_remove_missing_indexers_on_startup()
         {
@@ -69,12 +67,10 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.SetConstant<IIndexerRepository>(repo);
 
-
             var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
             existingIndexers.ConfigContract = typeof (NewznabSettings).Name;
 
             repo.Insert(existingIndexers);
-
 
             Subject.Handle(new ApplicationStartedEvent());
 

@@ -66,5 +66,13 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             return searchUrls;
         }
+
+        public override bool SupportsPaging
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }

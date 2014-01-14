@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Indexers
     public interface IFetchFeedFromIndexers
     {
         IList<ReleaseInfo> FetchRss(IIndexer indexer);
-
         IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
@@ -23,11 +22,12 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly Logger _logger;
         private readonly IHttpProvider _httpProvider;
+        private readonly IIndexerParsingService _indexerParsingService;
 
-
-        public FetchFeedService(IHttpProvider httpProvider, Logger logger)
+        public FetchFeedService(IHttpProvider httpProvider, IIndexerParsingService indexerParsingService, Logger logger)
         {
             _httpProvider = httpProvider;
+            _indexerParsingService = indexerParsingService;
             _logger = logger;
         }
 
@@ -60,12 +60,13 @@ namespace NzbDrone.Core.Indexers
             var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, offset);
             var result = Fetch(indexer, searchUrls);
 
-
             _logger.Info("{0} offset {1}. Found {2}", indexer, searchCriteria, result.Count);
 
-            if (result.Count > 90)
+            if (result.Count > 90 && 
+                offset < 1000 &&
+                indexer.SupportsPaging)
             {
-                result.AddRange(Fetch(indexer, searchCriteria, offset + 90));
+                result.AddRange(Fetch(indexer, searchCriteria, offset + 100));
             }
 
             return result;
@@ -106,7 +107,7 @@ namespace NzbDrone.Core.Indexers
                     var xml = _httpProvider.DownloadString(url);
                     if (!string.IsNullOrWhiteSpace(xml))
                     {
-                        result.AddRange(indexer.Parser.Process(xml, url));
+                        result.AddRange(_indexerParsingService.Parse(indexer, xml, url));
                     }
                     else
                     {

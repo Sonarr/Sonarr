@@ -270,6 +270,7 @@
     <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
+    <Compile Include="Indexers\IndexerParsingService.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\NewznabTestService.cs" />
     <Compile Include="Indexers\IParseFeed.cs" />

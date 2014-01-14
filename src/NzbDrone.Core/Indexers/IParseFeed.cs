@@ -5,6 +5,6 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IParseFeed
     {
-        IEnumerable<ReleaseInfo> Process(string source, string url);
+        IEnumerable<ReleaseInfo> Process(string xml, string url);
     }
 }

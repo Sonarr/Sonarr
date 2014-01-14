@@ -14,6 +14,14 @@ namespace NzbDrone.Core.Indexers.Wombles
             }
         }
 
+        public override bool SupportsPaging
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get
