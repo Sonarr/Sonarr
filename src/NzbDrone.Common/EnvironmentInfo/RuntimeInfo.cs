@@ -4,10 +4,10 @@ using System.IO;
 using System.Security.Principal;
 using System.ServiceProcess;
 using NLog;
+using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-
     public interface IRuntimeInfo
     {
         bool IsUserInteractive { get; }
@@ -67,7 +67,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             {
                 return (OsInfo.IsWindows &&
                         IsUserInteractive &&
-                        ProcessName.Equals("NzbDrone.Console.exe", StringComparison.InvariantCultureIgnoreCase)) ||
+                        ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase)) ||
                         OsInfo.IsLinux;
             } 
         }

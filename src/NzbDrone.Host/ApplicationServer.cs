@@ -75,7 +75,7 @@ namespace NzbDrone.Host
 
         public void Handle(ApplicationShutdownRequested message)
         {
-            if (!_runtimeInfo.IsWindowsService)
+            if (!_runtimeInfo.IsWindowsService && !message.Restarting)
             {
                 Shutdown();
             }

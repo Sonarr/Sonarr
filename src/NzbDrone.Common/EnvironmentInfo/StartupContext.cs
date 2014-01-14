@@ -17,6 +17,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         internal const string INSTALL_SERVICE = "i";
         internal const string UNINSTALL_SERVICE = "u";
         public const string HELP = "?";
+        public const string TERMINATE = "terminateexisting";
 
         public StartupContext(params string[] args)
         {
@@ -58,6 +59,5 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return Flags.Contains(UNINSTALL_SERVICE);
             }
         }
-
     }
 }

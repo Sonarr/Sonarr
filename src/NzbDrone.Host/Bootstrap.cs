@@ -36,7 +36,7 @@ namespace NzbDrone.Host
 
                 var appMode = GetApplicationMode(startupContext);
 
-                Start(appMode);
+                Start(appMode, startupContext);
 
                 if (startCallback != null)
                 {
@@ -54,11 +54,11 @@ namespace NzbDrone.Host
             }
         }
 
-        private static void Start(ApplicationModes applicationModes)
+        private static void Start(ApplicationModes applicationModes, StartupContext startupContext)
         {
             if (!IsInUtilityMode(applicationModes))
             {
-                EnsureSingleInstance(applicationModes == ApplicationModes.Service);
+                EnsureSingleInstance(applicationModes == ApplicationModes.Service, startupContext);
             }
 
             DbFactory.RegisterDatabase(_container);
@@ -80,11 +80,15 @@ namespace NzbDrone.Host
             }
         }
 
-        private static void EnsureSingleInstance(bool isService)
+        private static void EnsureSingleInstance(bool isService, StartupContext startupContext)
         {
             var instancePolicy = _container.Resolve<ISingleInstancePolicy>();
 
             if (isService)
+            {
+                instancePolicy.KillAllOtherInstance();
+            }
+            else if (startupContext.Flags.Contains(StartupContext.TERMINATE))
             {
                 instancePolicy.KillAllOtherInstance();
             }
