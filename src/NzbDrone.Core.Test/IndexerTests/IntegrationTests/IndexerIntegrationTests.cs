@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void SetUp()
         {
             UseRealHttp();
+            Mocker.SetConstant<IIndexerParsingService>(new IndexerParsingService());
         }
 
         [Test]
