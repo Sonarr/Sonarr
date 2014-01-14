@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using NLog;
 using NLog.Config;
@@ -15,7 +16,7 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.Configuration = new LoggingConfiguration();
 
-            if (System.Diagnostics.Debugger.IsAttached)
+            if (Debugger.IsAttached)
             {
                 RegisterDebugger();
             }
