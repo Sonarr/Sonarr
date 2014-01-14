@@ -22,12 +22,10 @@ namespace NzbDrone.Core.Indexers
     {
         private readonly Logger _logger;
         private readonly IHttpProvider _httpProvider;
-        private readonly IIndexerParsingService _indexerParsingService;
 
-        public FetchFeedService(IHttpProvider httpProvider, IIndexerParsingService indexerParsingService, Logger logger)
+        public FetchFeedService(IHttpProvider httpProvider, Logger logger)
         {
             _httpProvider = httpProvider;
-            _indexerParsingService = indexerParsingService;
             _logger = logger;
         }
 
@@ -107,7 +105,7 @@ namespace NzbDrone.Core.Indexers
                     var xml = _httpProvider.DownloadString(url);
                     if (!string.IsNullOrWhiteSpace(xml))
                     {
-                        result.AddRange(_indexerParsingService.Parse(indexer, xml, url));
+                        result.AddRange(indexer.Parser.Process(xml, url));
                     }
                     else
                     {
