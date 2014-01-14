@@ -114,7 +114,7 @@ namespace NzbDrone.Core.IndexerSearch
             var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes);
             // build list of queries for each episode in the form: "<series> <episode-title>"
             searchSpec.EpisodeQueryTitles = episodes.Where(e => !String.IsNullOrWhiteSpace(e.Title))
-                                                    .Select(e => searchSpec.QueryTitle + "+" + SearchCriteriaBase.GetQueryTitle(e.Title))
+                                                    .Select(e => searchSpec.QueryTitle + " " + SearchCriteriaBase.GetQueryTitle(e.Title))
                                                     .ToArray();
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
