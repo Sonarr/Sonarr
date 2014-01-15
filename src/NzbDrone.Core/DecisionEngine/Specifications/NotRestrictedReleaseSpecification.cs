@@ -41,6 +41,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             foreach (var restriction in restrictions)
             {
+                if (String.IsNullOrWhiteSpace(restriction)) continue;
+
                 if (subject.Release.Title.ToLowerInvariant().Contains(restriction.ToLowerInvariant()))
                 {
                     _logger.Trace("{0} is restricted: {1}", subject, restriction);

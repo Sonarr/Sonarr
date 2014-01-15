@@ -231,8 +231,8 @@ namespace NzbDrone.Core.Configuration
 
         public string ReleaseRestrictions
         {
-            get { return GetValue("ReleaseRestrictions", String.Empty); }
-            set { SetValue("ReleaseRestrictions", value); }
+            get { return GetValue("ReleaseRestrictions", String.Empty).Trim('\r', '\n'); }
+            set { SetValue("ReleaseRestrictions", value.Trim('\r', '\n')); }
         }
 
         public Int32 RssSyncInterval
