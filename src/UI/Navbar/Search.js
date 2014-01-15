@@ -6,7 +6,7 @@ define(
         'Series/SeriesCollection'
     ], function (Backbone, $, SeriesCollection) {
         $(document).on('keydown', function (e) {
-            if ($(e.target).is('input')) {
+            if ($(e.target).is('input') || $(e.target).is('textarea')) {
                 return;
             }
 
