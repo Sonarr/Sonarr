@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             var indexer = WithIndexer(true, 100);
             Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitle = _series.Title });
 
-            Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Exactly(11));
+            Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Exactly(10));
         }
     }
 

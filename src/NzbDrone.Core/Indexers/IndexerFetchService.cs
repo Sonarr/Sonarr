@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Indexers
             _logger.Info("{0} offset {1}. Found {2}", indexer, searchCriteria, result.Count);
 
             if (result.Count > 90 && 
-                offset < 1000 &&
+                offset < 900 &&
                 indexer.SupportsPaging)
             {
                 result.AddRange(Fetch(indexer, searchCriteria, offset + 100));
