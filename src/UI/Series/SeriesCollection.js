@@ -20,18 +20,6 @@ define(
                 pageSize: 1000
             },
 
-            sorters: {
-                nextAiring: function (model) {
-                    var nextAiring = model.get('nextAiring');
-
-                    if (!nextAiring) {
-                        return Number.MAX_VALUE;
-                    }
-
-                    return Moment(nextAiring).unix();
-                }
-            },
-
             mode: 'client',
 
             save: function () {
@@ -57,6 +45,17 @@ define(
                 });
 
                 return proxy.save();
+            },
+
+            //Sorters
+            nextAiring: function (model, attr) {
+                var nextAiring = model.get(attr);
+
+                if (!nextAiring) {
+                    return Number.MAX_VALUE;
+                }
+
+                return Moment(nextAiring).unix();
             }
         });
 

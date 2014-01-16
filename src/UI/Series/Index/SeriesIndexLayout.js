@@ -75,7 +75,7 @@ define(
                     name      : 'nextAiring',
                     label     : 'Next Airing',
                     cell      : RelativeDateCell,
-                    sortValue : SeriesCollection.sorters.nextAiring
+                    sortValue : SeriesCollection.nextAiring
                 },
                 {
                     name     : 'percentOfEpisodes',
@@ -152,7 +152,7 @@ define(
                         {
                             title     : 'Next Airing',
                             name      : 'nextAiring',
-                            sortValue : SeriesCollection.sorters.nextAiring
+                            sortValue : SeriesCollection.nextAiring
                         },
                         {
                             title: 'Episodes',

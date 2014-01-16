@@ -68,8 +68,10 @@ define(
                     var key = this.state.sortKey;
                     var order = this.state.order;
 
-                    if (this.sorters && this.sorters[key] && this.mode === 'client') {
+                    if (this[key] && this.mode === 'client') {
                         var sortValue = this[key];
+
+                        this.setSorting(key, order, { sortValue: sortValue });
 
                         var comparator = this._makeComparator(key, order, sortValue);
                         this.fullCollection.comparator = comparator;
