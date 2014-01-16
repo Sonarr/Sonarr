@@ -37,12 +37,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            var restrictions = restrictionsString.Split('\n');
+            var restrictions = restrictionsString.Split(new []{ '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var restriction in restrictions)
             {
-                if (String.IsNullOrWhiteSpace(restriction)) continue;
-
                 if (subject.Release.Title.ToLowerInvariant().Contains(restriction.ToLowerInvariant()))
                 {
                     _logger.Trace("{0} is restricted: {1}", subject, restriction);
