@@ -63,6 +63,21 @@ define(
                 return '1';
             };
 
+            _.extend(this.prototype, {
+                initialSort: function () {
+                    var key = this.state.sortKey;
+                    var order = this.state.order;
+
+                    if (this.sorters && this.sorters[key] && this.mode === 'client') {
+                        var sortValue = this[key];
+
+                        var comparator = this._makeComparator(key, order, sortValue);
+                        this.fullCollection.comparator = comparator;
+                        this.fullCollection.sort();
+                    }
+                }
+            });
+
             return this;
         };
     }

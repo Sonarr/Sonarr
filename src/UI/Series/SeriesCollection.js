@@ -6,8 +6,9 @@ define(
         'backbone.pageable',
         'Series/SeriesModel',
         'api!series',
-        'Mixins/AsPersistedStateCollection'
-    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsPersistedStateCollection) {
+        'Mixins/AsPersistedStateCollection',
+        'moment'
+    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsPersistedStateCollection, Moment) {
         var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
@@ -17,6 +18,18 @@ define(
                 sortKey: 'title',
                 order  : -1,
                 pageSize: 1000
+            },
+
+            sorters: {
+                nextAiring: function (model) {
+                    var nextAiring = model.get('nextAiring');
+
+                    if (!nextAiring) {
+                        return Number.MAX_VALUE;
+                    }
+
+                    return Moment(nextAiring).unix();
+                }
             },
 
             mode: 'client',
@@ -49,5 +62,7 @@ define(
 
         var MixedIn = AsPersistedStateCollection.call(Collection);
         var collection = new MixedIn(SeriesData);
+        collection.initialSort();
+
         return collection;
     });

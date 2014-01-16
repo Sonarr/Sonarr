@@ -17,8 +17,7 @@ define(
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
         'Shared/Toolbar/ToolbarLayout',
-        'underscore',
-        'moment'
+        'underscore'
     ], function (Marionette,
                  Backgrid,
                  PosterCollectionView,
@@ -35,8 +34,7 @@ define(
                  FooterView,
                  FooterModel,
                  ToolbarLayout,
-                 _,
-                 Moment) {
+                 _) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -77,15 +75,7 @@ define(
                     name      : 'nextAiring',
                     label     : 'Next Airing',
                     cell      : RelativeDateCell,
-                    sortValue : function (model) {
-                        var nextAiring = model.get('nextAiring');
-
-                        if (!nextAiring) {
-                            return Number.MAX_VALUE;
-                        }
-
-                        return Moment(nextAiring).unix();
-                    }
+                    sortValue : SeriesCollection.sorters.nextAiring
                 },
                 {
                     name     : 'percentOfEpisodes',
@@ -162,15 +152,7 @@ define(
                         {
                             title     : 'Next Airing',
                             name      : 'nextAiring',
-                            sortValue : function (model) {
-                                var nextAiring = model.get('nextAiring');
-
-                                if (!nextAiring) {
-                                    return Number.MAX_VALUE;
-                                }
-
-                                return Moment(nextAiring).unix();
-                            }
+                            sortValue : SeriesCollection.sorters.nextAiring
                         },
                         {
                             title: 'Episodes',
@@ -271,10 +253,6 @@ define(
                 var rightButtons = [
                     this.viewButtons
                 ];
-
-                if (this.showSortingButton) {
-                    rightButtons.splice(0, 0, this.sortingOptions);
-                }
 
                 rightButtons.splice(0, 0, this.sortingOptions);
 
