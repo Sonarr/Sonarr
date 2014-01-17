@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
@@ -7,6 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     {
         void DropColumns(string tableName, IEnumerable<string> columns);
         void AddIndexes(string tableName, params SQLiteIndex[] indexes);
+        void Nullify(string tableName, IEnumerable<string> columns);
     }
 
     public class SQLiteAlter : ISQLiteAlter
@@ -45,6 +47,44 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
 
                 CreateTable(tableName, columns, newIndexes);
+
+                transaction.Commit();
+            }
+        }
+
+        public void Nullify(string tableName, IEnumerable<string> columns)
+        {
+            using (var transaction = _sqLiteMigrationHelper.BeginTransaction())
+            {
+                var originalColumns = _sqLiteMigrationHelper.GetColumns(tableName);
+                var originalIndexes = _sqLiteMigrationHelper.GetIndexes(tableName);
+
+                var newColumns = originalColumns.Select(c =>
+                {
+                    if (!columns.Contains(c.Key))
+                    {
+                        return c.Value;
+                    }
+
+                    if (!c.Value.Schema.Contains("NOT NULL") && c.Value.Schema.Contains("NULL"))
+                    {
+                        return c.Value;
+                    }
+
+                    if (c.Value.Schema.Contains("NOT NULL"))
+                    {
+                        c.Value.Schema = c.Value.Schema.Replace("NOT NULL", "NULL");
+                        return c.Value;
+                    }
+
+                    c.Value.Schema += " NULL";
+
+                    return c.Value;
+                }).ToList();
+
+                var newIndexes = originalIndexes;
+
+                CreateTable(tableName, newColumns, newIndexes);
 
                 transaction.Commit();
             }
