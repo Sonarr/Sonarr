@@ -99,6 +99,24 @@
     </div>
 
     <div class="control-group">
+        <label class="control-label">Series Folder Format</label>
+
+        <div class="controls">
+            <div class="input-append x-helper-input">
+                <input type="text" class="naming-format" name="seriesFolderFormat"/>
+                <div class="btn-group x-naming-token-helper">
+                    <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-plus"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{> SeriesTitleNamingPartial}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
         <label class="control-label">Season Folder Format</label>
 
         <div class="controls">

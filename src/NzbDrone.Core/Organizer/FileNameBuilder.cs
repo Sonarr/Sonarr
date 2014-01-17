@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Organizer
         string BuildFilename(IList<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig);
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
         BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
+        string GetSeriesFolder(string seriesTitle);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -151,6 +152,7 @@ namespace NzbDrone.Core.Organizer
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
             string path = series.Path;
+
             if (series.SeasonFolder)
             {
                 string seasonFolder;
@@ -220,6 +222,17 @@ namespace NzbDrone.Core.Organizer
             }
 
             return basicNamingConfig;
+        }
+
+        public string GetSeriesFolder(string seriesTitle)
+        {
+            seriesTitle = CleanFilename(seriesTitle);
+
+            var nameSpec = _namingConfigService.GetConfig();
+            var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
+            tokenValues.Add("{Series Title}", seriesTitle);
+
+            return ReplaceTokens(nameSpec.SeriesFolderFormat, tokenValues);
         }
 
         public static string CleanFilename(string name)

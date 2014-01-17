@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Organizer
                         MultiEpisodeStyle = 0,
                         StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Title}",
                         DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Title}",
+                        SeriesFolderFormat = "{Series Title}",
                         SeasonFolderFormat = "Season {season}"
                     };
             }
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.Organizer
         public int MultiEpisodeStyle { get; set; }
         public string StandardEpisodeFormat { get; set; }
         public string DailyEpisodeFormat { get; set; }
+        public string SeriesFolderFormat { get; set; }
         public string SeasonFolderFormat { get; set; }
     }
 }

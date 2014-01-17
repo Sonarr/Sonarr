@@ -31,24 +31,24 @@ namespace NzbDrone.Core.Tv
     public class SeriesService : ISeriesService
     {
         private readonly ISeriesRepository _seriesRepository;
-        private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IEpisodeService _episodeService;
+        private readonly IBuildFileNames _fileNameBuilder;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
-                             IConfigService configServiceService,
                              IEventAggregator eventAggregator,
                              ISceneMappingService sceneMappingService,
                              IEpisodeService episodeService,
+                             IBuildFileNames fileNameBuilder,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
-            _configService = configServiceService;
             _eventAggregator = eventAggregator;
             _sceneMappingService = sceneMappingService;
             _episodeService = episodeService;
+            _fileNameBuilder = fileNameBuilder;
             _logger = logger;
         }
 
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Tv
 
             if (String.IsNullOrWhiteSpace(newSeries.Path))
             {
-                var folderName = FileNameBuilder.CleanFilename(newSeries.Title);
+                var folderName = _fileNameBuilder.GetSeriesFolder(newSeries.Title);
                 newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);
             }
 
