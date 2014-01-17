@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
@@ -86,7 +85,8 @@ namespace NzbDrone.Core.Organizer
 
             var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance)
             {
-                {"{Series Title}", series.Title}
+                {"{Series Title}", series.Title},
+                {"Original Title", episodeFile.SceneName}
             };
 
             tokenValues.Add("{Release Group}", episodeFile.ReleaseGroup);
