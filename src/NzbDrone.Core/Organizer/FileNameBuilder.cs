@@ -39,6 +39,9 @@ namespace NzbDrone.Core.Organizer
 
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>\s|\.|-|_)Title\})",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public FileNameBuilder(INamingConfigService namingConfigService,
                                ICacheManger cacheManger,
                                Logger logger)

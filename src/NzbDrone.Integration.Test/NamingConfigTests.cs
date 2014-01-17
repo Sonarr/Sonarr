@@ -96,5 +96,16 @@ namespace NzbDrone.Integration.Test
             var errors = NamingConfig.InvalidPut(config);
             errors.Should().NotBeEmpty();
         }
+
+        [Test]
+        public void should_get_bad_request_if_series_folder_format_does_not_contain_series_title()
+        {
+            var config = NamingConfig.GetSingle();
+            config.RenameEpisodes = true;
+            config.SeriesFolderFormat = "This and That";
+
+            var errors = NamingConfig.InvalidPut(config);
+            errors.Should().NotBeEmpty();
+        }
     }
 }
