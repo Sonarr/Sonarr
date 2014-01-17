@@ -40,7 +40,10 @@ namespace NzbDrone.Host
                     startCallback(_container);
                 }
 
-                SpinToExit(appMode);
+                else
+                {
+                    SpinToExit(appMode);
+                }
             }
             catch (TerminateApplicationException e)
             {

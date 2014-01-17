@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text.RegularExpressions;
 using Nancy;
 using NLog;
 using NzbDrone.Common;
@@ -12,6 +13,7 @@ namespace NzbDrone.Api.Frontend.Mappers
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly string _indexPath;
+        private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public IndexHtmlMapper(IAppFolderInfo appFolderInfo,
                                IDiskProvider diskProvider,
@@ -47,13 +49,15 @@ namespace NzbDrone.Api.Frontend.Mappers
             return StringToStream(GetIndexText());
         }
 
-
         private string GetIndexText()
         {
             var text = _diskProvider.ReadAllText(_indexPath);
 
+            text = ReplaceRegex.Replace(text, match => _configFileProvider.UrlBase + match.Value);
+
             text = text.Replace(".css", ".css?v=" + BuildInfo.Version);
             text = text.Replace(".js", ".js?v=" + BuildInfo.Version);
+            text = text.Replace("API_ROOT", _configFileProvider.UrlBase + "/api");
             text = text.Replace("API_KEY", _configFileProvider.ApiKey);
             text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
 

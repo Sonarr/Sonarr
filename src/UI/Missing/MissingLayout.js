@@ -4,7 +4,7 @@ define(
         'underscore',
         'marionette',
         'backgrid',
-        'Missing/Collection',
+        'Missing/MissingCollection',
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
@@ -120,7 +120,6 @@ define(
                         }
                     ]
                 };
-
 
                 this.toolbar.show(new ToolbarLayout({
                     left   :

@@ -17,7 +17,6 @@ define(
                 this.route('series/:query', this.seriesDetails);
             },
 
-
             series: function () {
                 this.setTitle('NzbDrone');
                 AppLayout.mainRegion.show(new SeriesIndexLayout());

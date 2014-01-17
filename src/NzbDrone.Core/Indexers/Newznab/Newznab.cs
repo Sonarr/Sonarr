@@ -55,7 +55,6 @@ namespace NzbDrone.Core.Indexers.Newznab
                 });
 
                 return list;
-
             }
         }
 
@@ -71,6 +70,14 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return settings;
+        }
+
+        public override bool SupportsPaging
+        {
+            get
+            {
+                return true;
+            }
         }
 
         public override IEnumerable<string> RecentFeed

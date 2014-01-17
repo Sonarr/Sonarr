@@ -37,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            var restrictions = restrictionsString.Split('\n');
+            var restrictions = restrictionsString.Split(new []{ '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var restriction in restrictions)
             {

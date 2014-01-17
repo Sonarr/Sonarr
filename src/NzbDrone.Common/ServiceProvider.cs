@@ -139,7 +139,6 @@ namespace NzbDrone.Common
             }
         }
 
-
         public ServiceControllerStatus GetStatus(string serviceName)
         {
           return  GetService(serviceName).Status;

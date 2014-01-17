@@ -2,10 +2,11 @@
 
 define(
     [
-        'handlebars'
-    ], function (Handlebars) {
+        'handlebars',
+        'System/StatusModel'
+    ], function (Handlebars, StatusModel) {
 
-        var placeHolder = '/Content/Images/poster-dark.jpg';
+        var placeHolder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.jpg';
 
         window.NzbDrone.imageError = function (img) {
             if (!img.src.contains(placeHolder)) {
@@ -16,5 +17,9 @@ define(
 
         Handlebars.registerHelper('defaultImg', function () {
             return new Handlebars.SafeString('onerror=window.NzbDrone.imageError(this)');
+        });
+
+        Handlebars.registerHelper('UrlBase', function () {
+            return new Handlebars.SafeString(StatusModel.get('urlBase'));
         });
     });

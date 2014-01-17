@@ -34,7 +34,5 @@ namespace NzbDrone
                 MessageBox.Show(text: message, buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
             }
         }
-
-
     }
 }

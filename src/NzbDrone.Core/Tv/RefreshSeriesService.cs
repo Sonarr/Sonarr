@@ -99,6 +99,8 @@ namespace NzbDrone.Core.Tv
 
         public void Execute(RefreshSeriesCommand message)
         {
+            _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent());
+
             if (message.SeriesId.HasValue)
             {
                 var series = _seriesService.GetSeries(message.SeriesId.Value);

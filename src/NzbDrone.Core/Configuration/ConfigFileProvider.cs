@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Configuration
         string ApiKey { get; }
         bool Torrent { get; }
         string SslCertHash { get; }
+        string UrlBase { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -152,6 +153,21 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("SslCertHash", ""); }
         }
 
+        public string UrlBase
+        {
+            get
+            {
+                var urlBase = GetValue("UrlBase", "");
+
+                if (String.IsNullOrEmpty(urlBase))
+                {
+                    return urlBase;
+                }
+
+                return "/" + urlBase.Trim('/').ToLower();
+            }
+        }
+
         public int GetValueInt(string key, int defaultValue)
         {
             return Convert.ToInt32(GetValue(key, defaultValue));
@@ -181,7 +197,7 @@ namespace NzbDrone.Core.Configuration
                     var valueHolder = parentContainer.Descendants(key).ToList();
 
                     if (valueHolder.Count() == 1)
-                        return valueHolder.First().Value;
+                        return valueHolder.First().Value.Trim();
 
                     //Save the value
                     if (persist)
@@ -198,6 +214,7 @@ namespace NzbDrone.Core.Configuration
         {
             EnsureDefaultConfigFile();
 
+            var valueString = value.ToString().Trim();
             var xDoc = LoadConfigFile();
             var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).Single();
 
@@ -207,15 +224,15 @@ namespace NzbDrone.Core.Configuration
 
             if (keyHolder.Count() != 1)
             {
-                parentContainer.Add(new XElement(key, value));
+                parentContainer.Add(new XElement(key, valueString));
             }
 
             else
             {
-                parentContainer.Descendants(key).Single().Value = value.ToString();
+                parentContainer.Descendants(key).Single().Value = valueString;
             }
 
-            _cache.Set(key, value.ToString());
+            _cache.Set(key, valueString);
 
             xDoc.Save(_configFile);
         }

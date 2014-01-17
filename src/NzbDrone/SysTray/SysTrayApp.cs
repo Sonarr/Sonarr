@@ -23,7 +23,6 @@ namespace NzbDrone.SysTray
             _browserService = browserService;
         }
 
-
         public void Start()
         {
             Application.ThreadException += OnThreadException;

@@ -68,7 +68,7 @@ define(
                         cell : QualityProfileCell
                     },
                     {
-                        name : 'monitored',
+                        name : 'seasonFolder',
                         label: 'Season Folder',
                         cell : SeasonFolderCell
                     },

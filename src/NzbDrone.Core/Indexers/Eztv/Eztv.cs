@@ -14,6 +14,14 @@ namespace NzbDrone.Core.Indexers.Eztv
             }
         }
 
+        public override bool SupportsPaging
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get

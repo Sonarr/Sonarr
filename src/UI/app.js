@@ -165,7 +165,8 @@ require.config({
                             renderable: true,
                             formatter : undefined,
                             cell      : undefined,
-                            headerCell: 'NzbDrone'
+                            headerCell: 'NzbDrone',
+                            sortType  : 'toggle'
                         };
 
                     });
@@ -231,7 +232,7 @@ define(
         });
 
         app.addInitializer(function () {
-            Backbone.history.start({ pushState: true });
+            Backbone.history.start({ pushState: true, root: serverStatusModel.get('urlBase') });
             RouteBinder.bind();
             AppLayout.navbarRegion.show(new NavbarView());
             $('body').addClass('started');

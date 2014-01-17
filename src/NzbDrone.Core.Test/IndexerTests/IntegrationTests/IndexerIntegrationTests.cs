@@ -20,7 +20,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         public void SetUp()
         {
             UseRealHttp();
-
         }
 
         [Test]
@@ -39,7 +38,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             ValidateResult(result, skipSize: true, skipInfo: true);
         }
 
-
         [Test]
         public void extv_rss()
         {
@@ -54,7 +52,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
             ValidateTorrentResult(result, skipSize: false, skipInfo: true);
         }
-
 
         [Test]
         public void nzbsorg_rss()
@@ -73,9 +70,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
             ValidateResult(result);
         }
-
-
-
+        
         private void ValidateResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
         {
             reports.Should().NotBeEmpty();
@@ -97,7 +92,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
         private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
         {
-
             reports.Should().OnlyContain(c => c.GetType() == typeof(TorrentInfo));
 
             ValidateResult(reports, skipSize, skipInfo);

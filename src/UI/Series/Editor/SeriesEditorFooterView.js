@@ -94,6 +94,8 @@ define(
 
                         model.set('rootFolderPath', rootFolderPath.get('path'));
                     }
+
+                    model.edited = true;
                 });
 
                 SeriesCollection.save();
@@ -150,6 +152,7 @@ define(
 
                 SeriesCollection.each(function (model) {
                     model.trigger('backgrid:select', model, false);
+                    model.edited = false;
                 });
             }
         });

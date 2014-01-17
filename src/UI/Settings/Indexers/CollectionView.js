@@ -6,8 +6,9 @@ define(
         'Settings/Indexers/ItemView',
         'Settings/Indexers/EditView',
         'Settings/Indexers/Collection',
+        'System/StatusModel',
         'underscore'
-    ], function (AppLayout, Marionette, IndexerItemView, IndexerEditView, IndexerCollection, _) {
+    ], function (AppLayout, Marionette, IndexerItemView, IndexerEditView, IndexerCollection, StatusModel, _) {
         return Marionette.CompositeView.extend({
             itemView         : IndexerItemView,
             itemViewContainer: '#x-indexers',
@@ -29,10 +30,10 @@ define(
                 var self = this;
                 //TODO: Is there a better way to deal with changing URLs?
                 var schemaCollection = new IndexerCollection();
-                schemaCollection.url = '/api/indexer/schema';
+                schemaCollection.url = StatusModel.get('urlBase') + '/api/indexer/schema';
                 schemaCollection.fetch({
                     success: function (collection) {
-                        collection.url = '/api/indexer';
+                        collection.url = StatusModel.get('urlBase') + '/api/indexer';
                         var model = _.first(collection.models);
 
                         model.set({

@@ -13,7 +13,6 @@ define(
         'Cells/QualityProfileCell',
         'Cells/EpisodeProgressCell',
         'Cells/SeriesActionsCell',
-        'Shared/Grid/DateHeaderCell',
         'Cells/SeriesStatusCell',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
@@ -31,7 +30,6 @@ define(
                  QualityProfileCell,
                  EpisodeProgressCell,
                  SeriesActionsCell,
-                 DateHeaderCell,
                  SeriesStatusCell,
                  FooterView,
                  FooterModel,
@@ -41,58 +39,57 @@ define(
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
             regions: {
-                seriesRegion: '#x-series',
-                toolbar     : '#x-toolbar',
-                footer : '#x-series-footer'
+                seriesRegion  : '#x-series',
+                toolbar       : '#x-toolbar',
+                footer        : '#x-series-footer'
             },
 
-            columns:
-                [
-                    {
-                        name      : 'statusWeight',
-                        label     : '',
-                        cell      : SeriesStatusCell
-                    },
-                    {
-                        name     : 'title',
-                        label    : 'Title',
-                        cell     : SeriesTitleCell,
-                        cellValue: 'this'
-                    },
-                    {
-                        name : 'seasonCount',
-                        label: 'Seasons',
-                        cell : 'integer'
-                    },
-                    {
-                        name : 'qualityProfileId',
-                        label: 'Quality',
-                        cell : QualityProfileCell
-                    },
-                    {
-                        name : 'network',
-                        label: 'Network',
-                        cell : 'string'
-                    },
-                    {
-                        name      : 'nextAiring',
-                        label     : 'Next Airing',
-                        cell      : RelativeDateCell,
-                        headerCell: DateHeaderCell
-                    },
-                    {
-                        name     : 'percentOfEpisodes',
-                        label    : 'Episodes',
-                        cell     : EpisodeProgressCell,
-                        className: 'episode-progress-cell'
-                    },
-                    {
-                        name    : 'this',
-                        label   : '',
-                        sortable: false,
-                        cell    : SeriesActionsCell
-                    }
-                ],
+            columns: [
+                {
+                    name      : 'statusWeight',
+                    label     : '',
+                    cell      : SeriesStatusCell
+                },
+                {
+                    name     : 'title',
+                    label    : 'Title',
+                    cell     : SeriesTitleCell,
+                    cellValue: 'this'
+                },
+                {
+                    name : 'seasonCount',
+                    label: 'Seasons',
+                    cell : 'integer'
+                },
+                {
+                    name : 'qualityProfileId',
+                    label: 'Quality',
+                    cell : QualityProfileCell
+                },
+                {
+                    name : 'network',
+                    label: 'Network',
+                    cell : 'string'
+                },
+                {
+                    name      : 'nextAiring',
+                    label     : 'Next Airing',
+                    cell      : RelativeDateCell,
+                    sortValue : SeriesCollection.nextAiring
+                },
+                {
+                    name     : 'percentOfEpisodes',
+                    label    : 'Episodes',
+                    cell     : EpisodeProgressCell,
+                    className: 'episode-progress-cell'
+                },
+                {
+                    name    : 'this',
+                    label   : '',
+                    sortable: false,
+                    cell    : SeriesActionsCell
+                }
+            ],
 
             leftSideButtons: {
                 type      : 'default',
@@ -130,25 +127,38 @@ define(
                     ]
             },
 
-            _showTable: function () {
-                this.currentView = new Backgrid.Grid({
-                    collection: SeriesCollection,
-                    columns   : this.columns,
-                    className : 'table table-hover'
-                });
-
-                this._renderView();
-                this._fetchCollection();
-            },
-
-            _showList: function () {
-                this.currentView = new ListCollectionView();
-                this._fetchCollection();
-            },
-
-            _showPosters: function () {
-                this.currentView = new PosterCollectionView();
-                this._fetchCollection();
+            sortingOptions: {
+                type          : 'sorting',
+                storeState    : false,
+                viewCollection: SeriesCollection,
+                items         :
+                    [
+                        {
+                            title: 'Title',
+                            name : 'title'
+                        },
+                        {
+                            title: 'Seasons',
+                            name : 'seasonCount'
+                        },
+                        {
+                            title: 'Quality',
+                            name : 'qualityProfileId'
+                        },
+                        {
+                            title: 'Network',
+                            name : 'network'
+                        },
+                        {
+                            title     : 'Next Airing',
+                            name      : 'nextAiring',
+                            sortValue : SeriesCollection.nextAiring
+                        },
+                        {
+                            title: 'Episodes',
+                            name : 'percentOfEpisodes'
+                        }
+                    ]
             },
 
             initialize: function () {
@@ -156,39 +166,8 @@ define(
 
                 this.listenTo(SeriesCollection, 'sync', this._renderView);
                 this.listenTo(SeriesCollection, 'remove', this._renderView);
-            },
 
-            _renderView: function () {
-
-                if (SeriesCollection.length === 0) {
-                    this.seriesRegion.show(new EmptyView());
-                    this.toolbar.close();
-                }
-                else {
-                    this.currentView.collection = SeriesCollection;
-                    this.seriesRegion.show(this.currentView);
-
-                    this._showToolbar();
-                    this._showFooter();
-                }
-            },
-
-            onShow: function () {
-                this._showToolbar();
-                this._renderView();
-            },
-
-            _fetchCollection: function () {
-                SeriesCollection.fetch();
-            },
-
-            _showToolbar: function () {
-
-                if (this.toolbar.currentView) {
-                    return;
-                }
-
-                var viewButtons = {
+                this.viewButtons = {
                     type         : 'radio',
                     storeState   : true,
                     menuKey      : 'seriesViewMode',
@@ -218,12 +197,67 @@ define(
                             }
                         ]
                 };
+            },
+
+            _showTable: function () {
+                this.currentView = new Backgrid.Grid({
+                    collection: SeriesCollection,
+                    columns   : this.columns,
+                    className : 'table table-hover'
+                });
+
+                this._fetchCollection();
+            },
+
+            _showList: function () {
+                this.currentView = new ListCollectionView({ collection: SeriesCollection });
+
+                this._fetchCollection();
+            },
+
+            _showPosters: function () {
+                this.currentView = new PosterCollectionView({ collection: SeriesCollection });
+
+                this._fetchCollection();
+            },
+
+            _renderView: function () {
+
+                if (SeriesCollection.length === 0) {
+                    this.seriesRegion.show(new EmptyView());
+                    this.toolbar.close();
+                }
+                else {
+                    this.seriesRegion.show(this.currentView);
+
+                    this._showToolbar();
+                    this._showFooter();
+                }
+            },
+
+            onShow: function () {
+                this._showToolbar();
+                this._renderView();
+            },
+
+            _fetchCollection: function () {
+                SeriesCollection.fetch();
+            },
+
+            _showToolbar: function () {
+
+                if (this.toolbar.currentView) {
+                    return;
+                }
+
+                var rightButtons = [
+                    this.viewButtons
+                ];
+
+                rightButtons.splice(0, 0, this.sortingOptions);
 
                 this.toolbar.show(new ToolbarLayout({
-                    right  :
-                        [
-                            viewButtons
-                        ],
+                    right  : rightButtons,
                     left   :
                         [
                             this.leftSideButtons

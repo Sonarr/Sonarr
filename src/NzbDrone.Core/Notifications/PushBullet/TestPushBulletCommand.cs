@@ -13,6 +13,6 @@ namespace NzbDrone.Core.Notifications.PushBullet
             }
         }
         public string ApiKey { get; set; }
-        public long DeviceId { get; set; }
+        public string DeviceId { get; set; }
     }
 }

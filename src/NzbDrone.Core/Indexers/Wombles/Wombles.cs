@@ -14,6 +14,14 @@ namespace NzbDrone.Core.Indexers.Wombles
             }
         }
 
+        public override bool SupportsPaging
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get
@@ -24,7 +32,7 @@ namespace NzbDrone.Core.Indexers.Wombles
 
         public override IEnumerable<string> RecentFeed
         {
-            get { yield return "http://nzb.isasecret.com/rss/?sec=TV&fr=false"; }
+            get { yield return "http://newshost.co.za/rss/?sec=TV&fr=false"; }
         }
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
