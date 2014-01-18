@@ -7,7 +7,6 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Qualities
 {
     [TestFixture]
-
     public class QualityProfileRepositoryFixture : DbTest<QualityProfileRepository, QualityProfile>
     {
         [Test]

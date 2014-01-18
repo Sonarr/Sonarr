@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = _secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
 
             var fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p, Allowed = Qualities.QualityFixture.GetDefaultQualities() })
                          .Build();
 
             _parseResultMulti = new RemoteEpisode

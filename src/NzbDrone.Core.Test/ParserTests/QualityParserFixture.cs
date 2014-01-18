@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Qualities;
@@ -150,9 +151,9 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [Test, TestCaseSource("SelfQualityParserCases")]
-        public void parsing_our_own_quality_enum(Quality quality)
+        public void parsing_our_own_quality_enum_name(Quality quality)
         {
-            var fileName = String.Format("My series S01E01 [{0}]", quality);
+            var fileName = String.Format("My series S01E01 [{0}]", quality.Name);
             var result = Parser.QualityParser.ParseQuality(fileName);
             result.Quality.Should().Be(quality);
         }

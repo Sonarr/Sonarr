@@ -7,9 +7,13 @@ namespace NzbDrone.Api.Qualities
 {
     public class QualityProfileSchemaModule : NzbDroneRestModule<QualityProfileResource>
     {
-        public QualityProfileSchemaModule()
+        private readonly IQualityDefinitionService _qualityDefinitionService;
+
+        public QualityProfileSchemaModule(IQualityDefinitionService qualityDefinitionService)
             : base("/qualityprofiles/schema")
         {
+            _qualityDefinitionService = qualityDefinitionService;
+
             GetResourceAll = GetAll;
         }
 
@@ -19,21 +23,30 @@ namespace NzbDrone.Api.Qualities
             profile.Cutoff = Quality.Unknown;
             profile.Allowed = new List<Quality>();
 
-            return new List<QualityProfileResource>{ QualityToResource(profile)};
+            return new List<QualityProfileResource> { QualityToResource(profile) };
         }
 
-        private static QualityProfileResource QualityToResource(QualityProfile profile)
+        private QualityProfileResource QualityToResource(QualityProfile profile)
         {
             return new QualityProfileResource
-                {
-                    Available = Quality.All()
-                        .Where(c => !profile.Allowed.Any(q => c.Id == q.Id))
-                        .InjectTo<List<QualityResource>>(),
+            {
+                Cutoff = QualityToResource(_qualityDefinitionService.Get(profile.Cutoff)),
+                Available = _qualityDefinitionService.All().Select(QualityToResource).ToList(),
+                Allowed = profile.Allowed.Select(_qualityDefinitionService.Get).Select(QualityToResource).ToList(),
+                Name = profile.Name,
+                Id = profile.Id
+            };
+        }
 
-                    Allowed = profile.Allowed.InjectTo<List<QualityResource>>(),
-                    Name = profile.Name,
-                    Id = profile.Id
-                };
+
+        private QualityResource QualityToResource(QualityDefinition config)
+        {
+            return new QualityResource
+            {
+                Id = config.Quality.Id,
+                Name = config.Quality.Name,
+                Weight = config.Weight
+            };
         }
     }
 }

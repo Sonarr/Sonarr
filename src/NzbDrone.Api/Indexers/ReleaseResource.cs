@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Indexers

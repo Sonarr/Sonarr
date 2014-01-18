@@ -29,25 +29,15 @@
         </div>
     </div>
     <div>
-        <div class="offset1 span3">
+        <div class="offset1 span2">
             <h3>Available</h3>
-            <select multiple="multiple" class="x-available-list">
-                {{#each available}}
-                <option value="{{id}}">{{name}}</option>
-                {{/each}}
-            </select>
+            <ul class="x-available-list">
+            </ul>
         </div>
-        <div class="span3">
-            <div class="control-group">
-                <div class="controls">
-                    <h3>Allowed</h3>
-                    <select multiple="multiple" class="x-allowed-list" validation-name="allowed">
-                        {{#each allowed}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-            </div>
+        <div class="span2">
+            <h3>Allowed</h3>
+            <ul class="x-allowed-list" validation-name="allowed">
+            </ul>
         </div>
     </div>
 </div>

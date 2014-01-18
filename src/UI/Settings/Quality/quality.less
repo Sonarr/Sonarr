@@ -1,6 +1,7 @@
 @import "../../Shared/Styles/card";
+@import "../../Content/Bootstrap/mixins";
 
-.quality-profiles, .quality-sizes {
+.quality-profiles {
   li {
     display: inline-block;
     vertical-align: top;
@@ -35,41 +36,121 @@
   }
 }
 
-.quality-size-item {
+ul.x-available-list, ul.x-allowed-list {
+  min-height: 100px;
 
-  .card;
-  text-align: center;
-
-  width: 200px;
-  height: 210px;
-  padding: 10px 15px;
-
-  h3 {
-    margin-top: 0px;
-  }
-
-  .size {
-    position: relative;
-    height: 100px;
-    margin: 10px;
-    text-align: center;
-  }
-
-  .knob {
-    box-shadow: none;
-  }
-
-  .size-value-wrapper {
-    position: absolute;
-    top: 50px;
-    width: 100%;
-
-    div {
-      margin-top: 2px;
+  .user-select(none);
+  
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  outline: none;
+  cursor: pointer;
+  
+  li {
+    margin: 2px;
+    padding: 2px;
+    line-height: 20px;
+    border: 1px solid #AAA;
+    border-radius: 4px;   /* may need vendor varients */
+    background: #FAFAFA;
+    
+    &:hover {
+      border-color: #888;
+      background: #EEE;
+    }
+    
+    .x-drag-handle, .x-moveleft-handle, .x-moveright-handle {
+      opacity: 0.0;
+      line-height: 20px;
     }
   }
 }
 
-#quality-size {
-  overflow: hidden;
+ul.x-available-list li {
+  .x-moveright-handle {
+    opacity: 0.2;
+  }
+  
+  .x-drag-handle {
+    display: none;
+  }
+  
+  &:hover .x-moveright-handle {
+    opacity: 1.0;
+  }
 }
+
+ul.x-allowed-list li {
+  .x-drag-handle, .x-moveleft-handle {
+    opacity: 0.2;
+  }
+  
+  .x-drag-handle:hover {
+    opacity: 1.0;
+    cursor: pointer;
+  }
+  
+  &:hover .x-moveleft-handle {
+    opacity: 1.0;
+  }
+}
+
+#quality-definition-list {
+
+  .x-header .row {
+    font-weight: bold;
+    line-height: 40px;
+  }
+
+  .x-rows .row {
+    line-height: 30px;
+    border-top: 1px solid #ddd;
+    vertical-align: middle;
+    padding: 5px;
+    
+    input {
+      margin-bottom: 0px;
+    }
+    
+    .size-label-wrapper {
+      line-height: 20px;
+    }
+    
+    .label {
+      min-width: 70px;
+      text-align: center;
+      margin: 0px 1px;
+      padding: 1px 4px;
+    }
+    
+    .ui-slider {
+      position: relative;
+      text-align: left;
+      background-color: #f5f5f5;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      height: 8px;
+      
+      .ui-slider-range {
+        position: absolute;
+        display: block;
+        background-color: #ddd;
+        height: 100%;
+      }
+    
+      .ui-slider-handle {
+        position: absolute;
+        z-index: 2;
+        width: 6px;
+        height: 12px;
+        cursor: default;
+        background-color: #ccc;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+        top: -3px;
+      }
+    }
+  }
+}
+

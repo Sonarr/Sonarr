@@ -22,13 +22,15 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.SeriesType = SeriesTypes.Standard)
+                                     .With(s => s.SeriesType = SeriesTypes.Standard)                                     
+                                     .With(e => e.QualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() })
                                      .Build();
 
             _localEpisode = new LocalEpisode
                                 {
                                     Path = @"C:\Test\30 Rock\30.rock.s01e01.avi",
-                                    Quality = new QualityModel(Quality.HDTV720p, false)
+                                    Quality = new QualityModel(Quality.HDTV720p, false),
+                                    Series = _series
                                 };
         }
 

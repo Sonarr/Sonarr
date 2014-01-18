@@ -2,65 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore.Converters;
+
 
 namespace NzbDrone.Core.Qualities
 {
-    public class Quality : IComparable<Quality>, IEmbeddedDocument
+    public class Quality : IEmbeddedDocument, IEquatable<Quality>
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Weight { get; set; }
 
-        public int CompareTo(Quality other)
+        public Quality()
         {
-            if (other.Weight > Weight)
-                return -1;
-
-            if (other.Weight < Weight)
-                return 1;
-
-            if (other.Weight == Weight)
-                return 0;
-
-            return 0;
         }
 
-        public static bool operator !=(Quality x, Quality y)
+        private Quality(int id, string name)
         {
-            return !(x == y);
-        }
-
-        public static bool operator ==(Quality x, Quality y)
-        {
-            var xObj = (Object)x;
-            var yObj = (object)y;
-
-            if (xObj == null || yObj == null)
-            {
-                return xObj == yObj;
-            }
-
-            return x.CompareTo(y) == 0;
-        }
-
-        public static bool operator >(Quality x, Quality y)
-        {
-            return x.CompareTo(y) > 0;
-        }
-
-        public static bool operator <(Quality x, Quality y)
-        {
-            return x.CompareTo(y) < 0;
-        }
-
-        public static bool operator <=(Quality x, Quality y)
-        {
-            return x.CompareTo(y) <= 0;
-        }
-
-        public static bool operator >=(Quality x, Quality y)
-        {
-            return x.CompareTo(y) >= 0;
+            Id = id;
+            Name = name;
         }
 
         public override string ToString()
@@ -70,110 +29,96 @@ namespace NzbDrone.Core.Qualities
 
         public override int GetHashCode()
         {
-            unchecked // Overflow is fine, just wrap
-            {
-                int hash = 17;
-                hash = hash * 23 + Weight.GetHashCode();
-                return hash;
-            }
+            return Id.GetHashCode();
         }
 
         public bool Equals(Quality other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.Weight, Weight);
+            return Id.Equals(other.Id);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(Quality)) return false;
-            return Equals((Quality)obj);
+
+            return Equals(obj as Quality);
         }
 
-        public static Quality Unknown
+        public static bool operator ==(Quality left, Quality right)
         {
-            get { return new Quality { Id = 0, Name = "Unknown", Weight = 0 }; }
+            return Equals(left, right);
         }
 
-        public static Quality SDTV
+        public static bool operator !=(Quality left, Quality right)
         {
-            get { return new Quality { Id = 1, Name = "SDTV", Weight = 1 }; }
+            return !Equals(left, right);
         }
 
-        public static Quality WEBDL480p
+        public static Quality Unknown     { get { return new Quality(0, "Unknown"); } }
+        public static Quality SDTV        { get { return new Quality(1, "SDTV"); } }
+        public static Quality DVD         { get { return new Quality(2, "DVD"); } }
+        public static Quality WEBDL1080p  { get { return new Quality(3, "WEBDL-1080p"); } }
+        public static Quality HDTV720p    { get { return new Quality(4, "HDTV-720p"); } }
+        public static Quality WEBDL720p   { get { return new Quality(5, "WEBDL-720p"); } }
+        public static Quality Bluray720p  { get { return new Quality(6, "Bluray-720p"); } }
+        public static Quality Bluray1080p { get { return new Quality(7, "Bluray-1080p"); } }
+        public static Quality WEBDL480p   { get { return new Quality(8, "WEBDL-480p"); } }
+        public static Quality HDTV1080p   { get { return new Quality(9, "HDTV-1080p"); } }
+        public static Quality RAWHD       { get { return new Quality(10, "Raw-HD"); } }
+        public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p"); } }
+        
+        public static List<Quality> All
         {
-            get { return new Quality { Id = 8, Name = "WEBDL-480p", Weight = 2 }; }
+            get
+            {
+                return new List<Quality>
+                {
+                    SDTV,
+                    DVD,
+                    WEBDL1080p,
+                    HDTV720p,
+                    WEBDL720p,
+                    Bluray720p,
+                    Bluray1080p,
+                    WEBDL480p,
+                    HDTV1080p,
+                    RAWHD
+                };
+            }
         }
 
-        public static Quality DVD
+        public static HashSet<QualityDefinition> DefaultQualityDefinitions
         {
-            get { return new Quality { Id = 2, Name = "DVD", Weight = 3 }; }
-        }
-
-        public static Quality HDTV720p
-        {
-            get { return new Quality { Id = 4, Name = "HDTV-720p", Weight = 4 }; }
-        }
-
-        public static Quality HDTV1080p
-        {
-            get { return new Quality { Id = 9, Name = "HDTV-1080p", Weight = 5 }; }
-        }
-
-        public static Quality RAWHD
-        {
-            get { return new Quality { Id = 10, Name = "Raw-HD", Weight = 6 }; }
-        }
-
-        public static Quality WEBDL720p
-        {
-            get { return new Quality { Id = 5, Name = "WEBDL-720p", Weight = 7 }; }
-        }
-
-        public static Quality Bluray720p
-        {
-            get { return new Quality { Id = 6, Name = "Bluray720p", Weight = 8 }; }
-        }
-
-        public static Quality WEBDL1080p
-        {
-            get { return new Quality { Id = 3, Name = "WEBDL-1080p", Weight = 9 }; }
-        }
-
-        public static Quality Bluray1080p
-        {
-            get { return new Quality { Id = 7, Name = "Bluray1080p", Weight = 10 }; }
-        }
-
-        public static List<Quality> All()
-        {
-            return new List<Quality>
-                       {
-                               SDTV,
-                               WEBDL480p,
-                               DVD,
-                               HDTV720p,
-                               HDTV1080p,
-                               RAWHD,
-                               WEBDL720p,
-                               WEBDL1080p,
-                               Bluray720p,
-                               Bluray1080p
-                       };
+            get
+            {
+                return new HashSet<QualityDefinition>
+                {
+                    new QualityDefinition(Quality.SDTV)        { /*Title = "SDTV",        */ Weight = 1,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.WEBDL480p)   { /*Title = "WEB-DL",      */ Weight = 2,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.DVD)         { /*Title = "DVD",         */ Weight = 3,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.HDTV720p)    { /*Title = "720p HDTV",   */ Weight = 4,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.HDTV1080p)   { /*Title = "1080p HDTV",  */ Weight = 5,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.RAWHD)       { /*Title = "RawHD",       */ Weight = 6,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.WEBDL720p)   { /*Title = "720p WEB-DL", */ Weight = 7,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.Bluray720p)  { /*Title = "720p BluRay", */ Weight = 8,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.WEBDL1080p)  { /*Title = "1080p WEB-DL",*/ Weight = 9,  MinSize=0, MaxSize=100 },
+                    new QualityDefinition(Quality.Bluray1080p) { /*Title = "1080p BluRay",*/ Weight = 10, MinSize=0, MaxSize=100 }
+                };
+            }
         }
 
         public static Quality FindById(int id)
         {
             if (id == 0) return Unknown;
 
-            var quality = All().SingleOrDefault(q => q.Id == id);
+            Quality quality = All.FirstOrDefault(v => v.Id == id);
 
             if (quality == null)
                 throw new ArgumentException("ID does not match a known quality", "id");
-
+                        
             return quality;
         }
 

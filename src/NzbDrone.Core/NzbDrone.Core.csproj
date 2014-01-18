@@ -145,6 +145,8 @@
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
+    <Compile Include="Datastore\Converters\QualityListConverter.cs" />
+    <Compile Include="Datastore\Converters\QualityModelConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\UtcConverter.cs" />
@@ -191,6 +193,8 @@
     <Compile Include="Datastore\Migration\033_add_api_key_to_pushover.cs" />
     <Compile Include="Datastore\Migration\034_remove_series_contraints.cs" />
     <Compile Include="Datastore\Migration\035_add_series_folder_format_to_naming_config.cs" />
+    <Compile Include="Datastore\Migration\036_update_with_quality_converters.cs" />
+    <Compile Include="Datastore\Migration\037_add_configurable_qualities.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -456,12 +460,13 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="Qualities\QualityModelComparer.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
-    <Compile Include="Qualities\QualitySizeRepository.cs" />
+    <Compile Include="Qualities\QualityDefinitionRepository.cs" />
     <Compile Include="Qualities\QualityProfileRepository.cs" />
     <Compile Include="Queue\Queue.cs" />
     <Compile Include="Queue\UpdateQueueEvent.cs" />
@@ -489,7 +494,7 @@
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\RefreshEpisodeService.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
-    <Compile Include="Tv\QualityModel.cs" />
+    <Compile Include="Qualities\QualityModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabAddResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabHistoryItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabHistory.cs" />
@@ -575,7 +580,7 @@
     <Compile Include="Qualities\QualityProfileService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Qualities\QualitySizeService.cs">
+    <Compile Include="Qualities\QualityDefinitionService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
@@ -597,7 +602,7 @@
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="History\History.cs" />
-    <Compile Include="Qualities\QualitySize.cs" />
+    <Compile Include="Qualities\QualityDefinition.cs" />
     <Compile Include="Qualities\QualityProfile.cs" />
     <Compile Include="RootFolders\RootFolder.cs" />
     <Compile Include="Tv\Series.cs" />

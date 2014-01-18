@@ -75,6 +75,7 @@ namespace NzbDrone.Core.Test.Datastore
         public void one_to_one()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
+                           .With(c => c.Quality = new QualityModel())
                            .BuildNew();
 
             Db.Insert(episodeFile);
