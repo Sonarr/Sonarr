@@ -353,5 +353,18 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(_episodeFile.ReleaseGroup);
         }
+
+        [Test]
+        public void should_be_able_to_use_orginal_title()
+        {
+            _series.Title = "30 Rock";
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - {Original Title}";
+
+            _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
+            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("30 Rock - 30.Rock.S01E01.xvid-LOL");
+        }
     }
 }

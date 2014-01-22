@@ -17,6 +17,12 @@ namespace NzbDrone.Core.Organizer
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
             return ruleBuilder.SetValidator(new ValidDailyEpisodeFormatValidator());
         }
+
+        public static IRuleBuilderOptions<T, string> ValidSeriesFolderFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            ruleBuilder.SetValidator(new NotEmptyValidator(null));
+            return ruleBuilder.SetValidator(new RegularExpressionValidator(FileNameBuilder.SeriesTitleRegex)).WithMessage("Must contain series title");
+        }
     }
 
     public class ValidDailyEpisodeFormatValidator : PropertyValidator

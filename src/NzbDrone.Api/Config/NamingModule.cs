@@ -4,7 +4,6 @@ using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Nancy.Responses;
-using NzbDrone.Api.REST;
 using NzbDrone.Core.Organizer;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Mapping;
@@ -39,6 +38,7 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
             SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
             SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
+            SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)

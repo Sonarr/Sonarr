@@ -97,9 +97,7 @@ namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
             var columns = _subject.GetColumns("QualitySizes");
             var indexes = _subject.GetIndexes("QualitySizes");
 
-
             _subject.CreateTable("QualityB", columns.Values, indexes);
-
 
             var newIndexes = _subject.GetIndexes("QualityB");
 
@@ -122,6 +120,5 @@ namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
             newColumns.Values.Should().HaveSameCount(columns.Values);
             newIndexes.Should().Contain(i=>i.Column == "AirTime");
         }
-
     }
 }
