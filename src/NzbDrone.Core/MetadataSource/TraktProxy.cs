@@ -8,7 +8,9 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
+using Omu.ValueInjecter;
 using RestSharp;
 using Episode = NzbDrone.Core.Tv.Episode;
 using NzbDrone.Core.Rest;
@@ -79,15 +81,16 @@ namespace NzbDrone.Core.MetadataSource
             series.AirTime = show.air_time_utc;
             series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
             series.Status = GetSeriesStatus(show.status, show.ended);
-
-            series.Seasons = show.seasons.Select(s => new Tv.Season
-            {
-                SeasonNumber = s.season
-            }).OrderByDescending(s => s.SeasonNumber).ToList();
+            series.Ratings = GetRatings(show.ratings);
+            series.Genres = show.genres;
+            series.Certification = show.certification;
+            series.Actors = GetActors(show.people);
+            series.Seasons = GetSeasons(show);
 
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });
             series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.images.fanart });
+
             return series;
         }
 
@@ -101,6 +104,9 @@ namespace NzbDrone.Core.MetadataSource
             episode.Title = traktEpisode.title;
             episode.AirDate = FromIsoToString(traktEpisode.first_aired_iso);
             episode.AirDateUtc = FromIso(traktEpisode.first_aired_iso);
+            episode.Ratings = GetRatings(traktEpisode.ratings);
+
+            episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
 
             return episode;
         }
@@ -174,6 +180,61 @@ namespace NzbDrone.Core.MetadataSource
             if (firstAired == 0) return DateTime.Today.Year;
 
             return year;
+        }
+
+        private static Tv.Ratings GetRatings(Trakt.Ratings ratings)
+        {
+            return new Tv.Ratings
+                   {
+                       Percentage = ratings.percentage,
+                       Votes = ratings.votes,
+                       Loved = ratings.loved,
+                       Hated = ratings.hated
+                   };
+        }
+
+        private static List<Tv.Actor> GetActors(People people)
+        {
+            if (people == null)
+            {
+                return new List<Tv.Actor>();
+            }
+
+            return GetActors(people.actors).ToList();
+        }
+
+        private static IEnumerable<Tv.Actor> GetActors(IEnumerable<Trakt.Actor> trakcActors)
+        {
+            foreach (var traktActor in trakcActors)
+            {
+                var actor = new Tv.Actor
+                            {
+                                Name = traktActor.name,
+                                Character = traktActor.character,
+                            };
+
+                actor.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Headshot, traktActor.images.headshot));
+
+                yield return actor;
+            }
+        }
+
+        private static List<Tv.Season> GetSeasons(Show show)
+        {
+            var seasons = new List<Tv.Season>();
+
+            foreach (var traktSeason in show.seasons.OrderByDescending(s => s.season))
+            {
+                var season = new Tv.Season
+                {
+                    SeasonNumber = traktSeason.season
+                };
+
+                season.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Poster, traktSeason.images.poster));
+                seasons.Add(season);
+            }
+
+            return seasons;
         }
     }
 }

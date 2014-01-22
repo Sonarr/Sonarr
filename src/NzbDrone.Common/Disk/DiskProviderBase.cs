@@ -5,12 +5,14 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Disk
 {
     public abstract class DiskProviderBase : IDiskProvider
     {
+        void CopyFile(string source, string destination, bool overwrite = false);
         enum TransferAction
         {
             Copy,
@@ -23,6 +25,41 @@ namespace NzbDrone.Common.Disk
         public abstract void InheritFolderPermissions(string filename);
         public abstract void SetPermissions(string path, string mask, string user, string group);
         public abstract long? GetTotalSize(string path);
+
+        //TODO: this needs tests
+        public static string GetRelativePath(string parentPath, string childPath)
+        {
+            if (!IsParent(parentPath, childPath))
+            {
+                throw new NotParentException("{0} is not a child of {1}", childPath, parentPath);
+            }
+
+            var parentUri = new Uri(parentPath, UriKind.Absolute);
+            var childUri = new Uri(childPath, UriKind.Absolute);
+
+            return childUri.MakeRelativeUri(parentUri).ToString();
+        }
+
+        public static bool IsParent(string parentPath, string childPath)
+        {
+            parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
+            childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
+
+            var parent = new DirectoryInfo(parentPath);
+            var child = new DirectoryInfo(childPath);
+
+            while (child.Parent != null)
+            {
+                if (child.Parent.FullName == parent.FullName)
+                {
+                    return true;
+                }
+
+                child = child.Parent;
+            }
+
+            return false;
+        }
 
         public DateTime GetLastFolderWrite(string path)
         {
@@ -238,6 +275,11 @@ namespace NzbDrone.Common.Disk
             File.Move(source, destination);
         }
 
+        public void CopyFile(string source, string destination, bool overwrite = false)
+        {
+            File.Copy(source, destination, overwrite);
+        }
+
         public void DeleteFolder(string path, bool recursive)
         {
             Ensure.That(path, () => path).IsValidPath();
@@ -331,27 +373,6 @@ namespace NzbDrone.Common.Disk
                 throw;
             }
 
-        }
-
-        public bool IsParent(string parentPath, string childPath)
-        {
-            parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
-            childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
-
-            var parent = new DirectoryInfo(parentPath);
-            var child = new DirectoryInfo(childPath);
-
-            while (child.Parent != null)
-            {
-                if (child.Parent.FullName == parent.FullName)
-                {
-                    return true;
-                }
-
-                child = child.Parent;
-            }
-
-            return false;
         }
 
         public void SetFolderWriteTime(string path, DateTime time)

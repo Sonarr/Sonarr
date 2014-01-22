@@ -16,7 +16,7 @@ namespace NzbDrone.Core.ThingiProvider
         private readonly IContainer _container;
         private readonly Logger _logger;
 
-        private readonly List<TProvider> _providers;
+        protected readonly List<TProvider> _providers;
 
         protected ProviderFactory(IProviderRepository<TProviderDefinition> providerRepository,
                                   IEnumerable<TProvider> providers,

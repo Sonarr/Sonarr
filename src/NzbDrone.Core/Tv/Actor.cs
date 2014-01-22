@@ -4,15 +4,15 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Tv
 {
-    public class Season : IEmbeddedDocument
+    public class Actor : IEmbeddedDocument
     {
-        public Season()
+        public Actor()
         {
             Images = new List<MediaCover.MediaCover>();
         }
 
-        public int SeasonNumber { get; set; }
-        public Boolean Monitored { get; set; }
+        public String Name { get; set; }
+        public String Character { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
     }
 }

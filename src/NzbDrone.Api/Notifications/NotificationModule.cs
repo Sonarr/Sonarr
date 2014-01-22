@@ -2,9 +2,9 @@
 
 namespace NzbDrone.Api.Notifications
 {
-    public class IndexerModule : ProviderModuleBase<NotificationResource, INotification, NotificationDefinition>
+    public class NotificationModule : ProviderModuleBase<NotificationResource, INotification, NotificationDefinition>
     {
-        public IndexerModule(NotificationFactory notificationFactory)
+        public NotificationModule(NotificationFactory notificationFactory)
             : base(notificationFactory, "notification")
         {
         }

@@ -13,5 +13,7 @@
         public int first_aired_utc { get; set; }
         public string url { get; set; }
         public string screen { get; set; }
+        public Ratings ratings { get; set; }
+        public Images images { get; set; }
     }
 }

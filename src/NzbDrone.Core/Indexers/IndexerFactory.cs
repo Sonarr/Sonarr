@@ -14,14 +14,12 @@ namespace NzbDrone.Core.Indexers
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
         private readonly IIndexerRepository _providerRepository;
-        private readonly IEnumerable<IIndexer> _providers;
         private readonly INewznabTestService _newznabTestService;
 
         public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, IContainer container, INewznabTestService newznabTestService, Logger logger)
             : base(providerRepository, providers, container, logger)
         {
             _providerRepository = providerRepository;
-            _providers = providers;
             _newznabTestService = newznabTestService;
         }
 

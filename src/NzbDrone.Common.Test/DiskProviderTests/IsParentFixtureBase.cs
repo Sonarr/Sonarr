@@ -6,6 +6,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.DiskProviderTests
 {
     public class IsParentFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
+    public class IsParentFixture : TestBase
     {
         private string _parent = @"C:\Test".AsOsAgnostic();
 
@@ -14,7 +15,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             var path = @"C:\Another Folder".AsOsAgnostic();
 
-            Subject.IsParent(_parent, path).Should().BeFalse();
+            DiskProvider.IsParent(_parent, path).Should().BeFalse();
         }
 
         [Test]
@@ -22,7 +23,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             var path = @"C:\Test\TV".AsOsAgnostic();
 
-            Subject.IsParent(_parent, path).Should().BeTrue();
+            DiskProvider.IsParent(_parent, path).Should().BeTrue();
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             var path = @"C:\Test\30.Rock.S01E01.Pilot.avi".AsOsAgnostic();
 
-            Subject.IsParent(_parent, path).Should().BeTrue();
+            DiskProvider.IsParent(_parent, path).Should().BeTrue();
         }
     }
 }

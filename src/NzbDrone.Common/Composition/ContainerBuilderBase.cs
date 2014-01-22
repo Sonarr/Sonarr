@@ -27,7 +27,7 @@ namespace NzbDrone.Common.Composition
             Container = new Container(new TinyIoCContainer(), _loadedTypes);
             AutoRegisterInterfaces();
             Container.Register(args);
-        }
+       }
 
         private void AutoRegisterInterfaces()
         {

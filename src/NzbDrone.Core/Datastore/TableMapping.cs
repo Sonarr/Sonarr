@@ -11,6 +11,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
@@ -35,8 +36,8 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers");
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
-            Mapper.Entity<NotificationDefinition>()
-                  .RegisterModel("Notifications");
+            Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
+            Mapper.Entity<MetadataDefinition>().RegisterModel("MetadataConsumers");
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
@@ -85,6 +86,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter(new QualityIntConverter()));
             MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<int>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<string>), new EmbeddedDocumentConverter());
         }
 
         private static void RegisterProviderSettingConverter()

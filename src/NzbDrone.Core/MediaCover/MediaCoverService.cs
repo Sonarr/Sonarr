@@ -13,6 +13,12 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.MediaCover
 {
+    public interface IMapCoversToLocal
+    {
+        void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
+        string GetCoverPath(int seriesId, MediaCoverTypes mediaCoverTypes);
+    }
+
     public class MediaCoverService :
         IHandleAsync<SeriesUpdatedEvent>,
         IHandleAsync<SeriesDeletedEvent>,
@@ -38,9 +44,30 @@ namespace NzbDrone.Core.MediaCover
             _coverRootFolder = appFolderInfo.GetMediaCoverPath();
         }
 
-        public void HandleAsync(SeriesUpdatedEvent message)
+        public string GetCoverPath(int seriesId, MediaCoverTypes coverTypes)
         {
-            EnsureCovers(message.Series);
+            return Path.Combine(GetSeriesCoverPath(seriesId), coverTypes.ToString().ToLower() + ".jpg");
+        }
+
+        public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
+        {
+            foreach (var mediaCover in covers)
+            {
+                var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
+
+                mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
+
+                if (_diskProvider.FileExists(filePath))
+                {
+                    var lastWrite = _diskProvider.GetLastFileWrite(filePath);
+                    mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
+                }
+            }
+        }
+
+        private string GetSeriesCoverPath(int seriesId)
+        {
+            return Path.Combine(_coverRootFolder, seriesId.ToString());
         }
 
         private void EnsureCovers(Series series)
@@ -75,6 +102,11 @@ namespace NzbDrone.Core.MediaCover
 
         }
 
+        public void HandleAsync(SeriesUpdatedEvent message)
+        {
+            EnsureCovers(message.Series);
+        }
+
         public void HandleAsync(SeriesDeletedEvent message)
         {
             var path = GetSeriesCoverPath(message.Series.Id);
@@ -83,36 +115,5 @@ namespace NzbDrone.Core.MediaCover
                 _diskProvider.DeleteFolder(path, true);
             }
         }
-
-        private string GetCoverPath(int seriesId, MediaCoverTypes coverTypes)
-        {
-            return Path.Combine(GetSeriesCoverPath(seriesId), coverTypes.ToString().ToLower() + ".jpg");
-        }
-
-        private string GetSeriesCoverPath(int seriesId)
-        {
-            return Path.Combine(_coverRootFolder, seriesId.ToString());
-        }
-
-        public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
-        {
-            foreach (var mediaCover in covers)
-            {
-                var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
-
-                mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
-
-                if (_diskProvider.FileExists(filePath))
-                {
-                    var lastWrite = _diskProvider.GetLastFileWrite(filePath);
-                    mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
-                }
-            }
-        }
-    }
-
-    public interface IMapCoversToLocal
-    {
-        void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
     }
 }

@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Common;
 
-
 namespace NzbDrone.Core.Tv
 {
     public class Episode : ModelBase
     {
+        public Episode()
+        {
+            Images = new List<MediaCover.MediaCover>();
+        }
+
         public const string AIR_DATE_FORMAT = "yyyy-MM-dd";
 
         public int SeriesId { get; set; }
@@ -18,12 +23,13 @@ namespace NzbDrone.Core.Tv
         public string Title { get; set; }
         public string AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
-
         public string Overview { get; set; }
         public Boolean Monitored { get; set; }
         public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
         public int SceneSeasonNumber { get; set; }
         public int SceneEpisodeNumber { get; set; }
+        public Ratings Ratings { get; set; }
+        public List<MediaCover.MediaCover> Images { get; set; }
 
         public String SeriesTitle { get; private set; }
 
