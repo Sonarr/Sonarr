@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Metadata
 {
-    public abstract class MetadataConsumerBase<TSettings> : IMetadata where TSettings : IProviderConfig, new()
+    public abstract class MetadataBase<TSettings> : IMetadata where TSettings : IProviderConfig, new()
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
         private readonly Logger _logger;
 
-        protected MetadataConsumerBase(IDiskProvider diskProvider, IHttpProvider httpProvider, Logger logger)
+        protected MetadataBase(IDiskProvider diskProvider, IHttpProvider httpProvider, Logger logger)
         {
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Metadata
         public abstract void OnSeriesUpdated(Series series);
         public abstract void OnEpisodeImport(Series series, EpisodeFile episodeFile, bool newDownload);
         public abstract void AfterRename(Series series);
+        public abstract MetadataFile FindMetadataFile(Series series, string path);
 
         protected TSettings Settings
         {

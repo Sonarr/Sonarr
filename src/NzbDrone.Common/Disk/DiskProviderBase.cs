@@ -34,10 +34,7 @@ namespace NzbDrone.Common.Disk
                 throw new NotParentException("{0} is not a child of {1}", childPath, parentPath);
             }
 
-            var parentUri = new Uri(parentPath, UriKind.Absolute);
-            var childUri = new Uri(childPath, UriKind.Absolute);
-
-            return childUri.MakeRelativeUri(parentUri).ToString();
+            return childPath.Substring(parentPath.Length).Trim(Path.DirectorySeparatorChar);
         }
 
         public static bool IsParent(string parentPath, string childPath)

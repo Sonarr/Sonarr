@@ -230,7 +230,11 @@ namespace NzbDrone.Core.MetadataSource
                     SeasonNumber = traktSeason.season
                 };
 
-                season.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Poster, traktSeason.images.poster));
+                if (traktSeason.images != null)
+                {
+                    season.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Poster, traktSeason.images.poster));
+                }
+                
                 seasons.Add(season);
             }
 

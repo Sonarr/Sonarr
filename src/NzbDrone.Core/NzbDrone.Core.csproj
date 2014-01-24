@@ -196,7 +196,7 @@
     <Compile Include="Datastore\Migration\037_add_configurable_qualities.cs" />
     <Compile Include="Datastore\Migration\038_add_on_upgrade_to_notifications.cs" />
     <Compile Include="Datastore\Migration\036_add_metadata_to_episodes_and_series.cs" />
-    <Compile Include="Datastore\Migration\037_add_metadata_consumers.cs" />
+    <Compile Include="Datastore\Migration\037_add_metadata_tables.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -319,11 +319,13 @@
     <Compile Include="Metadata\Consumers\Fake\FakeSettings.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
-    <Compile Include="Metadata\Events\EpisodeMetadataUpdated.cs" />
-    <Compile Include="Metadata\Events\SeasonMetadataUpdated.cs" />
-    <Compile Include="Metadata\Events\SeriesMetadataUpdated.cs" />
+    <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\MetadataFile.cs" />
+    <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
+    <Compile Include="Metadata\Files\MetadataFileService.cs" />
+    <Compile Include="Metadata\Files\MetadataFileUpdated.cs" />
     <Compile Include="Metadata\IMetadata.cs" />
-    <Compile Include="Metadata\MetadataConsumerBase.cs" />
+    <Compile Include="Metadata\MetadataBase.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="Metadata\MetadataDefinition.cs" />
     <Compile Include="Metadata\MetadataFactory.cs" />
@@ -696,9 +698,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Download\Clients\uTorrent\" />
-    <Folder Include="Metadata\EpisodeFiles\" />
-    <Folder Include="Metadata\Seasons\" />
-    <Folder Include="Metadata\Series\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

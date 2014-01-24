@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
@@ -10,21 +10,25 @@ using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Metadata.Events;
+using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 {
-    public class XbmcMetadata : MetadataConsumerBase<XbmcMetadataSettings>
+    public class XbmcMetadata : MetadataBase<XbmcMetadataSettings>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IMapCoversToLocal _mediaCoverService;
+        private readonly IMediaFileService _mediaFileService;
+        private readonly IMetadataFileService _metadataFileService;
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
         private readonly Logger _logger;
 
         public XbmcMetadata(IEventAggregator eventAggregator,
                             IMapCoversToLocal mediaCoverService,
+                            IMediaFileService mediaFileService,
+                            IMetadataFileService metadataFileService,
                             IDiskProvider diskProvider,
                             IHttpProvider httpProvider,
                             Logger logger)
@@ -32,10 +36,16 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         {
             _eventAggregator = eventAggregator;
             _mediaCoverService = mediaCoverService;
+            _mediaFileService = mediaFileService;
+            _metadataFileService = metadataFileService;
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
             _logger = logger;
         }
+
+        private static readonly Regex SeriesImagesRegex = new Regex(@"^(?<type>poster|banner|fanart)\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SeasonImagesRegex = new Regex(@"^season(?<season>\d{2,}|-all|-specials)-(?<type>poster|banner|fanart)\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex EpisodeImageRegex = new Regex(@"-thumb\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public override void OnSeriesUpdated(Series series)
         {
@@ -62,7 +72,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         {
             if (Settings.EpisodeMetadata)
             {
-                WriteEpisodeNfo(episodeFile);
+                WriteEpisodeNfo(series, episodeFile);
             }
 
             if (Settings.EpisodeImages)
@@ -73,9 +83,97 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
         public override void AfterRename(Series series)
         {
-            //TODO: Rename media files to match episode files
+            var episodeFiles = _mediaFileService.GetFilesBySeries(series.Id);
+            var episodeFilesMetadata = _metadataFileService.GetFilesBySeries(series.Id).Where(c => c.EpisodeFileId > 0).ToList();
 
-            throw new NotImplementedException();
+            foreach (var episodeFile in episodeFiles)
+            {
+                var metadataFiles = episodeFilesMetadata.Where(m => m.EpisodeFileId == episodeFile.Id).ToList();
+                var episodeFilenameWithoutExtension =
+                    Path.GetFileNameWithoutExtension(DiskProvider.GetRelativePath(series.Path, episodeFile.Path));
+
+                foreach (var metadataFile in metadataFiles)
+                {
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(metadataFile.RelativePath);
+                    var extension = Path.GetExtension(metadataFile.RelativePath);
+
+                    if (!fileNameWithoutExtension.Equals(episodeFilenameWithoutExtension))
+                    {
+                        var source = Path.Combine(series.Path, metadataFile.RelativePath);
+                        var destination = Path.Combine(series.Path, fileNameWithoutExtension + extension);
+
+                        _diskProvider.MoveFile(source, destination);
+                        metadataFile.RelativePath = fileNameWithoutExtension + extension;
+
+                        _eventAggregator.PublishEvent(new MetadataFileUpdated(metadataFile));
+                    }
+                }
+            }
+        }
+
+        public override MetadataFile FindMetadataFile(Series series, string path)
+        {
+            var filename = Path.GetFileName(path);
+
+            if (filename == null) return null;
+
+            var metadata = new MetadataFile
+                           {
+                               SeriesId = series.Id,
+                               Consumer = GetType().Name,
+                               RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                           };
+
+            if (SeriesImagesRegex.IsMatch(filename))
+            {
+                metadata.Type = MetadataType.SeriesImage;
+                return metadata;
+            }
+
+            var seasonMatch = SeasonImagesRegex.Match(filename);
+
+            if (seasonMatch.Success)
+            {
+                metadata.Type = MetadataType.SeasonImage;
+
+                var seasonNumber = seasonMatch.Groups["season"].Value;
+
+                if (seasonNumber.Contains("specials"))
+                {
+                    metadata.SeasonNumber = 0;
+                }
+
+                else
+                {
+                    metadata.SeasonNumber = Convert.ToInt32(seasonNumber);
+                }
+                
+                return metadata;
+            }
+
+            if (EpisodeImageRegex.IsMatch(filename))
+            {
+                metadata.Type = MetadataType.EpisodeImage;
+                return metadata;
+            }
+
+            if (filename.Equals("tvshow.nfo", StringComparison.InvariantCultureIgnoreCase))
+            {
+                metadata.Type = MetadataType.SeriesMetadata;
+                return metadata;
+            }
+
+            var parseResult = Parser.Parser.ParseTitle(filename);
+
+            if (parseResult != null &&
+                !parseResult.FullSeason &&
+                Path.GetExtension(filename) == ".nfo")
+            {
+                metadata.Type = MetadataType.EpisodeMetadata;
+                return metadata;
+            }
+
+            return null;
         }
 
         private void WriteTvShowNfo(Series series)
@@ -130,7 +228,15 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
                 _diskProvider.WriteAllText(path, doc.ToString());
 
-                _eventAggregator.PublishEvent(new SeriesMetadataUpdated(series, GetType().Name, MetadataType.SeriesMetadata, DiskProvider.GetRelativePath(series.Path, path)));
+                var metadata = new MetadataFile
+                {
+                    SeriesId = series.Id,
+                    Consumer = GetType().Name,
+                    Type = MetadataType.SeriesMetadata,
+                    RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                };
+
+                _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
             }
         }
 
@@ -149,7 +255,16 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 }
 
                 _diskProvider.CopyFile(source, destination, false);
-                _eventAggregator.PublishEvent(new SeriesMetadataUpdated(series, GetType().Name, MetadataType.SeriesImage, DiskProvider.GetRelativePath(series.Path, destination)));
+
+                var metadata = new MetadataFile
+                               {
+                                   SeriesId = series.Id,
+                                   Consumer = GetType().Name,
+                                   Type = MetadataType.SeriesImage,
+                                   RelativePath = DiskProvider.GetRelativePath(series.Path, destination)
+                               };
+
+                _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
             }
         }
 
@@ -169,12 +284,22 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     var path = Path.Combine(series.Path, filename);
                     
                     DownloadImage(series, image.Url, path);
-                    _eventAggregator.PublishEvent(new SeasonMetadataUpdated(series, season.SeasonNumber, GetType().Name, MetadataType.SeasonImage, DiskProvider.GetRelativePath(series.Path, path)));
+
+                    var metadata = new MetadataFile
+                                   {
+                                       SeriesId = series.Id,
+                                       SeasonNumber = season.SeasonNumber,
+                                       Consumer = GetType().Name,
+                                       Type = MetadataType.SeasonImage,
+                                       RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                                   };
+
+                    _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
                 }
             }
         }
 
-        private void WriteEpisodeNfo(EpisodeFile episodeFile)
+        private void WriteEpisodeNfo(Series series, EpisodeFile episodeFile)
         {
             var filename = episodeFile.Path.Replace(Path.GetExtension(episodeFile.Path), ".nfo");
 
@@ -218,15 +343,37 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             
             _logger.Debug("Saving episodedetails to: {0}", filename);
             _diskProvider.WriteAllText(filename, xmlResult.Trim(Environment.NewLine.ToCharArray()));
+
+            var metadata = new MetadataFile
+            {
+                SeriesId = series.Id,
+                EpisodeFileId = episodeFile.Id,
+                Consumer = GetType().Name,
+                Type = MetadataType.SeasonImage,
+                RelativePath = DiskProvider.GetRelativePath(series.Path, filename)
+            };
+
+            _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
         }
 
         private void WriteEpisodeImages(Series series, EpisodeFile episodeFile)
         {
             var screenshot = episodeFile.Episodes.Value.First().Images.Single(i => i.CoverType == MediaCoverTypes.Screenshot);
-            var filename = Path.ChangeExtension(episodeFile.Path, "jpg");
+
+            var filename = Path.GetFileNameWithoutExtension(episodeFile.Path) + "-thumb.jpg";
 
             DownloadImage(series, screenshot.Url, filename);
-            _eventAggregator.PublishEvent(new EpisodeMetadataUpdated(series, episodeFile, GetType().Name, MetadataType.SeasonImage, DiskProvider.GetRelativePath(series.Path, filename)));
+
+            var metadata = new MetadataFile
+                           {
+                               SeriesId = series.Id,
+                               EpisodeFileId = episodeFile.Id,
+                               Consumer = GetType().Name,
+                               Type = MetadataType.SeasonImage,
+                               RelativePath = DiskProvider.GetRelativePath(series.Path, filename)
+                           };
+
+            _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
         }
     }
 }

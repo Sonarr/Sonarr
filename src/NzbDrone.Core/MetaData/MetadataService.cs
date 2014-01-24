@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System.IO;
+using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
@@ -11,13 +13,11 @@ namespace NzbDrone.Core.Metadata
           IHandle<SeriesRenamedEvent>
     {
         private readonly IMetadataFactory _metadataFactory;
-        private readonly IMetadataRepository _metadataRepository;
         private readonly Logger _logger;
 
-        public NotificationService(IMetadataFactory metadataFactory, IMetadataRepository metadataRepository, Logger logger)
+        public NotificationService(IMetadataFactory metadataFactory, Logger logger)
         {
             _metadataFactory = metadataFactory;
-            _metadataRepository = metadataRepository;
             _logger = logger;
         }
 

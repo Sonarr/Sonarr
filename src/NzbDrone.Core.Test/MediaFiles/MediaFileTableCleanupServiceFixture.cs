@@ -36,10 +36,6 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IEpisodeService>()
                   .Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                   .Returns(_episodes);
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.IsParent(It.IsAny<String>(), It.IsAny<String>()))
-                  .Returns(true);
         }
 
         private void GivenEpisodeFiles(IEnumerable<EpisodeFile> episodeFiles)
@@ -56,13 +52,6 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IEpisodeService>()
                   .Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                   .Returns(_episodes);
-        }
-
-        private void GivenFileIsNotInSeriesFolder()
-        {
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.IsParent(It.IsAny<String>(), It.IsAny<String>()))
-                  .Returns(false);
         }
 
         [Test]
@@ -118,7 +107,6 @@ namespace NzbDrone.Core.Test.MediaFiles
                                 .Build();
 
             GivenEpisodeFiles(episodeFiles);
-            GivenFileIsNotInSeriesFolder();
 
             Subject.Execute(new CleanMediaFileDb(0));
 

@@ -7,11 +7,12 @@ using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Metadata.Consumers.Fake
 {
-    public class FakeMetadata : MetadataConsumerBase<FakeMetadataSettings>
+    public class FakeMetadata : MetadataBase<FakeMetadataSettings>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
@@ -25,19 +26,24 @@ namespace NzbDrone.Core.Metadata.Consumers.Fake
             _logger = logger;
         }
 
-        public override void OnSeriesUpdated(Series series)
+        public override void OnSeriesUpdated(Tv.Series series)
         {
             throw new NotImplementedException();
         }
 
-        public override void OnEpisodeImport(Series series, EpisodeFile episodeFile, bool newDownload)
+        public override void OnEpisodeImport(Tv.Series series, EpisodeFile episodeFile, bool newDownload)
         {
             throw new NotImplementedException();
         }
 
-        public override void AfterRename(Series series)
+        public override void AfterRename(Tv.Series series)
         {
             throw new NotImplementedException();
+        }
+
+        public override MetadataFile FindMetadataFile(Series series, string path)
+        {
+            return null;
         }
     }
 }
