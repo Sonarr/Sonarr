@@ -42,3 +42,7 @@ NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new
 ## License
 * [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
 Copyright 2010-2013 
+
+
+### Sponsers
+####JetBrains##### for providing us with free licenses
