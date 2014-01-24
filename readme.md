@@ -48,3 +48,4 @@ Copyright 2010-2013
 - [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
 	- [ReSharper](http://www.jetbrains.com/resharper/)
 	- [WebStorm](http://www.jetbrains.com/webstorm/)
+	- [TeamCity](http://www.jetbrains.com/teamcity/)
