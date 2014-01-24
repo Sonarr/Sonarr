@@ -45,4 +45,4 @@ Copyright 2010-2013
 
 
 ### Sponsers
-####JetBrains for providing us with free licenses
+####JetBrains for providing us with free licenses to their great tools
