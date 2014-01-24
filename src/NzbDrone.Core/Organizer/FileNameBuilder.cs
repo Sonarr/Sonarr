@@ -175,6 +175,8 @@ namespace NzbDrone.Core.Organizer
                     seasonFolder = ReplaceTokens(seasonFolder, tokenValues);
                 }
 
+                seasonFolder = CleanFilename(seasonFolder);
+
                 path = Path.Combine(path, seasonFolder);
             }
 
