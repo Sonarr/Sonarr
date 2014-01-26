@@ -1,4 +1,5 @@
-﻿<fieldset class="advanced-setting">
+﻿{{#if_linux}}
+<fieldset class="advanced-setting">
     <legend>Permissions</legend>
 
     <div class="control-group">
@@ -16,7 +17,6 @@
             </label>
 
             <span class="help-inline-checkbox">
-                {{LinuxOnly}}
                 <i class="icon-question-sign" title="Should chmod/chown be run when files are imported/renamed?"/>
             </span>
         </div>
@@ -28,7 +28,6 @@
         <div class="controls">
             <input type="text" name="fileChmod"/>
             <span class="help-inline">
-                {{LinuxOnly}}
                 <i class="icon-nd-form-info" title="Octal, applied to media files when imported/renamed by NzbDrone"/>
             </span>
         </div>
@@ -40,9 +39,9 @@
         <div class="controls">
             <input type="text" name="folderChmod"/>
             <span class="help-inline">
-                {{LinuxOnly}}
                 <i class="icon-nd-form-info" title="Octal, applied to series/season folders created by NzbDrone"/>
             </span>
         </div>
     </div>
 </fieldset>
+{{/if_linux}}

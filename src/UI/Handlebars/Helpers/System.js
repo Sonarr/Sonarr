@@ -19,7 +19,7 @@ define(
             if (StatusModel.get('isLinux'))
             {
                 return options.fn(this);
-        }
+            }
 
             return options.inverse(this);
         });
