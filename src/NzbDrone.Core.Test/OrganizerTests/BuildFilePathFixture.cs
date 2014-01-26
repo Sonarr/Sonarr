@@ -43,5 +43,23 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFilePath(fakeSeries, seasonNumber, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
         }
+
+        [Test]
+        public void should_clean_season_folder_when_it_contains_illegal_characters_in_series_title()
+        {
+            var filename = @"S01E05 - Episode Title";
+            var seasonNumber = 1;
+            var expectedPath = @"C:\Test\NCIS- Los Angeles\NCIS- Los Angeles Season 1\S01E05 - Episode Title.mkv";
+
+            var fakeSeries = Builder<Series>.CreateNew()
+                .With(s => s.Title = "NCIS: Los Angeles")
+                .With(s => s.Path = @"C:\Test\NCIS- Los Angeles".AsOsAgnostic())
+                .With(s => s.SeasonFolder = true)
+                .Build();
+
+            namingConfig.SeasonFolderFormat = "{Series Title} Season {season:0}";
+
+            Subject.BuildFilePath(fakeSeries, seasonNumber, filename, ".mkv").Should().Be(expectedPath.AsOsAgnostic());
+        }
     }
 }

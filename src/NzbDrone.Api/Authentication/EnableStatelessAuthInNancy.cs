@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
 using NzbDrone.Api.Extensions;
@@ -33,7 +34,9 @@ namespace NzbDrone.Api.Authentication
                 return response;
             }
 
-            var apiKey = context.Request.Headers.Authorization;
+            var authorizationHeader = context.Request.Headers.Authorization;
+            var apiKeyHeader = context.Request.Headers["X-Api-Key"].FirstOrDefault();
+            var apiKey = String.IsNullOrWhiteSpace(apiKeyHeader) ? authorizationHeader : apiKeyHeader;
             
             if (context.Request.IsApiRequest() && !ValidApiKey(apiKey) && !_authenticationService.IsAuthenticated(context))
             {

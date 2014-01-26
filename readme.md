@@ -39,6 +39,13 @@ NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new
 - Make sure `NzbDrone.Console` is set as the startup project
 
 
-## License
+### License ###
 * [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
 Copyright 2010-2013 
+
+
+### Sponsors ###
+- [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
+	- [ReSharper](http://www.jetbrains.com/resharper/)
+	- [WebStorm](http://www.jetbrains.com/webstorm/)
+	- [TeamCity](http://www.jetbrains.com/teamcity/)

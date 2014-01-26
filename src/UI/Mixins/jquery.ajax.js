@@ -25,7 +25,7 @@ define(
 
             if (xhr) {
                 xhr.headers = xhr.headers || {};
-                xhr.headers.Authorization = window.NzbDrone.ApiKey;
+                xhr.headers['X-Api-Key'] = window.NzbDrone.ApiKey;
             }
 
             return original.apply(this, arguments);
