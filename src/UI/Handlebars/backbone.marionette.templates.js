@@ -10,6 +10,7 @@ define(
         'Handlebars/Helpers/Series',
         'Handlebars/Helpers/Quality',
         'Handlebars/Helpers/System',
+        'Handlebars/Helpers/Os',
         'Handlebars/Handlebars.Debug'
     ], function (Templates) {
         return function () {

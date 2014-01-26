@@ -284,9 +284,16 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientWorkingFolders", value); }
         }
 
+        public Boolean SetPermissionsLinux
+        {
+            get { return GetValueBoolean("SetPermissionsLinux", false); }
+
+            set { SetValue("SetPermissionsLinux", value); }
+        }
+
         public String FileChmod
         {
-            get { return GetValue("FileChmod", "0755"); }
+            get { return GetValue("FileChmod", "0644"); }
 
             set { SetValue("FileChmod", value); }
         }

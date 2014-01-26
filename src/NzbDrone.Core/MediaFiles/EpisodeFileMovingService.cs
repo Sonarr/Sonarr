@@ -79,7 +79,18 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFile.Path);
             }
 
-            _diskProvider.CreateFolder(new FileInfo(destinationFilename).DirectoryName);
+            var directoryName = new FileInfo(destinationFilename).DirectoryName;
+
+            if (_diskProvider.FolderExists(directoryName))
+            {
+                _diskProvider.CreateFolder(directoryName);
+                SetFolderPermissions(directoryName);
+
+                if (!directoryName.PathEquals(series.Path))
+                {
+                    SetFolderPermissions(series.Path);
+                }
+            }
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
@@ -88,7 +99,6 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _logger.Trace("Setting last write time on series folder: {0}", series.Path);
                 _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
-                SetFolderPermissions(series.Path);
 
                 if (series.SeasonFolder)
                 {
@@ -96,7 +106,6 @@ namespace NzbDrone.Core.MediaFiles
 
                     _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
                     _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
-                    SetFolderPermissions(seasonFolder);
                 }
             }
 
@@ -136,6 +145,11 @@ namespace NzbDrone.Core.MediaFiles
 
         private void SetPermissions(string path, string permissions)
         {
+            if (!_configService.SetPermissionsLinux)
+            {
+                return;
+            }
+
             try
             {
                 _diskProvider.SetPermissions(path, permissions);

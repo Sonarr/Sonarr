@@ -61,6 +61,13 @@ namespace NzbDrone.Mono
 
                 throw new Exception("Error setting file permissions: " + error);
             }
+
+            if (Syscall.chown(path, Syscall.getuid(), Syscall.getgid()) < 0)
+            {
+                var error = Stdlib.GetLastError();
+
+                throw new Exception("Error setting file owner: " + error);
+            }
         }
 
         public override long? GetTotalSize(string path)
