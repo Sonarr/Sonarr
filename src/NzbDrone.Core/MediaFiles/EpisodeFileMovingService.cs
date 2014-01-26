@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var directoryName = new FileInfo(destinationFilename).DirectoryName;
 
-            if (_diskProvider.FolderExists(directoryName))
+            if (!_diskProvider.FolderExists(directoryName))
             {
                 _diskProvider.CreateFolder(directoryName);
                 SetFolderPermissions(directoryName);
