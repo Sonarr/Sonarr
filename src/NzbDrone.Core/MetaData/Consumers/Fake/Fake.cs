@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,17 +27,17 @@ namespace NzbDrone.Core.Metadata.Consumers.Fake
             _logger = logger;
         }
 
-        public override void OnSeriesUpdated(Tv.Series series)
+        public override void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles)
         {
             throw new NotImplementedException();
         }
 
-        public override void OnEpisodeImport(Tv.Series series, EpisodeFile episodeFile, bool newDownload)
+        public override void OnEpisodeImport(Series series, EpisodeFile episodeFile, bool newDownload)
         {
             throw new NotImplementedException();
         }
 
-        public override void AfterRename(Tv.Series series)
+        public override void AfterRename(Series series)
         {
             throw new NotImplementedException();
         }

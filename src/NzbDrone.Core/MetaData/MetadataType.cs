@@ -4,10 +4,11 @@ namespace NzbDrone.Core.Metadata
 {
     public enum MetadataType
     {
-        SeriesMetadata = 0,
-        EpisodeMetadata = 1,
-        SeriesImage = 2,
-        SeasonImage = 3,
-        EpisodeImage = 4
+        Unknown = 0,
+        SeriesMetadata = 1,
+        EpisodeMetadata = 2,
+        SeriesImage = 3,
+        SeasonImage = 4,
+        EpisodeImage = 5
     }
 }

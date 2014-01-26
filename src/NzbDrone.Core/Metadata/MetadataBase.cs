@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Metadata
 
         public ProviderDefinition Definition { get; set; }
 
-        public abstract void OnSeriesUpdated(Series series);
+        public abstract void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles);
         public abstract void OnEpisodeImport(Series series, EpisodeFile episodeFile, bool newDownload);
         public abstract void AfterRename(Series series);
         public abstract MetadataFile FindMetadataFile(Series series, string path);

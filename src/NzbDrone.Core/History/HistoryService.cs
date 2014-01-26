@@ -120,7 +120,7 @@ namespace NzbDrone.Core.History
 
         public void Handle(EpisodeImportedEvent message)
         {
-            if (message.NewDownload)
+            if (!message.NewDownload)
             {
                 return;
             }

@@ -6,6 +6,7 @@ using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Files;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Metadata
@@ -14,19 +15,19 @@ namespace NzbDrone.Core.Metadata
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMetadataFileService _metadataFileService;
-        private readonly IMediaFileService _mediaFileService;
+        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
         private readonly List<IMetadata> _consumers;
 
         public ExistingMetadataService(IDiskProvider diskProvider,
                                        IEnumerable<IMetadata> consumers,
                                        IMetadataFileService metadataFileService,
-                                       IMediaFileService mediaFileService,
+                                       IParsingService parsingService,
                                        Logger logger)
         {
             _diskProvider = diskProvider;
             _metadataFileService = metadataFileService;
-            _mediaFileService = mediaFileService;
+            _parsingService = parsingService;
             _logger = logger;
             _consumers = consumers.ToList();
         }
@@ -52,14 +53,21 @@ namespace NzbDrone.Core.Metadata
                     if (metadata.Type == MetadataType.EpisodeImage ||
                         metadata.Type == MetadataType.EpisodeMetadata)
                     {
-                        //TODO: replace this with parser lookup, otherwise its impossible to link thumbs without knowing too much about the consumers
-                        //We might want to resort to parsing the file name and
-                        //then finding it via episodes incase the file names get out of sync
-                        var episodeFile = _mediaFileService.FindByPath(possibleMetadataFile, false);
+                        var localEpisode = _parsingService.GetEpisodes(possibleMetadataFile, message.Series, false);
 
-                        if (episodeFile == null) break;
+                        if (localEpisode == null)
+                        {
+                            _logger.Trace("Cannot find related episodes for: {0}", possibleMetadataFile);
+                            break;
+                        }
 
-                        metadata.EpisodeFileId = episodeFile.Id;
+                        if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
+                        {
+                            _logger.Trace("Metadata file: {0} does not match existing files.", possibleMetadataFile);
+                            break;
+                        }
+
+                        metadata.EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId;
                     }
 
                     _metadataFileService.Upsert(metadata);

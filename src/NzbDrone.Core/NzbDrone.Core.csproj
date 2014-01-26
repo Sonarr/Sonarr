@@ -261,9 +261,10 @@
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
-    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
@@ -296,6 +297,7 @@
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
     <Compile Include="Lifecycle\Commands\RestartCommand.cs" />
     <Compile Include="Lifecycle\LifecycleService.cs" />
+    <Compile Include="MediaCover\MediaCoversUpdatedEvent.cs" />
     <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />

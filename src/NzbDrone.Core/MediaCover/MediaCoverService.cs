@@ -17,6 +17,7 @@ namespace NzbDrone.Core.MediaCover
     {
         void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
         string GetCoverPath(int seriesId, MediaCoverTypes mediaCoverTypes);
+
     }
 
     public class MediaCoverService :
@@ -28,17 +29,24 @@ namespace NzbDrone.Core.MediaCover
         private readonly IDiskProvider _diskProvider;
         private readonly ICoverExistsSpecification _coverExistsSpecification;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(IHttpProvider httpProvider, IDiskProvider diskProvider, IAppFolderInfo appFolderInfo,
-            ICoverExistsSpecification coverExistsSpecification, IConfigFileProvider configFileProvider, Logger logger)
+        public MediaCoverService(IHttpProvider httpProvider,
+                                 IDiskProvider diskProvider,
+                                 IAppFolderInfo appFolderInfo,
+                                 ICoverExistsSpecification coverExistsSpecification, 
+                                 IConfigFileProvider configFileProvider, 
+                                 IEventAggregator eventAggregator,
+                                 Logger logger)
         {
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
             _coverExistsSpecification = coverExistsSpecification;
             _configFileProvider = configFileProvider;
+            _eventAggregator = eventAggregator;
             _logger = logger;
 
             _coverRootFolder = appFolderInfo.GetMediaCoverPath();
@@ -99,12 +107,12 @@ namespace NzbDrone.Core.MediaCover
 
             _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.Url);
             _httpProvider.DownloadFile(cover.Url, fileName);
-
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)
         {
             EnsureCovers(message.Series);
+            _eventAggregator.PublishEvent(new MediaCoversUpdatedEvent(message.Series));
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,24 +48,24 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         private static readonly Regex SeasonImagesRegex = new Regex(@"^season(?<season>\d{2,}|-all|-specials)-(?<type>poster|banner|fanart)\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex EpisodeImageRegex = new Regex(@"-thumb\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public override void OnSeriesUpdated(Series series)
+        public override void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles)
         {
             if (Settings.SeriesMetadata)
             {
                 EnsureFolder(series.Path);
-                WriteTvShowNfo(series);
+                WriteTvShowNfo(series, existingMetadataFiles);
             }
 
             if (Settings.SeriesImages)
             {
                 EnsureFolder(series.Path);
-                WriteSeriesImages(series);
+                WriteSeriesImages(series, existingMetadataFiles);
             }
 
             if (Settings.SeasonImages)
             {
                 EnsureFolder(series.Path);
-                WriteSeasonImages(series);
+                WriteSeasonImages(series, existingMetadataFiles);
             }
         }
 
@@ -176,7 +177,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             return null;
         }
 
-        private void WriteTvShowNfo(Series series)
+        private void WriteTvShowNfo(Series series, List<MetadataFile> existingMetadataFiles)
         {
             _logger.Trace("Generating tvshow.nfo for: {0}", series.Title);
             var sb = new StringBuilder();
@@ -228,19 +229,20 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
                 _diskProvider.WriteAllText(path, doc.ToString());
 
-                var metadata = new MetadataFile
-                {
-                    SeriesId = series.Id,
-                    Consumer = GetType().Name,
-                    Type = MetadataType.SeriesMetadata,
-                    RelativePath = DiskProvider.GetRelativePath(series.Path, path)
-                };
+                var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesMetadata) ??
+                               new MetadataFile
+                               {
+                                   SeriesId = series.Id,
+                                   Consumer = GetType().Name,
+                                   Type = MetadataType.SeriesMetadata,
+                                   RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                               };
 
                 _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
             }
         }
 
-        private void WriteSeriesImages(Series series)
+        private void WriteSeriesImages(Series series, List<MetadataFile> existingMetadataFiles)
         {
             foreach (var image in series.Images)
             {
@@ -256,7 +258,8 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
                 _diskProvider.CopyFile(source, destination, false);
 
-                var metadata = new MetadataFile
+                var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage) ??
+                               new MetadataFile
                                {
                                    SeriesId = series.Id,
                                    Consumer = GetType().Name,
@@ -268,7 +271,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             }
         }
 
-        private void WriteSeasonImages(Series series)
+        private void WriteSeasonImages(Series series, List<MetadataFile> existingMetadataFiles)
         {
             foreach (var season in series.Seasons)
             {
@@ -285,12 +288,14 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     
                     DownloadImage(series, image.Url, path);
 
-                    var metadata = new MetadataFile
+                    var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeasonImage &&
+                                                                              c.SeasonNumber == season.SeasonNumber) ??
+                                   new MetadataFile
                                    {
                                        SeriesId = series.Id,
                                        SeasonNumber = season.SeasonNumber,
                                        Consumer = GetType().Name,
-                                       Type = MetadataType.SeasonImage,
+                                       Type = MetadataType.SeriesMetadata,
                                        RelativePath = DiskProvider.GetRelativePath(series.Path, path)
                                    };
 
@@ -327,11 +332,11 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     details.Add(new XElement("displayepisode", episode.EpisodeNumber));
                     details.Add(new XElement("thumb", episode.Images.Single(i => i.CoverType == MediaCoverTypes.Screenshot).Url));
                     details.Add(new XElement("watched", "false"));
-//                    details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
-//                    details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
                     details.Add(new XElement("rating", episode.Ratings.Percentage));
 
-                    //Todo: get guest stars, will need trakt to have them
+                    //Todo: get guest stars, writer and director
+                    //details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
+                    //details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
 
                     doc.Add(details);
                     doc.Save(xw);
@@ -360,7 +365,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         {
             var screenshot = episodeFile.Episodes.Value.First().Images.Single(i => i.CoverType == MediaCoverTypes.Screenshot);
 
-            var filename = Path.GetFileNameWithoutExtension(episodeFile.Path) + "-thumb.jpg";
+            var filename = Path.ChangeExtension(episodeFile.Path, "").Trim('.') + "-thumb.jpg";
 
             DownloadImage(series, screenshot.Url, filename);
 
