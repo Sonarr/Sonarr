@@ -33,6 +33,7 @@ namespace NzbDrone.Core.MediaFiles
                 { ".asf", Quality.SDTV },
                 { ".asx", Quality.SDTV },
                 { ".ogm", Quality.SDTV },
+                { ".ogv", Quality.SDTV },
                 { ".m2v", Quality.SDTV },
                 { ".avi", Quality.SDTV },
                 { ".bin", Quality.SDTV },
