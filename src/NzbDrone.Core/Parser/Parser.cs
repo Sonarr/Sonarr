@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
-                        Debug.WriteLine(regex);
+                        Logger.Trace(regex);
                         try
                         {
                             var result = ParseMatchCollection(match);

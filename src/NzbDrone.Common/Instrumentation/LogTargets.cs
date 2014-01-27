@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using NLog;
 using NLog.Config;
@@ -14,6 +15,11 @@ namespace NzbDrone.Common.Instrumentation
             var appFolderInfo = new AppFolderInfo(startupContext);
 
             LogManager.Configuration = new LoggingConfiguration();
+
+            if (Debugger.IsAttached)
+            {
+                RegisterDebugger();
+            }
 
             RegisterExceptron();
 
@@ -34,6 +40,18 @@ namespace NzbDrone.Common.Instrumentation
 
             LogManager.ReconfigExistingLoggers();
         }
+
+        private static void RegisterDebugger()
+        {
+            DebuggerTarget target = new DebuggerTarget();
+            target.Name = "debuggerLogger";
+            target.Layout = "[${level}] [${threadid}] ${logger}: ${message} ${onexception:inner=${newline}${newline}${exception:format=ToString}${newline}}";
+
+            var loggingRule = new LoggingRule("*", LogLevel.Trace, target);
+            LogManager.Configuration.AddTarget("debugger", target);
+            LogManager.Configuration.LoggingRules.Add(loggingRule);
+        }
+
 
         private static void RegisterConsole()
         {
