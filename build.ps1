@@ -4,6 +4,7 @@ $outputFolderMono = '.\_output_mono'
 $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
 $sourceFolder = '.\src'
+$updateFolder = $outputFolder + '\NzbDrone.Update'
 
 Function Build()
 {
@@ -178,6 +179,9 @@ Function CleanupWindowsPackage()
 {
     Write-Host Removing NzbDrone.Mono
     get-childitem $outputFolder -File -Filter NzbDrone.Mono.* -Recurse | foreach ($_) {remove-item $_.fullname}
+
+    Write-Host Adding NzbDrone.Windows to UpdatePackage
+    Copy-Item $outputFolder\* $updateFolder -Filter NzbDrone.Windows.*
 }
 
 Build
