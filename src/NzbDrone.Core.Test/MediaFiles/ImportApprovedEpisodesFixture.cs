@@ -123,15 +123,6 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_not_trigger_EpisodeImportedEvent_for_existing_files()
-        {
-            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() });
-
-            Mocker.GetMock<IEventAggregator>()
-                .Verify(v => v.PublishEvent(It.IsAny<EpisodeImportedEvent>()), Times.Never());
-        }
-
-        [Test]
         public void should_import_larger_files_first()
         {
             var fileDecision = _approvedDecisions.First();

@@ -12,7 +12,6 @@ namespace NzbDrone.Common.Disk
 {
     public abstract class DiskProviderBase : IDiskProvider
     {
-        void CopyFile(string source, string destination, bool overwrite = false);
         enum TransferAction
         {
             Copy,
@@ -26,7 +25,6 @@ namespace NzbDrone.Common.Disk
         public abstract void SetPermissions(string path, string mask, string user, string group);
         public abstract long? GetTotalSize(string path);
 
-        //TODO: this needs tests
         public static string GetRelativePath(string parentPath, string childPath)
         {
             if (!IsParent(parentPath, childPath))
@@ -270,11 +268,6 @@ namespace NzbDrone.Common.Disk
 
             RemoveReadOnly(source);
             File.Move(source, destination);
-        }
-
-        public void CopyFile(string source, string destination, bool overwrite = false)
-        {
-            File.Copy(source, destination, overwrite);
         }
 
         public void DeleteFolder(string path, bool recursive)

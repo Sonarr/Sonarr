@@ -48,7 +48,7 @@ namespace NzbDrone.Core.MediaFiles
                         continue;
                     }
 
-                    if (!DiskProvider.IsParent(series.Path, episodeFile.Path))
+                    if (!DiskProviderBase.IsParent(series.Path, episodeFile.Path))
                     {
                         _logger.Trace("File [{0}] does not belong to this series, removing from db", episodeFile.Path);
                         _mediaFileService.Delete(episodeFile);

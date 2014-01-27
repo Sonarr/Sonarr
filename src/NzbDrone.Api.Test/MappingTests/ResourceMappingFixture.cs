@@ -50,7 +50,6 @@ namespace NzbDrone.Api.Test.MappingTests
             MappingValidation.ValidateMapping(modelType, resourceType);
         }
 
-
         [Test]
         public void should_map_lay_loaded_values_should_not_be_inject_if_not_loaded()
         {

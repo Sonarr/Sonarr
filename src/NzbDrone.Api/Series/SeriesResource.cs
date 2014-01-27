@@ -59,5 +59,7 @@ namespace NzbDrone.Api.Series
         public String ImdbId { get; set; }
         public String TitleSlug { get; set; }
         public String RootFolderPath { get; set; }
+        public String Certification { get; set; }
+        public List<String> Genres { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
@@ -91,7 +92,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             {
                 var metadataFiles = episodeFilesMetadata.Where(m => m.EpisodeFileId == episodeFile.Id).ToList();
                 var episodeFilenameWithoutExtension =
-                    Path.GetFileNameWithoutExtension(DiskProvider.GetRelativePath(series.Path, episodeFile.Path));
+                    Path.GetFileNameWithoutExtension(DiskProviderBase.GetRelativePath(series.Path, episodeFile.Path));
 
                 foreach (var metadataFile in metadataFiles)
                 {
@@ -122,7 +123,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                            {
                                SeriesId = series.Id,
                                Consumer = GetType().Name,
-                               RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                               RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
                            };
 
             if (SeriesImagesRegex.IsMatch(filename))
@@ -235,7 +236,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                                    SeriesId = series.Id,
                                    Consumer = GetType().Name,
                                    Type = MetadataType.SeriesMetadata,
-                                   RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                                   RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
                                };
 
                 _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
@@ -264,7 +265,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                                    SeriesId = series.Id,
                                    Consumer = GetType().Name,
                                    Type = MetadataType.SeriesImage,
-                                   RelativePath = DiskProvider.GetRelativePath(series.Path, destination)
+                                   RelativePath = DiskProviderBase.GetRelativePath(series.Path, destination)
                                };
 
                 _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
@@ -296,7 +297,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                                        SeasonNumber = season.SeasonNumber,
                                        Consumer = GetType().Name,
                                        Type = MetadataType.SeriesMetadata,
-                                       RelativePath = DiskProvider.GetRelativePath(series.Path, path)
+                                       RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
                                    };
 
                     _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
@@ -355,7 +356,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 EpisodeFileId = episodeFile.Id,
                 Consumer = GetType().Name,
                 Type = MetadataType.SeasonImage,
-                RelativePath = DiskProvider.GetRelativePath(series.Path, filename)
+                RelativePath = DiskProviderBase.GetRelativePath(series.Path, filename)
             };
 
             _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
@@ -375,7 +376,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                                EpisodeFileId = episodeFile.Id,
                                Consumer = GetType().Name,
                                Type = MetadataType.SeasonImage,
-                               RelativePath = DiskProvider.GetRelativePath(series.Path, filename)
+                               RelativePath = DiskProviderBase.GetRelativePath(series.Path, filename)
                            };
 
             _eventAggregator.PublishEvent(new MetadataFileUpdated(metadata));
