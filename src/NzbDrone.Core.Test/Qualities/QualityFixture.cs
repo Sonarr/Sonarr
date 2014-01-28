@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -42,81 +44,21 @@ namespace NzbDrone.Core.Test.Qualities
             i.Should().Be(expected);
         }
 
-
-        [Test]
-        public void Icomparer_greater_test()
+        public static List<Quality> GetDefaultQualities()
         {
-            var first = Quality.DVD;
-            var second = Quality.Bluray1080p;
-
-            second.Should().BeGreaterThan(first);
-        }
-
-        [Test]
-        public void Icomparer_lesser()
-        {
-            var first = Quality.DVD;
-            var second = Quality.Bluray1080p;
-
-            first.Should().BeLessThan(second);
-        }
-
-        [Test]
-        public void equal_operand()
-        {
-            var first = Quality.Bluray1080p;
-            var second = Quality.Bluray1080p;
-
-            (first == second).Should().BeTrue();
-            (first >= second).Should().BeTrue();
-            (first <= second).Should().BeTrue();
-        }
-
-        [Test]
-        public void equal_operand_false()
-        {
-            var first = Quality.Bluray1080p;
-            var second = Quality.Unknown;
-
-            (first == second).Should().BeFalse();
-        }
-
-        [Test]
-        public void not_equal_operand()
-        {
-            var first = Quality.Bluray1080p;
-            var second = Quality.Bluray1080p;
-
-            (first != second).Should().BeFalse();
-        }
-
-        [Test]
-        public void not_equal_operand_false()
-        {
-            var first = Quality.Bluray1080p;
-            var second = Quality.Unknown;
-
-            (first != second).Should().BeTrue();
-        }
-
-        [Test]
-        public void greater_operand()
-        {
-            var first = Quality.DVD;
-            var second = Quality.Bluray1080p;
-
-            (first < second).Should().BeTrue();
-            (first <= second).Should().BeTrue();
-        }
-
-        [Test]
-        public void lesser_operand()
-        {
-            var first = Quality.DVD;
-            var second = Quality.Bluray1080p;
-
-            (second > first).Should().BeTrue();
-            (second >= first).Should().BeTrue();
+            return new List<Quality>
+            {
+                Quality.SDTV,
+                Quality.WEBDL480p,
+                Quality.DVD,
+                Quality.HDTV720p,
+                Quality.HDTV1080p,
+                Quality.RAWHD,
+                Quality.WEBDL720p,
+                Quality.Bluray720p,
+                Quality.WEBDL1080p,
+                Quality.Bluray1080p
+            };
         }
     }
 }

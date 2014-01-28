@@ -107,7 +107,6 @@ namespace NzbDrone.Api.Test.MappingTests
         [Test]
         public void should_map_qualityprofile()
         {
-
             var profileResource = new QualityProfileResource
                 {
                     Allowed = Builder<QualityResource>.CreateListOfSize(1).Build().ToList(),

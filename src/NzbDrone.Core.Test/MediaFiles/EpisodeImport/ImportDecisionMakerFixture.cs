@@ -13,6 +13,7 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using FizzWare.NBuilder;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
@@ -63,7 +64,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _fail3.Setup(c => c.RejectionReason).Returns("_fail3");
 
             _videoFiles = new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
-            _series = new Series();
+            _series = Builder<Series>.CreateNew()
+                                     .With(e => e.QualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .Build();
+
             _quality = new QualityModel(Quality.DVD);
             _localEpisode = new LocalEpisode
             { 
@@ -80,7 +84,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Mocker.GetMock<IMediaFileService>()
                 .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<int>()))
                 .Returns(_videoFiles);
-
         }
 
         private void GivenSpecifications(params Mock<IImportDecisionEngineSpecification>[] mocks)
@@ -162,7 +165,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                 .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<int>()))
                 .Returns(_videoFiles);
 
-            Subject.GetImportDecisions(_videoFiles, new Series(), false);
+            Subject.GetImportDecisions(_videoFiles, _series, false);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(c => c.GetEpisodes(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
@@ -176,7 +179,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenSpecifications(_pass1, _pass2, _pass3);
             var expectedQuality = QualityParser.ParseQuality(_videoFiles.Single());
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series(), false, null);
+            var result = Subject.GetImportDecisions(_videoFiles, _series, false, null);
 
             result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
         }
@@ -187,7 +190,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenSpecifications(_pass1, _pass2, _pass3);
             var expectedQuality = QualityParser.ParseQuality(_videoFiles.Single());
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series(), false, new QualityModel(Quality.SDTV));
+            var result = Subject.GetImportDecisions(_videoFiles, _series, false, new QualityModel(Quality.SDTV));
 
             result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
         }
@@ -198,7 +201,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenSpecifications(_pass1, _pass2, _pass3);
             var expectedQuality = new QualityModel(Quality.Bluray1080p);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series(), false, expectedQuality);
+            var result = Subject.GetImportDecisions(_videoFiles, _series, false, expectedQuality);
 
             result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
         }

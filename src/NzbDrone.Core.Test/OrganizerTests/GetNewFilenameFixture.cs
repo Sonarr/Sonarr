@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -50,6 +51,10 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .Build();
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "DRONE" };
+            
+            Mocker.GetMock<IQualityDefinitionService>()
+                .Setup(v => v.Get(Moq.It.IsAny<Quality>()))
+                .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
         }
 
         private void GivenProper()

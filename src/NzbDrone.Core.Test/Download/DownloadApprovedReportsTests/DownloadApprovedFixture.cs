@@ -37,6 +37,10 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             remoteEpisode.Release = new ReleaseInfo();
             remoteEpisode.Release.PublishDate = DateTime.UtcNow;
 
+            remoteEpisode.Series = Builder<Series>.CreateNew()
+                .With(e => e.QualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() })
+                .Build();
+
             return remoteEpisode;
         }
 

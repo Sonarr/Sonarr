@@ -1,6 +1,7 @@
 ﻿'use strict';
 define(
     [
+        'jquery',
         'vent',
         'marionette',
         'backbone',
@@ -17,7 +18,8 @@ define(
         'Settings/General/GeneralView',
         'Shared/LoadingView',
         'Config'
-    ], function (vent,
+    ], function ($,
+                 vent,
                  Marionette,
                  Backbone,
                  SettingsModel,
@@ -196,7 +198,7 @@ define(
                 this.ui.advancedSettings.prop('checked', checked);
 
                 if (checked) {
-                    this.$el.addClass('show-advanced-settings');
+                    $('body').addClass('show-advanced-settings');
                 }
             },
 
@@ -205,11 +207,11 @@ define(
                 Config.setValue('advancedSettings', checked);
 
                 if (checked) {
-                    this.$el.addClass('show-advanced-settings');
+                    $('body').addClass('show-advanced-settings');
                 }
 
                 else {
-                    this.$el.removeClass('show-advanced-settings');
+                    $('body').removeClass('show-advanced-settings');
                 }
             }
         });

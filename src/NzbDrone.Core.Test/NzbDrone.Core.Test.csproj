@@ -182,7 +182,7 @@
     <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
     <Compile Include="ParserTests\SeriesTitleInfoFixture.cs" />
     <Compile Include="Providers\XemProxyFixture.cs" />
-    <Compile Include="Qualities\QualitySizeRepositoryFixture.cs" />
+    <Compile Include="Qualities\QualityDefinitionRepositoryFixture.cs" />
     <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
     <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="Qualities\QualityFixture.cs" />
@@ -217,14 +217,14 @@
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
-    <Compile Include="Qualities\QualitySizeServiceFixture.cs" />
+    <Compile Include="Qualities\QualityDefinitionServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="OrganizerTests\GetNewFilenameFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
-    <Compile Include="TvTests\QualityModelFixture.cs" />
+    <Compile Include="Qualities\QualityModelComparerFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTest.cs" />

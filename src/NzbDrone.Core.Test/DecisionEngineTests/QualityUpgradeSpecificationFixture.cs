@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Qualities;
@@ -23,6 +24,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.SDTV, false, Quality.SDTV, true, Quality.SDTV, true },
             new object[] { Quality.WEBDL1080p, false, Quality.WEBDL1080p, false, Quality.WEBDL1080p, false }
         };
+        
+        [SetUp]
+        public void Setup()
+        {
+
+        }
 
         private void GivenAutoDownloadPropers(bool autoDownloadPropers)
         {
@@ -36,7 +43,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(true);
 
-            Subject.IsUpgradable(new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
+            var qualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() };
+
+            Subject.IsUpgradable(qualityProfile, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
                     .Should().Be(expected);
         }
 
@@ -45,8 +54,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(false);
 
-            Subject.IsUpgradable(new QualityModel(Quality.DVD, true),
-                                 new QualityModel(Quality.DVD, false)).Should().BeFalse();
+            var qualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() };
+
+            Subject.IsUpgradable(qualityProfile, new QualityModel(Quality.DVD, true), new QualityModel(Quality.DVD, false))
+                    .Should().BeFalse();
         }
     }
 }

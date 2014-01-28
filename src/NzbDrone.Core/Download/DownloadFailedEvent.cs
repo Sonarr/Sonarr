@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download

@@ -4,6 +4,7 @@ using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.History

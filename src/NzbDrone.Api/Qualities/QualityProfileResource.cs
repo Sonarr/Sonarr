@@ -14,7 +14,8 @@ namespace NzbDrone.Api.Qualities
 
     public class QualityResource : RestResource
     {
-        public Int32 Weight { get; set; }
         public String Name { get; set; }
+        
+        public Int32 Weight { get; set; }
     }
 }

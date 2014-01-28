@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles

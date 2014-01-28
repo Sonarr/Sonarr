@@ -26,7 +26,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            _series = Builder<Series>.CreateNew().Build();
+            _series = Builder<Series>.CreateNew()
+                                     .With(e => e.QualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .Build();
 
             _episode = Builder<Episode>.CreateNew()
                                        .With(e => e.SeriesId = _series.Id)

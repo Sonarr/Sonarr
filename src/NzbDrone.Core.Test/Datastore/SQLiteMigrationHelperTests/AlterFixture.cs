@@ -81,25 +81,25 @@ namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
         [Test]
         public void should_read_existing_indexes()
         {
-            var indexes = _subject.GetIndexes("QualitySizes");
+            var indexes = _subject.GetIndexes("QualityDefinitions");
 
             indexes.Should().NotBeEmpty();
 
             indexes.Should().OnlyContain(c => c != null);
             indexes.Should().OnlyContain(c => !string.IsNullOrWhiteSpace(c.Column));
-            indexes.Should().OnlyContain(c => c.Table == "QualitySizes");
+            indexes.Should().OnlyContain(c => c.Table == "QualityDefinitions");
             indexes.Should().OnlyContain(c => c.Unique);
         }
 
         [Test]
         public void should_add_indexes_when_creating_new_table()
         {
-            var columns = _subject.GetColumns("QualitySizes");
-            var indexes = _subject.GetIndexes("QualitySizes");
+            var columns = _subject.GetColumns("QualityDefinitions");
+            var indexes = _subject.GetIndexes("QualityDefinitions");
 
-            _subject.CreateTable("QualityB", columns.Values, indexes);
+            _subject.CreateTable("QualityDefinitionsB", columns.Values, indexes);
 
-            var newIndexes = _subject.GetIndexes("QualityB");
+            var newIndexes = _subject.GetIndexes("QualityDefinitionsB");
 
             newIndexes.Should().HaveSameCount(indexes);
             newIndexes.Select(c=>c.Column).Should().BeEquivalentTo(indexes.Select(c=>c.Column));

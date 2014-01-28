@@ -2,6 +2,8 @@
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 using NzbDrone.Core.Qualities;
+using System.Collections.Generic;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
@@ -26,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public object ToDB(object clrValue)
         {
-            if(clrValue == null) return 0;
+            if(clrValue == DBNull.Value) return 0;
 
             if(clrValue as Quality == null)
             {
