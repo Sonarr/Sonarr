@@ -12,7 +12,7 @@ define(
     ], function (vent, Marionette, Backbone, BackboneSortableCollectionView, EditQualityProfileItemView, AsModelBoundView, AsValidatedView, _) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/Quality/Profile/EditQualityProfileTemplate',
+            template: 'Settings/Quality/Profile/EditQualityProfileViewTemplate',
 
             ui: {
                 available: '.x-available-list',
