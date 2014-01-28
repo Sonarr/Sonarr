@@ -36,16 +36,14 @@
   }
 }
 
-ul.x-available-list, ul.x-allowed-list {
-  min-height: 100px;
-
+ul.available-list, ul.allowed-list {
   .user-select(none);
-  
+
+  min-height: 100px;
   margin: 0;
   padding: 0;
   list-style-type: none;
   outline: none;
-  cursor: pointer;
   
   li {
     margin: 2px;
@@ -54,56 +52,62 @@ ul.x-available-list, ul.x-allowed-list {
     border: 1px solid #AAA;
     border-radius: 4px;   /* may need vendor varients */
     background: #FAFAFA;
+    cursor: default;
     
     &:hover {
       border-color: #888;
       background: #EEE;
     }
     
-    .x-drag-handle, .x-moveleft-handle, .x-moveright-handle {
+    .drag-handle, .move-left-handle, .move-right-handle {
       opacity: 0.0;
       line-height: 20px;
+      cursor: pointer;
+    }
+
+    .move-handle {
+      cursor: pointer;
     }
   }
 }
 
-ul.x-available-list li {
-  .x-moveright-handle {
+ul.available-list li {
+  .move-right-handle {
     opacity: 0.2;
   }
   
-  .x-drag-handle {
+  .drag-handle {
     display: none;
   }
   
-  &:hover .x-moveright-handle {
+  &:hover .move-right-handle {
     opacity: 1.0;
   }
 }
 
-ul.x-allowed-list li {
-  .x-drag-handle, .x-moveleft-handle {
+ul.allowed-list li {
+  .drag-handle, .move-left-handle {
     opacity: 0.2;
   }
   
-  .x-drag-handle:hover {
+  .drag-handle:hover {
     opacity: 1.0;
     cursor: pointer;
   }
   
-  &:hover .x-moveleft-handle {
+  &:hover .move-left-handle {
     opacity: 1.0;
   }
 }
 
 #quality-definition-list {
 
-  .x-header .row {
+  .quality-header .row {
     font-weight: bold;
     line-height: 40px;
   }
 
-  .x-rows .row {
+  .rows .row {
     line-height: 30px;
     border-top: 1px solid #ddd;
     vertical-align: middle;

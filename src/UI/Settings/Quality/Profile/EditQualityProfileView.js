@@ -4,7 +4,7 @@ define(
         'vent',
         'marionette',
         'backbone',
-        'backbone.collectionview',
+        'Settings/Quality/Profile/QualitySortableCollectionView',
         'Settings/Quality/Profile/EditQualityProfileItemView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
@@ -21,8 +21,7 @@ define(
             },
             
             events: {
-                'click .x-save'             : '_saveQualityProfile',
-                //'click .x-qualityitem'      : '_moveQuality',
+                'click .x-save': '_saveQualityProfile'
             },
 
             initialize: function (options) {
@@ -36,30 +35,35 @@ define(
             },
             
             onRender: function() {
-                var listViewAvailable = new BackboneSortableCollectionView( {
-                    el        : this.ui.available,
-                    modelView : EditQualityProfileItemView,
-                    selectable: false,
-                    sortable  : false,
-                    collection: this.availableCollection
+                var listViewAvailable = new BackboneSortableCollectionView({
+                        el        : this.ui.available,
+                        modelView : EditQualityProfileItemView,
+                        selectable: false,
+                        sortable  : false,
+                        collection: this.availableCollection
                     });
-                listViewAvailable.render();
                   
-                var listViewAllowed = new BackboneSortableCollectionView( {
-                    el        : this.ui.allowed,
-                    modelView : EditQualityProfileItemView,
-                    selectable: false,
-                    sortable  : true,
-                    sortableOptions : {
-                        handle: ".x-drag-handle"
-                    },
-                    collection : this.allowedCollection
-                  } );
+                var listViewAllowed = new BackboneSortableCollectionView({
+                        el        : this.ui.allowed,
+                        modelView : EditQualityProfileItemView,
+                        selectable: false,
+                        sortable  : true,
+                        sortableOptions : {
+                            handle: '.x-drag-handle'
+                        },
+                        collection : this.allowedCollection
+                    });
+
+                listViewAvailable.render();
                 listViewAllowed.render();
                 
-                this.listenTo(listViewAvailable, "doubleClick", this._moveQuality);
-                this.listenTo(listViewAllowed, "doubleClick", this._moveQuality);
-                this.listenTo(listViewAllowed, "sortStop", this._updateModel);
+                this.listenTo(listViewAvailable, 'doubleClick', this._moveQuality);
+                this.listenTo(listViewAllowed, 'doubleClick', this._moveQuality);
+
+                this.listenTo(listViewAvailable, 'moveClicked', this._moveQuality);
+                this.listenTo(listViewAllowed, 'moveClicked', this._moveQuality);
+
+                this.listenTo(listViewAllowed, 'sortStop', this._updateModel);
             },
 
             _moveQuality: function (event) {
