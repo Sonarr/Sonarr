@@ -18,9 +18,9 @@
             <label class="control-label">Cutoff</label>
             <div class="controls">
                 <select class="x-cutoff" name="cutoff.id" validation-name="cutoff">
-                    {{#each allowed}}
+                    {{#eachReverse allowed}}
                         <option value="{{id}}">{{name}}</option>
-                    {{/each}}
+                    {{/eachReverse}}
                 </select>
                 <span class="help-inline">
                     <i class="icon-question-sign" title="Once this quality is reached NzbDrone will no longer download episodes"/>

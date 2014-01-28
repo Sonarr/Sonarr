@@ -31,7 +31,10 @@ define(
                 this.availableCollection.comparator = function (model) { return -model.get('weight'); };
                 this.availableCollection.sort();
                                 
-                this.allowedCollection = new Backbone.Collection(this.model.get('allowed').reverse());
+                this.allowedCollection = new Backbone.Collection(this.model.get('allowed'));
+                this.allowedCollection.comparator = function (model) { return -model.get('weight'); };
+                this.allowedCollection.sort();
+                this.allowedCollection.comparator = undefined;
             },
             
             onRender: function() {
