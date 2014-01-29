@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(true);
 
-            var qualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() };
+            var qualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() };
 
             Subject.IsUpgradable(qualityProfile, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
                     .Should().Be(expected);
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(false);
 
-            var qualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() };
+            var qualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() };
 
             Subject.IsUpgradable(qualityProfile, new QualityModel(Quality.DVD, true), new QualityModel(Quality.DVD, false))
                     .Should().BeFalse();

@@ -6,6 +6,7 @@ using System;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Qualities;
 using System.Collections.Generic;
+using NzbDrone.Core.Datastore.Converters;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -14,6 +15,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
+            Alter.Table("QualityProfiles").AddColumn("Items").AsString().Nullable();
+
             Execute.WithConnection(ConvertQualityProfiles);
 
             Execute.WithConnection(ConvertQualityModels);
@@ -21,7 +24,7 @@ namespace NzbDrone.Core.Datastore.Migration
         
         private void ConvertQualityProfiles(IDbConnection conn, IDbTransaction tran)
         {
-            var qualityListConverter = new NzbDrone.Core.Datastore.Converters.QualityListConverter();
+            var qualityProfileItemConverter = new EmbeddedDocumentConverter(new QualityIntConverter());
 
             // Convert 'Allowed' column in QualityProfiles from Json List<object> to Json List<int> (int = Quality)
             using (IDbCommand qualityProfileCmd = conn.CreateCommand())
@@ -36,13 +39,15 @@ namespace NzbDrone.Core.Datastore.Migration
                         var allowedJson = qualityProfileReader.GetString(1);
 
                         var allowed = Json.Deserialize<List<Quality>>(allowedJson);
-                        
-                        var allowedNewJson = qualityListConverter.ToDB(allowed);
+
+                        var items = Quality.DefaultQualityDefinitions.OrderBy(v => v.Weight).Select(v => new QualityProfileItem { Quality = v.Quality, Allowed = allowed.Contains(v.Quality) }).ToList();
+
+                        var allowedNewJson = qualityProfileItemConverter.ToDB(items);
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE QualityProfiles SET Allowed = ? WHERE Id = ?";
+                            updateCmd.CommandText = "UPDATE QualityProfiles SET Items = ? WHERE Id = ?";
                             updateCmd.AddParameter(allowedNewJson);
                             updateCmd.AddParameter(id);
 
@@ -63,7 +68,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertQualityModel(IDbConnection conn, IDbTransaction tran, string tableName)
         {
-            var qualityModelConverter = new NzbDrone.Core.Datastore.Converters.QualityModelConverter();
+            var qualityModelConverter = new EmbeddedDocumentConverter(new QualityIntConverter());
 
             using (IDbCommand qualityModelCmd = conn.CreateCommand())
             {

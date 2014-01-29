@@ -875,7 +875,7 @@
                                 {
                                         if( _.contains( this.selectedItems, clickedItemId ) )
                                                 this.setSelectedModels( _.without( this.selectedItems, clickedItemId ), { by : "cid" } );
-                                        else this.setSelectedModels( _.union( this.selectedItems, clickedItemId ), { by : "cid" } );
+                                        else this.setSelectedModels( _.union( this.selectedItems, [ clickedItemId ] ), { by : "cid" } );
                                 }
                                 else
                                         this.setSelectedModels( [ clickedItemId ], { by : "cid" } );

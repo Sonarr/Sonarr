@@ -14,13 +14,7 @@ namespace NzbDrone.Core.Test.Qualities
         {
             var profile = new QualityProfile
                 {
-                    Allowed = new List<Quality>
-                        {
-                            Quality.Bluray1080p,
-                            Quality.DVD,
-                            Quality.HDTV720p
-                        },
-
+                    Items =  Qualities.QualityFixture.GetDefaultQualities(Quality.Bluray1080p, Quality.DVD, Quality.HDTV720p),
                     Cutoff = Quality.Bluray1080p,
                     Name = "TestProfile"
                 };
@@ -29,8 +23,8 @@ namespace NzbDrone.Core.Test.Qualities
 
             StoredModel.Name.Should().Be(profile.Name);
             StoredModel.Cutoff.Should().Be(profile.Cutoff);
-
-            StoredModel.Allowed.Should().BeEquivalentTo(profile.Allowed);
+            
+            StoredModel.Items.Should().Equal(profile.Items, (a,b) => a.Quality == b.Quality && a.Allowed == b.Allowed);
 
 
         }

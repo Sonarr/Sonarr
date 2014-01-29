@@ -145,8 +145,6 @@
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
-    <Compile Include="Datastore\Converters\QualityListConverter.cs" />
-    <Compile Include="Datastore\Converters\QualityModelConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\UtcConverter.cs" />
@@ -461,6 +459,7 @@
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
     <Compile Include="Qualities\QualityModelComparer.cs" />
+    <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />

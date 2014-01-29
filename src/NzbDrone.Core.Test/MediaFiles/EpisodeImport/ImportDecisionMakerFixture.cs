@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             _videoFiles = new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi" };
             _series = Builder<Series>.CreateNew()
-                                     .With(e => e.QualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                      .Build();
 
             _quality = new QualityModel(Quality.DVD);

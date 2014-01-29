@@ -20,7 +20,7 @@ namespace NzbDrone.Api.Qualities
 
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Cutoff).NotNull();
-            SharedValidator.RuleFor(c => c.Allowed).NotEmpty();
+            SharedValidator.RuleFor(c => c.Items).NotEmpty();
 
             GetResourceAll = GetAll;
 
@@ -48,46 +48,23 @@ namespace NzbDrone.Api.Qualities
         private void Update(QualityProfileResource resource)
         {
             var model = _qualityProfileService.Get(resource.Id);
+            
             model.Name = resource.Name;
             model.Cutoff = (Quality)resource.Cutoff.Id;
-            model.Allowed = resource.Allowed.Select(p => (Quality)p.Id).ToList();
+            model.Items = resource.Items.InjectTo<List<QualityProfileItem>>();
             _qualityProfileService.Update(model);
         }
 
         private QualityProfileResource GetById(int id)
         {
-            return MapToResource(_qualityProfileService.Get(id));
+            return _qualityProfileService.Get(id).InjectTo<QualityProfileResource>();
         }
 
         private List<QualityProfileResource> GetAll()
         {
-            var profiles = _qualityProfileService.All().Select(MapToResource).ToList();
+            var profiles = _qualityProfileService.All().InjectTo<List<QualityProfileResource>>();
 
             return profiles;
-        }
-
-        private QualityProfileResource MapToResource(QualityProfile profile)
-        {
-            return new QualityProfileResource
-                {
-                    Cutoff = MapToResource(_qualityDefinitionService.Get(profile.Cutoff)),
-                    Available = _qualityDefinitionService.All()
-                        .Where(c => !profile.Allowed.Any(q => c.Quality == q))
-                        .Select(MapToResource).ToList(),
-                    Allowed = profile.Allowed.Select(_qualityDefinitionService.Get).Select(MapToResource).ToList(),
-                    Name = profile.Name,
-                    Id = profile.Id
-                };
-        }
-
-        private QualityResource MapToResource(QualityDefinition config)
-        {
-            return new QualityResource
-            {
-                Id = config.Quality.Id,
-                Name = config.Quality.Name,
-                Weight = config.Weight
-            };
         }
     }
 }

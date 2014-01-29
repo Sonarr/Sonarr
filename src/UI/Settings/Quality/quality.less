@@ -36,7 +36,7 @@
   }
 }
 
-ul.available-list, ul.allowed-list {
+ul.allowed-list {
   .user-select(none);
 
   min-height: 100px;
@@ -52,51 +52,41 @@ ul.available-list, ul.allowed-list {
     border: 1px solid #AAA;
     border-radius: 4px;   /* may need vendor varients */
     background: #FAFAFA;
-    cursor: default;
+    cursor: pointer;
     
-    &:hover {
-      border-color: #888;
-      background: #EEE;
+    .quality-label {
+      color: #CCC;
     }
-    
-    .drag-handle, .move-left-handle, .move-right-handle {
-      opacity: 0.0;
+    .drag-handle, .select-handle {
+      opacity: 0.2;
       line-height: 20px;
       cursor: pointer;
     }
-
-    .move-handle {
+    
+    .drag-handle:hover {
+      opacity: 1.0;
       cursor: pointer;
     }
   }
-}
-
-ul.available-list li {
-  .move-right-handle {
-    opacity: 0.2;
+  
+  li.selected {
+    .select-handle {
+      opacity: 1.0;
+      cursor: pointer;
+    }
+    
+    .quality-label {
+      color: #444;
+    }
   }
   
-  .drag-handle {
-    display: none;
-  }
-  
-  &:hover .move-right-handle {
-    opacity: 1.0;
-  }
-}
-
-ul.allowed-list li {
-  .drag-handle, .move-left-handle {
-    opacity: 0.2;
-  }
-  
-  .drag-handle:hover {
-    opacity: 1.0;
-    cursor: pointer;
-  }
-  
-  &:hover .move-left-handle {
-    opacity: 1.0;
+  li:hover {
+    border-color: #888;
+    background: #EEE;
+        
+    .select-handle {
+      opacity: 0.5;
+    }
   }
 }
 

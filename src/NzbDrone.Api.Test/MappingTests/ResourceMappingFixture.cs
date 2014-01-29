@@ -41,7 +41,8 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
         [TestCase(typeof(Core.History.History), typeof(HistoryResource))]
-        [TestCase(typeof(Quality), typeof(QualityResource))]
+        [TestCase(typeof(QualityProfile), typeof(QualityProfileResource))]
+        [TestCase(typeof(QualityProfileItem), typeof(QualityProfileItemResource))]
         [TestCase(typeof(Log), typeof(LogResource))]
         [TestCase(typeof(Command), typeof(CommandResource))]
         public void matching_fields(Type modelType, Type resourceType)
@@ -109,7 +110,8 @@ namespace NzbDrone.Api.Test.MappingTests
         {
             var profileResource = new QualityProfileResource
                 {
-                    Allowed = Builder<QualityResource>.CreateListOfSize(1).Build().ToList(),
+                    Cutoff = Quality.WEBDL1080p,
+                    Items = new List<QualityProfileItemResource> { new QualityProfileItemResource { Quality = Quality.WEBDL1080p, Allowed = true } }
                 };
 
 

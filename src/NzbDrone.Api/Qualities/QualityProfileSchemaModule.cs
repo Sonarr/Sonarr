@@ -19,34 +19,16 @@ namespace NzbDrone.Api.Qualities
 
         private List<QualityProfileResource> GetAll()
         {
+            var items = _qualityDefinitionService.All()
+                .OrderBy(v => v.Weight)
+                .Select(v => new QualityProfileItem { Quality = v.Quality, Allowed = false })
+                .ToList();
+
             var profile = new QualityProfile();
             profile.Cutoff = Quality.Unknown;
-            profile.Allowed = new List<Quality>();
+            profile.Items = items;
 
-            return new List<QualityProfileResource> { QualityToResource(profile) };
-        }
-
-        private QualityProfileResource QualityToResource(QualityProfile profile)
-        {
-            return new QualityProfileResource
-            {
-                Cutoff = QualityToResource(_qualityDefinitionService.Get(profile.Cutoff)),
-                Available = _qualityDefinitionService.All().Select(QualityToResource).ToList(),
-                Allowed = profile.Allowed.Select(_qualityDefinitionService.Get).Select(QualityToResource).ToList(),
-                Name = profile.Name,
-                Id = profile.Id
-            };
-        }
-
-
-        private QualityResource QualityToResource(QualityDefinition config)
-        {
-            return new QualityResource
-            {
-                Id = config.Quality.Id,
-                Name = config.Quality.Name,
-                Weight = config.Weight
-            };
+            return new List<QualityProfileResource> { profile.InjectTo<QualityProfileResource>() };
         }
     }
 }

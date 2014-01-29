@@ -2,11 +2,33 @@
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
 using NzbDrone.Common.Serializer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
 
 namespace NzbDrone.Core.Datastore.Converters
 {
     public class EmbeddedDocumentConverter : IConverter
     {
+        private readonly JsonSerializerSettings SerializerSetting;
+
+        public EmbeddedDocumentConverter(params JsonConverter[] converters)
+        {
+            SerializerSetting = new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented,
+                DefaultValueHandling = DefaultValueHandling.Include,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+            SerializerSetting.Converters.Add(new VersionConverter());
+            foreach (var converter in converters)
+                SerializerSetting.Converters.Add(converter);
+        }
+
         public virtual object FromDB(ConverterContext context)
         {
             if (context.DbValue == DBNull.Value)
@@ -20,8 +42,7 @@ namespace NzbDrone.Core.Datastore.Converters
             {
                 return null;
             }
-
-            return Json.Deserialize(stringValue, context.ColumnMap.FieldType);
+            return JsonConvert.DeserializeObject(stringValue, context.ColumnMap.FieldType, SerializerSetting);
         }
 
         public object FromDB(ColumnMap map, object dbValue)
@@ -33,7 +54,7 @@ namespace NzbDrone.Core.Datastore.Converters
         {
             if (clrValue == null) return null;
 
-            return clrValue.ToJson();
+            return JsonConvert.SerializeObject(clrValue, SerializerSetting);
         }
 
         public Type DbType

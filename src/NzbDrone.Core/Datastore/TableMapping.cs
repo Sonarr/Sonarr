@@ -81,8 +81,8 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<Quality>), new QualityListConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new QualityModelConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<QualityProfileItem>), new EmbeddedDocumentConverter(new QualityIntConverter()));
+            MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter(new QualityIntConverter()));
             MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<int>), new EmbeddedDocumentConverter());
         }

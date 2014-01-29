@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Qualities
         public static Quality WEBDL480p   { get { return new Quality(8, "WEBDL-480p"); } }
         public static Quality HDTV1080p   { get { return new Quality(9, "HDTV-1080p"); } }
         public static Quality RAWHD       { get { return new Quality(10, "Raw-HD"); } }
-        public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p"); } }
+        //public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p"); } }
         
         public static List<Quality> All
         {

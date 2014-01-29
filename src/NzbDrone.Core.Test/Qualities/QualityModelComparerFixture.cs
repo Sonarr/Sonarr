@@ -15,12 +15,12 @@ namespace NzbDrone.Core.Test.Qualities
 
         private void GivenDefaultQualityProfile()
         {
-            Subject = new QualityModelComparer(new QualityProfile { Allowed = QualityFixture.GetDefaultQualities() });
+            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities() });
         }
 
         private void GivenCustomQualityProfile()
         {
-            Subject = new QualityModelComparer(new QualityProfile { Allowed = new List<Quality> { Quality.Bluray720p, Quality.DVD } });
+            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
         }
 
         [Test]
@@ -86,32 +86,6 @@ namespace NzbDrone.Core.Test.Qualities
             var compare = Subject.Compare(first, second);
 
             compare.Should().BeGreaterThan(0);
-        }
-
-        [Test]
-        public void Icomparer_missing_custom_order()
-        {
-            GivenCustomQualityProfile();
-
-            var first = new QualityModel(Quality.Bluray720p, true);
-            var second = new QualityModel(Quality.Bluray1080p, true);
-
-            var compare = Subject.Compare(first, second);
-
-            compare.Should().BeGreaterThan(0);
-        }
-
-        [Test]
-        public void Icomparer_missing_both_custom_order()
-        {
-            GivenCustomQualityProfile();
-
-            var first = new QualityModel(Quality.SDTV, true);
-            var second = new QualityModel(Quality.Bluray1080p, true);
-
-            var compare = Subject.Compare(first, second);
-
-            compare.Should().Be(0);
         }
     }
 }

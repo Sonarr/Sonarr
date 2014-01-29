@@ -44,9 +44,9 @@ namespace NzbDrone.Core.Test.Qualities
             i.Should().Be(expected);
         }
 
-        public static List<Quality> GetDefaultQualities()
+        public static List<QualityProfileItem> GetDefaultQualities(params Quality[] allowed)
         {
-            return new List<Quality>
+            var qualities = new List<Quality>
             {
                 Quality.SDTV,
                 Quality.WEBDL480p,
@@ -59,6 +59,16 @@ namespace NzbDrone.Core.Test.Qualities
                 Quality.WEBDL1080p,
                 Quality.Bluray1080p
             };
+
+            if (allowed.Length == 0)
+                allowed = qualities.ToArray();
+
+            var items = qualities
+                .Except(allowed)
+                .Concat(allowed)
+                .Select(v => new QualityProfileItem { Quality = v, Allowed = allowed.Contains(v) }).ToList();
+
+            return items;
         }
     }
 }

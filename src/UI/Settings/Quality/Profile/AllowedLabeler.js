@@ -7,13 +7,14 @@ define(
         Handlebars.registerHelper('allowedLabeler', function () {
             var ret = '';
             var cutoff = this.cutoff;
-            _.each(this.allowed, function (allowed) {
-                if (allowed.id === cutoff.id) {
-                    ret += '<span class="label label-info" title="Cutoff">' + allowed.name + '</span> ';
-                }
-
-                else {
-                    ret += '<span class="label">' + allowed.name + '</span> ';
+            _.each(this.items, function (item) {
+                if (item.allowed) {
+                    if (item.quality.id === cutoff.id) {
+                        ret += '<span class="label label-info" title="Cutoff">' + item.quality.name + '</span>&nbsp;';
+                    }
+                    else {
+                        ret += '<span class="label">' + item.quality.name + '</span>&nbsp;';
+                    }
                 }
             });
 

@@ -14,15 +14,15 @@ namespace NzbDrone.Core.Qualities
         public QualityModelComparer(QualityProfile qualityProfile)
         {
             Ensure.That(qualityProfile, () => qualityProfile).IsNotNull();
-            Ensure.That(qualityProfile.Allowed, () => qualityProfile.Allowed).HasItems();
+            Ensure.That(qualityProfile.Items, () => qualityProfile.Items).HasItems();
 
             _qualityProfile = qualityProfile;
         }
 
         public int Compare(Quality left, Quality right)
         {
-            int leftIndex = _qualityProfile.Allowed.IndexOf(left);
-            int rightIndex = _qualityProfile.Allowed.IndexOf(right);
+            int leftIndex = _qualityProfile.Items.FindIndex(v => v.Quality == left);
+            int rightIndex = _qualityProfile.Items.FindIndex(v => v.Quality == right);
 
             return leftIndex.CompareTo(rightIndex);
         }
@@ -36,32 +36,5 @@ namespace NzbDrone.Core.Qualities
 
             return result;
         }
-        /*
-        public string GetName(Quality quality)
-        {
-            QualityDefinition qualityDefinition = _qualityDefinitionService.Get(quality);
-
-            return qualityDefinition.Name;
-        }
-
-        public string GetName(QualityModel quality)
-        {
-            QualityDefinition qualityDefinition = _qualityDefinitionService.Get(quality.Quality);
-
-            if (quality.Proper)
-                return qualityDefinition.Name + " Proper";
-            else
-                return qualityDefinition.Name;
-        }
-
-        public string GetSceneName(QualityModel quality)
-        {
-            QualityDefinition qualityDefinition = _qualityDefinitionService.Get(quality.Quality);
-
-            if (quality.Proper)
-                return qualityDefinition.SceneName + " PROPER";
-            else
-                return qualityDefinition.SceneName;
-        }*/
     }
 }

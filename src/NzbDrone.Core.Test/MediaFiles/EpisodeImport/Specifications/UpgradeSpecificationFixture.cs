@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         {
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)                                     
-                                     .With(e => e.QualityProfile = new QualityProfile { Allowed = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                      .Build();
 
             _localEpisode = new LocalEpisode

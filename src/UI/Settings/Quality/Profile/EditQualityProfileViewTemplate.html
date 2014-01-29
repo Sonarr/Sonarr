@@ -18,8 +18,10 @@
             <label class="control-label">Cutoff</label>
             <div class="controls">
                 <select class="x-cutoff" name="cutoff.id" validation-name="cutoff">
-                    {{#eachReverse allowed}}
-                        <option value="{{id}}">{{name}}</option>
+                    {{#eachReverse items}}
+                        {{#if allowed}}
+                            <option value="{{quality.id}}">{{quality.name}}</option>
+                        {{/if}}
                     {{/eachReverse}}
                 </select>
                 <span class="help-inline">
@@ -30,11 +32,6 @@
     </div>
     <div>
         <div class="offset1 span2">
-            <h3>Available</h3>
-            <ul class="available-list x-available-list">
-            </ul>
-        </div>
-        <div class="span2">
             <h3>
                 Allowed
                 <span class="help-inline">

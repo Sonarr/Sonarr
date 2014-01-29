@@ -14,6 +14,9 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
+            SqLiteAlter.DropColumns("QualityProfiles", new[] { "Allowed" });
+            Alter.Column("Items").OnTable("QualityProfiles").AsString().NotNullable();
+
             Create.TableForModel("QualityDefinitions")
                     .WithColumn("Quality").AsInt32().Unique()
                     .WithColumn("Title").AsString().Unique()
