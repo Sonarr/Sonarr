@@ -194,7 +194,7 @@ define(
             },
 
             _setAdvancedSettingsState: function () {
-                var checked = Config.getValueBoolean('advancedSettings');
+                var checked = Config.getValueBoolean(Config.Keys.AdvancedSettings);
                 this.ui.advancedSettings.prop('checked', checked);
 
                 if (checked) {
@@ -204,7 +204,7 @@ define(
 
             _toggleAdvancedSettings: function () {
                 var checked = this.ui.advancedSettings.prop('checked');
-                Config.setValue('advancedSettings', checked);
+                Config.setValue(Config.Keys.AdvancedSettings, checked);
 
                 if (checked) {
                     $('body').addClass('show-advanced-settings');

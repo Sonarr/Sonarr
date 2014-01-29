@@ -1,7 +1,6 @@
 ﻿using System;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
-using NzbDrone.Common.Serializer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
@@ -25,8 +24,11 @@ namespace NzbDrone.Core.Datastore.Converters
 
             SerializerSetting.Converters.Add(new StringEnumConverter { CamelCaseText = true });
             SerializerSetting.Converters.Add(new VersionConverter());
+
             foreach (var converter in converters)
+            {
                 SerializerSetting.Converters.Add(converter);
+            }
         }
 
         public virtual object FromDB(ConverterContext context)

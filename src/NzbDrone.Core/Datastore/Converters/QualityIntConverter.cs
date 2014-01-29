@@ -48,7 +48,6 @@ namespace NzbDrone.Core.Datastore.Converters
             }
         }
 
-        #region JsonConverter
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(Quality);
@@ -64,6 +63,5 @@ namespace NzbDrone.Core.Datastore.Converters
         {
             writer.WriteValue(ToDB(value));
         }
-        #endregion
     }
 }

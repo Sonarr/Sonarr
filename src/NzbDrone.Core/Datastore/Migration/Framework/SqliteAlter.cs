@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
                 var newIndexes = originalIndexes.Union(indexes);
 
-
                 CreateTable(tableName, columns, newIndexes);
 
                 transaction.Commit();
@@ -57,7 +56,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             using (var transaction = _sqLiteMigrationHelper.BeginTransaction())
             {
                 var originalColumns = _sqLiteMigrationHelper.GetColumns(tableName);
-                var originalIndexes = _sqLiteMigrationHelper.GetIndexes(tableName);
+                var indexes = _sqLiteMigrationHelper.GetIndexes(tableName);
 
                 var newColumns = originalColumns.Select(c =>
                 {
@@ -82,9 +81,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                     return c.Value;
                 }).ToList();
 
-                var newIndexes = originalIndexes;
-
-                CreateTable(tableName, newColumns, newIndexes);
+                CreateTable(tableName, newColumns, indexes);
 
                 transaction.Commit();
             }

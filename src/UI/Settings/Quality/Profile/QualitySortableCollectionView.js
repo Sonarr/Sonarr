@@ -6,7 +6,7 @@ define(
         return BackboneSortableCollectionView.extend({
 
             events : {
-                'mousedown li, td' : '_listItem_onMousedown',
+                'click li, td' : '_listItem_onMousedown',
                 'dblclick li, td'  : '_listItem_onDoubleClick',
                 'click'            : '_listBackground_onClick',
                 'click ul.collection-list, table.collection-list' : '_listBackground_onClick',

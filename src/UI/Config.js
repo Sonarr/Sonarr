@@ -9,8 +9,9 @@ define(
             },
             Keys  : {
                 DefaultQualityProfileId: 'DefaultQualityProfileId',
-                DefaultRootFolderId: 'DefaultRootFolderId',
-                UseSeasonFolder: 'UseSeasonFolder'
+                DefaultRootFolderId    : 'DefaultRootFolderId',
+                UseSeasonFolder        : 'UseSeasonFolder',
+                AdvancedSettings       : 'advancedSettings'
             },
 
             getValueBoolean: function (key, defaultValue) {

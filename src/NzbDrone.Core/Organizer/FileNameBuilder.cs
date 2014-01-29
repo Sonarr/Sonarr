@@ -150,7 +150,6 @@ namespace NzbDrone.Core.Organizer
             tokenValues.Add("{Episode Title}", GetEpisodeTitle(episodeTitles));
             tokenValues.Add("{Quality Title}", GetQualityTitle(episodeFile.Quality));
             
-
             return CleanFilename(ReplaceTokens(pattern, tokenValues).Trim());
         }
 

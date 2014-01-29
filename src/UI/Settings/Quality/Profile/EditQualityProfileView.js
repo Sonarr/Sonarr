@@ -1,6 +1,7 @@
 ﻿'use strict';
 define(
     [
+        'underscore',
         'vent',
         'marionette',
         'backbone',
@@ -8,8 +9,8 @@ define(
         'Settings/Quality/Profile/EditQualityProfileItemView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
-        'underscore'
-    ], function (vent, Marionette, Backbone, BackboneSortableCollectionView, EditQualityProfileItemView, AsModelBoundView, AsValidatedView, _) {
+        'Config'
+    ], function (_, vent, Marionette, Backbone, QualitySortableCollectionView, EditQualityProfileItemView, AsModelBoundView, AsValidatedView, Config) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/Quality/Profile/EditQualityProfileViewTemplate',
@@ -26,35 +27,23 @@ define(
             initialize: function (options) {
                 this.profileCollection = options.profileCollection;
                                                 
-                this.allowedCollection = new Backbone.Collection(_.toArray(this.model.get('items')).reverse());
+                this.itemsCollection = new Backbone.Collection(_.toArray(this.model.get('items')).reverse());
             },
             
             onRender: function() {                  
-                var MyCollectionView = BackboneSortableCollectionView.extend({
-                    events : {
-                            // Backbone.CollectionView used mousedown for the click event, which interferes with the sortable.
-                            "click li, td" : "_listItem_onMousedown",
-                            "dblclick li, td" : "_listItem_onDoubleClick",
-                            "click" : "_listBackground_onClick",
-                            "click ul.collection-list, table.collection-list" : "_listBackground_onClick",
-                            "keydown" : "_onKeydown"
-                    }
-                });
-                var listViewAllowed = new MyCollectionView({
+
+                var listViewAllowed = new QualitySortableCollectionView({
                         el              : this.ui.allowed,
                         modelView       : EditQualityProfileItemView,
                         selectable      : true,
                         selectMultiple  : true,
                         clickToSelect   : true,
                         clickToToggle   : true,
-                        sortable        : true,
-                        sortableOptions : {
-                            handle: '.x-drag-handle'
-                        },
-                        collection : this.allowedCollection
+                        sortable        : Config.getValueBoolean(Config.Keys.AdvancedSettings, false),
+                        collection : this.itemsCollection
                     });
 
-                listViewAllowed.setSelectedModels(this.allowedCollection.filter(function(item) { return item.get('allowed') === true; }));
+                listViewAllowed.setSelectedModels(this.itemsCollection.filter(function(item) { return item.get('allowed') === true; }));
 
                 listViewAllowed.render();
                 
@@ -73,7 +62,7 @@ define(
             },
             
             _updateModel: function() {            
-                this.model.set('items', this.allowedCollection.toJSON().reverse());
+                this.model.set('items', this.itemsCollection.toJSON().reverse());
                 
                 this.render();
             },

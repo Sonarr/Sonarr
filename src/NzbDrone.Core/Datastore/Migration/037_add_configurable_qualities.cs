@@ -2,10 +2,7 @@
 using NzbDrone.Core.Datastore.Migration.Framework;
 using System.Data;
 using System.Linq;
-using System;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Qualities;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
