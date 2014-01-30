@@ -19,7 +19,7 @@ define(
                     options = options || {};
                     options.url = model.methodUrls[method.toLowerCase()];
                 }
-                Backbone.sync(method, model, options);
+                return Backbone.sync(method, model, options);
             }
         });
     });
