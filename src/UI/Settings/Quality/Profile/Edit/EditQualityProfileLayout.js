@@ -20,7 +20,8 @@ define(
             },
 
             events: {
-                'click .x-save': '_saveQualityProfile'
+                'click .x-save'  : '_saveQualityProfile',
+                'click .x-cancel': '_cancelQualityProfile'
             },
 
             initialize: function (options) {
@@ -80,6 +81,21 @@ define(
                 if (promise) {
                     promise.done(function () {
                         self.profileCollection.add(self.model, { merge: true });
+                        vent.trigger(vent.Commands.CloseModalCommand);
+                    });
+                }
+            },
+
+            _cancelQualityProfile: function () {
+                if (!this.model.has('id')) {
+                    vent.trigger(vent.Commands.CloseModalCommand);
+                    return;
+                }
+
+                var promise = this.model.fetch();
+
+                if (promise) {
+                    promise.done(function () {
                         vent.trigger(vent.Commands.CloseModalCommand);
                     });
                 }
