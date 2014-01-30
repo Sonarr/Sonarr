@@ -47,11 +47,6 @@ namespace NzbDrone.Api.Calendar
 
             foreach (var series in episodes.GroupBy(v => v.Series))
             {
-                /*var icalSeries = icalCalendar.Create<RecurringComponent>();
-                icalSeries.UID = series.Key.Id.ToString();
-                icalSeries.Name = series.Key.Title;
-                icalSeries.Description = string.Format("{0} min on {1}", series.Key.Runtime, series.Key.Network);*/
-
                 foreach (var episode in series)
                 {
                     var occurrence = icalCalendar.Create<Event>();
@@ -59,8 +54,13 @@ namespace NzbDrone.Api.Calendar
                     occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;
                     occurrence.Start = new iCalDateTime(episode.AirDateUtc.Value);
                     occurrence.End = new iCalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime));
-                    //occurrence.... = episode.Overview;
-                            
+                    
+                    // Episode summary as event description
+                    occurrence.Description = episode.Overview;
+
+                    // TV Network as event category
+                    occurrence.Categories = new List<string>() { episode.Series.Network };
+
                     switch (episode.Series.SeriesType)
                     {
                         case SeriesTypes.Standard:
@@ -68,7 +68,7 @@ namespace NzbDrone.Api.Calendar
                             break;
 
                         default:
-                            occurrence.Summary = string.Format("{0} - {3}", episode.SeriesTitle, episode.Title);
+                            occurrence.Summary = string.Format("{0} - {1}", episode.Series.Title, episode.Title);
                             break;
                     }
                 }
@@ -82,6 +82,5 @@ namespace NzbDrone.Api.Calendar
 
             return output;
         }
-
     }
 }
