@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Mapping;
-using System.Linq;
 using FluentValidation;
 
 namespace NzbDrone.Api.Qualities
@@ -9,27 +8,19 @@ namespace NzbDrone.Api.Qualities
     public class QualityProfileModule : NzbDroneRestModule<QualityProfileResource>
     {
         private readonly IQualityProfileService _qualityProfileService;
-        private readonly IQualityDefinitionService _qualityDefinitionService;
 
-        public QualityProfileModule(IQualityProfileService qualityProfileService,
-                                    IQualityDefinitionService qualityDefinitionService)
+        public QualityProfileModule(IQualityProfileService qualityProfileService)
             : base("/qualityprofiles")
         {
             _qualityProfileService = qualityProfileService;
-            _qualityDefinitionService = qualityDefinitionService;
-
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Cutoff).NotNull();
-            SharedValidator.RuleFor(c => c.Items).NotEmpty();
+            SharedValidator.RuleFor(c => c.Items).MustHaveAllowedQuality();//.SetValidator(new AllowedValidator<QualityProfileItemResource>());
 
             GetResourceAll = GetAll;
-
             GetResourceById = GetById;
-
             UpdateResource = Update;
-
             CreateResource = Create;
-
             DeleteResource = DeleteProfile;
         }
 
