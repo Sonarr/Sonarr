@@ -10,6 +10,7 @@ define(
 
             initialize: function () {
                 this.listenTo(vent, vent.Commands.SaveSettings, this.saveSettings);
+                this.listenTo(this, 'destroy', this._stopListening);
             },
 
             saveSettings: function () {
@@ -28,8 +29,11 @@ define(
                 }
 
                 return undefined;
-            }
+            },
 
+            _stopListening: function () {
+                this.stopListening(vent, vent.Commands.SaveSettings);
+            }
         });
 
         return AsChangeTrackingModel.call(model);
