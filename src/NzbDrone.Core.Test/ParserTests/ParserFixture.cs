@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", "The.Girls.Next.Door", 3, 6)]
         [TestCase("Degrassi.S10E27.WS.DSR.XviD-2HD", "Degrassi", 10, 27)]
         [TestCase("Parenthood.2010.S02E14.HDTV.XviD-LOL", "Parenthood 2010", 2, 14)]
-        [TestCase("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1, 19)]
+        [TestCase("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five 0", 1, 19)]
         [TestCase("The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", "The Event", 1, 14)]
         [TestCase("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
         [TestCase("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
@@ -373,6 +373,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Venture Bros. (2004)", "venturebros2004")]
         [TestCase("Castle (2011)", "castle2011")]
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "adventuretime")]
+        [TestCase("Hawaii Five 0", "hawaiifive0")]
+        [TestCase("Match of the Day", "matchday")]
+        [TestCase("Match of the Day 2", "matchday2")]
         public void parse_series_name(string postTitle, string title)
         {
             var result = Parser.Parser.ParseSeriesName(postTitle);
@@ -412,7 +415,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Language.Should().Be(language);
         }
 
-        [TestCase("Hawaii Five 0 S01 720p WEB DL DD5 1 H 264 NT", "Hawaii Five", 1)]
+        [TestCase("Hawaii Five 0 S01 720p WEB DL DD5 1 H 264 NT", "Hawaii Five 0", 1)]
         [TestCase("30 Rock S03 WS PDTV XviD FUtV", "30 Rock", 3)]
         [TestCase("The Office Season 4 WS PDTV XviD FUtV", "The Office", 4)]
         [TestCase("Eureka Season 1 720p WEB DL DD 5 1 h264 TjHD", "Eureka", 1)]
