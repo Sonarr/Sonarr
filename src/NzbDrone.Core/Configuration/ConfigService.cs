@@ -307,16 +307,16 @@ namespace NzbDrone.Core.Configuration
 
         public String ChownUser
         {
-            get { return GetValue("User", ""); }
+            get { return GetValue("ChownUser", ""); }
 
-            set { SetValue("User", value); }
+            set { SetValue("ChownUser", value); }
         }
 
         public String ChownGroup
         {
-            get { return GetValue("User", ""); }
+            get { return GetValue("ChownGroup", ""); }
 
-            set { SetValue("User", value); }
+            set { SetValue("ChownGroup", value); }
         }
 
         private string GetValue(string key)
