@@ -45,5 +45,7 @@ namespace NzbDrone.Core.Configuration
         Boolean SetPermissionsLinux { get; set; }
         String FileChmod { get; set; }
         String FolderChmod { get; set; }
+        String ChownUser { get; set; }
+        String ChownGroup { get; set; }
     }
 }

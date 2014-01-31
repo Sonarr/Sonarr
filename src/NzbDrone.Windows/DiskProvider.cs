@@ -40,7 +40,7 @@ namespace NzbDrone.Windows
             File.SetAccessControl(filename, fs);
         }
 
-        public override void SetPermissions(string path, string mask)
+        public override void SetPermissions(string path, string mask, string user, string group)
         {
             
         }

@@ -1,13 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using NLog;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Disk
 {
@@ -15,7 +9,7 @@ namespace NzbDrone.Common.Disk
     {
         long? GetAvailableSpace(string path);
         void InheritFolderPermissions(string filename);
-        void SetPermissions(string path, string mask);
+        void SetPermissions(string path, string mask, string user, string group);
         long? GetTotalSize(string path);
 
         DateTime GetLastFolderWrite(string path);

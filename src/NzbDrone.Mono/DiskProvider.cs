@@ -49,7 +49,7 @@ namespace NzbDrone.Mono
             }
         }
 
-        public override void SetPermissions(string path, string mask)
+        public override void SetPermissions(string path, string mask, string user, string group)
         {
             Logger.Trace("Setting permissions: {0} on {1}", mask, path);
 
@@ -59,14 +59,41 @@ namespace NzbDrone.Mono
             {
                 var error = Stdlib.GetLastError();
 
-                throw new Exception("Error setting file permissions: " + error);
+                throw new LinuxPermissionsException("Error setting file permissions: " + error);
             }
 
-            if (Syscall.chown(path, Syscall.getuid(), Syscall.getgid()) < 0)
+            uint userId;
+            uint groupId;
+            
+            if (!uint.TryParse(user, out userId))
+            {
+                var u = Syscall.getpwnam(user);
+
+                if (u == null)
+                {
+                    throw new LinuxPermissionsException("Unknown user: {0}", user);
+                }
+
+                userId = u.pw_uid;
+            }
+
+            if (!uint.TryParse(group, out groupId))
+            {
+                var g = Syscall.getgrnam(user);
+
+                if (g == null)
+                {
+                    throw new LinuxPermissionsException("Unknown group: {0}", group);
+                }
+
+                groupId = g.gr_gid;
+            }
+
+            if (Syscall.chown(path, userId, groupId) < 0)
             {
                 var error = Stdlib.GetLastError();
 
-                throw new Exception("Error setting file owner: " + error);
+                throw new LinuxPermissionsException("Error setting file owner: " + error);
             }
         }
 

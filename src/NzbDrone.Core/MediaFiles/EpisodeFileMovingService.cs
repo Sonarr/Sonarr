@@ -152,7 +152,7 @@ namespace NzbDrone.Core.MediaFiles
 
             try
             {
-                _diskProvider.SetPermissions(path, permissions);
+                _diskProvider.SetPermissions(path, permissions, _configService.ChownUser, _configService.ChownGroup);
             }
 
             catch (Exception ex)
@@ -161,6 +161,10 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("Unable to apply permissions to: ", path);
                     _logger.TraceException(ex.Message, ex);
+                }
+                else
+                {
+                    throw;
                 }
             }
         }

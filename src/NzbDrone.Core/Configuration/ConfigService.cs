@@ -305,6 +305,20 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("FolderChmod", value); }
         }
 
+        public String ChownUser
+        {
+            get { return GetValue("User", ""); }
+
+            set { SetValue("User", value); }
+        }
+
+        public String ChownGroup
+        {
+            get { return GetValue("User", ""); }
+
+            set { SetValue("User", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
