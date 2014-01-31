@@ -1,0 +1,29 @@
+﻿<div class="modal-header">
+    <button type="button" class="close x-cancel" aria-hidden="true">&times;</button>
+    {{#if id}}
+        <h3>Edit</h3>
+    {{else}}
+        <h3>Add</h3>
+    {{/if}}
+</div>
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div id="x-fields"></div>
+        <div class="control-group">
+            <label class="control-label">Qualities</label>
+            <div class="controls qualities-controls">
+                <span id="x-qualities"></span>
+                <span class="help-inline">
+                    <i class="icon-question-sign" title="Qualities higher in the list are more preferred. Only checked qualities will be wanted."/>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    {{#if id}}
+        <button class="btn btn-danger pull-left x-delete">delete</button>
+    {{/if}}
+    <button class="btn x-cancel">cancel</button>
+    <button class="btn btn-primary x-save">save</button>
+</div>

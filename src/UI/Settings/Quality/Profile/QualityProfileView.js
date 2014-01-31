@@ -4,7 +4,7 @@ define(
     [
         'AppLayout',
         'marionette',
-        'Settings/Quality/Profile/EditQualityProfileView',
+        'Settings/Quality/Profile/Edit/EditQualityProfileLayout',
         'Settings/Quality/Profile/DeleteView',
         'Series/SeriesCollection',
         'Mixins/AsModelBoundView',
@@ -13,7 +13,7 @@ define(
     ], function (AppLayout, Marionette, EditProfileView, DeleteProfileView, SeriesCollection, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/Quality/Profile/QualityProfileTemplate',
+            template: 'Settings/Quality/Profile/QualityProfileViewTemplate',
             tagName : 'li',
 
             ui: {

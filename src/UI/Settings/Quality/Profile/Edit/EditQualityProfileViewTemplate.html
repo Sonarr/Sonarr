@@ -1,0 +1,21 @@
+﻿<div class="control-group">
+    <label class="control-label">Name</label>
+    <div class="controls">
+        <input type="text" name="name">
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">Cutoff</label>
+    <div class="controls">
+        <select class="x-cutoff" name="cutoff.id" validation-name="cutoff">
+            {{#eachReverse items}}
+            {{#if allowed}}
+            <option value="{{quality.id}}">{{quality.name}}</option>
+            {{/if}}
+            {{/eachReverse}}
+        </select>
+        <span class="help-inline">
+            <i class="icon-question-sign" title="Once this quality is reached NzbDrone will no longer download episodes"/>
+        </span>
+    </div>
+</div>

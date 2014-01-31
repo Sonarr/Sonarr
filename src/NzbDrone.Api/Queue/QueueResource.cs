@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Queue

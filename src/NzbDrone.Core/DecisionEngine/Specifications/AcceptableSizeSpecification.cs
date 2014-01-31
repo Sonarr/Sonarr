@@ -9,13 +9,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class AcceptableSizeSpecification : IDecisionEngineSpecification
     {
-        private readonly IQualitySizeService _qualityTypeProvider;
+        private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
-        public AcceptableSizeSpecification(IQualitySizeService qualityTypeProvider, IEpisodeService episodeService, Logger logger)
+        public AcceptableSizeSpecification(IQualityDefinitionService qualityDefinitionService, IEpisodeService episodeService, Logger logger)
         {
-            _qualityTypeProvider = qualityTypeProvider;
+            _qualityDefinitionService = qualityDefinitionService;
             _episodeService = episodeService;
             _logger = logger;
         }
@@ -44,15 +44,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return false;
             }
 
-            var qualityType = _qualityTypeProvider.Get(quality.Id);
+            var qualityDefinition = _qualityDefinitionService.Get(quality);
 
-            if (qualityType.MaxSize == 0)
+            if (qualityDefinition.MaxSize == 0)
             {
                 _logger.Trace("Max size is 0 (unlimited) - skipping check.");
                 return true;
             }
 
-            var maxSize = qualityType.MaxSize.Megabytes();
+            var maxSize = qualityDefinition.MaxSize.Megabytes();
 
             //Multiply maxSize by Series.Runtime
             maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;

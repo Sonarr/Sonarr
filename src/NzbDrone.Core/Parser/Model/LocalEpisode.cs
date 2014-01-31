@@ -1,7 +1,8 @@
 using System;
-using System.Collections.Generic;
-using NzbDrone.Core.Tv;
 using System.Linq;
+using System.Collections.Generic;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
 {

@@ -137,6 +137,7 @@
     <Compile Include="Missing\MissingModule.cs" />
     <Compile Include="Config\NamingSampleResource.cs" />
     <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
+    <Compile Include="Qualities\QualityProfileValidation.cs" />
     <Compile Include="Queue\QueueModule.cs" />
     <Compile Include="Queue\QueueResource.cs" />
     <Compile Include="ResourceChangeMessage.cs" />
@@ -166,8 +167,8 @@
     <Compile Include="NzbDroneApiModule.cs" />
     <Compile Include="Qualities\QualityProfileResource.cs" />
     <Compile Include="Qualities\QualityProfileModule.cs" />
-    <Compile Include="Qualities\QualitySizeResource.cs" />
-    <Compile Include="Qualities\QualitySizeModule.cs" />
+    <Compile Include="Qualities\QualityDefinitionResource.cs" />
+    <Compile Include="Qualities\QualityDefinitionModule.cs" />
     <Compile Include="Extensions\ReqResExtensions.cs" />
     <Compile Include="Config\SettingsModule.cs" />
     <Compile Include="System\SystemModule.cs" />

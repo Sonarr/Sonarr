@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 {
@@ -17,7 +19,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
-            if (localEpisode.Episodes.Any(e => e.EpisodeFileId != 0 && e.EpisodeFile.Value.Quality > localEpisode.Quality))
+            var qualityComparer = new QualityModelComparer(localEpisode.Series.QualityProfile);
+            if (localEpisode.Episodes.Any(e => e.EpisodeFileId != 0 && qualityComparer.Compare(e.EpisodeFile.Value.Quality, localEpisode.Quality) > 0))
             {
                 _logger.Trace("This file isn't an upgrade for all episodes. Skipping {0}", localEpisode.Path);
                 return false;

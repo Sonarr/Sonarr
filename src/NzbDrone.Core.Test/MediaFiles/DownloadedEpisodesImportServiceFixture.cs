@@ -80,6 +80,20 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(true);
 
             Subject.Execute(new DownloadedEpisodesScanCommand());
+            
+            VerifyNoImport();
+        }
+
+        [Test]
+        public void should_skip_if_no_series_found()
+        {
+            Mocker.GetMock<IParsingService>().Setup(c => c.GetSeries("foldername")).Returns((Series)null);
+
+            Subject.Execute(new DownloadedEpisodesScanCommand());
+
+            Mocker.GetMock<IMakeImportDecision>()
+                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<Core.Qualities.QualityModel>()),
+                    Times.Never());
 
             VerifyNoImport();
         }

@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                        };
 
             _fakeSeries = Builder<Series>.CreateNew()
-                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p })
+                         .With(c => c.QualityProfile = new QualityProfile { Cutoff = Quality.Bluray1080p, Items = Qualities.QualityFixture.GetDefaultQualities() })
                          .Build();
 
             _parseResultMulti = new RemoteEpisode
@@ -61,8 +61,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _upgradableQuality = new QualityModel(Quality.SDTV, false);
             _notupgradableQuality = new QualityModel(Quality.HDTV1080p, true);
-
-
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_notupgradableQuality);
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(2)).Returns(_notupgradableQuality);
@@ -132,7 +130,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_not_be_upgradable_if_episode_is_of_same_quality_as_existing()
         {
-            _fakeSeries.QualityProfile = new QualityProfile { Cutoff = Quality.WEBDL1080p };
+            _fakeSeries.QualityProfile = new QualityProfile { Cutoff = Quality.WEBDL1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradableQuality = new QualityModel(Quality.WEBDL1080p, false);
 

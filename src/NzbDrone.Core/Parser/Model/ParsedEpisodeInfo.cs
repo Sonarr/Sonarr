@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
