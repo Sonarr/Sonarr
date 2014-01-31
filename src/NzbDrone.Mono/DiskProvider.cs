@@ -62,6 +62,12 @@ namespace NzbDrone.Mono
                 throw new LinuxPermissionsException("Error setting file permissions: " + error);
             }
 
+            if (String.IsNullOrWhiteSpace(user) || String.IsNullOrWhiteSpace(group))
+            {
+                Logger.Trace("User or Group for chown not configured, skipping chown.");
+                return;
+            }
+
             uint userId;
             uint groupId;
             
