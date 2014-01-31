@@ -107,7 +107,7 @@ define(
                     statusLevel = 'success';
                 }
 
-                if (downloading) {
+                else if (downloading) {
                     statusLevel = 'purple';
                 }
 
