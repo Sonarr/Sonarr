@@ -66,7 +66,6 @@ define(
 
             onRender: function () {
                 this.grid.show(new LoadingView());
-                this.collection.fetch();
             },
 
             onShow: function () {
@@ -88,6 +87,44 @@ define(
             },
 
             _showToolbar: function () {
+                var filterButtons = {
+                    type         : 'radio',
+                    storeState   : true,
+                    menuKey      : 'logs.filterMode',
+                    defaultAction: 'all',
+                    items        :
+                    [
+                        {
+                            key           : 'all',
+                            title         : '',
+                            tooltip       : 'All',
+                            icon          : 'icon-circle-blank',
+                            callback      : this._setFilter
+                        },
+                        {
+                            key           : 'info',
+                            title         : '',
+                            tooltip       : 'Info',
+                            icon          : 'icon-info',
+                            callback      : this._setFilter
+                        },
+                        {
+                            key           : 'warn',
+                            title         : '',
+                            tooltip       : 'Warn',
+                            icon          : 'icon-warn',
+                            callback      : this._setFilter
+                        },
+                        {
+                            key           : 'error',
+                            title         : '',
+                            tooltip       : 'Error',
+                            icon          : 'icon-error',
+                            callback      : this._setFilter
+                        }
+                    ]
+                };
+                
                 var rightSideButtons = {
                     type      : 'default',
                         storeState: false,
@@ -111,6 +148,7 @@ define(
                 this.toolbar.show(new ToolbarLayout({
                     right   :
                         [
+                            filterButtons,
                             rightSideButtons
                         ],
                     context: this
@@ -121,6 +159,19 @@ define(
                 this.collection.state.currentPage = 1;
                 var promise = this.collection.fetch({ reset: true });
 
+                if (buttonContext) {
+                    buttonContext.ui.icon.spinForPromise(promise);
+                }
+            },
+            
+            _setFilter: function(buttonContext) {
+                var mode = buttonContext.model.get('key');
+                
+                this.collection.setFilterMode(mode, { reset: false });
+                
+                this.collection.state.currentPage = 1;
+                var promise = this.collection.fetch({ reset: true });
+                
                 if (buttonContext) {
                     buttonContext.ui.icon.spinForPromise(promise);
                 }

@@ -67,22 +67,12 @@ namespace NzbDrone.Core.History
                         .FirstOrDefault();
         }
 
-        public override PagingSpec<History> GetPaged(PagingSpec<History> pagingSpec)
+        protected override SortBuilder<History> GetPagedQuery(QueryBuilder<History> query, PagingSpec<History> pagingSpec)
         {
-            pagingSpec.Records = GetPagedQuery(pagingSpec).ToList();
-            pagingSpec.TotalRecords = GetPagedQuery(pagingSpec).GetRowCount();
+            var baseQuery = query.Join<History, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
+                                 .Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id);
 
-            return pagingSpec;
-        }
-
-        private SortBuilder<History> GetPagedQuery(PagingSpec<History> pagingSpec)
-        {
-            return Query.Join<History, Series>(JoinType.Inner, h => h.Series, (h, s) => h.SeriesId == s.Id)
-                                   .Join<History, Episode>(JoinType.Inner, h => h.Episode, (h, e) => h.EpisodeId == e.Id)
-                                   .Where(pagingSpec.FilterExpression)
-                                   .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                                   .Skip(pagingSpec.PagingOffset())
-                                   .Take(pagingSpec.PageSize);
+            return base.GetPagedQuery(baseQuery, pagingSpec);
         }
     }
 }

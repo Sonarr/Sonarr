@@ -4,9 +4,10 @@ define(
     [
         'backbone.pageable',
         'System/Logs/LogsModel',
+        'Mixins/AsFilteredCollection',
         'Mixins/AsPersistedStateCollection'
     ],
-    function (PagableCollection, LogsModel, AsPersistedStateCollection) {
+    function (PagableCollection, LogsModel, AsFilteredCollection, AsPersistedStateCollection) {
     var collection = PagableCollection.extend({
         url  : window.NzbDrone.ApiRoot + '/log',
         model: LogsModel,
@@ -30,6 +31,14 @@ define(
             }
         },
 
+        // Filter Modes
+        filterModes: {
+            'all'   : [null, null],
+            'info'  : ['level', 'Info'],
+            'warn'  : ['level', 'Warn'],
+            'error' : ['level', 'Error']
+        },
+
         parseState: function (resp, queryParams, state) {
             return {totalRecords: resp.totalRecords};
         },
@@ -43,5 +52,7 @@ define(
         }
     });
 
-        return AsPersistedStateCollection.call(collection);
+    collection = AsFilteredCollection.apply(collection);
+
+    return AsPersistedStateCollection.apply(collection);
 });

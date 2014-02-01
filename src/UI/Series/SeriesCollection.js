@@ -6,9 +6,10 @@ define(
         'backbone.pageable',
         'Series/SeriesModel',
         'api!series',
+        'Mixins/AsFilteredCollection',
         'Mixins/AsPersistedStateCollection',
         'moment'
-    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsPersistedStateCollection, Moment) {
+    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsFilteredCollection, AsPersistedStateCollection, Moment) {
         var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
@@ -47,6 +48,14 @@ define(
                 return proxy.save();
             },
 
+            // Filter Modes
+            filterModes: {
+                'all'        : [null, null],
+                'continuing' : ['status', 'continuing'],
+                'ended'      : ['status', 'ended'],
+                'monitored'  : ['monitored', true]
+            },
+            
             //Sorters
             nextAiring: function (model, attr) {
                 var nextAiring = model.get(attr);
@@ -59,9 +68,9 @@ define(
             }
         });
 
-        var MixedIn = AsPersistedStateCollection.call(Collection);
-        var collection = new MixedIn(SeriesData);
-        collection.initialSort();
+        var FilteredCollection = AsFilteredCollection.call(Collection);
+        var MixedIn = AsPersistedStateCollection.call(FilteredCollection);
+        var collection = new MixedIn(SeriesData, { full: true });
 
         return collection;
     });
