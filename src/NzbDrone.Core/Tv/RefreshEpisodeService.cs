@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Messaging.Events;
@@ -79,6 +80,7 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(updateList);
 
             AdjustMultiEpisodeAirTime(series, allEpisodes);
+            SetAbsoluteEpisodeNumber(allEpisodes);
 
             _episodeService.DeleteMany(existingEpisodes);
             _episodeService.UpdateMany(updateList);
@@ -132,11 +134,23 @@ namespace NzbDrone.Core.Tv
             foreach (var group in groups)
             {
                 var episodeCount = 0;
-                foreach (var episode in @group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
+                foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
                 {
                     episode.AirDateUtc = episode.AirDateUtc.Value.AddMinutes(series.Runtime * episodeCount);
                     episodeCount++;
                 }
+            }
+        }
+
+        private static void SetAbsoluteEpisodeNumber(IEnumerable<Episode> allEpisodes)
+        {
+            var episodes = allEpisodes.Where(e => e.SeasonNumber > 0 && e.EpisodeNumber > 0)
+                                      .OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber)
+                                      .ToList();
+
+            for (int i = 0; i < episodes.Count(); i++)
+            {
+                episodes[i].AbsoluteEpisodeNumber = i + 1;
             }
         }
     }
