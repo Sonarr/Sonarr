@@ -1,5 +1,7 @@
 ﻿using System;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Blacklisting
@@ -7,9 +9,11 @@ namespace NzbDrone.Core.Blacklisting
     public interface IBlacklistService
     {
         bool Blacklisted(string sourceTitle);
+        PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec);
+        void Delete(int id);
     }
 
-    public class BlacklistService : IBlacklistService, IHandle<DownloadFailedEvent>
+    public class BlacklistService : IBlacklistService, IHandle<DownloadFailedEvent>, IExecute<ClearBlacklistCommand>
     {
         private readonly IBlacklistRepository _blacklistRepository;
         private readonly IRedownloadFailedDownloads _redownloadFailedDownloadService;
@@ -23,6 +27,16 @@ namespace NzbDrone.Core.Blacklisting
         public bool Blacklisted(string sourceTitle)
         {
             return _blacklistRepository.Blacklisted(sourceTitle);
+        }
+
+        public PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec)
+        {
+            return _blacklistRepository.GetPaged(pagingSpec);
+        }
+
+        public void Delete(int id)
+        {
+            _blacklistRepository.Delete(id);
         }
 
         public void Handle(DownloadFailedEvent message)
@@ -39,6 +53,11 @@ namespace NzbDrone.Core.Blacklisting
             _blacklistRepository.Insert(blacklist);
 
             _redownloadFailedDownloadService.Redownload(message.SeriesId, message.EpisodeIds);
+        }
+
+        public void Execute(ClearBlacklistCommand message)
+        {
+            _blacklistRepository.Purge();
         }
     }
 }

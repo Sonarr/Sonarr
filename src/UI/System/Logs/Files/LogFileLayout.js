@@ -81,7 +81,7 @@ define(
                                 title         : 'Refresh',
                                 icon          : 'icon-refresh',
                                 ownerContext  : this,
-                                callback      : this._refreshLogs
+                                callback      : this._refreshTable
                             },
 
                             {
@@ -140,7 +140,7 @@ define(
                 this.contents.show(new ContentsView({ model: model }));
             },
 
-            _refreshLogs: function (buttonContext) {
+            _refreshTable: function (buttonContext) {
                 this.contents.close();
                 var promise = this.collection.fetch();
 
@@ -152,7 +152,7 @@ define(
 
             _commandComplete: function (options) {
                 if (options.command.get('name') === 'deletelogfiles') {
-                    this._refreshLogs();
+                    this._refreshTable();
                 }
             }
         });

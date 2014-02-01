@@ -97,7 +97,7 @@ define(
                             title         : 'Refresh',
                             icon          : 'icon-refresh',
                             ownerContext  : this,
-                            callback      : this._refreshLogs
+                            callback      : this._refreshTable
                         },
 
                         {
@@ -117,7 +117,7 @@ define(
                 }));
             },
 
-            _refreshLogs: function (buttonContext) {
+            _refreshTable: function (buttonContext) {
                 this.collection.state.currentPage = 1;
                 var promise = this.collection.fetch({ reset: true });
 
@@ -128,7 +128,7 @@ define(
 
             _commandComplete: function (options) {
                 if (options.command.get('name') === 'clearlog') {
-                    this._refreshLogs();
+                    this._refreshTable();
                 }
             }
         });

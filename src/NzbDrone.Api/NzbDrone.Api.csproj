@@ -82,6 +82,8 @@
     <Compile Include="Authentication\EnableStatelessAuthInNancy.cs" />
     <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
+    <Compile Include="Blacklist\BlacklistModule.cs" />
+    <Compile Include="Blacklist\BlacklistResource.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
     <Compile Include="ClientSchema\SchemaDeserializer.cs" />
     <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
