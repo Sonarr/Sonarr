@@ -210,16 +210,18 @@ namespace NzbDrone.Core.Datastore
 
         public virtual PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec)
         {
-            var pagingQuery = Query.OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                                   .Skip(pagingSpec.PagingOffset())
-                                   .Take(pagingSpec.PageSize);
-
-            pagingSpec.Records = pagingQuery.ToList();
-
-            //TODO: Use the same query for count and records
-            pagingSpec.TotalRecords = Count();
+            pagingSpec.Records = GetPagedQuery(Query, pagingSpec).ToList();
+            pagingSpec.TotalRecords = GetPagedQuery(Query, pagingSpec).GetRowCount();
 
             return pagingSpec;
+        }
+
+        protected virtual SortBuilder<TModel> GetPagedQuery(QueryBuilder<TModel> query, PagingSpec<TModel> pagingSpec)
+        {
+            return query.Where(pagingSpec.FilterExpression)
+                        .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                        .Skip(pagingSpec.PagingOffset())
+                        .Take(pagingSpec.PageSize);
         }
 
         public void DeleteAll()
