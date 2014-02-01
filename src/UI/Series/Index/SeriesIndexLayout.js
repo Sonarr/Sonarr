@@ -167,6 +167,44 @@ define(
                 this.listenTo(SeriesCollection, 'sync', this._renderView);
                 this.listenTo(SeriesCollection, 'remove', this._renderView);
 
+                this.filteringOptions = {
+                    type         : 'radio',
+                    storeState   : true,
+                    menuKey      : 'series.filterMode',
+                    defaultAction: 'all',
+                    items        :
+                        [
+                            {
+                                key     : 'all',
+                                title   : '',
+                                tooltip : 'All',
+                                icon    : 'icon-circle-blank',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'monitored',
+                                title   : '',
+                                tooltip : 'Monitored Only',
+                                icon    : 'icon-nd-monitored',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'continuing',
+                                title   : '',
+                                tooltip : 'Continuing Only',
+                                icon    : 'icon-play',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'ended',
+                                title   : '',
+                                tooltip : 'Ended Only',
+                                icon    : 'icon-stop',
+                                callback: this._setFilter
+                            }
+                        ]
+                };
+
                 this.viewButtons = {
                     type         : 'radio',
                     storeState   : true,
@@ -201,26 +239,30 @@ define(
 
             _showTable: function () {
                 this.currentView = new Backgrid.Grid({
-                    collection: SeriesCollection,
+                    collection: this.seriesCollection,
                     columns   : this.columns,
                     className : 'table table-hover'
                 });
 
-                this._fetchCollection();
+                this._renderView();
             },
 
             _showList: function () {
-                this.currentView = new ListCollectionView({ collection: SeriesCollection });
+                this.currentView = new ListCollectionView({ 
+                    collection: this.seriesCollection
+                });
 
-                this._fetchCollection();
+                this._renderView();
             },
 
             _showPosters: function () {
-                this.currentView = new PosterCollectionView({ collection: SeriesCollection });
+                this.currentView = new PosterCollectionView({
+                    collection: this.seriesCollection
+                });
 
-                this._fetchCollection();
+                this._renderView();
             },
-
+            
             _renderView: function () {
 
                 if (SeriesCollection.length === 0) {
@@ -238,10 +280,17 @@ define(
             onShow: function () {
                 this._showToolbar();
                 this._renderView();
+                this._fetchCollection();
             },
 
             _fetchCollection: function () {
-                SeriesCollection.fetch();
+                this.seriesCollection.fetch();
+            },
+
+            _setFilter: function(buttonContext) {
+                var mode = buttonContext.model.get('key');
+
+                this.seriesCollection.setFilterMode(mode);
             },
 
             _showToolbar: function () {
@@ -251,10 +300,10 @@ define(
                 }
 
                 var rightButtons = [
+                    this.sortingOptions,
+                    this.filteringOptions,
                     this.viewButtons
                 ];
-
-                rightButtons.splice(0, 0, this.sortingOptions);
 
                 this.toolbar.show(new ToolbarLayout({
                     right  : rightButtons,

@@ -62,23 +62,20 @@ define(
 
                 return '1';
             };
+            
+            var originalMakeComparator = this.prototype._makeComparator;
+            this.prototype._makeComparator = function (sortKey, order, sortValue) {
+                var state = this.state;
 
-            _.extend(this.prototype, {
-                initialSort: function () {
-                    var key = this.state.sortKey;
-                    var order = this.state.order;
+                sortKey = sortKey || state.sortKey;
+                order = order || state.order;
 
-                    if (this[key] && this.mode === 'client') {
-                        var sortValue = this[key];
-
-                        this.setSorting(key, order, { sortValue: sortValue });
-
-                        var comparator = this._makeComparator(key, order, sortValue);
-                        this.fullCollection.comparator = comparator;
-                        this.fullCollection.sort();
-                    }
-                }
-            });
+                if (!sortKey || !order) return;
+                
+                if (!sortValue && this[sortKey]) sortValue = this[sortKey];
+                
+                return originalMakeComparator.call(this, sortKey, order, sortValue);
+            };
 
             return this;
         };
