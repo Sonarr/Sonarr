@@ -130,6 +130,7 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="HistoryTests\HistoryServiceFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecsFixture.cs" />

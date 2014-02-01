@@ -59,7 +59,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             foreach (var episode in subject.Episodes)
             {
-                var bestQualityInHistory = _historyService.GetBestQualityInHistory(episode.Id);
+                var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.QualityProfile, episode.Id);
                 if (bestQualityInHistory != null)
                 {
                     _logger.Trace("Comparing history quality with report. History is {0}", bestQualityInHistory);

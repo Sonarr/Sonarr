@@ -62,9 +62,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _upgradableQuality = new QualityModel(Quality.SDTV, false);
             _notupgradableQuality = new QualityModel(Quality.HDTV1080p, true);
 
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_notupgradableQuality);
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(2)).Returns(_notupgradableQuality);
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(3)).Returns<QualityModel>(null);
+            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 1)).Returns(_notupgradableQuality);
+            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 2)).Returns(_notupgradableQuality);
+            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 3)).Returns<QualityModel>(null);
 
             Mocker.GetMock<IProvideDownloadClient>()
                   .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
@@ -72,12 +72,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithFirstReportUpgradable()
         {
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_upgradableQuality);
+            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 1)).Returns(_upgradableQuality);
         }
 
         private void WithSecondReportUpgradable()
         {
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(2)).Returns(_upgradableQuality);
+            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 2)).Returns(_upgradableQuality);
         }
 
         private void GivenSabnzbdDownloadClient()
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
             _upgradableQuality = new QualityModel(Quality.WEBDL1080p, false);
 
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(1)).Returns(_upgradableQuality);
+            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 1)).Returns(_upgradableQuality);
 
             _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
         }
