@@ -127,45 +127,45 @@ define(
                     ]
             },
 
-            sortingOptions: {
-                type          : 'sorting',
-                storeState    : false,
-                viewCollection: SeriesCollection,
-                items         :
-                    [
-                        {
-                            title: 'Title',
-                            name : 'title'
-                        },
-                        {
-                            title: 'Seasons',
-                            name : 'seasonCount'
-                        },
-                        {
-                            title: 'Quality',
-                            name : 'qualityProfileId'
-                        },
-                        {
-                            title: 'Network',
-                            name : 'network'
-                        },
-                        {
-                            title     : 'Next Airing',
-                            name      : 'nextAiring',
-                            sortValue : SeriesCollection.nextAiring
-                        },
-                        {
-                            title: 'Episodes',
-                            name : 'percentOfEpisodes'
-                        }
-                    ]
-            },
-
             initialize: function () {
-                this.seriesCollection = SeriesCollection;
+                this.seriesCollection = SeriesCollection.clone();
 
                 this.listenTo(SeriesCollection, 'sync', this._renderView);
                 this.listenTo(SeriesCollection, 'remove', this._renderView);
+
+                this.sortingOptions = {
+                    type          : 'sorting',
+                    storeState    : false,
+                    viewCollection: this.seriesCollection,
+                    items         :
+                        [
+                            {
+                                title: 'Title',
+                                name : 'title'
+                            },
+                            {
+                                title: 'Seasons',
+                                name : 'seasonCount'
+                            },
+                            {
+                                title: 'Quality',
+                                name : 'qualityProfileId'
+                            },
+                            {
+                                title: 'Network',
+                                name : 'network'
+                            },
+                            {
+                                title     : 'Next Airing',
+                                name      : 'nextAiring',
+                                sortValue : SeriesCollection.nextAiring
+                            },
+                            {
+                                title: 'Episodes',
+                                name : 'percentOfEpisodes'
+                            }
+                        ]
+                };
 
                 this.filteringOptions = {
                     type         : 'radio',
