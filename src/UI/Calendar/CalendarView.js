@@ -43,6 +43,12 @@ define(
                     eventRender   : function (event, element) {
                         self.$(element).addClass(event.statusLevel);
                         self.$(element).children('.fc-event-inner').addClass(event.statusLevel);
+
+                        if (event.progress > 0) {
+                            self.$(element).find('.fc-event-time')
+                                           .after('<span class="downloading-progress pull-right">{0}%</span>'
+                                           .format(event.progress.toFixed(0)));
+                        }
                     },
                     eventClick    : function (event) {
                         vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
@@ -85,6 +91,7 @@ define(
                         end         : end,
                         allDay      : false,
                         statusLevel : _instance._getStatusLevel(model, end),
+                        progress    : _instance._getDownloadProgress(model),
                         model       : model
                     };
 
@@ -129,6 +136,16 @@ define(
             _reloadCalendarEvents: function () {
                 this.$el.fullCalendar('removeEvents');
                 this._setEventData(this.collection);
+            },
+
+            _getDownloadProgress: function (element) {
+                var downloading = QueueCollection.findEpisode(element.get('id'));
+
+                if (!downloading) {
+                    return 0;
+                }
+
+                return 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
             }
         });
     });
