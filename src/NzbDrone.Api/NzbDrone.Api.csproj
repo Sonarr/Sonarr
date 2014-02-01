@@ -38,6 +38,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DDay.iCal">
+      <HintPath>..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
+    </Reference>
     <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
@@ -82,6 +85,7 @@
     <Compile Include="Authentication\EnableStatelessAuthInNancy.cs" />
     <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
+    <Compile Include="Calendar\CalendarFeedModule.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
     <Compile Include="ClientSchema\SchemaDeserializer.cs" />
     <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
