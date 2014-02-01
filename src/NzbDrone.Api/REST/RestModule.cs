@@ -241,6 +241,16 @@ namespace NzbDrone.Api.REST
                 }
             }
 
+            if (Request.Query.FilterKey != null)
+            {
+                pagingResource.FilterKey = Request.Query.FilterKey.ToString();
+
+                if (Request.Query.FilterValue != null)
+                {
+                    pagingResource.FilterValue = Request.Query.FilterValue.ToString();
+                }
+            }
+
             return pagingResource;
         }
     }
