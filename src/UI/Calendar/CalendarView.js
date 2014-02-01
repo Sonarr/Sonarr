@@ -9,7 +9,8 @@ define(
         'System/StatusModel',
         'History/Queue/QueueCollection',
         'Mixins/backbone.signalr.mixin',
-        'fullcalendar'
+        'fullcalendar',
+        'jquery.easypiechart'
     ], function (vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection) {
 
         var _instance;
@@ -18,6 +19,7 @@ define(
             initialize: function () {
                 this.collection = new CalendarCollection().bindSignalR({ updateOnly: true });
                 this.listenTo(this.collection, 'change', this._reloadCalendarEvents);
+                this.listenTo(QueueCollection, 'sync', this._reloadCalendarEvents);
             },
             render    : function () {
 
@@ -46,8 +48,16 @@ define(
 
                         if (event.progress > 0) {
                             self.$(element).find('.fc-event-time')
-                                           .after('<span class="downloading-progress pull-right">{0}%</span>'
-                                           .format(event.progress.toFixed(0)));
+                                .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(event.progress));
+
+                            self.$(element).find('.chart').easyPieChart({
+                                barColor  : '#ffffff',
+                                trackColor: false,
+                                scaleColor: false,
+                                lineWidth : 2,
+                                size      : 14,
+                                animate   : false
+                            });
                         }
                     },
                     eventClick    : function (event) {
