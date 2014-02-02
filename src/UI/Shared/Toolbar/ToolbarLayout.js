@@ -10,7 +10,8 @@ define(
         'underscore'
     ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView, SortingButtonCollectionView, _) {
         return Marionette.Layout.extend({
-            template: 'Shared/Toolbar/ToolbarLayoutTemplate',
+            template : 'Shared/Toolbar/ToolbarLayoutTemplate',
+            className: 'toolbar',
 
             ui: {
                 left_x : '.x-toolbar-left',

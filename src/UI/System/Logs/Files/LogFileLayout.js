@@ -72,7 +72,7 @@ define(
 
             _showToolbar: function () {
 
-                var rightSideButtons = {
+                var leftSideButtons = {
                     type      : 'default',
                     storeState: false,
                     items     :
@@ -95,9 +95,9 @@ define(
                 };
 
                 this.toolbar.show(new ToolbarLayout({
-                    right   :
+                    left   :
                         [
-                            rightSideButtons
+                            leftSideButtons
                         ],
                     context: this
                 }));

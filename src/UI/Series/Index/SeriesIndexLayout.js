@@ -41,6 +41,7 @@ define(
             regions: {
                 seriesRegion  : '#x-series',
                 toolbar       : '#x-toolbar',
+                toolbar2      : '#x-toolbar2',
                 footer        : '#x-series-footer'
             },
 
@@ -237,6 +238,12 @@ define(
                 };
             },
 
+            onShow: function () {
+                this._showToolbar();
+                this._renderView();
+                this._fetchCollection();
+            },
+
             _showTable: function () {
                 this.currentView = new Backgrid.Grid({
                     collection: this.seriesCollection,
@@ -277,12 +284,6 @@ define(
                 }
             },
 
-            onShow: function () {
-                this._showToolbar();
-                this._renderView();
-                this._fetchCollection();
-            },
-
             _fetchCollection: function () {
                 this.seriesCollection.fetch();
             },
@@ -300,8 +301,6 @@ define(
                 }
 
                 var rightButtons = [
-                    this.sortingOptions,
-                    this.filteringOptions,
                     this.viewButtons
                 ];
 
@@ -310,6 +309,17 @@ define(
                     left   :
                         [
                             this.leftSideButtons
+                        ],
+                    context: this
+                }));
+
+                this.toolbar2.show(new ToolbarLayout({
+                    right  : [
+                        this.filteringOptions
+                    ],
+                    left   :
+                        [
+                            this.sortingOptions
                         ],
                     context: this
                 }));

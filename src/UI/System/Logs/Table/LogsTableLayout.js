@@ -125,7 +125,7 @@ define(
                     ]
                 };
                 
-                var rightSideButtons = {
+                var leftSideButtons = {
                     type      : 'default',
                         storeState: false,
                         items     :
@@ -146,10 +146,13 @@ define(
                 };
 
                 this.toolbar.show(new ToolbarLayout({
-                    right   :
+                    left    :
                         [
-                            filterButtons,
-                            rightSideButtons
+                            leftSideButtons
+                        ],
+                    right  :
+                        [
+                            filterButtons
                         ],
                     context: this
                 }));

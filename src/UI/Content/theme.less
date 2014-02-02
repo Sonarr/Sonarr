@@ -15,19 +15,41 @@
 @import "../Shared/Styles/card";
 @import "../Rename/rename";
 
-.page-toolbar {
-  margin-top    : 10px;
-  margin-bottom : 30px;
+.toolbar {
 
-  .toolbar-group {
-    display: inline-block;
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
   }
 
-  .sorting-buttons {
-    .sorting-title {
+  .page-toolbar {
+    margin-top    : 10px;
+    margin-bottom : 30px;
+
+    .toolbar-group {
       display: inline-block;
-      width: 110px;
     }
+
+    .sorting-buttons {
+      .sorting-title {
+        display: inline-block;
+        width: 110px;
+      }
+    }
+  }
+}
+
+.toolbars {
+  margin-top    : 5px;
+  margin-bottom : 30px;
+
+  .page-toolbar {
+    margin-top    : 5px;
+    margin-bottom : 0px;
   }
 }
 
