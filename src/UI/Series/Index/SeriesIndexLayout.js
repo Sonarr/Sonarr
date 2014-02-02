@@ -275,6 +275,7 @@ define(
                 if (SeriesCollection.length === 0) {
                     this.seriesRegion.show(new EmptyView());
                     this.toolbar.close();
+                    this.toolbar2.close();
                 }
                 else {
                     this.seriesRegion.show(this.currentView);
