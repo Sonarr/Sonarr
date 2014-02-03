@@ -122,6 +122,7 @@
     <Compile Include="Blacklisting\Blacklist.cs" />
     <Compile Include="Blacklisting\BlacklistRepository.cs" />
     <Compile Include="Blacklisting\BlacklistService.cs" />
+    <Compile Include="Blacklisting\ClearBlacklistCommand.cs" />
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="DecisionEngine\Specifications\NotRestrictedReleaseSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
@@ -256,6 +258,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
+    <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />

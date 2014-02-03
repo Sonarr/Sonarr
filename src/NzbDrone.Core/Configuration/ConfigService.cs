@@ -278,10 +278,45 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("CreateEmptySeriesFolders", value); }
         }
 
-        public string DownloadClientWorkingFolders
+        public String DownloadClientWorkingFolders
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }
             set { SetValue("DownloadClientWorkingFolders", value); }
+        }
+
+        public Boolean SetPermissionsLinux
+        {
+            get { return GetValueBoolean("SetPermissionsLinux", false); }
+
+            set { SetValue("SetPermissionsLinux", value); }
+        }
+
+        public String FileChmod
+        {
+            get { return GetValue("FileChmod", "0644"); }
+
+            set { SetValue("FileChmod", value); }
+        }
+
+        public String FolderChmod
+        {
+            get { return GetValue("FolderChmod", "0755"); }
+
+            set { SetValue("FolderChmod", value); }
+        }
+
+        public String ChownUser
+        {
+            get { return GetValue("ChownUser", ""); }
+
+            set { SetValue("ChownUser", value); }
+        }
+
+        public String ChownGroup
+        {
+            get { return GetValue("ChownGroup", ""); }
+
+            set { SetValue("ChownGroup", value); }
         }
 
         private string GetValue(string key)

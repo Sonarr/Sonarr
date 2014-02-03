@@ -27,7 +27,7 @@ namespace NzbDrone.App.Test
         }
 
         [Test]
-        public void should_be_able_to_resolve_downlodclients()
+        public void should_be_able_to_resolve_downloadclients()
         {
             MainAppContainerBuilder.BuildContainer(args).Resolve<IEnumerable<IDownloadClient>>().Should().NotBeEmpty();
         }

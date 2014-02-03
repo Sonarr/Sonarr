@@ -3,6 +3,7 @@ using System.Net;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Parser.Model;

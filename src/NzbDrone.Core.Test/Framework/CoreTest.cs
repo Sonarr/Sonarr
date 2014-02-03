@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Framework
@@ -22,12 +23,11 @@ namespace NzbDrone.Core.Test.Framework
             Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));
         }
 
-        protected void UseRealDisk()
-        {
-            Mocker.SetConstant<IDiskProvider>(new DiskProvider());
-            WithTempAsAppPath();
-        }
-
+//        protected void UseRealDisk()
+//        {
+//            Mocker.SetConstant<IDiskProvider>(new DiskProvider());
+//            WithTempAsAppPath();
+//        }
     }
 
     public abstract class CoreTest<TSubject> : CoreTest where TSubject : class

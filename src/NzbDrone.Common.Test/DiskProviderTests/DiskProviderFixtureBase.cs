@@ -3,12 +3,12 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.DiskProviderTests
 {
-    [TestFixture]
-    public class DiskProviderFixture : TestBase<DiskProvider>
+    public class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
         DirectoryInfo _binFolder;
         DirectoryInfo _binFolderCopy;
@@ -91,7 +91,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             VerifyCopy();
         }
 
-
         [Test]
         public void CopyFolder_should_overwrite_existing_folder()
         {
@@ -126,7 +125,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             VerifyMove();
         }
 
-
         [Test]
         public void move_read_only_file()
         {
@@ -141,9 +139,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 
             Subject.MoveFile(source, destination);
         }
-
-
-
 
         [Test]
         public void empty_folder_should_return_folder_modified_date()
@@ -161,12 +156,11 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             Directory.CreateDirectory(testDir);
 
             TestLogger.Info("Path is: {0}", testFile);
-
             
             Subject.WriteAllText(testFile, "Test");
 
             Subject.GetLastFolderWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
-            Subject.GetLastFolderWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow);
+            Subject.GetLastFolderWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
         }
 
         [Test]
@@ -189,7 +183,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             Subject.IsFileLocked(testFile).Should().BeFalse();
         }
 
-
         [Test]
         public void should_return_true_for_unlocked_file()
         {
@@ -202,7 +195,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             }
         }
 
-
         [Test]
         public void should_be_able_to_set_permission_from_parrent()
         {
@@ -211,7 +203,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 
             Subject.InheritFolderPermissions(testFile);
         }
-
 
         [Test]
         [Explicit]

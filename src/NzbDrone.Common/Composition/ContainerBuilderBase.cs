@@ -67,6 +67,5 @@ namespace NzbDrone.Common.Composition
                 Container.RegisterAllAsSingleton(contractType, implementations);
             }
         }
-
     }
 }

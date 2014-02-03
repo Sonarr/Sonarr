@@ -10,13 +10,12 @@ define(
         'underscore'
     ], function (Marionette, ButtonCollection, ButtonModel, RadioButtonCollectionView, ButtonCollectionView, SortingButtonCollectionView, _) {
         return Marionette.Layout.extend({
-            template: 'Shared/Toolbar/ToolbarLayoutTemplate',
+            template : 'Shared/Toolbar/ToolbarLayoutTemplate',
+            className: 'toolbar',
 
-            regions: {
-                left_1 : '.x-toolbar-left-1',
-                left_2 : '.x-toolbar-left-2',
-                right_1: '.x-toolbar-right-1',
-                right_2: '.x-toolbar-right-2'
+            ui: {
+                left_x : '.x-toolbar-left',
+                right_x: '.x-toolbar-right'
             },
 
             initialize: function (options) {
@@ -97,8 +96,17 @@ define(
                         break;
                     }
                 }
-
-                this[position + '_' + (index + 1).toString()].show(buttonGroupView);
+                
+                var regionId = position + "_" + (index + 1);                
+                var region = this[regionId];
+                                
+                if (!region) {
+                    var regionClassName = "x-toolbar-" + position + "-" + (index + 1);
+                    this.ui[position + '_x'].append('<div class="toolbar-group '+regionClassName+'" />\r\n');                
+                    region = this.addRegion(regionId, "." + regionClassName);
+                }
+                
+                region.show(buttonGroupView);
             }
         });
     });

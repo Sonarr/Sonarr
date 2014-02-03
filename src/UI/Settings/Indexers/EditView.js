@@ -18,7 +18,8 @@ define(
 
             events: {
                 'click .x-save'        : '_save',
-                'click .x-save-and-add': '_saveAndAdd'
+                'click .x-save-and-add': '_saveAndAdd',
+                'click .x-cancel'      : '_cancel'
             },
 
             initialize: function (options) {
@@ -67,6 +68,13 @@ define(
                     promise.fail(function () {
                         self.ui.activity.empty();
                     });
+                }
+            },
+
+            _cancel: function () {
+                if (this.model.isNew()) {
+                    this.model.destroy();
+                    vent.trigger(vent.Commands.CloseModalCommand);
                 }
             }
         });

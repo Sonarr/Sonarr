@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.DiskProviderTests
 {
-    [TestFixture]
-    public class IsParentFixture : TestBase<DiskProvider>
+    public class IsParentFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
         private string _parent = @"C:\Test".AsOsAgnostic();
 

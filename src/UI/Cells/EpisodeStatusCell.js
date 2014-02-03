@@ -57,7 +57,15 @@ define(
                         var model = this.model;
                         var downloading = QueueCollection.findEpisode(model.get('id'));
 
-                        if (downloading || this.model.get('downloading')) {
+                        if (downloading) {
+                            var progress = 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
+
+                            this.$el.html('<div class="progress progress-purple" title="Episode is downloading - {0}%" data-container="body">'.format(progress.toFixed(1)) +
+                                          '<div class="bar" style="width: {0}%;"></div></div>'.format(progress));
+                            return;
+                        }
+
+                        else if (this.model.get('downloading')) {
                             icon = 'icon-nd-downloading';
                             tooltip = 'Episode is downloading';
                         }

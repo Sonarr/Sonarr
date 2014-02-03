@@ -1,0 +1,36 @@
+@import "Bootstrap/mixins";
+@import "Bootstrap/variables";
+@import "variables";
+
+.progress.episode-progress {
+  width         : 125px;
+  position      : relative;
+  margin-bottom : 2px;
+
+  .progressbar-back-text, .progressbar-front-text {
+    font-size   : 11.844px;
+    font-weight : bold;
+    text-align  : center;
+    cursor      : default;
+  }
+
+  .progressbar-back-text {
+    position : absolute;
+    width    : 100%;
+    height   : 100%;
+  }
+
+  .progressbar-front-text {
+    display : block;
+    width   : 125px;
+  }
+
+  .bar {
+    position : absolute;
+    overflow : hidden;
+  }
+}
+
+.progress-purple .bar, .progress .bar-purple {
+  #gradient > .vertical(@purple, @nzbdronePurple);
+}

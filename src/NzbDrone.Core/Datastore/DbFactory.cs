@@ -71,8 +71,6 @@ namespace NzbDrone.Core.Datastore
                     }
             }
 
-
-
             _migrationController.MigrateToLatest(connectionString, migrationType);
 
             return new Database(() =>

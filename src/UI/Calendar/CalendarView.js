@@ -9,7 +9,8 @@ define(
         'System/StatusModel',
         'History/Queue/QueueCollection',
         'Mixins/backbone.signalr.mixin',
-        'fullcalendar'
+        'fullcalendar',
+        'jquery.easypiechart'
     ], function (vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection) {
 
         var _instance;
@@ -18,6 +19,7 @@ define(
             initialize: function () {
                 this.collection = new CalendarCollection().bindSignalR({ updateOnly: true });
                 this.listenTo(this.collection, 'change', this._reloadCalendarEvents);
+                this.listenTo(QueueCollection, 'sync', this._reloadCalendarEvents);
             },
             render    : function () {
 
@@ -43,6 +45,20 @@ define(
                     eventRender   : function (event, element) {
                         self.$(element).addClass(event.statusLevel);
                         self.$(element).children('.fc-event-inner').addClass(event.statusLevel);
+
+                        if (event.progress > 0) {
+                            self.$(element).find('.fc-event-time')
+                                .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(event.progress));
+
+                            self.$(element).find('.chart').easyPieChart({
+                                barColor  : '#ffffff',
+                                trackColor: false,
+                                scaleColor: false,
+                                lineWidth : 2,
+                                size      : 14,
+                                animate   : false
+                            });
+                        }
                     },
                     eventClick    : function (event) {
                         vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
@@ -85,6 +101,7 @@ define(
                         end         : end,
                         allDay      : false,
                         statusLevel : _instance._getStatusLevel(model, end),
+                        progress    : _instance._getDownloadProgress(model),
                         model       : model
                     };
 
@@ -107,7 +124,7 @@ define(
                     statusLevel = 'success';
                 }
 
-                if (downloading) {
+                else if (downloading) {
                     statusLevel = 'purple';
                 }
 
@@ -129,6 +146,16 @@ define(
             _reloadCalendarEvents: function () {
                 this.$el.fullCalendar('removeEvents');
                 this._setEventData(this.collection);
+            },
+
+            _getDownloadProgress: function (element) {
+                var downloading = QueueCollection.findEpisode(element.get('id'));
+
+                if (!downloading) {
+                    return 0;
+                }
+
+                return 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
             }
         });
     });

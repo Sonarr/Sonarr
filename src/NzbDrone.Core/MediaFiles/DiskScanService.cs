@@ -2,6 +2,7 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.MediaFiles.Commands;

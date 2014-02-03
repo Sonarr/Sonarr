@@ -3,6 +3,7 @@ using NLog;
 using Nancy;
 using Nancy.Responses;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend.Mappers

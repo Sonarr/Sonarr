@@ -17,6 +17,8 @@ namespace NzbDrone.Host
 
         public static void Start(StartupContext startupContext, IUserAlert userAlert, Action<IContainer> startCallback = null)
         {
+            LogTargets.Register(startupContext, false, true);
+
             try
             {
                 GlobalExceptionHandlers.Register();
@@ -30,6 +32,7 @@ namespace NzbDrone.Host
                 }
 
                 _container = MainAppContainerBuilder.BuildContainer(startupContext);
+                _container.Resolve<IAppFolderFactory>().Register();
 
                 var appMode = GetApplicationMode(startupContext);
 
@@ -50,7 +53,6 @@ namespace NzbDrone.Host
                 Logger.Info(e.Message);
             }
         }
-
 
         private static void Start(ApplicationModes applicationModes)
         {

@@ -67,6 +67,7 @@
     <Compile Include="Composition\IContainer.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
     <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="EnvironmentInfo\AppFolderFactory.cs" />
     <Compile Include="EnvironmentInfo\BuildInfo.cs" />
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="HttpProvider.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="PathExtensions.cs" />
-    <Compile Include="DiskProvider.cs" />
+    <Compile Include="Disk\IDiskProvider.cs" />
     <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="Processes\ProcessProvider.cs" />

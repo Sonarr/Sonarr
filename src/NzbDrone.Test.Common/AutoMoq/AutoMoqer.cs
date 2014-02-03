@@ -3,12 +3,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Practices.Unity;
 using Moq;
 using Moq.Language.Flow;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common.AutoMoq.Unity;
 
 [assembly: InternalsVisibleTo("AutoMoq.Tests")]
@@ -132,6 +135,8 @@ namespace NzbDrone.Test.Common.AutoMoq
             this.container = container;
             container.RegisterInstance(this);
 
+            RegisterPlatformLibrary(container);
+
             registeredMocks = new Dictionary<Type, object>();
             AddTheAutoMockingContainerExtensionToTheContainer(container);
         }
@@ -162,6 +167,23 @@ namespace NzbDrone.Test.Common.AutoMoq
         private static Type GetTheMockType<T>() where T : class
         {
             return typeof(T);
+        }
+
+        private void RegisterPlatformLibrary(IUnityContainer container)
+        {
+            var assemblyName = "NzbDrone.Windows";
+
+            if (OsInfo.IsLinux)
+            {
+                assemblyName = "NzbDrone.Mono";
+            }
+
+            if (!File.Exists(assemblyName + ".dll"))
+            {
+                return;
+            }
+
+            Assembly.Load(assemblyName);
         }
 
         #endregion

@@ -2,6 +2,7 @@
 @import "../Content/Bootstrap/variables";
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
+@import "../Content/variables";
 
 .calendar {
   th, td {
@@ -100,7 +101,7 @@
   }
 
   .purple {
-    border-color : #7932ea;
+    border-color : @nzbdronePurple;
   }
 
   .episode-title {
@@ -148,7 +149,12 @@
   }
 
   .purple {
-    border-color     : #7932ea;
-    background-color : #7932ea;
+    border-color     : @nzbdronePurple;
+    background-color : @nzbdronePurple;
+  }
+
+  .chart {
+    margin-top  : 2px;
+    margin-right: 2px;
   }
 }

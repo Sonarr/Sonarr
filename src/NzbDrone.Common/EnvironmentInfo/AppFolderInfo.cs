@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -17,21 +18,14 @@ namespace NzbDrone.Common.EnvironmentInfo
 
     public class AppFolderInfo : IAppFolderInfo
     {
-        private readonly IDiskProvider _diskProvider;
-        private readonly Logger _logger;
         private readonly Environment.SpecialFolder DATA_SPECIAL_FOLDER = Environment.SpecialFolder.CommonApplicationData;
 
-
-        public AppFolderInfo(IDiskProvider diskProvider, IStartupContext startupContext)
+        public AppFolderInfo(IStartupContext startupContext)
         {
-            _diskProvider = diskProvider;
-
             if (OsInfo.IsLinux)
             {
                 DATA_SPECIAL_FOLDER = Environment.SpecialFolder.ApplicationData;
             }
-
-            _logger =  NzbDroneLogger.GetLogger(this);
 
             if (startupContext.Args.ContainsKey(StartupContext.APPDATA))
             {
@@ -42,29 +36,8 @@ namespace NzbDrone.Common.EnvironmentInfo
                 AppDataFolder = Path.Combine(Environment.GetFolderPath(DATA_SPECIAL_FOLDER, Environment.SpecialFolderOption.None), "NzbDrone");
             }
 
-            _diskProvider.EnsureFolder(AppDataFolder);
-
             StartUpFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             TempFolder = Path.GetTempPath();
-
-            diskProvider.EnsureFolder(AppDataFolder);
-
-            if (!OsInfo.IsLinux)
-            {
-                SetPermissions();
-            }
-        }
-
-        private void SetPermissions()
-        {
-            try
-            {
-                _diskProvider.SetPermissions(AppDataFolder, WellKnownSidType.WorldSid, FileSystemRights.FullControl, AccessControlType.Allow);
-            }
-            catch (Exception ex)
-            {
-                _logger.WarnException("Coudn't set app folder permission", ex);
-            }
         }
 
         public string AppDataFolder { get; private set; }

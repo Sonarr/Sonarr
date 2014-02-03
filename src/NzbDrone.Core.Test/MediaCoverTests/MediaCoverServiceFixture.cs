@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         [SetUp]
         public void Setup()
         {
-            Mocker.SetConstant<IAppFolderInfo>(new AppFolderInfo(new DiskProvider(), Mocker.Resolve<IStartupContext>()));
+            Mocker.SetConstant<IAppFolderInfo>(new AppFolderInfo(Mocker.Resolve<IStartupContext>()));
         }
 
         [Test]

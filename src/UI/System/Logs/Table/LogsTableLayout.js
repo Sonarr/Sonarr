@@ -66,7 +66,6 @@ define(
 
             onRender: function () {
                 this.grid.show(new LoadingView());
-                this.collection.fetch();
             },
 
             onShow: function () {
@@ -88,7 +87,45 @@ define(
             },
 
             _showToolbar: function () {
-                var rightSideButtons = {
+                var filterButtons = {
+                    type         : 'radio',
+                    storeState   : true,
+                    menuKey      : 'logs.filterMode',
+                    defaultAction: 'all',
+                    items        :
+                    [
+                        {
+                            key           : 'all',
+                            title         : '',
+                            tooltip       : 'All',
+                            icon          : 'icon-circle-blank',
+                            callback      : this._setFilter
+                        },
+                        {
+                            key           : 'info',
+                            title         : '',
+                            tooltip       : 'Info',
+                            icon          : 'icon-info',
+                            callback      : this._setFilter
+                        },
+                        {
+                            key           : 'warn',
+                            title         : '',
+                            tooltip       : 'Warn',
+                            icon          : 'icon-warn',
+                            callback      : this._setFilter
+                        },
+                        {
+                            key           : 'error',
+                            title         : '',
+                            tooltip       : 'Error',
+                            icon          : 'icon-error',
+                            callback      : this._setFilter
+                        }
+                    ]
+                };
+                
+                var leftSideButtons = {
                     type      : 'default',
                         storeState: false,
                         items     :
@@ -97,7 +134,7 @@ define(
                             title         : 'Refresh',
                             icon          : 'icon-refresh',
                             ownerContext  : this,
-                            callback      : this._refreshLogs
+                            callback      : this._refreshTable
                         },
 
                         {
@@ -109,15 +146,19 @@ define(
                 };
 
                 this.toolbar.show(new ToolbarLayout({
-                    right   :
+                    left    :
                         [
-                            rightSideButtons
+                            leftSideButtons
+                        ],
+                    right  :
+                        [
+                            filterButtons
                         ],
                     context: this
                 }));
             },
 
-            _refreshLogs: function (buttonContext) {
+            _refreshTable: function (buttonContext) {
                 this.collection.state.currentPage = 1;
                 var promise = this.collection.fetch({ reset: true });
 
@@ -125,10 +166,23 @@ define(
                     buttonContext.ui.icon.spinForPromise(promise);
                 }
             },
+            
+            _setFilter: function(buttonContext) {
+                var mode = buttonContext.model.get('key');
+                
+                this.collection.setFilterMode(mode, { reset: false });
+                
+                this.collection.state.currentPage = 1;
+                var promise = this.collection.fetch({ reset: true });
+                
+                if (buttonContext) {
+                    buttonContext.ui.icon.spinForPromise(promise);
+                }
+            },
 
             _commandComplete: function (options) {
                 if (options.command.get('name') === 'clearlog') {
-                    this._refreshLogs();
+                    this._refreshTable();
                 }
             }
         });

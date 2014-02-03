@@ -1,5 +1,5 @@
 ﻿using NLog;
-using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications

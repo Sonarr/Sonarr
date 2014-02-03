@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Api.Directories
 {

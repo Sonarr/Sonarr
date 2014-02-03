@@ -118,6 +118,7 @@
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
@@ -208,7 +209,6 @@
     <Compile Include="DecisionEngineTests\HistorySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />
-    <Compile Include="ProviderTests\DiskProviderTests\FreeDiskSpaceFixture.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />

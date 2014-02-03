@@ -3,9 +3,10 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -23,16 +24,19 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public EpisodeFileMovingService(IEpisodeService episodeService,
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
+                                IConfigService configService,
                                 Logger logger)
         {
             _episodeService = episodeService;
             _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -75,7 +79,18 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFile.Path);
             }
 
-            _diskProvider.CreateFolder(new FileInfo(destinationFilename).DirectoryName);
+            var directoryName = new FileInfo(destinationFilename).DirectoryName;
+
+            if (!_diskProvider.FolderExists(directoryName))
+            {
+                _diskProvider.CreateFolder(directoryName);
+                SetFolderPermissions(directoryName);
+
+                if (!directoryName.PathEquals(series.Path))
+                {
+                    SetFolderPermissions(series.Path);
+                }
+            }
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
@@ -121,6 +136,42 @@ namespace NzbDrone.Core.MediaFiles
                     }
                 }
             }
+
+            else
+            {
+                SetPermissions(destinationFilename, _configService.FileChmod);
+            }
+        }
+
+        private void SetPermissions(string path, string permissions)
+        {
+            if (!_configService.SetPermissionsLinux)
+            {
+                return;
+            }
+
+            try
+            {
+                _diskProvider.SetPermissions(path, permissions, _configService.ChownUser, _configService.ChownGroup);
+            }
+
+            catch (Exception ex)
+            {
+                if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
+                {
+                    _logger.Debug("Unable to apply permissions to: ", path);
+                    _logger.TraceException(ex.Message, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private void SetFolderPermissions(string path)
+        {
+            SetPermissions(path, _configService.FolderChmod);
         }
     }
 }

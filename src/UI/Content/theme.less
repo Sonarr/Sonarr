@@ -10,52 +10,46 @@
 @import "checkbox-button";
 @import "spinner";
 @import "legend";
+@import "progress-bars";
 @import "../Shared/Styles/clickable";
 @import "../Shared/Styles/card";
 @import "../Rename/rename";
 
-.progress.episode-progress {
-  width         : 125px;
-  position      : relative;
-  margin-bottom : 2px;
+.toolbar {
 
-  .progressbar-back-text, .progressbar-front-text {
-    font-size   : 11.844px;
-    font-weight : bold;
-    text-align  : center;
-    cursor      : default;
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
   }
 
-  .progressbar-back-text {
-    position : absolute;
-    width    : 100%;
-    height   : 100%;
-  }
+  .page-toolbar {
+    margin-top    : 10px;
+    margin-bottom : 30px;
 
-  .progressbar-front-text {
-    display : block;
-    width   : 125px;
-  }
+    .toolbar-group {
+      display: inline-block;
+    }
 
-  .bar {
-    position : absolute;
-    overflow : hidden;
+    .sorting-buttons {
+      .sorting-title {
+        display: inline-block;
+        width: 110px;
+      }
+    }
   }
 }
 
-.page-toolbar {
-  margin-top    : 10px;
+.toolbars {
+  margin-top    : 5px;
   margin-bottom : 30px;
 
-  .toolbar-group {
-    display: inline-block;
-  }
-
-  .sorting-buttons {
-    .sorting-title {
-      display: inline-block;
-      width: 110px;
-    }
+  .page-toolbar {
+    margin-top    : 5px;
+    margin-bottom : 0px;
   }
 }
 

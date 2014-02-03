@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Model;
 using NzbDrone.Common.Processes;
@@ -128,11 +129,9 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             updateSubFolder.Exists.Should().BeFalse();
 
-            Mocker.Resolve<DiskProvider>();
             Mocker.SetConstant<IArchiveService>(Mocker.Resolve<ArchiveService>());
 
             Subject.Execute(new ApplicationUpdateCommand());
-
 
             updateSubFolder.Refresh();
 

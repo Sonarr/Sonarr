@@ -42,5 +42,10 @@ namespace NzbDrone.Core.Configuration
         Boolean EnableFailedDownloadHandling { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
         void SaveValues(Dictionary<string, object> configValues);
+        Boolean SetPermissionsLinux { get; set; }
+        String FileChmod { get; set; }
+        String FolderChmod { get; set; }
+        String ChownUser { get; set; }
+        String ChownGroup { get; set; }
     }
 }

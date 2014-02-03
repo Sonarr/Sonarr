@@ -9,6 +9,10 @@ define(
             template : 'Shared/Toolbar/ButtonTemplate',
             className: 'btn',
 
+            ui: {
+                icon: 'i'
+            },
+
             events: {
                 'click': 'onClick'
             },
@@ -49,7 +53,7 @@ define(
 
                 var callback = this.model.get('callback');
                 if (callback) {
-                    callback.call(this.model.ownerContext);
+                    callback.call(this.model.ownerContext, this);
                 }
             }
         });

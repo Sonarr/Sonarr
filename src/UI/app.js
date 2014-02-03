@@ -21,6 +21,7 @@ require.config({
         'marionette'          : 'JsLibraries/backbone.marionette',
         'signalR'             : 'JsLibraries/jquery.signalR',
         'jquery.knob'         : 'JsLibraries/jquery.knob',
+        'jquery.easypiechart' : 'JsLibraries/jquery.easypiechart',
         'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
         'messenger'           : 'JsLibraries/messenger',
         'jquery'              : 'JsLibraries/jquery',
@@ -106,6 +107,12 @@ require.config({
             }
         },
         'jquery.knob'         : {
+            deps:
+                [
+                    'jquery'
+                ]
+        },
+        'jquery.easypiechart'         : {
             deps:
                 [
                     'jquery'

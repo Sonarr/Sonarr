@@ -6,6 +6,7 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -24,12 +25,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
         [SetUp]
         public void Setup()
         {
+            _series = Builder<Series>.CreateNew()
+                                     .With(s => s.Path = @"C:\Test\TV\Series")
+                                     .Build();
+
             _episodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Path = @"C:\Test\File.avi")
                                                .Build();
 
             _localEpisode = Builder<LocalEpisode>.CreateNew()
-                                                 .With(l => l.Series = Builder<Series>.CreateNew().Build())
+                                                 .With(l => l.Series = _series)
                                                  .With(l => l.Episodes = Builder<Episode>.CreateListOfSize(1).Build().ToList())
                                                  .Build();
 

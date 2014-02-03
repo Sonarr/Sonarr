@@ -36,6 +36,9 @@
         {{/if_eq}}
         {{#if_eq eventType compare="downloadFailed"}}
             <dl class="dl-horizontal">
+                <dt>Source Title</dt>
+                <dd>{{sourceTitle}}</dd>
+
                 {{#with data}}
                     <dt>Message</dt>
                     <dd>{{message}}</dd>
