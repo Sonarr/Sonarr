@@ -301,12 +301,12 @@ define(
                     return;
                 }
 
-                var rightButtons = [
-                    this.viewButtons
-                ];
-
                 this.toolbar.show(new ToolbarLayout({
-                    right  : rightButtons,
+                    right  :
+                        [
+                            this.sortingOptions,
+                            this.viewButtons
+                        ],
                     left   :
                         [
                             this.leftSideButtons
@@ -315,12 +315,9 @@ define(
                 }));
 
                 this.toolbar2.show(new ToolbarLayout({
-                    right  : [
-                        this.filteringOptions
-                    ],
-                    left   :
+                    right  :
                         [
-                            this.sortingOptions
+                            this.filteringOptions
                         ],
                     context: this
                 }));
