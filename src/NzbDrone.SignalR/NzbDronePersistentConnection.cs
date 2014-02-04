@@ -14,7 +14,6 @@ namespace NzbDrone.SignalR
             }
         }
 
-
         public void Execute(BroadcastSignalRMessage message)
         {
             Context.Connection.Broadcast(message.Body);

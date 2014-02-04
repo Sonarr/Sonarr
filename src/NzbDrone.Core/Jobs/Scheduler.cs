@@ -27,16 +27,6 @@ namespace NzbDrone.Core.Jobs
             _logger = logger;
         }
 
-        public void Handle(ApplicationStartedEvent message)
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
-            Timer.Interval = 1000 * 30;
-            Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token)
-                .LogExceptions();
-            
-            Timer.Start();
-        }
-
         private void ExecuteCommands()
         {
             try
@@ -70,8 +60,19 @@ namespace NzbDrone.Core.Jobs
             }
         }
 
+        public void Handle(ApplicationStartedEvent message)
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            Timer.Interval = 1000 * 30;
+            Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token)
+                .LogExceptions();
+
+            Timer.Start();
+        }
+
         public void Handle(ApplicationShutdownRequested message)
         {
+            _logger.Info("Shutting down scheduler");
             _cancellationTokenSource.Cancel(true);
             Timer.Stop();
         }

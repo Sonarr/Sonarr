@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
@@ -11,12 +12,14 @@ namespace NzbDrone.Core.Queue
                                   IHandle<ApplicationShutdownRequested>
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly Logger _logger;
         private static readonly Timer Timer = new Timer();
         private static CancellationTokenSource _cancellationTokenSource;
 
-        public QueueScheduler(IEventAggregator eventAggregator)
+        public QueueScheduler(IEventAggregator eventAggregator, Logger logger)
         {
             _eventAggregator = eventAggregator;
+            _logger = logger;
         }
 
         private void CheckQueue()
@@ -47,6 +50,7 @@ namespace NzbDrone.Core.Queue
 
         public void Handle(ApplicationShutdownRequested message)
         {
+            _logger.Info("Shutting down queue scheduler");
             _cancellationTokenSource.Cancel(true);
             Timer.Stop();
         }

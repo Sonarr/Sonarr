@@ -269,6 +269,7 @@ namespace NzbDrone.Common.Processes
 
             if (process.HasExited)
             {
+                Logger.Trace("Process has already exited");
                 return;
             }
 
