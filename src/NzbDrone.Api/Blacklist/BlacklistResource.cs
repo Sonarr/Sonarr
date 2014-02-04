@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Blacklist
 {
