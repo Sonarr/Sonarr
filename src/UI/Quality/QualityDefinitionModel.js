@@ -9,10 +9,10 @@ define(
             baseInitialize: ModelBase.prototype.initialize,
 
             initialize: function () {
-                var name = this.get('name');
+                var name = this.get('quality').name;
 
-                this.successMessage = 'Saved ' + name + ' size settings';
-                this.errorMessage = 'Couldn\'t save ' + name + ' size settings';
+                this.successMessage = 'Saved ' + name + ' quality settings';
+                this.errorMessage = 'Couldn\'t save ' + name + ' quality settings';
 
                 this.baseInitialize.call(this);
             }

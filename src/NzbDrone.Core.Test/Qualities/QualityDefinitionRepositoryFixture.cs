@@ -4,25 +4,27 @@ using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using FluentAssertions;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.Qualities
 {
     [TestFixture]
-
-    public class QualitySizeRepositoryFixture : DbTest<QualitySizeRepository, QualitySize>
+    public class QualityDefinitionRepositoryFixture : DbTest<QualityDefinitionRepository, QualityDefinition>
     {
         [SetUp]
         public void Setup()
         {
-            Mocker.SetConstant<IQualitySizeRepository>(Subject);
-            Mocker.Resolve<QualitySizeService>().Handle(new ApplicationStartedEvent());
+            foreach (var qualityDefault in Quality.DefaultQualityDefinitions)
+            {
+                qualityDefault.Id = 0;
+                Storage.Insert(qualityDefault);
+            }
         }
 
-
         [Test]
-        public void should_get_quality_size_by_id()
+        public void should_get_qualitydefinition_by_id()
         {
-            var size = Subject.GetByQualityId(Quality.Bluray1080p.Id);
+            var size = Subject.GetByQualityId((int)Quality.Bluray1080p);
 
             size.Should().NotBeNull();
         }

@@ -87,7 +87,6 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IDownloadClient>().Setup(c => c.IsConfigured).Returns(false);
 
-
             Subject.DownloadReport(_parseResult);
 
             Mocker.GetMock<IDownloadClient>().Verify(c => c.DownloadNzb(It.IsAny<RemoteEpisode>()), Times.Never());

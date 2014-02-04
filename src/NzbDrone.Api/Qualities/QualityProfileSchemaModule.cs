@@ -7,33 +7,28 @@ namespace NzbDrone.Api.Qualities
 {
     public class QualityProfileSchemaModule : NzbDroneRestModule<QualityProfileResource>
     {
-        public QualityProfileSchemaModule()
+        private readonly IQualityDefinitionService _qualityDefinitionService;
+
+        public QualityProfileSchemaModule(IQualityDefinitionService qualityDefinitionService)
             : base("/qualityprofiles/schema")
         {
+            _qualityDefinitionService = qualityDefinitionService;
+
             GetResourceAll = GetAll;
         }
 
         private List<QualityProfileResource> GetAll()
         {
+            var items = _qualityDefinitionService.All()
+                .OrderBy(v => v.Weight)
+                .Select(v => new QualityProfileItem { Quality = v.Quality, Allowed = false })
+                .ToList();
+
             var profile = new QualityProfile();
             profile.Cutoff = Quality.Unknown;
-            profile.Allowed = new List<Quality>();
+            profile.Items = items;
 
-            return new List<QualityProfileResource>{ QualityToResource(profile)};
-        }
-
-        private static QualityProfileResource QualityToResource(QualityProfile profile)
-        {
-            return new QualityProfileResource
-                {
-                    Available = Quality.All()
-                        .Where(c => !profile.Allowed.Any(q => c.Id == q.Id))
-                        .InjectTo<List<QualityResource>>(),
-
-                    Allowed = profile.Allowed.InjectTo<List<QualityResource>>(),
-                    Name = profile.Name,
-                    Id = profile.Id
-                };
+            return new List<QualityProfileResource> { profile.InjectTo<QualityProfileResource>() };
         }
     }
 }

@@ -3,7 +3,7 @@
 define(['AppLayout',
         'marionette',
         'Settings/Quality/Profile/QualityProfileView',
-        'Settings/Quality/Profile/EditQualityProfileView',
+        'Settings/Quality/Profile/Edit/EditQualityProfileLayout',
         'Settings/Quality/Profile/QualityProfileSchemaCollection',
         'underscore'
 ], function (AppLayout, Marionette, QualityProfileView, EditProfileView, ProfileCollection, _) {

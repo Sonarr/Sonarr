@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Qualities
 {
     public class QualityProfileResource : RestResource
     {
         public String Name { get; set; }
-        public QualityResource Cutoff { get; set; }
-        public List<QualityResource> Available { get; set; }
-        public List<QualityResource> Allowed { get; set; }
+        public Quality Cutoff { get; set; }
+        public List<QualityProfileItemResource> Items { get; set; }
     }
 
-    public class QualityResource : RestResource
+    public class QualityProfileItemResource : RestResource
     {
-        public Int32 Weight { get; set; }
-        public String Name { get; set; }
+        public Quality Quality { get; set; }
+        public bool Allowed { get; set; }
     }
 }

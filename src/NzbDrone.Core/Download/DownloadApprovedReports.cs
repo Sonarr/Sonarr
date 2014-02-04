@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
@@ -16,7 +18,7 @@ namespace NzbDrone.Core.Download
         private readonly IDownloadService _downloadService;
         private readonly Logger _logger;
 
-        public DownloadApprovedReports(IDownloadService downloadService, Logger logger)
+        public DownloadApprovedReports(IDownloadService downloadService,  Logger logger)
         {
             _downloadService = downloadService;
             _logger = logger;
@@ -57,11 +59,13 @@ namespace NzbDrone.Core.Download
         public List<DownloadDecision> GetQualifiedReports(IEnumerable<DownloadDecision> decisions)
         {
             return decisions.Where(c => c.Approved && c.RemoteEpisode.Episodes.Any())
-                            .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality)
-                            .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
-                            .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / c.RemoteEpisode.Episodes.Count)
-                            .ThenBy(c => c.RemoteEpisode.Release.Age)
-                            .ToList();
+                .GroupBy(c => c.RemoteEpisode.Series.Id, (i,s) => s
+                    .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(s.First().RemoteEpisode.Series.QualityProfile))
+                    .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
+                    .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / c.RemoteEpisode.Episodes.Count)
+                    .ThenBy(c => c.RemoteEpisode.Release.Age))
+                .SelectMany(c => c)
+                .ToList();
         }
     }
 }

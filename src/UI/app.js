@@ -2,30 +2,32 @@
 require.config({
 
     paths: {
-        'backbone'            : 'JsLibraries/backbone',
-        'moment'              : 'JsLibraries/moment',
-        'filesize'            : 'JsLibraries/filesize',
-        'handlebars'          : 'JsLibraries/handlebars.runtime',
-        'handlebars.helpers'  : 'JsLibraries/handlebars.helpers',
-        'bootstrap'           : 'JsLibraries/bootstrap',
-        'backbone.deepmodel'  : 'JsLibraries/backbone.deep.model',
-        'backbone.pageable'   : 'JsLibraries/backbone.pageable',
-        'backbone.validation' : 'JsLibraries/backbone.validation',
-        'backbone.modelbinder': 'JsLibraries/backbone.modelbinder',
-        'backgrid'            : 'JsLibraries/backbone.backgrid',
-        'backgrid.paginator'  : 'JsLibraries/backbone.backgrid.paginator',
-        'backgrid.selectall'  : 'JsLibraries/backbone.backgrid.selectall',
-        'fullcalendar'        : 'JsLibraries/fullcalendar',
-        'backstrech'          : 'JsLibraries/jquery.backstretch',
-        'underscore'          : 'JsLibraries/lodash.underscore',
-        'marionette'          : 'JsLibraries/backbone.marionette',
-        'signalR'             : 'JsLibraries/jquery.signalR',
-        'jquery.knob'         : 'JsLibraries/jquery.knob',
+        'backbone'                : 'JsLibraries/backbone',
+        'moment'                  : 'JsLibraries/moment',
+        'filesize'                : 'JsLibraries/filesize',
+        'handlebars'              : 'JsLibraries/handlebars.runtime',
+        'handlebars.helpers'      : 'JsLibraries/handlebars.helpers',
+        'bootstrap'               : 'JsLibraries/bootstrap',
+        'backbone.deepmodel'      : 'JsLibraries/backbone.deep.model',
+        'backbone.pageable'       : 'JsLibraries/backbone.pageable',
+        'backbone.validation'     : 'JsLibraries/backbone.validation',
+        'backbone.modelbinder'    : 'JsLibraries/backbone.modelbinder',
+        'backbone.collectionview' : 'JsLibraries/backbone.collectionview',
+        'backgrid'                : 'JsLibraries/backbone.backgrid',
+        'backgrid.paginator'      : 'JsLibraries/backbone.backgrid.paginator',
+        'backgrid.selectall'      : 'JsLibraries/backbone.backgrid.selectall',
+        'fullcalendar'            : 'JsLibraries/fullcalendar',
+        'backstrech'              : 'JsLibraries/jquery.backstretch',
+        'underscore'              : 'JsLibraries/lodash.underscore',
+        'marionette'              : 'JsLibraries/backbone.marionette',
+        'signalR'                 : 'JsLibraries/jquery.signalR',
+        'jquery-ui'               : 'JsLibraries/jquery-ui',
+        'jquery.knob'             : 'JsLibraries/jquery.knob',
         'jquery.easypiechart' : 'JsLibraries/jquery.easypiechart',
-        'jquery.dotdotdot'    : 'JsLibraries/jquery.dotdotdot',
-        'messenger'           : 'JsLibraries/messenger',
-        'jquery'              : 'JsLibraries/jquery',
-        'libs'                : 'JsLibraries/',
+        'jquery.dotdotdot'        : 'JsLibraries/jquery.dotdotdot',
+        'messenger'               : 'JsLibraries/messenger',
+        'jquery'                  : 'JsLibraries/jquery',
+        'libs'                    : 'JsLibraries/',
 
         'api': 'Require/require.api'
     },
@@ -106,6 +108,12 @@ require.config({
 
             }
         },
+        'jquery-ui'           : {
+            deps:
+                [
+                    'jquery'
+                ]
+        },
         'jquery.knob'         : {
             deps:
                 [
@@ -149,6 +157,14 @@ require.config({
                 [
                     'backbone'
                 ]
+        },
+        'backbone.collectionview': {
+            deps:
+                [
+                    'backbone',
+                    'jquery-ui'
+                ],                
+            exports: 'Backbone.CollectionView'
         },
         backgrid              : {
             deps:
