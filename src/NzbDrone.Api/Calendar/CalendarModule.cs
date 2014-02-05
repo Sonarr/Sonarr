@@ -51,7 +51,7 @@ namespace NzbDrone.Api.Calendar
             var resources = ToListResource(() => _episodeService.EpisodesBetweenDates(start, end))
                 .LoadSubtype(e => e.SeriesId, _seriesRepository);
 
-            return resources.OrderBy(e => e.AirDate).ToList();
+            return resources.OrderBy(e => e.AirDateUtc).ToList();
         }
 
         public void Handle(EpisodeGrabbedEvent message)
