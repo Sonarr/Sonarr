@@ -14,10 +14,12 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Alter.Table("QualityProfiles").AddColumn("Items").AsString().Nullable();
+            if (!Schema.Table("QualityProfiles").Column("Items").Exists())
+            {
+                Alter.Table("QualityProfiles").AddColumn("Items").AsString().Nullable();
+            }
 
             Execute.WithConnection(ConvertQualityProfiles);
-
             Execute.WithConnection(ConvertQualityModels);
         }
         
@@ -80,7 +82,12 @@ namespace NzbDrone.Core.Datastore.Migration
                         var id = qualityModelReader.GetInt32(0);
                         var qualityJson = qualityModelReader.GetString(1);
 
-                        var quality = Json.Deserialize<QualityModel>(qualityJson);
+                        QualityModel quality;
+
+                        if (!Json.TryDeserialize<QualityModel>(qualityJson, out quality))
+                        {
+                            continue;
+                        }
 
                         var qualityNewJson = qualityModelConverter.ToDB(quality);
 
