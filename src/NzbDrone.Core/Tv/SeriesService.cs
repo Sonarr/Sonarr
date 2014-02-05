@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Tv
             newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
 
             _seriesRepository.Insert(newSeries);
-            _eventAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
+            _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
 
             return newSeries;
         }
