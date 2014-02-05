@@ -74,13 +74,12 @@ namespace NzbDrone.Core.Datastore.Migration
             using (IDbCommand qualityModelCmd = conn.CreateCommand())
             {
                 qualityModelCmd.Transaction = tran;
-                qualityModelCmd.CommandText = @"SELECT Id, Quality FROM " + tableName;
+                qualityModelCmd.CommandText = @"SELECT Distinct Quality FROM " + tableName;
                 using (IDataReader qualityModelReader = qualityModelCmd.ExecuteReader())
                 {
                     while (qualityModelReader.Read())
                     {
-                        var id = qualityModelReader.GetInt32(0);
-                        var qualityJson = qualityModelReader.GetString(1);
+                        var qualityJson = qualityModelReader.GetString(0);
 
                         QualityModel quality;
 
@@ -94,9 +93,9 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE " + tableName + " SET Quality = ? WHERE Id = ?";
+                            updateCmd.CommandText = "UPDATE " + tableName + " SET Quality = ? WHERE Quality = ?";
                             updateCmd.AddParameter(qualityNewJson);
-                            updateCmd.AddParameter(id);
+                            updateCmd.AddParameter(qualityJson);
 
                             updateCmd.ExecuteNonQuery();
                         }
