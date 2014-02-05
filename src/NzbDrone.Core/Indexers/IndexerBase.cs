@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Indexers
         }
 
         public virtual IParseFeed Parser { get; private set; }
-
+        
         public abstract IEnumerable<string> RecentFeed { get; }
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Indexers
 
         public override string ToString()
         {
-            return GetType().Name;
+            return Definition.Name;
         }
     }
 
