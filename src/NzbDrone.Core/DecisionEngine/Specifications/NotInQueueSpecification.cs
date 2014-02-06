@@ -40,7 +40,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var queue = downloadClient.GetQueue().Select(q => q.RemoteEpisode);
 
-            return !IsInQueue(subject, queue);
+            if (IsInQueue(subject, queue))
+            {
+                _logger.Trace("Already in queue, rejecting.");
+            }
+
+            return true;
         }
 
         private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)

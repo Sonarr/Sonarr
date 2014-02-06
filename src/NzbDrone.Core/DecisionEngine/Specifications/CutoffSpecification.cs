@@ -33,6 +33,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 
                 if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.QualityProfile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
+                    _logger.Trace("Cutoff already met, rejecting.");
                     return false;
                 }
             }

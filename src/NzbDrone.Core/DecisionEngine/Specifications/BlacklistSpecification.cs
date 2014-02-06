@@ -37,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (_blacklistService.Blacklisted(subject.Release.Title))
             {
-                _logger.Trace("{0} is blacklisted", subject.Release.Title);
+                _logger.Trace("{0} is blacklisted, rejecting.", subject.Release.Title);
                 return false;
             }
 

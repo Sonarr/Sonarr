@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (quality == Quality.Unknown)
             {
                 _logger.Trace("Unknown quality. skipping size check.");
-                return false;
+                return true;
             }
 
             var qualityDefinition = _qualityDefinitionService.Get(quality);

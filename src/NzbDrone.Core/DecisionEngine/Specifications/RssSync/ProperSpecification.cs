@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 {
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {
-                        _logger.Trace("Proper for old file, skipping: {0}", subject);
+                        _logger.Trace("Proper for old file, rejecting: {0}", subject);
                         return false;
                     }
 

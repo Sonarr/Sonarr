@@ -51,6 +51,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                     if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                     {
+                        _logger.Trace("Latest history item is downloading, rejecting.");
                         return false;
                     }
                 }
