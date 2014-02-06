@@ -2,23 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
+using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Validation;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Api.Series
 {
-    public class SeriesModule : NzbDroneRestModule<SeriesResource>
+    public class SeriesModule : NzbDroneRestModuleWithSignalR<SeriesResource, Core.Tv.Series>, 
+                                IHandle<EpisodeImportedEvent>, 
+                                IHandle<EpisodeFileDeletedEvent>,
+                                IHandle<SeriesUpdatedEvent>,       
+                                IHandle<SeriesEditedEvent>,  
+                                IHandle<SeriesDeletedEvent>
+                                
     {
+        private readonly ICommandExecutor _commandExecutor;
         private readonly ISeriesService _seriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
         private readonly IMapCoversToLocal _coverMapper;
 
-        public SeriesModule(ISeriesService seriesService, ISeriesStatisticsService seriesStatisticsService, IMapCoversToLocal coverMapper)
-            : base("/Series")
+        public SeriesModule(ICommandExecutor commandExecutor,
+                            ISeriesService seriesService,
+                            ISeriesStatisticsService seriesStatisticsService,
+                            IMapCoversToLocal coverMapper)
+            : base(commandExecutor)
         {
+            _commandExecutor = commandExecutor;
             _seriesService = seriesService;
             _seriesStatisticsService = seriesStatisticsService;
             _coverMapper = coverMapper;
@@ -74,6 +90,8 @@ namespace NzbDrone.Api.Series
         private void UpdateSeries(SeriesResource seriesResource)
         {
             GetNewId<Core.Tv.Series>(_seriesService.UpdateSeries, seriesResource);
+
+            BroadcastResourceChange(ModelAction.Updated, seriesResource);
         }
 
         private void DeleteSeries(int id)
@@ -118,6 +136,33 @@ namespace NzbDrone.Api.Series
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
             resource.NextAiring = seriesStatistics.NextAiring;
+        }
+
+        public void Handle(EpisodeImportedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Updated, message.ImportedEpisode.SeriesId);
+        }
+
+        public void Handle(EpisodeFileDeletedEvent message)
+        {
+            if (message.ForUpgrade) return;
+
+            BroadcastResourceChange(ModelAction.Updated, message.EpisodeFile.SeriesId);
+        }
+
+        public void Handle(SeriesUpdatedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+        }
+
+        public void Handle(SeriesEditedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+        }
+
+        public void Handle(SeriesDeletedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Deleted, message.Series.InjectTo<SeriesResource>());
         }
     }
 }

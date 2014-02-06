@@ -136,7 +136,10 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
-            return _seriesRepository.Update(series);
+            var updatedSeries = _seriesRepository.Update(series);
+            _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries));
+
+            return updatedSeries;
         }
 
         public List<Series> UpdateSeries(List<Series> series)
@@ -148,6 +151,8 @@ namespace NzbDrone.Core.Tv
                     var folderName = new DirectoryInfo(s.Path).Name;
                     s.Path = Path.Combine(s.RootFolderPath, folderName);
                 }
+
+                _eventAggregator.PublishEvent(new SeriesEditedEvent(s));
             }
 
             _seriesRepository.UpdateMany(series);

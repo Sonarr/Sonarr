@@ -22,6 +22,12 @@ define(
                         return;
                     }
 
+                    if (options.action === 'deleted') {
+                        collection.remove(new collection.model(options.resource, {parse: true}));
+
+                        return;
+                    }
+
                     var model = new collection.model(options.resource, {parse: true});
 
                     //updateOnly will prevent the collection from adding a new item

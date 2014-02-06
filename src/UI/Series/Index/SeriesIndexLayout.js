@@ -1,6 +1,7 @@
 'use strict';
 define(
     [
+        'underscore',
         'marionette',
         'backgrid',
         'Series/Index/Posters/SeriesPostersCollectionView',
@@ -16,9 +17,9 @@ define(
         'Cells/SeriesStatusCell',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
-        'Shared/Toolbar/ToolbarLayout',
-        'underscore'
-    ], function (Marionette,
+        'Shared/Toolbar/ToolbarLayout'
+    ], function (_,
+                 Marionette,
                  Backgrid,
                  PosterCollectionView,
                  ListCollectionView,
@@ -33,8 +34,7 @@ define(
                  SeriesStatusCell,
                  FooterView,
                  FooterModel,
-                 ToolbarLayout,
-                 _) {
+                 ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -131,8 +131,25 @@ define(
             initialize: function () {
                 this.seriesCollection = SeriesCollection.clone();
 
-                this.listenTo(SeriesCollection, 'sync', this._renderView);
-                this.listenTo(SeriesCollection, 'remove', this._renderView);
+                this.listenTo(SeriesCollection, 'sync', function (model, collection, options) {
+                    this.seriesCollection.shadowCollection.add(model, options);
+                    this.seriesCollection.fullCollection.resetFiltered();
+                    this._renderView();
+                });
+
+                this.listenTo(SeriesCollection, 'add', function (model, collection, options) {
+                    this.seriesCollection.shadowCollection.add(model, options);
+                    this.seriesCollection.fullCollection.resetFiltered();
+                    this._renderView();
+                });
+
+                this.listenTo(SeriesCollection, 'remove', function (model, collection, options) {
+                    this.seriesCollection.shadowCollection.remove(model, options);
+                    this.seriesCollection.fullCollection.resetFiltered();
+                    this._renderView();
+                });
+
+
 
                 this.sortingOptions = {
                     type          : 'sorting',
@@ -255,7 +272,7 @@ define(
             },
 
             _showList: function () {
-                this.currentView = new ListCollectionView({ 
+                this.currentView = new ListCollectionView({
                     collection: this.seriesCollection
                 });
 
@@ -269,7 +286,7 @@ define(
 
                 this._renderView();
             },
-            
+
             _renderView: function () {
 
                 if (SeriesCollection.length === 0) {
@@ -278,6 +295,8 @@ define(
                     this.toolbar2.close();
                 }
                 else {
+                    this._resetFilter();
+
                     this.seriesRegion.show(this.currentView);
 
                     this._showToolbar();
@@ -293,6 +312,18 @@ define(
                 var mode = buttonContext.model.get('key');
 
                 this.seriesCollection.setFilterMode(mode);
+            },
+
+            _resetFilter: function () {
+                var key = this.seriesCollection.state.filterKey;
+                var value = this.seriesCollection.state.filterValue;
+
+                this.seriesCollection.setFilter([ null, null ]);
+                this.seriesCollection.setFilter([ key, value ]);
+            },
+
+            _shadowTest: function () {
+                window.alert('added to shadow');
             },
 
             _showToolbar: function () {

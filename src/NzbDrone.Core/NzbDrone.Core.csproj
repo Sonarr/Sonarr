@@ -489,6 +489,7 @@
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
     <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
     <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
