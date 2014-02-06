@@ -105,7 +105,6 @@ namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
             newIndexes.Select(c=>c.Column).Should().BeEquivalentTo(indexes.Select(c=>c.Column));
         }
 
-
         [Test]
         public void should_be_able_to_create_table_with_new_indexes()
         {

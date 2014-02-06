@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         private static readonly Regex SchemaRegex = new Regex(@"['\""\[](?<name>\w+)['\""\]]\s(?<schema>[\w-\s]+)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
-        private static readonly Regex IndexRegex = new Regex(@"\(""(?<col>.*)""\s(?<direction>ASC|DESC)\)$",
+        private static readonly Regex IndexRegex = new Regex(@"\((?:""|')(?<col>.*)(?:""|')\s(?<direction>ASC|DESC)\)$",
              RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
         public SqLiteMigrationHelper(IConnectionStringFactory connectionStringFactory, Logger logger)
@@ -96,14 +96,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             var reader = command.ExecuteReader();
             var sqls = ReadArray<string>(reader).ToList();
-
-
             var indexes = new List<SQLiteIndex>();
 
             foreach (var indexSql in sqls)
             {
                 var newIndex = new SQLiteIndex();
                 var matches = IndexRegex.Match(indexSql);
+
+                if (!matches.Success) continue;;
 
                 newIndex.Column = matches.Groups["col"].Value;
                 newIndex.Unique = indexSql.Contains("UNIQUE");
