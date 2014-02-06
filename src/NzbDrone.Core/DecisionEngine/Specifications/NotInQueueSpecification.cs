@@ -43,6 +43,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (IsInQueue(subject, queue))
             {
                 _logger.Trace("Already in queue, rejecting.");
+                return false;
             }
 
             return true;
