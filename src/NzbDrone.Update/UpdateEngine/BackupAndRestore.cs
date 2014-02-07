@@ -7,7 +7,7 @@ namespace NzbDrone.Update.UpdateEngine
 {
     public interface IBackupAndRestore
     {
-        void BackUp(string source);
+        void Backup(string source);
         void Restore(string target);
     }
 
@@ -24,7 +24,7 @@ namespace NzbDrone.Update.UpdateEngine
             _logger = logger;
         }
 
-        public void BackUp(string source)
+        public void Backup(string source)
         {
             _logger.Info("Creating backup of existing installation");
             _diskProvider.CopyFolder(source, _appFolderInfo.GetUpdateBackUpFolder());

@@ -19,17 +19,25 @@ namespace NzbDrone.Update.UpdateEngine
         private readonly ITerminateNzbDrone _terminateNzbDrone;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IBackupAndRestore _backupAndRestore;
+        private readonly IBackupAppData _backupAppData;
         private readonly IStartNzbDrone _startNzbDrone;
         private readonly Logger _logger;
 
-        public InstallUpdateService(IDiskProvider diskProvider, IDetectApplicationType detectApplicationType, ITerminateNzbDrone terminateNzbDrone,
-            IAppFolderInfo appFolderInfo, IBackupAndRestore backupAndRestore, IStartNzbDrone startNzbDrone, Logger logger)
+        public InstallUpdateService(IDiskProvider diskProvider,
+                                    IDetectApplicationType detectApplicationType,
+                                    ITerminateNzbDrone terminateNzbDrone,
+                                    IAppFolderInfo appFolderInfo,
+                                    IBackupAndRestore backupAndRestore,
+                                    IBackupAppData backupAppData,
+                                    IStartNzbDrone startNzbDrone,
+                                    Logger logger)
         {
             _diskProvider = diskProvider;
             _detectApplicationType = detectApplicationType;
             _terminateNzbDrone = terminateNzbDrone;
             _appFolderInfo = appFolderInfo;
             _backupAndRestore = backupAndRestore;
+            _backupAppData = backupAppData;
             _startNzbDrone = startNzbDrone;
             _logger = logger;
         }
@@ -59,7 +67,8 @@ namespace NzbDrone.Update.UpdateEngine
             {
                 _terminateNzbDrone.Terminate();
 
-                _backupAndRestore.BackUp(installationFolder);
+                _backupAndRestore.Backup(installationFolder);
+                _backupAppData.Backup();
 
                 _logger.Info("Moving update package to target");
 
