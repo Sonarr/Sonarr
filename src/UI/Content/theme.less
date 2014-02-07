@@ -219,3 +219,26 @@ body {
   height: 55px;
   opacity: 0;
 }
+
+.lifecycle-controls {
+  font-size: 20px;
+
+  i {
+    cursor: pointer;
+  }
+
+  .drone-button {
+    height: .8em;
+    margin-left: -8px;
+
+    &:hover {
+      .icon-stack-base:before {
+        .icon(@sign-blank)
+      }
+
+      .icon-nd-restart:before {
+        color: white;
+      }
+    }
+  }
+}

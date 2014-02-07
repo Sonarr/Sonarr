@@ -5,12 +5,14 @@ define(
         'marionette',
         'System/Info/SystemInfoLayout',
         'System/Logs/LogsLayout',
-        'System/Update/UpdateLayout'
+        'System/Update/UpdateLayout',
+        'Commands/CommandController'
     ], function (Backbone,
                  Marionette,
                  SystemInfoLayout,
                  LogsLayout,
-                 UpdateLayout) {
+                 UpdateLayout,
+                 CommandController) {
         return Marionette.Layout.extend({
             template: 'System/SystemLayoutTemplate',
 
@@ -27,9 +29,11 @@ define(
             },
 
             events: {
-                'click .x-info-tab'  : '_showInfo',
+                'click .x-info-tab'   : '_showInfo',
                 'click .x-logs-tab'   : '_showLogs',
-                'click .x-updates-tab': '_showUpdates'
+                'click .x-updates-tab': '_showUpdates',
+                'click .x-shutdown'   : '_shutdown',
+                'click .x-restart'    : '_restart'
             },
 
             initialize: function (options) {
@@ -83,6 +87,18 @@ define(
                 this.updates.show(new UpdateLayout());
                 this.ui.updatesTab.tab('show');
                 this._navigate('system/updates');
+            },
+
+            _shutdown: function () {
+                CommandController.Execute('shutdown', {
+                    name : 'shutdown'
+                });
+            },
+
+            _restart: function () {
+                CommandController.Execute('restart', {
+                    name : 'restart'
+                });
             }
         });
     });

@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -16,23 +18,27 @@ namespace NzbDrone.Core.Lifecycle
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IServiceProvider _serviceProvider;
         private readonly IProcessProvider _processProvider;
+        private readonly Logger _logger;
 
 
         public LifestyleService(IEventAggregator eventAggregator,
                                 IRuntimeInfo runtimeInfo,
                                 IAppFolderInfo appFolderInfo,
                                 IServiceProvider serviceProvider,
-                                IProcessProvider processProvider)
+                                IProcessProvider processProvider,
+                                Logger logger)
         {
             _eventAggregator = eventAggregator;
             _runtimeInfo = runtimeInfo;
             _appFolderInfo = appFolderInfo;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
+            _logger = logger;
         }
 
         public void Execute(ShutdownCommand message)
         {
+            _logger.ProgressInfo("Shutdown requested, goodbye.");
             _eventAggregator.PublishEvent(new ApplicationShutdownRequested());
             
             if (_runtimeInfo.IsWindowsService)
@@ -43,6 +49,7 @@ namespace NzbDrone.Core.Lifecycle
 
         public void Execute(RestartCommand message)
         {
+            _logger.ProgressInfo("Restart requested, brb.");
             _eventAggregator.PublishEvent(new ApplicationShutdownRequested(true));
 
             if (_runtimeInfo.IsWindowsService)
