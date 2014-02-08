@@ -2,7 +2,7 @@
 define(
     [
         'backbone',
-        'AddSeries/RootFolders/Model',
+        'AddSeries/RootFolders/RootFolderModel',
         'Mixins/backbone.signalr.mixin'
     ], function (Backbone, RootFolderModel) {
 

@@ -3,16 +3,16 @@
 define(
     [
         'marionette',
-        'AddSeries/RootFolders/CollectionView',
-        'AddSeries/RootFolders/Collection',
-        'AddSeries/RootFolders/Model',
+        'AddSeries/RootFolders/RootFolderCollectionView',
+        'AddSeries/RootFolders/RootFolderCollection',
+        'AddSeries/RootFolders/RootFolderModel',
         'Shared/LoadingView',
         'Mixins/AsValidatedView',
         'Mixins/AutoComplete'
     ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel, LoadingView, AsValidatedView) {
 
         var layout = Marionette.Layout.extend({
-            template: 'AddSeries/RootFolders/LayoutTemplate',
+            template: 'AddSeries/RootFolders/RootFolderLayoutTemplate',
 
             ui: {
                 pathInput: '.x-path input'
@@ -23,7 +23,8 @@ define(
             },
 
             events: {
-                'click .x-add': '_addFolder'
+                'click .x-add': '_addFolder',
+                'keydown .x-path input': '_keydown'
             },
 
             initialize: function () {
@@ -65,6 +66,14 @@ define(
 
             _showCurrentDirs: function () {
                 this.currentDirs.show(this.rootfolderListView);
+            },
+
+            _keydown: function (e) {
+                if (e.keyCode !== 13) {
+                    return;
+                }
+
+                this._addFolder();
             }
         });
 

@@ -7,9 +7,9 @@ define(
         'vent',
         'Series/SeriesCollection',
         'Quality/QualityProfileCollection',
-        'AddSeries/RootFolders/Collection',
+        'AddSeries/RootFolders/RootFolderCollection',
         'Shared/Toolbar/ToolbarLayout',
-        'AddSeries/RootFolders/Layout',
+        'AddSeries/RootFolders/RootFolderLayout',
         'Config'
     ], function (_,
                  Marionette,

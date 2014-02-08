@@ -4,11 +4,11 @@ define(
         'vent',
         'AppLayout',
         'marionette',
-        'AddSeries/RootFolders/Layout',
+        'AddSeries/RootFolders/RootFolderLayout',
         'AddSeries/Existing/AddExistingSeriesCollectionView',
         'AddSeries/AddSeriesView',
         'Quality/QualityProfileCollection',
-        'AddSeries/RootFolders/Collection',
+        'AddSeries/RootFolders/RootFolderCollection',
         'Series/SeriesCollection'
     ], function (vent,
                  AppLayout,

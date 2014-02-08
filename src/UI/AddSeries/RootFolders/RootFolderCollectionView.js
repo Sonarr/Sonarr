@@ -3,7 +3,7 @@
 define(
     [
         'marionette',
-        'AddSeries/RootFolders/ItemView'
+        'AddSeries/RootFolders/RootFolderItemView'
     ], function (Marionette, RootFolderItemView) {
 
 
