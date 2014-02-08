@@ -2,15 +2,17 @@
 
 define(
     [
+        'jquery',
         'handlebars',
         'System/StatusModel'
-    ], function (Handlebars, StatusModel) {
+    ], function ($, Handlebars, StatusModel) {
 
-        var placeHolder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.jpg';
+        var placeholder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.jpg';
 
         window.NzbDrone.imageError = function (img) {
-            if (!img.src.contains(placeHolder)) {
-                img.src = placeHolder;
+            if (!img.src.contains(placeholder)) {
+                img.src = placeholder;
+                $(img).addClass('placeholder-image');
             }
             img.onerror = null;
         };

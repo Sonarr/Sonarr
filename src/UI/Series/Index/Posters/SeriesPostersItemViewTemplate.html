@@ -11,13 +11,10 @@
                         <div class="ended-banner">Ended</div>
                     {{/unless_eq}}
                     <a href="{{route}}">
-                        <img class="series-poster" src="{{poster}}" alt="{{title}}">
+                        <img class="series-poster" src="{{poster}}" {{defaultImg}}>
+                        <div class="center title">{{title}}</div>
                     </a>
                 </div>
-            </div>
-
-            <div class="title-container">
-                <div class="center title">{{title}}</div>
             </div>
 
             <div class="center">
