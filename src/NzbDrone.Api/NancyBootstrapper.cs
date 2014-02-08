@@ -3,6 +3,7 @@ using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions.Pipelines;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
@@ -25,6 +26,11 @@ namespace NzbDrone.Api
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             _logger.Info("Starting NzbDrone API");
+
+            if (RuntimeInfo.IsProduction)
+            {
+                DiagnosticsHook.Disable(pipelines);
+            }
 
             RegisterPipelines(pipelines);
 
