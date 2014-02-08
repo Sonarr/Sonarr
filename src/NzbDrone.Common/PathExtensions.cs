@@ -161,6 +161,16 @@ namespace NzbDrone.Common
             return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_BACKUP_APPDATA_FOLDER_NAME);
         }
 
+        public static string GetUpdateBackupConfigFile(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetUpdateBackUpAppDataFolder(appFolderInfo), APP_CONFIG_FILE);
+        }
+
+        public static string GetUpdateBackupDatabase(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetUpdateBackUpAppDataFolder(appFolderInfo), NZBDRONE_DB);
+        }
+
         public static string GetUpdatePackageFolder(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_PACKAGE_FOLDER_NAME);

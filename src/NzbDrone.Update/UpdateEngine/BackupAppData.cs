@@ -27,18 +27,11 @@ namespace NzbDrone.Update.UpdateEngine
         public void Backup()
         {
             _logger.Info("Backing up appdata (database/config)");
-            var appDataPath = _appFolderInfo.GetAppDataPath();
             var backupFolderAppData = _appFolderInfo.GetUpdateBackUpAppDataFolder();
-            var binFolder = Path.Combine(backupFolderAppData, "bin");
 
             _diskProvider.CreateFolder(backupFolderAppData);
-            _diskProvider.CopyFolder(appDataPath, backupFolderAppData);
-
-            if (_diskProvider.FolderExists(binFolder))
-            {
-                _logger.Info("Deleting bin folder from appdata");
-                _diskProvider.DeleteFolder(binFolder, true);
-            }
+            _diskProvider.CopyFile(_appFolderInfo.GetConfigPath(), _appFolderInfo.GetUpdateBackupConfigFile(), true);
+            _diskProvider.CopyFile(_appFolderInfo.GetNzbDroneDatabase(), _appFolderInfo.GetUpdateBackupDatabase(), true);
         }
     }
 }

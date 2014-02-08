@@ -204,6 +204,20 @@ namespace NzbDrone.Common.Disk
             File.Delete(path);
         }
 
+        public void CopyFile(string source, string destination, bool overwrite = false)
+        {
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
+
+            if (source.PathEquals(destination))
+            {
+                Logger.Warn("Source and destination can't be the same {0}", source);
+                return;
+            }
+
+            File.Copy(source, destination, overwrite);
+        }
+
         public void MoveFile(string source, string destination)
         {
             Ensure.That(source, () => source).IsValidPath();
