@@ -3,17 +3,16 @@
     <li><a href="#logs" class="x-logs-tab no-router">Logs</a></li>
     <li><a href="#updates" class="x-updates-tab no-router">Updates</a></li>
     <li class="lifecycle-controls pull-right">
-        <span class="icon-stack drone-button x-shutdown">
-          <i class="icon-check-empty icon-stack-base"></i>
-          <i class="icon-nd-shutdown"></i>
-        </span>
-
-        {{#if_windows}}
-            <span class="icon-stack drone-button x-restart">
-              <i class="icon-check-empty icon-stack-base"></i>
-              <i class="icon-nd-restart"></i>
-            </span>
-        {{/if_windows}}
+        <div class="btn-group">
+            <button class="btn btn-icon-only x-shutdown" title="Shutdown" data-container="body">
+                <i class="icon-nd-shutdown"></i>
+            </button>
+            {{#if_windows}}
+            <button class="btn btn-icon-only x-restart" title="Restart" data-container="body">
+                <i class="icon-nd-restart"></i>
+            </button>
+            {{/if_windows}}
+        </div>
     </li>
 </ul>
 
