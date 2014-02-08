@@ -18,6 +18,7 @@ namespace NzbDrone.Common
         private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_PACKAGE_FOLDER_NAME = "nzbdrone" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_BACKUP_FOLDER_NAME = "nzbdrone_backup" + Path.DirectorySeparatorChar;
+        private static readonly string UPDATE_BACKUP_APPDATA_FOLDER_NAME = "nzbdrone_appdata_backup" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_CLIENT_FOLDER_NAME = "NzbDrone.Update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_LOG_FOLDER_NAME = "UpdateLogs" + Path.DirectorySeparatorChar;
 
@@ -153,6 +154,21 @@ namespace NzbDrone.Common
         public static string GetUpdateBackUpFolder(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_BACKUP_FOLDER_NAME);
+        }
+
+        public static string GetUpdateBackUpAppDataFolder(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_BACKUP_APPDATA_FOLDER_NAME);
+        }
+
+        public static string GetUpdateBackupConfigFile(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetUpdateBackUpAppDataFolder(appFolderInfo), APP_CONFIG_FILE);
+        }
+
+        public static string GetUpdateBackupDatabase(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetUpdateBackUpAppDataFolder(appFolderInfo), NZBDRONE_DB);
         }
 
         public static string GetUpdatePackageFolder(this IAppFolderInfo appFolderInfo)

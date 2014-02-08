@@ -50,10 +50,10 @@ namespace NzbDrone.Update
 
         public void Start(string[] args)
         {
-            int processId = ParseProcessId(args);
+            var processId = ParseProcessId(args);
 
             var exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
-            string targetFolder = exeFileInfo.Directory.FullName;
+            var targetFolder = exeFileInfo.Directory.FullName;
 
             logger.Info("Starting update process. Target Path:{0}", targetFolder);
             _installUpdateService.Start(targetFolder);
