@@ -8,7 +8,7 @@ define(
 
         return Marionette.ItemView.extend({
             tagName : 'li',
-            template: 'Series/Index/Posters/ItemTemplate',
+            template: 'Series/Index/Posters/SeriesPostersItemViewTemplate',
 
 
             ui: {

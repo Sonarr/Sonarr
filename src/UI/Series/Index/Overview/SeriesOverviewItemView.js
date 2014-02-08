@@ -6,7 +6,7 @@ define(
         'marionette'
     ], function (vent, Marionette) {
         return Marionette.ItemView.extend({
-            template: 'Series/Index/List/ItemTemplate',
+            template: 'Series/Index/Overview/SeriesOverviewItemViewTemplate',
 
             ui: {
                 'progressbar': '.progress .bar'

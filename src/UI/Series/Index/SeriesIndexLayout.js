@@ -3,8 +3,8 @@ define(
     [
         'marionette',
         'backgrid',
-        'Series/Index/Posters/CollectionView',
-        'Series/Index/List/CollectionView',
+        'Series/Index/Posters/SeriesPostersCollectionView',
+        'Series/Index/Overview/SeriesOverviewCollectionView',
         'Series/Index/EmptyView',
         'Series/SeriesCollection',
         'Cells/RelativeDateCell',
