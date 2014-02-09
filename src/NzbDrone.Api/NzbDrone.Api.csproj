@@ -150,7 +150,8 @@
     <Compile Include="Mapping\MappingValidation.cs" />
     <Compile Include="Mapping\ResourceMappingException.cs" />
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />
-    <Compile Include="Missing\MissingModule.cs" />
+    <Compile Include="Wanted\CutoffModule.cs" />
+    <Compile Include="Wanted\MissingModule.cs" />
     <Compile Include="Config\NamingSampleResource.cs" />
     <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
     <Compile Include="Qualities\QualityProfileValidation.cs" />

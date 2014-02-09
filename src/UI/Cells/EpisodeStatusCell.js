@@ -52,7 +52,24 @@ define(
 
                         return;
                     }
+                    else if (hasFile && this.model.get('episodeFile')) {
+                        var episodeFile = this.model.get('episodeFile');
+                   
+                        var quality = episodeFile.quality;
+                        var size = FormatHelpers.bytes(episodeFile.size);
+                        var title = 'Episode downloaded';
 
+                        if (quality.proper) {
+                            title += ' [PROPER] - {0}'.format(size);
+                            this.$el.html('<span class="badge badge-info" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        }
+                        else {
+                            title += ' - {0}'.format(size);
+                            this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        }
+
+                        return;
+                    }
                     else {
                         var model = this.model;
                         var downloading = QueueCollection.findEpisode(model.get('id'));

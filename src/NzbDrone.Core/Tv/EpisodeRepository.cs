@@ -4,7 +4,7 @@ using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
-
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Tv
 {
@@ -17,7 +17,8 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
-        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
+        PagingSpec<Episode> GetMissingEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials);
+        List<Episode> GetCutoffUnmetEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
         void SetMonitoredFlat(Episode episode, bool monitored);
@@ -81,7 +82,7 @@ namespace NzbDrone.Core.Tv
             return Query.Where(e => e.EpisodeFileId == fileId).ToList();
         }
 
-        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        public PagingSpec<Episode> GetMissingEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials)
         {
             var currentTime = DateTime.UtcNow;
             var startingSeasonNumber = 1;
@@ -91,10 +92,45 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            pagingSpec.Records = GetEpisodesWithoutFilesQuery(pagingSpec, currentTime, startingSeasonNumber).ToList();
-            pagingSpec.TotalRecords = GetEpisodesWithoutFilesQuery(pagingSpec, currentTime, startingSeasonNumber).GetRowCount();
+            pagingSpec.TotalRecords = GetMissingEpisodesQuery(pagingSpec, currentTime, startingSeasonNumber).GetRowCount();
+            pagingSpec.Records = GetMissingEpisodesQuery(pagingSpec, currentTime, startingSeasonNumber).ToList();
 
             return pagingSpec;
+        }
+
+        public List<Episode> GetCutoffUnmetEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        {
+            var currentTime = DateTime.UtcNow;
+            var startingSeasonNumber = 1;
+
+            if (includeSpecials)
+            {
+                startingSeasonNumber = 0;
+            }
+
+            var query = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                            .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, s) => e.EpisodeFileId == s.Id)
+                            .Where(pagingSpec.FilterExpression)
+                            .AndWhere(e => e.EpisodeFileId != 0)
+                            .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
+                            .AndWhere(e => e.AirDateUtc <= currentTime)
+                            .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection());
+
+            return query.ToList();
+        }
+
+        private SortBuilder<Episode> GetMissingEpisodesQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, int startingSeasonNumber)
+        {
+            var query = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                            .Where(pagingSpec.FilterExpression)
+                            .AndWhere(e => e.EpisodeFileId == 0)
+                            .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
+                            .AndWhere(e => e.AirDateUtc <= currentTime)
+                            .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
+                            .Skip(pagingSpec.PagingOffset())
+                            .Take(pagingSpec.PageSize);
+
+            return query;
         }
 
         public Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
@@ -140,19 +176,6 @@ namespace NzbDrone.Core.Tv
         public void SetFileId(int episodeId, int fileId)
         {
             SetFields(new Episode { Id = episodeId, EpisodeFileId = fileId }, episode => episode.EpisodeFileId);
-        }
-
-        private SortBuilder<Episode> GetEpisodesWithoutFilesQuery(PagingSpec<Episode> pagingSpec, DateTime currentTime, int startingSeasonNumber)
-        {
-            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                        .Where(e => e.EpisodeFileId == 0)
-                        .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                        .AndWhere(e => e.AirDateUtc <= currentTime)
-                        .AndWhere(e => e.Monitored)
-                        .AndWhere(e => e.Series.Monitored)
-                        .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
-                        .Skip(pagingSpec.PagingOffset())
-                        .Take(pagingSpec.PageSize);
         }
     }
 }

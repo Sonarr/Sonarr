@@ -16,13 +16,17 @@ define(
             initialize: function (options) {
                 this.menu = options.menu;
 
-                if (this.menu.storeState) {
-                    this.setActive();
-                }
+                this.setActive();
             },
 
             setActive: function () {
-                var storedKey = Config.getValue(this.menu.menuKey, this.menu.defaultAction);
+                var storedKey = this.menu.defaultAction;
+
+                if (this.menu.storeState)
+                    storedKey = Config.getValue(this.menu.menuKey, storedKey);
+
+                if (!storedKey)
+                    return;
 
                 this.collection.each(function (model) {
                     if (model.get('key').toLocaleLowerCase() === storedKey.toLowerCase()) {

@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_get_monitored_episodes()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.GetMissingEpisodes(_pagingSpec, false);
 
             episodes.Records.Should().HaveCount(1);
         }
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Ignore("Specials not implemented")]
         public void should_get_episode_including_specials()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, true);
+            var episodes = Subject.GetMissingEpisodes(_pagingSpec, true);
 
             episodes.Records.Should().HaveCount(2);
         }
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_not_include_unmonitored_episodes()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.GetMissingEpisodes(_pagingSpec, false);
 
             episodes.Records.Should().NotContain(e => e.Monitored == false);
         }
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_not_contain_unmonitored_series()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.GetMissingEpisodes(_pagingSpec, false);
 
             episodes.Records.Should().NotContain(e => e.SeriesId == _unmonitoredSeries.Id);
         }
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_have_count_of_one()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.GetMissingEpisodes(_pagingSpec, false);
 
             episodes.TotalRecords.Should().Be(1);
         }

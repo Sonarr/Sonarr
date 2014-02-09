@@ -24,7 +24,7 @@ define(
             };
             
             this.prototype.setFilterMode = function(mode, options) {
-                this.setFilter(this.filterModes[mode], options);
+                return this.setFilter(this.filterModes[mode], options);
             };
 
             var originalMakeFullCollection = this.prototype._makeFullCollection;
