@@ -257,7 +257,6 @@ define(
 
             onShow: function () {
                 this._showToolbar();
-                this._renderView();
                 this._fetchCollection();
             },
 
@@ -295,8 +294,6 @@ define(
                     this.toolbar2.close();
                 }
                 else {
-                    this._resetFilter();
-
                     this.seriesRegion.show(this.currentView);
 
                     this._showToolbar();
@@ -312,18 +309,6 @@ define(
                 var mode = buttonContext.model.get('key');
 
                 this.seriesCollection.setFilterMode(mode);
-            },
-
-            _resetFilter: function () {
-                var key = this.seriesCollection.state.filterKey;
-                var value = this.seriesCollection.state.filterValue;
-
-                this.seriesCollection.setFilter([ null, null ]);
-                this.seriesCollection.setFilter([ key, value ]);
-            },
-
-            _shadowTest: function () {
-                window.alert('added to shadow');
             },
 
             _showToolbar: function () {
