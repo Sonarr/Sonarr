@@ -8,8 +8,7 @@ define(
         'api!series',
         'Mixins/AsFilteredCollection',
         'Mixins/AsPersistedStateCollection',
-        'moment',
-        'Mixins/backbone.signalr.mixin'
+        'moment'
     ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsFilteredCollection, AsPersistedStateCollection, Moment) {
         var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
@@ -73,5 +72,5 @@ define(
         var MixedIn = AsPersistedStateCollection.call(FilteredCollection);
         var collection = new MixedIn(SeriesData, { full: true });
 
-        return collection.bindSignalR();
+        return collection;
     });

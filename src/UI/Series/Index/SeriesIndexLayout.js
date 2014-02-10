@@ -17,7 +17,8 @@ define(
         'Cells/SeriesStatusCell',
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
-        'Shared/Toolbar/ToolbarLayout'
+        'Shared/Toolbar/ToolbarLayout',
+        'Mixins/backbone.signalr.mixin'
     ], function (_,
                  Marionette,
                  Backgrid,
@@ -130,26 +131,22 @@ define(
 
             initialize: function () {
                 this.seriesCollection = SeriesCollection.clone();
+                this.seriesCollection.shadowCollection.bindSignalR();
 
-                this.listenTo(SeriesCollection, 'sync', function (model, collection, options) {
-                    this.seriesCollection.shadowCollection.add(model, options);
+                this.listenTo(this.seriesCollection.shadowCollection, 'sync', function (model, collection, options) {
                     this.seriesCollection.fullCollection.resetFiltered();
                     this._renderView();
                 });
 
-                this.listenTo(SeriesCollection, 'add', function (model, collection, options) {
-                    this.seriesCollection.shadowCollection.add(model, options);
+                this.listenTo(this.seriesCollection.shadowCollection, 'add', function (model, collection, options) {
                     this.seriesCollection.fullCollection.resetFiltered();
                     this._renderView();
                 });
 
-                this.listenTo(SeriesCollection, 'remove', function (model, collection, options) {
-                    this.seriesCollection.shadowCollection.remove(model, options);
+                this.listenTo(this.seriesCollection.shadowCollection, 'remove', function (model, collection, options) {
                     this.seriesCollection.fullCollection.resetFiltered();
                     this._renderView();
                 });
-
-
 
                 this.sortingOptions = {
                     type          : 'sorting',

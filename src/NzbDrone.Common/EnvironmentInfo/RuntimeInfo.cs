@@ -33,6 +33,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                                serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
                                serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
 
+            //Guarded to avoid issues when running in a non-managed process 
             var entry = Assembly.GetEntryAssembly();
 
             if (entry != null)
