@@ -23,8 +23,8 @@ namespace NzbDrone.Mono
             {
                 var processArgs = _processProvider.StartAndCapture("ps", String.Format("--pid {0} -o args=", c.Id));
 
-                return processArgs.Standard.Any(p => p.Contains(ProcessProvider.NZB_DRONE_PROCESS_NAME) || 
-                                                     p.Contains(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME));
+                return processArgs.Standard.Any(p => p.Contains(ProcessProvider.NZB_DRONE_PROCESS_NAME + ".exe") ||
+                                                     p.Contains(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME + ".exe"));
             }).ToList();
         }
     }
