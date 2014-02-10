@@ -238,6 +238,12 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
 
                                                       if (command == null)
                                                       {
+                                                          var platform = (int)Environment.OSVersion.Platform;
+                                                          if (platform == 4 || platform == 6 || platform == 128)
+                                                          {
+                                                              return;
+                                                          }
+
                                                           throw new SerializationException("Couldn't parse message " + message.Value);
                                                       }
 
