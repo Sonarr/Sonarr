@@ -51,6 +51,7 @@ namespace NzbDrone.Host
             catch (TerminateApplicationException e)
             {
                 Logger.Info(e.Message);
+                LogManager.Configuration = null;
             }
         }
 

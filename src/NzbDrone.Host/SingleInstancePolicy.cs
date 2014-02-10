@@ -16,12 +16,17 @@ namespace NzbDrone.Host
     {
         private readonly IProcessProvider _processProvider;
         private readonly IBrowserService _browserService;
+        private readonly INzbDroneProcessProvider _nzbDroneProcessProvider;
         private readonly Logger _logger;
 
-        public SingleInstancePolicy(IProcessProvider processProvider, IBrowserService browserService, Logger logger)
+        public SingleInstancePolicy(IProcessProvider processProvider,
+                                    IBrowserService browserService,
+                                    INzbDroneProcessProvider nzbDroneProcessProvider,
+                                    Logger logger)
         {
             _processProvider = processProvider;
             _browserService = browserService;
+            _nzbDroneProcessProvider = nzbDroneProcessProvider;
             _logger = logger;
         }
 
@@ -51,11 +56,10 @@ namespace NzbDrone.Host
         private List<int> GetOtherNzbDroneProcessIds()
         {
             var currentId = _processProvider.GetCurrentProcess().Id;
-            var consoleIds = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME)
-                .Select(c => c.Id);
-            var winformIds = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME).Select(c => c.Id);
-
-            var otherProcesses = consoleIds.Union(winformIds).Except(new[] { currentId }).ToList();
+            var otherProcesses = _nzbDroneProcessProvider.GetNzbDroneProcesses()
+                                                         .Select(c => c.Id)
+                                                         .Except(new[] {currentId})
+                                                         .ToList();
 
             if (otherProcesses.Any())
             {

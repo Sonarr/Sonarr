@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Nancy.Bootstrapper;
 using NzbDrone.Api;
 using NzbDrone.Common.Composition;

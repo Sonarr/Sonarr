@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="DiskProvider.cs" />
     <Compile Include="LinuxPermissionsException.cs" />
+    <Compile Include="NzbDroneProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

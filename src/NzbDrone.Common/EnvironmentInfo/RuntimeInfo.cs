@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Security.Principal;
 using System.ServiceProcess;
 using NLog;
@@ -15,6 +16,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool IsWindowsService { get; }
         bool IsConsole { get; }
         bool IsRunning { get; set; }
+        string ExecutingApplication { get; }
     }
 
     public class RuntimeInfo : IRuntimeInfo
@@ -30,6 +32,8 @@ namespace NzbDrone.Common.EnvironmentInfo
                                OsInfo.IsWindows &&
                                serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME) &&
                                serviceProvider.GetStatus(ServiceProvider.NZBDRONE_SERVICE_NAME) == ServiceControllerStatus.StartPending;
+
+            ExecutingApplication = Assembly.GetEntryAssembly().Location;
         }
 
         static RuntimeInfo()
@@ -73,6 +77,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         }
 
         public bool IsRunning { get; set; }
+        public string ExecutingApplication { get; private set; }
 
         public static bool IsProduction { get; private set; }
 

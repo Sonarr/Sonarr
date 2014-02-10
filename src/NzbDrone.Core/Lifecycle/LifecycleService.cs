@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
@@ -11,26 +11,23 @@ using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
 namespace NzbDrone.Core.Lifecycle
 {
-    public class LifestyleService: IExecute<ShutdownCommand>, IExecute<RestartCommand>
+    public class LifecycleService: IExecute<ShutdownCommand>, IExecute<RestartCommand>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IRuntimeInfo _runtimeInfo;
-        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IServiceProvider _serviceProvider;
         private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
 
 
-        public LifestyleService(IEventAggregator eventAggregator,
+        public LifecycleService(IEventAggregator eventAggregator,
                                 IRuntimeInfo runtimeInfo,
-                                IAppFolderInfo appFolderInfo,
                                 IServiceProvider serviceProvider,
                                 IProcessProvider processProvider,
                                 Logger logger)
         {
             _eventAggregator = eventAggregator;
             _runtimeInfo = runtimeInfo;
-            _appFolderInfo = appFolderInfo;
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
             _logger = logger;
@@ -38,7 +35,7 @@ namespace NzbDrone.Core.Lifecycle
 
         public void Execute(ShutdownCommand message)
         {
-            _logger.ProgressInfo("Shutdown requested, goodbye.");
+            _logger.Info("Shutdown requested.");
             _eventAggregator.PublishEvent(new ApplicationShutdownRequested());
             
             if (_runtimeInfo.IsWindowsService)
@@ -49,7 +46,13 @@ namespace NzbDrone.Core.Lifecycle
 
         public void Execute(RestartCommand message)
         {
-            _logger.ProgressInfo("Restart requested, brb.");
+            _logger.Info("Restart requested.");
+
+            if (OsInfo.IsLinux)
+            {
+                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
+            }
+
             _eventAggregator.PublishEvent(new ApplicationShutdownRequested(true));
 
             if (_runtimeInfo.IsWindowsService)
@@ -59,26 +62,7 @@ namespace NzbDrone.Core.Lifecycle
 
             else
             {
-                //TODO: move this to environment specific projects
-                if (OsInfo.IsWindows)
-                {
-                    if (_runtimeInfo.IsConsole)
-                    {
-                        //Run console with switch
-                        var path = Path.Combine(_appFolderInfo.StartUpFolder,
-                            ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME + ".exe");
-
-                        _processProvider.SpawnNewProcess(path, "--terminateexisting --nobrowser");
-                    }
-
-                    else
-                    {
-                        var path = Path.Combine(_appFolderInfo.StartUpFolder,
-                            ProcessProvider.NZB_DRONE_PROCESS_NAME + ".exe");
-
-                        _processProvider.Start(path, "--terminateexisting --nobrowser");
-                    }
-                }
+                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
             }
         }
     }

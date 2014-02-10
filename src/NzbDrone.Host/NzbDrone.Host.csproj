@@ -117,7 +117,7 @@
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
     <Compile Include="BrowserService.cs" />
-    <Compile Include="NzbDroneProcessService.cs" />
+    <Compile Include="SingleInstancePolicy.cs" />
     <Compile Include="IUserAlert.cs" />
     <Compile Include="Owin\NlogTextWriter.cs" />
     <Compile Include="Owin\OwinServiceProvider.cs" />
@@ -195,9 +195,7 @@
       <Name>NzbDrone.SignalR</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SignalR\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
