@@ -290,6 +290,7 @@ define(
 
                 if (SeriesCollection.length === 0) {
                     this.seriesRegion.show(new EmptyView());
+
                     this.toolbar.close();
                     this.toolbar2.close();
                 }
@@ -317,6 +318,14 @@ define(
                     return;
                 }
 
+                this.toolbar2.show(new ToolbarLayout({
+                    right  :
+                        [
+                            this.filteringOptions
+                        ],
+                    context: this
+                }));
+
                 this.toolbar.show(new ToolbarLayout({
                     right  :
                         [
@@ -326,14 +335,6 @@ define(
                     left   :
                         [
                             this.leftSideButtons
-                        ],
-                    context: this
-                }));
-
-                this.toolbar2.show(new ToolbarLayout({
-                    right  :
-                        [
-                            this.filteringOptions
                         ],
                     context: this
                 }));
