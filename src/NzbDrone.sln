@@ -73,6 +73,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{0F0D4998-8F5D-4467-A909-BB192C4B3B4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{4EACDBBC-BCD7-4765-A57B-3E08331E4749}"
+	ProjectSection(SolutionItems) = preProject
+		NzbDrone.Common.Test\ServiceFactoryFixture.cs = NzbDrone.Common.Test\ServiceFactoryFixture.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Windows.Test", "NzbDrone.Windows.Test\NzbDrone.Windows.Test.csproj", "{80B51429-7A0E-46D6-BEE3-C80DCB1C4EAA}"
 EndProject

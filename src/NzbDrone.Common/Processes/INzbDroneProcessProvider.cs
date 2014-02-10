@@ -5,6 +5,6 @@ namespace NzbDrone.Common.Processes
 {
     public interface INzbDroneProcessProvider
     {
-        List<ProcessInfo> GetNzbDroneProcesses();
+        List<ProcessInfo> FindNzbDroneProcesses();
     }
 }

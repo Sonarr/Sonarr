@@ -15,7 +15,7 @@ namespace NzbDrone.Mono
             _processProvider = processProvider;
         }
 
-        public List<ProcessInfo> GetNzbDroneProcesses()
+        public List<ProcessInfo> FindNzbDroneProcesses()
         {
             var monoProcesses = _processProvider.FindProcessByName("mono");
 

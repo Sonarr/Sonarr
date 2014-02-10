@@ -14,7 +14,7 @@ namespace NzbDrone.Windows
             _processProvider = processProvider;
         }
 
-        public List<ProcessInfo> GetNzbDroneProcesses()
+        public List<ProcessInfo> FindNzbDroneProcesses()
         {
             var consoleProcesses = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
             var winformProcesses = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME);

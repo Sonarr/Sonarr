@@ -56,7 +56,7 @@ namespace NzbDrone.Host
         private List<int> GetOtherNzbDroneProcessIds()
         {
             var currentId = _processProvider.GetCurrentProcess().Id;
-            var otherProcesses = _nzbDroneProcessProvider.GetNzbDroneProcesses()
+            var otherProcesses = _nzbDroneProcessProvider.FindNzbDroneProcesses()
                                                          .Select(c => c.Id)
                                                          .Except(new[] {currentId})
                                                          .ToList();
