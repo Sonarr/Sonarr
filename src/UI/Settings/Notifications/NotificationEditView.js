@@ -16,16 +16,26 @@ define(
         var model = Marionette.ItemView.extend({
             template: 'Settings/Notifications/NotificationEditViewTemplate',
 
+            ui: {
+                onDownloadToggle: '.x-on-download',
+                onUpgradeSection: '.x-on-upgrade'
+            },
+
             events: {
                 'click .x-save'        : '_saveNotification',
                 'click .x-save-and-add': '_saveAndAddNotification',
                 'click .x-delete'      : '_deleteNotification',
                 'click .x-back'        : '_back',
-                'click .x-test'        : '_test'
+                'click .x-test'        : '_test',
+                'change .x-on-download': '_onDownloadChanged'
             },
 
             initialize: function (options) {
                 this.notificationCollection = options.notificationCollection;
+            },
+
+            onRender: function () {
+                this._onDownloadChanged();
             },
 
             _saveNotification: function () {
@@ -71,6 +81,18 @@ define(
                 });
 
                 CommandController.Execute(testCommand, properties);
+            },
+
+            _onDownloadChanged: function () {
+                var checked = this.ui.onDownloadToggle.prop('checked');
+
+                if (checked) {
+                    this.ui.onUpgradeSection.show();
+                }
+
+                else {
+                    this.ui.onUpgradeSection.hide();
+                }
             }
         });
 

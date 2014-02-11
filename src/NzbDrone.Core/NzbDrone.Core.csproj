@@ -194,6 +194,7 @@
     <Compile Include="Datastore\Migration\035_add_series_folder_format_to_naming_config.cs" />
     <Compile Include="Datastore\Migration\036_update_with_quality_converters.cs" />
     <Compile Include="Datastore\Migration\037_add_configurable_qualities.cs" />
+    <Compile Include="Datastore\Migration\038_add_on_upgrade_to_notifications.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />

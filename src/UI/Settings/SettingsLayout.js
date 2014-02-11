@@ -66,7 +66,7 @@ define(
                 'click .x-notifications-tab'    : '_showNotifications',
                 'click .x-general-tab'          : '_showGeneral',
                 'click .x-save-settings'        : '_save',
-                'change .x-advanced-settings'     : '_toggleAdvancedSettings'
+                'change .x-advanced-settings'   : '_toggleAdvancedSettings'
             },
 
             initialize: function (options) {

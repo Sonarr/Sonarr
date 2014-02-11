@@ -80,6 +80,11 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
+                    if (downloadMessage.OldFiles.Any() && !((NotificationDefinition) notification.Definition).OnUpgrade)
+                    {
+                        continue;
+                    }
+
                     notification.OnDownload(downloadMessage);
                 }
 

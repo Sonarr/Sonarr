@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Notifications
     {
         List<INotification> OnGrabEnabled();
         List<INotification> OnDownloadEnabled();
+        List<INotification> OnUpgradeEnabled();
     }
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
@@ -27,6 +28,11 @@ namespace NzbDrone.Core.Notifications
         public List<INotification> OnDownloadEnabled()
         {
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnDownload).ToList();
+        }
+
+        public List<INotification> OnUpgradeEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnUpgrade).ToList();
         }
     }
 }
