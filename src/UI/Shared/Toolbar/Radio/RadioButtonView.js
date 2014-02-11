@@ -50,7 +50,6 @@ define(
                     throw 'ownerContext must be set.';
                 }
 
-
                 var callback = this.model.get('callback');
                 if (callback) {
                     callback.call(this.model.ownerContext, this);

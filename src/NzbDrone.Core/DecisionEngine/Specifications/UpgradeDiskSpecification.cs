@@ -30,7 +30,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
 
-                if (!_qualityUpgradableSpecification.IsUpgradable(file.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     return false;
                 }

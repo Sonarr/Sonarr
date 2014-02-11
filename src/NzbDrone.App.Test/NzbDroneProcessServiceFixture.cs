@@ -23,11 +23,7 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_continue_if_only_instance()
         {
-            Mocker.GetMock<IProcessProvider>()
-                .Setup(c => c.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME))
-                .Returns(new List<ProcessInfo>());
-
-            Mocker.GetMock<IProcessProvider>().Setup(c => c.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+            Mocker.GetMock<INzbDroneProcessProvider>().Setup(c => c.FindNzbDroneProcesses())
                 .Returns(new List<ProcessInfo>
                 {
                     new ProcessInfo{Id = CURRENT_PROCESS_ID}
@@ -36,28 +32,19 @@ namespace NzbDrone.App.Test
 
             Subject.PreventStartIfAlreadyRunning();
 
-
             Mocker.GetMock<IBrowserService>().Verify(c => c.LaunchWebUI(), Times.Never());
-
         }
 
         [Test]
         public void should_enforce_if_another_console_is_running()
         {
-            Mocker.GetMock<IProcessProvider>()
-                .Setup(c => c.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME))
+            Mocker.GetMock<INzbDroneProcessProvider>()
+                .Setup(c => c.FindNzbDroneProcesses())
                     .Returns(new List<ProcessInfo>
                 {
-                    new ProcessInfo{Id = 10}
-                });
-
-            Mocker.GetMock<IProcessProvider>().Setup(c => c.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME))
-                .Returns(new List<ProcessInfo>
-                {
+                    new ProcessInfo{Id = 10},
                     new ProcessInfo{Id = CURRENT_PROCESS_ID}
                 });
-
-
 
             Assert.Throws<TerminateApplicationException>(() => Subject.PreventStartIfAlreadyRunning());
             Mocker.GetMock<IBrowserService>().Verify(c => c.LaunchWebUI(), Times.Once());
@@ -67,21 +54,14 @@ namespace NzbDrone.App.Test
         [Test]
         public void should_return_false_if_another_gui_is_running()
         {
-            Mocker.GetMock<IProcessProvider>()
-                .Setup(c => c.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME))
+            Mocker.GetMock<INzbDroneProcessProvider>()
+                .Setup(c => c.FindNzbDroneProcesses())
                 .Returns(new List<ProcessInfo>
                 {
-                      new ProcessInfo{Id = CURRENT_PROCESS_ID}
+                      new ProcessInfo{Id = CURRENT_PROCESS_ID},
+                      new ProcessInfo{Id = 10}
                 
                 });
-
-            Mocker.GetMock<IProcessProvider>().Setup(c => c.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME))
-                .Returns(new List<ProcessInfo>
-                {
-                      new ProcessInfo{Id = 10}
-                });
-
-
 
             Assert.Throws<TerminateApplicationException>(() => Subject.PreventStartIfAlreadyRunning());
             Mocker.GetMock<IBrowserService>().Verify(c => c.LaunchWebUI(), Times.Once());

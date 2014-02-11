@@ -1,6 +1,7 @@
 ﻿'use strict';
 define(
     [
+        'jquery',
         'vent',
         'marionette',
         'backbone',
@@ -17,7 +18,8 @@ define(
         'Settings/General/GeneralView',
         'Shared/LoadingView',
         'Config'
-    ], function (vent,
+    ], function ($,
+                 vent,
                  Marionette,
                  Backbone,
                  SettingsModel,
@@ -64,7 +66,7 @@ define(
                 'click .x-notifications-tab'    : '_showNotifications',
                 'click .x-general-tab'          : '_showGeneral',
                 'click .x-save-settings'        : '_save',
-                'change .x-advanced-settings'     : '_toggleAdvancedSettings'
+                'change .x-advanced-settings'   : '_toggleAdvancedSettings'
             },
 
             initialize: function (options) {
@@ -192,24 +194,24 @@ define(
             },
 
             _setAdvancedSettingsState: function () {
-                var checked = Config.getValueBoolean('advancedSettings');
+                var checked = Config.getValueBoolean(Config.Keys.AdvancedSettings);
                 this.ui.advancedSettings.prop('checked', checked);
 
                 if (checked) {
-                    this.$el.addClass('show-advanced-settings');
+                    $('body').addClass('show-advanced-settings');
                 }
             },
 
             _toggleAdvancedSettings: function () {
                 var checked = this.ui.advancedSettings.prop('checked');
-                Config.setValue('advancedSettings', checked);
+                Config.setValue(Config.Keys.AdvancedSettings, checked);
 
                 if (checked) {
-                    this.$el.addClass('show-advanced-settings');
+                    $('body').addClass('show-advanced-settings');
                 }
 
                 else {
-                    this.$el.removeClass('show-advanced-settings');
+                    $('body').removeClass('show-advanced-settings');
                 }
             }
         });

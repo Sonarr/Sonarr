@@ -1,9 +1,9 @@
 'use strict';
 define(
     [
-        'backgrid'
-    ], function (Backgrid) {
-        return Backgrid.Cell.extend({
+        'Cells/NzbDroneCell'
+    ], function (NzbDroneCell) {
+        return NzbDroneCell.extend({
             className: 'series-status-cell',
 
             render: function () {
@@ -13,20 +13,24 @@ define(
 
                 if (status === 'ended') {
                     this.$el.html('<i class="icon-stop grid-icon" title="Ended"></i>');
-                    this.model.set('statusWeight', 3);
+                    this._setStatusWeight(3);
                 }
 
                 else if (!monitored) {
                     this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
-                    this.model.set('statusWeight', 2);
+                    this._setStatusWeight(2);
                 }
 
                 else {
                     this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
-                    this.model.set('statusWeight', 1);
+                    this._setStatusWeight(1);
                 }
 
                 return this;
+            },
+
+            _setStatusWeight: function (weight) {
+                this.model.set('statusWeight', weight, {silent: true});
             }
         });
     });

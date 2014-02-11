@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Tv
             newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
 
             _seriesRepository.Insert(newSeries);
-            _eventAggregator.PublishEvent(new SeriesAddedEvent(newSeries));
+            _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
 
             return newSeries;
         }
@@ -136,7 +136,10 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
-            return _seriesRepository.Update(series);
+            var updatedSeries = _seriesRepository.Update(series);
+            _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries));
+
+            return updatedSeries;
         }
 
         public List<Series> UpdateSeries(List<Series> series)
@@ -148,6 +151,8 @@ namespace NzbDrone.Core.Tv
                     var folderName = new DirectoryInfo(s.Path).Name;
                     s.Path = Path.Combine(s.RootFolderPath, folderName);
                 }
+
+                _eventAggregator.PublishEvent(new SeriesEditedEvent(s));
             }
 
             _seriesRepository.UpdateMany(series);

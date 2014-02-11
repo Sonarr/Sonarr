@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Organizer
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Organizer
     public class FileNameBuilder : IBuildFileNames
     {
         private readonly INamingConfigService _namingConfigService;
+        private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly ICached<EpisodeFormat> _patternCache;
         private readonly Logger _logger;
 
@@ -43,10 +45,12 @@ namespace NzbDrone.Core.Organizer
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public FileNameBuilder(INamingConfigService namingConfigService,
+                               IQualityDefinitionService qualityDefinitionService,
                                ICacheManger cacheManger,
                                Logger logger)
         {
             _namingConfigService = namingConfigService;
+            _qualityDefinitionService = qualityDefinitionService;
             _patternCache = cacheManger.GetCache<EpisodeFormat>(GetType());
             _logger = logger;
         }
@@ -87,12 +91,10 @@ namespace NzbDrone.Core.Organizer
                 sortedEpisodes.First().Title
             };
 
-            var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance)
-            {
-                {"{Series Title}", series.Title},
-                {"Original Title", episodeFile.SceneName}
-            };
+            var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
 
+            tokenValues.Add("{Series Title}", series.Title);
+            tokenValues.Add("{Original Title}", episodeFile.SceneName);
             tokenValues.Add("{Release Group}", episodeFile.ReleaseGroup);
 
             if (series.SeriesType == SeriesTypes.Daily)
@@ -146,9 +148,8 @@ namespace NzbDrone.Core.Organizer
             }
 
             tokenValues.Add("{Episode Title}", GetEpisodeTitle(episodeTitles));
-            tokenValues.Add("{Quality Title}", episodeFile.Quality.ToString());
+            tokenValues.Add("{Quality Title}", GetQualityTitle(episodeFile.Quality));
             
-
             return CleanFilename(ReplaceTokens(pattern, tokenValues).Trim());
         }
 
@@ -340,6 +341,14 @@ namespace NzbDrone.Core.Organizer
             }
 
             return String.Join(" + ", episodeTitles.Select(Parser.Parser.CleanupEpisodeTitle).Distinct());
+        }
+
+        private string GetQualityTitle(QualityModel quality)
+        {
+            if (quality.Proper)
+                return _qualityDefinitionService.Get(quality.Quality).Title + " Proper";
+            else
+                return _qualityDefinitionService.Get(quality.Quality).Title;
         }
     }
 

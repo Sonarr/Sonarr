@@ -6,6 +6,7 @@ using System.Linq;
 using System.ServiceProcess;
 using NLog;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common
 {
@@ -20,13 +21,21 @@ namespace NzbDrone.Common
         void Stop(string serviceName);
         void Start(string serviceName);
         ServiceControllerStatus GetStatus(string serviceName);
+        void Restart(string serviceName);
     }
 
     public class ServiceProvider : IServiceProvider
     {
         public const string NZBDRONE_SERVICE_NAME = "NzbDrone";
 
+        private readonly IProcessProvider _processProvider;
+
         private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+
+        public ServiceProvider(IProcessProvider processProvider)
+        {
+            _processProvider = processProvider;
+        }
 
         public virtual bool ServiceExist(string name)
         {
@@ -172,6 +181,13 @@ namespace NzbDrone.Common
             {
                 Logger.Error("Service start request has timed out. {0}", service.Status);
             }
+        }
+
+        public void Restart(string serviceName)
+        {
+            var args = String.Format("/C net.exe stop \"{0}\" && net.exe start \"{0}\"", serviceName);
+
+            _processProvider.Start("cmd.exe", args);
         }
     }
 }

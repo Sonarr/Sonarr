@@ -6,6 +6,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.History
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.History
         List<History> All();
         void Purge();
         void Trim();
-        QualityModel GetBestQualityInHistory(int episodeId);
+        QualityModel GetBestQualityInHistory(QualityProfile qualityProfile, int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
         List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
         List<History> Failed();
@@ -80,9 +81,12 @@ namespace NzbDrone.Core.History
             _historyRepository.Trim();
         }
 
-        public QualityModel GetBestQualityInHistory(int episodeId)
+        public QualityModel GetBestQualityInHistory(QualityProfile qualityProfile, int episodeId)
         {
-            return _historyRepository.GetBestQualityInHistory(episodeId).OrderByDescending(q => q).FirstOrDefault();
+            var comparer = new QualityModelComparer(qualityProfile);
+            return _historyRepository.GetBestQualityInHistory(episodeId)
+                .OrderByDescending(q => q, comparer)
+                .FirstOrDefault();
         }
 
         public void Handle(EpisodeGrabbedEvent message)

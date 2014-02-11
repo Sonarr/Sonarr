@@ -4,6 +4,8 @@ using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -38,13 +40,19 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var queue = downloadClient.GetQueue().Select(q => q.RemoteEpisode);
 
-            return !IsInQueue(subject, queue);
+            if (IsInQueue(subject, queue))
+            {
+                _logger.Trace("Already in queue, rejecting.");
+                return false;
+            }
+
+            return true;
         }
 
         private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)
         {
             var matchingSeries = queue.Where(q => q.Series.Id == newEpisode.Series.Id);
-            var matchingSeriesAndQuality = matchingSeries.Where(q => q.ParsedEpisodeInfo.Quality >= newEpisode.ParsedEpisodeInfo.Quality);
+            var matchingSeriesAndQuality = matchingSeries.Where(q => new QualityModelComparer(q.Series.QualityProfile).Compare(q.ParsedEpisodeInfo.Quality, newEpisode.ParsedEpisodeInfo.Quality) >= 0);
 
             return matchingSeriesAndQuality.Any(q => q.Episodes.Select(e => e.Id).Intersect(newEpisode.Episodes.Select(e => e.Id)).Any());
         }

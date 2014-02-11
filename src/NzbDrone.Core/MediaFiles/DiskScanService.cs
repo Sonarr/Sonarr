@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -21,13 +22,15 @@ namespace NzbDrone.Core.MediaFiles
 
     public class DiskScanService :
         IDiskScanService,
-        IHandle<SeriesUpdatedEvent>
+        IHandle<SeriesUpdatedEvent>,
+        IExecute<RescanSeriesCommand>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly ICommandExecutor _commandExecutor;
         private readonly IConfigService _configService;
+        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
@@ -35,6 +38,7 @@ namespace NzbDrone.Core.MediaFiles
                                 IImportApprovedEpisodes importApprovedEpisodes,
                                 ICommandExecutor commandExecutor,
                                 IConfigService configService,
+                                ISeriesService seriesService,
                                 Logger logger)
         {
             _diskProvider = diskProvider;
@@ -42,6 +46,7 @@ namespace NzbDrone.Core.MediaFiles
             _importApprovedEpisodes = importApprovedEpisodes;
             _commandExecutor = commandExecutor;
             _configService = configService;
+            _seriesService = seriesService;
             _logger = logger;
         }
 
@@ -89,6 +94,13 @@ namespace NzbDrone.Core.MediaFiles
         public void Handle(SeriesUpdatedEvent message)
         {
             Scan(message.Series);
+        }
+
+        public void Execute(RescanSeriesCommand message)
+        {
+            var series = _seriesService.GetSeries(message.SeriesId);
+
+            Scan(series);
         }
     }
 }

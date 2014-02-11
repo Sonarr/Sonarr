@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName},
                 };
 
-            var currentTasks = _scheduledTaskRepository.All();
+            var currentTasks = _scheduledTaskRepository.All().ToList();
 
             _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", defaultTasks.Count(), currentTasks.Count());
 
@@ -75,6 +75,11 @@ namespace NzbDrone.Core.Jobs
                 var currentDefinition = currentTasks.SingleOrDefault(c => c.TypeName == defaultTask.TypeName) ?? defaultTask;
 
                 currentDefinition.Interval = defaultTask.Interval;
+
+                if (currentDefinition.Id == 0)
+                {
+                    currentDefinition.LastExecution = DateTime.UtcNow;
+                }
 
                 _scheduledTaskRepository.Upsert(currentDefinition);
             }

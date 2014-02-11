@@ -11,7 +11,7 @@ define(
             },
 
             methodUrls: {
-                'update': window.NzbDrone.ApiRoot + '/episodes'
+                'update': window.NzbDrone.ApiRoot + '/episode'
             },
 
             sync: function(method, model, options) {

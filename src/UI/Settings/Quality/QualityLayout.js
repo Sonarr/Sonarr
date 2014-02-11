@@ -5,27 +5,27 @@ define(
         'marionette',
         'Quality/QualityProfileCollection',
         'Settings/Quality/Profile/QualityProfileCollectionView',
-        'Quality/QualitySizeCollection',
-        'Settings/Quality/Size/QualitySizeCollectionView'
-    ], function (Marionette, QualityProfileCollection, QualityProfileCollectionView, QualitySizeCollection, QualitySizeCollectionView) {
+        'Quality/QualityDefinitionCollection',
+        'Settings/Quality/Definition/QualityDefinitionCollectionView'
+    ], function (Marionette, QualityProfileCollection, QualityProfileCollectionView, QualityDefinitionCollection, QualityDefinitionCollectionView) {
         return Marionette.Layout.extend({
             template: 'Settings/Quality/QualityLayoutTemplate',
 
             regions: {
-                qualityProfile : '#quality-profile',
-                qualitySize    : '#quality-size'
+                qualityProfile    : '#quality-profile',
+                qualityDefinition : '#quality-definition'
             },
 
             initialize: function (options) {
                 this.settings = options.settings;
                 QualityProfileCollection.fetch();
-                this.qualitySizeCollection = new QualitySizeCollection();
-                this.qualitySizeCollection.fetch();
+                this.qualityDefinitionCollection = new QualityDefinitionCollection();
+                this.qualityDefinitionCollection.fetch();
             },
 
             onShow: function () {
                 this.qualityProfile.show(new QualityProfileCollectionView({collection: QualityProfileCollection}));
-                this.qualitySize.show(new QualitySizeCollectionView({collection: this.qualitySizeCollection}));
+                this.qualityDefinition.show(new QualityDefinitionCollectionView({collection: this.qualityDefinitionCollection}));
             }
         });
     });

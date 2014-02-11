@@ -1,10 +1,11 @@
 'use strict';
 define(
     [
+        'underscore',
         'marionette',
         'backgrid',
-        'Series/Index/Posters/CollectionView',
-        'Series/Index/List/CollectionView',
+        'Series/Index/Posters/SeriesPostersCollectionView',
+        'Series/Index/Overview/SeriesOverviewCollectionView',
         'Series/Index/EmptyView',
         'Series/SeriesCollection',
         'Cells/RelativeDateCell',
@@ -17,8 +18,9 @@ define(
         'Series/Index/FooterView',
         'Series/Index/FooterModel',
         'Shared/Toolbar/ToolbarLayout',
-        'underscore'
-    ], function (Marionette,
+        'Mixins/backbone.signalr.mixin'
+    ], function (_,
+                 Marionette,
                  Backgrid,
                  PosterCollectionView,
                  ListCollectionView,
@@ -33,8 +35,7 @@ define(
                  SeriesStatusCell,
                  FooterView,
                  FooterModel,
-                 ToolbarLayout,
-                 _) {
+                 ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'Series/Index/SeriesIndexLayoutTemplate',
 
@@ -130,9 +131,22 @@ define(
 
             initialize: function () {
                 this.seriesCollection = SeriesCollection.clone();
+                this.seriesCollection.shadowCollection.bindSignalR();
 
-                this.listenTo(SeriesCollection, 'sync', this._renderView);
-                this.listenTo(SeriesCollection, 'remove', this._renderView);
+                this.listenTo(this.seriesCollection.shadowCollection, 'sync', function (model, collection, options) {
+                    this.seriesCollection.fullCollection.resetFiltered();
+                    this._renderView();
+                });
+
+                this.listenTo(this.seriesCollection.shadowCollection, 'add', function (model, collection, options) {
+                    this.seriesCollection.fullCollection.resetFiltered();
+                    this._renderView();
+                });
+
+                this.listenTo(this.seriesCollection.shadowCollection, 'remove', function (model, collection, options) {
+                    this.seriesCollection.fullCollection.resetFiltered();
+                    this._renderView();
+                });
 
                 this.sortingOptions = {
                     type          : 'sorting',
@@ -240,7 +254,6 @@ define(
 
             onShow: function () {
                 this._showToolbar();
-                this._renderView();
                 this._fetchCollection();
             },
 
@@ -255,7 +268,7 @@ define(
             },
 
             _showList: function () {
-                this.currentView = new ListCollectionView({ 
+                this.currentView = new ListCollectionView({
                     collection: this.seriesCollection
                 });
 
@@ -269,11 +282,12 @@ define(
 
                 this._renderView();
             },
-            
+
             _renderView: function () {
 
                 if (SeriesCollection.length === 0) {
                     this.seriesRegion.show(new EmptyView());
+
                     this.toolbar.close();
                     this.toolbar2.close();
                 }
@@ -301,6 +315,14 @@ define(
                     return;
                 }
 
+                this.toolbar2.show(new ToolbarLayout({
+                    right  :
+                        [
+                            this.filteringOptions
+                        ],
+                    context: this
+                }));
+
                 this.toolbar.show(new ToolbarLayout({
                     right  :
                         [
@@ -310,14 +332,6 @@ define(
                     left   :
                         [
                             this.leftSideButtons
-                        ],
-                    context: this
-                }));
-
-                this.toolbar2.show(new ToolbarLayout({
-                    right  :
-                        [
-                            this.filteringOptions
                         ],
                     context: this
                 }));

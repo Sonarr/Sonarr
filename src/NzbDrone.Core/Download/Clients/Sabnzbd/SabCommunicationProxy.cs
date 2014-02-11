@@ -31,10 +31,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var action = String.Format("mode=addfile&cat={0}&priority={1}", category, priority);
 
             request.AddFile("name", ReadFully(nzb), title, "application/x-nzb");
-            
-            var response = Json.TryDeserialize<SabAddResponse>(ProcessRequest(request, action));
 
-            if (response == null)
+            SabAddResponse response;
+
+            if (!Json.TryDeserialize<SabAddResponse>(ProcessRequest(request, action), out response))
             {
                 response = new SabAddResponse();
                 response.Status = true;
@@ -87,9 +87,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 throw new ApplicationException("Unable to connect to SABnzbd, please check your settings");
             }
 
-            var result = Json.TryDeserialize<SabJsonError>(response.Content);
+            SabJsonError result;
 
-            if (result == null)
+            if (!Json.TryDeserialize<SabJsonError>(response.Content, out result))
             {
                 //Handle plain text responses from SAB
                 result = new SabJsonError();

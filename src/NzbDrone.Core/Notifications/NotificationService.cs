@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
@@ -79,6 +80,11 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
+                    if (downloadMessage.OldFiles.Any() && !((NotificationDefinition) notification.Definition).OnUpgrade)
+                    {
+                        continue;
+                    }
+
                     notification.OnDownload(downloadMessage);
                 }
 

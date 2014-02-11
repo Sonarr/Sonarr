@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_allow_if_quality_is_defined_in_profile(Quality qualityType)
         {
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
-            remoteEpisode.Series.QualityProfile.Value.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
+            remoteEpisode.Series.QualityProfile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
 
             Subject.IsSatisfiedBy(remoteEpisode, null).Should().BeTrue();
         }
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_allow_if_quality_is_not_defined_in_profile(Quality qualityType)
         {
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
-            remoteEpisode.Series.QualityProfile.Value.Allowed = new List<Quality> { Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p };
+            remoteEpisode.Series.QualityProfile.Value.Items =  Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
 
             Subject.IsSatisfiedBy(remoteEpisode, null).Should().BeFalse();
         }

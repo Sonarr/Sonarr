@@ -32,7 +32,7 @@ define(
             this.prototype._makeFullCollection = function (models, options) {
                 var self = this;
 
-                self.shadowCollection = originalMakeFullCollection.apply(this, [models, options]);
+                self.shadowCollection = originalMakeFullCollection.call(this, models, options);
                 
                 var filterModel = function(model) {
                     if (!self.state.filterKey || !self.state.filterValue)
@@ -46,12 +46,10 @@ define(
                 };
 
                 var filteredModels = self.shadowCollection.filtered();
-                
-                var fullCollection = originalMakeFullCollection.apply(this, [filteredModels, options]);
-
+                var fullCollection = originalMakeFullCollection.call(this, filteredModels, options);
 
                 fullCollection.resetFiltered = function(options) {
-                    Backbone.Collection.prototype.reset.apply(this, [self.shadowCollection.filtered(), options]);
+                    Backbone.Collection.prototype.reset.call(this, self.shadowCollection.filtered(), options);
                 };
                 
                 fullCollection.reset = function (models, options) {

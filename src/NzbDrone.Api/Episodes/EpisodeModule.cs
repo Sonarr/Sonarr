@@ -18,7 +18,7 @@ namespace NzbDrone.Api.Episodes
         private readonly IEpisodeService _episodeService;
 
         public EpisodeModule(ICommandExecutor commandExecutor, IEpisodeService episodeService)
-            : base(commandExecutor, "episodes")
+            : base(commandExecutor)
         {
             _episodeService = episodeService;
 

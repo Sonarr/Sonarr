@@ -6,7 +6,7 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public interface IQualityUpgradableSpecification
     {
-        bool IsUpgradable(QualityModel currentQuality, QualityModel newQuality = null);
+        bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
         bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
         bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality);
     }
@@ -20,11 +20,12 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public bool IsUpgradable(QualityModel currentQuality, QualityModel newQuality = null)
+        public bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
             if (newQuality != null)
             {
-                if (currentQuality >= newQuality)
+                int compare = new QualityModelComparer(profile).Compare(newQuality, currentQuality);
+                if (compare <= 0)
                 {
                     _logger.Trace("existing item has better or equal quality. skipping");
                     return false;
@@ -41,7 +42,9 @@ namespace NzbDrone.Core.DecisionEngine
 
         public bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
-            if (currentQuality.Quality >= profile.Cutoff)
+            int compare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
+
+            if (compare >= 0)
             {
                 if (newQuality != null && IsProperUpgrade(currentQuality, newQuality))
                 {
@@ -57,7 +60,9 @@ namespace NzbDrone.Core.DecisionEngine
 
         public bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality)
         {
-            if (currentQuality.Quality == newQuality.Quality && newQuality > currentQuality)
+            int compare = newQuality.Proper.CompareTo(currentQuality.Proper);
+
+            if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
                 _logger.Trace("New quality is a proper for existing quality");
                 return true;

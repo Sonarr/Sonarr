@@ -10,6 +10,7 @@ using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles

@@ -17,12 +17,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
         {
             var profile = new QualityProfile
                 {
-                    Allowed = new List<Quality>
-                        {
-                            Quality.Bluray1080p,
-                            Quality.DVD,
-                            Quality.HDTV720p
-                        },
+                    Items = Qualities.QualityFixture.GetDefaultQualities(Quality.Bluray1080p, Quality.DVD, Quality.HDTV720p),
 
                     Cutoff = Quality.Bluray1080p,
                     Name = "TestProfile"

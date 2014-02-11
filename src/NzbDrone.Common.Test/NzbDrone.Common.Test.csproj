@@ -73,7 +73,6 @@
     <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
     <Compile Include="ReflectionTests\ReflectionExtensionFixture.cs" />
-    <Compile Include="ServiceFactoryFixture.cs" />
     <Compile Include="ServiceProviderTests.cs" />
     <Compile Include="WebClientTests.cs" />
   </ItemGroup>

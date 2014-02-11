@@ -7,6 +7,8 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
@@ -40,8 +42,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         public List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload = false)
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
-                .OrderByDescending(c => c.LocalEpisode.Quality)
-                .ThenByDescending(c => c.LocalEpisode.Size);
+                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
+                    .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
+                    .ThenByDescending(c => c.LocalEpisode.Size))
+                .SelectMany(c => c)
+                .ToList();
 
             var imported = new List<ImportDecision>();
 

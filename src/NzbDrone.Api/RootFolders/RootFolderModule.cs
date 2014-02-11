@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using FluentValidation;
+using FluentValidation.Results;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Api.Mapping;
@@ -30,7 +33,15 @@ namespace NzbDrone.Api.RootFolders
 
         private int CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
+            try
+            {
+                return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
+            }
+            catch (Exception ex)
+            {
+                throw new ValidationException(new [] { new ValidationFailure("Path", ex.Message) });
+            }
+            
         }
 
         private List<RootFolderResource> GetRootFolders()
