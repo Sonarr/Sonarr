@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(38)]
+    [Migration(40)]
     public class add_metadata_to_episodes_and_series : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
