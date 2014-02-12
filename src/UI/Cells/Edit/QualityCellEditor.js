@@ -28,10 +28,12 @@ define(
                     var templateName = self.template;
                     self.schema = qualityProfileSchemaCollection.first();
 
-                    var selected = _.find(self.schema.get('available'), { 'id': self.model.get(self.column.get('name')).quality.id });
+                    var selected = _.find(self.schema.get('items'), function (model) {
+                        return model.quality.id === self.model.get(self.column.get('name')).quality.id;
+                    });
 
                     if (selected) {
-                        selected.selected = true;
+                        selected.quality.selected = true;
                     }
 
                     self.templateFunction = Marionette.TemplateCache.get(templateName);
