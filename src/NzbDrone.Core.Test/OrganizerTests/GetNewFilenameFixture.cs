@@ -371,5 +371,22 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30 Rock - 30.Rock.S01E01.xvid-LOL");
         }
+
+        [Test]
+        public void should_trim_periods_from_end_of_episode_title()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
+            _namingConfig.MultiEpisodeStyle = 3;
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Part 1.")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+
+            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "30 Rock" }, _episodeFile)
+                   .Should().Be("30 Rock - S06E06 - Part 1");
+        }
     }
 }

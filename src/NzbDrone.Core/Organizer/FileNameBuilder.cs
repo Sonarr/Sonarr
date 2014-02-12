@@ -44,6 +44,8 @@ namespace NzbDrone.Core.Organizer
         public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>\s|\.|-|_)Title\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly char[] EpisodeTitleTrimCharaters = new[] { ' ', '.' };
+
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
                                ICacheManger cacheManger,
@@ -88,7 +90,7 @@ namespace NzbDrone.Core.Organizer
             var pattern = namingConfig.StandardEpisodeFormat;
             var episodeTitles = new List<string>
             {
-                sortedEpisodes.First().Title
+                sortedEpisodes.First().Title.TrimEnd(EpisodeTitleTrimCharaters)
             };
 
             var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
@@ -140,7 +142,7 @@ namespace NzbDrone.Core.Organizer
                             break;
                     }
 
-                    episodeTitles.Add(episode.Title);
+                    episodeTitles.Add(episode.Title.TrimEnd(EpisodeTitleTrimCharaters));
                 }
 
                 seasonEpisodePattern = ReplaceNumberTokens(seasonEpisodePattern, sortedEpisodes);
