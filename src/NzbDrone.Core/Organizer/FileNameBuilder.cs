@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Organizer
         public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>\s|\.|-|_)Title\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly char[] EpisodeTitleTrimCharaters = new[] { ' ', '.' };
+        private static readonly char[] EpisodeTitleTrimCharaters = new[] { ' ', '.', '?' };
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
