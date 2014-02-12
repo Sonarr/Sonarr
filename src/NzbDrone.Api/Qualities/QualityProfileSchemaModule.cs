@@ -10,7 +10,7 @@ namespace NzbDrone.Api.Qualities
         private readonly IQualityDefinitionService _qualityDefinitionService;
 
         public QualityProfileSchemaModule(IQualityDefinitionService qualityDefinitionService)
-            : base("/qualityprofiles/schema")
+            : base("/qualityprofile/schema")
         {
             _qualityDefinitionService = qualityDefinitionService;
 
