@@ -5,11 +5,13 @@ using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 {
     [TestFixture]
-    public class EpisodesWithoutFilesFixture : DbTest<EpisodeRepository, Episode>
+    public class EpisodesWhereCutoffUnmetFixture : DbTest<EpisodeRepository, Episode>
     {
         private Series _monitoredSeries;
         private Series _unmonitoredSeries;
@@ -18,12 +20,19 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [SetUp]
         public void Setup()
         {
+            var qualityProfile = new QualityProfile 
+            {  
+                Cutoff = Quality.WEBDL720p,
+                Items = Qualities.QualityFixture.GetDefaultQualities()
+            };
+
             _monitoredSeries = Builder<Series>.CreateNew()
                                         .With(s => s.Id = 0)
                                         .With(s => s.TvRageId = RandomNumber)
                                         .With(s => s.Runtime = 30)
                                         .With(s => s.Monitored = true)
                                         .With(s => s.TitleSlug = "Title3")
+                                        .With(s => s.QualityProfile = qualityProfile)
                                         .Build();
 
             _unmonitoredSeries = Builder<Series>.CreateNew()
@@ -32,6 +41,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .With(s => s.Runtime = 30)
                                         .With(s => s.Monitored = false)
                                         .With(s => s.TitleSlug = "Title2")
+                                        .With(s => s.QualityProfile = qualityProfile)
                                         .Build();
 
             _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
@@ -44,16 +54,25 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                   SortKey = "AirDate",
                                   SortDirection = SortDirection.Ascending
                               };
+            
+            var qualityMet = new EpisodeFile { Path = "a", Quality = new QualityModel { Quality = Quality.WEBDL720p } };
+            var qualityUnmet = new EpisodeFile { Path = "b", Quality = new QualityModel { Quality = Quality.WEBDL480p } };
+
+            MediaFileRepository fileRepository = Mocker.Resolve<MediaFileRepository>();
+
+            qualityMet = fileRepository.Insert(qualityMet);
+            qualityUnmet = fileRepository.Insert(qualityUnmet);
 
             var monitoredSeriesEpisodes = Builder<Episode>.CreateListOfSize(3)
                                            .All()
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = _monitoredSeries.Id)
-                                           .With(e => e.EpisodeFileId = 0)
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(-5))
                                            .With(e => e.Monitored = true)
+                                           .With(e => e.EpisodeFileId = qualityUnmet.Id)
                                            .TheFirst(1)
                                            .With(e => e.Monitored = false)
+                                           .With(e => e.EpisodeFileId = qualityMet.Id)
                                            .TheLast(1)
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
@@ -62,11 +81,12 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .All()
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = _unmonitoredSeries.Id)
-                                           .With(e => e.EpisodeFileId = 0)
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(-5))
                                            .With(e => e.Monitored = true)
+                                           .With(e => e.EpisodeFileId = qualityUnmet.Id)
                                            .TheFirst(1)
                                            .With(e => e.Monitored = false)
+                                           .With(e => e.EpisodeFileId = qualityMet.Id)
                                            .TheLast(1)
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
@@ -76,12 +96,11 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .All()
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = _monitoredSeries.Id)
-                                           .With(e => e.EpisodeFileId = 0)
                                            .With(e => e.AirDateUtc = DateTime.Now.AddDays(5))
                                            .With(e => e.Monitored = true)
+                                           .With(e => e.EpisodeFileId = qualityUnmet.Id)
                                            .Build();
-
-
+            
             Db.InsertMany(monitoredSeriesEpisodes);
             Db.InsertMany(unmonitoredSeriesEpisodes);
             Db.InsertMany(unairedEpisodes);
@@ -102,18 +121,18 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         {
             GivenMonitoredFilterExpression();
 
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, false);
 
-            episodes.Records.Should().HaveCount(1);
+            episodes.Should().HaveCount(1);
         }
 
         [Test]
         [Ignore("Specials not implemented")]
         public void should_get_episode_including_specials()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, true);
+            var episodes = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, true);
 
-            episodes.Records.Should().HaveCount(2);
+            episodes.Should().HaveCount(2);
         }
 
         [Test]
@@ -121,9 +140,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         {
             GivenMonitoredFilterExpression();
 
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, false);
 
-            episodes.Records.Should().NotContain(e => e.Monitored == false);
+            episodes.Should().NotContain(e => e.Monitored == false);
         }
 
         [Test]
@@ -131,17 +150,19 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         {
             GivenMonitoredFilterExpression();
 
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            var episodes = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, false);
 
-            episodes.Records.Should().NotContain(e => e.SeriesId == _unmonitoredSeries.Id);
+            episodes.Should().NotContain(e => e.SeriesId == _unmonitoredSeries.Id);
         }
 
         [Test]
-        public void should_not_return_unaired()
+        public void should_not_include_cutoff_met_episodes()
         {
-            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+            GivenMonitoredFilterExpression();
 
-            episodes.TotalRecords.Should().Be(4);
+            var episodes = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, false);
+
+            episodes.Should().NotContain(e => e.EpisodeFile.Value.Quality.Quality == Quality.WEBDL720p);
         }
     }
 }

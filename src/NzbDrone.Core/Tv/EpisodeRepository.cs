@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
-        PagingSpec<Episode> GetMissingEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials);
-        List<Episode> GetCutoffUnmetEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials);
+        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
+        List<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
         void SetMonitoredFlat(Episode episode, bool monitored);
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Tv
             return Query.Where(e => e.EpisodeFileId == fileId).ToList();
         }
 
-        public PagingSpec<Episode> GetMissingEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)
         {
             var currentTime = DateTime.UtcNow;
             var startingSeasonNumber = 1;
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Tv
             return pagingSpec;
         }
 
-        public List<Episode> GetCutoffUnmetEpisodes(PagingSpec<Episode> pagingSpec, bool includeSpecials)
+        public List<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, bool includeSpecials)
         {
             var currentTime = DateTime.UtcNow;
             var startingSeasonNumber = 1;

@@ -22,8 +22,9 @@ define(
             setActive: function () {
                 var storedKey = this.menu.defaultAction;
 
-                if (this.menu.storeState)
+                if (this.menu.storeState) {
                     storedKey = Config.getValue(this.menu.menuKey, storedKey);
+                }
 
                 if (!storedKey)
                     return;

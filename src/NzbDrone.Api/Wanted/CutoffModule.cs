@@ -29,14 +29,18 @@ namespace NzbDrone.Api.Wanted
                 SortKey = pagingResource.SortKey,
                 SortDirection = pagingResource.SortDirection
             };
-            
-            if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
-                pagingSpec.FilterExpression = v => v.Monitored == false || v.Series.Monitored == false;
-            else
-                pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
 
-            PagingResource<EpisodeResource> resource = ApplyToPage(_episodeService.GetCutoffUnmetEpisodes, pagingSpec);
-                   
+            if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
+            {
+                pagingSpec.FilterExpression = v => v.Monitored == false || v.Series.Monitored == false;
+            }
+            else
+            {
+                pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
+            }
+
+            PagingResource<EpisodeResource> resource = ApplyToPage(_episodeService.EpisodesWhereCutoffUnmet, pagingSpec);
+
             resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
 
             return resource;

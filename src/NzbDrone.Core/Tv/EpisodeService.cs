@@ -21,8 +21,8 @@ namespace NzbDrone.Core.Tv
         Episode FindEpisode(int seriesId, String date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
-        PagingSpec<Episode> GetMissingEpisodes(PagingSpec<Episode> pagingSpec);
-        PagingSpec<Episode> GetCutoffUnmetEpisodes(PagingSpec<Episode> pagingSpec);
+        PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
+        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         void UpdateEpisode(Episode episode);
         void SetEpisodeMonitored(int episodeId, bool monitored);
@@ -109,12 +109,12 @@ namespace NzbDrone.Core.Tv
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec)
         {
-            var episodeResult = _episodeRepository.GetMissingEpisodes(pagingSpec, false);
+            var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, false);
 
             return episodeResult;
         }
 
-        public PagingSpec<Episode> GetCutoffUnmetEpisodes(PagingSpec<Episode> pagingSpec)
+        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec)
         {
             var allSpec = new PagingSpec<Episode>
             {
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Tv
                 FilterExpression = pagingSpec.FilterExpression
             };
 
-            var allItems = _episodeRepository.GetCutoffUnmetEpisodes(allSpec, false);
+            var allItems = _episodeRepository.EpisodesWhereCutoffUnmet(allSpec, false);
 
             var qualityProfileComparers = _qualityProfileRepository.All().ToDictionary(v => v.Id, v => new { Profile = v, Comparer = new QualityModelComparer(v) });
 
