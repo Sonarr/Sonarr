@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Metadata
                 definitions.Add(new MetadataDefinition
                 {
                     Enable = false,
-                    Name = provider.GetType().Name,
+                    Name = provider.GetType().Name.Replace("Metadata", ""),
                     Implementation = provider.GetType().Name,
                     Settings = (IProviderConfig)Activator.CreateInstance(provider.ConfigContract)
                 });

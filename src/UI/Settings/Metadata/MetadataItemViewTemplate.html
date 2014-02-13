@@ -1,0 +1,26 @@
+﻿<div class="metadata-item">
+    <div>
+        <h3>{{name}}</h3>
+        <span class="btn-group pull-right">
+            <button class="btn btn-mini btn-icon-only x-edit"><i class="icon-nd-edit"/></button>
+        </span>
+    </div>
+
+    <div class="settings">
+        {{#if enable}}
+            <span class="label label-success">Enabled</span>
+        {{else}}
+            <span class="label">Not Enabled</span>
+        {{/if}}
+        <hr>
+        {{#each fields}}
+            {{#if_eq type compare="checkbox"}}
+                {{#if value}}
+                    <span class="label label-success">{{label}}</span>
+                {{else}}
+                    <span class="label">{{label}}</span>
+                {{/if}}
+            {{/if_eq}}
+        {{/each}}
+    </div>
+</div>

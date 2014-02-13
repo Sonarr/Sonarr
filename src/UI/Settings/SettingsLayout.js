@@ -15,6 +15,7 @@ define(
         'Settings/DownloadClient/Layout',
         'Settings/Notifications/CollectionView',
         'Settings/Notifications/Collection',
+        'Settings/Metadata/MetadataLayout',
         'Settings/General/GeneralView',
         'Shared/LoadingView',
         'Config'
@@ -32,6 +33,7 @@ define(
                  DownloadClientLayout,
                  NotificationCollectionView,
                  NotificationCollection,
+                 MetadataLayout,
                  GeneralView,
                  LoadingView,
                  Config) {
@@ -44,6 +46,7 @@ define(
                 indexers        : '#indexers',
                 downloadClient  : '#download-client',
                 notifications   : '#notifications',
+                metadata        : '#metadata',
                 general         : '#general',
                 loading         : '#loading-region'
             },
@@ -54,8 +57,9 @@ define(
                 indexersTab        : '.x-indexers-tab',
                 downloadClientTab  : '.x-download-client-tab',
                 notificationsTab   : '.x-notifications-tab',
+                metadataTab        : '.x-metadata-tab',
                 generalTab         : '.x-general-tab',
-                advancedSettings    : '.x-advanced-settings'
+                advancedSettings   : '.x-advanced-settings'
             },
 
             events: {
@@ -64,6 +68,7 @@ define(
                 'click .x-indexers-tab'         : '_showIndexers',
                 'click .x-download-client-tab'  : '_showDownloadClient',
                 'click .x-notifications-tab'    : '_showNotifications',
+                'click .x-metadata-tab'         : '_showMetadata',
                 'click .x-general-tab'          : '_showGeneral',
                 'click .x-save-settings'        : '_save',
                 'change .x-advanced-settings'   : '_toggleAdvancedSettings'
@@ -99,6 +104,7 @@ define(
                         self.indexers.show(new IndexerLayout({ settings: self.settings, indexersCollection: self.indexerSettings }));
                         self.downloadClient.show(new DownloadClientLayout({ model: self.settings }));
                         self.notifications.show(new NotificationCollectionView({ collection: self.notificationSettings }));
+                        self.metadata.show(new MetadataLayout());
                         self.general.show(new GeneralView({ model: self.generalSettings }));
                         }
                     });
@@ -122,6 +128,9 @@ define(
                         break;
                     case 'notifications':
                         this._showNotifications();
+                        break;
+                    case 'metadata':
+                        this._showMetadata();
                         break;
                     case 'general':
                         this._showGeneral();
@@ -174,6 +183,15 @@ define(
 
                 this.ui.notificationsTab.tab('show');
                 this._navigate('settings/connect');
+            },
+
+            _showMetadata: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.ui.metadataTab.tab('show');
+                this._navigate('settings/metadata');
             },
 
             _showGeneral: function (e) {
