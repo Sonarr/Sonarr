@@ -4,7 +4,7 @@ define(
     [
         'AppLayout',
         'marionette',
-        'Settings/Notifications/DeleteView',
+        'Settings/Indexers/DeleteView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView'
     ], function (AppLayout, Marionette, DeleteView, AsModelBoundView, AsValidatedView) {
