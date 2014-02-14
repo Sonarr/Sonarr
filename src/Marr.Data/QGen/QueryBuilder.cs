@@ -556,8 +556,14 @@ namespace Marr.Data.QGen
             _isJoin = true;
             MemberInfo rightMember = (rightEntity.Body as MemberExpression).Member;
 
-            var relationship = EntGraph.Relationships.Single(v => v.Member == rightMember);
-            EntGraph.AddLazyRelationship(relationship);
+            foreach (var item in EntGraph)
+            {
+                if (item.EntityType == typeof(TLeft))
+                {
+                    var relationship = item.Relationships.Single(v => v.Member == rightMember);
+                    item.AddLazyRelationship(relationship);
+                }
+            }
 
             return Join(joinType, rightMember, filterExpression);
         }
