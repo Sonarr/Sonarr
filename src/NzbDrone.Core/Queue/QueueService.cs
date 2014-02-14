@@ -23,6 +23,13 @@ namespace NzbDrone.Core.Queue
         public List<Queue> GetQueue()
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
+
+            if (downloadClient == null)
+            {
+                _logger.Trace("Download client is not configured.");
+                return new List<Queue>();
+            }
+
             var queueItems = downloadClient.GetQueue();
 
             return MapQueue(queueItems);

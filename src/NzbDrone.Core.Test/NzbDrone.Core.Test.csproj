@@ -122,10 +122,10 @@
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbgetTests\DownloadNzbFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbgetTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
@@ -328,9 +328,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\newznab.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\Categories_json.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\SizeParsing\newznab.xml">

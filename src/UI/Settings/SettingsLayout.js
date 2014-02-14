@@ -12,7 +12,7 @@ define(
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/IndexerLayout',
         'Settings/Indexers/Collection',
-        'Settings/DownloadClient/Layout',
+        'Settings/DownloadClient/DownloadClientLayout',
         'Settings/Notifications/CollectionView',
         'Settings/Notifications/Collection',
         'Settings/Metadata/MetadataLayout',

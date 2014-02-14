@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var priorityType = (SabPriorityType)value;
+            var priorityType = (SabnzbdPriority)value;
                 writer.WriteValue(priorityType.ToString());
         }
 
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
         {
             var queuePriority = reader.Value.ToString();
 
-            SabPriorityType output;
+            SabnzbdPriority output;
             Enum.TryParse(queuePriority, out output);
 
             return output;
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(SabPriorityType);
+            return objectType == typeof(SabnzbdPriority);
         }
     }
 }

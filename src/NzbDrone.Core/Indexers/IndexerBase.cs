@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Indexers
 
     public enum DownloadProtocol
     {
-        Usenet,
-        Torrent
+        Usenet = 1,
+        Torrent = 2
     }
 }

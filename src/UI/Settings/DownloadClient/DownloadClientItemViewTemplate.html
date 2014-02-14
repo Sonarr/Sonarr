@@ -1,0 +1,17 @@
+﻿<div class="download-client-item thingy">
+    <div>
+        <h3>{{name}}</h3>
+        <span class="btn-group pull-right">
+            <button class="btn btn-mini btn-icon-only x-edit"><i class="icon-nd-edit"/></button>
+            <button class="btn btn-mini btn-icon-only x-delete"><i class="icon-nd-delete"/></button>
+        </span>
+    </div>
+
+    <div class="settings">
+        {{#if enable}}
+            <span class="label label-success">Enabled</span>
+        {{else}}
+            <span class="label">Not Enabled</span>
+        {{/if}}
+    </div>
+</div>

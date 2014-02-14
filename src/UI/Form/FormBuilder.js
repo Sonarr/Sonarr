@@ -35,6 +35,13 @@ define(
                     ]);
             }
 
+            if (field.type === 'path') {
+                return _templateRenderer.apply(field,
+                    [
+                        'Form/PathTemplate'
+                    ]);
+            }
+
             return _templateRenderer.apply(field,
                 [
                     'Form/TextboxTemplate'

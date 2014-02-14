@@ -94,6 +94,8 @@
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
     <Compile Include="Config\NamingModule.cs" />
+    <Compile Include="DownloadClient\DownloadClientModule.cs" />
+    <Compile Include="DownloadClient\DownloadClientResource.cs" />
     <Compile Include="DiskSpace\DiskSpaceModule.cs" />
     <Compile Include="DiskSpace\DiskSpaceResource.cs" />
     <Compile Include="EpisodeFiles\EpisodeFileModule.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="History\HistoryModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
+    <Compile Include="Notifications\NotificationSchemaModule.cs" />
     <Compile Include="ProviderResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="Indexers\IndexerSchemaModule.cs" />
@@ -145,7 +148,7 @@
     <Compile Include="Queue\QueueModule.cs" />
     <Compile Include="Queue\QueueResource.cs" />
     <Compile Include="ResourceChangeMessage.cs" />
-    <Compile Include="Notifications\NotificationSchemaModule.cs" />
+    <Compile Include="DownloadClient\DownloadClientSchemaModule.cs" />
     <Compile Include="Notifications\NotificationModule.cs" />
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="NzbDroneRestModule.cs" />

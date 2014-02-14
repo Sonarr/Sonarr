@@ -5,7 +5,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -32,9 +31,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
-            if (!downloadClient.IsConfigured)
+            if (downloadClient == null)
             {
-                _logger.Warn("Download client {0} isn't configured yet.", downloadClient.GetType().Name);
+                _logger.Warn("Download client isn't configured yet.");
                 return true;
             }
 

@@ -1,12 +1,9 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Files;
-using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Metadata
 {
@@ -16,10 +13,10 @@ namespace NzbDrone.Core.Metadata
           IHandle<SeriesRenamedEvent>
     {
         private readonly IMetadataFactory _metadataFactory;
-        private readonly MetadataFileService _metadataFileService;
+        private readonly IMetadataFileService _metadataFileService;
         private readonly Logger _logger;
 
-        public NotificationService(IMetadataFactory metadataFactory, MetadataFileService metadataFileService, Logger logger)
+        public NotificationService(IMetadataFactory metadataFactory, IMetadataFileService metadataFileService, Logger logger)
         {
             _metadataFactory = metadataFactory;
             _metadataFileService = metadataFileService;

@@ -4,8 +4,9 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Download.Clients.Blackhole;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -13,7 +14,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {
     [TestFixture]
-    public class BlackholeProviderFixture : CoreTest<BlackholeProvider>
+    public class BlackholeProviderFixture : CoreTest<Blackhole>
     {
         private const string _nzbUrl = "http://www.nzbs.com/url";
         private const string _title = "some_nzb_title";
@@ -27,13 +28,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             _blackHoleFolder = @"c:\nzb\blackhole\".AsOsAgnostic();
             _nzbPath = @"c:\nzb\blackhole\some_nzb_title.nzb".AsOsAgnostic();
 
-
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.BlackholeFolder).Returns(_blackHoleFolder);
-
             _remoteEpisode = new RemoteEpisode();
             _remoteEpisode.Release = new ReleaseInfo();
             _remoteEpisode.Release.Title = _title;
             _remoteEpisode.Release.DownloadUrl = _nzbUrl;
+
+            Subject.Definition = new DownloadClientDefinition();
+            Subject.Definition.Settings = new FolderSettings
+            {
+                Folder = _blackHoleFolder
+            };
         }
 
         private void WithExistingFile()

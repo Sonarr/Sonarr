@@ -73,69 +73,6 @@ namespace NzbDrone.Core.Configuration
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
-        public String SabHost
-        {
-            get { return GetValue("SabHost", "localhost"); }
-
-            set { SetValue("SabHost", value); }
-        }
-
-        public int SabPort
-        {
-            get { return GetValueInt("SabPort", 8080); }
-
-            set { SetValue("SabPort", value); }
-        }
-
-        public String SabApiKey
-        {
-            get { return GetValue("SabApiKey"); }
-
-            set { SetValue("SabApiKey", value); }
-        }
-
-        public String SabUsername
-        {
-            get { return GetValue("SabUsername"); }
-
-            set { SetValue("SabUsername", value); }
-        }
-
-        public String SabPassword
-        {
-            get { return GetValue("SabPassword"); }
-
-            set { SetValue("SabPassword", value); }
-        }
-
-        public String SabTvCategory
-        {
-            get { return GetValue("SabTvCategory", "tv"); }
-
-            set { SetValue("SabTvCategory", value); }
-        }
-
-        public SabPriorityType SabRecentTvPriority
-        {
-            get { return GetValueEnum("SabRecentTvPriority", SabPriorityType.Default); }
-
-            set { SetValue("SabRecentTvPriority", value); }
-        }
-
-        public SabPriorityType SabOlderTvPriority
-        {
-            get { return GetValueEnum("SabOlderTvPriority", SabPriorityType.Default); }
-
-            set { SetValue("SabOlderTvPriority", value); }
-        }
-
-        public bool SabUseSsl
-        {
-            get { return GetValueBoolean("SabUseSsl", false); }
-
-            set { SetValue("SabUseSsl", value); }
-        }
-
         public String DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
@@ -155,78 +92,10 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("Retention", value); }
         }
 
-        public DownloadClientType DownloadClient
-        {
-            get { return GetValueEnum("DownloadClient", DownloadClientType.Blackhole); }
-
-            set { SetValue("DownloadClient", value); }
-        }
-
-        public string BlackholeFolder
-        {
-            get { return GetValue("BlackholeFolder", String.Empty); }
-            set { SetValue("BlackholeFolder", value); }
-        }
-
-        public string PneumaticFolder
-        {
-            get { return GetValue("PneumaticFolder", String.Empty); }
-            set { SetValue("PneumaticFolder", value); }
-        }
-
         public string RecycleBin
         {
             get { return GetValue("RecycleBin", String.Empty); }
             set { SetValue("RecycleBin", value); }
-        }
-
-        public String NzbgetUsername
-        {
-            get { return GetValue("NzbgetUsername", "nzbget"); }
-
-            set { SetValue("NzbgetUsername", value); }
-        }
-
-        public String NzbgetPassword
-        {
-            get { return GetValue("NzbgetPassword", ""); }
-
-            set { SetValue("NzbgetPassword", value); }
-        }
-
-        public String NzbgetHost
-        {
-            get { return GetValue("NzbgetHost", "localhost"); }
-
-            set { SetValue("NzbgetHost", value); }
-        }
-
-        public Int32 NzbgetPort
-        {
-            get { return GetValueInt("NzbgetPort", 6789); }
-
-            set { SetValue("NzbgetPort", value); }
-        }
-
-        public String NzbgetTvCategory
-        {
-            get { return GetValue("NzbgetTvCategory", ""); }
-
-            set { SetValue("NzbgetTvCategory", value); }
-        }
-
-        public PriorityType NzbgetRecentTvPriority
-        {
-            get { return GetValueEnum("NzbgetRecentTvPriority", PriorityType.Normal); }
-
-            set { SetValue("NzbgetRecentTvPriority", value); }
-        }
-
-        public PriorityType NzbgetOlderTvPriority
-        {
-            get { return GetValueEnum("NzbgetOlderTvPriority", PriorityType.Normal); }
-
-            set { SetValue("NzbgetOlderTvPriority", value); }
         }
 
         public string ReleaseRestrictions

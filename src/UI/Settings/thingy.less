@@ -1,0 +1,65 @@
+@import "../Shared/Styles/card";
+@import "../Shared/Styles/clickable";
+
+.add-thingy {
+  .card;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: lighter;
+  text-align: center;
+
+  a {
+    font-size: 16px;
+    color: #595959;
+
+    i {
+      .clickable;
+    }
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.add-thingies {
+  text-align: center;
+
+  .items {
+    list-style-type: none;
+    margin: 0px;
+
+    li {
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+}
+
+.thingy {
+
+  .card;
+
+  h3 {
+    margin-top: 0px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn-group {
+    margin-top: 8px;
+  }
+
+  .settings {
+    margin-top: 5px;
+  }
+}
+
+.thingies {
+  li {
+    display: inline-block;
+    vertical-align: top;
+  }
+}

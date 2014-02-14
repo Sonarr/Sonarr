@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using FizzWare.NBuilder;
@@ -33,9 +34,6 @@ namespace NzbDrone.Core.Test.Download
                    .With(c => c.Release = Builder<ReleaseInfo>.CreateNew().Build())
                    .With(c => c.Episodes = episodes)
                    .Build();
-
-
-            Mocker.GetMock<IDownloadClient>().Setup(c => c.IsConfigured).Returns(true);
         }
 
         private void WithSuccessfulAdd()
@@ -85,7 +83,8 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_attempt_download_if_client_isnt_configure()
         {
-            Mocker.GetMock<IDownloadClient>().Setup(c => c.IsConfigured).Returns(false);
+            Mocker.GetMock<IProvideDownloadClient>()
+                  .Setup(c => c.GetDownloadClient()).Returns((IDownloadClient)null);
 
             Subject.DownloadReport(_parseResult);
 

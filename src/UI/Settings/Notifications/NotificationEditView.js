@@ -22,7 +22,7 @@ define(
             },
 
             events: {
-                'click .x-save'        : '_saveNotification',
+                'click .x-save'        : '_saveClient',
                 'click .x-save-and-add': '_saveAndAddNotification',
                 'click .x-delete'      : '_deleteNotification',
                 'click .x-back'        : '_back',
@@ -38,7 +38,7 @@ define(
                 this._onDownloadChanged();
             },
 
-            _saveNotification: function () {
+            _saveClient: function () {
                 var self = this;
                 var promise = this.model.saveSettings();
 

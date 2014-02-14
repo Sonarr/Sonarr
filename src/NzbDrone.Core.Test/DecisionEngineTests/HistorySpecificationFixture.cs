@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void GivenSabnzbdDownloadClient()
         {
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.Resolve<SabnzbdClient>());
+                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.Resolve<Sabnzbd>());
         }
 
         private void GivenMostRecentForEpisode(HistoryEventType eventType)
