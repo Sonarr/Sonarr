@@ -27,7 +27,9 @@ namespace NzbDrone.Api.RootFolders
             CreateResource = CreateRootFolder;
             DeleteResource = DeleteFolder;
 
-            SharedValidator.RuleFor(c => c.Path).IsValidPath()
+            SharedValidator.RuleFor(c => c.Path)
+                           .Cascade(CascadeMode.StopOnFirstFailure)
+                           .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(pathExistsValidator)
                            .SetValidator(droneFactoryValidator);
