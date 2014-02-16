@@ -8,14 +8,14 @@ define(
     ], function (Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/MediaManagement/FileManagement/FileManagementViewTemplate',
+            template: 'Settings/DownloadClient/Options/DownloadClientOptionsViewTemplate',
 
             ui: {
-                recyclingBin : '.x-path'
+                droneFactory : '.x-path'
             },
 
             onShow: function () {
-                this.ui.recyclingBin.autoComplete('/directories');
+                this.ui.droneFactory.autoComplete('/directories');
             }
         });
 

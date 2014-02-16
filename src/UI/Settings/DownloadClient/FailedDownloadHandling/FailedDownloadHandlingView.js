@@ -3,25 +3,19 @@ define(
     [
         'marionette',
         'Mixins/AsModelBoundView',
-        'Mixins/AsValidatedView',
-        'Mixins/AutoComplete'
+        'Mixins/AsValidatedView'
     ], function (Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/MediaManagement/Permissions/PermissionsViewTemplate',
+            template: 'Settings/DownloadClient/FailedDownloadHandling/FailedDownloadHandlingViewTemplate',
 
             ui: {
-                recyclingBin                  : '.x-path',
                 failedDownloadHandlingCheckbox: '.x-failed-download-handling',
                 failedDownloadOptions         : '.x-failed-download-options'
             },
 
             events: {
                 'change .x-failed-download-handling': '_setFailedDownloadOptionsVisibility'
-            },
-
-            onShow: function () {
-                this.ui.recyclingBin.autoComplete('/directories');
             },
 
             _setFailedDownloadOptionsVisibility: function () {

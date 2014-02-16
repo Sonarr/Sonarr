@@ -7,7 +7,7 @@ define(
     ], function (Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/Indexers/Options/IndexerOptionsViewTemplate'
+            template: 'Settings/MediaManagement/Sorting/SortingViewTemplate'
         });
 
         AsModelBoundView.call(view);

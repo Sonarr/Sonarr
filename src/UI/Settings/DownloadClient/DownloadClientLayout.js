@@ -5,24 +5,17 @@ define(
         'marionette',
         'Settings/DownloadClient/DownloadClientCollection',
         'Settings/DownloadClient/DownloadClientCollectionView',
-        'Mixins/AsModelBoundView',
-        'Mixins/AutoComplete',
-        'bootstrap'
-    ], function (Marionette, DownloadClientCollection, DownloadClientCollectionView, AsModelBoundView) {
+        'Settings/DownloadClient/Options/DownloadClientOptionsView',
+        'Settings/DownloadClient/FailedDownloadHandling/FailedDownloadHandlingView'
+    ], function (Marionette, DownloadClientCollection, DownloadClientCollectionView, DownloadClientOptionsView, FailedDownloadHandlingView) {
 
-        var view = Marionette.Layout.extend({
+        return Marionette.Layout.extend({
             template : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
 
             regions: {
-                downloadClients: '#x-download-clients-region'
-            },
-
-            ui: {
-                droneFactory: '.x-path'
-            },
-
-            events: {
-                'change .x-download-client': 'downloadClientChanged'
+                downloadClients        : '#x-download-clients-region',
+                downloadClientOptions  : '#x-download-client-options-region',
+                failedDownloadHandling : '#x-failed-download-handling-region'
             },
 
             initialize: function () {
@@ -32,9 +25,8 @@ define(
 
             onShow: function () {
                 this.downloadClients.show(new DownloadClientCollectionView({ collection: this.downloadClientCollection }));
-                this.ui.droneFactory.autoComplete('/directories');
+                this.downloadClientOptions.show(new DownloadClientOptionsView({ model: this.model }));
+                this.failedDownloadHandling.show(new FailedDownloadHandlingView({ model: this.model }));
             }
         });
-
-        return AsModelBoundView.call(view);
     });

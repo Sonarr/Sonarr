@@ -2,7 +2,6 @@
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
@@ -14,7 +13,18 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.Port).GreaterThan(0);
 
-            //Todo: either API key or Username/Password needs to be valid
+            RuleFor(c => c.ApiKey).NotEmpty()
+                                  .WithMessage("API Key is required when username/password are not configured")
+                                  .When(c => String.IsNullOrWhiteSpace(c.Username));
+
+            RuleFor(c => c.Username).NotEmpty()
+                                    .WithMessage("Username is required when API key is not configured")
+                                    .When(c => String.IsNullOrWhiteSpace(c.ApiKey));
+
+
+            RuleFor(c => c.Password).NotEmpty()
+                                    .WithMessage("Password is required when API key is not configured")
+                                    .When(c => String.IsNullOrWhiteSpace(c.ApiKey));
         }
     }
 

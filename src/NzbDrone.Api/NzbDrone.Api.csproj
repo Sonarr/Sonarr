@@ -92,8 +92,17 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="Config\IndexerConfigModule.cs" />
+    <Compile Include="Config\MediaManagementConfigModule.cs" />
+    <Compile Include="Config\MediaManagementConfigResource.cs" />
+    <Compile Include="Config\NzbDroneConfigModule.cs" />
+    <Compile Include="Config\DownloadClientConfigModule.cs" />
+    <Compile Include="Config\DownloadClientConfigResource.cs" />
+    <Compile Include="Config\HostConfigModule.cs" />
+    <Compile Include="Config\HostConfigResource.cs" />
     <Compile Include="Config\NamingConfigResource.cs" />
-    <Compile Include="Config\NamingModule.cs" />
+    <Compile Include="Config\NamingConfigModule.cs" />
+    <Compile Include="Config\IndexerConfigResource.cs" />
     <Compile Include="DownloadClient\DownloadClientModule.cs" />
     <Compile Include="DownloadClient\DownloadClientResource.cs" />
     <Compile Include="DiskSpace\DiskSpaceModule.cs" />
@@ -177,11 +186,9 @@
     <Compile Include="Qualities\QualityDefinitionResource.cs" />
     <Compile Include="Qualities\QualityDefinitionModule.cs" />
     <Compile Include="Extensions\ReqResExtensions.cs" />
-    <Compile Include="Config\SettingsModule.cs" />
     <Compile Include="System\SystemModule.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
-    <Compile Include="Validation\PathValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

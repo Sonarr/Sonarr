@@ -660,6 +660,11 @@
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
     <Compile Include="Update\UpdateCheckService.cs" />
+    <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
+    <Compile Include="Validation\Paths\PathValidator.cs" />
+    <Compile Include="Validation\Paths\RootFolderValidator.cs" />
+    <Compile Include="Validation\Paths\PathExistsValidator.cs" />
+    <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

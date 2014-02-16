@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Configuration
             return dict;
         }
 
-        public void SaveValues(Dictionary<string, object> configValues)
+        public void SaveConfigDictionary(Dictionary<string, object> configValues)
         {
             var allWithDefaults = AllWithDefaults();
 

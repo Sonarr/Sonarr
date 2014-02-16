@@ -8,13 +8,14 @@ define(
         'Settings/DownloadClient/Delete/DownloadClientDeleteView',
         'Commands/CommandController',
         'Mixins/AsModelBoundView',
+        'Mixins/AsValidatedView',
         'underscore',
         'Form/FormBuilder',
         'Mixins/AutoComplete',
         'bootstrap'
-    ], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, _) {
+    ], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, _) {
 
-        var model = Marionette.ItemView.extend({
+        var view = Marionette.ItemView.extend({
             template: 'Settings/DownloadClient/Edit/DownloadClientEditViewTemplate',
 
             ui: {
@@ -89,5 +90,8 @@ define(
             }
         });
 
-        return AsModelBoundView.call(model);
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+
+        return view;
     });

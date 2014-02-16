@@ -2,17 +2,20 @@
 define(
     [
         'jquery',
+        'underscore',
         'vent',
         'marionette',
         'backbone',
-        'Settings/SettingsModel',
         'Settings/General/GeneralSettingsModel',
         'Settings/MediaManagement/Naming/NamingModel',
         'Settings/MediaManagement/MediaManagementLayout',
+        'Settings/MediaManagement/MediaManagementSettingsModel',
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/IndexerLayout',
         'Settings/Indexers/Collection',
+        'Settings/Indexers/IndexerSettingsModel',
         'Settings/DownloadClient/DownloadClientLayout',
+        'Settings/DownloadClient/DownloadClientSettingsModel',
         'Settings/Notifications/CollectionView',
         'Settings/Notifications/Collection',
         'Settings/Metadata/MetadataLayout',
@@ -20,17 +23,20 @@ define(
         'Shared/LoadingView',
         'Config'
     ], function ($,
+                 _,
                  vent,
                  Marionette,
                  Backbone,
-                 SettingsModel,
                  GeneralSettingsModel,
                  NamingModel,
                  MediaManagementLayout,
+                 MediaManagementSettingsModel,
                  QualityLayout,
                  IndexerLayout,
                  IndexerCollection,
+                 IndexerSettingsModel,
                  DownloadClientLayout,
+                 DownloadClientSettingsModel,
                  NotificationCollectionView,
                  NotificationCollection,
                  MetadataLayout,
@@ -84,26 +90,31 @@ define(
                 this.loading.show(new LoadingView());
                 var self = this;
 
-                this.settings = new SettingsModel();
-                this.generalSettings = new GeneralSettingsModel();
+                this.mediaManagementSettings = new MediaManagementSettingsModel();
                 this.namingSettings = new NamingModel();
-                this.indexerSettings = new IndexerCollection();
-                this.notificationSettings = new NotificationCollection();
+                this.indexerSettings = new IndexerSettingsModel();
+                this.indexerCollection = new IndexerCollection();
+                this.downloadClientSettings = new DownloadClientSettingsModel();
+                this.notificationCollection = new NotificationCollection();
+                this.generalSettings = new GeneralSettingsModel();
 
-                Backbone.$.when(this.settings.fetch(),
-                        this.generalSettings.fetch(),
+                Backbone.$.when(
+                        this.mediaManagementSettings.fetch(),
                         this.namingSettings.fetch(),
                         this.indexerSettings.fetch(),
-                        this.notificationSettings.fetch()
+                        this.indexerCollection.fetch(),
+                        this.downloadClientSettings.fetch(),
+                        this.notificationCollection.fetch(),
+                        this.generalSettings.fetch()
                     ).done(function () {
                         if(!self.isClosed)
                         {
                         self.loading.$el.hide();
-                        self.mediaManagement.show(new MediaManagementLayout({ settings: self.settings, namingSettings: self.namingSettings }));
-                        self.quality.show(new QualityLayout({ settings: self.settings }));
-                        self.indexers.show(new IndexerLayout({ settings: self.settings, indexersCollection: self.indexerSettings }));
-                        self.downloadClient.show(new DownloadClientLayout({ model: self.settings }));
-                        self.notifications.show(new NotificationCollectionView({ collection: self.notificationSettings }));
+                        self.mediaManagement.show(new MediaManagementLayout({ settings: self.mediaManagementSettings, namingSettings: self.namingSettings }));
+                        self.quality.show(new QualityLayout());
+                        self.indexers.show(new IndexerLayout({ settings: self.indexerSettings, indexersCollection: self.indexerCollection }));
+                        self.downloadClient.show(new DownloadClientLayout({ model: self.downloadClientSettings }));
+                        self.notifications.show(new NotificationCollectionView({ collection: self.notificationCollection }));
                         self.metadata.show(new MetadataLayout());
                         self.general.show(new GeneralView({ model: self.generalSettings }));
                         }
@@ -204,7 +215,7 @@ define(
             },
 
             _navigate:function(route){
-                Backbone.history.navigate(route, { trigger: true, replace: true });
+                Backbone.history.navigate(route, { trigger: false, replace: true });
             },
 
             _save: function () {

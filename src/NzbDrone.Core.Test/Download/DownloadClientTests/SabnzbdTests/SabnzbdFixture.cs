@@ -50,45 +50,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         }
 
         [Test]
-        public void GetHistory_should_return_a_list_with_items_when_the_history_has_items()
-        {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(ReadAllText("Files", "History.txt"));
-
-
-            var result = Subject.GetHistory();
-
-
-            result.Should().HaveCount(1);
-        }
-
-        [Test]
-        public void GetHistory_should_return_an_empty_list_when_the_queue_is_empty()
-        {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(ReadAllText("Files", "HistoryEmpty.txt"));
-
-
-            var result = Subject.GetHistory();
-
-
-            result.Should().BeEmpty();
-        }
-
-        [Test]
-        public void GetHistory_should_return_an_empty_list_when_there_is_an_error_getting_the_queue()
-        {
-            Mocker.GetMock<IHttpProvider>()
-                    .Setup(s => s.DownloadString("http://192.168.5.55:2222/api?mode=history&output=json&start=0&limit=0&apikey=5c770e3197e4fe763423ee7c392c25d1&ma_username=admin&ma_password=pass"))
-                    .Returns(ReadAllText("Files", "JsonError.txt"));
-
-
-            Assert.Throws<ApplicationException>(() => Subject.GetHistory(), "API Key Incorrect");
-        }
-
-        [Test]
         public void downloadNzb_should_use_sabRecentTvPriority_when_recentEpisode_is_true()
         {
             Mocker.GetMock<ISabnzbdProxy>()

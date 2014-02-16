@@ -7,23 +7,33 @@ namespace NzbDrone.Core.Configuration
     {
         IEnumerable<Config> All();
         Dictionary<String, Object> AllWithDefaults();
+        void SaveConfigDictionary(Dictionary<string, object> configValues);
+
+        //Download Client
         String DownloadedEpisodesFolder { get; set; }
-        bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
-        int Retention { get; set; }
-        string RecycleBin { get; set; }
-        string ReleaseRestrictions { get; set; }
-        Int32 RssSyncInterval { get; set; }
-        Boolean AutoDownloadPropers { get; set; }
         String DownloadClientWorkingFolders { get; set; }
+
+        //Failed Download Handling (Download client)
         Boolean AutoRedownloadFailed { get; set; }
         Boolean RemoveFailedDownloads { get; set; }
         Boolean EnableFailedDownloadHandling { get; set; }
+
+        //Media Management
+        Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
+        String RecycleBin { get; set; }
+        Boolean AutoDownloadPropers { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
-        void SaveValues(Dictionary<string, object> configValues);
+
+        //Permissions (Media Management)
         Boolean SetPermissionsLinux { get; set; }
         String FileChmod { get; set; }
         String FolderChmod { get; set; }
         String ChownUser { get; set; }
         String ChownGroup { get; set; }
+
+        //Indexers
+        Int32 Retention { get; set; }
+        Int32 RssSyncInterval { get; set; }
+        String ReleaseRestrictions { get; set; }
     }
 }

@@ -12,14 +12,14 @@ using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Config
 {
-    public class NamingModule : NzbDroneRestModule<NamingConfigResource>
+    public class NamingConfigModule : NzbDroneRestModule<NamingConfigResource>
     {
         private readonly INamingConfigService _namingConfigService;
         private readonly IFilenameSampleService _filenameSampleService;
         private readonly IFilenameValidationService _filenameValidationService;
         private readonly IBuildFileNames _filenameBuilder;
 
-        public NamingModule(INamingConfigService namingConfigService,
+        public NamingConfigModule(INamingConfigService namingConfigService,
                             IFilenameSampleService filenameSampleService,
                             IFilenameValidationService filenameValidationService,
                             IBuildFileNames filenameBuilder)

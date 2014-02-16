@@ -1,8 +1,17 @@
-﻿using FluentValidation.Validators;
+﻿using FluentValidation;
+using FluentValidation.Validators;
 using NzbDrone.Common;
 
-namespace NzbDrone.Api.Validation
+namespace NzbDrone.Core.Validation.Paths
 {
+    public static class PathValidation
+    {
+        public static IRuleBuilderOptions<T, string> IsValidPath<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new PathValidator());
+        }
+    }
+
     public class PathValidator : PropertyValidator
     {
         public PathValidator()

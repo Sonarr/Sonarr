@@ -5,9 +5,8 @@ define(
     ], function (SettingsModelBase) {
         return SettingsModelBase.extend({
 
-            url           : window.NzbDrone.ApiRoot + '/settings/host',
+            url           : window.NzbDrone.ApiRoot + '/config/host',
             successMessage: 'General settings saved',
             errorMessage  : 'Failed to save general settings'
-
         });
     });

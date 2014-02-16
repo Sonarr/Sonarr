@@ -22,7 +22,7 @@ define(
             },
 
             _edit: function () {
-                var view = new EditView({ model: this.model});
+                var view = new EditView({ model: this.model, downloadClientCollection: this.model.collection });
                 AppLayout.modalRegion.show(view);
             },
 

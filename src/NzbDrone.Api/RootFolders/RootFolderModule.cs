@@ -5,7 +5,7 @@ using FluentValidation.Results;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Api.Mapping;
-using NzbDrone.Api.Validation;
+using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Api.RootFolders
 {
@@ -13,7 +13,11 @@ namespace NzbDrone.Api.RootFolders
     {
         private readonly IRootFolderService _rootFolderService;
 
-        public RootFolderModule(IRootFolderService rootFolderService, ICommandExecutor commandExecutor)
+        public RootFolderModule(IRootFolderService rootFolderService,
+                                ICommandExecutor commandExecutor,
+                                RootFolderValidator rootFolderValidator,
+                                PathExistsValidator pathExistsValidator,
+                                DroneFactoryValidator droneFactoryValidator)
             : base(commandExecutor)
         {
             _rootFolderService = rootFolderService;
@@ -23,7 +27,10 @@ namespace NzbDrone.Api.RootFolders
             CreateResource = CreateRootFolder;
             DeleteResource = DeleteFolder;
 
-            SharedValidator.RuleFor(c => c.Path).IsValidPath();
+            SharedValidator.RuleFor(c => c.Path).IsValidPath()
+                           .SetValidator(rootFolderValidator)
+                           .SetValidator(pathExistsValidator)
+                           .SetValidator(droneFactoryValidator);
         }
 
         private RootFolderResource GetRootFolder(int id)
@@ -33,15 +40,7 @@ namespace NzbDrone.Api.RootFolders
 
         private int CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            try
-            {
-                return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
-            }
-            catch (Exception ex)
-            {
-                throw new ValidationException(new [] { new ValidationFailure("Path", ex.Message) });
-            }
-            
+            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);            
         }
 
         private List<RootFolderResource> GetRootFolders()
