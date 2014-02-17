@@ -120,6 +120,8 @@
     <Compile Include="Frontend\StaticResourceModule.cs" />
     <Compile Include="History\HistoryResource.cs" />
     <Compile Include="History\HistoryModule.cs" />
+    <Compile Include="Metadata\MetadataResource.cs" />
+    <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="ProviderResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="Indexers\IndexerSchemaModule.cs" />

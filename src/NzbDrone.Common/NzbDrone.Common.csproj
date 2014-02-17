@@ -91,6 +91,7 @@
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
+    <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />

@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
     <Compile Include="DiskProviderTests\FreeSpaceFixture.cs" />
-    <Compile Include="DiskProviderTests\IsParentFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFactoryFixture.cs" />
   </ItemGroup>

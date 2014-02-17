@@ -10,7 +10,6 @@ namespace NzbDrone.Api.Qualities
         private readonly IQualityProfileService _qualityProfileService;
 
         public QualityProfileModule(IQualityProfileService qualityProfileService)
-            : base("/qualityprofiles")
         {
             _qualityProfileService = qualityProfileService;
             SharedValidator.RuleFor(c => c.Name).NotEmpty();

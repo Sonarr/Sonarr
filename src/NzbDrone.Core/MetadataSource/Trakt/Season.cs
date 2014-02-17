@@ -8,5 +8,6 @@ namespace NzbDrone.Core.MetadataSource.Trakt
         public List<Episode> episodes { get; set; }
         public string url { get; set; }
         public string poster { get; set; }
+        public Images images { get; set; }
     }
 }

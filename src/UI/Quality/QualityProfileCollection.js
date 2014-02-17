@@ -7,7 +7,7 @@ define(
 
         var QualityProfileCollection = Backbone.Collection.extend({
             model: QualityProfileModel,
-            url  : window.NzbDrone.ApiRoot + '/qualityprofiles'
+            url  : window.NzbDrone.ApiRoot + '/qualityprofile'
         });
 
         var profiles = new QualityProfileCollection();

@@ -33,13 +33,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.ExistingFile = true;
         }
 
-        private void GivenNewFile()
-        {
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.IsParent(_localEpisode.Series.Path, _localEpisode.Path))
-                .Returns(false);
-        }
-
         [Test]
         public void should_return_true_if_file_is_under_series_folder()
         {
@@ -62,8 +55,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_file_is_in_use()
         {
-            GivenNewFile();
-
             Mocker.GetMock<IDiskProvider>()
                 .Setup(s => s.IsFileLocked(It.IsAny<string>()))
                 .Returns(true);
@@ -74,8 +65,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_true_if_file_is_not_in_use()
         {
-            GivenNewFile();
-
             Mocker.GetMock<IDiskProvider>()
                 .Setup(s => s.IsFileLocked(It.IsAny<string>()))
                 .Returns(false);

@@ -29,6 +29,8 @@ namespace NzbDrone.Core.MetadataSource.Trakt
         public Images images { get; set; }
         public List<string> genres { get; set; }
         public List<Season> seasons { get; set; }
+        public Ratings ratings { get; set; }
+        public People people { get; set; }
     }
 
     public class SearchShow

@@ -30,6 +30,5 @@ namespace NzbDrone.Core.MediaFiles
                         .AndWhere(c => c.SeasonNumber == seasonNumber)
                         .ToList();
         }
-
     }
 }

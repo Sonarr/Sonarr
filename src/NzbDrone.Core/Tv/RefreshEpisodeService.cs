@@ -65,6 +65,8 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
                     episodeToUpdate.AirDateUtc = episode.AirDateUtc;
+                    episodeToUpdate.Ratings = episode.Ratings;
+                    episodeToUpdate.Images = episode.Images;
 
                     successCount++;
                 }

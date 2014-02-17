@@ -50,6 +50,10 @@ namespace NzbDrone.Core.Tv
             series.Images = seriesInfo.Images;
             series.Network = seriesInfo.Network;
             series.FirstAired = seriesInfo.FirstAired;
+            series.Ratings = seriesInfo.Ratings;
+            series.Actors = seriesInfo.Actors;
+            series.Genres = seriesInfo.Genres;
+            series.Certification = seriesInfo.Certification;
 
             if (_dailySeriesService.IsDailySeries(series.TvdbId))
             {

@@ -189,7 +189,11 @@ namespace NzbDrone.Common.Processes
         public void WaitForExit(Process process)
         {
             Logger.Trace("Waiting for process {0} to exit.", process.ProcessName);
-            process.WaitForExit();
+
+            if (!process.HasExited)
+            {
+                process.WaitForExit();
+            }
         }
 
         public void SetPriority(int processId, ProcessPriorityClass priority)

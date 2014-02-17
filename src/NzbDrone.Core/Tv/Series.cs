@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Tv
         public Series()
         {
             Images = new List<MediaCover.MediaCover>();
+            Genres = new List<String>();
+            Actors = new List<Actor>();
         }
 
         public int TvdbId { get; set; }
@@ -35,6 +37,10 @@ namespace NzbDrone.Core.Tv
         public string TitleSlug { get; set; }
         public string Path { get; set; }
         public int Year { get; set; }
+        public Ratings Ratings { get; set; }
+        public List<String> Genres { get; set; }
+        public List<Actor> Actors { get; set; }
+        public String Certification { get; set; }
 
         public string RootFolderPath { get; set; }
 

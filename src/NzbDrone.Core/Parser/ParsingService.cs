@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Parser
                 Episodes = episodes,
                 Path = filename,
                 ParsedEpisodeInfo = parsedEpisodeInfo,
-                ExistingFile = _diskProvider.IsParent(series.Path, filename)
+                ExistingFile = DiskProviderBase.IsParent(series.Path, filename)
             };
         }
 
