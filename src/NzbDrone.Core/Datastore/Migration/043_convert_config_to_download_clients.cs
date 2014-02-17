@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Runtime.Remoting.Messaging;
 using FluentMigrator;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(42)]
+    [Migration(43)]
     public class convert_config_to_download_clients : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()

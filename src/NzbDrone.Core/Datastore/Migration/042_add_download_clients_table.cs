@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(41)]
+    [Migration(42)]
     public class add_download_clients_table : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()

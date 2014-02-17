@@ -198,8 +198,8 @@
     <Compile Include="Datastore\Migration\040_add_metadata_to_episodes_and_series.cs" />
     <Compile Include="Datastore\Migration\039_add_metadata_tables.cs" />
     <Compile Include="Datastore\Migration\041_fix_xbmc_season_images_metadata.cs" />
-    <Compile Include="Datastore\Migration\041_add_download_clients_table.cs" />
-    <Compile Include="Datastore\Migration\042_convert_config_to_download_clients.cs" />
+    <Compile Include="Datastore\Migration\042_add_download_clients_table.cs" />
+    <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
