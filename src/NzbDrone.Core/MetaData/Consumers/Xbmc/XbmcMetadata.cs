@@ -217,7 +217,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     tvShow.Add(new XElement("actor",
                                     new XElement("name", actor.Name),
                                     new XElement("role", actor.Character),
-                                    new XElement("thumb", actor.Images.First())
+                                    new XElement("thumb", actor.Images.First().Url)
                             ));
                 }
 
@@ -296,7 +296,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                                        SeriesId = series.Id,
                                        SeasonNumber = season.SeasonNumber,
                                        Consumer = GetType().Name,
-                                       Type = MetadataType.SeriesMetadata,
+                                       Type = MetadataType.SeasonImage,
                                        RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
                                    };
 
