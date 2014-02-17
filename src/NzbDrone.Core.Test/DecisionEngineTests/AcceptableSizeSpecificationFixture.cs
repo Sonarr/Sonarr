@@ -58,6 +58,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .With(q => q.Quality = Quality.SDTV)
                 .Build();
 
+            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
+        }
+
+        private void GivenLastEpisode()
+        {
+            Mocker.GetMock<IEpisodeService>().Setup(
+                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
+                .Returns(true);
         }
 
         [TestCase(30, 50, false)]
@@ -66,42 +74,28 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase(60, 100, false)]
         [TestCase(60, 500, true)]
         [TestCase(60, 1000, false)]
-        public void IsAcceptableSize_single_episode(int runtime, int sizeInMegaBytes, bool expectedResult)
-        {
+        public void single_episode(int runtime, int sizeInMegaBytes, bool expectedResult)
+        {           
             series.Runtime = runtime;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(false);
-
-            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
-            
-            result.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultSingle, null).Should().Be(expectedResult);
         }
 
         [TestCase(30, 500, true)]
         [TestCase(30, 1000, false)]
         [TestCase(60, 1000, true)]
         [TestCase(60, 2000, false)]
-        public void IsAcceptableSize_single_episode_first_or_last(int runtime, int sizeInMegaBytes, bool expectedResult)
+        public void single_episode_first_or_last(int runtime, int sizeInMegaBytes, bool expectedResult)
         {
+            GivenLastEpisode();
+
             series.Runtime = runtime;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(true);
-
-            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
-
-            result.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultSingle, null).Should().Be(expectedResult);
         }
 
         [TestCase(30, 50 * 2, false)]
@@ -110,21 +104,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase(60, 100 * 2, false)]
         [TestCase(60, 500 * 2, true)]
         [TestCase(60, 1000 * 2, false)]
-        public void IsAcceptableSize_multi_episode(int runtime, int sizeInMegaBytes, bool expectedResult)
+        public void multi_episode(int runtime, int sizeInMegaBytes, bool expectedResult)
         {
             series.Runtime = runtime;
             parseResultMulti.Series = series;
             parseResultMulti.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
             Mocker.GetMock<IEpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
                 .Returns(false);
 
-            bool result = Subject.IsSatisfiedBy(parseResultMulti, null);
-
-            result.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultMulti, null).Should().Be(expectedResult);
         }
 
         [TestCase(30, 50 * 6, false)]
@@ -133,87 +123,58 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase(60, 100 * 6, false)]
         [TestCase(60, 500 * 6, true)]
         [TestCase(60, 1000 * 6, false)]
-        public void IsAcceptableSize_multiset_episode(int runtime, int sizeInMegaBytes, bool expectedResult)
+        public void multiset_episode(int runtime, int sizeInMegaBytes, bool expectedResult)
         {
             series.Runtime = runtime;
             parseResultMultiSet.Series = series;
             parseResultMultiSet.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
             Mocker.GetMock<IEpisodeService>().Setup(
                 s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
                 .Returns(false);
 
-            bool result = Subject.IsSatisfiedBy(parseResultMultiSet, null);
-
-            result.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultMultiSet, null).Should().Be(expectedResult);
         }
 
         [Test]
-        public void IsAcceptableSize_return_true_if_unlimited_30_minute()
+        public void should_return_true_if_unlimited_30_minute()
         {
+            GivenLastEpisode();
+
             series.Runtime = 30;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 18457280000;
             qualityType.MaxSize = 0;
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(true);
-
-
-            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
-
-
-            result.Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
         }
-
+        
         [Test]
-        public void IsAcceptableSize_return_true_if_unlimited_60_minute()
+        public void should_return_true_if_unlimited_60_minute()
         {
+            GivenLastEpisode();
+
             series.Runtime = 60;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 36857280000;
             qualityType.MaxSize = 0;
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(true);
-
-
-            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
-
-
-            result.Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();;
         }
 
         [Test]
-        public void IsAcceptableSize_should_treat_daily_series_as_single_episode()
+        public void should_treat_daily_series_as_single_episode()
         {
+            GivenLastEpisode();
+
             series.Runtime = 60;
             parseResultSingle.Series = series;
             parseResultSingle.Series.SeriesType = SeriesTypes.Daily;
-
             parseResultSingle.Release.Size = 300.Megabytes();
 
             qualityType.MaxSize = 10;
 
-            Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
-
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(true);
-
-
-            bool result = Subject.IsSatisfiedBy(parseResultSingle, null);
-
-
-            result.Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
         }
 
         [Test]
@@ -227,7 +188,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
-
         [Test]
         public void should_always_return_false_if_unknown()
         {
@@ -237,7 +197,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
 
             Subject.IsSatisfiedBy(parseResult, null).Should().BeFalse();
-
 
             Mocker.GetMock<IQualityDefinitionService>().Verify(c => c.Get(It.IsAny<Quality>()), Times.Never());
         }
