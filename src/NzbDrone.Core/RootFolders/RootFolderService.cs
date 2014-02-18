@@ -29,6 +29,7 @@ namespace NzbDrone.Core.RootFolders
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
         private readonly IConfigService _configService;
+        private readonly Logger _logger;
 
         private static readonly HashSet<string> SpecialFolders = new HashSet<string> { "$recycle.bin", "system volume information", "recycler", "lost+found" };
 
@@ -36,12 +37,14 @@ namespace NzbDrone.Core.RootFolders
         public RootFolderService(IRootFolderRepository rootFolderRepository,
                                  IDiskProvider diskProvider,
                                  ISeriesRepository seriesRepository,
-                                 IConfigService configService)
+                                 IConfigService configService,
+                                 Logger logger)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
             _configService = configService;
+            _logger = logger;
         }
 
         public List<RootFolder> All()
@@ -57,7 +60,7 @@ namespace NzbDrone.Core.RootFolders
 
             rootFolders.ForEach(folder =>
             {
-                if (_diskProvider.FolderExists(folder.Path))
+                if (folder.Path.IsPathValid() && _diskProvider.FolderExists(folder.Path))
                 {
                     folder.FreeSpace = _diskProvider.GetAvailableSpace(folder.Path);
                     folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
