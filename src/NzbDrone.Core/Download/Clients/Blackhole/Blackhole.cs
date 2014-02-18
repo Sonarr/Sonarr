@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return new QueueItem[0];
         }
 
-        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
         {
             return new HistoryItem[0];
         }

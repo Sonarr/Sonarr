@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }, TimeSpan.FromSeconds(10));
         }
 
-        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0)
+        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
         {
             var items = _sabnzbdProxy.GetHistory(start, limit, Settings).Items;
             var historyItems = new List<HistoryItem>();

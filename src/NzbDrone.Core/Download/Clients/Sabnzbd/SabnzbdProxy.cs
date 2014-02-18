@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = String.Format("mode=queue&start={0}&limit={1}", start, limit);
+            var action = String.Format("mode=history&start={0}&limit={1}", start, limit);
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());

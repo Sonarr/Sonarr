@@ -26,9 +26,7 @@ define([
             this.model.set({
                 id         : undefined,
                 name       : this.model.get('implementationName'),
-                onGrab     : true,
-                onDownload : true,
-                onUpgrade  : true
+                enable     : true
             });
 
             var editView = new EditView({ model: this.model, downloadClientCollection: this.downloadClientCollection });
