@@ -200,6 +200,9 @@
     <Compile Include="Datastore\Migration\041_fix_xbmc_season_images_metadata.cs" />
     <Compile Include="Datastore\Migration\042_add_download_clients_table.cs" />
     <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
+    <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -334,6 +337,7 @@
     <Compile Include="MetadataSource\Trakt\Actor.cs" />
     <Compile Include="MetadataSource\Trakt\People.cs" />
     <Compile Include="MetadataSource\Trakt\Ratings.cs" />
+    <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Consumers\Fake\Fake.cs" />
     <Compile Include="Metadata\Consumers\Fake\FakeSettings.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />

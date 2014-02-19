@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Metadata.Files
         MetadataFile FindByPath(string path);
         List<string> FilterExistingFiles(List<string> files, Series series);
         MetadataFile Upsert(MetadataFile metadataFile);
+        void Delete(int id);
     }
 
     public class MetadataFileService : IMetadataFileService,
@@ -70,6 +71,11 @@ namespace NzbDrone.Core.Metadata.Files
         {
             metadataFile.LastUpdated = DateTime.UtcNow;
             return _repository.Upsert(metadataFile);
+        }
+
+        public void Delete(int id)
+        {
+            _repository.Delete(id);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

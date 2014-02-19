@@ -7,24 +7,30 @@ using NzbDrone.Core.Metadata.Files;
 
 namespace NzbDrone.Core.Metadata
 {
-    public class NotificationService
+    public class MetadataService
         : IHandle<MediaCoversUpdatedEvent>,
           IHandle<EpisodeImportedEvent>,
           IHandle<SeriesRenamedEvent>
     {
         private readonly IMetadataFactory _metadataFactory;
         private readonly IMetadataFileService _metadataFileService;
+        private readonly ICleanMetadataService _cleanMetadataService;
         private readonly Logger _logger;
 
-        public NotificationService(IMetadataFactory metadataFactory, IMetadataFileService metadataFileService, Logger logger)
+        public MetadataService(IMetadataFactory metadataFactory,
+                               IMetadataFileService metadataFileService,
+                               ICleanMetadataService cleanMetadataService,
+                               Logger logger)
         {
             _metadataFactory = metadataFactory;
             _metadataFileService = metadataFileService;
+            _cleanMetadataService = cleanMetadataService;
             _logger = logger;
         }
 
         public void Handle(MediaCoversUpdatedEvent message)
         {
+            _cleanMetadataService.Clean(message.Series);
             var seriesMetadata = _metadataFileService.GetFilesBySeries(message.Series.Id);
 
             foreach (var consumer in _metadataFactory.Enabled())

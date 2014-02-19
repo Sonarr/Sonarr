@@ -55,11 +55,6 @@ namespace NzbDrone.Core.Metadata
             }
         }
 
-        protected virtual void EnsureFolder(string path)
-        {
-            _diskProvider.CreateFolder(path);
-        }
-
         protected virtual void DownloadImage(Series series, string url, string path)
         {
             try
