@@ -180,6 +180,16 @@
     <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
+    <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
+    <Compile Include="ParserTests\ReleaseGroupParserFixture.cs" />
+    <Compile Include="ParserTests\LanguageParserFixture.cs" />
+    <Compile Include="ParserTests\SeasonParserFixture.cs" />
+    <Compile Include="ParserTests\NormalizeTitleFixture.cs" />
+    <Compile Include="ParserTests\CrapParserFixture.cs" />
+    <Compile Include="ParserTests\DailyEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\SingleEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\PathParserFixture.cs" />
+    <Compile Include="ParserTests\MultiEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetSeriesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />

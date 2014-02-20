@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Metadata
                     if (metadata.Type == MetadataType.EpisodeImage ||
                         metadata.Type == MetadataType.EpisodeMetadata)
                     {
-                        var localEpisode = _parsingService.GetEpisodes(possibleMetadataFile, message.Series, false);
+                        var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series, false);
 
                         if (localEpisode == null)
                         {

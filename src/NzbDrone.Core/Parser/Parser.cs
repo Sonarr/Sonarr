@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 1103/1113 naming
-                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
+                new Regex(@"^(?<title>.+?)?(?:\W(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //4-digit episode number
@@ -120,7 +120,6 @@ namespace NzbDrone.Core.Parser
                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?",
                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
