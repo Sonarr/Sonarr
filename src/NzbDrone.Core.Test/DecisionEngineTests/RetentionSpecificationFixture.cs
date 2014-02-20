@@ -20,65 +20,62 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             parseResult = new RemoteEpisode
             {
-                Release = new ReleaseInfo
-                    {
-                        PublishDate = DateTime.Now.AddDays(-100)
-                    }
+                Release = new ReleaseInfo()
             };
         }
 
-        private void WithUnlimitedRetention()
+        private void WithRetention(int days)
         {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(0);
+            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(days);
         }
 
-        private void WithLongRetention()
+        private void WithAge(int days)
         {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(1000);
-        }
-
-        private void WithShortRetention()
-        {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(10);
-        }
-
-        private void WithEqualRetention()
-        {
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.Retention).Returns(100);
+            parseResult.Release.PublishDate = DateTime.Now.AddDays(-days);
         }
 
         [Test]
-        public void unlimited_retention_should_return_true()
+        public void should_return_true_when_retention_is_set_to_zero()
         {
-            WithUnlimitedRetention();
+            WithRetention(0);
+            WithAge(100);
+
             Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
-        public void longer_retention_should_return_true()
+        public void should_return_true_when_release_if_younger_than_retention()
         {
-            WithLongRetention();
+            WithRetention(1000);
+            WithAge(100);
+
             Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
-        public void equal_retention_should_return_true()
+        public void should_return_true_when_release_and_retention_are_the_same()
         {
-            WithEqualRetention();
+            WithRetention(100);
+            WithAge(100);
+
             Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
 
         [Test]
-        public void shorter_retention_should_return_false()
+        public void should_return_false_when_old_than_retention()
         {
-            WithShortRetention();
+            WithRetention(10);
+            WithAge(100);
+
             Subject.IsSatisfiedBy(parseResult, null).Should().BeFalse();
         }
 
         [Test]
-        public void zeroDay_report_should_return_true()
+        public void should_return_true_if_release_came_out_today_and_retention_is_zero()
         {
-            WithUnlimitedRetention();
+            WithRetention(0);
+            WithAge(100);
+
             Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
         }
     }
