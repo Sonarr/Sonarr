@@ -85,12 +85,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var request = new RestRequest();
             var action = "mode=get_cats";
 
-            SabnzbdCategoryResponse response;
-
-            if (!Json.TryDeserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings), out response))
-            {
-                response = new SabnzbdCategoryResponse();
-            }
+            var response = Json.Deserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings));
 
             return response;
         }

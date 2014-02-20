@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var settings = new SabnzbdSettings();
             settings.InjectFrom(message);
 
-            _sabnzbdProxy.GetVersion(settings);
+            _sabnzbdProxy.GetCategories(settings);
         }
     }
 }
