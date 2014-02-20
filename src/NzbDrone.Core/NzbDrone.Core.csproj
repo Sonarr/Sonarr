@@ -173,7 +173,7 @@
     <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\029_add_formats_to_naming_config.cs" />
     <Compile Include="Datastore\Migration\031_delete_old_naming_config_columns.cs" />
-    <Compile Include="Datastore\Migration\032_add_indexes.cs" />
+    <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\030_add_season_folder_format_to_naming_config.cs" />
     <Compile Include="Datastore\Migration\032_set_default_release_group.cs" />
     <Compile Include="Datastore\Migration\033_add_api_key_to_pushover.cs" />
