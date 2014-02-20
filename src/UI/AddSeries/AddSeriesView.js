@@ -71,7 +71,6 @@ define(
             },
 
             onShow: function () {
-                this.searchResult.show(this.resultCollectionView);
                 this.ui.seriesSearch.focus();
             },
 
