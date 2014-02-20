@@ -10,7 +10,7 @@ define(
                 return;
             }
 
-            if (e.ctrlKey) {
+            if (e.ctrlKey || e.metaKey || e.altKey) {
                 return;
             }
 
