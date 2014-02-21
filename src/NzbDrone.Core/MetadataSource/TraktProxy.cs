@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Web;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
-using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
-using Omu.ValueInjecter;
 using RestSharp;
 using Episode = NzbDrone.Core.Tv.Episode;
 using NzbDrone.Core.Rest;
@@ -20,7 +19,8 @@ namespace NzbDrone.Core.MetadataSource
     public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo
     {
         private readonly Logger _logger;
-        private static readonly Regex InvalidSearchCharRegex = new Regex(@"[^a-zA-Z0-9\s-\.]", RegexOptions.Compiled);
+        private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
+        private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*)", RegexOptions.Compiled);
 
         public TraktProxy(Logger logger)
         {
@@ -166,9 +166,9 @@ namespace NzbDrone.Core.MetadataSource
         private static string GetSearchTerm(string phrase)
         {
             phrase = phrase.RemoveAccent().ToLower();
-            phrase = phrase.Replace("&", "and");
-            phrase = InvalidSearchCharRegex.Replace(phrase, string.Empty);
-            phrase = phrase.CleanSpaces().Replace(" ", "+");
+            phrase = InvalidSearchCharRegex.Replace(phrase, "");
+            phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim().ToLower();
+            phrase = HttpUtility.UrlEncode(phrase);
 
             return phrase;
         }

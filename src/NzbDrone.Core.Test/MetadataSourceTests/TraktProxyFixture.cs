@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("Franklin & Bash", "Franklin & Bash")]
         [TestCase("Mr. D", "Mr. D")]
         [TestCase("Rob & Big", "Rob and Big")]
+        [TestCase("M*A*S*H", "M*A*S*H")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
