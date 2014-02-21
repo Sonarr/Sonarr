@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Download;
 
@@ -30,9 +31,17 @@ namespace NzbDrone.Core.Queue
                 return new List<Queue>();
             }
 
-            var queueItems = downloadClient.GetQueue();
+            try
+            {
+                var queueItems = downloadClient.GetQueue();
 
-            return MapQueue(queueItems);
+                return MapQueue(queueItems);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error getting queue from download client: " + downloadClient.ToString(), ex);
+                return new List<Queue>();
+            }
         }
 
         private List<Queue> MapQueue(IEnumerable<QueueItem> queueItems)
