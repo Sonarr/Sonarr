@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web.UI.WebControls;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Messaging.Events;
