@@ -25,28 +25,34 @@ namespace NzbDrone.Core.Tv
 
         public bool SeriesPathExists(string path)
         {
-            return Query.Any(c => c.Path == path);
+            return Query.Where(c => c.Path == path).Any();
         }
 
         public Series FindByTitle(string cleanTitle)
         {
-            return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle, StringComparison.InvariantCultureIgnoreCase));
+            cleanTitle = cleanTitle.ToLowerInvariant();
+
+            return Query.Where(s => s.CleanTitle == cleanTitle)
+                        .SingleOrDefault();
         }
 
         public Series FindByTitle(string cleanTitle, int year)
         {
-            return Query.SingleOrDefault(s => s.CleanTitle.Equals(cleanTitle, StringComparison.InvariantCultureIgnoreCase) &&
-                                              s.Year == year);
+            cleanTitle = cleanTitle.ToLowerInvariant();
+
+            return Query.Where(s => s.CleanTitle == cleanTitle)
+                        .AndWhere(s => s.Year == year)
+                        .SingleOrDefault();
         }
 
         public Series FindByTvdbId(int tvdbId)
         {
-            return Query.SingleOrDefault(s => s.TvdbId.Equals(tvdbId));
+            return Query.Where(s => s.TvdbId == tvdbId).SingleOrDefault();
         }
 
         public Series FindByTvRageId(int tvRageId)
         {
-            return Query.SingleOrDefault(s => s.TvRageId.Equals(tvRageId));
+            return Query.Where(s => s.TvRageId == tvRageId).SingleOrDefault();
         }
 
         public void SetSeriesType(int seriesId, SeriesTypes seriesType)

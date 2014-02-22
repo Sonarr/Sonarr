@@ -98,8 +98,6 @@ namespace NzbDrone.Core.Tv
                 return FindByTvdbId(tvdbId.Value);
             }
 
-            var clean = Parser.Parser.CleanSeriesTitle(title);
-
             return _seriesRepository.FindByTitle(Parser.Parser.CleanSeriesTitle(title));
         }
 

@@ -103,7 +103,6 @@ namespace NzbDrone.Core.Tv
                 });
         }
 
-
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec)
         {
             var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, false);
@@ -138,7 +137,6 @@ namespace NzbDrone.Core.Tv
         {
             var episode = GetEpisode(episodeId);
             var seasonEpisodes = GetEpisodesBySeason(episode.SeriesId, episode.SeasonNumber);
-
 
             //Ensure that this is either the first episode
             //or is the last episode in a season that has 10 or more episodes

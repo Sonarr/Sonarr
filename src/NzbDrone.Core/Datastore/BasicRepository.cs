@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 using Marr.Data;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore.Events;
@@ -74,7 +73,7 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            var model = DataMapper.Query<TModel>().SingleOrDefault(c => c.Id == id);
+            var model = Query.Where(c => c.Id == id).SingleOrDefault();
 
             if (model == null)
             {
