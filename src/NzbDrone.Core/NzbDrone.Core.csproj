@@ -344,10 +344,10 @@
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\Files\MetadataFile.cs" />
     <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
     <Compile Include="Metadata\Files\MetadataFileService.cs" />
-    <Compile Include="Metadata\Files\MetadataFileUpdated.cs" />
     <Compile Include="Metadata\IMetadata.cs" />
     <Compile Include="Metadata\MetadataBase.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />

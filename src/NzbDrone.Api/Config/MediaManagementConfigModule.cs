@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Validation.Paths;
 
@@ -11,7 +12,7 @@ namespace NzbDrone.Api.Config
         {
             SharedValidator.RuleFor(c => c.FileChmod).NotEmpty();
             SharedValidator.RuleFor(c => c.FolderChmod).NotEmpty();
-            SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator);
+            SharedValidator.RuleFor(c => c.RecycleBin).IsValidPath().SetValidator(pathExistsValidator).When(c => !String.IsNullOrWhiteSpace(c.RecycleBin));
         }
     }
 }
