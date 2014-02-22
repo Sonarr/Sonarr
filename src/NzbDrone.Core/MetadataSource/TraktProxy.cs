@@ -20,7 +20,7 @@ namespace NzbDrone.Core.MetadataSource
     {
         private readonly Logger _logger;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
-        private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*)", RegexOptions.Compiled);
+        private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!)", RegexOptions.Compiled);
 
         public TraktProxy(Logger logger)
         {
