@@ -41,7 +41,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (freeSpace < localEpisode.Size + 100.Megabytes())
                 {
-                    _logger.Warn("Not enough free space to import: {0}", localEpisode);
+                    _logger.Warn("Not enough free space ({0}) to import: {1} ({2})", freeSpace, localEpisode, localEpisode.Size);
                     return false;
                 }
             }
