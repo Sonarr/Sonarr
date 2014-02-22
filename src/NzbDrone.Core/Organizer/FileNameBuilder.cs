@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Organizer
         {
             string result = name;
             string[] badCharacters = { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
-            string[] goodCharacters = { "+", "+", "{", "}", "!", "@", "-", "#", "`" };
+            string[] goodCharacters = { "-", "-", "",  "",  "!", "-", "-", "",  "" };
 
             for (int i = 0; i < badCharacters.Length; i++)
                 result = result.Replace(badCharacters[i], goodCharacters[i]);
