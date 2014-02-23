@@ -24,8 +24,6 @@ namespace NzbDrone.Common.Composition
             _container.Register<TService, TImplementation>();
         }
 
-        public TinyIoCContainer TinyContainer { get { return _container; } }
-
         public void Register<T>(T instance) where T : class
         {
             _container.Register<T>(instance);
@@ -48,22 +46,7 @@ namespace NzbDrone.Common.Composition
 
         public void Register<TService>(Func<IContainer, TService> factory) where TService : class
         {
-            _container.Register((c, n) =>
-                {
-                    return factory(this);
-                });
-        }
-
-        public void RegisterSingleton<TService, TImplementation>()
-            where TImplementation : class, TService
-            where TService : class
-        {
-            _container.Register<TService, TImplementation>().AsSingleton();
-        }
-
-        public void RegisterSingleton<T>() where T : class
-        {
-            _container.Register<T, T>().AsSingleton();
+            _container.Register((c, n) => factory(this));
         }
 
         public void RegisterSingleton(Type service, Type implementation)
@@ -74,16 +57,6 @@ namespace NzbDrone.Common.Composition
         public IEnumerable<T> ResolveAll<T>() where T : class
         {
             return _container.ResolveAll<T>();
-        }
-
-        public IEnumerable<object> ResolveAll(Type type)
-        {
-            return _container.ResolveAll(type);
-        }
-
-        public void Register(Type registrationType, object instance)
-        {
-            _container.Register(registrationType, instance);
         }
 
         public void RegisterAllAsSingleton(Type registrationType, IEnumerable<Type> implementationList)

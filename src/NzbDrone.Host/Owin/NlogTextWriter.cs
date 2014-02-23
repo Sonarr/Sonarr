@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using NLog;
 using NzbDrone.Common.Instrumentation;
@@ -7,8 +8,12 @@ namespace NzbDrone.Host.Owin
 {
     public class NlogTextWriter : TextWriter
     {
-        private readonly Logger _logger = NzbDroneLogger.GetLogger();
+        private readonly Logger _logger;
 
+        public NlogTextWriter(Logger logger)
+        {
+            _logger = logger;
+        }
 
         public override Encoding Encoding
         {
@@ -29,7 +34,14 @@ namespace NzbDrone.Host.Owin
 
         public override void Write(string value)
         {
-            _logger.Trace(value);
+            if (value.ToLower().Contains("error"))
+            {
+                _logger.Error(value);
+            }
+            else
+            {
+                _logger.Trace(value);
+            }
         }
 
         public override void Write(char value)

@@ -29,17 +29,13 @@ namespace NzbDrone.Core.Datastore
 
         public static void RegisterDatabase(IContainer container)
         {
-            container.Resolve<IDbFactory>().Create();
+            var mainDb = container.Resolve<IDbFactory>().Create();
 
-            container.Register(c => c.Resolve<IDbFactory>().Create());
+            container.Register(mainDb);
 
-            container.Resolve<IDbFactory>().Create(MigrationType.Log);
+            var logDb = container.Resolve<IDbFactory>().Create(MigrationType.Log);
 
-            container.Register<ILogRepository>(c =>
-            {
-                var db = c.Resolve<IDbFactory>().Create(MigrationType.Log);
-                return new LogRepository(db, c.Resolve<IEventAggregator>());
-            });
+            container.Register<ILogRepository>(c => new LogRepository(logDb, c.Resolve<IEventAggregator>()));
         }
 
         public DbFactory(IMigrationController migrationController, IConnectionStringFactory connectionStringFactory)
@@ -73,7 +69,7 @@ namespace NzbDrone.Core.Datastore
 
             _migrationController.MigrateToLatest(connectionString, migrationType);
 
-            return new Database(() =>
+            var db = new Database(() =>
                 {
                     var dataMapper = new DataMapper(SQLiteFactory.Instance, connectionString)
                     {
@@ -82,6 +78,11 @@ namespace NzbDrone.Core.Datastore
 
                     return dataMapper;
                 });
+
+            db.Vacuum();
+
+
+            return db;
         }
     }
 }

@@ -5,6 +5,7 @@ using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Converters;
+using NzbDrone.Core.Datastore.Extentions;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore

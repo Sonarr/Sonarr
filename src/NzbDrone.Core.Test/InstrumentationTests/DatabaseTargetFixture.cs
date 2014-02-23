@@ -5,6 +5,7 @@ using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Test.Framework;

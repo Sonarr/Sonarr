@@ -7,24 +7,9 @@ using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {
-
-    public class DatabaseFixture : DbTest
-    {
-        [Test]
-        public void SingleOrDefault_should_return_null_on_empty_db()
-        {
-            Mocker.Resolve<IDatabase>()
-                  .GetDataMapper().Query<Series>()
-                  .SingleOrDefault(c => c.CleanTitle == "SomeTitle")
-                  .Should()
-                  .BeNull();
-        }
-    }
-
     [TestFixture]
     public class ObjectDatabaseFixture : DbTest<BasicRepository<ScheduledTask>, ScheduledTask>
     {
