@@ -3,11 +3,12 @@
 define(
     [
         'reqres',
+        'backbone',
         'Cells/NzbDroneCell',
         'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (reqres, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
+    ], function (reqres, Backbone, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -39,7 +40,7 @@ define(
                         }
 
                         else {
-                            episodeFile = this.model.get('episodeFile');
+                            episodeFile = new Backbone.Model(this.model.get('episodeFile'));
                         }
 
                         this.listenTo(episodeFile, 'change', this._refresh);
