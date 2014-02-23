@@ -512,6 +512,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="Qualities\QualitiesBelowCutoff.cs" />
     <Compile Include="Qualities\QualityModelComparer.cs" />
     <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
@@ -536,6 +537,7 @@
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="Tv\Actor.cs" />
+    <Compile Include="Tv\EpisodeCutoffService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
     <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />

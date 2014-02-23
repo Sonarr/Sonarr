@@ -3,19 +3,18 @@ using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Wanted
 {
     public class CutoffModule : NzbDroneRestModule<EpisodeResource>
     {
-        private readonly IEpisodeService _episodeService;
+        private readonly IEpisodeCutoffService _episodeCutoffService;
         private readonly SeriesRepository _seriesRepository;
 
-        public CutoffModule(IEpisodeService episodeService, SeriesRepository seriesRepository)
+        public CutoffModule(IEpisodeCutoffService episodeCutoffService, SeriesRepository seriesRepository)
             :base("wanted/cutoff")
         {
-            _episodeService = episodeService;
+            _episodeCutoffService = episodeCutoffService;
             _seriesRepository = seriesRepository;
             GetResourcePaged = GetCutoffUnmetEpisodes;
         }
@@ -39,7 +38,7 @@ namespace NzbDrone.Api.Wanted
                 pagingSpec.FilterExpression = v => v.Monitored == true && v.Series.Monitored == true;
             }
 
-            PagingResource<EpisodeResource> resource = ApplyToPage(_episodeService.EpisodesWhereCutoffUnmet, pagingSpec);
+            PagingResource<EpisodeResource> resource = ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, pagingSpec);
 
             resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
 
