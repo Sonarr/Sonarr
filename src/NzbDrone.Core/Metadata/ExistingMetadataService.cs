@@ -12,7 +12,7 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Metadata
 {
-    public class ExistingMetadataService : IHandleAsync<SeriesUpdatedEvent>
+    public class ExistingMetadataService : IHandle<SeriesUpdatedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMetadataFileService _metadataFileService;
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Metadata
             _consumers = consumers.ToList();
         }
 
-        public void HandleAsync(SeriesUpdatedEvent message)
+        public void Handle(SeriesUpdatedEvent message)
         {
             if (!_diskProvider.FolderExists(message.Series.Path)) return;
 
@@ -42,7 +42,9 @@ namespace NzbDrone.Core.Metadata
             var filesOnDisk = _diskProvider.GetFiles(message.Series.Path, SearchOption.AllDirectories);
             var possibleMetadataFiles = filesOnDisk.Where(c => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower())).ToList();
             var filteredFiles = _metadataFileService.FilterExistingFiles(possibleMetadataFiles, message.Series);
-            
+
+            var metadataFiles = new List<MetadataFile>();
+
             foreach (var possibleMetadataFile in filteredFiles)
             {
                 foreach (var consumer in _consumers)
@@ -54,7 +56,7 @@ namespace NzbDrone.Core.Metadata
                     if (metadata.Type == MetadataType.EpisodeImage ||
                         metadata.Type == MetadataType.EpisodeMetadata)
                     {
-                        var localEpisode = _parsingService.GetEpisodes(possibleMetadataFile, message.Series, false);
+                        var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series, false);
 
                         if (localEpisode == null)
                         {
@@ -71,9 +73,11 @@ namespace NzbDrone.Core.Metadata
                         metadata.EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId;
                     }
 
-                    _metadataFileService.Upsert(metadata);
+                    metadataFiles.Add(metadata);
                 }
             }
+
+            _metadataFileService.Upsert(metadataFiles);
         }
     }
 }

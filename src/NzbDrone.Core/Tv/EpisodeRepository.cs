@@ -37,22 +37,31 @@ namespace NzbDrone.Core.Tv
 
         public Episode Find(int seriesId, int season, int episodeNumber)
         {
-            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SeasonNumber == season && s.EpisodeNumber == episodeNumber);
+            return Query.Where(s => s.SeriesId == seriesId)
+                               .AndWhere(s => s.SeasonNumber == season)
+                               .AndWhere(s => s.EpisodeNumber == episodeNumber)
+                               .SingleOrDefault();
         }
 
         public Episode Find(int seriesId, int absoluteEpisodeNumber)
         {
-            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.AbsoluteEpisodeNumber == absoluteEpisodeNumber);
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.AbsoluteEpisodeNumber == absoluteEpisodeNumber)
+                        .SingleOrDefault();
         }
 
         public Episode Get(int seriesId, String date)
         {
-            return Query.Single(s => s.SeriesId == seriesId && s.AirDate == date);
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.AirDate == date)
+                        .Single();
         }
 
         public Episode Find(int seriesId, String date)
         {
-            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.AirDate == date);
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.AirDate == date)
+                        .SingleOrDefault();
         }
 
         public List<Episode> GetEpisodes(int seriesId)
@@ -62,7 +71,9 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> GetEpisodes(int seriesId, int seasonNumber)
         {
-            return Query.Where(s => s.SeriesId == seriesId && s.SeasonNumber == seasonNumber).ToList();
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.SeasonNumber == seasonNumber)
+                        .ToList();
         }
 
         public List<Episode> GetEpisodeByFileId(int fileId)
@@ -88,9 +99,11 @@ namespace NzbDrone.Core.Tv
 
         public Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return Query.SingleOrDefault(s => s.SeriesId == seriesId && s.SceneSeasonNumber == seasonNumber && s.SceneEpisodeNumber == episodeNumber);
+            return Query.Where(s => s.SeriesId == seriesId)
+                        .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
+                        .AndWhere(s => s.SceneEpisodeNumber == episodeNumber)
+                        .SingleOrDefault();
         }
-
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
         {

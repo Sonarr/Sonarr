@@ -3,8 +3,9 @@ define(
     [
         'marionette',
         'Mixins/AsModelBoundView',
+        'Mixins/AsValidatedView',
         'Mixins/AutoComplete'
-    ], function (Marionette, AsModelBoundView) {
+    ], function (Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Permissions/PermissionsViewTemplate',
@@ -35,5 +36,8 @@ define(
             }
         });
 
-        return AsModelBoundView.call(view);
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+
+        return view;
     });

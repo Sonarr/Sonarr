@@ -4,7 +4,7 @@ define(
     [
         'marionette',
         'Settings/MediaManagement/Naming/NamingView',
-        'Settings/MediaManagement/Sorting/View',
+        'Settings/MediaManagement/Sorting/SortingView',
         'Settings/MediaManagement/FileManagement/FileManagementView',
         'Settings/MediaManagement/Permissions/PermissionsView'
     ], function (Marionette, NamingView, SortingView, FileManagementView, PermissionsView) {

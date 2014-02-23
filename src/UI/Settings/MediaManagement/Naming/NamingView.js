@@ -19,13 +19,15 @@ define(
                 singleEpisodeExample  : '.x-single-episode-example',
                 multiEpisodeExample   : '.x-multi-episode-example',
                 dailyEpisodeExample   : '.x-daily-episode-example',
-                namingTokenHelper     : '.x-naming-token-helper'
+                namingTokenHelper     : '.x-naming-token-helper',
+                multiEpisodeStyle     : '.x-multi-episode-style'
             },
 
             events: {
                 'change .x-rename-episodes'      : '_setFailedDownloadOptionsVisibility',
                 'click .x-show-wizard'           : '_showWizard',
-                'click .x-naming-token-helper a' : '_addToken'
+                'click .x-naming-token-helper a' : '_addToken',
+                'change .x-multi-episode-style'  : '_multiEpisodeFomatChanged'
             },
 
             regions: {
@@ -58,10 +60,6 @@ define(
             },
 
             _updateSamples: function () {
-                if (!_.has(this.model.changed, 'standardEpisodeFormat') && !_.has(this.model.changed, 'dailyEpisodeFormat')) {
-                    return;
-                }
-
                 this.namingSampleModel.fetch({ data: this.model.toJSON() });
             },
 
@@ -92,6 +90,10 @@ define(
 
                 this.ui.namingTokenHelper.removeClass('open');
                 input.focus();
+            },
+
+            multiEpisodeFormatChanged: function () {
+                this.model.set('multiEpisodeStyle', this.ui.multiEpisodeStyle.val());
             }
         });
 

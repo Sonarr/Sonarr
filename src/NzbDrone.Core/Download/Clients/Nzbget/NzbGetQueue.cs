@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
-    public class NzbGetQueue
+    public class NzbgetQueue
     {
         public String Version { get; set; }
 
         [JsonProperty(PropertyName = "result")]
-        public List<NzbGetQueueItem> QueueItems { get; set; }
+        public List<NzbgetQueueItem> QueueItems { get; set; }
     }
 }

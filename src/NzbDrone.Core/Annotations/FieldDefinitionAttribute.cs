@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Annotations
         Textbox,
         Password,
         Checkbox,
-        Select
+        Select,
+        Path
     }
 }

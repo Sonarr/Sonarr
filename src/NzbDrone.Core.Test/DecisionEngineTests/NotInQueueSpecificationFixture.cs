@@ -56,9 +56,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.GetMock<IProvideDownloadClient>()
                   .Setup(s => s.GetDownloadClient())
                   .Returns(_downloadClient.Object);
-
-            _downloadClient.SetupGet(s => s.IsConfigured)
-                           .Returns(true);
         }
 
         private void GivenEmptyQueue()

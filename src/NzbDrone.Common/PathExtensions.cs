@@ -71,7 +71,6 @@ namespace NzbDrone.Common
             return false;
         }
 
-
         public static bool ContainsInvalidPathChars(this string text)
         {
             return text.IndexOfAny(Path.GetInvalidPathChars()) >= 0;

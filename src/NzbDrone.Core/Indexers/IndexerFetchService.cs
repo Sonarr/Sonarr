@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Indexers
         IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria);
     }
 
     public class FetchFeedService : IFetchFeedFromIndexers
@@ -76,9 +77,8 @@ namespace NzbDrone.Core.Indexers
 
             var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
             var result = Fetch(indexer, searchUrls);
-
-
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+
             return result;
         }
 
@@ -89,6 +89,20 @@ namespace NzbDrone.Core.Indexers
             var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.AirDate);
             var result = Fetch(indexer, searchUrls);
 
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            return result;
+        }
+
+        public IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria)
+        {
+            var queryUrls = new List<String>();
+            foreach (var episodeQueryTitle in searchCriteria.EpisodeQueryTitles)
+            {
+                _logger.Debug("Performing query of {0} for {1}", indexer, episodeQueryTitle);
+                queryUrls.AddRange(indexer.GetSearchUrls(episodeQueryTitle));
+            }
+
+            var result = Fetch(indexer, queryUrls);
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
             return result;
         }

@@ -17,7 +17,17 @@
                 </h2>
             </div>
             <div class="row new-series-overview x-overview">
-                {{overview}}
+                <div class="overview-internal">
+                    {{overview}}
+                </div>
+            </div>
+            <div class="row labels">
+                {{#unless path}}
+                <div class="span4">Path</div>
+                {{/unless}}
+
+                <div class="span1 starting-season starting-season-label">Starting Season</div>
+                <div class="span2">Quality Profile</div>
             </div>
             <div class="row">
                 <form class="form-inline">

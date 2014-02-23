@@ -6,9 +6,8 @@ define(
         'Settings/Indexers/ItemView',
         'Settings/Indexers/EditView',
         'Settings/Indexers/Collection',
-        'System/StatusModel',
         'underscore'
-    ], function (AppLayout, Marionette, IndexerItemView, IndexerEditView, IndexerCollection, StatusModel, _) {
+    ], function (AppLayout, Marionette, IndexerItemView, IndexerEditView, IndexerCollection, _) {
         return Marionette.CompositeView.extend({
             itemView         : IndexerItemView,
             itemViewContainer: '#x-indexers',
@@ -28,12 +27,14 @@ define(
 
             _openSchemaModal: function () {
                 var self = this;
-                //TODO: Is there a better way to deal with changing URLs?
                 var schemaCollection = new IndexerCollection();
-                schemaCollection.url = StatusModel.get('urlBase') + '/api/indexer/schema';
+                var originalUrl = schemaCollection.url;
+
+                schemaCollection.url = schemaCollection.url + '/schema';
+
                 schemaCollection.fetch({
                     success: function (collection) {
-                        collection.url = StatusModel.get('urlBase') + '/api/indexer';
+                        collection.url = originalUrl;
                         var model = _.first(collection.models);
 
                         model.set({

@@ -6,9 +6,15 @@ define(
         'AddSeries/Existing/UnmappedFolderCollection'
     ], function (Marionette, AddSeriesView, UnmappedFolderCollection) {
 
-        return Marionette.CollectionView.extend({
+        return Marionette.CompositeView.extend({
 
-            itemView: AddSeriesView,
+            itemView         : AddSeriesView,
+            itemViewContainer: '.x-loading-folders',
+            template         : 'AddSeries/Existing/AddExistingSeriesCollectionViewTemplate',
+
+            ui: {
+                loadingFolders: '.x-loading-folders'
+            },
 
             initialize: function () {
                 this.collection = new UnmappedFolderCollection();
@@ -17,6 +23,10 @@ define(
 
             showCollection: function () {
                 this._showAndSearch(0);
+            },
+
+            appendHtml: function(collectionView, itemView, index){
+                collectionView.ui.loadingFolders.before(itemView.el);
             },
 
             _showAndSearch: function (index) {
@@ -34,6 +44,10 @@ define(
                                 self._showAndSearch(currentIndex + 1);
                             }
                         });
+                }
+
+                else {
+                    this.ui.loadingFolders.hide();
                 }
             },
 

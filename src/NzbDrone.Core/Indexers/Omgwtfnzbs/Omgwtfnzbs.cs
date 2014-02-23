@@ -67,8 +67,13 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return searchUrls;
         }
 
-        public override bool SupportsPaging
+        public override IEnumerable<string> GetSearchUrls(string query, int offset)
         {
+            return new List<string>();
+        }
+
+        public override bool SupportsPaging
+	{
             get
             {
                 return false;

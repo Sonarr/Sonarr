@@ -106,16 +106,6 @@ namespace NzbDrone.Core.Test.Configuration
         }
 
         [Test]
-        public void updating_a_vakye_should_update_its_value()
-        {
-            Subject.SabHost = "Test";
-            Subject.SabHost.Should().Be("Test");
-
-            Subject.SabHost = "Test2";
-            Subject.SabHost.Should().Be("Test2");
-        }
-
-        [Test]
         [Description("This test will use reflection to ensure each config property read/writes to a unique key")]
         public void config_properties_should_write_and_read_using_same_key()
         {

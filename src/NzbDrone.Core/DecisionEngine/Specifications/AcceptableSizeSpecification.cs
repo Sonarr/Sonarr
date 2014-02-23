@@ -27,7 +27,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-
             _logger.Trace("Beginning size check for: {0}", subject);
 
             var quality = subject.ParsedEpisodeInfo.Quality.Quality;
@@ -45,34 +44,43 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
 
             var qualityDefinition = _qualityDefinitionService.Get(quality);
+            var minSize = qualityDefinition.MinSize.Megabytes();
 
+            //Multiply maxSize by Series.Runtime
+            minSize = minSize * subject.Series.Runtime * subject.Episodes.Count;
+
+            //If the parsed size is smaller than minSize we don't want it
+            if (subject.Release.Size < minSize)
+            {
+                _logger.Trace("Item: {0}, Size: {1} is smaller than minimum allowed size ({2}), rejecting.", subject, subject.Release.Size, minSize);
+                return false;
+            }
             if (qualityDefinition.MaxSize == 0)
             {
                 _logger.Trace("Max size is 0 (unlimited) - skipping check.");
-                return true;
             }
-
-            var maxSize = qualityDefinition.MaxSize.Megabytes();
-
-            //Multiply maxSize by Series.Runtime
-            maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
-
-            //Check if there was only one episode parsed and it is the first
-            if (subject.Episodes.Count == 1 && subject.Episodes.First().EpisodeNumber == 1)
+            else
             {
-                maxSize = maxSize * 2;
-            }
+                var maxSize = qualityDefinition.MaxSize.Megabytes();
 
-            //If the parsed size is greater than maxSize we don't want it
-            if (subject.Release.Size > maxSize)
-            {
-                _logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
-                return false;
-            }
+                //Multiply maxSize by Series.Runtime
+                maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
 
+                //Check if there was only one episode parsed and it is the first
+                if (subject.Episodes.Count == 1 && _episodeService.IsFirstOrLastEpisodeOfSeason(subject.Episodes.First().Id))
+                {
+                    maxSize = maxSize * 2;
+                }
+
+                //If the parsed size is greater than maxSize we don't want it
+                if (subject.Release.Size > maxSize)
+                {
+                    _logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
+                    return false;
+                }
+            }
             _logger.Trace("Item: {0}, meets size constraints.", subject);
             return true;
         }
-
     }
 }

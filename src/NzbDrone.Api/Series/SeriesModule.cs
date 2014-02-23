@@ -12,6 +12,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Api.Validation;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Api.Series
 {

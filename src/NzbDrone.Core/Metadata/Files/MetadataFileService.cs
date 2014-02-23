@@ -18,13 +18,14 @@ namespace NzbDrone.Core.Metadata.Files
         List<MetadataFile> GetFilesByEpisodeFile(int episodeFileId);
         MetadataFile FindByPath(string path);
         List<string> FilterExistingFiles(List<string> files, Series series);
-        MetadataFile Upsert(MetadataFile metadataFile);
+        void Upsert(List<MetadataFile> metadataFiles);
+        void Delete(int id);
     }
 
     public class MetadataFileService : IMetadataFileService,
                                               IHandleAsync<SeriesDeletedEvent>,
                                               IHandleAsync<EpisodeFileDeletedEvent>,
-                                              IHandle<MetadataFileUpdated>
+                                              IHandle<MetadataFilesUpdated>
     {
         private readonly IMetadataFileRepository _repository;
         private readonly ISeriesService _seriesService;
@@ -66,10 +67,17 @@ namespace NzbDrone.Core.Metadata.Files
             return files.Except(seriesFiles, PathEqualityComparer.Instance).ToList();
         }
 
-        public MetadataFile Upsert(MetadataFile metadataFile)
+        public void Upsert(List<MetadataFile> metadataFiles)
         {
-            metadataFile.LastUpdated = DateTime.UtcNow;
-            return _repository.Upsert(metadataFile);
+            metadataFiles.ForEach(m => m.LastUpdated = DateTime.UtcNow);
+
+            _repository.InsertMany(metadataFiles.Where(m => m.Id == 0).ToList());
+            _repository.UpdateMany(metadataFiles.Where(m => m.Id > 0).ToList());
+        }
+
+        public void Delete(int id)
+        {
+            _repository.Delete(id);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
@@ -97,9 +105,9 @@ namespace NzbDrone.Core.Metadata.Files
             _repository.DeleteForEpisodeFile(episodeFile.Id);
         }
 
-        public void Handle(MetadataFileUpdated message)
+        public void Handle(MetadataFilesUpdated message)
         {
-            Upsert(message.Metadata);
+            Upsert(message.MetadataFiles);
         }
     }
 }

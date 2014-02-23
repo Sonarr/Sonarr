@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Metadata.Files
 
         public MetadataFile FindByPath(string path)
         {
-            return Query.SingleOrDefault(c => c.RelativePath == path);
+            return Query.Where(c => c.RelativePath == path).SingleOrDefault();
         }
     }
 }

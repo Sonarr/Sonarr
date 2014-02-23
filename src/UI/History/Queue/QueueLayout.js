@@ -9,7 +9,8 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/QualityCell',
         'History/Queue/QueueStatusCell',
-        'History/Queue/TimeleftCell'
+        'History/Queue/TimeleftCell',
+        'Shared/Grid/Pager'
     ], function (Marionette,
                  Backgrid,
                  QueueCollection,
@@ -18,12 +19,14 @@ define(
                  EpisodeTitleCell,
                  QualityCell,
                  QueueStatusCell,
-                 TimeleftCell) {
+                 TimeleftCell,
+                 GridPager) {
         return Marionette.Layout.extend({
             template: 'History/Queue/QueueLayoutTemplate',
 
             regions: {
-                table: '#x-queue'
+                table: '#x-queue',
+                pager: '#x-queue-pager'
             },
 
             columns:
@@ -65,7 +68,6 @@ define(
                     }
                 ],
 
-
             initialize: function () {
                 this.listenTo(QueueCollection, 'sync', this._showTable);
             },
@@ -79,6 +81,11 @@ define(
                     columns   : this.columns,
                     collection: QueueCollection,
                     className : 'table table-hover'
+                }));
+
+                this.pager.show(new GridPager({
+                    columns   : this.columns,
+                    collection: QueueCollection
                 }));
             }
         });

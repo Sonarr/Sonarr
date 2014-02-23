@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
         {
-            Mocker.SetConstant<IEnumerable<IRejectWithReason>>(mocks.Select(c => c.Object));
+            Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(mocks.Select(c => c.Object));
         }
 
         [Test]

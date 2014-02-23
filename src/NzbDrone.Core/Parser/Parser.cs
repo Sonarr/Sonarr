@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 1103/1113 naming
-                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
+                new Regex(@"^(?<title>.+?)?(?:\W(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)\d{2}(?!p|i|\d+|\)|\]|\W\d+)))+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //4-digit episode number
@@ -113,6 +113,13 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex WordDelimiterRegex = new Regex(@"(\s|\.|,|_|-|=|\|)+", RegexOptions.Compiled);
+        private static readonly Regex PunctuationRegex = new Regex(@"[^\w\s]", RegexOptions.Compiled);
+        private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of)\b\s?",
+                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?",
+                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -217,6 +224,15 @@ namespace NzbDrone.Core.Parser
         {
             //this will remove (1),(2) from the end of multi part episodes.
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
+        }
+
+        public static string NormalizeEpisodeTitle(string title)
+        {
+            string singleSpaces  = WordDelimiterRegex.Replace(title, " ");
+            string noPunctuation = PunctuationRegex.Replace(singleSpaces, String.Empty);
+            string noCommonWords = CommonWordRegex.Replace(noPunctuation, String.Empty);
+            string normalized    = SpecialEpisodeWordRegex.Replace(noCommonWords, String.Empty);
+            return normalized.Trim().ToLower();
         }
 
         public static string ParseReleaseGroup(string title)

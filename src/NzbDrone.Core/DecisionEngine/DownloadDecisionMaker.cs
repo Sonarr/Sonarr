@@ -23,7 +23,7 @@ namespace NzbDrone.Core.DecisionEngine
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
-        public DownloadDecisionMaker(IEnumerable<IRejectWithReason> specifications, IParsingService parsingService, Logger logger)
+        public DownloadDecisionMaker(IEnumerable<IDecisionEngineSpecification> specifications, IParsingService parsingService, Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
@@ -63,6 +63,15 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     var parsedEpisodeInfo = Parser.Parser.ParseTitle(report.Title);
 
+                    if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode())
+                    {
+                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(report.Title, report.TvRageId, searchCriteria);
+                        if (specialEpisodeInfo != null)
+                        {
+                            parsedEpisodeInfo = specialEpisodeInfo;
+                        }
+                    }
+
                     if (parsedEpisodeInfo != null && !string.IsNullOrWhiteSpace(parsedEpisodeInfo.SeriesTitle))
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvRageId, searchCriteria);
@@ -91,13 +100,12 @@ namespace NzbDrone.Core.DecisionEngine
                     yield return decision;
                 }
             }
-
         }
 
         private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null)
         {
             var reasons = _specifications.Select(c => EvaluateSpec(c, remoteEpisode, searchCriteria))
-                .Where(c => !string.IsNullOrWhiteSpace(c));
+                                         .Where(c => !string.IsNullOrWhiteSpace(c));
 
             return new DownloadDecision(remoteEpisode, reasons.ToArray());
         }

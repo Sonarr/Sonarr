@@ -57,7 +57,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 try
                 {
-                    var parsedEpisode = _parsingService.GetEpisodes(file, series, sceneSource);
+                    var parsedEpisode = _parsingService.GetLocalEpisode(file, series, sceneSource);
                     
                     if (parsedEpisode != null)
                     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Download;
 
@@ -23,9 +24,24 @@ namespace NzbDrone.Core.Queue
         public List<Queue> GetQueue()
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
-            var queueItems = downloadClient.GetQueue();
 
-            return MapQueue(queueItems);
+            if (downloadClient == null)
+            {
+                _logger.Trace("Download client is not configured.");
+                return new List<Queue>();
+            }
+
+            try
+            {
+                var queueItems = downloadClient.GetQueue();
+
+                return MapQueue(queueItems);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error getting queue from download client: " + downloadClient.ToString(), ex);
+                return new List<Queue>();
+            }
         }
 
         private List<Queue> MapQueue(IEnumerable<QueueItem> queueItems)

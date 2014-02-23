@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("Franklin & Bash", "Franklin & Bash")]
         [TestCase("Mr. D", "Mr. D")]
         [TestCase("Rob & Big", "Rob and Big")]
+        [TestCase("M*A*S*H", "M*A*S*H")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         }
 
         [TestCase(75978)]
-        [TestCase(79349)]
+        [TestCase(83462)]
         public void should_be_able_to_get_series_detail(int tvdbId)
         {
             var details = Subject.GetSeriesInfo(tvdbId);

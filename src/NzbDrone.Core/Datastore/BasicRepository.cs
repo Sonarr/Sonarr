@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Datastore
 
         public TModel Get(int id)
         {
-            var model = DataMapper.Query<TModel>().SingleOrDefault(c => c.Id == id);
+            var model = Query.Where(c => c.Id == id).SingleOrDefault();
 
             if (model == null)
             {
@@ -142,23 +142,44 @@ namespace NzbDrone.Core.Datastore
 
         public void InsertMany(IList<TModel> models)
         {
-            foreach (var model in models)
+            using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                Insert(model);
+                unitOfWork.BeginTransaction();
+
+                foreach (var model in models)
+                {
+                    unitOfWork.DB.Insert(model);
+                }
+
+                unitOfWork.Commit();
             }
         }
 
         public void UpdateMany(IList<TModel> models)
         {
-            foreach (var model in models)
+            using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                Update(model);
+                unitOfWork.BeginTransaction();
+
+                foreach (var model in models)
+                {
+                    var localModel = model;
+
+                    if (model.Id == 0)
+                    {
+                        throw new InvalidOperationException("Can't update model with ID 0");
+                    }
+
+                    unitOfWork.DB.Update(model, c => c.Id == localModel.Id);
+                }
+
+                unitOfWork.Commit();
             }
         }
 
         public void DeleteMany(List<TModel> models)
         {
-            models.ForEach(Delete);
+            DeleteMany(models.Select(m => m.Id));
         }
 
         public TModel Upsert(TModel model)
@@ -179,7 +200,19 @@ namespace NzbDrone.Core.Datastore
 
         public void DeleteMany(IEnumerable<int> ids)
         {
-            ids.ToList().ForEach(Delete);
+            using (var unitOfWork = new UnitOfWork(() => DataMapper))
+            {
+                unitOfWork.BeginTransaction();
+
+                foreach (var id in ids)
+                {
+                    var localId = id;
+
+                    unitOfWork.DB.Delete<TModel>(c => c.Id == localId);
+                }
+
+                unitOfWork.Commit();
+            }
         }
 
         public void Purge()

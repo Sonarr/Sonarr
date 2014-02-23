@@ -198,6 +198,11 @@
     <Compile Include="Datastore\Migration\040_add_metadata_to_episodes_and_series.cs" />
     <Compile Include="Datastore\Migration\039_add_metadata_tables.cs" />
     <Compile Include="Datastore\Migration\041_fix_xbmc_season_images_metadata.cs" />
+    <Compile Include="Datastore\Migration\042_add_download_clients_table.cs" />
+    <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
+    <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -240,13 +245,27 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
+    <Compile Include="Download\Clients\Blackhole\Blackhole.cs" />
+    <Compile Include="Download\Clients\Blackhole\TestBlackholeCommand.cs" />
+    <Compile Include="Download\Clients\FolderSettings.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
+    <Compile Include="Download\Clients\Nzbget\TestNzbgetCommand.cs" />
+    <Compile Include="Download\Clients\Pneumatic\Pneumatic.cs" />
+    <Compile Include="Download\Clients\Pneumatic\TestPneumaticCommand.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdAddResponse.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdCategoryResponse.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdVersionResponse.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\TestSabnzbdCommand.cs" />
+    <Compile Include="Download\DownloadClientBase.cs" />
+    <Compile Include="Download\DownloadClientDefinition.cs" />
+    <Compile Include="Download\DownloadClientFactory.cs" />
+    <Compile Include="Download\DownloadClientRepository.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbGetCommunicationProxy.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\ConnectionInfoModel.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetProxy.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabAutoConfigureService.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabCommunicationProxy.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdProxy.cs" />
     <Compile Include="Download\CheckForFailedDownloadCommand.cs" />
     <Compile Include="Download\HistoryItem.cs" />
     <Compile Include="Download\DownloadFailedEvent.cs" />
@@ -264,12 +283,14 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
+    <Compile Include="IndexerSearch\Definitions\SpecialEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
     <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
     <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
@@ -318,15 +339,16 @@
     <Compile Include="MetadataSource\Trakt\Actor.cs" />
     <Compile Include="MetadataSource\Trakt\People.cs" />
     <Compile Include="MetadataSource\Trakt\Ratings.cs" />
+    <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Consumers\Fake\Fake.cs" />
     <Compile Include="Metadata\Consumers\Fake\FakeSettings.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\Files\MetadataFile.cs" />
     <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
     <Compile Include="Metadata\Files\MetadataFileService.cs" />
-    <Compile Include="Metadata\Files\MetadataFileUpdated.cs" />
     <Compile Include="Metadata\IMetadata.cs" />
     <Compile Include="Metadata\MetadataBase.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
@@ -476,10 +498,10 @@
     <Compile Include="Download\Clients\Nzbget\EnqueueResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbGetQueue.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbGetQueueItem.cs" />
-    <Compile Include="Download\Clients\Nzbget\PriorityType.cs" />
-    <Compile Include="Download\Clients\Nzbget\VersionModel.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetQueue.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetQueueItem.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetPriority.cs" />
+    <Compile Include="Download\Clients\Nzbget\VersionResponse.cs" />
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Parser\Language.cs" />
     <Compile Include="Parser\Model\LocalEpisode.cs" />
@@ -529,18 +551,13 @@
     <Compile Include="Tv\RefreshEpisodeService.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Qualities\QualityModel.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabAddResponse.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabHistoryItem.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabHistory.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabJsonError.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabQueue.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabCategoryModel.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabModel.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabQueueItem.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabVersionModel.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistoryItem.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistory.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdJsonError.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueue.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueueItem.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetClient.cs" />
-    <Compile Include="Download\Clients\PneumaticClient.cs" />
+    <Compile Include="Download\Clients\Nzbget\Nzbget.cs" />
     <Compile Include="MediaFiles\RecycleBinProvider.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
@@ -556,13 +573,10 @@
     <Compile Include="MediaFiles\DiskScanService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Download\Clients\BlackholeProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Download\IDownloadClient.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdClient.cs">
+    <Compile Include="Download\Clients\Sabnzbd\Sabnzbd.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Download\DownloadService.cs">
@@ -631,7 +645,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Notifications\NotificationDefinition.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabPriorityType.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdPriority.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Instrumentation\Log.cs" />
@@ -652,6 +666,11 @@
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
     <Compile Include="Update\UpdateCheckService.cs" />
+    <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
+    <Compile Include="Validation\Paths\PathValidator.cs" />
+    <Compile Include="Validation\Paths\RootFolderValidator.cs" />
+    <Compile Include="Validation\Paths\PathExistsValidator.cs" />
+    <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

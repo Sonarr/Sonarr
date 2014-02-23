@@ -42,9 +42,9 @@ namespace NzbDrone.Core.Metadata
 
         public ProviderDefinition Definition { get; set; }
 
-        public abstract void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles);
+        public abstract void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles);
         public abstract void OnEpisodeImport(Series series, EpisodeFile episodeFile, bool newDownload);
-        public abstract void AfterRename(Series series);
+        public abstract void AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles);
         public abstract MetadataFile FindMetadataFile(Series series, string path);
 
         protected TSettings Settings
@@ -53,11 +53,6 @@ namespace NzbDrone.Core.Metadata
             {
                 return (TSettings)Definition.Settings;
             }
-        }
-
-        protected virtual void EnsureFolder(string path)
-        {
-            _diskProvider.CreateFolder(path);
         }
 
         protected virtual void DownloadImage(Series series, string url, string path)

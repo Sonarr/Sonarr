@@ -2,10 +2,11 @@
 define(
     [
         'marionette',
-        'Mixins/AsModelBoundView'
-    ], function (Marionette, AsModelBoundView) {
+        'Mixins/AsModelBoundView',
+        'Mixins/AsValidatedView'
+    ], function (Marionette, AsModelBoundView, AsValidatedView) {
         var view = Marionette.ItemView.extend({
-            template: 'Settings/General/GeneralTemplate',
+            template: 'Settings/General/GeneralViewTemplate',
 
             events: {
                 'change .x-auth': '_setAuthOptionsVisibility',
@@ -56,6 +57,9 @@ define(
             }
         });
 
-        return AsModelBoundView.call(view);
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+
+        return view;
     });
 

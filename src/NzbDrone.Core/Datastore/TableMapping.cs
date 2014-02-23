@@ -7,6 +7,7 @@ using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
@@ -39,6 +40,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
             Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
             Mapper.Entity<MetadataDefinition>().RegisterModel("Metadata");
+            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients");
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 

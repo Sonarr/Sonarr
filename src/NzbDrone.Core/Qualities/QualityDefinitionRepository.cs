@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Qualities
         {
             try
             {
-                return Query.Single(q => (int)q.Quality == qualityId);
+                return Query.Where(q => (int) q.Quality == qualityId).Single();
             }
             catch (InvalidOperationException e)
             {

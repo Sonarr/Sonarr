@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
@@ -46,7 +45,14 @@ namespace NzbDrone.Core.Download
 
         private void CheckQueue(List<History.History> grabbedHistory, List<History.History> failedHistory)
         {
-            var downloadClientQueue = GetDownloadClient().GetQueue().ToList();
+            var downloadClient = GetDownloadClient();
+
+            if (downloadClient == null)
+            {
+                return;
+            }
+
+            var downloadClientQueue = downloadClient.GetQueue().ToList();
             var failedItems = downloadClientQueue.Where(q => q.Title.StartsWith("ENCRYPTED / ")).ToList();
 
             if (!failedItems.Any())
@@ -78,14 +84,21 @@ namespace NzbDrone.Core.Download
                 if (_configService.RemoveFailedDownloads)
                 {
                     _logger.Info("Removing encrypted download from queue: {0}", failedItem.Title.Replace("ENCRYPTED / ", ""));
-                    GetDownloadClient().RemoveFromQueue(failedItem.Id);
+                    downloadClient.RemoveFromQueue(failedItem.Id);
                 }
             }
         }
 
         private void CheckHistory(List<History.History> grabbedHistory, List<History.History> failedHistory)
         {
-            var downloadClientHistory = GetDownloadClient().GetHistory(0, 20).ToList();
+            var downloadClient = GetDownloadClient();
+
+            if (downloadClient == null)
+            {
+                return;
+            }
+
+            var downloadClientHistory = downloadClient.GetHistory(0, 20).ToList();
             var failedItems = downloadClientHistory.Where(h => h.Status == HistoryStatus.Failed).ToList();
 
             if (!failedItems.Any())
@@ -117,7 +130,7 @@ namespace NzbDrone.Core.Download
                 if (_configService.RemoveFailedDownloads)
                 {
                     _logger.Info("Removing failed download from history: {0}", failedItem.Title);
-                    GetDownloadClient().RemoveFromHistory(failedItem.Id);
+                    downloadClient.RemoveFromHistory(failedItem.Id);
                 }
             }
         }
@@ -152,7 +165,14 @@ namespace NzbDrone.Core.Download
 
         private IDownloadClient GetDownloadClient()
         {
-            return _downloadClientProvider.GetDownloadClient();
+            var downloadClient = _downloadClientProvider.GetDownloadClient();
+
+            if (downloadClient == null)
+            {
+                _logger.Trace("No download client is configured");
+            }
+
+            return downloadClient;
         }
 
         public void Execute(CheckForFailedDownloadCommand message)

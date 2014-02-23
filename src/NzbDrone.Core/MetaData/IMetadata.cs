@@ -8,9 +8,9 @@ namespace NzbDrone.Core.Metadata
 {
     public interface IMetadata : IProvider
     {
-        void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles);
+        void OnSeriesUpdated(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles);
         void OnEpisodeImport(Series series, EpisodeFile episodeFile, bool newDownload);
-        void AfterRename(Series series);
+        void AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles);
         MetadataFile FindMetadataFile(Series series, string path);
     }
 }

@@ -179,9 +179,7 @@ namespace NzbDrone.Common.Processes
         public ProcessOutput StartAndCapture(string path, string args = null)
         {
             var output = new ProcessOutput();
-            var process = Start(path, args, s => output.Standard.Add(s), error => output.Error.Add(error));
-
-            WaitForExit(process);
+            Start(path, args, s => output.Standard.Add(s), error => output.Error.Add(error)).WaitForExit();
 
             return output;
         }
@@ -190,10 +188,7 @@ namespace NzbDrone.Common.Processes
         {
             Logger.Trace("Waiting for process {0} to exit.", process.ProcessName);
 
-            if (!process.HasExited)
-            {
-                process.WaitForExit();
-            }
+            process.WaitForExit();
         }
 
         public void SetPriority(int processId, ProcessPriorityClass priority)

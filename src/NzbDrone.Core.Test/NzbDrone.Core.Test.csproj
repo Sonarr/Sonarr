@@ -122,10 +122,10 @@
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\DownloadNzbFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\NzbgetProviderTests\QueueFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbgetTests\DownloadNzbFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbgetTests\QueueFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
-    <Compile Include="Download\DownloadClientTests\SabProviderTests\SabProviderFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
@@ -180,6 +180,17 @@
     <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
+    <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
+    <Compile Include="ParserTests\IsPossibleSpecialEpisodeFixture.cs" />
+    <Compile Include="ParserTests\ReleaseGroupParserFixture.cs" />
+    <Compile Include="ParserTests\LanguageParserFixture.cs" />
+    <Compile Include="ParserTests\SeasonParserFixture.cs" />
+    <Compile Include="ParserTests\NormalizeTitleFixture.cs" />
+    <Compile Include="ParserTests\CrapParserFixture.cs" />
+    <Compile Include="ParserTests\DailyEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\SingleEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\PathParserFixture.cs" />
+    <Compile Include="ParserTests\MultiEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetEpisodesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\GetSeriesFixture.cs" />
     <Compile Include="ParserTests\ParsingServiceTests\MapFixture.cs" />
@@ -287,16 +298,7 @@
     <Content Include="Files\LongOverview.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\HistoryEmpty.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Files\Queue.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\History.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\JsonError.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="..\NzbDrone.Test.Common\App.config">
@@ -328,9 +330,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\newznab.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\Categories_json.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\SizeParsing\newznab.xml">

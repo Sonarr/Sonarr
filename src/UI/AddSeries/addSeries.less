@@ -57,6 +57,8 @@
 
   .search-item {
 
+    padding-bottom : 20px;
+
     .series-title {
       .label {
         margin-left: 15px;
@@ -65,8 +67,13 @@
     }
 
     .new-series-overview {
-      overflow      : hidden;
-      height        : 120px;
+      overflow : hidden;
+      height   : 103px;
+
+      .overview-internal {
+        overflow : hidden;
+        height   : 80px;
+      }
     }
 
     .new-series-poster {
@@ -77,13 +84,14 @@
       margin     : 10px;
     }
 
-    padding-bottom : 20px;
     a {
       color : #343434;
     }
+
     a:hover {
       text-decoration : none;
     }
+
     select {
       font-size : 16px;
     }
@@ -102,7 +110,22 @@
 
     .starting-season {
       width: 140px;
+
+      &.starting-season-label {
+        display: inline-block;
+      }
     }
+
+    .labels {
+      [class*="span"] {
+        margin-left: 3px;
+      }
+    }
+  }
+
+  .loading-folders {
+    margin : 30px 0px;
+    text-align: center;
   }
 }
 

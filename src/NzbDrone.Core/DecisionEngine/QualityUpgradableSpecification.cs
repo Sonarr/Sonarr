@@ -1,6 +1,5 @@
 using NLog;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine
 {
