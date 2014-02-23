@@ -21,7 +21,9 @@ namespace NzbDrone.Core.Blacklisting
 
         public bool Blacklisted(int seriesId, string sourceTitle)
         {
-            return Query.Where(e => e.SourceTitle.Contains(sourceTitle)).Any();
+            return Query.Where(e => e.SeriesId == seriesId)
+                        .AndWhere(e => e.SourceTitle.Contains(sourceTitle))
+                        .Any();
         }
 
         public List<Blacklist> BlacklistedBySeries(int seriesId)
