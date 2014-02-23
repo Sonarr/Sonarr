@@ -3,11 +3,12 @@
 define(
     [
         'reqres',
+        'backbone',
         'Cells/NzbDroneCell',
         'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (reqres, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
+    ], function (reqres, Backbone, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -31,8 +32,16 @@ define(
                     var hasAired = Moment(this.model.get('airDateUtc')).isBefore(Moment());
                     var hasFile = this.model.get('hasFile');
 
-                    if (hasFile && reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
-                        var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
+                    if (hasFile) {
+                        var episodeFile;
+
+                        if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
+                            episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
+                        }
+
+                        else {
+                            episodeFile = new Backbone.Model(this.model.get('episodeFile'));
+                        }
 
                         this.listenTo(episodeFile, 'change', this._refresh);
 

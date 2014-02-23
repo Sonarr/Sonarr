@@ -45,12 +45,12 @@ namespace NzbDrone.Automation.Test
         }
 
         [Test]
-        public void missing_page()
+        public void wanted_page()
         {
-            page.MissingNavIcon.Click();
+            page.WantedNavIcon.Click();
             page.WaitForNoSpinner();
 
-            page.FindByClass("iv-missing-missinglayout").Should().NotBeNull();
+            page.FindByClass("iv-wanted-missing-missinglayout").Should().NotBeNull();
         }
 
         [Test]

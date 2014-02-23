@@ -72,13 +72,36 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .Build();
 
 
+            var unairedEpisodes           = Builder<Episode>.CreateListOfSize(1)
+                                           .All()
+                                           .With(e => e.Id = 0)
+                                           .With(e => e.SeriesId = _monitoredSeries.Id)
+                                           .With(e => e.EpisodeFileId = 0)
+                                           .With(e => e.AirDateUtc = DateTime.Now.AddDays(5))
+                                           .With(e => e.Monitored = true)
+                                           .Build();
+
+
             Db.InsertMany(monitoredSeriesEpisodes);
             Db.InsertMany(unmonitoredSeriesEpisodes);
+            Db.InsertMany(unairedEpisodes);
+        }
+
+        private void GivenMonitoredFilterExpression()
+        {
+            _pagingSpec.FilterExpression = e => e.Monitored == true && e.Series.Monitored == true;
+        }
+
+        private void GivenUnmonitoredFilterExpression()
+        {
+            _pagingSpec.FilterExpression = e => e.Monitored == false || e.Series.Monitored == false;
         }
 
         [Test]
         public void should_get_monitored_episodes()
         {
+            GivenMonitoredFilterExpression();
+
             var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
 
             episodes.Records.Should().HaveCount(1);
@@ -96,6 +119,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_not_include_unmonitored_episodes()
         {
+            GivenMonitoredFilterExpression();
+
             var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
 
             episodes.Records.Should().NotContain(e => e.Monitored == false);
@@ -104,17 +129,19 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_not_contain_unmonitored_series()
         {
+            GivenMonitoredFilterExpression();
+
             var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
 
             episodes.Records.Should().NotContain(e => e.SeriesId == _unmonitoredSeries.Id);
         }
 
         [Test]
-        public void should_have_count_of_one()
+        public void should_not_return_unaired()
         {
             var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
 
-            episodes.TotalRecords.Should().Be(1);
+            episodes.TotalRecords.Should().Be(4);
         }
     }
 }
