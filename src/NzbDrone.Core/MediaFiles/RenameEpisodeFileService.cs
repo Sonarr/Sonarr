@@ -75,6 +75,13 @@ namespace NzbDrone.Core.MediaFiles
             foreach (var file in files)
             {
                 var episodesInFile = episodes.Where(e => e.EpisodeFileId == file.Id).ToList();
+
+                if (!episodesInFile.Any())
+                {
+                    _logger.Warn("File ({0}) is not linked to any episodes", file.Path);
+                    continue;
+                }
+
                 var seasonNumber = episodesInFile.First().SeasonNumber;
                 var newName = _filenameBuilder.BuildFilename(episodesInFile, series, file);
                 var newPath = _filenameBuilder.BuildFilePath(series, seasonNumber, newName, Path.GetExtension(file.Path));
