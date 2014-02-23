@@ -28,8 +28,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                 Cutoff = Quality.WEBDL480p,
                 Items = new List<QualityProfileItem> 
                 { 
-                    new QualityProfileItem { Allowed = true, Quality = Quality.SDTV },  
-                    new QualityProfileItem { Allowed = true, Quality = Quality.WEBDL480p }
+                    new QualityProfileItem { Allowed = true, Quality = Quality.SDTV },
+                    new QualityProfileItem { Allowed = true, Quality = Quality.WEBDL480p },
+                    new QualityProfileItem { Allowed = true, Quality = Quality.RAWHD }
                 }
             };
 
@@ -64,16 +65,18 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                     {
                                         new QualitiesBelowCutoff(qualityProfile.Id, new[] {Quality.SDTV.Id})
                                     };
-            
+
             var qualityMet = new EpisodeFile { Path = "a", Quality = new QualityModel { Quality = Quality.WEBDL480p } };
             var qualityUnmet = new EpisodeFile { Path = "b", Quality = new QualityModel { Quality = Quality.SDTV } };
+            var qualityRawHD = new EpisodeFile { Path = "c", Quality = new QualityModel { Quality = Quality.RAWHD } };
 
             MediaFileRepository fileRepository = Mocker.Resolve<MediaFileRepository>();
 
             qualityMet = fileRepository.Insert(qualityMet);
             qualityUnmet = fileRepository.Insert(qualityUnmet);
+            qualityRawHD = fileRepository.Insert(qualityRawHD);
 
-            var monitoredSeriesEpisodes = Builder<Episode>.CreateListOfSize(3)
+            var monitoredSeriesEpisodes = Builder<Episode>.CreateListOfSize(4)
                                            .All()
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = _monitoredSeries.Id)
@@ -83,6 +86,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .TheFirst(1)
                                            .With(e => e.Monitored = false)
                                            .With(e => e.EpisodeFileId = qualityMet.Id)
+                                           .TheNext(1)
+                                           .With(e => e.EpisodeFileId = qualityRawHD.Id)
                                            .TheLast(1)
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
