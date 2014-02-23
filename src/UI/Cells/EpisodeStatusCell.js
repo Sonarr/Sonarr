@@ -31,8 +31,16 @@ define(
                     var hasAired = Moment(this.model.get('airDateUtc')).isBefore(Moment());
                     var hasFile = this.model.get('hasFile');
 
-                    if (hasFile && reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
-                        var episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
+                    if (hasFile) {
+                        var episodeFile;
+
+                        if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
+                            episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
+                        }
+
+                        else {
+                            episodeFile = this.model.get('episodeFile');
+                        }
 
                         this.listenTo(episodeFile, 'change', this._refresh);
 
@@ -52,24 +60,7 @@ define(
 
                         return;
                     }
-                    else if (hasFile && this.model.get('episodeFile')) {
-                        var episodeFile = this.model.get('episodeFile');
-                   
-                        var quality = episodeFile.quality;
-                        var size = FormatHelpers.bytes(episodeFile.size);
-                        var title = 'Episode downloaded';
 
-                        if (quality.proper) {
-                            title += ' [PROPER] - {0}'.format(size);
-                            this.$el.html('<span class="badge badge-info" title="{0}">{1}</span>'.format(title, quality.quality.name));
-                        }
-                        else {
-                            title += ' - {0}'.format(size);
-                            this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
-                        }
-
-                        return;
-                    }
                     else {
                         var model = this.model;
                         var downloading = QueueCollection.findEpisode(model.get('id'));
