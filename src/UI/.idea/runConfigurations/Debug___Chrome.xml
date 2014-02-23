@@ -6,7 +6,7 @@
     <mapping url="http://localhost:8989/Upcoming" local-file="$PROJECT_DIR$/Upcoming" />
     <mapping url="http://localhost:8989/app.js" local-file="$PROJECT_DIR$/app.js" />
     <mapping url="http://localhost:8989/Mixins" local-file="$PROJECT_DIR$/Mixins" />
-    <mapping url="http://localhost:8989/Missing" local-file="$PROJECT_DIR$/Missing" />
+    <mapping url="http://localhost:8989/Wanted" local-file="$PROJECT_DIR$/Wanted" />
     <mapping url="http://localhost:8989/Quality" local-file="$PROJECT_DIR$/Quality" />
     <mapping url="http://localhost:8989/Config.js" local-file="$PROJECT_DIR$/Config.js" />
     <mapping url="http://localhost:8989/Shared" local-file="$PROJECT_DIR$/Shared" />

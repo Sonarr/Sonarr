@@ -7,6 +7,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv
 {
@@ -40,12 +41,14 @@ namespace NzbDrone.Core.Tv
     {
 
         private readonly IEpisodeRepository _episodeRepository;
+        private readonly IQualityProfileRepository _qualityProfileRepository;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public EpisodeService(IEpisodeRepository episodeRepository, IConfigService configService, Logger logger)
+        public EpisodeService(IEpisodeRepository episodeRepository, IQualityProfileRepository qualityProfileRepository, IConfigService configService, Logger logger)
         {
             _episodeRepository = episodeRepository;
+            _qualityProfileRepository = qualityProfileRepository;
             _configService = configService;
             _logger = logger;
         }
@@ -88,7 +91,7 @@ namespace NzbDrone.Core.Tv
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
-
+        
         public Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle) 
         {
             // TODO: can replace this search mechanism with something smarter/faster/better

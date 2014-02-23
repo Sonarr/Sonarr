@@ -4,11 +4,12 @@ define(
         'underscore',
         'marionette',
         'backgrid',
-        'Missing/MissingCollection',
+        'Wanted/Cutoff/CutoffUnmetCollection',
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
+        'Cells/EpisodeStatusCell',
         'Shared/Grid/Pager',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView',
@@ -18,18 +19,19 @@ define(
     ], function (_,
                  Marionette,
                  Backgrid,
-                 MissingCollection,
+                 CutoffUnmetCollection,
                  SeriesTitleCell,
                  EpisodeNumberCell,
                  EpisodeTitleCell,
                  RelativeDateCell,
+                 EpisodeStatusCell,
                  GridPager,
                  ToolbarLayout,
                  LoadingView,
                  Messenger,
                  CommandController) {
         return Marionette.Layout.extend({
-            template: 'Missing/MissingLayoutTemplate',
+            template: 'Wanted/Cutoff/CutoffUnmetLayoutTemplate',
 
             regions: {
                 missing: '#x-missing',
@@ -52,38 +54,44 @@ define(
                     {
                         name    : 'series',
                         label   : 'Series Title',
-                        sortable: false,
+                        sortable  : false,
                         cell    : SeriesTitleCell
                     },
                     {
                         name    : 'this',
                         label   : 'Episode',
-                        sortable: false,
+                        sortable  : false,
                         cell    : EpisodeNumberCell
                     },
                     {
                         name    : 'this',
                         label   : 'Episode Title',
-                        sortable: false,
-                        cell    : EpisodeTitleCell
+                        sortable  : false,
+                        cell    : EpisodeTitleCell,
                     },
                     {
-                        name : 'airDateUtc',
-                        label: 'Air Date',
-                        cell : RelativeDateCell
+                        name    : 'airDateUtc',
+                        label   : 'Air Date',
+                        cell    : RelativeDateCell
+                    },
+                    {
+                        name    : 'status',
+                        label   : 'Status',
+                        cell    : EpisodeStatusCell,
+                        sortable: false
                     }
                 ],
 
             initialize: function () {
-                this.collection = new MissingCollection();
+                this.collection = new CutoffUnmetCollection();
 
                 this.listenTo(this.collection, 'sync', this._showTable);
             },
 
             onShow: function () {
                 this.missing.show(new LoadingView());
-                this.collection.fetch();
                 this._showToolbar();
+                this.collection.fetch();
             },
 
             _showTable: function () {
@@ -120,11 +128,39 @@ define(
                         }
                     ]
                 };
+                
+                var filterOptions = {
+                    type          : 'radio',
+                    storeState    : false,
+                    menuKey       : 'wanted.filterMode',
+                    defaultAction : 'monitored',
+                    items         :
+                    [
+                        {
+                            key      : 'monitored',
+                            title    : '',
+                            tooltip  : 'Monitored Only',
+                            icon     : 'icon-nd-monitored',
+                            callback : this._setFilter
+                        },
+                        {
+                            key      : 'unmonitored',
+                            title    : '',
+                            tooltip  : 'Unmonitored Only',
+                            icon     : 'icon-nd-unmonitored',
+                            callback : this._setFilter
+                        },
+                    ]                    
+                };
 
                 this.toolbar.show(new ToolbarLayout({
                     left   :
                         [
                             leftSideButtons
+                        ],
+                    right  :
+                        [
+                            filterOptions
                         ],
                     context: this
                 }));
@@ -135,6 +171,16 @@ define(
                         name: 'episodeSearch'
                     }
                 });
+            },
+            
+            _setFilter: function(buttonContext) {
+                var mode = buttonContext.model.get('key');
+
+                this.collection.state.currentPage = 1;
+                var promise = this.collection.setFilterMode(mode);
+                
+                if (buttonContext)
+                    buttonContext.ui.icon.spinForPromise(promise);
             },
 
             _searchSelected: function () {

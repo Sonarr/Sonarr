@@ -161,6 +161,14 @@ namespace Marr.Data
         }
 
         /// <summary>
+        /// Adds an Child in the graph for LazyLoaded property.
+        /// </summary>
+        public void AddLazyRelationship(Relationship childRelationship)
+        {
+            _children.Add(new EntityGraph(childRelationship.RelationshipInfo.EntityType.GetGenericArguments()[0], this, childRelationship));
+        }
+
+        /// <summary>
         /// Adds an entity to the appropriate place in the object graph.
         /// </summary>
         /// <param name="entityInstance"></param>
@@ -182,7 +190,10 @@ namespace Marr.Data
             }
             else // RelationTypes.One
             {
-                _relationship.Setter(_parent._entity, entityInstance);
+                if (_relationship.IsLazyLoaded)
+                    _relationship.Setter(_parent._entity, Activator.CreateInstance(_relationship.MemberType, entityInstance));
+                else
+                    _relationship.Setter(_parent._entity, entityInstance);
             }
 
             EntityReference entityRef = new EntityReference(entityInstance);
