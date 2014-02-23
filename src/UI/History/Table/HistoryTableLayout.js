@@ -79,7 +79,6 @@ define(
                     }
                 ],
 
-
             initialize: function () {
                 this.collection = new HistoryCollection({ tableName: 'history' });
                 this.listenTo(this.collection, 'sync', this._showTable);
@@ -104,6 +103,5 @@ define(
                 this.history.show(new LoadingView());
                 this.collection.fetch();
             }
-
         });
     });
