@@ -132,6 +132,54 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
+        public void should_not_process_if_grabbed_history_contains_null_downloadclient_id()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", null);
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenNoFailedHistory();
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyNoFailedDownloads();
+        }
+
+        [Test]
+        public void should_process_if_failed_history_contains_null_downloadclient_id()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+
+            GivenGrabbedHistory(historyGrabbed);
+
+            var historyFailed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyFailed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyFailed.First().Data.Add("downloadClientId", null);
+            
+            GivenFailedHistory(historyFailed);
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyFailedDownloads();
+        }
+
+        [Test]
         public void should_not_process_if_already_added_to_history_as_failed()
         {
             GivenFailedDownloadClientHistory();
