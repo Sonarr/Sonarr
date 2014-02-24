@@ -101,6 +101,10 @@ Function PackageMono()
     Write-Host Removing NzbDrone.Windows
     get-childitem $outputFolderMono -File -Filter NzbDrone.Windows.* -Recurse | foreach ($_) {remove-item $_.fullname}
 
+    Write-Host "Adding sqlite dylibs"
+    New-Item -ItemType directory -Path "$outputFolderMono\sqlite"
+    Copy-Item "$sourceFolder\Libraries\sqlite\*.dylib" "$outputFolderMono\sqlite"
+
     Get-ChildItem $outputFolderMono -File -Filter "NzbDrone.Console.exe*" -Recurse | foreach ($_) {
         $newName = $_.fullname -Replace ".Console",""
 
