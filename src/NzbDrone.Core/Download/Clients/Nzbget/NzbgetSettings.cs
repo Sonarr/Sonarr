@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.Port).GreaterThan(0);
-            RuleFor(c => c.Username).NotEmpty();
-            RuleFor(c => c.Password).NotEmpty();
+            RuleFor(c => c.Username).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Password));
+            RuleFor(c => c.Password).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Username));
         }
     }
 
