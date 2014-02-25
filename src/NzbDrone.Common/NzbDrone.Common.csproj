@@ -67,6 +67,7 @@
     <Compile Include="Composition\IContainer.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
