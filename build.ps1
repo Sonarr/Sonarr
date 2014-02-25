@@ -1,6 +1,7 @@
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
+$outputFolderOsx = '.\_output_osx'
 $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
 $sourceFolder = '.\src'
@@ -101,10 +102,6 @@ Function PackageMono()
     Write-Host Removing NzbDrone.Windows
     get-childitem $outputFolderMono -File -Filter NzbDrone.Windows.* -Recurse | foreach ($_) {remove-item $_.fullname}
 
-    Write-Host "Adding sqlite dylibs"
-    New-Item -ItemType directory -Path "$outputFolderMono\sqlite"
-    Copy-Item "$sourceFolder\Libraries\sqlite\*.dylib" "$outputFolderMono\sqlite"
-
     Get-ChildItem $outputFolderMono -File -Filter "NzbDrone.Console.exe*" -Recurse | foreach ($_) {
         $newName = $_.fullname -Replace ".Console",""
 
@@ -114,6 +111,23 @@ Function PackageMono()
     Remove-Item "$outputFolderMono\NzbDrone.Console.vshost.exe"
 
     Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
+}
+
+Function PackageOsx()
+{
+    Write-Host "##teamcity[progressStart 'Creating OS X Package']"
+
+    if(Test-Path $outputFolderOsx)
+    {
+        Remove-Item -Recurse -Force $outputFolderMono -ErrorAction Continue
+    }
+
+    Copy-Item $outputFolderMono $outputFolderOsx -recurse
+
+    Write-Host "Adding sqlite dylibs"
+    Copy-Item "$sourceFolder\Libraries\sqlite\*.dylib" "$outputFolderOsx"
+
+    Write-Host "##teamcity[progressFinish 'Creating OS X Package']"
 }
 
 Function AddJsonNet()
@@ -191,5 +205,6 @@ Function CleanupWindowsPackage()
 Build
 RunGrunt
 PackageMono
+PackageOsx
 PackageTests
 CleanupWindowsPackage
