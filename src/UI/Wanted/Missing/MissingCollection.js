@@ -29,11 +29,10 @@ define(
                     '1' : 'desc'
                 }
             },
-            
-            // Filter Modes
+
             filterModes: {
                 'monitored'   : ['monitored', 'true'],
-                'unmonitored' : ['monitored', 'false'],
+                'unmonitored' : ['monitored', 'false']
             },
 
             parseState: function (resp) {

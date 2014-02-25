@@ -39,6 +39,11 @@ namespace NzbDrone.Api.History
                 pagingSpec.SortKey = "series.title";
             }
 
+            if (pagingResource.FilterKey == "eventType")
+            {
+                var filterValue = (HistoryEventType)Convert.ToInt32(pagingResource.FilterValue);
+                pagingSpec.FilterExpression = v => v.EventType == filterValue;
+            }
 
             if (episodeId.HasValue)
             {

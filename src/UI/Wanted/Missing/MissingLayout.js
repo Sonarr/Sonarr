@@ -149,7 +149,7 @@ define(
                             tooltip  : 'Unmonitored Only',
                             icon     : 'icon-nd-unmonitored',
                             callback : this._setFilter
-                        },
+                        }
                     ]                    
                 };
 

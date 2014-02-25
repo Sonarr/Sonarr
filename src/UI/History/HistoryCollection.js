@@ -3,8 +3,9 @@ define(
     [
         'History/HistoryModel',
         'backbone.pageable',
+        'Mixins/AsFilteredCollection',
         'Mixins/AsPersistedStateCollection'
-    ], function (HistoryModel, PageableCollection, AsPersistedStateCollection) {
+    ], function (HistoryModel, PageableCollection, AsFilteredCollection, AsPersistedStateCollection) {
         var collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/history',
             model: HistoryModel,
@@ -25,6 +26,13 @@ define(
                     '-1': 'asc',
                     '1' : 'desc'
                 }
+            },
+
+            filterModes: {
+                'all'      : [null, null],
+                'grabbed'  : ['eventType', '1'],
+                'imported' : ['eventType', '3'],
+                'failed'   : ['eventType', '4']
             },
 
             initialize: function (options) {
@@ -50,5 +58,6 @@ define(
             }
         });
 
-        return AsPersistedStateCollection.apply(collection);
+        collection = AsFilteredCollection.call(collection);
+        return AsPersistedStateCollection.call(collection);
     });
