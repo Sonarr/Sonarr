@@ -99,7 +99,7 @@ namespace NzbDrone.Mono
             {
                 var error = Stdlib.GetLastError();
 
-                throw new LinuxPermissionsException("Error setting file owner: " + error);
+                throw new LinuxPermissionsException("Error setting file owner and/or group: " + error);
             }
         }
 
