@@ -92,7 +92,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("System"));
+                return Find(By.PartialLinkText("System"));
             }
         }
 

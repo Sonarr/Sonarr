@@ -80,11 +80,21 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         {
         }
 
-        public void Execute(TestPneumaticCommand message)
+        public override void Test()
         {
-            var testPath = Path.Combine(message.Folder, "drone_test.txt");
+            PerformTest(Settings.Folder);
+        }
+
+        private void PerformTest(string folder)
+        {
+            var testPath = Path.Combine(folder, "drone_test.txt");
             _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
             _diskProvider.DeleteFile(testPath);
+        }
+
+        public void Execute(TestPneumaticCommand message)
+        {
+            PerformTest(message.Folder);
         }
     }
 }

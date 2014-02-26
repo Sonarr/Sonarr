@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Download.Clients.Nzbget;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
+﻿using System.Linq;
 
 namespace NzbDrone.Core.Download
 {

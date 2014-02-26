@@ -7,6 +7,7 @@ using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DataAugmentation.Xem;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Housekeeping;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Commands;
@@ -50,6 +51,7 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(CheckForFailedDownloadCommand).FullName},
+                    new ScheduledTask{ Interval = 5, TypeName = typeof(CheckHealthCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},

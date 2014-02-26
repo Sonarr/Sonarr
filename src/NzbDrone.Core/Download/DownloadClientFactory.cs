@@ -2,6 +2,7 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download
@@ -15,8 +16,8 @@ namespace NzbDrone.Core.Download
     {
         private readonly IDownloadClientRepository _providerRepository;
 
-        public DownloadClientFactory(IDownloadClientRepository providerRepository, IEnumerable<IDownloadClient> providers, IContainer container, Logger logger)
-            : base(providerRepository, providers, container, logger)
+        public DownloadClientFactory(IDownloadClientRepository providerRepository, IEnumerable<IDownloadClient> providers, IContainer container, IEventAggregator eventAggregator, Logger logger)
+            : base(providerRepository, providers, container, eventAggregator, logger)
         {
             _providerRepository = providerRepository;
         }

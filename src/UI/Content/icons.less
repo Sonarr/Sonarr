@@ -48,7 +48,7 @@
 
 .icon-nd-warning:before {
   .icon(@warning-sign);
-  color : #f89406;
+  color : @orange;
 }
 
 .icon-nd-edit:before {
@@ -79,7 +79,7 @@
 
 .icon-nd-form-warning:before {
   .icon(@warning-sign);
-  color: #f89406;
+  color: @orange;
 }
 
 .icon-nd-form-danger:before {
@@ -175,4 +175,14 @@
 
 .icon-nd-restart:before {
   .icon(@repeat);
+}
+
+.icon-nd-health-warning:before {
+  .icon(@exclamation-sign);
+  color : @orange
+}
+
+.icon-nd-health-error:before {
+  .icon(@exclamation-sign);
+  color : @errorText
 }

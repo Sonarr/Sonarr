@@ -11,5 +11,6 @@ namespace NzbDrone.Core.Download
         IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0);
         void RemoveFromQueue(string id);
         void RemoveFromHistory(string id);
+        void Test();
     }
 }

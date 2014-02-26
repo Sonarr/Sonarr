@@ -22,6 +22,8 @@
   li {
     list-style-type : none;
     display         : inline-block;
+    position        : relative;
+
     a {
 
       &:focus {
@@ -38,21 +40,20 @@
       font-weight   : 100;
     }
     span.label.pull-right {
-      position : relative;
-      top      : 24px;
-      right    : 14px;
+      position : absolute;
+      top      : 28px;
+      right    : 18px;
     }
   }
 }
 
-.backdrop #nav-region {
-  background-color : #000000;
-  .opacity(0.85);
-}
+.backdrop  {
+  #nav-region {
+    background-color : #000000;
+    .opacity(0.85);
+  }
 
-#nav-region li a:hover, #in-sub-nav li a.active {
-  background-color : #555555;
-  text-decoration  : none;
+
 }
 
 #nav-region {
@@ -61,6 +62,19 @@
 
   .span12 {
     margin-left : 0px;
+  }
+
+  li {
+    a {
+      &:hover {
+        background-color : #555555;
+        text-decoration  : none;
+      }
+
+      .label {
+        cursor: pointer;
+      }
+    }
   }
 }
 

@@ -33,9 +33,9 @@ define(
 
                 var href = event.target.getAttribute('href');
 
-                if (!href && $target.parent('a') && $target.parent('a')[0]) {
+                if (!href && $target.closest('a') && $target.closest('a')[0]) {
 
-                    var linkElement = $target.parent('a')[0];
+                    var linkElement = $target.closest('a')[0];
 
                     href = linkElement.getAttribute('href');
                 }

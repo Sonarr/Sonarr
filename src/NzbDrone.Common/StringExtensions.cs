@@ -52,5 +52,10 @@ namespace NzbDrone.Common
         {
             return CollapseSpace.Replace(text, " ").Trim();
         }
+
+        public static bool IsNullOrWhiteSpace(this string text)
+        {
+            return String.IsNullOrWhiteSpace(text);
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Indexers
         public abstract DownloadProtocol Protocol { get; }
 
         public abstract bool SupportsPaging { get; }
+        public virtual bool SupportsSearching { get { return true; } }
 
         protected TSettings Settings
         {

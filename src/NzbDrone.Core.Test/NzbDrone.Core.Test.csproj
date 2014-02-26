@@ -125,6 +125,11 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="HealthCheck\Checks\UpdateCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\DroneFactoryCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\HealthCheckFixtureExtentions.cs" />
     <Compile Include="HistoryTests\HistoryServiceFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />

@@ -122,6 +122,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _sabnzbdProxy.RemoveFrom("history", id, Settings);
         }
 
+        public override void Test()
+        {
+            _sabnzbdProxy.GetCategories(Settings);
+        }
+
         public void Execute(TestSabnzbdCommand message)
         {
             var settings = new SabnzbdSettings();

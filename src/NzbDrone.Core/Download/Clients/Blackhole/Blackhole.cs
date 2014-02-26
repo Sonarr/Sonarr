@@ -58,11 +58,21 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
         {
         }
 
-        public void Execute(TestBlackholeCommand message)
+        public override void Test()
         {
-            var testPath = Path.Combine(message.Folder, "drone_test.txt");
+            PerformTest(Settings.Folder);
+        }
+
+        private void PerformTest(string folder)
+        {
+            var testPath = Path.Combine(folder, "drone_test.txt");
             _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
             _diskProvider.DeleteFile(testPath);
+        }
+
+        public void Execute(TestBlackholeCommand message)
+        {
+            PerformTest(message.Folder);
         }
     }
 }

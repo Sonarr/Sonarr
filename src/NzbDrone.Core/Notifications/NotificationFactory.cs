@@ -2,6 +2,7 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications
@@ -15,8 +16,8 @@ namespace NzbDrone.Core.Notifications
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
     {
-        public NotificationFactory(INotificationRepository providerRepository, IEnumerable<INotification> providers, IContainer container, Logger logger)
-            : base(providerRepository, providers, container, logger)
+        public NotificationFactory(INotificationRepository providerRepository, IEnumerable<INotification> providers, IContainer container, IEventAggregator eventAggregator, Logger logger)
+            : base(providerRepository, providers, container, eventAggregator, logger)
         {
         }
 

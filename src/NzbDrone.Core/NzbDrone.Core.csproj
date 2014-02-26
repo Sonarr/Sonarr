@@ -264,6 +264,13 @@
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
+    <Compile Include="HealthCheck\CheckHealthCommand.cs" />
+    <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
+    <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
+    <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
+    <Compile Include="HealthCheck\HealthCheck.cs" />
+    <Compile Include="HealthCheck\TriggerHealthCheckEvent.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
@@ -342,6 +349,8 @@
     <Compile Include="Metadata\MetadataRepository.cs" />
     <Compile Include="Metadata\MetadataService.cs" />
     <Compile Include="Metadata\MetadataType.cs" />
+    <Compile Include="HealthCheck\HealthCheckService.cs" />
+    <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
     <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
@@ -503,6 +512,7 @@
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
+    <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualityDefinitionRepository.cs" />

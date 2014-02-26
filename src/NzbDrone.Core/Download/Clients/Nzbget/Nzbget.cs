@@ -80,7 +80,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             throw new NotImplementedException();
         }
 
-        public VersionResponse GetVersion(string host = null, int port = 0, string username = null, string password = null)
+        public override void Test()
+        {
+            _proxy.GetVersion(Settings);
+        }
+
+        private VersionResponse GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
             return _proxy.GetVersion(Settings);
         }
