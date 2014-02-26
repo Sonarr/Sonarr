@@ -85,7 +85,7 @@ namespace NzbDrone.Mono
 
             if (!uint.TryParse(group, out groupId))
             {
-                var g = Syscall.getgrnam(user);
+                var g = Syscall.getgrnam(group);
 
                 if (g == null)
                 {
