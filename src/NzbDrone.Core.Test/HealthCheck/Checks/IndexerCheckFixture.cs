@@ -7,6 +7,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
@@ -38,13 +39,30 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_null_when_multiple_multiple_indexers_are_enabled()
+        public void should_return_null_when_multiple_indexers_are_enabled()
         {
-            var indexers = new List<IIndexer>{Mocker.GetMock<IIndexer>().Object, Mocker.GetMock<IIndexer>().Object};
+            var indexer1 = Mocker.GetMock<IIndexer>();
+            indexer1.SetupGet(s => s.SupportsSearching).Returns(true);
+
+            var indexer2 = Mocker.GetMock<Wombles>();
+            indexer2.SetupGet(s => s.SupportsSearching).Returns(false);
 
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.GetAvailableProviders())
-                  .Returns(indexers);
+                  .Returns(new List<IIndexer> { indexer1.Object, indexer2.Object });
+
+            Subject.Check().Should().BeNull();
+        }
+
+        [Test]
+        public void should_return_null_when_indexer_supports_searching()
+        {
+            var indexer1 = Mocker.GetMock<IIndexer>();
+            indexer1.SetupGet(s => s.SupportsSearching).Returns(true);
+
+            Mocker.GetMock<IIndexerFactory>()
+                  .Setup(s => s.GetAvailableProviders())
+                  .Returns(new List<IIndexer> { indexer1.Object });
 
             Subject.Check().Should().BeNull();
         }
