@@ -88,7 +88,7 @@ define(
 
             onShow: function () {
                 this.history.show(new LoadingView());
-                this.collection.fetch();
+                //this.collection.fetch();
                 this._showToolbar();
             },
 
@@ -109,7 +109,7 @@ define(
             _showToolbar: function () {
                 var filterOptions = {
                     type          : 'radio',
-                    storeState    : false,
+                    storeState    : true,
                     menuKey       : 'history.filterMode',
                     defaultAction : 'all',
                     items         :
