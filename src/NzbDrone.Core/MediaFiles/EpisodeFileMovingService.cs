@@ -98,14 +98,14 @@ namespace NzbDrone.Core.MediaFiles
             try
             {
                 _logger.Trace("Setting last write time on series folder: {0}", series.Path);
-                _diskProvider.SetFolderWriteTime(series.Path, episodeFile.DateAdded);
+                _diskProvider.FolderSetLastWriteTimeUtc(series.Path, episodeFile.DateAdded);
 
                 if (series.SeasonFolder)
                 {
                     var seasonFolder = Path.GetDirectoryName(destinationFilename);
 
                     _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
-                    _diskProvider.SetFolderWriteTime(seasonFolder, episodeFile.DateAdded);
+                    _diskProvider.FolderSetLastWriteTimeUtc(seasonFolder, episodeFile.DateAdded);
                 }
             }
 
