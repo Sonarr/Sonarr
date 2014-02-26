@@ -24,7 +24,15 @@ namespace NzbDrone.Mono
 
             try
             {
-                return GetDriveInfoLinux(path).AvailableFreeSpace;
+                var driveInfo = GetDriveInfoLinux(path);
+
+                if (driveInfo == null)
+                {
+                    Logger.Trace("Unable to get free space for '{0}', unable to find suitable drive", path);
+                    return null;
+                }
+
+                return driveInfo.AvailableFreeSpace;
             }
             catch (InvalidOperationException e)
             {
@@ -132,7 +140,7 @@ namespace NzbDrone.Mono
                 drives.Where(drive =>
                     drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
                     .OrderByDescending(drive => drive.Name.Length)
-                    .First();
+                    .FirstOrDefault();
         }
     }
 }
