@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodeByFileId(int fileId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
-        Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
+        List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
@@ -116,12 +116,11 @@ namespace NzbDrone.Core.Tv
             return pagingSpec;
         }
 
-        public Episode FindEpisodeBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
+        public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
             return Query.Where(s => s.SeriesId == seriesId)
                         .AndWhere(s => s.SceneSeasonNumber == seasonNumber)
-                        .AndWhere(s => s.SceneEpisodeNumber == episodeNumber)
-                        .SingleOrDefault();
+                        .AndWhere(s => s.SceneEpisodeNumber == episodeNumber);
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)

@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Queue
                 foreach (var episode in queueItem.RemoteEpisode.Episodes)
                 {
                     var queue = new Queue();
-                    queue.Id = queueItem.Id.GetHashCode();
+                    queue.Id = queueItem.Id.GetHashCode() + episode.Id;
                     queue.Series = queueItem.RemoteEpisode.Series;
                     queue.Episode = episode;
                     queue.Quality = queueItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
