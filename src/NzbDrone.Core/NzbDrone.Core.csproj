@@ -232,6 +232,7 @@
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
     <Compile Include="Download\Clients\Blackhole\Blackhole.cs" />
     <Compile Include="Download\Clients\Blackhole\TestBlackholeCommand.cs" />
+    <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\FolderSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\TestNzbgetCommand.cs" />
