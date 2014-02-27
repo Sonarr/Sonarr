@@ -308,6 +308,7 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
     <Compile Include="Lifecycle\Commands\RestartCommand.cs" />

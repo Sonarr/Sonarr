@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
@@ -15,6 +14,7 @@ namespace NzbDrone.Core.Tv
     public interface ISeriesService
     {
         Series GetSeries(int seriesId);
+        List<Series> GetSeries(IEnumerable<int> seriesIds);
         Series AddSeries(Series newSeries);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
@@ -56,6 +56,11 @@ namespace NzbDrone.Core.Tv
         public Series GetSeries(int seriesId)
         {
             return _seriesRepository.Get(seriesId);
+        }
+
+        public List<Series> GetSeries(IEnumerable<int> seriesIds)
+        {
+            return _seriesRepository.Get(seriesIds).ToList();
         }
 
         public Series AddSeries(Series newSeries)
