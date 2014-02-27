@@ -4,15 +4,27 @@ define(
         'vent',
         'marionette',
         'backgrid',
-        'Cells/ToggleCell',
+        'Cells/EpisodeMonitoredCell',
         'Cells/EpisodeTitleCell',
         'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
         'Cells/EpisodeActionsCell',
         'Commands/CommandController',
         'moment',
-        'underscore'
-    ], function (vent, Marionette, Backgrid, ToggleCell, EpisodeTitleCell, RelativeDateCell, EpisodeStatusCell, EpisodeActionsCell, CommandController, Moment, _) {
+        'underscore',
+        'Shared/Messenger'
+    ], function (vent,
+                Marionette,
+                Backgrid,
+                ToggleCell,
+                EpisodeTitleCell,
+                RelativeDateCell,
+                EpisodeStatusCell,
+                EpisodeActionsCell,
+                CommandController,
+                Moment,
+                _,
+                Messenger) {
         return Marionette.Layout.extend({
             template: 'Series/Details/SeasonLayoutTemplate',
 
@@ -95,7 +107,6 @@ define(
 
             onRender: function () {
 
-
                 if (this.showingEpisodes) {
                     this._showEpisodes();
                 }
@@ -135,6 +146,16 @@ define(
             },
 
             _seasonMonitored: function () {
+                if (!this.series.get('monitored')) {
+
+                    Messenger.show({
+                        message: 'Unable to change monitored state when series is not monitored',
+                        type   : 'error'
+                    });
+
+                    return;
+                }
+
                 var name = 'monitored';
                 this.model.set(name, !this.model.get(name));
                 this.series.setSeasonMonitored(this.model.get('seasonNumber'));
