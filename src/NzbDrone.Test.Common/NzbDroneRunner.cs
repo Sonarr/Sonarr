@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NUnit.Framework;
@@ -116,7 +117,7 @@ namespace NzbDrone.Test.Common
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (XmlException ex)
                 {
                     Console.WriteLine("Error getting API Key from XML file: " + ex.Message, ex);
                 }
