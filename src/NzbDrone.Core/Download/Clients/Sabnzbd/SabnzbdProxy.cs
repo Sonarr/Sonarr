@@ -97,7 +97,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
-            
         }
 
         public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
@@ -156,7 +155,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             
             if (result.Failed)
-                throw new ApplicationException(result.Error);
+                throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
         }
 
         //TODO: Find a better home for this
