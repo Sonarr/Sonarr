@@ -57,7 +57,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private IRestClient BuildClient(NzbgetSettings settings)
         {
-            var url = String.Format("http://{0}:{1}/jsonrpc",
+            var protocol = settings.UseSsl ? "https" : "http";
+
+            var url = String.Format("{0}//{1}:{2}/jsonrpc",
+                                 protocol,
                                  settings.Host,
                                  settings.Port);
 

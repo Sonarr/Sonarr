@@ -51,6 +51,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(6, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority))]
         public Int32 OlderTvPriority { get; set; }
 
+        [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
+        public Boolean UseSsl { get; set; }
+
         public ValidationResult Validate()
         {
             return Validator.Validate(this);
