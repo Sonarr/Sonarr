@@ -53,7 +53,7 @@ define(
 
                 else {
                     //Open in new tab
-                    window.open(href, '_blank');
+                    window.open('http://www.dereferer.org/?' + encodeURI(href), '_blank');
                 }
             }
         };
