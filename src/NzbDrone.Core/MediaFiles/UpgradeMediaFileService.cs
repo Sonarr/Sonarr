@@ -54,7 +54,7 @@ namespace NzbDrone.Core.MediaFiles
                 _mediaFileService.Delete(file, true);
             }
 
-            moveFileResult.Path = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+            moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
 
             return moveFileResult;
         }

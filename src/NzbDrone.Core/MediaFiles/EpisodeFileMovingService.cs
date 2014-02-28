@@ -15,8 +15,8 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IMoveEpisodeFiles
     {
-        string MoveEpisodeFile(EpisodeFile episodeFile, Series series);
-        string MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
+        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class EpisodeFileMovingService : IMoveEpisodeFiles
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public string MoveEpisodeFile(EpisodeFile episodeFile, Series series)
+        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series)
         {
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
@@ -49,10 +49,10 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Trace("Renaming episode file: {0} to {1}", episodeFile, filePath);
             MoveFile(episodeFile, series, filePath);
 
-            return filePath;
+            return episodeFile;
         }
 
-        public string MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
@@ -60,10 +60,10 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Trace("Moving episode file: {0} to {1}", episodeFile, filePath);
             MoveFile(episodeFile, localEpisode.Series, filePath);
             
-            return filePath;
+            return episodeFile;
         }
 
-        private void MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
+        private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series,() => series).IsNotNull();
@@ -94,6 +94,7 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+            episodeFile.Path = destinationFilename;
 
             try
             {
@@ -141,6 +142,8 @@ namespace NzbDrone.Core.MediaFiles
             {
                 SetPermissions(destinationFilename, _configService.FileChmod);
             }
+
+            return episodeFile;
         }
 
         private void SetPermissions(string path, string permissions)

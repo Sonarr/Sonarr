@@ -116,7 +116,7 @@ namespace NzbDrone.Core.MediaFiles
                 try
                 {
                     _logger.Trace("Renaming episode file: {0}", episodeFile);
-                    episodeFile.Path = _episodeFileMover.MoveEpisodeFile(episodeFile, series);
+                    _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
                     renamed.Add(episodeFile);
