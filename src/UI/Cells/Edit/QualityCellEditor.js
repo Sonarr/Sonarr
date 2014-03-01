@@ -50,7 +50,9 @@ define(
                 var column = this.column;
                 var selected = parseInt(this.$el.val(), 10);
 
-                var qualityProfileItem = _.find(this.schema.get('items'), function(model) { return model.quality.id == selected });
+                var qualityProfileItem = _.find(this.schema.get('items'), function(model) {
+                    return model.quality.id === selected;
+                });
 
                 var newQuality = {
                     proper : false,
