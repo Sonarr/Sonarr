@@ -17,7 +17,12 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _providerRepository;
         private readonly INewznabTestService _newznabTestService;
 
-        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, IContainer container, IEventAggregator eventAggregator, INewznabTestService newznabTestService, Logger logger)
+        public IndexerFactory(IIndexerRepository providerRepository,
+                              IEnumerable<IIndexer> providers,
+                              IContainer container, 
+                              IEventAggregator eventAggregator, 
+                              INewznabTestService newznabTestService, 
+                              Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
             _providerRepository = providerRepository;

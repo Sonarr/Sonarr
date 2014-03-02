@@ -21,8 +21,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(HealthCheckResultType.Error, "No indexers are enabled");
             }
 
-            
-
             if (enabled.All(i => i.SupportsSearching == false))
             {
                 return new HealthCheck(HealthCheckResultType.Warning, "Enabled indexers do not support searching");

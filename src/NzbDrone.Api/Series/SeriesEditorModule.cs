@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Remoting.Messaging;
 using Nancy;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;

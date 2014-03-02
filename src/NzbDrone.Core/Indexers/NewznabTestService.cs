@@ -48,11 +48,11 @@ namespace NzbDrone.Core.Indexers
                 var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
                 throw new ValidationException(new List<ValidationFailure> { apiKeyFailure }.ToArray());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.Warn("Indexer doesn't appear to be Newznab based");
+                _logger.WarnException("Indexer doesn't appear to be Newznab based: " + ex.Message, ex);
 
-                var failure = new ValidationFailure("Url", "Invalid Newznab URL entered");
+                var failure = new ValidationFailure("Url", "Invalid Newznab URL, check log for details");
                 throw new ValidationException(new List<ValidationFailure> { failure }.ToArray());
             }
         }
