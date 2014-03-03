@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>NzbDrone Calendar feed</h3>
+</div>
+<div class="modal-body edit-series-modal">
+    <div class="row">
+        <div>
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="ical-url">iCal feed</label>
+
+                    <div class="controls">
+                        <input type="text" id="ical-url" class="x-ical-url" value="/feed/calendar/NzbDrone.ics" name="ical-url">
+                <span class="help-inline">
+                    <i class="icon-nd-form-info" title="copy this url into your clients subscription form or use the subscribe now link if you have a webcal protocol handler installed"/>
+                </span>
+				or <a href="webcal:///feed/calendar/NzbDrone.ics" id="ical-subscribe-button">subscribe now!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal">close</button>
+</div>
