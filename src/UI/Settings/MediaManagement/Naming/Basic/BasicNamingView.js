@@ -2,11 +2,11 @@
 define(
     [
         'underscore',
-        'vent',
         'marionette',
+        'Config',
         'Settings/MediaManagement/Naming/NamingSampleModel',
         'Mixins/AsModelBoundView'
-    ], function (_, vent, Marionette, NamingSampleModel, AsModelBoundView) {
+    ], function (_, Marionette, Config, NamingSampleModel, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Naming/Basic/BasicNamingViewTemplate',
@@ -35,6 +35,10 @@ define(
             },
 
             _buildFormat: function () {
+                if (Config.getValueBoolean(Config.Keys.AdvancedSettings)) {
+                    return;
+                }
+
                 if (_.has(this.model.changed, 'standardEpisodeFormat') || _.has(this.model.changed, 'dailyEpisodeFormat')) {
                     return;
                 }

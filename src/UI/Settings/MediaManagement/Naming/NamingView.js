@@ -3,12 +3,11 @@ define(
     [
         'underscore',
         'marionette',
-        'Config',
         'Settings/MediaManagement/Naming/NamingSampleModel',
         'Settings/MediaManagement/Naming/Basic/BasicNamingView',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView'
-    ], function (_, Marionette, Config, NamingSampleModel, BasicNamingView, AsModelBoundView, AsValidatedView) {
+    ], function (_, Marionette, NamingSampleModel, BasicNamingView, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.Layout.extend({
             template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
