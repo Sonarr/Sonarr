@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SQLite;
 using NLog.Common;
 using NLog.Config;
 using NLog;
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Instrumentation
             {
                 _repository.Insert(log);
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
                 InternalLogger.Error("Unable to save log event to database: {0}", ex);
                 throw;

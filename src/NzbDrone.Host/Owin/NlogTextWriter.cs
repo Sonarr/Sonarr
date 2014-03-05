@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using NLog;
-using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Host.Owin
 {
