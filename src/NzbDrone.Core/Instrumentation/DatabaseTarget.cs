@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog.Common;
 using NLog.Config;
 using NLog;
 using NLog.Layouts;
@@ -76,10 +77,18 @@ namespace NzbDrone.Core.Instrumentation
                 log.ExceptionType = logEvent.Exception.GetType().ToString();
             }
 
-
+            
             log.Level = logEvent.Level.Name;
 
-            _repository.Insert(log);
+            try
+            {
+                _repository.Insert(log);
+            }
+            catch (Exception ex)
+            {
+                InternalLogger.Error("Unable to save log event to database: {0}", ex);
+                throw;
+            }
         }
 
         public void Handle(ApplicationShutdownRequested message)
