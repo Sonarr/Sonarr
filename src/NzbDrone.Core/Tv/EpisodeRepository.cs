@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
+        List<Episode> EpisodesWithFiles(int seriesId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
         PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
@@ -82,6 +83,12 @@ namespace NzbDrone.Core.Tv
         public List<Episode> GetEpisodeByFileId(int fileId)
         {
             return Query.Where(e => e.EpisodeFileId == fileId).ToList();
+        }
+
+        public List<Episode> EpisodesWithFiles(int seriesId)
+        {
+            return Query.Join<Episode, EpisodeFile>(JoinType.Inner, e => e.EpisodeFile, (e, ef) => e.EpisodeFileId == ef.Id)
+                        .Where(e => e.SeriesId == seriesId);
         }
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials)

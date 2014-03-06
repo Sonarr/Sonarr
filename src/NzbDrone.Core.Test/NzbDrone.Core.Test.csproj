@@ -210,6 +210,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
     <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
     <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWhereCutoffUnmetFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />
