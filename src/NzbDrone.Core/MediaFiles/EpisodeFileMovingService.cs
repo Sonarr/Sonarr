@@ -81,7 +81,15 @@ namespace NzbDrone.Core.MediaFiles
 
             if (!_diskProvider.FolderExists(directoryName))
             {
-                _diskProvider.CreateFolder(directoryName);
+                try
+                {
+                    _diskProvider.CreateFolder(directoryName);
+                }
+                catch (IOException ex)
+                {
+                    _logger.ErrorException("Unable to create directory: " + directoryName, ex);
+                }
+                
                 SetFolderPermissions(directoryName);
 
                 if (!directoryName.PathEquals(series.Path))
