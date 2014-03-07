@@ -32,7 +32,7 @@ namespace NzbDrone.Host.Owin
 
         public override void Write(string value)
         {
-            if (value.ToLower().Contains("error"))
+            if (value.ToLower().Contains("error") && !value.ToLower().Contains("sqlite"))
             {
                 _logger.Error(value);
             }
