@@ -18,7 +18,7 @@ define(
             state: {
                 sortKey: 'title',
                 order  : -1,
-                pageSize: 1000
+                pageSize: 100000
             },
 
             mode: 'client',
