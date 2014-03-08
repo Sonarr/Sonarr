@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Configuration
 
         public string Branch
         {
-            get { return GetValue("Branch", "master"); }
+            get { return GetValue("Branch", "master").ToLowerInvariant(); }
         }
 
         public string Username
