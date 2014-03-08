@@ -7,19 +7,22 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv
 {
     public interface IEpisodeService
     {
         Episode GetEpisode(int id);
-        Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useScene = false);
+        Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
         Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle);
+        List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode GetEpisode(int seriesId, String date);
         Episode FindEpisode(int seriesId, String date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
+        List<Episode> EpisodesWithFiles(int seriesId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec);
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         void UpdateEpisode(Episode episode);
@@ -38,7 +41,6 @@ namespace NzbDrone.Core.Tv
         IHandle<EpisodeFileAddedEvent>,
         IHandleAsync<SeriesDeletedEvent>
     {
-
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
@@ -55,18 +57,19 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.Get(id);
         }
 
-        public Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber, bool useSceneNumbering = false)
+        public Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            if (useSceneNumbering)
-            {
-                return _episodeRepository.FindEpisodeBySceneNumbering(seriesId, seasonNumber, episodeNumber);
-            }
             return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
         }
 
         public Episode FindEpisode(int seriesId, int absoluteEpisodeNumber)
         {
             return _episodeRepository.Find(seriesId, absoluteEpisodeNumber);
+        }
+
+        public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
+        {
+            return _episodeRepository.FindEpisodesBySceneNumbering(seriesId, seasonNumber, episodeNumber);
         }
 
         public Episode GetEpisode(int seriesId, String date)
@@ -88,7 +91,7 @@ namespace NzbDrone.Core.Tv
         {
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
-
+        
         public Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle) 
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
@@ -101,6 +104,11 @@ namespace NzbDrone.Core.Tv
                     // find episode title within search string
                     return (title.Length > 0) && search.Contains(title); 
                 });
+        }
+
+        public List<Episode> EpisodesWithFiles(int seriesId)
+        {
+            return _episodeRepository.EpisodesWithFiles(seriesId);
         }
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec)

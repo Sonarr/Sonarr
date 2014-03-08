@@ -23,7 +23,7 @@ require.config({
         'signalR'                 : 'JsLibraries/jquery.signalR',
         'jquery-ui'               : 'JsLibraries/jquery-ui',
         'jquery.knob'             : 'JsLibraries/jquery.knob',
-        'jquery.easypiechart' : 'JsLibraries/jquery.easypiechart',
+        'jquery.easypiechart'     : 'JsLibraries/jquery.easypiechart',
         'jquery.dotdotdot'        : 'JsLibraries/jquery.dotdotdot',
         'messenger'               : 'JsLibraries/messenger',
         'jquery'                  : 'JsLibraries/jquery',

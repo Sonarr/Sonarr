@@ -2,6 +2,7 @@
 using System.IO;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using RestSharp;
@@ -97,7 +98,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
-            
         }
 
         public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
@@ -113,14 +113,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var protocol = settings.UseSsl ? "https" : "http";
 
-            var url = string.Format(@"{0}://{1}:{2}/api?{3}&apikey={4}&ma_username={5}&ma_password={6}&output=json",
+            var authentication = settings.ApiKey.IsNullOrWhiteSpace() ?
+                                 String.Format("ma_username={0}&ma_password={1}", settings.Username, settings.Password) :
+                                 String.Format("apikey={0}", settings.ApiKey);
+
+            var url = string.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
                                  protocol,
                                  settings.Host,
                                  settings.Port,
                                  action,
-                                 settings.ApiKey,
-                                 settings.Username,
-                                 settings.Password);
+                                 authentication);
 
             _logger.Trace(url);
 
@@ -131,7 +133,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                throw new ApplicationException("Unable to connect to SABnzbd, please check your settings");
+                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings");
             }
 
             SabnzbdJsonError result;
@@ -156,7 +158,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             
             if (result.Failed)
-                throw new ApplicationException(result.Error);
+                throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
         }
 
         //TODO: Find a better home for this

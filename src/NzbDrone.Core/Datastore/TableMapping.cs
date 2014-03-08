@@ -7,6 +7,7 @@ using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
+using NzbDrone.Core.Datastore.Extentions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;

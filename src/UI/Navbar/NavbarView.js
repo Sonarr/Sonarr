@@ -3,10 +3,15 @@ define(
     [
         'marionette',
         'jquery',
+        'Health/HealthView',
         'Navbar/Search'
-    ], function (Marionette, $) {
-        return Marionette.ItemView.extend({
-            template: 'Navbar/NavbarTemplate',
+    ], function (Marionette, $, HealthView) {
+        return Marionette.Layout.extend({
+            template: 'Navbar/NavbarLayoutTemplate',
+
+            regions: {
+                health: '#x-health'
+            },
 
             ui: {
                 search: '.x-series-search'
@@ -18,6 +23,7 @@ define(
 
             onRender: function () {
                 this.ui.search.bindSearch();
+                this.health.show(new HealthView());
             },
 
             onClick: function (event) {
@@ -30,9 +36,9 @@ define(
                 var href = event.target.getAttribute('href');
 
                 //if couldn't find it look up'
-                if (!href && target.parent('a') && target.parent('a')[0]) {
+                if (!href && target.closest('a') && target.closest('a')[0]) {
 
-                    var linkElement = target.parent('a')[0];
+                    var linkElement = target.closest('a')[0];
 
                     href = linkElement.getAttribute('href');
                     this.setActive(linkElement);

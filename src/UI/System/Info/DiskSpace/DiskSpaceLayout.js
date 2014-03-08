@@ -1,7 +1,7 @@
 ﻿'use strict';
 define([
-    'vent',
-    'marionette',
+        'vent',
+        'marionette',
         'backgrid',
         'System/Info/DiskSpace/DiskSpaceCollection',
         'Shared/LoadingView',
@@ -14,6 +14,7 @@ define([
         regions: {
             grid: '#x-grid'
         },
+
         columns:
             [
                 {
@@ -37,6 +38,7 @@ define([
             this.collection = new DiskSpaceCollection();
             this.listenTo(this.collection, 'sync', this._showTable);
         },
+
         onRender : function() {
             this.grid.show(new LoadingView());
         },
@@ -44,6 +46,7 @@ define([
         onShow: function() {
             this.collection.fetch();
         },
+
         _showTable: function() {
             this.grid.show(new Backgrid.Grid({
                 row: Backgrid.Row,

@@ -365,11 +365,6 @@ namespace NzbDrone.Common.Disk
 
         }
 
-        public void SetFolderWriteTime(string path, DateTime time)
-        {
-            Directory.SetLastWriteTimeUtc(path, time);
-        }
-
         private static void RemoveReadOnly(string path)
         {
             if (File.Exists(path))

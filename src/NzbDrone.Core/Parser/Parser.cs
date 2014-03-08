@@ -426,6 +426,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("dutch"))
                 return Language.Dutch;
 
+            if (lowerTitle.Contains("nlsub"))
+                return Language.Dutch;
+
             if (lowerTitle.Contains("japanese"))
                 return Language.Japanese;
 
@@ -461,9 +464,6 @@ namespace NzbDrone.Core.Parser
 
             if (lowerTitle.Contains("portuguese"))
                 return Language.Portuguese;
-
-            if (lowerTitle.Contains("nlsub"))
-                return Language.Norwegian;
 
             var match = LanguageRegex.Match(title);
 

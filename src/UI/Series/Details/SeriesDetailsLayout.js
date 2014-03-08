@@ -141,10 +141,12 @@ define(
                 if (monitored) {
                     this.ui.monitored.addClass('icon-nd-monitored');
                     this.ui.monitored.removeClass('icon-nd-unmonitored');
+                    this.$el.removeClass('series-not-monitored');
                 }
                 else {
                     this.ui.monitored.addClass('icon-nd-unmonitored');
                     this.ui.monitored.removeClass('icon-nd-monitored');
+                    this.$el.addClass('series-not-monitored');
                 }
             },
 

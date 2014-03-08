@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -10,7 +9,7 @@ namespace NzbDrone.Core.MediaFiles
             OldFiles = new List<EpisodeFile>();
         }
 
-        public String Path { get; set; }
+        public EpisodeFile EpisodeFile { get; set; }
         public List<EpisodeFile> OldFiles { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.Port).GreaterThan(0);
-            RuleFor(c => c.Username).NotEmpty();
-            RuleFor(c => c.Password).NotEmpty();
+            RuleFor(c => c.Username).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Password));
+            RuleFor(c => c.Password).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Username));
         }
     }
 
@@ -45,11 +45,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(4, Label = "Category", Type = FieldType.Textbox)]
         public String TvCategory { get; set; }
 
-        [FieldDefinition(5, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority))]
+        [FieldDefinition(5, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
         public Int32 RecentTvPriority { get; set; }
 
-        [FieldDefinition(6, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority))]
+        [FieldDefinition(6, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public Int32 OlderTvPriority { get; set; }
+
+        [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
+        public Boolean UseSsl { get; set; }
 
         public ValidationResult Validate()
         {

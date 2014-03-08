@@ -551,6 +551,23 @@ namespace Marr.Data.QGen
             return Join(joinType, rightMember, filterExpression);
         }
 
+        public virtual QueryBuilder<T> Join<TLeft, TRight>(JoinType joinType, Expression<Func<TLeft, LazyLoaded<TRight>>> rightEntity, Expression<Func<TLeft, TRight, bool>> filterExpression)
+        {
+            _isJoin = true;
+            MemberInfo rightMember = (rightEntity.Body as MemberExpression).Member;
+
+            foreach (var item in EntGraph)
+            {
+                if (item.EntityType == typeof(TLeft))
+                {
+                    var relationship = item.Relationships.Single(v => v.Member == rightMember);
+                    item.AddLazyRelationship(relationship);
+                }
+            }
+
+            return Join(joinType, rightMember, filterExpression);
+        }
+
         public virtual QueryBuilder<T> Join<TLeft, TRight>(JoinType joinType, MemberInfo rightMember, Expression<Func<TLeft, TRight, bool>> filterExpression)
         {
             _isJoin = true;

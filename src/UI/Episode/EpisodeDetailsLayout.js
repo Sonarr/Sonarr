@@ -5,8 +5,9 @@ define(
         'Episode/Summary/EpisodeSummaryLayout',
         'Episode/Search/EpisodeSearchLayout',
         'Episode/Activity/EpisodeActivityLayout',
-        'Series/SeriesCollection'
-    ], function (Marionette, SummaryLayout, SearchLayout, EpisodeActivityLayout, SeriesCollection) {
+        'Series/SeriesCollection',
+        'Shared/Messenger'
+    ], function (Marionette, SummaryLayout, SearchLayout, EpisodeActivityLayout, SeriesCollection, Messenger) {
 
         return Marionette.Layout.extend({
             template: 'Episode/EpisodeDetailsLayoutTemplate',
@@ -37,7 +38,7 @@ define(
             initialize: function (options) {
                 this.templateHelpers.hideSeriesLink = options.hideSeriesLink;
 
-                this.series = SeriesCollection.find({ id: this.model.get('seriesId') });
+                this.series = SeriesCollection.get(this.model.get('seriesId'));
                 this.templateHelpers.series = this.series.toJSON();
                 this.openingTab = options.openingTab || 'summary';
 
@@ -57,6 +58,14 @@ define(
                 }
 
                 this._setMonitoredState();
+
+                if (this.series.get('monitored')) {
+                    this.$el.removeClass('series-not-monitored');
+                }
+
+                else {
+                    this.$el.addClass('series-not-monitored');
+                }
             },
 
             _showSummary: function (e) {
@@ -87,6 +96,16 @@ define(
             },
 
             _toggleMonitored: function () {
+                if (!this.series.get('monitored')) {
+
+                    Messenger.show({
+                        message: 'Unable to change monitored state when series is not monitored',
+                        type   : 'error'
+                    });
+
+                    return;
+                }
+
                 var name = 'monitored';
                 this.model.set(name, !this.model.get(name), { silent: true });
 

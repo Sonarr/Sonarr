@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
@@ -42,9 +43,21 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<QueueItem> GetQueue()
         {
-            var items = _proxy.GetQueue(Settings);
+            List<NzbgetQueueItem> queue;
 
-            foreach (var nzbGetQueueItem in items)
+            try
+            {
+                queue = _proxy.GetQueue(Settings);
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return Enumerable.Empty<QueueItem>();
+            }
+
+            var queueItems = new List<QueueItem>();
+
+            foreach (var nzbGetQueueItem in queue)
             {
                 var queueItem = new QueueItem();
                 queueItem.Id = nzbGetQueueItem.NzbId.ToString();
@@ -60,9 +73,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 if (remoteEpisode.Series == null) continue;
 
                 queueItem.RemoteEpisode = remoteEpisode;
-
-                yield return queueItem;
+                queueItems.Add(queueItem);
             }
+
+            return queueItems;
         }
 
         public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
@@ -80,7 +94,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             throw new NotImplementedException();
         }
 
-        public VersionResponse GetVersion(string host = null, int port = 0, string username = null, string password = null)
+        public override void Test()
+        {
+            _proxy.GetVersion(Settings);
+        }
+
+        private VersionResponse GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
             return _proxy.GetVersion(Settings);
         }

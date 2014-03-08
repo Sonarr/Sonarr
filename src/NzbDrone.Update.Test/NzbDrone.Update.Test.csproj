@@ -36,27 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,6 +47,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StartNzbDroneService.cs" />
@@ -85,11 +79,11 @@
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
-      <Project>{caddfce0-7509-4430-8364-2074e1eefca2}</Project>
+      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Update\NzbDrone.Update.csproj">
-      <Project>{4ccc53cd-8d5e-4cc4-97d2-5c9312ac2bd7}</Project>
+      <Project>{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}</Project>
       <Name>NzbDrone.Update</Name>
     </ProjectReference>
   </ItemGroup>

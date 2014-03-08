@@ -1,6 +1,7 @@
 $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
+$outputFolderOsx = '.\_output_osx'
 $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
 $sourceFolder = '.\src'
@@ -112,6 +113,23 @@ Function PackageMono()
     Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
 }
 
+Function PackageOsx()
+{
+    Write-Host "##teamcity[progressStart 'Creating OS X Package']"
+
+    if(Test-Path $outputFolderOsx)
+    {
+        Remove-Item -Recurse -Force $outputFolderMono -ErrorAction Continue
+    }
+
+    Copy-Item $outputFolderMono $outputFolderOsx -recurse
+
+    Write-Host "Adding sqlite dylibs"
+    Copy-Item "$sourceFolder\Libraries\sqlite\*.dylib" "$outputFolderOsx"
+
+    Write-Host "##teamcity[progressFinish 'Creating OS X Package']"
+}
+
 Function AddJsonNet()
 {
     get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse | foreach ($_) {remove-item $_.fullname}
@@ -187,5 +205,6 @@ Function CleanupWindowsPackage()
 Build
 RunGrunt
 PackageMono
+PackageOsx
 PackageTests
 CleanupWindowsPackage

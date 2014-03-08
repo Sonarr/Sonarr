@@ -174,33 +174,37 @@ namespace NzbDrone.Core.Parser
 
             foreach (var episodeNumber in parsedEpisodeInfo.EpisodeNumbers)
             {
-                Episode episodeInfo = null;
-
                 if (series.UseSceneNumbering && sceneSource)
                 {
+                    List<Episode> episodes = new List<Episode>();
+
                     if (searchCriteria != null)
                     {
-                        episodeInfo = searchCriteria.Episodes.SingleOrDefault(e => e.SceneSeasonNumber == parsedEpisodeInfo.SeasonNumber &&
-                                                                          e.SceneEpisodeNumber == episodeNumber);
+                        episodes = searchCriteria.Episodes.Where(e => e.SceneSeasonNumber == parsedEpisodeInfo.SeasonNumber &&
+                                                                          e.SceneEpisodeNumber == episodeNumber).ToList();
                     }
 
-                    if (episodeInfo == null)
+                    if (!episodes.Any())
                     {
-                        episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber, true);
+                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
                     }
 
-                    if (episodeInfo != null)
+                    if (episodes != null && episodes.Any())
                     {
-                        _logger.Info("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}x{4:00}",
+                        _logger.Info("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}",
                                     series.Title,
-                                    episodeInfo.SceneSeasonNumber,
-                                    episodeInfo.SceneEpisodeNumber,
-                                    episodeInfo.SeasonNumber,
-                                    episodeInfo.EpisodeNumber);
+                                    episodes.First().SceneSeasonNumber,
+                                    episodes.First().SceneEpisodeNumber,
+                                    String.Join(", ", episodes.Select(e => String.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber))));
+
+                        result.AddRange(episodes);
+                        continue;
                     }
                 }
 
-                if (episodeInfo == null && searchCriteria != null)
+                Episode episodeInfo = null;
+
+                if (searchCriteria != null)
                 {
                     episodeInfo = searchCriteria.Episodes.SingleOrDefault(e => e.SeasonNumber == parsedEpisodeInfo.SeasonNumber &&
                                                                           e.EpisodeNumber == episodeNumber);

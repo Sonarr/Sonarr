@@ -50,11 +50,13 @@ define(
                 var column = this.column;
                 var selected = parseInt(this.$el.val(), 10);
 
-                var quality = _.find(this.schema.get('available'), { 'id': selected });
+                var qualityProfileItem = _.find(this.schema.get('items'), function(model) {
+                    return model.quality.id === selected;
+                });
 
                 var newQuality = {
                     proper : false,
-                    quality: quality
+                    quality: qualityProfileItem.quality
                 };
 
                 model.set(column.get('name'), newQuality);

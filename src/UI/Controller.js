@@ -7,7 +7,7 @@ define(
         'History/HistoryLayout',
         'Settings/SettingsLayout',
         'AddSeries/AddSeriesLayout',
-        'Missing/MissingLayout',
+        'Wanted/WantedLayout',
         'Calendar/CalendarLayout',
         'Release/ReleaseLayout',
         'System/SystemLayout',
@@ -20,7 +20,7 @@ define(
                  HistoryLayout,
                  SettingsLayout,
                  AddSeriesLayout,
-                 MissingLayout,
+                 WantedLayout,
                  CalendarLayout,
                  ReleaseLayout,
                  SystemLayout,
@@ -44,10 +44,10 @@ define(
                 this.showMainRegion(new SettingsLayout({ action: action }));
             },
 
-            missing: function () {
-                this.setTitle('Missing');
+            wanted: function (action) {
+                this.setTitle('Wanted');
 
-                this.showMainRegion(new MissingLayout());
+                this.showMainRegion(new WantedLayout({ action: action }));
             },
 
             history: function (action) {

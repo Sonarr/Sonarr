@@ -60,11 +60,21 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             return _queueCache.Get("queue", () =>
             {
-                var sabQueue = _sabnzbdProxy.GetQueue(0, 0, Settings).Items;
+                SabnzbdQueue sabQueue;
+
+                try
+                {
+                    sabQueue = _sabnzbdProxy.GetQueue(0, 0, Settings);
+                }
+                catch (DownloadClientException ex)
+                {
+                    _logger.ErrorException(ex.Message, ex);
+                    return Enumerable.Empty<QueueItem>();
+                }
 
                 var queueItems = new List<QueueItem>();
 
-                foreach (var sabQueueItem in sabQueue)
+                foreach (var sabQueueItem in sabQueue.Items)
                 {
                     var queueItem = new QueueItem();
                     queueItem.Id = sabQueueItem.Id;
@@ -91,10 +101,21 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
         {
-            var items = _sabnzbdProxy.GetHistory(start, limit, Settings).Items;
+            SabnzbdHistory sabHistory;
+
+            try
+            {
+                sabHistory = _sabnzbdProxy.GetHistory(start, limit, Settings);
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return Enumerable.Empty<HistoryItem>();
+            }
+
             var historyItems = new List<HistoryItem>();
 
-            foreach (var sabHistoryItem in items)
+            foreach (var sabHistoryItem in sabHistory.Items)
             {
                 var historyItem = new HistoryItem();
                 historyItem.Id = sabHistoryItem.Id;
@@ -120,6 +141,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public override void RemoveFromHistory(string id)
         {
             _sabnzbdProxy.RemoveFrom("history", id, Settings);
+        }
+
+        public override void Test()
+        {
+            _sabnzbdProxy.GetCategories(Settings);
         }
 
         public void Execute(TestSabnzbdCommand message)

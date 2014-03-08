@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using NUnit.Framework;
@@ -100,18 +101,28 @@ namespace NzbDrone.Test.Common
         private void SetApiKey()
         {
             var configFile = Path.Combine(AppData, "config.xml");
+            var attempts = 0;
 
-            while (ApiKey == null)
+            while (ApiKey == null && attempts < 50)
             {
-                if (File.Exists(configFile))
+                try
                 {
-                    var apiKeyElement =  XDocument.Load(configFile)
-                        .XPathSelectElement("Config/ApiKey");
-                    if (apiKeyElement != null)
+                    if (File.Exists(configFile))
                     {
-                        ApiKey = apiKeyElement.Value;
+                        var apiKeyElement = XDocument.Load(configFile)
+                            .XPathSelectElement("Config/ApiKey");
+                        if (apiKeyElement != null)
+                        {
+                            ApiKey = apiKeyElement.Value;
+                        }
                     }
                 }
+                catch (XmlException ex)
+                {
+                    Console.WriteLine("Error getting API Key from XML file: " + ex.Message, ex);
+                }
+
+                attempts++;
                 Thread.Sleep(1000);
             }
         }

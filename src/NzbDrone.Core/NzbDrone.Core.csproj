@@ -51,26 +51,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentMigrator, Version=1.1.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner, Version=1.1.0.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
     <Reference Include="Growl.Connector">
       <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
     </Reference>
@@ -81,38 +62,41 @@
       <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="Omu.ValueInjecter">
       <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
-    </Reference>
-    <Reference Include="Prowlin, Version=0.9.4456.26422, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.3.3\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="FluentMigrator">
+      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Prowlin">
+      <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.3.3\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
@@ -153,9 +137,11 @@
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
+    <Compile Include="Datastore\Extentions\MappingExtensions.cs" />
+    <Compile Include="Datastore\Extentions\PagingSpecExtensions.cs" />
+    <Compile Include="Datastore\Extentions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
-    <Compile Include="Datastore\MappingExtensions.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
@@ -187,6 +173,7 @@
     <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\029_add_formats_to_naming_config.cs" />
     <Compile Include="Datastore\Migration\031_delete_old_naming_config_columns.cs" />
+    <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\030_add_season_folder_format_to_naming_config.cs" />
     <Compile Include="Datastore\Migration\032_set_default_release_group.cs" />
     <Compile Include="Datastore\Migration\033_add_api_key_to_pushover.cs" />
@@ -209,8 +196,8 @@
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationLogger.cs" />
     <Compile Include="Datastore\Migration\001_initialSetup.cs" />
+    <Compile Include="Datastore\Migration\Framework\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
-    <Compile Include="Datastore\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteColumn.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
@@ -219,8 +206,6 @@
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
-    <Compile Include="Datastore\PagingSpecExtensions.cs" />
-    <Compile Include="Datastore\RelationshipExtensions.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
@@ -247,6 +232,7 @@
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
     <Compile Include="Download\Clients\Blackhole\Blackhole.cs" />
     <Compile Include="Download\Clients\Blackhole\TestBlackholeCommand.cs" />
+    <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\FolderSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\TestNzbgetCommand.cs" />
@@ -279,6 +265,13 @@
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
+    <Compile Include="HealthCheck\CheckHealthCommand.cs" />
+    <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
+    <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
+    <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
+    <Compile Include="HealthCheck\HealthCheck.cs" />
+    <Compile Include="HealthCheck\TriggerHealthCheckEvent.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
@@ -315,6 +308,7 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
     <Compile Include="Lifecycle\Commands\RestartCommand.cs" />
@@ -357,6 +351,8 @@
     <Compile Include="Metadata\MetadataRepository.cs" />
     <Compile Include="Metadata\MetadataService.cs" />
     <Compile Include="Metadata\MetadataType.cs" />
+    <Compile Include="HealthCheck\HealthCheckService.cs" />
+    <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
     <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
@@ -512,11 +508,13 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="Qualities\QualitiesBelowCutoff.cs" />
     <Compile Include="Qualities\QualityModelComparer.cs" />
     <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
+    <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
     <Compile Include="Qualities\QualityProfileInUseException.cs" />
     <Compile Include="Qualities\QualityDefinitionRepository.cs" />
@@ -536,6 +534,7 @@
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="Tv\Actor.cs" />
+    <Compile Include="Tv\EpisodeCutoffService.cs" />
     <Compile Include="Tv\EpisodeService.cs" />
     <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
     <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />

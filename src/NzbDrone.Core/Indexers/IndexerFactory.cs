@@ -2,6 +2,7 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
@@ -16,8 +17,13 @@ namespace NzbDrone.Core.Indexers
         private readonly IIndexerRepository _providerRepository;
         private readonly INewznabTestService _newznabTestService;
 
-        public IndexerFactory(IIndexerRepository providerRepository, IEnumerable<IIndexer> providers, IContainer container, INewznabTestService newznabTestService, Logger logger)
-            : base(providerRepository, providers, container, logger)
+        public IndexerFactory(IIndexerRepository providerRepository,
+                              IEnumerable<IIndexer> providers,
+                              IContainer container, 
+                              IEventAggregator eventAggregator, 
+                              INewznabTestService newznabTestService, 
+                              Logger logger)
+            : base(providerRepository, providers, container, eventAggregator, logger)
         {
             _providerRepository = providerRepository;
             _newznabTestService = newznabTestService;

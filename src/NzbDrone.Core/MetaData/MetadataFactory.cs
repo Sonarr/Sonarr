@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Consumers.Fake;
 using NzbDrone.Core.ThingiProvider;
 
@@ -17,8 +18,8 @@ namespace NzbDrone.Core.Metadata
     {
         private readonly IMetadataRepository _providerRepository;
 
-        public MetadataFactory(IMetadataRepository providerRepository, IEnumerable<IMetadata> providers, IContainer container, Logger logger)
-            : base(providerRepository, providers, container, logger)
+        public MetadataFactory(IMetadataRepository providerRepository, IEnumerable<IMetadata> providers, IContainer container, IEventAggregator eventAggregator, Logger logger)
+            : base(providerRepository, providers, container, eventAggregator, logger)
         {
             _providerRepository = providerRepository;
         }

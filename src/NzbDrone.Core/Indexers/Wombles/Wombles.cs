@@ -22,6 +22,14 @@ namespace NzbDrone.Core.Indexers.Wombles
             }
         }
 
+        public override bool SupportsSearching
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get

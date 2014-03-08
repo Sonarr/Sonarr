@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Jobs
                     }
                     catch (Exception e)
                     {
-                        _logger.ErrorException("Error occurred while execution task " + task.TypeName, e);
+                        _logger.ErrorException("Error occurred while executing task " + task.TypeName, e);
                     }
                 }
             }

@@ -10,6 +10,7 @@ define(
         'AddSeries/RootFolders/RootFolderCollection',
         'Shared/Toolbar/ToolbarLayout',
         'AddSeries/RootFolders/RootFolderLayout',
+        'Series/Editor/Rename/RenameSeriesView',
         'Config'
     ], function (_,
                  Marionette,
@@ -20,6 +21,7 @@ define(
                  RootFolders,
                  ToolbarLayout,
                  RootFolderLayout,
+                 RenameSeriesView,
                  Config) {
         return Marionette.ItemView.extend({
             template: 'Series/Editor/SeriesEditorFooterViewTemplate',
@@ -31,12 +33,14 @@ define(
                 rootFolder    : '.x-root-folder',
                 selectedCount : '.x-selected-count',
                 saveButton    : '.x-save',
+                renameButton  : '.x-rename',
                 container     : '.series-editor-footer'
             },
 
             events: {
                 'click .x-save'        : '_updateAndSave',
-                'change .x-root-folder': '_rootFolderChanged'
+                'change .x-root-folder': '_rootFolderChanged',
+                'click .x-rename'      : '_rename'
             },
 
             templateHelpers: function () {
@@ -115,6 +119,7 @@ define(
                     this.ui.seasonFolder.attr('disabled', '');
                     this.ui.rootFolder.attr('disabled', '');
                     this.ui.saveButton.attr('disabled', '');
+                    this.ui.renameButton.attr('disabled', '');
                 }
 
                 else {
@@ -123,6 +128,7 @@ define(
                     this.ui.seasonFolder.removeAttr('disabled', '');
                     this.ui.rootFolder.removeAttr('disabled', '');
                     this.ui.saveButton.removeAttr('disabled', '');
+                    this.ui.renameButton.removeAttr('disabled', '');
                 }
             },
 
@@ -154,6 +160,14 @@ define(
                     model.trigger('backgrid:select', model, false);
                     model.edited = false;
                 });
+            },
+
+            _rename: function () {
+                var selected = this.editorGrid.getSelectedModels();
+                var renameSeriesView = new RenameSeriesView({ series: selected });
+                this.listenToOnce(renameSeriesView, 'seriesRenamed', this._afterSave);
+
+                vent.trigger(vent.Commands.OpenModalCommand, renameSeriesView);
             }
         });
     });

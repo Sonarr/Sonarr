@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Instrumentation
         {
             var trimDate = DateTime.UtcNow.AddDays(-7).Date;
             Delete(c => c.Time <= trimDate);
+            Vacuum();
         }
     }
 }

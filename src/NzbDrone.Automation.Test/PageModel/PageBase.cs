@@ -72,11 +72,11 @@ namespace NzbDrone.Automation.Test.PageModel
             }
         }
 
-        public IWebElement MissingNavIcon
+        public IWebElement WantedNavIcon
         {
             get
             {
-                return Find(By.LinkText("Missing"));
+                return Find(By.LinkText("Wanted"));
             }
         }
 
@@ -92,7 +92,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("System"));
+                return Find(By.PartialLinkText("System"));
             }
         }
 

@@ -57,7 +57,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private IRestClient BuildClient(NzbgetSettings settings)
         {
-            var url = String.Format("http://{0}:{1}/jsonrpc",
+            var protocol = settings.UseSsl ? "https" : "http";
+
+            var url = String.Format("{0}://{1}:{2}/jsonrpc",
+                                 protocol,
                                  settings.Host,
                                  settings.Port);
 
@@ -82,13 +85,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                throw new ApplicationException("Unable to connect to NzbGet, please check your settings");
+                throw new DownloadClientException("Unable to connect to NzbGet, please check your settings");
             }
 
             var result = Json.Deserialize<JsonError>(response.Content);
 
             if (result.Error != null)
-                throw new ApplicationException(result.Error.ToString());
+                throw new DownloadClientException("Error response received from nzbget: {0}", result.Error.ToString());
         }
     }
 }

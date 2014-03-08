@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.Mapping;
 
-namespace NzbDrone.Core.Datastore
+namespace NzbDrone.Core.Datastore.Extentions
 {
     public static class RelationshipExtensions
     {

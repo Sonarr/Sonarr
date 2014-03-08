@@ -1,19 +1,21 @@
 ﻿'use strict';
 define(
     [
+        'underscore',
         'Series/EpisodeModel',
         'backbone.pageable',
+        'Mixins/AsFilteredCollection',
         'Mixins/AsPersistedStateCollection'
-    ], function (EpisodeModel, PagableCollection, AsPersistedStateCollection) {
+    ], function (_, EpisodeModel, PagableCollection, AsFilteredCollection, AsPersistedStateCollection) {
         var collection = PagableCollection.extend({
-            url  : window.NzbDrone.ApiRoot + '/missing',
+            url  : window.NzbDrone.ApiRoot + '/wanted/missing',
             model: EpisodeModel,
-            tableName: 'missing',
+            tableName: 'wanted.missing',
 
             state: {
-                pageSize: 15,
-                sortKey : 'airDateUtc',
-                order   : 1
+                pageSize    : 15,
+                sortKey     : 'airDateUtc',
+                order       : 1
             },
 
             queryParams: {
@@ -26,6 +28,11 @@ define(
                     '-1': 'asc',
                     '1' : 'desc'
                 }
+            },
+
+            filterModes: {
+                'monitored'   : ['monitored', 'true'],
+                'unmonitored' : ['monitored', 'false']
             },
 
             parseState: function (resp) {
@@ -41,5 +48,6 @@ define(
             }
         });
 
+        collection = AsFilteredCollection.call(collection);
         return AsPersistedStateCollection.call(collection);
     });

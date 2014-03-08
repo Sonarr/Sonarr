@@ -48,7 +48,7 @@ define(
 
             number: function (input) {
                 if (!input) {
-                    return '';
+                    return '0';
                 }
 
                 return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

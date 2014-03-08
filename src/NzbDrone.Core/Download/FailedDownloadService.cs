@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Commands;
@@ -72,8 +73,7 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
-                if (failedHistory.Any(h => h.Data.ContainsKey(DOWNLOAD_CLIENT_ID) &&
-                                           h.Data[DOWNLOAD_CLIENT_ID].Equals(failedLocal.Id)))
+                if (failedHistory.Any(h => failedLocal.Id.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID))))
                 {
                     _logger.Trace("Already added to history as failed");
                     continue;
@@ -118,8 +118,7 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
-                if (failedHistory.Any(h => h.Data.ContainsKey(DOWNLOAD_CLIENT_ID) &&
-                                           h.Data[DOWNLOAD_CLIENT_ID].Equals(failedLocal.Id)))
+                if (failedHistory.Any(h => failedLocal.Id.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID))))
                 {
                     _logger.Trace("Already added to history as failed");
                     continue;
@@ -137,8 +136,7 @@ namespace NzbDrone.Core.Download
 
         private List<History.History> GetHistoryItems(List<History.History> grabbedHistory, string downloadClientId)
         {
-            return grabbedHistory.Where(h => h.Data.ContainsKey(DOWNLOAD_CLIENT_ID) &&
-                                             h.Data[DOWNLOAD_CLIENT_ID].Equals(downloadClientId))
+            return grabbedHistory.Where(h => downloadClientId.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID)))
                                  .ToList();
         }
 
@@ -148,17 +146,14 @@ namespace NzbDrone.Core.Download
             string downloadClient;
             string downloadClientId;
 
-            historyItem.Data.TryGetValue(DOWNLOAD_CLIENT, out downloadClient);
-            historyItem.Data.TryGetValue(DOWNLOAD_CLIENT_ID, out downloadClientId);
-
             _eventAggregator.PublishEvent(new DownloadFailedEvent
             {
                 SeriesId = historyItem.SeriesId,
                 EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
                 Quality = historyItem.Quality,
                 SourceTitle = historyItem.SourceTitle,
-                DownloadClient = downloadClient,
-                DownloadClientId = downloadClientId,
+                DownloadClient = historyItem.Data.GetValueOrDefault(DOWNLOAD_CLIENT),
+                DownloadClientId = historyItem.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID),
                 Message = message
             });
         }

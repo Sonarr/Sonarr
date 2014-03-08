@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using RestSharp;
 using NzbDrone.Core.Rest;
 
@@ -36,6 +37,7 @@ namespace NzbDrone.Core.Update
 
             var request = new RestRequest("/v1/update/{branch}/changes");
 
+            request.AddParameter("majorVersion", BuildInfo.Version.Major);
             request.AddUrlSegment("branch", branch);
 
             var updates = restClient.ExecuteAndValidate<List<UpdatePackage>>(request);

@@ -21,7 +21,8 @@ namespace NzbDrone.Core.MediaFiles
     }
 
     public class RenameEpisodeFileService : IRenameEpisodeFileService,
-                                            IExecute<RenameFilesCommand>
+                                            IExecute<RenameFilesCommand>,
+                                            IExecute<RenameSeriesCommand>
     {
         private readonly ISeriesService _seriesService;
         private readonly IMediaFileService _mediaFileService;
@@ -115,7 +116,7 @@ namespace NzbDrone.Core.MediaFiles
                 try
                 {
                     _logger.Trace("Renaming episode file: {0}", episodeFile);
-                    episodeFile.Path = _episodeFileMover.MoveEpisodeFile(episodeFile, series);
+                    _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
                     renamed.Add(episodeFile);
@@ -145,7 +146,21 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.ProgressInfo("Renaming {0} files for {1}", episodeFiles.Count, series.Title);
             RenameFiles(episodeFiles, series);
-            _logger.ProgressInfo("Selected Episode Files renamed for {0}", series.Title);
+            _logger.ProgressInfo("Selected episode files renamed for {0}", series.Title);
+        }
+
+        public void Execute(RenameSeriesCommand message)
+        {
+            _logger.Trace("Renaming all files for selected series");
+            var seriesToRename = _seriesService.GetSeries(message.SeriesIds);
+
+            foreach (var series in seriesToRename)
+            {
+                var episodeFiles = _mediaFileService.GetFilesBySeries(series.Id);
+                _logger.ProgressInfo("Renaming all files in series: {0}", series.Title);
+                RenameFiles(episodeFiles, series);
+                _logger.ProgressInfo("All episode files renamed for {0}", series.Title);
+            }
         }
     }
 }

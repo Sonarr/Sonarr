@@ -69,14 +69,19 @@ namespace NzbDrone.Core.DiskSpace
 
                 try
                 {
-                    var freeSpace = _diskProvider.GetAvailableSpace(path).Value;
-                    var totalSpace = _diskProvider.GetTotalSize(path).Value;
+                    var freeSpace = _diskProvider.GetAvailableSpace(path);
+                    var totalSpace = _diskProvider.GetTotalSize(path);
+
+                    if (!freeSpace.HasValue || !totalSpace.HasValue)
+                    {
+                        continue;
+                    }
 
                     diskSpace = new DiskSpace
                                 {
                                     Path = path,
-                                    FreeSpace = freeSpace,
-                                    TotalSpace = totalSpace
+                                    FreeSpace = freeSpace.Value,
+                                    TotalSpace = totalSpace.Value
                                 };
 
                     diskSpace.Label = _diskProvider.GetVolumeLabel(path);

@@ -80,7 +80,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
                         var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
-                        episodeFile.Path = moveResult.Path;
                         oldFiles = moveResult.OldFiles;
                     }
 

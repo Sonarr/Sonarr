@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.ThingiProvider
     {
         private readonly IProviderRepository<TProviderDefinition> _providerRepository;
         private readonly IContainer _container;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         protected readonly List<TProvider> _providers;
@@ -21,10 +23,12 @@ namespace NzbDrone.Core.ThingiProvider
         protected ProviderFactory(IProviderRepository<TProviderDefinition> providerRepository,
                                   IEnumerable<TProvider> providers,
                                   IContainer container,
+                                  IEventAggregator eventAggregator,
                                   Logger logger)
         {
             _providerRepository = providerRepository;
             _container = container;
+            _eventAggregator = eventAggregator;
             _providers = providers.ToList();
             _logger = logger;
         }
@@ -62,6 +66,7 @@ namespace NzbDrone.Core.ThingiProvider
         public virtual void Update(TProviderDefinition definition)
         {
             _providerRepository.Update(definition);
+            _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>());
         }
 
         public void Delete(int id)

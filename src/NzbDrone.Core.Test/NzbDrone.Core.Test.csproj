@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{193ADD3B-792B-4173-8E4C-5A3F8F0237F0}</ProjectGuid>
@@ -23,6 +23,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -32,6 +34,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -40,72 +43,63 @@
     <Reference Include="AutoMoq">
       <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator, Version=1.1.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner, Version=1.1.0.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.Unity.Configuration">
       <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="NCrunch.Framework, Version=1.46.0.9, Culture=neutral, PublicKeyToken=01d101bf6f3e0aea, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NCrunch.Framework.1.46.0.9\lib\net35\NCrunch.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Prowlin, Version=0.9.4456.26422, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12">
+      <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator">
+      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="NCrunch.Framework">
+      <HintPath>..\packages\NCrunch.Framework.1.46.0.9\lib\net35\NCrunch.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Prowlin">
+      <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blacklisting\BlacklistServiceFixture.cs" />
     <Compile Include="Blacklisting\BlacklistRepositoryFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
+    <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
+    <Compile Include="Datastore\DatabaseFixture.cs" />
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
@@ -131,6 +125,11 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="HealthCheck\Checks\UpdateCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\DroneFactoryCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\HealthCheckFixtureExtentions.cs" />
     <Compile Include="HistoryTests\HistoryServiceFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />
@@ -211,6 +210,8 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
     <Compile Include="ThingiProviderTests\NullConfigFixture.cs" />
     <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithFilesFixture.cs" />
+    <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWhereCutoffUnmetFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\EpisodeProviderTests\HandleEpisodeFileDeletedFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />
@@ -254,7 +255,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
-      <Project>{f6fc6be7-0847-4817-a1ed-223dc647c3d7}</Project>
+      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
       <Name>Marr.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
