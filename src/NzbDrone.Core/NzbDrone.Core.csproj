@@ -308,6 +308,7 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="MediaFiles\Commands\AirDateSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
@@ -318,9 +319,11 @@
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="MediaFiles\Events\SeriesScannedEvent.cs" />
+    <Compile Include="MediaFiles\Events\SeriesAirDatedEvent.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFilePreview.cs" />
+    <Compile Include="MediaFiles\UpdateEpisodeFileService.cs" />
     <Compile Include="Messaging\Commands\CommandExecutor.cs" />
     <Compile Include="Messaging\Commands\ICommandExecutor.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />

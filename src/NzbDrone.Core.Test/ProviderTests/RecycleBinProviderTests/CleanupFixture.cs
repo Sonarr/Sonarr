@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFolderWrite(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-10));
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFileWrite(It.IsAny<String>()))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFileWriteUTC(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-10));
         }
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFolderWrite(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-3));
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFileWrite(It.IsAny<String>()))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFileWriteUTC(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-3));
         }
 

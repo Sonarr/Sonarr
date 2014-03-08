@@ -67,7 +67,7 @@ namespace NzbDrone.Core.MediaCover
 
                 if (_diskProvider.FileExists(filePath))
                 {
-                    var lastWrite = _diskProvider.GetLastFileWrite(filePath);
+                    var lastWrite = _diskProvider.GetLastFileWriteUTC(filePath);
                     mediaCover.Url += "?lastWrite=" + lastWrite.Ticks;
                 }
             }

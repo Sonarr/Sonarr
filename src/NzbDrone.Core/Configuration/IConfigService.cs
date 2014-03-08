@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Configuration
 
         //Media Management
         Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
+        Boolean FileDateAiredDate { get; set; }
         String RecycleBin { get; set; }
         Boolean AutoDownloadPropers { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }

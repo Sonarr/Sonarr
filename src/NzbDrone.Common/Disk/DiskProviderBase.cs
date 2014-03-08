@@ -78,14 +78,26 @@ namespace NzbDrone.Common.Disk
 
         public DateTime GetLastFileWrite(string path)
         {
+            PathEnsureFileExists(path);
+
+            return new FileInfo(path).LastWriteTime;
+        }
+
+        public DateTime GetLastFileWriteUTC(string path)
+        {
+            PathEnsureFileExists(path);
+
+            return new FileInfo(path).LastWriteTimeUtc;
+        }
+
+        private void PathEnsureFileExists(string path)
+        {
             Ensure.That(path, () => path).IsValidPath();
 
             if (!FileExists(path))
             {
                 throw new FileNotFoundException("File doesn't exist: " + path);
             }
-
-            return new FileInfo(path).LastWriteTimeUtc;
         }
 
         public void EnsureFolder(string path)
@@ -303,6 +315,26 @@ namespace NzbDrone.Common.Disk
             Ensure.That(path, () => path).IsValidPath();
 
             Directory.SetLastWriteTimeUtc(path, dateTime);
+        }
+
+        public void FileSetLastWriteTime(string path, DateTime dateTime)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            File.SetLastWriteTime(path, dateTime);
+        }
+        public void FileSetLastAccessTime(string path, DateTime dateTime)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            File.SetLastAccessTimeUtc(path, dateTime);
+        }
+
+        public void FileSetLastAccessTimeUtc(string path, DateTime dateTime)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            File.SetLastAccessTimeUtc(path, dateTime);
         }
 
         public bool IsFileLocked(string file)
