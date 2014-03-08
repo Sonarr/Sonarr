@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         public void finds_update_when_version_lower()
         {
             UseRealHttp();
-            Subject.GetLatestUpdate("master", new Version(1, 0)).Should().NotBeNull();
+            Subject.GetLatestUpdate("master", new Version(2, 0)).Should().NotBeNull();
         }
     }
 }
