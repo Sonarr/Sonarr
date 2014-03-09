@@ -57,7 +57,9 @@
   min-height : 500px;
 }
 
-#scroll-up {
+#scroll-up,
+#maximus-fanart,
+#minimus-fanart {
   .clickable;
 
   &:hover {
@@ -68,10 +70,23 @@
   .opacity   (0.2);
   position  : fixed;
   bottom    : 50px;
-  right     : 50px;
   display   : none;
   font-size : 56px;
   color     : white;
+}
+
+#scroll-up {
+  right     : 50px;  
+}
+
+#maximus-fanart,
+#minimus-fanart {
+  right     : 105px;  
+}
+
+.hidden {
+  right     : -9000px !important;
+  position  : absolute !important;
 }
 
 .control-panel-visible {
