@@ -119,7 +119,7 @@ Function PackageOsx()
 
     if(Test-Path $outputFolderOsx)
     {
-        Remove-Item -Recurse -Force $outputFolderMono -ErrorAction Continue
+        Remove-Item -Recurse -Force $outputFolderOsx -ErrorAction Continue
     }
 
     Copy-Item $outputFolderMono $outputFolderOsx -recurse
