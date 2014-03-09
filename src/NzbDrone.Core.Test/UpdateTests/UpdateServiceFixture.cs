@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         private readonly UpdatePackage _updatePackage = new UpdatePackage
         {
             FileName = "NzbDrone.develop.2.0.0.zip",
-            Url = "http://update.nzbdrone.com/v2/develop/NzbDrone.develop.zip",
+            Url = "http://update.nzbdrone.com/v2/develop/windows/NzbDrone.develop.zip",
             Version = new Version("2.0.0")
         };
 
