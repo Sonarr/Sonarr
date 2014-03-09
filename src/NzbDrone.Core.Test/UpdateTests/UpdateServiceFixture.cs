@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             updateSubFolder.Refresh();
 
             updateSubFolder.Exists.Should().BeTrue();
-            updateSubFolder.GetDirectories("nzbdrone").Should().HaveCount(1);
+            updateSubFolder.GetDirectories("NzbDrone").Should().HaveCount(1);
             updateSubFolder.GetDirectories().Should().HaveCount(1);
             updateSubFolder.GetFiles().Should().NotBeEmpty();
         }
