@@ -36,7 +36,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             {
                 if (Directory.GetParent(localEpisode.Path).Name.StartsWith(workingFolder))
                 {
-                    if (OsInfo.IsLinux)
+                    if (OsInfo.IsMono)
                     {
                         _logger.Trace("{0} is still being unpacked", localEpisode.Path);
                         return false;

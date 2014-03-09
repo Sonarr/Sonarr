@@ -106,12 +106,12 @@ namespace NzbDrone.Host
                 return ApplicationModes.Help;
             }
 
-            if (!OsInfo.IsLinux && startupContext.InstallService)
+            if (!OsInfo.IsMono && startupContext.InstallService)
             {
                 return ApplicationModes.InstallService;
             }
 
-            if (!OsInfo.IsLinux && startupContext.UninstallService)
+            if (!OsInfo.IsMono && startupContext.UninstallService)
             {
                 return ApplicationModes.UninstallService;
             }

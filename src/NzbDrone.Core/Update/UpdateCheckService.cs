@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
-            if (OsInfo.IsLinux) return null;
+            if (OsInfo.IsMono) return null;
 
             var latestAvailable = _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
 

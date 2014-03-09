@@ -7,7 +7,7 @@ namespace NzbDrone.Test.Common
     {
         public static string AsOsAgnostic(this string path)
         {
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 if (path.Length > 2 && path[1] == ':')
                 {

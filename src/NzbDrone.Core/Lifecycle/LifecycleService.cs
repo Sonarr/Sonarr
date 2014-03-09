@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Lifecycle
         {
             _logger.Info("Restart requested.");
 
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
             }

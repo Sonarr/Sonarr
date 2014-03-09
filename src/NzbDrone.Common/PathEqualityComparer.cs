@@ -20,7 +20,7 @@ namespace NzbDrone.Common
 
         public int GetHashCode(string obj)
         {
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 return obj.CleanFilePath().GetHashCode();
             }

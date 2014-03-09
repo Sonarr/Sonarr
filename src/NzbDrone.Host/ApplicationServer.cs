@@ -53,7 +53,7 @@ namespace NzbDrone.Host
 
         public void Start()
         {
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 Console.CancelKeyPress += (sender, eventArgs) => _processProvider.Kill(_processProvider.GetCurrentProcess().Id);
             }
@@ -90,7 +90,7 @@ namespace NzbDrone.Host
 
         public void Handle(ApplicationShutdownRequested message)
         {
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 _processProvider.Kill(_processProvider.GetCurrentProcess().Id);
             }

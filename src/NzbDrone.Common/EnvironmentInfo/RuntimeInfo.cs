@@ -78,7 +78,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return (OsInfo.IsWindows &&
                         IsUserInteractive &&
                         ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase)) ||
-                        OsInfo.IsLinux;
+                        OsInfo.IsMono;
             } 
         }
 

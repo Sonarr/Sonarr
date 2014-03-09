@@ -90,7 +90,7 @@ namespace NzbDrone.Host.AccessControl
 
         private bool IsFirewallEnabled()
         {
-            if (OsInfo.IsLinux) return false;
+            if (OsInfo.IsMono) return false;
 
             try
             {

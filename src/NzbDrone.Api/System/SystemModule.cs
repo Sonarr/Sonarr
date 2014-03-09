@@ -16,7 +16,11 @@ namespace NzbDrone.Api.System
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IDatabase _database;
 
-        public SystemModule(IAppFolderInfo appFolderInfo, IRuntimeInfo runtimeInfo, IRouteCacheProvider routeCacheProvider, IConfigFileProvider configFileProvider, IDatabase database)
+        public SystemModule(IAppFolderInfo appFolderInfo,
+                            IRuntimeInfo runtimeInfo,
+                            IRouteCacheProvider routeCacheProvider,
+                            IConfigFileProvider configFileProvider,
+                            IDatabase database)
             : base("system")
         {
             _appFolderInfo = appFolderInfo;
@@ -41,8 +45,10 @@ namespace NzbDrone.Api.System
                     StartupPath = _appFolderInfo.StartUpFolder,
                     AppData = _appFolderInfo.GetAppDataPath(),
                     OsVersion = OsInfo.Version.ToString(),
+                    IsMonoRuntime = OsInfo.IsMono,
                     IsMono = OsInfo.IsMono,
-                    IsLinux = OsInfo.IsLinux,
+                    IsLinux = OsInfo.IsMono,
+                    IsOsx = OsInfo.IsOsx,
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled,
@@ -50,9 +56,7 @@ namespace NzbDrone.Api.System
                     SqliteVersion = _database.Version,
                     UrlBase = _configFileProvider.UrlBase
                 }.AsResponse();
-
         }
-
 
         private Response GetRoutes()
         {

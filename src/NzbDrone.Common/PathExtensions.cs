@@ -29,7 +29,7 @@ namespace NzbDrone.Common
 
             var info = new FileInfo(path.Trim());
 
-            if (!OsInfo.IsLinux && info.FullName.StartsWith(@"\\")) //UNC
+            if (!OsInfo.IsMono && info.FullName.StartsWith(@"\\")) //UNC
             {
                 return info.FullName.TrimEnd('/', '\\', ' ');
             }
@@ -39,7 +39,7 @@ namespace NzbDrone.Common
 
         public static bool PathEquals(this string firstPath, string secondPath)
         {
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 if (firstPath.Equals(secondPath)) return true;
                 return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath());
@@ -58,7 +58,7 @@ namespace NzbDrone.Common
                 return false;
             }
 
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
                 return path.StartsWith(Path.DirectorySeparatorChar.ToString());
             }
@@ -97,7 +97,7 @@ namespace NzbDrone.Common
 
         public static string GetActualCasing(this string path)
         {
-            if (OsInfo.IsLinux || path.StartsWith("\\"))
+            if (OsInfo.IsMono || path.StartsWith("\\"))
             {
                 return path;
             }

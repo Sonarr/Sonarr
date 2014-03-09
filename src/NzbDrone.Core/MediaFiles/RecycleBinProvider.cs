@@ -73,7 +73,7 @@ namespace NzbDrone.Core.MediaFiles
             {
                 logger.Info("Recycling Bin has not been configured, deleting permanently.");
 
-                if (!OsInfo.IsLinux)
+                if (!OsInfo.IsMono)
                 {
                     logger.Trace(_diskProvider.GetFileAttributes(path));
                 }
