@@ -362,6 +362,9 @@
     <None Include="Files\SceneMappings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Files\TestArchive.tar.gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\TestArchive.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

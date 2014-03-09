@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Common;
 using System.IO;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
@@ -13,7 +14,9 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         public void Should_extract_to_correct_folder()
         {
             var destination = Path.Combine(TempFolder, "destination");
-            Subject.Extract(GetTestFilePath("TestArchive.zip"), destination);
+            var testArchive = OsInfo.IsWindows ? "TestArchive.zip" : "TestArchive.tar.gz";
+
+            Subject.Extract(GetTestFilePath(testArchive), destination);
 
             var destinationFolder = new DirectoryInfo(destination);
 
