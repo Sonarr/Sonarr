@@ -21,17 +21,30 @@ namespace NzbDrone.Core.Test.UpdateTests
     {
         private string _sandboxFolder;
 
-        private readonly UpdatePackage _updatePackage = new UpdatePackage
-        {
-            FileName = "NzbDrone.develop.2.0.0.zip",
-            Url = "http://update.nzbdrone.com/v2/develop/windows/NzbDrone.develop.zip",
-            Version = new Version("2.0.0")
-        };
+        private UpdatePackage _updatePackage;
 
         [SetUp]
         public void Setup()
         {
-            WindowsOnly();
+            if (OsInfo.IsLinux)
+            {
+                _updatePackage = new UpdatePackage
+                {
+                    FileName = "NzbDrone.develop.2.0.0.0.tar.gz",
+                    Url = "http://update.nzbdrone.com/v2/develop/mono/NzbDrone.develop.tar.gz",
+                    Version = new Version("2.0.0.0")
+                };
+            }
+
+            else
+            {
+                _updatePackage = new UpdatePackage
+                {
+                    FileName = "NzbDrone.develop.2.0.0.0.zip",
+                    Url = "http://update.nzbdrone.com/v2/develop/windows/NzbDrone.develop.zip",
+                    Version = new Version("2.0.0.0")
+                };
+            }
 
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.TempFolder).Returns(TempFolder);
             Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns(_updatePackage);
@@ -40,7 +53,6 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             _sandboxFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder();
         }
-
 
 
         [Test]

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.GZip;
+using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common
 {
@@ -24,6 +27,21 @@ namespace NzbDrone.Common
         {
             _logger.Trace("Extracting archive [{0}] to [{1}]", compressedFile, destination);
 
+            if (OsInfo.IsWindows)
+            {
+                ExtractZip(compressedFile, destination);
+            }
+
+            else
+            {
+                ExtractTgz(compressedFile, destination);
+            }
+
+            _logger.Trace("Extraction complete.");
+        }
+
+        private void ExtractZip(string compressedFile, string destination)
+        {
             using (var fileStream = File.OpenRead(compressedFile))
             {
                 var zipFile = new ZipFile(fileStream);
@@ -64,8 +82,19 @@ namespace NzbDrone.Common
                     }
                 }
             }
+        }
 
-            _logger.Trace("Extraction complete.");
+        private void ExtractTgz(string compressedFile, string destination)
+        {
+            Stream inStream = File.OpenRead(compressedFile);
+            Stream gzipStream = new GZipInputStream(inStream);
+
+            TarArchive tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
+            tarArchive.ExtractContents(destination);
+            tarArchive.Close();
+
+            gzipStream.Close();
+            inStream.Close();
         }
 
         private void OnZipError(TestStatus status, string message)
