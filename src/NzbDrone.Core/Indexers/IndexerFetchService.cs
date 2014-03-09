@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Indexers
 
             var result = Fetch(indexer, indexer.RecentFeed);
 
-            _logger.Debug("Finished processing feeds from " + indexer);
+            _logger.Debug("Finished processing feeds from {0} found {1} releases", indexer, result.Count);
 
             return result;
         }

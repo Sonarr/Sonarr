@@ -24,7 +24,7 @@ namespace NzbDrone.Host
                 GlobalExceptionHandlers.Register();
                 IgnoreCertErrorPolicy.Register();
 
-                Logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+                Logger.Info("Starting NzbDrone - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
 
                 if (!PlatformValidation.IsValidate(userAlert))
                 {
