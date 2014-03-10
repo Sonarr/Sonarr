@@ -14,6 +14,7 @@ namespace NzbDrone.Api.Config
         public String Password { get; set; }
         public String LogLevel { get; set; }
         public String Branch { get; set; }
+        public Boolean AutoUpdate { get; set; }
         public String ApiKey { get; set; }
         public Boolean Torrent { get; set; }
         public String SslCertHash { get; set; }

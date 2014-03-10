@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Datastore;
 
@@ -59,6 +60,11 @@ namespace NzbDrone.Host
         {
             if (!IsInUtilityMode(applicationModes))
             {
+                if (startupContext.Flags.Contains(StartupContext.RESTART))
+                {
+                    Thread.Sleep(2000);
+                }
+
                 EnsureSingleInstance(applicationModes == ApplicationModes.Service, startupContext);
             }
 
@@ -73,12 +79,7 @@ namespace NzbDrone.Host
                 return;
             }
 
-            var runTimeInfo = _container.Resolve<IRuntimeInfo>();
-
-            while (runTimeInfo.IsRunning)
-            {
-                Thread.Sleep(1000);
-            }
+            _container.Resolve<IWaitForExit>().Spin();
         }
 
         private static void EnsureSingleInstance(bool isService, StartupContext startupContext)

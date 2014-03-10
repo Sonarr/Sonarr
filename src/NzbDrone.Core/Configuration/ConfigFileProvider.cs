@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
+        bool AutoUpdate { get; }
         string ApiKey { get; }
         bool Torrent { get; }
         string SslCertHash { get; }
@@ -131,6 +132,11 @@ namespace NzbDrone.Core.Configuration
         public string Branch
         {
             get { return GetValue("Branch", "master").ToLowerInvariant(); }
+        }
+
+        public bool AutoUpdate
+        {
+            get { return GetValueBoolean("AutoUpdate", false, persist: false); }
         }
 
         public string Username

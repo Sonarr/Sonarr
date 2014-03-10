@@ -48,21 +48,11 @@ namespace NzbDrone.Core.Lifecycle
         {
             _logger.Info("Restart requested.");
 
-            if (OsInfo.IsMono)
-            {
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
-            }
-
             _eventAggregator.PublishEvent(new ApplicationShutdownRequested(true));
 
             if (_runtimeInfo.IsWindowsService)
             {
                 _serviceProvider.Restart(ServiceProvider.NZBDRONE_SERVICE_NAME);
-            }
-
-            else
-            {
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
             }
         }
     }

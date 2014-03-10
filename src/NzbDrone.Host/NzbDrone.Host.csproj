@@ -101,6 +101,7 @@
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
     <Compile Include="BrowserService.cs" />
+    <Compile Include="SpinService.cs" />
     <Compile Include="SingleInstancePolicy.cs" />
     <Compile Include="IUserAlert.cs" />
     <Compile Include="Owin\NlogTextWriter.cs" />
