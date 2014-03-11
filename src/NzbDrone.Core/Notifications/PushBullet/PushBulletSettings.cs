@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.pushbullet.com/")]
         public String ApiKey { get; set; }
 
-        [FieldDefinition(1, Label = "Device ID")]
+        [FieldDefinition(1, Label = "Device ID", HelpText = "device_iden in the device's URL on pubshbullet.com")]
         public String DeviceId { get; set; }
 
         public bool IsValid
