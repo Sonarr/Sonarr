@@ -2,7 +2,7 @@
     {{#each handles}}
         <li {{#if className}}class="{{className}}"{{/if}} >
             {{#if pageNumber}}
-                <span>{{pageNumber}} / {{lastPage}}</span>
+                <span class="x-page-number">{{pageNumber}} / {{lastPage}}</span>
             {{else}}
             <i class="pager-btn clickable {{label}}" data-action="{{action}}"/>
             {{/if}}
