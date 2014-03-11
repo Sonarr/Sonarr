@@ -202,8 +202,6 @@ namespace NzbDrone.Core.Tv
                     var folderName = new DirectoryInfo(s.Path).Name;
                     s.Path = Path.Combine(s.RootFolderPath, folderName);
                 }
-
-                _eventAggregator.PublishEvent(new SeriesEditedEvent(s));
             }
 
             _seriesRepository.UpdateMany(series);
