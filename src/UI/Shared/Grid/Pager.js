@@ -11,10 +11,10 @@ define(
             template: 'Shared/Grid/PagerTemplate',
 
             events: {
-                'click .pager-btn'             : 'changePage',
-                'click .x-page-number'         : '_showPageJumper',
-                'change .x-page-number select' : '_jumpToPage',
-                'blur .x-page-number select'   : 'render'
+                'click .pager-btn'      : 'changePage',
+                'click .x-page-number'  : '_showPageJumper',
+                'change .x-page-select' : '_jumpToPage',
+                'blur .x-page-select'   : 'render'
             },
 
             windowSize: 1,
@@ -176,12 +176,15 @@ define(
                 this.$el.find('.x-page-number').html(templateFunction({
                     pages      : pages
                 }));
-
-                this.$el.find('.x-page-number select').trigger('click');
             },
 
             _jumpToPage: function () {
-                var selectedPage = parseInt(this.$el.find('.x-page-number select').val(), 10);
+                var target = this.$el.find('.x-page-select');
+
+                //Remove event handlers so the blur event is not triggered
+                this.undelegateEvents();
+
+                var selectedPage = parseInt(target.val(), 10);
 
                 this.$el.find('.x-page-number').html('<i class="icon-spinner icon-spin"></i>');
                 this.collection.getPage(selectedPage);
