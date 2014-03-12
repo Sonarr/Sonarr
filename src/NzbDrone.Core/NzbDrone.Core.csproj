@@ -334,6 +334,8 @@
     <Compile Include="MetadataSource\Trakt\Actor.cs" />
     <Compile Include="MetadataSource\Trakt\People.cs" />
     <Compile Include="MetadataSource\Trakt\Ratings.cs" />
+    <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadata.cs" />
+    <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadataSettings.cs" />
     <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Consumers\Fake\Fake.cs" />
     <Compile Include="Metadata\Consumers\Fake\FakeSettings.cs" />
