@@ -9,10 +9,11 @@ define(
     ], function (_, vent, Backbone, Marionette, CommandController) {
 
         return  Marionette.ItemView.extend({
-            template: 'Series/Editor/Rename/RenameSeriesViewTemplate',
+            template: 'Series/Editor/UpdateFiles/UpdateFilesSeriesViewTemplate',
 
             events: {
-                'click .x-confirm-rename': '_rename'
+                'click .x-confirm-rename': '_rename',
+                'click .x-confirm-airdate': '_setFileAirDate'
             },
 
             initialize: function (options) {
@@ -29,7 +30,19 @@ define(
                     seriesIds : seriesIds
                 });
 
-                this.trigger('seriesRenamed');
+                this.trigger('updatingFiles');
+                vent.trigger(vent.Commands.CloseModalCommand);
+            },
+
+            _setFileAirDate: function () {
+                var seriesIds = _.pluck(this.series, 'id');
+
+                CommandController.Execute('AirDateSeries', {
+                    name: 'AirDateSeries',
+                    seriesIds: seriesIds
+                });
+
+                this.trigger('updatingFiles');
                 vent.trigger(vent.Commands.CloseModalCommand);
             }
         });

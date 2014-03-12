@@ -42,7 +42,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                         return false;
                     }
 
-                    if (_diskProvider.GetLastFileWrite(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
+                    if (_diskProvider.GetLastFileWriteUTC(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
                     {
                         _logger.Trace("{0} appears to be unpacking still", localEpisode.Path);
                         return false;
