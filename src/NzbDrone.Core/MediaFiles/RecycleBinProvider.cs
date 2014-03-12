@@ -139,7 +139,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
             {
-                if (_diskProvider.GetLastFileWrite(file).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.GetLastFileWriteUTC(file).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Trace("File hasn't expired yet, skipping: {0}", file);
                     continue;

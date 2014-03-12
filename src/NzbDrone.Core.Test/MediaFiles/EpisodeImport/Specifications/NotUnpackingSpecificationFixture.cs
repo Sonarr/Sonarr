@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         private void GivenLastWriteTimeUtc(DateTime time)
         {
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetLastFileWrite(It.IsAny<string>()))
+                .Setup(s => s.GetLastFileWriteUTC(It.IsAny<string>()))
                 .Returns(time);
         }
 

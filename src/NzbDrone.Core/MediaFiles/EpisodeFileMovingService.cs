@@ -22,18 +22,21 @@ namespace NzbDrone.Core.MediaFiles
     public class EpisodeFileMovingService : IMoveEpisodeFiles
     {
         private readonly IEpisodeService _episodeService;
+        private readonly IUpdateEpisodeFileService _updateEpisodeFileService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public EpisodeFileMovingService(IEpisodeService episodeService,
+                                IUpdateEpisodeFileService updateEpisodeFileService,
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
                                 IConfigService configService,
                                 Logger logger)
         {
             _episodeService = episodeService;
+            _updateEpisodeFileService = updateEpisodeFileService;
             _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
             _configService = configService;
@@ -101,6 +104,11 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
             episodeFile.Path = destinationFilename;
+
+            if (_configService.FileDateAiredDate)
+            {
+                _updateEpisodeFileService.ChangeFileDateToAirdate(episodeFile, series);
+            }
 
             try
             {

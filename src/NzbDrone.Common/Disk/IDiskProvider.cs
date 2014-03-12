@@ -14,6 +14,7 @@ namespace NzbDrone.Common.Disk
 
         DateTime GetLastFolderWrite(string path);
         DateTime GetLastFileWrite(string path);
+        DateTime GetLastFileWriteUTC(string path);
         void EnsureFolder(string path);
         bool FolderExists(string path);
         bool FileExists(string path);
@@ -33,6 +34,8 @@ namespace NzbDrone.Common.Disk
         void WriteAllText(string filename, string contents);
         void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
         void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
+        void FileSetLastWriteTime(string path, DateTime dateTime);
+        void FileSetLastAccessTime(string path, DateTime dateTime);
         bool IsFileLocked(string path);
         string GetPathRoot(string path);
         string GetParentFolder(string path);

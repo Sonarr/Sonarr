@@ -10,7 +10,7 @@ define(
         'AddSeries/RootFolders/RootFolderCollection',
         'Shared/Toolbar/ToolbarLayout',
         'AddSeries/RootFolders/RootFolderLayout',
-        'Series/Editor/Rename/RenameSeriesView',
+        'Series/Editor/UpdateFiles/UpdateFilesSeriesView',
         'Config'
     ], function (_,
                  Marionette,
@@ -21,26 +21,26 @@ define(
                  RootFolders,
                  ToolbarLayout,
                  RootFolderLayout,
-                 RenameSeriesView,
+                 UpdateFilesSeriesView,
                  Config) {
         return Marionette.ItemView.extend({
             template: 'Series/Editor/SeriesEditorFooterViewTemplate',
 
             ui: {
-                monitored     : '.x-monitored',
-                qualityProfile: '.x-quality-profiles',
-                seasonFolder  : '.x-season-folder',
-                rootFolder    : '.x-root-folder',
-                selectedCount : '.x-selected-count',
-                saveButton    : '.x-save',
-                renameButton  : '.x-rename',
-                container     : '.series-editor-footer'
+                monitored        : '.x-monitored',
+                qualityProfile   : '.x-quality-profiles',
+                seasonFolder     : '.x-season-folder',
+                rootFolder       : '.x-root-folder',
+                selectedCount    : '.x-selected-count',
+                saveButton       : '.x-save',
+                updateFilesButton: '.x-update-files',
+                container        : '.series-editor-footer'
             },
 
             events: {
                 'click .x-save'        : '_updateAndSave',
                 'change .x-root-folder': '_rootFolderChanged',
-                'click .x-rename'      : '_rename'
+                'click .x-update-files': '_updateFiles'
             },
 
             templateHelpers: function () {
@@ -119,7 +119,7 @@ define(
                     this.ui.seasonFolder.attr('disabled', '');
                     this.ui.rootFolder.attr('disabled', '');
                     this.ui.saveButton.attr('disabled', '');
-                    this.ui.renameButton.attr('disabled', '');
+                    this.ui.updateFilesButton.attr('disabled', '');
                 }
 
                 else {
@@ -128,7 +128,7 @@ define(
                     this.ui.seasonFolder.removeAttr('disabled', '');
                     this.ui.rootFolder.removeAttr('disabled', '');
                     this.ui.saveButton.removeAttr('disabled', '');
-                    this.ui.renameButton.removeAttr('disabled', '');
+                    this.ui.updateFilesButton.removeAttr('disabled', '');
                 }
             },
 
@@ -162,12 +162,12 @@ define(
                 });
             },
 
-            _rename: function () {
+            _updateFiles: function () {
                 var selected = this.editorGrid.getSelectedModels();
-                var renameSeriesView = new RenameSeriesView({ series: selected });
-                this.listenToOnce(renameSeriesView, 'seriesRenamed', this._afterSave);
+                var updateFilesSeriesView = new UpdateFilesSeriesView({ series: selected });
+                this.listenToOnce(updateFilesSeriesView, 'updatingFiles', this._afterSave);
 
-                vent.trigger(vent.Commands.OpenModalCommand, renameSeriesView);
+                vent.trigger(vent.Commands.OpenModalCommand, updateFilesSeriesView);
             }
         });
     });

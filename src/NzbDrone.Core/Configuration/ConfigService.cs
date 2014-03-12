@@ -86,6 +86,12 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoUnmonitorPreviouslyDownloadedEpisodes", value); }
         }
 
+        public bool FileDateAiredDate
+        {
+            get { return GetValueBoolean("FileDateAiredDate"); }
+            set { SetValue("FileDateAiredDate", value); }
+        }
+
         public int Retention
         {
             get { return GetValueInt("Retention", 0); }
