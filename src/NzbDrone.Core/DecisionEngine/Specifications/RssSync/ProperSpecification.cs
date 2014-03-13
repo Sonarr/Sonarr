@@ -41,13 +41,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 {
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {
-                        _logger.Trace("Proper for old file, rejecting: {0}", subject);
+                        _logger.Debug("Proper for old file, rejecting: {0}", subject);
                         return false;
                     }
 
                     if (!_configService.AutoDownloadPropers)
                     {
-                        _logger.Trace("Auto downloading of propers is disabled");
+                        _logger.Debug("Auto downloading of propers is disabled");
                         return false;
                     }
                 }

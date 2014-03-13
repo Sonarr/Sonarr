@@ -27,20 +27,20 @@ namespace NzbDrone.Host
             {
                 case ApplicationModes.Service:
                     {
-                        _logger.Trace("Service selected");
+                        _logger.Debug("Service selected");
                         _serviceProvider.Run(_nzbDroneServiceFactory.Build());
                         break;
                     }
 
                 case ApplicationModes.Interactive:
                     {
-                        _logger.Trace("Console selected");
+                        _logger.Debug("Console selected");
                         _nzbDroneServiceFactory.Start();
                         break;
                     }
                 case ApplicationModes.InstallService:
                     {
-                        _logger.Trace("Install Service selected");
+                        _logger.Debug("Install Service selected");
                         if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
                             _consoleService.PrintServiceAlreadyExist();
@@ -54,7 +54,7 @@ namespace NzbDrone.Host
                     }
                 case ApplicationModes.UninstallService:
                     {
-                        _logger.Trace("Uninstall Service selected");
+                        _logger.Debug("Uninstall Service selected");
                         if (!_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME))
                         {
                             _consoleService.PrintServiceDoesNotExist();

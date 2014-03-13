@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Metadata.Files
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            _logger.Trace("Deleting Metadata from database for series: {0}", message.Series);
+            _logger.Debug("Deleting Metadata from database for series: {0}", message.Series);
             _repository.DeleteForSeries(message.Series.Id);
         }
 
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Metadata.Files
                 }
             }
 
-            _logger.Trace("Deleting Metadata from database for episode file: {0}", episodeFile);
+            _logger.Debug("Deleting Metadata from database for episode file: {0}", episodeFile);
             _repository.DeleteForEpisodeFile(episodeFile.Id);
         }
 

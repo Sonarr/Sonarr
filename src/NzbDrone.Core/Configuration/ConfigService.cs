@@ -247,7 +247,7 @@ namespace NzbDrone.Core.Configuration
         {
             key = key.ToLowerInvariant();
 
-            _logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
+            _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
 
             var dbValue = _repository.Get(key);
 

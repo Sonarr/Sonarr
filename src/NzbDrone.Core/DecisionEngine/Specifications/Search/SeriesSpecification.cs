@@ -28,11 +28,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return true;
             }
 
-            _logger.Trace("Checking if series matches searched series");
+            _logger.Debug("Checking if series matches searched series");
 
             if (remoteEpisode.Series.Id != searchCriteria.Series.Id)
             {
-                _logger.Trace("Series {0} does not match {1}", remoteEpisode.Series, searchCriteria.Series);
+                _logger.Debug("Series {0} does not match {1}", remoteEpisode.Series, searchCriteria.Series);
                 return false;
             }
 

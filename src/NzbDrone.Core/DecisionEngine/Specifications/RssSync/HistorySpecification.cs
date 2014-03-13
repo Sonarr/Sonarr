@@ -37,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         {
             if (searchCriteria != null)
             {
-                _logger.Trace("Skipping history check during search");
+                _logger.Debug("Skipping history check during search");
                 return true;
             }
 
@@ -45,15 +45,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (downloadClient != null && downloadClient.GetType() == typeof (Sabnzbd))
             {
-                _logger.Trace("Performing history status check on report");
+                _logger.Debug("Performing history status check on report");
                 foreach (var episode in subject.Episodes)
                 {
-                    _logger.Trace("Checking current status of episode [{0}] in history", episode.Id);
+                    _logger.Debug("Checking current status of episode [{0}] in history", episode.Id);
                     var mostRecent = _historyService.MostRecentForEpisode(episode.Id);
 
                     if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                     {
-                        _logger.Trace("Latest history item is downloading, rejecting.");
+                        _logger.Debug("Latest history item is downloading, rejecting.");
                         return false;
                     }
                 }
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.QualityProfile, episode.Id);
                 if (bestQualityInHistory != null)
                 {
-                    _logger.Trace("Comparing history quality with report. History is {0}", bestQualityInHistory);
+                    _logger.Debug("Comparing history quality with report. History is {0}", bestQualityInHistory);
                     if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
                         return false;
                 }

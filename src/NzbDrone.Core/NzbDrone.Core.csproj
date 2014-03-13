@@ -308,6 +308,8 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerCleansedExtensions.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
@@ -368,7 +370,6 @@
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\TestNotifyMyAndroidCommand.cs" />
-    <Compile Include="Instrumentation\LoggerExtensions.cs" />
     <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\Command.cs" />

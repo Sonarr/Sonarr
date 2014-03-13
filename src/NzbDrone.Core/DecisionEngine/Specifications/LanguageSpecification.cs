@@ -24,10 +24,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            _logger.Trace("Checking if report meets language requirements. {0}", subject.ParsedEpisodeInfo.Language);
+            _logger.Debug("Checking if report meets language requirements. {0}", subject.ParsedEpisodeInfo.Language);
             if (subject.ParsedEpisodeInfo.Language != Language.English)
             {
-                _logger.Trace("Report Language: {0} rejected because it is not English", subject.ParsedEpisodeInfo.Language);
+                _logger.Debug("Report Language: {0} rejected because it is not English", subject.ParsedEpisodeInfo.Language);
                 return false;
             }
 

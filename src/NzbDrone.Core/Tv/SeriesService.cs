@@ -141,10 +141,10 @@ namespace NzbDrone.Core.Tv
                 // series are usually the first thing in release title, so we select the leftmost and longest match
                 var match = query.First().series;
 
-                _logger.Trace("Multiple series matched {0} from title {1}", match.Title, title);
+                _logger.Debug("Multiple series matched {0} from title {1}", match.Title, title);
                 foreach (var entry in list)
                 {
-                    _logger.Trace("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
+                    _logger.Debug("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
                 }
 
                 return match;

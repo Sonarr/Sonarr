@@ -4,7 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.Serializer;

@@ -63,12 +63,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         if (quality != null && new QualityModelComparer(parsedEpisode.Series.QualityProfile).Compare(quality, parsedEpisode.Quality) > 0)
                         {
-                            _logger.Trace("Using quality from folder: {0}", quality);
+                            _logger.Debug("Using quality from folder: {0}", quality);
                             parsedEpisode.Quality = quality;
                         }
 
                         parsedEpisode.Size = _diskProvider.GetFileSize(file);
-                        _logger.Trace("Size: {0}", parsedEpisode.Size);
+                        _logger.Debug("Size: {0}", parsedEpisode.Size);
 
                         decision = GetDecision(parsedEpisode);
                     }

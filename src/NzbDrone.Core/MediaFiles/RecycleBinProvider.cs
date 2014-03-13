@@ -50,10 +50,10 @@ namespace NzbDrone.Core.MediaFiles
             {
                 var destination = Path.Combine(recyclingBin, new DirectoryInfo(path).Name);
 
-                logger.Trace("Moving '{0}' to '{1}'", path, destination);
+                logger.Debug("Moving '{0}' to '{1}'", path, destination);
                 _diskProvider.MoveFolder(path, destination);
 
-                logger.Trace("Setting last accessed: {0}", path);
+                logger.Debug("Setting last accessed: {0}", path);
                 _diskProvider.FolderSetLastWriteTimeUtc(destination, DateTime.UtcNow);
                 foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
                 {
@@ -75,21 +75,21 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (!OsInfo.IsMono)
                 {
-                    logger.Trace(_diskProvider.GetFileAttributes(path));
+                    logger.Debug(_diskProvider.GetFileAttributes(path));
                 }
 
                 _diskProvider.DeleteFile(path);
-                logger.Trace("File has been permanently deleted: {0}", path);
+                logger.Debug("File has been permanently deleted: {0}", path);
             }
 
             else
             {
                 var destination = Path.Combine(recyclingBin, new FileInfo(path).Name);
 
-                logger.Trace("Moving '{0}' to '{1}'", path, destination);
+                logger.Debug("Moving '{0}' to '{1}'", path, destination);
                 _diskProvider.MoveFile(path, destination);
                 _diskProvider.FileSetLastWriteTimeUtc(destination, DateTime.UtcNow);
-                logger.Trace("File has been moved to the recycling bin: {0}", destination);
+                logger.Debug("File has been moved to the recycling bin: {0}", destination);
             }
         }
 
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.DeleteFile(file);
             }
 
-            logger.Trace("Recycling Bin has been emptied.");
+            logger.Debug("Recycling Bin has been emptied.");
         }
 
         public void Cleanup()
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.MediaFiles
             {
                 if (_diskProvider.FolderGetLastWrite(folder).AddDays(7) > DateTime.UtcNow)
                 {
-                    logger.Trace("Folder hasn't expired yet, skipping: {0}", folder);
+                    logger.Debug("Folder hasn't expired yet, skipping: {0}", folder);
                     continue;
                 }
 
@@ -141,14 +141,14 @@ namespace NzbDrone.Core.MediaFiles
             {
                 if (_diskProvider.FileGetLastWriteUtc(file).AddDays(7) > DateTime.UtcNow)
                 {
-                    logger.Trace("File hasn't expired yet, skipping: {0}", file);
+                    logger.Debug("File hasn't expired yet, skipping: {0}", file);
                     continue;
                 }
 
                 _diskProvider.DeleteFile(file);
             }
 
-            logger.Trace("Recycling Bin has been cleaned up.");
+            logger.Debug("Recycling Bin has been cleaned up.");
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

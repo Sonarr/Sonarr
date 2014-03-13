@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Metadata
             {
                 if (_diskProvider.FileExists(path))
                 {
-                    _logger.Trace("Image already exists: {0}, will not download again.", path);
+                    _logger.Debug("Image already exists: {0}, will not download again.", path);
                     return;
                 }
 

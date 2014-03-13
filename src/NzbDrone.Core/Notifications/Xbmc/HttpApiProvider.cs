@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             if (!settings.AlwaysUpdate)
             {
-                _logger.Trace("Determining if there are any active players on XBMC host: {0}", settings.Address);
+                _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
                 var activePlayers = GetActivePlayers(settings);
 
                 if (activePlayers.Any(a => a.Type.Equals("video")))
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public bool CheckForError(string response)
         {
-            _logger.Trace("Looking for error in response: {0}", response);
+            _logger.Debug("Looking for error in response: {0}", response);
 
             if (String.IsNullOrWhiteSpace(response))
             {
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 var errorMessage = response.Substring(errorIndex + 6);
                 errorMessage = errorMessage.Substring(0, errorMessage.IndexOfAny(new char[] { '<', ';' }));
 
-                _logger.Trace("Error found in response: {0}", errorMessage);
+                _logger.Debug("Error found in response: {0}", errorMessage);
                 return true;
             }
 
@@ -141,13 +141,13 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             try
             {
-                _logger.Trace("Sending Update DB Request to XBMC Host: {0}", settings.Address);
+                _logger.Debug("Sending Update DB Request to XBMC Host: {0}", settings.Address);
                 var xbmcSeriesPath = GetSeriesPath(settings, series);
 
                 //If the path is found update it, else update the whole library
                 if (!String.IsNullOrEmpty(xbmcSeriesPath))
                 {
-                    _logger.Trace("Updating series [{0}] on XBMC host: {1}", series, settings.Address);
+                    _logger.Debug("Updating series [{0}] on XBMC host: {1}", series, settings.Address);
                     var command = BuildExecBuiltInCommand(String.Format("UpdateLibrary(video,{0})", xbmcSeriesPath));
                     SendCommand(settings, command);
                 }
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 else
                 {
                     //Update the entire library
-                    _logger.Trace("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series, settings.Address);
+                    _logger.Debug("Series [{0}] doesn't exist on XBMC host: {1}, Updating Entire Library", series, settings.Address);
                     var command = BuildExecBuiltInCommand("UpdateLibrary(video)");
                     SendCommand(settings, command);
                 }

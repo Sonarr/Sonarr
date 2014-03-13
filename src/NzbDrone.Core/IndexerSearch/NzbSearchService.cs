@@ -8,7 +8,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;

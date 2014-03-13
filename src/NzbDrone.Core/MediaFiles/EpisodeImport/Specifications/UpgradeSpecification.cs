@@ -22,7 +22,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             var qualityComparer = new QualityModelComparer(localEpisode.Series.QualityProfile);
             if (localEpisode.Episodes.Any(e => e.EpisodeFileId != 0 && qualityComparer.Compare(e.EpisodeFile.Value.Quality, localEpisode.Quality) > 0))
             {
-                _logger.Trace("This file isn't an upgrade for all episodes. Skipping {0}", localEpisode.Path);
+                _logger.Debug("This file isn't an upgrade for all episodes. Skipping {0}", localEpisode.Path);
                 return false;
             }
 

@@ -201,7 +201,7 @@ namespace NzbDrone.Common.Disk
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(target, () => target).IsValidPath();
 
-            Logger.Trace("{0} {1} -> {2}", transferAction, source, target);
+            Logger.Debug("{0} {1} -> {2}", transferAction, source, target);
 
             var sourceFolder = new DirectoryInfo(source);
             var targetFolder = new DirectoryInfo(target);
@@ -220,7 +220,7 @@ namespace NzbDrone.Common.Disk
             {
                 var destFile = Path.Combine(target, sourceFile.Name);
 
-                Logger.Trace("{0} {1} -> {2}", transferAction, sourceFile, destFile);
+                Logger.Debug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
 
                 switch (transferAction)
                 {

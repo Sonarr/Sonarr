@@ -5,9 +5,9 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
-using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Core.Update
 {

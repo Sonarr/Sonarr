@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
-                _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
+                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
 
                 if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {

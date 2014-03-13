@@ -28,12 +28,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
-                _logger.Trace("Comparing file quality with report. Existing file is {0}", file.Quality);
+                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
 
                 
                 if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.QualityProfile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
-                    _logger.Trace("Cutoff already met, rejecting.");
+                    _logger.Debug("Cutoff already met, rejecting.");
                     return false;
                 }
             }

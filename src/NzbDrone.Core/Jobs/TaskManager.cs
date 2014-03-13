@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Jobs
 
             if (scheduledTask != null)
             {
-                _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
+                _logger.Debug("Updating last run time for: {0}", scheduledTask.TypeName);
                 _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, DateTime.UtcNow);
             }
         }

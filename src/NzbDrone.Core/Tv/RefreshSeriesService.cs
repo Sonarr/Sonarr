@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DataAugmentation.DailySeries;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Tv
                 //Todo: Should this should use the previous season's monitored state?
                 if (existingSeason == null)
                 {
-                    _logger.Trace("New season ({0}) for series: [{1}] {2}, setting monitored to true", season.SeasonNumber, series.TvdbId, series.Title);
+                    _logger.Debug("New season ({0}) for series: [{1}] {2}, setting monitored to true", season.SeasonNumber, series.TvdbId, series.Title);
                     season.Monitored = true;
                 }
 

@@ -1,6 +1,6 @@
 ﻿using NLog;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 

@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
+using NzbDrone.Core.Instrumentation.Extensions;
 using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
@@ -124,7 +125,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                                  action,
                                  authentication);
 
-            _logger.Trace(url);
+            _logger.CleansedDebug(url);
 
             return new RestClient(url);
         }

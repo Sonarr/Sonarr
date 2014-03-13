@@ -33,9 +33,9 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             var filename = Path.Combine(Settings.Folder, title + ".nzb");
 
 
-            _logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
+            _logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
             _httpProvider.DownloadFile(url, filename);
-            _logger.Trace("NZB Download succeeded, saved to: {0}", filename);
+            _logger.Debug("NZB Download succeeded, saved to: {0}", filename);
 
             return null;
         }

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            _logger.Trace("Updating CleanTitle for all series");
+            _logger.Debug("Updating CleanTitle for all series");
 
             var series = _seriesRepository.All().ToList();
 

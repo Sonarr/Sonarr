@@ -35,13 +35,13 @@ namespace NzbDrone.Core.Notifications.Growl
 
             _growlConnector = new GrowlConnector(password, hostname, port);
 
-            Logger.Trace("Sending Notification to: {0}:{1}", hostname, port);
+            Logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
             _growlConnector.Notify(notification);
         }
 
         private void Register(string host, int port, string password)
         {
-            Logger.Trace("Registering NzbDrone with Growl host: {0}:{1}", host, port);
+            Logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
             _growlConnector = new GrowlConnector(password, host, port);
             _growlConnector.Register(_growlApplication, _notificationTypes.ToArray());
         }

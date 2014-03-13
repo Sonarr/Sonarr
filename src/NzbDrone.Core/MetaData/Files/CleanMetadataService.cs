@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Metadata.Files
 
         public void Clean(Series series)
         {
-            _logger.Trace("Cleaning missing metadata files for series: {0}", series.Title);
+            _logger.Debug("Cleaning missing metadata files for series: {0}", series.Title);
 
             var metadataFiles = _metadataFileService.GetFilesBySeries(series.Id);
 
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Metadata.Files
             {
                 if (!_diskProvider.FileExists(Path.Combine(series.Path, metadataFile.RelativePath)))
                 {
-                    _logger.Trace("Deleting metadata file from database: {0}", metadataFile.RelativePath);
+                    _logger.Debug("Deleting metadata file from database: {0}", metadataFile.RelativePath);
                     _metadataFileService.Delete(metadataFile.Id);
                 }
             }

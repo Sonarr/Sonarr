@@ -25,7 +25,7 @@ namespace NzbDrone.Common
 
         public void Extract(string compressedFile, string destination)
         {
-            _logger.Trace("Extracting archive [{0}] to [{1}]", compressedFile, destination);
+            _logger.Debug("Extracting archive [{0}] to [{1}]", compressedFile, destination);
 
             if (OsInfo.IsWindows)
             {
@@ -37,7 +37,7 @@ namespace NzbDrone.Common
                 ExtractTgz(compressedFile, destination);
             }
 
-            _logger.Trace("Extraction complete.");
+            _logger.Debug("Extraction complete.");
         }
 
         private void ExtractZip(string compressedFile, string destination)

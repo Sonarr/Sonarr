@@ -30,7 +30,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         private void PerformUpdate(Series series)
         {
-            _logger.Trace("Updating scene numbering mapping for: {0}", series);
+            _logger.Debug("Updating scene numbering mapping for: {0}", series);
 
             try
             {
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                 if (!mappings.Any())
                 {
-                    _logger.Trace("Mappings for: {0} are empty, skipping", series);
+                    _logger.Debug("Mappings for: {0} are empty, skipping", series);
                     _cache.Remove(series.TvdbId.ToString());
                     return;
                 }
@@ -54,13 +54,13 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                 foreach (var mapping in mappings)
                 {
-                    _logger.Trace("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+                    _logger.Debug("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
 
                     var episode = episodes.SingleOrDefault(e => e.SeasonNumber == mapping.Tvdb.Season && e.EpisodeNumber == mapping.Tvdb.Episode);
 
                     if (episode == null)
                     {
-                        _logger.Trace("Information hasn't been added to TheTVDB yet, skipping.");
+                        _logger.Debug("Information hasn't been added to TheTVDB yet, skipping.");
                         continue;
                     }
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             if (!_cache.Find(message.Series.TvdbId.ToString()))
             {
-                _logger.Trace("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
+                _logger.Debug("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
                 return;
             }
 

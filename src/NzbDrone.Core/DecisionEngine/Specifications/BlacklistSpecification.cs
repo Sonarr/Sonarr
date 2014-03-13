@@ -31,13 +31,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             if (!_configService.EnableFailedDownloadHandling)
             {
-                _logger.Trace("Failed Download Handling is not enabled");
+                _logger.Debug("Failed Download Handling is not enabled");
                 return true;
             }
 
             if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release.Title))
             {
-                _logger.Trace("{0} is blacklisted, rejecting.", subject.Release.Title);
+                _logger.Debug("{0} is blacklisted, rejecting.", subject.Release.Title);
                 return false;
             }
 

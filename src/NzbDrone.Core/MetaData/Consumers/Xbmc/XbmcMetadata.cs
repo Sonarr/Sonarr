@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
                     else
                     {
-                        _logger.Trace("Unknown episode file metadata: {0}", metadataFile.RelativePath);
+                        _logger.Debug("Unknown episode file metadata: {0}", metadataFile.RelativePath);
                         continue;
                     }
 
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
         private MetadataFile WriteTvShowNfo(Series series, List<MetadataFile> existingMetadataFiles)
         {
-            _logger.Trace("Generating tvshow.nfo for: {0}", series.Title);
+            _logger.Debug("Generating tvshow.nfo for: {0}", series.Title);
             var sb = new StringBuilder();
             var xws = new XmlWriterSettings();
             xws.OmitXmlDeclaration = true;
@@ -310,7 +310,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 //TODO: Do we want to overwrite the file if it exists?
                 if (_diskProvider.FileExists(destination))
                 {
-                    _logger.Trace("Series image: {0} already exists.", image.CoverType);
+                    _logger.Debug("Series image: {0} already exists.", image.CoverType);
                     continue;
                 }
 
@@ -453,7 +453,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
             if (screenshot == null)
             {
-                _logger.Trace("Episode screenshot not available");
+                _logger.Debug("Episode screenshot not available");
                 return null;
             }
 

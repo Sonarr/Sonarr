@@ -4,7 +4,6 @@ using FluentAssertions;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Instrumentation;
@@ -103,7 +102,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         public void null_string_as_arg_should_not_fail()
         {
             var epFile = new EpisodeFile();
-            _logger.Trace("File {0} no longer exists on disk. removing from database.", epFile.Path);
+            _logger.Debug("File {0} no longer exists on disk. removing from database.", epFile.Path);
 
             epFile.Path.Should().BeNull();
         }

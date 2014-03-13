@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
                 var client = new ProwlClient();
 
-                _logger.Trace("Sending Prowl Notification");
+                _logger.Debug("Sending Prowl Notification");
 
                 var notificationResult = client.SendNotification(notification);
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
             catch (Exception ex)
             {
-                _logger.TraceException(ex.Message, ex);
+                _logger.DebugException(ex.Message, ex);
                 _logger.Warn("Invalid API Key: {0}", apiKey);
             }
         }
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
                 var client = new ProwlClient();
 
-                _logger.Trace("Verifying API Key: {0}", apiKey);
+                _logger.Debug("Verifying API Key: {0}", apiKey);
 
                 var verificationResult = client.SendVerification(verificationRequest);
                 if (!String.IsNullOrWhiteSpace(verificationResult.ErrorMessage) &&
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
             catch (Exception ex)
             {
-                _logger.TraceException(ex.Message, ex);
+                _logger.DebugException(ex.Message, ex);
                 _logger.Warn("Invalid API Key: {0}", apiKey);
                 throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");
             }

@@ -48,7 +48,7 @@ namespace NzbDrone.Common.Instrumentation
         {
             if (logEvent == null || logEvent.Exception == null) return;
 
-            InternalLogger.Trace("Sending Exception to api.exceptron.com. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
+            InternalLogger.Debug("Sending Exception to api.exceptron.com. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
 
             try
             {

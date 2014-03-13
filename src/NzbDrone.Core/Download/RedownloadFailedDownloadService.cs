@@ -32,13 +32,13 @@ namespace NzbDrone.Core.Download
         {
             if (!_configService.AutoRedownloadFailed)
             {
-                _logger.Trace("Auto redownloading failed episodes is disabled");
+                _logger.Debug("Auto redownloading failed episodes is disabled");
                 return;
             }
 
             if (episodeIds.Count == 1)
             {
-                _logger.Trace("Failed download only contains one episode, searching again");
+                _logger.Debug("Failed download only contains one episode, searching again");
 
                 _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand
                                                      {
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Download
 
             if (episodeIds.Count == episodesInSeason.Count)
             {
-                _logger.Trace("Failed download was entire season, searching again");
+                _logger.Debug("Failed download was entire season, searching again");
 
                 _commandExecutor.PublishCommandAsync(new SeasonSearchCommand
                                                      {
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            _logger.Trace("Failed download contains multiple episodes, probably a double episode, searching again");
+            _logger.Debug("Failed download contains multiple episodes, probably a double episode, searching again");
 
             _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand
             {

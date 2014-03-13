@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
 
-                Logger.Trace("Getting version from response");
+                Logger.Debug("Getting version from response");
                 var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
 
                 var versionObject = result.Result.Property("version");
@@ -108,9 +108,9 @@ namespace NzbDrone.Core.Notifications.Xbmc
                                    DisplayTime = message.DisplayTime
                                };
              
-            Logger.Trace("Determining version of XBMC Host: {0}", settings.Address);
+            Logger.Debug("Determining version of XBMC Host: {0}", settings.Address);
             var version = GetJsonVersion(settings);
-            Logger.Trace("Version is: {0}", version);
+            Logger.Debug("Version is: {0}", version);
 
             if (version == new XbmcVersion(0))
             {

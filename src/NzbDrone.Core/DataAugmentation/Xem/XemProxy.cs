@@ -38,7 +38,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public List<int> GetXemSeriesIds()
         {
-            _logger.Trace("Fetching Series IDs from");
+            _logger.Debug("Fetching Series IDs from");
 
             var restClient = new RestClient(XEM_BASE_URL);
 
@@ -52,9 +52,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id)
         {
-            _logger.Trace("Fetching Mappings for: {0}", id);
-            var url = String.Format("{0}all?id={1}&origin=tvdb", XEM_BASE_URL, id);
-
+            _logger.Debug("Fetching Mappings for: {0}", id);
 
             var restClient = new RestClient(XEM_BASE_URL);
 

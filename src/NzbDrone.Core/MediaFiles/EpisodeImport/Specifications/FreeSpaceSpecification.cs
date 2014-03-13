@@ -26,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             {
                 if (localEpisode.ExistingFile)
                 {
-                    _logger.Trace("Skipping free space check for existing episode");
+                    _logger.Debug("Skipping free space check for existing episode");
                     return true;
                 }
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (!freeSpace.HasValue)
                 {
-                    _logger.Trace("Free space check returned an invalid result for: {0}", path);
+                    _logger.Debug("Free space check returned an invalid result for: {0}", path);
                     return true;
                 }
 

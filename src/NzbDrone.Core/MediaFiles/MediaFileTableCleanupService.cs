@@ -43,21 +43,21 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     if (!_diskProvider.FileExists(episodeFile.Path))
                     {
-                        _logger.Trace("File [{0}] no longer exists on disk, removing from db", episodeFile.Path);
+                        _logger.Debug("File [{0}] no longer exists on disk, removing from db", episodeFile.Path);
                         _mediaFileService.Delete(episodeFile);
                         continue;
                     }
 
                     if (!DiskProviderBase.IsParent(series.Path, episodeFile.Path))
                     {
-                        _logger.Trace("File [{0}] does not belong to this series, removing from db", episodeFile.Path);
+                        _logger.Debug("File [{0}] does not belong to this series, removing from db", episodeFile.Path);
                         _mediaFileService.Delete(episodeFile);
                         continue; 
                     }
 
                     if (!episodes.Any(e => e.EpisodeFileId == episodeFile.Id))
                     {
-                        _logger.Trace("File [{0}] is not assigned to any episodes, removing from db", episodeFile.Path);
+                        _logger.Debug("File [{0}] is not assigned to any episodes, removing from db", episodeFile.Path);
                         _mediaFileService.Delete(episodeFile);
                         continue;
                     }
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.MediaFiles
 //
 //                    if (localEpsiode == null || episodes.Count != localEpsiode.Episodes.Count)
 //                    {
-//                        _logger.Trace("File [{0}] parsed episodes has changed, removing from db", episodeFile.Path);
+//                        _logger.Debug("File [{0}] parsed episodes has changed, removing from db", episodeFile.Path);
 //                        _mediaFileService.Delete(episodeFile);
 //                        continue;
 //                    }

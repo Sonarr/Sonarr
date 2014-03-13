@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine
                 int compare = new QualityModelComparer(profile).Compare(newQuality, currentQuality);
                 if (compare <= 0)
                 {
-                    _logger.Trace("existing item has better or equal quality. skipping");
+                    _logger.Debug("existing item has better or equal quality. skipping");
                     return false;
                 }
 
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DecisionEngine
                     return true;
                 }
 
-                _logger.Trace("Existing item meets cut-off. skipping.");
+                _logger.Debug("Existing item meets cut-off. skipping.");
                 return false;
             }
 
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.DecisionEngine
 
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
-                _logger.Trace("New quality is a proper for existing quality");
+                _logger.Debug("New quality is a proper for existing quality");
                 return true;
             }
 

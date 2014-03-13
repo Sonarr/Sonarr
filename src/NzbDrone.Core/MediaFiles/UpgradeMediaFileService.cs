@@ -46,7 +46,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (_diskProvider.FileExists(file.Path))
                 {
-                    _logger.Trace("Removing existing episode file: {0}", file);
+                    _logger.Debug("Removing existing episode file: {0}", file);
                     _recycleBinProvider.DeleteFile(file.Path);
                 }
 

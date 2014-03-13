@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Notifications.Email
             catch(Exception ex)
             {
                 _logger.Error("Error sending email. Subject: {0}", email.Subject);
-                _logger.TraceException(ex.Message, ex);
+                _logger.DebugException(ex.Message, ex);
             }
         }
 

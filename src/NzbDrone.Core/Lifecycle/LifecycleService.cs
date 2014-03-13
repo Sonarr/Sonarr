@@ -1,9 +1,7 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
-using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;

@@ -60,7 +60,7 @@ namespace NzbDrone.Common.Processes
 
         public ProcessInfo GetProcessById(int id)
         {
-            Logger.Trace("Finding process with Id:{0}", id);
+            Logger.Debug("Finding process with Id:{0}", id);
 
             var processInfo = ConvertToProcessInfo(Process.GetProcesses().FirstOrDefault(p => p.Id == id));
 
@@ -70,7 +70,7 @@ namespace NzbDrone.Common.Processes
             }
             else
             {
-                Logger.Trace("Found process {0}", processInfo.ToString());
+                Logger.Debug("Found process {0}", processInfo.ToString());
             }
 
             return processInfo;
@@ -186,7 +186,7 @@ namespace NzbDrone.Common.Processes
 
         public void WaitForExit(Process process)
         {
-            Logger.Trace("Waiting for process {0} to exit.", process.ProcessName);
+            Logger.Debug("Waiting for process {0} to exit.", process.ProcessName);
 
             process.WaitForExit();
         }
@@ -268,7 +268,7 @@ namespace NzbDrone.Common.Processes
 
             if (process.HasExited)
             {
-                Logger.Trace("Process has already exited");
+                Logger.Debug("Process has already exited");
                 return;
             }
 

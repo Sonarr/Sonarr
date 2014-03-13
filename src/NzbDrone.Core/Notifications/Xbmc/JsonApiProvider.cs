@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             if (!settings.AlwaysUpdate)
             {
-                _logger.Trace("Determining if there are any active players on XBMC host: {0}", settings.Address);
+                _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
                 var activePlayers = GetActivePlayers(settings);
 
                 if (activePlayers.Any(a => a.Type.Equals("video")))
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public bool CheckForError(string response)
         {
-            _logger.Trace("Looking for error in response: {0}", response);
+            _logger.Debug("Looking for error in response: {0}", response);
 
             if (String.IsNullOrWhiteSpace(response))
             {
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             if (!allSeries.Any())
             {
-                _logger.Trace("No TV shows returned from XBMC");
+                _logger.Debug("No TV shows returned from XBMC");
                 return null;
             }
 
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 if (seriesPath != null)
                 {
-                    _logger.Trace("Updating series {0} (Path: {1}) on XBMC host: {2}", series, seriesPath, settings.Address);
+                    _logger.Debug("Updating series {0} (Path: {1}) on XBMC host: {2}", series, seriesPath, settings.Address);
 
                     var parameters = new JObject(new JObject(new JProperty("directory", seriesPath)));
                     postJson = BuildJsonRequest("VideoLibrary.Scan", parameters);
@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 else
                 {
-                    _logger.Trace("Series {0} doesn't exist on XBMC host: {1}, Updating Entire Library", series,
+                    _logger.Debug("Series {0} doesn't exist on XBMC host: {1}, Updating Entire Library", series,
                                  settings.Address);
 
                     postJson = BuildJsonRequest("VideoLibrary.Scan");
@@ -158,12 +158,12 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 if (CheckForError(response)) return;
 
-                _logger.Trace(" from response");
+                _logger.Debug(" from response");
                 var result = Json.Deserialize<XbmcJsonResult<String>>(response);
 
                 if (!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _logger.Trace("Failed to update library for: {0}", settings.Address);
+                    _logger.Debug("Failed to update library for: {0}", settings.Address);
                 }
             }
 
