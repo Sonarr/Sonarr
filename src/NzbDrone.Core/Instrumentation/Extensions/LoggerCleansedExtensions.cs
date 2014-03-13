@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Instrumentation.Extensions
             message = Cleanse(message);
 
             var logEvent = new LogEventInfo(level, logger.Name, message);
-            logEvent.Properties.Add("Status", "");
 
             logger.Log(logEvent);
         }
