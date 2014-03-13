@@ -35,7 +35,7 @@ namespace NzbDrone.Api.Logs
                 {
                     Id = i + 1,
                     Filename = Path.GetFileName(file),
-                    LastWriteTime = _diskProvider.GetLastFileWriteUTC(file)
+                    LastWriteTime = _diskProvider.FileGetLastWriteUtc(file)
                 });
             }
 

@@ -22,23 +22,6 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label">Set File Date to Airdate</label>
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="fileDateAiredDate" />
-                <p>
-                    <span>Yes</span>
-                    <span>No</span>
-                </p>
-                <div class="btn btn-primary slide-button" />
-            </label>
-            <span class="help-inline-checkbox">
-                <i class="icon-nd-form-info" title="Adjust added media file dates to the original episode aired date" />
-            </span>
-        </div>
-    </div>
-
-    <div class="control-group">
         <label class="control-label">Download Propers</label>
 
         <div class="controls">
@@ -65,6 +48,21 @@
             <input type="text" name="recycleBin" class="x-path"/>
             <span class="help-inline">
                 <i class="icon-nd-form-info" title="Episode files will go here when deleted instead of being permanently deleted"/>
+            </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Change File Date</label>
+
+        <div class="controls">
+            <select class="inputClass" name="fileDate">
+                <option value="none">None</option>
+                <option value="localAirDate">Local Air Date</option>
+                <option value="utcAirDate">UTC Air Date</option>
+            </select>
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Change file date on import/rescan"/>
             </span>
         </div>
     </div>

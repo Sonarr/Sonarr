@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -51,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Trace("Renaming episode file: {0} to {1}", episodeFile, filePath);
             
-            return MoveFile(episodeFile, series, filePath);
+            return MoveFile(episodeFile, series, episodes, filePath);
         }
 
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
@@ -61,10 +62,10 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Trace("Moving episode file: {0} to {1}", episodeFile, filePath);
             
-            return MoveFile(episodeFile, localEpisode.Series, filePath);
+            return MoveFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath);
         }
 
-        private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
+        private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series,() => series).IsNotNull();
@@ -105,10 +106,7 @@ namespace NzbDrone.Core.MediaFiles
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
             episodeFile.Path = destinationFilename;
 
-            if (_configService.FileDateAiredDate)
-            {
-                _updateEpisodeFileService.ChangeFileDateToAirdate(episodeFile, series);
-            }
+            _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
 
             try
             {

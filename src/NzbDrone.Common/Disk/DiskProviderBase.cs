@@ -56,7 +56,7 @@ namespace NzbDrone.Common.Disk
             return false;
         }
 
-        public DateTime GetLastFolderWrite(string path)
+        public DateTime FolderGetLastWrite(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
 
@@ -76,14 +76,14 @@ namespace NzbDrone.Common.Disk
                             .Max(c => c.LastWriteTimeUtc);
         }
 
-        public DateTime GetLastFileWrite(string path)
+        public DateTime FileGetLastWrite(string path)
         {
             PathEnsureFileExists(path);
 
             return new FileInfo(path).LastWriteTime;
         }
 
-        public DateTime GetLastFileWriteUTC(string path)
+        public DateTime FileGetLastWriteUtc(string path)
         {
             PathEnsureFileExists(path);
 

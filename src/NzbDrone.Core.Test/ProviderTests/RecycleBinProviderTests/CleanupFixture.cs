@@ -18,19 +18,19 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
         private void WithExpired()
         {
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFolderWrite(It.IsAny<String>()))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.FolderGetLastWrite(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-10));
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFileWriteUTC(It.IsAny<String>()))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.FileGetLastWriteUtc(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-10));
         }
 
         private void WithNonExpired()
         {
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFolderWrite(It.IsAny<String>()))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.FolderGetLastWrite(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-3));
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetLastFileWriteUTC(It.IsAny<String>()))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.FileGetLastWriteUtc(It.IsAny<String>()))
                                             .Returns(DateTime.UtcNow.AddDays(-3));
         }
 

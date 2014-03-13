@@ -128,7 +128,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var folder in _diskProvider.GetDirectories(_configService.RecycleBin))
             {
-                if (_diskProvider.GetLastFolderWrite(folder).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.FolderGetLastWrite(folder).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Trace("Folder hasn't expired yet, skipping: {0}", folder);
                     continue;
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
             {
-                if (_diskProvider.GetLastFileWriteUTC(file).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.FileGetLastWriteUtc(file).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Trace("File hasn't expired yet, skipping: {0}", file);
                     continue;

@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                     new MediaCover.MediaCover {CoverType = MediaCoverTypes.Banner}
                 };
 
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetLastFileWriteUTC(It.IsAny<string>()))
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileGetLastWriteUtc(It.IsAny<string>()))
                   .Returns(new DateTime(1234));
 
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(It.IsAny<string>()))

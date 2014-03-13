@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -20,10 +21,10 @@ namespace NzbDrone.Core.Configuration
 
         //Media Management
         Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
-        Boolean FileDateAiredDate { get; set; }
         String RecycleBin { get; set; }
         Boolean AutoDownloadPropers { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
+        FileDateType FileDate { get; set; }
 
         //Permissions (Media Management)
         Boolean SetPermissionsLinux { get; set; }

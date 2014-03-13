@@ -144,7 +144,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         public void empty_folder_should_return_folder_modified_date()
         {
             var tempfolder = new DirectoryInfo(TempFolder);
-            Subject.GetLastFolderWrite(TempFolder).Should().Be(tempfolder.LastWriteTimeUtc);
+            Subject.FolderGetLastWrite(TempFolder).Should().Be(tempfolder.LastWriteTimeUtc);
         }
 
         [Test]
@@ -159,8 +159,8 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             
             Subject.WriteAllText(testFile, "Test");
 
-            Subject.GetLastFolderWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
-            Subject.GetLastFolderWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
+            Subject.FolderGetLastWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
+            Subject.FolderGetLastWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Explicit]
         public void check_last_write()
         {
-            Console.WriteLine(Subject.GetLastFolderWrite(_binFolder.FullName));
+            Console.WriteLine(Subject.FolderGetLastWrite(_binFolder.FullName));
             Console.WriteLine(_binFolder.LastWriteTimeUtc);
         }
 
