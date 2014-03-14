@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_unopacking_on_linux()
         {
-            LinuxOnly();
+            MonoOnly();
 
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));

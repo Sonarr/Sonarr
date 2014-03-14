@@ -131,7 +131,7 @@ namespace NzbDrone.Test.Common
         }
 
 
-        protected void LinuxOnly()
+        protected void MonoOnly()
         {
             if (!OsInfo.IsMono)
             {

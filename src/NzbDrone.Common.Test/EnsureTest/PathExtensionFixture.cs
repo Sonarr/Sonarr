@@ -19,7 +19,7 @@ namespace NzbDrone.Common.Test.EnsureTest
         [TestCase(@"/var/user/file with, comma.mkv")]
         public void EnsureLinuxPath(string path)
         {
-            LinuxOnly();
+            MonoOnly();
             Ensure.That(path, () => path).IsValidPath();
         }
     }

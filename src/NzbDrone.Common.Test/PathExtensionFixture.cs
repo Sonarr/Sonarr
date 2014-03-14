@@ -50,7 +50,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"//CAPITAL//lower// ", @"/CAPITAL/lower")]
         public void Clean_Path_Linux(string dirty, string clean)
         {
-            LinuxOnly();
+            MonoOnly();
 
             var result = dirty.CleanFilePath();
             result.Should().Be(clean);
@@ -139,7 +139,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void get_actual_casing_should_return_original_value_in_linux()
         {
-            LinuxOnly();
+            MonoOnly();
             var path = Directory.GetCurrentDirectory();
             path.GetActualCasing().Should().Be(path);
             path.GetActualCasing().Should().Be(path);
