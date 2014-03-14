@@ -6,13 +6,13 @@ using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
-    public class MonoVersionnCheck : IProvideHealthCheck
+    public class MonoVersionCheck : IProvideHealthCheck
     {
         private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
         private static readonly Regex VersionRegex = new Regex(@"(?<=\W)(?<version>\d+\.\d+\.\d+\.\d+)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public MonoVersionnCheck(IProcessProvider processProvider, Logger logger)
+        public MonoVersionCheck(IProcessProvider processProvider, Logger logger)
         {
             _processProvider = processProvider;
             _logger = logger;

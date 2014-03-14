@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
     [TestFixture]
-    public class MonoVersionCheckFixture : CoreTest<DownloadClientCheck>
+    public class MonoVersionCheckFixture : CoreTest<MonoVersionCheck>
     {
         [SetUp]
         public void Setup()
