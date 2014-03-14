@@ -10,7 +10,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
-        private static readonly Regex VersionRegex = new Regex(@"(?<=\W)(?<version>\d+\.\d+\.\d+\.\d+)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex VersionRegex = new Regex(@"(?<=\W)(?<version>\d+\.\d+\.\d+(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public MonoVersionCheck(IProcessProvider processProvider, Logger logger)
         {

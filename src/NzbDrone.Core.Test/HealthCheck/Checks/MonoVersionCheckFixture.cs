@@ -62,5 +62,21 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Subject.Check().Should().BeNull();
         }
+
+        [Test]
+        public void should_return_null_when_mono_3_2_7()
+        {
+            GivenOutput("3.2.7");
+
+            Subject.Check().Should().BeNull();
+        }
+
+        [Test]
+        public void should_return_null_when_mono_3_2_1()
+        {
+            GivenOutput("3.2.1");
+
+            Subject.Check().Should().BeNull();
+        }
     }
 }
