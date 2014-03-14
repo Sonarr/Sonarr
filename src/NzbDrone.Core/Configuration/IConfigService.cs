@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Configuration
         //Download Client
         String DownloadedEpisodesFolder { get; set; }
         String DownloadClientWorkingFolders { get; set; }
+        Int32 DownloadedEpisodesScanInterval { get; set; }
 
         //Failed Download Handling (Download client)
         Boolean AutoRedownloadFailed { get; set; }

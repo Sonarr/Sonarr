@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.DataAugmentation.Xem;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Housekeeping;
@@ -40,14 +39,15 @@ namespace NzbDrone.Core.Jobs
 
         public IList<ScheduledTask> GetPending()
         {
-            return _scheduledTaskRepository.All().Where(c => c.LastExecution.AddMinutes(c.Interval) < DateTime.UtcNow).ToList();
+            return _scheduledTaskRepository.All()
+                                           .Where(c => c.Interval > 0 && c.LastExecution.AddMinutes(c.Interval) < DateTime.UtcNow)
+                                           .ToList();
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             var defaultTasks = new[]
                 {
-                    new ScheduledTask{ Interval = _configService.RssSyncInterval, TypeName = typeof(RssSyncCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(CheckForFailedDownloadCommand).FullName},
@@ -57,6 +57,18 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},
                     new ScheduledTask{ Interval = 12*60, TypeName = typeof(RefreshSeriesCommand).FullName},
                     new ScheduledTask{ Interval = 24*60, TypeName = typeof(HousekeepingCommand).FullName},
+
+                    new ScheduledTask
+                    { 
+                        Interval = _configService.RssSyncInterval,
+                        TypeName = typeof(RssSyncCommand).FullName
+                    },
+
+                    new ScheduledTask
+                    { 
+                        Interval = _configService.DownloadedEpisodesScanInterval,
+                        TypeName = typeof(DownloadedEpisodesScanCommand).FullName
+                    },
                 };
 
             var currentTasks = _scheduledTaskRepository.All().ToList();
@@ -102,7 +114,11 @@ namespace NzbDrone.Core.Jobs
         {
             var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
             rss.Interval = _configService.RssSyncInterval;
-            _scheduledTaskRepository.Update(rss);
+
+            var downloadedEpisodes = _scheduledTaskRepository.GetDefinition(typeof(DownloadedEpisodesScanCommand));
+            downloadedEpisodes.Interval = _configService.DownloadedEpisodesScanInterval;
+
+            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask>{ rss, downloadedEpisodes });
         }
     }
 }

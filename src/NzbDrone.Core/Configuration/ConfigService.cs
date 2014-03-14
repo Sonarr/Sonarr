@@ -157,6 +157,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadClientWorkingFolders", value); }
         }
 
+        public Int32 DownloadedEpisodesScanInterval
+        {
+            get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
+
+            set { SetValue("DownloadedEpisodesScanInterval", value); }
+        }
+
         public Boolean SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }
