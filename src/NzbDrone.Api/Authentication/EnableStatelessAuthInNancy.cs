@@ -4,6 +4,7 @@ using Nancy;
 using Nancy.Bootstrapper;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
+using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
@@ -12,12 +13,12 @@ namespace NzbDrone.Api.Authentication
     public class EnableStatelessAuthInNancy : IRegisterNancyPipeline
     {
         private readonly IAuthenticationService _authenticationService;
-        private readonly IConfigFileProvider _configFileProvider;
+        private static String API_KEY;
 
         public EnableStatelessAuthInNancy(IAuthenticationService authenticationService, IConfigFileProvider configFileProvider)
         {
             _authenticationService = authenticationService;
-            _configFileProvider = configFileProvider;
+            API_KEY = configFileProvider.ApiKey;
         }
 
         public void Register(IPipelines pipelines)
@@ -36,9 +37,9 @@ namespace NzbDrone.Api.Authentication
 
             var authorizationHeader = context.Request.Headers.Authorization;
             var apiKeyHeader = context.Request.Headers["X-Api-Key"].FirstOrDefault();
-            var apiKey = String.IsNullOrWhiteSpace(apiKeyHeader) ? authorizationHeader : apiKeyHeader;
-            
-            if (context.Request.IsApiRequest() && !ValidApiKey(apiKey) && !_authenticationService.IsAuthenticated(context))
+            var apiKey = apiKeyHeader.IsNullOrWhiteSpace() ? authorizationHeader : apiKeyHeader;
+
+            if (context.Request.IsApiRequest() && !ValidApiKey(apiKey) && !IsAuthenticated(context))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }
@@ -48,10 +49,15 @@ namespace NzbDrone.Api.Authentication
 
         private bool ValidApiKey(string apiKey)
         {
-            if (String.IsNullOrWhiteSpace(apiKey)) return false;
-            if (!apiKey.Equals(_configFileProvider.ApiKey)) return false;
+            if (apiKey.IsNullOrWhiteSpace()) return false;
+            if (!apiKey.Equals(API_KEY)) return false;
 
             return true;
+        }
+
+        private bool IsAuthenticated(NancyContext context)
+        {
+            return _authenticationService.Enabled && _authenticationService.IsAuthenticated(context);
         }
     }
 }

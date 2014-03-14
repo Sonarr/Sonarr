@@ -78,6 +78,7 @@ module.exports = function (grunt) {
                             '**/*.png',
                             '**/*.jpg',
                             '**/*.ico',
+                            '**/*.swf',
                             '**/FontAwesome/*.*',
                             '**/fonts/*.*'
                         ],

@@ -119,6 +119,21 @@
                 </div>
             </div>
         </div>
+
+        <div class="control-group api-key">
+            <label class="control-label">API Key</label>
+            <div class="controls">
+                <div class="input-append">
+                    <input type="text" name="apiKey" readonly="readonly" class="x-api-key"/>
+                    <button class="btn btn-icon-only x-copy-api-key" title="Copy to clipboard"><i class="icon-copy"></i></button>
+                    <button class="btn btn-danger btn-icon-only x-reset-api-key" title="Reset API Key"><i class="icon-refresh"></i></button>
+                </div>
+
+                <span>
+                    <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
+                </span>
+            </div>
+        </div>
     </fieldset>
 
     <fieldset>
@@ -155,27 +170,27 @@
             </div>
         </div>
 
-        {{#if_mono}}
-        <div class="control-group">
-            <label class="control-label">Auto Update</label>
+        <!--{{#if_mono}}-->
+        <!--<div class="control-group">-->
+            <!--<label class="control-label">Auto Update</label>-->
 
-            <div class="controls">
-                <label class="checkbox toggle well">
-                    <input type="checkbox" name="autoUpdate"/>
+            <!--<div class="controls">-->
+                <!--<label class="checkbox toggle well">-->
+                    <!--<input type="checkbox" name="autoUpdate"/>-->
 
-                    <p>
-                        <span>Yes</span>
-                        <span>No</span>
-                    </p>
+                    <!--<p>-->
+                        <!--<span>Yes</span>-->
+                        <!--<span>No</span>-->
+                    <!--</p>-->
 
-                    <div class="btn btn-primary slide-button"/>
-                </label>
+                    <!--<div class="btn btn-primary slide-button"/>-->
+                <!--</label>-->
 
-                <span class="help-inline-checkbox">
-                    <i class="icon-nd-form-info" title="Use drone's built in auto update instead of package manager/manual updating"/>
-                </span>
-            </div>
-        </div>
-        {{/if_mono}}
+                <!--<span class="help-inline-checkbox">-->
+                    <!--<i class="icon-nd-form-info" title="Use drone's built in auto update instead of package manager/manual updating"/>-->
+                <!--</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--{{/if_mono}}-->
     </fieldset>
 </div>

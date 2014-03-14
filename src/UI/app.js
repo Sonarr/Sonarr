@@ -27,6 +27,7 @@ require.config({
         'jquery.dotdotdot'        : 'JsLibraries/jquery.dotdotdot',
         'messenger'               : 'JsLibraries/messenger',
         'jquery'                  : 'JsLibraries/jquery',
+        'zero.clipboard'          : 'JsLibraries/zero.clipboard',
         'libs'                    : 'JsLibraries/',
 
         'api': 'Require/require.api'
