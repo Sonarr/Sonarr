@@ -23,7 +23,7 @@ namespace NzbDrone.Api.Calendar
 
         private Response GetCalendarFeed()
         {
-            var start = DateTime.Today.Subtract(TimeSpan.FromDays(7));
+            var start = DateTime.Today.AddDays(-7);
             var end = DateTime.Today.AddDays(28);
 
             var queryStart = Request.Query.Start;
@@ -35,28 +35,25 @@ namespace NzbDrone.Api.Calendar
             var episodes = _episodeService.EpisodesBetweenDates(start, end);
             var icalCalendar = new iCalendar();
 
-            foreach (var series in episodes.GroupBy(v => v.Series))
+            foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
-                foreach (var episode in series)
+                var occurrence = icalCalendar.Create<Event>();
+                occurrence.UID = "NzbDrone_episode_" + episode.Id.ToString();
+                occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;
+                occurrence.Start = new iCalDateTime(episode.AirDateUtc.Value);
+                occurrence.End = new iCalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime));
+                occurrence.Description = episode.Overview;
+                occurrence.Categories = new List<string>() { episode.Series.Network };
+
+                switch (episode.Series.SeriesType)
                 {
-                    var occurrence = icalCalendar.Create<Event>();
-                    occurrence.UID = "NzbDrone_episode_" + episode.Id.ToString();
-                    occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;
-                    occurrence.Start = new iCalDateTime(episode.AirDateUtc.Value);
-                    occurrence.End = new iCalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime));
-                    occurrence.Description = episode.Overview;
-                    occurrence.Categories = new List<string>() { episode.Series.Network };
+                    case SeriesTypes.Daily:
+                        occurrence.Summary = string.Format("{0} - {1}", episode.Series.Title, episode.Title);
+                        break;
 
-                    switch (episode.Series.SeriesType)
-                    {
-                        case SeriesTypes.Daily:
-                            occurrence.Summary = string.Format("{0} - {1}", episode.Series.Title, episode.Title);
-                            break;
-
-                        default:
-                            occurrence.Summary = string.Format("{0} - {1}x{2:00} - {3}", episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title);
-                            break;
-                    }
+                    default:
+                        occurrence.Summary = string.Format("{0} - {1}x{2:00} - {3}", episode.Series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title);
+                        break;
                 }
             }
 

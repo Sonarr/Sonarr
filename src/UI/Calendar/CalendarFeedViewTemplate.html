@@ -7,14 +7,17 @@
         <div>
             <div class="form-horizontal">
                 <div class="control-group">
-                    <label class="control-label" for="ical-url">iCal feed</label>
+                    <label class="control-label">iCal feed</label>
 
-                    <div class="controls">
-                        <input type="text" id="ical-url" class="x-ical-url" value="/feed/calendar/NzbDrone.ics" name="ical-url">
-                <span class="help-inline">
-                    <i class="icon-nd-form-info" title="copy this url into your clients subscription form or use the subscribe now link if you have a webcal protocol handler installed"/>
-                </span>
-				or <a href="webcal:///feed/calendar/NzbDrone.ics" id="ical-subscribe-button">subscribe now!</a>
+                    <div class="controls ical-url">
+                        <div class="input-append">
+                            <input type="text" class="x-ical-url" value="{{icalHttpUrl}}" readonly="readonly" />
+                            <button class="btn btn-icon-only x-ical-copy" title="Copy to clipboard"><i class="icon-copy"></i></button>
+                            <a class="btn btn-icon-only no-router" title="Subscribe" href="{{icalWebCalUrl}}" target="_blank"><i class="icon-calendar-empty"></i></a>
+                        </div>
+                        <span class="help-inline">
+                            <i class="icon-nd-form-info" title="Copy this url into your clients subscription form or use the subscribe button if your browser support webcal"/>
+                        </span>
                     </div>
                 </div>
             </div>
