@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Download
 
             if (!failedItems.Any())
             {
-                _logger.Trace("Yay! No encrypted downloads");
+                _logger.Debug("Yay! No encrypted downloads");
                 return;
             }
 
@@ -69,13 +70,13 @@ namespace NzbDrone.Core.Download
 
                 if (!historyItems.Any())
                 {
-                    _logger.Trace("Unable to find matching history item");
+                    _logger.Debug("Unable to find matching history item");
                     continue;
                 }
 
                 if (failedHistory.Any(h => failedLocal.Id.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID))))
                 {
-                    _logger.Trace("Already added to history as failed");
+                    _logger.Debug("Already added to history as failed");
                     continue;
                 }
 
@@ -103,7 +104,7 @@ namespace NzbDrone.Core.Download
 
             if (!failedItems.Any())
             {
-                _logger.Trace("Yay! No failed downloads");
+                _logger.Debug("Yay! No failed downloads");
                 return;
             }
 
@@ -114,13 +115,21 @@ namespace NzbDrone.Core.Download
 
                 if (!historyItems.Any())
                 {
-                    _logger.Trace("Unable to find matching history item");
+                    _logger.Debug("Unable to find matching history item");
+                    continue;
+                }
+
+                //TODO: Make this more configurable (ignore failure reasons) to support changes and other failures that should be ignored
+                if (failedLocal.Message.Equals("Unpacking failed, write error or disk is full?",
+                    StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _logger.Debug("Failed due to lack of disk space, do not blacklist");
                     continue;
                 }
 
                 if (failedHistory.Any(h => failedLocal.Id.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID))))
                 {
-                    _logger.Trace("Already added to history as failed");
+                    _logger.Debug("Already added to history as failed");
                     continue;
                 }
 
@@ -164,7 +173,7 @@ namespace NzbDrone.Core.Download
 
             if (downloadClient == null)
             {
-                _logger.Trace("No download client is configured");
+                _logger.Debug("No download client is configured");
             }
 
             return downloadClient;
@@ -174,7 +183,7 @@ namespace NzbDrone.Core.Download
         {
             if (!_configService.EnableFailedDownloadHandling)
             {
-                _logger.Trace("Failed Download Handling is not enabled");
+                _logger.Debug("Failed Download Handling is not enabled");
                 return;
             }
 

@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var client = BuildClient(settings);
             var response = client.Execute(restRequest);
-            _logger.Trace("Response: {0}", response.Content);
+            _logger.Debug("Response: {0}", response.Content);
 
             CheckForError(response);
 

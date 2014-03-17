@@ -15,8 +15,6 @@ namespace NzbDrone.Core.Test.ParserTests
     public class NormalizeTitleFixture : CoreTest
     {
         [TestCase("Conan", "conan")]
-        [TestCase("The Tonight Show With Jay Leno", "tonightshowwithjayleno")]
-        [TestCase("The.Daily.Show", "dailyshow")]
         [TestCase("Castle (2009)", "castle2009")]
         [TestCase("Parenthood.2010", "parenthood2010")]
         [TestCase("Law_and_Order_SVU", "lawordersvu")]
@@ -51,9 +49,6 @@ namespace NzbDrone.Core.Test.ParserTests
                                 "word.{0}.word",
                                 "word {0} word",
                                 "word-{0}-word",
-                                "{0}.word.word",
-                                "{0}-word-word",
-                                "{0} word word",
                                 "word.word.{0}",
                                 "word-word-{0}",
                                 "word-word {0}",
@@ -64,7 +59,6 @@ namespace NzbDrone.Core.Test.ParserTests
                 var dirty = String.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be("wordword");
             }
-
         }
 
         [TestCase("the")]
@@ -91,6 +85,37 @@ namespace NzbDrone.Core.Test.ParserTests
                 dirty.CleanSeriesTitle().Should().Be(("word" + word.ToLower() + "word"));
             }
 
+        }
+
+        [TestCase("The Office", "theoffice")]
+        [TestCase("The Tonight Show With Jay Leno", "thetonightshowwithjayleno")]
+        [TestCase("The.Daily.Show", "thedailyshow")]
+        public void should_not_remove_from_the_beginning_of_the_title(string parsedSeriesName, string seriesName)
+        {
+            var result = parsedSeriesName.CleanSeriesTitle();
+            result.Should().Be(seriesName);
+        }
+
+        [TestCase("the")]
+        [TestCase("and")]
+        [TestCase("or")]
+        [TestCase("a")]
+        [TestCase("an")]
+        [TestCase("of")]
+        public void should_not_clean_word_from_beginning_of_string(string word)
+        {
+            var dirtyFormat = new[]
+                            {
+                                "{0}.word.word",
+                                "{0}-word-word",
+                                "{0} word word"
+                            };
+
+            foreach (var s in dirtyFormat)
+            {
+                var dirty = String.Format(s, word);
+                dirty.CleanSeriesTitle().Should().Be(word + "wordword");
+            }
         }
     }
 }

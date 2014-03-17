@@ -8,7 +8,7 @@ namespace NzbDrone.Mono.Test.DiskProviderTests
     {
         public FreeSpaceFixture()
         {
-            LinuxOnly();
+            MonoOnly();
         }
     }
 }

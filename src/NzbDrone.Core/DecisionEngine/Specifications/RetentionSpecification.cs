@@ -30,10 +30,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var age = subject.Release.Age;
             var retention = _configService.Retention;
 
-            _logger.Trace("Checking if report meets retention requirements. {0}", age);
+            _logger.Debug("Checking if report meets retention requirements. {0}", age);
             if (retention > 0 && age > retention)
             {
-                _logger.Trace("Report age: {0} rejected by user's retention limit", age);
+                _logger.Debug("Report age: {0} rejected by user's retention limit", age);
                 return false;
             }
 

@@ -9,12 +9,14 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 
 
 namespace NzbDrone.Core.Configuration
 {
-    public interface IConfigFileProvider : IHandleAsync<ApplicationStartedEvent>
+    public interface IConfigFileProvider : IHandleAsync<ApplicationStartedEvent>,
+                                           IExecute<ResetApiKeyCommand>
     {
         Dictionary<string, object> GetConfigDictionary();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
@@ -28,6 +30,7 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
+        bool AutoUpdate { get; }
         string ApiKey { get; }
         bool Torrent { get; }
         string SslCertHash { get; }
@@ -75,6 +78,11 @@ namespace NzbDrone.Core.Configuration
 
             foreach (var configValue in configValues)
             {
+                if (configValue.Key.Equals("ApiKey", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
                 object currentValue;
                 allWithDefaults.TryGetValue(configValue.Key, out currentValue);
                 if (currentValue == null) continue;
@@ -114,7 +122,7 @@ namespace NzbDrone.Core.Configuration
         {
             get
             {
-                return GetValue("ApiKey", Guid.NewGuid().ToString().Replace("-", ""));
+                return GetValue("ApiKey", GenerateApiKey());
             }
         }
 
@@ -131,6 +139,11 @@ namespace NzbDrone.Core.Configuration
         public string Branch
         {
             get { return GetValue("Branch", "master").ToLowerInvariant(); }
+        }
+
+        public bool AutoUpdate
+        {
+            get { return GetValueBoolean("AutoUpdate", false, persist: false); }
         }
 
         public string Username
@@ -290,9 +303,19 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
+        private string GenerateApiKey()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
+        }
+
         public void HandleAsync(ApplicationStartedEvent message)
         {
             DeleteOldValues();
+        }
+
+        public void Execute(ResetApiKeyCommand message)
+        {
+            SetValue("ApiKey", GenerateApiKey());
         }
     }
 }

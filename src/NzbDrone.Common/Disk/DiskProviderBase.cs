@@ -56,7 +56,7 @@ namespace NzbDrone.Common.Disk
             return false;
         }
 
-        public DateTime GetLastFolderWrite(string path)
+        public DateTime FolderGetLastWrite(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
 
@@ -76,7 +76,21 @@ namespace NzbDrone.Common.Disk
                             .Max(c => c.LastWriteTimeUtc);
         }
 
-        public DateTime GetLastFileWrite(string path)
+        public DateTime FileGetLastWrite(string path)
+        {
+            PathEnsureFileExists(path);
+
+            return new FileInfo(path).LastWriteTime;
+        }
+
+        public DateTime FileGetLastWriteUtc(string path)
+        {
+            PathEnsureFileExists(path);
+
+            return new FileInfo(path).LastWriteTimeUtc;
+        }
+
+        private void PathEnsureFileExists(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
 
@@ -84,8 +98,6 @@ namespace NzbDrone.Common.Disk
             {
                 throw new FileNotFoundException("File doesn't exist: " + path);
             }
-
-            return new FileInfo(path).LastWriteTimeUtc;
         }
 
         public void EnsureFolder(string path)
@@ -189,7 +201,7 @@ namespace NzbDrone.Common.Disk
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(target, () => target).IsValidPath();
 
-            Logger.Trace("{0} {1} -> {2}", transferAction, source, target);
+            Logger.Debug("{0} {1} -> {2}", transferAction, source, target);
 
             var sourceFolder = new DirectoryInfo(source);
             var targetFolder = new DirectoryInfo(target);
@@ -208,7 +220,7 @@ namespace NzbDrone.Common.Disk
             {
                 var destFile = Path.Combine(target, sourceFile.Name);
 
-                Logger.Trace("{0} {1} -> {2}", transferAction, sourceFile, destFile);
+                Logger.Debug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
 
                 switch (transferAction)
                 {
@@ -303,6 +315,26 @@ namespace NzbDrone.Common.Disk
             Ensure.That(path, () => path).IsValidPath();
 
             Directory.SetLastWriteTimeUtc(path, dateTime);
+        }
+
+        public void FileSetLastWriteTime(string path, DateTime dateTime)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            File.SetLastWriteTime(path, dateTime);
+        }
+        public void FileSetLastAccessTime(string path, DateTime dateTime)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            File.SetLastAccessTimeUtc(path, dateTime);
+        }
+
+        public void FileSetLastAccessTimeUtc(string path, DateTime dateTime)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            File.SetLastAccessTimeUtc(path, dateTime);
         }
 
         public bool IsFileLocked(string file)

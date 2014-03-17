@@ -31,7 +31,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             else
             {
-                if (inConsole && (OsInfo.IsLinux || new RuntimeInfo(null, new ServiceProvider(new ProcessProvider())).IsUserInteractive))
+                if (inConsole && (OsInfo.IsMono || new RuntimeInfo(null, new ServiceProvider(new ProcessProvider())).IsUserInteractive))
                 {
                     RegisterConsole();
                 }

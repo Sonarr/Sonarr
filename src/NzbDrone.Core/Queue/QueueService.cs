@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Queue
 
             if (downloadClient == null)
             {
-                _logger.Trace("Download client is not configured.");
+                _logger.Debug("Download client is not configured.");
                 return new List<Queue>();
             }
 

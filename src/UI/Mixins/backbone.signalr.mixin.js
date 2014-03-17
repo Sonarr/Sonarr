@@ -39,7 +39,7 @@ define(
                     console.log(options.action + ': {0}}'.format(options.resource));
                 };
 
-                collection.listenTo(vent, 'server:' + collection.url.replace('/api/', ''), processMessage);
+                collection.listenTo(vent, 'server:' + collection.url.split('/api/')[1], processMessage);
 
                 return this;
             },

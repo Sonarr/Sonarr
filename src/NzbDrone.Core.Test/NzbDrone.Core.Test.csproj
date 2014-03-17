@@ -125,10 +125,11 @@
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
+    <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheckFixture.cs" />
-    <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\MonoVersionCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\HealthCheckFixtureExtentions.cs" />
     <Compile Include="HistoryTests\HistoryServiceFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
@@ -360,6 +361,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Files\SceneMappings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Files\TestArchive.zip">

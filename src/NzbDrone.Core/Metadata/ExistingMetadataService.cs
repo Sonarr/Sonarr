@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Metadata
         {
             if (!_diskProvider.FolderExists(message.Series.Path)) return;
 
-            _logger.Trace("Looking for existing metadata in {0}", message.Series.Path);
+            _logger.Debug("Looking for existing metadata in {0}", message.Series.Path);
 
             var filesOnDisk = _diskProvider.GetFiles(message.Series.Path, SearchOption.AllDirectories);
             var possibleMetadataFiles = filesOnDisk.Where(c => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower())).ToList();
@@ -60,13 +60,13 @@ namespace NzbDrone.Core.Metadata
 
                         if (localEpisode == null)
                         {
-                            _logger.Trace("Cannot find related episodes for: {0}", possibleMetadataFile);
+                            _logger.Debug("Cannot find related episodes for: {0}", possibleMetadataFile);
                             break;
                         }
 
                         if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
                         {
-                            _logger.Trace("Metadata file: {0} does not match existing files.", possibleMetadataFile);
+                            _logger.Debug("Metadata file: {0} does not match existing files.", possibleMetadataFile);
                             break;
                         }
 

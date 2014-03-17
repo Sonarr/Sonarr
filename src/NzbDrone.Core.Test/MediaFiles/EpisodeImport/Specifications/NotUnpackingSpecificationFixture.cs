@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         private void GivenLastWriteTimeUtc(DateTime time)
         {
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetLastFileWrite(It.IsAny<string>()))
+                .Setup(s => s.FileGetLastWriteUtc(It.IsAny<string>()))
                 .Returns(time);
         }
 
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_return_false_if_unopacking_on_linux()
         {
-            LinuxOnly();
+            MonoOnly();
 
             GivenInWorkingFolder();
             GivenLastWriteTimeUtc(DateTime.UtcNow.AddDays(-5));

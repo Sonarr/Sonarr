@@ -43,10 +43,10 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
             var filename = Path.Combine(Settings.Folder, title + ".nzb");
 
-            logger.Trace("Downloading NZB from: {0} to: {1}", url, filename);
+            logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
             _httpProvider.DownloadFile(url, filename);
 
-            logger.Trace("NZB Download succeeded, saved to: {0}", filename);
+            logger.Debug("NZB Download succeeded, saved to: {0}", filename);
 
             var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
             _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);

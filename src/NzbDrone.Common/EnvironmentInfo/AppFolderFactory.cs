@@ -32,7 +32,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         {
             _diskProvider.EnsureFolder(_appFolderInfo.AppDataFolder);
 
-            if (!OsInfo.IsLinux)
+            if (!OsInfo.IsMono)
             {
                 SetPermissions();
             }

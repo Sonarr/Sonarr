@@ -53,9 +53,9 @@ namespace NzbDrone.Host
 
         public void Start()
         {
-            if (OsInfo.IsLinux)
+            if (OsInfo.IsMono)
             {
-                Console.CancelKeyPress += (sender, eventArgs) => _processProvider.Kill(_processProvider.GetCurrentProcess().Id);
+                Console.CancelKeyPress += (sender, eventArgs) => LogManager.Configuration = null;
             }
 
             _runtimeInfo.IsRunning = true;
@@ -90,13 +90,14 @@ namespace NzbDrone.Host
 
         public void Handle(ApplicationShutdownRequested message)
         {
-            if (OsInfo.IsLinux)
+            if (!_runtimeInfo.IsWindowsService)
             {
-                _processProvider.Kill(_processProvider.GetCurrentProcess().Id);
-            }
+                if (message.Restarting)
+                {
+                    _runtimeInfo.RestartPending = true;
+                }
 
-            if (!_runtimeInfo.IsWindowsService && !message.Restarting)
-            {
+                LogManager.Configuration = null;
                 Shutdown();
             }
         }

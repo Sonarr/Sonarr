@@ -21,10 +21,10 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             if (BuildInfo.IsDebug)
             {
-                _logger.Trace("Not running scheduled task last execution cleanup during debug");
+                _logger.Debug("Not running scheduled task last execution cleanup during debug");
             }
 
-            _logger.Trace("Running scheduled task last execution cleanup");
+            _logger.Debug("Running scheduled task last execution cleanup");
 
             var mapper = _database.GetDataMapper();
             mapper.AddParameter("time", DateTime.UtcNow);

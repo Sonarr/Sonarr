@@ -1,23 +1,23 @@
 ﻿<div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Rename Selected Series</h3>
+    <h3>Organize of Selected Series</h3>
 </div>
-<div class="modal-body rename-series-modal">
+<div class="modal-body update-files-series-modal">
     <div class="alert alert-info">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
-        You can use the rename function for an individual series to preview the rename
+        Tip: To preview a rename... select "Cancel" then any series title and use the <i data-original-title="" class="icon-nd-rename" title=""></i>
     </div>
 
-    Are you sure you want to rename all files in the {{numberOfSeries}} selected series?
+    Are you sure you want to update all files in the {{numberOfSeries}} selected series?
 
     {{debug}}
     <ul class="selected-series">
         {{#each series}}
-            <li>{{title}}</li>
+        <li>{{title}}</li>
         {{/each}}
     </ul>
 </div>
 <div class="modal-footer">
     <button class="btn" data-dismiss="modal">cancel</button>
-    <button class="btn btn-danger x-confirm-rename">rename</button>
+    <button class="btn btn-danger x-confirm-organize">organize</button>
 </div>

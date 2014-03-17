@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             if (_trackCommands.FindExisting(command) != null)
             {
-                _logger.Debug("Command is already in progress: {0}", command.GetType().Name);
+                _logger.Trace("Command is already in progress: {0}", command.GetType().Name);
                 return;
             }
 
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             if (existingCommand != null)
             {
-                _logger.Debug("Command is already in progress: {0}", command.GetType().Name);
+                _logger.Trace("Command is already in progress: {0}", command.GetType().Name);
                 return existingCommand;
             }
 

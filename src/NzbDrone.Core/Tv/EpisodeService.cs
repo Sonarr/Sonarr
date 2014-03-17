@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Tv
         {
             foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
             {
-                _logger.Trace("Detaching episode {0} from file.", episode.Id);
+                _logger.Debug("Detaching episode {0} from file.", episode.Id);
                 episode.EpisodeFileId = 0;
 
                 if (!message.ForUpgrade && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes)

@@ -78,7 +78,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Overview = show.overview;
             series.Runtime = show.runtime;
             series.Network = show.network;
-            series.AirTime = show.air_time_utc;
+            series.AirTime = show.air_time;
             series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
             series.Status = GetSeriesStatus(show.status, show.ended);
             series.Ratings = GetRatings(show.ratings);

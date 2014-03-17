@@ -27,13 +27,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            _logger.Trace("Checking if release contains any restricted terms: {0}", subject);
+            _logger.Debug("Checking if release contains any restricted terms: {0}", subject);
 
             var restrictionsString = _configService.ReleaseRestrictions;
 
             if (String.IsNullOrWhiteSpace(restrictionsString))
             {
-                _logger.Trace("No restrictions configured, allowing: {0}", subject);
+                _logger.Debug("No restrictions configured, allowing: {0}", subject);
                 return true;
             }
 
@@ -43,12 +43,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 if (subject.Release.Title.ToLowerInvariant().Contains(restriction.ToLowerInvariant()))
                 {
-                    _logger.Trace("{0} is restricted: {1}", subject, restriction);
+                    _logger.Debug("{0} is restricted: {1}", subject, restriction);
                     return false;
                 }
             }
 
-            _logger.Trace("No restrictions apply, allowing: {0}", subject);
+            _logger.Debug("No restrictions apply, allowing: {0}", subject);
             return true;
         }
     }

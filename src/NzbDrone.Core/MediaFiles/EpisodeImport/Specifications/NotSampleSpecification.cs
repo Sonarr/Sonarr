@@ -37,19 +37,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             if (localEpisode.ExistingFile)
             {
-                _logger.Trace("Existing file, skipping sample check");
+                _logger.Debug("Existing file, skipping sample check");
                 return true;
             }
 
             if (localEpisode.Series.SeriesType == SeriesTypes.Daily)
             {
-                _logger.Trace("Daily Series, skipping sample check");
+                _logger.Debug("Daily Series, skipping sample check");
                 return true;
             }
 
             if (localEpisode.SeasonNumber == 0)
             {
-                _logger.Trace("Special, skipping sample check");
+                _logger.Debug("Special, skipping sample check");
                 return true;
             }
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (extension != null && extension.Equals(".flv", StringComparison.InvariantCultureIgnoreCase))
             {
-                _logger.Trace("Skipping sample check for .flv file");
+                _logger.Debug("Skipping sample check for .flv file");
                 return true;
             }
 
@@ -73,19 +73,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (runTime.TotalSeconds < 90)
                 {
-                    _logger.Trace("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
+                    _logger.Debug("[{0}] appears to be a sample. Size: {1} Runtime: {2}", localEpisode.Path, localEpisode.Size, runTime);
                     return false;
                 }
             }
 
             catch (DllNotFoundException)
             {
-                _logger.Trace("Falling back to file size detection");
+                _logger.Debug("Falling back to file size detection");
 
                 return CheckSize(localEpisode);
             }
 
-            _logger.Trace("Runtime is over 90 seconds");
+            _logger.Debug("Runtime is over 90 seconds");
             return true;
         }
 
@@ -95,14 +95,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             {
                 if (localEpisode.Size < SampleSizeLimit * 2)
                 {
-                    _logger.Trace("1080p file is less than sample limit");
+                    _logger.Debug("1080p file is less than sample limit");
                     return false;
                 }
             }
 
             if (localEpisode.Size < SampleSizeLimit)
             {
-                _logger.Trace("File is less than sample limit");
+                _logger.Debug("File is less than sample limit");
                 return false;
             }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using NLog;
 
-namespace NzbDrone.Core.Instrumentation
+namespace NzbDrone.Core.Instrumentation.Extensions
 {
     public static class LoggerExtensions
     {

@@ -1,13 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -31,15 +30,17 @@ namespace NzbDrone.Core.MediaFiles
         private readonly ICommandExecutor _commandExecutor;
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
-                                IMakeImportDecision importDecisionMaker,
-                                IImportApprovedEpisodes importApprovedEpisodes,
-                                ICommandExecutor commandExecutor,
-                                IConfigService configService,
-                                ISeriesService seriesService,
-                                Logger logger)
+                               IMakeImportDecision importDecisionMaker,
+                               IImportApprovedEpisodes importApprovedEpisodes,
+                               ICommandExecutor commandExecutor,
+                               IConfigService configService,
+                               ISeriesService seriesService,
+                               IEventAggregator eventAggregator,
+                               Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
@@ -47,6 +48,7 @@ namespace NzbDrone.Core.MediaFiles
             _commandExecutor = commandExecutor;
             _configService = configService;
             _seriesService = seriesService;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
@@ -75,7 +77,9 @@ namespace NzbDrone.Core.MediaFiles
 
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
             _importApprovedEpisodes.Import(decisions);
+
             _logger.Info("Completed scanning disk for {0}", series.Title);
+            _eventAggregator.PublishEvent(new SeriesScannedEvent(series));
         }
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)

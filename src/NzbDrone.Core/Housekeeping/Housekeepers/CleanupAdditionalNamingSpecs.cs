@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            _logger.Trace("Running naming spec cleanup");
+            _logger.Debug("Running naming spec cleanup");
 
             var mapper = _database.GetDataMapper();
 

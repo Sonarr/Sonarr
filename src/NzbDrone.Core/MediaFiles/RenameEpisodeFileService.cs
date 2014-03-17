@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
@@ -115,17 +115,17 @@ namespace NzbDrone.Core.MediaFiles
             {
                 try
                 {
-                    _logger.Trace("Renaming episode file: {0}", episodeFile);
+                    _logger.Debug("Renaming episode file: {0}", episodeFile);
                     _episodeFileMover.MoveEpisodeFile(episodeFile, series);
 
                     _mediaFileService.Update(episodeFile);
                     renamed.Add(episodeFile);
 
-                    _logger.Trace("Renamed episode file: {0}", episodeFile);
+                    _logger.Debug("Renamed episode file: {0}", episodeFile);
                 }
                 catch (SameFilenameException ex)
                 {
-                    _logger.Trace("File not renamed, source and destination are the same: {0}", ex.Filename);
+                    _logger.Debug("File not renamed, source and destination are the same: {0}", ex.Filename);
                 }
                 catch (Exception ex)
                 {
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public void Execute(RenameSeriesCommand message)
         {
-            _logger.Trace("Renaming all files for selected series");
+            _logger.Debug("Renaming all files for selected series");
             var seriesToRename = _seriesService.GetSeries(message.SeriesIds);
 
             foreach (var series in seriesToRename)

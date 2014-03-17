@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -12,6 +13,7 @@ namespace NzbDrone.Core.Configuration
         //Download Client
         String DownloadedEpisodesFolder { get; set; }
         String DownloadClientWorkingFolders { get; set; }
+        Int32 DownloadedEpisodesScanInterval { get; set; }
 
         //Failed Download Handling (Download client)
         Boolean AutoRedownloadFailed { get; set; }
@@ -23,6 +25,7 @@ namespace NzbDrone.Core.Configuration
         String RecycleBin { get; set; }
         Boolean AutoDownloadPropers { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
+        FileDateType FileDate { get; set; }
 
         //Permissions (Media Management)
         Boolean SetPermissionsLinux { get; set; }

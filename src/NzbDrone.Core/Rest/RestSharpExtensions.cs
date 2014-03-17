@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Rest
             Ensure.That(response.Request, () => response.Request).IsNotNull();
             Ensure.That(restClient, () => restClient).IsNotNull();
 
-            Logger.Trace("Validating Responses from [{0}] [{1}] status: [{2}]", response.Request.Method, restClient.BuildUri(response.Request), response.StatusCode);
+            Logger.Debug("Validating Responses from [{0}] [{1}] status: [{2}]", response.Request.Method, restClient.BuildUri(response.Request), response.StatusCode);
 
             if (response.ResponseUri == null)
             {

@@ -114,6 +114,7 @@
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
+    <Compile Include="Configuration\ResetApiKeyCommand.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
     <Compile Include="HealthCheck\CheckHealthCommand.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
+    <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
@@ -308,6 +311,8 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerCleansedExtensions.cs" />
+    <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
@@ -317,9 +322,12 @@
     <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
+    <Compile Include="MediaFiles\Events\SeriesScannedEvent.cs" />
+    <Compile Include="MediaFiles\FileDateType.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFilePreview.cs" />
+    <Compile Include="MediaFiles\UpdateEpisodeFileService.cs" />
     <Compile Include="Messaging\Commands\CommandExecutor.cs" />
     <Compile Include="Messaging\Commands\ICommandExecutor.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />
@@ -365,7 +373,6 @@
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\TestNotifyMyAndroidCommand.cs" />
-    <Compile Include="Instrumentation\LoggerExtensions.cs" />
     <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\Command.cs" />

@@ -28,7 +28,7 @@ namespace NzbDrone.Mono
 
                 if (driveInfo == null)
                 {
-                    Logger.Trace("Unable to get free space for '{0}', unable to find suitable drive", path);
+                    Logger.Debug("Unable to get free space for '{0}', unable to find suitable drive", path);
                     return null;
                 }
 
@@ -59,7 +59,7 @@ namespace NzbDrone.Mono
 
         public override void SetPermissions(string path, string mask, string user, string group)
         {
-            Logger.Trace("Setting permissions: {0} on {1}", mask, path);
+            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
 
             var filePermissions = NativeConvert.FromOctalPermissionString(mask);
 
@@ -72,7 +72,7 @@ namespace NzbDrone.Mono
 
             if (String.IsNullOrWhiteSpace(user) || String.IsNullOrWhiteSpace(group))
             {
-                Logger.Trace("User or Group for chown not configured, skipping chown.");
+                Logger.Debug("User or Group for chown not configured, skipping chown.");
                 return;
             }
 
@@ -93,7 +93,7 @@ namespace NzbDrone.Mono
 
             if (!uint.TryParse(group, out groupId))
             {
-                var g = Syscall.getgrnam(user);
+                var g = Syscall.getgrnam(group);
 
                 if (g == null)
                 {
@@ -107,7 +107,7 @@ namespace NzbDrone.Mono
             {
                 var error = Stdlib.GetLastError();
 
-                throw new LinuxPermissionsException("Error setting file owner: " + error);
+                throw new LinuxPermissionsException("Error setting file owner and/or group: " + error);
             }
         }
 

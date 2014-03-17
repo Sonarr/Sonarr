@@ -15,8 +15,8 @@ define(
             return options.inverse(this);
         });
 
-        Handlebars.registerHelper('if_linux', function(options) {
-            if (StatusModel.get('isLinux'))
+        Handlebars.registerHelper('if_mono', function(options) {
+            if (StatusModel.get('isMono'))
             {
                 return options.fn(this);
             }

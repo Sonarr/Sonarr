@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Enable = false,
                     Name = "Nzb.su",
                     Implementation = GetType().Name,
-                    Settings = GetSettings("https://nzb.su", new List<Int32>())
+                    Settings = GetSettings("https://api.nzb.su", new List<Int32>())
                 });
 
                 list.Add(new IndexerDefinition

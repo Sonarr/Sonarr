@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Messaging.Events
                 return eventType.Name;
             }
 
-            return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
+            return String.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
         }
     }
 }

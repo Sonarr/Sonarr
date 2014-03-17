@@ -18,6 +18,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         internal const string UNINSTALL_SERVICE = "u";
         public const string HELP = "?";
         public const string TERMINATE = "terminateexisting";
+        public const string RESTART = "restart";
 
         public StartupContext(params string[] args)
         {

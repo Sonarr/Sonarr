@@ -7,6 +7,7 @@ namespace NzbDrone.Api.Config
     {
         public String DownloadedEpisodesFolder { get; set; }
         public String DownloadClientWorkingFolders { get; set; }
+        public Int32 DownloadedEpisodesScanInterval { get; set; }
 
         public Boolean AutoRedownloadFailed { get; set; }
         public Boolean RemoveFailedDownloads { get; set; }

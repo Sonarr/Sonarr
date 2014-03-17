@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public void Sql(string sql)
         {
-            _logger.Trace(sql);
+            _logger.Debug(sql);
         }
 
         public void ElapsedTime(TimeSpan timeSpan)

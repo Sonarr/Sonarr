@@ -295,6 +295,14 @@ namespace Microsoft.AspNet.SignalR.Messaging
 
                     Trace.TraceEvent(TraceEventType.Verbose, 0, "Dispoing the broker");
 
+                    //Check if OS is not Windows and exit
+                    var platform = (int)Environment.OSVersion.Platform;
+
+                    if ((platform == 4) || (platform == 6) || (platform == 128))
+                    {
+                        return;
+                    }
+
                     // Wait for all threads to stop working
                     WaitForDrain();
 

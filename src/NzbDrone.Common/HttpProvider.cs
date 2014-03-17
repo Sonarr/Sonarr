@@ -102,14 +102,14 @@ namespace NzbDrone.Common
                     fileInfo.Directory.Create();
                 }
 
-                _logger.Trace("Downloading [{0}] to [{1}]", url, fileName);
+                _logger.Debug("Downloading [{0}] to [{1}]", url, fileName);
 
                 var stopWatch = Stopwatch.StartNew();
                 var webClient = new WebClient();
                 webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
                 webClient.DownloadFile(url, fileName);
                 stopWatch.Stop();
-                _logger.Trace("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
+                _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
             }
             catch (WebException e)
             {
@@ -127,7 +127,7 @@ namespace NzbDrone.Common
         {
             address = String.Format("http://{0}/jsonrpc", address);
 
-            _logger.Trace("Posting command: {0}, to {1}", command, address);
+            _logger.Debug("Posting command: {0}, to {1}", command, address);
 
             byte[] byteArray = Encoding.ASCII.GetBytes(command);
 

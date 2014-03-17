@@ -1,7 +1,7 @@
 ﻿using System;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -22,18 +23,21 @@ namespace NzbDrone.Core.MediaFiles
     public class EpisodeFileMovingService : IMoveEpisodeFiles
     {
         private readonly IEpisodeService _episodeService;
+        private readonly IUpdateEpisodeFileService _updateEpisodeFileService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public EpisodeFileMovingService(IEpisodeService episodeService,
+                                IUpdateEpisodeFileService updateEpisodeFileService,
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
                                 IConfigService configService,
                                 Logger logger)
         {
             _episodeService = episodeService;
+            _updateEpisodeFileService = updateEpisodeFileService;
             _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
             _configService = configService;
@@ -46,9 +50,9 @@ namespace NzbDrone.Core.MediaFiles
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
-            _logger.Trace("Renaming episode file: {0} to {1}", episodeFile, filePath);
+            _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
             
-            return MoveFile(episodeFile, series, filePath);
+            return MoveFile(episodeFile, series, episodes, filePath);
         }
 
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
@@ -56,12 +60,12 @@ namespace NzbDrone.Core.MediaFiles
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
-            _logger.Trace("Moving episode file: {0} to {1}", episodeFile, filePath);
+            _logger.Debug("Moving episode file: {0} to {1}", episodeFile, filePath);
             
-            return MoveFile(episodeFile, localEpisode.Series, filePath);
+            return MoveFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath);
         }
 
-        private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, string destinationFilename)
+        private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series,() => series).IsNotNull();
@@ -102,16 +106,18 @@ namespace NzbDrone.Core.MediaFiles
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
             episodeFile.Path = destinationFilename;
 
+            _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
+
             try
             {
-                _logger.Trace("Setting last write time on series folder: {0}", series.Path);
+                _logger.Debug("Setting last write time on series folder: {0}", series.Path);
                 _diskProvider.FolderSetLastWriteTimeUtc(series.Path, episodeFile.DateAdded);
 
                 if (series.SeasonFolder)
                 {
                     var seasonFolder = Path.GetDirectoryName(destinationFilename);
 
-                    _logger.Trace("Setting last write time on season folder: {0}", seasonFolder);
+                    _logger.Debug("Setting last write time on season folder: {0}", seasonFolder);
                     _diskProvider.FolderSetLastWriteTimeUtc(seasonFolder, episodeFile.DateAdded);
                 }
             }
@@ -134,7 +140,7 @@ namespace NzbDrone.Core.MediaFiles
                     if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
                     {
                         _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
-                        _logger.TraceException(ex.Message, ex);
+                        _logger.DebugException(ex.Message, ex);
                     }
 
                     else
@@ -169,7 +175,7 @@ namespace NzbDrone.Core.MediaFiles
                 if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
                 {
                     _logger.Debug("Unable to apply permissions to: ", path);
-                    _logger.TraceException(ex.Message, ex);
+                    _logger.DebugException(ex.Message, ex);
                 }
                 else
                 {

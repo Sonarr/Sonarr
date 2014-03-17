@@ -38,7 +38,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (!remoteEpisode.ParsedEpisodeInfo.IsDaily() || remoteEpisode.ParsedEpisodeInfo.AirDate != episode.AirDate)
             {
-                _logger.Trace("Episode AirDate does not match searched episode number, skipping.");
+                _logger.Debug("Episode AirDate does not match searched episode number, skipping.");
                 return false;
             }
 

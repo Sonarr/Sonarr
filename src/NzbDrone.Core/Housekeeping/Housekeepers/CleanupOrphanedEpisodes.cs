@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            _logger.Trace("Running orphaned episodes cleanup");
+            _logger.Debug("Running orphaned episodes cleanup");
 
             var mapper = _database.GetDataMapper();
 

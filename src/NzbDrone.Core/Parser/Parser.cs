@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -100,7 +99,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
-        private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(a|an|the|and|or|of)(?:\b|_))|\W|_",
+        private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(?<!^)(a|an|the|and|or|of)(?:\b|_))|\W|_",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[x|h|x\s|h\s]264|DD\W?5\W1|\<|\>|\?|\*|\:|\|",
@@ -129,7 +128,7 @@ namespace NzbDrone.Core.Parser
 
             if (result == null)
             {
-                Logger.Trace("Attempting to parse episode info using full path. {0}", fileInfo.FullName);
+                Logger.Debug("Attempting to parse episode info using full path. {0}", fileInfo.FullName);
                 result = ParseTitle(fileInfo.FullName);
             }
 
@@ -150,7 +149,7 @@ namespace NzbDrone.Core.Parser
             {
                 if (!ValidateBeforeParsing(title)) return null;
 
-                Logger.Trace("Parsing string '{0}'", title);
+                Logger.Debug("Parsing string '{0}'", title);
                 var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
 
                 foreach (var regex in ReportTitleRegex)
@@ -166,20 +165,20 @@ namespace NzbDrone.Core.Parser
                             if (result != null)
                             {
                                 result.Language = ParseLanguage(title);
-                                Logger.Trace("Language parsed: {0}", result.Language);
+                                Logger.Debug("Language parsed: {0}", result.Language);
 
                                 result.Quality = QualityParser.ParseQuality(title);
-                                Logger.Trace("Quality parsed: {0}", result.Quality);
+                                Logger.Debug("Quality parsed: {0}", result.Quality);
 
                                 result.ReleaseGroup = ParseReleaseGroup(title);
-                                Logger.Trace("Release Group parsed: {0}", result.ReleaseGroup);
+                                Logger.Debug("Release Group parsed: {0}", result.ReleaseGroup);
 
                                 return result;
                             }
                         }
                         catch (InvalidDateException ex)
                         {
-                            Logger.TraceException(ex.Message, ex);
+                            Logger.DebugException(ex.Message, ex);
                             break;
                         }
                     }
@@ -191,13 +190,13 @@ namespace NzbDrone.Core.Parser
                     Logger.ErrorException("An error has occurred while trying to parse " + title, e);
             }
 
-            Logger.Trace("Unable to parse {0}", title);
+            Logger.Debug("Unable to parse {0}", title);
             return null;
         }
 
         public static string ParseSeriesName(string title)
         {
-            Logger.Trace("Parsing string '{0}'", title);
+            Logger.Debug("Parsing string '{0}'", title);
 
             var parseResult = ParseTitle(title);
 
@@ -402,7 +401,7 @@ namespace NzbDrone.Core.Parser
             result.SeriesTitle = CleanSeriesTitle(seriesName);
             result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
 
-            Logger.Trace("Episode Parsed. {0}", result);
+            Logger.Debug("Episode Parsed. {0}", result);
 
             return result;
         }
@@ -492,7 +491,7 @@ namespace NzbDrone.Core.Parser
         {
             if (title.ToLower().Contains("password") && title.ToLower().Contains("yenc"))
             {
-                Logger.Trace("");
+                Logger.Debug("");
                 return false;
             }
 

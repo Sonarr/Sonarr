@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Update
             var request = new RestRequest("/v1/update/{branch}");
 
             request.AddParameter("version", currentVersion);
+            request.AddParameter("os", OsInfo.Os.ToString().ToLowerInvariant());
             request.AddUrlSegment("branch", branch);
 
             var update = restClient.ExecuteAndValidate<UpdatePackageAvailable>(request);
@@ -38,6 +39,7 @@ namespace NzbDrone.Core.Update
             var request = new RestRequest("/v1/update/{branch}/changes");
 
             request.AddParameter("majorVersion", BuildInfo.Version.Major);
+            request.AddParameter("os", OsInfo.Os.ToString().ToLowerInvariant());
             request.AddUrlSegment("branch", branch);
 
             var updates = restClient.ExecuteAndValidate<List<UpdatePackage>>(request);

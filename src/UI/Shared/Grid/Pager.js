@@ -1,16 +1,20 @@
 'use strict';
 define(
     [
+        'jquery',
         'marionette',
         'backgrid.paginator'
-    ], function (Marionette, Paginator) {
+    ], function ($, Marionette, Paginator) {
 
         return Paginator.extend({
 
             template: 'Shared/Grid/PagerTemplate',
 
             events: {
-                'click .pager-btn': 'changePage'
+                'click .pager-btn'      : 'changePage',
+                'click .x-page-number'  : '_showPageJumper',
+                'change .x-page-select' : '_jumpToPage',
+                'blur .x-page-select'   : 'render'
             },
 
             windowSize: 1,
@@ -25,7 +29,7 @@ define(
             changePage: function (e) {
                 e.preventDefault();
 
-                var target =this.$(e.target);
+                var target = this.$(e.target);
 
                 if (target.closest('li').hasClass('disabled')) {
                     return;
@@ -77,7 +81,7 @@ define(
                 var lastPage = +state.lastPage;
                 lastPage = Math.max(0, firstPage ? lastPage - 1 :lastPage);
                 var currentPage = Math.max(state.currentPage, state.firstPage);
-                currentPage = firstPage ? currentPage - 1 :currentPage;
+                currentPage = firstPage ? currentPage - 1 : currentPage;
                 var windowStart = Math.floor(currentPage / this.windowSize) * this.windowSize;
                 var windowEnd = Math.min(lastPage + 1, windowStart + this.windowSize);
 
@@ -145,6 +149,45 @@ define(
                 this.delegateEvents();
 
                 return this;
+            },
+
+            _showPageJumper: function (e) {
+                if ($(e.target).is('select')) {
+                    return;
+                }
+
+                var templateFunction = Marionette.TemplateCache.get('Shared/Grid/JumpToPageTemplate');
+                var state = this.collection.state;
+                var currentPage = Math.max(state.currentPage, state.firstPage);
+                currentPage = state.firstPage ? currentPage - 1 : currentPage;
+
+                var pages = [];
+
+                for (var i = 0; i < this.collection.state.lastPage; i++) {
+                    if (i === currentPage) {
+                        pages.push({ page: i + 1, current: true });
+                    }
+
+                    else {
+                        pages.push({ page: i + 1 });
+                    }
+                }
+
+                this.$el.find('.x-page-number').html(templateFunction({
+                    pages      : pages
+                }));
+            },
+
+            _jumpToPage: function () {
+                var target = this.$el.find('.x-page-select');
+
+                //Remove event handlers so the blur event is not triggered
+                this.undelegateEvents();
+
+                var selectedPage = parseInt(target.val(), 10);
+
+                this.$el.find('.x-page-number').html('<i class="icon-spinner icon-spin"></i>');
+                this.collection.getPage(selectedPage);
             }
         });
     });

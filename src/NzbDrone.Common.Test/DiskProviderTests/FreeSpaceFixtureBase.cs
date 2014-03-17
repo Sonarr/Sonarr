@@ -36,7 +36,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void should_be_able_to_check_space_on_ramdrive()
         {
-            LinuxOnly();
+            MonoOnly();
             Subject.GetAvailableSpace("/run/").Should().NotBe(0);
         }
 

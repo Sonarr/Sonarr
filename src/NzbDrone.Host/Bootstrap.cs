@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Datastore;
 
@@ -24,7 +25,7 @@ namespace NzbDrone.Host
                 GlobalExceptionHandlers.Register();
                 IgnoreCertErrorPolicy.Register();
 
-                Logger.Info("Starting NzbDrone Console. Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+                Logger.Info("Starting NzbDrone - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
 
                 if (!PlatformValidation.IsValidate(userAlert))
                 {
@@ -59,6 +60,11 @@ namespace NzbDrone.Host
         {
             if (!IsInUtilityMode(applicationModes))
             {
+                if (startupContext.Flags.Contains(StartupContext.RESTART))
+                {
+                    Thread.Sleep(2000);
+                }
+
                 EnsureSingleInstance(applicationModes == ApplicationModes.Service, startupContext);
             }
 
@@ -73,12 +79,7 @@ namespace NzbDrone.Host
                 return;
             }
 
-            var runTimeInfo = _container.Resolve<IRuntimeInfo>();
-
-            while (runTimeInfo.IsRunning)
-            {
-                Thread.Sleep(1000);
-            }
+            _container.Resolve<IWaitForExit>().Spin();
         }
 
         private static void EnsureSingleInstance(bool isService, StartupContext startupContext)
@@ -106,12 +107,12 @@ namespace NzbDrone.Host
                 return ApplicationModes.Help;
             }
 
-            if (!OsInfo.IsLinux && startupContext.InstallService)
+            if (!OsInfo.IsMono && startupContext.InstallService)
             {
                 return ApplicationModes.InstallService;
             }
 
-            if (!OsInfo.IsLinux && startupContext.UninstallService)
+            if (!OsInfo.IsMono && startupContext.UninstallService)
             {
                 return ApplicationModes.UninstallService;
             }

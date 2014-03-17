@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             try
             {
-                _logger.Trace("Sending Update Request to Plex Server");
+                _logger.Debug("Sending Update Request to Plex Server");
                 var sections = GetSectionKeys(settings);
                 sections.ForEach(s => UpdateSection(settings, s));
             }
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public List<int> GetSectionKeys(PlexServerSettings settings)
         {
-            _logger.Trace("Getting sections from Plex host: {0}", settings.Host);
+            _logger.Debug("Getting sections from Plex host: {0}", settings.Host);
             var url = String.Format("http://{0}:{1}/library/sections", settings.Host, settings.Port);
             var xmlStream = _httpProvider.DownloadStream(url, null);
             var xDoc = XDocument.Load(xmlStream);
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void UpdateSection(PlexServerSettings settings, int key)
         {
-            _logger.Trace("Updating Plex host: {0}, Section: {1}", settings.Host, key);
+            _logger.Debug("Updating Plex host: {0}, Section: {1}", settings.Host, key);
             var url = String.Format("http://{0}:{1}/library/sections/{2}/refresh", settings.Host, settings.Port, key);
             _httpProvider.DownloadString(url);
         }
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void Execute(TestPlexClientCommand message)
         {
-            _logger.Trace("Sending Test Notifcation to Plex Client: {0}", message.Host);
+            _logger.Debug("Sending Test Notifcation to Plex Client: {0}", message.Host);
             var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
             var result = SendCommand(message.Host, message.Port, command, message.Username, message.Password);
 

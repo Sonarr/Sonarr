@@ -4,9 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration.Events;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Nzbget;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
 
 
@@ -141,16 +139,29 @@ namespace NzbDrone.Core.Configuration
 
         public Boolean CreateEmptySeriesFolders
         {
-            //TODO: only create if the parent folder exists (check first)
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
 
             set { SetValue("CreateEmptySeriesFolders", value); }
+        }
+
+        public FileDateType FileDate
+        {
+            get { return GetValueEnum("FileDate", FileDateType.None); }
+
+            set { SetValue("FileDate", value); }
         }
 
         public String DownloadClientWorkingFolders
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }
             set { SetValue("DownloadClientWorkingFolders", value); }
+        }
+
+        public Int32 DownloadedEpisodesScanInterval
+        {
+            get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
+
+            set { SetValue("DownloadedEpisodesScanInterval", value); }
         }
 
         public Boolean SetPermissionsLinux
@@ -243,7 +254,7 @@ namespace NzbDrone.Core.Configuration
         {
             key = key.ToLowerInvariant();
 
-            _logger.Trace("Writing Setting to file. Key:'{0}' Value:'{1}'", key, value);
+            _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
 
             var dbValue = _repository.Get(key);
 

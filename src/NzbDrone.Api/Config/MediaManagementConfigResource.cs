@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Api.Config
 {
@@ -9,6 +10,7 @@ namespace NzbDrone.Api.Config
         public String RecycleBin { get; set; }
         public Boolean AutoDownloadPropers { get; set; }
         public Boolean CreateEmptySeriesFolders { get; set; }
+        public FileDateType FileDate { get; set; }
 
         public Boolean SetPermissionsLinux { get; set; }
         public String FileChmod { get; set; }

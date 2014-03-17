@@ -27,19 +27,19 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            _logger.Trace("Beginning size check for: {0}", subject);
+            _logger.Debug("Beginning size check for: {0}", subject);
 
             var quality = subject.ParsedEpisodeInfo.Quality.Quality;
 
             if (quality == Quality.RAWHD)
             {
-                _logger.Trace("Raw-HD release found, skipping size check.");
+                _logger.Debug("Raw-HD release found, skipping size check.");
                 return true;
             }
 
             if (quality == Quality.Unknown)
             {
-                _logger.Trace("Unknown quality. skipping size check.");
+                _logger.Debug("Unknown quality. skipping size check.");
                 return false;
             }
 
@@ -52,12 +52,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             //If the parsed size is smaller than minSize we don't want it
             if (subject.Release.Size < minSize)
             {
-                _logger.Trace("Item: {0}, Size: {1} is smaller than minimum allowed size ({2}), rejecting.", subject, subject.Release.Size, minSize);
+                _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2}), rejecting.", subject, subject.Release.Size, minSize);
                 return false;
             }
             if (qualityDefinition.MaxSize == 0)
             {
-                _logger.Trace("Max size is 0 (unlimited) - skipping check.");
+                _logger.Debug("Max size is 0 (unlimited) - skipping check.");
             }
             else
             {
@@ -75,11 +75,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 //If the parsed size is greater than maxSize we don't want it
                 if (subject.Release.Size > maxSize)
                 {
-                    _logger.Trace("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
+                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
                     return false;
                 }
             }
-            _logger.Trace("Item: {0}, meets size constraints.", subject);
+            _logger.Debug("Item: {0}, meets size constraints.", subject);
             return true;
         }
     }

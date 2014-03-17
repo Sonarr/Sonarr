@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Parser
 
             if (!episodes.Any())
             {
-                _logger.Trace("No matching episodes found for: {0}", parsedEpisodeInfo);
+                _logger.Debug("No matching episodes found for: {0}", parsedEpisodeInfo);
                 return null;
             }
 
@@ -256,7 +256,7 @@ namespace NzbDrone.Core.Parser
 
             if (series == null)
             {
-                _logger.Trace("No matching series {0}", title);
+                _logger.Debug("No matching series {0}", title);
                 return null;
             }
 
@@ -325,7 +325,7 @@ namespace NzbDrone.Core.Parser
 
             if (series == null)
             {
-                _logger.Trace("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
+                _logger.Debug("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
                 return null;
             }
 

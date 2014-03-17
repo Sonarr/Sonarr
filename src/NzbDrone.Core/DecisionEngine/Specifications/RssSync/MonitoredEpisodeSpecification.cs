@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         {
             if (searchCriteria != null)
             {
-                _logger.Trace("Skipping monitored check during search");
+                _logger.Debug("Skipping monitored check during search");
                 return true;
             }
 

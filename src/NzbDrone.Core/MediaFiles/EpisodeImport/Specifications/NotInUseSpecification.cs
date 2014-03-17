@@ -21,13 +21,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             if (localEpisode.ExistingFile)
             {
-                _logger.Trace("{0} is in series folder, skipping in use check", localEpisode.Path);
+                _logger.Debug("{0} is in series folder, skipping in use check", localEpisode.Path);
                 return true;
             }
 
             if (_diskProvider.IsFileLocked(localEpisode.Path))
             {
-                _logger.Trace("{0} is in use");
+                _logger.Debug("{0} is in use");
                 return false;
             }
 

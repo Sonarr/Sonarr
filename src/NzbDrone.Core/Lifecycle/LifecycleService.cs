@@ -1,9 +1,7 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
-using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -48,21 +46,11 @@ namespace NzbDrone.Core.Lifecycle
         {
             _logger.Info("Restart requested.");
 
-            if (OsInfo.IsLinux)
-            {
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
-            }
-
             _eventAggregator.PublishEvent(new ApplicationShutdownRequested(true));
 
             if (_runtimeInfo.IsWindowsService)
             {
                 _serviceProvider.Restart(ServiceProvider.NZBDRONE_SERVICE_NAME);
-            }
-
-            else
-            {
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--terminateexisting --nobrowser");
             }
         }
     }

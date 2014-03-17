@@ -1,8 +1,8 @@
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Nancy;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
@@ -12,9 +12,11 @@ namespace NzbDrone.Api.Frontend.Mappers
     public class IndexHtmlMapper : StaticResourceMapperBase
     {
         private readonly IDiskProvider _diskProvider;
-        private readonly IConfigFileProvider _configFileProvider;
         private readonly string _indexPath;
         private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static String API_KEY;
+        private static String URL_BASE;
 
         public IndexHtmlMapper(IAppFolderInfo appFolderInfo,
                                IDiskProvider diskProvider,
@@ -23,8 +25,10 @@ namespace NzbDrone.Api.Frontend.Mappers
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
-            _configFileProvider = configFileProvider;
             _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "index.html");
+
+            API_KEY = configFileProvider.ApiKey;
+            URL_BASE = configFileProvider.UrlBase;
         }
 
         protected override string Map(string resourceUrl)
@@ -54,12 +58,12 @@ namespace NzbDrone.Api.Frontend.Mappers
         {
             var text = _diskProvider.ReadAllText(_indexPath);
 
-            text = ReplaceRegex.Replace(text, match => _configFileProvider.UrlBase + match.Value);
+            text = ReplaceRegex.Replace(text, match => URL_BASE + match.Value);
 
             text = text.Replace(".css", ".css?v=" + BuildInfo.Version);
             text = text.Replace(".js", ".js?v=" + BuildInfo.Version);
-            text = text.Replace("API_ROOT", _configFileProvider.UrlBase + "/api");
-            text = text.Replace("API_KEY", _configFileProvider.ApiKey);
+            text = text.Replace("API_ROOT", URL_BASE + "/api");
+            text = text.Replace("API_KEY", API_KEY);
             text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
 
             return text;

@@ -7,11 +7,9 @@ define(
 
         return Marionette.ItemView.extend({
 
-
             initialize: function () {
                 this.listenTo(this.model, 'change', this.render);
             },
-
 
             render: function () {
                 if (!this.model.get('message') || !this.model.get('sendUpdatesToClient')) {
@@ -37,7 +35,13 @@ define(
                         message.hideAfter = 0;
                 }
 
-                Messenger.show(message);
+                if (this.messenger) {
+                    this.messenger.update(message);
+                }
+
+                else {
+                    this.messenger = Messenger.show(message);
+                }
 
                 console.log(message.message);
             }

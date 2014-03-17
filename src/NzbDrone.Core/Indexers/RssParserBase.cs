@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Indexers
                 throw new SizeParsingException("Unable to parse size from: {0} [{1}]", reportInfo.Title, url);
             }
 
-            _logger.Trace("Parsed: {0} from: {1}", reportInfo, item.Title());
+            _logger.Trace("Parsed: {0}", item.Title());
 
             return PostProcessor(item, reportInfo);
         }

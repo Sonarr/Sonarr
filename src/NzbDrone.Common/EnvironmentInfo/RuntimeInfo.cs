@@ -16,6 +16,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool IsWindowsService { get; }
         bool IsConsole { get; }
         bool IsRunning { get; set; }
+        bool RestartPending { get; set; }
         string ExecutingApplication { get; }
     }
 
@@ -78,11 +79,12 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return (OsInfo.IsWindows &&
                         IsUserInteractive &&
                         ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase)) ||
-                        OsInfo.IsLinux;
+                        OsInfo.IsMono;
             } 
         }
 
         public bool IsRunning { get; set; }
+        public bool RestartPending { get; set; }
         public string ExecutingApplication { get; private set; }
 
         public static bool IsProduction { get; private set; }

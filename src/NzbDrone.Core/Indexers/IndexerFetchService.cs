@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser.Model;
 using System.Linq;
 
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Indexers
 
             var result = Fetch(indexer, indexer.RecentFeed);
 
-            _logger.Debug("Finished processing feeds from " + indexer);
+            _logger.Debug("Finished processing feeds from {0} found {1} releases", indexer, result.Count);
 
             return result;
         }
@@ -115,7 +116,7 @@ namespace NzbDrone.Core.Indexers
             {
                 try
                 {
-                    _logger.Trace("Downloading Feed " + url);
+                    _logger.CleansedDebug("Downloading Feed " + url);
                     var xml = _httpProvider.DownloadString(url);
                     if (!string.IsNullOrWhiteSpace(xml))
                     {

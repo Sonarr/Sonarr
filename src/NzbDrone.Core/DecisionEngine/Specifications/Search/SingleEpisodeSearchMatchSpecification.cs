@@ -34,13 +34,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
             {
-                _logger.Trace("Season number does not match searched season number, skipping.");
+                _logger.Debug("Season number does not match searched season number, skipping.");
                 return false;
             }
 
             if (!remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers.Contains(singleEpisodeSpec.EpisodeNumber))
             {
-                _logger.Trace("Episode number does not match searched episode number, skipping.");
+                _logger.Debug("Episode number does not match searched episode number, skipping.");
                 return false;
             }
 

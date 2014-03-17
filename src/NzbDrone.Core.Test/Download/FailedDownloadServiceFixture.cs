@@ -253,5 +253,22 @@ namespace NzbDrone.Core.Test.Download
 
             VerifyNoFailedDownloads();
         }
+
+        [Test]
+        public void should_not_process_if_failed_due_to_lack_of_disk_space()
+        {
+            var history = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            GivenGrabbedHistory(history);
+            GivenFailedDownloadClientHistory();
+
+            _failed.First().Message = "Unpacking failed, write error or disk is full?";
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyNoFailedDownloads();
+        }
     }
 }
