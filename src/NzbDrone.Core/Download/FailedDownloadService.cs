@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -115,6 +116,14 @@ namespace NzbDrone.Core.Download
                 if (!historyItems.Any())
                 {
                     _logger.Debug("Unable to find matching history item");
+                    continue;
+                }
+
+                //TODO: Make this more configurable (ignore failure reasons) to support changes and other failures that should be ignored
+                if (failedLocal.Message.Equals("Unpacking failed, write error or disk is full?",
+                    StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _logger.Debug("Failed due to lack of disk space, do not blacklist");
                     continue;
                 }
 
