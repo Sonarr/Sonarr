@@ -29,16 +29,20 @@ define(
                     return;
                 }
 
-                event.preventDefault();
-
                 var href = event.target.getAttribute('href');
 
                 if (!href && $target.closest('a') && $target.closest('a')[0]) {
 
                     var linkElement = $target.closest('a')[0];
 
+                    if ($(linkElement).hasClass('no-router')) {
+                        return;
+                    }
+
                     href = linkElement.getAttribute('href');
                 }
+
+                event.preventDefault();
 
                 if (!href) {
                     throw 'couldn\'t find route target';
