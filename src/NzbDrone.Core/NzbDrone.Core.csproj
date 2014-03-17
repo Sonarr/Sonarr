@@ -191,6 +191,7 @@
     <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
