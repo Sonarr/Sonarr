@@ -43,15 +43,20 @@ namespace NzbDrone.Host.AccessControl
             var localHttpsUrls = BuildUrls("https", "localhost", _configFileProvider.SslPort);
             var wildcardHttpsUrls = BuildUrls("https", "*", _configFileProvider.SslPort);
 
+            if (!_configFileProvider.EnableSsl)
+            {
+                localHttpsUrls.Clear();
+                wildcardHttpsUrls.Clear();
+            }
+
             if (OsInfo.IsWindows && !_runtimeInfo.IsAdmin)
             {
                 var httpUrls = wildcardHttpUrls.All(IsRegistered) ? wildcardHttpUrls : localHttpUrls;
                 var httpsUrls = wildcardHttpsUrls.All(IsRegistered) ? wildcardHttpsUrls : localHttpsUrls;
 
                 Urls.AddRange(httpUrls);
-                Urls.AddRange(httpsUrls);             
+                Urls.AddRange(httpsUrls);
             }
-
             else
             {
                 Urls.AddRange(wildcardHttpUrls);
