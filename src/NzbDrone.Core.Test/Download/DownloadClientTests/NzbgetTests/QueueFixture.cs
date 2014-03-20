@@ -24,6 +24,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             _queue = Builder<NzbgetQueueItem>.CreateListOfSize(5)
                                              .All()
                                              .With(q => q.NzbName = "30.Rock.S01E01.Pilot.720p.hdtv.nzb")
+                                             .With(q => q.Parameters = new List<NzbgetParameter>
+                                                                       {
+                                                                           new NzbgetParameter { Name = "drone", Value = "id" }
+                                                                       })
                                              .Build()
                                              .ToList();
 
