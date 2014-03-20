@@ -97,6 +97,11 @@ namespace NzbDrone.Core.DecisionEngine
 
                 if (decision != null)
                 {
+                    if (decision.Rejections.Any())
+                    {
+                        _logger.Debug("Release rejected for the following reasons: {0}", String.Join(", ", decision.Rejections));
+                    }
+
                     yield return decision;
                 }
             }
