@@ -107,6 +107,7 @@
     <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Services.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
     <Compile Include="StringExtensions.cs" />

@@ -236,6 +236,8 @@
     <Compile Include="Download\Clients\Blackhole\TestBlackholeCommand.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\FolderSettings.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetHistoryItem.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetParameter.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\TestNzbgetCommand.cs" />
     <Compile Include="Download\Clients\Pneumatic\Pneumatic.cs" />
@@ -500,10 +502,10 @@
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
-    <Compile Include="Download\Clients\Nzbget\EnqueueResponse.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetBooleanResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetQueue.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetListResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetQueueItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetPriority.cs" />
     <Compile Include="Download\Clients\Nzbget\VersionResponse.cs" />

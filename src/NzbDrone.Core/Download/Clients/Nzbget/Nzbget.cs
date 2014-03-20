@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -13,14 +14,17 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     {
         private readonly INzbgetProxy _proxy;
         private readonly IParsingService _parsingService;
+        private readonly IHttpProvider _httpProvider;
         private readonly Logger _logger;
 
         public Nzbget(INzbgetProxy proxy,
                       IParsingService parsingService,
+                      IHttpProvider httpProvider,
                       Logger logger)
         {
             _proxy = proxy;
             _parsingService = parsingService;
+            _httpProvider = httpProvider;
             _logger = logger;
         }
 
@@ -29,16 +33,18 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title + ".nzb";
 
-            string cat = Settings.TvCategory;
+            string category = Settings.TvCategory;
             int priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
             _logger.Info("Adding report [{0}] to the queue.", title);
 
-            var success = _proxy.AddNzb(Settings, title, cat, priority, false, url);
+            using (var nzb = _httpProvider.DownloadStream(url))
+            {
+                _logger.Info("Adding report [{0}] to the queue.", title);
+                var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
 
-            _logger.Debug("Queue Response: [{0}]", success);
-
-            return null;
+                return response;
+            }
         }
 
         public override IEnumerable<QueueItem> GetQueue()
@@ -57,14 +63,16 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var queueItems = new List<QueueItem>();
 
-            foreach (var nzbGetQueueItem in queue)
+            foreach (var item in queue)
             {
+                var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
+
                 var queueItem = new QueueItem();
-                queueItem.Id = nzbGetQueueItem.NzbId.ToString();
-                queueItem.Title = nzbGetQueueItem.NzbName;
-                queueItem.Size = nzbGetQueueItem.FileSizeMb;
-                queueItem.Sizeleft = nzbGetQueueItem.RemainingSizeMb;
-                queueItem.Status = nzbGetQueueItem.FileSizeMb == nzbGetQueueItem.PausedSizeMb ? "paused" : "queued";
+                queueItem.Id = droneParameter == null ? item.NzbId.ToString() : droneParameter.Value.ToString();
+                queueItem.Title = item.NzbName;
+                queueItem.Size = item.FileSizeMb;
+                queueItem.Sizeleft = item.RemainingSizeMb;
+                queueItem.Status = item.FileSizeMb == item.PausedSizeMb ? "paused" : "queued";
 
                 var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
                 if (parsedEpisodeInfo == null) continue;
@@ -81,7 +89,43 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
         {
-            return new HistoryItem[0];
+            List<NzbgetHistoryItem> history;
+
+            try
+            {
+                history = _proxy.GetHistory(Settings);
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return Enumerable.Empty<HistoryItem>();
+            }
+
+            var historyItems = new List<HistoryItem>();
+            var successStatues = new[] {"SUCCESS", "NONE"};
+
+            foreach (var item in history)
+            {
+                var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
+                var status = successStatues.Contains(item.ParStatus) &&
+                             successStatues.Contains(item.ScriptStatus)
+                    ? HistoryStatus.Completed
+                    : HistoryStatus.Failed;
+
+                var historyItem = new HistoryItem();
+                historyItem.Id = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
+                historyItem.Title = item.Name;
+                historyItem.Size = item.FileSizeMb.ToString(); //Why is this a string?
+                historyItem.DownloadTime = 0;
+                historyItem.Storage = item.DestDir;
+                historyItem.Category = item.Category;
+                historyItem.Message = String.Format("PAR Status: {0} - Script Status: {1}", item.ParStatus, item.ScriptStatus);
+                historyItem.Status = status;
+
+                historyItems.Add(historyItem);
+            }
+
+            return historyItems;
         }
 
         public override void RemoveFromQueue(string id)
@@ -91,7 +135,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override void RemoveFromHistory(string id)
         {
-            throw new NotImplementedException();
+            _proxy.RemoveFromHistory(id, Settings);
         }
 
         public override void Test()

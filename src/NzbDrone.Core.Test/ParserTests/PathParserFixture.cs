@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"C:\Test\Unsorted\The.Big.Bang.Theory.S01E01.720p.HDTV\tbbt101.avi", 1, 1)]
         [TestCase(@"C:\Test\Unsorted\Terminator.The.Sarah.Connor.Chronicles.S02E19.720p.BluRay.x264-SiNNERS-RP\ba27283b17c00d01193eacc02a8ba98eeb523a76.mkv", 2, 19)]
         [TestCase(@"C:\Test\Unsorted\Terminator.The.Sarah.Connor.Chronicles.S02E18.720p.BluRay.x264-SiNNERS-RP\45a55debe3856da318cc35882ad07e43cd32fd15.mkv", 2, 18)]
+        [TestCase(@"C:\Test\The.Blacklist.S01E16.720p.HDTV.X264-DIMENSION\XRmZciqkBopq4851Ddbipe\Vh1FvU3bJXw6zs8EEUX4bMo5vbbMdHghxHirc.mkv", 1, 16)]
         public void should_parse_from_path(string path, int season, int episode)
         {
             var result = Parser.Parser.ParsePath(path);
