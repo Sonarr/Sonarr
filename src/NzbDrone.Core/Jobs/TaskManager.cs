@@ -48,7 +48,6 @@ namespace NzbDrone.Core.Jobs
         {
             var defaultTasks = new[]
                 {
-                    new ScheduledTask{ Interval = 1, TypeName = typeof(DownloadedEpisodesScanCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName},
                     new ScheduledTask{ Interval = 1, TypeName = typeof(CheckForFailedDownloadCommand).FullName},
                     new ScheduledTask{ Interval = 5, TypeName = typeof(CheckHealthCommand).FullName},
@@ -73,7 +72,7 @@ namespace NzbDrone.Core.Jobs
 
             var currentTasks = _scheduledTaskRepository.All().ToList();
 
-            _logger.Debug("Initializing jobs. Available: {0} Existing:{1}", defaultTasks.Count(), currentTasks.Count());
+            _logger.Debug("Initializing jobs. Available: {0} Existing: {1}", defaultTasks.Count(), currentTasks.Count());
 
             foreach (var job in currentTasks)
             {
