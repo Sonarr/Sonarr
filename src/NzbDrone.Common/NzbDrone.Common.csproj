@@ -105,6 +105,7 @@
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="Processes\INzbDroneProcessProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
+    <Compile Include="RateGate.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />

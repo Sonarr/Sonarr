@@ -19,6 +19,7 @@ namespace NzbDrone.Core.IndexerSearch
     public interface ISearchForNzb
     {
         List<DownloadDecision> EpisodeSearch(int episodeId);
+        List<DownloadDecision> EpisodeSearch(Episode episode);
         List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber);
     }
 
@@ -52,6 +53,12 @@ namespace NzbDrone.Core.IndexerSearch
         public List<DownloadDecision> EpisodeSearch(int episodeId)
         {
             var episode = _episodeService.GetEpisode(episodeId);
+
+            return EpisodeSearch(episode);
+        }
+
+        public List<DownloadDecision> EpisodeSearch(Episode episode)
+        {
             var series = _seriesService.GetSeries(episode.SeriesId);
 
             if (series.SeriesType == SeriesTypes.Daily)
@@ -67,7 +74,7 @@ namespace NzbDrone.Core.IndexerSearch
             if (episode.SeasonNumber == 0)
             {
                 // search for special episodes in season 0 
-                return SearchSpecial(series, new List<Episode>{episode});
+                return SearchSpecial(series, new List<Episode> { episode });
             }
 
             return SearchSingle(series, episode);
