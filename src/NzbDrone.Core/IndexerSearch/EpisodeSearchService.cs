@@ -49,7 +49,8 @@ namespace NzbDrone.Core.IndexerSearch
                                                          Page = 1,
                                                          PageSize = 100000,
                                                          SortDirection = SortDirection.Ascending,
-                                                         SortKey = "Id"
+                                                         SortKey = "Id",
+                                                         FilterExpression = v => v.Monitored && v.Series.Monitored
                                                      }).Records.ToList();
 
             _logger.ProgressInfo("Performing missing search for {0} episodes", episodes.Count);
