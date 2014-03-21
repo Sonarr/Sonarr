@@ -13,5 +13,14 @@ namespace NzbDrone.Core.MediaFiles.Commands
                 return true;
             }
         }
+
+        public RescanSeriesCommand()
+        {
+        }
+
+        public RescanSeriesCommand(int seriesId)
+        {
+            SeriesId = seriesId;
+        }
     }
 }

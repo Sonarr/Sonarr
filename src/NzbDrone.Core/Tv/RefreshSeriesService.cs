@@ -5,6 +5,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
@@ -21,15 +22,26 @@ namespace NzbDrone.Core.Tv
         private readonly IRefreshEpisodeService _refreshEpisodeService;
         private readonly IEventAggregator _eventAggregator;
         private readonly IDailySeriesService _dailySeriesService;
+        private readonly ICommandExecutor _commandExecutor;
+        private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly Logger _logger;
 
-        public RefreshSeriesService(IProvideSeriesInfo seriesInfo, ISeriesService seriesService, IRefreshEpisodeService refreshEpisodeService, IEventAggregator eventAggregator, IDailySeriesService dailySeriesService, Logger logger)
+        public RefreshSeriesService(IProvideSeriesInfo seriesInfo,
+                                    ISeriesService seriesService,
+                                    IRefreshEpisodeService refreshEpisodeService,
+                                    IEventAggregator eventAggregator,
+                                    IDailySeriesService dailySeriesService,
+                                    ICommandExecutor commandExecutor,
+                                    ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
+                                    Logger logger)
         {
             _seriesInfo = seriesInfo;
             _seriesService = seriesService;
             _refreshEpisodeService = refreshEpisodeService;
             _eventAggregator = eventAggregator;
             _dailySeriesService = dailySeriesService;
+            _commandExecutor = commandExecutor;
+            _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _logger = logger;
         }
 
@@ -116,13 +128,29 @@ namespace NzbDrone.Core.Tv
 
                 foreach (var series in allSeries)
                 {
-                    try
+                    if (_checkIfSeriesShouldBeRefreshed.ShouldRefresh(series))
                     {
-                        RefreshSeriesInfo(series);
+                        try
+                        {
+                            RefreshSeriesInfo(series);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.ErrorException("Couldn't refresh info for {0}".Inject(series), e);
+                        }
                     }
-                    catch (Exception e)
+
+                    else
                     {
-                        _logger.ErrorException("Couldn't refresh info for {0}".Inject(series), e);
+                        try
+                        {
+                            _logger.Info("Skipping refresh of series: {0}", series.Title);
+                            _commandExecutor.PublishCommand(new RescanSeriesCommand(series.Id));
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.ErrorException("Couldn't rescan series {0}".Inject(series), e);
+                        }
                     }
                 }
             }
