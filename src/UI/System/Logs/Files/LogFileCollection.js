@@ -6,7 +6,7 @@ define(
         'System/Logs/Files/LogFileModel'
     ], function (Backbone, LogFileModel) {
         return Backbone.Collection.extend({
-            url  : window.NzbDrone.ApiRoot + '/log/files',
+            url  : window.NzbDrone.ApiRoot + '/log/file',
             model: LogFileModel,
 
             state: {

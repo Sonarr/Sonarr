@@ -6,7 +6,7 @@ define(
     ], function (Backbone, StatusModel) {
         return Backbone.Model.extend({
             url: function () {
-                return StatusModel.get('urlBase') + '/log/' + this.get('filename');
+                return StatusModel.get('urlBase') + '/logfile/' + this.get('filename');
             },
 
             parse: function (contents) {
