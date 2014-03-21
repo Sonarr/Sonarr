@@ -24,6 +24,11 @@ namespace NzbDrone.Core.Indexers.Newznab
                 throw new ApiKeyException("Indexer requires an API key");
             }
 
+            if (errorMessage == "Request limit reached")
+            {
+                throw new RequestLimitReachedException("API limit reached");
+            }
+
             throw new NewznabException("Newznab error detected: {0}", errorMessage);
         }
     }

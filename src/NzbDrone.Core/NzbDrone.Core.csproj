@@ -299,6 +299,7 @@
     <Compile Include="Indexers\BasicTorrentRssParser.cs" />
     <Compile Include="Indexers\DownloadProtocols.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
+    <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
     <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />

@@ -46,7 +46,11 @@ namespace NzbDrone.Core.Indexers
                 _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
 
                 var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
-                throw new ValidationException(new List<ValidationFailure> { apiKeyFailure }.ToArray());
+                throw new ValidationException(new List<ValidationFailure> {apiKeyFailure}.ToArray());
+            }
+            catch (RequestLimitReachedException)
+            {
+                _logger.Warn("Request limit reached");
             }
             catch (Exception ex)
             {
