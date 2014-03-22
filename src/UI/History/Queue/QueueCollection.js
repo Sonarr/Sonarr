@@ -18,7 +18,7 @@ define(
             mode: 'client',
 
             findEpisode: function (episodeId) {
-                return _.find(this.models, function (queueModel) {
+                return _.find(this.fullCollection.models, function (queueModel) {
                     return queueModel.get('episode').id === episodeId;
                 });
             }
