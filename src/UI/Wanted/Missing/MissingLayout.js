@@ -131,6 +131,14 @@ define(
                             title: 'Season Pass',
                             icon : 'icon-bookmark',
                             route: 'seasonpass'
+                        },
+                        {
+                            title: 'Rescan Drone Factory Folder',
+                            icon : 'icon-refresh',
+                            command: 'downloadedepisodesscan',
+                            properties: {
+                                sendUpdates: true
+                            }
                         }
                     ]
                 };
