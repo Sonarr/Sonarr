@@ -5,6 +5,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Tv
         private readonly IRefreshEpisodeService _refreshEpisodeService;
         private readonly IEventAggregator _eventAggregator;
         private readonly IDailySeriesService _dailySeriesService;
-        private readonly ICommandExecutor _commandExecutor;
+        private readonly IDiskScanService _diskScanService;
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly Logger _logger;
 
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Tv
                                     IRefreshEpisodeService refreshEpisodeService,
                                     IEventAggregator eventAggregator,
                                     IDailySeriesService dailySeriesService,
-                                    ICommandExecutor commandExecutor,
+                                    IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     Logger logger)
         {
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Tv
             _refreshEpisodeService = refreshEpisodeService;
             _eventAggregator = eventAggregator;
             _dailySeriesService = dailySeriesService;
-            _commandExecutor = commandExecutor;
+            _diskScanService = diskScanService;
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _logger = logger;
         }
@@ -145,7 +146,7 @@ namespace NzbDrone.Core.Tv
                         try
                         {
                             _logger.Info("Skipping refresh of series: {0}", series.Title);
-                            _commandExecutor.PublishCommand(new RescanSeriesCommand(series.Id));
+                            _diskScanService.Scan(series);
                         }
                         catch (Exception e)
                         {

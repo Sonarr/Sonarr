@@ -16,6 +16,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IDiskScanService
     {
+        void Scan(Series series);
         string[] GetVideoFiles(string path, bool allDirectories = true);
     }
 
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private void Scan(Series series)
+        public void Scan(Series series)
         {
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
             _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
