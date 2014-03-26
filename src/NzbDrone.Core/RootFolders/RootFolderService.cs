@@ -132,11 +132,8 @@ namespace NzbDrone.Core.RootFolders
                 results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
             }
 
-            if (Path.GetPathRoot(path).Equals(path, StringComparison.InvariantCultureIgnoreCase))
-            {
-                var setToRemove = SpecialFolders;
-                results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
-            }
+            var setToRemove = SpecialFolders;
+            results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
 
             Logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
