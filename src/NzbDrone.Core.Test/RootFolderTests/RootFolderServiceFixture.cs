@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetDirectories(It.IsAny<String>()))
-                  .Returns(new string[] {@"C:\30 Rock", @"C:\$Recycle.Bin", @"C:\.AppleDouble"});
+                  .Returns(new string[] {@"C:\30 Rock".AsOsAgnostic(), @"C:\$Recycle.Bin".AsOsAgnostic(), @"C:\.AppleDouble".AsOsAgnostic()});
 
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetAllSeries())
