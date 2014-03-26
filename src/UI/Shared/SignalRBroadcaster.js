@@ -59,13 +59,6 @@ define(
                             vent.trigger(vent.Events.ServerUpdated);
                         }
                     });
-
-                    Messenger.show({
-                        id        : messengerId,
-                        type      : 'success',
-                        hideAfter : 5,
-                        message   : 'Connection to backend restored'
-                    });
                 });
 
                 this.signalRconnection.disconnected(function () {
