@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(new List<Series>());
 
             Subject.GetUnmappedFolders(@"C:\")
-                   .Should().OnlyContain(u => u.Path == @"C:\30 Rock");
+                   .Should().OnlyContain(u => u.Path == @"C:\30 Rock".AsOsAgnostic());
         }
     }
 }
