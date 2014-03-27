@@ -39,7 +39,8 @@ namespace NzbDrone.Core.RootFolders
                                                                      "lost+found",
                                                                      ".appledb",
                                                                      ".appledesktop",
-                                                                     ".appledouble"
+                                                                     ".appledouble",
+                                                                     "@eadir"
                                                                  };
 
 
