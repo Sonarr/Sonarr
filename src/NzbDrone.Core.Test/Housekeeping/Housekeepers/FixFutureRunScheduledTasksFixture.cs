@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Microsoft.Practices.ObjectBuilder2;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers

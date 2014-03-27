@@ -282,6 +282,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
@@ -350,8 +351,6 @@
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadata.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadataSettings.cs" />
     <Compile Include="Metadata\Files\CleanMetadataService.cs" />
-    <Compile Include="Metadata\Consumers\Fake\Fake.cs" />
-    <Compile Include="Metadata\Consumers\Fake\FakeSettings.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
