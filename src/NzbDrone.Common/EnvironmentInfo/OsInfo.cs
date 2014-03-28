@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace NzbDrone.Common.EnvironmentInfo
@@ -18,7 +19,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             IsLinux = IsMono && !IsOsx;
             IsWindows = !IsMono;
 
-            FirstDayOfWeek = DateTime.Today.GetFirstDayOfWeek().DayOfWeek;
+            FirstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 
             if (!IsMono)
             {
