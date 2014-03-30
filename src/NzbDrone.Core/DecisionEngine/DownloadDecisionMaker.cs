@@ -97,6 +97,17 @@ namespace NzbDrone.Core.DecisionEngine
 
                 if (decision != null)
                 {
+                    if (searchCriteria != null)
+                    {
+                        var criteriaEpisodes = searchCriteria.Episodes.Select(v => v.Id).ToList();
+                        var remoteEpisodes = decision.RemoteEpisode.Episodes.Select(v => v.Id).ToList();
+                        if (!criteriaEpisodes.Intersect(remoteEpisodes).Any())
+                        {
+                            _logger.Debug("Release rejected since the episode wasn't requested: {0}", decision.RemoteEpisode.ParsedEpisodeInfo);
+                            continue;
+                        }
+                    }
+
                     if (decision.Rejections.Any())
                     {
                         _logger.Debug("Release rejected for the following reasons: {0}", String.Join(", ", decision.Rejections));

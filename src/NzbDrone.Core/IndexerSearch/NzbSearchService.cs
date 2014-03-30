@@ -138,10 +138,43 @@ namespace NzbDrone.Core.IndexerSearch
                 return SearchSpecial(series, episodes);
             }
 
-            var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
-            searchSpec.SeasonNumber = seasonNumber;
+            List<DownloadDecision> downloadDecisions = new List<DownloadDecision>();
 
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+            if (series.UseSceneNumbering)
+            {
+                var sceneSeasonGroups = episodes.GroupBy(v => v.SceneSeasonNumber).Distinct();
+
+                foreach (var sceneSeasonEpisodes in sceneSeasonGroups)
+                {
+                    if (sceneSeasonEpisodes.Count() == 1)
+                    {
+                        var searchSpec = Get<SingleEpisodeSearchCriteria>(series, sceneSeasonEpisodes.ToList());
+                        searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
+                        searchSpec.EpisodeNumber = sceneSeasonEpisodes.First().SceneEpisodeNumber;
+
+                        var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+                        downloadDecisions.AddRange(decisions);
+                    }
+                    else
+                    {
+                        var searchSpec = Get<SeasonSearchCriteria>(series, sceneSeasonEpisodes.ToList());
+                        searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
+
+                        var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+                        downloadDecisions.AddRange(decisions);
+                    }
+                }
+            }
+            else
+            {
+                var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
+                searchSpec.SeasonNumber = seasonNumber;
+
+                var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+                downloadDecisions.AddRange(decisions);
+            }
+
+            return downloadDecisions;
         }
 
         private TSpec Get<TSpec>(Series series, List<Episode> episodes) where TSpec : SearchCriteriaBase, new()
