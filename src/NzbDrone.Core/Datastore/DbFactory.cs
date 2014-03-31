@@ -15,7 +15,6 @@ namespace NzbDrone.Core.Datastore
         IDatabase Create(MigrationType migrationType = MigrationType.Main);
     }
 
-
     public class DbFactory : IDbFactory
     {
         private readonly IMigrationController _migrationController;
@@ -79,8 +78,11 @@ namespace NzbDrone.Core.Datastore
                     return dataMapper;
                 });
 
-            db.Vacuum();
 
+            if (migrationType == MigrationType.Main)
+            {
+                db.Vacuum();
+            }
 
             return db;
         }

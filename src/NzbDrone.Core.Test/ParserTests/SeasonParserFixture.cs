@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Office Season4 WS PDTV XviD FUtV", "The Office", 4)]
         [TestCase("Eureka S 01 720p WEB DL DD 5 1 h264 TjHD", "Eureka", 1)]
         [TestCase("Doctor Who Confidential   Season 3", "Doctor Who Confidential", 3)]
+        [TestCase("Fleming.S01.720p.WEBDL.DD5.1.H.264-NTb", "Fleming", 1)]
         public void should_parsefull_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

@@ -8,25 +8,24 @@ define(
         'Calendar/Collection',
         'System/StatusModel',
         'History/Queue/QueueCollection',
+        'Config',
         'Mixins/backbone.signalr.mixin',
         'fullcalendar',
         'jquery.easypiechart'
-    ], function (vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection) {
-
-        var _instance;
+    ], function (vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config) {
 
         return Marionette.ItemView.extend({
+            storageKey: 'calendar.view',
+
             initialize: function () {
                 this.collection = new CalendarCollection().bindSignalR({ updateOnly: true });
                 this.listenTo(this.collection, 'change', this._reloadCalendarEvents);
                 this.listenTo(QueueCollection, 'sync', this._reloadCalendarEvents);
             },
+
             render    : function () {
-
-                var self = this;
-
                 this.$el.empty().fullCalendar({
-                    defaultView   : 'basicWeek',
+                    defaultView   : Config.getValue(this.storageKey, 'basicWeek'),
                     allDayDefault : false,
                     ignoreTimezone: false,
                     weekMode      : 'variable',
@@ -41,53 +40,61 @@ define(
                         prev: '<i class="icon-arrow-left"></i>',
                         next: '<i class="icon-arrow-right"></i>'
                     },
-                    viewRender : this._getEvents,
-                    eventRender   : function (event, element) {
-                        self.$(element).addClass(event.statusLevel);
-                        self.$(element).children('.fc-event-inner').addClass(event.statusLevel);
-
-                        if (event.progress > 0) {
-                            self.$(element).find('.fc-event-time')
-                                .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(event.progress));
-
-                            self.$(element).find('.chart').easyPieChart({
-                                barColor  : '#ffffff',
-                                trackColor: false,
-                                scaleColor: false,
-                                lineWidth : 2,
-                                size      : 14,
-                                animate   : false
-                            });
-                        }
-                    },
+                    viewRender    : this._viewRender.bind(this),
+                    eventRender   : this._eventRender.bind(this),
                     eventClick    : function (event) {
                         vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
                     }
                 });
-
-                _instance = this;
             },
 
             onShow: function () {
                 this.$('.fc-button-today').click();
             },
 
+            _viewRender: function (view) {
+                if (Config.getValue(this.storageKey) !== view.name) {
+                    Config.setValue(this.storageKey, view.name);
+                }
+                
+                this._getEvents(view);
+            },
+            
+            _eventRender: function (event, element) {
+                this.$(element).addClass(event.statusLevel);
+                this.$(element).children('.fc-event-inner').addClass(event.statusLevel);
+
+                if (event.progress > 0) {
+                    this.$(element).find('.fc-event-time')
+                        .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(event.progress));
+
+                    this.$(element).find('.chart').easyPieChart({
+                        barColor  : '#ffffff',
+                        trackColor: false,
+                        scaleColor: false,
+                        lineWidth : 2,
+                        size      : 14,
+                        animate   : false
+                    });
+                }
+            },
+            
             _getEvents: function (view) {
                 var start = moment(view.visStart).toISOString();
                 var end = moment(view.visEnd).toISOString();
 
-                _instance.$el.fullCalendar('removeEvents');
+                this.$el.fullCalendar('removeEvents');
 
-                _instance.collection.fetch({
+                this.collection.fetch({
                     data   : { start: start, end: end },
-                    success: function (collection) {
-                        _instance._setEventData(collection);
-                    }
+                    success: this._setEventData.bind(this)
                 });
             },
 
             _setEventData: function (collection) {
                 var events = [];
+
+                var self = this;
 
                 collection.each(function (model) {
                     var seriesTitle = model.get('series').title;
@@ -100,15 +107,15 @@ define(
                         start       : start,
                         end         : end,
                         allDay      : false,
-                        statusLevel : _instance._getStatusLevel(model, end),
-                        progress    : _instance._getDownloadProgress(model),
+                        statusLevel : self._getStatusLevel(model, end),
+                        progress    : self._getDownloadProgress(model),
                         model       : model
                     };
 
                     events.push(event);
                 });
 
-                _instance.$el.fullCalendar('addEventSource', events);
+                this.$el.fullCalendar('addEventSource', events);
             },
 
             _getStatusLevel: function (element, endTime) {

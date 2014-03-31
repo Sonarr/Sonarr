@@ -66,7 +66,6 @@
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\IContainer.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
-    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
@@ -105,8 +104,10 @@
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="Processes\INzbDroneProcessProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
+    <Compile Include="RateGate.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Services.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
     <Compile Include="StringExtensions.cs" />

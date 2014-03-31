@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>NzbDrone Calendar feed</h3>
+</div>
+<div class="modal-body edit-series-modal">
+    <div class="row">
+        <div>
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label">iCal feed</label>
+
+                    <div class="controls ical-url">
+                        <div class="input-append">
+                            <input type="text" class="x-ical-url" value="{{icalHttpUrl}}" readonly="readonly" />
+                            <button class="btn btn-icon-only x-ical-copy" title="Copy to clipboard"><i class="icon-copy"></i></button>
+                            <a class="btn btn-icon-only no-router" title="Subscribe" href="{{icalWebCalUrl}}" target="_blank"><i class="icon-calendar-empty"></i></a>
+                        </div>
+                        <span class="help-inline">
+                            <i class="icon-nd-form-info" title="Copy this url into your clients subscription form or use the subscribe button if your browser support webcal"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn" data-dismiss="modal">close</button>
+</div>

@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Parser.Model;
@@ -46,16 +48,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void should_add_item_to_queue()
         {
-            var p = new object[] {"30.Rock.S01E01.Pilot.720p.hdtv.nzb", "TV", 50, false, "http://www.nzbdrone.com"};
-
             Mocker.GetMock<INzbgetProxy>()
-                    .Setup(s => s.AddNzb(It.IsAny<NzbgetSettings>(), p))
-                    .Returns(true);
+                  .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<Int32>(), It.IsAny<NzbgetSettings>()))
+                  .Returns("id");
 
             Subject.DownloadNzb(_remoteEpisode);
 
             Mocker.GetMock<INzbgetProxy>()
-                    .Verify(v => v.AddNzb(It.IsAny<NzbgetSettings>(), It.IsAny<object []>()), Times.Once());
+                  .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<Int32>(), It.IsAny<NzbgetSettings>()), Times.Once());
         }
     }
 }

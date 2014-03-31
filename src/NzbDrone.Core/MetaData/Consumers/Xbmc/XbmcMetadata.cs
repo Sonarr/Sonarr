@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -10,7 +9,6 @@ using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;

@@ -401,8 +401,13 @@ namespace NzbDrone.Common.Disk
         {
             if (File.Exists(path))
             {
-                var newAttributes = File.GetAttributes(path) & ~(FileAttributes.ReadOnly);
-                File.SetAttributes(path, newAttributes);
+                var attributes = File.GetAttributes(path);
+
+                if (attributes.HasFlag(FileAttributes.ReadOnly))
+                {
+                    var newAttributes = attributes & ~(FileAttributes.ReadOnly);
+                    File.SetAttributes(path, newAttributes);
+                }
             }
         }
 

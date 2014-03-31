@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Metadata.Consumers.Fake;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Metadata
@@ -30,8 +29,6 @@ namespace NzbDrone.Core.Metadata
 
             foreach (var provider in _providers)
             {
-                if (provider.GetType() == typeof(FakeMetadata)) continue;;
-
                 definitions.Add(new MetadataDefinition
                 {
                     Enable = false,

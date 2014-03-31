@@ -3,6 +3,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using NzbDrone.Core.Instrumentation.Extensions;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var request = new RestRequest(Method.POST);
             var action = String.Format("mode=addfile&cat={0}&priority={1}", category, priority);
 
-            request.AddFile("name", ReadFully(nzb), title, "application/x-nzb");
+            request.AddFile("name", nzb.ToBytes(), title, "application/x-nzb");
 
             SabnzbdAddResponse response;
 
@@ -160,21 +161,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             
             if (result.Failed)
                 throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
-        }
-
-        //TODO: Find a better home for this
-        private byte[] ReadFully(Stream input)
-        {
-            byte[] buffer = new byte[16 * 1024];
-            using (MemoryStream ms = new MemoryStream())
-            {
-                int read;
-                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-                return ms.ToArray();
-            }
         }
     }
 }

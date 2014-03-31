@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IDiskScanService
     {
+        void Scan(Series series);
         string[] GetVideoFiles(string path, bool allDirectories = true);
     }
 
@@ -52,7 +54,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private void Scan(Series series)
+        public void Scan(Series series)
         {
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
             _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
@@ -73,9 +75,16 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
+            var videoFilesStopwatch = Stopwatch.StartNew();
             var mediaFileList = GetVideoFiles(series.Path).ToList();
+            videoFilesStopwatch.Stop();
+            _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
+            var decisionsStopwatch = Stopwatch.StartNew();
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
+            decisionsStopwatch.Stop();
+            _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
+
             _importApprovedEpisodes.Import(decisions);
 
             _logger.Info("Completed scanning disk for {0}", series.Title);

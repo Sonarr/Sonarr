@@ -14,7 +14,7 @@ namespace NzbDrone.Api.Logs
 
         public LogFileModule(IAppFolderInfo appFolderInfo,
                              IDiskProvider diskProvider)
-            : base("log/files")
+            : base("log/file")
         {
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;

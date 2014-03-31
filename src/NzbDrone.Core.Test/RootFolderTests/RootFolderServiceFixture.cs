@@ -4,10 +4,10 @@ using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.RootFolderTests
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(new List<RootFolder>());
         }
 
-        private void WithNoneExistingFolder()
+        private void WithNonExistingFolder()
         {
             Mocker.GetMock<IDiskProvider>()
                 .Setup(m => m.FolderExists(It.IsAny<string>()))
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_throw_if_folder_being_added_doesnt_exist()
         {
-            WithNoneExistingFolder();
+            WithNonExistingFolder();
 
             Assert.Throws<DirectoryNotFoundException>(() => Subject.Add(new RootFolder { Path = "C:\\TEST".AsOsAgnostic() }));
         }
@@ -62,9 +62,9 @@ namespace NzbDrone.Core.Test.RootFolderTests
         }
 
         [Test]
-        public void None_existing_folder_returns_empty_list()
+        public void should_return_empty_list_when_folder_doesnt_exist()
         {
-            WithNoneExistingFolder();
+            WithNonExistingFolder();
 
             Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder>());
 
@@ -99,6 +99,27 @@ namespace NzbDrone.Core.Test.RootFolderTests
             Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV".AsOsAgnostic() } });
 
             Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
+        }
+
+        [Test]
+        public void should_not_include_system_files_and_folders()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetDirectories(It.IsAny<String>()))
+                  .Returns(new string[]
+                           {
+                               @"C:\30 Rock".AsOsAgnostic(),
+                               @"C:\$Recycle.Bin".AsOsAgnostic(),
+                               @"C:\.AppleDouble".AsOsAgnostic(), 
+                               @"C:\Test\.AppleDouble".AsOsAgnostic()
+                           });
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(s => s.GetAllSeries())
+                  .Returns(new List<Series>());
+
+            Subject.GetUnmappedFolders(@"C:\")
+                   .Should().OnlyContain(u => u.Path == @"C:\30 Rock".AsOsAgnostic());
         }
     }
 }

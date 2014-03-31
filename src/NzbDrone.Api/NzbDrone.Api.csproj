@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DDay.iCal">
+      <HintPath>..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.1.3\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -88,6 +91,7 @@
     <Compile Include="Blacklist\BlacklistModule.cs" />
     <Compile Include="Blacklist\BlacklistResource.cs" />
     <Compile Include="Calendar\CalendarModule.cs" />
+    <Compile Include="Calendar\CalendarFeedModule.cs" />
     <Compile Include="ClientSchema\SchemaDeserializer.cs" />
     <Compile Include="ClientSchema\FieldDefinitionAttribute.cs" />
     <Compile Include="ClientSchema\Field.cs" />
@@ -139,6 +143,7 @@
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="Notifications\NotificationSchemaModule.cs" />
+    <Compile Include="NzbDroneFeedModule.cs" />
     <Compile Include="ProviderResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="Indexers\IndexerSchemaModule.cs" />
@@ -199,7 +204,9 @@
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">

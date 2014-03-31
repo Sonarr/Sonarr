@@ -67,7 +67,7 @@ define(
                         name    : 'this',
                         label   : 'Episode Title',
                         sortable  : false,
-                        cell    : EpisodeTitleCell,
+                        cell    : EpisodeTitleCell
                     },
                     {
                         name    : 'airDateUtc',
@@ -122,9 +122,23 @@ define(
                             ownerContext: this
                         },
                         {
+                            title: 'Search All Missing',
+                            icon : 'icon-search',
+                            callback: this._searchMissing,
+                            ownerContext: this
+                        },
+                        {
                             title: 'Season Pass',
                             icon : 'icon-bookmark',
                             route: 'seasonpass'
+                        },
+                        {
+                            title: 'Rescan Drone Factory Folder',
+                            icon : 'icon-refresh',
+                            command: 'downloadedepisodesscan',
+                            properties: {
+                                sendUpdates: true
+                            }
                         }
                     ]
                 };
@@ -201,6 +215,16 @@ define(
                     name    : 'episodeSearch',
                     episodeIds: ids
                 });
+            },
+
+            _searchMissing: function () {
+                if (window.confirm('Are you sure you want to search for {0} missing episodes? '.format(this.collection.state.totalRecords) +
+                                   'One API request to each indexer will be used for each episode. ' +
+                                   'This cannot be stopped once started.')) {
+                    CommandController.Execute('missingEpisodeSearch', {
+                        name    : 'missingEpisodeSearch'
+                    });
+                }
             }
         });
     });

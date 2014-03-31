@@ -31,7 +31,17 @@ namespace NzbDrone.Core.RootFolders
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        private static readonly HashSet<string> SpecialFolders = new HashSet<string> { "$recycle.bin", "system volume information", "recycler", "lost+found" };
+        private static readonly HashSet<string> SpecialFolders = new HashSet<string>
+                                                                 {
+                                                                     "$recycle.bin",
+                                                                     "system volume information",
+                                                                     "recycler",
+                                                                     "lost+found",
+                                                                     ".appledb",
+                                                                     ".appledesktop",
+                                                                     ".appledouble",
+                                                                     "@eadir"
+                                                                 };
 
 
         public RootFolderService(IRootFolderRepository rootFolderRepository,
@@ -123,11 +133,8 @@ namespace NzbDrone.Core.RootFolders
                 results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
             }
 
-            if (Path.GetPathRoot(path).Equals(path, StringComparison.InvariantCultureIgnoreCase))
-            {
-                var setToRemove = SpecialFolders;
-                results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
-            }
+            var setToRemove = SpecialFolders;
+            results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
 
             Logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
