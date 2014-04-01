@@ -142,15 +142,25 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (series.UseSceneNumbering)
             {
-                var sceneSeasonGroups = episodes.GroupBy(v => v.SceneSeasonNumber).Distinct();
+                var sceneSeasonGroups = episodes.GroupBy(v => 
+                    {
+                        if (v.SceneSeasonNumber == 0 && v.SceneEpisodeNumber == 0)
+                            return v.SeasonNumber;
+                        else
+                            return v.SceneSeasonNumber;
+                    }).Distinct();
 
                 foreach (var sceneSeasonEpisodes in sceneSeasonGroups)
                 {
                     if (sceneSeasonEpisodes.Count() == 1)
                     {
+                        var episode = sceneSeasonEpisodes.First();
                         var searchSpec = Get<SingleEpisodeSearchCriteria>(series, sceneSeasonEpisodes.ToList());
                         searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
-                        searchSpec.EpisodeNumber = sceneSeasonEpisodes.First().SceneEpisodeNumber;
+                        if (episode.SceneSeasonNumber == 0 && episode.SceneEpisodeNumber == 0)
+                            searchSpec.EpisodeNumber = episode.EpisodeNumber;
+                        else
+                            searchSpec.EpisodeNumber = episode.SceneEpisodeNumber;
 
                         var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
                         downloadDecisions.AddRange(decisions);

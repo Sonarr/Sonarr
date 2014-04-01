@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Tv;
@@ -26,12 +27,12 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.GetAvailableProviders())
-                  .Returns(new List<IIndexer>{indexer.Object});
+                  .Returns(new List<IIndexer> { indexer.Object });
 
             Mocker.GetMock<NzbDrone.Core.DecisionEngine.IMakeDownloadDecision>()
                 .Setup(s => s.GetSearchDecision(It.IsAny<List<Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
                 .Returns(new List<NzbDrone.Core.DecisionEngine.Specifications.DownloadDecision>());
-            
+
             _xemSeries = Builder<Series>.CreateNew()
                 .With(v => v.UseSceneNumbering = true)
                 .Build();
@@ -81,12 +82,16 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             WithEpisode(4, 2, 5, 14);
             WithEpisode(4, 3, 6, 11);
             WithEpisode(5, 1, 6, 12);
+
+            // Season 7+ maps normally, so no mapping specified.
+            WithEpisode(7, 1, 0, 0);
+            WithEpisode(7, 2, 0, 0);
         }
 
         private List<SearchCriteriaBase> WatchForSearchCriteria()
         {
             List<SearchCriteriaBase> result = new List<SearchCriteriaBase>();
-            
+
             Mocker.GetMock<IFetchFeedFromIndexers>()
                 .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<SingleEpisodeSearchCriteria>()))
                 .Callback<IIndexer, SingleEpisodeSearchCriteria>((i, s) => result.Add(s))
@@ -94,7 +99,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             Mocker.GetMock<IFetchFeedFromIndexers>()
                 .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<SeasonSearchCriteria>()))
-                .Callback<IIndexer,SeasonSearchCriteria>((i,s) => result.Add(s))
+                .Callback<IIndexer, SeasonSearchCriteria>((i, s) => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
             return result;
@@ -111,9 +116,9 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var criteria = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
 
-            Assert.AreEqual(1, criteria.Count);
-            Assert.AreEqual(2, criteria[0].SeasonNumber);
-            Assert.AreEqual(3, criteria[0].EpisodeNumber);
+            criteria.Count.Should().Be(1);
+            criteria[0].SeasonNumber.Should().Be(2);
+            criteria[0].EpisodeNumber.Should().Be(3);
         }
 
         [Test]
@@ -127,8 +132,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
-            Assert.AreEqual(1, criteria.Count);
-            Assert.AreEqual(2, criteria[0].SeasonNumber);
+            criteria.Count.Should().Be(1);
+            criteria[0].SeasonNumber.Should().Be(2);
         }
 
         [Test]
@@ -142,9 +147,9 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
 
-            Assert.AreEqual(2, criteria.Count);
-            Assert.AreEqual(3, criteria[0].SeasonNumber);
-            Assert.AreEqual(4, criteria[1].SeasonNumber);
+            criteria.Count.Should().Be(2);
+            criteria[0].SeasonNumber.Should().Be(3);
+            criteria[1].SeasonNumber.Should().Be(4);
         }
 
         [Test]
@@ -159,12 +164,27 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var criteria1 = allCriteria.OfType<SeasonSearchCriteria>().ToList();
             var criteria2 = allCriteria.OfType<SingleEpisodeSearchCriteria>().ToList();
 
-            Assert.AreEqual(1, criteria1.Count);
-            Assert.AreEqual(5, criteria1[0].SeasonNumber);
+            criteria1.Count.Should().Be(1);
+            criteria1[0].SeasonNumber.Should().Be(5);
 
-            Assert.AreEqual(1, criteria2.Count);
-            Assert.AreEqual(6, criteria2[0].SeasonNumber);
-            Assert.AreEqual(11, criteria2[0].EpisodeNumber);
+            criteria2.Count.Should().Be(1);
+            criteria2[0].SeasonNumber.Should().Be(6);
+            criteria2[0].EpisodeNumber.Should().Be(11);
+        }
+
+        [Test]
+        public void scene_seasonsearch_should_use_seasonnumber_if_no_scene_number_is_available()
+        {
+            WithEpisodes();
+
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, 7);
+
+            var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(1);
+            criteria[0].SeasonNumber.Should().Be(7);
         }
     }
 }

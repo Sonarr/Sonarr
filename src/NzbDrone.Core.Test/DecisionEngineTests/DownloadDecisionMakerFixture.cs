@@ -239,11 +239,16 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                         Episodes = episodes.Where(v => v.SceneEpisodeNumber == p.EpisodeNumbers.First()).ToList()
                     });
 
-            Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(new List<IDecisionEngineSpecification>());
+            Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(new List<IDecisionEngineSpecification>
+            {
+                Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.EpisodeRequestedSpecification>()
+            });
 
             var decisions = Subject.GetSearchDecision(reports, criteria);
 
-            Assert.AreEqual(1, decisions.Count);
+            var approvedDecisions = decisions.Where(v => v.Approved).ToList();
+
+            approvedDecisions.Count.Should().Be(1);
         }
     }
 }
