@@ -2,7 +2,7 @@
     <fieldset>
         <legend>Start-Up</legend>
 
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">Port Number</label>
 
             <div class="controls">
@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">URL Base</label>
 
             <div class="controls">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="control-group advanced-setting">
+        <div class="form-group advanced-setting">
             <label class="control-label">Enable SSL</label>
 
             <div class="controls">
@@ -47,7 +47,7 @@
         </div>
 
         <div class="x-ssl-options">
-            <div class="control-group advanced-setting">
+            <div class="form-group advanced-setting">
                 <label class="control-label">SSL Port Number</label>
 
                 <div class="controls">
@@ -56,7 +56,7 @@
             </div>
 
             {{#if_windows}}
-            <div class="control-group advanced-setting">
+            <div class="form-group advanced-setting">
                 <label class="control-label">SSL Cert Hash</label>
 
                 <div class="controls">
@@ -66,7 +66,7 @@
             {{/if_windows}}
         </div>
 
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">Open browser on start</label>
 
             <div class="controls">
@@ -90,7 +90,7 @@
 
     <fieldset>
         <legend>Security</legend>
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">Authentication</label>
             <div class="controls">
                 <label class="checkbox toggle well">
@@ -108,13 +108,13 @@
             </div>
         </div>
         <div class='x-auth-options'>
-            <div class="control-group">
+            <div class="form-group">
                 <label class="control-label">Username</label>
                 <div class="controls">
                     <input type="text" placeholder="Username" name="username"/>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="form-group">
                 <label class="control-label">Password</label>
                 <div class="controls">
                     <input type="password" name="password"/>
@@ -122,10 +122,10 @@
             </div>
         </div>
 
-        <div class="control-group api-key">
+        <div class="form-group api-key">
             <label class="control-label">API Key</label>
             <div class="controls">
-                <div class="input-append">
+                <div class="input-group">
                     <input type="text" name="apiKey" readonly="readonly" class="x-api-key"/>
                     <button class="btn btn-icon-only x-copy-api-key" title="Copy to clipboard"><i class="icon-copy"></i></button>
                     <button class="btn btn-danger btn-icon-only x-reset-api-key" title="Reset API Key"><i class="icon-refresh"></i></button>
@@ -141,7 +141,7 @@
     <fieldset>
         <legend>Logging</legend>
 
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">Log Level</label>
 
             <div class="controls">
@@ -164,7 +164,7 @@
             <i class="icon-nd-warning"></i>
             Don't change anything here unless you know what you are doing.
         </div>
-        <div class="control-group">
+        <div class="form-group">
             <label class="control-label">Branch</label>
 
             <div class="controls">
@@ -173,7 +173,7 @@
         </div>
 
         <!--{{#if_mono}}-->
-        <!--<div class="control-group">-->
+        <!--<div class="form-group">-->
             <!--<label class="control-label">Auto Update</label>-->
 
             <!--<div class="controls">-->

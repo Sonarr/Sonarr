@@ -1,74 +1,81 @@
-﻿<div class="container">
-    <div class="row">
-        <div class="span12">
-            <ul id="main-menu-region">
-                <div class="pull-left logo">
-                    <a href="{{UrlBase}}/">
+﻿<div class="navbar navbar-nzbdrone" role="navigation">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div id="main-menu-region">
+                <div class="navbar-header logo">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" />
+                    <a class="navbar-brand" href="{{UrlBase}} /">
                         <img src="{{UrlBase}}/Content/Images/logo.png?v=2" alt="NzbDrone">
                     </a>
                 </div>
-                <li>
-                    <a href="{{UrlBase}}/">
-                        <i class="icon-play"></i>
-                        <br>
-                        Series
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/calendar">
-                        <i class="icon-calendar"></i>
-                        <br>
-                        Calendar
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/history">
-                        <i class="icon-time"></i>
-                        <br>
-                        History
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/wanted">
-                        <i class="icon-warning-sign"></i>
-                        <br>
-                        Wanted
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/settings">
-                        <i class="icon-cogs"></i>
-                        <br>
-                        Settings
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/system">
-                        <i class="icon-laptop"></i>
-                        <br>
-                        System
-                        <span id="x-health"></span>
-                    </a>
-                </li>
-                <li>
-                        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HGGGM7JT5YVSS" target="_blank">
-                        <i class="icon-nd-donate"></i>
-                        <br>
-                        Donate
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="span12">
-            <div class="search">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-search"></i></span>
-                    <input class="span4 x-series-search" id="prependedInput" type="text">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="{{UrlBase}}/">
+                                <i class="icon-play"></i>
+                                <br>
+                                Series
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{UrlBase}}/calendar">
+                                <i class="icon-calendar"></i>
+                                <br>
+                                Calendar
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{UrlBase}}/history">
+                                <i class="icon-time"></i>
+                                <br>
+                                History
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{UrlBase}}/wanted">
+                                <i class="icon-warning-sign"></i>
+                                <br>
+                                Wanted
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{UrlBase}}/settings">
+                                <i class="icon-cogs"></i>
+                                <br>
+                                Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{UrlBase}}/system">
+                                <i class="icon-laptop"></i>
+                                <br>
+                                System
+                                <span id="x-health"></span>
+                            </a>
+                        </li>
+                        <li>
+                                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HGGGM7JT5YVSS" target="_blank">
+                                <i class="icon-nd-donate"></i>
+                                <br>
+                                Donate
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="searchbar">
+<!--
+    <div class="row">
+        <div class="col-md-12">
+            <div class="search">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-search"></i></span>
+                    <input class="col-md-4 x-series-search" id="prependedInput" type="text">
+                </div>
+            </div>
+        </div>
+    </div>-->
 </div>

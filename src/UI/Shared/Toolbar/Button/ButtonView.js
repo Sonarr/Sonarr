@@ -9,7 +9,7 @@ define(
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
-            className: 'btn',
+            className: 'btn btn-default btn-icon-only-xs',
 
             ui: {
                 icon: 'i'

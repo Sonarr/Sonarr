@@ -4,8 +4,8 @@
   cursor : default;
 }
 
-.input-append {
-  .add-on {
+.input-group {
+  .input-group-addon {
     margin-left : 0;
   }
 }
@@ -18,13 +18,28 @@
 
   text-transform : capitalize;
   min-width      : 80px;
+  padding        : 4px 12px;
 
-  &.btn-mini {
+  &.btn-xs {
     min-width : 0px;
   }
 
   &.btn-icon-only {
-    min-width : 15px;
+    min-width : 41px;
+  }
+  
+  &.btn-icon-only-xs {
+    @media (max-width: @screen-xs-max) {
+      min-width : 41px;
+   
+      span {
+          .responsive-invisibility();
+      }
+    }
+  }
+  
+  label, input {
+    padding: 0px;
   }
 }
 

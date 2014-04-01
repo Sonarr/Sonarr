@@ -1,6 +1,9 @@
 ﻿'use strict';
-
-define(['jquery'],function ($) {
+define(
+    [
+        'jquery',
+        'typeahead'
+    ], function ($) {
 
     $.fn.autoComplete = function (resource) {
         $(this).typeahead({

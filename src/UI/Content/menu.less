@@ -1,5 +1,7 @@
 ﻿@import "prefixer";
 
+@grid-float-breakpoint:     @screen-xs-min;
+
 #main-menu-region {
   text-align    : center;
   margin-bottom : 10px;
@@ -11,12 +13,49 @@
   i {
     width : 40px;
   }
-
+  
+  .navbar-nav, .navbar-nav>li {
+    float          : none;
+  }
+  
+  .navbar-brand {
+    padding        : 0px;
+  }
+  
   .logo {
     margin-top     : 25px;
     vertical-align : middle;
     height         : 70px;
     width          : 70px;
+    
+    color: #ff0000;
+    &:after {
+      content: "unknown";
+    }
+    
+    @media (min-width: @screen-xs-min) {
+      &:after {
+        content: "xs";
+      }
+    }
+    
+    @media (min-width: @screen-sm-min) {
+      &:after {
+        content: "sm";
+      }
+    }
+    
+    @media (min-width: @screen-md-min) {
+      &:after {
+        content: "md";
+      }
+    }
+    
+    @media (min-width: @screen-lg-min) {
+      &:after {
+        content: "lg";
+      }
+    }
   }
 
   li {
@@ -31,11 +70,31 @@
       }
 
       display       : block;
-      border-radius : 6px;
-      padding       : 15px 10px 5px;
-      min-height    : 56px;
-      min-width     : 64px;
-      margin        : 20px 10px 5px;
+      
+      @media (max-width: @screen-xs-max) {
+        border-radius : 6px;
+        padding       : 15px 10px 5px;
+        min-height    : 38px;
+        min-width     : 42px;
+        margin        : 20px 0px 5px;
+      }
+      
+      @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+        border-radius : 6px;
+        padding       : 15px 10px 5px;
+        min-height    : 76px;
+        min-width     : 84px;
+        margin        : 20px 0px 5px;
+      }
+      
+      @media (min-width: @screen-md-min) {
+        border-radius : 6px;
+        padding       : 15px 10px 5px;
+        min-height    : 76px;
+        min-width     : 84px;
+        margin        : 20px 10px 5px;
+      }
+      
       color         : #b9b9b9;
       font-weight   : 100;
     }
@@ -60,7 +119,7 @@
   margin-bottom : 80px;
   height        : 150px;
 
-  .span12 {
+  .col-md-12 {
     margin-left : 0px;
   }
 
@@ -81,7 +140,7 @@
 .search {
   text-align: center;
 
-  input, .add-on {
+  input, .input-group-addon {
     background-color: #333333;
     border-color: #333333;
     color: #cccccc;

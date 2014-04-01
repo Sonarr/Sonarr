@@ -1,12 +1,12 @@
 ﻿<div class="search-item {{#unless isExisting}}search-item-new{{/unless}}">
     <div class="row">
-        <div class="span2">
+        <div class="col-md-2">
             <a href="{{traktUrl}}" target="_blank">
                 <img class="new-series-poster" src="{{remotePoster}}"
                 {{defaultImg}} >
             </a>
         </div>
-        <div class="span9">
+        <div class="col-md-9">
 
             <div class="row">
                 <h2 class="series-title">
@@ -24,11 +24,11 @@
             {{#unless existing}}
             <div class="row labels">
                 {{#unless path}}
-                <div class="span4">Path</div>
+                <div class="col-md-4">Path</div>
                 {{/unless}}
 
-                <div class="span1 starting-season starting-season-label">Starting Season</div>
-                <div class="span2">Quality Profile</div>
+                <div class="col-md-1 starting-season starting-season-label">Starting Season</div>
+                <div class="col-md-2">Quality Profile</div>
             </div>
             {{/unless}}
             <div class="row">

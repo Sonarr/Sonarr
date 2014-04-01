@@ -6,9 +6,9 @@ define(
     ], function (Marionette, Config) {
 
         return Marionette.ItemView.extend({
-            template : 'Shared/Toolbar/ButtonTemplate',
-            className: 'btn',
-
+            template : 'Shared/Toolbar/RadioButtonTemplate',
+            className: 'btn btn-default',
+            
             ui: {
                 icon: 'i'
             },

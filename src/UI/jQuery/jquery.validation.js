@@ -30,7 +30,7 @@ define(
                 }
             }
 
-            var controlGroup = input.parents('.control-group');
+            var controlGroup = input.parents('.form-group');
 
             if(controlGroup.length ===0){
                 controlGroup = input.parent();
@@ -50,7 +50,7 @@ define(
         };
 
         $.fn.addFormError = function (error) {
-            this.find('.control-group').parent().prepend('<div class="alert alert-error validation-error">' + error.errorMessage + '</div>');
+            this.find('.form-group').parent().prepend('<div class="alert alert-error validation-error">' + error.errorMessage + '</div>');
         };
 
         $.fn.removeAllErrors = function () {

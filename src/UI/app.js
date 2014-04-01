@@ -27,6 +27,7 @@ require.config({
         'jquery.dotdotdot'        : 'JsLibraries/jquery.dotdotdot',
         'messenger'               : 'JsLibraries/messenger',
         'jquery'                  : 'JsLibraries/jquery',
+        'typeahead'               : 'JsLibraries/typeahead',
         'zero.clipboard'          : 'JsLibraries/zero.clipboard',
         'libs'                    : 'JsLibraries/',
 
@@ -108,6 +109,12 @@ require.config({
                 AsNamedView.call(window.Marionette.ItemView.prototype);
 
             }
+        },
+        'typeahead'           : {
+            deps:
+                [
+                    'jquery'
+                ]
         },
         'jquery-ui'           : {
             deps:

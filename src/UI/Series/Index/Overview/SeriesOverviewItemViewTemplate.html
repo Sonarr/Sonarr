@@ -1,18 +1,18 @@
 ﻿<div class="series-item">
     <div class="row">
-        <div class="span2">
+        <div class="col-xs-2">
             <a href="{{route}}">
                 <img class="series-poster" src="{{poster}}" {{defaultImg}}>
             </a>
         </div>
-        <div class="span10">
+        <div class="col-xs-10">
             <div class="row">
-                <div class="span9">
+                <div class="col-xs-10">
                     <a href="{{route}}" target="_blank">
                         <h2>{{title}}</h2>
                     </a>
                 </div>
-                <div class="span1">
+                <div class="col-xs-2">
                     <div class="pull-right">
                         <i class="icon-cog x-edit" title="Edit Series"/>
                         <i class="icon-remove x-remove" title="Delete Series"/>
@@ -20,15 +20,21 @@
                 </div>
             </div>
             <div class="row">
-                <a href="{{route}}">
-                    <div class="span10">
-                        {{overview}}
-                    </div>
-                </a>
+                <div class="col-xs-12">
+                    <a href="{{route}}">
+                        <div>
+                            {{overview}}
+                        </div>
+                    </a>
+                </div>
             </div>
-            <div class="row">&nbsp;</div>
             <div class="row">
-                <div class="span8">
+                    <div class="col-xs-12">
+                        &nbsp;
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-xs-10">
                     {{#if_eq status compare="continuing"}}
                         {{#if nextAiring}}
                             <span class="label">{{NextAiring nextAiring}}</span>
@@ -41,7 +47,7 @@
 
                     {{qualityProfile qualityProfileId}}
                 </div>
-                <div class="span2">
+                <div class="col-xs-2">
                     {{> EpisodeProgressPartial }}
                 </div>
             </div>

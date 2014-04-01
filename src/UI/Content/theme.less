@@ -88,7 +88,7 @@
 th {
   &.sortable {
     &:hover {
-      background : @tableBackgroundHover;
+      background : @table-bg-hover;
     }
     .clickable();
 
@@ -146,8 +146,9 @@ body {
 
 .started #page {
   .card(#aaaaaa);
-  width      : 1210px;
-  min-width  : 1210px;
+  /* width      : 1210px;
+  min-width  : 1210px; */
+  max-width  : 1210px;
   margin     : auto;
   margin-top : -70px;
   padding    : 20px 0px;
@@ -170,19 +171,19 @@ body {
 }
 
 .status-primary {
-  color : @linkColor;
+  color : @link-color;
 }
 
 .status-success {
-  color : @successText;
+  color : @state-success-text;
 }
 
 .status-warning {
-  color : @warningText;
+  color : @state-warning-text;
 }
 
 .status-danger {
-  color : @errorText;
+  color : @state-danger-text;
 }
 
 .form-inline {
@@ -192,7 +193,7 @@ body {
 }
 
 .error {
-  .formFieldState(@errorText, @errorText, @errorBackground);
+  background: #FF0000;
 }
 
 #errors{

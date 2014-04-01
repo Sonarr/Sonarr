@@ -1,6 +1,12 @@
+@import "../Content/Bootstrap/variables";
 @import "../Shared/Styles/card.less";
 @import "../Shared/Styles/clickable.less";
 @import "../Content/prefixer";
+
+.series-poster {
+  min-width: 56px;
+  max-width: 100%;
+}
 
 .edit-series-modal, .delete-series-modal {
   overflow : visible;
@@ -63,7 +69,11 @@
 }
 
 .series-posters {
-  list-style-type : none;
+  list-style-type: none;
+
+  @media (max-width: @screen-xs-max) {
+    padding        : 0px;
+  }
 
   li {
     display        : inline-block;
@@ -75,7 +85,7 @@
     .card;
     .clickable;
     margin-bottom : 20px;
-    height        : 295px;
+    height        : 315px;
 
     .center {
       display      : block;
@@ -316,7 +326,7 @@
     margin-left: -40px;
   }
 
-  .span2 {
+  .col-md-2 {
     width: 160px;
   }
 }
