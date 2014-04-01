@@ -80,6 +80,11 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         {
         }
 
+        public override void RetryDownload(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Test()
         {
             PerformTest(Settings.Folder);

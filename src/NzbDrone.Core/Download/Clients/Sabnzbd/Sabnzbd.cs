@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -18,20 +15,20 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IParsingService _parsingService;
-        private readonly ISabnzbdProxy _sabnzbdProxy;
+        private readonly ISabnzbdProxy _proxy;
         private readonly ICached<IEnumerable<QueueItem>> _queueCache;
         private readonly Logger _logger;
 
         public Sabnzbd(IHttpProvider httpProvider,
-                       ICacheManger cacheManger,
+                       ICacheManager cacheManager,
                        IParsingService parsingService,
-                       ISabnzbdProxy sabnzbdProxy,
+                       ISabnzbdProxy proxy,
                        Logger logger)
         {
             _httpProvider = httpProvider;
             _parsingService = parsingService;
-            _sabnzbdProxy = sabnzbdProxy;
-            _queueCache = cacheManger.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
+            _proxy = proxy;
+            _queueCache = cacheManager.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
             _logger = logger;
         }
 
@@ -45,7 +42,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             using (var nzb = _httpProvider.DownloadStream(url))
             {
                 _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = _sabnzbdProxy.DownloadNzb(nzb, title, category, priority, Settings);
+                var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
 
                 if (response != null && response.Ids.Any())
                 {
@@ -64,7 +61,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 try
                 {
-                    sabQueue = _sabnzbdProxy.GetQueue(0, 0, Settings);
+                    sabQueue = _proxy.GetQueue(0, 0, Settings);
                 }
                 catch (DownloadClientException ex)
                 {
@@ -105,7 +102,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             try
             {
-                sabHistory = _sabnzbdProxy.GetHistory(start, limit, Settings);
+                sabHistory = _proxy.GetHistory(start, limit, Settings);
             }
             catch (DownloadClientException ex)
             {
@@ -135,17 +132,22 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public override void RemoveFromQueue(string id)
         {
-            _sabnzbdProxy.RemoveFrom("queue", id, Settings);
+            _proxy.RemoveFrom("queue", id, Settings);
         }
 
         public override void RemoveFromHistory(string id)
         {
-            _sabnzbdProxy.RemoveFrom("history", id, Settings);
+            _proxy.RemoveFrom("history", id, Settings);
+        }
+
+        public override void RetryDownload(string id)
+        {
+            _proxy.RetryDownload(id, Settings);
         }
 
         public override void Test()
         {
-            _sabnzbdProxy.GetCategories(Settings);
+            _proxy.GetCategories(Settings);
         }
 
         public void Execute(TestSabnzbdCommand message)
@@ -153,7 +155,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var settings = new SabnzbdSettings();
             settings.InjectFrom(message);
 
-            _sabnzbdProxy.GetCategories(settings);
+            _proxy.GetCategories(settings);
         }
     }
 }

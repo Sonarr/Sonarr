@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Parser.Model
 
         public DateTime PublishDate { get; set; }
 
-        public int Age
+        public Int32 Age
         {
             get
             {
@@ -25,6 +25,21 @@ namespace NzbDrone.Core.Parser.Model
             private set
             {
                 
+            }
+        }
+
+        public Double AgeHours
+        {
+            get
+            {
+                return DateTime.UtcNow.Subtract(PublishDate).TotalHours;
+            }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set
+            {
+
             }
         }
 

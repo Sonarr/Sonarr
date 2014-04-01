@@ -18,14 +18,14 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public XemService(IEpisodeService episodeService,
                            IXemProxy xemProxy,
-                           ISeriesService seriesService, ICacheManger cacheManger, Logger logger)
+                           ISeriesService seriesService, ICacheManager cacheManager, Logger logger)
         {
             _episodeService = episodeService;
             _xemProxy = xemProxy;
             _seriesService = seriesService;
             _logger = logger;
             _logger = logger;
-            _cache = cacheManger.GetCache<bool>(GetType());
+            _cache = cacheManager.GetCache<bool>(GetType());
         }
 
         private void PerformUpdate(Series series)

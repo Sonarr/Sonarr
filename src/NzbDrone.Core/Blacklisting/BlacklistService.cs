@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Linq;
+using NLog;
+using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
@@ -9,25 +13,31 @@ namespace NzbDrone.Core.Blacklisting
 {
     public interface IBlacklistService
     {
-        bool Blacklisted(int seriesId,string sourceTitle);
+        bool Blacklisted(int seriesId,string sourceTitle, DateTime publishedDate);
         PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec);
         void Delete(int id);
     }
 
-    public class BlacklistService : IBlacklistService, IExecute<ClearBlacklistCommand>, IHandle<DownloadFailedEvent>, IHandle<SeriesDeletedEvent>
+    public class BlacklistService : IBlacklistService,
+                                    IExecute<ClearBlacklistCommand>,
+                                    IHandle<DownloadFailedEvent>,
+                                    IHandle<SeriesDeletedEvent>
     {
         private readonly IBlacklistRepository _blacklistRepository;
         private readonly IRedownloadFailedDownloads _redownloadFailedDownloadService;
 
-        public BlacklistService(IBlacklistRepository blacklistRepository, IRedownloadFailedDownloads redownloadFailedDownloadService)
+        public BlacklistService(IBlacklistRepository blacklistRepository,
+                                IRedownloadFailedDownloads redownloadFailedDownloadService)
         {
             _blacklistRepository = blacklistRepository;
             _redownloadFailedDownloadService = redownloadFailedDownloadService;
         }
 
-        public bool Blacklisted(int seriesId, string sourceTitle)
+        public bool Blacklisted(int seriesId, string sourceTitle, DateTime publishedDate)
         {
-            return _blacklistRepository.Blacklisted(seriesId,sourceTitle);
+            var blacklisted = _blacklistRepository.Blacklisted(seriesId, sourceTitle);
+
+            return blacklisted.Any(item => HasSamePublishedDate(item, publishedDate));
         }
 
         public PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec)
@@ -38,6 +48,14 @@ namespace NzbDrone.Core.Blacklisting
         public void Delete(int id)
         {
             _blacklistRepository.Delete(id);
+        }
+
+        private bool HasSamePublishedDate(Blacklist item, DateTime publishedDate)
+        {
+            if (!item.PublishedDate.HasValue) return true;
+
+            return item.PublishedDate.Value.AddDays(-2) <= publishedDate &&
+                   item.PublishedDate.Value.AddDays(2) >= publishedDate;
         }
 
         public void Execute(ClearBlacklistCommand message)
@@ -53,7 +71,8 @@ namespace NzbDrone.Core.Blacklisting
                                 EpisodeIds = message.EpisodeIds,
                                 SourceTitle = message.SourceTitle,
                                 Quality = message.Quality,
-                                Date = DateTime.UtcNow
+                                Date = DateTime.UtcNow,
+                                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate", null))
                             };
 
             _blacklistRepository.Insert(blacklist);

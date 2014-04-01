@@ -61,5 +61,41 @@
                 </span>
             </div>
         </div>
+
+        <div class="control-group advanced-setting">
+            <label class="control-label">Grace Period</label>
+
+            <div class="controls">
+                <input type="number" min="1" max="24" name="blacklistGracePeriod"/>
+
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Age in hours that a release will remain in the download client and retried"/>
+            </span>
+            </div>
+        </div>
+
+        <div class="control-group advanced-setting">
+            <label class="control-label">Retry Interval</label>
+
+            <div class="controls">
+                <input type="number" min="5" max="120" name="blacklistRetryInterval"/>
+
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Time in minutes before a failed download for a recent release will be retried"/>
+            </span>
+            </div>
+        </div>
+
+        <div class="control-group advanced-setting">
+            <label class="control-label">Retry Count</label>
+
+            <div class="controls">
+                <input type="number" min="0" max="10" name="blacklistRetryLimit"/>
+
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="Number of times to retry a release before it is blacklisted"/>
+            </span>
+            </div>
+        </div>
     </div>
 </fieldset>

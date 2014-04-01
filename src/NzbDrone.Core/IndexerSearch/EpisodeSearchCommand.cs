@@ -14,5 +14,14 @@ namespace NzbDrone.Core.IndexerSearch
                 return true;
             }
         }
+
+        public EpisodeSearchCommand()
+        {
+        }
+
+        public EpisodeSearchCommand(List<int> episodeIds)
+        {
+            EpisodeIds = episodeIds;
+        }
     }
 }
