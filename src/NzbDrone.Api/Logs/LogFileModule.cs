@@ -4,11 +4,15 @@ using System.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using Nancy;
+using Nancy.Responses;
 
 namespace NzbDrone.Api.Logs
 {
     public class LogFileModule : NzbDroneRestModule<LogFileResource>
     {
+        private const string LOGFILE_ROUTE = @"/(?<filename>nzbdrone(?:\.\d+)?\.txt)";
+
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IDiskProvider _diskProvider;
 
@@ -19,6 +23,8 @@ namespace NzbDrone.Api.Logs
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
             GetResourceAll = GetLogFiles;
+
+            Get[LOGFILE_ROUTE] = options => GetLogFile(options.filename);
         }
 
         private List<LogFileResource> GetLogFiles()
@@ -40,6 +46,18 @@ namespace NzbDrone.Api.Logs
             }
 
             return result.OrderByDescending(l => l.LastWriteTime).ToList();
+        }
+
+        private Response GetLogFile(string filename)
+        {
+            var filePath = Path.Combine(_appFolderInfo.GetLogFolder(), filename);
+
+            if (!_diskProvider.FileExists(filePath))
+                return new NotFoundResponse();
+
+            var data = _diskProvider.ReadAllText(filePath);
+            
+            return new TextResponse(data);
         }
     }
 }

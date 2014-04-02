@@ -40,8 +40,8 @@ namespace NzbDrone.Api.Calendar
                 var occurrence = icalCalendar.Create<Event>();
                 occurrence.UID = "NzbDrone_episode_" + episode.Id.ToString();
                 occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;
-                occurrence.Start = new iCalDateTime(episode.AirDateUtc.Value);
-                occurrence.End = new iCalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime));
+                occurrence.Start = new iCalDateTime(episode.AirDateUtc.Value) { HasTime = true };
+                occurrence.End = new iCalDateTime(episode.AirDateUtc.Value.AddMinutes(episode.Series.Runtime)) { HasTime = true };
                 occurrence.Description = episode.Overview;
                 occurrence.Categories = new List<string>() { episode.Series.Network };
 
