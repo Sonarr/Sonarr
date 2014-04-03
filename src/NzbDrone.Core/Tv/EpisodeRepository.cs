@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Marr.Data.QGen;
+using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Extentions;
 using NzbDrone.Core.Messaging.Events;
@@ -14,8 +16,8 @@ namespace NzbDrone.Core.Tv
     {
         Episode Find(int seriesId, int season, int episodeNumber);
         Episode Find(int seriesId, int absoluteEpisodeNumber);
-        Episode Get(int seriesId, String date);
-        Episode Find(int seriesId, String date);
+        Episode Get(int seriesId, string date);
+        Episode Find(int seriesId, string date);
         List<Episode> GetEpisodes(int seriesId);
         List<Episode> GetEpisodes(int seriesId, int seasonNumber);
         List<Episode> GetEpisodeByFileId(int fileId);
@@ -32,11 +34,13 @@ namespace NzbDrone.Core.Tv
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
     {
         private readonly IDatabase _database;
+        private readonly Logger _logger;
 
-        public EpisodeRepository(IDatabase database, IEventAggregator eventAggregator)
+        public EpisodeRepository(IDatabase database, IEventAggregator eventAggregator, Logger logger)
             : base(database, eventAggregator)
         {
             _database = database;
+            _logger = logger;
         }
 
         public Episode Find(int seriesId, int season, int episodeNumber)
@@ -54,18 +58,21 @@ namespace NzbDrone.Core.Tv
                         .SingleOrDefault();
         }
 
-        public Episode Get(int seriesId, String date)
+        public Episode Get(int seriesId, string date)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.AirDate == date)
-                        .Single();
+            var episode = FindOneByAirDate(seriesId, date);
+
+            if (episode == null)
+            {
+                throw new InvalidOperationException("Expected at one episode");
+            }
+
+            return episode;
         }
 
-        public Episode Find(int seriesId, String date)
+        public Episode Find(int seriesId, string date)
         {
-            return Query.Where(s => s.SeriesId == seriesId)
-                        .AndWhere(s => s.AirDate == date)
-                        .SingleOrDefault();
+            return FindOneByAirDate(seriesId, date);
         }
 
         public List<Episode> GetEpisodes(int seriesId)
@@ -206,6 +213,29 @@ namespace NzbDrone.Core.Tv
             }
 
             return String.Format("({0})", String.Join(" OR ", clauses));
+        }
+
+        private Episode FindOneByAirDate(int seriesId, string date)
+        {
+            var episodes = Query.Where(s => s.SeriesId == seriesId)
+                                .AndWhere(s => s.AirDate == date)
+                                .ToList();
+
+            if (!episodes.Any()) return null;
+
+            if (episodes.Count == 1) return episodes.First();
+
+            _logger.Debug("Multiple episodes with the same air date were found, will exclude specials");
+
+            var regularEpisodes = episodes.Where(e => e.SeasonNumber > 0).ToList();
+
+            if (regularEpisodes.Count == 1)
+            {
+                _logger.Debug("Left with one episode after excluding specials");
+                return regularEpisodes.First();
+            }
+
+            throw new InvalidOperationException("Multiple episodes with the same air date found");
         }
     }
 }
