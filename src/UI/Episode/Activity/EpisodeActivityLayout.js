@@ -7,9 +7,18 @@ define(
         'Cells/EventTypeCell',
         'Cells/QualityCell',
         'Cells/RelativeDateCell',
+        'Episode/Activity/EpisodeActivityActionsCell',
         'Episode/Activity/NoActivityView',
         'Shared/LoadingView'
-    ], function (Marionette, Backgrid, HistoryCollection, EventTypeCell, QualityCell, RelativeDateCell, NoActivityView, LoadingView) {
+    ], function (Marionette,
+                 Backgrid,
+                 HistoryCollection,
+                 EventTypeCell,
+                 QualityCell,
+                 RelativeDateCell,
+                 EpisodeActivityActionsCell,
+                 NoActivityView,
+                 LoadingView) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Activity/EpisodeActivityLayoutTemplate',
@@ -40,6 +49,12 @@ define(
                         name : 'date',
                         label: 'Date',
                         cell : RelativeDateCell
+                    },
+                    {
+                        name    : 'this',
+                        label   : '',
+                        cell    : EpisodeActivityActionsCell,
+                        sortable: false
                     }
                 ],
 
