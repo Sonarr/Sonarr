@@ -32,7 +32,13 @@ namespace NzbDrone.Api.Series
         public SeriesModule(ICommandExecutor commandExecutor,
                             ISeriesService seriesService,
                             ISeriesStatisticsService seriesStatisticsService,
-                            IMapCoversToLocal coverMapper)
+                            IMapCoversToLocal coverMapper,
+                            RootFolderValidator rootFolderValidator,
+                            PathExistsValidator pathExistsValidator,
+                            SeriesPathValidator seriesPathValidator,
+                            SeriesExistsValidator seriesExistsValidator,
+                            DroneFactoryValidator droneFactoryValidator
+            )
             : base(commandExecutor)
         {
             _commandExecutor = commandExecutor;
@@ -48,11 +54,18 @@ namespace NzbDrone.Api.Series
 
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
-            PutValidator.RuleFor(s => s.Path).IsValidPath();
+            PutValidator.RuleFor(s => s.Path)
+                        .Cascade(CascadeMode.StopOnFirstFailure)
+                        .IsValidPath()
+                        .SetValidator(rootFolderValidator)
+                        .SetValidator(pathExistsValidator)
+                        .SetValidator(seriesPathValidator)
+                        .SetValidator(droneFactoryValidator);
 
             PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => String.IsNullOrEmpty(s.RootFolderPath));
             PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => String.IsNullOrEmpty(s.Path));
             PostValidator.RuleFor(s => s.Title).NotEmpty();
+            PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
         }
 
         private SeriesResource GetSeries(int id)
