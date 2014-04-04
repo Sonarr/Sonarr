@@ -76,6 +76,10 @@ define(
                         size      : 14,
                         animate   : false
                     });
+
+                    this.$(element).find('.chart').tooltip({
+                        title: 'Episode is downloading - {0}% {1}'.format(event.progress.toFixed(1), event.releaseTitle)
+                    });
                 }
             },
             
@@ -109,6 +113,7 @@ define(
                         allDay      : false,
                         statusLevel : self._getStatusLevel(model, end),
                         progress    : self._getDownloadProgress(model),
+                        releaseTitle: self._getReleaseTitle(model),
                         model       : model
                     };
 
@@ -163,6 +168,16 @@ define(
                 }
 
                 return 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
+            },
+
+            _getReleaseTitle: function (element) {
+                var downloading = QueueCollection.findEpisode(element.get('id'));
+
+                if (!downloading) {
+                    return '';
+                }
+
+                return downloading.get('title');
             }
         });
     });
