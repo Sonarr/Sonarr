@@ -1,9 +1,10 @@
 ﻿'use strict';
 define(
     [
+        'underscore',
         'vent',
         'AppLayout',
-        'underscore',
+        'backbone',
         'marionette',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/RootFolderCollection',
@@ -13,7 +14,18 @@ define(
         'Shared/Messenger',
         'Mixins/AsValidatedView',
         'jquery.dotdotdot'
-    ], function (vent, AppLayout, _, Marionette, QualityProfiles, RootFolders, RootFolderLayout, SeriesCollection, Config, Messenger, AsValidatedView) {
+    ], function (_,
+                 vent,
+                 AppLayout,
+                 Backbone,
+                 Marionette,
+                 QualityProfiles,
+                 RootFolders,
+                 RootFolderLayout,
+                 SeriesCollection,
+                 Config,
+                 Messenger,
+                 AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
 
@@ -156,7 +168,17 @@ define(
                     icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
 
                     Messenger.show({
-                        message: 'Added: ' + self.model.get('title')
+                        message: 'Added: ' + self.model.get('title'),
+                        actions : {
+                            goToSeries: {
+                                label: 'Go to Series Page',
+                                action: function() {
+                                    Backbone.history.navigate('/series/' + self.model.get('titleSlug'), { trigger: true });
+                                }
+                            }
+                        },
+                        hideAfter: 8,
+                        hideOnNavigate: true
                     });
 
                     vent.trigger(vent.Events.SeriesAdded, { series: self.model });
