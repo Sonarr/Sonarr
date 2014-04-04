@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Configuration
         Boolean AutoDownloadPropers { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
         FileDateType FileDate { get; set; }
+        Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
 
         //Permissions (Media Management)
         Boolean SetPermissionsLinux { get; set; }

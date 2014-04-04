@@ -164,6 +164,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadedEpisodesScanInterval", value); }
         }
 
+        public Boolean SkipFreeSpaceCheckWhenImporting
+        {
+            get { return GetValueBoolean("SkipFreeSpaceCheckWhenImporting", false); }
+
+            set { SetValue("SkipFreeSpaceCheckWhenImporting", value); }
+        }
+
         public Boolean SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }

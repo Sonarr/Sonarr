@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -140,6 +141,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
                   .Returns(freeSpace);
+
+            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_skip_check_is_enabled()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .Setup(s => s.SkipFreeSpaceCheckWhenImporting)
+                  .Returns(true);
 
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
         }

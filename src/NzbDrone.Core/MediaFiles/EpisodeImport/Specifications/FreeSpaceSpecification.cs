@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -10,11 +10,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
     public class FreeSpaceSpecification : IImportDecisionEngineSpecification
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public FreeSpaceSpecification(IDiskProvider diskProvider,  Logger logger)
+        public FreeSpaceSpecification(IDiskProvider diskProvider, IConfigService configService,  Logger logger)
         {
             _diskProvider = diskProvider;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -22,6 +24,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public bool IsSatisfiedBy(LocalEpisode localEpisode)
         {
+            if (_configService.SkipFreeSpaceCheckWhenImporting)
+            {
+                _logger.Debug("Skipping free space check when importing");
+                return true;
+            }
+
             try
             {
                 if (localEpisode.ExistingFile)
