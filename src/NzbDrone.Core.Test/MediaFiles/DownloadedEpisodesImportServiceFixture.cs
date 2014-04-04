@@ -12,6 +12,7 @@ using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Test.MediaFiles
     public class DownloadedEpisodesImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
     {
         private string[] _subFolders = new[] { "c:\\root\\foldername".AsOsAgnostic() };
-        private string[] _videoFiles = new[] { "c:\\root\\foldername\\video.ext".AsOsAgnostic() };
+        private string[] _videoFiles = new[] { "c:\\root\\foldername\\30.rock.s01e01.ext".AsOsAgnostic() };
 
         [SetUp]
         public void Setup()
@@ -113,6 +114,8 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetSeries(It.IsAny<String>()), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -129,7 +132,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_delete_folder_if_files_were_imported()
+        public void should_delete_folder_if_files_were_imported_and_video_files_remain()
         {
             GivenValidSeries();
 
@@ -145,6 +148,40 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true))
                   .Returns(imported);
+
+            Subject.Execute(new DownloadedEpisodesScanCommand());
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_delete_folder_if_files_were_imported_and_only_sample_files_remain()
+        {
+            GivenValidSeries();
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), true, null))
+                  .Returns(imported);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                  .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true))
+                  .Returns(imported);
+
+            Mocker.GetMock<ISampleService>()
+                  .Setup(s => s.IsSample(It.IsAny<Series>(),
+                      It.IsAny<QualityModel>(),
+                      It.IsAny<String>(),
+                      It.IsAny<Int64>(),
+                      It.IsAny<Int32>()))
+                  .Returns(true);
 
             Subject.Execute(new DownloadedEpisodesScanCommand());
 

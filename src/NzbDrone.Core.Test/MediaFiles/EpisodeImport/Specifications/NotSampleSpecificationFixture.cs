@@ -41,96 +41,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                 };
         }
 
-        private void GivenFileSize(long size)
-        {
-            _localEpisode.Size = size;
-        }
-
-        private void GivenRuntime(int seconds)
-        {
-            Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
-                  .Returns(new TimeSpan(0, 0, seconds));
-        }
-
-        [Test]
-        public void should_return_true_if_series_is_daily()
-        {
-            _series.SeriesType = SeriesTypes.Daily;
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-        }
-
-        [Test]
-        public void should_return_true_if_season_zero()
-        {
-            _localEpisode.Episodes[0].SeasonNumber = 0;
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-        }
-
         [Test]
         public void should_return_true_for_existing_file()
         {
             _localEpisode.ExistingFile = true;
             Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-        }
-
-        [Test]
-        public void should_return_true_for_flv()
-        {
-            _localEpisode.Path = @"C:\Test\some.show.s01e01.flv";
-
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-
-            Mocker.GetMock<IVideoFileInfoReader>().Verify(c => c.GetRunTime(It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public void should_use_runtime()
-        {
-            GivenRuntime(120);
-            GivenFileSize(1000.Megabytes());
-
-            Subject.IsSatisfiedBy(_localEpisode);
-
-            Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<String>()), Times.Once());
-        }
-
-        [Test]
-        public void should_return_false_if_runtime_is_less_than_minimum()
-        {
-            GivenRuntime(60);
-
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_true_if_runtime_greater_than_than_minimum()
-        {
-            GivenRuntime(120);
-
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-        }
-
-        [Test]
-        public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_acceptable_size()
-        {
-            Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
-                  .Throws<DllNotFoundException>();
-
-            GivenFileSize(1000.Megabytes());
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeTrue();
-        }
-
-        [Test]
-        public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_undersize()
-        {
-            Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
-                  .Throws<DllNotFoundException>();
-
-            GivenFileSize(1.Megabytes());
-            Subject.IsSatisfiedBy(_localEpisode).Should().BeFalse();
         }
     }
 }
