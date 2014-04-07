@@ -108,7 +108,13 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void Execute(TestPlexServerCommand message)
         {
-            if (!GetSectionKeys(new PlexServerSettings {Host = message.Host, Port = message.Port}).Any())
+            if (!GetSectionKeys(new PlexServerSettings
+                                {
+                                    Host = message.Host,
+                                    Port = message.Port,
+                                    Username = message.Username,
+                                    Password =  message.Password
+                                }).Any())
             {
                 throw new Exception("Unable to connect to Plex Server");
             }
