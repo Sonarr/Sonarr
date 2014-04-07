@@ -39,6 +39,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Ray Donovan - S01E01.720p.HDtv.x264-Evolve (NLsub)", Language.Dutch)]
         [TestCase("Shield,.The.1x13.Tueurs.De.Flics.FR.DVDRip.XviD", Language.French)]
         [TestCase("True.Detective.S01E01.1080p.WEB-DL.Rus.Eng.TVKlondike", Language.Russian)]
+        [TestCase("The.Trip.To.Italy.S02E01.720p.HDTV.x264-TLA", Language.English)]
         public void should_parse_language(string postTitle, Language language)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
