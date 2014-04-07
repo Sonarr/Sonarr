@@ -31,6 +31,16 @@
                         <dt>Info:</dt>
                         <dd><a href="{{nzbInfoUrl}}">{{nzbInfoUrl}}</a></dd>
                     {{/if}}
+
+                    {{#if downloadClient}}
+                        <dt>Download Client:</dt>
+                        <dd>{{downloadClient}}</dd>
+                    {{/if}}
+
+                    {{#if downloadClientId}}
+                        <dt>Download Client ID:</dt>
+                        <dd>{{downloadClientId}}</dd>
+                    {{/if}}
                 {{/with}}
             </dl>
         {{/if_eq}}
