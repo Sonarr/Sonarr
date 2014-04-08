@@ -193,16 +193,22 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             {
                 metadata.Type = MetadataType.SeasonImage;
 
-                var seasonNumber = seasonMatch.Groups["season"].Value;
+                var seasonNumberMatch = seasonMatch.Groups["season"].Value;
+                int seasonNumber;
 
-                if (seasonNumber.Contains("specials"))
+                if (seasonNumberMatch.Contains("specials"))
                 {
                     metadata.SeasonNumber = 0;
                 }
 
+                else if (Int32.TryParse(seasonNumberMatch, out seasonNumber))
+                {
+                    metadata.SeasonNumber = seasonNumber;
+                }
+
                 else
                 {
-                    metadata.SeasonNumber = Convert.ToInt32(seasonNumber);
+                    return null;
                 }
                 
                 return metadata;
@@ -462,7 +468,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             var filename = GetEpisodeImageFilename(episodeFile.Path);
             var relativePath = DiskProviderBase.GetRelativePath(series.Path, filename);
 
-            var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeImage &&
+            var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
                                                                               c.EpisodeFileId == episodeFile.Id);
 
             if (existingMetadata != null)
