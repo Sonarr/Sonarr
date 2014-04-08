@@ -13,6 +13,7 @@ using NzbDrone.Api.Validation;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
+using NzbDrone.Core.DataAugmentation.Scene;
 
 namespace NzbDrone.Api.Series
 {
@@ -27,11 +28,13 @@ namespace NzbDrone.Api.Series
         private readonly ICommandExecutor _commandExecutor;
         private readonly ISeriesService _seriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
+        private readonly ISceneMappingService _sceneMappingService;
         private readonly IMapCoversToLocal _coverMapper;
 
         public SeriesModule(ICommandExecutor commandExecutor,
                             ISeriesService seriesService,
                             ISeriesStatisticsService seriesStatisticsService,
+                            ISceneMappingService sceneMappingService,
                             IMapCoversToLocal coverMapper,
                             RootFolderValidator rootFolderValidator,
                             PathExistsValidator pathExistsValidator,
@@ -44,6 +47,8 @@ namespace NzbDrone.Api.Series
             _commandExecutor = commandExecutor;
             _seriesService = seriesService;
             _seriesStatisticsService = seriesStatisticsService;
+            _sceneMappingService = sceneMappingService;
+
             _coverMapper = coverMapper;
 
             GetResourceAll = AllSeries;
@@ -67,6 +72,21 @@ namespace NzbDrone.Api.Series
             PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
         }
 
+        private void PopulateAlternativeTitles(List<SeriesResource> resources)
+        {
+            foreach (var resource in resources)
+            {
+                PopulateAlternativeTitles(resource);
+            }
+        }
+
+        private void PopulateAlternativeTitles(SeriesResource resource)
+        {
+            var mapping = _sceneMappingService.FindByTvdbid(resource.TvdbId);
+            if (mapping == null) return;
+            resource.AlternativeTitles = mapping.Select(x => x.Title).Distinct().ToList();
+        }
+
         private SeriesResource GetSeries(int id)
         {
             var series = _seriesService.GetSeries(id);
@@ -80,6 +100,7 @@ namespace NzbDrone.Api.Series
             var resource = series.InjectTo<SeriesResource>();
             MapCoversToLocal(resource);
             FetchAndLinkSeriesStatistics(resource);
+            PopulateAlternativeTitles(resource);
 
             return resource;
         }
@@ -91,6 +112,7 @@ namespace NzbDrone.Api.Series
 
             MapCoversToLocal(seriesResources.ToArray());
             LinkSeriesStatistics(seriesResources, seriesStats);
+            PopulateAlternativeTitles(seriesResources);
 
             return seriesResources;
         }
