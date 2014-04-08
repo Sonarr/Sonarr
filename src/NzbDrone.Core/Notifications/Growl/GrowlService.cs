@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Growl.Connector;
 using NLog;
 using NzbDrone.Common.Instrumentation;
@@ -62,6 +63,8 @@ namespace NzbDrone.Core.Notifications.Growl
 
             const string title = "Test Notification";
             const string body = "This is a test message from NzbDrone";
+
+            Thread.Sleep(5000);
 
             SendNotification(title, body, "TEST", message.Host, message.Port, message.Password);
         }
