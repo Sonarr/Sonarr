@@ -54,21 +54,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_return_true_if_series_is_daily()
-        {
-            _series.SeriesType = SeriesTypes.Daily;
-            ShouldBeFalse();
-        }
-
-        [Test]
-        public void should_return_true_if_season_zero()
+        public void should_return_false_if_season_zero()
         {
             _localEpisode.Episodes[0].SeasonNumber = 0;
             ShouldBeFalse();
         }
 
         [Test]
-        public void should_return_true_for_flv()
+        public void should_return_false_for_flv()
         {
             _localEpisode.Path = @"C:\Test\some.show.s01e01.flv";
 
@@ -93,7 +86,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_return_false_if_runtime_is_less_than_minimum()
+        public void should_return_true_if_runtime_is_less_than_minimum()
         {
             GivenRuntime(60);
 
@@ -101,7 +94,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_return_true_if_runtime_greater_than_than_minimum()
+        public void should_return_false_if_runtime_greater_than_than_minimum()
         {
             GivenRuntime(120);
 

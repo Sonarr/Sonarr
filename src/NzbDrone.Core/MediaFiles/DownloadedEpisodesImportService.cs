@@ -185,7 +185,7 @@ namespace NzbDrone.Core.MediaFiles
                 if (!_sampleService.IsSample(series, quality, videoFile, size,
                     episodeParseResult.SeasonNumber))
                 {
-                    _logger.Warn("Non-sample file has not been imported: [{0}]", videoFile);
+                    _logger.Warn("Non-sample file detected: [{0}]", videoFile);
                     return false;
                 }
             }
