@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging.Events;
@@ -197,14 +198,22 @@ namespace NzbDrone.Core.Tv
         {
             foreach (var s in series)
             {
-                if (!String.IsNullOrWhiteSpace(s.RootFolderPath))
+                if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
                     var folderName = new DirectoryInfo(s.Path).Name;
                     s.Path = Path.Combine(s.RootFolderPath, folderName);
+                    _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                }
+
+                else
+                {
+                    _logger.Trace("Not changing path for: {0}", s.Title);
                 }
             }
 
+            _logger.Debug("Updating {0} series", series.Count);
             _seriesRepository.UpdateMany(series);
+            _logger.Debug("{0} series updated", series.Count);
 
             return series;
         }
