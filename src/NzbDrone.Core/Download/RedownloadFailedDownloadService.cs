@@ -40,10 +40,7 @@ namespace NzbDrone.Core.Download
             {
                 _logger.Debug("Failed download only contains one episode, searching again");
 
-                _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand
-                                                     {
-                                                         EpisodeIds = episodeIds.ToList()
-                                                     });
+                _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand(episodeIds));
 
                 return;
             }
@@ -66,10 +63,7 @@ namespace NzbDrone.Core.Download
 
             _logger.Debug("Failed download contains multiple episodes, probably a double episode, searching again");
 
-            _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand
-            {
-                EpisodeIds = episodeIds.ToList()
-            });
+            _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand(episodeIds));
         }
     }
 }

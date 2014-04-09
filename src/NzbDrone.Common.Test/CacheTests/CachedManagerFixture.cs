@@ -7,7 +7,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Common.Test.CacheTests
 {
     [TestFixture]
-    public class CachedManagerFixture : TestBase<ICacheManger>
+    public class CachedManagerFixture : TestBase<ICacheManager>
     {
         [Test]
         public void should_return_proper_type_of_cache()

@@ -23,6 +23,7 @@ namespace NzbDrone.Core.History
         List<History> Grabbed();
         History MostRecentForEpisode(int episodeId);
         History Get(int id);
+        List<History> FindBySourceTitle(string sourceTitle);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
@@ -71,6 +72,11 @@ namespace NzbDrone.Core.History
             return _historyRepository.Get(id);
         }
 
+        public List<History> FindBySourceTitle(string sourceTitle)
+        {
+            return _historyRepository.FindBySourceTitle(sourceTitle);
+        }
+
         public void Purge()
         {
             _historyRepository.Purge();
@@ -107,6 +113,8 @@ namespace NzbDrone.Core.History
                 history.Data.Add("NzbInfoUrl", message.Episode.Release.InfoUrl);
                 history.Data.Add("ReleaseGroup", message.Episode.ParsedEpisodeInfo.ReleaseGroup);
                 history.Data.Add("Age", message.Episode.Release.Age.ToString());
+                history.Data.Add("AgeHours", message.Episode.Release.AgeHours.ToString());
+                history.Data.Add("PublishedDate", message.Episode.Release.PublishDate.ToString("s") + "Z");
                 history.Data.Add("DownloadClient", message.DownloadClient);
 
                 if (!String.IsNullOrWhiteSpace(message.DownloadClientId))

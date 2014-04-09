@@ -25,13 +25,13 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private readonly ICached<SceneMapping> _getSceneNameCache;
         private readonly ICached<SceneMapping> _gettvdbIdCache;
 
-        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ICacheManger cacheManger, Logger logger)
+        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ICacheManager cacheManager, Logger logger)
         {
             _repository = repository;
             _sceneMappingProxy = sceneMappingProxy;
 
-            _getSceneNameCache = cacheManger.GetCache<SceneMapping>(GetType(), "scene_name");
-            _gettvdbIdCache = cacheManger.GetCache<SceneMapping>(GetType(), "tvdb_id");
+            _getSceneNameCache = cacheManager.GetCache<SceneMapping>(GetType(), "scene_name");
+            _gettvdbIdCache = cacheManager.GetCache<SceneMapping>(GetType(), "tvdb_id");
             _logger = logger;
         }
 

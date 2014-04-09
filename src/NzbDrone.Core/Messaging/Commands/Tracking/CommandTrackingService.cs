@@ -21,9 +21,9 @@ namespace NzbDrone.Core.Messaging.Commands.Tracking
     {
         private readonly ICached<Command> _cache;
 
-        public CommandTrackingService(ICacheManger cacheManger)
+        public CommandTrackingService(ICacheManager cacheManager)
         {
-            _cache = cacheManger.GetCache<Command>(GetType());
+            _cache = cacheManager.GetCache<Command>(GetType());
         }
 
         public Command GetById(int id)

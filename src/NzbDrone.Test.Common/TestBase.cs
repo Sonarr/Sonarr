@@ -89,7 +89,7 @@ namespace NzbDrone.Test.Common
 
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
 
-            Mocker.SetConstant<ICacheManger>(new CacheManger());
+            Mocker.SetConstant<ICacheManager>(new CacheManager());
 
             Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
 
