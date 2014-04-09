@@ -116,7 +116,7 @@ namespace NzbDrone.Common.Processes
             };
 
 
-            logger.Info("Starting {0} {1}", path, args);
+            logger.Debug("Starting {0} {1}", path, args);
 
             var process = new Process
                 {
@@ -163,7 +163,7 @@ namespace NzbDrone.Common.Processes
                 path = "mono";
             }
 
-            Logger.Info("Starting {0} {1}", path, args);
+            Logger.Debug("Starting {0} {1}", path, args);
 
             var startInfo = new ProcessStartInfo(path, args);
             var process = new Process

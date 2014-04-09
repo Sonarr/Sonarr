@@ -30,7 +30,13 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(1, Label = "Port")]
         public Int32 Port { get; set; }
 
-        [FieldDefinition(2, Label = "Update Library", Type = FieldType.Checkbox)]
+        [FieldDefinition(2, Label = "Username")]
+        public String Username { get; set; }
+
+        [FieldDefinition(3, Label = "Password")]
+        public String Password { get; set; }
+
+        [FieldDefinition(4, Label = "Update Library", Type = FieldType.Checkbox)]
         public Boolean UpdateLibrary { get; set; }
 
         public bool IsValid

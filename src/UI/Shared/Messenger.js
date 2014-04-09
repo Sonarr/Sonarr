@@ -23,13 +23,16 @@ define(function () {
                 }
             }
 
+            options.hideOnNavigate = options.hideOnNavigate || false;
+
             return window.Messenger().post({
                 message        : options.message,
                 type           : options.type,
                 showCloseButton: true,
                 hideAfter      : options.hideAfter,
                 id             : options.id,
-                actions        : options.actions
+                actions        : options.actions,
+                hideOnNavigate : options.hideOnNavigate
             });
         },
 

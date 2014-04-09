@@ -193,16 +193,22 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             {
                 metadata.Type = MetadataType.SeasonImage;
 
-                var seasonNumber = seasonMatch.Groups["season"].Value;
+                var seasonNumberMatch = seasonMatch.Groups["season"].Value;
+                int seasonNumber;
 
-                if (seasonNumber.Contains("specials"))
+                if (seasonNumberMatch.Contains("specials"))
                 {
                     metadata.SeasonNumber = 0;
                 }
 
+                else if (Int32.TryParse(seasonNumberMatch, out seasonNumber))
+                {
+                    metadata.SeasonNumber = seasonNumber;
+                }
+
                 else
                 {
-                    metadata.SeasonNumber = Convert.ToInt32(seasonNumber);
+                    return null;
                 }
                 
                 return metadata;
@@ -313,14 +319,16 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 }
 
                 _diskProvider.CopyFile(source, destination, false);
+                var relativePath = DiskProviderBase.GetRelativePath(series.Path, destination);
 
-                var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage) ??
+                var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage &&
+                                                                          c.RelativePath == relativePath) ??
                                new MetadataFile
                                {
                                    SeriesId = series.Id,
                                    Consumer = GetType().Name,
                                    Type = MetadataType.SeriesImage,
-                                   RelativePath = DiskProviderBase.GetRelativePath(series.Path, destination)
+                                   RelativePath = relativePath
                                };
 
                 yield return metadata;
@@ -341,18 +349,20 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     }
 
                     var path = Path.Combine(series.Path, filename);
-                    
-                    DownloadImage(series, image.Url, path);
+                    var relativePath = DiskProviderBase.GetRelativePath(series.Path, path);
 
+                    DownloadImage(series, image.Url, path);
+                    
                     var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeasonImage &&
-                                                                              c.SeasonNumber == season.SeasonNumber) ??
+                                                                              c.SeasonNumber == season.SeasonNumber &&
+                                                                              c.RelativePath == relativePath) ??
                                    new MetadataFile
                                    {
                                        SeriesId = series.Id,
                                        SeasonNumber = season.SeasonNumber,
                                        Consumer = GetType().Name,
                                        Type = MetadataType.SeasonImage,
-                                       RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
+                                       RelativePath = relativePath
                                    };
 
                     yield return metadata;
@@ -458,7 +468,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             var filename = GetEpisodeImageFilename(episodeFile.Path);
             var relativePath = DiskProviderBase.GetRelativePath(series.Path, filename);
 
-            var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeImage &&
+            var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
                                                                               c.EpisodeFileId == episodeFile.Id);
 
             if (existingMetadata != null)

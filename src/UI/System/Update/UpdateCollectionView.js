@@ -2,9 +2,11 @@
 define(
     [
         'marionette',
-        'System/Update/UpdateItemView'
-    ], function (Marionette, UpdateItemView) {
+        'System/Update/UpdateItemView',
+        'System/Update/EmptyView'
+    ], function (Marionette, UpdateItemView, EmptyView) {
         return Marionette.CollectionView.extend({
-            itemView: UpdateItemView
+            itemView : UpdateItemView,
+            emptyView: EmptyView
         });
     });

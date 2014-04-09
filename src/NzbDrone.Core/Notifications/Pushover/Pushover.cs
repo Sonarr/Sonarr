@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Notifications.Pushover
     public class Pushover : NotificationBase<PushoverSettings>
     {
         private readonly IPushoverProxy _pushoverProxy;
-
+        
         public Pushover(IPushoverProxy pushoverProxy)
         {
             _pushoverProxy = pushoverProxy;
@@ -20,14 +20,14 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
             const string title = "Episode Grabbed";
 
-            _pushoverProxy.SendNotification(title, message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority);
+            _pushoverProxy.SendNotification(title, message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _pushoverProxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority);
+            _pushoverProxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
         public override void AfterRename(Series series)

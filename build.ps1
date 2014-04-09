@@ -127,6 +127,9 @@ Function PackageOsx()
     Write-Host "Adding sqlite dylibs"
     Copy-Item "$sourceFolder\Libraries\sqlite\*.dylib" "$outputFolderOsx"
 
+    Write-Host "Adding MediaInfo dylib"
+    Copy-Item "$sourceFolder\Libraries\MediaInfo\*.dylib" "$outputFolderOsx"
+
     Write-Host "##teamcity[progressFinish 'Creating OS X Package']"
 }
 

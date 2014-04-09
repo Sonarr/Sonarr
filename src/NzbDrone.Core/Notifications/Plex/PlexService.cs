@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             _logger.Debug("Getting sections from Plex host: {0}", settings.Host);
             var url = String.Format("http://{0}:{1}/library/sections", settings.Host, settings.Port);
-            var xmlStream = _httpProvider.DownloadStream(url, null);
+            var xmlStream = _httpProvider.DownloadStream(url, GetCredentials(settings));
             var xDoc = XDocument.Load(xmlStream);
             var mediaContainer = xDoc.Descendants("MediaContainer").FirstOrDefault();
             var directories = mediaContainer.Descendants("Directory").Where(x => x.Attribute("type").Value == "show");
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             _logger.Debug("Updating Plex host: {0}, Section: {1}", settings.Host, key);
             var url = String.Format("http://{0}:{1}/library/sections/{2}/refresh", settings.Host, settings.Port, key);
-            _httpProvider.DownloadString(url);
+            _httpProvider.DownloadString(url, GetCredentials(settings));
         }
 
         public string SendCommand(string host, int port, string command, string username, string password)
@@ -83,6 +84,13 @@ namespace NzbDrone.Core.Notifications.Plex
             }
 
             return _httpProvider.DownloadString(url);
+        }
+
+        private NetworkCredential GetCredentials(PlexServerSettings settings)
+        {
+            if (settings.Username.IsNullOrWhiteSpace()) return null;
+
+            return new NetworkCredential(settings.Username, settings.Password);
         }
 
         public void Execute(TestPlexClientCommand message)
@@ -100,7 +108,13 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void Execute(TestPlexServerCommand message)
         {
-            if (!GetSectionKeys(new PlexServerSettings {Host = message.Host, Port = message.Port}).Any())
+            if (!GetSectionKeys(new PlexServerSettings
+                                {
+                                    Host = message.Host,
+                                    Port = message.Port,
+                                    Username = message.Username,
+                                    Password =  message.Password
+                                }).Any())
             {
                 throw new Exception("Unable to connect to Plex Server");
             }

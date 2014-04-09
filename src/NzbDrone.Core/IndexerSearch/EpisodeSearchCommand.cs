@@ -3,7 +3,7 @@ using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public class MissingEpisodeSearchCommand : Command
+    public class EpisodeSearchCommand : Command
     {
         public List<int> EpisodeIds { get; set; }
 

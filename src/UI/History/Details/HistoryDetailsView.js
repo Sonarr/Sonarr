@@ -24,6 +24,7 @@ define(
                     type: 'POST',
                     data: data
                 });
+
                 vent.trigger(vent.Commands.CloseModalCommand);
             }
         });

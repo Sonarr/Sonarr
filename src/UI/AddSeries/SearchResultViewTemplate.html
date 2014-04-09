@@ -21,6 +21,7 @@
                     {{overview}}
                 </div>
             </div>
+            {{#unless existing}}
             <div class="row labels">
                 {{#unless path}}
                 <div class="span4">Path</div>
@@ -29,6 +30,7 @@
                 <div class="span1 starting-season starting-season-label">Starting Season</div>
                 <div class="span2">Quality Profile</div>
             </div>
+            {{/unless}}
             <div class="row">
                 <form class="form-inline">
                     {{#if existing}}

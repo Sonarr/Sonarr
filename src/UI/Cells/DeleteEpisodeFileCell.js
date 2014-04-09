@@ -22,7 +22,7 @@ define(
             _onClick: function () {
                 var self = this;
 
-                if (window.confirm('Are you sure you want to delete \'{0}\' form disk?'.format(this.model.get('path')))) {
+                if (window.confirm('Are you sure you want to delete \'{0}\' from disk?'.format(this.model.get('path')))) {
                     this.model.destroy()
                         .done(function () {
                             vent.trigger(vent.Events.EpisodeFileDeleted, { episodeFile: self.model });

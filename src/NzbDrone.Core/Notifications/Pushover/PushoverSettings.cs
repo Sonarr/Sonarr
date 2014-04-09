@@ -27,6 +27,9 @@ namespace NzbDrone.Core.Notifications.Pushover
         [FieldDefinition(2, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(PushoverPriority) )]
         public Int32 Priority { get; set; }
 
+        [FieldDefinition(3, Label = "Sound", Type = FieldType.Textbox, HelpText = "Notification sound, leave blank to use the default", HelpLink = "https://pushover.net/api#sounds")]
+        public String Sound { get; set; }
+
         public bool IsValid
         {
             get

@@ -96,7 +96,9 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         private void ValidateEpisode(Episode episode)
         {
             episode.Should().NotBeNull();
-            episode.EpisodeNumber.Should().NotBe(0);
+
+            //TODO: Is there a better way to validate that episode number or season number is greater than zero?
+            (episode.EpisodeNumber + episode.SeasonNumber).Should().NotBe(0);
 
             episode.Should().NotBeNull();
 

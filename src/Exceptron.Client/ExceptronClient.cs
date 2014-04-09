@@ -184,6 +184,9 @@ namespace Exceptron.Client
         {
             report.cul = Thread.CurrentThread.CurrentCulture.Name;
 
+            if (string.IsNullOrEmpty(report.cul))
+                report.cul = "en";
+
             try
             {
                 report.os = Environment.OSVersion.VersionString;

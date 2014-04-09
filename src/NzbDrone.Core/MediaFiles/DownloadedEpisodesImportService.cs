@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -24,6 +26,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IConfigService _configService;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
+        private readonly ISampleService _sampleService;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -33,6 +36,7 @@ namespace NzbDrone.Core.MediaFiles
             IConfigService configService,
             IMakeImportDecision importDecisionMaker,
             IImportApprovedEpisodes importApprovedEpisodes,
+            ISampleService sampleService,
             Logger logger)
         {
             _diskProvider = diskProvider;
@@ -42,6 +46,7 @@ namespace NzbDrone.Core.MediaFiles
             _configService = configService;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
+            _sampleService = sampleService;
             _logger = logger;
         }
 
@@ -64,24 +69,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var subFolder in _diskProvider.GetDirectories(downloadedEpisodesFolder))
             {
-                try
-                {
-                    if (_seriesService.SeriesPathExists(subFolder))
-                    {
-                        continue;
-                    }
-
-                    var importedFiles = ProcessSubFolder(new DirectoryInfo(subFolder));
-
-                    if (importedFiles.Any())
-                    {
-                        _diskProvider.DeleteFolder(subFolder, true);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("An error has occurred while importing folder: " + subFolder, e);
-                }
+                ProcessFolder(subFolder);
             }
 
             foreach (var videoFile in _diskScanService.GetVideoFiles(downloadedEpisodesFolder, false))
@@ -97,9 +85,9 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        private List<ImportDecision> ProcessSubFolder(DirectoryInfo subfolderInfo)
+        private List<ImportDecision> ProcessFolder(DirectoryInfo directoryInfo)
         {
-            var cleanedUpName = GetCleanedUpFolderName(subfolderInfo.Name);
+            var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
             var series = _parsingService.GetSeries(cleanedUpName);
             var quality = QualityParser.ParseQuality(cleanedUpName);
             _logger.Debug("{0} folder quality: {1}", cleanedUpName, quality);
@@ -110,7 +98,7 @@ namespace NzbDrone.Core.MediaFiles
                 return new List<ImportDecision>();
             }
 
-            var videoFiles = _diskScanService.GetVideoFiles(subfolderInfo.FullName);
+            var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
 
             return ProcessFiles(series, quality, videoFiles);
         }
@@ -140,6 +128,33 @@ namespace NzbDrone.Core.MediaFiles
             return _importApprovedEpisodes.Import(decisions, true);
         }
 
+        private void ProcessFolder(string path)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            try
+            {
+                if (_seriesService.SeriesPathExists(path))
+                {
+                    _logger.Warn("Unable to process folder that contains sorted TV Shows");
+                    return;
+                }
+
+                var directoryFolderInfo = new DirectoryInfo(path);
+                var importedFiles = ProcessFolder(directoryFolderInfo);
+                
+                if (importedFiles.Any() && ShouldDeleteFolder(directoryFolderInfo))
+                {
+                    _logger.Debug("Deleting folder after importing valid files");
+                    _diskProvider.DeleteFolder(path, true);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("An error has occurred while importing folder: " + path, e);
+            }
+        }
+
         private string GetCleanedUpFolderName(string folder)
         {
             folder = folder.Replace("_UNPACK_", "")
@@ -148,9 +163,47 @@ namespace NzbDrone.Core.MediaFiles
             return folder;
         }
 
+        private bool ShouldDeleteFolder(DirectoryInfo directoryInfo)
+        {
+            var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
+            var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
+            var series = _parsingService.GetSeries(cleanedUpName);
+
+            foreach (var videoFile in videoFiles)
+            {
+                var episodeParseResult = Parser.Parser.ParseTitle(Path.GetFileName(videoFile));
+
+                if (episodeParseResult == null)
+                {
+                    _logger.Warn("Unable to parse file on import: [{0}]", videoFile);
+                    return false;
+                }
+
+                var size = _diskProvider.GetFileSize(videoFile);
+                var quality = QualityParser.ParseQuality(videoFile);
+
+                if (!_sampleService.IsSample(series, quality, videoFile, size,
+                    episodeParseResult.SeasonNumber))
+                {
+                    _logger.Warn("Non-sample file detected: [{0}]", videoFile);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public void Execute(DownloadedEpisodesScanCommand message)
         {
-            ProcessDownloadedEpisodesFolder();
+            if (message.Path.IsNullOrWhiteSpace())
+            {
+                ProcessDownloadedEpisodesFolder();
+            }
+
+            else
+            {
+                ProcessFolder(message.Path);
+            }
         }
     }
 }

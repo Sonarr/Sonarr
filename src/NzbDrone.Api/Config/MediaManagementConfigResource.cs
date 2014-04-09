@@ -17,5 +17,7 @@ namespace NzbDrone.Api.Config
         public String FolderChmod { get; set; }
         public String ChownUser { get; set; }
         public String ChownGroup { get; set; }
+
+        public Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
     }
 }

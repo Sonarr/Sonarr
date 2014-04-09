@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
