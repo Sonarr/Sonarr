@@ -76,6 +76,16 @@ namespace NzbDrone.Core.Test.Download
                   .Returns(_failed);
         }
 
+        private void GivenGracePeriod(int hours)
+        {
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.BlacklistGracePeriod).Returns(hours);
+        }
+
+        private void GivenRetryLimit(int count)
+        {
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.BlacklistRetryLimit).Returns(count);
+        }
+
         private void VerifyNoFailedDownloads()
         {
             Mocker.GetMock<IEventAggregator>()
@@ -265,6 +275,92 @@ namespace NzbDrone.Core.Test.Download
             GivenFailedDownloadClientHistory();
 
             _failed.First().Message = "Unpacking failed, write error or disk is full?";
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyNoFailedDownloads();
+        }
+
+        [Test]
+        public void should_process_if_ageHours_is_not_set()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenNoFailedHistory();
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyFailedDownloads();
+        }
+
+        [Test]
+        public void should_process_if_age_is_greater_than_grace_period()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("ageHours", "48");
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenNoFailedHistory();
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyFailedDownloads();
+        }
+
+        [Test]
+        public void should_process_if_retry_count_is_greater_than_grace_period()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("ageHours", "48");
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenNoFailedHistory();
+            GivenGracePeriod(6);
+
+            Subject.Execute(new CheckForFailedDownloadCommand());
+
+            VerifyFailedDownloads();
+        }
+
+        [Test]
+        public void should_not_process_if_age_is_less_than_grace_period()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("ageHours", "1");
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenNoFailedHistory();
+            GivenGracePeriod(6);
+            GivenRetryLimit(1);
 
             Subject.Execute(new CheckForFailedDownloadCommand());
 

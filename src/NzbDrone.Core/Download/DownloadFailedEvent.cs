@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
     public class DownloadFailedEvent : IEvent
     {
+        public DownloadFailedEvent()
+        {
+            Data = new Dictionary<string, string>();
+        }
+
         public Int32 SeriesId { get; set; }
         public List<Int32> EpisodeIds { get; set; }
         public QualityModel Quality { get; set; }
@@ -15,5 +19,6 @@ namespace NzbDrone.Core.Download
         public String DownloadClient { get; set; }
         public String DownloadClientId { get; set; }
         public String Message { get; set; }
+        public Dictionary<string, string> Data { get; set; }
     }
 }

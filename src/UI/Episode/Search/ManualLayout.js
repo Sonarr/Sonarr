@@ -6,8 +6,9 @@ define(
         'Cells/FileSizeCell',
         'Cells/QualityCell',
         'Cells/ApprovalStatusCell',
-        'Release/DownloadReportCell'
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell) {
+        'Release/DownloadReportCell',
+        'Release/AgeCell'
+    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, AgeCell) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/ManualLayoutTemplate',
@@ -22,7 +23,7 @@ define(
                         name    : 'age',
                         label   : 'Age',
                         sortable: true,
-                        cell    : Backgrid.IntegerCell
+                        cell    : AgeCell
                     },
                     {
                         name    : 'title',

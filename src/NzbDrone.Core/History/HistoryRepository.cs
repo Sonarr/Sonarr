@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Extentions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -18,6 +17,7 @@ namespace NzbDrone.Core.History
         List<History> Failed();
         List<History> Grabbed();
         History MostRecentForEpisode(int episodeId);
+        List<History> FindBySourceTitle(string sourceTitle);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -67,6 +67,16 @@ namespace NzbDrone.Core.History
             return Query.Where(h => h.EpisodeId == episodeId)
                         .OrderByDescending(h => h.Date)
                         .FirstOrDefault();
+        }
+
+        public List<History> FindBySourceTitle(string sourceTitle)
+        {
+            return Query.Where(h => h.SourceTitle.Contains(sourceTitle));
+        }
+
+        public List<History> AllForEpisode(int episodeId)
+        {
+            return Query.Where(h => h.EpisodeId == episodeId);
         }
 
         protected override SortBuilder<History> GetPagedQuery(QueryBuilder<History> query, PagingSpec<History> pagingSpec)

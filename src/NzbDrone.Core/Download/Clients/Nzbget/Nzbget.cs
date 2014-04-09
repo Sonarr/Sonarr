@@ -138,6 +138,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _proxy.RemoveFromHistory(id, Settings);
         }
 
+        public override void RetryDownload(string id)
+        {
+            _proxy.RetryDownload(id, Settings);
+        }
+
         public override void Test()
         {
             _proxy.GetVersion(Settings);

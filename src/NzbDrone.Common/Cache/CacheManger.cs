@@ -4,7 +4,7 @@ using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Common.Cache
 {
-    public interface ICacheManger
+    public interface ICacheManager
     {
         ICached<T> GetCache<T>(Type host, string name);
         ICached<T> GetCache<T>(Type host);
@@ -12,11 +12,11 @@ namespace NzbDrone.Common.Cache
         ICollection<ICached> Caches { get; }
     }
 
-    public class CacheManger : ICacheManger
+    public class CacheManager : ICacheManager
     {
         private readonly ICached<ICached> _cache;
 
-        public CacheManger()
+        public CacheManager()
         {
             _cache = new Cached<ICached>();
 

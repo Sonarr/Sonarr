@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -11,6 +10,7 @@ namespace NzbDrone.Api.Indexers
     {
         public QualityModel Quality { get; set; }
         public Int32 Age { get; set; }
+        public Double AgeHours { get; set; }
         public Int64 Size { get; set; }
         public String Indexer { get; set; }
         public String ReleaseGroup { get; set; }

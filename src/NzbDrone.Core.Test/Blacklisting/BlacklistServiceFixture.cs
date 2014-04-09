@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Blacklisting
 {
@@ -26,6 +26,8 @@ namespace NzbDrone.Core.Test.Blacklisting
                          DownloadClient = "SabnzbdClient",
                          DownloadClientId = "Sabnzbd_nzo_2dfh73k"
                      };
+
+            _event.Data.Add("publishedDate", DateTime.UtcNow.ToString("s") + "Z");
         }
 
         [Test]

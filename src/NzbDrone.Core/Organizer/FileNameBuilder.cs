@@ -48,12 +48,12 @@ namespace NzbDrone.Core.Organizer
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
-                               ICacheManger cacheManger,
+                               ICacheManager cacheManager,
                                Logger logger)
         {
             _namingConfigService = namingConfigService;
             _qualityDefinitionService = qualityDefinitionService;
-            _patternCache = cacheManger.GetCache<EpisodeFormat>(GetType());
+            _patternCache = cacheManager.GetCache<EpisodeFormat>(GetType());
             _logger = logger;
         }
 

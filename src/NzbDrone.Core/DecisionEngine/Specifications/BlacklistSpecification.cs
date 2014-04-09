@@ -27,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (!_configService.EnableFailedDownloadHandling)
             {
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release.Title))
+            if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release.Title, subject.Release.PublishDate))
             {
                 _logger.Debug("{0} is blacklisted, rejecting.", subject.Release.Title);
                 return false;

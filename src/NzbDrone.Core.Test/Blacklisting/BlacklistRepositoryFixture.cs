@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.Blacklisting
         {
             Subject.Insert(_blacklist);
 
-            Subject.Blacklisted(_blacklist.SeriesId, _blacklist.SourceTitle.ToUpperInvariant()).Should().BeTrue();
+            Subject.Blacklisted(_blacklist.SeriesId, _blacklist.SourceTitle.ToUpperInvariant()).Should().HaveCount(1);
         }
     }
 }
