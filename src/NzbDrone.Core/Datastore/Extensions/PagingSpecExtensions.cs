@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace NzbDrone.Core.Datastore.Extentions
+namespace NzbDrone.Core.Datastore.Extensions
 {
     public static class PagingSpecExtensions
     {

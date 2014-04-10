@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
 
-            ExceptionVerification.AssertNoUnexcpectedLogs();
+            ExceptionVerification.AssertNoUnexpectedLogs();
         }
 
         [Test]

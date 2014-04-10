@@ -26,7 +26,7 @@ namespace NzbDrone.Test.Common
             _logs = new List<LogEventInfo>();
         }
 
-        public static void AssertNoUnexcpectedLogs()
+        public static void AssertNoUnexpectedLogs()
         {
             ExpectedFatals(0);
             ExpectedErrors(0);

@@ -103,8 +103,8 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
-    <Compile Include="Datastore\PagingSpecExtenstionsTests\ToSortDirectionFixture.cs" />
-    <Compile Include="Datastore\PagingSpecExtenstionsTests\PagingOffsetFixture.cs" />
+    <Compile Include="Datastore\PagingSpecExtensionsTests\ToSortDirectionFixture.cs" />
+    <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperTests\AlterFixture.cs" />
     <Compile Include="Datastore\SQLiteMigrationHelperTests\DuplicateFixture.cs" />

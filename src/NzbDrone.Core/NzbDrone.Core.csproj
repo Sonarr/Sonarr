@@ -138,9 +138,9 @@
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
-    <Compile Include="Datastore\Extentions\MappingExtensions.cs" />
-    <Compile Include="Datastore\Extentions\PagingSpecExtensions.cs" />
-    <Compile Include="Datastore\Extentions\RelationshipExtensions.cs" />
+    <Compile Include="Datastore\Extensions\MappingExtensions.cs" />
+    <Compile Include="Datastore\Extensions\PagingSpecExtensions.cs" />
+    <Compile Include="Datastore\Extensions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />

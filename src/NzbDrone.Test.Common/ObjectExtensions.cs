@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Test.Common
 {
-    public static class ObjectExtentions
+    public static class ObjectExtensions
     {
         public static T JsonClone<T>(this T source) where T : new()
         {
