@@ -196,8 +196,10 @@ namespace NzbDrone.Core.Tv
 
         public List<Series> UpdateSeries(List<Series> series)
         {
+            _logger.Debug("Updating {0} series", series.Count);
             foreach (var s in series)
             {
+                _logger.Trace("Updating: {0}", s.Title);
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
                     var folderName = new DirectoryInfo(s.Path).Name;
@@ -210,8 +212,7 @@ namespace NzbDrone.Core.Tv
                     _logger.Trace("Not changing path for: {0}", s.Title);
                 }
             }
-
-            _logger.Debug("Updating {0} series", series.Count);
+            
             _seriesRepository.UpdateMany(series);
             _logger.Debug("{0} series updated", series.Count);
 
