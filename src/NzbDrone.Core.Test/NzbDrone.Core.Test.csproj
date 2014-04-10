@@ -190,6 +190,7 @@
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTest.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />
+    <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoServiceFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReaderFixture.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFileServiceFixture.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileServiceFixture.cs" />

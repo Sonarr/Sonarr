@@ -216,6 +216,8 @@ namespace NzbDrone.Core.Organizer
             tokenValues.Add("{Episode Title}", GetEpisodeTitle(episodeTitles));
             tokenValues.Add("{Quality Title}", GetQualityTitle(episodeFile.Quality));
 
+            AddMediaInfoTokens(episodeFile, tokenValues);
+
             var filename = ReplaceTokens(pattern, tokenValues).Trim();
             filename = FilenameCleanupRegex.Replace(filename, match => match.Captures[0].Value[0].ToString() );
 
@@ -331,6 +333,91 @@ namespace NzbDrone.Core.Organizer
                 result = result.Replace(badCharacters[i], goodCharacters[i]);
 
             return result.Trim();
+        }
+
+        private void AddMediaInfoTokens(EpisodeFile episodeFile, Dictionary<string, string> tokenValues)
+        {
+           if (episodeFile.MediaInfo == null)
+              return;
+
+           var mediaInfoFull = string.Empty;
+
+           switch (episodeFile.MediaInfo.VideoCodec)
+           {
+              case "AVC":
+                 if (Path.GetFileNameWithoutExtension(episodeFile.Path).Contains("x264"))
+                    mediaInfoFull += "x264";
+                 else if (Path.GetFileNameWithoutExtension(episodeFile.Path).Contains("h264"))
+                    mediaInfoFull += "h264";
+                 else
+                    mediaInfoFull += "h264";
+                 break;
+
+              default:
+                 mediaInfoFull += episodeFile.MediaInfo.VideoCodec;
+                 break;
+           }
+
+           switch (episodeFile.MediaInfo.AudioFormat)
+           {
+              case "AC-3":
+                 mediaInfoFull += ".AC3";
+                 break;
+
+              case "MPEG Audio":
+                 if (episodeFile.MediaInfo.AudioProfile == "Layer 3")
+                    mediaInfoFull += ".MP3";
+                 else
+                    mediaInfoFull += "." + episodeFile.MediaInfo.AudioFormat;
+                 break;
+
+              case "DTS":
+                 mediaInfoFull += "." + episodeFile.MediaInfo.AudioFormat;
+                 break;
+
+              default:
+                 mediaInfoFull += "." + episodeFile.MediaInfo.AudioFormat;
+                 break;
+           }
+
+           tokenValues.Add("{MediaInfo Short}", mediaInfoFull);
+
+           var audioLanguagesToken = GetLanguagesToken(episodeFile.MediaInfo.AudioLanguages);
+           if (!string.IsNullOrEmpty(audioLanguagesToken) && audioLanguagesToken != "EN")
+              mediaInfoFull += string.Format("[{0}]", audioLanguagesToken);
+
+           var subtitleLanguagesToken = GetLanguagesToken(episodeFile.MediaInfo.Subtitles);
+           if (!string.IsNullOrEmpty(subtitleLanguagesToken))
+              mediaInfoFull += string.Format(".[{0}]", subtitleLanguagesToken);
+           
+           tokenValues.Add("{MediaInfo Full}", mediaInfoFull);
+        }
+
+        private string GetLanguagesToken(string mediaInfoLanguages)
+        {
+           List<string> tokens = new List<string>();
+           foreach (var item in mediaInfoLanguages.Split('/'))
+           {
+              if (!string.IsNullOrWhiteSpace(item))
+                 tokens.Add(item.Trim());
+           }
+           
+           var cultures = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.NeutralCultures);
+           for (int i = 0; i < tokens.Count; i++)
+           {
+              try
+              {
+                 var cultureInfo = cultures.FirstOrDefault(p => p.EnglishName == tokens[i]);
+
+                 if (cultureInfo != null)
+                  tokens[i] = cultureInfo.TwoLetterISOLanguageName.ToUpper();
+              }
+              catch
+              {
+              }
+           }
+
+           return string.Join("+", tokens.Distinct());
         }
 
         private string ReplaceTokens(string pattern, Dictionary<string, string> tokenValues)

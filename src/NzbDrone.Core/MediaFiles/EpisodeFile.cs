@@ -2,6 +2,7 @@
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.MediaFiles
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
         public QualityModel Quality { get; set; }
+        public MediaInfoModel MediaInfo { get; set; }
         public LazyList<Episode> Episodes { get; set; }
 
         public override string ToString()

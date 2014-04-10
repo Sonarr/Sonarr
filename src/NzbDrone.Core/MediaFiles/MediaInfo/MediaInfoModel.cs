@@ -1,8 +1,9 @@
 ﻿using System;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
-    public class MediaInfoModel
+    public class MediaInfoModel : IEmbeddedDocument
     {
         public string VideoCodec { get; set; }
         public int VideoBitrate { get; set; }
