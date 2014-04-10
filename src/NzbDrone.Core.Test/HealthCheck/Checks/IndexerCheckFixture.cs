@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_null_when_multiple_indexers_are_enabled()
+        public void should_return_ok_when_multiple_indexers_are_enabled()
         {
             var indexer1 = Mocker.GetMock<IIndexer>();
             indexer1.SetupGet(s => s.SupportsSearching).Returns(true);
@@ -51,11 +51,11 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.GetAvailableProviders())
                   .Returns(new List<IIndexer> { indexer1.Object, indexer2.Object });
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
 
         [Test]
-        public void should_return_null_when_indexer_supports_searching()
+        public void should_return_ok_when_indexer_supports_searching()
         {
             var indexer1 = Mocker.GetMock<IIndexer>();
             indexer1.SetupGet(s => s.SupportsSearching).Returns(true);
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.GetAvailableProviders())
                   .Returns(new List<IIndexer> { indexer1.Object });
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
     }
 }

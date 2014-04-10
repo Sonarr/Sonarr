@@ -280,7 +280,8 @@
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
-    <Compile Include="HealthCheck\TriggerHealthCheckEvent.cs" />
+    <Compile Include="HealthCheck\HealthCheckBase.cs" />
+    <Compile Include="HealthCheck\HealthCheckCompleteEvent.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />

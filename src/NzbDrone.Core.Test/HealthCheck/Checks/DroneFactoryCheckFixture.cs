@@ -57,11 +57,11 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_null_when_no_issues_found()
+        public void should_return_ok_when_no_issues_found()
         {
             GivenDroneFactoryFolder(true);
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
     }
 }

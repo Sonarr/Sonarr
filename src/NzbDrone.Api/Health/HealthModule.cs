@@ -8,7 +8,7 @@ using NzbDrone.Core.Messaging.Events;
 namespace NzbDrone.Api.Health
 {
     public class HealthModule : NzbDroneRestModuleWithSignalR<HealthResource, HealthCheck>,
-                                IHandle<TriggerHealthCheckEvent>
+                                IHandle<HealthCheckCompleteEvent>
     {
         private readonly IHealthCheckService _healthCheckService;
 
@@ -21,10 +21,10 @@ namespace NzbDrone.Api.Health
 
         private List<HealthResource> GetHealth()
         {
-            return ToListResource(_healthCheckService.PerformHealthCheck);
+            return ToListResource(_healthCheckService.Results);
         }
 
-        public void Handle(TriggerHealthCheckEvent message)
+        public void Handle(HealthCheckCompleteEvent message)
         {
             BroadcastResourceChange(ModelAction.Sync);
         }

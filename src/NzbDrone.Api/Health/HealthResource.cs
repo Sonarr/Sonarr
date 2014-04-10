@@ -2,12 +2,11 @@
 using NzbDrone.Api.REST;
 using NzbDrone.Core.HealthCheck;
 
-
 namespace NzbDrone.Api.Health
 {
     public class HealthResource : RestResource
     {
-        public HealthCheckResultType Type { get; set; }
+        public HealthCheckResult Type { get; set; }
         public String Message { get; set; }
     }
 }

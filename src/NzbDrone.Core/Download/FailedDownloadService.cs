@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Download
             _configService = configService;
             _logger = logger;
 
-            _failedDownloads = cacheManager.GetCache<FailedDownload>(GetType(), "queue");
+            _failedDownloads = cacheManager.GetCache<FailedDownload>(GetType());
         }
 
         public void MarkAsFailed(int historyId)

@@ -6,7 +6,7 @@ using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
-    public class DroneFactoryCheck : IProvideHealthCheck
+    public class DroneFactoryCheck : HealthCheckBase
     {
         private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
@@ -17,18 +17,18 @@ namespace NzbDrone.Core.HealthCheck.Checks
             _diskProvider = diskProvider;
         }
 
-        public HealthCheck Check()
+        public override HealthCheck Check()
         {
             var droneFactoryFolder = _configService.DownloadedEpisodesFolder;
 
             if (droneFactoryFolder.IsNullOrWhiteSpace())
             {
-                return new HealthCheck(HealthCheckResultType.Warning, "Drone factory folder is not configured");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Drone factory folder is not configured");
             }
 
             if (!_diskProvider.FolderExists(droneFactoryFolder))
             {
-                return new HealthCheck(HealthCheckResultType.Error, "Drone factory folder does not exist");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "Drone factory folder does not exist");
             }
             
             try
@@ -39,12 +39,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
             catch (Exception)
             {
-                return new HealthCheck(HealthCheckResultType.Error, "Unable to write to drone factory folder");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to write to drone factory folder");
             }
 
             //Todo: Unable to import one or more files/folders from
 
-            return null;
+            return new HealthCheck(GetType());
         }
     }
 }
