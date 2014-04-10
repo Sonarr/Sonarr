@@ -58,7 +58,6 @@ namespace NzbDrone.Api.Series
                         .Cascade(CascadeMode.StopOnFirstFailure)
                         .IsValidPath()
                         .SetValidator(rootFolderValidator)
-                        .SetValidator(pathExistsValidator)
                         .SetValidator(seriesPathValidator)
                         .SetValidator(droneFactoryValidator);
 
