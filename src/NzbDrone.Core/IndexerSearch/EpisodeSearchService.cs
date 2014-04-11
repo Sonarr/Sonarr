@@ -57,7 +57,7 @@ namespace NzbDrone.Core.IndexerSearch
                                                          FilterExpression = v => v.Monitored == true && v.Series.Monitored == true
                                                      }).Records.ToList();
 
-            var missing = episodes.Where(e => _queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id));
+            var missing = episodes.Where(e => !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id));
 
             _logger.ProgressInfo("Performing missing search for {0} episodes", episodes.Count);
             var downloadedCount = 0;
