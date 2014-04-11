@@ -9,7 +9,9 @@ namespace NzbDrone.Api.Config
         public IndexerConfigModule(IConfigService configService)
             : base(configService)
         {
-            SharedValidator.RuleFor(c => c.RssSyncInterval).InclusiveBetween(10, 120);
+            SharedValidator.RuleFor(c => c.RssSyncInterval)
+                .InclusiveBetween(10, 120)
+                .When(c => c.RssSyncInterval > 0);
         }
     }
 }
