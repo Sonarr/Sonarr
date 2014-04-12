@@ -50,7 +50,14 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void PublishCommand(string commandTypeName)
         {
+            PublishCommand(commandTypeName, null);
+        }
+
+        public void PublishCommand(string commandTypeName, DateTime? lastExecutionTime)
+        {
             dynamic command = GetCommand(commandTypeName);
+            command.LastExecutionTime = lastExecutionTime;
+
             PublishCommand(command);
         }
 

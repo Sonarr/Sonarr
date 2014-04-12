@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Messaging.Commands
         public string Message { get; private set; }
 
         public string Name { get; private set; }
+        public DateTime? LastExecutionTime { get; set; }
 
         protected Command()
         {
