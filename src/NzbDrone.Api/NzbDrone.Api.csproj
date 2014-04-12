@@ -140,6 +140,7 @@
     <Compile Include="Health\HealthModule.cs" />
     <Compile Include="History\HistoryResource.cs" />
     <Compile Include="History\HistoryModule.cs" />
+    <Compile Include="MediaCovers\MediaCoverModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="Notifications\NotificationSchemaModule.cs" />
