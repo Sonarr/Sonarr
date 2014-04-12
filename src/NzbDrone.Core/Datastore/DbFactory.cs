@@ -78,12 +78,6 @@ namespace NzbDrone.Core.Datastore
                     return dataMapper;
                 });
 
-
-            if (migrationType == MigrationType.Main)
-            {
-                db.Vacuum();
-            }
-
             return db;
         }
     }
