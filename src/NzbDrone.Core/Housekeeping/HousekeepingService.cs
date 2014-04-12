@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping
 {
@@ -11,11 +12,13 @@ namespace NzbDrone.Core.Housekeeping
     {
         private readonly IEnumerable<IHousekeepingTask> _housekeepers;
         private readonly Logger _logger;
+        private readonly IDatabase _mainDb;
 
-        public HousekeepingService(IEnumerable<IHousekeepingTask> housekeepers, Logger logger)
+        public HousekeepingService(IEnumerable<IHousekeepingTask> housekeepers, Logger logger, IDatabase mainDb)
         {
             _housekeepers = housekeepers;
             _logger = logger;
+            _mainDb = mainDb;
         }
 
         private void Clean()
@@ -33,6 +36,10 @@ namespace NzbDrone.Core.Housekeeping
                     _logger.ErrorException("Error running housekeeping task: " + housekeeper.GetType().FullName, ex);
                 }
             }
+
+            // Vacuuming the log db isn't needed since that's done hourly at the TrimLogCommand.
+            _logger.Debug("Compressing main database after housekeeping");
+            _mainDb.Vacuum();
         }
 
         public void Execute(HousekeepingCommand message)
