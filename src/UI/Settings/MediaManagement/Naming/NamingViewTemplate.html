@@ -103,7 +103,7 @@
 
         <div class="controls">
             <div class="input-append x-helper-input">
-                <input type="text" class="naming-format" name="seriesFolderFormat"/>
+                <input type="text" class="naming-format" name="seriesFolderFormat" data-onkeyup="true"/>
                 <div class="btn-group x-naming-token-helper">
                     <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-plus"></i>
@@ -124,7 +124,7 @@
 
         <div class="controls">
             <div class="input-append x-helper-input">
-                <input type="text" class="naming-format" name="seasonFolderFormat"/>
+                <input type="text" class="naming-format" name="seasonFolderFormat" data-onkeyup="true"/>
                 <div class="btn-group x-naming-token-helper">
                     <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-plus"></i>
@@ -160,6 +160,22 @@
 
         <div class="controls">
             <span class="x-daily-episode-example naming-example"></span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Series Folder Example</label>
+
+        <div class="controls">
+            <span class="x-series-folder-example naming-example"></span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="control-label">Season Folder Example</label>
+
+        <div class="controls">
+            <span class="x-season-folder-example naming-example"></span>
         </div>
     </div>
 </fieldset>

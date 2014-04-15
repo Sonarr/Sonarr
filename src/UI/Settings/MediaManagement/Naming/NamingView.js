@@ -19,7 +19,9 @@ define(
                 multiEpisodeExample   : '.x-multi-episode-example',
                 dailyEpisodeExample   : '.x-daily-episode-example',
                 namingTokenHelper     : '.x-naming-token-helper',
-                multiEpisodeStyle     : '.x-multi-episode-style'
+                multiEpisodeStyle     : '.x-multi-episode-style',
+                seriesFolderExample   : '.x-series-folder-example',
+                seasonFolderExample   : '.x-season-folder-example'
             },
 
             events: {
@@ -66,6 +68,8 @@ define(
                 this.ui.singleEpisodeExample.html(this.namingSampleModel.get('singleEpisodeExample'));
                 this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
                 this.ui.dailyEpisodeExample.html(this.namingSampleModel.get('dailyEpisodeExample'));
+                this.ui.seriesFolderExample.html(this.namingSampleModel.get('seriesFolderExample'));
+                this.ui.seasonFolderExample.html(this.namingSampleModel.get('seasonFolderExample'));
             },
 
             _addToken: function (e) {

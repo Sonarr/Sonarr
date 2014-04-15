@@ -92,6 +92,9 @@ namespace NzbDrone.Api.Config
                     ? "Invalid format"
                     : dailyEpisodeSampleResult.Filename;
 
+            sampleResource.SeriesFolderExample = _filenameSampleService.GetSeriesFolderSample(nameSpec);
+            sampleResource.SeasonFolderExample = _filenameSampleService.GetSeasonFolderSample(nameSpec);
+
             return sampleResource.AsResponse();
         }
 

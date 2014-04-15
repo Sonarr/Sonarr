@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -14,6 +11,8 @@ namespace NzbDrone.Core.Organizer
         SampleResult GetStandardSample(NamingConfig nameSpec);
         SampleResult GetMultiEpisodeSample(NamingConfig nameSpec);
         SampleResult GetDailySample(NamingConfig nameSpec);
+        String GetSeriesFolderSample(NamingConfig nameSpec);
+        String GetSeasonFolderSample(NamingConfig nameSpec);
     }
 
     public class FilenameSampleService : IFilenameSampleService
@@ -121,6 +120,16 @@ namespace NzbDrone.Core.Organizer
             };
 
             return result;
+        }
+
+        public string GetSeriesFolderSample(NamingConfig nameSpec)
+        {
+            return _buildFileNames.GetSeriesFolder(_standardSeries.Title, nameSpec);
+        }
+
+        public string GetSeasonFolderSample(NamingConfig nameSpec)
+        {
+            return _buildFileNames.GetSeasonFolder(_standardSeries.Title, _episode1.SeasonNumber, nameSpec);
         }
 
         private string BuildSample(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec)
