@@ -17,10 +17,6 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex[] ReportTitleRegex = new[]
             {
-                //Episodes with airdate
-                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                 //Anime - Absolute Episode Number + Title + Season+Episode
                 //Todo: This currently breaks series that start with numbers
 //                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
@@ -51,11 +47,11 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                new Regex(@"^(?<title>.+?)(?:(\W|_)+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))+)\W?(?!\\)",
+                new Regex(@"^(?<title>.+?)(?:(\W|_)+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))*)\W?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+)))+)",
+                new Regex(@"^(?<title>.+?)(?:\W+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2,3}(?!\d+)))*)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with single digit episode number (S01E1, S01E5E6, etc)
@@ -80,6 +76,10 @@ namespace NzbDrone.Core.Parser
 
                 //Supports Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Episodes with airdate
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 1103/1113 naming
@@ -163,6 +163,7 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
+                        Console.WriteLine(regex);
                         Logger.Trace(regex);
                         try
                         {

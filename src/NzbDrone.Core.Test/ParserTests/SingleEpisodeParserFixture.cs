@@ -82,6 +82,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("24.S01E01", "24", 1, 1)]
         [TestCase("Homeland - 2x12 - The Choice [HDTV-1080p].mkv", "Homeland", 2, 12)]
         [TestCase("Homeland - 2x4 - New Car Smell [HDTV-1080p].mkv", "Homeland", 2, 4)]
+        [TestCase("Top Gear - 06x11 - 2005.08.07", "Top Gear", 6, 11)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
