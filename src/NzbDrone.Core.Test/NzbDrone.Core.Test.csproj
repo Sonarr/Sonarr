@@ -191,7 +191,7 @@
     <Compile Include="ParserTests\NormalizeTitleFixture.cs" />
     <Compile Include="ParserTests\CrapParserFixture.cs" />
     <Compile Include="ParserTests\DailyEpisodeParserFixture.cs" />
-    <Compile Include="ParserTests\HashedReleasesFixture.cs" />
+    <Compile Include="ParserTests\HashedReleaseFixture.cs" />
     <Compile Include="ParserTests\SingleEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\PathParserFixture.cs" />
     <Compile Include="ParserTests\MultiEpisodeParserFixture.cs" />
