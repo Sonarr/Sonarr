@@ -377,6 +377,11 @@
     <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
+    <Compile Include="Notifications\Plex\PlexError.cs" />
+    <Compile Include="Notifications\Plex\PlexException.cs" />
+    <Compile Include="Notifications\Plex\PlexSection.cs" />
+    <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
+    <Compile Include="Notifications\Plex\PlexUser.cs" />
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />

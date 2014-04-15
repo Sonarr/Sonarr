@@ -18,11 +18,13 @@ namespace NzbDrone.Core.Notifications.Plex
     public class PlexService : IPlexService, IExecute<TestPlexClientCommand>, IExecute<TestPlexServerCommand>
     {
         private readonly IHttpProvider _httpProvider;
+        private readonly IPlexServerProxy _plexServerProxy;
         private readonly Logger _logger;
 
-        public PlexService(IHttpProvider httpProvider, Logger logger)
+        public PlexService(IHttpProvider httpProvider, IPlexServerProxy plexServerProxy, Logger logger)
         {
             _httpProvider = httpProvider;
+            _plexServerProxy = plexServerProxy;
             _logger = logger;
         }
 
@@ -45,7 +47,7 @@ namespace NzbDrone.Core.Notifications.Plex
             {
                 _logger.Debug("Sending Update Request to Plex Server");
                 var sections = GetSectionKeys(settings);
-                sections.ForEach(s => UpdateSection(settings, s));
+                sections.ForEach(s => UpdateSection(s, settings));
             }
 
             catch(Exception ex)
@@ -55,26 +57,21 @@ namespace NzbDrone.Core.Notifications.Plex
             }
         }
 
-        public List<int> GetSectionKeys(PlexServerSettings settings)
+        private List<int> GetSectionKeys(PlexServerSettings settings)
         {
             _logger.Debug("Getting sections from Plex host: {0}", settings.Host);
-            var url = String.Format("http://{0}:{1}/library/sections", settings.Host, settings.Port);
-            var xmlStream = _httpProvider.DownloadStream(url, GetCredentials(settings));
-            var xDoc = XDocument.Load(xmlStream);
-            var mediaContainer = xDoc.Descendants("MediaContainer").FirstOrDefault();
-            var directories = mediaContainer.Descendants("Directory").Where(x => x.Attribute("type").Value == "show");
 
-            return directories.Select(d => Int32.Parse(d.Attribute("key").Value)).ToList();
+            return _plexServerProxy.GetTvSections(settings).Select(s => s.Id).ToList();
         }
 
-        public void UpdateSection(PlexServerSettings settings, int key)
+        private void UpdateSection(int key, PlexServerSettings settings)
         {
             _logger.Debug("Updating Plex host: {0}, Section: {1}", settings.Host, key);
-            var url = String.Format("http://{0}:{1}/library/sections/{2}/refresh", settings.Host, settings.Port, key);
-            _httpProvider.DownloadString(url, GetCredentials(settings));
+
+            _plexServerProxy.Update(key, settings);
         }
 
-        public string SendCommand(string host, int port, string command, string username, string password)
+        private string SendCommand(string host, int port, string command, string username, string password)
         {
             var url = String.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command={2}", host, port, command);
 
@@ -84,13 +81,6 @@ namespace NzbDrone.Core.Notifications.Plex
             }
 
             return _httpProvider.DownloadString(url);
-        }
-
-        private NetworkCredential GetCredentials(PlexServerSettings settings)
-        {
-            if (settings.Username.IsNullOrWhiteSpace()) return null;
-
-            return new NetworkCredential(settings.Username, settings.Password);
         }
 
         public void Execute(TestPlexClientCommand message)

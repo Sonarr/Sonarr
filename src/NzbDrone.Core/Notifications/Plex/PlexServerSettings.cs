@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(2, Label = "Username")]
         public String Username { get; set; }
 
-        [FieldDefinition(3, Label = "Password")]
+        [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
         public String Password { get; set; }
 
         [FieldDefinition(4, Label = "Update Library", Type = FieldType.Checkbox)]
