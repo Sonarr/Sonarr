@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void Update(int sectionId, PlexServerSettings settings)
         {
-            var resource = String.Format("library/sections/{2}/refresh");
+            var resource = String.Format("library/sections/{0}/refresh", sectionId);
             var request = GetPlexServerRequest(resource, Method.GET, settings);
             var client = GetPlexServerClient(settings);
 
