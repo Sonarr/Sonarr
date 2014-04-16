@@ -5,7 +5,8 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public class SceneMapping : ModelBase
     {
-        [JsonProperty("title")]
+        public string Title { get; set; }
+
         public string ParseTerm { get; set; }
 
         [JsonProperty("searchTitle")]

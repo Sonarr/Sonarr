@@ -1,12 +1,13 @@
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
+using System.Collections.Generic;
 
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingRepository : IBasicRepository<SceneMapping>
     {
-
+        List<SceneMapping> FindByTvdbid(int tvdbId);
     }
 
     public class SceneMappingRepository : BasicRepository<SceneMapping>, ISceneMappingRepository
@@ -16,5 +17,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         {
         }
 
+        public List<SceneMapping> FindByTvdbid(int tvdbId)
+        {
+            return Query.Where(x => x.TvdbId == tvdbId);
+        }
     }
 }

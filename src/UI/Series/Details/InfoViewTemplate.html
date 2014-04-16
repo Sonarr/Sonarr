@@ -1,25 +1,32 @@
-﻿{{qualityProfile qualityProfileId}}
-<span class="label label-info">{{network}}</span>
-<span class="label label-info">{{runtime}} minutes</span>
-<span class="label label-info">{{path}}</span>
-{{#if_eq status compare="continuing"}}
-    <span class="label label-info">Continuing</span>
-{{else}}
-    <span class="label">Ended</span>
-{{/if_eq}}
+﻿<div>
+    {{qualityProfile qualityProfileId}}
+    <span class="label label-info">{{network}}</span>
+    <span class="label label-info">{{runtime}} minutes</span>
+    <span class="label label-info">{{path}}</span>
+    {{#if_eq status compare="continuing"}}
+        <span class="label label-info">Continuing</span>
+    {{else}}
+        <span class="label">Ended</span>
+    {{/if_eq}}
 
-<span class="pull-right">
-    <a href="{{traktUrl}}" class="label label-info">Trakt</a>
+    <span class="pull-right">
+        <a href="{{traktUrl}}" class="label label-info">Trakt</a>
 
-    {{#if imdbId}}
-        <a href="{{imdbUrl}}" class="label label-info">IMDB</a>
-    {{/if}}
+        {{#if imdbId}}
+            <a href="{{imdbUrl}}" class="label label-info">IMDB</a>
+        {{/if}}
 
-    {{#if tvdbId}}
-        <a href="{{tvdbUrl}}" class="label label-info">TVDB</a>
-    {{/if}}
+        {{#if tvdbId}}
+            <a href="{{tvdbUrl}}" class="label label-info">TVDB</a>
+        {{/if}}
 
-    {{#if tvRageId}}
-        <a href="{{tvRageUrl}}" class="label label-info">TVRage</a>
-    {{/if}}
-</span>
+        {{#if tvRageId}}
+            <a href="{{tvRageUrl}}" class="label label-info">TVRage</a>
+        {{/if}}
+    </span>
+</div>
+<div>
+    {{#each alternativeTitles}}
+    <span class="label">{{this}}</span>
+    {{/each}}
+</div>

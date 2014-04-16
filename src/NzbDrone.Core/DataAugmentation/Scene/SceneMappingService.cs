@@ -6,6 +6,7 @@ using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     {
         string GetSceneName(int tvdbId);
         Nullable<int> GetTvDbId(string cleanName);
+        List<SceneMapping> FindByTvdbid(int tvdbId);
     }
 
     public class SceneMappingService : ISceneMappingService,
@@ -24,6 +26,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private readonly Logger _logger;
         private readonly ICached<SceneMapping> _getSceneNameCache;
         private readonly ICached<SceneMapping> _gettvdbIdCache;
+        private readonly ICached<List<SceneMapping>> _findbytvdbIdCache;
 
         public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ICacheManager cacheManager, Logger logger)
         {
@@ -32,6 +35,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             _getSceneNameCache = cacheManager.GetCache<SceneMapping>(GetType(), "scene_name");
             _gettvdbIdCache = cacheManager.GetCache<SceneMapping>(GetType(), "tvdb_id");
+            _findbytvdbIdCache = cacheManager.GetCache<List<SceneMapping>>(GetType(), "find_tvdb_id");
             _logger = logger;
         }
 
@@ -54,6 +58,11 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mapping.TvdbId;
         }
 
+        public List<SceneMapping> FindByTvdbid(int tvdbId)
+        {
+            return _findbytvdbIdCache.Find(tvdbId.ToString());
+        }
+
         private void UpdateMappings()
         {
             _logger.Info("Updating Scene mapping");
@@ -68,7 +77,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
                     foreach (var sceneMapping in mappings)
                     {
-                        sceneMapping.ParseTerm = sceneMapping.ParseTerm.CleanSeriesTitle();
+                        sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
                     }
 
                     _repository.InsertMany(mappings);
@@ -92,11 +101,16 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             _gettvdbIdCache.Clear();
             _getSceneNameCache.Clear();
+            _findbytvdbIdCache.Clear();
 
             foreach (var sceneMapping in mappings)
             {
                 _getSceneNameCache.Set(sceneMapping.TvdbId.ToString(), sceneMapping);
                 _gettvdbIdCache.Set(sceneMapping.ParseTerm.CleanSeriesTitle(), sceneMapping);
+            }
+            foreach (var sceneMapping in mappings.GroupBy(x => x.TvdbId))
+            {
+                _findbytvdbIdCache.Set(sceneMapping.Key.ToString(), sceneMapping.ToList());
             }
         }
 
