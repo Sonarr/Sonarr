@@ -24,11 +24,17 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [Test]
-        public void should_not_include_extension_in_release_roup()
+        public void should_not_include_extension_in_release_group()
         {
             const string path = @"C:\Test\Doctor.Who.2005.s01e01.internal.bdrip.x264-archivist.mkv";
 
             Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
+        }
+
+        [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP", "EVL")]
+        public void should_not_include_repost_in_release_group(string title, string expected)
+        {
+            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
     }
 }
