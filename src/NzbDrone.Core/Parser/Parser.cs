@@ -163,7 +163,6 @@ namespace NzbDrone.Core.Parser
 
                     if (match.Count != 0)
                     {
-                        Console.WriteLine(regex);
                         Logger.Trace(regex);
                         try
                         {
