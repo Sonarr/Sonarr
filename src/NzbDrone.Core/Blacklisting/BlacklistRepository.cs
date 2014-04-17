@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
@@ -8,7 +6,7 @@ namespace NzbDrone.Core.Blacklisting
 {
     public interface IBlacklistRepository : IBasicRepository<Blacklist>
     {
-        bool Blacklisted(int seriesId, string sourceTitle);
+        List<Blacklist> Blacklisted(int seriesId, string sourceTitle);
         List<Blacklist> BlacklistedBySeries(int seriesId);
     }
 
@@ -19,11 +17,10 @@ namespace NzbDrone.Core.Blacklisting
         {
         }
 
-        public bool Blacklisted(int seriesId, string sourceTitle)
+        public List<Blacklist> Blacklisted(int seriesId, string sourceTitle)
         {
             return Query.Where(e => e.SeriesId == seriesId)
-                        .AndWhere(e => e.SourceTitle.Contains(sourceTitle))
-                        .Any();
+                        .AndWhere(e => e.SourceTitle.Contains(sourceTitle));
         }
 
         public List<Blacklist> BlacklistedBySeries(int seriesId)

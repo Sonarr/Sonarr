@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Jobs
 
                     try
                     {
-                        _commandExecutor.PublishCommand(task.TypeName);
+                        _commandExecutor.PublishCommand(task.TypeName, task.LastExecution);
                     }
                     catch (Exception e)
                     {

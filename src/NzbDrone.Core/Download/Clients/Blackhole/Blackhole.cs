@@ -58,6 +58,11 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
         {
         }
 
+        public override void RetryDownload(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Test()
         {
             PerformTest(Settings.Folder);

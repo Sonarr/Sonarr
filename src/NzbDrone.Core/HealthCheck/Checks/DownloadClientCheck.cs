@@ -3,7 +3,7 @@ using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
-    public class DownloadClientCheck : IProvideHealthCheck
+    public class DownloadClientCheck : HealthCheckBase
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
 
@@ -12,13 +12,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
             _downloadClientProvider = downloadClientProvider;
         }
 
-        public HealthCheck Check()
+        public override HealthCheck Check()
         {
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
             if (downloadClient == null)
             {
-                return new HealthCheck(HealthCheckResultType.Warning, "No download client is available");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available");
             }
 
             try
@@ -27,10 +27,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
             catch (Exception)
             {
-                return new HealthCheck(HealthCheckResultType.Error, "Unable to communicate with download client");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client");
             }
 
-            return null;
+            return new HealthCheck(GetType());
         }
     }
 }

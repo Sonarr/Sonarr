@@ -5,18 +5,27 @@ namespace NzbDrone.Core.HealthCheck
 {
     public class HealthCheck : ModelBase
     {
-        public HealthCheckResultType Type { get; set; }
+        public Type Source { get; set; }
+        public HealthCheckResult Type { get; set; }
         public String Message { get; set; }
 
-        public HealthCheck(HealthCheckResultType type, string message)
+        public HealthCheck(Type source)
         {
+            Source = source;
+            Type = HealthCheckResult.Ok;
+        }
+
+        public HealthCheck(Type source, HealthCheckResult type, string message)
+        {
+            Source = source;
             Type = type;
             Message = message;
         }
     }
 
-    public enum HealthCheckResultType
+    public enum HealthCheckResult
     {
+        Ok = 0,
         Warning = 1,
         Error = 2
     }

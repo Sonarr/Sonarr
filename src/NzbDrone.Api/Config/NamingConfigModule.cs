@@ -4,6 +4,7 @@ using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Nancy.Responses;
+using NzbDrone.Common;
 using NzbDrone.Core.Organizer;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Mapping;
@@ -39,6 +40,7 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
             SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
             SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
+            SharedValidator.RuleFor(c => c.SeasonFolderFormat).ValidSeasonFolderFormat();
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
@@ -72,7 +74,6 @@ namespace NzbDrone.Api.Config
 
         private JsonResponse<NamingSampleResource> GetExamples(NamingConfigResource config)
         {
-            //TODO: Validate that the format is valid
             var nameSpec = config.InjectTo<NamingConfig>();
             var sampleResource = new NamingSampleResource();
             
@@ -91,6 +92,14 @@ namespace NzbDrone.Api.Config
             sampleResource.DailyEpisodeExample = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult) != null
                     ? "Invalid format"
                     : dailyEpisodeSampleResult.Filename;
+
+            sampleResource.SeriesFolderExample = nameSpec.SeriesFolderFormat.IsNullOrWhiteSpace()
+                ? "Invalid format"
+                : _filenameSampleService.GetSeriesFolderSample(nameSpec);
+
+            sampleResource.SeasonFolderExample = nameSpec.SeasonFolderFormat.IsNullOrWhiteSpace()
+                ? "Invalid format"
+                : _filenameSampleService.GetSeasonFolderSample(nameSpec);
 
             return sampleResource.AsResponse();
         }

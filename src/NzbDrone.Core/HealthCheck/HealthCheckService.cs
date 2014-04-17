@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider.Events;
@@ -12,56 +16,86 @@ namespace NzbDrone.Core.HealthCheck
 {
     public interface IHealthCheckService
     {
-        List<HealthCheck> PerformHealthCheck();
+        List<HealthCheck> Results();
     }
 
     public class HealthCheckService : IHealthCheckService,
                                       IExecute<CheckHealthCommand>,
+                                      IHandleAsync<ApplicationStartedEvent>,
                                       IHandleAsync<ConfigSavedEvent>,
                                       IHandleAsync<ProviderUpdatedEvent<IIndexer>>,
                                       IHandleAsync<ProviderUpdatedEvent<IDownloadClient>>
     {
         private readonly IEnumerable<IProvideHealthCheck> _healthChecks;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ICacheManager _cacheManager;
         private readonly Logger _logger;
 
-        public HealthCheckService(IEnumerable<IProvideHealthCheck> healthChecks, IEventAggregator eventAggregator, Logger logger)
+        private readonly ICached<HealthCheck> _healthCheckResults;
+
+        public HealthCheckService(IEnumerable<IProvideHealthCheck> healthChecks,
+                                  IEventAggregator eventAggregator,
+                                  ICacheManager cacheManager,
+                                  Logger logger)
         {
             _healthChecks = healthChecks;
             _eventAggregator = eventAggregator;
+            _cacheManager = cacheManager;
             _logger = logger;
+
+            _healthCheckResults = _cacheManager.GetCache<HealthCheck>(GetType());
         }
 
-        public List<HealthCheck> PerformHealthCheck()
+        public List<HealthCheck> Results()
         {
-            _logger.Trace("Checking health");
-            var result = _healthChecks.Select(c => c.Check()).Where(c => c != null).ToList();
-            
-            return result;
+            return _healthCheckResults.Values.ToList();
         }
 
-        public void Execute(CheckHealthCommand message)
+        private void PerformHealthCheck(Func<IProvideHealthCheck, bool> predicate)
         {
-            //Until we have stored health checks we should just trigger the complete event
-            //and let the clients check in
-            //Multiple connected clients means we're going to compute the health check multiple times
-            //Multiple checks feels a bit ugly, but means the most up to date information goes to the client
-            _eventAggregator.PublishEvent(new TriggerHealthCheckEvent());
+            var results = _healthChecks.Where(predicate)
+                                       .Select(c => c.Check())
+                                       .ToList();
+
+            foreach (var result in results)
+            {
+                if (result.Type == HealthCheckResult.Ok)
+                {
+                    _healthCheckResults.Remove(result.Source.Name);
+                }
+
+                else
+                {
+                    _healthCheckResults.Set(result.Source.Name, result);
+                }
+            }
+
+            _eventAggregator.PublishEvent(new HealthCheckCompleteEvent());
         }
 
         public void HandleAsync(ConfigSavedEvent message)
         {
-            _eventAggregator.PublishEvent(new TriggerHealthCheckEvent());
+            PerformHealthCheck(c => c.CheckOnConfigChange);
         }
 
         public void HandleAsync(ProviderUpdatedEvent<IIndexer> message)
         {
-            _eventAggregator.PublishEvent(new TriggerHealthCheckEvent());
+            PerformHealthCheck(c => c.CheckOnConfigChange);
         }
 
         public void HandleAsync(ProviderUpdatedEvent<IDownloadClient> message)
         {
-            _eventAggregator.PublishEvent(new TriggerHealthCheckEvent());
+            PerformHealthCheck(c => c.CheckOnConfigChange);
+        }
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            PerformHealthCheck(c => c.CheckOnStartup);
+        }
+
+        public void Execute(CheckHealthCommand message)
+        {
+            PerformHealthCheck(c => c.CheckOnSchedule);
         }
     }
 }

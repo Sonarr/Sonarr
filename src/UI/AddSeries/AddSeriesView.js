@@ -57,7 +57,7 @@ define(
 
                 this.$el.addClass(this.className);
 
-                this.ui.seriesSearch.keyup(function () {
+                this.ui.seriesSearch.keypress(function () {
                     self.searchResult.close();
                     self._abortExistingSearch();
                     self.throttledSearch({

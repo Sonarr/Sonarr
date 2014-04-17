@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_null_when_download_client_returns()
+        public void should_return_ok_when_download_client_returns()
         {
             var downloadClient = Mocker.GetMock<IDownloadClient>();
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.GetDownloadClient())
                   .Returns(downloadClient.Object);
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
     }
 }

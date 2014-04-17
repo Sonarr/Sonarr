@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NzbDrone.Common
 {
@@ -11,6 +10,18 @@ namespace NzbDrone.Common
         {
             TValue value;
             return dictionary.TryGetValue(key, out value) ? value : defaultValue;
+        }
+
+        public static Dictionary<T1, T2> Merge<T1, T2>(this Dictionary<T1, T2> first, Dictionary<T1, T2> second)
+        {
+            if (first == null) throw new ArgumentNullException("first");
+            if (second == null) throw new ArgumentNullException("second");
+
+            var merged = new Dictionary<T1, T2>();
+            first.ToList().ForEach(kv => merged[kv.Key] = kv.Value);
+            second.ToList().ForEach(kv => merged[kv.Key] = kv.Value);
+
+            return merged;
         }
     }
 }

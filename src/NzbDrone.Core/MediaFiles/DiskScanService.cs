@@ -111,9 +111,21 @@ namespace NzbDrone.Core.MediaFiles
 
         public void Execute(RescanSeriesCommand message)
         {
-            var series = _seriesService.GetSeries(message.SeriesId);
+            if (message.SeriesId.HasValue)
+            {
+                var series = _seriesService.GetSeries(message.SeriesId.Value);
+                Scan(series);
+            }
 
-            Scan(series);
+            else
+            {
+                var allSeries = _seriesService.GetAllSeries();
+
+                foreach (var series in allSeries)
+                {
+                    Scan(series);
+                }
+            }
         }
     }
 }

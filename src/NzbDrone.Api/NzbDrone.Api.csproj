@@ -136,10 +136,11 @@
     <Compile Include="Frontend\Mappers\IMapHttpRequestsToDisk.cs" />
     <Compile Include="Frontend\Mappers\StaticResourceMapperBase.cs" />
     <Compile Include="Frontend\StaticResourceModule.cs" />
-    <Compile Include="Health\HistoryResource.cs" />
+    <Compile Include="Health\HealthResource.cs" />
     <Compile Include="Health\HealthModule.cs" />
     <Compile Include="History\HistoryResource.cs" />
     <Compile Include="History\HistoryModule.cs" />
+    <Compile Include="MediaCovers\MediaCoverModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="Notifications\NotificationSchemaModule.cs" />

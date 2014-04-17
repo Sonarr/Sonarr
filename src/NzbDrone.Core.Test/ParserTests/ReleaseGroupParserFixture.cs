@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
@@ -20,6 +17,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Office - S01E01 - Pilot [HTDV-480p]", "DRONE")]
         [TestCase("The Office - S01E01 - Pilot [HTDV-720p]", "DRONE")]
         [TestCase("The Office - S01E01 - Pilot [HTDV-1080p]", "DRONE")]
+        [TestCase("The.Walking.Dead.S04E13.720p.WEB-DL.AAC2.0.H.264-Cyphanix", "Cyphanix")]
         public void should_parse_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);

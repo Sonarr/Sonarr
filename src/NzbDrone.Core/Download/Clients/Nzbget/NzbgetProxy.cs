@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
         VersionResponse GetVersion(NzbgetSettings settings);
         void RemoveFromHistory(string id, NzbgetSettings settings);
+        void RetryDownload(string id, NzbgetSettings settings);
     }
 
     public class NzbgetProxy : INzbgetProxy
@@ -95,6 +96,23 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             if (!EditQueue("HistoryDelete", 0, "", item.Id, settings))
             {
                 _logger.Warn("Failed to remove item from nzbget history, {0} [{1}]", item.Name, item.Id);
+            }
+        }
+
+        public void RetryDownload(string id, NzbgetSettings settings)
+        {
+            var history = GetHistory(settings);
+            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone") != null);
+
+            if (item == null)
+            {
+                _logger.Warn("Unable to return item to queue, Unknown ID: {0}", id);
+                return;
+            }
+
+            if (!EditQueue("HistoryReturn", 0, "", item.Id, settings))
+            {
+                _logger.Warn("Failed to return item to queue from history, {0} [{1}]", item.Name, item.Id);
             }
         }
 

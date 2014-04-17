@@ -6,7 +6,7 @@ using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
-    public class UpdateCheck : IProvideHealthCheck
+    public class UpdateCheck : HealthCheckBase
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IAppFolderInfo _appFolderInfo;
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
         }
 
 
-        public HealthCheck Check()
+        public override HealthCheck Check()
         {
             if (OsInfo.IsWindows)
             {
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception)
                 {
-                    return new HealthCheck(HealthCheckResultType.Error,
+                    return new HealthCheck(GetType(), HealthCheckResult.Error,
                         "Unable to update, running from write-protected folder");
                 }
             }
@@ -41,11 +41,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 if (_checkUpdateService.AvailableUpdate() != null)
                 {
-                    return new HealthCheck(HealthCheckResultType.Warning, "New update is available");
+                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "New update is available");
                 }
             }
 
-            return null;
+            return new HealthCheck(GetType());
+        }
+
+        public override bool CheckOnConfigChange
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

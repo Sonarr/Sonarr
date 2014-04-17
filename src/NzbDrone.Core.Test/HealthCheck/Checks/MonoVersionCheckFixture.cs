@@ -48,35 +48,35 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_null_when_mono_3_2()
+        public void should_return_ok_when_mono_3_2()
         {
             GivenOutput("3.2.0.1");
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
 
         [Test]
-        public void should_return_null_when_mono_4_0()
+        public void should_return_ok_when_mono_4_0()
         {
             GivenOutput("4.0.0.0");
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
 
         [Test]
-        public void should_return_null_when_mono_3_2_7()
+        public void should_return_ok_when_mono_3_2_7()
         {
             GivenOutput("3.2.7");
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
 
         [Test]
-        public void should_return_null_when_mono_3_2_1()
+        public void should_return_ok_when_mono_3_2_1()
         {
             GivenOutput("3.2.1");
 
-            Subject.Check().Should().BeNull();
+            Subject.Check().ShouldBeOk();
         }
     }
 }

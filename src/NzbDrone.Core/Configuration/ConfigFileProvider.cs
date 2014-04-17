@@ -46,9 +46,9 @@ namespace NzbDrone.Core.Configuration
 
         private readonly string _configFile;
 
-        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManger cacheManger, IEventAggregator eventAggregator)
+        public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManager cacheManager, IEventAggregator eventAggregator)
         {
-            _cache = cacheManger.GetCache<string>(GetType());
+            _cache = cacheManager.GetCache<string>(GetType());
             _eventAggregator = eventAggregator;
             _configFile = appFolderInfo.GetConfigPath();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -6,6 +7,9 @@ namespace NzbDrone.Core.Organizer
 {
     public static class FileNameValidation
     {
+        private static readonly Regex SeasonFolderRegex = new Regex(@"(\{season(\:\d+)?\})",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static IRuleBuilderOptions<T, string> ValidEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
@@ -22,6 +26,12 @@ namespace NzbDrone.Core.Organizer
         {
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
             return ruleBuilder.SetValidator(new RegularExpressionValidator(FileNameBuilder.SeriesTitleRegex)).WithMessage("Must contain series title");
+        }
+
+        public static IRuleBuilderOptions<T, string> ValidSeasonFolderFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            ruleBuilder.SetValidator(new NotEmptyValidator(null));
+            return ruleBuilder.SetValidator(new RegularExpressionValidator(SeasonFolderRegex)).WithMessage("Must contain season number");
         }
     }
 

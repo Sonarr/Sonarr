@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Commands;
@@ -23,6 +24,8 @@ namespace NzbDrone.Core.Download
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
+        private readonly ICached<FailedDownload> _failedDownloads;
+
         private static string DOWNLOAD_CLIENT = "downloadClient";
         private static string DOWNLOAD_CLIENT_ID = "downloadClientId";
 
@@ -30,6 +33,7 @@ namespace NzbDrone.Core.Download
                                      IHistoryService historyService,
                                      IEventAggregator eventAggregator,
                                      IConfigService configService,
+                                     ICacheManager cacheManager,
                                      Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
@@ -37,6 +41,8 @@ namespace NzbDrone.Core.Download
             _eventAggregator = eventAggregator;
             _configService = configService;
             _logger = logger;
+
+            _failedDownloads = cacheManager.GetCache<FailedDownload>(GetType());
         }
 
         public void MarkAsFailed(int historyId)
@@ -127,6 +133,12 @@ namespace NzbDrone.Core.Download
                     continue;
                 }
 
+                if (FailedDownloadForRecentRelease(failedItem, historyItems))
+                {
+                    _logger.Debug("Recent release Failed, do not blacklist");
+                    continue;
+                }
+                
                 if (failedHistory.Any(h => failedLocal.Id.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID))))
                 {
                     _logger.Debug("Already added to history as failed");
@@ -152,19 +164,21 @@ namespace NzbDrone.Core.Download
         private void PublishDownloadFailedEvent(List<History.History> historyItems, string message)
         {
             var historyItem = historyItems.First();
-            string downloadClient;
-            string downloadClientId;
 
-            _eventAggregator.PublishEvent(new DownloadFailedEvent
-            {
-                SeriesId = historyItem.SeriesId,
-                EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
-                Quality = historyItem.Quality,
-                SourceTitle = historyItem.SourceTitle,
-                DownloadClient = historyItem.Data.GetValueOrDefault(DOWNLOAD_CLIENT),
-                DownloadClientId = historyItem.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID),
-                Message = message
-            });
+            var downloadFailedEvent = new DownloadFailedEvent
+                                      {
+                                          SeriesId = historyItem.SeriesId,
+                                          EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
+                                          Quality = historyItem.Quality,
+                                          SourceTitle = historyItem.SourceTitle,
+                                          DownloadClient = historyItem.Data.GetValueOrDefault(DOWNLOAD_CLIENT),
+                                          DownloadClientId = historyItem.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID),
+                                          Message = message
+                                      };
+
+            downloadFailedEvent.Data = downloadFailedEvent.Data.Merge(historyItem.Data);
+
+            _eventAggregator.PublishEvent(downloadFailedEvent);
         }
 
         private IDownloadClient GetDownloadClient()
@@ -177,6 +191,56 @@ namespace NzbDrone.Core.Download
             }
 
             return downloadClient;
+        }
+
+        private bool FailedDownloadForRecentRelease(HistoryItem failedDownloadHistoryItem, List<History.History> matchingHistoryItems)
+        {
+            double ageHours;
+
+            if (!Double.TryParse(matchingHistoryItems.First().Data.GetValueOrDefault("ageHours"), out ageHours))
+            {
+                _logger.Debug("Unable to determine age of failed download");
+                return false;
+            }
+
+            if (ageHours > _configService.BlacklistGracePeriod)
+            {
+                _logger.Debug("Failed download is older than the grace period");
+                return false;
+            }
+
+            var tracked = _failedDownloads.Get(failedDownloadHistoryItem.Id, () => new FailedDownload
+                       {
+                           DownloadClientHistoryItem = failedDownloadHistoryItem,
+                           LastRetry = DateTime.UtcNow
+                       }
+            );
+
+            if (tracked.RetryCount >= _configService.BlacklistRetryLimit)
+            {
+                _logger.Debug("Retry limit reached");
+                return false;
+            }
+
+            if (tracked.LastRetry.AddMinutes(_configService.BlacklistRetryInterval) < DateTime.UtcNow)
+            {
+                _logger.Debug("Retrying failed release");
+                tracked.LastRetry = DateTime.UtcNow;
+                tracked.RetryCount++;
+
+                try
+                {
+                    GetDownloadClient().RetryDownload(failedDownloadHistoryItem.Id);
+                }
+
+                catch (NotImplementedException ex)
+                {
+                    _logger.Debug("Retrying failed downloads is not supported by your download client");
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void Execute(CheckForFailedDownloadCommand message)

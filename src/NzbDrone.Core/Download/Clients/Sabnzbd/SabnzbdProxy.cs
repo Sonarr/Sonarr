@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         SabnzbdCategoryResponse GetCategories(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
+        void RetryDownload(string id, SabnzbdSettings settings);
     }
 
     public class SabnzbdProxy : ISabnzbdProxy
@@ -109,6 +110,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());
+        }
+
+        public void RetryDownload(string id, SabnzbdSettings settings)
+        {
+            var request = new RestRequest();
+            var action = String.Format("mode=retry&value={0}", id);
+
+            ProcessRequest(request, action, settings);
         }
 
         private IRestClient BuildClient(string action, SabnzbdSettings settings)

@@ -18,6 +18,8 @@ namespace NzbDrone.Core.Organizer
         string BuildFilePath(Series series, int seasonNumber, string fileName, string extension);
         BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
         string GetSeriesFolder(string seriesTitle);
+        string GetSeriesFolder(string seriesTitle, NamingConfig namingConfig);
+        string GetSeasonFolder(string seriesTitle, int seasonNumber, NamingConfig namingConfig);
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -48,12 +50,12 @@ namespace NzbDrone.Core.Organizer
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
-                               ICacheManger cacheManger,
+                               ICacheManager cacheManager,
                                Logger logger)
         {
             _namingConfigService = namingConfigService;
             _qualityDefinitionService = qualityDefinitionService;
-            _patternCache = cacheManger.GetCache<EpisodeFormat>(GetType());
+            _patternCache = cacheManager.GetCache<EpisodeFormat>(GetType());
             _logger = logger;
         }
 
@@ -171,11 +173,7 @@ namespace NzbDrone.Core.Organizer
                 else
                 {
                     var nameSpec = _namingConfigService.GetConfig();
-                    var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
-                    tokenValues.Add("{Series Title}", series.Title);
-                    
-                    seasonFolder = ReplaceSeasonTokens(nameSpec.SeasonFolderFormat, seasonNumber);
-                    seasonFolder = ReplaceTokens(seasonFolder, tokenValues);
+                    seasonFolder = GetSeasonFolder(series.Title, seasonNumber, nameSpec);
                 }
 
                 seasonFolder = CleanFilename(seasonFolder);
@@ -234,13 +232,28 @@ namespace NzbDrone.Core.Organizer
 
         public string GetSeriesFolder(string seriesTitle)
         {
+            var namingConfig = _namingConfigService.GetConfig();
+
+            return GetSeriesFolder(seriesTitle, namingConfig);
+        }
+
+        public string GetSeriesFolder(string seriesTitle, NamingConfig namingConfig)
+        {
             seriesTitle = CleanFilename(seriesTitle);
 
-            var nameSpec = _namingConfigService.GetConfig();
             var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
             tokenValues.Add("{Series Title}", seriesTitle);
 
-            return ReplaceTokens(nameSpec.SeriesFolderFormat, tokenValues);
+            return ReplaceTokens(namingConfig.SeriesFolderFormat, tokenValues);
+        }
+
+        public string GetSeasonFolder(string seriesTitle, int seasonNumber, NamingConfig namingConfig)
+        {
+            var tokenValues = new Dictionary<string, string>(FilenameBuilderTokenEqualityComparer.Instance);
+            tokenValues.Add("{Series Title}", seriesTitle);
+                    
+            var seasonFolder = ReplaceSeasonTokens(namingConfig.SeasonFolderFormat, seasonNumber);
+            return ReplaceTokens(seasonFolder, tokenValues);
         }
 
         public static string CleanFilename(string name)

@@ -192,6 +192,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
+    <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
+    <Compile Include="Datastore\Migration\048_add_title_to_scenemappings.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -209,6 +211,7 @@
     <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
+    <Compile Include="DecisionEngine\Specifications\RetrySpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
@@ -258,6 +261,7 @@
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdProxy.cs" />
     <Compile Include="Download\CheckForFailedDownloadCommand.cs" />
+    <Compile Include="Download\FailedDownload.cs" />
     <Compile Include="Download\HistoryItem.cs" />
     <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadApprovedReports.cs" />
@@ -277,7 +281,8 @@
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
-    <Compile Include="HealthCheck\TriggerHealthCheckEvent.cs" />
+    <Compile Include="HealthCheck\HealthCheckBase.cs" />
+    <Compile Include="HealthCheck\HealthCheckCompleteEvent.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
@@ -373,6 +378,11 @@
     <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
+    <Compile Include="Notifications\Plex\PlexError.cs" />
+    <Compile Include="Notifications\Plex\PlexException.cs" />
+    <Compile Include="Notifications\Plex\PlexSection.cs" />
+    <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
+    <Compile Include="Notifications\Plex\PlexUser.cs" />
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />

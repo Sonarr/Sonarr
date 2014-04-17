@@ -3,7 +3,7 @@ using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
-    public class IndexerCheck : IProvideHealthCheck
+    public class IndexerCheck : HealthCheckBase
     {
         private readonly IIndexerFactory _indexerFactory;
 
@@ -12,21 +12,21 @@ namespace NzbDrone.Core.HealthCheck.Checks
             _indexerFactory = indexerFactory;
         }
 
-        public HealthCheck Check()
+        public override HealthCheck Check()
         {
             var enabled = _indexerFactory.GetAvailableProviders();
 
             if (!enabled.Any())
             {
-                return new HealthCheck(HealthCheckResultType.Error, "No indexers are enabled");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "No indexers are enabled");
             }
 
             if (enabled.All(i => i.SupportsSearching == false))
             {
-                return new HealthCheck(HealthCheckResultType.Warning, "Enabled indexers do not support searching");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enabled indexers do not support searching");
             }
 
-            return null;
+            return new HealthCheck(GetType());
         }
     }
 }

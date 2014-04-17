@@ -123,6 +123,15 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             ShouldBeTrue();
         }
 
+        [Test]
+        public void should_not_treat_daily_episode_a_special()
+        {
+            GivenRuntime(600);
+            _series.SeriesType = SeriesTypes.Daily;
+            _localEpisode.Episodes[0].SeasonNumber = 0;
+            ShouldBeFalse();
+        }
+
         private void ShouldBeTrue()
         {
             Subject.IsSample(_localEpisode.Series,

@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -25,8 +26,8 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
             mappings.Should().NotBeEmpty();
 
-            mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.SearchTerm));
-            mappings.Should().NotContain(c => string.IsNullOrWhiteSpace(c.ParseTerm));
+            mappings.Should().NotContain(c => String.IsNullOrWhiteSpace(c.SearchTerm));
+            mappings.Should().NotContain(c => String.IsNullOrWhiteSpace(c.Title));
             mappings.Should().NotContain(c => c.TvdbId == 0);
         }
 
