@@ -30,37 +30,6 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         [Test]
-        public void should_create_default_indexer_on_startup()
-        {
-            IList<IndexerDefinition> storedIndexers = null;
-
-            Mocker.GetMock<IIndexerRepository>()
-                  .Setup(c => c.InsertMany(It.IsAny<IList<IndexerDefinition>>()))
-                  .Callback<IList<IndexerDefinition>>(indexers => storedIndexers = indexers);
-
-            Subject.Handle(new ApplicationStartedEvent());
-
-            storedIndexers.Should().NotBeEmpty();
-            storedIndexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
-            storedIndexers.Select(c => c.Enable).Should().NotBeEmpty();
-            storedIndexers.Select(c => c.Implementation).Should().NotContainNulls();
-        }
-
-        [Test]
-        public void getting_list_of_indexers()
-        {
-            Mocker.SetConstant<IIndexerRepository>(Mocker.Resolve<IndexerRepository>());
-
-            Subject.Handle(new ApplicationStartedEvent());
-
-            var indexers = Subject.All().ToList();
-            indexers.Should().NotBeEmpty();
-            indexers.Should().NotContain(c => c.Settings == null);
-            indexers.Should().NotContain(c => c.Name == null);
-            indexers.Select(c => c.Name).Should().OnlyHaveUniqueItems();
-        }
-
-        [Test]
         public void should_remove_missing_indexers_on_startup()
         {
             var repo = Mocker.Resolve<IndexerRepository>();

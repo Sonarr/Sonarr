@@ -13,32 +13,43 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Download
 {
     [TestFixture]
-    public class FailedDownloadServiceFixture : CoreTest<FailedDownloadService>
+    public class FailedDownloadServiceFixture : CoreTest<DownloadTrackingService>
     {
-        private List<HistoryItem> _completed;
-        private List<HistoryItem> _failed;
+        private List<DownloadClientItem> _completed;
+        private List<DownloadClientItem> _failed;
 
         [SetUp]
         public void Setup()
         {
-            _completed = Builder<HistoryItem>.CreateListOfSize(5)
+            _completed = Builder<DownloadClientItem>.CreateListOfSize(5)
                                              .All()
-                                             .With(h => h.Status = HistoryStatus.Completed)
+                                             .With(h => h.Status = DownloadItemStatus.Completed)
                                              .Build()
                                              .ToList();
 
-            _failed = Builder<HistoryItem>.CreateListOfSize(1)
+            _failed = Builder<DownloadClientItem>.CreateListOfSize(1)
                                           .All()
-                                          .With(h => h.Status = HistoryStatus.Failed)
+                                          .With(h => h.Status = DownloadItemStatus.Failed)
                                           .Build()
                                           .ToList();
 
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
+                  .Setup(c => c.GetDownloadClients())
+                  .Returns( new IDownloadClient[] { Mocker.GetMock<IDownloadClient>().Object });
+
+            Mocker.GetMock<IDownloadClient>()
+                  .SetupGet(c => c.Definition)
+                  .Returns(new Core.Download.DownloadClientDefinition { Id = 1, Name = "testClient" });
 
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableFailedDownloadHandling)
                   .Returns(true);
+
+            Mocker.GetMock<IHistoryService>()
+                  .Setup(s => s.Imported())
+                  .Returns(new List<History.History>());
+
+            Mocker.SetConstant<IFailedDownloadService>(Mocker.Resolve<FailedDownloadService>());
         }
 
         private void GivenNoGrabbedHistory()
@@ -72,7 +83,7 @@ namespace NzbDrone.Core.Test.Download
         private void GivenFailedDownloadClientHistory()
         {
             Mocker.GetMock<IDownloadClient>()
-                  .Setup(s => s.GetHistory(0, 20))
+                  .Setup(s => s.GetItems())
                   .Returns(_failed);
         }
 
@@ -102,10 +113,10 @@ namespace NzbDrone.Core.Test.Download
         public void should_not_process_if_no_download_client_history()
         {
             Mocker.GetMock<IDownloadClient>()
-                  .Setup(s => s.GetHistory(0, 20))
-                  .Returns(new List<HistoryItem>());
+                  .Setup(s => s.GetItems())
+                  .Returns(new List<DownloadClientItem>());
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             Mocker.GetMock<IHistoryService>()
                   .Verify(s => s.BetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), HistoryEventType.Grabbed),
@@ -117,11 +128,14 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_process_if_no_failed_items_in_download_client_history()
         {
+            GivenNoGrabbedHistory();
+            GivenNoFailedHistory();
+
             Mocker.GetMock<IDownloadClient>()
-                  .Setup(s => s.GetHistory(0, 20))
+                  .Setup(s => s.GetItems())
                   .Returns(_completed);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             Mocker.GetMock<IHistoryService>()
                   .Verify(s => s.BetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), HistoryEventType.Grabbed),
@@ -136,7 +150,7 @@ namespace NzbDrone.Core.Test.Download
             GivenNoGrabbedHistory();
             GivenFailedDownloadClientHistory();
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -156,7 +170,7 @@ namespace NzbDrone.Core.Test.Download
             GivenGrabbedHistory(historyGrabbed);
             GivenNoFailedHistory();
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -171,7 +185,7 @@ namespace NzbDrone.Core.Test.Download
                                                   .ToList();
 
             historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
-            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
 
             GivenGrabbedHistory(historyGrabbed);
 
@@ -184,7 +198,7 @@ namespace NzbDrone.Core.Test.Download
             
             GivenFailedHistory(historyFailed);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
         }
@@ -202,9 +216,9 @@ namespace NzbDrone.Core.Test.Download
             GivenFailedHistory(history);
 
             history.First().Data.Add("downloadClient", "SabnzbdClient");
-            history.First().Data.Add("downloadClientId", _failed.First().Id);
+            history.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -222,9 +236,9 @@ namespace NzbDrone.Core.Test.Download
             GivenNoFailedHistory();
 
             history.First().Data.Add("downloadClient", "SabnzbdClient");
-            history.First().Data.Add("downloadClientId", _failed.First().Id);
+            history.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
         }
@@ -244,10 +258,10 @@ namespace NzbDrone.Core.Test.Download
             history.ForEach(h =>
             {
                 h.Data.Add("downloadClient", "SabnzbdClient");
-                h.Data.Add("downloadClientId", _failed.First().Id);
+                h.Data.Add("downloadClientId", _failed.First().DownloadClientId);
             });
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads(2);
         }
@@ -259,7 +273,7 @@ namespace NzbDrone.Core.Test.Download
                   .SetupGet(s => s.EnableFailedDownloadHandling)
                   .Returns(false);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -276,7 +290,7 @@ namespace NzbDrone.Core.Test.Download
 
             _failed.First().Message = "Unpacking failed, write error or disk is full?";
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }
@@ -291,12 +305,12 @@ namespace NzbDrone.Core.Test.Download
                                                   .ToList();
 
             historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
-            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
 
             GivenGrabbedHistory(historyGrabbed);
             GivenNoFailedHistory();
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
         }
@@ -311,13 +325,13 @@ namespace NzbDrone.Core.Test.Download
                                                   .ToList();
 
             historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
-            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
             historyGrabbed.First().Data.Add("ageHours", "48");
 
             GivenGrabbedHistory(historyGrabbed);
             GivenNoFailedHistory();
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
         }
@@ -332,14 +346,14 @@ namespace NzbDrone.Core.Test.Download
                                                   .ToList();
 
             historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
-            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
             historyGrabbed.First().Data.Add("ageHours", "48");
 
             GivenGrabbedHistory(historyGrabbed);
             GivenNoFailedHistory();
             GivenGracePeriod(6);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
         }
@@ -354,7 +368,7 @@ namespace NzbDrone.Core.Test.Download
                                                   .ToList();
 
             historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
-            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().Id);
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
             historyGrabbed.First().Data.Add("ageHours", "1");
 
             GivenGrabbedHistory(historyGrabbed);
@@ -362,7 +376,7 @@ namespace NzbDrone.Core.Test.Download
             GivenGracePeriod(6);
             GivenRetryLimit(1);
 
-            Subject.Execute(new CheckForFailedDownloadCommand());
+            Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
         }

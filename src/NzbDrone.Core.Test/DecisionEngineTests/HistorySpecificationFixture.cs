@@ -67,7 +67,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<QualityProfile>(), 3)).Returns<QualityModel>(null);
 
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
+                  .Setup(c => c.GetDownloadClients())
+                  .Returns(new IDownloadClient[] { Mocker.GetMock<IDownloadClient>().Object });
         }
 
         private void WithFirstReportUpgradable()
@@ -83,7 +84,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void GivenSabnzbdDownloadClient()
         {
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.Resolve<Sabnzbd>());
+                  .Setup(c => c.GetDownloadClients())
+                  .Returns(new IDownloadClient[] { Mocker.Resolve<Sabnzbd>() });
         }
 
         private void GivenMostRecentForEpisode(HistoryEventType eventType)

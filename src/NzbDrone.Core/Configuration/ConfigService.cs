@@ -72,6 +72,11 @@ namespace NzbDrone.Core.Configuration
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
+        public Boolean IsDefined(String key)
+        {
+            return _repository.Get(key.ToLower()) != null;
+        }
+
         public String DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
@@ -117,6 +122,27 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoDownloadPropers", value); }
         }
 
+        public Boolean EnableCompletedDownloadHandling
+        {
+            get { return GetValueBoolean("EnableCompletedDownloadHandling", false); }
+
+            set { SetValue("EnableCompletedDownloadHandling", value); }
+        }
+
+        public Boolean RemoveCompletedDownloads
+        {
+            get { return GetValueBoolean("RemoveCompletedDownloads", false); }
+
+            set { SetValue("RemoveCompletedDownloads", value); }
+        }
+
+        public Boolean EnableFailedDownloadHandling
+        {
+            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
+
+            set { SetValue("EnableFailedDownloadHandling", value); }
+        }
+
         public Boolean AutoRedownloadFailed
         {
             get { return GetValueBoolean("AutoRedownloadFailed", true); }
@@ -150,13 +176,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("BlacklistRetryLimit", 1); }
 
             set { SetValue("BlacklistRetryLimit", value); }
-        }
-
-        public Boolean EnableFailedDownloadHandling
-        {
-            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
-
-            set { SetValue("EnableFailedDownloadHandling", value); }
         }
 
         public Boolean CreateEmptySeriesFolders

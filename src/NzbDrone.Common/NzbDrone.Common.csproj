@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveProvider.cs" />
+    <Compile Include="ConvertBase32.cs" />
     <Compile Include="Cache\Cached.cs" />
     <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\ICached.cs" />

@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 result.Error = response.Content.Replace("error: ", "");
             }
-            
+
             if (result.Failed)
                 throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
         }

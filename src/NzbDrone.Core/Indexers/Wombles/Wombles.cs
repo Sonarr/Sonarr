@@ -6,29 +6,8 @@ namespace NzbDrone.Core.Indexers.Wombles
 {
     public class Wombles : IndexerBase<NullConfig>
     {
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
-
-        public override bool SupportsPaging
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override bool SupportsSearching
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
+        public override bool SupportsSearching { get { return false; } }
 
         public override IParseFeed Parser
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -14,22 +15,27 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     public class Nzbget : DownloadClientBase<NzbgetSettings>, IExecute<TestNzbgetCommand>
     {
         private readonly INzbgetProxy _proxy;
-        private readonly IParsingService _parsingService;
         private readonly IHttpProvider _httpProvider;
-        private readonly Logger _logger;
 
         public Nzbget(INzbgetProxy proxy,
                       IParsingService parsingService,
                       IHttpProvider httpProvider,
                       Logger logger)
+            : base(parsingService, logger)
         {
             _proxy = proxy;
-            _parsingService = parsingService;
             _httpProvider = httpProvider;
-            _logger = logger;
         }
 
-        public override string DownloadNzb(RemoteEpisode remoteEpisode)
+        public override DownloadProtocol Protocol
+        {
+            get
+            {
+                return DownloadProtocol.Usenet;
+            }
+        }
+
+        public override string Download(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title + ".nzb";
@@ -48,7 +54,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
         }
 
-        public override IEnumerable<QueueItem> GetQueue()
+        private IEnumerable<DownloadClientItem> GetQueue()
         {
             List<NzbgetQueueItem> queue;
 
@@ -59,36 +65,42 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             catch (DownloadClientException ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return Enumerable.Empty<QueueItem>();
+                return Enumerable.Empty<DownloadClientItem>();
             }
 
-            var queueItems = new List<QueueItem>();
+            var queueItems = new List<DownloadClientItem>();
 
             foreach (var item in queue)
             {
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
 
-                var queueItem = new QueueItem();
-                queueItem.Id = droneParameter == null ? item.NzbId.ToString() : droneParameter.Value.ToString();
+                var queueItem = new DownloadClientItem();
+                queueItem.DownloadClientId = droneParameter == null ? item.NzbId.ToString() : droneParameter.Value.ToString();
                 queueItem.Title = item.NzbName;
-                queueItem.Size = item.FileSizeMb;
-                queueItem.Sizeleft = item.RemainingSizeMb;
-                queueItem.Status = item.FileSizeMb == item.PausedSizeMb ? "paused" : "queued";
+                queueItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
+                queueItem.RemainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
+                queueItem.Category = item.Category;
 
-                var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title);
-                if (parsedEpisodeInfo == null) continue;
+                if (queueItem.TotalSize == MakeInt64(item.PausedSizeHi, item.PausedSizeLo))
+                {
+                    queueItem.Status = DownloadItemStatus.Paused;
+                }
+                else if (item.ActiveDownloads == 0 && queueItem.RemainingSize != 0)
+                {
+                    queueItem.Status = DownloadItemStatus.Queued;
+                }
+                else
+                {
+                    queueItem.Status = DownloadItemStatus.Downloading;
+                }
 
-                var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
-                if (remoteEpisode.Series == null) continue;
-
-                queueItem.RemoteEpisode = remoteEpisode;
                 queueItems.Add(queueItem);
             }
 
             return queueItems;
         }
 
-        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
+        private IEnumerable<DownloadClientItem> GetHistory()
         {
             List<NzbgetHistoryItem> history;
 
@@ -99,10 +111,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             catch (DownloadClientException ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return Enumerable.Empty<HistoryItem>();
+                return Enumerable.Empty<DownloadClientItem>();
             }
 
-            var historyItems = new List<HistoryItem>();
+            var historyItems = new List<DownloadClientItem>();
             var successStatues = new[] {"SUCCESS", "NONE"};
 
             foreach (var item in history)
@@ -110,15 +122,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
                 var status = successStatues.Contains(item.ParStatus) &&
                              successStatues.Contains(item.ScriptStatus)
-                    ? HistoryStatus.Completed
-                    : HistoryStatus.Failed;
+                    ? DownloadItemStatus.Completed
+                    : DownloadItemStatus.Failed;
 
-                var historyItem = new HistoryItem();
-                historyItem.Id = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
+                var historyItem = new DownloadClientItem();
+                historyItem.DownloadClient = Definition.Name;
+                historyItem.DownloadClientId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
-                historyItem.Size = item.FileSizeMb.ToString(); //Why is this a string?
-                historyItem.DownloadTime = 0;
-                historyItem.Storage = item.DestDir;
+                historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
+                historyItem.OutputPath = item.DestDir;
                 historyItem.Category = item.Category;
                 historyItem.Message = String.Format("PAR Status: {0} - Script Status: {1}", item.ParStatus, item.ScriptStatus);
                 historyItem.Status = status;
@@ -129,12 +141,20 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return historyItems;
         }
 
-        public override void RemoveFromQueue(string id)
+        public override IEnumerable<DownloadClientItem> GetItems()
         {
-            throw new NotImplementedException();
+            foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
+            {
+                if (downloadClientItem.Category != Settings.TvCategory) continue;
+
+                downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
+                if (downloadClientItem.RemoteEpisode == null) continue;
+
+                yield return downloadClientItem;
+            }
         }
 
-        public override void RemoveFromHistory(string id)
+        public override void RemoveItem(string id)
         {
             _proxy.RemoveFromHistory(id, Settings);
         }
@@ -160,6 +180,18 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             settings.InjectFrom(message);
 
             _proxy.GetVersion(settings);
+        }
+
+        // Javascript doesn't support 64 bit integers natively so json officially doesn't either. 
+        // NzbGet api thus sends it in two 32 bit chunks. Here we join the two chunks back together.
+        // Simplified decimal example: "42" splits into "4" and "2". To join them I shift (<<) the "4" 1 digit to the left = "40". combine it with "2". which becomes "42" again.
+        private Int64 MakeInt64(UInt32 high, UInt32 low)
+        {
+            Int64 result = high;
+
+            result = (result << 32) | (Int64)low;
+
+            return result;
         }
     }
 }

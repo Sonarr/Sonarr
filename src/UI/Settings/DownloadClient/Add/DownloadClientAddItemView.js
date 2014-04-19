@@ -1,10 +1,11 @@
 ﻿'use strict';
 
 define([
+    'jquery',
     'AppLayout',
     'marionette',
     'Settings/DownloadClient/Edit/DownloadClientEditView'
-], function (AppLayout, Marionette, EditView) {
+], function ($, AppLayout, Marionette, EditView) {
 
     return Marionette.ItemView.extend({
         template: 'Settings/DownloadClient/Add/DownloadClientAddItemViewTemplate',
@@ -15,7 +16,7 @@ define([
         },
 
         initialize: function (options) {
-            this.downloadClientCollection = options.downloadClientCollection;
+            this.targetCollection = options.targetCollection;
         },
 
         _add: function (e) {
@@ -25,11 +26,11 @@ define([
 
             this.model.set({
                 id         : undefined,
-                name       : this.model.get('implementationName'),
+                name       : this.model.get('implementation'),
                 enable     : true
             });
 
-            var editView = new EditView({ model: this.model, downloadClientCollection: this.downloadClientCollection });
+            var editView = new EditView({ model: this.model, targetCollection: this.targetCollection });
             AppLayout.modalRegion.show(editView);
         }
     });

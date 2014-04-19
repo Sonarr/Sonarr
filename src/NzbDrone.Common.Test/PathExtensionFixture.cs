@@ -85,6 +85,57 @@ namespace NzbDrone.Common.Test
         {
             first.AsOsAgnostic().PathEquals(second.AsOsAgnostic()).Should().BeFalse();
         }
+        
+        private string _parent = @"C:\Test".AsOsAgnostic();
+
+        [Test]
+        public void should_return_false_when_not_a_child()
+        {
+            var path = @"C:\Another Folder".AsOsAgnostic();
+
+            _parent.IsParentPath(path).Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_when_folder_is_parent_of_another_folder()
+        {
+            var path = @"C:\Test\TV".AsOsAgnostic();
+
+            _parent.IsParentPath(path).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_folder_is_parent_of_a_file()
+        {
+            var path = @"C:\Test\30.Rock.S01E01.Pilot.avi".AsOsAgnostic();
+
+            _parent.IsParentPath(path).Should().BeTrue();
+        }
+        [TestCase(@"C:\Test\", @"C:\Test\mydir")]
+        [TestCase(@"C:\Test\", @"C:\Test\mydir\")]
+        [TestCase(@"C:\Test", @"C:\Test\30.Rock.S01E01.Pilot.avi")]
+        public void path_should_be_parent(string parentPath, string childPath)
+        {
+            parentPath.AsOsAgnostic().IsParentPath(childPath.AsOsAgnostic()).Should().BeTrue();
+        }
+
+        [TestCase(@"C:\Test2\", @"C:\Test")]
+        [TestCase(@"C:\Test\Test\", @"C:\Test\")]
+        [TestCase(@"C:\Test\", @"C:\Test")]
+        [TestCase(@"C:\Test\", @"C:\Test\")]
+        public void path_should_not_be_parent(string parentPath, string childPath)
+        {
+            parentPath.AsOsAgnostic().IsParentPath(childPath.AsOsAgnostic()).Should().BeFalse();
+        }
+
+        [TestCase(@"C:\test\", @"C:\Test\mydir")]
+        [TestCase(@"C:\test", @"C:\Test\mydir\")]
+        public void path_should_be_parent_on_windows_only(string parentPath, string childPath)
+        {
+            var expectedResult = OsInfo.IsWindows;
+
+            parentPath.IsParentPath(childPath).Should().Be(expectedResult);
+        }
 
         [Test]
         public void normalize_path_exception_empty()

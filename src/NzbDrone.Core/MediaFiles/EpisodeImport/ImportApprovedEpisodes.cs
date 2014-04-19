@@ -9,13 +9,14 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Download;
 
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IImportApprovedEpisodes
     {
-        List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownloads = false);
+        List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null);
     }
 
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
@@ -39,14 +40,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload = false)
+        public List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null)
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
-                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
-                    .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
-                    .ThenByDescending(c => c.LocalEpisode.Size))
-                .SelectMany(c => c)
-                .ToList();
+               .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
+                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
+                   .ThenByDescending(c => c.LocalEpisode.Size))
+               .SelectMany(c => c)
+               .ToList();
 
             var imported = new List<ImportDecision>();
 
@@ -78,15 +79,23 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
+                        bool copyOnly = historyItem != null && historyItem.IsReadOnly;
                         episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
-                        var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode);
+                        var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly);
                         oldFiles = moveResult.OldFiles;
                     }
 
                     _mediaFileService.Add(episodeFile);
                     imported.Add(importDecision);
 
-                    _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload));
+                    if (historyItem != null)
+                    {
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, historyItem.DownloadClient, historyItem.DownloadClientId));
+                    }
+                    else
+                    {
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload));
+                    }
 
                     if (newDownload)
                     {

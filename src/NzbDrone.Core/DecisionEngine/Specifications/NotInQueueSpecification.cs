@@ -5,17 +5,18 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class NotInQueueSpecification : IDecisionEngineSpecification
     {
-        private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly IQueueService _queueService;
         private readonly Logger _logger;
 
-        public NotInQueueSpecification(IProvideDownloadClient downloadClientProvider, Logger logger)
+        public NotInQueueSpecification(IQueueService queueService, Logger logger)
         {
-            _downloadClientProvider = downloadClientProvider;
+            _queueService = queueService;
             _logger = logger;
         }
 
@@ -29,15 +30,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            var downloadClient = _downloadClientProvider.GetDownloadClient();
-
-            if (downloadClient == null)
-            {
-                _logger.Warn("Download client isn't configured yet.");
-                return true;
-            }
-
-            var queue = downloadClient.GetQueue().Select(q => q.RemoteEpisode);
+            var queue = _queueService.GetQueue().Select(q => q.RemoteEpisode);
 
             if (IsInQueue(subject, queue))
             {

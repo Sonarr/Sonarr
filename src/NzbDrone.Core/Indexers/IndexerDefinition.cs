@@ -5,5 +5,7 @@ namespace NzbDrone.Core.Indexers
     public class IndexerDefinition : ProviderDefinition
     {
         public bool Enable { get; set; }
+
+        public DownloadProtocol Protocol { get; set; }
     }
 }

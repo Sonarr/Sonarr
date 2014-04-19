@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadClientFactory : IProviderFactory<IDownloadClient, DownloadClientDefinition>
     {
-        List<IDownloadClient> Enabled();
+
     }
 
     public class DownloadClientFactory : ProviderFactory<IDownloadClient, DownloadClientDefinition>, IDownloadClientFactory
@@ -22,9 +22,18 @@ namespace NzbDrone.Core.Download
             _providerRepository = providerRepository;
         }
 
-        public List<IDownloadClient> Enabled()
+        protected override List<DownloadClientDefinition> Active()
         {
-            return GetAvailableProviders().Where(n => ((DownloadClientDefinition)n.Definition).Enable).ToList();
+            return base.Active().Where(c => c.Enable).ToList();
+        }
+
+        protected override DownloadClientDefinition GetTemplate(IDownloadClient provider)
+        {
+            var definition = base.GetTemplate(provider);
+
+            definition.Protocol = provider.Protocol;
+
+            return definition;
         }
     }
 }

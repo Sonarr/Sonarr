@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Metadata
             _diskProvider.WriteAllText(seriesMetadata.Path, seriesMetadata.Contents);
 
             metadata.Hash = hash;
-            metadata.RelativePath = DiskProviderBase.GetRelativePath(series.Path, seriesMetadata.Path);
+            metadata.RelativePath = series.Path.GetRelativePath(seriesMetadata.Path);
 
             return metadata;
         }
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            var relativePath = DiskProviderBase.GetRelativePath(series.Path, episodeMetadata.Path);
+            var relativePath = series.Path.GetRelativePath(episodeMetadata.Path);
 
             var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeMetadata &&
                                                                               c.EpisodeFileId == episodeFile.Id);
@@ -226,7 +226,7 @@ namespace NzbDrone.Core.Metadata
                     continue;
                 }
 
-                var relativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path);
+                var relativePath = series.Path.GetRelativePath(image.Path);
 
                 var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage &&
                                                                           c.RelativePath == relativePath) ??
@@ -260,7 +260,7 @@ namespace NzbDrone.Core.Metadata
                         continue;
                     }
 
-                    var relativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path);
+                    var relativePath = series.Path.GetRelativePath(image.Path);
 
                     var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeasonImage &&
                                                                             c.SeasonNumber == season.SeasonNumber &&
@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Metadata
                     continue;
                 }
 
-                var relativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path);
+                var relativePath = series.Path.GetRelativePath(image.Path);
 
                 var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
                                                                                   c.EpisodeFileId == episodeFile.Id);
@@ -319,7 +319,7 @@ namespace NzbDrone.Core.Metadata
                                    EpisodeFileId = episodeFile.Id,
                                    Consumer = consumer.GetType().Name,
                                    Type = MetadataType.EpisodeImage,
-                                   RelativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path)
+                                   RelativePath = series.Path.GetRelativePath(image.Path)
                                };
 
                 DownloadImage(series, image.Url, image.Path);

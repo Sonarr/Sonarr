@@ -9,6 +9,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -18,7 +19,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private Series _series;
         private Episode _episode;
         private RemoteEpisode _remoteEpisode;
-        private Mock<IDownloadClient> _downloadClient;
 
         private Series _otherSeries;
         private Episode _otherEpisode;
@@ -50,34 +50,30 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                    .With(r => r.Episodes = new List<Episode> { _episode })
                                                    .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD)})
                                                    .Build();
-
-            _downloadClient = Mocker.GetMock<IDownloadClient>();
-
-            Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(s => s.GetDownloadClient())
-                  .Returns(_downloadClient.Object);
         }
 
         private void GivenEmptyQueue()
         {
-            _downloadClient.Setup(s => s.GetQueue())
-                           .Returns(new List<QueueItem>());
+            Mocker.GetMock<IQueueService>()
+                .Setup(s => s.GetQueue())
+                .Returns(new List<Queue.Queue>());
         }
 
         private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes)
         {
-            var queue = new List<QueueItem>();
+            var queue = new List<Queue.Queue>();
 
             foreach (var remoteEpisode in remoteEpisodes)
             {
-                queue.Add(new QueueItem
-                          {
-                              RemoteEpisode = remoteEpisode
+                queue.Add(new Queue.Queue
+                {
+                    RemoteEpisode = remoteEpisode
                           });
             }
 
-            _downloadClient.Setup(s => s.GetQueue())
-                           .Returns(queue);
+            Mocker.GetMock<IQueueService>()
+                .Setup(s => s.GetQueue())
+                .Returns(queue);
         }
 
         [Test]

@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     if (!newFilename.PathEquals(existingFilename))
                     {
                         _diskProvider.MoveFile(existingFilename, newFilename);
-                        metadataFile.RelativePath = DiskProviderBase.GetRelativePath(series.Path, newFilename);
+                        metadataFile.RelativePath = series.Path.GetRelativePath(newFilename);
 
                         updatedMetadataFiles.Add(metadataFile);
                     }
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                            {
                                SeriesId = series.Id,
                                Consumer = GetType().Name,
-                               RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
+                               RelativePath = series.Path.GetRelativePath(path)
                            };
 
             if (SeriesImagesRegex.IsMatch(filename))

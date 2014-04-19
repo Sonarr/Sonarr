@@ -34,8 +34,10 @@ namespace NzbDrone.Core.Indexers
 
         public abstract DownloadProtocol Protocol { get; }
 
-        public abstract bool SupportsPaging { get; }
-        public virtual bool SupportsSearching { get { return true; } }
+        public virtual Boolean SupportsFeed { get { return true; } }
+        public virtual Int32 SupportedPageSize { get { return 0; } }
+        public bool SupportsPaging { get { return SupportedPageSize > 0; } }
+        public virtual Boolean SupportsSearching { get { return true; } }
 
         protected TSettings Settings
         {
@@ -57,11 +59,5 @@ namespace NzbDrone.Core.Indexers
         {
             return Definition.Name;
         }
-    }
-
-    public enum DownloadProtocol
-    {
-        Usenet = 1,
-        Torrent = 2
     }
 }

@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                     if (!newFilename.PathEquals(existingFilename))
                     {
                         _diskProvider.MoveFile(existingFilename, newFilename);
-                        metadataFile.RelativePath = DiskProviderBase.GetRelativePath(series.Path, newFilename);
+                        metadataFile.RelativePath = series.Path.GetRelativePath(newFilename);
 
                         updatedMetadataFiles.Add(metadataFile);
                     }
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                            {
                                SeriesId = series.Id,
                                Consumer = GetType().Name,
-                               RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
+                               RelativePath = series.Path.GetRelativePath(path)
                            };
 
             //Series and season images are both named folder.jpg, only season ones sit in season folders

@@ -65,6 +65,10 @@
     <Reference Include="Omu.ValueInjecter">
       <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -89,9 +93,6 @@
     </Reference>
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.3.3\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite">
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
@@ -238,10 +239,12 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
-    <Compile Include="Download\Clients\Blackhole\Blackhole.cs" />
-    <Compile Include="Download\Clients\Blackhole\TestBlackholeCommand.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
+    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
+    <Compile Include="Download\Clients\UsenetBlackhole\TestUsenetBlackholeCommand.cs" />
+    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
-    <Compile Include="Download\Clients\FolderSettings.cs" />
+    <Compile Include="Download\Clients\Pneumatic\PneumaticSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetHistoryItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetParameter.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
@@ -253,6 +256,7 @@
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdVersionResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
     <Compile Include="Download\Clients\Sabnzbd\TestSabnzbdCommand.cs" />
+    <Compile Include="Download\CompletedDownloadService.cs" />
     <Compile Include="Download\DownloadClientBase.cs" />
     <Compile Include="Download\DownloadClientDefinition.cs" />
     <Compile Include="Download\DownloadClientFactory.cs" />
@@ -262,15 +266,16 @@
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdProxy.cs" />
-    <Compile Include="Download\CheckForFailedDownloadCommand.cs" />
-    <Compile Include="Download\FailedDownload.cs" />
-    <Compile Include="Download\HistoryItem.cs" />
+    <Compile Include="Download\CheckForFinishedDownloadCommand.cs" />
+    <Compile Include="Download\DownloadClientItem.cs" />
+    <Compile Include="Download\FailedDownloadService.cs" />
+    <Compile Include="Download\DownloadItemStatus.cs" />
+    <Compile Include="Download\TrackedDownload.cs" />
     <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadApprovedReports.cs" />
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
-    <Compile Include="Download\FailedDownloadService.cs" />
-    <Compile Include="Download\QueueItem.cs" />
+    <Compile Include="Download\DownloadTrackingService.cs" />
     <Compile Include="Download\RedownloadFailedDownloadService.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
@@ -278,6 +283,7 @@
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
     <Compile Include="HealthCheck\CheckHealthCommand.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
+    <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
@@ -307,10 +313,9 @@
     <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
     <Compile Include="Indexers\BasicTorrentRssParser.cs" />
-    <Compile Include="Indexers\DownloadProtocols.cs" />
+    <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
-    <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
@@ -440,7 +445,6 @@
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportApprovedEpisodes.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecification.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotInUseSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
@@ -754,9 +758,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Download\Clients\uTorrent\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

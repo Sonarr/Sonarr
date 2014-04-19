@@ -1,31 +1,29 @@
 ﻿'use strict';
-define(
-    [
-        'underscore',
-        'AppLayout',
-        'marionette',
-        'Settings/DownloadClient/DownloadClientItemView',
-        'Settings/DownloadClient/Add/SchemaModal'
-    ], function (_, AppLayout, Marionette, DownloadClientItemView, SchemaModal) {
-        return Marionette.CompositeView.extend({
-            itemView         : DownloadClientItemView,
-            itemViewContainer: '#x-download-clients',
-            template         : 'Settings/DownloadClient/DownloadClientCollectionViewTemplate',
 
-            ui: {
-                'addCard': '.x-add-card'
-            },
+define([
+    'marionette',
+    'Settings/DownloadClient/DownloadClientItemView',
+    'Settings/DownloadClient/Add/DownloadClientSchemaModal'
+], function (Marionette, ItemView, SchemaModal) {
+    return Marionette.CompositeView.extend({
+        itemView         : ItemView,
+        itemViewContainer: '.download-client-list',
+        template         : 'Settings/DownloadClient/DownloadClientCollectionViewTemplate',
 
-            events: {
-                'click .x-add-card': '_openSchemaModal'
-            },
+        ui: {
+            'addCard': '.x-add-card'
+        },
 
-            appendHtml: function (collectionView, itemView, index) {
-                collectionView.ui.addCard.parent('li').before(itemView.el);
-            },
+        events: {
+            'click .x-add-card': '_openSchemaModal'
+        },
 
-            _openSchemaModal: function () {
-                SchemaModal.open(this.collection);
-            }
-        });
+        appendHtml: function (collectionView, itemView, index) {
+            collectionView.ui.addCard.parent('li').before(itemView.el);
+        },
+
+        _openSchemaModal: function () {
+            SchemaModal.open(this.collection);
+        }
     });
+});

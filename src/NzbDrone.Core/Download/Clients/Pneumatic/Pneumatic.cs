@@ -7,8 +7,10 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
@@ -21,22 +23,34 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
-        public Pneumatic(IConfigService configService, IHttpProvider httpProvider,
-                                    IDiskProvider diskProvider)
+        public Pneumatic(IConfigService configService,
+                         IHttpProvider httpProvider,
+                         IDiskProvider diskProvider,
+                         IParsingService parsingService,
+                         Logger logger)
+            : base(parsingService, logger)
         {
             _configService = configService;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
         }
 
-        public override string DownloadNzb(RemoteEpisode remoteEpisode)
+        public override DownloadProtocol Protocol
+        {
+            get
+            {
+                return DownloadProtocol.Usenet;
+            }
+        }
+
+        public override string Download(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
 
             if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
             {
-                throw new NotImplementedException("Full season releases are not supported with Pneumatic.");
+                throw new NotSupportedException("Full season releases are not supported with Pneumatic.");
             }
 
             title = FileNameBuilder.CleanFilename(title);
@@ -63,27 +77,19 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             }
         }
 
-        public override IEnumerable<QueueItem> GetQueue()
+        public override IEnumerable<DownloadClientItem> GetItems()
         {
-            return new QueueItem[0];
+            return new DownloadClientItem[0];
         }
-
-        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
+        
+        public override void RemoveItem(string id)
         {
-            return new HistoryItem[0];
-        }
-
-        public override void RemoveFromQueue(string id)
-        {
-        }
-
-        public override void RemoveFromHistory(string id)
-        {
+            throw new NotSupportedException();
         }
 
         public override void RetryDownload(string id)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public override void Test()

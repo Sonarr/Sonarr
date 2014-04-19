@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -14,16 +15,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var downloadClient = _downloadClientProvider.GetDownloadClient();
+            var downloadClients = _downloadClientProvider.GetDownloadClients();
 
-            if (downloadClient == null)
+            if (downloadClients.Count() == 0)
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available");
             }
 
             try
             {
-                downloadClient.GetQueue();
+                foreach (var downloadClient in downloadClients)
+                {
+                    downloadClient.GetItems();
+                }
             }
             catch (Exception)
             {

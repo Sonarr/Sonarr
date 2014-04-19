@@ -2,6 +2,7 @@
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Queue
 {
@@ -15,5 +16,6 @@ namespace NzbDrone.Core.Queue
         public Decimal Sizeleft { get; set; }
         public TimeSpan Timeleft { get; set; }
         public String Status { get; set; }
+        public RemoteEpisode RemoteEpisode { get; set; }
     }
 }

@@ -5,13 +5,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
     public class Omgwtfnzbs : IndexerBase<OmgwtfnzbsSettings>
     {
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
         public override IParseFeed Parser
         {
@@ -25,7 +19,6 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             get
             {
-
                 yield return String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
                                   Settings.Username, Settings.ApiKey);
             }
@@ -70,14 +63,6 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
         {
             return new List<string>();
-        }
-
-        public override bool SupportsPaging
-	{
-            get
-            {
-                return false;
-            }
         }
     }
 }

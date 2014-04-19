@@ -1,32 +1,31 @@
 ﻿﻿'use strict';
 
-define(
-    [
-        'marionette',
-        'Settings/DownloadClient/DownloadClientCollection',
-        'Settings/DownloadClient/DownloadClientCollectionView',
-        'Settings/DownloadClient/Options/DownloadClientOptionsView',
-        'Settings/DownloadClient/FailedDownloadHandling/FailedDownloadHandlingView'
-    ], function (Marionette, DownloadClientCollection, DownloadClientCollectionView, DownloadClientOptionsView, FailedDownloadHandlingView) {
+define([
+    'marionette',
+    'Settings/DownloadClient/DownloadClientCollection',
+    'Settings/DownloadClient/DownloadClientCollectionView',
+    'Settings/DownloadClient/DroneFactory/DroneFactoryView',
+    'Settings/DownloadClient/DownloadHandling/DownloadHandlingView'
+], function (Marionette, DownloadClientCollection, CollectionView, DroneFactoryView, DownloadHandlingView) {
 
-        return Marionette.Layout.extend({
-            template : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
+    return Marionette.Layout.extend({
+        template : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
 
-            regions: {
-                downloadClients        : '#x-download-clients-region',
-                downloadClientOptions  : '#x-download-client-options-region',
-                failedDownloadHandling : '#x-failed-download-handling-region'
-            },
+        regions: {
+            downloadClients        : '#x-download-clients-region',
+            downloadHandling       : '#x-download-handling-region',
+            droneFactory           : '#x-dronefactory-region'
+        },
 
-            initialize: function () {
-                this.downloadClientCollection = new DownloadClientCollection();
-                this.downloadClientCollection.fetch();
-            },
+        initialize: function () {
+            this.downloadClientsCollection = new DownloadClientCollection();
+            this.downloadClientsCollection.fetch();
+        },
 
-            onShow: function () {
-                this.downloadClients.show(new DownloadClientCollectionView({ collection: this.downloadClientCollection }));
-                this.downloadClientOptions.show(new DownloadClientOptionsView({ model: this.model }));
-                this.failedDownloadHandling.show(new FailedDownloadHandlingView({ model: this.model }));
-            }
-        });
+        onShow: function () {
+            this.downloadClients.show(new CollectionView({ collection: this.downloadClientsCollection }));
+            this.downloadHandling.show(new DownloadHandlingView({ model: this.model }));
+            this.droneFactory.show(new DroneFactoryView({ model: this.model }));
+        }
     });
+});

@@ -1,3 +1,4 @@
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
@@ -41,9 +42,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return true;
             }
 
-            var downloadClient = _downloadClientProvider.GetDownloadClient();
+            var downloadClients = _downloadClientProvider.GetDownloadClients();
 
-            if (downloadClient != null && downloadClient.GetType() == typeof (Sabnzbd))
+            foreach (var downloadClient in downloadClients.OfType<Sabnzbd>())
             {
                 _logger.Debug("Performing history status check on report");
                 foreach (var episode in subject.Episodes)

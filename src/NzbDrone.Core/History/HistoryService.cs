@@ -21,6 +21,7 @@ namespace NzbDrone.Core.History
         List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
         List<History> Failed();
         List<History> Grabbed();
+        List<History> Imported();
         History MostRecentForEpisode(int episodeId);
         History Get(int id);
         List<History> FindBySourceTitle(string sourceTitle);
@@ -60,6 +61,11 @@ namespace NzbDrone.Core.History
         public List<History> Grabbed()
         {
             return _historyRepository.Grabbed();
+        }
+
+        public List<History> Imported()
+        {
+            return _historyRepository.Imported();
         }
 
         public History MostRecentForEpisode(int episodeId)
@@ -149,6 +155,8 @@ namespace NzbDrone.Core.History
                 //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
                 history.Data.Add("DroppedPath", message.EpisodeInfo.Path);
                 history.Data.Add("ImportedPath", message.ImportedEpisode.Path);
+                history.Data.Add("DownloadClient", message.DownloadClient);
+                history.Data.Add("DownloadClientId", message.DownloadClientId);
 
                 _historyRepository.Insert(history);
             }
