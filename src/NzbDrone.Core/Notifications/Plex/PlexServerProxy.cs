@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public interface IPlexServerProxy
     {
-        List<PlexSection> GetTvSections(PlexServerSettings settings);
+        List<PlexDirectory> GetTvSections(PlexServerSettings settings);
         void Update(int sectionId, PlexServerSettings settings);
     }
 
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Notifications.Plex
             _authCache = cacheManager.GetCache<String>(GetType(), "authCache");
         }
 
-        public List<PlexSection> GetTvSections(PlexServerSettings settings)
+        public List<PlexDirectory> GetTvSections(PlexServerSettings settings)
         {
             var request = GetPlexServerRequest("library/sections", Method.GET, settings);
             var client = GetPlexServerClient(settings);
@@ -35,7 +35,6 @@ namespace NzbDrone.Core.Notifications.Plex
             return Json.Deserialize<PlexMediaContainer>(response.Content)
                        .Directories
                        .Where(d => d.Type == "show")
-                       .SelectMany(d => d.Sections)
                        .ToList();
         }
 
