@@ -1,16 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.ThingiProvider;
 
-namespace NzbDrone.Core.Indexers.Eztv
+namespace NzbDrone.Core.Indexers.Fanzub
 {
-    public class Eztv : IndexerBase<NullConfig>
+    public class Fanzub : IndexerBase<NullConfig>
     {
         public override DownloadProtocol Protocol
         {
             get
             {
-                return DownloadProtocol.Torrent;
+                return DownloadProtocol.Usenet;
             }
         }
 
@@ -22,11 +23,19 @@ namespace NzbDrone.Core.Indexers.Eztv
             }
         }
 
+        public override bool SupportsSearching
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override IParseFeed Parser
         {
             get
             {
-                return new BasicTorrentRssParser();
+                return new FanzubParser();
             }
         }
 
@@ -34,31 +43,28 @@ namespace NzbDrone.Core.Indexers.Eztv
         {
             get
             {
-                yield return "http://www.ezrss.it/feed/";
+                yield return "http://fanzub.com/rss/?cat=anime";
             }
         }
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
-            yield return string.Format("http://www.ezrss.it/search/index.php?show_name={0}&season={1}&episode={2}&mode=rss", seriesTitle, seasonNumber, episodeNumber);
+            return new List<string>();
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
         {
-            yield return string.Format("http://www.ezrss.it/search/index.php?show_name={0}&season={1}&mode=rss", seriesTitle, seasonNumber);
-
+            return new List<string>();
         }
 
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
         {
-            //EZTV doesn't support searching based on actual episode airdate. they only support release date.
-            return new string[0];
+            return new List<string>();
         }
 
         public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
         {
-            // TODO: Implement
-            return new List<string>();
+            return RecentFeed.Select(url => String.Format("{0}&q={1}%20{2}", url, seriesTitle, absoluteEpisodeNumber));
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
