@@ -311,6 +311,7 @@
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
+    <Compile Include="IndexerSearch\Definitions\AnimeEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\MissingEpisodeSearchCommand.cs" />
     <Compile Include="IndexerSearch\Definitions\SpecialEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
@@ -323,6 +324,9 @@
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
+    <Compile Include="Indexers\Eztv\Eztv.cs" />
+    <Compile Include="Indexers\Fanzub\Fanzub.cs" />
+    <Compile Include="Indexers\Fanzub\FanzubParser.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />

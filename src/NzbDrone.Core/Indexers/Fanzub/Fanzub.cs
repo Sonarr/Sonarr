@@ -1,25 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.ThingiProvider;
 
-namespace NzbDrone.Core.Indexers.Wombles
+namespace NzbDrone.Core.Indexers.Fanzub
 {
-    public class Wombles : IndexerBase<NullConfig>
+    public class Fanzub : IndexerBase<NullConfig>
     {
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
-        public override bool SupportsSearching { get { return false; } }
+        public override DownloadProtocol Protocol
+        {
+            get
+            {
+                return DownloadProtocol.Usenet;
+            }
+        }
+
+        public override bool SupportsPaging
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsSearching
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         public override IParseFeed Parser
         {
             get
             {
-                return new WomblesParser();
+                return new FanzubParser();
             }
         }
 
         public override IEnumerable<string> RecentFeed
         {
-            get { yield return "http://newshost.co.za/rss/?sec=TV&fr=false"; }
+            get
+            {
+                yield return "http://fanzub.com/rss/?cat=anime";
+            }
         }
 
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
@@ -39,7 +64,7 @@ namespace NzbDrone.Core.Indexers.Wombles
 
         public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
         {
-            return new List<string>();
+            return RecentFeed.Select(url => String.Format("{0}&q={1}%20{2}", url, seriesTitle, absoluteEpisodeNumber));
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
