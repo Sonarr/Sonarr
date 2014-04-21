@@ -48,6 +48,12 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return searchUrls;
         }
 
+        public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
+        {
+            // TODO: Implement
+            return new List<string>();
+        }
+
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
         {
             var searchUrls = new List<String>();

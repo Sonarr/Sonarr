@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Indexers
         IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(IIndexer indexer, AnimeEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria);
     }
 
@@ -90,6 +91,17 @@ namespace NzbDrone.Core.Indexers
             var result = Fetch(indexer, searchUrls);
 
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            return result;
+        }
+
+        public IList<ReleaseInfo> Fetch(IIndexer indexer, AnimeEpisodeSearchCriteria searchCriteria)
+        {
+            _logger.Debug("Searching for {0}", searchCriteria);
+
+            var searchUrls = indexer.GetAnimeEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.AbsoluteEpisodeNumber);
+            var result = Fetch(indexer, searchUrls);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+
             return result;
         }
 
