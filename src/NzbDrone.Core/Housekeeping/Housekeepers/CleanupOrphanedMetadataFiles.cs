@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
             DeleteOrphanedBySeries();
             DeleteOrphanedByEpisodeFile();
+            DeleteWhereEpisodeFileIsZero();
         }
 
         private void DeleteOrphanedBySeries()
@@ -45,6 +46,17 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                                      ON MetadataFiles.EpisodeFileId = EpisodeFiles.Id
                                      WHERE MetadataFiles.EpisodeFileId > 0
                                      AND EpisodeFiles.Id IS NULL)");
+        }
+
+        private void DeleteWhereEpisodeFileIsZero()
+        {
+            var mapper = _database.GetDataMapper();
+
+            mapper.ExecuteNonQuery(@"DELETE FROM MetadataFiles
+                                     WHERE Id IN (
+                                     SELECT Id FROM MetadataFiles
+                                     WHERE Type IN (2, 5)
+                                     AND EpisodeFileId = 0)");
         }
     }
 }
