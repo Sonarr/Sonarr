@@ -7,6 +7,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -172,15 +173,9 @@ namespace NzbDrone.Core.MediaFiles
 
             catch (Exception ex)
             {
-                if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
-                {
-                    _logger.Debug("Unable to apply permissions to: ", path);
-                    _logger.DebugException(ex.Message, ex);
-                }
-                else
-                {
-                    throw;
-                }
+
+                _logger.WarnException("Unable to apply permissions to: " + path, ex);
+                _logger.DebugException(ex.Message, ex);
             }
         }
 
