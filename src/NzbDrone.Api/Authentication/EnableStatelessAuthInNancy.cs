@@ -29,7 +29,7 @@ namespace NzbDrone.Api.Authentication
 
             var apiKey = GetApiKey(context);
 
-            if (context.Request.IsApiRequest() && !ValidApiKey(apiKey))
+            if ((context.Request.IsApiRequest() || context.Request.IsFeedRequest()) && !ValidApiKey(apiKey))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }
