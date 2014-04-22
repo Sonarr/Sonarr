@@ -7,6 +7,7 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using System.Text;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -29,10 +30,60 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("THIS SHOULD NEVER PARSE")]
         [TestCase("Vh1FvU3bJXw6zs8EEUX4bMo5vbbMdHghxHirc.mkv")]
         [TestCase("0e895c37245186812cb08aab1529cf8ee389dd05.mkv")]
+        [TestCase("08bbc153931ce3ca5fcafe1b92d3297285feb061.mkv")]
+        [TestCase("185d86a343e39f3341e35c4dad3ff159")]
         public void should_not_parse_crap(string title)
         {
             Parser.Parser.ParseTitle(title).Should().BeNull();
             ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_not_parse_md5()
+        {
+            string hash = "CRAPPY TEST SEED";
+
+            var hashAlgo = System.Security.Cryptography.MD5.Create();
+
+            var repetitions = 100;
+            var success = 0;
+            for (int i = 0; i < repetitions; i++)
+            {
+                var hashData = hashAlgo.ComputeHash(System.Text.Encoding.Default.GetBytes(hash));
+
+                hash = BitConverter.ToString(hashData).Replace("-", "");
+
+                if (Parser.Parser.ParseTitle(hash) == null)
+                    success++;
+            }
+
+            success.Should().Be(repetitions);
+        }
+
+        [TestCase(32)]
+        [TestCase(40)]
+        public void should_not_parse_random(int length)
+        {
+            string charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            var hashAlgo = new Random();
+
+            var repetitions = 500;
+            var success = 0;
+            for (int i = 0; i < repetitions; i++)
+            {
+                StringBuilder hash = new StringBuilder(length);
+
+                for (int x = 0; x < length; x++)
+                {
+                    hash.Append(charset[hashAlgo.Next() % charset.Length]);
+                }
+
+                if (Parser.Parser.ParseTitle(hash.ToString()) == null)
+                    success++;
+            }
+
+            success.Should().Be(repetitions);
         }
     }
 }

@@ -48,6 +48,14 @@ namespace NzbDrone.Common
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
+        public static string TrimEnd(this string text, string postfix)
+        {
+            if (text.EndsWith(postfix))
+                text = text.Substring(0, text.Length - postfix.Length);
+
+            return text;
+        }
+
         public static string CleanSpaces(this string text)
         {
             return CollapseSpace.Replace(text, " ").Trim();
