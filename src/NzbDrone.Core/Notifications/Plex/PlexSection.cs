@@ -16,6 +16,8 @@ namespace NzbDrone.Core.Notifications.Plex
 
         [JsonProperty("_children")]
         public List<PlexSection> Sections { get; set; }
+
+        public Int32 Key { get; set; }
     }
 
     public class PlexMediaContainer

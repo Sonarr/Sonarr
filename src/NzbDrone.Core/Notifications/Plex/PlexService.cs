@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             _logger.Debug("Getting sections from Plex host: {0}", settings.Host);
 
-            return _plexServerProxy.GetTvSections(settings).Select(s => s.Id).ToList();
+            return _plexServerProxy.GetTvSections(settings).Select(s => s.Key).ToList();
         }
 
         private void UpdateSection(int key, PlexServerSettings settings)
