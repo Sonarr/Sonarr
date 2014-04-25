@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("2020.NZ.2012.16.02.PDTV.XviD-C4TV", "2020nz", 2012, 2, 16)]
         [TestCase("2020.NZ.2012.13.02.PDTV.XviD-C4TV", "2020nz", 2012, 2, 13)]
         [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "2020nz", 2011, 12, 2)]
+        [TestCase("Series Title - 2013-10-30 - Episode Title (1) [HDTV-720p]", "Series Title", 2013, 10, 30)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
