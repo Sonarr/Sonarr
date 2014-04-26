@@ -97,6 +97,8 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
+            title = Parser.Parser.CleanSeriesTitle(title);
+
             var tvdbId = _sceneMappingService.GetTvDbId(title);
 
             if (tvdbId.HasValue)
@@ -104,7 +106,7 @@ namespace NzbDrone.Core.Tv
                 return FindByTvdbId(tvdbId.Value);
             }
 
-            return _seriesRepository.FindByTitle(Parser.Parser.CleanSeriesTitle(title));
+            return _seriesRepository.FindByTitle(title);
         }
 
         public Series FindByTitleInexact(string title)
