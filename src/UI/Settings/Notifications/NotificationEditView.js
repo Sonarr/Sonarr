@@ -27,6 +27,7 @@ define(
                 'click .x-delete'      : '_deleteNotification',
                 'click .x-back'        : '_back',
                 'click .x-test'        : '_test',
+                'click .x-cancel'      : '_cancel',
                 'change .x-on-download': '_onDownloadChanged'
             },
 
@@ -63,12 +64,23 @@ define(
                 }
             },
 
+            _cancel: function () {
+                if (this.model.isNew()) {
+                    this.model.destroy();
+                    vent.trigger(vent.Commands.CloseModalCommand);
+                }
+            },
+
             _deleteNotification: function () {
                 var view = new DeleteView({ model: this.model });
                 AppLayout.modalRegion.show(view);
             },
 
             _back: function () {
+                if (this.model.isNew()) {
+                    this.model.destroy();
+                }
+
                 require('Settings/Notifications/SchemaModal').open(this.notificationCollection);
             },
 
