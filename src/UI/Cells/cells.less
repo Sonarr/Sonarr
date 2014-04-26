@@ -2,6 +2,7 @@
 @import "../Content/Bootstrap/variables";
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
+@import "../Content/mixins";
 
 .episode-title-cell {
   .btn-link;
@@ -31,6 +32,7 @@
 
 .toggle-cell{
   .clickable();
+  .not-selectable;
 }
 
 .approval-status-cell {

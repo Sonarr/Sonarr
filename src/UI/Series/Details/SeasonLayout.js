@@ -92,11 +92,19 @@ define(
 
             initialize: function (options) {
 
+
                 if (!options.episodeCollection) {
                     throw 'episodeCollection is needed';
                 }
 
                 this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
+
+                var self = this;
+
+                this.episodeCollection.each(function (model) {
+                    model.episodeCollection = self.episodeCollection;
+                });
+
                 this.series = options.series;
 
                 this.showingEpisodes = this._shouldShowEpisodes();
@@ -249,6 +257,34 @@ define(
 
                 this.templateHelpers.showingEpisodes = this.showingEpisodes;
                 this.render();
+            },
+
+            _episodeMonitoredToggled: function (options) {
+                var model = options.model;
+                var shiftKey = options.shiftKey;
+
+                if (!this.episodeCollection.get(model.get('id'))) {
+                    return;
+                }
+
+                if (!shiftKey) {
+                    return;
+                }
+
+                var lastToggled = this.episodeCollection.lastToggled;
+
+                if (!lastToggled) {
+                    return;
+                }
+
+                var currentIndex = this.episodeCollection.indexOf(model);
+                var lastIndex = this.episodeCollection.indexOf(lastToggled);
+
+                var low = Math.min(currentIndex, lastIndex);
+                var high = Math.max(currentIndex, lastIndex);
+                var range = _.range(low + 1, high);
+
+                this.episodeCollection.lastToggled = model;
             }
         });
     });
