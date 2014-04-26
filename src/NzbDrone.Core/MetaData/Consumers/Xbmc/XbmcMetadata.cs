@@ -247,6 +247,8 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             xws.OmitXmlDeclaration = true;
             xws.Indent = false;
 
+            var episodeGuideUrl = String.Format("http://www.thetvdb.com/api/1D62F2F90030C444/series/{0}/all/en.zip", series.TvdbId);
+
             using (var xw = XmlWriter.Create(sb, xws))
             {
                 var tvShow = new XElement("tvshow");
@@ -254,10 +256,8 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 tvShow.Add(new XElement("title", series.Title));
                 tvShow.Add(new XElement("rating", (decimal)series.Ratings.Percentage/10));
                 tvShow.Add(new XElement("plot", series.Overview));
-
-                //Todo: probably will need to use TVDB to use this feature...
-//                tvShow.Add(new XElement("episodeguide", new XElement("url", episodeGuideUrl)));
-//                tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
+                tvShow.Add(new XElement("episodeguide", new XElement("url", episodeGuideUrl)));
+                tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
                 tvShow.Add(new XElement("mpaa", series.Certification));
                 tvShow.Add(new XElement("id", series.TvdbId));
 
