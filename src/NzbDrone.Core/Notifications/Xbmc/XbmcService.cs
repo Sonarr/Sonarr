@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
 
-                Logger.Debug("Getting version from response");
+                Logger.Debug("Getting version from response: " + response);
                 var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
 
                 var versionObject = result.Result.Property("version");
