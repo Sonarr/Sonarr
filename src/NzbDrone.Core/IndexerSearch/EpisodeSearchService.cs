@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -13,7 +14,8 @@ namespace NzbDrone.Core.IndexerSearch
 {
     public interface IEpisodeSearchService
     {
-        void MissingEpisodesAiredAfter(DateTime dateTime);
+        void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed
+            );
     }
 
     public class MissingEpisodeSearchService : IEpisodeSearchService, IExecute<EpisodeSearchCommand>, IExecute<MissingEpisodeSearchCommand>
@@ -37,11 +39,12 @@ namespace NzbDrone.Core.IndexerSearch
             _logger = logger;
         }
 
-        public void MissingEpisodesAiredAfter(DateTime dateTime)
+        public void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed)
         {
             var missing = _episodeService.EpisodesBetweenDates(dateTime, DateTime.UtcNow)
                                          .Where(e => !e.HasFile &&
-                                                !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id))
+                                                !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id) &&
+                                                !grabbed.Contains(e.Id))
                                          .ToList();
 
             var downloadedCount = 0;
