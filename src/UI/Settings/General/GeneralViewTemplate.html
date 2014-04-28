@@ -102,7 +102,7 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <label class="checkbox toggle well">
-                        <input type="checkbox" class='x-auth' name="authenticationEnabled"/>
+                        <input type="checkbox" class="x-auth" name="authenticationEnabled"/>
                         <p>
                             <span>On</span>
                             <span>Off</span>
@@ -117,7 +117,7 @@
             </div>
         </div>
 
-        <div class='x-auth-options'>
+        <div class="x-auth-options">
             <div class="form-group">
                 <label class="col-sm-3 control-label">Username</label>
 
@@ -174,9 +174,8 @@
         </div>
     </fieldset>
 
-    {{#if_windows}}
     <fieldset class="advanced-setting">
-        <legend>Development</legend>
+        <legend>Updating</legend>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">Branch</label>
@@ -186,28 +185,56 @@
             </div>
         </div>
 
-        <!--{{#if_mono}}-->
-        <!--<div class="form-group">-->
-            <!--<label class="control-label">Auto Update</label>-->
+        {{#if_mono}}
+        <div class="alert alert-warning">Please see: <a href="https://github.com/NzbDrone/NzbDrone/wiki/Updating">the wiki</a> for more information</div>
 
-            <!--<div class="controls">-->
-                <!--<label class="checkbox toggle well">-->
-                    <!--<input type="checkbox" name="autoUpdate"/>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Automatic</label>
 
-                    <!--<p>-->
-                        <!--<span>Yes</span>-->
-                        <!--<span>No</span>-->
-                    <!--</p>-->
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="updateAutomatically"/>
+                        <p>
+                            <span>On</span>
+                            <span>Off</span>
+                        </p>
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
 
-                    <!--<div class="btn btn-primary slide-button"/>-->
-                <!--</label>-->
+                    <span class="help-inline-checkbox">
+                        <i class="icon-nd-form-info" title="Automatically download and install updates. You will still be able to install from System: Updates"/>
+                    </span>
+                </div>
+            </div>
+        </div>
 
-                <!--<span class="help-inline-checkbox">-->
-                    <!--<i class="icon-nd-form-info" title="Use drone's built in auto update instead of package manager/manual updating"/>-->
-                <!--</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--{{/if_mono}}-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Mechanism</label>
+
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-info" title="Use built-in updater or external script"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <select name="updateMechanism" class="form-control x-update-mechanism">
+                    <option value="builtIn">Built-in</option>
+                    <option value="script">Script</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group x-script-group">
+            <label class="col-sm-3 control-label">Script Path</label>
+
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-info" title="Path to a custom script that take an extracted update package and handle the remainder of the update process"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <input type="text" name="updateScriptPath" class="form-control"/>
+            </div>
+        </div>
+        {{/if_mono}}
     </fieldset>
-    {{/if_windows}}
 </div>

@@ -1,6 +1,7 @@
 using System;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 using IServiceProvider = NzbDrone.Common.IServiceProvider;
 
@@ -26,6 +27,15 @@ namespace NzbDrone.Update.UpdateEngine
 
         public void Terminate()
         {
+            if (OsInfo.IsMono)
+            {
+                _logger.Info("Stopping all instances");
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+
+                return;
+            }
+
             _logger.Info("Stopping all running services");
 
             if (_serviceProvider.ServiceExist(ServiceProvider.NZBDRONE_SERVICE_NAME)
@@ -35,7 +45,6 @@ namespace NzbDrone.Update.UpdateEngine
                 {
                     _logger.Info("NzbDrone Service is installed and running");
                     _serviceProvider.Stop(ServiceProvider.NZBDRONE_SERVICE_NAME);
-
                 }
                 catch (Exception e)
                 {

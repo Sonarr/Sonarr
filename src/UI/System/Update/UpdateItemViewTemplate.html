@@ -5,17 +5,9 @@
                 - {{ShortDate releaseDate}}
                 {{#if installed}}<i class="icon-ok" title="Installed"></i>{{/if}}
 
-                {{#if_windows}}
-                    {{#if isUpgrade}}
-                        <span class="label label-default install-update x-install-update">Install</span>
-                    {{/if}}
-                {{else}}
-                    {{#if isUpgrade}}
-                        <span class="label label-default install-update">
-                            <a href="https://github.com/NzbDrone/NzbDrone/wiki/Installation#linux">Install</a>
-                        </span>
-                    {{/if}}
-                {{/if_windows}}
+                {{#if isUpgrade}}
+                    <span class="label label-default install-update x-install-update">Install</span>
+                {{/if}}
             </span>
         </legend>
 

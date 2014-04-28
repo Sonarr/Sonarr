@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
@@ -50,24 +52,60 @@ namespace NzbDrone.Update
 
         public void Start(string[] args)
         {
-            var processId = ParseProcessId(args);
+            var startupContext = ParseArgs(args);
+            string targetFolder;
 
-            var exeFileInfo = new FileInfo(_processProvider.GetProcessById(processId).StartPath);
-            var targetFolder = exeFileInfo.Directory.FullName;
+            if (startupContext.ExecutingApplication.IsNullOrWhiteSpace())
+            {
+                var exeFileInfo = new FileInfo(_processProvider.GetProcessById(startupContext.ProcessId).StartPath);
+                targetFolder = exeFileInfo.Directory.FullName;
+            }
 
+            else
+            {
+                var exeFileInfo = new FileInfo(startupContext.ExecutingApplication);
+                targetFolder = exeFileInfo.Directory.FullName;
+            }
+            
             logger.Info("Starting update process. Target Path:{0}", targetFolder);
             _installUpdateService.Start(targetFolder);
         }
 
-        private int ParseProcessId(string[] args)
+        private UpdateStartupContext ParseArgs(string[] args)
         {
-            int id;
-            if (args == null || !Int32.TryParse(args[0], out id) || id <= 0)
+            if (args == null || !args.Any())
             {
-                throw new ArgumentOutOfRangeException("args", "Invalid process ID");
+                throw new ArgumentOutOfRangeException("args", "args must be specified");
             }
 
-            logger.Debug("NzbDrone processId:{0}", id);
+            var startupContext = new UpdateStartupContext
+                                 {
+                                     ProcessId = ParseProcessId(args[0])
+                                 };
+
+            if (args.Count() == 1)
+            {
+                return startupContext;
+            }
+
+            if (args.Count() >= 3)
+            {
+                startupContext.UpdateLocation = args[1];
+                startupContext.ExecutingApplication = args[2];
+            }
+
+            return startupContext;
+        }
+
+        private int ParseProcessId(string arg)
+        {
+            int id;
+            if (!Int32.TryParse(arg, out id) || id <= 0)
+            {
+                throw new ArgumentOutOfRangeException("arg", "Invalid process ID");
+            }
+
+            logger.Debug("NzbDrone process ID: {0}", id);
             return id;
         }
     }

@@ -3,7 +3,9 @@ using System.Reflection;
 using FluentValidation;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
+using NzbDrone.Core.Validation.Paths;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Config
@@ -12,7 +14,7 @@ namespace NzbDrone.Api.Config
     {
         private readonly IConfigFileProvider _configFileProvider;
 
-        public HostConfigModule(ConfigFileProvider configFileProvider)
+        public HostConfigModule(IConfigFileProvider configFileProvider)
             : base("/config/host")
         {
             _configFileProvider = configFileProvider;
@@ -29,6 +31,8 @@ namespace NzbDrone.Api.Config
 
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslCertHash).NotEmpty().When(c => c.EnableSsl && OsInfo.IsWindows);
+
+            SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
         }
 
         private HostConfigResource GetHostConfig()
