@@ -34,6 +34,7 @@ namespace NzbDrone.Host
 
                 _container = MainAppContainerBuilder.BuildContainer(startupContext);
                 _container.Resolve<IAppFolderFactory>().Register();
+                _container.Resolve<IProvidePidFile>().Write();
 
                 var appMode = GetApplicationMode(startupContext);
 
