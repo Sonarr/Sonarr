@@ -40,7 +40,10 @@ namespace NzbDrone.Core.Metadata
             _logger.Debug("Looking for existing metadata in {0}", message.Series.Path);
 
             var filesOnDisk = _diskProvider.GetFiles(message.Series.Path, SearchOption.AllDirectories);
-            var possibleMetadataFiles = filesOnDisk.Where(c => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower())).ToList();
+
+            var possibleMetadataFiles = filesOnDisk.Where(c => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower()) &&
+                                                         !c.StartsWith(Path.Combine(message.Series.Path, "EXTRAS"))).ToList();
+
             var filteredFiles = _metadataFileService.FilterExistingFiles(possibleMetadataFiles, message.Series);
 
             var metadataFiles = new List<MetadataFile>();
