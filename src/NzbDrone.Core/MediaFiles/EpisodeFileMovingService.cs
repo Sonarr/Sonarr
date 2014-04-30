@@ -105,6 +105,19 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+            if (_configService.AutoMoveRelatedFiles) {
+                var sourceGlob = Path.GetFileNameWithoutExtension(episodeFile.Path) + ".*";
+                var sourceDir = Path.GetDirectoryName(episodeFile.Path);
+                var allFiles = Directory.GetFiles(sourceDir, sourceGlob);
+                foreach (var relatedFile in allFiles) {
+                    var relatedDestinationFilename = Path.Combine(
+                        Path.GetDirectoryName(destinationFilename), 
+                        Path.GetFileNameWithoutExtension(episodeFile.Path) + Path.GetExtension(relatedFile));
+                    _logger.Debug("Moving related [{0}] > [{1}]", relatedFile, relatedDestinationFilename);
+                    _diskProvider.MoveFile(relatedFile, relatedDestinationFilename);
+                }
+            }
+
             episodeFile.Path = destinationFilename;
 
             _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
