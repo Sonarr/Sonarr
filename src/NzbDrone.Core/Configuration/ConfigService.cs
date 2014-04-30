@@ -84,10 +84,10 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoUnmonitorPreviouslyDownloadedEpisodes", value); }
         }
 
-        public bool AutoMoveRelatedFiles
+        public bool MoveRelatedFiles
         {
-            get { return GetValueBoolean("AutoMoveRelatedFiles"); }
-            set { SetValue("AutoMoveRelatedFiles", value); }
+            get { return GetValueBoolean("MoveRelatedFiles"); }
+            set { SetValue("MoveRelatedFiles", value); }
         }
 
         public int Retention

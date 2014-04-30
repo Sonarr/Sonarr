@@ -11,7 +11,7 @@ namespace NzbDrone.Api.Config
         public Boolean AutoDownloadPropers { get; set; }
         public Boolean CreateEmptySeriesFolders { get; set; }
         public FileDateType FileDate { get; set; }
-        public Boolean AutoMoveRelatedFiles { get; set; }
+        public Boolean MoveRelatedFiles { get; set; }
 
         public Boolean SetPermissionsLinux { get; set; }
         public String FileChmod { get; set; }
