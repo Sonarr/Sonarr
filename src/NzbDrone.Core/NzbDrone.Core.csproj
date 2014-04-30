@@ -361,6 +361,8 @@
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\ImageFileResult.cs" />
+    <Compile Include="Metadata\Files\MetadataFileResult.cs" />
     <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\Files\MetadataFile.cs" />
     <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
@@ -539,6 +541,7 @@
     <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />

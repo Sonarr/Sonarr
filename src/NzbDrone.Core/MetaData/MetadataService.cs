@@ -1,6 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net;
 using NLog;
+using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
@@ -21,6 +27,9 @@ namespace NzbDrone.Core.Metadata
         private readonly ICleanMetadataService _cleanMetadataService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IEpisodeService _episodeService;
+        private readonly IDiskProvider _diskProvider;
+        private readonly IHttpProvider _httpProvider;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public MetadataService(IMetadataFactory metadataFactory,
@@ -28,6 +37,9 @@ namespace NzbDrone.Core.Metadata
                                ICleanMetadataService cleanMetadataService,
                                IMediaFileService mediaFileService,
                                IEpisodeService episodeService,
+                               IDiskProvider diskProvider,
+                               IHttpProvider httpProvider,
+                               IEventAggregator eventAggregator,
                                Logger logger)
         {
             _metadataFactory = metadataFactory;
@@ -35,17 +47,41 @@ namespace NzbDrone.Core.Metadata
             _cleanMetadataService = cleanMetadataService;
             _mediaFileService = mediaFileService;
             _episodeService = episodeService;
+            _diskProvider = diskProvider;
+            _httpProvider = httpProvider;
+            _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
         public void Handle(MediaCoversUpdatedEvent message)
         {
             _cleanMetadataService.Clean(message.Series);
-            var seriesMetadata = _metadataFileService.GetFilesBySeries(message.Series.Id);
+
+            if (!_diskProvider.FolderExists(message.Series.Path))
+            {
+                _logger.Info("Series folder does not exist, skipping metadata creation");
+                return;
+            }
+
+            var seriesMetadataFiles = _metadataFileService.GetFilesBySeries(message.Series.Id);
+            var episodeFiles = GetEpisodeFiles(message.Series.Id);
 
             foreach (var consumer in _metadataFactory.Enabled())
             {
-                consumer.OnSeriesUpdated(message.Series, GetMetadataFilesForConsumer(consumer, seriesMetadata), GetEpisodeFiles(message.Series.Id));
+                var consumerFiles = GetMetadataFilesForConsumer(consumer, seriesMetadataFiles);
+                var files = new List<MetadataFile>();
+
+                files.AddIfNotNull(ProcessSeriesMetadata(consumer, message.Series, consumerFiles));
+                files.AddRange(ProcessSeriesImages(consumer, message.Series, consumerFiles));
+                files.AddRange(ProcessSeasonImages(consumer, message.Series, consumerFiles));
+
+                foreach (var episodeFile in episodeFiles)
+                {
+                    files.AddIfNotNull(ProcessEpisodeMetadata(consumer, message.Series, episodeFile, consumerFiles));
+                    files.AddRange(ProcessEpisodeImages(consumer, message.Series, episodeFile, consumerFiles));
+                }
+
+                _eventAggregator.PublishEvent(new MetadataFilesUpdated(files));
             }
         }
 
@@ -53,17 +89,27 @@ namespace NzbDrone.Core.Metadata
         {
             foreach (var consumer in _metadataFactory.Enabled())
             {
-                consumer.OnEpisodeImport(message.EpisodeInfo.Series, message.ImportedEpisode, message.NewDownload);
+                var files = new List<MetadataFile>();
+
+                files.AddIfNotNull(ProcessEpisodeMetadata(consumer, message.EpisodeInfo.Series, message.ImportedEpisode, new List<MetadataFile>()));
+                files.AddRange(ProcessEpisodeImages(consumer, message.EpisodeInfo.Series, message.ImportedEpisode, new List<MetadataFile>()));
+
+                _eventAggregator.PublishEvent(new MetadataFilesUpdated(files));
             }
         }
 
         public void Handle(SeriesRenamedEvent message)
         {
             var seriesMetadata = _metadataFileService.GetFilesBySeries(message.Series.Id);
+            var episodeFiles = GetEpisodeFiles(message.Series.Id);
 
             foreach (var consumer in _metadataFactory.Enabled())
             {
-                consumer.AfterRename(message.Series, GetMetadataFilesForConsumer(consumer, seriesMetadata), GetEpisodeFiles(message.Series.Id));
+                var updatedMetadataFiles = consumer.AfterRename(message.Series,
+                                                                GetMetadataFilesForConsumer(consumer, seriesMetadata),
+                                                                episodeFiles);
+
+                _eventAggregator.PublishEvent(new MetadataFilesUpdated(updatedMetadataFiles));
             }
         }
 
@@ -84,6 +130,220 @@ namespace NzbDrone.Core.Metadata
         private List<MetadataFile> GetMetadataFilesForConsumer(IMetadata consumer, List<MetadataFile> seriesMetadata)
         {
             return seriesMetadata.Where(c => c.Consumer == consumer.GetType().Name).ToList();
+        }
+
+        private MetadataFile ProcessSeriesMetadata(IMetadata consumer, Series series, List<MetadataFile> existingMetadataFiles)
+        {
+            var seriesMetadata = consumer.SeriesMetadata(series);
+
+            if (seriesMetadata == null)
+            {
+                return null;
+            }
+
+            var hash = seriesMetadata.Contents.SHA256Hash();
+
+            var metadata = existingMetadataFiles.SingleOrDefault(e => e.Type == MetadataType.SeriesMetadata) ??
+                               new MetadataFile
+                               {
+                                   SeriesId = series.Id,
+                                   Consumer = GetType().Name,
+                                   Type = MetadataType.SeriesMetadata,
+                               };
+
+            if (hash == metadata.Hash)
+            {
+                return null;
+            }
+
+            _logger.Debug("Writing Series Metadata to: {0}", seriesMetadata.Path);
+            _diskProvider.WriteAllText(seriesMetadata.Path, seriesMetadata.Contents);
+
+            metadata.Hash = hash;
+            metadata.RelativePath = DiskProviderBase.GetRelativePath(series.Path, seriesMetadata.Path);
+
+            return metadata;
+        }
+
+        private MetadataFile ProcessEpisodeMetadata(IMetadata consumer, Series series, EpisodeFile episodeFile, List<MetadataFile> existingMetadataFiles)
+        {
+            var episodeMetadata = consumer.EpisodeMetadata(series, episodeFile);
+
+            if (episodeMetadata == null)
+            {
+                return null;
+            }
+
+            var relativePath = DiskProviderBase.GetRelativePath(series.Path, episodeMetadata.Path);
+
+            var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeMetadata &&
+                                                                              c.EpisodeFileId == episodeFile.Id);
+
+            if (existingMetadata != null)
+            {
+                var fullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
+                if (!episodeMetadata.Path.PathEquals(fullPath))
+                {
+                    _diskProvider.MoveFile(fullPath, episodeMetadata.Path);
+                    existingMetadata.RelativePath = relativePath;
+                }
+            }
+
+            var hash = episodeMetadata.Contents.SHA256Hash();
+
+            var metadata = existingMetadata ??
+                           new MetadataFile
+                           {
+                               SeriesId = series.Id,
+                               EpisodeFileId = episodeFile.Id,
+                               Consumer = GetType().Name,
+                               Type = MetadataType.EpisodeMetadata,
+                               RelativePath = relativePath
+                           };
+
+            if (hash == metadata.Hash)
+            {
+                return null;
+            }
+
+            _logger.Debug("Writing Episode Metadata to: {0}", episodeMetadata.Path);
+            _diskProvider.WriteAllText(episodeMetadata.Path, episodeMetadata.Contents);
+
+            metadata.Hash = hash;
+
+            return metadata;
+        }
+
+        private List<MetadataFile> ProcessSeriesImages(IMetadata consumer, Series series, List<MetadataFile> existingMetadataFiles)
+        {
+            var result = new List<MetadataFile>();
+
+            foreach (var image in consumer.SeriesImages(series))
+            {
+                if (_diskProvider.FileExists(image.Path))
+                {
+                    _logger.Debug("Series image already exists: {0}", image.Path);
+                    continue;
+                }
+
+                var relativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path);
+
+                var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage &&
+                                                                          c.RelativePath == relativePath) ??
+                               new MetadataFile
+                               {
+                                   SeriesId = series.Id,
+                                   Consumer = GetType().Name,
+                                   Type = MetadataType.SeriesImage,
+                                   RelativePath = relativePath
+                               };
+
+                _diskProvider.CopyFile(image.Url, image.Path);
+
+                result.Add(metadata);
+            }
+
+            return result;
+        }
+
+        private List<MetadataFile> ProcessSeasonImages(IMetadata consumer, Series series, List<MetadataFile> existingMetadataFiles)
+        {
+            var result = new List<MetadataFile>();
+
+            foreach (var season in series.Seasons)
+            {
+                foreach (var image in consumer.SeasonImages(series, season))
+                {
+                    if (_diskProvider.FileExists(image.Path))
+                    {
+                        _logger.Debug("Season image already exists: {0}", image.Path);
+                        continue;
+                    }
+
+                    var relativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path);
+
+                    var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeasonImage &&
+                                                                            c.SeasonNumber == season.SeasonNumber &&
+                                                                            c.RelativePath == relativePath) ??
+                                new MetadataFile
+                                {
+                                    SeriesId = series.Id,
+                                    SeasonNumber = season.SeasonNumber,
+                                    Consumer = GetType().Name,
+                                    Type = MetadataType.SeasonImage,
+                                    RelativePath = relativePath
+                                };
+
+                    DownloadImage(series, image.Url, image.Path);
+
+                    result.Add(metadata);
+                }
+            }
+
+            return result;
+        }
+
+        private List<MetadataFile> ProcessEpisodeImages(IMetadata consumer, Series series, EpisodeFile episodeFile, List<MetadataFile> existingMetadataFiles)
+        {
+            var result = new List<MetadataFile>();
+
+            foreach (var image in consumer.EpisodeImages(series, episodeFile))
+            {
+                if (_diskProvider.FileExists(image.Path))
+                {
+                    _logger.Debug("Episode image already exists: {0}", image.Path);
+                    continue;
+                }
+
+                var relativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path);
+
+                var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
+                                                                                  c.EpisodeFileId == episodeFile.Id);
+
+                if (existingMetadata != null)
+                {
+                    var fullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
+                    if (!image.Path.PathEquals(fullPath))
+                    {
+                        _diskProvider.MoveFile(fullPath, image.Path);
+                        existingMetadata.RelativePath = relativePath;
+
+                        return new List<MetadataFile>{ existingMetadata };
+                    }
+                }
+
+                var metadata = existingMetadata ??
+                               new MetadataFile
+                               {
+                                   SeriesId = series.Id,
+                                   EpisodeFileId = episodeFile.Id,
+                                   Consumer = GetType().Name,
+                                   Type = MetadataType.EpisodeImage,
+                                   RelativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path)
+                               };
+
+                DownloadImage(series, image.Url, image.Path);
+
+                result.Add(metadata);
+            }
+
+            return result;
+        }
+
+        private void DownloadImage(Series series, string url, string path)
+        {
+            try
+            {
+                _httpProvider.DownloadFile(url, path);
+            }
+            catch (WebException e)
+            {
+                _logger.Warn(string.Format("Couldn't download image {0} for {1}. {2}", url, series, e.Message));
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("Couldn't download image " + url + " for " + series, e);
+            }
         }
     }
 }
