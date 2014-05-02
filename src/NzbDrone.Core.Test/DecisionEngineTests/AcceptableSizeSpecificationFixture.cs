@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                         Series = series,
                                         Release = new ReleaseInfo(),
                                         ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, true) },
-                                        Episodes = new List<Episode> { new Episode() }
+                                        Episodes = new List<Episode> { new Episode() { Id = 2 } }
 
                                     };
 
@@ -59,13 +59,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Build();
 
             Mocker.GetMock<IQualityDefinitionService>().Setup(s => s.Get(Quality.SDTV)).Returns(qualityType);
+
+            Mocker.GetMock<IEpisodeService>().Setup(
+                s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(new List<Episode>() {
+                    new Episode(), new Episode(), new Episode(), new Episode(), new Episode(),
+                    new Episode(), new Episode(), new Episode(), new Episode() { Id = 2 }, new Episode() });
         }
 
         private void GivenLastEpisode()
         {
             Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(true);
+                s => s.GetEpisodesBySeason(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(new List<Episode>() {
+                    new Episode(), new Episode(), new Episode(), new Episode(), new Episode(),
+                    new Episode(), new Episode(), new Episode(), new Episode(), new Episode() { Id = 2 } });
         }
 
         [TestCase(30, 50, false)]
@@ -110,10 +118,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultMulti.Series = series;
             parseResultMulti.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(false);
-
             Subject.IsSatisfiedBy(parseResultMulti, null).Should().Be(expectedResult);
         }
 
@@ -128,10 +132,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             series.Runtime = runtime;
             parseResultMultiSet.Series = series;
             parseResultMultiSet.Release.Size = sizeInMegaBytes.Megabytes();
-
-            Mocker.GetMock<IEpisodeService>().Setup(
-                s => s.IsFirstOrLastEpisodeOfSeason(It.IsAny<int>()))
-                .Returns(false);
 
             Subject.IsSatisfiedBy(parseResultMultiSet, null).Should().Be(expectedResult);
         }
