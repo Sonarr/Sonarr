@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
                            };
 
             //Series and season images are both named folder.jpg, only season ones sit in season folders
-            if (String.Compare(filename, parentdir.Name, true) == 0)
+            if (String.Compare(filename, parentdir.Name, StringComparison.InvariantCultureIgnoreCase) == 0)
             {
                 var seasonMatch = SeasonImagesRegex.Match(parentdir.Name);
                 if (seasonMatch.Success)
@@ -128,16 +128,22 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
             if (parseResult != null &&
                 !parseResult.FullSeason)
             {
-                switch (Path.GetExtension(filename).ToLowerInvariant())
+                var extension = Path.GetExtension(filename).ToLowerInvariant();
+
+                if (extension == ".xml")
                 {
-                    case ".xml":
-                        metadata.Type = MetadataType.EpisodeMetadata;
-                        return metadata;
-                    case ".jpg":
+                    metadata.Type = MetadataType.EpisodeMetadata;
+                    return metadata;
+                }
+
+                if (extension == ".jpg")
+                {
+                    if (!Path.GetFileNameWithoutExtension(filename).EndsWith("-thumb"))
+                    {
                         metadata.Type = MetadataType.EpisodeImage;
                         return metadata;
-                }
-                
+                    }
+                }                
             }
 
             return null;

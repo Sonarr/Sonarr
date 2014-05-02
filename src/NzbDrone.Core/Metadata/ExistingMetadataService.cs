@@ -5,14 +5,14 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Metadata
 {
-    public class ExistingMetadataService : IHandle<SeriesUpdatedEvent>
+    public class ExistingMetadataService : IHandle<SeriesScannedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMetadataFileService _metadataFileService;
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Metadata
             _consumers = consumers.ToList();
         }
 
-        public void Handle(SeriesUpdatedEvent message)
+        public void Handle(SeriesScannedEvent message)
         {
             if (!_diskProvider.FolderExists(message.Series.Path)) return;
 

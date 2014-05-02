@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Metadata
                                new MetadataFile
                                {
                                    SeriesId = series.Id,
-                                   Consumer = GetType().Name,
+                                   Consumer = consumer.GetType().Name,
                                    Type = MetadataType.SeriesMetadata,
                                };
 
@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Metadata
                            {
                                SeriesId = series.Id,
                                EpisodeFileId = episodeFile.Id,
-                               Consumer = GetType().Name,
+                               Consumer = consumer.GetType().Name,
                                Type = MetadataType.EpisodeMetadata,
                                RelativePath = relativePath
                            };
@@ -233,7 +233,7 @@ namespace NzbDrone.Core.Metadata
                                new MetadataFile
                                {
                                    SeriesId = series.Id,
-                                   Consumer = GetType().Name,
+                                   Consumer = consumer.GetType().Name,
                                    Type = MetadataType.SeriesImage,
                                    RelativePath = relativePath
                                };
@@ -269,7 +269,7 @@ namespace NzbDrone.Core.Metadata
                                 {
                                     SeriesId = series.Id,
                                     SeasonNumber = season.SeasonNumber,
-                                    Consumer = GetType().Name,
+                                    Consumer = consumer.GetType().Name,
                                     Type = MetadataType.SeasonImage,
                                     RelativePath = relativePath
                                 };
@@ -317,7 +317,7 @@ namespace NzbDrone.Core.Metadata
                                {
                                    SeriesId = series.Id,
                                    EpisodeFileId = episodeFile.Id,
-                                   Consumer = GetType().Name,
+                                   Consumer = consumer.GetType().Name,
                                    Type = MetadataType.EpisodeImage,
                                    RelativePath = DiskProviderBase.GetRelativePath(series.Path, image.Path)
                                };
