@@ -110,7 +110,7 @@ namespace NzbDrone.Core.MediaFiles
                 var baseFilename = Path.GetFileNameWithoutExtension(episodeFile.Path);
                 var sourceGlob = Path.ChangeExtension(baseFilename, "*");
                 var sourceDir = Path.GetDirectoryName(episodeFile.Path);
-                var allFiles = _diskProvider.GetFiles(sourceDir, sourceGlob);
+                var allFiles = Directory.GetFiles(sourceDir, sourceGlob);
                 foreach (var relatedFile in allFiles)
                 {
                     var relatedDestinationFilename = Path.ChangeExtension(destinationFilename, Path.GetExtension(relatedFile));
