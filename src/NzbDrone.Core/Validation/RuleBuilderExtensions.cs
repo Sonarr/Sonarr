@@ -26,5 +26,10 @@ namespace NzbDrone.Core.Validation
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
             return ruleBuilder.SetValidator(new RegularExpressionValidator("^http(?:s)?://[a-z0-9-.]+", RegexOptions.IgnoreCase)).WithMessage("must be valid URL that");
         }
+
+        public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new InclusiveBetweenValidator(0, 65535));
+        }
     }
 }
