@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Core.Configuration;
 
@@ -13,6 +14,7 @@ namespace NzbDrone.Host.AccessControl
     public class SslAdapter : ISslAdapter
     {
         private const string APP_ID = "C2172AF4-F9A6-4D91-BAEE-C2E4EE680613";
+        private static readonly Regex CertificateHashRegex = new Regex(@"^\s+(?:Certificate Hash\s+:\s+)(?<hash>\w+)", RegexOptions.Compiled);
 
         private readonly INetshProvider _netshProvider;
         private readonly IConfigFileProvider _configFileProvider;
@@ -54,7 +56,32 @@ namespace NzbDrone.Host.AccessControl
 
             if (output == null || !output.Standard.Any()) return false;
 
+            var hashLine = output.Standard.SingleOrDefault(line => CertificateHashRegex.IsMatch(line));
+
+            if (hashLine != null)
+            {
+                var match = CertificateHashRegex.Match(hashLine);
+
+                if (match.Success)
+                {
+                    if (match.Groups["hash"].Value != _configFileProvider.SslCertHash)
+                    {
+                        Unregister();
+
+                        return false;
+                    }
+                }
+            }
+
             return output.Standard.Any(line => line.Contains(ipPort));
+        }
+
+        private void Unregister()
+        {
+            var ipPort = "0.0.0.0:" + _configFileProvider.SslPort;
+            var arguments = String.Format("http delete sslcert ipport={0}", ipPort);
+
+            _netshProvider.Run(arguments);
         }
     }
 }
