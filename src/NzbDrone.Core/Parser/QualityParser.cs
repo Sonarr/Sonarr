@@ -111,9 +111,27 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
-            if (sourceMatch.Groups["dvd"].Success ||
-                sourceMatch.Groups["bdrip"].Success ||
+            if (sourceMatch.Groups["bdrip"].Success ||
                 sourceMatch.Groups["brrip"].Success)
+            {
+                if (resolution == Resolution._720p)
+                {
+                    result.Quality = Quality.Bluray720p;
+                    return result;
+                }
+                else if (resolution == Resolution._1080p)
+                {
+                    result.Quality = Quality.Bluray1080p;
+                    return result;
+                }
+                else
+                {
+                    result.Quality = Quality.DVD;
+                    return result;
+                }
+            }
+
+            if (sourceMatch.Groups["dvd"].Success)
             {
                 result.Quality = Quality.DVD;
                 return result;
