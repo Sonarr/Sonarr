@@ -1,4 +1,4 @@
-/*! messenger 1.3.6 */
+/*! messenger 1.4.1 */
 /*
  * This file begins the output concatenated into messenger.js
  *
@@ -331,11 +331,11 @@ window.Messenger.Events = (function() {
 
     BaseView.prototype.delegateEvents = function(events) {
       var delegateEventSplitter, eventName, key, match, method, selector, _results;
-      if (!(events || (events = _.result(this, 'events')))) {
+      if (!(events || (events = _.result(this, "events")))) {
         return;
       }
-      delegateEventSplitter = /^(\S+)\s*(.*)$/;
       this.undelegateEvents();
+      delegateEventSplitter = /^(\S+)\s*(.*)$/;
       _results = [];
       for (key in events) {
         method = events[key];
@@ -343,7 +343,7 @@ window.Messenger.Events = (function() {
           method = this[events[key]];
         }
         if (!method) {
-          throw new Error("Method " + events[key] + " does not exist");
+          throw new Error("Method \"" + events[key] + "\" does not exist");
         }
         match = key.match(delegateEventSplitter);
         eventName = match[1];
@@ -409,7 +409,8 @@ window.Messenger.Events = (function() {
 
     _Message.prototype.defaults = {
       hideAfter: 10,
-      scroll: true
+      scroll: true,
+      closeButtonText: "&times;"
     };
 
     _Message.prototype.initialize = function(opts) {
@@ -574,7 +575,8 @@ window.Messenger.Events = (function() {
         _this = this;
       $message = $("<div class='messenger-message message alert " + opts.type + " message-" + opts.type + " alert-" + opts.type + "'>");
       if (opts.showCloseButton) {
-        $cancel = $('<button type="button" class="close" data-dismiss="alert">&times;</button>');
+        $cancel = $('<button type="button" class="messenger-close" data-dismiss="alert">');
+        $cancel.html(opts.closeButtonText);
         $cancel.click(function() {
           _this.cancel();
           return true;
@@ -992,7 +994,7 @@ window.Messenger.Events = (function() {
     };
 
     ActionMessenger.prototype.run = function() {
-      var args, attr, events, getMessageText, handler, handlers, m_opts, msg, old, opts, promiseAttrs, type, _i, _len, _ref2, _ref3,
+      var args, events, getMessageText, handler, handlers, m_opts, msg, old, opts, type, _ref2,
         _this = this;
       m_opts = arguments[0], opts = arguments[1], args = 3 <= arguments.length ? __slice.call(arguments, 2) : [];
       if (opts == null) {
@@ -1101,7 +1103,9 @@ window.Messenger.Events = (function() {
           }
           msg.update(msgOpts);
           if (responseOpts && msgOpts.message) {
-            Messenger();
+            Messenger(_.extend({}, _this.options, {
+              instance: _this
+            }));
             return msg.show();
           } else {
             return msg.hide();
@@ -1118,14 +1122,6 @@ window.Messenger.Events = (function() {
       msg._actionInstance = m_opts.action.apply(m_opts, [opts].concat(__slice.call(args)));
       if (m_opts.returnsPromise) {
         msg._actionInstance.then(handlers.success, handlers.error);
-      }
-      promiseAttrs = ['done', 'progress', 'fail', 'state', 'then'];
-      for (_i = 0, _len = promiseAttrs.length; _i < _len; _i++) {
-        attr = promiseAttrs[_i];
-        if (msg[attr] != null) {
-          delete msg[attr];
-        }
-        msg[attr] = (_ref3 = msg._actionInstance) != null ? _ref3[attr] : void 0;
       }
       return msg;
     };
@@ -1145,6 +1141,45 @@ window.Messenger.Events = (function() {
         returnsPromise: true
       });
       return this.run(m_opts);
+    };
+
+    ActionMessenger.prototype.error = function(m_opts) {
+      if (m_opts == null) {
+        m_opts = {};
+      }
+      if (typeof m_opts === 'string') {
+        m_opts = {
+          message: m_opts
+        };
+      }
+      m_opts.type = 'error';
+      return this.post(m_opts);
+    };
+
+    ActionMessenger.prototype.info = function(m_opts) {
+      if (m_opts == null) {
+        m_opts = {};
+      }
+      if (typeof m_opts === 'string') {
+        m_opts = {
+          message: m_opts
+        };
+      }
+      m_opts.type = 'info';
+      return this.post(m_opts);
+    };
+
+    ActionMessenger.prototype.success = function(m_opts) {
+      if (m_opts == null) {
+        m_opts = {};
+      }
+      if (typeof m_opts === 'string') {
+        m_opts = {
+          message: m_opts
+        };
+      }
+      m_opts.type = 'success';
+      return this.post(m_opts);
     };
 
     return ActionMessenger;
@@ -1204,7 +1239,7 @@ window.Messenger.Events = (function() {
         inst = $el.messenger(opts);
         inst._location = chosen_loc;
         Messenger.instance = inst;
-      } else if ($(inst._location) !== $(chosen_loc)) {
+      } else if (!$(inst._location).is($(chosen_loc))) {
         inst.$el.detach();
         $parent.prepend(inst.$el);
       }

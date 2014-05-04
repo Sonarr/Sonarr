@@ -1,11 +1,12 @@
 'use strict';
 define(
     [
-        'backbone',
+        'underscore',
         'jquery',
+        'backbone',
         'Series/SeriesCollection',
         'typeahead'
-    ], function (Backbone, $, SeriesCollection) {
+    ], function (_, $, Backbone, SeriesCollection) {
         $(document).on('keydown', function (e) {
             if ($(e.target).is('input') || $(e.target).is('textarea')) {
                 return;
@@ -23,20 +24,33 @@ define(
 
         $.fn.bindSearch = function () {
             $(this).typeahead({
-                source: function () {
-                    return SeriesCollection.pluck('title');
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
                 },
+                {
+                    name: 'series',
+                    displayKey: 'title',
+                    source: substringMatcher()
+                });
 
-                sorter: function (items) {
-                    return items.sort();
-                },
-
-                updater: function (item) {
-                    var series = SeriesCollection.findWhere({ title: item });
-
-                    this.$element.blur();
-                    Backbone.history.navigate('/series/{0}'.format(series.get('titleSlug')), { trigger: true });
-                }
+            $(this).on('typeahead:selected typeahead:autocompleted', function (e, series) {
+                this.blur();
+                $(this).val('');
+                Backbone.history.navigate('/series/{0}'.format(series.titleSlug), { trigger: true });
             });
+        };
+
+        var substringMatcher = function() {
+            return function findMatches(q, cb) {
+                // regex used to determine if a string contains the substring `q`
+                var substrRegex = new RegExp(q, 'i');
+
+                var matches = _.select(SeriesCollection.toJSON(), function (series) {
+                    return substrRegex.test(series.title);
+                });
+
+                cb(matches);
+            };
         };
     });

@@ -99,7 +99,7 @@
         left       : 0px;
         width      : 170px;
 
-        .progressbar-front-text {
+        .progressbar-front-text, .progressbar-back-text {
           width : 170px;
         }
       }
@@ -121,6 +121,26 @@
 
       .tooltip {
         .opacity(1);
+      }
+    }
+
+    @media (max-width: @screen-xs-max) {
+      height  : 235px;
+      margin  : 5px;
+      padding : 6px 5px;
+
+      .center {
+        .progress {
+          width : 125px;
+
+          .progressbar-front-text, .progressbar-back-text {
+            width : 125px
+          }
+        }
+      }
+
+      .labels {
+        width: 125px;
       }
     }
   }
@@ -180,6 +200,18 @@
       font-size   : 34px;
       line-height : 34px;
     }
+
+    @media (max-width: @screen-xs-max) {
+      .series-poster {
+        width       : 120px;
+        height      : 176px;
+      }
+
+      .ended-banner {
+        top  : 145px;
+        left : -137px;
+      }
+    }
   }
 }
 
@@ -218,12 +250,6 @@
   .episode-file-info {
     margin-top : 30px;
     font-size  : 12px;
-  }
-
-  .search-buttons {
-    width        : 400px;
-    margin-left  : auto;
-    margin-right : auto;
   }
 }
 
@@ -310,24 +336,22 @@
   }
 }
 
+//Overview List
+.series-overview-list-actions {
+  min-width: 56px;
+  max-width: 56px;
+}
+
 //Editor
 
 .series-editor-footer {
-  width: 1160px;
+  max-width: 1160px;
   color: #f5f5f5;
   margin-left: auto;
   margin-right: auto;
 
-  .selected-count {
-    margin-right: 10px;
-  }
-
-  .row {
-    margin-left: -40px;
-  }
-
-  .col-md-2 {
-    width: 160px;
+  .form-group {
+    padding-top: 0px;
   }
 }
 
@@ -346,6 +370,19 @@
 
     i {
       cursor: not-allowed;
+    }
+  }
+}
+
+.series-info {
+  .row {
+    margin-bottom: 5px;
+  }
+
+  .series-info-links {
+    @media (max-width: @screen-sm-max) {
+      display    : inline-block;
+      margin-top : 5px;
     }
   }
 }

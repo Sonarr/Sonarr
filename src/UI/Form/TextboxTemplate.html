@@ -1,8 +1,8 @@
 <div class="form-group">
-    <label class="control-label">{{label}}</label>
+    <label class="col-sm-3 control-label">{{label}}</label>
 
-    <div class="controls">
-        <input type="text" name="fields.{{order}}.value" validation-name="{{name}}" spellcheck="false"/>
-        {{> FormHelpPartial}}
+    <div class="col-sm-5">
+        <input type="text" name="fields.{{order}}.value" validation-name="{{name}}" spellcheck="false" class="form-control"/>
     </div>
+    {{> FormHelpPartial}}
 </div>

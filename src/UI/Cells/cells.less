@@ -16,6 +16,10 @@
 .episode-title-cell {
   .btn-link;
   .text-overflow();
+
+  &:hover {
+    text-transform: none;
+  }
 }
 
 .air-date-cell {
@@ -88,7 +92,7 @@ td.episode-status-cell, td.quality-cell {
 }
 
 .episode-actions-cell {
-  width: 50px;
+  width: 65px;
 
   li {
     .clickable();
@@ -110,12 +114,13 @@ td.episode-status-cell, td.quality-cell {
 }
 
 .series-actions-cell {
-  width: 56px;
+  width     : 56px;
+  min-width : 56px;
 }
 
 .timeleft-cell {
-  cursor: default;
-  width: 80px;
+  cursor : default;
+  width  : 80px;
 }
 
 .queue-status-cell {

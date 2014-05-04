@@ -27,7 +27,6 @@ define(
                 this.model.set('qualityProfiles', QualityProfiles);
             },
 
-
             _saveSeries: function () {
 
                 var self = this;

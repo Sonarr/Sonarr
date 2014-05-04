@@ -2,6 +2,7 @@
 
 define(
     [
+        'jquery',
         'vent',
         'marionette',
         'moment',
@@ -12,7 +13,7 @@ define(
         'Mixins/backbone.signalr.mixin',
         'fullcalendar',
         'jquery.easypiechart'
-    ], function (vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config) {
+    ], function ($, vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config) {
 
         return Marionette.ItemView.extend({
             storageKey: 'calendar.view',
@@ -24,28 +25,7 @@ define(
             },
 
             render    : function () {
-                this.$el.empty().fullCalendar({
-                    defaultView   : Config.getValue(this.storageKey, 'basicWeek'),
-                    allDayDefault : false,
-                    ignoreTimezone: false,
-                    weekMode      : 'variable',
-                    firstDay      : StatusModel.get('startOfWeek'),
-                    timeFormat    : 'h(:mm)tt',
-                    header        : {
-                        left  : 'prev,next today',
-                        center: 'title',
-                        right : 'month,basicWeek,basicDay'
-                    },
-                    buttonText    : {
-                        prev: '<i class="icon-arrow-left"></i>',
-                        next: '<i class="icon-arrow-right"></i>'
-                    },
-                    viewRender    : this._viewRender.bind(this),
-                    eventRender   : this._eventRender.bind(this),
-                    eventClick    : function (event) {
-                        vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
-                    }
-                });
+                this.$el.empty().fullCalendar(this._getOptions());
             },
 
             onShow: function () {
@@ -178,6 +158,59 @@ define(
                 }
 
                 return downloading.get('title');
+            },
+
+            _getOptions: function () {
+                var options = {
+                    allDayDefault : false,
+                    ignoreTimezone: false,
+                    weekMode      : 'variable',
+                    firstDay      : StatusModel.get('startOfWeek'),
+                    timeFormat    : 'h(:mm)tt',
+                    buttonText    : {
+                        prev: '<i class="icon-arrow-left"></i>',
+                        next: '<i class="icon-arrow-right"></i>'
+                    },
+                    viewRender    : this._viewRender.bind(this),
+                    eventRender   : this._eventRender.bind(this),
+                    eventClick    : function (event) {
+                        vent.trigger(vent.Commands.ShowEpisodeDetails, {episode: event.model});
+                    }
+                };
+
+                if ($(window).width() < 768) {
+                    options.defaultView = Config.getValue(this.storageKey, 'basicDay');
+
+                    options.titleFormat = {
+                        month: 'MMM yyyy',                             // September 2009
+                        week: 'MMM d[ yyyy]{ \'&#8212;\'[ MMM] d yyyy}', // Sep 7 - 13 2009
+                        day: 'ddd, MMM d, yyyy'                  // Tuesday, Sep 8, 2009
+                    };
+
+                    options.header = {
+                        left  : 'prev,next today',
+                        center: 'title',
+                        right : 'basicWeek,basicDay'
+                    };
+                }
+
+                else {
+                    options.defaultView = Config.getValue(this.storageKey, 'basicWeek');
+
+                    options.titleFormat = {
+                        month: 'MMM yyyy',                             // September 2009
+                        week: 'MMM d[ yyyy]{ \'&#8212;\'[ MMM] d yyyy}', // Sep 7 - 13 2009
+                        day: 'dddd, MMM d, yyyy'                  // Tues, Sep 8, 2009
+                    };
+
+                    options.header = {
+                        left  : 'prev,next today',
+                        center: 'title',
+                        right : 'month,basicWeek,basicDay'
+                    };
+                }
+
+                return options;
             }
         });
     });

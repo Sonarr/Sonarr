@@ -3,7 +3,7 @@
 @import "Bootstrap/type";
 @import "font";
 @import "form";
-@import "menu";
+@import "navbar";
 @import "Backgrid/backgrid";
 @import "prefixer";
 @import "icons";
@@ -14,6 +14,15 @@
 @import "../Shared/Styles/clickable";
 @import "../Shared/Styles/card";
 @import "../Rename/rename";
+@import "typeahead";
+@import "utilities";
+
+.main-region {
+  @media (min-width: @screen-lg-min) {
+    padding-left  : 30px;
+    padding-right : 30px;
+  }
+}
 
 .toolbar {
 
@@ -150,8 +159,9 @@ body {
   min-width  : 1210px; */
   max-width  : 1210px;
   margin     : auto;
-  margin-top : -70px;
+//  margin-top : -70px;
   padding    : 20px 0px;
+
   .header {
     padding-bottom : 10px;
     margin-bottom  : 20px;
@@ -186,12 +196,6 @@ body {
   color : @state-danger-text;
 }
 
-.form-inline {
-  div {
-    display : inline-block;
-  }
-}
-
 .error {
   background: #FF0000;
 }
@@ -219,6 +223,17 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 55px;
+  height: 80px;
   opacity: 0;
+
+  @media (max-width: @screen-sm-max) {
+    height: initial;
+    position: static;
+  }
+}
+
+.tab-content {
+  .tab-pane {
+    padding-top: 10px;
+  }
 }

@@ -1,26 +1,28 @@
-﻿<fieldset">
+﻿<fieldset>
     <legend>Options</legend>
     <div class="form-group">
-        <label class="control-label">Drone Factory</label>
+        <label class="col-sm-3 control-label">Drone Factory</label>
 
-        <div class="controls">
-            <input type="text" name="downloadedEpisodesFolder" class="x-path"/>
-            <span class="help-inline">
-                <i class="icon-nd-form-info" title="The folder where your download client downloads TV shows to (Completed Download Directory)"/>
-                <i class="icon-nd-form-warning" title="Do not use the folder that contains some or all of your sorted and named TV shows - doing so could cause data loss"></i>
-            </span>
+        <div class="col-sm-1 col-sm-push-8 help-inline">
+            <i class="icon-nd-form-info" title="The folder where your download client downloads TV shows to (Completed Download Directory)"/>
+            <i class="icon-nd-form-warning" title="Do not use the folder that contains some or all of your sorted and named TV shows - doing so could cause data loss"></i>
+        </div>
+
+        <div class="col-sm-8 col-sm-pull-1">
+            <input type="text" name="downloadedEpisodesFolder" class="form-control x-path" />
         </div>
     </div>
 
     <div class="form-group advanced-setting">
-        <label class="control-label">Drone Factory Interval</label>
+        <label class="col-sm-3 control-label">Drone Factory Interval</label>
 
-        <div class="controls">
-            <input type="number" name="downloadedEpisodesScanInterval"/>
-                <span class="help-inline">
-                    <i class="icon-nd-form-info" title="Interval in minutes to scan the Drone Factory. Set to zero to disable."/>
-                    <i class="icon-nd-form-warning" title="Setting a high interval or disabling scanning will prevent episodes from being imported."></i>
-                </span>
+        <div class="col-sm-1 col-sm-push-2 help-inline">
+            <i class="icon-nd-form-info" title="Interval in minutes to scan the Drone Factory. Set to zero to disable."/>
+            <i class="icon-nd-form-warning" title="Setting a high interval or disabling scanning will prevent episodes from being imported."></i>
+        </div>
+
+        <div class="col-sm-2 col-sm-pull-1">
+            <input type="number" name="downloadedEpisodesScanInterval" class="form-control" />
         </div>
     </div>
 </fieldset>

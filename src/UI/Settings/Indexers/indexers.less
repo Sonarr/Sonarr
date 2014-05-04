@@ -1,16 +1,29 @@
 .indexer-settings-item {
 
   width: 220px;
-  height: 260px;
+  height: 295px;
   padding: 10px 15px;
 
   h3 {
-    width: 190px;
+    width: 175px;
+    overflow: visible;
   }
 
   &.add-card {
+    margin-top: 10px;
+    margin-left: 10px;
+
     .center {
-      margin-top: 100px;
+      margin-top: 90px;
     }
+  }
+
+  /* Super hack to keep using form builder, this should be dead when we do proper modals for editing */
+  .col-sm-1, .col-sm-3, .col-sm-5 {
+    display : block;
+    width   : 100%;
+    padding: 0px;
+    float: none;
+    position: inherit;
   }
 }

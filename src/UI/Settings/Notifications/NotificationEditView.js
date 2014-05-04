@@ -67,8 +67,9 @@ define(
             _cancel: function () {
                 if (this.model.isNew()) {
                     this.model.destroy();
-                    vent.trigger(vent.Commands.CloseModalCommand);
                 }
+
+                vent.trigger(vent.Commands.CloseModalCommand);
             },
 
             _deleteNotification: function () {

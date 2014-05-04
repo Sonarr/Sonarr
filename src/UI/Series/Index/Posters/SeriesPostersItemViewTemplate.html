@@ -2,7 +2,7 @@
     <div class="center">
         <div class="series-poster-container x-series-poster">
             <div class="series-controls">
-                <i class="icon-cog x-edit" title="Edit Series"/>
+                <i class="icon-nd-edit x-edit" title="Edit Series"/>
                 <i class="icon-remove x-remove" title="Delete Series"/>
             </div>
             {{#unless_eq status compare="continuing"}}
@@ -19,7 +19,7 @@
         <div class="labels">
             {{#if_eq status compare="continuing"}}
                 {{#if nextAiring}}
-                    <span class="label label-inverse">{{NextAiring nextAiring}}</span>
+                    <span class="label label-default">{{NextAiring nextAiring}}</span>
                 {{/if}}
             {{/if_eq}}
             {{> EpisodeProgressPartial }}

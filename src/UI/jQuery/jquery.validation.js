@@ -32,14 +32,22 @@ define(
 
             var controlGroup = input.parents('.form-group');
 
-            if(controlGroup.length ===0){
+            if(controlGroup.length === 0) {
                 controlGroup = input.parent();
             }
             else{
-                controlGroup.find('.controls').append('<span class="help-inline error-message">' + error.errorMessage + '</span>');
+                var inputGroup = controlGroup.find('.input-group');
+
+                if (inputGroup.length === 0) {
+                    controlGroup.append('<span class="help-inline error-message">' + error.errorMessage + '</span>');
+                }
+
+                else {
+                    inputGroup.parent().append('<span class="help-block error-message">' + error.errorMessage + '</span>');
+                }
             }
 
-            controlGroup.addClass('error');
+            controlGroup.addClass('has-error');
 
             return controlGroup.find('.help-inline').text();
         };

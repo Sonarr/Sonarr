@@ -51,7 +51,12 @@ require.config({
                 [
                     'jquery'
                 ],
-            exports: 'Messenger'
+            exports: 'Messenger',
+            init : function () {
+                window.Messenger.options = {
+                    theme: 'flat'
+                };
+            }
         },
         signalR               : {
             deps:

@@ -1,12 +1,13 @@
 ﻿{{#if folder.path}}
-<div class="row unmapped-folder-path">
-    <div class="col-md-11">
+<div class="unmapped-folder-path">
+    <div class="col-md-12">
         {{folder.path}}
     </div>
 </div>{{/if}}
-<div class="row x-search-bar">
-    <div class="input-group nz-input-large add-series-search col-md-11">
-        <i class="input-group-addon icon-search"/>
+<div class="x-search-bar">
+    <div class="input-group input-group-lg add-series-search">
+        <span class="input-group-addon"><i class="icon-search"/></span>
+
         {{#if folder}}
         <input type="text" class="form-control x-series-search" value="{{folder.name}}">
         {{else}}

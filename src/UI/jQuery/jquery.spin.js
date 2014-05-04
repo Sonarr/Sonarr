@@ -53,6 +53,7 @@ define(
             if (idleIcon) {
                 icon.addClass(idleIcon);
             }
+
             return this;
         };
     });
