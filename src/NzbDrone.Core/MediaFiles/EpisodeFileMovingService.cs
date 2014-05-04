@@ -52,7 +52,7 @@ namespace NzbDrone.Core.MediaFiles
             var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
-            
+
             return MoveFile(episodeFile, series, episodes, filePath);
         }
 
@@ -62,14 +62,14 @@ namespace NzbDrone.Core.MediaFiles
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
 
             _logger.Debug("Moving episode file: {0} to {1}", episodeFile, filePath);
-            
+
             return MoveFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath);
         }
 
         private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
-            Ensure.That(series,() => series).IsNotNull();
+            Ensure.That(series, () => series).IsNotNull();
             Ensure.That(destinationFilename, () => destinationFilename).IsValidPath();
 
             if (!_diskProvider.FileExists(episodeFile.Path))
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.ErrorException("Unable to create directory: " + directoryName, ex);
                 }
-                
+
                 SetFolderPermissions(directoryName);
 
                 if (!directoryName.PathEquals(series.Path))
@@ -105,6 +105,20 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
             _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+            if (_configService.MoveRelatedFiles)
+            {
+                var baseFilename = Path.GetFileNameWithoutExtension(episodeFile.Path);
+                var sourceGlob = Path.ChangeExtension(baseFilename, "*");
+                var sourceDir = Path.GetDirectoryName(episodeFile.Path);
+                var allFiles = Directory.GetFiles(sourceDir, sourceGlob);
+                foreach (var relatedFile in allFiles)
+                {
+                    var relatedDestinationFilename = Path.ChangeExtension(destinationFilename, Path.GetExtension(relatedFile));
+                    _logger.Debug("Moving related [{0}] > [{1}]", relatedFile, relatedDestinationFilename);
+                    _diskProvider.MoveFile(relatedFile, relatedDestinationFilename);
+                }
+            }
+
             episodeFile.Path = destinationFilename;
 
             _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
