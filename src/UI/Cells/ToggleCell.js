@@ -24,8 +24,8 @@ define(
                 this.$('i').addClass('icon-spinner icon-spin');
 
                 this.model.save().always(function () {
-                        self.render();
-                    });
+                    self.render();
+                });
             },
 
             render: function () {

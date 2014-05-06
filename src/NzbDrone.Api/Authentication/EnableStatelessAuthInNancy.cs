@@ -5,7 +5,6 @@ using Nancy.Bootstrapper;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication
@@ -28,11 +27,9 @@ namespace NzbDrone.Api.Authentication
         {
             Response response = null;
 
-            var authorizationHeader = context.Request.Headers.Authorization;
-            var apiKeyHeader = context.Request.Headers["X-Api-Key"].FirstOrDefault();
-            var apiKey = apiKeyHeader.IsNullOrWhiteSpace() ? authorizationHeader : apiKeyHeader;
+            var apiKey = GetApiKey(context);
 
-            if (context.Request.IsApiRequest() && !ValidApiKey(apiKey))
+            if ((context.Request.IsApiRequest() || context.Request.IsFeedRequest()) && !ValidApiKey(apiKey))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }
@@ -45,6 +42,24 @@ namespace NzbDrone.Api.Authentication
             if (!API_KEY.Equals(apiKey)) return false;
 
             return true;
+        }
+
+        private string GetApiKey(NancyContext context)
+        {
+            var apiKeyHeader = context.Request.Headers["X-Api-Key"].FirstOrDefault();
+            var apiKeyQueryString = context.Request.Query["ApiKey"];
+
+            if (!apiKeyHeader.IsNullOrWhiteSpace())
+            {
+                return apiKeyHeader;
+            }
+
+            if (apiKeyQueryString.HasValue)
+            {
+                return apiKeyQueryString.Value;
+            }
+
+            return context.Request.Headers.Authorization;
         }
     }
 }

@@ -10,6 +10,11 @@ namespace NzbDrone.Api.Extensions
             return request.Path.StartsWith("/api/", StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static bool IsFeedRequest(this Request request)
+        {
+            return request.Path.StartsWith("/feed/", StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsSignalRRequest(this Request request)
         {
             return request.Path.StartsWith("/signalr/", StringComparison.InvariantCultureIgnoreCase);

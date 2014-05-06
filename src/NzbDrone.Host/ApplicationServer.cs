@@ -24,7 +24,6 @@ namespace NzbDrone.Host
         private readonly PriorityMonitor _priorityMonitor;
         private readonly IStartupContext _startupContext;
         private readonly IBrowserService _browserService;
-        private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
 
         public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, 
@@ -33,7 +32,6 @@ namespace NzbDrone.Host
                                       PriorityMonitor priorityMonitor, 
                                       IStartupContext startupContext, 
                                       IBrowserService browserService, 
-                                      IProcessProvider processProvider, 
                                       Logger logger)
         {
             _configFileProvider = configFileProvider;
@@ -42,7 +40,6 @@ namespace NzbDrone.Host
             _priorityMonitor = priorityMonitor;
             _startupContext = startupContext;
             _browserService = browserService;
-            _processProvider = processProvider;
             _logger = logger;
         }
 

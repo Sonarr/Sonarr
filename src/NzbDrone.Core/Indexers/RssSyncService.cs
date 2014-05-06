@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Instrumentation.Extensions;
@@ -11,7 +13,7 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IRssSyncService
     {
-        void Sync();
+        List<DownloadDecision> Sync();
     }
 
     public class RssSyncService : IRssSyncService, IExecute<RssSyncCommand>
@@ -36,7 +38,7 @@ namespace NzbDrone.Core.Indexers
         }
 
 
-        public void Sync()
+        public List<DownloadDecision> Sync()
         {
             _logger.ProgressInfo("Starting RSS Sync");
 
@@ -45,16 +47,18 @@ namespace NzbDrone.Core.Indexers
             var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
             _logger.ProgressInfo("RSS Sync Completed. Reports found: {0}, Reports downloaded: {1}", reports.Count, downloaded.Count());
+
+            return downloaded;
         }
 
         public void Execute(RssSyncCommand message)
         {
-            Sync();
+            var downloaded = Sync();
 
             if (message.LastExecutionTime.HasValue && DateTime.UtcNow.Subtract(message.LastExecutionTime.Value).TotalHours > 3)
             {
                 _logger.Info("RSS Sync hasn't run since: {0}. Searching for any missing episodes since then.", message.LastExecutionTime.Value);
-                _episodeSearchService.MissingEpisodesAiredAfter(message.LastExecutionTime.Value.AddDays(-1));
+                _episodeSearchService.MissingEpisodesAiredAfter(message.LastExecutionTime.Value.AddDays(-1), downloaded.SelectMany(d => d.RemoteEpisode.Episodes).Select(e => e.Id));
             }
         }
     }

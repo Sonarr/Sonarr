@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
-using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Api.Validation
 {

@@ -405,5 +405,35 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "30 Rock" }, _episodeFile)
                    .Should().Be("30 Rock - S06E06 - Part 1");
         }
+
+        [Test]
+        public void should_replace_double_period_with_single_period()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Part 1")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "Chicago P.D." }, _episodeFile)
+                   .Should().Be("Chicago.P.D.S06E06.Part.1");
+        }
+
+        [Test]
+        public void should_replace_triple_period_with_single_period()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            var episode = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "Part 1")
+                            .With(e => e.SeasonNumber = 6)
+                            .With(e => e.EpisodeNumber = 6)
+                            .Build();
+
+            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "Chicago P.D.." }, _episodeFile)
+                   .Should().Be("Chicago.P.D.S06E06.Part.1");
+        }
     }
 }

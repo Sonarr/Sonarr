@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -76,7 +78,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = GetVideoFiles(series.Path).ToList();
+            var mediaFileList = GetVideoFiles(series.Path).Where(file => !file.StartsWith(Path.Combine(series.Path, "EXTRAS"))).ToList();
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 

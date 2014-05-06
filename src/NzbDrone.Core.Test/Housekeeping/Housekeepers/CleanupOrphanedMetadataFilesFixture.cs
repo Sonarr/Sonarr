@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -80,6 +81,44 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Db.Insert(metadataFile);
             Subject.Clean();
             AllStoredModels.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void should_delete_episode_metadata_files_that_have_episodefileid_of_zero()
+        {
+            var series = Builder<Series>.CreateNew()
+                                        .BuildNew();
+
+            Db.Insert(series);
+
+            var metadataFile = Builder<MetadataFile>.CreateNew()
+                                                    .With(m => m.SeriesId = series.Id)
+                                                    .With(m => m.Type = MetadataType.EpisodeMetadata)
+                                                    .With(m => m.EpisodeFileId = 0)
+                                                    .BuildNew();
+
+            Db.Insert(metadataFile);
+            Subject.Clean();
+            AllStoredModels.Should().HaveCount(0);
+        }
+
+        [Test]
+        public void should_delete_episode_image_files_that_have_episodefileid_of_zero()
+        {
+            var series = Builder<Series>.CreateNew()
+                                        .BuildNew();
+
+            Db.Insert(series);
+
+            var metadataFile = Builder<MetadataFile>.CreateNew()
+                                                    .With(m => m.SeriesId = series.Id)
+                                                    .With(m => m.Type = MetadataType.EpisodeImage)
+                                                    .With(m => m.EpisodeFileId = 0)
+                                                    .BuildNew();
+
+            Db.Insert(metadataFile);
+            Subject.Clean();
+            AllStoredModels.Should().HaveCount(0);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes without a title, Single (S01E05, 1x05) AND Multi (S01E04E05, 1x04x05, etc)
-                new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))+(?![\da-z]))",
+                new Regex(@"^(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title Absolute Episode Number [SubGroup] 
-                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:.+?)\[(?<subgroup>.+?)\](?:\.|$)",
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{3}(?!\d+)))+(?:.+?)\[(?<subgroup>.+?)\](?:\.|$)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 103/113 naming
@@ -92,13 +92,25 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                new Regex(@"^(?<title>.+?)(?:(\W|_)+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p)))+(?![\da-z]))\W?(?!\\)",
+                new Regex(@"^(?<title>.+?)(?:(\W|_)+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p)))+)\W?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title Absolute Episode Number
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+e(?<absoluteepisode>\d{2,3}))+",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
+
+        private static readonly Regex[] RejectHashedReleasesRegex = new Regex[]
+            {
+                // Generic match for md5 and mixed-case hashes.
+                new Regex(@"^[0-9a-zA-Z]{32}", RegexOptions.Compiled),
+
+                // Format seen on some NZBGeek releases
+                new Regex(@"^[A-Z]{11}\d{3}$", RegexOptions.Compiled)
+            };
+
+        //Regex to detect whether the title was reversed.
+        private static readonly Regex ReversedTitleRegex = new Regex(@"\.p027\.|\.p0801\.|\.\d{2}E\d{2}S\.", RegexOptions.Compiled);
 
         private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(?<!^)(a|an|the|and|or|of)(?:\b|_))|\W|_",
                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -155,6 +167,17 @@ namespace NzbDrone.Core.Parser
                 if (!ValidateBeforeParsing(title)) return null;
 
                 Logger.Debug("Parsing string '{0}'", title);
+
+                if (ReversedTitleRegex.IsMatch(title))
+                {
+                    var titleWithoutExtension = RemoveFileExtension(title).ToCharArray();
+                    Array.Reverse(titleWithoutExtension);
+
+                    title = new string(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
+
+                    Logger.Debug("Reversed name detected. Converted to '{0}'", title);
+                }
+
                 var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
 
                 foreach (var regex in ReportTitleRegex)
@@ -245,10 +268,9 @@ namespace NzbDrone.Core.Parser
 
             title = title.Trim();
 
-            if (!title.ContainsInvalidPathChars() && MediaFiles.MediaFileExtensions.Extensions.Contains(Path.GetExtension(title).ToLower()))
-            {
-                title = Path.GetFileNameWithoutExtension(title).Trim();
-            }
+            title = RemoveFileExtension(title);
+
+            title = title.TrimEnd("-RP");
 
             var index = title.LastIndexOf('-');
 
@@ -273,6 +295,19 @@ namespace NzbDrone.Core.Parser
             }
 
             return group;
+        }
+
+        public static string RemoveFileExtension(string title)
+        {
+            if (!title.ContainsInvalidPathChars())
+            {
+                if (MediaFiles.MediaFileExtensions.Extensions.Contains(Path.GetExtension(title).ToLower()))
+                {
+                    title = Path.Combine(Path.GetDirectoryName(title), Path.GetFileNameWithoutExtension(title));
+                }
+            }
+
+            return title;
         }
 
         private static SeriesTitleInfo GetSeriesTitleInfo(string title)
@@ -508,6 +543,14 @@ namespace NzbDrone.Core.Parser
 
             if (!title.Any(Char.IsLetterOrDigit))
             {
+                return false;
+            }
+
+            var titleWithoutExtension = RemoveFileExtension(title);
+
+            if (RejectHashedReleasesRegex.Any(v => v.IsMatch(titleWithoutExtension)))
+            {
+                Logger.Debug("Rejected Hashed Release Title: " + title);
                 return false;
             }
 

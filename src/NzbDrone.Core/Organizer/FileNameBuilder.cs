@@ -46,6 +46,8 @@ namespace NzbDrone.Core.Organizer
         public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>\s|\.|-|_)Title\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex FilenameCleanupRegex = new Regex(@"\.{2,}", RegexOptions.Compiled);
+
         private static readonly char[] EpisodeTitleTrimCharaters = new[] { ' ', '.', '?' };
 
         public FileNameBuilder(INamingConfigService namingConfigService,
@@ -90,6 +92,7 @@ namespace NzbDrone.Core.Organizer
 
             var sortedEpisodes = episodes.OrderBy(e => e.EpisodeNumber).ToList();
             var pattern = namingConfig.StandardEpisodeFormat;
+            
             var episodeTitles = new List<string>
             {
                 sortedEpisodes.First().Title.TrimEnd(EpisodeTitleTrimCharaters)
@@ -153,8 +156,11 @@ namespace NzbDrone.Core.Organizer
 
             tokenValues.Add("{Episode Title}", GetEpisodeTitle(episodeTitles));
             tokenValues.Add("{Quality Title}", GetQualityTitle(episodeFile.Quality));
-            
-            return CleanFilename(ReplaceTokens(pattern, tokenValues).Trim());
+
+            var filename = ReplaceTokens(pattern, tokenValues).Trim();
+            filename = FilenameCleanupRegex.Replace(filename, match => match.Captures[0].Value[0].ToString() );
+
+            return CleanFilename(filename);
         }
 
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)

@@ -8,11 +8,11 @@ define(
         var vent = new Backbone.Wreqr.EventAggregator();
 
         vent.Events = {
-            SeriesAdded       : 'series:added',
-            SeriesDeleted     : 'series:deleted',
-            CommandComplete   : 'command:complete',
-            ServerUpdated     : 'server:updated',
-            EpisodeFileDeleted: 'episodefile:deleted'
+            SeriesAdded        : 'series:added',
+            SeriesDeleted      : 'series:deleted',
+            CommandComplete    : 'command:complete',
+            ServerUpdated      : 'server:updated',
+            EpisodeFileDeleted : 'episodefile:deleted'
         };
 
         vent.Commands = {

@@ -57,7 +57,13 @@ define(
 
                 this.$el.addClass(this.className);
 
-                this.ui.seriesSearch.keypress(function () {
+                this.ui.seriesSearch.keyup(function (e) {
+
+                    //Ignore special keys: http://www.javascripter.net/faq/keycodes.htm
+                    if (_.contains([9, 16, 17, 18, 19, 20, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 93 ], e.keyCode)) {
+                        return;
+                    }
+
                     self.searchResult.close();
                     self._abortExistingSearch();
                     self.throttledSearch({

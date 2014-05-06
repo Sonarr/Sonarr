@@ -12,17 +12,31 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             new object[]
             {
-                @"C:\Test\Some.Hashed.Release.S01E01.720p.WEB-DL.AAC2.0.H.264-Mercury\0e895c3724.mkv".AsOsAgnostic(),
+                @"C:\Test\Some.Hashed.Release.S01E01.720p.WEB-DL.AAC2.0.H.264-Mercury\0e895c37245186812cb08aab1529cf8ee389dd05.mkv".AsOsAgnostic(),
                 "somehashedrelease",
                 "WEBDL-720p",
                 "Mercury"
             },
             new object[]
             {
-                @"C:\Test\0e895c3724\Some.Hashed.Release.S01E01.720p.WEB-DL.AAC2.0.H.264-Mercury.mkv".AsOsAgnostic(),
+                @"C:\Test\0e895c37245186812cb08aab1529cf8ee389dd05\Some.Hashed.Release.S01E01.720p.WEB-DL.AAC2.0.H.264-Mercury.mkv".AsOsAgnostic(),
                 "somehashedrelease",
                 "WEBDL-720p",
                 "Mercury"
+            },
+            new object[]
+            {
+                @"C:\Test\Some.Hashed.Release.S01E01.720p.WEB-DL.AAC2.0.H.264-Mercury.mkv\yrucreM-462.H.0.2CAA.LD-BEW.p027.10E10S.esaeleR.dehsaH.emoS.mkv".AsOsAgnostic(),
+                "somehashedrelease",
+                "WEBDL-720p",
+                "Mercury"
+            },
+            new object[]
+            {
+                @"C:\Test\Weeds.S01E10.DVDRip.XviD-NZBgeek\AHFMZXGHEWD660.mkv".AsOsAgnostic(),
+                "weeds",
+                "DVD",
+                "NZBgeek"
             }
         };
 
