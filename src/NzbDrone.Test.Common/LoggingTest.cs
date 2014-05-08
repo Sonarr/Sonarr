@@ -50,7 +50,7 @@ namespace NzbDrone.Test.Common
             //https://bugs.launchpad.net/nunitv2/+bug/1076932
             if (BuildInfo.IsDebug && TestContext.CurrentContext.Result.State == TestState.Success)
             {
-                ExceptionVerification.AssertNoUnexcpectedLogs();
+                ExceptionVerification.AssertNoUnexpectedLogs();
             }
         }
     }

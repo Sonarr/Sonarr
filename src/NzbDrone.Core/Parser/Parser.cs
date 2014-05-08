@@ -24,15 +24,15 @@ namespace NzbDrone.Core.Parser
 
                 //Anime - [SubGroup] Title Absolute Episode Number + Season+Episode
                 new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))(?<title>.+?)(?:(?:\W|_)+(?<absoluteepisode>\d{2,3}))+(?:_|-|\s|\.)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Season+Episode + Absolute Episode Number
                 new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)(?:\s|\.)(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.|$)+)+",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Absolute Episode Number
                 new Regex(@"^\[(?<subgroup>.+?)\](?:_|-|\s|\.)?(?<title>.+?)(?:(?:\W|_)+(?<absoluteepisode>\d{2,}))+",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-Part episodes without a title (S01E05.S01E06)
                 new Regex(@"^(?:\W*S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Parser
 
                 //Anime - Title Absolute Episode Number [SubGroup] 
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{3}(?!\d+)))+(?:.+?)\[(?<subgroup>.+?)\](?:\.|$)",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 103/113 naming
                 new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)\d{1})(?<episode>\d{2}(?!\w|\d+)))+",
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Parser
 
                 //Anime - Title Absolute Episode Number
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+e(?<absoluteepisode>\d{2,3}))+",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
         private static readonly Regex[] RejectHashedReleasesRegex = new Regex[]
@@ -113,10 +113,16 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ReversedTitleRegex = new Regex(@"\.p027\.|\.p0801\.|\.\d{2}E\d{2}S\.", RegexOptions.Compiled);
 
         private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(?<!^)(a|an|the|and|or|of)(?:\b|_))|\W|_",
-                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[xh][\W_]?264|DD\W?5\W1|\<|\>|\?|\*|\:|\|",
-                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)\b(?<!WEB-DL|480p|720p|1080p)",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
@@ -124,14 +130,14 @@ namespace NzbDrone.Core.Parser
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
-                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex WordDelimiterRegex = new Regex(@"(\s|\.|,|_|-|=|\|)+", RegexOptions.Compiled);
         private static readonly Regex PunctuationRegex = new Regex(@"[^\w\s]", RegexOptions.Compiled);
         private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of)\b\s?",
-                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?",
-                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -179,6 +185,12 @@ namespace NzbDrone.Core.Parser
                 }
 
                 var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
+
+                var airDateMatch = AirDateRegex.Match(simpleTitle);
+                if (airDateMatch.Success)
+                {
+                    simpleTitle = airDateMatch.Groups[1].Value + airDateMatch.Groups["airyear"].Value + "." + airDateMatch.Groups["airmonth"].Value + "." + airDateMatch.Groups["airday"].Value;
+                }
 
                 foreach (var regex in ReportTitleRegex)
                 {
@@ -272,24 +284,13 @@ namespace NzbDrone.Core.Parser
 
             title = title.TrimEnd("-RP");
 
-            var index = title.LastIndexOf('-');
-
-            if (index < 0)
-                index = title.LastIndexOf(' ');
-
-            if (index < 0)
-                return defaultReleaseGroup;
-
-            var group = title.Substring(index + 1);
-
-            if (group.Length == title.Length)
-                return String.Empty;
-
-            group = group.Trim('-', ' ', '[', ']');
-
-            if (group.ToLower() == "480p" ||
-                group.ToLower() == "720p" ||
-                group.ToLower() == "1080p")
+            string group;
+            var matches = ReleaseGroupRegex.Matches(title);
+            if (matches.Count != 0)
+            {
+                group = matches.OfType<Match>().Last().Groups["releasegroup"].Value;
+            }
+            else
             {
                 return defaultReleaseGroup;
             }

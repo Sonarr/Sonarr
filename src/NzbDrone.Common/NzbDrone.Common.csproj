@@ -61,7 +61,7 @@
   <ItemGroup>
     <Compile Include="ArchiveProvider.cs" />
     <Compile Include="Cache\Cached.cs" />
-    <Compile Include="Cache\CacheManger.cs" />
+    <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\ICached.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\IContainer.cs" />

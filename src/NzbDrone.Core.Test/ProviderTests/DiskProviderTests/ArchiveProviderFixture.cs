@@ -13,12 +13,10 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
         [Test]
         public void Should_extract_to_correct_folder()
         {
-            var destination = Path.Combine(TempFolder, "destination");
+            var destinationFolder = new DirectoryInfo(GetTempFilePath());
             var testArchive = OsInfo.IsWindows ? "TestArchive.zip" : "TestArchive.tar.gz";
 
-            Subject.Extract(GetTestFilePath(testArchive), destination);
-
-            var destinationFolder = new DirectoryInfo(destination);
+            Subject.Extract(Path.Combine("Files", testArchive), destinationFolder.FullName);
 
             destinationFolder.Exists.Should().BeTrue();
             destinationFolder.GetDirectories().Should().HaveCount(1);

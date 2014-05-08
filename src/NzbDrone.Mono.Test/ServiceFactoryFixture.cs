@@ -13,15 +13,13 @@ namespace NzbDrone.Mono.Test
     [TestFixture]
     public class ServiceFactoryFixture : TestBase<ServiceFactory>
     {
-        [SetUp]
-        public void setup()
-        {
-            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new StartupContext()));
-        }
-
         [Test]
         public void event_handlers_should_be_unique()
         {
+            MonoOnly();
+    
+            Mocker.SetConstant(MainAppContainerBuilder.BuildContainer(new StartupContext()));
+
             var handlers = Subject.BuildAll<IHandle<ApplicationShutdownRequested>>()
                                   .Select(c => c.GetType().FullName);
 

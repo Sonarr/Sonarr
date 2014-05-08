@@ -42,7 +42,7 @@ namespace NzbDrone.Api.RootFolders
 
         private int CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);            
+            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
         }
 
         private List<RootFolderResource> GetRootFolders()

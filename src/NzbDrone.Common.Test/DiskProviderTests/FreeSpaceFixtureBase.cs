@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
@@ -61,7 +62,17 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         {
             WindowsOnly();
 
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvailableSpace(@"Z:\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
+            // Find a drive that doesn't exist.
+            for (char driveletter = 'Z'; driveletter > 'D' ; driveletter--)
+            {
+                if (new DriveInfo(driveletter.ToString()).IsReady)
+                    continue;
+                
+                Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvailableSpace(driveletter + @":\NOT_A_REAL_PATH\DOES_NOT_EXIST".AsOsAgnostic()));
+                return;
+            }
+
+            Assert.Inconclusive("No drive available for testing.");
         }
 
         [Test]

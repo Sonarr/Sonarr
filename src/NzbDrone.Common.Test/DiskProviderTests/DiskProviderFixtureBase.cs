@@ -10,30 +10,26 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 {
     public class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
-        DirectoryInfo _binFolder;
-        DirectoryInfo _binFolderCopy;
-        DirectoryInfo _binFolderMove;
-
         [SetUp]
         public void Setup()
         {
-            _binFolder = new DirectoryInfo(Directory.GetCurrentDirectory());
-            _binFolderCopy = new DirectoryInfo(Path.Combine(_binFolder.Parent.FullName, "bin_copy"));
-            _binFolderMove = new DirectoryInfo(Path.Combine(_binFolder.Parent.FullName, "bin_move"));
 
-            if (_binFolderCopy.Exists)
-            {
-                foreach (var file in _binFolderCopy.GetFiles("*", SearchOption.AllDirectories))
-                {
-                    file.Attributes = FileAttributes.Normal;
-                }
-                _binFolderCopy.Delete(true);
-            }
+        }
 
-            if (_binFolderMove.Exists)
-            {
-                _binFolderMove.Delete(true);
-            }
+        public DirectoryInfo GetFilledTempFolder()
+        {
+            var tempFolder = GetTempFilePath();
+            Directory.CreateDirectory(tempFolder);
+
+            File.WriteAllText(Path.Combine(tempFolder, Path.GetRandomFileName()), "RootFile");
+
+            var subDir = Path.Combine(tempFolder, Path.GetRandomFileName());
+            Directory.CreateDirectory(subDir);
+
+            File.WriteAllText(Path.Combine(subDir, Path.GetRandomFileName()), "SubFile1");
+            File.WriteAllText(Path.Combine(subDir, Path.GetRandomFileName()), "SubFile2");
+
+            return new DirectoryInfo(tempFolder);
         }
 
         [Test]
@@ -57,79 +53,94 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         }
 
         [Test]
-        public void moveFile_should_overwrite_existing_file()
+        public void MoveFile_should_overwrite_existing_file()
         {
+            var source1 = GetTempFilePath();
+            var source2 = GetTempFilePath();
+            var destination = GetTempFilePath();
 
-            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
+            File.WriteAllText(source1, "SourceFile1");
+            File.WriteAllText(source2, "SourceFile2");
 
-            var targetPath = Path.Combine(_binFolderCopy.FullName, "file.move");
+            Subject.MoveFile(source1, destination);
+            Subject.MoveFile(source2, destination);
 
-            Subject.MoveFile(_binFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName, targetPath);
-            Subject.MoveFile(_binFolderCopy.GetFiles("*.pdb", SearchOption.AllDirectories).First().FullName, targetPath);
-
-            File.Exists(targetPath).Should().BeTrue();
+            File.Exists(destination).Should().BeTrue();
         }
 
         [Test]
-        public void moveFile_should_not_move_overwrite_itself()
+        public void MoveFile_should_not_move_overwrite_itself()
         {
+            var source = GetTempFilePath();
 
-            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
+            File.WriteAllText(source, "SourceFile1");
 
-            var targetPath = _binFolderCopy.GetFiles("*.dll", SearchOption.AllDirectories).First().FullName;
+            Subject.MoveFile(source, source);
 
-            Subject.MoveFile(targetPath, targetPath);
-
-            File.Exists(targetPath).Should().BeTrue();
+            File.Exists(source).Should().BeTrue();
             ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
         public void CopyFolder_should_copy_folder()
         {
-            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
-            VerifyCopy();
+            var source = GetFilledTempFolder();
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.CopyFolder(source.FullName, destination.FullName);
+
+            VerifyCopy(source.FullName, destination.FullName);
         }
 
         [Test]
         public void CopyFolder_should_overwrite_existing_folder()
         {
-
-
-
-            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
-
+            var source = GetFilledTempFolder();
+            var destination = new DirectoryInfo(GetTempFilePath());
+            Subject.CopyFolder(source.FullName, destination.FullName);
+            
             //Delete Random File
-            _binFolderCopy.Refresh();
-            _binFolderCopy.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
+            destination.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
 
-            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
+            Subject.CopyFolder(source.FullName, destination.FullName);
 
+            VerifyCopy(source.FullName, destination.FullName);
+        }
 
-            VerifyCopy();
+        [Test]
+        public void MoveFolder_should_move_folder()
+        {
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.CopyFolder(original.FullName, source.FullName);
+
+            Subject.MoveFolder(source.FullName, destination.FullName);
+
+            VerifyMove(original.FullName, source.FullName, destination.FullName);
         }
 
         [Test]
         public void MoveFolder_should_overwrite_existing_folder()
         {
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
 
+            Subject.CopyFolder(original.FullName, source.FullName);
+            Subject.CopyFolder(original.FullName, destination.FullName);
 
-            Subject.CopyFolder(_binFolder.FullName, _binFolderCopy.FullName);
-            Subject.CopyFolder(_binFolder.FullName, _binFolderMove.FullName);
-            VerifyCopy();
+            Subject.MoveFolder(source.FullName, destination.FullName);
 
-
-            Subject.MoveFolder(_binFolderCopy.FullName, _binFolderMove.FullName);
-
-
-            VerifyMove();
+            VerifyMove(original.FullName, source.FullName, destination.FullName);
         }
 
         [Test]
         public void move_read_only_file()
         {
-            var source = GetTestFilePath();
-            var destination = GetTestFilePath();
+            var source = GetTempFilePath();
+            var destination = GetTempFilePath();
 
             Subject.WriteAllText(source, "SourceFile");
             Subject.WriteAllText(destination, "DestinationFile");
@@ -150,23 +161,25 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void folder_should_return_correct_value_for_last_write()
         {
-            var testDir = Path.Combine(SandboxFolder, "LastWrite");
+            var testDir = GetTempFilePath();
             var testFile = Path.Combine(testDir, Path.GetRandomFileName());
 
             Directory.CreateDirectory(testDir);
+
+            Subject.FolderSetLastWriteTimeUtc(TempFolder, DateTime.UtcNow.AddMinutes(-5));
 
             TestLogger.Info("Path is: {0}", testFile);
             
             Subject.WriteAllText(testFile, "Test");
 
-            Subject.FolderGetLastWrite(SandboxFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
-            Subject.FolderGetLastWrite(SandboxFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
+            Subject.FolderGetLastWrite(TempFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
+            Subject.FolderGetLastWrite(TempFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
         }
 
         [Test]
         public void should_return_false_for_unlocked_file()
         {
-            var testFile = GetTestFilePath();
+            var testFile = GetTempFilePath();
             Subject.WriteAllText(testFile, new Guid().ToString());
 
             Subject.IsFileLocked(testFile).Should().BeFalse();
@@ -175,7 +188,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void should_return_false_for_unlocked_and_readonly_file()
         {
-            var testFile = GetTestFilePath();
+            var testFile = GetTempFilePath();
             Subject.WriteAllText(testFile, new Guid().ToString());
 
             File.SetAttributes(testFile, FileAttributes.ReadOnly);
@@ -186,7 +199,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void should_return_true_for_unlocked_file()
         {
-            var testFile = GetTestFilePath();
+            var testFile = GetTempFilePath();
             Subject.WriteAllText(testFile, new Guid().ToString());
 
             using (var file = File.OpenWrite(testFile))
@@ -198,7 +211,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Test]
         public void should_be_able_to_set_permission_from_parrent()
         {
-            var testFile = GetTestFilePath();
+            var testFile = GetTempFilePath();
             Subject.WriteAllText(testFile, new Guid().ToString());
 
             Subject.InheritFolderPermissions(testFile);
@@ -208,33 +221,26 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         [Explicit]
         public void check_last_write()
         {
-            Console.WriteLine(Subject.FolderGetLastWrite(_binFolder.FullName));
-            Console.WriteLine(_binFolder.LastWriteTimeUtc);
+            Console.WriteLine(Subject.FolderGetLastWrite(GetFilledTempFolder().FullName));
+            Console.WriteLine(GetFilledTempFolder().LastWriteTimeUtc);
         }
 
-        private void VerifyCopy()
+        private void VerifyCopy(string source, string destination)
         {
-            _binFolder.Refresh();
-            _binFolderCopy.Refresh();
+            var sourceFiles = Directory.GetFileSystemEntries(source, "*", SearchOption.AllDirectories).Select(v => v.Substring(source.Length + 1)).ToArray();
+            var destFiles = Directory.GetFileSystemEntries(destination, "*", SearchOption.AllDirectories).Select(v => v.Substring(destination.Length + 1)).ToArray();
 
-            _binFolderCopy.GetFiles("*.*", SearchOption.AllDirectories)
-               .Should().HaveSameCount(_binFolder.GetFiles("*.*", SearchOption.AllDirectories));
-
-            _binFolderCopy.GetDirectories().Should().HaveSameCount(_binFolder.GetDirectories());
+            CollectionAssert.AreEquivalent(sourceFiles, destFiles);
         }
 
-        private void VerifyMove()
+        private void VerifyMove(string source, string from, string destination)
         {
-            _binFolder.Refresh();
-            _binFolderCopy.Refresh();
-            _binFolderMove.Refresh();
+            Directory.Exists(from).Should().BeFalse();
 
-            _binFolderCopy.Exists.Should().BeFalse();
+            var sourceFiles = Directory.GetFileSystemEntries(source, "*", SearchOption.AllDirectories).Select(v => v.Substring(source.Length + 1)).ToArray();
+            var destFiles = Directory.GetFileSystemEntries(destination, "*", SearchOption.AllDirectories).Select(v => v.Substring(destination.Length + 1)).ToArray();
 
-            _binFolderMove.GetFiles("*.*", SearchOption.AllDirectories)
-               .Should().HaveSameCount(_binFolder.GetFiles("*.*", SearchOption.AllDirectories));
-
-            _binFolderMove.GetDirectories().Should().HaveSameCount(_binFolder.GetDirectories());
+            CollectionAssert.AreEquivalent(sourceFiles, destFiles);
         }
     }
 }

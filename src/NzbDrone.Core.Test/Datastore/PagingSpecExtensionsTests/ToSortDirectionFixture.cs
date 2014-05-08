@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Extentions;
+using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.Datastore.PagingSpecExtenstionsTests
+namespace NzbDrone.Core.Test.Datastore.PagingSpecExtensionsTests
 {
     public class ToSortDirectionFixture
     {

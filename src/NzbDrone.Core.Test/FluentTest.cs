@@ -4,6 +4,7 @@ using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test
 {
@@ -22,10 +23,11 @@ namespace NzbDrone.Core.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithDefault_Fail()
         {
-            "test".WithDefault(null);
+            Assert.Throws<ArgumentNullException>(() => "test".WithDefault(null));
+
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
