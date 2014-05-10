@@ -502,6 +502,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("norwegian"))
                 return Language.Norwegian;
 
+            if (lowerTitle.Contains("nordic"))
+                return Language.Norwegian;
+
             if (lowerTitle.Contains("finnish"))
                 return Language.Finnish;
 
