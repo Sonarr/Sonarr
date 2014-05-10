@@ -85,8 +85,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Authentication\AuthenticationService.cs" />
-    <Compile Include="Authentication\EnableStatelessAuthInNancy.cs" />
-    <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
+    <Compile Include="Authentication\EnableAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="Blacklist\BlacklistModule.cs" />
     <Compile Include="Blacklist\BlacklistResource.cs" />

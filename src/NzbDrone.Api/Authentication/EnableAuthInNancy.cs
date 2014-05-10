@@ -1,16 +1,15 @@
 ﻿using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Bootstrapper;
-using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Extensions.Pipelines;
 
 namespace NzbDrone.Api.Authentication
 {
-    public class EnableBasicAuthInNancy : IRegisterNancyPipeline
+    public class EnableAuthInNancy : IRegisterNancyPipeline
     {
         private readonly IAuthenticationService _authenticationService;
 
-        public EnableBasicAuthInNancy(IAuthenticationService authenticationService)
+        public EnableAuthInNancy(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
         }
@@ -25,7 +24,7 @@ namespace NzbDrone.Api.Authentication
         {
             Response response = null;
 
-            if (!context.Request.IsApiRequest() && !_authenticationService.IsAuthenticated(context))
+            if (!_authenticationService.IsAuthenticated(context))
             {
                 response = new Response { StatusCode = HttpStatusCode.Unauthorized };
             }
