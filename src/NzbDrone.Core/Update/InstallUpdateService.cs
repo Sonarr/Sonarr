@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Update
                     _diskProvider.DeleteFolder(updateSandboxFolder, true);
                 }
 
-                _logger.ProgressInfo("Downloading update {0} [{1}]", updatePackage.Version, updatePackage.Branch);
+                _logger.ProgressInfo("Downloading update {0}", updatePackage.Version);
                 _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
                 _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
 
