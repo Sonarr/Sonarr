@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public void RemoveFromHistory(string id, NzbgetSettings settings)
         {
             var history = GetHistory(settings);
-            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone") != null);
+            var item = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
 
             if (item == null)
             {
