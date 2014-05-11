@@ -7,7 +7,7 @@ using System.Text;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Http
 {
     public interface IHttpProvider
     {
@@ -132,7 +132,7 @@ namespace NzbDrone.Common
 
             byte[] byteArray = Encoding.ASCII.GetBytes(command);
 
-            var wc = new WebClient();
+            var wc = new NzbDroneWebClient();
             wc.Credentials = new NetworkCredential(username, password);
 
             var response = wc.UploadData(address, "POST", byteArray);

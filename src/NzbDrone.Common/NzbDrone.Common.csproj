@@ -93,6 +93,9 @@
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
+    <Compile Include="Http\NzbDroneWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
@@ -125,7 +128,7 @@
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="ServiceFactory.cs" />
-    <Compile Include="HttpProvider.cs" />
+    <Compile Include="Http\HttpProvider.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />

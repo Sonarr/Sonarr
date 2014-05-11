@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Instrumentation.Extensions;
