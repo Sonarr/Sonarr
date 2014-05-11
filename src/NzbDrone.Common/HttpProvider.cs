@@ -15,7 +15,6 @@ namespace NzbDrone.Common
         string DownloadString(string url, string username, string password);
         string DownloadString(string url, ICredentials credentials);
         Dictionary<string, string> GetHeader(string url);
-
         Stream DownloadStream(string url, NetworkCredential credential = null);
         void DownloadFile(string url, string fileName);
         string PostCommand(string address, string username, string password, string command);
@@ -33,6 +32,7 @@ namespace NzbDrone.Common
         {
             _logger = logger;
             _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
+            ServicePointManager.Expect100Continue = false;
         }
 
         public string DownloadString(string url)
@@ -134,6 +134,7 @@ namespace NzbDrone.Common
 
             var wc = new WebClient();
             wc.Credentials = new NetworkCredential(username, password);
+
             var response = wc.UploadData(address, "POST", byteArray);
             var text = Encoding.ASCII.GetString(response);
 

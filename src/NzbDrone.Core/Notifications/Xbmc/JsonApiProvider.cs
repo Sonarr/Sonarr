@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 postJson.Add(new JProperty("params", parameters));
             }
 
-            postJson.Add(new JProperty("id", 10));
+            postJson.Add(new JProperty("id", DateTime.Now.Ticks));
 
             return postJson;
         }
