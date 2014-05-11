@@ -28,6 +28,7 @@
   .items {
     list-style-type: none;
     margin: 0px;
+    padding: 0px;
 
     li {
       display: inline-block;
@@ -45,6 +46,7 @@
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
+    line-height: 30px;
     text-overflow: ellipsis;
   }
 
@@ -61,5 +63,9 @@
   li {
     display: inline-block;
     vertical-align: top;
+  }
+
+  @media (max-width: @screen-xs-max) {
+    padding-left: 0px;
   }
 }

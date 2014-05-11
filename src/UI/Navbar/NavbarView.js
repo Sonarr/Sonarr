@@ -14,7 +14,8 @@ define(
             },
 
             ui: {
-                search: '.x-series-search'
+                search: '.x-series-search',
+                collapse: '.x-navbar-collapse'
             },
 
             events: {
@@ -45,6 +46,10 @@ define(
                 }
                 else {
                     this.setActive(event.target);
+                }
+
+                if ($(window).width() < 768) {
+                    this.ui.collapse.collapse('hide');
                 }
             },
 

@@ -1,73 +1,45 @@
-﻿<div class="container">
-    <div class="row">
-        <div class="span12">
-            <ul id="main-menu-region">
-                <div class="pull-left logo">
-                    <a href="{{UrlBase}}/">
-                        <img src="{{UrlBase}}/Content/Images/logo.png?v=2" alt="NzbDrone">
-                    </a>
-                </div>
-                <li>
-                    <a href="{{UrlBase}}/">
-                        <i class="icon-play"></i>
-                        <br>
-                        Series
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/calendar">
-                        <i class="icon-calendar"></i>
-                        <br>
-                        Calendar
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/history">
-                        <i class="icon-time"></i>
-                        <br>
-                        History
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/wanted">
-                        <i class="icon-warning-sign"></i>
-                        <br>
-                        Wanted
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/settings">
-                        <i class="icon-cogs"></i>
-                        <br>
-                        Settings
-                    </a>
-                </li>
-                <li>
-                    <a href="{{UrlBase}}/system">
-                        <i class="icon-laptop"></i>
-                        <br>
-                        System
-                        <span id="x-health"></span>
-                    </a>
-                </li>
-                <li>
-                        <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HGGGM7JT5YVSS" target="_blank">
-                        <i class="icon-nd-donate"></i>
-                        <br>
-                        Donate
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+﻿<!-- Static navbar -->
+<div class="navbar navbar-nzbdrone" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{UrlBase}}/">
+                <!--<img src="{{UrlBase}}/Content/Images/logo.png?v=2" alt="nzbdrone">-->
+                <img src="{{UrlBase}}/Content/Images/logos/128.png" class="visible-lg"/>
+                <img src="{{UrlBase}}/Content/Images/logos/64.png" class="visible-md visible-sm"/>
+                <span class="visible-xs">
+                    <img src="{{UrlBase}}/Content/Images/logos/32.png"/>
+                    <span class="logo-text"><span class="highlight">nzb</span>drone</span>
+                </span>
 
-    <div class="row">
-        <div class="span12">
-            <div class="search">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-search"></i></span>
-                    <input class="span4 x-series-search" id="prependedInput" type="text">
-                </div>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse x-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{UrlBase}}/" class="x-series-nav"><i class="icon-play"></i> Series</a></li>
+                <li><a href="{{UrlBase}}/calendar" class="x-calendar-nav"><i class="icon-calendar"></i> Calendar</a></li>
+                <li><a href="{{UrlBase}}/history" class="x-history-nav"><i class="icon-time"></i> History</a></li>
+                <li><a href="{{UrlBase}}/wanted" class="x-wanted-nav"><i class="icon-warning-sign"></i> Wanted</a></li>
+                <li><a href="{{UrlBase}}/settings" class="x-settings-nav"><i class="icon-cogs"></i> Settings</a></li>
+                <li><a href="{{UrlBase}}/system" class="x-system-nav"><i class="icon-laptop"></i> System<span id="x-health" class="health"></span></a></li>
+                <li><a href="http://nzbdrone.com/#donate" target="_blank"><i class="icon-nd-donate"></i> Donate</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active screen-size"></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+
+    <div class="col-md-12 search">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="icon-search"></i></span>
+                <input type="text" class="col-md-6 form-control x-series-search" >
             </div>
         </div>
     </div>

@@ -128,6 +128,7 @@
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Frontend\IsCacheableSpecification.cs" />
+    <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
     <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\LogFileMapper.cs" />
     <Compile Include="Frontend\Mappers\MediaCoverMapper.cs" />

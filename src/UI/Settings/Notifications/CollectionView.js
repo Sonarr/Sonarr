@@ -1,7 +1,7 @@
 ﻿'use strict';
 define([
     'marionette',
-    'Settings/Notifications/ItemView',
+    'Settings/Notifications/NotificationsItemView',
     'Settings/Notifications/SchemaModal'
 ], function (Marionette, NotificationItemView, SchemaModal) {
     return Marionette.CompositeView.extend({

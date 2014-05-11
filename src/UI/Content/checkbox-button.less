@@ -18,7 +18,7 @@
     }
 
     .btn {
-      .buttonBackground(@btnBackground, @btnBackgroundHighlight);
+      .button-variant(@btn-default-color, @btn-default-bg, @btn-default-border);
       color: #333333;
     }
 
@@ -27,7 +27,7 @@
   }
 
     input:first-of-type:checked ~ .btn-primary {
-      .buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
+      .button-variant(@btn-primary-color, @btn-primary-bg, @btn-primary-border);
     }
   }
 }

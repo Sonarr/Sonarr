@@ -3,13 +3,26 @@ define(
     [
         'underscore',
         'vent',
+        'AppLayout',
         'marionette',
         'backbone',
         'Settings/Quality/Profile/Edit/EditQualityProfileItemView',
         'Settings/Quality/Profile/Edit/QualitySortableCollectionView',
         'Settings/Quality/Profile/Edit/EditQualityProfileView',
+        'Settings/Quality/Profile/DeleteQualityProfileView',
+        'Series/SeriesCollection',
         'Config'
-    ], function (_, vent, Marionette, Backbone, EditQualityProfileItemView, QualitySortableCollectionView, EditQualityProfileView, Config) {
+    ], function (_,
+                 vent,
+                 AppLayout,
+                 Marionette,
+                 Backbone,
+                 EditQualityProfileItemView,
+                 QualitySortableCollectionView,
+                 EditQualityProfileView,
+                 DeleteView,
+                 SeriesCollection,
+                 Config) {
 
         return Marionette.Layout.extend({
             template: 'Settings/Quality/Profile/Edit/EditQualityProfileLayoutTemplate',
@@ -19,14 +32,24 @@ define(
                 qualities: '#x-qualities'
             },
 
+            ui: {
+                deleteButton: '.x-delete'
+            },
+
             events: {
-                'click .x-save'  : '_saveQualityProfile',
-                'click .x-cancel': '_cancelQualityProfile'
+                'click .x-save'   : '_saveQualityProfile',
+                'click .x-cancel' : '_cancelQualityProfile',
+                'click .x-delete' : '_delete'
             },
 
             initialize: function (options) {
                 this.profileCollection = options.profileCollection;
                 this.itemsCollection = new Backbone.Collection(_.toArray(this.model.get('items')).reverse());
+                this.listenTo(SeriesCollection, 'all', this._updateDisableStatus);
+            },
+
+            onRender: function () {
+                this._updateDisableStatus();
             },
 
             onShow: function () {
@@ -103,6 +126,25 @@ define(
 
             _showFieldsView: function () {
                 this.fields.show(this.fieldsView);
+            },
+
+            _delete: function () {
+                var view = new DeleteView({ model: this.model });
+                AppLayout.modalRegion.show(view);
+            },
+
+            _updateDisableStatus: function () {
+                if (this._isQualityInUse()) {
+                    this.ui.deleteButton.addClass('disabled');
+                    this.ui.deleteButton.attr('title', 'Can\'t delete quality profiles attached to a series.');
+                }
+                else {
+                    this.ui.deleteButton.removeClass('disabled');
+                }
+            },
+
+            _isQualityInUse: function () {
+                return SeriesCollection.where({'qualityProfileId': this.model.id}).length !== 0;
             }
         });
     });

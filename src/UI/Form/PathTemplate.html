@@ -1,12 +1,8 @@
-<div class="control-group">
-    <label class="control-label">{{label}}</label>
+<div class="form-group">
+    <label class="col-sm-3 control-label">{{label}}</label>
 
-    <div class="controls">
-        <input type="text" name="fields.{{order}}.value" validation-name="{{name}}" class="x-path"/>
-        {{#if helpText}}
-            <span class="help-inline">
-                <i class="icon-nd-form-info" title="{{helpText}}"/>
-            </span>
-        {{/if}}
+    <div class="col-sm-5">
+        <input type="text" name="fields.{{order}}.value" validation-name="{{name}}" class="form-control x-path"/>
     </div>
+    {{> FormHelpPartial}}
 </div>

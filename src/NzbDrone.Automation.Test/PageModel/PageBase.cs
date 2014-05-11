@@ -13,6 +13,7 @@ namespace NzbDrone.Automation.Test.PageModel
         public PageBase(RemoteWebDriver driver)
         {
             _driver = driver;
+            driver.Manage().Window.Maximize();
         }
 
         public IWebElement FindByClass(string className, int timeout = 5)
@@ -52,7 +53,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("Series"));
+                return FindByClass("x-series-nav");
             }
         }
 
@@ -60,7 +61,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("Calendar"));
+                return FindByClass("x-calendar-nav");
             }
         }
 
@@ -68,7 +69,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("History"));
+                return FindByClass("x-history-nav");
             }
         }
 
@@ -76,7 +77,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("Wanted"));
+                return FindByClass("x-wanted-nav");
             }
         }
 
@@ -84,7 +85,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.LinkText("Settings"));
+                return FindByClass("x-settings-nav");
             }
         }
 
@@ -92,7 +93,7 @@ namespace NzbDrone.Automation.Test.PageModel
         {
             get
             {
-                return Find(By.PartialLinkText("System"));
+                return FindByClass("x-system-nav");
             }
         }
 

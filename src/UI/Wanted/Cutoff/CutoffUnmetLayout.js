@@ -34,7 +34,7 @@ define(
             template: 'Wanted/Cutoff/CutoffUnmetLayoutTemplate',
 
             regions: {
-                missing: '#x-missing',
+                cutoff: '#x-cutoff-unmet',
                 toolbar: '#x-toolbar',
                 pager  : '#x-pager'
             },
@@ -89,7 +89,7 @@ define(
             },
 
             onShow: function () {
-                this.missing.show(new LoadingView());
+                this.cutoff.show(new LoadingView());
                 this._showToolbar();
                 this.collection.fetch();
             },
@@ -101,7 +101,7 @@ define(
                     className : 'table table-hover'
                 });
 
-                this.missing.show(this.missingGrid);
+                this.cutoff.show(this.missingGrid);
 
                 this.pager.show(new GridPager({
                     columns   : this.columns,
@@ -149,7 +149,7 @@ define(
                             tooltip  : 'Unmonitored Only',
                             icon     : 'icon-nd-unmonitored',
                             callback : this._setFilter
-                        },
+                        }
                     ]                    
                 };
 
@@ -179,8 +179,9 @@ define(
                 this.collection.state.currentPage = 1;
                 var promise = this.collection.setFilterMode(mode);
                 
-                if (buttonContext)
+                if (buttonContext) {
                     buttonContext.ui.icon.spinForPromise(promise);
+                }
             },
 
             _searchSelected: function () {

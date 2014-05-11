@@ -3,10 +3,11 @@
 <head runat="server">
     <title>NzbDrone</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Content/bootstrap.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/bootstrap.toggle-switch.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/Messenger/messenger.css" rel='stylesheet' type='text/css'/>
-    <link href="/Content/Messenger/messenger.future.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/Messenger/messenger.flat.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/fullcalendar.css" rel='stylesheet' type='text/css'>
     <link href="/Content/theme.css" rel='stylesheet' type='text/css'/>
     <link href="/Cells/cells.css" rel='stylesheet' type='text/css'>
@@ -27,21 +28,21 @@
     <link rel="alternate" type="text/calendar" title="iCalendar feed for NzbDrone" href="/feed/calendar/NzbDrone.ics" />
 </head>
 <body>
-<div id="nav-region"></div>
+<div class="container">
+    <div id="nav-region"></div>
+</div>
 <div id="page">
     <div class="page-container">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="span12" id="notification-region"/>
+                <div class="col-md-12" id="notification-region"/>
             </div>
-            <div class="span12" id="main-region">
-                <div class="row">
-                    <div id="followingBalls">
-                        <div id="ball-1" class="ball"></div>
-                        <div id="ball-2" class="ball"></div>
-                        <div id="ball-3" class="ball"></div>
-                        <div id="ball-4" class="ball"></div>
-                    </div>
+            <div class="container-fluid main-region" id="main-region">
+                <div id="followingBalls">
+                    <div id="ball-1" class="ball"></div>
+                    <div id="ball-2" class="ball"></div>
+                    <div id="ball-3" class="ball"></div>
+                    <div id="ball-4" class="ball"></div>
                 </div>
             </div>
             <div id="modal-region"></div>
@@ -52,9 +53,9 @@
     </a>
 </div>
 <div class="footer">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="span12">
+            <div class="col-md-12">
                 <div id="footer-region">
                     NzbDrone Ver.
                     <span class="version"></span>

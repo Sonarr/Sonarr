@@ -88,7 +88,6 @@ define(
 
             onShow: function () {
                 this.history.show(new LoadingView());
-                //this.collection.fetch();
                 this._showToolbar();
             },
 
@@ -160,8 +159,9 @@ define(
                 this.collection.state.currentPage = 1;
                 var promise = this.collection.setFilterMode(mode);
 
-                if (buttonContext)
+                if (buttonContext) {
                     buttonContext.ui.icon.spinForPromise(promise);
+                }
             }
         });
     });

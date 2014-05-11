@@ -11,7 +11,7 @@ define(
             var profile = QualityProfileCollection.get(profileId);
 
             if (profile) {
-                return new Handlebars.SafeString('<span class="label quality-profile-label">' + profile.get("name") + '</span>');
+                return new Handlebars.SafeString('<span class="label label-default quality-profile-label">' + profile.get("name") + '</span>');
             }
 
             return undefined;

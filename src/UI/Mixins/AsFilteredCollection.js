@@ -15,7 +15,7 @@ define(
                 this.state.filterValue = filter[1];
 
                 if (options.reset) {
-                    if (this.mode != 'server') {
+                    if (this.mode !== 'server') {
                         this.fullCollection.resetFiltered();
                     } else {
                         return this.fetch();
@@ -35,10 +35,12 @@ define(
                 self.shadowCollection = originalMakeFullCollection.call(this, models, options);
                 
                 var filterModel = function(model) {
-                    if (!self.state.filterKey || !self.state.filterValue)
+                    if (!self.state.filterKey || !self.state.filterValue) {
                         return true;
-                    else
+                    }
+                    else {
                         return model.get(self.state.filterKey) === self.state.filterValue;
+                    }
                 };
 
                 self.shadowCollection.filtered = function() {

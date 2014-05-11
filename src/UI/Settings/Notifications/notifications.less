@@ -1,18 +1,17 @@
-.notifications {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-}
+@import "../../Shared/Styles/clickable.less";
+
+//.notifications {
+//  width: -webkit-fit-content;
+//  width: -moz-fit-content;
+//  width: fit-content;
+//}
 
 .notification-item {
+  .clickable;
 
   width: 290px;
   height: 90px;
   padding: 20px 20px;
-
-  h3 {
-    width: 230px;
-  }
 
   .settings {
     margin-top: 5px;
@@ -20,7 +19,13 @@
 
   &.add-card {
     .center {
-      margin-top: 15px;
+      margin-top: -4px;
     }
+  }
+}
+
+.add-notifications {
+  li {
+    width: 40%;
   }
 }

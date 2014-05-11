@@ -10,7 +10,7 @@ define(
             itemView : RadioButtonView,
 
             attributes: {
-                'data-toggle': 'buttons-radio'
+                'data-toggle': 'buttons'
             },
 
             initialize: function (options) {

@@ -2,19 +2,10 @@
 @import "../Shared/Styles/clickable.less";
 
 #add-series-screen {
-
-  .operations-row {
-    margin-left : 0px;
-  }
-
   .existing-series {
 
     .card();
     margin : 30px 0px;
-
-    .add-series-search {
-      width : 970px;
-    }
 
     .unmapped-folder-path {
       padding: 20px;
@@ -42,17 +33,6 @@
   .add-series-search {
     margin-top    : 20px;
     margin-bottom : 20px;
-    padding-left  : 20px;
-
-    *[class*='icon-'] {
-      font-size   : 28px;
-      height      : 30px;
-      width       : 40px;
-      padding-top : 14px;
-    }
-    input {
-      height : 50px;
-    }
   }
 
   .search-item {
@@ -101,12 +81,8 @@
     }
 
     .checkbox {
-      width         : 100px;
-      margin-left   : 0px;
-      display       : inline-block;
-      padding-top   : 0px;
-      margin-bottom : 0px;
-    }
+          margin-top : 0px;
+        }
 
     .starting-season {
       width: 140px;
@@ -116,9 +92,9 @@
       }
     }
 
-    .labels {
-      [class*="span"] {
-        margin-left: 3px;
+    i {
+      &:before {
+        color: #ffffff;
       }
     }
   }
@@ -145,16 +121,6 @@ li.add-new:hover {
   text-decoration: none;
   color: rgb(255, 255, 255);
   background-color: rgb(0, 129, 194);
-}
-
-.btn-group {
-  .dropdown-menu {
-    right: 0px;
-  }
-
-  .add-series-import-btn {
-    width: 93.3%;
-  }
 }
 
 .root-folders-modal {

@@ -3,18 +3,16 @@
 define([
     'AppLayout',
     'marionette',
-    'Settings/Notifications/NotificationEditView',
-    'Settings/Notifications/DeleteView'
+    'Settings/Notifications/NotificationEditView'
 
-], function (AppLayout, Marionette, EditView, DeleteView) {
+], function (AppLayout, Marionette, EditView) {
 
     return Marionette.ItemView.extend({
-        template: 'Settings/Notifications/ItemTemplate',
+        template: 'Settings/Notifications/NotificationItemViewTemplate',
         tagName : 'li',
 
         events: {
-            'click .x-edit'  : '_editNotification',
-            'click .x-delete': '_deleteNotification'
+            'click'  : '_editNotification'
         },
 
         initialize: function () {
@@ -23,11 +21,6 @@ define([
 
         _editNotification: function () {
             var view = new EditView({ model: this.model, notificationCollection: this.model.collection});
-            AppLayout.modalRegion.show(view);
-        },
-
-        _deleteNotification: function () {
-            var view = new DeleteView({ model: this.model});
             AppLayout.modalRegion.show(view);
         }
     });

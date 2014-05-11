@@ -111,9 +111,10 @@ define(
 
             _showToolbar: function () {
                 var leftSideButtons = {
-                    type      : 'default',
-                        storeState: false,
-                        items     :
+                    type       : 'default',
+                    storeState : false,
+                    collapse   : true,
+                    items      :
                     [
                         {
                             title: 'Search Selected',

@@ -63,7 +63,7 @@ define(
 
                 this.signalRconnection.disconnected(function () {
                     if (tryingToReconnect) {
-                        $('<div class="modal-backdrop"></div>').appendTo(document.body);
+                        $('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
 
                         Messenger.show({
                             id        : messengerId,

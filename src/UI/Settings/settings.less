@@ -53,20 +53,22 @@ li.save-and-add:hover {
 }
 
 .advanced-settings-toggle {
+  margin-top: 10px;
   margin-right: 40px;
+  display: inline-block;
 
   .checkbox {
     width         : 100px;
     margin-left   : 0px;
     display       : inline-block;
     padding-top   : 0px;
-    margin-bottom : 0px;
+    margin-bottom : -10px;
     margin-top    : -1px;
   }
 
   .help-inline-checkbox {
     display        : inline-block;
-    margin-top     : -23px;
+    margin-top     : -3px;
     margin-bottom  : 0;
     vertical-align : middle;
   }
@@ -76,7 +78,7 @@ li.save-and-add:hover {
   display: none;
 
   .control-label {
-    color: @warningText;
+    color: @brand-warning;
   }
 }
 
@@ -99,5 +101,16 @@ li.save-and-add:hover {
   input {
     width  : 280px;
     cursor : text;
+  }
+}
+
+.settings-tabs {
+  @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+    li {
+      a {
+        white-space : nowrap;
+        padding     : 10px;
+      }
+    }
   }
 }

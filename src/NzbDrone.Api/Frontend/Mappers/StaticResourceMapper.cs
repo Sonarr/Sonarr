@@ -1,6 +1,5 @@
 using System.IO;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -29,7 +28,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             return resourceUrl.StartsWith("/Content") ||
                    resourceUrl.EndsWith(".js") ||
                    resourceUrl.EndsWith(".css") ||
-                   resourceUrl.EndsWith(".ico") ||
+                   (resourceUrl.EndsWith(".ico") && !resourceUrl.Equals("/favicon.ico")) ||
                    resourceUrl.EndsWith(".swf");
         }
     }

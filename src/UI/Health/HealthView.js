@@ -6,6 +6,8 @@ define(
         'Health/HealthCollection'
     ], function (_, Marionette, HealthCollection) {
         return Marionette.ItemView.extend({
+            tagName: 'span',
+
             initialize: function () {
                 this.listenTo(HealthCollection, 'sync', this._healthSync);
                 HealthCollection.fetch();
@@ -25,10 +27,10 @@ define(
                 });
 
                 if (errors) {
-                    label = 'label-important';
+                    label = 'label-danger';
                 }
 
-                this.$el.html('<span class="label pull-right {0}">{1}</span>'.format(label, count));
+                this.$el.html('<span class="label {0}">{1}</span>'.format(label, count));
                 return this;
             },
 
