@@ -34,9 +34,9 @@ define(
             template: 'Wanted/Cutoff/CutoffUnmetLayoutTemplate',
 
             regions: {
-                cutoff: '#x-cutoff-unmet',
-                toolbar: '#x-toolbar',
-                pager  : '#x-pager'
+                cutoff  : '#x-cutoff-unmet',
+                toolbar : '#x-toolbar',
+                pager   : '#x-pager'
             },
 
             ui: {
@@ -95,13 +95,13 @@ define(
             },
 
             _showTable: function () {
-                this.missingGrid = new Backgrid.Grid({
+                this.cutoffGrid = new Backgrid.Grid({
                     columns   : this.columns,
                     collection: this.collection,
                     className : 'table table-hover'
                 });
 
-                this.cutoff.show(this.missingGrid);
+                this.cutoff.show(this.cutoffGrid);
 
                 this.pager.show(new GridPager({
                     columns   : this.columns,
@@ -185,7 +185,7 @@ define(
             },
 
             _searchSelected: function () {
-                var selected = this.missingGrid.getSelectedModels();
+                var selected = this.cutoffGrid.getSelectedModels();
 
                 if (selected.length === 0) {
                     Messenger.show({
