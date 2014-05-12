@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(49)]
+    [Migration(50)]
     public class add_hash_to_metadata_files : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
