@@ -122,6 +122,7 @@
     <Compile Include="Episodes\RenameEpisodeModule.cs" />
     <Compile Include="Episodes\RenameEpisodeResource.cs" />
     <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\NzbDroneVersionPipeline.cs" />
     <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IRegisterNancyPipeline.cs" />
