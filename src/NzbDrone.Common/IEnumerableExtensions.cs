@@ -12,5 +12,15 @@ namespace NzbDrone.Common
 
             return source.Where(element => knownKeys.Add(keySelector(element)));
         }
+
+        public static void AddIfNotNull<TSource>(this List<TSource> source, TSource item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            source.Add(item);
+        }
     }
 }

@@ -195,6 +195,7 @@
     <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
     <Compile Include="Datastore\Migration\048_add_title_to_scenemappings.cs" />
     <Compile Include="Datastore\Migration\049_fix_dognzb_url.cs" />
+    <Compile Include="Datastore\Migration\049_add_hash_to_metadata_files.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -362,6 +363,8 @@
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\ImageFileResult.cs" />
+    <Compile Include="Metadata\Files\MetadataFileResult.cs" />
     <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\Files\MetadataFile.cs" />
     <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
@@ -540,6 +543,7 @@
     <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
