@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Parser.Model;

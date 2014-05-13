@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FluentValidation.Results;
-using NLog;
+using System.Collections.Generic;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
@@ -13,6 +11,9 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
+using NLog;
+using Omu.ValueInjecter;
+using FluentValidation.Results;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
@@ -115,6 +116,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 else
                 {
                     historyItem.Status = DownloadItemStatus.Completed;
+                    historyItem.RemainingTime = TimeSpan.Zero;
                 }
 
                 historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);

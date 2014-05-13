@@ -106,19 +106,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 .Returns(_config);
         }
 
-        protected void WithMountPoint(String mountPath)
+        protected void GivenMountPoint(String mountPath)
         {
             (Subject.Definition.Settings as SabnzbdSettings).TvCategoryLocalPath = mountPath;
         }
 
-        protected void WithFailedDownload()
+        protected void GivenFailedDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
                 .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
                 .Returns((SabnzbdAddResponse)null);
         }
 
-        protected void WithSuccessfulDownload()
+        protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
                 .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 });
         }
 
-        protected virtual void WithQueue(SabnzbdQueue queue)
+        protected virtual void GivenQueue(SabnzbdQueue queue)
         {
             if (queue == null)
             {
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 .Returns(queue);
         }
 
-        protected virtual void WithHistory(SabnzbdHistory history)
+        protected virtual void GivenHistory(SabnzbdHistory history)
         {
             if (history == null)
                 history = new SabnzbdHistory() { Items = new List<SabnzbdHistoryItem>() };
@@ -158,8 +158,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [Test]
         public void GetItems_should_return_no_items_when_queue_is_empty()
         {
-            WithQueue(null);
-            WithHistory(null);
+            GivenQueue(null);
+            GivenHistory(null);
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -170,8 +170,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _queued.Items.First().Status = status;
 
-            WithQueue(_queued);
-            WithHistory(null);
+            GivenQueue(_queued);
+            GivenHistory(null);
             
             var result = Subject.GetItems().Single();
 
@@ -184,8 +184,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _queued.Items.First().Status = status;
 
-            WithQueue(_queued);
-            WithHistory(null);
+            GivenQueue(_queued);
+            GivenHistory(null);
 
             var result = Subject.GetItems().Single();
 
@@ -205,8 +205,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _queued.Items.First().Status = status;
 
-            WithQueue(_queued);
-            WithHistory(null);
+            GivenQueue(_queued);
+            GivenHistory(null);
 
             var result = Subject.GetItems().Single();
 
@@ -217,8 +217,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [Test]
         public void completed_download_should_have_required_properties()
         {
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -230,8 +230,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _completed.Items.First().Status = SabnzbdDownloadStatus.Failed;
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -241,7 +241,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [Test]
         public void Download_should_return_unique_id()
         {
-            WithSuccessfulDownload();
+            GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
@@ -255,8 +255,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _completed.Items.First().Category = "myowncat";
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var items = Subject.GetItems();
 
@@ -292,8 +292,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _completed.Items.First().Title = title;
             _completed.Items.First().Storage = (@"C:\sorted\" + title + @"\" + storage).AsOsAgnostic();
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -303,10 +303,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [Test]
         public void should_remap_storage_if_mounted()
         {
-            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+            GivenMountPoint(@"O:\mymount".AsOsAgnostic());
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -318,8 +318,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _completed.Items.First().Storage = @"C:\".AsOsAgnostic();
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -331,8 +331,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             _completed.Items.First().Storage = @"C:\sorted\somewhere\asdfasdf\asdfasdf.mkv".AsOsAgnostic();
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -349,7 +349,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.complete_dir = completeDir;
             _config.Categories.First().Dir = categoryDir;
             
-            WithQueue(null);
+            GivenQueue(null);
 
             var result = Subject.GetStatus();
 
@@ -361,9 +361,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [Test]
         public void should_return_status_with_mounted_outputdir()
         {
-            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+            GivenMountPoint(@"O:\mymount".AsOsAgnostic());
 
-            WithQueue(null);
+            GivenQueue(null);
 
             var result = Subject.GetStatus();
 

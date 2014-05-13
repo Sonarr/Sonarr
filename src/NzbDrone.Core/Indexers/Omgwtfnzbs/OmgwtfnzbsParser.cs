@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         protected override long GetSize(XElement item)
         {
             var sizeString = Regex.Match(item.Description(), @"(?:Size:\<\/b\>\s\d+\.)\d{1,2}\s\w{2}(?:\<br \/\>)", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
-            return ParseSize(sizeString);
+            return ParseSize(sizeString, true);
         }
     }
 }

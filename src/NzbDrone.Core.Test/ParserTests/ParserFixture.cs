@@ -35,6 +35,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hawaii Five 0", "hawaiifive0")]
         [TestCase("Match of the Day", "matchday")]
         [TestCase("Match of the Day 2", "matchday2")]
+        [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
+        [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "Seed")]
         public void should_parse_series_name(String postTitle, String title)
         {
             var result = Parser.Parser.ParseSeriesName(postTitle);
