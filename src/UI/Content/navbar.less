@@ -77,6 +77,11 @@
       color       : #b9b9b9;
       font-weight : 100;
 
+      &:focus {
+        background-color : transparent;
+        text-decoration : none;
+      }
+
       &:hover {
         background-color : #555555;
         text-decoration  : none;
@@ -84,11 +89,6 @@
 
       .label {
         cursor: pointer;
-      }
-
-      &:focus {
-        background-color : transparent;
-        text-decoration : none;
       }
 
       @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
