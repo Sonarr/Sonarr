@@ -191,12 +191,6 @@ namespace NzbDrone.Core.Indexers
             _logger.Debug("Downloading Feed " + request.Url);
             var response = new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
 
-            if (response.HttpResponse.Headers.ContentType != null && response.HttpResponse.Headers.ContentType.Contains("text/html") &&
-                request.HttpRequest.Headers.Accept != null && !request.HttpRequest.Headers.Accept.Contains("text/html"))
-            {
-                throw new WebException("Indexer responded with html content. Site is likely blocked or unavailable.");
-            }
-
             return parser.ParseResponse(response).ToList();
         }
 

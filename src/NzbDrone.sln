@@ -76,6 +76,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Windows.Test", "Nz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Mono.Test", "NzbDrone.Mono.Test\NzbDrone.Mono.Test.csproj", "{40D72824-7D02-4A77-9106-8FE0EEA2B997}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoTorrent", "MonoTorrent\MonoTorrent.csproj", "{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -471,6 +473,21 @@ Global
 		{40D72824-7D02-4A77-9106-8FE0EEA2B997}.Release|Mixed Platforms.Build.0 = Release|x86
 		{40D72824-7D02-4A77-9106-8FE0EEA2B997}.Release|x86.ActiveCfg = Release|x86
 		{40D72824-7D02-4A77-9106-8FE0EEA2B997}.Release|x86.Build.0 = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Debug|x86.ActiveCfg = Debug|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Debug|x86.Build.0 = Debug|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Mono|Any CPU.ActiveCfg = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Mono|Mixed Platforms.ActiveCfg = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Mono|Mixed Platforms.Build.0 = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Mono|x86.ActiveCfg = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Mono|x86.Build.0 = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|Any CPU.ActiveCfg = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|Mixed Platforms.Build.0 = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|x86.ActiveCfg = Release|x86
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -500,6 +517,7 @@ Global
 		{4EACDBBC-BCD7-4765-A57B-3E08331E4749} = {57A04B72-8088-4F75-A582-1158CF8291F7}
 		{80B51429-7A0E-46D6-BEE3-C80DCB1C4EAA} = {4EACDBBC-BCD7-4765-A57B-3E08331E4749}
 		{40D72824-7D02-4A77-9106-8FE0EEA2B997} = {4EACDBBC-BCD7-4765-A57B-3E08331E4749}
+		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;packages\Unity.2.1.505.2\lib\NET35

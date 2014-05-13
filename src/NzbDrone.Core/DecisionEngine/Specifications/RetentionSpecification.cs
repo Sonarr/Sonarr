@@ -20,6 +20,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            if (subject.Release.DownloadProtocol != Indexers.DownloadProtocol.Usenet)
+            {
+                _logger.Debug("Not checking retention requirement for non-usenet report");
+                return Decision.Accept();
+            }
+
             var age = subject.Release.Age;
             var retention = _configService.Retention;
 

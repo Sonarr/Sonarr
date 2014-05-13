@@ -140,6 +140,8 @@
     <Compile Include="Http\HttpProvider.cs" />
     <Compile Include="Http\HttpRequest.cs" />
     <Compile Include="Http\HttpResponse.cs" />
+    <Compile Include="Http\JsonRpcRequestBuilder.cs" />
+    <Compile Include="Http\JsonRpcResponse.cs" />
     <Compile Include="Http\NzbDroneWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
