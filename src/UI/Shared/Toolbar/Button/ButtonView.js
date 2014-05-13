@@ -33,6 +33,10 @@ define(
                     this.$el.addClass('btn-icon-only');
                 }
 
+                if (this.model.get('className')) {
+                    this.$el.addClass(this.model.get('className'));
+                }
+
                 var command = this.model.get('command');
                 if (command) {
                     var properties = _.extend({ name: command }, this.model.get('properties'));
