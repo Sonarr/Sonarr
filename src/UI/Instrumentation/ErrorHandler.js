@@ -1,5 +1,4 @@
-﻿define(
-    [
+﻿define([
         'jquery',
         'messenger'
     ], function ($, Messenger) {
@@ -29,10 +28,10 @@
                 var messageText = filename + ' : ' + line + '</br>' + msg;
 
                 var message = {
-                    message        : messageText,
-                    type           : 'error',
-                    hideAfter      : 1000,
-                    showCloseButton: true
+                    message         : messageText,
+                    type            : 'error',
+                    hideAfter       : 1000,
+                    showCloseButton : true
                 };
 
                 new Messenger().post(message);
@@ -62,9 +61,9 @@
             }
 
             var message = {
-                type           : 'error',
-                hideAfter      : 1000,
-                showCloseButton: true
+                type            : 'error',
+                hideAfter       : 1000,
+                showCloseButton : true
             };
 
             if (xmlHttpRequest.status === 0 && xmlHttpRequest.readyState === 0) {
