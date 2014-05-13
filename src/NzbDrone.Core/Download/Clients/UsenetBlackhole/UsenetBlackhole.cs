@@ -70,6 +70,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
+                    Category = "nzbdrone",
                     Title = title,
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),

@@ -129,6 +129,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[xh][\W_]?264|DD\W?5\W1|\<|\>|\?|\*|\:|\||848x480|1280x720|1920x1080|8bit|10bit",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex WebsitePrefixRegex = new Regex(@"^\[\s*[a-z]+(\.[a-z]+)+\s*\][- ]*",
+                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -201,6 +204,9 @@ namespace NzbDrone.Core.Parser
                 }
 
                 var simpleTitle = SimpleTitleRegex.Replace(title, String.Empty);
+
+                // TODO: Quick fix stripping [url] - prefixes.
+                simpleTitle = WebsitePrefixRegex.Replace(simpleTitle, String.Empty);
 
                 var airDateMatch = AirDateRegex.Match(simpleTitle);
                 if (airDateMatch.Success)
