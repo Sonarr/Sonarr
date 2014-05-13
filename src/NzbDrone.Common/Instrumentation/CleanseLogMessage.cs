@@ -7,15 +7,23 @@ namespace NzbDrone.Common.Instrumentation
         private static readonly Regex[] CleansingRules = new[] 
             {
                 // Url
-                new Regex(@"(<=\?|&)apikey=(?<secret>\w+?)(?=\W|$|_)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                new Regex(@"(<=\?|&)[^=]*?(username|password)=(?<secret>\w+?)(?=\W|$|_)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                
+                new Regex(@"(?<=\?|&)(apikey|token)=(?<secret>[^&=]+?)(?= |&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"(?<=\?|&)[^=]*?(username|password)=(?<secret>[^&=]+?)(?= |&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+
+                // Path
+                new Regex(@"""C:\\Users\\(?<secret>[^\""]+?)(\\|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"""/home/(?<secret>[^/""]+?)(/|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+
                 // NzbGet
                 new Regex(@"""Name""\s*:\s*""[^""]*(username|password)""\s*,\s*""Value""\s*:\s*""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
                 // Sabnzbd
                 new Regex(@"""[^""]*(username|password|api_?key|nzb_key)""\s*:\s*""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                new Regex(@"""email_(account|to|from|pwd)""\s*:\s*""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                new Regex(@"""email_(account|to|from|pwd)""\s*:\s*""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+
+                // uTorrent
+                new Regex(@"\[""[a-z._]*(|username|password)"",\d,""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"\[""(boss_key|boss_key_salt|proxy\.proxy)"",\d,""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
         //private static readonly Regex CleansingRegex = new Regex(@"(?<=apikey=)(\w+?)(?=\W|$|_)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

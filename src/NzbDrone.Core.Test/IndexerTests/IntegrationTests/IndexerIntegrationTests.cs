@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Eztv;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 
             ValidateResult(result, skipSize: true, skipInfo: true);
         }
-        
+
         private void ValidateResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)
         {
             reports.Should().NotBeEmpty();

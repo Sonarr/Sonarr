@@ -272,10 +272,21 @@
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\TorrentSeedingSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
     <Compile Include="Download\CheckForFinishedDownloadCommand.cs" />
+    <Compile Include="Download\Clients\Deluge\Deluge.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeError.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeException.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeProxy.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeResponse.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeSettings.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeTorrent.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugeTorrentStatus.cs" />
+    <Compile Include="Download\Clients\Deluge\DelugePriority.cs" />
+    <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
@@ -313,10 +324,29 @@
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueue.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
+    <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackhole.cs" />
+    <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackholeSettings.cs" />
+    <Compile Include="Download\Clients\TorrentSeedConfiguration.cs" />
+    <Compile Include="Download\Clients\Transmission\Transmission.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionException.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionProxy.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionResponse.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionSettings.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionTorrent.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionTorrentStatus.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionPriority.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentPriority.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrent.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentProxy.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentResponse.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentSettings.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentTorrent.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentTorrentStatus.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
     <Compile Include="Download\UsenetClientBase.cs" />
+    <Compile Include="Download\TorrentClientBase.cs" />
     <Compile Include="Download\DownloadClientBase.cs" />
     <Compile Include="Download\DownloadClientDefinition.cs" />
     <Compile Include="Download\DownloadClientFactory.cs" />
@@ -385,10 +415,15 @@
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
     <Compile Include="Indexers\Animezb\Animezb.cs" />
     <Compile Include="Indexers\Animezb\AnimezbRequestGenerator.cs" />
+    <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
+    <Compile Include="Indexers\BitMeTv\BitMeTvRssParser.cs" />
+    <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\IndexerException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
+    <Compile Include="Indexers\Eztv\Eztv.cs" />
+    <Compile Include="Indexers\Eztv\EztvSettings.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
@@ -403,6 +438,12 @@
     <Compile Include="Indexers\IndexerRequest.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IProcessIndexerResponse.cs" />
+    <Compile Include="Indexers\IPTorrents\IPTorrents.cs" />
+    <Compile Include="Indexers\IPTorrents\IPTorrentsRssParser.cs" />
+    <Compile Include="Indexers\IPTorrents\IPTorrentsSettings.cs" />
+    <Compile Include="Indexers\KickassTorrents\KickassTorrents.cs" />
+    <Compile Include="Indexers\KickassTorrents\KickassTorrentsRssParser.cs" />
+    <Compile Include="Indexers\KickassTorrents\KickassTorrentsSettings.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
     <Compile Include="Indexers\Newznab\NewznabRequestGenerator.cs" />
@@ -410,6 +451,9 @@
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Exceptions\SizeParsingException.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRequestGenerator.cs" />
+    <Compile Include="Indexers\Nyaa\Nyaa.cs" />
+    <Compile Include="Indexers\Nyaa\NyaaRssParser.cs" />
+    <Compile Include="Indexers\Nyaa\NyaaSettings.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
@@ -419,6 +463,9 @@
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\RssSyncCompleteEvent.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
+    <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
+    <Compile Include="Indexers\Torrentleech\TorrentleechRssParser.cs" />
+    <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
     <Compile Include="Indexers\Wombles\WomblesRssParser.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
@@ -568,6 +615,7 @@
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingService.cs" />
+    <Compile Include="MediaFiles\TorrentInfo\TorrentFileInfoReader.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
     <Compile Include="Notifications\Email\Email.cs">
       <SubType>Code</SubType>
@@ -814,6 +862,10 @@
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
       <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
       <Name>Marr.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MonoTorrent\MonoTorrent.csproj">
+      <Project>{411a9e0e-fdc6-4e25-828a-0c2cd1cd96f8}</Project>
+      <Name>MonoTorrent</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>

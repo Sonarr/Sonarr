@@ -26,6 +26,10 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
             Mocker.GetMock<IRemotePathMappingRepository>()
                   .Setup(s => s.All())
                   .Returns(new List<RemotePathMapping>());
+
+            Mocker.GetMock<IRemotePathMappingRepository>()
+                  .Setup(s => s.Insert(It.IsAny<RemotePathMapping>()))
+                  .Returns<RemotePathMapping>(m => m);
         }
 
         private void GivenMapping()
@@ -111,6 +115,25 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
             var result = Subject.RemapLocalToRemote(host, localPath);
 
             result.Should().Be(expectedRemotePath);
+        }
+
+        [TestCase(@"\\server\share\with/mixed/slashes", @"\\server\share\with\mixed\slashes\")]
+        [TestCase(@"D:/with/forward/slashes", @"D:\with\forward\slashes\")]
+        [TestCase(@"D:/with/mixed\slashes", @"D:\with\mixed\slashes\")]
+        public void should_fix_wrong_slashes_on_add(String remotePath, String cleanedPath)
+        {
+            GivenMapping();
+
+            var mapping = new RemotePathMapping
+            {
+                Host = "my-server.localdomain",
+                RemotePath = remotePath,
+                LocalPath = @"D:\mountedstorage\downloads\tv" .AsOsAgnostic()
+            };
+
+            var result = Subject.Add(mapping);
+
+            result.RemotePath.Should().Be(cleanedPath);
         }
     }
 }

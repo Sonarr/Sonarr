@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         protected void GivenCompletedItem()
         {
             var targetDir = Path.Combine(_completedDownloadFolder, _title);
+
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetDirectories(_completedDownloadFolder))
                 .Returns(new[] { targetDir });
@@ -67,6 +68,17 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var result = Subject.GetItems().Single();
 
             VerifyCompleted(result);
+        }
+
+        [Test]
+        public void should_return_category()
+        {
+            GivenCompletedItem();
+
+            var result = Subject.GetItems().Single();
+
+            // We must have a category or CDH won't pick it up.
+            result.Category.Should().NotBeNullOrWhiteSpace();
         }
 
         [Test]

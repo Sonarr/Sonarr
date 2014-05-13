@@ -209,13 +209,13 @@ namespace NzbDrone.Core.RemotePathMappings
 
         private static String CleanPath(String path)
         {
-            if (path.Contains('\\'))
+            if (path.StartsWith(@"\\") || path.Contains(':'))
             {
-                return path.TrimEnd('\\', '/') + "\\";
+                return path.TrimEnd('\\', '/').Replace('/', '\\') + "\\";
             }
             else
             {
-                return path.TrimEnd('\\', '/') + "/";
+                return path.TrimEnd('\\', '/').Replace('\\', '/') + "/";
             }
         }
     }
