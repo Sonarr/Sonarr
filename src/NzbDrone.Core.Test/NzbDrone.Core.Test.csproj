@@ -140,11 +140,15 @@
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\Blackhole\TorrentBlackholeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\Blackhole\UsenetBlackholeFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\DelugeTests\DelugeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadClientFixtureBase.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetTests\NzbgetFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\TransmissionTests\TransmissionFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\UTorrentTests\UTorrentFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
@@ -179,6 +183,9 @@
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
     <Compile Include="IndexerTests\AnimezbTests\AnimezbFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
+    <Compile Include="IndexerTests\BitMeTvTests\BitMeTvFixture.cs" />
+    <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
+    <Compile Include="IndexerTests\EztvTests\EztvFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabFixture.cs" />
@@ -189,6 +196,10 @@
     <Compile Include="IndexerTests\SeasonSearchFixture.cs" />
     <Compile Include="IndexerTests\TestIndexer.cs" />
     <Compile Include="IndexerTests\TestIndexerSettings.cs" />
+    <Compile Include="IndexerTests\IPTorrentsTests\IPTorrentsFixture.cs" />
+    <Compile Include="IndexerTests\KickassTorrentsTests\KickassTorrentsFixture.cs" />
+    <Compile Include="IndexerTests\NyaaTests\NyaaFixture.cs" />
+    <Compile Include="IndexerTests\TorrentleechTests\TorrentleechFixture.cs" />
     <Compile Include="IndexerTests\XElementExtensionsFixture.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
@@ -324,7 +335,13 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\Indexers\BroadcastheNet\RecentFeed.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Files\RSS\fanzub.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\Eztv.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="License.txt" />
@@ -354,6 +371,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\QueueUnknownPriority.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\Nyaa.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\filesharingtalk.xml">
@@ -392,6 +412,18 @@
     <Content Include="Files\RSS\wombles.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Files\RSS\BitMeTv.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\IPTorrents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\KickassTorrents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\Torrentleech.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
