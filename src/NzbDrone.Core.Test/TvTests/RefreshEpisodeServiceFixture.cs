@@ -24,6 +24,9 @@ namespace NzbDrone.Core.Test.TvTests
         public void TestFixture()
         {
             _gameOfThrones = Mocker.Resolve<TraktProxy>().GetSeriesInfo(121361);//Game of thrones
+
+            // Remove specials.
+            _gameOfThrones.Item2.RemoveAll(v => v.SeasonNumber == 0);
         }
 
         private List<Episode> GetEpisodes()
