@@ -10,11 +10,14 @@ define(
 
         return NzbDroneController.extend({
 
+            _originalInit: NzbDroneController.prototype.initialize,
 
             initialize: function () {
                 this.route('', this.series);
                 this.route('series', this.series);
                 this.route('series/:query', this.seriesDetails);
+
+                this._originalInit.apply(this, arguments);
             },
 
             series: function () {
