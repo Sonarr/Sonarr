@@ -105,7 +105,6 @@
     <Compile Include="Messaging\IEvent.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="PathEqualityComparer.cs" />
-    <Compile Include="Processes\INzbDroneProcessProvider.cs" />
     <Compile Include="Processes\PidFileProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="RateGate.cs" />

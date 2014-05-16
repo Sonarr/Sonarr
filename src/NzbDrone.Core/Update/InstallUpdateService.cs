@@ -6,6 +6,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
@@ -27,18 +28,31 @@ namespace NzbDrone.Core.Update
         private readonly IHttpProvider _httpProvider;
         private readonly IArchiveService _archiveService;
         private readonly IProcessProvider _processProvider;
+        private readonly IVerifyUpdates _updateVerifier;
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IRuntimeInfo _runtimeInfo;
 
 
         public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppFolderInfo appFolderInfo,
                                     IDiskProvider diskProvider, IHttpProvider httpProvider,
-                                    IArchiveService archiveService, IProcessProvider processProvider, Logger logger)
+                                    IArchiveService archiveService, IProcessProvider processProvider,
+                                    IVerifyUpdates updateVerifier,
+                                    IConfigFileProvider configFileProvider,
+                                    IRuntimeInfo runtimeInfo, Logger logger)
         {
+            if (configFileProvider == null)
+            {
+                throw new ArgumentNullException("configFileProvider");
+            }
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
             _archiveService = archiveService;
             _processProvider = processProvider;
+            _updateVerifier = updateVerifier;
+            _configFileProvider = configFileProvider;
+            _runtimeInfo = runtimeInfo;
             _logger = logger;
         }
 
@@ -60,24 +74,69 @@ namespace NzbDrone.Core.Update
                 _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
                 _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
 
+                _logger.ProgressInfo("Verifying update package");
+
+                if (!_updateVerifier.Verify(updatePackage, packageDestination))
+                {
+                    _logger.Error("Update package is invalid");
+                    throw new UpdateVerificationFailedException("Update file '{0}' is invalid", packageDestination);
+                }
+
+                _logger.Info("Update package verified successfully");
+
                 _logger.ProgressInfo("Extracting Update package");
                 _archiveService.Extract(packageDestination, updateSandboxFolder);
                 _logger.Info("Update package extracted successfully");
+
+                if (OsInfo.IsMono && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
+                {
+                    InstallUpdateWithScript(updateSandboxFolder);
+                    return;
+                }
 
                 _logger.Info("Preparing client");
                 _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
                                             updateSandboxFolder);
 
                 _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
-
                 _logger.ProgressInfo("NzbDrone will restart shortly.");
 
-                _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), _processProvider.GetCurrentProcess().Id.ToString());
+                _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), GetUpdaterArgs(updateSandboxFolder));
             }
             catch (Exception ex)
             {
                 _logger.ErrorException("Update process failed", ex);
             }
+        }
+
+        private void InstallUpdateWithScript(String updateSandboxFolder)
+        {
+            var scriptPath = _configFileProvider.UpdateScriptPath;
+
+            if (scriptPath.IsNullOrWhiteSpace())
+            {
+                throw new ArgumentException("Update Script has not been defined");
+            }
+
+            if (!_diskProvider.FileExists(scriptPath, true))
+            {
+                var message = String.Format("Update Script: '{0}' does not exist", scriptPath);
+                throw new FileNotFoundException(message, scriptPath);
+            }
+
+            _logger.Info("Removing NzbDrone.Update");
+            _diskProvider.DeleteFolder(_appFolderInfo.GetUpdateClientFolder(), true);
+
+            _logger.ProgressInfo("Starting update script: {0}", _configFileProvider.UpdateScriptPath);
+            _processProvider.Start(scriptPath, GetUpdaterArgs(updateSandboxFolder.WrapInQuotes()));
+        }
+
+        private string GetUpdaterArgs(string updateSandboxFolder)
+        {
+            var processId = _processProvider.GetCurrentProcess().Id.ToString();
+            var executingApplication = _runtimeInfo.ExecutingApplication;
+
+            return String.Join(" ", processId, updateSandboxFolder.WrapInQuotes(), executingApplication.WrapInQuotes());
         }
 
         public void Execute(ApplicationUpdateCommand message)

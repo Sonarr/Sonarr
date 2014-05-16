@@ -9,6 +9,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Model;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.Commands;
@@ -49,12 +50,28 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.TempFolder).Returns(TempFolder);
             Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns(_updatePackage);
+            Mocker.GetMock<IVerifyUpdates>().Setup(c => c.Verify(It.IsAny<UpdatePackage>(), It.IsAny<String>())).Returns(true);
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
+            Mocker.GetMock<IRuntimeInfo>().Setup(c => c.ExecutingApplication).Returns(@"C:\Test\NzbDrone.exe");
 
             _sandboxFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder();
         }
 
+        private void GivenInstallScript(string path)
+        {
+            Mocker.GetMock<IConfigFileProvider>()
+                  .SetupGet(s => s.UpdateMechanism)
+                  .Returns(UpdateMechanism.Script);
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .SetupGet(s => s.UpdateScriptPath)
+                  .Returns(path);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FileExists(path, true))
+                  .Returns(true);
+        }
 
         [Test]
         public void should_delete_sandbox_before_update_if_folder_exists()
@@ -76,7 +93,6 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Mocker.GetMock<IDiskProvider>().Verify(c => c.DeleteFolder(_sandboxFolder, true), Times.Never());
         }
-
 
         [Test]
         public void Should_download_update_package()
@@ -118,11 +134,11 @@ namespace NzbDrone.Core.Test.UpdateTests
             Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IProcessProvider>()
-                .Verify(c => c.Start(It.IsAny<string>(), "12", null, null), Times.Once());
+                .Verify(c => c.Start(It.IsAny<string>(), It.Is<String>(s => s.StartsWith("12")), null, null), Times.Once());
         }
 
         [Test]
-        public void when_no_updates_are_available_should_return_without_error_or_warnings()
+        public void should_return_without_error_or_warnings_when_no_updates_are_available()
         {
             Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns<UpdatePackage>(null);
 
@@ -130,6 +146,75 @@ namespace NzbDrone.Core.Test.UpdateTests
 
 
             ExceptionVerification.AssertNoUnexpectedLogs();
+        }
+
+        [Test]
+        public void should_not_extract_if_verification_fails()
+        {
+            Mocker.GetMock<IVerifyUpdates>().Setup(c => c.Verify(It.IsAny<UpdatePackage>(), It.IsAny<String>())).Returns(false);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            Mocker.GetMock<IArchiveService>().Verify(v => v.Extract(It.IsAny<String>(), It.IsAny<String>()), Times.Never());
+        }
+
+        [Test]
+        [Platform("Mono")]
+        public void should_run_script_if_configured()
+        {
+            const string scriptPath = "/tmp/nzbdrone/update.sh";
+
+            GivenInstallScript(scriptPath);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Once());
+        }
+
+        [Test]
+        [Platform("Mono")]
+        public void should_throw_if_script_is_not_set()
+        {
+            const string scriptPath = "/tmp/nzbdrone/update.sh";
+
+            GivenInstallScript("");
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            ExceptionVerification.ExpectedErrors(1);
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Never());
+        }
+
+        [Test]
+        [Platform("Mono")]
+        public void should_throw_if_script_is_null()
+        {
+            const string scriptPath = "/tmp/nzbdrone/update.sh";
+
+            GivenInstallScript(null);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            ExceptionVerification.ExpectedErrors(1);
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Never());
+        }
+
+        [Test]
+        [Platform("Mono")]
+        public void should_throw_if_script_path_does_not_exist()
+        {
+            const string scriptPath = "/tmp/nzbdrone/update.sh";
+
+            GivenInstallScript(scriptPath);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FileExists(scriptPath, true))
+                  .Returns(false);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            ExceptionVerification.ExpectedErrors(1);
+            Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Never());
         }
 
         [Test]

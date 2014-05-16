@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -22,7 +23,6 @@ namespace NzbDrone.Core.Configuration
         Int32 BlacklistGracePeriod { get; set; }
         Int32 BlacklistRetryInterval { get; set; }
         Int32 BlacklistRetryLimit { get; set; }
-
 
         //Media Management
         Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }

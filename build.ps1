@@ -6,6 +6,7 @@ $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
 $sourceFolder = '.\src'
 $updateFolder = $outputFolder + '\NzbDrone.Update'
+$updateFolderMono = $outputFolderMono + '\NzbDrone.Update'
 
 Function Build()
 {
@@ -73,9 +74,6 @@ Function PackageMono()
 
     Copy-Item $outputFolder $outputFolderMono -recurse
 
-    Write-Host Removing Update Client 
-    Remove-Item -Recurse -Force "$outputFolderMono\NzbDrone.Update"
-
     Write-Host Creating MDBs
     get-childitem $outputFolderMono -File -Include @("*.exe", "*.dll") -Exclude @("MediaInfo.dll", "sqlite3.dll") -Recurse | foreach ($_) {
         Write-Host "Creating .mdb for $_"
@@ -109,6 +107,9 @@ Function PackageMono()
     }
 
     Remove-Item "$outputFolderMono\NzbDrone.Console.vshost.exe"
+
+    Write-Host Adding NzbDrone.Mono to UpdatePackage
+    Copy-Item $outputFolderMono\* $updateFolderMono -Filter NzbDrone.Mono.*
 
     Write-Host "##teamcity[progressFinish 'Creating Mono Package']"
 }

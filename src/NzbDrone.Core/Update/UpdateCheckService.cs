@@ -18,7 +18,9 @@ namespace NzbDrone.Core.Update
         private readonly Logger _logger;
 
 
-        public CheckUpdateService(IUpdatePackageProvider updatePackageProvider, IConfigFileProvider configFileProvider, Logger logger)
+        public CheckUpdateService(IUpdatePackageProvider updatePackageProvider,
+                                  IConfigFileProvider configFileProvider,
+                                  Logger logger)
         {
             _updatePackageProvider = updatePackageProvider;
             _configFileProvider = configFileProvider;
@@ -27,7 +29,10 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
-            if (OsInfo.IsMono) return null;
+            if (OsInfo.IsMono && !_configFileProvider.UpdateAutomatically)
+            {
+                return null;
+            }
 
             var latestAvailable = _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
 

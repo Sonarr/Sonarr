@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Api.Config
 {
@@ -14,10 +15,12 @@ namespace NzbDrone.Api.Config
         public String Password { get; set; }
         public String LogLevel { get; set; }
         public String Branch { get; set; }
-        public Boolean AutoUpdate { get; set; }
         public String ApiKey { get; set; }
         public Boolean Torrent { get; set; }
         public String SslCertHash { get; set; }
         public String UrlBase { get; set; }
+        public Boolean UpdateAutomatically { get; set; }
+        public UpdateMechanism UpdateMechanism { get; set; }
+        public String UpdateScriptPath { get; set; }
     }
 }

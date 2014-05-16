@@ -6,6 +6,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Update;
 
 
 namespace NzbDrone.Core.Configuration

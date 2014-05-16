@@ -82,7 +82,6 @@ namespace NzbDrone.Update.UpdateEngine
                     _backupAndRestore.Restore(installationFolder);
                     _logger.FatalException("Failed to copy upgrade package to target folder.", e);
                 }
-
             }
             finally
             {
