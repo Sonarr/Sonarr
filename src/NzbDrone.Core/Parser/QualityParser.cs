@@ -176,6 +176,16 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
+            if (normalizedName.Contains("bluray720p"))
+            {
+                result.Quality = Quality.Bluray720p;
+            }
+
+            if (normalizedName.Contains("bluray1080p"))
+            {
+                result.Quality = Quality.Bluray1080p;
+            }
+
             //Based on extension
             if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
             {
