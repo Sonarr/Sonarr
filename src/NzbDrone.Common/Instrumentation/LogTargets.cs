@@ -104,7 +104,7 @@ namespace NzbDrone.Common.Instrumentation
             var fileTarget = new FileTarget();
 
             fileTarget.Name = "updateFileLogger";
-            fileTarget.FileName = Path.Combine(appFolderInfo.GetUpdateLogFolder(), DateTime.Now.ToString("yy.MM.d-HH.mm") + ".txt");
+            fileTarget.FileName = Path.Combine(appFolderInfo.GetUpdateLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-HH.mm") + ".txt");
             fileTarget.AutoFlush = true;
             fileTarget.KeepFileOpen = false;
             fileTarget.ConcurrentWrites = false;
