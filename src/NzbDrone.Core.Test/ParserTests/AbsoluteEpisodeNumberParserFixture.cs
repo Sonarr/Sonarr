@@ -33,13 +33,14 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[ACX]Hack Sign 01 Role Play [Kosaka] [9C57891E].mkv", "Hack Sign", 1, 0, 0)]
         [TestCase("[SFW-sage] Bakuman S3 - 12 [720p][D07C91FC]", "Bakuman S3", 12, 0, 0)]
         [TestCase("ducktales_e66_time_is_money_part_one_marking_time", "DuckTales", 66, 0, 0)]
+        [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0].mkv", "No Game No Life", 1, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
-            result.AbsoluteEpisodeNumbers.First().Should().Be(absoluteEpisodeNumber);
+            result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeasonNumber.Should().Be(seasonNumber);
-            result.EpisodeNumbers.FirstOrDefault().Should().Be(episodeNumber);
+            result.EpisodeNumbers.SingleOrDefault().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.FullSeason.Should().BeFalse();
         }
