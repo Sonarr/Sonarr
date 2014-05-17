@@ -69,7 +69,7 @@ define(
                         if (downloading) {
                             var progress = 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
 
-                            this.$el.html('<div class="progress progress-purple" title="Episode is downloading - {0}% {1}" data-container="body">'.format(progress.toFixed(1), downloading.get('title')) +
+                            this.$el.html('<div class="progress progress-purple" title="Episode is downloading - {0}% {1}">'.format(progress.toFixed(1), downloading.get('title')) +
                                           '<div class="bar" style="width: {0}%;"></div></div>'.format(progress));
                             return;
                         }

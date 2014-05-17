@@ -71,7 +71,8 @@ require.config({
                 ],
             init: function ($) {
                 $('body').tooltip({
-                    selector: '[title]'
+                    selector: '[title]',
+                    container: 'body'
                 });
             }
         },

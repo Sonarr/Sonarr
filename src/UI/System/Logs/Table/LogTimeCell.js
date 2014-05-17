@@ -13,7 +13,6 @@ define(
                 var date = Moment(this._getValue());
                 this.$el.html(date.format('LT'));
                 this.$el.attr('title', date.format('LLLL'));
-                this.$el.attr('data-container', 'body');
 
                 return this;
             }
