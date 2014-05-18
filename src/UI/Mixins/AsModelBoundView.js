@@ -20,7 +20,7 @@ define(
                 }
 
                 var options = {
-                    changeTriggers: {'': 'change', '[contenteditable]': 'blur', '[data-onkeyup]': 'keyup'}
+                    changeTriggers: {'': 'change typeahead:selected typeahead:autocompleted', '[contenteditable]': 'blur', '[data-onkeyup]': 'keyup'}
                 };
 
                 this._modelBinder.bind(this.model, this.el, null, options);

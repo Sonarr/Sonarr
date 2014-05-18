@@ -2,9 +2,8 @@
 define(
     [
         'jquery',
-        'underscore',
         'typeahead'
-    ], function ($, _) {
+    ], function ($) {
 
     $.fn.autoComplete = function (resource) {
         $(this).typeahead({
