@@ -68,13 +68,7 @@ require.config({
             deps:
                 [
                     'jquery'
-                ],
-            init: function ($) {
-                $('body').tooltip({
-                    selector: '[title]',
-                    container: 'body'
-                });
-            }
+                ]
         },
         backstrech            : {
             deps:
@@ -249,9 +243,10 @@ define(
         'Shared/Modal/ModalController',
         'Shared/ControlPanel/ControlPanelController',
         'System/StatusModel',
+        'Shared/Tooltip',
         'Instrumentation/StringFormat',
         'LifeCycle'
-    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel) {
+    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel, Tooltip) {
 
         new SeriesController();
         new ModalController();
@@ -265,6 +260,10 @@ define(
         });
 
         app.addInitializer(SignalRBroadcaster.appInitializer, {
+            app: app
+        });
+
+        app.addInitializer(Tooltip.appInitializer, {
             app: app
         });
 
