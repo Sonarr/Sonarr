@@ -21,7 +21,7 @@ namespace NzbDrone.Test.Common
                 LogManager.Configuration = new LoggingConfiguration();
                 var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
                 LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, consoleTarget));
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
 
                 RegisterExceptionVerification();
             }

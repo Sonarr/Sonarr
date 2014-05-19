@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Tv;
@@ -12,14 +13,14 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         private static readonly Regex BeginningThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public Series Series { get; set; }
-        public string SceneTitle { get; set; }
+        public List<String> SceneTitles { get; set; }
         public List<Episode> Episodes { get; set; }
 
-        public string QueryTitle
+        public List<String> QueryTitles
         {
             get
             {
-                return GetQueryTitle(SceneTitle);
+                return SceneTitles.Select(GetQueryTitle).ToList();
             }
         }
 

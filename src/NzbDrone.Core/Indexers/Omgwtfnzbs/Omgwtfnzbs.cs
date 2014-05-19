@@ -24,43 +24,52 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             }
         }
 
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
+        public override IEnumerable<string> GetEpisodeSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<string>();
 
             foreach (var url in RecentFeed)
             {
-                searchUrls.Add(String.Format("{0}&search={1}+S{2:00}E{3:00}", url, seriesTitle, seasonNumber, episodeNumber));
+                foreach (var title in titles)
+                {
+                    searchUrls.Add(String.Format("{0}&search={1}+S{2:00}E{3:00}", url, title, seasonNumber, episodeNumber));
+                }
             }
 
             return searchUrls;
         }
 
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
+        public override IEnumerable<string> GetDailyEpisodeSearchUrls(List<String> titles, int tvRageId, DateTime date)
         {
             var searchUrls = new List<String>();
 
             foreach (var url in RecentFeed)
             {
-                searchUrls.Add(String.Format("{0}&search={1}+{2:yyyy MM dd}", url, seriesTitle, date));
+                foreach (var title in titles)
+                {
+                    searchUrls.Add(String.Format("{0}&search={1}+{2:yyyy MM dd}", url, title, date));
+                }
             }
 
             return searchUrls;
         }
 
-        public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
+        public override IEnumerable<string> GetAnimeEpisodeSearchUrls(List<String> titles, int tvRageId, int absoluteEpisodeNumber)
         {
             // TODO: Implement
             return new List<string>();
         }
 
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
+        public override IEnumerable<string> GetSeasonSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int offset)
         {
             var searchUrls = new List<String>();
 
             foreach (var url in RecentFeed)
             {
-                searchUrls.Add(String.Format("{0}&search={1}+S{2:00}", url, seriesTitle, seasonNumber));
+                foreach (var title in titles)
+                {
+                    searchUrls.Add(String.Format("{0}&search={1}+S{2:00}", url, title, seasonNumber));
+                }
             }
 
             return searchUrls;

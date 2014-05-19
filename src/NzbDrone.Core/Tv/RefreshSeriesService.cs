@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Tv
             var seriesInfo = tuple.Item1;
 
             series.Title = seriesInfo.Title;
+            series.TitleSlug = seriesInfo.TitleSlug;
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;

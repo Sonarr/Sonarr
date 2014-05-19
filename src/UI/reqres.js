@@ -7,7 +7,8 @@ define(
         var reqres = new Backbone.Wreqr.RequestResponse();
 
         reqres.Requests = {
-            GetEpisodeFileById: 'GetEpisodeFileById'
+            GetEpisodeFileById             : 'GetEpisodeFileById',
+            GetAlternateNameBySeasonNumber : 'GetAlternateNameBySeasonNumber'
         };
 
         return reqres;

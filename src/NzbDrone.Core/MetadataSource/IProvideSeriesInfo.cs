@@ -6,6 +6,6 @@ namespace NzbDrone.Core.MetadataSource
 {
     public interface IProvideSeriesInfo
     {
-        Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId);
+        Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId);
     }
 }

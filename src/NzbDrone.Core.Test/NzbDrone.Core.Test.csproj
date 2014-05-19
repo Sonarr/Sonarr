@@ -173,6 +173,7 @@
     <Compile Include="Messaging\Commands\CommandExecutorFixture.cs" />
     <Compile Include="Messaging\Commands\CommandFixture.cs" />
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
+    <Compile Include="MetadataSourceTests\TvdbProxyFixture.cs" />
     <Compile Include="MetadataSourceTests\TraktProxyFixture.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
     <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
+    <Compile Include="ParserTests\AnimeMetadataParserFixture.cs" />
     <Compile Include="ParserTests\IsPossibleSpecialEpisodeFixture.cs" />
     <Compile Include="ParserTests\ReleaseGroupParserFixture.cs" />
     <Compile Include="ParserTests\LanguageParserFixture.cs" />
@@ -249,7 +251,7 @@
     <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest_GetEpisodesByParseResult.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
-    <Compile Include="OrganizerTests\GetNewFilenameFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
     <Compile Include="Qualities\QualityModelComparerFixture.cs" />

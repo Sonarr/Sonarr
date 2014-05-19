@@ -32,12 +32,13 @@ define(
             template: 'AddSeries/SearchResultViewTemplate',
 
             ui: {
-                qualityProfile: '.x-quality-profile',
-                rootFolder    : '.x-root-folder',
-                seasonFolder  : '.x-season-folder',
-                addButton     : '.x-add',
-                overview      : '.x-overview',
-                startingSeason: '.x-starting-season'
+                qualityProfile : '.x-quality-profile',
+                rootFolder     : '.x-root-folder',
+                seasonFolder   : '.x-season-folder',
+                seriesType     : '.x-series-type',
+                startingSeason : '.x-starting-season',
+                addButton      : '.x-add',
+                overview       : '.x-overview'
             },
 
             events: {
@@ -151,12 +152,14 @@ define(
                 var quality = this.ui.qualityProfile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
                 var startingSeason = this.ui.startingSeason.val();
+                var seriesType = this.ui.seriesType.val();
                 var seasonFolder = this.ui.seasonFolder.prop('checked');
 
                 this.model.set('qualityProfileId', quality);
                 this.model.set('rootFolderPath', rootFolderPath);
-                this.model.setSeasonPass(startingSeason);
                 this.model.set('seasonFolder', seasonFolder);
+                this.model.set('seriesType', seriesType);
+                this.model.setSeasonPass(startingSeason);
 
                 var self = this;
                 var promise = this.model.save();

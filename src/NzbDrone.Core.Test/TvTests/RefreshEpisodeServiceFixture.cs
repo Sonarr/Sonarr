@@ -157,8 +157,22 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_not_set_absolute_episode_number_for_non_anime()
+        {
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
+                .Returns(new List<Episode>());
+
+            Subject.RefreshEpisodeInfo(GetSeries(), GetEpisodes());
+
+            _insertedEpisodes.All(e => e.AbsoluteEpisodeNumber == 0).Should().BeTrue();
+        }
+
+        [Test]
+        [Ignore]
         public void should_set_absolute_episode_number()
         {
+            //TODO: Only run this against an anime series
+
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
                 .Returns(new List<Episode>());
 

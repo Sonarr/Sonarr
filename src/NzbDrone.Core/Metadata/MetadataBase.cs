@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using NLog;
-using NzbDrone.Common;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.ThingiProvider;

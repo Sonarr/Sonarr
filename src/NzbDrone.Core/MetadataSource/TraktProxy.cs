@@ -80,10 +80,10 @@ namespace NzbDrone.Core.MetadataSource
             }
         }
 
-        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId)
+        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
             var client = BuildClient("show", "summary");
-            var restRequest = new RestRequest(tvDbSeriesId.ToString() + "/extended");
+            var restRequest = new RestRequest(tvdbSeriesId.ToString() + "/extended");
             var response = client.ExecuteAndValidate<Show>(restRequest);
 
             var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Runtime = show.runtime;
             series.Network = show.network;
             series.AirTime = show.air_time;
-            series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
+            series.TitleSlug = GetTitleSlug(show.url);
             series.Status = GetSeriesStatus(show.status, show.ended);
             series.Ratings = GetRatings(show.ratings);
             series.Genres = show.genres;
@@ -131,7 +131,6 @@ namespace NzbDrone.Core.MetadataSource
             var episode = new Episode();
             episode.Overview = traktEpisode.overview;
             episode.SeasonNumber = traktEpisode.season;
-            episode.EpisodeNumber = traktEpisode.episode;
             episode.EpisodeNumber = traktEpisode.number;
             episode.Title = traktEpisode.title;
             episode.AirDate = FromIsoToString(traktEpisode.first_aired_iso);
@@ -272,6 +271,18 @@ namespace NzbDrone.Core.MetadataSource
             }
 
             return seasons;
+        }
+
+        private static String GetTitleSlug(String url)
+        {
+            var slug = url.ToLower().Replace("http://trakt.tv/show/", "");
+
+            if (slug.StartsWith("."))
+            {
+                slug = "dot" + slug.Substring(1);
+            }
+
+            return slug;
         }
     }
 }

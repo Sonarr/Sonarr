@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
@@ -12,8 +14,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         [TestCase("Franklin & Bash", Result = "Franklin+and+Bash")]
         public string should_replace_some_special_characters(string input)
         {
-            Subject.SceneTitle = input;
-            return Subject.QueryTitle;
+            Subject.SceneTitles = new List<string> { input };
+            return Subject.QueryTitles.First();
         }
     }
 }

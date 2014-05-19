@@ -8,7 +8,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            return string.Format("[{0} : {1:00}]", SceneTitle, AbsoluteEpisodeNumber);
+            return string.Format("[{0} : {1:00}]", Series.Title, AbsoluteEpisodeNumber);
         }
     }
 }

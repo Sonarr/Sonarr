@@ -56,6 +56,14 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [Test]
+        public void should_not_have_period_at_start_of_title_slug()
+        {
+            var details = Subject.GetSeriesInfo(79099);
+
+            details.Item1.TitleSlug.Should().Be("dothack");
+        }
+
         private void ValidateSeries(Series series)
         {
             series.Should().NotBeNull();

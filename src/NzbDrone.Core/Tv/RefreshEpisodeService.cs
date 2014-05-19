@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -17,12 +17,14 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
+        private readonly ITvdbProxy _tvdbProxy;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, ITvdbProxy tvdbProxy, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeService = episodeService;
+            _tvdbProxy = tvdbProxy;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -68,6 +70,13 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.Ratings = episode.Ratings;
                     episodeToUpdate.Images = episode.Images;
 
+                    //Reset the absolute episode number to zero if the series is not anime
+                    if (series.SeriesType != SeriesTypes.Anime)
+                    {
+                        episodeToUpdate.AbsoluteEpisodeNumber = 0;
+                    }
+                    
+
                     successCount++;
                 }
                 catch (Exception e)
@@ -82,7 +91,7 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(updateList);
 
             AdjustMultiEpisodeAirTime(series, allEpisodes);
-            SetAbsoluteEpisodeNumber(allEpisodes);
+            SetAbsoluteEpisodeNumber(series, allEpisodes);
 
             _episodeService.DeleteMany(existingEpisodes);
             _episodeService.UpdateMany(updateList);
@@ -144,15 +153,30 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private static void SetAbsoluteEpisodeNumber(IEnumerable<Episode> allEpisodes)
+        private void SetAbsoluteEpisodeNumber(Series series, IEnumerable<Episode> allEpisodes)
         {
-            var episodes = allEpisodes.Where(e => e.SeasonNumber > 0 && e.EpisodeNumber > 0)
-                                      .OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber)
-                                      .ToList();
-
-            for (int i = 0; i < episodes.Count(); i++)
+            if (series.SeriesType != SeriesTypes.Anime)
             {
-                episodes[i].AbsoluteEpisodeNumber = i + 1;
+                _logger.Debug("Skipping absolute number lookup for non-anime");
+
+                return;
+            }
+
+            var tvdbEpisodes = _tvdbProxy.GetEpisodeInfo(series.TvdbId);
+
+            foreach (var episode in allEpisodes)
+            {
+                //I'd use single, but then I'd have to trust the tvdb data... and I don't
+                var tvdbEpisode = tvdbEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber &&
+                                                                    e.EpisodeNumber == episode.EpisodeNumber);
+
+                if (tvdbEpisode == null)
+                {
+                    _logger.Debug("Cannot find matching episode from the tvdb: {0}x{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+                    continue;
+                }
+
+                episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
             }
         }
     }

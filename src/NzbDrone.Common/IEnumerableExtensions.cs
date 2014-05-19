@@ -22,5 +22,10 @@ namespace NzbDrone.Common
 
             source.Add(item);
         }
+
+        public static bool Empty<TSource>(this IEnumerable<TSource> source)
+        {
+            return !source.Any();
+        }
     }
 }

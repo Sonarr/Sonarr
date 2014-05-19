@@ -8,6 +8,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -77,7 +78,7 @@ namespace NzbDrone.Core.Tv
             _logger.Info("Adding Series {0} Path: [{1}]", newSeries, newSeries.Path);
 
             newSeries.Monitored = true;
-            newSeries.CleanTitle = Parser.Parser.CleanSeriesTitle(newSeries.Title);
+            newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
 
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
@@ -97,8 +98,6 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
-            title = Parser.Parser.CleanSeriesTitle(title);
-
             var tvdbId = _sceneMappingService.GetTvDbId(title);
 
             if (tvdbId.HasValue)
@@ -106,13 +105,13 @@ namespace NzbDrone.Core.Tv
                 return FindByTvdbId(tvdbId.Value);
             }
 
-            return _seriesRepository.FindByTitle(title);
+            return _seriesRepository.FindByTitle(title.CleanSeriesTitle());
         }
 
         public Series FindByTitleInexact(string title)
         {
             // find any series clean title within the provided release title
-            string cleanTitle = Parser.Parser.CleanSeriesTitle(title);
+            string cleanTitle = title.CleanSeriesTitle();
             var list = _seriesRepository.All().Where(s => cleanTitle.Contains(s.CleanTitle)).ToList();
             if (!list.Any())
             {
