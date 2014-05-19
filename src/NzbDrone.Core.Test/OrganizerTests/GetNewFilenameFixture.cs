@@ -42,12 +42,14 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 15)
                             .With(e => e.EpisodeNumber = 6)
+                            .With(e => e.AbsoluteEpisodeNumber = 100)
                             .Build();
 
             _episode2 = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "City Sushi")
                             .With(e => e.SeasonNumber = 15)
                             .With(e => e.EpisodeNumber = 7)
+                            .With(e => e.AbsoluteEpisodeNumber = 101)
                             .Build();
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "DRONE" };
@@ -434,6 +436,55 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "Chicago P.D.." }, _episodeFile)
                    .Should().Be("Chicago.P.D.S06E06.Part.1");
+        }
+
+        [Test]
+        public void should_not_replace_absolute_numbering_when_series_is_not_anime()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06.City.Sushi");
+        }
+
+        [Test]
+        public void should_replace_standard_and_absolute_numbering_when_series_is_anime()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06.100.City.Sushi");
+        }
+
+        [Test]
+        public void should_replace_standard_numbering_when_series_is_anime()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06.City.Sushi");
+        }
+
+        [Test]
+        public void should_replace_absolute_numbering_when_series_is_anime()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.100.City.Sushi");
+        }
+
+        [Test]
+        public void should_replace_multiple_absolute_numbering_when_series_is_anime()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("South Park - 100 - 101 - City Sushi");
         }
     }
 }

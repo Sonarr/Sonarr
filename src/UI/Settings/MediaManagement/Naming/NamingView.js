@@ -18,6 +18,7 @@ define(
                 singleEpisodeExample  : '.x-single-episode-example',
                 multiEpisodeExample   : '.x-multi-episode-example',
                 dailyEpisodeExample   : '.x-daily-episode-example',
+                animeEpisodeExample   : '.x-anime-episode-example',
                 namingTokenHelper     : '.x-naming-token-helper',
                 multiEpisodeStyle     : '.x-multi-episode-style',
                 seriesFolderExample   : '.x-series-folder-example',
@@ -68,6 +69,7 @@ define(
                 this.ui.singleEpisodeExample.html(this.namingSampleModel.get('singleEpisodeExample'));
                 this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
                 this.ui.dailyEpisodeExample.html(this.namingSampleModel.get('dailyEpisodeExample'));
+                this.ui.animeEpisodeExample.html(this.namingSampleModel.get('animeEpisodeExample'));
                 this.ui.seriesFolderExample.html(this.namingSampleModel.get('seriesFolderExample'));
                 this.ui.seasonFolderExample.html(this.namingSampleModel.get('seasonFolderExample'));
             },

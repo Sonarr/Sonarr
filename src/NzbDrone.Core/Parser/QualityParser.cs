@@ -175,10 +175,46 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
+            if (resolution == Resolution._480p)
+            {
+                result.Quality = Quality.SDTV;
+                return result;
+            }
+
             if (codecRegex.Groups["x264"].Success)
             {
                 result.Quality = Quality.SDTV;
                 return result;
+            }
+
+            if (normalizedName.Contains("848x480"))
+            {
+                if (normalizedName.Contains("dvd"))
+                {
+                    result.Quality = Quality.DVD;
+                }
+
+                result.Quality = Quality.SDTV;
+            }
+
+            if (normalizedName.Contains("1280x720"))
+            {
+                if (normalizedName.Contains("bluray"))
+                {
+                    result.Quality = Quality.Bluray720p;
+                }
+
+                result.Quality = Quality.HDTV720p;
+            }
+
+            if (normalizedName.Contains("1920x1080"))
+            {
+                if (normalizedName.Contains("bluray"))
+                {
+                    result.Quality = Quality.Bluray1080p;
+                }
+
+                result.Quality = Quality.HDTV1080p;
             }
 
             if (normalizedName.Contains("bluray720p"))

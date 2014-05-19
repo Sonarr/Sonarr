@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Reflection;
@@ -25,13 +27,14 @@ namespace NzbDrone.Api.ClientSchema
                 if (fieldAttribute != null)
                 {
 
-                    var field = new Field()
+                    var field = new Field
                         {
                             Name = propertyInfo.Name,
                             Label = fieldAttribute.Label,
                             HelpText = fieldAttribute.HelpText,
                             HelpLink = fieldAttribute.HelpLink,
                             Order = fieldAttribute.Order,
+                            Advanced = fieldAttribute.Advanced,
                             Type = fieldAttribute.Type.ToString().ToLowerInvariant()
                         };
 
@@ -92,6 +95,23 @@ namespace NzbDrone.Api.ClientSchema
                     else if (propertyInfo.PropertyType == typeof(Nullable<Int64>))
                     {
                         var value = field.Value.ToString().ParseInt64();
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof (IEnumerable<Int32>))
+                    {
+                        IEnumerable<Int32> value;
+
+                        if (field.Value.GetType() == typeof (JArray))
+                        {
+                            value = ((JArray) field.Value).Select(s => s.Value<Int32>());
+                        }
+
+                        else
+                        {
+                            value = field.Value.ToString().Split(new []{','}, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToInt32(s));
+                        }
+                        
                         propertyInfo.SetValue(target, value, null);
                     }
 

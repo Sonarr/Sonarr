@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using FizzWare.NBuilder;
 using Moq;
@@ -14,9 +16,11 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
     public class SceneMappingServiceFixture : CoreTest<SceneMappingService>
     {
-
         private List<SceneMapping> _fakeMappings;
 
+        private Mock<ISceneMappingProvider> _provider1;
+        private Mock<ISceneMappingProvider> _provider2;
+            
         [SetUp]
         public void Setup()
         {
@@ -33,14 +37,24 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             _fakeMappings[2].ParseTerm = "Can";
             _fakeMappings[3].ParseTerm = "Be";
             _fakeMappings[4].ParseTerm = "Cleaned";
+
+            _provider1 = new Mock<ISceneMappingProvider>();
+            _provider1.Setup(s => s.GetSceneMappings()).Returns(_fakeMappings);
+
+            _provider2 = new Mock<ISceneMappingProvider>();
+            _provider2.Setup(s => s.GetSceneMappings()).Returns(_fakeMappings);
         }
 
-
+        private void GivenProviders(IEnumerable<Mock<ISceneMappingProvider>> providers)
+        {
+            Mocker.SetConstant<IEnumerable<ISceneMappingProvider>>(providers.Select(s => s.Object));
+        }
 
         [Test]
-        public void UpdateMappings_purge_existing_mapping_and_add_new_ones()
+        public void should_purge_existing_mapping_and_add_new_ones()
         {
-            Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Returns(_fakeMappings);
+            GivenProviders(new [] { _provider1 });
+
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
 
             Subject.Execute(new UpdateSceneMappingCommand());
@@ -48,27 +62,26 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             AssertMappingUpdated();
         }
 
-
-
         [Test]
-        public void UpdateMappings_should_not_delete_if_fetch_fails()
+        public void should_not_delete_if_fetch_fails()
         {
+            GivenProviders(new[] { _provider1 });
 
-            Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Throws(new WebException());
+            _provider1.Setup(c => c.GetSceneMappings()).Throws(new WebException());
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
             AssertNoUpdate();
 
             ExceptionVerification.ExpectedErrors(1);
-
         }
 
         [Test]
-        public void UpdateMappings_should_not_delete_if_fetch_returns_empty_list()
+        public void should_not_delete_if_fetch_returns_empty_list()
         {
+            GivenProviders(new[] { _provider1 });
 
-            Mocker.GetMock<ISceneMappingProxy>().Setup(c => c.Fetch()).Returns(new List<SceneMapping>());
+            _provider1.Setup(c => c.GetSceneMappings()).Returns(new List<SceneMapping>());
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
@@ -77,19 +90,31 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [Test]
+        public void should_get_mappings_for_all_providers()
+        {
+            GivenProviders(new[] { _provider1, _provider2 });
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+
+            Subject.Execute(new UpdateSceneMappingCommand());
+
+            _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
+            _provider2.Verify(c => c.GetSceneMappings(), Times.Once());
+        }
+
         private void AssertNoUpdate()
         {
-            Mocker.GetMock<ISceneMappingProxy>().Verify(c => c.Fetch(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(It.IsAny<bool>()), Times.Never());
+            _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<String>()), Times.Never());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Never());
         }
 
         private void AssertMappingUpdated()
         {
-            Mocker.GetMock<ISceneMappingProxy>().Verify(c => c.Fetch(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Purge(It.IsAny<bool>()), Times.Once());
+            _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<String>()), Times.Once());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Once());
-
 
             foreach (var sceneMapping in _fakeMappings)
             {
@@ -97,8 +122,5 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
                 Subject.GetTvDbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
             }
         }
-
-
-
     }
 }

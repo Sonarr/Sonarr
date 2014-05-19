@@ -38,6 +38,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sonny.With.a.Chance.S02E15.divx", false)]
         [TestCase("The.Girls.Next.Door.S03E06.HDTV-WiDE", false)]
         [TestCase("Degrassi.S10E27.WS.DSR.XviD-2HD", false)]
+        [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [480p]", false)]
+        [TestCase("[CR] Sailor Moon - 004 [480p][48CE2D0F]", false)]
+        [TestCase("[Hatsuyuki] Naruto Shippuuden - 363 [848x480][ADE35E38]", false)]
         public void should_parse_sdtv_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.SDTV, proper);
@@ -55,6 +58,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", false)]
         [TestCase("the.shield.1x13.circles.ws.xvidvd-tns", false)]
         [TestCase("the_x-files.9x18.sunshine_days.ac3.ws_dvdrip_xvid-fov.avi", false)]
+        [TestCase("[FroZen] Miyuki - 23 [DVD][7F6170E6]", false)]
         [TestCase("Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         public void should_parse_dvd_quality(string title, bool proper)
@@ -81,6 +85,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sonny.With.a.Chance.S02E15.mkv", false)]
         [TestCase(@"E:\Downloads\tv\The.Big.Bang.Theory.S01E01.720p.HDTV\ajifajjjeaeaeqwer_eppj.avi", false)]
         [TestCase("Gem.Hunt.S01E08.Tourmaline.Nepal.720p.HDTV.x264-DHD", false)]
+        [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0]", false)]
+        [TestCase("[Doki] Mahouka Koukou no Rettousei - 07 (1280x720 Hi10P AAC) [80AF7DDE]", false)]
+        [TestCase("[Doremi].Yes.Pretty.Cure.5.Go.Go!.31.[1280x720].[C65D4B1F].mkv", false)]
+        [TestCase("[HorribleSubs]_Fairy_Tail_-_145_[720p]", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV720p, proper);
@@ -91,6 +99,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("DEXTER.S07E01.ARE.YOU.1080P.HDTV.x264-QCF", false)]
         [TestCase("DEXTER.S07E01.ARE.YOU.1080P.HDTV.proper.X264-QCF", true)]
         [TestCase("Dexter - S01E01 - Title [HDTV-1080p]", false)]
+        [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [1080p]", false)]
         public void should_parse_hdtv1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);

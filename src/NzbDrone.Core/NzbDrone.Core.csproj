@@ -118,10 +118,12 @@
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
+    <Compile Include="DataAugmentation\Scene\ISceneMappingProvider.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
+    <Compile Include="DataAugmentation\Scene\ServicesProvider.cs" />
     <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemResult.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemSceneTvdbMapping.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Datastore\Migration\049_fix_dognzb_url.cs" />
     <Compile Include="Datastore\Migration\050_add_hash_to_metadata_files.cs" />
     <Compile Include="Datastore\Migration\051_download_client_import.cs" />
+    <Compile Include="Datastore\Migration\052_add_columns_for_anime.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -324,7 +327,6 @@
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
-    <Compile Include="Indexers\Eztv\Eztv.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
     <Compile Include="Indexers\Fanzub\FanzubParser.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
@@ -432,6 +434,7 @@
     <Compile Include="Notifications\Xbmc\Model\XbmcJsonResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcVersion.cs" />
     <Compile Include="Organizer\BasicNamingConfig.cs" />
+    <Compile Include="Organizer\AbsoluteEpisodeFormat.cs" />
     <Compile Include="Organizer\FilenameValidationService.cs" />
     <Compile Include="Organizer\EpisodeFormat.cs" />
     <Compile Include="Organizer\Exception.cs" />

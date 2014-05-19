@@ -16,5 +16,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         [JsonProperty("season")]
         public int SeasonNumber { get; set; }
+
+        public string Type { get; set; }
     }
 }

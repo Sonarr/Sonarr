@@ -15,6 +15,8 @@ namespace NzbDrone.Api.Indexers
         public Int64 Size { get; set; }
         public String Indexer { get; set; }
         public String ReleaseGroup { get; set; }
+        public String SubGroup { get; set; }
+        public String ReleaseHash { get; set; }
         public String Title { get; set; }
         public Boolean FullSeason { get; set; }
         public Boolean SceneSource { get; set; }
@@ -25,7 +27,7 @@ namespace NzbDrone.Api.Indexers
         public int[] EpisodeNumbers { get; set; }
         public Boolean Approved { get; set; }
         public Int32 TvRageId { get; set; }
-        public List<string> Rejections { get; set; }
+        public IEnumerable<String> Rejections { get; set; }
         public DateTime PublishDate { get; set; }
         public String CommentUrl { get; set; }
         public String DownloadUrl { get; set; }

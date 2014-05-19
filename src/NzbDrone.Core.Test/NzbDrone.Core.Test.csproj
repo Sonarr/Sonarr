@@ -187,6 +187,7 @@
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
     <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
+    <Compile Include="ParserTests\AnimeMetadataParserFixture.cs" />
     <Compile Include="ParserTests\IsPossibleSpecialEpisodeFixture.cs" />
     <Compile Include="ParserTests\ReleaseGroupParserFixture.cs" />
     <Compile Include="ParserTests\LanguageParserFixture.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -123,10 +124,12 @@ namespace NzbDrone.Core.IndexerSearch
         private List<DownloadDecision> SearchAnime(Series series, Episode episode)
         {
             var searchSpec = Get<AnimeEpisodeSearchCriteria>(series, new List<Episode> { episode });
-            // TODO: Get the scene title from TheXEM
-            searchSpec.SceneTitle = series.Title;
-            // TODO: Calculate the Absolute Episode Number on the fly (if I have to)
             searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.GetValueOrDefault(0);
+
+            if (searchSpec.AbsoluteEpisodeNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", "Can not search for an episode absolute episode number of zero");
+            }
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
@@ -210,7 +213,7 @@ namespace NzbDrone.Core.IndexerSearch
             spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId);
             spec.Episodes = episodes;
 
-            if (string.IsNullOrWhiteSpace(spec.SceneTitle))
+            if (spec.SceneTitle.IsNullOrWhiteSpace())
             {
                 spec.SceneTitle = series.Title;
             }

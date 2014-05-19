@@ -28,14 +28,22 @@
                             {{> RootFolderSelectionPartial rootFolders}}
                         </div>
                     {{/unless}}
+
                     <div class="form-group col-md-2">
                         <label>Starting Season</label>
                         {{> StartingSeasonSelectionPartial seasons}}
                     </div>
+
                     <div class="form-group col-md-2">
                         <label>Quality Profile</label>
                         {{> QualityProfileSelectionPartial qualityProfiles}}
                     </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Series Type</label>
+                        {{> SeriesTypeSelectionPartial}}
+                    </div>
+
                     <div class="form-group col-md-2">
                         <label>Season Folders</label>
 
@@ -50,20 +58,23 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group col-md-1 pull-right">
-                        <label>&nbsp;</label>
-                        <button class="btn btn-success x-add add-series pull-right pull-none-xs"> Add
+                {{/unless}}
+            </div>
+            <div class="row">
+                {{#unless existing}}
+                    <div class="form-group col-md-2 col-md-offset-10">
+                        <!--Uncomment if we need to add even more controls to add series-->
+                        <!--<label>&nbsp;</label>-->
+                        <button class="btn btn-success x-add"> Add
                             <i class="icon-plus"></i>
                         </button>
                     </div>
-
                 {{else}}
-                    <div class="col-md-1 col-md-offset-11">
-                        <button class="btn add-series disabled pull-right pull-none-xs">
+                    <div class="col-md-2 col-md-offset-10">
+                        <button class="btn add-series disabled">
                             Already Exists
                         </button>
                     </div>
-
                 {{/unless}}
             </div>
         </div>

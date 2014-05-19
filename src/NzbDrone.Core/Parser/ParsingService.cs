@@ -151,18 +151,31 @@ namespace NzbDrone.Core.Parser
 
             if (parsedEpisodeInfo.IsAbsoluteNumbering())
             {
+                var sceneSeasonNumber = _sceneMappingService.GetSeasonNumber(parsedEpisodeInfo.SeriesTitle);
+
                 foreach (var absoluteEpisodeNumber in parsedEpisodeInfo.AbsoluteEpisodeNumbers)
                 {
-                    var episodeInfo = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
+                    Episode episode;
 
-                    if (episodeInfo != null)
+                    if (sceneSeasonNumber.HasValue && sceneSeasonNumber > 1)
+                    {
+                        episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                    }
+
+                    else
+                    {
+                        episode = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
+                    }
+                   
+                    if (episode != null)
                     {
                         _logger.Info("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
                                     absoluteEpisodeNumber,
                                     series.Title,
-                                    episodeInfo.SeasonNumber,
-                                    episodeInfo.EpisodeNumber);
-                        result.Add(episodeInfo);
+                                    episode.SeasonNumber,
+                                    episode.EpisodeNumber);
+
+                        result.Add(episode);
                     }
                 }
 

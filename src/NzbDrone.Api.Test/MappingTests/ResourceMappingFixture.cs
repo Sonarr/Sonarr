@@ -51,7 +51,7 @@ namespace NzbDrone.Api.Test.MappingTests
         }
 
         [Test]
-        public void should_map_lay_loaded_values_should_not_be_inject_if_not_loaded()
+        public void should_map_lazy_loaded_values_should_not_be_inject_if_not_loaded()
         {
             var modelWithLazy = new ModelWithLazy()
                 {

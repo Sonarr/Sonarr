@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
@@ -38,8 +39,14 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex SeasonRegex = new Regex(@"(?<season>\{season(?:\:0+)?})",
                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex AbsoluteEpisodeRegex = new Regex(@"(?<absolute>\{absolute(?:\:0+)?})",
+                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static readonly Regex SeasonEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<seasonEpisode>s?{season(?:\:0+)?}(?<episodeSeparator>e|x)(?<episode>{episode(?:\:0+)?}))(?<separator>.+?(?={))?",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public static readonly Regex AbsoluteEpisodePatternRegex = new Regex(@"(?<separator>(?<=}).+?)?(?<absolute>{absolute(?:\:0+)?})(?<separator>.+?(?={))?",
+                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -118,6 +125,11 @@ namespace NzbDrone.Core.Organizer
                 }
             }
 
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                pattern = namingConfig.AnimeEpisodeFormat;
+            }
+
             var episodeFormat = GetEpisodeFormat(pattern);
 
             if (episodeFormat != null)
@@ -152,6 +164,34 @@ namespace NzbDrone.Core.Organizer
 
                 seasonEpisodePattern = ReplaceNumberTokens(seasonEpisodePattern, sortedEpisodes);
                 tokenValues.Add("{Season Episode}", seasonEpisodePattern);
+            }
+
+            //TODO: Extract to another method
+            var absoluteEpisodeFormat = GetAbsoluteFormat(pattern);
+
+            if (absoluteEpisodeFormat != null)
+            {
+                if (series.SeriesType != SeriesTypes.Anime)
+                {
+                    pattern = pattern.Replace(absoluteEpisodeFormat.AbsoluteEpisodePattern, "");
+                }
+
+                else
+                {
+                    pattern = pattern.Replace(absoluteEpisodeFormat.AbsoluteEpisodePattern, "{Absolute Pattern}");
+                    var absoluteEpisodePattern = absoluteEpisodeFormat.AbsoluteEpisodePattern;
+
+                    foreach (var episode in sortedEpisodes.Skip(1))
+                    {
+                        absoluteEpisodePattern += absoluteEpisodeFormat.Separator +
+                                                  absoluteEpisodeFormat.AbsoluteEpisodePattern;
+
+                        episodeTitles.Add(episode.Title.TrimEnd(EpisodeTitleTrimCharaters));
+                    }
+
+                    absoluteEpisodePattern = ReplaceAbsoluteNumberTokens(absoluteEpisodePattern, sortedEpisodes);
+                    tokenValues.Add("{Absolute Pattern}", absoluteEpisodePattern);
+                }
             }
 
             tokenValues.Add("{Episode Title}", GetEpisodeTitle(episodeTitles));
@@ -310,10 +350,25 @@ namespace NzbDrone.Core.Organizer
             var episodeIndex = 0;
             pattern = EpisodeRegex.Replace(pattern, match =>
             {
-                var episode = episodes[episodeIndex].EpisodeNumber;
+                var episode = episodes[episodeIndex];
                 episodeIndex++;
 
-                return ReplaceNumberToken(match.Groups["episode"].Value, episode);
+                return ReplaceNumberToken(match.Groups["episode"].Value, episode.EpisodeNumber);
+            });
+
+            return ReplaceSeasonTokens(pattern, episodes.First().SeasonNumber);
+        }
+
+        private string ReplaceAbsoluteNumberTokens(string pattern, List<Episode> episodes)
+        {
+            var episodeIndex = 0;
+            pattern = AbsoluteEpisodeRegex.Replace(pattern, match =>
+            {
+                var episode = episodes[episodeIndex];
+                episodeIndex++;
+
+                //TODO: We need to handle this null check somewhere, I think earlier is better...
+                return ReplaceNumberToken(match.Groups["absolute"].Value, episode.AbsoluteEpisodeNumber.Value);
             });
 
             return ReplaceSeasonTokens(pattern, episodes.First().SeasonNumber);
@@ -352,6 +407,22 @@ namespace NzbDrone.Core.Organizer
 
                 return null;
             });
+        }
+
+        private AbsoluteEpisodeFormat GetAbsoluteFormat(string pattern)
+        {
+            var match = AbsoluteEpisodePatternRegex.Match(pattern);
+
+            if (match.Success)
+            {
+                return new AbsoluteEpisodeFormat
+                       {
+                           Separator = match.Groups["separator"].Value,
+                           AbsoluteEpisodePattern = match.Groups["absolute"].Value
+                       };
+            }
+
+            return null;
         }
 
         private string GetEpisodeTitle(List<string> episodeTitles)

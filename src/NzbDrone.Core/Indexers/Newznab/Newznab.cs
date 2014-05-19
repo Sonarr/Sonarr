@@ -79,13 +79,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             get
             {
-                //Todo: We should be able to update settings on start
-                if (Settings.Url.Contains("nzbs.org"))
-                {
-                    Settings.Categories = new List<int> { 5000 };
-                }
-
-                var url = String.Format("{0}/api?t=tvsearch&cat={1}&extended=1", Settings.Url.TrimEnd('/'), String.Join(",", Settings.Categories));
+                var url = String.Format("{0}/api?t=tvsearch&cat={1}&extended=1{2}", Settings.Url.TrimEnd('/'), String.Join(",", Settings.Categories), Settings.AdditionalParameters);
 
                 if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
                 {
@@ -127,8 +121,13 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
         {
-            // TODO: Implement
-            return new List<string>();
+            /*
+             * This is going to be interesting because often the tvRageId doesn't always 
+             * match the series and when there are multiple names by season its a mess
+             * For now: just search based on name and abs episode number
+             */
+
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+{2}", url.Replace("t=tvsearch", "t=search"), NewsnabifyTitle(seriesTitle), absoluteEpisodeNumber));
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
