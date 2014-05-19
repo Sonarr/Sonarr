@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Host;
 
 namespace NzbDrone.SysTray
@@ -14,13 +15,17 @@ namespace NzbDrone.SysTray
     public class SystemTrayApp : Form, ISystemTrayApp
     {
         private readonly IBrowserService _browserService;
+        private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IProcessProvider _processProvider;
 
         private readonly NotifyIcon _trayIcon = new NotifyIcon();
         private readonly ContextMenu _trayMenu = new ContextMenu();
 
-        public SystemTrayApp(IBrowserService browserService)
+        public SystemTrayApp(IBrowserService browserService, IRuntimeInfo runtimeInfo, IProcessProvider processProvider)
         {
             _browserService = browserService;
+            _runtimeInfo = runtimeInfo;
+            _processProvider = processProvider;
         }
 
         public void Start()
@@ -98,6 +103,11 @@ namespace NzbDrone.SysTray
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
+            if (_runtimeInfo.RestartPending)
+            {
+                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, "--restart --nobrowser");
+            }
+
             DisposeTrayIcon();
         }
 

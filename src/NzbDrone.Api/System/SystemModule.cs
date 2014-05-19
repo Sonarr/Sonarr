@@ -5,6 +5,8 @@ using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Lifecycle.Commands;
 
 namespace NzbDrone.Api.System
 {
@@ -15,12 +17,14 @@ namespace NzbDrone.Api.System
         private readonly IRouteCacheProvider _routeCacheProvider;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IDatabase _database;
+        private readonly ILifecycleService _lifecycleService;
 
         public SystemModule(IAppFolderInfo appFolderInfo,
                             IRuntimeInfo runtimeInfo,
                             IRouteCacheProvider routeCacheProvider,
                             IConfigFileProvider configFileProvider,
-                            IDatabase database)
+                            IDatabase database,
+                            ILifecycleService lifecycleService)
             : base("system")
         {
             _appFolderInfo = appFolderInfo;
@@ -28,8 +32,11 @@ namespace NzbDrone.Api.System
             _routeCacheProvider = routeCacheProvider;
             _configFileProvider = configFileProvider;
             _database = database;
+            _lifecycleService = lifecycleService;
             Get["/status"] = x => GetStatus();
             Get["/routes"] = x => GetRoutes();
+            Post["/shutdown"] = x => Shutdown();
+            Post["/restart"] = x => Restart();
         }
 
         private Response GetStatus()
@@ -62,5 +69,18 @@ namespace NzbDrone.Api.System
         {
             return _routeCacheProvider.GetCache().Values.AsResponse();
         }
+
+        private Response Shutdown()
+        {
+            _lifecycleService.Shutdown();
+            return "".AsResponse();
+        }
+
+        private Response Restart()
+        {
+            _lifecycleService.Restart();
+            return "".AsResponse();
+        }
     }
 }
+ 
