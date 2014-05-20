@@ -58,7 +58,8 @@ define(
                     });
 
                     this.$(element).find('.chart').tooltip({
-                        title: 'Episode is downloading - {0}% {1}'.format(event.progress.toFixed(1), event.releaseTitle)
+                        title: 'Episode is downloading - {0}% {1}'.format(event.progress.toFixed(1), event.releaseTitle),
+                        container: 'body'
                     });
                 }
             },
