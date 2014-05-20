@@ -3,7 +3,8 @@
 @nzbdronePurple: #7932ea;
 @droneTeal:      #35c5f4;
 
-//@tn: ~'(max-width: @{screen-tn-max})';
+@screen-tn-max: @screen-xs-min - 1;
+@tn: ~'(max-width: @{screen-tn-max})';
 @xs: ~'(min-width: @{screen-xs-max}) and (max-width: @{screen-xs-max})';
 @sm: ~'(min-width: @{screen-sm-min}) and (max-width: @{screen-sm-max})';
 @md: ~'(min-width: @{screen-md-min}) and (max-width: @{screen-md-max})';
