@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaFiles;
 
@@ -27,6 +28,8 @@ namespace NzbDrone.Api.Episodes
         public Core.Tv.Series Series { get; set; }
         public String SeriesTitle { get; set; }
 
-        public Boolean Downloading { get; set; }
+        //Hiding this so people don't think its usable (only used to set the initial state)
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public Boolean Grabbed { get; set; }
     }
 }

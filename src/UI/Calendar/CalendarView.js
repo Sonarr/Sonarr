@@ -106,7 +106,7 @@ define(
 
             _getStatusLevel: function (element, endTime) {
                 var hasFile = element.get('hasFile');
-                var downloading = QueueCollection.findEpisode(element.get('id')) || element.get('downloading');
+                var downloading = QueueCollection.findEpisode(element.get('id')) || element.get('grabbed');
                 var currentTime = moment();
                 var start = moment(element.get('airDateUtc'));
                 var end = moment(endTime);

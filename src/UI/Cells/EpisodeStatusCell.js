@@ -69,12 +69,19 @@ define(
                         if (downloading) {
                             var progress = 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
 
-                            this.$el.html('<div class="progress progress-purple" title="Episode is downloading - {0}% {1}">'.format(progress.toFixed(1), downloading.get('title')) +
-                                          '<div class="bar" style="width: {0}%;"></div></div>'.format(progress));
-                            return;
+                            if (progress === 0) {
+                                icon = 'icon-nd-downloading';
+                                tooltip = 'Episode is downloading';
+                            }
+
+                            else {
+                                this.$el.html('<div class="progress" title="Episode is downloading - {0}% {1}">'.format(progress.toFixed(1), downloading.get('title')) +
+                                    '<div class="progress-bar progress-bar-purple" style="width: {0}%;"></div></div>'.format(progress));
+                                return;
+                            }
                         }
 
-                        else if (this.model.get('downloading')) {
+                        else if (this.model.get('grabbed')) {
                             icon = 'icon-nd-downloading';
                             tooltip = 'Episode is downloading';
                         }
