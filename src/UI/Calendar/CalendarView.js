@@ -30,6 +30,9 @@ define(
 
             onShow: function () {
                 this.$('.fc-button-today').click();
+                this.$el.fullCalendar('render');
+
+                this.$('.fc-day-header').css('width: 14.3%');
             },
 
             _viewRender: function (view) {
@@ -38,6 +41,7 @@ define(
                 }
                 
                 this._getEvents(view);
+                this.$('.fc-day-header').css('width: 14.3%');
             },
             
             _eventRender: function (event, element) {

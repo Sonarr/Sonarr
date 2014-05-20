@@ -3,6 +3,7 @@
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
 @import "../Content/mixins";
+@import "../Content/variables";
 
 .table {
 
@@ -11,14 +12,25 @@
 
 .series-title {
   .text-overflow();
+
+  @media @sm {
+    max-width: 250px
+  }
 }
 
 .episode-title-cell {
-  .btn-link;
   .text-overflow();
 
-  &:hover {
-    text-transform: none;
+  @media @lg {
+    max-width: 350px;
+  }
+
+  @media @md {
+    max-width: 250px;
+  }
+
+  @media @sm {
+    max-width: 200px;
   }
 }
 
