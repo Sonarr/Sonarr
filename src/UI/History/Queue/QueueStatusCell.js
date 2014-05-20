@@ -26,10 +26,6 @@ define(
                         title = 'Queued';
                     }
 
-                    var timeleft = this.cellValue.get('timeleft');
-                    var size = this.cellValue.get('size');
-                    var sizeleft = this.cellValue.get('sizeleft');
-
                     this.$el.html('<i class="{0}" title="{1}"></i>'.format(icon, title));
                 }
 
