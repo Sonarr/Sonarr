@@ -11,7 +11,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public UInt32 FileSizeLo { get; set; }
         public UInt32 FileSizeHi { get; set; }
         public String ParStatus { get; set; }
+        public String UnpackStatus { get; set; }
+        public String MoveStatus { get; set; }
         public String ScriptStatus { get; set; }
+        public String DeleteStatus { get; set; }
+        public String MarkStatus { get; set; }
         public String DestDir { get; set; }
         public List<NzbgetParameter> Parameters { get; set; }
     }

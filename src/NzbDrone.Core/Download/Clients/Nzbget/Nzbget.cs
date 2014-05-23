@@ -115,15 +115,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
 
             var historyItems = new List<DownloadClientItem>();
-            var successStatues = new[] {"SUCCESS", "NONE"};
+            var successStatus = new[] {"SUCCESS", "NONE"};
 
             foreach (var item in history)
             {
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
-                var status = successStatues.Contains(item.ParStatus) &&
-                             successStatues.Contains(item.ScriptStatus)
-                    ? DownloadItemStatus.Completed
-                    : DownloadItemStatus.Failed;
 
                 var historyItem = new DownloadClientItem();
                 historyItem.DownloadClient = Definition.Name;
@@ -132,8 +128,22 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
                 historyItem.OutputPath = item.DestDir;
                 historyItem.Category = item.Category;
-                historyItem.Message = String.Format("PAR Status: {0} - Script Status: {1}", item.ParStatus, item.ScriptStatus);
-                historyItem.Status = status;
+                historyItem.Message = String.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
+                historyItem.Status = DownloadItemStatus.Completed;
+
+                if (!successStatus.Contains(item.ParStatus) ||
+                         !successStatus.Contains(item.UnpackStatus) ||
+                         !successStatus.Contains(item.MoveStatus) ||
+                         !successStatus.Contains(item.ScriptStatus) ||
+                         !successStatus.Contains(item.DeleteStatus) ||
+                         !successStatus.Contains(item.MarkStatus))
+                {
+                    historyItem.Status = DownloadItemStatus.Failed;
+                }
+                else if (item.MoveStatus != "SUCCESS")
+                {
+                    historyItem.Status = DownloadItemStatus.Queued;
+                }
 
                 historyItems.Add(historyItem);
             }
