@@ -58,6 +58,11 @@ namespace NzbDrone.Core.Indexers.Wombles
             return new List<string>();
         }
 
+        public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
+        {
+            return new List<string>();
+        }
+
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
         {
             return new List<string>();

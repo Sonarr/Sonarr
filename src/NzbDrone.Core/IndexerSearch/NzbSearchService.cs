@@ -70,6 +70,10 @@ namespace NzbDrone.Core.IndexerSearch
 
                 return SearchDaily(series, episode);
             }
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                return SearchAnime(series, episode);
+            }
 
             if (episode.SeasonNumber == 0)
             {
@@ -112,6 +116,17 @@ namespace NzbDrone.Core.IndexerSearch
             var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
             var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
             searchSpec.AirDate = airDate;
+
+            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+        }
+
+        private List<DownloadDecision> SearchAnime(Series series, Episode episode)
+        {
+            var searchSpec = Get<AnimeEpisodeSearchCriteria>(series, new List<Episode> { episode });
+            // TODO: Get the scene title from TheXEM
+            searchSpec.SceneTitle = series.Title;
+            // TODO: Calculate the Absolute Episode Number on the fly (if I have to)
+            searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.GetValueOrDefault(0);
 
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
