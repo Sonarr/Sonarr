@@ -24,7 +24,10 @@ namespace NzbDrone.Core.Queue
 
         public List<Queue> GetQueue()
         {
-            var queueItems = _downloadTrackingService.GetQueuedDownloads().Select(v => v.DownloadItem).ToList();
+            var queueItems = _downloadTrackingService.GetQueuedDownloads()
+                .Select(v => v.DownloadItem)
+                .OrderBy(v => v.RemainingTime)
+                .ToList();
 
             return MapQueue(queueItems);
         }

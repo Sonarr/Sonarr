@@ -2,8 +2,9 @@
 
 define(
     [
-        'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
+        'Cells/NzbDroneCell',
+        'filesize'
+    ], function (NzbDroneCell, fileSize) {
         return NzbDroneCell.extend({
 
             className: 'timeleft-cell',
@@ -14,11 +15,15 @@ define(
                 if (this.cellValue) {
 
                     var timeleft = this.cellValue.get('timeleft');
-                    var size = this.cellValue.get('size');
-                    var sizeleft = this.cellValue.get('sizeleft');
+                    var totalSize = fileSize(this.cellValue.get('size'), 1, false);
+                    var remainingSize = fileSize(this.cellValue.get('sizeleft'), 1, false);
 
-                    this.$el.html(timeleft);
-                    this.$el.attr('title', '{0} MB / {1} MB'.format(sizeleft, size));
+                    if (timeleft === undefined) {
+                        this.$el.html("-");
+                    } else {
+                        this.$el.html(timeleft);
+                    }
+                    this.$el.attr('title', '{0} / {1}'.format(remainingSize, totalSize));
                 }
 
                 return this;
