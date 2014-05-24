@@ -68,7 +68,7 @@ namespace NzbDrone.Update
             }
             
             logger.Info("Starting update process. Target Path:{0}", targetFolder);
-            _installUpdateService.Start(targetFolder);
+            _installUpdateService.Start(targetFolder, startupContext.ProcessId);
         }
 
         private UpdateStartupContext ParseArgs(string[] args)

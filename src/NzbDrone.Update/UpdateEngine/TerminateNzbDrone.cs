@@ -9,7 +9,7 @@ namespace NzbDrone.Update.UpdateEngine
 {
     public interface ITerminateNzbDrone
     {
-        void Terminate();
+        void Terminate(int processId);
     }
 
     public class TerminateNzbDrone : ITerminateNzbDrone
@@ -25,11 +25,12 @@ namespace NzbDrone.Update.UpdateEngine
             _logger = logger;
         }
 
-        public void Terminate()
+        public void Terminate(int processId)
         {
             if (OsInfo.IsMono)
             {
                 _logger.Info("Stopping all instances");
+                _processProvider.Kill(processId);
                 _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
                 _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
 

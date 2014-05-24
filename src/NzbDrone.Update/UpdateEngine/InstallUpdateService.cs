@@ -4,12 +4,13 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Update.UpdateEngine
 {
     public interface IInstallUpdateService
     {
-        void Start(string installationFolder);
+        void Start(string installationFolder, int processId);
     }
 
     public class InstallUpdateService : IInstallUpdateService
@@ -21,6 +22,7 @@ namespace NzbDrone.Update.UpdateEngine
         private readonly IBackupAndRestore _backupAndRestore;
         private readonly IBackupAppData _backupAppData;
         private readonly IStartNzbDrone _startNzbDrone;
+        private readonly IProcessProvider _processProvider;
         private readonly Logger _logger;
 
         public InstallUpdateService(IDiskProvider diskProvider,
@@ -30,6 +32,7 @@ namespace NzbDrone.Update.UpdateEngine
                                     IBackupAndRestore backupAndRestore,
                                     IBackupAppData backupAppData,
                                     IStartNzbDrone startNzbDrone,
+                                    IProcessProvider processProvider,
                                     Logger logger)
         {
             _diskProvider = diskProvider;
@@ -39,10 +42,11 @@ namespace NzbDrone.Update.UpdateEngine
             _backupAndRestore = backupAndRestore;
             _backupAppData = backupAppData;
             _startNzbDrone = startNzbDrone;
+            _processProvider = processProvider;
             _logger = logger;
         }
 
-        private void Verify(string targetFolder)
+        private void Verify(string targetFolder, int processId)
         {
             _logger.Info("Verifying requirements before update...");
 
@@ -52,20 +56,30 @@ namespace NzbDrone.Update.UpdateEngine
             if (!_diskProvider.FolderExists(targetFolder))
                 throw new DirectoryNotFoundException("Target folder doesn't exist " + targetFolder);
 
+            if (processId < 1)
+            {
+                throw new ArgumentException("Invalid process ID: " + processId);
+            }
+
+            if (!_processProvider.Exists(processId))
+            {
+                throw new ArgumentException("Process with ID doesn't exist " + processId);
+            }
+
             _logger.Info("Verifying Update Folder");
             if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdatePackageFolder()))
                 throw new DirectoryNotFoundException("Update folder doesn't exist " + _appFolderInfo.GetUpdatePackageFolder());
         }
 
-        public void Start(string installationFolder)
+        public void Start(string installationFolder, int processId)
         {
-            Verify(installationFolder);
+            Verify(installationFolder, processId);
 
             var appType = _detectApplicationType.GetAppType();
 
             try
             {
-                _terminateNzbDrone.Terminate();
+                _terminateNzbDrone.Terminate(processId);
 
                 _backupAndRestore.Backup(installationFolder);
                 _backupAppData.Backup();

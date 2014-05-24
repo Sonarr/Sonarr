@@ -21,6 +21,7 @@ namespace NzbDrone.Common.Processes
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
         void Kill(int processId);
+        Boolean Exists(int processId);
         Boolean Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
@@ -38,6 +39,11 @@ namespace NzbDrone.Common.Processes
         public ProcessInfo GetCurrentProcess()
         {
             return ConvertToProcessInfo(Process.GetCurrentProcess());
+        }
+
+        public bool Exists(int processId)
+        {
+            return GetProcessById(processId) != null;
         }
 
         public Boolean Exists(string processName)
