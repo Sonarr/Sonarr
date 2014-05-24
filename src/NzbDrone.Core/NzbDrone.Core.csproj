@@ -239,6 +239,8 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetGlobalStatus.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetPostQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\TestUsenetBlackholeCommand.cs" />
@@ -525,13 +527,11 @@
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetBooleanResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetListResponse.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetQueueItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetPriority.cs" />
-    <Compile Include="Download\Clients\Nzbget\VersionResponse.cs" />
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Parser\Language.cs" />
     <Compile Include="Parser\Model\LocalEpisode.cs" />

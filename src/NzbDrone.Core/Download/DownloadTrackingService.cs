@@ -15,12 +15,12 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadTrackingService
     {
-        List<TrackedDownload> GetTrackedDownloads();
-        List<TrackedDownload> GetCompletedDownloads();
-        List<TrackedDownload> GetQueuedDownloads();
+        TrackedDownload[] GetTrackedDownloads();
+        TrackedDownload[] GetCompletedDownloads();
+        TrackedDownload[] GetQueuedDownloads();
     }
 
-    public class DownloadTrackingService : IDownloadTrackingService, IExecute<CheckForFinishedDownloadCommand>, IHandle<ApplicationStartedEvent>
+    public class DownloadTrackingService : IDownloadTrackingService, IExecute<CheckForFinishedDownloadCommand>, IHandle<ApplicationStartedEvent>, IHandle<EpisodeGrabbedEvent>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IHistoryService _historyService;
@@ -30,8 +30,7 @@ namespace NzbDrone.Core.Download
         private readonly ICompletedDownloadService  _completedDownloadService;
         private readonly Logger _logger;
 
-        private readonly ICached<TrackedDownload> _trackedDownloads;
-        private readonly ICached<List<TrackedDownload>> _queuedDownloads;
+        private readonly ICached<TrackedDownload[]> _trackedDownloadCache;
 
         public static string DOWNLOAD_CLIENT = "downloadClient";
         public static string DOWNLOAD_CLIENT_ID = "downloadClientId";
@@ -53,108 +52,105 @@ namespace NzbDrone.Core.Download
             _completedDownloadService = completedDownloadService;
             _logger = logger;
 
-            _trackedDownloads = cacheManager.GetCache<TrackedDownload>(GetType());
-            _queuedDownloads = cacheManager.GetCache<List<TrackedDownload>>(GetType(), "queued");
+            _trackedDownloadCache = cacheManager.GetCache<TrackedDownload[]>(GetType());
         }
 
-        public List<TrackedDownload> GetTrackedDownloads()
+        public TrackedDownload[] GetTrackedDownloads()
         {
-            return _trackedDownloads.Values.ToList();
+            return _trackedDownloadCache.Get("tracked", () => new TrackedDownload[0]);
         }
 
-        public List<TrackedDownload> GetCompletedDownloads()
+        public TrackedDownload[] GetCompletedDownloads()
         {
-            return _trackedDownloads.Values.Where(v => v.State == TrackedDownloadState.Downloading && v.DownloadItem.Status == DownloadItemStatus.Completed).ToList();
+            return GetTrackedDownloads()
+                    .Where(v => v.State == TrackedDownloadState.Downloading && v.DownloadItem.Status == DownloadItemStatus.Completed)
+                    .ToArray();
         }
 
-        public List<TrackedDownload> GetQueuedDownloads()
+        public TrackedDownload[] GetQueuedDownloads()
         {
-            return _queuedDownloads.Get("queued", () =>
+            return _trackedDownloadCache.Get("queued", () =>
                 {
                     UpdateTrackedDownloads();
 
-                    var enabledFailedDownloadHandling = _configService.EnableFailedDownloadHandling;
-                    var enabledCompletedDownloadHandling = _configService.EnableCompletedDownloadHandling;
-
-                    return _trackedDownloads.Values
-                            .Where(v => v.State == TrackedDownloadState.Downloading)
-                            .Where(v => 
-                                v.DownloadItem.Status == DownloadItemStatus.Queued ||
-                                v.DownloadItem.Status == DownloadItemStatus.Paused ||
-                                v.DownloadItem.Status == DownloadItemStatus.Downloading ||
-                                v.DownloadItem.Status == DownloadItemStatus.Failed && enabledFailedDownloadHandling ||
-                                v.DownloadItem.Status == DownloadItemStatus.Completed && enabledCompletedDownloadHandling)
-                            .ToList();
+                    return FilterQueuedDownloads(GetTrackedDownloads());
 
                 }, TimeSpan.FromSeconds(5.0));
         }
 
-        private TrackedDownload GetTrackedDownload(IDownloadClient downloadClient, DownloadClientItem queueItem)
+        private TrackedDownload[] FilterQueuedDownloads(IEnumerable<TrackedDownload> trackedDownloads)
         {
-            var id = String.Format("{0}-{1}", downloadClient.Definition.Id, queueItem.DownloadClientId);
-            var trackedDownload = _trackedDownloads.Get(id, () => new TrackedDownload
-            {
-                TrackingId = id,
-                DownloadClient = downloadClient.Definition.Id,
-                StartedTracking = DateTime.UtcNow,
-                State = TrackedDownloadState.Unknown
-            });
+            var enabledFailedDownloadHandling = _configService.EnableFailedDownloadHandling;
+            var enabledCompletedDownloadHandling = _configService.EnableCompletedDownloadHandling;
 
-            trackedDownload.DownloadItem = queueItem;
-
-            return trackedDownload;
+            return trackedDownloads
+                    .Where(v => v.State == TrackedDownloadState.Downloading)
+                    .Where(v => 
+                        v.DownloadItem.Status == DownloadItemStatus.Queued ||
+                        v.DownloadItem.Status == DownloadItemStatus.Paused ||
+                        v.DownloadItem.Status == DownloadItemStatus.Downloading ||
+                        v.DownloadItem.Status == DownloadItemStatus.Failed && enabledFailedDownloadHandling ||
+                        v.DownloadItem.Status == DownloadItemStatus.Completed && enabledCompletedDownloadHandling)
+                    .ToArray();
         }
-
+        
         private List<History.History> GetHistoryItems(List<History.History> grabbedHistory, string downloadClientId)
         {
             return grabbedHistory.Where(h => downloadClientId.Equals(h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID)))
                                  .ToList();
         }
 
-
         private Boolean UpdateTrackedDownloads()
         {
             var downloadClients = _downloadClientProvider.GetDownloadClients();
 
-            var oldTrackedDownloads = new HashSet<TrackedDownload>(_trackedDownloads.Values);
-            var newTrackedDownloads = new HashSet<TrackedDownload>();
+            var oldTrackedDownloads = GetTrackedDownloads().ToDictionary(v => v.TrackingId);
+            var newTrackedDownloads = new List<TrackedDownload>();
 
             var stateChanged = false;
 
             foreach (var downloadClient in downloadClients)
             {
-                var downloadClientHistory = downloadClient.GetItems().Select(v => GetTrackedDownload(downloadClient, v)).ToList();
-                foreach (var trackedDownload in downloadClientHistory)
+                var downloadClientHistory = downloadClient.GetItems().ToList();
+                foreach (var downloadItem in downloadClientHistory)
                 {
-                    if (!oldTrackedDownloads.Contains(trackedDownload))
+                    var trackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, downloadItem.DownloadClientId);
+                    TrackedDownload trackedDownload;
+
+                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
                     {
-                        _logger.Trace("Started tracking download from history: {0}", trackedDownload.TrackingId);
+                        trackedDownload = new TrackedDownload
+                        {
+                            TrackingId = trackingId,
+                            DownloadClient = downloadClient.Definition.Id,
+                            StartedTracking = DateTime.UtcNow,
+                            State = TrackedDownloadState.Unknown
+                        };
+
+                        _logger.Trace("Started tracking download from history: {0}: {1}", trackedDownload.TrackingId, downloadItem.Title);
                         stateChanged = true;
                     }
+
+                    trackedDownload.DownloadItem = downloadItem;
 
                     newTrackedDownloads.Add(trackedDownload);
                 }
             }
 
-            foreach (var item in oldTrackedDownloads.Except(newTrackedDownloads))
+            foreach (var downloadItem in oldTrackedDownloads.Values.Except(newTrackedDownloads))
             {
-                if (item.State != TrackedDownloadState.Removed)
+                if (downloadItem.State != TrackedDownloadState.Removed)
                 {
-                    item.State = TrackedDownloadState.Removed;
+                    downloadItem.State = TrackedDownloadState.Removed;
                     stateChanged = true;
 
-                    _logger.Debug("Item removed from download client by user: {0}", item.TrackingId);
+                    _logger.Debug("Item removed from download client by user: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
                 }
+
+                _logger.Trace("Stopped tracking download: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
             }
 
-            foreach (var item in newTrackedDownloads.Union(oldTrackedDownloads).Where(v => v.State == TrackedDownloadState.Removed))
-            {
-                _trackedDownloads.Remove(item.TrackingId);
-
-                _logger.Trace("Stopped tracking download: {0}", item.TrackingId);
-            }
-
-            _queuedDownloads.Clear();
+            _trackedDownloadCache.Set("tracked", newTrackedDownloads.ToArray());
 
             return stateChanged;
         }
@@ -168,7 +164,7 @@ namespace NzbDrone.Core.Download
             var stateChanged = UpdateTrackedDownloads();
             
             var downloadClients = _downloadClientProvider.GetDownloadClients();
-            var trackedDownloads = _trackedDownloads.Values.ToArray();
+            var trackedDownloads = GetTrackedDownloads();
 
             foreach (var trackedDownload in trackedDownloads)
             {
@@ -190,6 +186,8 @@ namespace NzbDrone.Core.Download
                 }
             }
 
+            _trackedDownloadCache.Set("queued", FilterQueuedDownloads(trackedDownloads), TimeSpan.FromSeconds(5.0));
+
             if (stateChanged)
             {
                 _eventAggregator.PublishEvent(new UpdateQueueEvent());
@@ -202,6 +200,11 @@ namespace NzbDrone.Core.Download
         }
 
         public void Handle(ApplicationStartedEvent message)
+        {
+            ProcessTrackedDownloads();
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
         {
             ProcessTrackedDownloads();
         }

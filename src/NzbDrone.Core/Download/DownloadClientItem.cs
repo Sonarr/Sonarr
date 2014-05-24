@@ -8,22 +8,23 @@ namespace NzbDrone.Core.Download
 {
     public class DownloadClientItem
     {
-        public string DownloadClient { get; set; }
-        public string DownloadClientId { get; set; }
-        public string Category { get; set; }
-        public string Title { get; set; }
+        public String DownloadClient { get; set; }
+        public String DownloadClientId { get; set; }
+        public String Category { get; set; }
+        public String Title { get; set; }
 
-        public long TotalSize { get; set; }
-        public long RemainingSize { get; set; }
+        public Int64 TotalSize { get; set; }
+        public Int64 RemainingSize { get; set; }
         public TimeSpan DownloadTime { get; set; }
         public TimeSpan RemainingTime { get; set; }
 
-        public string OutputPath { get; set; }
-        public string Message { get; set; }
+        public String OutputPath { get; set; }
+        public String Message { get; set; }
 
         public DownloadItemStatus Status { get; set; }
-        public bool IsEncrypted { get; set; }
-        public bool IsReadOnly { get; set; }
+        public Boolean IsEncrypted { get; set; }
+        public Boolean IsReadOnly { get; set; }
+
         public RemoteEpisode RemoteEpisode { get; set; }
     }
 }

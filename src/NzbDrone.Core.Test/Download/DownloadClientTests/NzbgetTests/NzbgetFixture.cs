@@ -52,7 +52,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                     Name = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE",
                     DestDir = "somedirectory",
                     Parameters = new List<NzbgetParameter> { new NzbgetParameter { Name = "drone", Value = "id" } },
-                    ParStatus = "Some Error"
+                    ParStatus = "Some Error",
+                    UnpackStatus = "NONE",
+                    MoveStatus = "NONE",
+                    ScriptStatus = "NONE",
+                    DeleteStatus = "NONE",
+                    MarkStatus = "NONE"
                 };
 
             _completed = new NzbgetHistoryItem
@@ -63,8 +68,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                     DestDir = "somedirectory",
                     Parameters = new List<NzbgetParameter> { new NzbgetParameter { Name = "drone", Value = "id" } },
                     ParStatus = "SUCCESS",
-                    ScriptStatus = "NONE"
+                    UnpackStatus = "NONE",
+                    MoveStatus = "SUCCESS",
+                    ScriptStatus = "NONE",
+                    DeleteStatus = "NONE",
+                    MarkStatus = "NONE"
                 };
+
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(s => s.GetGlobalStatus(It.IsAny<NzbgetSettings>()))
+                .Returns(new NzbgetGlobalStatus
+                {
+                    DownloadRate = 7000000
+                });
         }
 
         protected void WithFailedDownload()
@@ -93,6 +109,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(s => s.GetQueue(It.IsAny<NzbgetSettings>()))
                 .Returns(list);
+
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(s => s.GetPostQueue(It.IsAny<NzbgetSettings>()))
+                .Returns(new List<NzbgetPostQueueItem>());
         }
 
         protected virtual void WithHistory(NzbgetHistoryItem history)
@@ -134,7 +154,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void paused_item_should_have_required_properties()
         {
-            _queued.PausedSizeLo = _queued.FileSizeLo;
+            _queued.PausedSizeLo = _queued.RemainingSizeLo;
 
             WithQueue(_queued);
             WithHistory(null);

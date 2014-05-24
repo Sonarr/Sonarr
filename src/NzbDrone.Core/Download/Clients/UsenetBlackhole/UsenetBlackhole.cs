@@ -83,6 +83,8 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 else
                 {
                     historyItem.Status = DownloadItemStatus.Completed;
+
+                    historyItem.RemainingTime = TimeSpan.Zero;
                 }
 
                 historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);

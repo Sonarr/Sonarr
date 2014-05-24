@@ -56,11 +56,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private IEnumerable<DownloadClientItem> GetQueue()
         {
+            NzbgetGlobalStatus globalStatus;
             List<NzbgetQueueItem> queue;
+            Dictionary<Int32, NzbgetPostQueueItem> postQueue;
 
             try
             {
+                globalStatus = _proxy.GetGlobalStatus(Settings);
                 queue = _proxy.GetQueue(Settings);
+                postQueue = _proxy.GetPostQueue(Settings).ToDictionary(v => v.NzbId);
             }
             catch (DownloadClientException ex)
             {
@@ -70,28 +74,57 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var queueItems = new List<DownloadClientItem>();
 
+            Int64 totalRemainingSize = 0;
+
             foreach (var item in queue)
             {
+                var postQueueItem = postQueue.GetValueOrDefault(item.NzbId);
+
+                Int64 totalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
+                Int64 pausedSize = MakeInt64(item.PausedSizeHi, item.PausedSizeLo);
+                Int64 remainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
+                
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
 
                 var queueItem = new DownloadClientItem();
                 queueItem.DownloadClientId = droneParameter == null ? item.NzbId.ToString() : droneParameter.Value.ToString();
                 queueItem.Title = item.NzbName;
-                queueItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
-                queueItem.RemainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
+                queueItem.TotalSize = totalSize;
                 queueItem.Category = item.Category;
 
-                if (queueItem.TotalSize == MakeInt64(item.PausedSizeHi, item.PausedSizeLo))
+                if (postQueueItem != null)
+                {
+                    queueItem.Status = DownloadItemStatus.Downloading;
+                    queueItem.Message = postQueueItem.ProgressLabel;
+
+                    if (postQueueItem.StageProgress != 0)
+                    {
+                        queueItem.RemainingTime = TimeSpan.FromSeconds(postQueueItem.StageTimeSec * 1000 / postQueueItem.StageProgress - postQueueItem.StageTimeSec);
+                    }
+                }
+                else if (globalStatus.DownloadPaused || remainingSize == pausedSize)
                 {
                     queueItem.Status = DownloadItemStatus.Paused;
-                }
-                else if (item.ActiveDownloads == 0 && queueItem.RemainingSize != 0)
-                {
-                    queueItem.Status = DownloadItemStatus.Queued;
+                    queueItem.RemainingSize = remainingSize;
                 }
                 else
                 {
-                    queueItem.Status = DownloadItemStatus.Downloading;
+                    if (item.ActiveDownloads == 0 && remainingSize != 0)
+                    {
+                        queueItem.Status = DownloadItemStatus.Queued;
+                    }
+                    else
+                    {
+                        queueItem.Status = DownloadItemStatus.Downloading;
+                    }
+
+                    queueItem.RemainingSize = remainingSize - pausedSize;
+
+                    if (globalStatus.DownloadRate != 0)
+                    {
+                        queueItem.RemainingTime = TimeSpan.FromSeconds((totalRemainingSize + queueItem.RemainingSize) / globalStatus.DownloadRate);
+                        totalRemainingSize += queueItem.RemainingSize;
+                    }
                 }
 
                 queueItems.Add(queueItem);
@@ -130,13 +163,17 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.Category = item.Category;
                 historyItem.Message = String.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
                 historyItem.Status = DownloadItemStatus.Completed;
+                historyItem.RemainingTime = TimeSpan.Zero;
+
+                if (item.DeleteStatus == "MANUAL")
+                {
+                    continue;
+                }
 
                 if (!successStatus.Contains(item.ParStatus) ||
                          !successStatus.Contains(item.UnpackStatus) ||
                          !successStatus.Contains(item.MoveStatus) ||
-                         !successStatus.Contains(item.ScriptStatus) ||
-                         !successStatus.Contains(item.DeleteStatus) ||
-                         !successStatus.Contains(item.MarkStatus))
+                         !successStatus.Contains(item.ScriptStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
@@ -179,7 +216,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _proxy.GetVersion(Settings);
         }
 
-        private VersionResponse GetVersion(string host = null, int port = 0, string username = null, string password = null)
+        private String GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
             return _proxy.GetVersion(Settings);
         }

@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<IDownloadTrackingService>()
                 .Setup(v => v.GetCompletedDownloads())
-                .Returns(_completed.ToList());
+                .Returns(_completed.ToArray());
         }
 
         private void GivenDroneFactoryFolder(bool exists = false)
