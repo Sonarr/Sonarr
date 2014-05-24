@@ -39,6 +39,7 @@ src/**/[Oo]bj/
 
 # ReSharper is a .NET coding add-in
 _ReSharper*
+_dotCover*
 
 # NCrunch
 *.ncrunch*
