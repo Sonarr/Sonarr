@@ -35,10 +35,8 @@ namespace NzbDrone.Core.Indexers
             return res;
         }
 
-        public static DateTime PublishDate(this XElement item)
+        public static DateTime ParseDate(string dateString)
         {
-            string dateString = item.TryGetValue("pubDate");
-
             try
             {
                 DateTime result;
@@ -54,6 +52,13 @@ namespace NzbDrone.Core.Indexers
                 Logger.WarnException("Unable to parse " + dateString, e);
                 throw;
             }
+        }
+
+        public static DateTime PublishDate(this XElement item)
+        {
+            string dateString = item.TryGetValue("pubDate");
+
+            return ParseDate(dateString);
         }
 
         public static List<String> Links(this XElement item)
