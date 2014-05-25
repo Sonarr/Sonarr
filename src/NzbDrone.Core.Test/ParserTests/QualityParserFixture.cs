@@ -57,6 +57,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("the.shield.1x13.circles.ws.xvidvd-tns", false)]
         [TestCase("the_x-files.9x18.sunshine_days.ac3.ws_dvdrip_xvid-fov.avi", false)]
         [TestCase("Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
+        [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);

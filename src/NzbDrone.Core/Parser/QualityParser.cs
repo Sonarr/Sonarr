@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Parser
                     return result;
                 }
 
-                if (resolution == Resolution._576p)
+                if (resolution == Resolution._480p || resolution == Resolution._576p)
                 {
                     result.Quality = Quality.DVD;
                     return result;
