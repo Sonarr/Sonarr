@@ -149,8 +149,8 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 
         public void Execute(TestUsenetBlackholeCommand message)
         {
-            PerformTest(Settings.NzbFolder);
-            PerformTest(Settings.WatchFolder);
+            PerformTest(message.NzbFolder);
+            PerformTest(message.WatchFolder);
         }
     }
 }

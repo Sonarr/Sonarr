@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
         {
             //Todo: Validate that the path actually exists
             RuleFor(c => c.NzbFolder).IsValidPath();
+            RuleFor(c => c.WatchFolder).IsValidPath();
         }
     }
 

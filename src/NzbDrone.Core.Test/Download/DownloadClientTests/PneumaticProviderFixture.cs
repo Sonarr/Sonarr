@@ -45,9 +45,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
 
             Subject.Definition = new DownloadClientDefinition();
-            Subject.Definition.Settings = new FolderSettings
+            Subject.Definition.Settings = new PneumaticSettings
             {
-                Folder = _pneumaticFolder
+                NzbFolder = _pneumaticFolder
             };
         }
 

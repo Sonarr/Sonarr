@@ -8,21 +8,21 @@ using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
-    public class FolderSettingsValidator : AbstractValidator<FolderSettings>
+    public class PneumaticSettingsValidator : AbstractValidator<PneumaticSettings>
     {
-        public FolderSettingsValidator()
+        public PneumaticSettingsValidator()
         {
             //Todo: Validate that the path actually exists
-            RuleFor(c => c.Folder).IsValidPath();
+            RuleFor(c => c.NzbFolder).IsValidPath();
         }
     }
 
-    public class FolderSettings : IProviderConfig
+    public class PneumaticSettings : IProviderConfig
     {
-        private static readonly FolderSettingsValidator Validator = new FolderSettingsValidator();
+        private static readonly PneumaticSettingsValidator Validator = new PneumaticSettingsValidator();
 
-        [FieldDefinition(0, Label = "Folder", Type = FieldType.Path)]
-        public String Folder { get; set; }
+        [FieldDefinition(0, Label = "Nzb Folder", Type = FieldType.Path)]
+        public String NzbFolder { get; set; }
 
         public ValidationResult Validate()
         {

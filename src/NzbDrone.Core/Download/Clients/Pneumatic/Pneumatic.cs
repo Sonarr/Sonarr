@@ -15,7 +15,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
-    public class Pneumatic : DownloadClientBase<FolderSettings>, IExecute<TestPneumaticCommand>
+    public class Pneumatic : DownloadClientBase<PneumaticSettings>, IExecute<TestPneumaticCommand>
     {
         private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             title = FileNameBuilder.CleanFilename(title);
 
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
-            var filename = Path.Combine(Settings.Folder, title + ".nzb");
+            var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
             logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
             _httpProvider.DownloadFile(url, filename);
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(Settings.Folder);
+                return !string.IsNullOrWhiteSpace(Settings.NzbFolder);
             }
         }
 
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public override void Test()
         {
-            PerformTest(Settings.Folder);
+            PerformTest(Settings.NzbFolder);
         }
 
         private void PerformTest(string folder)
