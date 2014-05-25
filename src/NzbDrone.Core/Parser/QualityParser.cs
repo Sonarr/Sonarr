@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser
 {
@@ -32,7 +31,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper|repack)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p)|(?<_720p>720p)|(?<_1080p>1080p))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p)|(?<_576p>576p)|(?<_720p>720p)|(?<_1080p>1080p))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",
@@ -69,6 +68,12 @@ namespace NzbDrone.Core.Parser
                 if (resolution == Resolution._1080p)
                 {
                     result.Quality = Quality.Bluray1080p;
+                    return result;
+                }
+
+                if (resolution == Resolution._576p)
+                {
+                    result.Quality = Quality.DVD;
                     return result;
                 }
 
@@ -209,6 +214,7 @@ namespace NzbDrone.Core.Parser
 
             if (!match.Success) return Resolution.Unknown;
             if (match.Groups["_480p"].Success) return Resolution._480p;
+            if (match.Groups["_576p"].Success) return Resolution._576p;
             if (match.Groups["_720p"].Success) return Resolution._720p;
             if (match.Groups["_1080p"].Success) return Resolution._1080p;
 
@@ -219,6 +225,7 @@ namespace NzbDrone.Core.Parser
     public enum Resolution
     {
         _480p,
+        _576p,
         _720p,
         _1080p,
         Unknown
