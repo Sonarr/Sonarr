@@ -78,7 +78,7 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo)
         {
-            var fileTarget = new FileTarget();
+            var fileTarget = new NzbDroneFileTarget();
 
             fileTarget.Name = "rollingFileLogger";
             fileTarget.FileName = Path.Combine(appFolderInfo.GetLogFolder(), "nzbdrone.txt");

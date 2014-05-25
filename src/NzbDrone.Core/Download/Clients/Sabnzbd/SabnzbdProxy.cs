@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                                  action,
                                  authentication);
 
-            _logger.CleansedDebug(url);
+            _logger.Debug(url);
 
             return new RestClient(url);
         }

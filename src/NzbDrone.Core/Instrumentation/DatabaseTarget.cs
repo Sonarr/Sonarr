@@ -5,6 +5,7 @@ using NLog.Config;
 using NLog;
 using NLog.Layouts;
 using NLog.Targets;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Instrumentation
         {
             var log = new Log();
             log.Time = logEvent.TimeStamp;
-            log.Message = logEvent.FormattedMessage;
+            log.Message = CleanseLogMessage.Cleanse(logEvent.FormattedMessage);
             log.Method = Layout.Render(logEvent);
 
             log.Logger = logEvent.LoggerName;

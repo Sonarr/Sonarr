@@ -97,9 +97,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IEnumerableExtensions.cs" />
+    <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
+    <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
     <Compile Include="Instrumentation\NzbDroneLogger.cs" />
     <Compile Include="Instrumentation\LogTargets.cs" />
     <Compile Include="Messaging\IEvent.cs" />

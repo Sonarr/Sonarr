@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Indexers
             {
                 try
                 {
-                    _logger.CleansedDebug("Downloading Feed " + url);
+                    _logger.Debug("Downloading Feed " + url);
                     var xml = _httpProvider.DownloadString(url);
                     if (!string.IsNullOrWhiteSpace(xml))
                     {
