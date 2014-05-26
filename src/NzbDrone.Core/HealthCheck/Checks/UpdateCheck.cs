@@ -22,6 +22,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
+            //TODO: Check on mono as well
             if (OsInfo.IsWindows)
             {
                 try

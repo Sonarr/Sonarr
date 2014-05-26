@@ -58,13 +58,21 @@ namespace NzbDrone.Core.MediaFiles
 
         public void Scan(Series series)
         {
+            var rootFolder = _diskProvider.GetParentFolder(series.Path);
+
+            if (!_diskProvider.FolderExists(rootFolder))
+            {
+                _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
+                return;
+            }
+
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
             _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
 
             if (!_diskProvider.FolderExists(series.Path))
             {
                 if (_configService.CreateEmptySeriesFolders &&
-                    _diskProvider.FolderExists(_diskProvider.GetParentFolder(series.Path)))
+                    _diskProvider.FolderExists(rootFolder))
                 {
                     _logger.Debug("Creating missing series folder: {0}", series.Path);
                     _diskProvider.CreateFolder(series.Path);
