@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Neighbours.S29E161-E165.PDTV.x264-FQM", "Neighbours", 29, new[] { 161, 162, 163, 164, 165 })]
         [TestCase("Shortland.Street.S22E5363-E5366.HDTV.x264-FiHTV", "Shortland Street", 22, new[] { 5363, 5364, 5365, 5366 })]
         [TestCase("the.office.101.102.hdtv-lol", "The Office", 1, new[] { 1, 2 })]
+        //[TestCase("Adventure Time - 5x01 - x02 - Finn the Human (2) & Jake the Dog (3)", "Adventure Time", 5, new [] { 1, 2 })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
