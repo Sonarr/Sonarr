@@ -80,9 +80,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 var postQueueItem = postQueue.GetValueOrDefault(item.NzbId);
 
-                Int64 totalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
-                Int64 pausedSize = MakeInt64(item.PausedSizeHi, item.PausedSizeLo);
-                Int64 remainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
+                var totalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
+                var pausedSize = MakeInt64(item.PausedSizeHi, item.PausedSizeLo);
+                var remainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
                 
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
 

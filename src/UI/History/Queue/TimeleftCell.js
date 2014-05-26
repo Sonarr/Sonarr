@@ -20,7 +20,8 @@ define(
 
                     if (timeleft === undefined) {
                         this.$el.html("-");
-                    } else {
+                    }
+                    else {
                         this.$el.html(timeleft);
                     }
                     this.$el.attr('title', '{0} / {1}'.format(remainingSize, totalSize));
