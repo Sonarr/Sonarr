@@ -17,20 +17,18 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
     public class Pneumatic : DownloadClientBase<PneumaticSettings>, IExecute<TestPneumaticCommand>
     {
-        private readonly IConfigService _configService;
         private readonly IHttpProvider _httpProvider;
         private readonly IDiskProvider _diskProvider;
 
         private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
-        public Pneumatic(IConfigService configService,
-                         IHttpProvider httpProvider,
+        public Pneumatic(IHttpProvider httpProvider,
                          IDiskProvider diskProvider,
+                         IConfigService configService,
                          IParsingService parsingService,
                          Logger logger)
-            : base(parsingService, logger)
+            : base(configService, parsingService, logger)
         {
-            _configService = configService;
             _httpProvider = httpProvider;
             _diskProvider = diskProvider;
         }

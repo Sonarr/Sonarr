@@ -10,6 +10,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {
@@ -22,6 +23,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [SetUp]
         public void SetupBase()
         {
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(s => s.DownloadClientHistoryLimit)
+                .Returns(30);
+
             Mocker.GetMock<IParsingService>()
                 .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), null))
                 .Returns(CreateRemoteEpisode());

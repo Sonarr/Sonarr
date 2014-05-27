@@ -205,6 +205,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("DownloadedEpisodesScanInterval", value); }
         }
 
+        public Int32 DownloadClientHistoryLimit
+        {
+            get { return GetValueInt("DownloadClientHistoryLimit", 30); }
+
+            set { SetValue("DownloadClientHistoryLimit", value); }
+        }
+
         public Boolean SkipFreeSpaceCheckWhenImporting
         {
             get { return GetValueBoolean("SkipFreeSpaceCheckWhenImporting", false); }

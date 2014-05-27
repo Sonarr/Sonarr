@@ -2,13 +2,15 @@
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Api.Series;
+using NzbDrone.Api.Episodes;
 
 namespace NzbDrone.Api.Queue
 {
     public class QueueResource : RestResource
     {
-        public Core.Tv.Series Series { get; set; }
-        public Episode Episode { get; set; }
+        public SeriesResource Series { get; set; }
+        public EpisodeResource Episode { get; set; }
         public QualityModel Quality { get; set; }
         public Decimal Size { get; set; }
         public String Title { get; set; }

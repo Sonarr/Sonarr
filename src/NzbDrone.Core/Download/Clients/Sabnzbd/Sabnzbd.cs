@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
@@ -18,10 +19,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         private readonly ISabnzbdProxy _proxy;
 
         public Sabnzbd(IHttpProvider httpProvider,
-                       IParsingService parsingService,
                        ISabnzbdProxy proxy,
+                       IConfigService configService,
+                       IParsingService parsingService,
                        Logger logger)
-            : base(parsingService, logger)
+            : base(configService, parsingService, logger)
         {
             _httpProvider = httpProvider;
             _proxy = proxy;
@@ -116,7 +118,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             try
             {
-                sabHistory = _proxy.GetHistory(0, 0, Settings);
+                sabHistory = _proxy.GetHistory(0, _configService.DownloadClientHistoryLimit, Settings);
             }
             catch (DownloadClientException ex)
             {

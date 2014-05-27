@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
@@ -23,10 +24,11 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 
         public UsenetBlackhole(IDiskProvider diskProvider,
                                IDiskScanService diskScanService,
-                               IParsingService parsingService,
                                IHttpProvider httpProvider,
+                               IConfigService configService,
+                               IParsingService parsingService,
                                Logger logger)
-            : base(parsingService, logger)
+            : base(configService, parsingService, logger)
         {
             _diskProvider = diskProvider;
             _diskScanService = diskScanService;

@@ -5,6 +5,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Configuration;
 using NLog;
 
 namespace NzbDrone.Core.Download
@@ -12,6 +13,7 @@ namespace NzbDrone.Core.Download
     public abstract class DownloadClientBase<TSettings> : IDownloadClient
         where TSettings : IProviderConfig, new()
     {
+        protected readonly IConfigService _configService;
         private readonly IParsingService _parsingService;
         protected readonly Logger _logger;
 
@@ -41,8 +43,9 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        protected DownloadClientBase(IParsingService parsingService, Logger logger)
+        protected DownloadClientBase(IConfigService configService, IParsingService parsingService, Logger logger)
         {
+            _configService = configService;
             _parsingService = parsingService;
             _logger = logger;
         }

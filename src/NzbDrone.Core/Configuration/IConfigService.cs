@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Configuration
         String DownloadedEpisodesFolder { get; set; }
         String DownloadClientWorkingFolders { get; set; }
         Int32 DownloadedEpisodesScanInterval { get; set; }
+        Int32 DownloadClientHistoryLimit { get; set; }
 
         //Completed/Failed Download Handling (Download client)
         Boolean EnableCompletedDownloadHandling { get; set; }
