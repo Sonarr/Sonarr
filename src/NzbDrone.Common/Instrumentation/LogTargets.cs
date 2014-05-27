@@ -78,7 +78,7 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo)
         {
-            var fileTarget = new FileTarget();
+            var fileTarget = new NzbDroneFileTarget();
 
             fileTarget.Name = "rollingFileLogger";
             fileTarget.FileName = Path.Combine(appFolderInfo.GetLogFolder(), "nzbdrone.txt");
@@ -104,7 +104,7 @@ namespace NzbDrone.Common.Instrumentation
             var fileTarget = new FileTarget();
 
             fileTarget.Name = "updateFileLogger";
-            fileTarget.FileName = Path.Combine(appFolderInfo.GetUpdateLogFolder(), DateTime.Now.ToString("yy.MM.d-HH.mm") + ".txt");
+            fileTarget.FileName = Path.Combine(appFolderInfo.GetUpdateLogFolder(), DateTime.Now.ToString("yyyy.MM.dd-HH.mm") + ".txt");
             fileTarget.AutoFlush = true;
             fileTarget.KeepFileOpen = false;
             fileTarget.ConcurrentWrites = false;

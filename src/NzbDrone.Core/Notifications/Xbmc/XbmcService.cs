@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Messaging.Commands;
@@ -57,7 +58,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 var postJson = new JObject();
                 postJson.Add(new JProperty("jsonrpc", "2.0"));
                 postJson.Add(new JProperty("method", "JSONRPC.Version"));
-                postJson.Add(new JProperty("id", 10));
+                postJson.Add(new JProperty("id", DateTime.Now.Ticks));
 
                 var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
 

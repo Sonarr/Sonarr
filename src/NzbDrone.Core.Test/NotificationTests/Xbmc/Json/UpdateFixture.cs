@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
     public class UpdateFixture : CoreTest<JsonApiProvider>
     {
         private XbmcSettings _settings;
-        const string _expectedJson = "{\"jsonrpc\":\"2.0\",\"method\":\"VideoLibrary.GetTvShows\",\"params\":{\"properties\":[\"file\",\"imdbnumber\"]},\"id\":10}";
+        const string _expectedJson = "{\"jsonrpc\":\"2.0\",\"method\":\"VideoLibrary.GetTvShows\",\"params\":{\"properties\":[\"file\",\"imdbnumber\"]},\"id\":";
 
         private const string _tvshowsResponse = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":" +
                                         "{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\"" +
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
 
             Mocker.GetMock<IHttpProvider>()
                 .Setup(s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password,
-                        It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "") == _expectedJson.Replace(" ", ""))))
+                        It.Is<string>(e => e.Replace(" ", "").Replace("\r\n", "").Replace("\t", "").Contains(_expectedJson.Replace(" ", "")))))
                 .Returns(_tvshowsResponse);
         }
 

@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Plex;
 using NzbDrone.Core.Test.Framework;
 

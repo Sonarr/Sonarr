@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
@@ -214,7 +215,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 postJson.Add(new JProperty("params", parameters));
             }
 
-            postJson.Add(new JProperty("id", 10));
+            postJson.Add(new JProperty("id", DateTime.Now.Ticks));
 
             return postJson;
         }

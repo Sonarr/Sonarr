@@ -21,7 +21,7 @@ define(
             },
 
             showPanel: function () {
-                this.$el.addClass('modal hide fade');
+                this.$el.addClass('modal fade');
 
                 //need tab index so close on escape works
                 //https://github.com/twitter/bootstrap/issues/4663

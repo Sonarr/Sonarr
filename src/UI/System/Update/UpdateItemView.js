@@ -12,8 +12,27 @@ define(
                 'click .x-install-update': '_installUpdate'
             },
 
+            initialize: function () {
+                this.updating = false;
+            },
+
             _installUpdate: function () {
-                CommandController.Execute('installUpdate', { updatePackage: this.model.toJSON() });
+                if (this.updating) {
+                    return;
+                }
+
+                this.updating = true;
+                var self = this;
+
+                var promise = CommandController.Execute('installUpdate', { updatePackage: this.model.toJSON() });
+
+                promise.done(function () {
+                    window.setTimeout(function () {
+                        self.updating = false;
+                    }, 5000);
+                });
+
+
             }
         });
     });

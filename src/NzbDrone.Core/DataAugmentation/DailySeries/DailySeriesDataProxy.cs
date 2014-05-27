@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.DataAugmentation.DailySeries

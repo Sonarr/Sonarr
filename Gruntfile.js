@@ -27,7 +27,7 @@ module.exports = function (grunt) {
             },
 
             bootstrap: {
-                src : srcContent + 'Bootstrap/bootstrap.less',
+                src : srcContent + 'bootstrap.less',
                 dest: destContent + 'bootstrap.css'
             },
             general  : {
@@ -118,7 +118,7 @@ module.exports = function (grunt) {
         requirejs: {
             compile:{
                 options: {
-                    mainConfigFile: "src/UI/app.js",
+                    mainConfigFile: 'src/UI/app.js',
                     fileExclusionRegExp: /^.*\.(?!js$)[^.]+$/,
                     preserveLicenseComments: false,
                     dir: outputDir,
@@ -139,11 +139,11 @@ module.exports = function (grunt) {
                 nospawn: false
             },
             bootstrap  : {
-                files: [ srcContent + 'Bootstrap/**', srcContent + 'FontAwesome/**'],
+                files: [ srcContent + 'Bootstrap/**', srcContent + 'FontAwesome/**', srcContent + 'bootstrap.less'],
                 tasks: ['less:bootstrap','less:general']
             },
             generalLess: {
-                files: [ srcRoot + '**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**'],
+                files: [ srcRoot + '**/*.less', '!**/Bootstrap/**', '!**/FontAwesome/**', '!' + srcContent + '/bootstrap.less'],
                 tasks: ['less:general']
             },
             handlebars : {

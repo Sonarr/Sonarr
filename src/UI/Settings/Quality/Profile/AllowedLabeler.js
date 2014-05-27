@@ -10,10 +10,10 @@ define(
             _.each(this.items, function (item) {
                 if (item.allowed) {
                     if (item.quality.id === cutoff.id) {
-                        ret += '<span class="label label-info" title="Cutoff">' + item.quality.name + '</span>&nbsp;';
+                        ret += '<li><span class="label label-info" title="Cutoff">' + item.quality.name + '</span></li>';
                     }
                     else {
-                        ret += '<span class="label">' + item.quality.name + '</span>&nbsp;';
+                        ret += '<li><span class="label label-default">' + item.quality.name + '</span></li>';
                     }
                 }
             });

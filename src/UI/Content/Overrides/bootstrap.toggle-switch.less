@@ -2,23 +2,27 @@
 @import "Bootstrap/mixins";
 
 .toggle {
+  height: 34px;
+  box-sizing: border-box;
+
   .slide-button {
-    .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+    .button-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border);
 
     &.btn-danger, &.btn-warning {
-      .buttonBackground(@btnInverseBackground, @btnInverseBackgroundHighlight);
+      //.buttonBackground(@btnInverseBackground, @btnInverseBackgroundHighlight);
+      .button-variant(@btn-warning-color, @btn-warning-bg, @btn-warning-border);
     }
   }
 
   input:first-of-type:checked ~ .slide-button {
-    .buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
+    .button-variant(@btn-primary-color, @btn-primary-bg, @btn-primary-border);
 
     &.btn-danger {
-      .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+      .button-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border);
     }
 
     &.btn-warning {
-      .buttonBackground(@btnWarningBackground, @btnWarningBackgroundHighlight);
+      .button-variant(@btn-warning-color, @btn-warning-bg, @btn-warning-border);
     }
   }
 }

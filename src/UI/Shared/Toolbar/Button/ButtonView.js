@@ -9,7 +9,7 @@ define(
 
         return Marionette.ItemView.extend({
             template : 'Shared/Toolbar/ButtonTemplate',
-            className: 'btn',
+            className: 'btn btn-default btn-icon-only-xs',
 
             ui: {
                 icon: 'i'
@@ -31,6 +31,10 @@ define(
 
                 if (!this.model.get('title')) {
                     this.$el.addClass('btn-icon-only');
+                }
+
+                if (this.model.get('className')) {
+                    this.$el.addClass(this.model.get('className'));
                 }
 
                 var command = this.model.get('command');

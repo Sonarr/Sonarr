@@ -11,6 +11,7 @@ using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Update;
 
 
 namespace NzbDrone.Core.Configuration
@@ -30,11 +31,13 @@ namespace NzbDrone.Core.Configuration
         string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
-        bool AutoUpdate { get; }
         string ApiKey { get; }
         bool Torrent { get; }
         string SslCertHash { get; }
         string UrlBase { get; }
+        Boolean UpdateAutomatically { get; }
+        UpdateMechanism UpdateMechanism { get; }
+        String UpdateScriptPath { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -141,11 +144,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("Branch", "master").ToLowerInvariant(); }
         }
 
-        public bool AutoUpdate
-        {
-            get { return GetValueBoolean("AutoUpdate", false, persist: false); }
-        }
-
         public string Username
         {
             get { return GetValue("Username", ""); }
@@ -181,6 +179,21 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
+        public bool UpdateAutomatically
+        {
+            get { return GetValueBoolean("UpdateAutomatically", false, false); }
+        }
+
+        public UpdateMechanism UpdateMechanism
+        {
+            get { return GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false); }
+        }
+
+        public string UpdateScriptPath
+        {
+            get { return GetValue("UpdateScriptPath", "", false ); }
+        }
+
         public int GetValueInt(string key, int defaultValue)
         {
             return Convert.ToInt32(GetValue(key, defaultValue));
@@ -191,9 +204,9 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToBoolean(GetValue(key, defaultValue, persist));
         }
 
-        public T GetValueEnum<T>(string key, T defaultValue)
+        public T GetValueEnum<T>(string key, T defaultValue, bool persist = true)
         {
-            return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
+            return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), persist);
         }
 
         public string GetValue(string key, object defaultValue, bool persist = true)
@@ -210,7 +223,9 @@ namespace NzbDrone.Core.Configuration
                     var valueHolder = parentContainer.Descendants(key).ToList();
 
                     if (valueHolder.Count() == 1)
+                    {
                         return valueHolder.First().Value.Trim();
+                    }
 
                     //Save the value
                     if (persist)

@@ -13,6 +13,15 @@ namespace NzbDrone.Common.Security
 
         private static bool ValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
         {
+            var request = sender as HttpWebRequest;
+
+            if (request != null &&
+                request.Address.OriginalString.ContainsIgnoreCase("nzbdrone.com") &&
+                sslpolicyerrors != SslPolicyErrors.None)
+            {
+                return false;
+            }
+
             return true;
         }
     }

@@ -43,7 +43,7 @@ namespace NzbDrone.Update.Test
             Subject.Start(new[] { "12", "" });
 
 
-            Mocker.GetMock<IInstallUpdateService>().Verify(c => c.Start(@"C:\NzbDrone"), Times.Once());
+            Mocker.GetMock<IInstallUpdateService>().Verify(c => c.Start(@"C:\NzbDrone", 12), Times.Once());
         }
 
 

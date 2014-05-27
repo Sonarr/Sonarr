@@ -447,5 +447,15 @@ namespace NzbDrone.Common.Disk
 
             return driveInfo.VolumeLabel;
         }
+
+        public FileStream StreamFile(string path)
+        {
+            if (!FileExists(path))
+            {
+                throw new FileNotFoundException("Unable to find file: " + path, path);
+            }
+
+            return new FileStream(path, FileMode.Open);
+        }
     }
 }

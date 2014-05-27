@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Instrumentation.Extensions;
@@ -116,7 +117,7 @@ namespace NzbDrone.Core.Indexers
             {
                 try
                 {
-                    _logger.CleansedDebug("Downloading Feed " + url);
+                    _logger.Debug("Downloading Feed " + url);
                     var xml = _httpProvider.DownloadString(url);
                     if (!string.IsNullOrWhiteSpace(xml))
                     {

@@ -96,6 +96,7 @@ define(
             leftSideButtons: {
                 type      : 'default',
                 storeState: false,
+                collapse  : true,
                 items     :
                     [
                         {

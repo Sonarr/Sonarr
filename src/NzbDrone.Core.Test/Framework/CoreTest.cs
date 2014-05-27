@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Http;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Framework

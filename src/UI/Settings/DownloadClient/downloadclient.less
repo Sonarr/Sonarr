@@ -1,3 +1,5 @@
+@import "../../Shared/Styles/clickable.less";
+
 .download-client-list {
   li {
     display: inline-block;
@@ -7,21 +9,25 @@
 
 .download-client-item {
 
+  .clickable;
+
   width: 290px;
   height: 90px;
   padding: 10px 15px;
 
-  h3 {
-    width: 230px;
-  }
-
   &.add-card {
     .center {
-      margin-top: 15px;
+      margin-top: -3px;
     }
   }
 }
 
 .modal-overflow {
   overflow-y: visible;
+}
+
+.add-download-client {
+  li {
+    width: 33%;
+  }
 }

@@ -44,4 +44,16 @@ define(
             return 'primary';
 
         });
+
+        Handlebars.registerHelper('EpisodeProgressClass', function () {
+            if (this.episodeFileCount === this.episodeCount) {
+                if (this.continuing) {
+                    return '';
+                }
+
+                return 'progress-bar-success';
+            }
+
+            return 'progress-bar-danger';
+        });
     });

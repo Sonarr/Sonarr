@@ -4,6 +4,7 @@ using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -66,10 +67,27 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 //Multiply maxSize by Series.Runtime
                 maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;
 
-                //Check if there was only one episode parsed and it is the first
-                if (subject.Episodes.Count == 1 && _episodeService.IsFirstOrLastEpisodeOfSeason(subject.Episodes.First().Id))
+                if (subject.Episodes.Count == 1)
                 {
-                    maxSize = maxSize * 2;
+                    Episode episode = subject.Episodes.First();
+                    List<Episode> seasonEpisodes;
+
+                    var seasonSearchCriteria = searchCriteria as SeasonSearchCriteria;
+                    if (seasonSearchCriteria != null && !seasonSearchCriteria.Series.UseSceneNumbering && seasonSearchCriteria.Episodes.Any(v => v.Id == episode.Id))
+                    {
+                        seasonEpisodes = (searchCriteria as SeasonSearchCriteria).Episodes;
+                    }
+                    else
+                    {
+                        seasonEpisodes = _episodeService.GetEpisodesBySeason(episode.SeriesId, episode.SeasonNumber);
+                    }
+
+                    //Ensure that this is either the first episode
+                    //or is the last episode in a season that has 10 or more episodes
+                    if (seasonEpisodes.First().Id == episode.Id || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().Id == episode.Id))
+                    {
+                        maxSize = maxSize * 2;
+                    }
                 }
 
                 //If the parsed size is greater than maxSize we don't want it

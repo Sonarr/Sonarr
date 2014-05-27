@@ -101,6 +101,12 @@ namespace NzbDrone.Core.Tv
                 //Todo: Should this should use the previous season's monitored state?
                 if (existingSeason == null)
                 {
+                    if (season.SeasonNumber == 0)
+                    {
+                        season.Monitored = false;
+                        continue;
+                    }
+
                     _logger.Debug("New season ({0}) for series: [{1}] {2}, setting monitored to true", season.SeasonNumber, series.TvdbId, series.Title);
                     season.Monitored = true;
                 }

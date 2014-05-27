@@ -21,7 +21,8 @@ namespace NzbDrone.Common.Processes
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
         void Kill(int processId);
-        bool Exists(string processName);
+        Boolean Exists(int processId);
+        Boolean Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
         Process SpawnNewProcess(string path, string args = null);
@@ -35,20 +36,17 @@ namespace NzbDrone.Common.Processes
         public const string NZB_DRONE_PROCESS_NAME = "NzbDrone";
         public const string NZB_DRONE_CONSOLE_PROCESS_NAME = "NzbDrone.Console";
 
-        private static List<Process> GetProcessesByName(string name)
-        {
-            var monoProcesses = Process.GetProcessesByName("mono")
-                                       .Where(process => process.Modules.Cast<ProcessModule>().Any(module => module.ModuleName.ToLower() == name.ToLower() + ".exe"));
-            return Process.GetProcessesByName(name)
-                .Union(monoProcesses).ToList();
-        }
-
         public ProcessInfo GetCurrentProcess()
         {
             return ConvertToProcessInfo(Process.GetCurrentProcess());
         }
 
-        public bool Exists(string processName)
+        public bool Exists(int processId)
+        {
+            return GetProcessById(processId) != null;
+        }
+
+        public Boolean Exists(string processName)
         {
             return GetProcessesByName(processName).Any();
         }
@@ -78,7 +76,7 @@ namespace NzbDrone.Common.Processes
 
         public List<ProcessInfo> FindProcessByName(string name)
         {
-            return Process.GetProcessesByName(name).Select(ConvertToProcessInfo).Where(c => c != null).ToList();
+            return GetProcessesByName(name).Select(ConvertToProcessInfo).Where(c => c != null).ToList();
         }
 
         public void OpenDefaultBrowser(string url)
@@ -203,12 +201,40 @@ namespace NzbDrone.Common.Processes
             process.PriorityClass = priority;
         }
 
+        public void Kill(int processId)
+        {
+            var process = Process.GetProcesses().FirstOrDefault(p => p.Id == processId);
+
+            if (process == null)
+            {
+                Logger.Warn("Cannot find process with id: {0}", processId);
+                return;
+            }
+
+            process.Refresh();
+
+            if (process.HasExited)
+            {
+                Logger.Debug("Process has already exited");
+                return;
+            }
+
+            Logger.Info("[{0}]: Killing process", process.Id);
+            process.Kill();
+            Logger.Info("[{0}]: Waiting for exit", process.Id);
+            process.WaitForExit();
+            Logger.Info("[{0}]: Process terminated successfully", process.Id);
+        }
+
         public void KillAll(string processName)
         {
-            var processToKill = GetProcessesByName(processName);
+            var processes = GetProcessesByName(processName);
 
-            foreach (var processInfo in processToKill)
+            Logger.Debug("Found {0} processes to kill", processes.Count);
+
+            foreach (var processInfo in processes)
             {
+                Logger.Debug("Killing process: {0} [{1}]", processInfo.Id, processInfo.ProcessName);
                 Kill(processInfo.Id);
             }
         }
@@ -254,29 +280,23 @@ namespace NzbDrone.Common.Processes
             return process.Modules.Cast<ProcessModule>().FirstOrDefault(module => module.ModuleName.ToLower().EndsWith(".exe")).FileName;
         }
 
-        public void Kill(int processId)
+        private static List<Process> GetProcessesByName(string name)
         {
-            var process = Process.GetProcesses().FirstOrDefault(p => p.Id == processId);
+            //TODO: move this to an OS specific class
 
-            if (process == null)
-            {
-                Logger.Warn("Cannot find process with id: {0}", processId);
-                return;
-            }
+            var monoProcesses = Process.GetProcessesByName("mono")
+                                       .Union(Process.GetProcessesByName("mono-sgen"))
+                                       .Where(process =>
+                                              process.Modules.Cast<ProcessModule>()
+                                                     .Any(module =>
+                                                          module.ModuleName.ToLower() == name.ToLower() + ".exe"));
 
-            process.Refresh();
+            var processes = Process.GetProcessesByName(name)
+                                   .Union(monoProcesses).ToList();
 
-            if (process.HasExited)
-            {
-                Logger.Debug("Process has already exited");
-                return;
-            }
+            Logger.Debug("Found {0} processes with the name: {1}", processes.Count, name);
 
-            Logger.Info("[{0}]: Killing process", process.Id);
-            process.Kill();
-            Logger.Info("[{0}]: Waiting for exit", process.Id);
-            process.WaitForExit();
-            Logger.Info("[{0}]: Process terminated successfully", process.Id);
+            return processes;
         }
     }
 }

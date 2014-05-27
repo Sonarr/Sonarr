@@ -6,8 +6,10 @@ define(
         'Commands/CommandCollection',
         'Commands/CommandMessengerCollectionView',
         'underscore',
+        'moment',
+        'Shared/Messenger',
         'jQuery/jquery.spin'
-    ], function (vent, CommandModel, CommandCollection, CommandMessengerCollectionView, _) {
+    ], function (vent, CommandModel, CommandCollection, CommandMessengerCollectionView, _, moment, Messenger) {
 
 
         CommandMessengerCollectionView.render();
@@ -16,15 +18,35 @@ define(
 
             return {
 
+                _lastCommand: {},
+
                 Execute: function (name, properties) {
 
                     var attr = _.extend({name: name.toLocaleLowerCase()}, properties);
-
                     var commandModel = new CommandModel(attr);
 
-                    return commandModel.save().success(function () {
+                    if (this._lastCommand.command && this._lastCommand.command.isSameCommand(attr) && moment().add('seconds', -5).isBefore(this._lastCommand.time)) {
+
+                        Messenger.show({
+                            message: 'Please wait at least 5 seconds before running this command again',
+                            hideAfter: 5,
+                            type: 'error'
+                        });
+
+                        return this._lastCommand.promise;
+                    }
+
+                    var promise = commandModel.save().success(function () {
                         CommandCollection.add(commandModel);
                     });
+
+                    this._lastCommand = {
+                        command : commandModel,
+                        promise : promise,
+                        time    : moment()
+                    };
+
+                    return promise;
                 },
 
                 bindToCommand: function (options) {

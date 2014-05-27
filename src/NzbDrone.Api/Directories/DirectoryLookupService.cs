@@ -37,7 +37,6 @@ namespace NzbDrone.Api.Directories
             return dirs;
         }
 
-
         private List<string> GetSubDirectories(string path)
         {
             try
@@ -47,9 +46,12 @@ namespace NzbDrone.Api.Directories
             catch (DirectoryNotFoundException)
             {
                 return new List<string>();
-                
             }
             catch (ArgumentException)
+            {
+                return new List<string>();
+            }
+            catch (IOException)
             {
                 return new List<string>();
             }

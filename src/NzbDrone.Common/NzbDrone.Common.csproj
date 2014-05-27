@@ -61,7 +61,7 @@
   <ItemGroup>
     <Compile Include="ArchiveProvider.cs" />
     <Compile Include="Cache\Cached.cs" />
-    <Compile Include="Cache\CacheManger.cs" />
+    <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\ICached.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\IContainer.cs" />
@@ -93,16 +93,20 @@
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
+    <Compile Include="Http\NzbDroneWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="IEnumerableExtensions.cs" />
+    <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
+    <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
     <Compile Include="Instrumentation\NzbDroneLogger.cs" />
     <Compile Include="Instrumentation\LogTargets.cs" />
     <Compile Include="Messaging\IEvent.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="PathEqualityComparer.cs" />
-    <Compile Include="Processes\INzbDroneProcessProvider.cs" />
     <Compile Include="Processes\PidFileProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="RateGate.cs" />
@@ -125,7 +129,7 @@
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="ServiceFactory.cs" />
-    <Compile Include="HttpProvider.cs" />
+    <Compile Include="Http\HttpProvider.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />

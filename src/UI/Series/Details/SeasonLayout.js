@@ -92,7 +92,6 @@ define(
 
             initialize: function (options) {
 
-
                 if (!options.episodeCollection) {
                     throw 'episodeCollection is needed';
                 }

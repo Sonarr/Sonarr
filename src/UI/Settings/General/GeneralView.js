@@ -12,19 +12,22 @@ define(
             template: 'Settings/General/GeneralViewTemplate',
 
             events: {
-                'change .x-auth'         : '_setAuthOptionsVisibility',
-                'change .x-ssl'          : '_setSslOptionsVisibility',
-                'click .x-reset-api-key' : '_resetApiKey'
+                'change .x-auth'             : '_setAuthOptionsVisibility',
+                'change .x-ssl'              : '_setSslOptionsVisibility',
+                'click .x-reset-api-key'     : '_resetApiKey',
+                'change .x-update-mechanism' : '_setScriptGroupVisibility'
             },
 
             ui: {
-                authToggle  : '.x-auth',
-                authOptions : '.x-auth-options',
-                sslToggle   : '.x-ssl',
-                sslOptions  : '.x-ssl-options',
-                resetApiKey : '.x-reset-api-key',
-                copyApiKey  : '.x-copy-api-key',
-                apiKeyInput : '.x-api-key'
+                authToggle      : '.x-auth',
+                authOptions     : '.x-auth-options',
+                sslToggle       : '.x-ssl',
+                sslOptions      : '.x-ssl-options',
+                resetApiKey     : '.x-reset-api-key',
+                copyApiKey      : '.x-copy-api-key',
+                apiKeyInput     : '.x-api-key',
+                updateMechanism : '.x-update-mechanism',
+                scriptGroup     : '.x-script-group'
             },
 
             initialize: function () {
@@ -38,6 +41,10 @@ define(
 
                 if(!this.ui.sslToggle.prop('checked')){
                     this.ui.sslOptions.hide();
+                }
+
+                if (!this._showScriptGroup()) {
+                    this.ui.scriptGroup.hide();
                 }
 
                 CommandController.bindToCommand({
@@ -79,7 +86,7 @@ define(
             },
 
             _resetApiKey: function () {
-                if (window.confirm("Reset API Key?")) {
+                if (window.confirm('Reset API Key?')) {
                     CommandController.Execute('resetApiKey', {
                         name : 'resetApiKey'
                     });
@@ -90,6 +97,21 @@ define(
                 if (options.command.get('name') === 'resetapikey') {
                     this.model.fetch();
                 }
+            },
+
+            _setScriptGroupVisibility: function () {
+
+                if (this._showScriptGroup()) {
+                    this.ui.scriptGroup.slideDown();
+                }
+
+                else {
+                    this.ui.scriptGroup.slideUp();
+                }
+            },
+
+            _showScriptGroup: function () {
+                return this.ui.updateMechanism.val() === 'script';
             }
         });
 

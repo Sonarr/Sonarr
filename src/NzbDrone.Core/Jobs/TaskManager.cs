@@ -100,6 +100,9 @@ namespace NzbDrone.Core.Jobs
 
         public void Handle(CommandExecutedEvent message)
         {
+            if (message.Command.GetType().Name == "BroadcastSignalRMessage")
+                return;
+
             var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
 
             if (scheduledTask != null)

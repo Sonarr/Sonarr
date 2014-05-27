@@ -12,5 +12,6 @@ namespace NzbDrone.Core.Metadata.Files
         public DateTime LastUpdated { get; set; }
         public Int32? EpisodeFileId { get; set; }
         public Int32? SeasonNumber { get; set; }
+        public String Hash { get; set; }
     }
 }

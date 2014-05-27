@@ -97,13 +97,13 @@ define(
                     }
                 }
                 
-                var regionId = position + "_" + (index + 1);                
+                var regionId = position + '_' + (index + 1);                
                 var region = this[regionId];
                                 
                 if (!region) {
-                    var regionClassName = "x-toolbar-" + position + "-" + (index + 1);
-                    this.ui[position + '_x'].append('<div class="toolbar-group '+regionClassName+'" />\r\n');                
-                    region = this.addRegion(regionId, "." + regionClassName);
+                    var regionClassName = 'x-toolbar-' + position + '-' + (index + 1);
+                    this.ui[position + '_x'].append('<div class="toolbar-group ' + regionClassName + '" />\r\n');
+                    region = this.addRegion(regionId, '.' + regionClassName);
                 }
                 
                 region.show(buttonGroupView);

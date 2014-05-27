@@ -1,19 +1,27 @@
 @import "../../Content/Bootstrap/mixins";
 @import "../../Content/FontAwesome/font-awesome";
+@import "../../Shared/Styles/clickable.less";
 
 .quality-profile-item {
+  .clickable;
 
   width: 300px;
   height: 120px;
   padding: 10px 15px;
 
-  h3 {
-    width: 240px;
-  }
-
   &.add-card {
     .center {
-      margin-top: 30px;
+      margin-top: 10px;
+    }
+  }
+
+  .allowed-qualities {
+
+    padding-left: 0px;
+
+    li {
+      list-style-type : none;
+      margin: 1px;
     }
   }
 }
@@ -66,6 +74,7 @@ ul.qualities {
     .quality-label {
       color: #c6c6c6;
     }
+
     .drag-handle, .select-handle {
       opacity: 0.2;
       line-height: 20px;

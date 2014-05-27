@@ -2,138 +2,154 @@
     <fieldset>
         <legend>Start-Up</legend>
 
-        <div class="control-group">
-            <label class="control-label">Port Number</label>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Port Number</label>
 
-            <div class="controls">
-                <input type="number" placeholder="8989" name="port"/>
-                <span>
-                    <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
-                </span>
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <input type="number" placeholder="8989" name="port" class="form-control"/>
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label">URL Base</label>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">URL Base</label>
 
-            <div class="controls">
-                <input type="text" name="urlBase"/>
-                <span>
-                    <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
-                    <i class="icon-nd-form-info" title="For reverse proxy support, default is empty"/>
-                </span>
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
+                <i class="icon-nd-form-info" title="For reverse proxy support, default is empty"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <input type="text" name="urlBase" class="form-control"/>
             </div>
         </div>
 
-        <div class="control-group advanced-setting">
-            <label class="control-label">Enable SSL</label>
+        <div class="form-group advanced-setting">
+            <label class="col-sm-3 control-label">Enable SSL</label>
 
-            <div class="controls">
-                <label class="checkbox toggle well">
-                    <input type="checkbox" name="enableSsl" class="x-ssl"/>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="enableSsl" class="x-ssl"/>
 
-                    <p>
-                        <span>Yes</span>
-                        <span>No</span>
-                    </p>
+                        <p>
+                            <span>Yes</span>
+                            <span>No</span>
+                        </p>
 
-                    <div class="btn btn-primary slide-button"/>
-                </label>
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
 
-                <span class="help-inline-checkbox">
-                    <i class="icon-nd-form-warning" title="Requires restart running as administrator to take effect"/>
-                </span>
+                    <span class="help-inline-checkbox">
+                        <i class="icon-nd-form-warning" title="Requires restart running as administrator to take effect"/>
+                    </span>
+                </div>
             </div>
         </div>
 
         <div class="x-ssl-options">
-            <div class="control-group advanced-setting">
-                <label class="control-label">SSL Port Number</label>
+            <div class="form-group advanced-setting">
+                <label class="col-sm-3 control-label">SSL Port Number</label>
 
-                <div class="controls">
-                    <input type="number" placeholder="8989" name="sslPort"/>
+                <div class="col-sm-4">
+                    <input type="number" placeholder="8989" name="sslPort" class="form-control"/>
                 </div>
             </div>
 
             {{#if_windows}}
-            <div class="control-group advanced-setting">
-                <label class="control-label">SSL Cert Hash</label>
+            <div class="form-group advanced-setting">
+                <label class="col-sm-3 control-label">SSL Cert Hash</label>
 
-                <div class="controls">
-                    <input type="text" name="sslCertHash"/>
+                <div class="col-sm-4">
+                    <input type="text" name="sslCertHash" class="form-control"/>
                 </div>
             </div>
             {{/if_windows}}
         </div>
 
-        <div class="control-group">
-            <label class="control-label">Open browser on start</label>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Open browser on start</label>
 
-            <div class="controls">
-                <label class="checkbox toggle well">
-                    <input type="checkbox" name="launchBrowser"/>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="launchBrowser" class="form-control"/>
 
-                    <p>
-                        <span>Yes</span>
-                        <span>No</span>
-                    </p>
+                        <p>
+                            <span>Yes</span>
+                            <span>No</span>
+                        </p>
 
-                    <div class="btn btn-primary slide-button"/>
-                </label>
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
 
-                <span class="help-inline-checkbox">
-                    <i class="icon-nd-form-info" title="Open a web browser and navigate to NzbDrone homepage on app start. Has no effect if installed as a windows service"/>
-                </span>
+                    <span class="help-inline-checkbox">
+                        <i class="icon-nd-form-info" title="Open a web browser and navigate to NzbDrone homepage on app start. Has no effect if installed as a windows service"/>
+                    </span>
+                </div>
             </div>
         </div>
     </fieldset>
 
     <fieldset>
         <legend>Security</legend>
-        <div class="control-group">
-            <label class="control-label">Authentication</label>
-            <div class="controls">
-                <label class="checkbox toggle well">
-                    <input type="checkbox" class='x-auth' name="authenticationEnabled"/>
-                    <p>
-                        <span>On</span>
-                        <span>Off</span>
-                    </p>
-                    <div class="btn btn-primary slide-button"/>
-                </label>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Authentication</label>
 
-            <span class="help-inline-checkbox">
-                <i class="icon-nd-form-info" title="Require Username and Password to access Nzbdrone"/>
-            </span>
-            </div>
-        </div>
-        <div class='x-auth-options'>
-            <div class="control-group">
-                <label class="control-label">Username</label>
-                <div class="controls">
-                    <input type="text" placeholder="Username" name="username"/>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">Password</label>
-                <div class="controls">
-                    <input type="password" name="password"/>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" class="x-auth" name="authenticationEnabled"/>
+                        <p>
+                            <span>On</span>
+                            <span>Off</span>
+                        </p>
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
+
+                    <span class="help-inline-checkbox">
+                        <i class="icon-nd-form-info" title="Require Username and Password to access Nzbdrone"/>
+                    </span>
                 </div>
             </div>
         </div>
 
-        <div class="control-group api-key">
-            <label class="control-label">API Key</label>
-            <div class="controls">
-                <div class="input-append">
-                    <input type="text" name="apiKey" readonly="readonly" class="x-api-key"/>
-                    <button class="btn btn-icon-only x-copy-api-key" title="Copy to clipboard"><i class="icon-copy"></i></button>
-                    <button class="btn btn-danger btn-icon-only x-reset-api-key" title="Reset API Key"><i class="icon-refresh"></i></button>
-                </div>
+        <div class="x-auth-options">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Username</label>
 
-                <span>
-                    <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
-                </span>
+                <div class="col-sm-4">
+                    <input type="text" placeholder="Username" name="username" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Password</label>
+
+                <div class="col-sm-4">
+                    <input type="password" name="password" class="form-control"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group api-key">
+            <label class="col-sm-3 control-label">API Key</label>
+
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <div class="input-group">
+                    <input type="text" name="apiKey" readonly="readonly" class="form-control x-api-key"/>
+                    <div class="input-group-btn">
+                        <button class="btn btn-icon-only x-copy-api-key hidden-xs"><i class="icon-copy"></i></button>
+                        <button class="btn btn-danger btn-icon-only x-reset-api-key" title="Reset API Key"><i class="icon-refresh"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
     </fieldset>
@@ -141,58 +157,84 @@
     <fieldset>
         <legend>Logging</legend>
 
-        <div class="control-group">
-            <label class="control-label">Log Level</label>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Log Level</label>
 
-            <div class="controls">
-                <select name="logLevel">
+            <div class="col-sm-1 col-sm-push-2 help-inline">
+                <i class="icon-nd-form-warning" title="Trace and Debug logging should only be enabled temporarily"/>
+            </div>
+
+            <div class="col-sm-2 col-sm-pull-1">
+                <select name="logLevel" class="form-control">
                     <option value="Trace">Trace</option>
                     <option value="Debug">Debug</option>
                     <option value="Info">Info</option>
                 </select>
-
-                <span>
-                    <i class="icon-nd-form-warning" title="Trace and Debug logging should only be enabled temporarily"/>
-                </span>
             </div>
         </div>
     </fieldset>
 
     <fieldset class="advanced-setting">
-        <legend>Development</legend>
-        <div class="alert">
-            <i class="icon-nd-warning"></i>
-            Don't change anything here unless you know what you are doing.
-        </div>
-        <div class="control-group">
-            <label class="control-label">Branch</label>
+        <legend>Updating</legend>
 
-            <div class="controls">
-                <input type="text" placeholder="master" name="branch"/>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Branch</label>
+
+            <div class="col-sm-4">
+                <input type="text" placeholder="master" name="branch" class="form-control"/>
             </div>
         </div>
 
-        <!--{{#if_mono}}-->
-        <!--<div class="control-group">-->
-            <!--<label class="control-label">Auto Update</label>-->
+        {{#if_mono}}
+        <div class="alert alert-warning">Please see: <a href="https://github.com/NzbDrone/NzbDrone/wiki/Updating">the wiki</a> for more information</div>
 
-            <!--<div class="controls">-->
-                <!--<label class="checkbox toggle well">-->
-                    <!--<input type="checkbox" name="autoUpdate"/>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Automatic</label>
 
-                    <!--<p>-->
-                        <!--<span>Yes</span>-->
-                        <!--<span>No</span>-->
-                    <!--</p>-->
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="updateAutomatically"/>
+                        <p>
+                            <span>On</span>
+                            <span>Off</span>
+                        </p>
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
 
-                    <!--<div class="btn btn-primary slide-button"/>-->
-                <!--</label>-->
+                    <span class="help-inline-checkbox">
+                        <i class="icon-nd-form-info" title="Automatically download and install updates. You will still be able to install from System: Updates"/>
+                    </span>
+                </div>
+            </div>
+        </div>
 
-                <!--<span class="help-inline-checkbox">-->
-                    <!--<i class="icon-nd-form-info" title="Use drone's built in auto update instead of package manager/manual updating"/>-->
-                <!--</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--{{/if_mono}}-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Mechanism</label>
+
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-info" title="Use built-in updater or external script"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <select name="updateMechanism" class="form-control x-update-mechanism">
+                    <option value="builtIn">Built-in</option>
+                    <option value="script">Script</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group x-script-group">
+            <label class="col-sm-3 control-label">Script Path</label>
+
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-info" title="Path to a custom script that take an extracted update package and handle the remainder of the update process"/>
+            </div>
+
+            <div class="col-sm-4 col-sm-pull-1">
+                <input type="text" name="updateScriptPath" class="form-control"/>
+            </div>
+        </div>
+        {{/if_mono}}
     </fieldset>
 </div>

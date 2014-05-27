@@ -3,19 +3,47 @@
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
 @import "../Content/mixins";
+@import "../Content/variables";
+
+.table {
+
+  //table-layout: fixed;
+}
+
+.series-title {
+  .text-overflow();
+
+  @media @sm {
+    max-width: 250px
+  }
+}
 
 .episode-title-cell {
-  .btn-link;
+  .text-overflow();
+
+  @media @lg {
+    max-width: 350px;
+  }
+
+  @media @md {
+    max-width: 250px;
+  }
+
+  @media @sm {
+    max-width: 200px;
+  }
 }
 
 .air-date-cell {
   width : 120px;
   cursor: default;
+  .text-overflow();
 }
 
 .relative-date-cell {
   width : 150px;
   cursor: default;
+  .text-overflow();
 }
 
 .history-event-type-cell {
@@ -42,7 +70,7 @@
   }
 
   i {
-    color : @red;
+    color : @brand-danger;
   }
 }
 
@@ -71,12 +99,12 @@ td.episode-status-cell, td.quality-cell {
 }
 
 .nzb-title-cell {
-  max-width: 600px;
+  max-width: 400px;
   word-wrap: break-word;
 }
 
 .episode-actions-cell {
-  width: 50px;
+  width: 65px;
 
   li {
     .clickable();
@@ -98,12 +126,13 @@ td.episode-status-cell, td.quality-cell {
 }
 
 .series-actions-cell {
-  width: 40px;
+  width     : 56px;
+  min-width : 56px;
 }
 
 .timeleft-cell {
-  cursor: default;
-  width: 80px;
+  cursor : default;
+  width  : 80px;
 }
 
 .queue-status-cell {

@@ -13,7 +13,6 @@ define(
             className: 'row',
 
             ui: {
-                title              : '.x-title',
                 sizeSlider         : '.x-slider',
                 thirtyMinuteMinSize: '.x-min-thirty',
                 sixtyMinuteMinSize : '.x-min-sixty',
@@ -22,7 +21,6 @@ define(
             },
 
             events: {
-                'change .x-title': '_updateTitle',
                 'slide .x-slider': '_updateSize'
             },
 
@@ -36,14 +34,10 @@ define(
                     range       : true,
                     min         : 0,
                     max         : 200,
-                    values      : [ this.model.get('minSize'), this.model.get('maxSize') ],
+                    values      : [ this.model.get('minSize'), this.model.get('maxSize') ]
                 });     
                 
                 this._changeSize();     
-            },
-            
-            _updateTitle: function() {
-                this.model.set('title', this.ui.title.val());
             },
 
             _updateSize: function (event, ui) {

@@ -55,6 +55,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Girls.Next.Door.S03E06.DVDRip.XviD-WiDE", false)]
         [TestCase("The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", false)]
         [TestCase("the.shield.1x13.circles.ws.xvidvd-tns", false)]
+        [TestCase("the_x-files.9x18.sunshine_days.ac3.ws_dvdrip_xvid-fov.avi", false)]
+        [TestCase("Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
+        [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);
@@ -115,6 +118,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Two and a Half Men S10E03 1080p WEB DL DD5 1 H 264 REPACK NFHD", true)]
         [TestCase("Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", false)]
         [TestCase("The.Big.Bang.Theory.S06E11.The.Santa.Simulation.1080p.WEB-DL.DD5.1.H.264", false)]
+        [TestCase("Rosemary's.Baby.S01E02.Night.2.[WEBDL-1080p].mkv", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -123,6 +127,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", false)]
         [TestCase("The Big Bang Theory.S03E01.The Electric Can Opener Fluctuation.m2ts", false)]
+        [TestCase("Revolution.S01E02.Chained.Heat.[Bluray720p].mkv", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
@@ -130,6 +135,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", false)]
         [TestCase("Sons.Of.Anarchy.S02E13.1080p.BluRay.x264-AVCDVD", false)]
+        [TestCase("Revolution.S01E02.Chained.Heat.[Bluray1080p].mkv", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);

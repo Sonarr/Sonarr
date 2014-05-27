@@ -27,7 +27,6 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodesByFileId(int episodeFileId);
         void UpdateEpisode(Episode episode);
         void SetEpisodeMonitored(int episodeId, bool monitored);
-        bool IsFirstOrLastEpisodeOfSeason(int episodeId);
         void UpdateEpisodes(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
         void InsertMany(List<Episode> episodes);
@@ -139,19 +138,6 @@ namespace NzbDrone.Core.Tv
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
             _episodeRepository.SetMonitoredBySeason(seriesId, seasonNumber, monitored);
-        }
-
-        public bool IsFirstOrLastEpisodeOfSeason(int episodeId)
-        {
-            var episode = GetEpisode(episodeId);
-            var seasonEpisodes = GetEpisodesBySeason(episode.SeriesId, episode.SeasonNumber);
-
-            //Ensure that this is either the first episode
-            //or is the last episode in a season that has 10 or more episodes
-            if (seasonEpisodes.First().EpisodeNumber == episode.EpisodeNumber || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().EpisodeNumber == episode.EpisodeNumber))
-                return true;
-
-            return false;
         }
 
         public void UpdateEpisodes(List<Episode> episodes)

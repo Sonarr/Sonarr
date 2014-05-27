@@ -27,6 +27,7 @@ require.config({
         'jquery.dotdotdot'        : 'JsLibraries/jquery.dotdotdot',
         'messenger'               : 'JsLibraries/messenger',
         'jquery'                  : 'JsLibraries/jquery',
+        'typeahead'               : 'JsLibraries/typeahead',
         'zero.clipboard'          : 'JsLibraries/zero.clipboard',
         'libs'                    : 'JsLibraries/',
 
@@ -50,7 +51,12 @@ require.config({
                 [
                     'jquery'
                 ],
-            exports: 'Messenger'
+            exports: 'Messenger',
+            init : function () {
+                window.Messenger.options = {
+                    theme: 'flat'
+                };
+            }
         },
         signalR               : {
             deps:
@@ -62,12 +68,7 @@ require.config({
             deps:
                 [
                     'jquery'
-                ],
-            init: function ($) {
-                $('body').tooltip({
-                    selector: '[title]'
-                });
-            }
+                ]
         },
         backstrech            : {
             deps:
@@ -108,6 +109,12 @@ require.config({
                 AsNamedView.call(window.Marionette.ItemView.prototype);
 
             }
+        },
+        'typeahead'           : {
+            deps:
+                [
+                    'jquery'
+                ]
         },
         'jquery-ui'           : {
             deps:
@@ -236,9 +243,10 @@ define(
         'Shared/Modal/ModalController',
         'Shared/ControlPanel/ControlPanelController',
         'System/StatusModel',
+        'Shared/Tooltip',
         'Instrumentation/StringFormat',
         'LifeCycle'
-    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel) {
+    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel, Tooltip) {
 
         new SeriesController();
         new ModalController();
@@ -252,6 +260,10 @@ define(
         });
 
         app.addInitializer(SignalRBroadcaster.appInitializer, {
+            app: app
+        });
+
+        app.addInitializer(Tooltip.appInitializer, {
             app: app
         });
 

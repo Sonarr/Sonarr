@@ -3,8 +3,11 @@
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
 @import "../Content/variables";
+@import "../Content/Overrides/bootstrap";
 
 .calendar {
+  width: 100%;
+
   th, td {
     border-color : #eeeeee;
   }
@@ -77,27 +80,27 @@
   }
 
   .primary {
-    border-color : @btnPrimaryBackground;
+    border-color : @btn-primary-bg;
   }
 
   .info {
-    border-color : @btnInfoBackground;
+    border-color : @btn-info-bg;
   }
 
   .inverse {
-    border-color : @btnInverseBackground;
+    border-color : @btn-link-disabled-color;
   }
 
   .warning {
-    border-color : @btnWarningBackground;
+    border-color : @btn-warning-bg;
   }
 
   .danger {
-    border-color : @btnDangerBackground;
+    border-color : @btn-danger-bg;
   }
 
   .success {
-    border-color : @btnSuccessBackground;;
+    border-color : @btn-success-bg;
   }
 
   .purple {
@@ -107,10 +110,17 @@
   .episode-title {
     .btn-link;
     .text-overflow;
-    color      : @linkColor;
+    color      : @link-color;
     margin-top : 1px;
-    width      : 140px;
     display    : inline-block;
+    
+    @media (max-width: @screen-xs-min) {
+      width      : 140px;
+    }
+    
+    @media (min-width: @screen-md-min) {
+      width      : 140px;
+    }
   }
 }
 
@@ -119,33 +129,33 @@
   background-position : -160px -128px;
 
   .primary {
-    border-color     : @btnPrimaryBackground;
-    background-color : @btnPrimaryBackground;
+    border-color     : @btn-primary-bg;
+    background-color : @btn-primary-bg;
   }
 
   .info {
-    border-color     : @btnInfoBackground;
-    background-color : @btnInfoBackground;
+    border-color     : @btn-info-bg;
+    background-color : @btn-info-bg;
   }
 
   .inverse {
-    border-color     : @btnInverseBackground;
-    background-color : @btnInverseBackground;
+    border-color     : @btn-link-disabled-color;
+    background-color : @btn-link-disabled-color;
   }
 
   .warning {
-    border-color     : @btnWarningBackground;
-    background-color : @btnWarningBackground;
+    border-color     : @btn-warning-bg;
+    background-color : @btn-warning-bg;
   }
 
   .danger {
-    border-color     : @btnDangerBackground;
-    background-color : @btnDangerBackground;
+    border-color     : @btn-danger-bg;
+    background-color : @btn-danger-bg;
   }
 
   .success {
-    border-color     : @btnSuccessBackground;
-    background-color : @btnSuccessBackground;
+    border-color     : @btn-success-bg;
+    background-color : @btn-success-bg;
   }
 
   .purple {
@@ -161,7 +171,7 @@
 
 .ical
 {
-  color: @btnInverseBackground;
+  color: @btn-link-disabled-color;
   cursor: pointer;
 }
 

@@ -10,16 +10,19 @@ define(
 
         return NzbDroneController.extend({
 
+            _originalInit: NzbDroneController.prototype.initialize,
 
             initialize: function () {
                 this.route('', this.series);
                 this.route('series', this.series);
                 this.route('series/:query', this.seriesDetails);
+
+                this._originalInit.apply(this, arguments);
             },
 
             series: function () {
                 this.setTitle('NzbDrone');
-                AppLayout.mainRegion.show(new SeriesIndexLayout());
+                this.showMainRegion(new SeriesIndexLayout());
             },
 
             seriesDetails: function (query) {
@@ -28,7 +31,7 @@ define(
                 if (series.length !== 0) {
                     var targetSeries = series[0];
                     this.setTitle(targetSeries.get('title'));
-                    AppLayout.mainRegion.show(new SeriesDetailsLayout({ model: targetSeries }));
+                    this.showMainRegion(new SeriesDetailsLayout({ model: targetSeries }));
                 }
                 else {
                     this.showNotFound();

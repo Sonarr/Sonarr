@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace NzbDrone.Common
 {
@@ -64,6 +65,21 @@ namespace NzbDrone.Common
         public static bool IsNullOrWhiteSpace(this string text)
         {
             return String.IsNullOrWhiteSpace(text);
+        }
+
+        public static bool ContainsIgnoreCase(this string text, string contains)
+        {
+            return text.IndexOf(contains, StringComparison.InvariantCultureIgnoreCase) > -1;
+        }
+
+        public static string WrapInQuotes(this string text)
+        {
+            if (!text.Contains(" "))
+            {
+                return text;
+            }
+
+            return "\"" + text + "\"";
         }
     }
 }

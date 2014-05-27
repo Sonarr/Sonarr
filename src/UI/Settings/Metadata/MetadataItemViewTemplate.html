@@ -2,7 +2,7 @@
     <div>
         <h3>{{name}}</h3>
         <span class="btn-group pull-right">
-            <button class="btn btn-mini btn-icon-only x-edit"><i class="icon-nd-edit"/></button>
+            <button class="btn btn-xs btn-icon-only x-edit"><i class="icon-nd-edit"/></button>
         </span>
     </div>
 
@@ -10,7 +10,7 @@
         {{#if enable}}
             <span class="label label-success">Enabled</span>
         {{else}}
-            <span class="label">Not Enabled</span>
+            <span class="label label-default">Not Enabled</span>
         {{/if}}
         <hr>
         {{#each fields}}

@@ -18,8 +18,8 @@ define(
                 this.$el.empty();
 
                 this.$el.html(
-                    '<i class="icon-cog x-edit-series" title="" data-original-title="Edit Series"></i> ' +
-                    '<i class="icon-remove x-remove-series" title="" data-original-title="Delete Series"></i>'
+                    '<i class="icon-nd-edit x-edit-series" title="" data-original-title="Edit Series"></i> ' +
+                    '<i class="icon-remove x-remove-series hidden-xs" title="" data-original-title="Delete Series"></i>'
                 );
 
                 this.delegateEvents();

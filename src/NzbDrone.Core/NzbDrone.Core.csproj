@@ -138,9 +138,9 @@
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
-    <Compile Include="Datastore\Extentions\MappingExtensions.cs" />
-    <Compile Include="Datastore\Extentions\PagingSpecExtensions.cs" />
-    <Compile Include="Datastore\Extentions\RelationshipExtensions.cs" />
+    <Compile Include="Datastore\Extensions\MappingExtensions.cs" />
+    <Compile Include="Datastore\Extensions\PagingSpecExtensions.cs" />
+    <Compile Include="Datastore\Extensions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
@@ -194,6 +194,8 @@
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
     <Compile Include="Datastore\Migration\048_add_title_to_scenemappings.cs" />
+    <Compile Include="Datastore\Migration\049_fix_dognzb_url.cs" />
+    <Compile Include="Datastore\Migration\050_add_hash_to_metadata_files.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -279,6 +281,7 @@
     <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
+    <Compile Include="HealthCheck\Checks\RootFolderCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
     <Compile Include="HealthCheck\HealthCheckBase.cs" />
@@ -322,7 +325,6 @@
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
-    <Compile Include="Instrumentation\Extensions\LoggerCleansedExtensions.cs" />
     <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
@@ -361,6 +363,8 @@
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\ImageFileResult.cs" />
+    <Compile Include="Metadata\Files\MetadataFileResult.cs" />
     <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\Files\MetadataFile.cs" />
     <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
@@ -539,6 +543,7 @@
     <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
@@ -688,10 +693,13 @@
     <Compile Include="Update\InstallUpdateService.cs" />
     <Compile Include="Update\RecentUpdateProvider.cs" />
     <Compile Include="Update\UpdateChanges.cs" />
+    <Compile Include="Update\UpdateMechanism.cs" />
     <Compile Include="Update\UpdatePackageAvailable.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
     <Compile Include="Update\UpdatePackage.cs" />
     <Compile Include="Update\UpdateCheckService.cs" />
+    <Compile Include="Update\UpdateVerification.cs" />
+    <Compile Include="Update\UpdateVerificationFailedException.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
     <Compile Include="Validation\Paths\RootFolderValidator.cs" />
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />

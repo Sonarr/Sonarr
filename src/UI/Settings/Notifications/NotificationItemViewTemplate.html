@@ -1,0 +1,19 @@
+﻿<div class="notification-item thingy" title="Click to edit">
+    <div>
+        <h3>{{name}}</h3>
+    </div>
+
+    <div class="settings">
+        {{#if onGrab}}
+            <span class="label label-success">On Grab</span>
+        {{else}}
+            <span class="label label-default">On Grab</span>
+        {{/if}}
+
+        {{#if onDownload}}
+            <span class="label label-success">On Download</span>
+        {{else}}
+            <span class="label label-default">On Download</span>
+        {{/if}}
+    </div>
+</div>

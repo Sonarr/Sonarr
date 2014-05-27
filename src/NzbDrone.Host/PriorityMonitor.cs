@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Host
@@ -36,7 +37,15 @@ namespace NzbDrone.Host
             }
             catch (Exception e)
             {
-                _logger.WarnException("Unable to verify priority", e);
+                if (OsInfo.IsMono)
+                {
+                    _logger.TraceException("Unable to verify priority", e);
+                }
+
+                else
+                {
+                    _logger.WarnException("Unable to verify priority", e);
+                }
             }
         }
     }

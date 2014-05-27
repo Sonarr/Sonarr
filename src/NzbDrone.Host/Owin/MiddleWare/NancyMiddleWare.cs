@@ -13,7 +13,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
             _nancyBootstrapper = nancyBootstrapper;
         }
 
-        public int Order { get { return 1; } }
+        public int Order { get { return 2; } }
 
         public void Attach(IAppBuilder appBuilder)
         {

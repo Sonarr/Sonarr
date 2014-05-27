@@ -1,18 +1,20 @@
 ﻿'use strict';
 define(
     [
+        'jquery',
         'backbone',
         'marionette',
         'System/Info/SystemInfoLayout',
         'System/Logs/LogsLayout',
         'System/Update/UpdateLayout',
-        'Commands/CommandController'
-    ], function (Backbone,
+        'Shared/Messenger'
+    ], function ($,
+                 Backbone,
                  Marionette,
                  SystemInfoLayout,
                  LogsLayout,
                  UpdateLayout,
-                 CommandController) {
+                 Messenger) {
         return Marionette.Layout.extend({
             template: 'System/SystemLayoutTemplate',
 
@@ -90,14 +92,26 @@ define(
             },
 
             _shutdown: function () {
-                CommandController.Execute('shutdown', {
-                    name : 'shutdown'
+                $.ajax({
+                    url: window.NzbDrone.ApiRoot + '/system/shutdown',
+                    type: 'POST'
+                });
+
+                Messenger.show({
+                    message: 'NzbDrone will shutdown shortly',
+                    type: 'info'
                 });
             },
 
             _restart: function () {
-                CommandController.Execute('restart', {
-                    name : 'restart'
+                $.ajax({
+                    url: window.NzbDrone.ApiRoot + '/system/restart',
+                    type: 'POST'
+                });
+
+                Messenger.show({
+                    message: 'NzbDrone will restart shortly',
+                    type: 'info'
                 });
             }
         });

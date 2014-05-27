@@ -50,20 +50,11 @@ define(
 
                 this.signalRconnection.reconnected(function() {
                     tryingToReconnect = false;
-
-                    var currentVersion = StatusModel.get('version');
-
-                    var promise = StatusModel.fetch();
-                    promise.done(function () {
-                        if (StatusModel.get('version') !== currentVersion) {
-                            vent.trigger(vent.Events.ServerUpdated);
-                        }
-                    });
                 });
 
                 this.signalRconnection.disconnected(function () {
                     if (tryingToReconnect) {
-                        $('<div class="modal-backdrop"></div>').appendTo(document.body);
+                        $('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
 
                         Messenger.show({
                             id        : messengerId,

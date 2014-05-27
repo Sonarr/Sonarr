@@ -1,22 +1,29 @@
 ﻿<div class="series-editor-footer">
     <div class="row">
-        <div class="span2">Monitored</div>
-        <div class="span2">Quality Profile</div>
-        <div class="span2">Season Folder</div>
-        <div class="span4">Root Folder</div>
-    </div>
+        <div class="form-group col-md-2">
+            <label>Monitored</label>
 
-    <div class="row">
-        <div class="span2">
-            <select class="span2 x-monitored">
+            <select class="form-control x-monitored">
                 <option value="noChange">No change</option>
                 <option value="true">Monitored</option>
                 <option value="false">Unmonitored</option>
             </select>
         </div>
 
-        <div class="span2">
-            <select class="span2 x-quality-profiles">
+        <div class="form-group col-md-2">
+            <label>Season Folder</label>
+
+            <select class="form-control x-season-folder">
+                <option value="noChange">No change</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Quality Profile</label>
+
+            <select class="form-control x-quality-profiles">
                 <option value="noChange">No change</option>
                 {{#each qualityProfiles.models}}
                     <option value="{{id}}">{{attributes.name}}</option>
@@ -24,28 +31,24 @@
             </select>
         </div>
 
-        <div class="span2">
-            <select class="span2 x-season-folder">
-                <option value="noChange">No change</option>
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-            </select>
-        </div>
+        <div class="form-group col-md-3">
+            <label>Root Folder</label>
 
-        <div class="span3">
-            <select class="span3 x-root-folder" validation-name="RootFolderPath">
+            <select class="form-control x-root-folder" validation-name="RootFolderPath">
                 <option value="noChange">No change</option>
                 {{#each rootFolders}}
-                    <option value="{{id}}">{{path}}</option>
+                <option value="{{id}}">{{path}}</option>
                 {{/each}}
                 <option value="addNew">Add a different path</option>
             </select>
         </div>
 
-        <span class="pull-right">
-            <span class="selected-count x-selected-count">0  series selected</span>
-            <button class="btn btn-primary x-save">Save</button>
-            <button class="btn btn-danger x-organize-files">Organize</button>
-        </span>
+        <div class="form-group col-md-3 actions">
+            <label class="x-selected-count">0 series selected</label>
+            <div>
+                <button class="btn btn-primary x-save">Save</button>
+                <button class="btn btn-danger x-organize-files">Organize</button>
+            </div>
+        </div>
     </div>
 </div>

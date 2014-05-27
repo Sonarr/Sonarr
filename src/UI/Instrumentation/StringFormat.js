@@ -4,7 +4,8 @@ String.prototype.format = function () {
     return this.replace(/{(\d+)}/g, function (match, number) {
         if (typeof args[number] !== 'undefined') {
             return args[number];
-        } else {
+        }
+        else {
             return match;
         }
     });

@@ -85,8 +85,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Authentication\AuthenticationService.cs" />
-    <Compile Include="Authentication\EnableStatelessAuthInNancy.cs" />
-    <Compile Include="Authentication\EnableBasicAuthInNancy.cs" />
+    <Compile Include="Authentication\EnableAuthInNancy.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="Blacklist\BlacklistModule.cs" />
     <Compile Include="Blacklist\BlacklistResource.cs" />
@@ -123,12 +122,14 @@
     <Compile Include="Episodes\RenameEpisodeModule.cs" />
     <Compile Include="Episodes\RenameEpisodeResource.cs" />
     <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\NzbDroneVersionPipeline.cs" />
     <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IRegisterNancyPipeline.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Frontend\IsCacheableSpecification.cs" />
+    <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
     <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\LogFileMapper.cs" />
     <Compile Include="Frontend\Mappers\MediaCoverMapper.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Mapping\MappingValidation.cs" />
     <Compile Include="Mapping\ResourceMappingException.cs" />
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />
+    <Compile Include="Update\UpdateResource.cs" />
     <Compile Include="Wanted\CutoffModule.cs" />
     <Compile Include="Wanted\LegacyMissingModule.cs" />
     <Compile Include="Wanted\MissingModule.cs" />

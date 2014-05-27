@@ -21,7 +21,7 @@ namespace NzbDrone.Test.Common
                 LogManager.Configuration = new LoggingConfiguration();
                 var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
                 LogManager.Configuration.AddTarget(consoleTarget.GetType().Name, consoleTarget);
-                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, consoleTarget));
+                LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, consoleTarget));
 
                 RegisterExceptionVerification();
             }
@@ -50,7 +50,7 @@ namespace NzbDrone.Test.Common
             //https://bugs.launchpad.net/nunitv2/+bug/1076932
             if (BuildInfo.IsDebug && TestContext.CurrentContext.Result.State == TestState.Success)
             {
-                ExceptionVerification.AssertNoUnexcpectedLogs();
+                ExceptionVerification.AssertNoUnexpectedLogs();
             }
         }
     }

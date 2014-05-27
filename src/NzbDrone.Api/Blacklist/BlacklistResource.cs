@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Api.Series;
 
 namespace NzbDrone.Api.Blacklist
 {
@@ -12,5 +13,7 @@ namespace NzbDrone.Api.Blacklist
         public string SourceTitle { get; set; }
         public QualityModel Quality { get; set; }
         public DateTime Date { get; set; }
+
+        public SeriesResource Series { get; set; }
     }
 }

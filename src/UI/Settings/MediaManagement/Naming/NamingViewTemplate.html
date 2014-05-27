@@ -1,37 +1,44 @@
 ﻿<fieldset>
     <legend>Episode Naming</legend>
 
-    <div class="control-group">
-        <label class="control-label">Rename Episodes</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Rename Episodes</label>
 
-        <div class="controls">
-            <label class="checkbox toggle well">
-                <input type="checkbox" name="renameEpisodes" class="x-rename-episodes"/>
+        <div class="col-sm-8">
+            <div class="input-group">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="renameEpisodes" class="x-rename-episodes"/>
 
-                <p>
-                    <span>Yes</span>
-                    <span>No</span>
-                </p>
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
 
-                <div class="btn btn-primary slide-button"/>
-            </label>
+                    <div class="btn btn-primary slide-button"/>
+                </label>
 
-            <span class="help-inline-checkbox">
-                <i class="icon-nd-form-warning" title="NzbDrone will use the existing file name if set to no"/>
-            </span>
+                <span class="help-inline-checkbox">
+                    <i class="icon-nd-form-warning" title="NzbDrone will use the existing file name if set to no"/>
+                </span>
+            </div>
         </div>
     </div>
 
     <div class="x-naming-options">
         <div class="basic-setting x-basic-naming"></div>
 
-        <div class="control-group advanced-setting">
-            <label class="control-label">Standard Episode Format</label>
+        <div class="form-group advanced-setting">
+            <label class="col-sm-3 control-label">Standard Episode Format</label>
 
-            <div class="controls">
-                <div class="input-append x-helper-input">
-                    <input type="text" class="naming-format" name="standardEpisodeFormat" data-onkeyup="true" />
-                    <div class="btn-group x-naming-token-helper">
+            <div class="col-sm-1 col-sm-push-8 help-inline">
+                <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used"></i>
+                <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
+            </div>
+
+            <div class="col-sm-8 col-sm-pull-1">
+                <div class="input-group x-helper-input">
+                    <input type="text" class="form-control naming-format" name="standardEpisodeFormat" data-onkeyup="true" />
+                    <div class="input-group-btn btn-group x-naming-token-helper">
                         <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-plus"></i>
                         </button>
@@ -47,20 +54,21 @@
                         </ul>
                     </div>
                 </div>
-                <span class="help-inline">
-                    <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used"></i>
-                    <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
-                </span>
             </div>
         </div>
 
-        <div class="control-group advanced-setting">
-            <label class="control-label">Daily Episode Format</label>
+        <div class="form-group advanced-setting">
+            <label class="col-sm-3 control-label">Daily Episode Format</label>
 
-            <div class="controls">
-                <div class="input-append x-helper-input">
-                    <input type="text" class="naming-format" name="dailyEpisodeFormat" data-onkeyup="true" />
-                    <div class="btn-group x-naming-token-helper">
+            <div class="col-sm-1 col-sm-push-8 help-inline">
+                <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used"></i>
+                <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
+            </div>
+
+            <div class="col-sm-8 col-sm-pull-1">
+                <div class="input-group x-helper-input">
+                    <input type="text" class="form-control naming-format" name="dailyEpisodeFormat" data-onkeyup="true" />
+                    <div class="input-group-btn btn-group x-naming-token-helper">
                         <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-plus"></i>
                         </button>
@@ -77,34 +85,21 @@
                         </ul>
                     </div>
                 </div>
-                <span class="help-inline">
-                    <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used"></i>
-                    <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
-                </span>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">Multi-Episode Style</label>
-
-            <div class="controls">
-                <select class="inputClass x-multi-episode-style" name="multiEpisodeStyle">
-                    <option value="0">Extend</option>
-                    <option value="1">Duplicate</option>
-                    <option value="2">Repeat</option>
-                    <option value="3">Scene</option>
-                </select>
             </div>
         </div>
     </div>
 
-    <div class="control-group advanced-setting">
-        <label class="control-label">Series Folder Format</label>
+    <div class="form-group advanced-setting">
+        <label class="col-sm-3 control-label">Series Folder Format</label>
 
-        <div class="controls">
-            <div class="input-append x-helper-input">
-                <input type="text" class="naming-format" name="seriesFolderFormat" data-onkeyup="true"/>
-                <div class="btn-group x-naming-token-helper">
+        <div class="col-sm-1 col-sm-push-8 help-inline">
+            <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used. Only used when adding a new series."></i>
+        </div>
+
+        <div class="col-sm-8 col-sm-pull-1">
+            <div class="input-group x-helper-input">
+                <input type="text" class="form-control naming-format" name="seriesFolderFormat" data-onkeyup="true"/>
+                <div class="input-group-btn btn-group x-naming-token-helper">
                     <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-plus"></i>
                     </button>
@@ -113,19 +108,16 @@
                     </ul>
                 </div>
             </div>
-            <span class="help-inline">
-                <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used. Only used when adding a new series."></i>
-            </span>
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">Season Folder Format</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Season Folder Format</label>
 
-        <div class="controls">
-            <div class="input-append x-helper-input">
-                <input type="text" class="naming-format" name="seasonFolderFormat" data-onkeyup="true"/>
-                <div class="btn-group x-naming-token-helper">
+        <div class="col-sm-8">
+            <div class="input-group x-helper-input">
+                <input type="text" class="form-control naming-format" name="seasonFolderFormat" data-onkeyup="true"/>
+                <div class="input-group-btn btn-group x-naming-token-helper">
                     <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-plus"></i>
                     </button>
@@ -139,43 +131,58 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">Single Episode Example</label>
+    <div class="x-naming-options">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Multi-Episode Style</label>
 
-        <div class="controls">
-            <span class="x-single-episode-example naming-example"></span>
+            <div class="col-sm-2">
+                <select class="form-control x-multi-episode-style" name="multiEpisodeStyle">
+                    <option value="0">Extend</option>
+                    <option value="1">Duplicate</option>
+                    <option value="2">Repeat</option>
+                    <option value="3">Scene</option>
+                </select>
+            </div>
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">Multi-Episode Example</label>
-
-        <div class="controls">
-            <span class="x-multi-episode-example naming-example"></span>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Single Episode Example</label>
+        
+        <div class="col-sm-8">
+            <p class="form-control-static x-single-episode-example naming-example"></p>
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">Daily-Episode Example</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Multi-Episode Example</label>
 
-        <div class="controls">
-            <span class="x-daily-episode-example naming-example"></span>
+        <div class="col-sm-8">
+            <p class="form-control-static x-multi-episode-example naming-example"></p>
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">Series Folder Example</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Daily-Episode Example</label>
 
-        <div class="controls">
-            <span class="x-series-folder-example naming-example"></span>
+        <div class="col-sm-8">
+            <p class="form-control-static x-daily-episode-example naming-example"></p>
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">Season Folder Example</label>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Series Folder Example</label>
 
-        <div class="controls">
-            <span class="x-season-folder-example naming-example"></span>
+        <div class="col-sm-8">
+            <p class="form-control-static x-series-folder-example naming-example"></p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Season Folder Example</label>
+
+        <div class="col-sm-8">
+            <p class="form-control-static x-season-folder-example naming-example"></p>
         </div>
     </div>
 </fieldset>

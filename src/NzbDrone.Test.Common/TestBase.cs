@@ -109,16 +109,21 @@ namespace NzbDrone.Test.Common
 
             try
             {
-                if (Directory.Exists(TempFolder))
+                var tempFolder = new DirectoryInfo(TempFolder);
+                if (tempFolder.Exists)
                 {
-                    Directory.Delete(TempFolder, true);
+                    foreach (var file in tempFolder.GetFiles("*", SearchOption.AllDirectories))
+                    {
+                        file.IsReadOnly = false;
+                    }
+
+                    tempFolder.Delete(true);
                 }
             }
             catch (Exception)
             {
             }
         }
-
 
         protected IAppFolderInfo TestFolderInfo { get; private set; }
 
@@ -148,26 +153,11 @@ namespace NzbDrone.Test.Common
             TestFolderInfo = Mocker.GetMock<IAppFolderInfo>().Object;
         }
 
-        protected string GetTestFilePath(string fileName)
+        protected string GetTempFilePath()
         {
-            return Path.Combine(SandboxFolder, fileName);
+            return Path.Combine(TempFolder, Path.GetRandomFileName());
         }
 
-        protected string GetTestFilePath()
-        {
-            return GetTestFilePath(Path.GetRandomFileName());
-        }
-
-        protected string SandboxFolder
-        {
-            get
-            {
-                var folder = Path.Combine(Directory.GetCurrentDirectory(), "Files");
-                Directory.CreateDirectory(folder);
-                return folder;
-            }
-
-        }
         protected void VerifyEventPublished<TEvent>() where TEvent : class, IEvent
         {
             VerifyEventPublished<TEvent>(Times.Once());

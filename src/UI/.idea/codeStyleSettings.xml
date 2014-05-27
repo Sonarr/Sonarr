@@ -17,6 +17,7 @@
           <option name="VALUE_ALIGNMENT" value="1" />
         </CssCodeStyleSettings>
         <JSCodeStyleSettings>
+          <option name="SPACE_BEFORE_PROPERTY_COLON" value="true" />
           <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
         </JSCodeStyleSettings>
         <XML>
@@ -33,8 +34,7 @@
           <option name="ELSE_ON_NEW_LINE" value="true" />
           <option name="CATCH_ON_NEW_LINE" value="true" />
           <option name="FINALLY_ON_NEW_LINE" value="true" />
-          <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
-          <option name="SPACE_AFTER_COLON" value="false" />
+          <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
           <option name="METHOD_PARAMETERS_WRAP" value="5" />
           <option name="ARRAY_INITIALIZER_WRAP" value="2" />
           <option name="IF_BRACE_FORCE" value="3" />
