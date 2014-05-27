@@ -21,6 +21,14 @@
 .episode-title-cell {
   .text-overflow();
 
+  color: #428bca;
+  text-decoration: none;
+
+  &.focus, &.hover {
+    color: #2a6496;
+    text-decoration: underline;
+  }
+
   @media @lg {
     max-width: 350px;
   }
