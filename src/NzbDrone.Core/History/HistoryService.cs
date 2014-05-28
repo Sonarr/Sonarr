@@ -25,6 +25,7 @@ namespace NzbDrone.Core.History
         History MostRecentForEpisode(int episodeId);
         History Get(int id);
         List<History> FindBySourceTitle(string sourceTitle);
+        void UpdateHistoryData(Int32 historyId, Dictionary<String, String> data);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
@@ -99,6 +100,13 @@ namespace NzbDrone.Core.History
             return _historyRepository.GetBestQualityInHistory(episodeId)
                 .OrderByDescending(q => q, comparer)
                 .FirstOrDefault();
+        }
+
+        public void UpdateHistoryData(Int32 historyId, Dictionary<String, String> data)
+        {
+            var history = _historyRepository.Get(historyId);
+            history.Data = data;
+            _historyRepository.Update(history);
         }
 
         public void Handle(EpisodeGrabbedEvent message)

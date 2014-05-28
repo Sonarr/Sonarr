@@ -160,7 +160,8 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            return ProcessFiles(series, quality, videoFiles);
+            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, true, quality);
+            return _importApprovedEpisodes.Import(decisions, true);
         }
 
         private void ProcessVideoFile(string videoFile)
@@ -179,13 +180,8 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
-            ProcessFiles(series, null, videoFile);
-        }
-
-        private List<ImportDecision> ProcessFiles(Series series, QualityModel quality, params string[] videoFiles)
-        {
-            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, true, quality);
-            return _importApprovedEpisodes.Import(decisions, true);
+            var decisions = _importDecisionMaker.GetImportDecisions(new [] { videoFile }.ToList(), series, true, null);
+            _importApprovedEpisodes.Import(decisions, true);
         }
 
         private void ProcessFolder(string path)

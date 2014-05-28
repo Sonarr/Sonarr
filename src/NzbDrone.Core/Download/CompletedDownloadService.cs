@@ -30,18 +30,21 @@ namespace NzbDrone.Core.Download
         private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
+        private readonly IHistoryService _historyService;
         private readonly Logger _logger;
 
         public CompletedDownloadService(IEventAggregator eventAggregator,
                                      IConfigService configService,
                                      IDiskProvider diskProvider,
                                      IDownloadedEpisodesImportService downloadedEpisodesImportService,
+                                     IHistoryService historyService,
                                      Logger logger)
         {
             _eventAggregator = eventAggregator;
             _configService = configService;
             _diskProvider = diskProvider;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
+            _historyService = historyService;
             _logger = logger;
         }
 
@@ -67,7 +70,7 @@ namespace NzbDrone.Core.Download
                     _logger.Trace("Ignoring download that wasn't grabbed by drone: " + trackedDownload.DownloadItem.Title);
                     return;
                 }
-                
+
                 var importedItems = GetHistoryItems(importedHistory, trackedDownload.DownloadItem.DownloadClientId);
 
                 if (importedItems.Any())
@@ -112,6 +115,34 @@ namespace NzbDrone.Core.Download
                     }
                     else
                     {
+                        if (grabbedItems.Any())
+                        {
+                            var episodeIds = trackedDownload.DownloadItem.RemoteEpisode.Episodes.Select(v => v.Id).ToList();
+
+                            // Check if we can associate it with a previous drone factory import.
+                            importedItems = importedHistory.Where(v => v.Data.GetValueOrDefault(DownloadTrackingService.DOWNLOAD_CLIENT_ID) == null &&
+                                                                  episodeIds.Contains(v.EpisodeId) && 
+                                                                  v.Data.GetValueOrDefault("droppedPath") != null &&
+                                                                  new FileInfo(v.Data["droppedPath"]).Directory.Name == grabbedItems.First().SourceTitle
+                                                                  ).ToList();
+                            if (importedItems.Count == 1)
+                            {
+                                var importedFile = new FileInfo(importedItems.First().Data["droppedPath"]);
+
+                                if (importedFile.Directory.Name == grabbedItems.First().SourceTitle)
+                                {
+                                    trackedDownload.State = TrackedDownloadState.Imported;
+
+                                    importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT];
+                                    importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID];
+                                    _historyService.UpdateHistoryData(importedItems.First().Id, importedItems.First().Data);
+
+                                    _logger.Debug("Storage path does not exist, but found probable drone factory ImportEvent: " + trackedDownload.DownloadItem.Title);
+                                    return;
+                                }
+                            }
+                        }
+
                         _logger.Debug("Storage path does not exist: " + trackedDownload.DownloadItem.Title);
                         return;
                     }

@@ -13,6 +13,8 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.Tv;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Test.Download
 {
@@ -28,6 +30,10 @@ namespace NzbDrone.Core.Test.Download
                                              .All()
                                              .With(h => h.Status = DownloadItemStatus.Completed)
                                              .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
+                                             .With(h => h.RemoteEpisode = new RemoteEpisode
+                                                {
+                                                    Episodes = new List<Episode> { new Episode { Id = 1 } }
+                                                })
                                              .Build()
                                              .ToList();
             
@@ -255,7 +261,9 @@ namespace NzbDrone.Core.Test.Download
 
             history.First().Data.Add("downloadClient", "SabnzbdClient");
             history.First().Data.Add("downloadClientId", _completed.First().DownloadClientId);
-            
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
             VerifyNoImports();
         }
 
@@ -278,7 +286,58 @@ namespace NzbDrone.Core.Test.Download
             history.First().Data.Add("downloadClient", "SabnzbdClient");
             history.First().Data.Add("downloadClientId", _completed.First().DownloadClientId);
 
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
             VerifyNoImports();
+        }
+
+        [Test]
+        public void should_process_as_already_imported_if_drone_factory_import_history_exists()
+        {
+            GivenCompletedDownloadClientHistory(false);
+
+            _completed.Clear();
+            _completed.AddRange(Builder<DownloadClientItem>.CreateListOfSize(2)
+                                             .All()
+                                             .With(h => h.Status = DownloadItemStatus.Completed)
+                                             .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
+                                             .With(h => h.RemoteEpisode = new RemoteEpisode
+                                             {
+                                                 Episodes = new List<Episode> { new Episode { Id = 1 } }
+                                             })
+                                             .Build());
+
+            var grabbedHistory = Builder<History.History>.CreateListOfSize(2)
+                                                  .All()
+                                                  .With(d => d.Data["downloadClient"] = "SabnzbdClient")
+                                                  .TheFirst(1)
+                                                  .With(d => d.Data["downloadClientId"] = _completed.First().DownloadClientId)
+                                                  .With(d => d.SourceTitle = "Droned.S01E01.720p-LAZY")
+                                                  .TheLast(1)
+                                                  .With(d => d.Data["downloadClientId"] = _completed.Last().DownloadClientId)
+                                                  .With(d => d.SourceTitle = "Droned.S01E01.Proper.720p-LAZY")
+                                                  .Build()
+                                                  .ToList();
+
+            var importedHistory = Builder<History.History>.CreateListOfSize(2)
+                                                  .All()
+                                                  .With(d => d.EpisodeId = 1)
+                                                  .TheFirst(1)
+                                                  .With(d => d.Data["droppedPath"] = @"C:\mydownload\Droned.S01E01.720p-LAZY\lzy-dr101.mkv".AsOsAgnostic())
+                                                  .TheLast(1)
+                                                  .With(d => d.Data["droppedPath"] = @"C:\mydownload\Droned.S01E01.Proper.720p-LAZY\lzy-dr101.mkv".AsOsAgnostic())
+                                                  .Build()
+                                                  .ToList();
+
+            GivenGrabbedHistory(grabbedHistory);
+            GivenImportedHistory(importedHistory);
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
+            VerifyNoImports();
+
+            Mocker.GetMock<IHistoryService>()
+                .Verify(v => v.UpdateHistoryData(It.IsAny<int>(), It.IsAny<Dictionary<String, String>>()), Times.Exactly(2));
         }
 
         [Test]
