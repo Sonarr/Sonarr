@@ -47,7 +47,7 @@ define(
 
         Handlebars.registerHelper('EpisodeProgressClass', function () {
             if (this.episodeFileCount === this.episodeCount) {
-                if (this.continuing) {
+                if (this.status === 'continuing') {
                     return '';
                 }
 
