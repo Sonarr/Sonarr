@@ -32,6 +32,12 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var season in series.Seasons)
             {
+                if (!season.Monitored)
+                {
+                    _logger.Debug("Season {0} of {1} is not monitored, skipping seaarch", season.SeasonNumber, series.Title);
+                    continue;
+                }
+
                 var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber);
                 downloadedCount += _downloadApprovedReports.DownloadApproved(decisions).Count;
             }

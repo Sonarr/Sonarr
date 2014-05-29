@@ -19,10 +19,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
         public override HealthCheck Check()
         {
             var missingRootFolders = _seriesService.GetAllSeries()
-                                                .Select(s => _diskProvider.GetParentFolder(s.Path))
-                                                .Distinct()
-                                                .Where(s => !_diskProvider.FolderExists(s))
-                                                .ToList();
+                                                   .Select(s => _diskProvider.GetParentFolder(s.Path))
+                                                   .Distinct()
+                                                   .Where(s => !_diskProvider.FolderExists(s))
+                                                   .ToList();
 
             if (missingRootFolders.Any())
             {
