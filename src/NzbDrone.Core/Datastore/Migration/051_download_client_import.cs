@@ -16,9 +16,28 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
+            Execute.WithConnection(EnableCompletedDownloadHandlingForNewUsers);
+
             Execute.WithConnection(ConvertFolderSettings);
 
             Execute.WithConnection(AssociateImportedHistoryItems);
+        }
+
+        private void EnableCompletedDownloadHandlingForNewUsers(IDbConnection conn, IDbTransaction tran)
+        {
+            using (IDbCommand cmd = conn.CreateCommand())
+            {
+                cmd.Transaction = tran;
+                cmd.CommandText = @"SELECT Value FROM Config WHERE Key = 'downloadedepisodesfolder'";
+
+                var result = cmd.ExecuteScalar();
+
+                if (result == null)
+                {
+                    cmd.CommandText = @"INSERT INTO Config (Key, Value) VALUES ('enablecompleteddownloadhandling', 'True')";
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         private void ConvertFolderSettings(IDbConnection conn, IDbTransaction tran)
