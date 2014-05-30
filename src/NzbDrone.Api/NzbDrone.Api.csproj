@@ -131,6 +131,7 @@
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Frontend\IsCacheableSpecification.cs" />
     <Compile Include="Frontend\Mappers\UpdateLogFileMapper.cs" />
+    <Compile Include="Frontend\Mappers\BackupFileMapper.cs" />
     <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
     <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\LogFileMapper.cs" />
@@ -165,6 +166,8 @@
     <Compile Include="Mapping\ResourceMappingException.cs" />
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />
     <Compile Include="Series\AlternateTitleResource.cs" />
+    <Compile Include="System\Backup\BackupModule.cs" />
+    <Compile Include="System\Backup\BackupResource.cs" />
     <Compile Include="Update\UpdateResource.cs" />
     <Compile Include="Wanted\CutoffModule.cs" />
     <Compile Include="Wanted\LegacyMissingModule.cs" />

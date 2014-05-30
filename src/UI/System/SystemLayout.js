@@ -7,6 +7,7 @@ define(
         'System/Info/SystemInfoLayout',
         'System/Logs/LogsLayout',
         'System/Update/UpdateLayout',
+        'System/Backup/BackupLayout',
         'Shared/Messenger'
     ], function ($,
                  Backbone,
@@ -14,26 +15,30 @@ define(
                  SystemInfoLayout,
                  LogsLayout,
                  UpdateLayout,
+                 BackupLayout,
                  Messenger) {
         return Marionette.Layout.extend({
             template: 'System/SystemLayoutTemplate',
 
             regions: {
-                info   : '#info',
+                info    : '#info',
                 logs    : '#logs',
-                updates: '#updates'
+                updates : '#updates',
+                backup  : '#backup'
             },
 
             ui: {
-                infoTab  : '.x-info-tab',
-                logsTab   : '.x-logs-tab',
-                updatesTab: '.x-updates-tab'
+                infoTab    : '.x-info-tab',
+                logsTab    : '.x-logs-tab',
+                updatesTab : '.x-updates-tab',
+                backupTab  : '.x-backup-tab'
             },
 
             events: {
                 'click .x-info-tab'   : '_showInfo',
                 'click .x-logs-tab'   : '_showLogs',
                 'click .x-updates-tab': '_showUpdates',
+                'click .x-backup-tab': '_showBackup',
                 'click .x-shutdown'   : '_shutdown',
                 'click .x-restart'    : '_restart'
             },
@@ -51,6 +56,9 @@ define(
                         break;
                     case 'updates':
                         this._showUpdates();
+                        break;
+                    case 'backup':
+                        this._showBackup();
                         break;
                     default:
                         this._showInfo();
@@ -89,6 +97,16 @@ define(
                 this.updates.show(new UpdateLayout());
                 this.ui.updatesTab.tab('show');
                 this._navigate('system/updates');
+            },
+
+            _showBackup: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.backup.show(new BackupLayout());
+                this.ui.backupTab.tab('show');
+                this._navigate('system/backup');
             },
 
             _shutdown: function () {

@@ -15,19 +15,19 @@ define(
             },
 
             initialize: function () {
-                this.updateCollection = new UpdateCollection();
+                this.backupCollection = new UpdateCollection();
 
-                this.listenTo(this.updateCollection, 'sync', this._showUpdates);
+                this.listenTo(this.backupCollection, 'sync', this._showUpdates);
             },
 
             onRender: function () {
                 this.updates.show(new LoadingView());
 
-                this.updateCollection.fetch();
+                this.backupCollection.fetch();
             },
 
             _showUpdates: function () {
-                this.updates.show(new UpdateCollectionView({ collection: this.updateCollection }));
+                this.updates.show(new UpdateCollectionView({ collection: this.backupCollection }));
             }
         });
     });
