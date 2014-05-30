@@ -128,7 +128,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var folder in _diskProvider.GetDirectories(_configService.RecycleBin))
             {
-                if (_diskProvider.FolderGetLastWrite(folder).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.FolderGetLastWriteUtc(folder).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Debug("Folder hasn't expired yet, skipping: {0}", folder);
                     continue;
