@@ -35,7 +35,9 @@ namespace NzbDrone.Core.MetadataSource
                 var restRequest = new RestRequest(GetSearchTerm(title) + "/30/seasons");
                 var response = client.ExecuteAndValidate<List<Show>>(restRequest);
 
-                return response.Select(MapSeries).ToList();
+                return response.Select(MapSeries)
+                    .OrderBy(v => title.LevenshteinDistanceClean(v.Title))
+                    .ToList();
             }
             catch (WebException ex)
             {
