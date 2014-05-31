@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Qualities
             {
                 return Query.Where(q => (int) q.Quality == qualityId).Single();
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 throw new ModelNotFoundException(typeof(QualityDefinition), qualityId);
             }

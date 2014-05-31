@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Organizer
             {
                 return _buildFileNames.BuildFilename(episodes, series, episodeFile, nameSpec);
             }
-            catch (NamingFormatException ex)
+            catch (NamingFormatException)
             {
                 return String.Empty;
             }

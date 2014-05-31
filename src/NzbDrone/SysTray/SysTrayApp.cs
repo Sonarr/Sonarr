@@ -125,7 +125,7 @@ namespace NzbDrone.SysTray
                 _trayIcon.Visible = false;
                 _trayIcon.Dispose();
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

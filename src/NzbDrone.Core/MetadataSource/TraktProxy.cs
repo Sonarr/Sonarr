@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MetadataSource
                         .ToList();
                 }
             }
-            catch (WebException ex)
+            catch (WebException)
             {
                 throw new TraktException("Search for '{0}' failed. Unable to communicate with Trakt.", title);
             }

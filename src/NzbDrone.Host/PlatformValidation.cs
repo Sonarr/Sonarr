@@ -26,7 +26,7 @@ namespace NzbDrone.Host
                 {
                     Process.Start("http://www.microsoft.com/en-ca/download/details.aspx?id=30653");
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     userAlert.Alert("Oops. can't start default browser. Please visit http://www.microsoft.com/en-ca/download/details.aspx?id=30653 to download .NET Framework 4.5.");
                 }

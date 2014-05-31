@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Indexers
         {
             PreProcess(xml, url);
 
-            using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { ProhibitDtd = false, IgnoreComments = true }))
+            using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, IgnoreComments = true }))
             {
 
                 var document = XDocument.Load(xmlTextReader);

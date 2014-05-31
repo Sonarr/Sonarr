@@ -11,10 +11,6 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("3C29FEF7-4B07-49ED-822E-1C29DC49BFAB")]
 
-[assembly: InternalsVisibleTo("NzbDrone.Core.Test")]
-
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-
 [assembly: AssemblyVersion("10.0.0.*")]
-[assembly: AssemblyFileVersion("10.0.0.*")]
+
+[assembly: InternalsVisibleTo("NzbDrone.Core.Test")]
