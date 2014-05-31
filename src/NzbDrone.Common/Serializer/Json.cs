@@ -48,12 +48,12 @@ namespace NzbDrone.Common.Serializer
                 result = Deserialize<T>(json);
                 return true;
             }
-            catch (JsonReaderException ex)
+            catch (JsonReaderException)
             {
                 result = default(T);
                 return false;
             }
-            catch (JsonSerializationException ex)
+            catch (JsonSerializationException)
             {
                 result = default(T);
                 return false;

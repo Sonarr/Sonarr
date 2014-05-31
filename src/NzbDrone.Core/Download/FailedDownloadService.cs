@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Download
                         _historyService.UpdateHistoryData(matchingHistoryItems.First().Id, newHistoryData);
                     }
                 }
-                catch (NotSupportedException ex)
+                catch (NotSupportedException)
                 {
                     UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Retrying failed downloads is not supported by your download client.");
                     return false;

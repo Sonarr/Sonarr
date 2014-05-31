@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Blacklist
         {
             _blacklistService = blacklistService;
             GetResourcePaged = GetBlacklist;
-            DeleteResource = Delete;
+            DeleteResource = DeleteBlacklist;
         }
 
         private PagingResource<BlacklistResource> GetBlacklist(PagingResource<BlacklistResource> pagingResource)
@@ -28,7 +28,7 @@ namespace NzbDrone.Api.Blacklist
             return ApplyToPage(_blacklistService.Paged, pagingSpec);
         }
 
-        private void Delete(int id)
+        private void DeleteBlacklist(int id)
         {
             _blacklistService.Delete(id);
         }
