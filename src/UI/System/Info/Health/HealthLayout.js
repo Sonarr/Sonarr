@@ -5,8 +5,9 @@ define(
         'backgrid',
         'Health/HealthCollection',
         'System/Info/Health/HealthCell',
+        'System/Info/Health/HealthWikiCell',
         'System/Info/Health/HealthOkView'
-    ], function (Marionette, Backgrid, HealthCollection, HealthCell, HealthOkView) {
+    ], function (Marionette, Backgrid, HealthCollection, HealthCell, HealthWikiCell, HealthOkView) {
         return Marionette.Layout.extend({
             template: 'System/Info/Health/HealthLayoutTemplate',
 
@@ -19,12 +20,20 @@ define(
                     {
                         name: 'type',
                         label: '',
-                        cell: HealthCell
+                        cell: HealthCell,
+                        sortable: false
                     },
                     {
                         name: 'message',
                         label: 'Message',
-                        cell: 'string'
+                        cell: 'string',
+                        sortable: false
+                    },
+                    {
+                        name: 'wikiUrl',
+                        label: '',
+                        cell: HealthWikiCell,
+                        sortable: false
                     }
                 ],
 

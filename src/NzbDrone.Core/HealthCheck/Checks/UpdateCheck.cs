@@ -33,8 +33,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error,
-                        "Unable to update, running from write-protected folder");
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to update, running from write-protected folder");
                 }
             }
 
