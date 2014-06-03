@@ -87,3 +87,19 @@ h3 {
     margin-left: 0px;
   }
 }
+
+// Tooltips
+
+.help-inline-checkbox, .help-inline {
+  .tooltip-inner {
+    white-space : pre-wrap;
+    min-width   : 200px;
+  }
+
+  .help-link ~ .tooltip {
+    .tooltip-inner {
+      white-space : normal;
+      min-width   : 0px;
+    }
+  }
+}

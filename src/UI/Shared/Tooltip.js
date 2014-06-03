@@ -9,17 +9,7 @@ define(
                 console.log('starting signalR');
 
                 $('body').tooltip({
-                    selector: '[title]',
-                    container: 'body'
-                });
-
-                $(document).click(function(e) {
-
-                    if ($(e.target).attr('title') !== undefined) {
-                        return;
-                    }
-
-                    $('.tooltip').remove();
+                    selector: '[title]'
                 });
 
                 return this;
