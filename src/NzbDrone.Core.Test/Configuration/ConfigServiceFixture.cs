@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Test.Configuration
         public void SetUp()
         {
             Mocker.SetConstant<IConfigRepository>(Mocker.Resolve<ConfigRepository>());
+
+            Db.All<Config>().ForEach(Db.Delete);
         }
 
         [Test]

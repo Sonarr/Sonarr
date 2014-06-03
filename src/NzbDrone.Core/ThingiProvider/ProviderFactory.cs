@@ -40,12 +40,7 @@ namespace NzbDrone.Core.ThingiProvider
 
         public List<TProviderDefinition> Templates()
         {
-            return _providers.Select(p => new TProviderDefinition()
-            {
-                ConfigContract = p.ConfigContract.Name,
-                Implementation = p.GetType().Name,
-                Settings = (IProviderConfig)Activator.CreateInstance(p.ConfigContract)
-            }).ToList();
+            return _providers.Select(GetTemplate).ToList();
         }
 
         public List<TProvider> GetAvailableProviders()
@@ -85,6 +80,18 @@ namespace NzbDrone.Core.ThingiProvider
         private Type GetImplementation(TProviderDefinition definition)
         {
             return _providers.Select(c => c.GetType()).SingleOrDefault(c => c.Name.Equals(definition.Implementation, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        protected virtual TProviderDefinition GetTemplate(TProvider provider)
+        {
+            var definition = new TProviderDefinition()
+            {
+                ConfigContract = provider.ConfigContract.Name,
+                Implementation = provider.GetType().Name,
+                Settings = (IProviderConfig)Activator.CreateInstance(provider.ConfigContract)
+            };
+
+            return definition;
         }
 
         public void Handle(ApplicationStartedEvent message)

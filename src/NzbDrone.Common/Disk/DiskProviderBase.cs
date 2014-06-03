@@ -25,45 +25,17 @@ namespace NzbDrone.Common.Disk
         public abstract void SetPermissions(string path, string mask, string user, string group);
         public abstract long? GetTotalSize(string path);
 
-        public static string GetRelativePath(string parentPath, string childPath)
+
+        public DateTime FolderGetCreationTimeUtc(string path)
         {
-            if (!IsParent(parentPath, childPath))
-            {
-                throw new NotParentException("{0} is not a child of {1}", childPath, parentPath);
-            }
+            CheckFolderExists(path);
 
-            return childPath.Substring(parentPath.Length).Trim(Path.DirectorySeparatorChar);
-        }
-
-        public static bool IsParent(string parentPath, string childPath)
-        {
-            parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
-            childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
-
-            var parent = new DirectoryInfo(parentPath);
-            var child = new DirectoryInfo(childPath);
-
-            while (child.Parent != null)
-            {
-                if (child.Parent.FullName == parent.FullName)
-                {
-                    return true;
-                }
-
-                child = child.Parent;
-            }
-
-            return false;
+            return new DirectoryInfo(path).CreationTimeUtc;
         }
 
         public DateTime FolderGetLastWrite(string path)
         {
-            Ensure.That(path, () => path).IsValidPath();
-
-            if (!FolderExists(path))
-            {
-                throw new DirectoryNotFoundException("Directory doesn't exist. " + path);
-            }
+            CheckFolderExists(path);
 
             var dirFiles = GetFiles(path, SearchOption.AllDirectories).ToList();
 
@@ -76,21 +48,38 @@ namespace NzbDrone.Common.Disk
                             .Max(c => c.LastWriteTimeUtc);
         }
 
+        public DateTime FileGetCreationTimeUtc(string path)
+        {
+            CheckFileExists(path);
+
+            return new FileInfo(path).CreationTimeUtc;
+        }
+
         public DateTime FileGetLastWrite(string path)
         {
-            PathEnsureFileExists(path);
+            CheckFileExists(path);
 
             return new FileInfo(path).LastWriteTime;
         }
 
         public DateTime FileGetLastWriteUtc(string path)
         {
-            PathEnsureFileExists(path);
+            CheckFileExists(path);
 
             return new FileInfo(path).LastWriteTimeUtc;
         }
 
-        private void PathEnsureFileExists(string path)
+        private void CheckFolderExists(string path)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            if (!FolderExists(path))
+            {
+                throw new DirectoryNotFoundException("Directory doesn't exist. " + path);
+            }
+        }
+
+        private void CheckFileExists(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
 
@@ -285,6 +274,9 @@ namespace NzbDrone.Common.Disk
         public void DeleteFolder(string path, bool recursive)
         {
             Ensure.That(path, () => path).IsValidPath();
+
+            var files = Directory.GetFiles(path, "*.*", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            Array.ForEach(files, RemoveReadOnly);
 
             Directory.Delete(path, recursive);
         }

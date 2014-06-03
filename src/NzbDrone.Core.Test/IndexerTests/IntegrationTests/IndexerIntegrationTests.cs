@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Eztv;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Parser.Model;
@@ -36,39 +35,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             var result = Subject.FetchRss(indexer);
 
             ValidateResult(result, skipSize: true, skipInfo: true);
-        }
-
-        [Test]
-        public void extv_rss()
-        {
-            var indexer = new Eztv();
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "Eztv",
-                Settings = NullConfig.Instance
-            };
-
-            var result = Subject.FetchRss(indexer);
-
-            ValidateTorrentResult(result, skipSize: false, skipInfo: true);
-        }
-
-        [Test]
-        public void nzbsorg_rss()
-        {
-            var indexer = new Newznab();
-
-            indexer.Definition = new IndexerDefinition();
-            indexer.Definition.Name = "nzbs.org";
-            indexer.Definition.Settings = new NewznabSettings
-            {
-                ApiKey = "64d61d3cfd4b75e51d01cbc7c6a78275",
-                Url = "http://nzbs.org"
-            };
-
-            var result = Subject.FetchRss(indexer);
-
-            ValidateResult(result);
         }
         
         private void ValidateResult(IList<ReleaseInfo> reports, bool skipSize = false, bool skipInfo = false)

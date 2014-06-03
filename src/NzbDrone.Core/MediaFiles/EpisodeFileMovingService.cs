@@ -19,6 +19,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class EpisodeFileMovingService : IMoveEpisodeFiles
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
             
-            return MoveFile(episodeFile, series, episodes, filePath);
+            return TransferFile(episodeFile, series, episodes, filePath, false);
         }
 
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
@@ -63,10 +64,20 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Moving episode file: {0} to {1}", episodeFile, filePath);
             
-            return MoveFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath);
+            return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, false);
         }
 
-        private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename)
+        public EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
+        {
+            var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
+            var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+
+            _logger.Debug("Copying episode file: {0} to {1}", episodeFile, filePath);
+
+            return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, true);
+        }
+        
+        private EpisodeFile TransferFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename, bool copyOnly)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series,() => series).IsNotNull();
@@ -103,8 +114,16 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
-            _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+            if (copyOnly)
+            {
+                _logger.Debug("Copying [{0}] > [{1}]", episodeFile.Path, destinationFilename);
+                _diskProvider.CopyFile(episodeFile.Path, destinationFilename);
+            }
+            else
+            {
+                _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
+                _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+            }
             episodeFile.Path = destinationFilename;
 
             _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);

@@ -11,7 +11,9 @@ namespace NzbDrone.Common.Disk
         void InheritFolderPermissions(string filename);
         void SetPermissions(string path, string mask, string user, string group);
         long? GetTotalSize(string path);
+        DateTime FolderGetCreationTimeUtc(string path);
         DateTime FolderGetLastWrite(string path);
+        DateTime FileGetCreationTimeUtc(string path);
         DateTime FileGetLastWrite(string path);
         DateTime FileGetLastWriteUtc(string path);
         void EnsureFolder(string path);

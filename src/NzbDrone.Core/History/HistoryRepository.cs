@@ -16,6 +16,7 @@ namespace NzbDrone.Core.History
         List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
         List<History> Failed();
         List<History> Grabbed();
+        List<History> Imported();
         History MostRecentForEpisode(int episodeId);
         List<History> FindBySourceTitle(string sourceTitle);
     }
@@ -60,6 +61,11 @@ namespace NzbDrone.Core.History
         public List<History> Grabbed()
         {
             return Query.Where(h => h.EventType == HistoryEventType.Grabbed);
+        }
+
+        public List<History> Imported()
+        {
+            return Query.Where(h => h.EventType == HistoryEventType.DownloadFolderImported);
         }
 
         public History MostRecentForEpisode(int episodeId)

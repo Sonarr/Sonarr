@@ -39,14 +39,39 @@ namespace NzbDrone.Common
 
         public static bool PathEquals(this string firstPath, string secondPath)
         {
-            if (OsInfo.IsMono)
+            if (firstPath.Equals(secondPath, OsInfo.PathStringComparison)) return true;
+            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), OsInfo.PathStringComparison);
+        }
+
+        public static string GetRelativePath(this string parentPath, string childPath)
+        {
+            if (!parentPath.IsParentPath(childPath))
             {
-                if (firstPath.Equals(secondPath)) return true;
-                return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath());
+                throw new NzbDrone.Common.Exceptions.NotParentException("{0} is not a child of {1}", childPath, parentPath);
             }
 
-            if (firstPath.Equals(secondPath, StringComparison.OrdinalIgnoreCase)) return true;
-            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), StringComparison.OrdinalIgnoreCase);
+            return childPath.Substring(parentPath.Length).Trim(Path.DirectorySeparatorChar);
+        }
+
+        public static bool IsParentPath(this string parentPath, string childPath)
+        {
+            parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
+            childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
+
+            var parent = new DirectoryInfo(parentPath);
+            var child = new DirectoryInfo(childPath);
+
+            while (child.Parent != null)
+            {
+                if (child.Parent.FullName.Equals(parent.FullName, OsInfo.PathStringComparison))
+                {
+                    return true;
+                }
+
+                child = child.Parent;
+            }
+
+            return false;
         }
 
         private static readonly Regex WindowsPathWithDriveRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);

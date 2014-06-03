@@ -137,7 +137,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         }
 
         [Test]
-        public void move_read_only_file()
+        public void should_be_able_to_move_read_only_file()
         {
             var source = GetTempFilePath();
             var destination = GetTempFilePath();
@@ -149,6 +149,23 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             File.SetAttributes(destination, FileAttributes.ReadOnly);
 
             Subject.MoveFile(source, destination);
+        }
+
+        [Test]
+        public void should_be_able_to_delete_directory_with_read_only_file()
+        {
+            var sourceDir = GetTempFilePath();
+            var source = Path.Combine(sourceDir, "test.txt");
+
+            Directory.CreateDirectory(sourceDir);
+
+            Subject.WriteAllText(source, "SourceFile");
+
+            File.SetAttributes(source, FileAttributes.ReadOnly);
+
+            Subject.DeleteFolder(sourceDir, true);
+
+            Directory.Exists(sourceDir).Should().BeFalse();
         }
 
         [Test]

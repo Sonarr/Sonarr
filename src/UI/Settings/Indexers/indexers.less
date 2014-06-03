@@ -1,29 +1,33 @@
-.indexer-settings-item {
+@import "../../Shared/Styles/clickable.less";
 
-  width: 220px;
-  height: 295px;
+.indexer-list {
+  li {
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+.indexer-item {
+
+  .clickable;
+
+  width: 290px;
+  height: 90px;
   padding: 10px 15px;
 
-  h3 {
-    width: 175px;
-    overflow: visible;
-  }
-
   &.add-card {
-    margin-top: 10px;
-    margin-left: 10px;
-
     .center {
-      margin-top: 90px;
+      margin-top: -3px;
     }
   }
+}
 
-  /* Super hack to keep using form builder, this should be dead when we do proper modals for editing */
-  .col-sm-1, .col-sm-3, .col-sm-5 {
-    display : block;
-    width   : 100%;
-    padding: 0px;
-    float: none;
-    position: inherit;
+.modal-overflow {
+  overflow-y: visible;
+}
+
+.add-indexer {
+  li {
+    width: 33%;
   }
 }

@@ -72,6 +72,11 @@ namespace NzbDrone.Core.Configuration
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
+        public Boolean IsDefined(String key)
+        {
+            return _repository.Get(key.ToLower()) != null;
+        }
+
         public String DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
@@ -117,6 +122,27 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("AutoDownloadPropers", value); }
         }
 
+        public Boolean EnableCompletedDownloadHandling
+        {
+            get { return GetValueBoolean("EnableCompletedDownloadHandling", false); }
+
+            set { SetValue("EnableCompletedDownloadHandling", value); }
+        }
+
+        public Boolean RemoveCompletedDownloads
+        {
+            get { return GetValueBoolean("RemoveCompletedDownloads", false); }
+
+            set { SetValue("RemoveCompletedDownloads", value); }
+        }
+
+        public Boolean EnableFailedDownloadHandling
+        {
+            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
+
+            set { SetValue("EnableFailedDownloadHandling", value); }
+        }
+
         public Boolean AutoRedownloadFailed
         {
             get { return GetValueBoolean("AutoRedownloadFailed", true); }
@@ -152,13 +178,6 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("BlacklistRetryLimit", value); }
         }
 
-        public Boolean EnableFailedDownloadHandling
-        {
-            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
-
-            set { SetValue("EnableFailedDownloadHandling", value); }
-        }
-
         public Boolean CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
@@ -184,6 +203,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
 
             set { SetValue("DownloadedEpisodesScanInterval", value); }
+        }
+
+        public Int32 DownloadClientHistoryLimit
+        {
+            get { return GetValueInt("DownloadClientHistoryLimit", 30); }
+
+            set { SetValue("DownloadClientHistoryLimit", value); }
         }
 
         public Boolean SkipFreeSpaceCheckWhenImporting

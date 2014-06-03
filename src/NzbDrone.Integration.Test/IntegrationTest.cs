@@ -68,6 +68,17 @@ namespace NzbDrone.Integration.Test
 
             _runner.Start();
             InitRestClients();
+
+            // Add Wombles
+            var wombles = Indexers.Post(new Api.Indexers.IndexerResource
+            {
+                Enable = true,
+                ConfigContract = "NullConfig",
+                Implementation = "Wombles",
+                Name = "Wombles",
+                Protocol = Core.Indexers.DownloadProtocol.Usenet,
+                Fields = new List<Api.ClientSchema.Field>()
+            });
         }
 
         private void InitRestClients()

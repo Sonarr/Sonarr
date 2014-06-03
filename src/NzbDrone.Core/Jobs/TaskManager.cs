@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Jobs
             var defaultTasks = new[]
                 {
                     new ScheduledTask{ Interval = 1, TypeName = typeof(TrackedCommandCleanupCommand).FullName},
-                    new ScheduledTask{ Interval = 1, TypeName = typeof(CheckForFailedDownloadCommand).FullName},
+                    new ScheduledTask{ Interval = 1, TypeName = typeof(CheckForFinishedDownloadCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(ApplicationUpdateCommand).FullName},
                     new ScheduledTask{ Interval = 1*60, TypeName = typeof(TrimLogCommand).FullName},
                     new ScheduledTask{ Interval = 3*60, TypeName = typeof(UpdateSceneMappingCommand).FullName},

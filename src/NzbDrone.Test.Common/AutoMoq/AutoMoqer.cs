@@ -23,8 +23,8 @@ namespace NzbDrone.Test.Common.AutoMoq
     {
         public readonly MockBehavior DefaultBehavior = MockBehavior.Default;
         public Type ResolveType;
-        private IUnityContainer container;
-        private IDictionary<Type, object> registeredMocks;
+        private IUnityContainer _container;
+        private IDictionary<Type, object> _registeredMocks;
 
         public AutoMoqer()
         {
@@ -46,7 +46,7 @@ namespace NzbDrone.Test.Common.AutoMoq
         public virtual T Resolve<T>()
         {
             ResolveType = typeof(T);
-            var result = container.Resolve<T>();
+            var result = _container.Resolve<T>();
             SetConstant(result);
             ResolveType = null;
             return result;
@@ -78,13 +78,13 @@ namespace NzbDrone.Test.Common.AutoMoq
 
         public virtual void SetMock(Type type, Mock mock)
         {
-            if (registeredMocks.ContainsKey(type) == false)
-                registeredMocks.Add(type, mock);
+            if (_registeredMocks.ContainsKey(type) == false)
+                _registeredMocks.Add(type, mock);
         }
 
         public virtual void SetConstant<T>(T instance)
         {
-            container.RegisterInstance(instance);
+            _container.RegisterInstance(instance);
             SetMock(instance.GetType(), null);
         }
 
@@ -120,7 +120,7 @@ namespace NzbDrone.Test.Common.AutoMoq
 
         public void VerifyAllMocks()
         {
-            foreach (var registeredMock in registeredMocks)
+            foreach (var registeredMock in _registeredMocks)
             {
                 var mock = registeredMock.Value as Mock;
                 if (mock != null)
@@ -132,12 +132,12 @@ namespace NzbDrone.Test.Common.AutoMoq
 
         private void SetupAutoMoqer(IUnityContainer container)
         {
-            this.container = container;
+            _container = container;
             container.RegisterInstance(this);
 
             RegisterPlatformLibrary(container);
 
-            registeredMocks = new Dictionary<Type, object>();
+            _registeredMocks = new Dictionary<Type, object>();
             AddTheAutoMockingContainerExtensionToTheContainer(container);
         }
 
@@ -149,19 +149,19 @@ namespace NzbDrone.Test.Common.AutoMoq
 
         private Mock<T> TheRegisteredMockForThisType<T>(Type type) where T : class
         {
-            return (Mock<T>)registeredMocks.Where(x => x.Key == type).First().Value;
+            return (Mock<T>)_registeredMocks.Where(x => x.Key == type).First().Value;
         }
 
         private void CreateANewMockAndRegisterIt<T>(Type type, MockBehavior behavior) where T : class
         {
             var mock = new Mock<T>(behavior);
-            container.RegisterInstance(mock.Object);
+            _container.RegisterInstance(mock.Object);
             SetMock(type, mock);
         }
 
         private bool GetMockHasNotBeenCalledForThisType(Type type)
         {
-            return registeredMocks.ContainsKey(type) == false;
+            return _registeredMocks.ContainsKey(type) == false;
         }
 
         private static Type GetTheMockType<T>() where T : class

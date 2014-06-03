@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Indexers
     {
         IParseFeed Parser { get; }
         DownloadProtocol Protocol { get; }
+        Int32 SupportedPageSize { get; }
         Boolean SupportsPaging { get; }
         Boolean SupportsSearching { get; }
 

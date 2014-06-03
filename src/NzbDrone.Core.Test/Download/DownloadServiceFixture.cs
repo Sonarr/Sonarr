@@ -9,6 +9,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.Download
 {
@@ -16,12 +17,19 @@ namespace NzbDrone.Core.Test.Download
     public class DownloadServiceFixture : CoreTest<DownloadService>
     {
         private RemoteEpisode _parseResult;
-
+        private List<IDownloadClient> _downloadClients;
         [SetUp]
         public void Setup()
         {
+            _downloadClients = new List<IDownloadClient>();
+
             Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClient()).Returns(Mocker.GetMock<IDownloadClient>().Object);
+                .Setup(v => v.GetDownloadClients())
+                .Returns(_downloadClients);
+
+            Mocker.GetMock<IProvideDownloadClient>()
+                .Setup(v => v.GetDownloadClient(It.IsAny<Indexers.DownloadProtocol>()))
+                .Returns<Indexers.DownloadProtocol>(v => _downloadClients.FirstOrDefault(d => d.Protocol == v));
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                 .TheFirst(1).With(s => s.Id = 12)
@@ -29,31 +37,43 @@ namespace NzbDrone.Core.Test.Download
                 .All().With(s => s.SeriesId = 5)
                 .Build().ToList();
 
+            var releaseInfo = Builder<ReleaseInfo>.CreateNew()
+                .With(v => v.DownloadProtocol = Indexers.DownloadProtocol.Usenet)
+                .Build();
+
             _parseResult = Builder<RemoteEpisode>.CreateNew()
                    .With(c => c.Series = Builder<Series>.CreateNew().Build())
-                   .With(c => c.Release = Builder<ReleaseInfo>.CreateNew().Build())
+                   .With(c => c.Release = releaseInfo)
                    .With(c => c.Episodes = episodes)
                    .Build();
         }
 
-        private void WithSuccessfulAdd()
+        private Mock<IDownloadClient> WithUsenetClient()
         {
-            Mocker.GetMock<IDownloadClient>()
-                  .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()));
+            var mock = new Mock<IDownloadClient>(Moq.MockBehavior.Default);
+            _downloadClients.Add(mock.Object);
+
+            mock.SetupGet(v => v.Protocol).Returns(Indexers.DownloadProtocol.Usenet);
+
+            return mock;
         }
 
-        private void WithFailedAdd()
+        private Mock<IDownloadClient> WithTorrentClient()
         {
-            Mocker.GetMock<IDownloadClient>()
-                .Setup(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()))
-                .Throws(new WebException());
+            var mock = new Mock<IDownloadClient>(Moq.MockBehavior.Default);
+            _downloadClients.Add(mock.Object);
+
+            mock.SetupGet(v => v.Protocol).Returns(Indexers.DownloadProtocol.Torrent);
+
+            return mock;
         }
 
         [Test]
         public void Download_report_should_publish_on_grab_event()
         {
-            WithSuccessfulAdd();
-
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()));
+            
             Subject.DownloadReport(_parseResult);
 
             VerifyEventPublished<EpisodeGrabbedEvent>();
@@ -62,18 +82,20 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void Download_report_should_grab_using_client()
         {
-            WithSuccessfulAdd();
-
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()));
+            
             Subject.DownloadReport(_parseResult);
 
-            Mocker.GetMock<IDownloadClient>()
-                .Verify(s => s.DownloadNzb(It.IsAny<RemoteEpisode>()), Times.Once());
+            mock.Verify(s => s.Download(It.IsAny<RemoteEpisode>()), Times.Once());
         }
 
         [Test]
         public void Download_report_should_not_publish_on_failed_grab_event()
         {
-            WithFailedAdd();
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
+                .Throws(new WebException());
 
             Assert.Throws<WebException>(() => Subject.DownloadReport(_parseResult));
 
@@ -83,15 +105,38 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_attempt_download_if_client_isnt_configure()
         {
-            Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClient()).Returns((IDownloadClient)null);
-
             Subject.DownloadReport(_parseResult);
 
-            Mocker.GetMock<IDownloadClient>().Verify(c => c.DownloadNzb(It.IsAny<RemoteEpisode>()), Times.Never());
+            Mocker.GetMock<IDownloadClient>().Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Never());
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
 
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_send_download_to_correct_usenet_client()
+        {
+            var mockTorrent = WithTorrentClient();
+            var mockUsenet = WithUsenetClient();
+
+            Subject.DownloadReport(_parseResult);
+
+            mockTorrent.Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Never());
+            mockUsenet.Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Once());
+        }
+
+        [Test]
+        public void should_send_download_to_correct_torrent_client()
+        {
+            var mockTorrent = WithTorrentClient();
+            var mockUsenet = WithUsenetClient();
+
+            _parseResult.Release.DownloadProtocol = Indexers.DownloadProtocol.Torrent;
+
+            Subject.DownloadReport(_parseResult);
+
+            mockTorrent.Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Once());
+            mockUsenet.Verify(c => c.Download(It.IsAny<RemoteEpisode>()), Times.Never());
         }
     }
 }

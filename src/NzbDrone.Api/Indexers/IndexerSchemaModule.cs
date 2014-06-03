@@ -19,7 +19,7 @@ namespace NzbDrone.Api.Indexers
 
         private List<IndexerResource> GetSchema()
         {
-            var indexers = _indexerFactory.Templates().Where(c => c.Implementation =="Newznab");
+            var indexers = _indexerFactory.Templates();
 
             var result = new List<IndexerResource>(indexers.Count());
 

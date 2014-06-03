@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -7,7 +8,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         [JsonProperty(PropertyName = "fail_message")]
         public string FailMessage { get; set; }
 
-        public string Size { get; set; }
+        [JsonProperty(PropertyName = "bytes")]
+        public Int64 Size { get; set; }
         public string Category { get; set; }
 
         [JsonProperty(PropertyName = "nzb_name")]
@@ -17,7 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public int DownloadTime { get; set; }
 
         public string Storage { get; set; }
-        public string Status { get; set; }
+        public SabnzbdDownloadStatus Status { get; set; }
 
         [JsonProperty(PropertyName = "nzo_id")]
         public string Id { get; set; }

@@ -30,10 +30,11 @@ namespace NzbDrone.Api
             DeleteResource = DeleteProvider;
 
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
+            SharedValidator.RuleFor(c => c.Name).Must((v,c) => !_providerFactory.All().Any(p => p.Name == c && p.Id != v.Id)).WithMessage("Should be unique");
             SharedValidator.RuleFor(c => c.Implementation).NotEmpty();
             SharedValidator.RuleFor(c => c.ConfigContract).NotEmpty();
 
-            PostValidator.RuleFor(c => c.Fields).NotEmpty();
+            PostValidator.RuleFor(c => c.Fields).NotNull();
         }
 
         private TProviderResource GetProviderById(int id)

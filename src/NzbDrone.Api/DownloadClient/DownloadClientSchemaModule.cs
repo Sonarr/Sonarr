@@ -7,28 +7,28 @@ namespace NzbDrone.Api.DownloadClient
 {
     public class DownloadClientSchemaModule : NzbDroneRestModule<DownloadClientResource>
     {
-        private readonly IDownloadClientFactory _notificationFactory;
+        private readonly IDownloadClientFactory _downloadClientFactory;
 
-        public DownloadClientSchemaModule(IDownloadClientFactory notificationFactory)
+        public DownloadClientSchemaModule(IDownloadClientFactory downloadClientFactory)
             : base("downloadclient/schema")
         {
-            _notificationFactory = notificationFactory;
+            _downloadClientFactory = downloadClientFactory;
             GetResourceAll = GetSchema;
         }
 
         private List<DownloadClientResource> GetSchema()
         {
-            var notifications = _notificationFactory.Templates();
+            var downloadClients = _downloadClientFactory.Templates();
 
-            var result = new List<DownloadClientResource>(notifications.Count);
+            var result = new List<DownloadClientResource>(downloadClients.Count);
 
-            foreach (var notification in notifications)
+            foreach (var downloadClient in downloadClients)
             {
-                var notificationResource = new DownloadClientResource();
-                notificationResource.InjectFrom(notification);
-                notificationResource.Fields = SchemaBuilder.ToSchema(notification.Settings);
+                var downloadClientResource = new DownloadClientResource();
+                downloadClientResource.InjectFrom(downloadClient);
+                downloadClientResource.Fields = SchemaBuilder.ToSchema(downloadClient.Settings);
 
-                result.Add(notificationResource);
+                result.Add(downloadClientResource);
             }
 
             return result;

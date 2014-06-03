@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             indexer.Setup(s => s.GetSeasonSearchUrls(It.IsAny<String>(), It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32>()))
                 .Returns(new List<string> { "http://www.nzbdrone.com" });
 
-            indexer.SetupGet(s => s.SupportsPaging).Returns(paging);
+            indexer.SetupGet(s => s.SupportedPageSize).Returns(paging ? 100 : 0);
 
             var definition = new IndexerDefinition();
             definition.Name = "Test";

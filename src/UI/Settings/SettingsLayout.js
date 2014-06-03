@@ -12,12 +12,12 @@ define(
         'Settings/MediaManagement/MediaManagementSettingsModel',
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/IndexerLayout',
-        'Settings/Indexers/Collection',
+        'Settings/Indexers/IndexerCollection',
         'Settings/Indexers/IndexerSettingsModel',
         'Settings/DownloadClient/DownloadClientLayout',
         'Settings/DownloadClient/DownloadClientSettingsModel',
-        'Settings/Notifications/CollectionView',
-        'Settings/Notifications/Collection',
+        'Settings/Notifications/NotificationCollectionView',
+        'Settings/Notifications/NotificationCollection',
         'Settings/Metadata/MetadataLayout',
         'Settings/General/GeneralView',
         'Shared/LoadingView',
@@ -93,7 +93,6 @@ define(
                 this.mediaManagementSettings = new MediaManagementSettingsModel();
                 this.namingSettings = new NamingModel();
                 this.indexerSettings = new IndexerSettingsModel();
-                this.indexerCollection = new IndexerCollection();
                 this.downloadClientSettings = new DownloadClientSettingsModel();
                 this.notificationCollection = new NotificationCollection();
                 this.generalSettings = new GeneralSettingsModel();
@@ -102,7 +101,6 @@ define(
                         this.mediaManagementSettings.fetch(),
                         this.namingSettings.fetch(),
                         this.indexerSettings.fetch(),
-                        this.indexerCollection.fetch(),
                         this.downloadClientSettings.fetch(),
                         this.notificationCollection.fetch(),
                         this.generalSettings.fetch()
@@ -112,7 +110,7 @@ define(
                         self.loading.$el.hide();
                         self.mediaManagement.show(new MediaManagementLayout({ settings: self.mediaManagementSettings, namingSettings: self.namingSettings }));
                         self.quality.show(new QualityLayout());
-                        self.indexers.show(new IndexerLayout({ settings: self.indexerSettings, indexersCollection: self.indexerCollection }));
+                        self.indexers.show(new IndexerLayout({ model: self.indexerSettings }));
                         self.downloadClient.show(new DownloadClientLayout({ model: self.downloadClientSettings }));
                         self.notifications.show(new NotificationCollectionView({ collection: self.notificationCollection }));
                         self.metadata.show(new MetadataLayout());

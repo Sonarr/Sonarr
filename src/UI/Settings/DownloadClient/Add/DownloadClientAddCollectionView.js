@@ -1,23 +1,14 @@
 ﻿'use strict';
 
 define([
-    'marionette',
+    'Settings/ThingyAddCollectionView',
+    'Settings/ThingyHeaderGroupView',
     'Settings/DownloadClient/Add/DownloadClientAddItemView'
-], function (Marionette, AddItemView) {
+], function (ThingyAddCollectionView, ThingyHeaderGroupView, AddItemView) {
 
-    return Marionette.CompositeView.extend({
-        itemView         : AddItemView,
+    return ThingyAddCollectionView.extend({
+        itemView         : ThingyHeaderGroupView.extend({ itemView: AddItemView }),
         itemViewContainer: '.add-download-client .items',
-        template         : 'Settings/DownloadClient/Add/DownloadClientAddCollectionViewTemplate',
-
-        itemViewOptions: function () {
-            return {
-                downloadClientCollection: this.downloadClientCollection
-            };
-        },
-
-        initialize: function (options) {
-            this.downloadClientCollection = options.downloadClientCollection;
-        }
+        template         : 'Settings/DownloadClient/Add/DownloadClientAddCollectionViewTemplate'
     });
 });
