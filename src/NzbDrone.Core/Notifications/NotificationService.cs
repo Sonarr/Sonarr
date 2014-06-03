@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications
 
             var episodeTitles = String.Join(" + ", episodes.Select(e => e.Title));
 
-            return String.Format("{0} - {1}{2} - {3} {4}",
+            return String.Format("{0} - {1}{2} - {3} [{4}]",
                                     series.Title,
                                     episodes.First().SeasonNumber,
                                     episodeNumbers,
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Notifications
         public void Handle(EpisodeDownloadedEvent message)
         {
             var downloadMessage = new DownloadMessage();
-            downloadMessage.Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
+            downloadMessage.Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.Quality);
             downloadMessage.Series = message.Episode.Series;
             downloadMessage.EpisodeFile = message.EpisodeFile;
             downloadMessage.OldFiles = message.OldFiles;

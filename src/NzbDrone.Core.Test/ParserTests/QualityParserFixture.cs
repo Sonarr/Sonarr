@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Qualities;
@@ -105,6 +104,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sonny.With.a.Chance.S02E15.720p.WEB-DL.DD5.1.H.264-SURFER", false)]
         [TestCase("S07E23 - [WEBDL].mkv ", false)]
         [TestCase("Fringe S04E22 720p WEB-DL DD5.1 H264-EbP.mkv", false)]
+        [TestCase("House.S04.720p.Web-Dl.Dd5.1.h264-P2PACK", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
