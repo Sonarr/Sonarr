@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -142,7 +143,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     DownloadTime = TimeSpan.FromSeconds(sabHistoryItem.DownloadTime),
                     RemainingTime = TimeSpan.Zero,
 
-                    OutputPath = sabHistoryItem.Storage,
                     Message = sabHistoryItem.FailMessage
                 };
 
@@ -157,6 +157,19 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 else // Verifying/Moving etc
                 {
                     historyItem.Status = DownloadItemStatus.Downloading;
+                }
+
+                if (!sabHistoryItem.Storage.IsNullOrWhiteSpace())
+                {
+                    var parent = Directory.GetParent(sabHistoryItem.Storage);
+                    if (parent.Name == sabHistoryItem.Title)
+                    {
+                        historyItem.OutputPath = parent.FullName;
+                    }
+                    else
+                    {
+                        historyItem.OutputPath = sabHistoryItem.Storage;
+                    }
                 }
 
                 historyItems.Add(historyItem);

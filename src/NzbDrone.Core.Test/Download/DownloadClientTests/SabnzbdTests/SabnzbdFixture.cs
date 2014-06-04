@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -12,7 +13,7 @@ using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using System.Collections.Generic;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 {
@@ -253,6 +254,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             Mocker.GetMock<ISabnzbdProxy>()
                   .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());
+        }
+
+        [Test]
+        public void should_return_path_to_folder_instead_of_file()
+        {
+            _completed.Items.First().Storage = @"C:\sorted\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv".AsOsAgnostic();
+
+            WithQueue(null);
+            WithHistory(_completed);
+            
+            var result = Subject.GetItems().Single();
+
+            result.OutputPath.Should().Be(@"C:\sorted\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
         }
     }
 }
