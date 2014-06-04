@@ -108,7 +108,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (String.IsNullOrEmpty(downloadedEpisodesFolder))
             {
-                _logger.Warn("Drone Factory folder is not configured");
+                _logger.Trace("Drone Factory folder is not configured");
                 return;
             }
 
