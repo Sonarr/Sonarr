@@ -12,19 +12,12 @@ define(
             var originalBeforeClose = this.prototype.onBeforeClose;
 
             var errorHandler = function (response) {
-
-                if (response.status === 400) {
-
-                    var view = this;
-                    var validationErrors = JSON.parse(response.responseText);
-                    _.each(validationErrors, function (error) {
-                        view.$el.processServerError(error);
-                    });
-                }
+                this.model.trigger('validation:failed', response);
             };
 
-            var validatedSync = function (method, model,options) {
-                this.$el.removeAllErrors();
+            var validatedSync = function (method, model, options) {
+                model.trigger('validation:sync');
+//                this.$el.removeAllErrors();
                 arguments[2].isValidatedCall = true;
                 return model._originalSync.apply(this, arguments).fail(errorHandler.bind(this));
             };
@@ -38,6 +31,21 @@ define(
             };
 
             this.prototype.onRender = function () {
+
+                this.listenTo(this.model, 'validation:sync', function () {
+                   this.$el.removeAllErrors();
+                });
+
+                this.listenTo(this.model, 'validation:failed', function (response) {
+                    if (response.status === 400) {
+
+                        var view = this;
+                        var validationErrors = JSON.parse(response.responseText);
+                        _.each(validationErrors, function (error) {
+                            view.$el.processServerError(error);
+                        });
+                    }
+                });
 
                 Validation.bind(this);
                 this.bindToModelValidation = bindToModel.bind(this);
@@ -55,6 +63,10 @@ define(
 
                 if (this.model) {
                     Validation.unbind(this);
+
+                    //If we don't do this the next time the model is used the sync is bound to an old view
+                    this.model.sync = this.model._originalSync;
+                    this.model._originalSync = undefined;
                 }
 
                 if (originalBeforeClose) {

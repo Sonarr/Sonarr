@@ -16,7 +16,6 @@ define(
                 return this.name.toLowerCase() === validationName;
             });
 
-
             if (input.length === 0) {
                 input = this.find('[validation-name]').filter(function () {
                     return $(this).attr('validation-name').toLowerCase() === validationName;
@@ -58,7 +57,10 @@ define(
         };
 
         $.fn.addFormError = function (error) {
-            this.find('.form-group').parent().prepend('<div class="alert alert-error validation-error">' + error.errorMessage + '</div>');
+            var t1 = this.find('.form-horizontal');
+            var t2 = this.find('.form-horizontal').parent();
+
+            this.prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
         };
 
         $.fn.removeAllErrors = function () {

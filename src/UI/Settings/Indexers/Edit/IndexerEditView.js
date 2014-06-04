@@ -22,11 +22,16 @@ define([
             'click .x-save-and-add': '_saveAndAdd',
             'click .x-delete'      : '_delete',
             'click .x-back'        : '_back',
-           'click .x-test'        : '_test'
+            'click .x-close'       : '_close',
+            'click .x-test'        : '_test'
         },
 
         initialize: function (options) {
             this.targetCollection = options.targetCollection;
+        },
+
+        onBeforeClose: function () {
+            window.alert('closing down!');
         },
 
         _save: function () {
@@ -65,6 +70,19 @@ define([
             }
 
             require('Settings/Indexers/Add/IndexerSchemaModal').open(this.targetCollection);
+        },
+
+        _close: function () {
+
+            if (this.model.isNew()) {
+                this.model.destroy();
+            }
+
+            else {
+                this.model.fetch();
+            }
+
+            vent.trigger(vent.Commands.CloseModalCommand);
         },
 
         _test: function () {

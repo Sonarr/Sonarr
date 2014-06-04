@@ -9,15 +9,15 @@ define(
         return Marionette.AppRouter.extend({
 
             initialize: function () {
-                vent.on(vent.Commands.OpenControlPanelCommand, this._openControlPanel, this);
-                vent.on(vent.Commands.CloseControlPanelCommand, this._closeControlPanel, this);
+                vent.on(vent.Commands.OpenControlPanelCommand, this._openModal, this);
+                vent.on(vent.Commands.CloseControlPanelCommand, this._closeModal, this);
             },
 
-            _openControlPanel: function (view) {
+            _openModal: function (view) {
                 AppLayout.controlPanelRegion.show(view);
             },
 
-            _closeControlPanel: function () {
+            _closeModal: function () {
                 AppLayout.controlPanelRegion.closePanel();
             }
         });

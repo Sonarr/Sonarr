@@ -26,7 +26,7 @@ define([
 
             this.model.set({
                 id         : undefined,
-                name       : this.model.get('implementation'),
+                name       : undefined,
                 enable     : true
             });
 

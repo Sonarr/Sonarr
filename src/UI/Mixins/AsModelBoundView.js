@@ -30,7 +30,7 @@ define(
                 }
             };
 
-            this.prototype.beforeClose = function () {
+            this.prototype.onBeforeClose = function () {
 
                 if (this._modelBinder) {
                     this._modelBinder.unbind();
