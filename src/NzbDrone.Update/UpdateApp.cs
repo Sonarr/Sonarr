@@ -71,30 +71,30 @@ namespace NzbDrone.Update
                                      ProcessId = ParseProcessId(args[0])
                                  };
 
-            if (args.Count() == 1)
-            {
-                return startupContext;
-            }
-
-            else if (args.Count() == 3)
-            {
-                startupContext.UpdateLocation = args[1];
-                startupContext.ExecutingApplication = args[2];
-            }
-
-            else
-            {
-                logger.Debug("Arguments:");
-
-                foreach (var arg in args)
-                {
-                    logger.Debug("  {0}", arg);
-                }
-
-                var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
-
-                throw new ArgumentOutOfRangeException("args", message);
-            }
+//            if (args.Count() == 1)
+//            {
+//                return startupContext;
+//            }
+//
+//            else if (args.Count() == 3)
+//            {
+//                startupContext.UpdateLocation = args[1];
+//                startupContext.ExecutingApplication = args[2];
+//            }
+//
+//            else
+//            {
+//                logger.Debug("Arguments:");
+//
+//                foreach (var arg in args)
+//                {
+//                    logger.Debug("  {0}", arg);
+//                }
+//
+//                var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
+//
+//                throw new ArgumentOutOfRangeException("args", message);
+//            }
 
             return startupContext;
         }
