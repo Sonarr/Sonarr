@@ -20,6 +20,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Walking.Dead.S04E13.720p.WEB-DL.AAC2.0.H.264-Cyphanix", "Cyphanix")]
         [TestCase("Arrow.S02E01.720p.WEB-DL.DD5.1.H.264.mkv", "DRONE")]
         [TestCase("Series Title S01E01 Episode Title", "DRONE")]
+        [TestCase("The Colbert Report - 2014-06-02 - Thomas Piketty.mkv", "DRONE")]
+        [TestCase("Real Time with Bill Maher S12E17 May 23, 2014.mp4", "DRONE")]
+        [TestCase("Reizen Waes - S01E08 - Transistrië, Zuid-Ossetië en Abchazië SDTV.avi", "DRONE")]
+        [TestCase("Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi", "DRONE")]
         public void should_parse_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);

@@ -284,18 +284,22 @@ namespace NzbDrone.Core.Parser
 
             title = title.TrimEnd("-RP");
 
-            string group;
             var matches = ReleaseGroupRegex.Matches(title);
+
             if (matches.Count != 0)
             {
-                group = matches.OfType<Match>().Last().Groups["releasegroup"].Value;
-            }
-            else
-            {
-                return defaultReleaseGroup;
+                var group = matches.OfType<Match>().Last().Groups["releasegroup"].Value;
+                int groupIsNumeric;
+
+                if (Int32.TryParse(group, out groupIsNumeric))
+                {
+                    return defaultReleaseGroup;
+                }
+
+                return group;
             }
 
-            return group;
+            return defaultReleaseGroup;
         }
 
         public static string RemoveFileExtension(string title)
