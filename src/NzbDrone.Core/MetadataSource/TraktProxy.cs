@@ -20,7 +20,7 @@ namespace NzbDrone.Core.MetadataSource
     {
         private readonly Logger _logger;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
-        private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@)", RegexOptions.Compiled);
+        private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
 
         public TraktProxy(Logger logger)
         {
@@ -31,11 +31,43 @@ namespace NzbDrone.Core.MetadataSource
         {
             try
             {
-                var client = BuildClient("search", "shows");
-                var restRequest = new RestRequest(GetSearchTerm(title) + "/30/seasons");
-                var response = client.ExecuteAndValidate<List<Show>>(restRequest);
+                if (title.StartsWith("tvdb:") || title.StartsWith("tvdbid:") || title.StartsWith("slug:"))
+                {
+                    try
+                    {
+                        var slug = title.Split(':')[1];
 
-                return response.Select(MapSeries).ToList();
+                        if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace))
+                        {
+                            return new List<Series>();
+                        }
+
+                        var client = BuildClient("show", "summary");
+                        var restRequest = new RestRequest(GetSearchTerm(slug) + "/extended");
+                        var response = client.ExecuteAndValidate<Show>(restRequest);
+
+                        return new List<Series> { MapSeries(response) };
+                    }
+                    catch (RestException ex)
+                    {
+                        if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                        {
+                            return new List<Series>();
+                        }
+
+                        throw;
+                    }
+                }
+                else
+                {
+                    var client = BuildClient("search", "shows");
+                    var restRequest = new RestRequest(GetSearchTerm(title) + "/30/seasons");
+                    var response = client.ExecuteAndValidate<List<Show>>(restRequest);
+
+                    return response.Select(MapSeries)
+                        .OrderBy(v => title.LevenshteinDistanceClean(v.Title))
+                        .ToList();
+                }
             }
             catch (WebException ex)
             {
@@ -170,7 +202,6 @@ namespace NzbDrone.Core.MetadataSource
             phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim().ToLower();
             phrase = phrase.Trim('-');
             phrase = HttpUtility.UrlEncode(phrase);
-            
 
             return phrase;
         }

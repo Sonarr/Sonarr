@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Core.Parser.Model;
+using System.Globalization;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
@@ -17,6 +18,21 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected override string GetNzbInfoUrl(XElement item)
         {
             return item.Comments().Replace("#comments", "");
+        }
+
+        protected override DateTime GetPublishDate(XElement item)
+        {
+            var attributes = item.Elements("attr").ToList();
+            var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("usenetdate", StringComparison.CurrentCultureIgnoreCase));
+
+            if (usenetdateElement != null)
+            {
+                var dateString = usenetdateElement.Attribute("value").Value;
+
+                return XElementExtensions.ParseDate(dateString);
+            }
+
+            return base.GetPublishDate(item);
         }
 
         protected override long GetSize(XElement item)
