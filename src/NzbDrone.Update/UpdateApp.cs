@@ -53,19 +53,7 @@ namespace NzbDrone.Update
         public void Start(string[] args)
         {
             var startupContext = ParseArgs(args);
-            string targetFolder;
-
-            if (startupContext.ExecutingApplication.IsNullOrWhiteSpace())
-            {
-                var exeFileInfo = new FileInfo(_processProvider.GetProcessById(startupContext.ProcessId).StartPath);
-                targetFolder = exeFileInfo.Directory.FullName;
-            }
-
-            else
-            {
-                var exeFileInfo = new FileInfo(startupContext.ExecutingApplication);
-                targetFolder = exeFileInfo.Directory.FullName;
-            }
+            var targetFolder = GetInstallationDirectory(startupContext);
             
             logger.Info("Starting update process. Target Path:{0}", targetFolder);
             _installUpdateService.Start(targetFolder, startupContext.ProcessId);
@@ -121,6 +109,27 @@ namespace NzbDrone.Update
 
             logger.Debug("NzbDrone process ID: {0}", id);
             return id;
+        }
+
+        private string GetInstallationDirectory(UpdateStartupContext startupContext)
+        {
+            if (startupContext.ExecutingApplication.IsNullOrWhiteSpace())
+            {
+                logger.Debug("Using process ID to find installation directory: {0}", startupContext.ProcessId);
+                var exeFileInfo = new FileInfo(_processProvider.GetProcessById(startupContext.ProcessId).StartPath);
+                logger.Debug("Executable location: {0}", exeFileInfo.FullName);
+
+                return exeFileInfo.DirectoryName;
+            }
+
+            else
+            {
+                logger.Debug("Using executing application: {0}", startupContext.ExecutingApplication);
+                var exeFileInfo = new FileInfo(startupContext.ExecutingApplication);
+                logger.Debug("Executable location: {0}", exeFileInfo.FullName);
+
+                return exeFileInfo.DirectoryName;
+            }
         }
     }
 }
