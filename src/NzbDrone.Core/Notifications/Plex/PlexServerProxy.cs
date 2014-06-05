@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             CheckForError(response.Content);
-            _logger.Trace("Sections response: {0}", response.Content);
+            _logger.Debug("Sections response: {0}", response.Content);
 
             return Json.Deserialize<PlexMediaContainer>(response.Content)
                        .Directories
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             CheckForError(response.Content);
-            _logger.Trace("Update response: {0}", response.Content);
+            _logger.Debug("Update response: {0}", response.Content);
         }
 
         private String Authenticate(string username, string password)
@@ -64,6 +64,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             CheckForError(response.Content);
+            _logger.Debug("Authentication Response: {0}", response.Content);
 
             var user = Json.Deserialize<PlexUser>(JObject.Parse(response.Content).SelectToken("user").ToString());
 
@@ -91,7 +92,6 @@ namespace NzbDrone.Core.Notifications.Plex
 	        request.AddHeader("X-Plex-Version", "0");
 
             return request;
-
         }
 
         private RestClient GetPlexServerClient(PlexServerSettings settings)
