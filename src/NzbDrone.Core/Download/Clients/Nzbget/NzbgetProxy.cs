@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         List<NzbgetPostQueueItem> GetPostQueue(NzbgetSettings settings);
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
         String GetVersion(NzbgetSettings settings);
+        Dictionary<String, String> GetConfig(NzbgetSettings settings);
         void RemoveFromHistory(string id, NzbgetSettings settings);
         void RetryDownload(string id, NzbgetSettings settings);
     }
@@ -97,6 +98,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             return Json.Deserialize<NzbgetResponse<String>>(ProcessRequest(request, settings)).Version;
         }
+
+        public Dictionary<String, String> GetConfig(NzbgetSettings settings)
+        {
+            var request = BuildRequest(new JsonRequest("config"));
+
+            return Json.Deserialize<NzbgetResponse<List<NzbgetConfigItem>>>(ProcessRequest(request, settings)).Result.ToDictionary(v => v.Name, v => v.Value);
+        }
+
 
         public void RemoveFromHistory(string id, NzbgetSettings settings)
         {

@@ -240,6 +240,8 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetCategory.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetConfigItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetGlobalStatus.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetPostQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdProxy.cs" />
     <Compile Include="Download\CheckForFinishedDownloadCommand.cs" />
     <Compile Include="Download\DownloadClientItem.cs" />
+    <Compile Include="Download\DownloadClientStatus.cs" />
     <Compile Include="Download\FailedDownloadService.cs" />
     <Compile Include="Download\DownloadItemStatus.cs" />
     <Compile Include="Download\TrackedDownload.cs" />

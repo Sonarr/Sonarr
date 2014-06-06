@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
@@ -213,14 +214,65 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _proxy.RetryDownload(id, Settings);
         }
 
-        public override void Test()
+        public override DownloadClientStatus GetStatus()
         {
-            _proxy.GetVersion(Settings);
+            var config = _proxy.GetConfig(Settings);
+
+            var category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+
+            var status = new DownloadClientStatus
+            {
+                IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
+            };
+
+            if (category != null)
+            {
+                status.OutputRootFolders = new List<string> { category.DestDir };
+            }
+
+            return status;
+        }
+
+        protected IEnumerable<NzbgetCategory> GetCategories(Dictionary<String, String> config)
+        {
+            for (int i = 1; i < 100; i++)
+            {
+                var name = config.GetValueOrDefault("Category" + i + ".Name");
+
+                if (name == null) yield break;
+
+                var destDir = config.GetValueOrDefault("Category" + i + ".DestDir");
+                
+                if (destDir.IsNullOrWhiteSpace())
+                {
+                    var mainDir = config.GetValueOrDefault("MainDir");
+                    destDir = config.GetValueOrDefault("DestDir", String.Empty).Replace("${MainDir}", mainDir);
+
+                    if (config.GetValueOrDefault("AppendCategoryDir", "yes") == "yes")
+                    {
+                        destDir = Path.Combine(destDir, name);
+                    }
+                }
+
+                yield return new NzbgetCategory
+                {
+                    Name = name,
+                    DestDir = destDir,
+                    Unpack = config.GetValueOrDefault("Category" + i + ".Unpack") == "yes",
+                    DefScript = config.GetValueOrDefault("Category" + i + ".DefScript"),
+                    Aliases = config.GetValueOrDefault("Category" + i + ".Aliases"),
+                };
+            }
         }
 
         private String GetVersion(string host = null, int port = 0, string username = null, string password = null)
         {
             return _proxy.GetVersion(Settings);
+        }
+
+        public override void Test()
+        {
+            _proxy.GetVersion(Settings);
         }
 
         public void Execute(TestNzbgetCommand message)

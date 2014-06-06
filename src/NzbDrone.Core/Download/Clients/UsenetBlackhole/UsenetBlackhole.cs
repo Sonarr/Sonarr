@@ -142,6 +142,15 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             PerformTest(Settings.WatchFolder);
         }
 
+        public override DownloadClientStatus GetStatus()
+        {
+            return new DownloadClientStatus
+            {
+                IsLocalhost = true,
+                OutputRootFolders = new List<string> { Settings.WatchFolder }
+            };
+        }
+
         private void PerformTest(string folder)
         {
             var testPath = Path.Combine(folder, "drone_test.txt");

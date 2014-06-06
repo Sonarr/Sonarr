@@ -14,5 +14,7 @@ namespace NzbDrone.Core.Download
         void RemoveItem(string id);
         void RetryDownload(string id);
         void Test();
+
+        DownloadClientStatus GetStatus();
     }
 }

@@ -208,6 +208,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _proxy.RetryDownload(id, Settings);
         }
 
+        public override DownloadClientStatus GetStatus()
+        {
+            var status = new DownloadClientStatus
+            {
+                IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
+            };
+
+            return status;
+        }
+
         public override void Test()
         {
             _proxy.GetCategories(Settings);

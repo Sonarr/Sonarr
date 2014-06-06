@@ -67,6 +67,7 @@ namespace NzbDrone.Core.Download
         public abstract void RemoveItem(string id);
         public abstract void RetryDownload(string id);
         public abstract void Test();
+        public abstract DownloadClientStatus GetStatus();
 
         protected RemoteEpisode GetRemoteEpisode(String title)
         {
