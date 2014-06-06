@@ -30,10 +30,6 @@ define([
             this.targetCollection = options.targetCollection;
         },
 
-        onBeforeClose: function () {
-            window.alert('closing down!');
-        },
-
         _save: function () {
             var self = this;
             var promise = this.model.save();

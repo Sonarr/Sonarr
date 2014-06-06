@@ -9,7 +9,7 @@ define(
             var validationName = error.propertyName.toLowerCase();
 
             this.find('.validation-errors')
-                .addClass('alert alert-error')
+                .addClass('alert alert-danger')
                 .append('<div><i class="icon-exclamation-sign"></i>' + error.errorMessage + '</div>');
 
             var input = this.find('[name]').filter(function () {
@@ -65,7 +65,7 @@ define(
 
         $.fn.removeAllErrors = function () {
             this.find('.error').removeClass('error');
-            this.find('.validation-errors').removeClass('alert').removeClass('alert-error').html('');
+            this.find('.validation-errors').removeClass('alert').removeClass('alert-danger').html('');
             this.find('.validation-error').remove();
             return this.find('.help-inline.error-message').remove();
         };

@@ -12,12 +12,18 @@ define(
             var originalBeforeClose = this.prototype.onBeforeClose;
 
             var errorHandler = function (response) {
-                this.model.trigger('validation:failed', response);
+                if (this.model) {
+                    this.model.trigger('validation:failed', response);
+                }
+
+                else {
+                    this.trigger('validation:failed', response);
+                }
             };
 
             var validatedSync = function (method, model, options) {
                 model.trigger('validation:sync');
-//                this.$el.removeAllErrors();
+
                 arguments[2].isValidatedCall = true;
                 return model._originalSync.apply(this, arguments).fail(errorHandler.bind(this));
             };
@@ -30,22 +36,34 @@ define(
                 }
             };
 
+            var validationFailed = function (response) {
+                if (response.status === 400) {
+
+                    var view = this;
+                    var validationErrors = JSON.parse(response.responseText);
+                    _.each(validationErrors, function (error) {
+                        view.$el.processServerError(error);
+                    });
+                }
+            };
+
             this.prototype.onRender = function () {
 
-                this.listenTo(this.model, 'validation:sync', function () {
-                   this.$el.removeAllErrors();
-                });
+                if (this.model) {
+                    this.listenTo(this.model, 'validation:sync', function () {
+                        this.$el.removeAllErrors();
+                    });
 
-                this.listenTo(this.model, 'validation:failed', function (response) {
-                    if (response.status === 400) {
+                    this.listenTo(this.model, 'validation:failed', validationFailed);
+                }
 
-                        var view = this;
-                        var validationErrors = JSON.parse(response.responseText);
-                        _.each(validationErrors, function (error) {
-                            view.$el.processServerError(error);
-                        });
-                    }
-                });
+                else {
+                    this.listenTo(this, 'validation:sync', function () {
+                        this.$el.removeAllErrors();
+                    });
+
+                    this.listenTo(this, 'validation:failed', validationFailed);
+                }
 
                 Validation.bind(this);
                 this.bindToModelValidation = bindToModel.bind(this);
