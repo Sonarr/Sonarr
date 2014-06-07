@@ -124,7 +124,12 @@ namespace NzbDrone.Core.IndexerSearch
         private List<DownloadDecision> SearchAnime(Series series, Episode episode)
         {
             var searchSpec = Get<AnimeEpisodeSearchCriteria>(series, new List<Episode> { episode });
-            searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.GetValueOrDefault(0);
+            searchSpec.AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber.GetValueOrDefault(0);
+
+            if (searchSpec.AbsoluteEpisodeNumber == 0)
+            {
+                searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.GetValueOrDefault(0);
+            }
 
             if (searchSpec.AbsoluteEpisodeNumber == 0)
             {

@@ -99,12 +99,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.*?)(?:\W?S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{1}))+)+(\W+|_|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Anime - Title Absolute Episode Number 
-                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[.{8}\])?(?:$|\.)",
+                //Anime - Title Absolute Episode Number (e66)
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[.{8}\])?(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Anime - Title Absolute Episode Number (e66)
-                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+e(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[.{8}\])?(?:$|\.)",
+                //Anime - Title Absolute Episode Number 
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[.{8}\])?(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 

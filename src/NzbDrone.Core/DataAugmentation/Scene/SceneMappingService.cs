@@ -70,6 +70,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public Nullable<Int32> GetSeasonNumber(string title)
         {
+            //TODO: we should be able to override xem aliases with ones from services
+            //Example Fairy Tail - Alias is assigned to season 2 (anidb), but we're still using tvdb for everything
+
             var mapping = _gettvdbIdCache.Find(title.CleanSeriesTitle());
 
             if (mapping == null)
