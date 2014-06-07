@@ -60,6 +60,8 @@ namespace NzbDrone.Core.Update
         {
             try
             {
+                EnsureAppDataSafety();
+
                 var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
                 var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
@@ -137,6 +139,15 @@ namespace NzbDrone.Core.Update
             var executingApplication = _runtimeInfo.ExecutingApplication;
 
             return String.Join(" ", processId, updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar).WrapInQuotes(), executingApplication.WrapInQuotes());
+        }
+
+        private void EnsureAppDataSafety()
+        {
+            if (_appFolderInfo.StartUpFolder.IsParentPath(_appFolderInfo.AppDataFolder) ||
+                _appFolderInfo.StartUpFolder.PathEquals(_appFolderInfo.AppDataFolder))
+            {
+                throw new NotSupportedException("Update will cause AppData to be deleted, correct you configuration before proceeding");
+            }
         }
 
         public void Execute(ApplicationUpdateCommand message)
