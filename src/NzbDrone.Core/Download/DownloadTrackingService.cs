@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download
             var downloadClients = _downloadClientProvider.GetDownloadClients();
 
             var oldTrackedDownloads = GetTrackedDownloads().ToDictionary(v => v.TrackingId);
-            var newTrackedDownloads = new List<TrackedDownload>();
+            var newTrackedDownloads = new Dictionary<String, TrackedDownload>();
 
             var stateChanged = false;
 
@@ -116,6 +116,8 @@ namespace NzbDrone.Core.Download
                 {
                     var trackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, downloadItem.DownloadClientId);
                     TrackedDownload trackedDownload;
+
+                    if (newTrackedDownloads.ContainsKey(trackingId)) continue;
 
                     if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
                     {
@@ -133,11 +135,11 @@ namespace NzbDrone.Core.Download
 
                     trackedDownload.DownloadItem = downloadItem;
 
-                    newTrackedDownloads.Add(trackedDownload);
+                    newTrackedDownloads[trackingId] = trackedDownload;
                 }
             }
 
-            foreach (var downloadItem in oldTrackedDownloads.Values.Except(newTrackedDownloads))
+            foreach (var downloadItem in oldTrackedDownloads.Values.Where(v => !newTrackedDownloads.ContainsKey(v.TrackingId)))
             {
                 if (downloadItem.State != TrackedDownloadState.Removed)
                 {
@@ -150,7 +152,7 @@ namespace NzbDrone.Core.Download
                 _logger.Trace("Stopped tracking download: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
             }
 
-            _trackedDownloadCache.Set("tracked", newTrackedDownloads.ToArray());
+            _trackedDownloadCache.Set("tracked", newTrackedDownloads.Values.ToArray());
 
             return stateChanged;
         }
