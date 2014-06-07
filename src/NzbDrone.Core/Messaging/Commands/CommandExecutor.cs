@@ -77,8 +77,12 @@ namespace NzbDrone.Core.Messaging.Commands
 
             _trackCommands.Store(command);
 
+            // TODO: We should use async await (once we get 4.5) or normal Task Continuations on Command processing to prevent blocking the TaskScheduler.
+            //       For now we use TaskCreationOptions 0x10, which is actually .net 4.5 HideScheduler.
+            //       This will detach the scheduler from the thread, causing new Task creating in the command to be executed on the ThreadPool, avoiding a deadlock.
+            //       Please note that the issue only shows itself on mono because since Microsoft .net implementation supports Task inlining on WaitAll.
             _taskFactory.StartNew(() => ExecuteCommand<TCommand>(command)
-                , TaskCreationOptions.PreferFairness)
+                , TaskCreationOptions.PreferFairness | (TaskCreationOptions)0x10)
                 .LogExceptions();
 
             return command;
