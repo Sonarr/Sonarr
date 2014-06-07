@@ -49,6 +49,9 @@ namespace NzbDrone.Core.Test.UpdateTests
             }
 
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.TempFolder).Returns(TempFolder);
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.StartUpFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.AppDataFolder).Returns(@"C:\ProgramData\NzbDrone".AsOsAgnostic);
+
             Mocker.GetMock<ICheckUpdateService>().Setup(c => c.AvailableUpdate()).Returns(_updatePackage);
             Mocker.GetMock<IVerifyUpdates>().Setup(c => c.Verify(It.IsAny<UpdatePackage>(), It.IsAny<String>())).Returns(true);
 
@@ -101,7 +104,6 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Subject.Execute(new ApplicationUpdateCommand());
 
-
             Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive));
         }
 
@@ -111,7 +113,6 @@ namespace NzbDrone.Core.Test.UpdateTests
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
             Subject.Execute(new ApplicationUpdateCommand());
-
 
             Mocker.GetMock<IArchiveService>().Verify(c => c.Extract(updateArchive, _sandboxFolder));
         }
@@ -237,6 +238,26 @@ namespace NzbDrone.Core.Test.UpdateTests
             updateSubFolder.GetDirectories("NzbDrone").Should().HaveCount(1);
             updateSubFolder.GetDirectories().Should().HaveCount(1);
             updateSubFolder.GetFiles().Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_log_error_when_app_data_is_child_of_startup_folder()
+        {
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.StartUpFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone\AppData".AsOsAgnostic);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_log_error_when_app_data_is_same_as_startup_folder()
+        {
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.StartUpFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
+            Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [TearDown]
