@@ -60,6 +60,10 @@ namespace NzbDrone.Core.Parser.Model
             {
                 episodeString = string.Format("S{0:00}E{1}", SeasonNumber, String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
             }
+            else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
+            {
+                episodeString = string.Format("{0}", String.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
+            }
 
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
         }
