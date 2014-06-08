@@ -58,11 +58,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">Quality Profile</label>
+                            <label class="col-sm-4 control-label">Profile</label>
 
                             <div class="col-sm-4">
-                                <select class="form-control x-quality-profile" name="qualityProfileId">
-                                    {{#each qualityProfiles.models}}
+                                <select class="form-control x-profile" id="inputProfile" name="profileId">
+                                    {{#each profiles.models}}
                                     <option value="{{id}}">{{attributes.name}}</option>
                                     {{/each}}
                                 </select>

@@ -7,7 +7,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class NotSampleSpecification : IDecisionEngineSpecification
     {
         private readonly Logger _logger;
+
         public string RejectionReason { get { return "Sample"; } }
+        public RejectionType Type { get { return RejectionType.Permanent; } }
 
         public NotSampleSpecification(Logger logger)
         {

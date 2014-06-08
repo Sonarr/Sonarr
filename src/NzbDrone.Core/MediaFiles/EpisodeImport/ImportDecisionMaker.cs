@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Parser;
@@ -61,7 +60,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     
                     if (parsedEpisode != null)
                     {
-                        if (quality != null && new QualityModelComparer(parsedEpisode.Series.QualityProfile).Compare(quality, parsedEpisode.Quality) > 0)
+                        if (quality != null && new QualityModelComparer(parsedEpisode.Series.Profile).Compare(quality, parsedEpisode.Quality) > 0)
                         {
                             _logger.Debug("Using quality from folder: {0}", quality);
                             parsedEpisode.Quality = quality;

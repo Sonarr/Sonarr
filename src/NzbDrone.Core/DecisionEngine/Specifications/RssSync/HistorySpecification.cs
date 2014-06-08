@@ -34,6 +34,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria != null)
@@ -63,11 +65,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             foreach (var episode in subject.Episodes)
             {
-                var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.QualityProfile, episode.Id);
+                var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.Profile, episode.Id);
                 if (bestQualityInHistory != null)
                 {
                     _logger.Debug("Comparing history quality with report. History is {0}", bestQualityInHistory);
-                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.QualityProfile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
+                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
                         return false;
                 }
             }

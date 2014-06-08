@@ -2,17 +2,17 @@
 {
     public enum Language
     {
-        English = 0,
-        French = 1,
-        Spanish = 2,
-        German = 3,
-        Italian = 4,
-        Danish = 5,
-        Dutch = 6,
-        Japanese = 7,
-        Cantonese = 8,
-        Mandarin = 9,
-        Korean = 10,
+        Unknown = 0,
+        English = 1,
+        French = 2,
+        Spanish = 3,
+        German = 4,
+        Italian = 5,
+        Danish = 6,
+        Dutch = 7,
+        Japanese = 8,
+        Cantonese = 9,
+        Mandarin = 10,
         Russian = 11,
         Polish = 12,
         Vietnamese = 13,
@@ -22,6 +22,7 @@
         Turkish = 17,
         Portuguese = 18,
         Flemish = 19,
-        Greek = 20
+        Greek = 20,
+        Korean = 21
     }
 }

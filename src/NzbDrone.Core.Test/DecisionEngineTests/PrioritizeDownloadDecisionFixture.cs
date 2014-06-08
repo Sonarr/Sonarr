@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.DecisionEngine;
@@ -38,7 +40,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release.Size = size;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
-                                                  .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                                  .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                                   .Build();
 
             return remoteEpisode;

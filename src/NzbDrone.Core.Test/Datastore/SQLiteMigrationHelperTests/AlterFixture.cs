@@ -6,6 +6,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using System.Linq;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
 {
@@ -118,6 +119,24 @@ namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
 
             newColumns.Values.Should().HaveSameCount(columns.Values);
             newIndexes.Should().Contain(i=>i.Column == "AirTime");
+        }
+
+        [Test]
+        public void should_create_indexes_with_the_same_uniqueness()
+        {
+            var columns = _subject.GetColumns("Series");
+            var indexes = _subject.GetIndexes("Series");
+
+            var tempIndexes = indexes.JsonClone();
+
+            tempIndexes[0].Unique = false;
+            tempIndexes[1].Unique = true;
+
+            _subject.CreateTable("Series_New", columns.Values, tempIndexes);
+            var newIndexes = _subject.GetIndexes("Series_New");
+
+            newIndexes.Should().HaveSameCount(tempIndexes);
+            newIndexes.ShouldAllBeEquivalentTo(tempIndexes, options  => options.Excluding(o => o.IndexName).Excluding(o => o.Table));
         }
     }
 }

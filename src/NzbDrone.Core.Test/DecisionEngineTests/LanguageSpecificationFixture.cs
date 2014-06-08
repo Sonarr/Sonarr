@@ -1,9 +1,12 @@
 ﻿using FluentAssertions;
+using Marr.Data;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -11,28 +14,35 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
     public class LanguageSpecificationFixture : CoreTest
     {
-        private RemoteEpisode parseResult;
+        private RemoteEpisode _remoteEpisode;
+
+        [SetUp]
+        public void Setup()
+        {
+            _remoteEpisode = new RemoteEpisode
+            {
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    Language = Language.English
+                },
+                Series = new Series
+                         {
+                             Profile = new LazyLoaded<Profile>(new Profile
+                                                               {
+                                                                   Language = Language.English
+                                                               })
+                         }
+            };
+        }
 
         private void WithEnglishRelease()
         {
-            parseResult = new RemoteEpisode
-                {
-                    ParsedEpisodeInfo = new ParsedEpisodeInfo
-                        {
-                            Language = Language.English
-                        }
-                };
+            _remoteEpisode.ParsedEpisodeInfo.Language = Language.English;
         }
 
         private void WithGermanRelease()
         {
-            parseResult = new RemoteEpisode
-            {
-                ParsedEpisodeInfo = new ParsedEpisodeInfo
-                {
-                    Language = Language.German
-                }
-            };
+            _remoteEpisode.ParsedEpisodeInfo.Language = Language.German;            
         }
 
         [Test]
@@ -40,7 +50,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithEnglishRelease();
 
-            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(parseResult, null).Should().BeTrue();
+            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
         }
 
         [Test]
@@ -48,7 +58,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithGermanRelease();
 
-            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(parseResult, null).Should().BeFalse();
+            Mocker.Resolve<LanguageSpecification>().IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
         }
     }
 }

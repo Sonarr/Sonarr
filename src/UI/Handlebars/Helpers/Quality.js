@@ -2,15 +2,15 @@
 define(
     [
         'handlebars',
-        'Quality/QualityProfileCollection'
-    ], function (Handlebars, QualityProfileCollection) {
+        'Profile/ProfileCollection'
+    ], function (Handlebars, ProfileCollection) {
 
-        Handlebars.registerHelper('qualityProfile', function (profileId) {
+        Handlebars.registerHelper('profile', function (profileId) {
 
-            var profile = QualityProfileCollection.get(profileId);
+            var profile = ProfileCollection.get(profileId);
 
             if (profile) {
-                return new Handlebars.SafeString('<span class="label label-default quality-profile-label">' + profile.get('name') + '</span>');
+                return new Handlebars.SafeString('<span class="label label-default profile-label">' + profile.get("name") + '</span>');
             }
 
             return undefined;

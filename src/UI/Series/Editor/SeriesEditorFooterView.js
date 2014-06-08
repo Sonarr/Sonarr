@@ -5,7 +5,7 @@ define(
         'marionette',
         'backgrid',
         'vent',
-        'Quality/QualityProfileCollection',
+        'Profile/ProfileCollection',
         'AddSeries/RootFolders/RootFolderCollection',
         'Shared/Toolbar/ToolbarLayout',
         'AddSeries/RootFolders/RootFolderLayout',
@@ -15,7 +15,7 @@ define(
                  Marionette,
                  Backgrid,
                  vent,
-                 QualityProfiles,
+                 Profiles,
                  RootFolders,
                  ToolbarLayout,
                  RootFolderLayout,
@@ -26,7 +26,7 @@ define(
 
             ui: {
                 monitored           : '.x-monitored',
-                qualityProfile      : '.x-quality-profiles',
+                profile             : '.x-profiles',
                 seasonFolder        : '.x-season-folder',
                 rootFolder          : '.x-root-folder',
                 selectedCount       : '.x-selected-count',
@@ -43,8 +43,8 @@ define(
 
             templateHelpers: function () {
                 return {
-                    qualityProfiles: QualityProfiles,
-                    rootFolders    : RootFolders.toJSON()
+                    profiles   : Profiles,
+                    rootFolders: RootFolders.toJSON()
                 };
             },
 
@@ -68,7 +68,7 @@ define(
                 var selected = this.editorGrid.getSelectedModels();
 
                 var monitored = this.ui.monitored.val();
-                var profile = this.ui.qualityProfile.val();
+                var profile = this.ui.profile.val();
                 var seasonFolder = this.ui.seasonFolder.val();
                 var rootFolder = this.ui.rootFolder.val();
 
@@ -82,7 +82,7 @@ define(
                     }
 
                     if (profile !== 'noChange') {
-                        model.set('qualityProfileId', parseInt(profile, 10));
+                        model.set('profileId', parseInt(profile, 10));
                     }
 
                     if (seasonFolder === 'true') {
@@ -113,7 +113,7 @@ define(
 
                 if (selectedCount === 0) {
                     this.ui.monitored.attr('disabled', '');
-                    this.ui.qualityProfile.attr('disabled', '');
+                    this.ui.profile.attr('disabled', '');
                     this.ui.seasonFolder.attr('disabled', '');
                     this.ui.rootFolder.attr('disabled', '');
                     this.ui.saveButton.attr('disabled', '');
@@ -122,7 +122,7 @@ define(
 
                 else {
                     this.ui.monitored.removeAttr('disabled', '');
-                    this.ui.qualityProfile.removeAttr('disabled', '');
+                    this.ui.profile.removeAttr('disabled', '');
                     this.ui.seasonFolder.removeAttr('disabled', '');
                     this.ui.rootFolder.removeAttr('disabled', '');
                     this.ui.saveButton.removeAttr('disabled', '');

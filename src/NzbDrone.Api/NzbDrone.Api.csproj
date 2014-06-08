@@ -150,6 +150,9 @@
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="NzbDroneFeedModule.cs" />
+    <Compile Include="Profiles\Languages\LanguageModule.cs" />
+    <Compile Include="Profiles\Languages\LanguageResource.cs" />
+    <Compile Include="Profiles\LegacyProfileModule.cs" />
     <Compile Include="ProviderResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
     <Compile Include="Indexers\IndexerModule.cs" />
@@ -175,7 +178,7 @@
     <Compile Include="Wanted\MissingModule.cs" />
     <Compile Include="Config\NamingSampleResource.cs" />
     <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
-    <Compile Include="Qualities\QualityProfileValidation.cs" />
+    <Compile Include="Profiles\ProfileValidation.cs" />
     <Compile Include="Queue\QueueModule.cs" />
     <Compile Include="Queue\QueueResource.cs" />
     <Compile Include="ResourceChangeMessage.cs" />
@@ -183,7 +186,7 @@
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="PagingResource.cs" />
-    <Compile Include="Qualities\QualityProfileSchemaModule.cs" />
+    <Compile Include="Profiles\ProfileSchemaModule.cs" />
     <Compile Include="REST\BadRequestException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />
     <Compile Include="REST\RestModule.cs" />
@@ -202,8 +205,8 @@
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NzbDroneApiModule.cs" />
-    <Compile Include="Qualities\QualityProfileResource.cs" />
-    <Compile Include="Qualities\QualityProfileModule.cs" />
+    <Compile Include="Profiles\ProfileResource.cs" />
+    <Compile Include="Profiles\ProfileModule.cs" />
     <Compile Include="Qualities\QualityDefinitionResource.cs" />
     <Compile Include="Qualities\QualityDefinitionModule.cs" />
     <Compile Include="Extensions\ReqResExtensions.cs" />

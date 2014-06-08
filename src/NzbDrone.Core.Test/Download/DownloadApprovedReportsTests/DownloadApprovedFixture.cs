@@ -4,19 +4,19 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using NzbDrone.Core.DecisionEngine;
 
 namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
 {
     [TestFixture]
-    public class DownloadApprovedFixture : CoreTest<DownloadApprovedReports>
+    public class DownloadApprovedFixture : CoreTest<ProcessDownloadDecisions>
     {
         [SetUp]
         public void SetUp()
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             remoteEpisode.Release.PublishDate = DateTime.UtcNow;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
-                .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                 .Build();
 
             return remoteEpisode;
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode));
 
-            Subject.DownloadApproved(decisions);
+            Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>()), Times.Once());
         }
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode));
             decisions.Add(new DownloadDecision(remoteEpisode));
 
-            Subject.DownloadApproved(decisions);
+            Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>()), Times.Once());
         }
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            Subject.DownloadApproved(decisions);
+            Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>()), Times.Once());
         }
 
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode));
 
-            Subject.DownloadApproved(decisions).Should().HaveCount(1);
+            Subject.ProcessDecisions(decisions).Grabbed.Should().HaveCount(1);
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            Subject.DownloadApproved(decisions).Should().HaveCount(2);
+            Subject.ProcessDecisions(decisions).Grabbed.Should().HaveCount(2);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode2));
             decisions.Add(new DownloadDecision(remoteEpisode3));
 
-            Subject.DownloadApproved(decisions).Should().HaveCount(2);
+            Subject.ProcessDecisions(decisions).Grabbed.Should().HaveCount(2);
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode));
 
             Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>())).Throws(new Exception());
-            Subject.DownloadApproved(decisions).Should().BeEmpty();
+            Subject.ProcessDecisions(decisions).Grabbed.Should().BeEmpty();
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -177,8 +177,8 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         public void should_return_an_empty_list_when_none_are_appproved()
         {
             var decisions = new List<DownloadDecision>();
-            decisions.Add(new DownloadDecision(null, "Failure!"));
-            decisions.Add(new DownloadDecision(null, "Failure!"));
+            decisions.Add(new DownloadDecision(null, new Rejection("Failure!")));
+            decisions.Add(new DownloadDecision(null, new Rejection("Failure!")));
 
             Subject.GetQualifiedReports(decisions).Should().BeEmpty();
         }

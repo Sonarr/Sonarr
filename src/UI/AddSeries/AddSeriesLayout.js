@@ -7,7 +7,7 @@ define(
         'AddSeries/RootFolders/RootFolderLayout',
         'AddSeries/Existing/AddExistingSeriesCollectionView',
         'AddSeries/AddSeriesView',
-        'Quality/QualityProfileCollection',
+        'Profile/ProfileCollection',
         'AddSeries/RootFolders/RootFolderCollection',
         'Series/SeriesCollection'
     ], function (vent,
@@ -16,7 +16,7 @@ define(
                  RootFolderLayout,
                  ExistingSeriesCollectionView,
                  AddSeriesView,
-                 QualityProfileCollection,
+                 ProfileCollection,
                  RootFolderCollection) {
 
         return Marionette.Layout.extend({
@@ -36,7 +36,7 @@ define(
             },
 
             initialize: function () {
-                QualityProfileCollection.fetch();
+                ProfileCollection.fetch();
                 RootFolderCollection.fetch()
                     .done(function () {
                         RootFolderCollection.synced = true;

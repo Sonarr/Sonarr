@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Qualities;
@@ -22,15 +23,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [SetUp]
         public void Setup()
         {
-            var qualityProfile = new QualityProfile 
+            var profile = new Profile 
             {  
                 Id = 1,
                 Cutoff = Quality.WEBDL480p,
-                Items = new List<QualityProfileItem> 
+                Items = new List<ProfileQualityItem> 
                 { 
-                    new QualityProfileItem { Allowed = true, Quality = Quality.SDTV },
-                    new QualityProfileItem { Allowed = true, Quality = Quality.WEBDL480p },
-                    new QualityProfileItem { Allowed = true, Quality = Quality.RAWHD }
+                    new ProfileQualityItem { Allowed = true, Quality = Quality.SDTV },
+                    new ProfileQualityItem { Allowed = true, Quality = Quality.WEBDL480p },
+                    new ProfileQualityItem { Allowed = true, Quality = Quality.RAWHD }
                 }
             };
 
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                               .With(s => s.Runtime = 30)
                                               .With(s => s.Monitored = true)
                                               .With(s => s.TitleSlug = "Title3")
-                                              .With(s => s.Id = qualityProfile.Id)
+                                              .With(s => s.Id = profile.Id)
                                               .BuildNew();
 
             _unmonitoredSeries = Builder<Series>.CreateNew()
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 .With(s => s.Runtime = 30)
                                                 .With(s => s.Monitored = false)
                                                 .With(s => s.TitleSlug = "Title2")
-                                                .With(s => s.Id = qualityProfile.Id)
+                                                .With(s => s.Id = profile.Id)
                                                 .BuildNew();
 
             _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
@@ -63,7 +64,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             _qualitiesBelowCutoff = new List<QualitiesBelowCutoff>
                                     {
-                                        new QualitiesBelowCutoff(qualityProfile.Id, new[] {Quality.SDTV.Id})
+                                        new QualitiesBelowCutoff(profile.Id, new[] {Quality.SDTV.Id})
                                     };
 
             var qualityMet = new EpisodeFile { Path = "a", Quality = new QualityModel { Quality = Quality.WEBDL480p } };

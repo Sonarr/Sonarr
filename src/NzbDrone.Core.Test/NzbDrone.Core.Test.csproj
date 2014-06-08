@@ -111,6 +111,7 @@
     <Compile Include="DecisionEngineTests\NotInQueueSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\RssSync\DelaySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
+    <Compile Include="Download\Pending\PendingReleaseServiceTests\ProcessFixture.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
@@ -141,6 +143,8 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFilesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklistFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasksFixture.cs" />
     <Compile Include="IndexerSearchTests\NzbSearchServiceFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
@@ -209,7 +213,7 @@
     <Compile Include="ParserTests\SeriesTitleInfoFixture.cs" />
     <Compile Include="Providers\XemProxyFixture.cs" />
     <Compile Include="Qualities\QualityDefinitionRepositoryFixture.cs" />
-    <Compile Include="Qualities\QualityProfileRepositoryFixture.cs" />
+    <Compile Include="Profiles\ProfileRepositoryFixture.cs" />
     <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="Qualities\QualityFixture.cs" />
     <Compile Include="ParserTests\QualityParserFixture.cs" />
@@ -242,7 +246,7 @@
     <Compile Include="MediaFiles\DownloadedEpisodesImportServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
-    <Compile Include="TvTests\SeriesRepositoryTests\QualityProfileRepositoryFixture.cs" />
+    <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateMultipleSeriesFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\UpdateSeriesFixture.cs" />
     <Compile Include="TvTests\ShouldRefreshSeriesFixture.cs" />
@@ -260,11 +264,10 @@
     <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTest.cs" />
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
-    <Compile Include="TvTests\EpisodeProviderTests\EpisodeProviderTest.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="ParserTests\ParserFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Qualities\QualityProfileServiceFixture.cs" />
+    <Compile Include="Profiles\ProfileServiceFixture.cs" />
     <Compile Include="TvTests\SeriesServiceTests\AddSeriesFixture.cs" />
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />

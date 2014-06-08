@@ -44,7 +44,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
-                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
+                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.Profile))
                    .ThenByDescending(c => c.LocalEpisode.Size))
                .SelectMany(c => c)
                .ToList();

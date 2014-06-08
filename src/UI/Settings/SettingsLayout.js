@@ -10,6 +10,7 @@ define(
         'Settings/MediaManagement/Naming/NamingModel',
         'Settings/MediaManagement/MediaManagementLayout',
         'Settings/MediaManagement/MediaManagementSettingsModel',
+        'Settings/Profile/ProfileLayout',
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/IndexerLayout',
         'Settings/Indexers/IndexerCollection',
@@ -31,6 +32,7 @@ define(
                  NamingModel,
                  MediaManagementLayout,
                  MediaManagementSettingsModel,
+                 ProfileLayout,
                  QualityLayout,
                  IndexerLayout,
                  IndexerCollection,
@@ -48,6 +50,7 @@ define(
 
             regions: {
                 mediaManagement : '#media-management',
+                profiles        : '#profiles',
                 quality         : '#quality',
                 indexers        : '#indexers',
                 downloadClient  : '#download-client',
@@ -59,6 +62,7 @@ define(
 
             ui: {
                 mediaManagementTab : '.x-media-management-tab',
+                profilesTab        : '.x-profiles-tab',
                 qualityTab         : '.x-quality-tab',
                 indexersTab        : '.x-indexers-tab',
                 downloadClientTab  : '.x-download-client-tab',
@@ -70,6 +74,7 @@ define(
 
             events: {
                 'click .x-media-management-tab' : '_showMediaManagement',
+                'click .x-profiles-tab'         : '_showProfiles',
                 'click .x-quality-tab'          : '_showQuality',
                 'click .x-indexers-tab'         : '_showIndexers',
                 'click .x-download-client-tab'  : '_showDownloadClient',
@@ -109,6 +114,7 @@ define(
                         {
                         self.loading.$el.hide();
                         self.mediaManagement.show(new MediaManagementLayout({ settings: self.mediaManagementSettings, namingSettings: self.namingSettings }));
+                        self.profiles.show(new ProfileLayout());
                         self.quality.show(new QualityLayout());
                         self.indexers.show(new IndexerLayout({ model: self.indexerSettings }));
                         self.downloadClient.show(new DownloadClientLayout({ model: self.downloadClientSettings }));
@@ -123,6 +129,9 @@ define(
 
             onShow: function () {
                 switch (this.action) {
+                    case 'profiles':
+                        this._showProfiles();
+                        break;
                     case 'quality':
                         this._showQuality();
                         break;
@@ -156,6 +165,15 @@ define(
 
                 this.ui.mediaManagementTab.tab('show');
                 this._navigate('settings/mediamanagement');
+            },
+
+            _showProfiles: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.ui.profilesTab.tab('show');
+                this._navigate('settings/profiles');
             },
 
             _showQuality: function (e) {

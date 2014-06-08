@@ -30,6 +30,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (!_configService.EnableFailedDownloadHandling)

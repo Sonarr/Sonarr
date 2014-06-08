@@ -31,6 +31,11 @@ define(
                         icon = 'icon-inbox';
                         title = 'Downloaded';
                     }
+                    
+                    if (status === 'pending') {
+                        icon = 'icon-time';
+                        title = 'Pending';
+                    }
 
                     if (errorMessage !== '') {
                         if (status === 'completed') {

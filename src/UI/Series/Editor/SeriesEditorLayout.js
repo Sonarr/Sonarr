@@ -7,7 +7,7 @@ define(
         'Series/Index/EmptyView',
         'Series/SeriesCollection',
         'Cells/SeriesTitleCell',
-        'Cells/QualityProfileCell',
+        'Cells/ProfileCell',
         'Cells/SeriesStatusCell',
         'Cells/SeasonFolderCell',
         'Shared/Toolbar/ToolbarLayout',
@@ -19,7 +19,7 @@ define(
                  EmptyView,
                  SeriesCollection,
                  SeriesTitleCell,
-                 QualityProfileCell,
+                 ProfileCell,
                  SeriesStatusCell,
                  SeasonFolderCell,
                  ToolbarLayout,
@@ -33,10 +33,10 @@ define(
             },
 
             ui: {
-                monitored      : '.x-monitored',
-                qualityProfiles: '.x-quality-profiles',
-                rootFolder     : '.x-root-folder',
-                selectedCount  : '.x-selected-count'
+                monitored     : '.x-monitored',
+                profiles      : '.x-profiles',
+                rootFolder    : '.x-root-folder',
+                selectedCount : '.x-selected-count'
             },
 
             events: {
@@ -47,36 +47,36 @@ define(
             columns:
                 [
                     {
-                        name      : '',
-                        cell      : 'select-row',
-                        headerCell: 'select-all',
-                        sortable  : false
+                        name       : '',
+                        cell       : 'select-row',
+                        headerCell : 'select-all',
+                        sortable   : false
                     },
                     {
-                        name      : 'statusWeight',
-                        label     : '',
-                        cell      : SeriesStatusCell
+                        name       : 'statusWeight',
+                        label      : '',
+                        cell       : SeriesStatusCell
                     },
                     {
-                        name      : 'title',
-                        label     : 'Title',
-                        cell      : SeriesTitleCell,
-                        cellValue : 'this'
+                        name       : 'title',
+                        label      : 'Title',
+                        cell       : SeriesTitleCell,
+                        cellValue  : 'this'
                     },
                     {
-                        name      : 'qualityProfileId',
-                        label     : 'Quality',
-                        cell      : QualityProfileCell
+                        name       : 'profileId',
+                        label      : 'Profile',
+                        cell       : ProfileCell
                     },
                     {
-                        name      : 'seasonFolder',
-                        label     : 'Season Folder',
-                        cell      : SeasonFolderCell
+                        name       : 'seasonFolder',
+                        label      : 'Season Folder',
+                        cell       : SeasonFolderCell
                     },
                     {
-                        name      : 'path',
-                        label     : 'Path',
-                        cell      : 'string'
+                        name       : 'path',
+                        label      : 'Path',
+                        cell       : 'string'
                     }
                 ],
 

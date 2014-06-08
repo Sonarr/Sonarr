@@ -9,6 +9,7 @@ using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
@@ -17,6 +18,8 @@ using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
@@ -27,7 +30,6 @@ namespace NzbDrone.Core.Datastore
 {
     public static class TableMapping
     {
-
         private static readonly FluentMappings Mapper = new FluentMappings(true);
 
         public static void Map()
@@ -52,7 +54,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.RootFolderPath)
                   .Relationship()
-                  .HasOne(s => s.QualityProfile, s => s.QualityProfileId);
+                  .HasOne(s => s.Profile, s => s.ProfileId);
 
             Mapper.Entity<Episode>().RegisterModel("Episodes")
                   .Ignore(e => e.SeriesTitle)
@@ -64,14 +66,16 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles")
                   .Relationships.AutoMapICollectionOrComplexProperties();
 
-            Mapper.Entity<QualityProfile>().RegisterModel("QualityProfiles");
+            Mapper.Entity<Profile>().RegisterModel("Profiles");
             Mapper.Entity<QualityDefinition>().RegisterModel("QualityDefinitions");
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
             Mapper.Entity<SeriesStatistics>().MapResultSet();
             Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
-
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");
+
+            Mapper.Entity<PendingRelease>().RegisterModel("PendingReleases")
+                  .Ignore(e => e.RemoteEpisode);
         }
 
         private static void RegisterMappers()
@@ -84,11 +88,13 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<QualityProfileItem>), new EmbeddedDocumentConverter(new QualityIntConverter()));
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<ProfileQualityItem>), new EmbeddedDocumentConverter(new QualityIntConverter()));
             MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter(new QualityIntConverter()));
             MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<int>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<string>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(ParsedEpisodeInfo), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(ReleaseInfo), new EmbeddedDocumentConverter());
         }
 
         private static void RegisterProviderSettingConverter()

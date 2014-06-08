@@ -1,6 +1,7 @@
 ﻿using FizzWare.NBuilder;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Qualities;
@@ -15,19 +16,19 @@ namespace NzbDrone.Core.Test.Datastore
         [SetUp]
         public void Setup()
         {
-            var qualityProfile = new NzbDrone.Core.Qualities.QualityProfile
+            var profile = new Profile
                 {
                     Name = "Test",
                     Cutoff = Quality.WEBDL720p,
-                    Items = NzbDrone.Core.Test.Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities()
                 };
 
             
-            qualityProfile = Db.Insert(qualityProfile);
+            profile = Db.Insert(profile);
 
             var series = Builder<Series>.CreateListOfSize(1)
                 .All()
-                .With(v => v.QualityProfileId = qualityProfile.Id)
+                .With(v => v.ProfileId = profile.Id)
                 .BuildListOfNew();
 
             Db.InsertMany(series);
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void should_lazy_load_qualityprofile_if_not_joined()
+        public void should_lazy_load_profile_if_not_joined()
         {
             var db = Mocker.Resolve<IDatabase>();
             var DataMapper = db.GetDataMapper();
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Test.Datastore
             foreach (var episode in episodes)
             {
                 Assert.IsNotNull(episode.Series);
-                Assert.IsFalse(episode.Series.QualityProfile.IsLoaded);
+                Assert.IsFalse(episode.Series.Profile.IsLoaded);
             }
         }
 
@@ -84,20 +85,20 @@ namespace NzbDrone.Core.Test.Datastore
         }
 
         [Test]
-        public void should_explicit_load_qualityprofile_if_joined()
+        public void should_explicit_load_profile_if_joined()
         {
             var db = Mocker.Resolve<IDatabase>();
             var DataMapper = db.GetDataMapper();
 
             var episodes = DataMapper.Query<Episode>()
                 .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
-                .Join<Series, QualityProfile>(Marr.Data.QGen.JoinType.Inner, v => v.QualityProfile, (l, r) => l.QualityProfileId == r.Id)
+                .Join<Series, Profile>(Marr.Data.QGen.JoinType.Inner, v => v.Profile, (l, r) => l.ProfileId == r.Id)
                 .ToList();
 
             foreach (var episode in episodes)
             {
                 Assert.IsNotNull(episode.Series);
-                Assert.IsTrue(episode.Series.QualityProfile.IsLoaded);
+                Assert.IsTrue(episode.Series.Profile.IsLoaded);
             }
         }
 

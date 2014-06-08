@@ -25,6 +25,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             _logger.Debug("Checking if release contains any restricted terms: {0}", subject);

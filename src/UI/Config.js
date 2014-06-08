@@ -8,7 +8,7 @@ define(
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
             Keys  : {
-                DefaultQualityProfileId : 'DefaultQualityProfileId',
+                DefaultProfileId    : 'DefaultProfileId',
                 DefaultRootFolderId     : 'DefaultRootFolderId',
                 UseSeasonFolder         : 'UseSeasonFolder',
                 DefaultSeriesType       : 'DefaultSeriesType',

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Common;
 
 
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Tv
         public string Overview { get; set; }
         public String AirTime { get; set; }
         public bool Monitored { get; set; }
-        public int QualityProfileId { get; set; }
+        public int ProfileId { get; set; }
         public bool SeasonFolder { get; set; }
         public DateTime? LastInfoSync { get; set; }
         public int Runtime { get; set; }
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Tv
         public string RootFolderPath { get; set; }
 
         public DateTime? FirstAired { get; set; }
-        public LazyLoaded<QualityProfile> QualityProfile { get; set; }
+        public LazyLoaded<Profile> Profile { get; set; }
 
         public List<Season> Seasons { get; set; }
 

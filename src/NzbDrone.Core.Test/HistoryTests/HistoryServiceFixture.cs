@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
@@ -10,14 +11,14 @@ namespace NzbDrone.Core.Test.HistoryTests
 {
     public class HistoryServiceFixture : CoreTest<HistoryService>
     {
-        private QualityProfile _profile;
-        private QualityProfile _profileCustom;
+        private Profile _profile;
+        private Profile _profileCustom;
 
         [SetUp]
         public void Setup()
         {
-            _profile = new QualityProfile { Cutoff = Quality.WEBDL720p, Items = QualityFixture.GetDefaultQualities() };
-            _profileCustom = new QualityProfile { Cutoff = Quality.WEBDL720p, Items = QualityFixture.GetDefaultQualities(Quality.DVD) };
+            _profile = new Profile { Cutoff = Quality.WEBDL720p, Items = QualityFixture.GetDefaultQualities() };
+            _profileCustom = new Profile { Cutoff = Quality.WEBDL720p, Items = QualityFixture.GetDefaultQualities(Quality.DVD) };
         }
 
         [Test]

@@ -11,7 +11,7 @@ define(
         'Cells/RelativeDateCell',
         'Cells/SeriesTitleCell',
         'Cells/TemplatedCell',
-        'Cells/QualityProfileCell',
+        'Cells/ProfileCell',
         'Cells/EpisodeProgressCell',
         'Cells/SeriesActionsCell',
         'Cells/SeriesStatusCell',
@@ -29,7 +29,7 @@ define(
                  RelativeDateCell,
                  SeriesTitleCell,
                  TemplatedCell,
-                 QualityProfileCell,
+                 ProfileCell,
                  EpisodeProgressCell,
                  SeriesActionsCell,
                  SeriesStatusCell,
@@ -65,9 +65,9 @@ define(
                     cell      : 'integer'
                 },
                 {
-                    name      : 'qualityProfileId',
-                    label     : 'Quality',
-                    cell      : QualityProfileCell
+                    name : 'profileId',
+                    label: 'Profile',
+                    cell : ProfileCell
                 },
                 {
                     name      : 'network',
@@ -165,7 +165,7 @@ define(
                             },
                             {
                                 title: 'Quality',
-                                name : 'qualityProfileId'
+                                name : 'profileId'
                             },
                             {
                                 title: 'Network',

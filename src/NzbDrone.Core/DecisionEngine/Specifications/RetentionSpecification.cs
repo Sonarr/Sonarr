@@ -25,6 +25,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var age = subject.Release.Age;

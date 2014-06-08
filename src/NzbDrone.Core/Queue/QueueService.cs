@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Download;
@@ -39,19 +38,21 @@ namespace NzbDrone.Core.Queue
             {
                 foreach (var episode in queueItem.DownloadItem.RemoteEpisode.Episodes)
                 {
-                    var queue = new Queue();
-                    queue.Id = queueItem.DownloadItem.DownloadClientId.GetHashCode() + episode.Id;
-                    queue.Series = queueItem.DownloadItem.RemoteEpisode.Series;
-                    queue.Episode = episode;
-                    queue.Quality = queueItem.DownloadItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
-                    queue.Title = queueItem.DownloadItem.Title;
-                    queue.Size = queueItem.DownloadItem.TotalSize;
-                    queue.Sizeleft = queueItem.DownloadItem.RemainingSize;
-                    queue.Timeleft = queueItem.DownloadItem.RemainingTime;
-                    queue.Status = queueItem.DownloadItem.Status.ToString();
-                    queue.RemoteEpisode = queueItem.DownloadItem.RemoteEpisode;
+                    var queue = new Queue
+                                {
+                                    Id = episode.Id ^ (queueItem.DownloadItem.DownloadClientId.GetHashCode().GetHashCode() << 16),
+                                    Series = queueItem.DownloadItem.RemoteEpisode.Series,
+                                    Episode = episode,
+                                    Quality = queueItem.DownloadItem.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                                    Title = queueItem.DownloadItem.Title,
+                                    Size = queueItem.DownloadItem.TotalSize,
+                                    Sizeleft = queueItem.DownloadItem.RemainingSize,
+                                    Timeleft = queueItem.DownloadItem.RemainingTime,
+                                    Status = queueItem.DownloadItem.Status.ToString(),
+                                    RemoteEpisode = queueItem.DownloadItem.RemoteEpisode
+                                };
 
-                    if (queueItem.HasError)
+                if (queueItem.HasError)
                     {
                         queue.ErrorMessage = queueItem.StatusMessage;
                     }

@@ -21,19 +21,19 @@ namespace NzbDrone.Core.IndexerSearch
     public class MissingEpisodeSearchService : IEpisodeSearchService, IExecute<EpisodeSearchCommand>, IExecute<MissingEpisodeSearchCommand>
     {
         private readonly ISearchForNzb _nzbSearchService;
-        private readonly IDownloadApprovedReports _downloadApprovedReports;
+        private readonly IProcessDownloadDecisions _processDownloadDecisions;
         private readonly IEpisodeService _episodeService;
         private readonly IQueueService _queueService;
         private readonly Logger _logger;
 
         public MissingEpisodeSearchService(ISearchForNzb nzbSearchService,
-                                    IDownloadApprovedReports downloadApprovedReports,
+                                    IProcessDownloadDecisions processDownloadDecisions,
                                     IEpisodeService episodeService,
                                     IQueueService queueService,
                                     Logger logger)
         {
             _nzbSearchService = nzbSearchService;
-            _downloadApprovedReports = downloadApprovedReports;
+            _processDownloadDecisions = processDownloadDecisions;
             _episodeService = episodeService;
             _queueService = queueService;
             _logger = logger;
@@ -52,9 +52,10 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var episode in missing)
             {
+                //TODO: Add a flag to the search to state it is a "scheduled" search
                 var decisions = _nzbSearchService.EpisodeSearch(episode);
-                var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
-                downloadedCount += downloaded.Count;
+                var processed = _processDownloadDecisions.ProcessDecisions(decisions);
+                downloadedCount += processed.Grabbed.Count;
             }
 
             _logger.ProgressInfo("Completed search for {0} episodes. {1} reports downloaded.", missing.Count, downloadedCount);
@@ -65,9 +66,9 @@ namespace NzbDrone.Core.IndexerSearch
             foreach (var episodeId in message.EpisodeIds)
             {
                 var decisions = _nzbSearchService.EpisodeSearch(episodeId);
-                var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
+                var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
-                _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", downloaded.Count);
+                _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", processed.Grabbed.Count);
             }
         }
 
@@ -97,8 +98,8 @@ namespace NzbDrone.Core.IndexerSearch
                 {
                     rateGate.WaitToProceed();
                     var decisions = _nzbSearchService.EpisodeSearch(episode);
-                    var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
-                    downloadedCount += downloaded.Count;
+                    var processed = _processDownloadDecisions.ProcessDecisions(decisions);
+                    downloadedCount += processed.Grabbed.Count;
                 }
             }
 

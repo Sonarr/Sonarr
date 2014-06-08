@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
@@ -13,20 +14,20 @@ namespace NzbDrone.Core.Test.Qualities
     {
         public QualityModelComparer Subject { get; set; }
 
-        private void GivenDefaultQualityProfile()
+        private void GivenDefaultProfile()
         {
-            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities() });
+            Subject = new QualityModelComparer(new Profile { Items = QualityFixture.GetDefaultQualities() });
         }
 
-        private void GivenCustomQualityProfile()
+        private void GivenCustomProfile()
         {
-            Subject = new QualityModelComparer(new QualityProfile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
+            Subject = new QualityModelComparer(new Profile { Items = QualityFixture.GetDefaultQualities(Quality.Bluray720p, Quality.DVD) });
         }
 
         [Test]
         public void Icomparer_greater_test()
         {
-            GivenDefaultQualityProfile();
+            GivenDefaultProfile();
 
             var first = new QualityModel(Quality.DVD, true);
             var second = new QualityModel(Quality.Bluray1080p, true);
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Test.Qualities
         [Test]
         public void Icomparer_greater_proper()
         {
-            GivenDefaultQualityProfile();
+            GivenDefaultProfile();
 
             var first = new QualityModel(Quality.Bluray1080p, false);
             var second = new QualityModel(Quality.Bluray1080p, true);
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Test.Qualities
         [Test]
         public void Icomparer_lesser()
         {
-            GivenDefaultQualityProfile();
+            GivenDefaultProfile();
 
             var first = new QualityModel(Quality.DVD, true);
             var second = new QualityModel(Quality.Bluray1080p, true);
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Test.Qualities
         [Test]
         public void Icomparer_lesser_proper()
         {
-            GivenDefaultQualityProfile();
+            GivenDefaultProfile();
 
             var first = new QualityModel(Quality.DVD, false);
             var second = new QualityModel(Quality.DVD, true);
@@ -78,7 +79,7 @@ namespace NzbDrone.Core.Test.Qualities
         [Test]
         public void Icomparer_greater_custom_order()
         {
-            GivenCustomQualityProfile();
+            GivenCustomProfile();
 
             var first = new QualityModel(Quality.DVD, true);
             var second = new QualityModel(Quality.Bluray720p, true);

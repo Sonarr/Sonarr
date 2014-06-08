@@ -15,7 +15,6 @@ using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Series
 {
@@ -27,7 +26,6 @@ namespace NzbDrone.Api.Series
                                 IHandle<SeriesDeletedEvent>
                                 
     {
-        private readonly ICommandExecutor _commandExecutor;
         private readonly ISeriesService _seriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
         private readonly ISceneMappingService _sceneMappingService;
@@ -47,7 +45,6 @@ namespace NzbDrone.Api.Series
             )
             : base(commandExecutor)
         {
-            _commandExecutor = commandExecutor;
             _seriesService = seriesService;
             _seriesStatisticsService = seriesStatisticsService;
             _sceneMappingService = sceneMappingService;
@@ -60,7 +57,7 @@ namespace NzbDrone.Api.Series
             UpdateResource = UpdateSeries;
             DeleteResource = DeleteSeries;
 
-            SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
+            SharedValidator.RuleFor(s => s.ProfileId).ValidId();
 
             SharedValidator.RuleFor(s => s.Path)
                            .Cascade(CascadeMode.StopOnFirstFailure)

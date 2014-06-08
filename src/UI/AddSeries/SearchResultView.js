@@ -6,7 +6,7 @@ define(
         'AppLayout',
         'backbone',
         'marionette',
-        'Quality/QualityProfileCollection',
+        'Profile/ProfileCollection',
         'AddSeries/RootFolders/RootFolderCollection',
         'AddSeries/RootFolders/RootFolderLayout',
         'Series/SeriesCollection',
@@ -19,7 +19,7 @@ define(
                  AppLayout,
                  Backbone,
                  Marionette,
-                 QualityProfiles,
+                 Profiles,
                  RootFolders,
                  RootFolderLayout,
                  SeriesCollection,
@@ -32,7 +32,7 @@ define(
             template: 'AddSeries/SearchResultViewTemplate',
 
             ui: {
-                qualityProfile : '.x-quality-profile',
+                profile        : '.x-profile',
                 rootFolder     : '.x-root-folder',
                 seasonFolder   : '.x-season-folder',
                 seriesType     : '.x-series-type',
@@ -42,11 +42,11 @@ define(
             },
 
             events: {
-                'click .x-add'              : '_addSeries',
-                'change .x-quality-profile' : '_qualityProfileChanged',
-                'change .x-root-folder'     : '_rootFolderChanged',
-                'change .x-season-folder'   : '_seasonFolderChanged',
-                'change .x-series-type'     : '_seriesTypeChanged'
+                'click .x-add'            : '_addSeries',
+                'change .x-profile'       : '_profileChanged',
+                'change .x-root-folder'   : '_rootFolderChanged',
+                'change .x-season-folder' : '_seasonFolderChanged',
+                'change .x-series-type'   : '_seriesTypeChanged'
             },
 
             initialize: function () {
@@ -65,13 +65,13 @@ define(
 
             onRender: function () {
 
-                var defaultQuality = Config.getValue(Config.Keys.DefaultQualityProfileId);
+                var defaultProfile = Config.getValue(Config.Keys.DefaultProfileId);
                 var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
                 var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
                 var defaultSeriesType = Config.getValueBoolean(Config.Keys.DefaultSeriesType, true);
 
-                if (QualityProfiles.get(defaultQuality)) {
-                    this.ui.qualityProfile.val(defaultQuality);
+                if (Profiles.get(defaultProfile)) {
+                    this.ui.profile.val(defaultProfile);
                 }
 
                 if (RootFolders.get(defaultRoot)) {
@@ -101,7 +101,7 @@ define(
                     this.templateHelpers.existing = existingSeries[0].toJSON();
                 }
 
-                this.templateHelpers.qualityProfiles = QualityProfiles.toJSON();
+                this.templateHelpers.profiles = Profiles.toJSON();
 
                 if (!this.model.get('isExisting')) {
                     this.templateHelpers.rootFolders = RootFolders.toJSON();
@@ -109,8 +109,8 @@ define(
             },
 
             _onConfigUpdated: function (options) {
-                if (options.key === Config.Keys.DefaultQualityProfileId) {
-                    this.ui.qualityProfile.val(options.value);
+                if (options.key === Config.Keys.DefaultProfileId) {
+                    this.ui.profile.val(options.value);
                 }
 
                 else if (options.key === Config.Keys.DefaultRootFolderId) {
@@ -126,8 +126,8 @@ define(
                 }
             },
 
-            _qualityProfileChanged: function () {
-                Config.setValue(Config.Keys.DefaultQualityProfileId, this.ui.qualityProfile.val());
+            _profileChanged: function () {
+                Config.setValue(Config.Keys.DefaultProfileId, this.ui.profile.val());
             },
 
             _seasonFolderChanged: function () {
@@ -160,14 +160,14 @@ define(
                 var icon = this.ui.addButton.find('icon');
                 icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
 
-                var quality = this.ui.qualityProfile.val();
+                var profile = this.ui.profile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
                 var startingSeason = this.ui.startingSeason.val();
                 var seriesType = this.ui.seriesType.val();
                 var seasonFolder = this.ui.seasonFolder.prop('checked');
 
                 this.model.set({
-                    qualityProfileId: quality,
+                    profileId: profile,
                     rootFolderPath: rootFolderPath,
                     seasonFolder: seasonFolder,
                     seriesType: seriesType

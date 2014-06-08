@@ -3,17 +3,17 @@ define(
     [
         'vent',
         'marionette',
-        'Quality/QualityProfileCollection',
+        'Profile/ProfileCollection',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
         'Mixins/AutoComplete'
-    ], function (vent, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
+    ], function (vent, Marionette, Profiles, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Series/Edit/EditSeriesViewTemplate',
 
             ui: {
-                qualityProfile: '.x-quality-profile',
+                profile: '.x-profile',
                 path          : '.x-path'
             },
 
@@ -24,14 +24,14 @@ define(
 
 
             initialize: function () {
-                this.model.set('qualityProfiles', QualityProfiles);
+                this.model.set('profiles', Profiles);
             },
 
             _saveSeries: function () {
 
                 var self = this;
-                var qualityProfileId = this.ui.qualityProfile.val();
-                this.model.set({ qualityProfileId: qualityProfileId});
+                var profileId = this.ui.profile.val();
+                this.model.set({ profileId: profileId});
 
                 this.model.save().done(function () {
                     self.trigger('saved');
