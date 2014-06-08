@@ -82,7 +82,9 @@ namespace NzbDrone.Core.Messaging.Commands
             //       This will detach the scheduler from the thread, causing new Task creating in the command to be executed on the ThreadPool, avoiding a deadlock.
             //       Please note that the issue only shows itself on mono because since Microsoft .net implementation supports Task inlining on WaitAll.
             _taskFactory.StartNew(() => ExecuteCommand<TCommand>(command)
-                , TaskCreationOptions.PreferFairness | (TaskCreationOptions)0x10)
+                , TaskCreationOptions.PreferFairness)
+//                  This breaks on systems that don't have .Net 4.5 installed (but works fine when it does, even though we are targetting 4.0)
+//                , TaskCreationOptions.PreferFairness | (TaskCreationOptions)0x10)
                 .LogExceptions();
 
             return command;
