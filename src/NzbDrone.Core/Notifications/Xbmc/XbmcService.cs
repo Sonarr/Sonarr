@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 var postJson = new JObject();
                 postJson.Add(new JProperty("jsonrpc", "2.0"));
                 postJson.Add(new JProperty("method", "JSONRPC.Version"));
-                postJson.Add(new JProperty("id", DateTime.Now.Ticks));
+                postJson.Add(new JProperty("id", 1));
 
                 var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
 
