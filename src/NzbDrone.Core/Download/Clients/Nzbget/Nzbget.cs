@@ -180,10 +180,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
-                else if (item.MoveStatus != "SUCCESS")
-                {
-                    historyItem.Status = DownloadItemStatus.Queued;
-                }
 
                 historyItems.Add(historyItem);
             }
