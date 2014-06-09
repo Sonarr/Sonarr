@@ -55,6 +55,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Initial D Fifth Stage - 14 DVD - Central Anime", "Initial D Fifth Stage", 14, 0, 0)]
         [TestCase("Initial_D_Fifth_Stage_-_14(DVD)_-_(Central_Anime)[0183D922].mkv", "Initial D Fifth Stage", 14, 0, 0)]
 //        [TestCase("Initial D - 4th Stage Ep 01.mkv", "Initial D - 4th Stage", 1, 0, 0)]
+        [TestCase("[ChihiroDesuYo].No.Game.No.Life.-.09.1280x720.10bit.AAC.[24CCE81D]", "No.Game.No.Life", 9, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

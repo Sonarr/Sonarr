@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(?<!^)(a|an|the|and|or|of)(?:\b|_))|\W|_",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[xh][\W_]?264|DD\W?5\W1|\<|\>|\?|\*|\:|\|",
+        private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[xh][\W_]?264|DD\W?5\W1|\<|\>|\?|\*|\:|\||848x480|1280x720|1920x1080|8bit|10bit",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
