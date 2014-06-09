@@ -75,7 +75,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             var request = BuildRequest("allNames");
             request.AddParameter("origin", "tvdb");
-            request.AddParameter("language", "us");
+            //request.AddParameter("language", "us");
             request.AddParameter("seasonNumbers", true);
 
             var response = restClient.ExecuteAndValidate<XemResult<Dictionary<Int32, List<JObject>>>>(request);
