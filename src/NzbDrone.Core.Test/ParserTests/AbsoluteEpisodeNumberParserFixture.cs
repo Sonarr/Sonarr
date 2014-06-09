@@ -56,6 +56,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Initial_D_Fifth_Stage_-_14(DVD)_-_(Central_Anime)[0183D922].mkv", "Initial D Fifth Stage", 14, 0, 0)]
 //        [TestCase("Initial D - 4th Stage Ep 01.mkv", "Initial D - 4th Stage", 1, 0, 0)]
         [TestCase("[ChihiroDesuYo].No.Game.No.Life.-.09.1280x720.10bit.AAC.[24CCE81D]", "No.Game.No.Life", 9, 0, 0)]
+        [TestCase("Fairy Tail - 001 - Fairy Tail", "Fairy Tail", 001, 0, 0)]
+        [TestCase("Fairy Tail - 049 - The Day of Fated Meeting", "Fairy Tail", 049, 0, 0)]
+        [TestCase("Fairy Tail - 050 - Special Request Watch Out for the Guy You Like!", "Fairy Tail", 050, 0, 0)]
+        [TestCase("Fairy Tail - 099 - Natsu vs. Gildarts", "Fairy Tail", 099, 0, 0)]
+        [TestCase("Fairy Tail - 100 - Mest", "Fairy Tail", 100, 0, 0)]
+//        [TestCase("Fairy Tail - 101 - Mest", "Fairy Tail", 100, 0, 0)] //This gets caught up in the 'see' numbering
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

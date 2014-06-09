@@ -39,6 +39,7 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
             SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
             SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
+            SharedValidator.RuleFor(c => c.AnimeEpisodeFormat).ValidAnimeEpisodeFormat();
             SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
             SharedValidator.RuleFor(c => c.SeasonFolderFormat).ValidSeasonFolderFormat();
         }

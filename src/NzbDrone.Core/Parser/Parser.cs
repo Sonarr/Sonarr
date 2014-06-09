@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 103/113 naming
-                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)\d{1})(?<episode>[1-9][0-9]|[0][1-9])(?!\w|\d+))+",
+                new Regex(@"^(?<title>.+?)?(?:\W?(?<season>(?<!\d+)[1-9])(?<episode>[1-9][0-9]|[0][1-9])(?!\w|\d+))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
