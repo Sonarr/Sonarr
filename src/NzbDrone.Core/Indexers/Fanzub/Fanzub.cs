@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
 
         public override IEnumerable<string> GetAnimeEpisodeSearchUrls(string seriesTitle, int tvRageId, int absoluteEpisodeNumber)
         {
-            return RecentFeed.Select(url => String.Format("{0}&q={1}%20{2}", url, seriesTitle, absoluteEpisodeNumber));
+            return RecentFeed.Select(url => String.Format("{0}&q={1}%20{2:00}", url, seriesTitle, absoluteEpisodeNumber));
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)

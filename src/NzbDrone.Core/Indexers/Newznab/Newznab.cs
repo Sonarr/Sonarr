@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Indexers.Newznab
              * For now: just search based on name and abs episode number
              */
 
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+{2}", url.Replace("t=tvsearch", "t=search"), NewsnabifyTitle(seriesTitle), absoluteEpisodeNumber));
+            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}+{2:00}", url.Replace("t=tvsearch", "t=search"), NewsnabifyTitle(seriesTitle), absoluteEpisodeNumber));
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
