@@ -210,7 +210,12 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         }
 
         public override MetadataFileResult EpisodeMetadata(Series series, EpisodeFile episodeFile)
-        {          
+        {
+            if (!Settings.EpisodeMetadata)
+            {
+                return null;
+            }
+
             _logger.Debug("Generating Episode Metadata for: {0}", episodeFile.Path);
 
             var xmlResult = String.Empty;
