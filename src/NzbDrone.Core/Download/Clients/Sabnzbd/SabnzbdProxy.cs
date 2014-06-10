@@ -6,7 +6,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Core.Instrumentation.Extensions;
 using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd

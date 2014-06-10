@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 if (!sabHistoryItem.Storage.IsNullOrWhiteSpace())
                 {
                     var parent = Directory.GetParent(sabHistoryItem.Storage);
-                    if (parent.Name == sabHistoryItem.Title)
+                    if (parent != null && parent.Name == sabHistoryItem.Title)
                     {
                         historyItem.OutputPath = parent.FullName;
                     }

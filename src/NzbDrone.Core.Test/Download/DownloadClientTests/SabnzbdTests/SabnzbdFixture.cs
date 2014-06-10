@@ -268,5 +268,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             result.OutputPath.Should().Be(@"C:\sorted\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
         }
+
+        [Test]
+        public void should_not_blow_up_if_storage_is_drive_root()
+        {
+            _completed.Items.First().Storage = @"C:\".AsOsAgnostic();
+
+            WithQueue(null);
+            WithHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.OutputPath.Should().Be(@"C:\".AsOsAgnostic());
+        }
     }
 }
