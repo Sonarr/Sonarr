@@ -218,9 +218,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return status;
         }
 
-        public override void Test()
+        public override void Test(SabnzbdSettings settings)
         {
-            _proxy.GetCategories(Settings);
+            var categories = _proxy.GetCategories(settings);
+
+            if (!categories.Any(v => v == settings.TvCategory))
+            {
+                throw new ApplicationException("Category does not exist");
+            }
         }
 
         public void Execute(TestSabnzbdCommand message)
@@ -228,7 +233,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var settings = new SabnzbdSettings();
             settings.InjectFrom(message);
 
-            _proxy.GetCategories(settings);
+            Test(settings);
         }
     }
 }

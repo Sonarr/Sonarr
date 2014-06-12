@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Download
         IEnumerable<DownloadClientItem> GetItems();
         void RemoveItem(string id);
         void RetryDownload(string id);
-        void Test();
 
         DownloadClientStatus GetStatus();
     }

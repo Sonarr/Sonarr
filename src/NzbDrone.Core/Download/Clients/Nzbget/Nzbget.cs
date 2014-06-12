@@ -266,9 +266,18 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return _proxy.GetVersion(Settings);
         }
 
-        public override void Test()
+        public override void Test(NzbgetSettings settings)
         {
-            _proxy.GetVersion(Settings);
+            _proxy.GetVersion(settings);
+
+            var config = _proxy.GetConfig(settings);
+
+            var categories = GetCategories(config);
+
+            if (!categories.Any(v => v.Name == settings.TvCategory))
+            {
+                throw new ApplicationException("Category does not exist");
+            }
         }
 
         public void Execute(TestNzbgetCommand message)
@@ -276,7 +285,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var settings = new NzbgetSettings();
             settings.InjectFrom(message);
 
-            _proxy.GetVersion(settings);
+            Test(settings);
         }
 
         // Javascript doesn't support 64 bit integers natively so json officially doesn't either. 

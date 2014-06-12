@@ -13,6 +13,7 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
@@ -136,12 +137,6 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             throw new NotSupportedException();
         }
 
-        public override void Test()
-        {
-            PerformTest(Settings.NzbFolder);
-            PerformTest(Settings.WatchFolder);
-        }
-
         public override DownloadClientStatus GetStatus()
         {
             return new DownloadClientStatus
@@ -151,7 +146,13 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             };
         }
 
-        private void PerformTest(string folder)
+        public override void Test(UsenetBlackholeSettings settings)
+        {
+            PerformWriteTest(settings.NzbFolder);
+            PerformWriteTest(settings.WatchFolder);
+        }
+
+        private void PerformWriteTest(string folder)
         {
             var testPath = Path.Combine(folder, "drone_test.txt");
             _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
@@ -160,8 +161,10 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 
         public void Execute(TestUsenetBlackholeCommand message)
         {
-            PerformTest(message.NzbFolder);
-            PerformTest(message.WatchFolder);
+            var settings = new UsenetBlackholeSettings();
+            settings.InjectFrom(message);
+
+            Test(settings);
         }
     }
 }

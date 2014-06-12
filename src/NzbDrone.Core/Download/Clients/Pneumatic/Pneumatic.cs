@@ -12,6 +12,7 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
@@ -100,12 +101,12 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return status;
         }
 
-        public override void Test()
+        public override void Test(PneumaticSettings settings)
         {
-            PerformTest(Settings.NzbFolder);
+            PerformWriteTest(settings.NzbFolder);
         }
 
-        private void PerformTest(string folder)
+        private void PerformWriteTest(string folder)
         {
             var testPath = Path.Combine(folder, "drone_test.txt");
             _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
@@ -114,7 +115,10 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public void Execute(TestPneumaticCommand message)
         {
-            PerformTest(message.Folder);
+            var settings = new PneumaticSettings();
+            settings.InjectFrom(message);
+
+            Test(settings);
         }
     }
 }

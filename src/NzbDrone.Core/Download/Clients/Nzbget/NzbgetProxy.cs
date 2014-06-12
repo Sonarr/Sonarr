@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var request = BuildRequest(new JsonRequest("append", parameters));
 
             var response = Json.Deserialize<NzbgetResponse<Boolean>>(ProcessRequest(request, settings));
-            _logger.Debug("Queue Response: [{0}]", response.Result);
+            _logger.Trace("Response: [{0}]", response.Result);
 
             if (!response.Result)
             {
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var client = BuildClient(settings);
             var response = client.Execute(restRequest);
-            _logger.Debug("Response: {0}", response.Content);
+            _logger.Trace("Response: {0}", response.Content);
 
             CheckForError(response);
 
@@ -169,6 +169,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                                  protocol,
                                  settings.Host,
                                  settings.Port);
+
+            _logger.Debug("Url: " + url);
 
             var client = new RestClient(url);
             client.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
