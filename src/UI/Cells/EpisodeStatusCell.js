@@ -50,14 +50,14 @@ define(
                         var title = 'Episode downloaded';
 
                         if (quality.proper) {
-                            title += ' [PROPER] - {0}'.format(size);
-                            this.$el.html('<span class="badge badge-info" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                            title += ' [PROPER]';
                         }
 
-                        else {
+                        if (size !== '') {
                             title += ' - {0}'.format(size);
-                            this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
                         }
+
+                        this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
 
                         return;
                     }
