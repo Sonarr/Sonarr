@@ -14,12 +14,12 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay)|
-                                                                (?<webdl>WEB-DL|WEBDL|WEB\sDL|WEB\-DL|WebRip)|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|WebRip)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRiP)|
                                                                 (?<brrip>BRRip)|
                                                                 (?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)|
-                                                                (?<dsr>WS\sDSR|WS_DSR|WS\.DSR|DSR)|
+                                                                (?<dsr>WS[-_. ]DSR|DSR)|
                                                                 (?<pdtv>PDTV)|
                                                                 (?<sdtv>SDTV)
                                                                 )\b",
@@ -36,6 +36,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex OtherSourceRegex = new Regex(@"(?<hdtv>HD[-_. ]TV)|(?<sdtv>SD[-_. ]TV)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static QualityModel ParseQuality(string name)
         {
@@ -191,6 +193,13 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.Bluray1080p;
             }
 
+            var otherSourceMatch = OtherSourceMatch(normalizedName);
+
+            if (otherSourceMatch != Quality.Unknown)
+            {
+                result.Quality = otherSourceMatch;
+            }
+
             //Based on extension
             if (result.Quality == Quality.Unknown && !name.ContainsInvalidPathChars())
             {
@@ -219,6 +228,17 @@ namespace NzbDrone.Core.Parser
             if (match.Groups["_1080p"].Success) return Resolution._1080p;
 
             return Resolution.Unknown;
+        }
+
+        private static Quality OtherSourceMatch(string name)
+        {
+            var match = OtherSourceRegex.Match(name);
+
+            if (!match.Success) return Quality.Unknown;
+            if (match.Groups["sdtv"].Success) return Quality.SDTV;
+            if (match.Groups["hdtv"].Success) return Quality.HDTV720p;
+
+            return Quality.Unknown;
         }
     }
 
