@@ -3,37 +3,25 @@
 define(
     [
         'vent',
-        'marionette'
-    ], function (vent, Marionette) {
+        'marionette',
+        'Series/Index/SeriesIndexItemView'
+    ], function (vent, Marionette, SeriesIndexItemView) {
 
-        return Marionette.ItemView.extend({
+        return SeriesIndexItemView.extend({
             tagName : 'li',
             template: 'Series/Index/Posters/SeriesPostersItemViewTemplate',
 
+            initialize: function () {
+                this.events['mouseenter .x-series-poster'] = 'posterHoverAction';
+                this.events['mouseleave .x-series-poster'] = 'posterHoverAction';
 
-            ui: {
-                'progressbar': '.progress .bar',
-                'controls'   : '.series-controls'
-            },
-
-            events: {
-                'click .x-edit'              : 'editSeries',
-                'click .x-remove'            : 'removeSeries',
-                'mouseenter .x-series-poster': 'posterHoverAction',
-                'mouseleave .x-series-poster': 'posterHoverAction'
-            },
-
-
-            editSeries: function () {
-                vent.trigger(vent.Commands.EditSeriesCommand, {series:this.model});
-            },
-
-            removeSeries: function () {
-                vent.trigger(vent.Commands.DeleteSeriesCommand, {series:this.model});
+                this.ui.controls = '.x-series-controls';
+                this.ui.title = '.x-title';
             },
 
             posterHoverAction: function () {
                 this.ui.controls.slideToggle();
+                this.ui.title.slideToggle();
             }
         });
     });

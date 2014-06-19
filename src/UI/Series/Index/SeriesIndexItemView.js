@@ -1,17 +1,15 @@
-'use strict';
+﻿'use strict';
 
 define(
     [
         'vent',
-        'Cells/NzbDroneCell',
+        'marionette',
         'Commands/CommandController'
-    ], function (vent, NzbDroneCell, CommandController) {
-        return NzbDroneCell.extend({
-
-            className: 'series-actions-cell',
+    ], function (vent, Marionette, CommandController) {
+        return Marionette.ItemView.extend({
 
             ui: {
-                refresh: '.x-refresh'
+                refresh : '.x-refresh'
             },
 
             events: {
@@ -19,28 +17,18 @@ define(
                 'click .x-refresh' : '_refreshSeries'
             },
 
-            render: function () {
-                this.$el.empty();
-
-                this.$el.html(
-                    '<i class="icon-refresh x-refresh hidden-xs" title="" data-original-title="Update series info and scan disk"></i> ' +
-                    '<i class="icon-nd-edit x-edit" title="" data-original-title="Edit Series"></i>'
-                );
-
+            onRender: function () {
                 CommandController.bindToCommand({
-                    element: this.$el.find('.x-refresh'),
+                    element: this.ui.refresh,
                     command: {
                         name     : 'refreshSeries',
                         seriesId : this.model.get('id')
                     }
                 });
-
-                this.delegateEvents();
-                return this;
             },
 
             _editSeries: function () {
-                vent.trigger(vent.Commands.EditSeriesCommand, {series:this.model});
+                vent.trigger(vent.Commands.EditSeriesCommand, {series: this.model});
             },
 
             _refreshSeries: function () {
