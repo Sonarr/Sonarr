@@ -3,12 +3,14 @@
         <legend>{{version}}
             <span class="date">
                 - {{ShortDate releaseDate}}
-                {{#if installed}}<i class="icon-ok" title="Installed"></i>{{/if}}
-
-                {{#if isUpgrade}}
-                    <span class="label label-default install-update x-install-update">Install</span>
-                {{/if}}
             </span>
+            {{#if installed}}
+                <span class="update-installed"><i class="icon-ok" title="Installed"></i></span>
+            {{/if}}
+
+            {{#if isUpgrade}}
+                <span class="label label-default install-update x-install-update">Install</span>
+            {{/if}}
         </legend>
 
         {{#with changes}}
