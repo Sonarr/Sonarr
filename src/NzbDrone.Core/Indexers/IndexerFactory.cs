@@ -50,9 +50,9 @@ namespace NzbDrone.Core.Indexers
             return base.Create(definition);
         }
 
-        protected override IndexerDefinition GetTemplate(IIndexer provider)
+        protected override IndexerDefinition GetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
-            var definition = base.GetTemplate(provider);
+            definition = base.GetProviderCharacteristics(provider, definition);
 
             definition.Protocol = provider.Protocol;
 

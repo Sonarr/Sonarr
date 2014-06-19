@@ -11,5 +11,8 @@ namespace NzbDrone.Api
         public List<Field> Fields { get; set; }
         public String Implementation { get; set; }
         public String ConfigContract { get; set; }
+        public String InfoLink { get; set; }
+
+        public List<ProviderResource> Presets { get; set; }
     }
 }

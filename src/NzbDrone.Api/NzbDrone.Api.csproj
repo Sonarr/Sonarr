@@ -144,11 +144,9 @@
     <Compile Include="MediaCovers\MediaCoverModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
-    <Compile Include="Notifications\NotificationSchemaModule.cs" />
     <Compile Include="NzbDroneFeedModule.cs" />
     <Compile Include="ProviderResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
-    <Compile Include="Indexers\IndexerSchemaModule.cs" />
     <Compile Include="Indexers\IndexerModule.cs" />
     <Compile Include="Indexers\IndexerResource.cs" />
     <Compile Include="Indexers\ReleaseModule.cs" />
@@ -172,7 +170,6 @@
     <Compile Include="Queue\QueueModule.cs" />
     <Compile Include="Queue\QueueResource.cs" />
     <Compile Include="ResourceChangeMessage.cs" />
-    <Compile Include="DownloadClient\DownloadClientSchemaModule.cs" />
     <Compile Include="Notifications\NotificationModule.cs" />
     <Compile Include="Notifications\NotificationResource.cs" />
     <Compile Include="NzbDroneRestModule.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Nancy;
@@ -22,7 +23,7 @@ namespace NzbDrone.Api
             : base(resource)
         {
             _providerFactory = providerFactory;
-            Get["templates"] = x => GetTemplates();
+            Get["schema"] = x => GetTemplates();
             GetResourceAll = GetAll;
             GetResourceById = GetProviderById;
             CreateResource = CreateProvider;
@@ -82,8 +83,13 @@ namespace NzbDrone.Api
 
             definition.InjectFrom(providerResource);
 
+            var preset = _providerFactory.GetPresetDefinitions(definition)
+                            .Where(v => v.Name == definition.Name)
+                            .Select(v => v.Settings)
+                            .FirstOrDefault();
+
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
-            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(providerResource.Fields, configContract);
+            definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(providerResource.Fields, configContract, preset);
 
             Validate(definition);
 
@@ -97,15 +103,29 @@ namespace NzbDrone.Api
 
         private Response GetTemplates()
         {
-            var templates = _providerFactory.Templates();
+            var defaultDefinitions = _providerFactory.GetDefaultDefinitions();
 
-            var result = new List<TProviderResource>(templates.Count());
+            var result = new List<TProviderResource>(defaultDefinitions.Count());
 
-            foreach (var providerDefinition in templates)
+            foreach (var providerDefinition in defaultDefinitions)
             {
                 var providerResource = new TProviderResource();
                 providerResource.InjectFrom(providerDefinition);
                 providerResource.Fields = SchemaBuilder.ToSchema(providerDefinition.Settings);
+                providerResource.InfoLink = String.Format("https://github.com/NzbDrone/NzbDrone/wiki/Supported-{0}#{1}",
+                    typeof(TProviderResource).Name.Replace("Resource", "s"),
+                    providerDefinition.Implementation.ToLower());
+
+                var presetDefinitions = _providerFactory.GetPresetDefinitions(providerDefinition);
+
+                providerResource.Presets = presetDefinitions.Select(v =>
+                {
+                    var presetResource = new TProviderResource();
+                    presetResource.InjectFrom(v);
+                    presetResource.Fields = SchemaBuilder.ToSchema(v.Settings);
+
+                    return presetResource as ProviderResource;
+                }).ToList();
 
                 result.Add(providerResource);
             }

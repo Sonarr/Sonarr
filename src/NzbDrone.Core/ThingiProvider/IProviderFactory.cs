@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -12,6 +13,7 @@ namespace NzbDrone.Core.ThingiProvider
         TProviderDefinition Create(TProviderDefinition indexer);
         void Update(TProviderDefinition indexer);
         void Delete(int id);
-        List<TProviderDefinition> Templates();
+        IEnumerable<TProviderDefinition> GetDefaultDefinitions();
+        IEnumerable<TProviderDefinition> GetPresetDefinitions(TProviderDefinition providerDefinition);
     }
 }

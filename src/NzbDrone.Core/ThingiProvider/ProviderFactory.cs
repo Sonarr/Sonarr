@@ -38,9 +38,41 @@ namespace NzbDrone.Core.ThingiProvider
             return _providerRepository.All().ToList();
         }
 
-        public List<TProviderDefinition> Templates()
+        public IEnumerable<TProviderDefinition> GetDefaultDefinitions()
         {
-            return _providers.Select(GetTemplate).ToList();
+            foreach (var provider in _providers)
+            {
+                var definition = provider.DefaultDefinitions
+                    .OfType<TProviderDefinition>()
+                    .FirstOrDefault(v => v.Name == null || v.Name == provider.GetType().Name);
+
+                if (definition == null)
+                {
+                    definition = new TProviderDefinition()
+                    {
+                        Name = string.Empty,
+                        ConfigContract = provider.ConfigContract.Name,
+                        Implementation = provider.GetType().Name,
+                        Settings = (IProviderConfig)Activator.CreateInstance(provider.ConfigContract)
+                    };
+                }
+
+                definition = GetProviderCharacteristics(provider, definition);
+
+                yield return definition;
+            }
+        }
+
+        public IEnumerable<TProviderDefinition> GetPresetDefinitions(TProviderDefinition providerDefinition)
+        {
+            var provider = _providers.First(v => v.GetType().Name == providerDefinition.Implementation);
+
+            var definitions = provider.DefaultDefinitions
+                   .OfType<TProviderDefinition>()
+                   .Where(v => v.Name != null && v.Name != provider.GetType().Name)
+                   .ToList();
+
+            return definitions;
         }
 
         public List<TProvider> GetAvailableProviders()
@@ -82,18 +114,6 @@ namespace NzbDrone.Core.ThingiProvider
             return _providers.Select(c => c.GetType()).SingleOrDefault(c => c.Name.Equals(definition.Implementation, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        protected virtual TProviderDefinition GetTemplate(TProvider provider)
-        {
-            var definition = new TProviderDefinition()
-            {
-                ConfigContract = provider.ConfigContract.Name,
-                Implementation = provider.GetType().Name,
-                Settings = (IProviderConfig)Activator.CreateInstance(provider.ConfigContract)
-            };
-
-            return definition;
-        }
-
         public void Handle(ApplicationStartedEvent message)
         {
             _logger.Debug("Initializing Providers. Count {0}", _providers.Count);
@@ -110,6 +130,11 @@ namespace NzbDrone.Core.ThingiProvider
         protected virtual List<TProviderDefinition> Active()
         {
             return All().Where(c => c.Settings.Validate().IsValid).ToList();
+        }
+
+        protected virtual TProviderDefinition GetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
+        {
+            return definition;
         }
 
         private void RemoveMissingImplementations()

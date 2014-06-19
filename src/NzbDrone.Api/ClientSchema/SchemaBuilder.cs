@@ -5,6 +5,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.ClientSchema
 {
@@ -55,13 +56,18 @@ namespace NzbDrone.Api.ClientSchema
         }
 
 
-        public static object ReadFormSchema(List<Field> fields, Type targetType)
+        public static object ReadFormSchema(List<Field> fields, Type targetType, object defaults = null)
         {
             Ensure.That(targetType, () => targetType).IsNotNull();
 
             var properties = targetType.GetSimpleProperties();
 
             var target = Activator.CreateInstance(targetType);
+
+            if (defaults != null)
+            {
+                target.InjectFrom(defaults);
+            }
 
             foreach (var propertyInfo in properties)
             {

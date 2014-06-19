@@ -27,9 +27,9 @@ namespace NzbDrone.Core.Download
             return base.Active().Where(c => c.Enable).ToList();
         }
 
-        protected override DownloadClientDefinition GetTemplate(IDownloadClient provider)
+        protected override DownloadClientDefinition GetProviderCharacteristics(IDownloadClient provider, DownloadClientDefinition definition)
         {
-            var definition = base.GetTemplate(provider);
+            definition = base.GetProviderCharacteristics(provider, definition);
 
             definition.Protocol = provider.Protocol;
 
