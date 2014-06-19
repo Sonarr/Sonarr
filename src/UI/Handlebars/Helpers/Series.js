@@ -69,6 +69,6 @@ define(
                 return this.title;
             }
 
-            return new Handlebars.SafeString('{0} <em>({1})</em>'.format(this.title, this.year));
+            return new Handlebars.SafeString('{0} <span class="year">({1})</span>'.format(this.title, this.year));
         });
     });
