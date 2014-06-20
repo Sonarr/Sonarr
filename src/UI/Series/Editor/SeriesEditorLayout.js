@@ -57,25 +57,26 @@ define(
                         cell      : SeriesStatusCell
                     },
                     {
-                        name     : 'title',
-                        label    : 'Title',
-                        cell     : SeriesTitleCell,
-                        cellValue: 'this'
+                        name      : 'title',
+                        label     : 'Title',
+                        cell      : SeriesTitleCell,
+                        cellValue : 'this',
+                        sortValue : 'sortTitle'
                     },
                     {
-                        name : 'qualityProfileId',
-                        label: 'Quality',
-                        cell : QualityProfileCell
+                        name      : 'qualityProfileId',
+                        label     : 'Quality',
+                        cell      : QualityProfileCell
                     },
                     {
-                        name : 'seasonFolder',
-                        label: 'Season Folder',
-                        cell : SeasonFolderCell
+                        name      : 'seasonFolder',
+                        label     : 'Season Folder',
+                        cell      : SeasonFolderCell
                     },
                     {
-                        name : 'path',
-                        label: 'Path',
-                        cell : 'string'
+                        name      : 'path',
+                        label     : 'Path',
+                        cell      : 'string'
                     }
                 ],
 
