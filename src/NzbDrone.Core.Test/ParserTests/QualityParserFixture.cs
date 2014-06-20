@@ -160,6 +160,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", false)]
         [TestCase("How I Met Your Mother S01E18 Nothing Good Happens After 2 A.M. 720p HDTV DD5.1 MPEG2-TrollHD", false)]
         [TestCase("The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", false)]
+        [TestCase("Californication.S07E11.1080i.HDTV.DD5.1.MPEG2-NTb.ts", false)]
+        [TestCase("Game of Thrones S04E10 1080i HDTV MPEG2 DD5.1-CtrlHD.ts", false)]
+        [TestCase("VICE.S02E05.1080i.HDTV.DD2.0.MPEG2-NTb.ts", false)]
         public void should_parse_raw_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.RAWHD, proper);
