@@ -177,6 +177,7 @@ namespace NzbDrone.Api.Series
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
             resource.NextAiring = seriesStatistics.NextAiring;
+            resource.PreviousAiring = seriesStatistics.PreviousAiring;
         }
 
         public void Handle(EpisodeImportedEvent message)

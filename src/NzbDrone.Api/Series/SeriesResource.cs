@@ -34,6 +34,7 @@ namespace NzbDrone.Api.Series
         public String QualityProfileName { get; set; }
         public String Overview { get; set; }
         public DateTime? NextAiring { get; set; }
+        public DateTime? PreviousAiring { get; set; }
         public String Network { get; set; }
         public String AirTime { get; set; }
         public List<MediaCover> Images { get; set; }

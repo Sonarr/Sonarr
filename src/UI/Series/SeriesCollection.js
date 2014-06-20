@@ -59,12 +59,18 @@ define(
             //Sorters
             nextAiring: function (model, attr) {
                 var nextAiring = model.get(attr);
-
-                if (!nextAiring) {
-                    return Number.MAX_VALUE;
+                
+                if (nextAiring) {
+                    return Moment(nextAiring).unix();
+                }
+                
+                var previousAiring = model.get(attr.replace('nextAiring', 'previousAiring'));
+                
+                if (previousAiring) {
+                    return 10000000000 - Moment(previousAiring).unix();
                 }
 
-                return Moment(nextAiring).unix();
+                return Number.MAX_VALUE;
             }
         });
 
