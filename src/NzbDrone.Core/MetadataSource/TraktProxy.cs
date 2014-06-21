@@ -105,6 +105,7 @@ namespace NzbDrone.Core.MetadataSource
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
+            series.SortTitle = Parser.Parser.NormalizeEpisodeTitle(show.title).ToLower();
             series.Year = GetYear(show.year, show.first_aired);
             series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
