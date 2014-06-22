@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         private void GivenInWorkingFolder()
         {
-            _localEpisode.Path = @"C:\Test\Unsorted TV\_UNPACK_30.rock\30.rock.s01e01.avi".AsOsAgnostic();
+            _localEpisode.Path = @"C:\Test\Unsorted TV\_UNPACK_30.rock\someSubFolder\30.rock.s01e01.avi".AsOsAgnostic();
         }
 
         private void GivenLastWriteTimeUtc(DateTime time)

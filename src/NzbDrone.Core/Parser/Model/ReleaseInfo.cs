@@ -1,4 +1,5 @@
 using System;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Parser.Model
 {
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Parser.Model
         public string InfoUrl { get; set; }
         public string CommentUrl { get; set; }
         public String Indexer { get; set; }
+        public DownloadProtocol DownloadProtocol { get; set; }
 
         public DateTime PublishDate { get; set; }
 

@@ -8,5 +8,6 @@ namespace NzbDrone.Api.Health
     {
         public HealthCheckResult Type { get; set; }
         public String Message { get; set; }
+        public Uri WikiUrl { get; set; }
     }
 }

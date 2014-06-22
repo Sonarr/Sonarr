@@ -2,6 +2,7 @@
 using System.IO;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -11,19 +12,22 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IDiskProvider _diskProvider;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly ICheckUpdateService _checkUpdateService;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public UpdateCheck(IDiskProvider diskProvider, IAppFolderInfo appFolderInfo, ICheckUpdateService checkUpdateService)
+        public UpdateCheck(IDiskProvider diskProvider,
+                           IAppFolderInfo appFolderInfo,
+                           ICheckUpdateService checkUpdateService,
+                           IConfigFileProvider configFileProvider)
         {
             _diskProvider = diskProvider;
             _appFolderInfo = appFolderInfo;
             _checkUpdateService = checkUpdateService;
+            _configFileProvider = configFileProvider;
         }
-
-
+        
         public override HealthCheck Check()
         {
-            //TODO: Check on mono as well
-            if (OsInfo.IsWindows)
+            if (OsInfo.IsWindows || (OsInfo.IsMono && _configFileProvider.UpdateAutomatically))
             {
                 try
                 {
@@ -33,8 +37,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception)
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error,
-                        "Unable to update, running from write-protected folder");
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to update, running from write-protected folder");
                 }
             }
 

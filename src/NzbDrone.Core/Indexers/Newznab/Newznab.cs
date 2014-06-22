@@ -7,6 +7,9 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : IndexerBase<NewznabSettings>
     {
+        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
+        public override Int32 SupportedPageSize { get { return 100; } }
+
         public override IParseFeed Parser
         {
             get
@@ -72,14 +75,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             return settings;
         }
 
-        public override bool SupportsPaging
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public override IEnumerable<string> RecentFeed
         {
             get
@@ -138,14 +133,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&offset={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, offset));
-        }
-
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
         }
 
         private static string NewsnabifyTitle(string title)

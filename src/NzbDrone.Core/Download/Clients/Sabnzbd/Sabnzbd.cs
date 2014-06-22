@@ -1,10 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -15,25 +17,28 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     public class Sabnzbd : DownloadClientBase<SabnzbdSettings>, IExecute<TestSabnzbdCommand>
     {
         private readonly IHttpProvider _httpProvider;
-        private readonly IParsingService _parsingService;
         private readonly ISabnzbdProxy _proxy;
-        private readonly ICached<IEnumerable<QueueItem>> _queueCache;
-        private readonly Logger _logger;
 
         public Sabnzbd(IHttpProvider httpProvider,
-                       ICacheManager cacheManager,
-                       IParsingService parsingService,
                        ISabnzbdProxy proxy,
+                       IConfigService configService,
+                       IParsingService parsingService,
                        Logger logger)
+            : base(configService, parsingService, logger)
         {
             _httpProvider = httpProvider;
-            _parsingService = parsingService;
             _proxy = proxy;
-            _queueCache = cacheManager.GetCache<IEnumerable<QueueItem>>(GetType(), "queue");
-            _logger = logger;
         }
 
-        public override string DownloadNzb(RemoteEpisode remoteEpisode)
+        public override DownloadProtocol Protocol
+        {
+            get
+            {
+                return DownloadProtocol.Usenet;
+            }
+        }
+
+        public override string Download(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
@@ -54,76 +59,118 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override IEnumerable<QueueItem> GetQueue()
+        private IEnumerable<DownloadClientItem> GetQueue()
         {
-            return _queueCache.Get("queue", () =>
+            SabnzbdQueue sabQueue;
+
+            try
             {
-                SabnzbdQueue sabQueue;
+                sabQueue = _proxy.GetQueue(0, 0, Settings);
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return Enumerable.Empty<DownloadClientItem>();
+            }
 
-                try
+            var queueItems = new List<DownloadClientItem>();
+
+            foreach (var sabQueueItem in sabQueue.Items)
+            {
+                var queueItem = new DownloadClientItem();
+                queueItem.DownloadClient = Definition.Name;
+                queueItem.DownloadClientId = sabQueueItem.Id;
+                queueItem.Category = sabQueueItem.Category;
+                queueItem.Title = sabQueueItem.Title;
+                queueItem.TotalSize = (long)(sabQueueItem.Size * 1024 * 1024);
+                queueItem.RemainingSize = (long)(sabQueueItem.Sizeleft * 1024 * 1024);
+                queueItem.RemainingTime = sabQueueItem.Timeleft;
+
+                if (sabQueue.Paused || sabQueueItem.Status == SabnzbdDownloadStatus.Paused)
                 {
-                    sabQueue = _proxy.GetQueue(0, 0, Settings);
+                    queueItem.Status = DownloadItemStatus.Paused;
+
+                    queueItem.RemainingTime = null;
                 }
-                catch (DownloadClientException ex)
+                else if (sabQueueItem.Status == SabnzbdDownloadStatus.Queued || sabQueueItem.Status == SabnzbdDownloadStatus.Grabbing)
                 {
-                    _logger.ErrorException(ex.Message, ex);
-                    return Enumerable.Empty<QueueItem>();
+                    queueItem.Status = DownloadItemStatus.Queued;
                 }
-
-                var queueItems = new List<QueueItem>();
-
-                foreach (var sabQueueItem in sabQueue.Items)
+                else
                 {
-                    var queueItem = new QueueItem();
-                    queueItem.Id = sabQueueItem.Id;
-                    queueItem.Title = sabQueueItem.Title;
-                    queueItem.Size = sabQueueItem.Size;
-                    queueItem.Sizeleft = sabQueueItem.Sizeleft;
-                    queueItem.Timeleft = sabQueueItem.Timeleft;
-                    queueItem.Status = sabQueueItem.Status;
-
-                    var parsedEpisodeInfo = Parser.Parser.ParseTitle(queueItem.Title.Replace("ENCRYPTED / ", ""));
-                    if (parsedEpisodeInfo == null) continue;
-
-                    var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
-                    if (remoteEpisode.Series == null) continue;
-
-                    queueItem.RemoteEpisode = remoteEpisode;
-
-                    queueItems.Add(queueItem);
+                    queueItem.Status = DownloadItemStatus.Downloading;
                 }
 
-                return queueItems;
-            }, TimeSpan.FromSeconds(10));
+                if (queueItem.Title.StartsWith("ENCRYPTED /"))
+                {
+                    queueItem.Title = queueItem.Title.Substring(11);
+                    queueItem.IsEncrypted = true;
+                }
+
+                queueItems.Add(queueItem);
+            }
+
+            return queueItems;
         }
 
-        public override IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10)
+        private IEnumerable<DownloadClientItem> GetHistory()
         {
             SabnzbdHistory sabHistory;
 
             try
             {
-                sabHistory = _proxy.GetHistory(start, limit, Settings);
+                sabHistory = _proxy.GetHistory(0, _configService.DownloadClientHistoryLimit, Settings);
             }
             catch (DownloadClientException ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return Enumerable.Empty<HistoryItem>();
+                return Enumerable.Empty<DownloadClientItem>();
             }
 
-            var historyItems = new List<HistoryItem>();
+            var historyItems = new List<DownloadClientItem>();
 
             foreach (var sabHistoryItem in sabHistory.Items)
             {
-                var historyItem = new HistoryItem();
-                historyItem.Id = sabHistoryItem.Id;
-                historyItem.Title = sabHistoryItem.Title;
-                historyItem.Size = sabHistoryItem.Size;
-                historyItem.DownloadTime = sabHistoryItem.DownloadTime;
-                historyItem.Storage = sabHistoryItem.Storage;
-                historyItem.Category = sabHistoryItem.Category;
-                historyItem.Message = sabHistoryItem.FailMessage;
-                historyItem.Status = sabHistoryItem.Status == "Failed" ? HistoryStatus.Failed : HistoryStatus.Completed;
+                var historyItem = new DownloadClientItem
+                {
+                    DownloadClient = Definition.Name,
+                    DownloadClientId = sabHistoryItem.Id,
+                    Category = sabHistoryItem.Category,
+                    Title = sabHistoryItem.Title,
+
+                    TotalSize = sabHistoryItem.Size,
+                    RemainingSize = 0,
+                    DownloadTime = TimeSpan.FromSeconds(sabHistoryItem.DownloadTime),
+                    RemainingTime = TimeSpan.Zero,
+
+                    Message = sabHistoryItem.FailMessage
+                };
+
+                if (sabHistoryItem.Status == SabnzbdDownloadStatus.Failed)
+                {
+                    historyItem.Status = DownloadItemStatus.Failed;
+                }
+                else if (sabHistoryItem.Status == SabnzbdDownloadStatus.Completed)
+                {
+                    historyItem.Status = DownloadItemStatus.Completed;
+                }
+                else // Verifying/Moving etc
+                {
+                    historyItem.Status = DownloadItemStatus.Downloading;
+                }
+
+                if (!sabHistoryItem.Storage.IsNullOrWhiteSpace())
+                {
+                    var parent = Directory.GetParent(sabHistoryItem.Storage);
+                    if (parent != null && parent.Name == sabHistoryItem.Title)
+                    {
+                        historyItem.OutputPath = parent.FullName;
+                    }
+                    else
+                    {
+                        historyItem.OutputPath = sabHistoryItem.Storage;
+                    }
+                }
 
                 historyItems.Add(historyItem);
             }
@@ -131,14 +178,29 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return historyItems;
         }
 
-        public override void RemoveFromQueue(string id)
+        public override IEnumerable<DownloadClientItem> GetItems()
         {
-            _proxy.RemoveFrom("queue", id, Settings);
+            foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
+            {
+                if (downloadClientItem.Category != Settings.TvCategory) continue;
+
+                downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
+                if (downloadClientItem.RemoteEpisode == null) continue;
+
+                yield return downloadClientItem;
+            }
         }
 
-        public override void RemoveFromHistory(string id)
+        public override void RemoveItem(string id)
         {
-            _proxy.RemoveFrom("history", id, Settings);
+            if (GetQueue().Any(v => v.DownloadClientId == id))
+            {
+                _proxy.RemoveFrom("queue", id, Settings);
+            }
+            else
+            {
+                _proxy.RemoveFrom("history", id, Settings);
+            }
         }
 
         public override void RetryDownload(string id)
@@ -146,9 +208,24 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _proxy.RetryDownload(id, Settings);
         }
 
-        public override void Test()
+        public override DownloadClientStatus GetStatus()
         {
-            _proxy.GetCategories(Settings);
+            var status = new DownloadClientStatus
+            {
+                IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
+            };
+
+            return status;
+        }
+
+        public override void Test(SabnzbdSettings settings)
+        {
+            var categories = _proxy.GetCategories(settings);
+
+            if (!categories.Any(v => v == settings.TvCategory))
+            {
+                throw new ApplicationException("Category does not exist");
+            }
         }
 
         public void Execute(TestSabnzbdCommand message)
@@ -156,7 +233,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var settings = new SabnzbdSettings();
             settings.InjectFrom(message);
 
-            _proxy.GetCategories(settings);
+            Test(settings);
         }
     }
 }

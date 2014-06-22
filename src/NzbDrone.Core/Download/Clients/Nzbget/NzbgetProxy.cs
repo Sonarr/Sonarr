@@ -13,9 +13,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     public interface INzbgetProxy
     {
         string DownloadNzb(Stream nzb, string title, string category, int priority, NzbgetSettings settings);
+        NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings);
         List<NzbgetQueueItem> GetQueue(NzbgetSettings settings);
+        List<NzbgetPostQueueItem> GetPostQueue(NzbgetSettings settings);
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
-        VersionResponse GetVersion(NzbgetSettings settings);
+        String GetVersion(NzbgetSettings settings);
+        Dictionary<String, String> GetConfig(NzbgetSettings settings);
         void RemoveFromHistory(string id, NzbgetSettings settings);
         void RetryDownload(string id, NzbgetSettings settings);
     }
@@ -34,8 +37,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var parameters = new object[] { title, category, priority, false, Convert.ToBase64String(nzb.ToBytes()) };
             var request = BuildRequest(new JsonRequest("append", parameters));
 
-            var response = Json.Deserialize<NzbgetBooleanResponse>(ProcessRequest(request, settings));
-            _logger.Debug("Queue Response: [{0}]", response.Result);
+            var response = Json.Deserialize<NzbgetResponse<Boolean>>(ProcessRequest(request, settings));
+            _logger.Trace("Response: [{0}]", response.Result);
 
             if (!response.Result)
             {
@@ -61,31 +64,53 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return droneId;
         }
 
+        public NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings)
+        {
+            var request = BuildRequest(new JsonRequest("status"));
+
+            return Json.Deserialize<NzbgetResponse<NzbgetGlobalStatus>>(ProcessRequest(request, settings)).Result;
+        }
+
         public List<NzbgetQueueItem> GetQueue(NzbgetSettings settings)
         {
             var request = BuildRequest(new JsonRequest("listgroups"));
 
-            return Json.Deserialize<NzbgetListResponse<NzbgetQueueItem>>(ProcessRequest(request, settings)).QueueItems;
+            return Json.Deserialize<NzbgetResponse<List<NzbgetQueueItem>>>(ProcessRequest(request, settings)).Result;
+        }
+
+        public List<NzbgetPostQueueItem> GetPostQueue(NzbgetSettings settings)
+        {
+            var request = BuildRequest(new JsonRequest("postqueue"));
+
+            return Json.Deserialize<NzbgetResponse<List<NzbgetPostQueueItem>>>(ProcessRequest(request, settings)).Result;
         }
 
         public List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings)
         {
             var request = BuildRequest(new JsonRequest("history"));
 
-            return Json.Deserialize<NzbgetListResponse<NzbgetHistoryItem>>(ProcessRequest(request, settings)).QueueItems;
+            return Json.Deserialize<NzbgetResponse<List<NzbgetHistoryItem>>>(ProcessRequest(request, settings)).Result;
         }
 
-        public VersionResponse GetVersion(NzbgetSettings settings)
+        public String GetVersion(NzbgetSettings settings)
         {
             var request = BuildRequest(new JsonRequest("version"));
 
-            return Json.Deserialize<VersionResponse>(ProcessRequest(request, settings));
+            return Json.Deserialize<NzbgetResponse<String>>(ProcessRequest(request, settings)).Version;
         }
+
+        public Dictionary<String, String> GetConfig(NzbgetSettings settings)
+        {
+            var request = BuildRequest(new JsonRequest("config"));
+
+            return Json.Deserialize<NzbgetResponse<List<NzbgetConfigItem>>>(ProcessRequest(request, settings)).Result.ToDictionary(v => v.Name, v => v.Value);
+        }
+
 
         public void RemoveFromHistory(string id, NzbgetSettings settings)
         {
             var history = GetHistory(settings);
-            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone") != null);
+            var item = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
 
             if (item == null)
             {
@@ -120,7 +145,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var parameters = new object[] { command, offset, editText, id };
             var request = BuildRequest(new JsonRequest("editqueue", parameters));
-            var response = Json.Deserialize<NzbgetBooleanResponse>(ProcessRequest(request, settings));
+            var response = Json.Deserialize<NzbgetResponse<Boolean>>(ProcessRequest(request, settings));
 
             return response.Result;
         }
@@ -129,7 +154,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var client = BuildClient(settings);
             var response = client.Execute(restRequest);
-            _logger.Debug("Response: {0}", response.Content);
+            _logger.Trace("Response: {0}", response.Content);
 
             CheckForError(response);
 
@@ -144,6 +169,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                                  protocol,
                                  settings.Host,
                                  settings.Port);
+
+            _logger.Debug("Url: " + url);
 
             var client = new RestClient(url);
             client.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);

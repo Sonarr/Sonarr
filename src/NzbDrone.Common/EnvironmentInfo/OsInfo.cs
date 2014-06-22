@@ -24,11 +24,14 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (!IsMono)
             {
                 Os = Os.Windows;
-            }
 
+                PathStringComparison = StringComparison.OrdinalIgnoreCase;
+            }
             else
             {
                 Os = IsOsx ? Os.Osx : Os.Linux;
+
+                PathStringComparison = StringComparison.Ordinal;
             }
         }
 
@@ -40,6 +43,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public static bool IsWindows { get; private set; }
         public static Os Os { get; private set; }
         public static DayOfWeek FirstDayOfWeek { get; private set; }
+        public static StringComparison PathStringComparison { get; private set; }
 
         //Borrowed from: https://github.com/jpobst/Pinta/blob/master/Pinta.Core/Managers/SystemManager.cs
         //From Managed.Windows.Forms/XplatUI

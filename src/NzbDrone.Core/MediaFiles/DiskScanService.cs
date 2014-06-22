@@ -95,7 +95,7 @@ namespace NzbDrone.Core.MediaFiles
             decisionsStopwatch.Stop();
             _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
 
-            _importApprovedEpisodes.Import(decisions);
+            _importApprovedEpisodes.Import(decisions, false);
 
             _logger.Info("Completed scanning disk for {0}", series.Title);
             _eventAggregator.PublishEvent(new SeriesScannedEvent(series));

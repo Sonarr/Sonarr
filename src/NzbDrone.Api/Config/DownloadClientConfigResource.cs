@@ -9,9 +9,12 @@ namespace NzbDrone.Api.Config
         public String DownloadClientWorkingFolders { get; set; }
         public Int32 DownloadedEpisodesScanInterval { get; set; }
 
+        public Boolean EnableCompletedDownloadHandling { get; set; }
+        public Boolean RemoveCompletedDownloads { get; set; }
+
+        public Boolean EnableFailedDownloadHandling { get; set; }
         public Boolean AutoRedownloadFailed { get; set; }
         public Boolean RemoveFailedDownloads { get; set; }
-        public Boolean EnableFailedDownloadHandling { get; set; }
         public Int32 BlacklistGracePeriod { get; set; }
         public Int32 BlacklistRetryInterval { get; set; }
         public Int32 BlacklistRetryLimit { get; set; }

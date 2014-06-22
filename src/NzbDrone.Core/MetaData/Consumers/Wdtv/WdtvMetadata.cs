@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -11,11 +9,8 @@ using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 
@@ -36,7 +31,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
             _logger = logger;
         }
 
-        private static readonly Regex SeasonImagesRegex = new Regex(@"^(season (?<season>\d+))|(?<season>specials)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SeasonImagesRegex = new Regex(@"^(season (?<season>\d+))|(?<specials>specials)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public override List<MetadataFile> AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles)
         {
@@ -72,7 +67,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                     if (!newFilename.PathEquals(existingFilename))
                     {
                         _diskProvider.MoveFile(existingFilename, newFilename);
-                        metadataFile.RelativePath = DiskProviderBase.GetRelativePath(series.Path, newFilename);
+                        metadataFile.RelativePath = series.Path.GetRelativePath(newFilename);
 
                         updatedMetadataFiles.Add(metadataFile);
                     }
@@ -91,11 +86,11 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                            {
                                SeriesId = series.Id,
                                Consumer = GetType().Name,
-                               RelativePath = DiskProviderBase.GetRelativePath(series.Path, path)
+                               RelativePath = series.Path.GetRelativePath(path)
                            };
 
             //Series and season images are both named folder.jpg, only season ones sit in season folders
-            if (String.Compare(filename, "folder.jpg", true) == 0)
+            if (Path.GetFileName(filename).Equals("folder.jpg", StringComparison.InvariantCultureIgnoreCase))
             {
                 var parentdir = Directory.GetParent(path);
                 var seasonMatch = SeasonImagesRegex.Match(parentdir.Name);
@@ -103,19 +98,19 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                 {
                     metadata.Type = MetadataType.SeasonImage;
 
-                    var seasonNumber = seasonMatch.Groups["season"].Value;
-
-                    if (seasonNumber.Contains("specials"))
+                    if (seasonMatch.Groups["specials"].Success)
                     {
                         metadata.SeasonNumber = 0;
                     }
+
                     else
                     {
-                        metadata.SeasonNumber = Convert.ToInt32(seasonNumber);
+                        metadata.SeasonNumber = Convert.ToInt32(seasonMatch.Groups["season"].Value);
                     }
 
                     return metadata;
                 }
+
                 else
                 {
                     metadata.Type = MetadataType.SeriesImage;

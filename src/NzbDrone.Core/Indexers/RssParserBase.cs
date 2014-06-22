@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Indexers
                     try
                     {
                         var reportInfo = ParseFeedItem(item.StripNameSpace(), url);
+
                         if (reportInfo != null)
                         {
                             reportInfo.DownloadUrl = GetNzbUrl(item);
@@ -69,7 +70,7 @@ namespace NzbDrone.Core.Indexers
             var reportInfo = CreateNewReleaseInfo();
 
             reportInfo.Title = title;
-            reportInfo.PublishDate = item.PublishDate();
+            reportInfo.PublishDate = GetPublishDate(item);
             reportInfo.DownloadUrl = GetNzbUrl(item);
             reportInfo.InfoUrl = GetNzbInfoUrl(item);
 
@@ -90,6 +91,11 @@ namespace NzbDrone.Core.Indexers
         protected virtual string GetTitle(XElement item)
         {
             return item.Title();
+        }
+
+        protected virtual DateTime GetPublishDate(XElement item)
+        {
+            return item.PublishDate();
         }
 
         protected virtual string GetNzbUrl(XElement item)

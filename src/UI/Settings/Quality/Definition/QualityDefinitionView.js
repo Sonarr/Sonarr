@@ -9,7 +9,7 @@ define(
     ], function (Marionette, AsModelBoundView, fileSize) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/Quality/Definition/QualityDefinitionTemplate',
+            template: 'Settings/Quality/Definition/QualityDefinitionViewTemplate',
             className: 'row',
 
             ui: {
@@ -61,6 +61,14 @@ define(
                 }
                 
                 {
+                    if (maxSize === 0)
+                    {
+                        this.ui.thirtyMinuteMaxSize.html('Unlimited');
+                        this.ui.sixtyMinuteMaxSize.html('Unlimited');
+
+                        return;
+                    }
+
                     var maxBytes = maxSize * 1024 * 1024;
                     var maxThirty = fileSize(maxBytes * 30, 1, false);
                     var maxSixty = fileSize(maxBytes * 60, 1, false);

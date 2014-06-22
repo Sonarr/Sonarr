@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class SabnzbdQueueItem
     {
-        public string Status { get; set; }
+        public SabnzbdDownloadStatus Status { get; set; }
         public int Index { get; set; }
 
         [JsonConverter(typeof(SabnzbdQueueTimeConverter))]
@@ -14,8 +14,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         [JsonProperty(PropertyName = "mb")]
         public decimal Size { get; set; }
-
-        private string _title;
 
         [JsonProperty(PropertyName = "filename")]
         public string Title { get; set; }

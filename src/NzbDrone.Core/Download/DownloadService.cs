@@ -19,7 +19,6 @@ namespace NzbDrone.Core.Download
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-
         public DownloadService(IProvideDownloadClient downloadClientProvider,
             IEventAggregator eventAggregator, Logger logger)
         {
@@ -34,15 +33,15 @@ namespace NzbDrone.Core.Download
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
 
             var downloadTitle = remoteEpisode.Release.Title;
-            var downloadClient = _downloadClientProvider.GetDownloadClient();
+            var downloadClient = _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol);
 
             if (downloadClient == null)
             {
-                _logger.Warn("Download client isn't configured yet.");
+                _logger.Warn("{0} Download client isn't configured yet.", remoteEpisode.Release.DownloadProtocol);
                 return;
             }
 
-            var downloadClientId = downloadClient.DownloadNzb(remoteEpisode);
+            var downloadClientId = downloadClient.Download(remoteEpisode);
             var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
             episodeGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
 

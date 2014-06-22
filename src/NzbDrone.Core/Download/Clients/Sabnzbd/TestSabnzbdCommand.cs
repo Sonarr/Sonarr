@@ -13,11 +13,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
+
         public String Host { get; set; }
         public Int32 Port { get; set; }
         public String ApiKey { get; set; }
         public String Username { get; set; }
         public String Password { get; set; }
+        public String TvCategory { get; set; }
+        public Int32 RecentTvPriority { get; set; }
+        public Int32 OlderTvPriority { get; set; }
         public Boolean UseSsl { get; set; }
     }
 }

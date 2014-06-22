@@ -34,19 +34,25 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             foreach (var workingFolder in _configService.DownloadClientWorkingFolders.Split('|'))
             {
-                if (Directory.GetParent(localEpisode.Path).Name.StartsWith(workingFolder))
+                DirectoryInfo parent = Directory.GetParent(localEpisode.Path);
+                while (parent != null)
                 {
-                    if (OsInfo.IsMono)
+                    if (parent.Name.StartsWith(workingFolder))
                     {
-                        _logger.Debug("{0} is still being unpacked", localEpisode.Path);
-                        return false;
+                        if (OsInfo.IsMono)
+                        {
+                            _logger.Debug("{0} is still being unpacked", localEpisode.Path);
+                            return false;
+                        }
+
+                        if (_diskProvider.FileGetLastWriteUtc(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
+                        {
+                            _logger.Debug("{0} appears to be unpacking still", localEpisode.Path);
+                            return false;
+                        }
                     }
 
-                    if (_diskProvider.FileGetLastWriteUtc(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
-                    {
-                        _logger.Debug("{0} appears to be unpacking still", localEpisode.Path);
-                        return false;
-                    }
+                    parent = parent.Parent;
                 }
             }
 

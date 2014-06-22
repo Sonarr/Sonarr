@@ -63,11 +63,9 @@ namespace NzbDrone.Core.Indexers
 
             _logger.Info("{0} offset {1}. Found {2}", indexer, searchCriteria, result.Count);
 
-            if (result.Count > 90 && 
-                offset < 900 &&
-                indexer.SupportsPaging)
+            if (indexer.SupportsPaging && result.Count >= indexer.SupportedPageSize &&  offset < 900)
             {
-                result.AddRange(Fetch(indexer, searchCriteria, offset + 100));
+                result.AddRange(Fetch(indexer, searchCriteria, offset + indexer.SupportedPageSize));
             }
 
             return result;
@@ -152,7 +150,11 @@ namespace NzbDrone.Core.Indexers
                 }
             }
 
-            result.ForEach(c => c.Indexer = indexer.Definition.Name);
+            result.ForEach(c => 
+            { 
+                c.Indexer = indexer.Definition.Name;
+                c.DownloadProtocol = indexer.Protocol; 
+            });
 
             return result;
         }

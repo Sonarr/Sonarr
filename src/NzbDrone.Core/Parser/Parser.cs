@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Absolute Episode Number
-                new Regex(@"^\[(?<subgroup>.+?)\](?:_|-|\s|\.)?(?<title>.+?)(?:(?:\W|_)+(?<absoluteepisode>\d{2,}))+",
+                new Regex(@"^\[(?<subgroup>.+?)\](?:_|-|\s|\.)?(?<title>.+?)(?:[ ._-]+(?<absoluteepisode>\d{2,}))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-Part episodes without a title (S01E05.S01E06)
@@ -284,18 +284,22 @@ namespace NzbDrone.Core.Parser
 
             title = title.TrimEnd("-RP");
 
-            string group;
             var matches = ReleaseGroupRegex.Matches(title);
+
             if (matches.Count != 0)
             {
-                group = matches.OfType<Match>().Last().Groups["releasegroup"].Value;
-            }
-            else
-            {
-                return defaultReleaseGroup;
+                var group = matches.OfType<Match>().Last().Groups["releasegroup"].Value;
+                int groupIsNumeric;
+
+                if (Int32.TryParse(group, out groupIsNumeric))
+                {
+                    return defaultReleaseGroup;
+                }
+
+                return group;
             }
 
-            return group;
+            return defaultReleaseGroup;
         }
 
         public static string RemoveFileExtension(string title)
@@ -500,6 +504,9 @@ namespace NzbDrone.Core.Parser
                 return Language.Swedish;
 
             if (lowerTitle.Contains("norwegian"))
+                return Language.Norwegian;
+
+            if (lowerTitle.Contains("nordic"))
                 return Language.Norwegian;
 
             if (lowerTitle.Contains("finnish"))

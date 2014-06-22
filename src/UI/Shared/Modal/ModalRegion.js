@@ -11,7 +11,7 @@ define(
 
             constructor: function () {
                 Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
-                this.on('show', this.showPanel, this);
+                this.on('show', this.showModal, this);
             },
 
             getEl: function (selector) {
@@ -20,7 +20,7 @@ define(
                 return $el;
             },
 
-            showPanel: function () {
+            showModal: function () {
                 this.$el.addClass('modal fade');
 
                 //need tab index so close on escape works
@@ -32,7 +32,7 @@ define(
                     'backdrop': 'static'});
             },
 
-            closePanel: function () {
+            closeModal: function () {
                 $(this.el).modal('hide');
                 this.reset();
             }

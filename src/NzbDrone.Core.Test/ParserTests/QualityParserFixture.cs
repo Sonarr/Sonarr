@@ -16,10 +16,24 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.DVD },
             new object[] { Quality.WEBDL480p },
             new object[] { Quality.HDTV720p },
+            new object[] { Quality.HDTV1080p },
             new object[] { Quality.WEBDL720p },
             new object[] { Quality.WEBDL1080p },
             new object[] { Quality.Bluray720p },
             new object[] { Quality.Bluray1080p }
+        };
+
+        public static object[] OtherSourceQualityParserCases =
+        {
+            new object[] { "SD TV", Quality.SDTV },
+            new object[] { "SD DVD",  Quality.DVD },
+            new object[] { "480p WEB-DL", Quality.WEBDL480p },
+            new object[] { "HD TV", Quality.HDTV720p },
+            new object[] { "1080p HD TV", Quality.HDTV1080p },
+            new object[] { "720p WEB-DL", Quality.WEBDL720p },
+            new object[] { "1080p WEB-DL", Quality.WEBDL1080p },
+            new object[] { "720p BluRay", Quality.Bluray720p },
+            new object[] { "1080p BluRay", Quality.Bluray1080p }
         };
 
         [TestCase("S07E23 .avi ", false)]
@@ -64,7 +78,8 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Elementary.S01E10.The.Leviathan.480p.WEB-DL.x264-mSD", false)]
         [TestCase("Glee.S04E10.Glee.Actually.480p.WEB-DL.x264-mSD", false)]
-        [TestCase("The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD", false)]  
+        [TestCase("The.Big.Bang.Theory.S06E11.The.Santa.Simulation.480p.WEB-DL.x264-mSD", false)]
+        [TestCase("Da.Vincis.Demons.S02E04.480p.WEB.DL.nSD.x264-NhaNc3", false)]
         public void should_parse_webdl480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL480p, proper);
@@ -105,6 +120,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S07E23 - [WEBDL].mkv ", false)]
         [TestCase("Fringe S04E22 720p WEB-DL DD5.1 H264-EbP.mkv", false)]
         [TestCase("House.S04.720p.Web-Dl.Dd5.1.h264-P2PACK", false)]
+        [TestCase("Da.Vincis.Demons.S02E04.720p.WEB.DL.nSD.x264-NhaNc3", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -144,6 +160,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("POI S02E11 1080i HDTV DD5.1 MPEG2-TrollHD", false)]
         [TestCase("How I Met Your Mother S01E18 Nothing Good Happens After 2 A.M. 720p HDTV DD5.1 MPEG2-TrollHD", false)]
         [TestCase("The Voice S01E11 The Finals 1080i HDTV DD5.1 MPEG2-TrollHD", false)]
+        [TestCase("Californication.S07E11.1080i.HDTV.DD5.1.MPEG2-NTb.ts", false)]
+        [TestCase("Game of Thrones S04E10 1080i HDTV MPEG2 DD5.1-CtrlHD.ts", false)]
+        [TestCase("VICE.S02E05.1080i.HDTV.DD2.0.MPEG2-NTb.ts", false)]
         public void should_parse_raw_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.RAWHD, proper);
@@ -163,6 +182,18 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.QualityParser.ParseQuality(fileName);
             result.Quality.Should().Be(quality);
         }
+
+        [Test, TestCaseSource("OtherSourceQualityParserCases")]
+        public void should_parse_quality_from_other_source(string qualityString, Quality quality)
+        {
+            foreach (var c in new char[] { '-', '.', ' ', '_' })
+            {
+                var title = String.Format("My series S01E01 {0}", qualityString.Replace(' ', c));
+
+                ParseAndVerifyQuality(title, quality, false);
+            }
+        }
+
 
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)
         {

@@ -31,17 +31,7 @@ namespace NzbDrone.Core.Indexers
 
         protected override void InitializeProviders()
         {
-            var definitions = _providers.Where(c => c.Protocol == DownloadProtocol.Usenet)
-                .SelectMany(indexer => indexer.DefaultDefinitions);
 
-            var currentProviders = All();
-
-            var newProviders = definitions.Where(def => currentProviders.All(c => c.Implementation != def.Implementation)).ToList();
-
-            if (newProviders.Any())
-            {
-                _providerRepository.InsertMany(newProviders.Cast<IndexerDefinition>().ToList());
-            }
         }
 
         protected override List<IndexerDefinition> Active()
@@ -58,6 +48,15 @@ namespace NzbDrone.Core.Indexers
             }
 
             return base.Create(definition);
+        }
+
+        protected override IndexerDefinition GetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
+        {
+            definition = base.GetProviderCharacteristics(provider, definition);
+
+            definition.Protocol = provider.Protocol;
+
+            return definition;
         }
     }
 }

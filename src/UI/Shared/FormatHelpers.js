@@ -10,6 +10,11 @@ define(
 
             bytes: function (sourceSize) {
                 var size = Number(sourceSize);
+
+                if (isNaN(size)) {
+                    return '';
+                }
+
                 return Filesize(size, { base: 2, round: 1 });
             },
 

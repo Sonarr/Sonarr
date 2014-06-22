@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -30,5 +31,6 @@ namespace NzbDrone.Api.Indexers
         public String DownloadUrl { get; set; }
         public String InfoUrl { get; set; }
         public Boolean DownloadAllowed { get; set; }
+        public DownloadProtocol DownloadProtocol { get; set; }
     }
 }

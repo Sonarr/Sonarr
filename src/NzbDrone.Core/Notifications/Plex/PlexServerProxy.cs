@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Serializer;
@@ -19,10 +20,12 @@ namespace NzbDrone.Core.Notifications.Plex
     public class PlexServerProxy : IPlexServerProxy
     {
         private readonly ICached<String> _authCache;
+        private readonly Logger _logger;
 
-        public PlexServerProxy(ICacheManager cacheManager)
+        public PlexServerProxy(ICacheManager cacheManager, Logger logger)
         {
             _authCache = cacheManager.GetCache<String>(GetType(), "authCache");
+            _logger = logger;
         }
 
         public List<PlexDirectory> GetTvSections(PlexServerSettings settings)
@@ -31,6 +34,9 @@ namespace NzbDrone.Core.Notifications.Plex
             var client = GetPlexServerClient(settings);
 
             var response = client.Execute(request);
+
+            CheckForError(response.Content);
+            _logger.Debug("Sections response: {0}", response.Content);
 
             return Json.Deserialize<PlexMediaContainer>(response.Content)
                        .Directories
@@ -45,6 +51,9 @@ namespace NzbDrone.Core.Notifications.Plex
             var client = GetPlexServerClient(settings);
 
             var response = client.Execute(request);
+
+            CheckForError(response.Content);
+            _logger.Debug("Update response: {0}", response.Content);
         }
 
         private String Authenticate(string username, string password)
@@ -53,7 +62,9 @@ namespace NzbDrone.Core.Notifications.Plex
             var client = GetMyPlexClient(username, password); 
 
             var response = client.Execute(request);
+
             CheckForError(response.Content);
+            _logger.Debug("Authentication Response: {0}", response.Content);
 
             var user = Json.Deserialize<PlexUser>(JObject.Parse(response.Content).SelectToken("user").ToString());
 
@@ -81,7 +92,6 @@ namespace NzbDrone.Core.Notifications.Plex
 	        request.AddHeader("X-Plex-Version", "0");
 
             return request;
-
         }
 
         private RestClient GetPlexServerClient(PlexServerSettings settings)

@@ -4,11 +4,21 @@
   margin-bottom: 30px;
 
   legend {
-    margin-bottom: 5px;
-    line-height: 30px;
+    cursor        : default;
+    margin-bottom : 5px;
+    line-height   : 30px;
 
     .date {
-      font-size: 16px;
+      font-size : 16px;
+    }
+
+    .install-update {
+      .clickable();
+      margin-left : 10px;
+    }
+
+    .update-installed {
+      margin-left : 10px;
     }
   }
 
@@ -23,11 +33,6 @@
   .change {
     margin-bottom: 2px;
     font-size: 13px;
-  }
-
-  .install-update {
-    .clickable();
-    margin-left: 10px;
   }
 
   a {

@@ -25,17 +25,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.FolderExists(DRONE_FACTORY_FOLDER))
                   .Returns(exists);
         }
-
-        [Test]
-        public void should_return_warning_when_drone_factory_folder_is_not_configured()
-        {
-            Mocker.GetMock<IConfigService>()
-                  .SetupGet(s => s.DownloadedEpisodesFolder)
-                  .Returns("");
-
-            Subject.Check().ShouldBeWarning();
-        }
-
+        
         [Test]
         public void should_return_error_when_drone_factory_folder_does_not_exist()
         {

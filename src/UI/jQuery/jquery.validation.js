@@ -9,13 +9,12 @@ define(
             var validationName = error.propertyName.toLowerCase();
 
             this.find('.validation-errors')
-                .addClass('alert alert-error')
+                .addClass('alert alert-danger')
                 .append('<div><i class="icon-exclamation-sign"></i>' + error.errorMessage + '</div>');
 
             var input = this.find('[name]').filter(function () {
                 return this.name.toLowerCase() === validationName;
             });
-
 
             if (input.length === 0) {
                 input = this.find('[validation-name]').filter(function () {
@@ -58,12 +57,15 @@ define(
         };
 
         $.fn.addFormError = function (error) {
-            this.find('.form-group').parent().prepend('<div class="alert alert-error validation-error">' + error.errorMessage + '</div>');
+            var t1 = this.find('.form-horizontal');
+            var t2 = this.find('.form-horizontal').parent();
+
+            this.prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
         };
 
         $.fn.removeAllErrors = function () {
             this.find('.error').removeClass('error');
-            this.find('.validation-errors').removeClass('alert').removeClass('alert-error').html('');
+            this.find('.validation-errors').removeClass('alert').removeClass('alert-danger').html('');
             this.find('.validation-error').remove();
             return this.find('.help-inline.error-message').remove();
         };

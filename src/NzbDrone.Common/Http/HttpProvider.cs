@@ -84,6 +84,7 @@ namespace NzbDrone.Common.Http
         public Stream DownloadStream(string url, NetworkCredential credential = null)
         {
             var request = (HttpWebRequest)WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
             request.UserAgent = _userAgent;
             request.Timeout = 20 * 1000;
 

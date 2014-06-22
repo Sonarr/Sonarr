@@ -13,7 +13,7 @@ define(
             tagName : 'li',
 
             events: {
-                'click .x-edit'  : '_edit'
+                'click'  : '_edit'
             },
 
             initialize: function () {

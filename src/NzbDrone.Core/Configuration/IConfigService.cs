@@ -11,15 +11,21 @@ namespace NzbDrone.Core.Configuration
         Dictionary<String, Object> AllWithDefaults();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
+        Boolean IsDefined(String key);
+
         //Download Client
         String DownloadedEpisodesFolder { get; set; }
         String DownloadClientWorkingFolders { get; set; }
         Int32 DownloadedEpisodesScanInterval { get; set; }
+        Int32 DownloadClientHistoryLimit { get; set; }
 
-        //Failed Download Handling (Download client)
+        //Completed/Failed Download Handling (Download client)
+        Boolean EnableCompletedDownloadHandling { get; set; }
+        Boolean RemoveCompletedDownloads { get; set; }
+
+        Boolean EnableFailedDownloadHandling { get; set; }
         Boolean AutoRedownloadFailed { get; set; }
         Boolean RemoveFailedDownloads { get; set; }
-        Boolean EnableFailedDownloadHandling { get; set; }
         Int32 BlacklistGracePeriod { get; set; }
         Int32 BlacklistRetryInterval { get; set; }
         Int32 BlacklistRetryLimit { get; set; }

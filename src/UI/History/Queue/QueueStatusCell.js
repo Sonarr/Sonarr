@@ -26,6 +26,11 @@ define(
                         title = 'Queued';
                     }
 
+                    if (status === 'completed') {
+                        icon = 'icon-inbox';
+                        title = 'Downloaded';
+                    }
+
                     this.$el.html('<i class="{0}" title="{1}"></i>'.format(icon, title));
                 }
 

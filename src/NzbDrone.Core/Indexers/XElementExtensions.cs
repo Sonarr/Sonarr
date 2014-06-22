@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Indexers
     {
         private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
 
-        private static readonly Regex RemoveTimeZoneRegex = new Regex(@"\s[A-Z]{2,4}$", RegexOptions.Compiled);
+        public static readonly Regex RemoveTimeZoneRegex = new Regex(@"\s[A-Z]{2,4}$", RegexOptions.Compiled);
 
         public static string Title(this XElement item)
         {
@@ -35,10 +35,8 @@ namespace NzbDrone.Core.Indexers
             return res;
         }
 
-        public static DateTime PublishDate(this XElement item)
+        public static DateTime ParseDate(string dateString)
         {
-            string dateString = item.TryGetValue("pubDate");
-
             try
             {
                 DateTime result;
@@ -54,6 +52,13 @@ namespace NzbDrone.Core.Indexers
                 Logger.WarnException("Unable to parse " + dateString, e);
                 throw;
             }
+        }
+
+        public static DateTime PublishDate(this XElement item)
+        {
+            string dateString = item.TryGetValue("pubDate");
+
+            return ParseDate(dateString);
         }
 
         public static List<String> Links(this XElement item)
@@ -78,7 +83,7 @@ namespace NzbDrone.Core.Indexers
             return long.Parse(item.TryGetValue("length"));
         }
 
-        private static string TryGetValue(this XElement item, string elementName, string defaultValue = "")
+        public static string TryGetValue(this XElement item, string elementName, string defaultValue = "")
         {
             var element = item.Element(elementName);
 

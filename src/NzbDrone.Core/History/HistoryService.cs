@@ -21,9 +21,11 @@ namespace NzbDrone.Core.History
         List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
         List<History> Failed();
         List<History> Grabbed();
+        List<History> Imported();
         History MostRecentForEpisode(int episodeId);
         History Get(int id);
         List<History> FindBySourceTitle(string sourceTitle);
+        void UpdateHistoryData(Int32 historyId, Dictionary<String, String> data);
     }
 
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
@@ -62,6 +64,11 @@ namespace NzbDrone.Core.History
             return _historyRepository.Grabbed();
         }
 
+        public List<History> Imported()
+        {
+            return _historyRepository.Imported();
+        }
+
         public History MostRecentForEpisode(int episodeId)
         {
             return _historyRepository.MostRecentForEpisode(episodeId);
@@ -93,6 +100,13 @@ namespace NzbDrone.Core.History
             return _historyRepository.GetBestQualityInHistory(episodeId)
                 .OrderByDescending(q => q, comparer)
                 .FirstOrDefault();
+        }
+
+        public void UpdateHistoryData(Int32 historyId, Dictionary<String, String> data)
+        {
+            var history = _historyRepository.Get(historyId);
+            history.Data = data;
+            _historyRepository.Update(history);
         }
 
         public void Handle(EpisodeGrabbedEvent message)
@@ -149,6 +163,8 @@ namespace NzbDrone.Core.History
                 //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
                 history.Data.Add("DroppedPath", message.EpisodeInfo.Path);
                 history.Data.Add("ImportedPath", message.ImportedEpisode.Path);
+                history.Data.Add("DownloadClient", message.DownloadClient);
+                history.Data.Add("DownloadClientId", message.DownloadClientId);
 
                 _historyRepository.Insert(history);
             }

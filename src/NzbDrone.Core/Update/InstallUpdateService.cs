@@ -60,6 +60,8 @@ namespace NzbDrone.Core.Update
         {
             try
             {
+                EnsureAppDataSafety();
+
                 var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
                 var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
@@ -128,7 +130,7 @@ namespace NzbDrone.Core.Update
             _diskProvider.DeleteFolder(_appFolderInfo.GetUpdateClientFolder(), true);
 
             _logger.ProgressInfo("Starting update script: {0}", _configFileProvider.UpdateScriptPath);
-            _processProvider.Start(scriptPath, GetUpdaterArgs(updateSandboxFolder.WrapInQuotes()));
+            _processProvider.Start(scriptPath, GetUpdaterArgs(updateSandboxFolder));
         }
 
         private string GetUpdaterArgs(string updateSandboxFolder)
@@ -136,7 +138,16 @@ namespace NzbDrone.Core.Update
             var processId = _processProvider.GetCurrentProcess().Id.ToString();
             var executingApplication = _runtimeInfo.ExecutingApplication;
 
-            return String.Join(" ", processId, updateSandboxFolder.WrapInQuotes(), executingApplication.WrapInQuotes());
+            return String.Join(" ", processId, updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar).WrapInQuotes(), executingApplication.WrapInQuotes());
+        }
+
+        private void EnsureAppDataSafety()
+        {
+            if (_appFolderInfo.StartUpFolder.IsParentPath(_appFolderInfo.AppDataFolder) ||
+                _appFolderInfo.StartUpFolder.PathEquals(_appFolderInfo.AppDataFolder))
+            {
+                throw new NotSupportedException("Update will cause AppData to be deleted, correct you configuration before proceeding");
+            }
         }
 
         public void Execute(ApplicationUpdateCommand message)

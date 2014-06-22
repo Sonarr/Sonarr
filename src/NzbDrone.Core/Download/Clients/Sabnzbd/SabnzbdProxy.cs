@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Core.Instrumentation.Extensions;
 using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         void RemoveFrom(string source, string id, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
-        SabnzbdCategoryResponse GetCategories(SabnzbdSettings settings);
+        List<String> GetCategories(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
         void RetryDownload(string id, SabnzbdSettings settings);
@@ -84,12 +85,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response;
         }
 
-        public SabnzbdCategoryResponse GetCategories(SabnzbdSettings settings)
+        public List<String> GetCategories(SabnzbdSettings settings)
         {
             var request = new RestRequest();
             var action = "mode=get_cats";
 
-            var response = Json.Deserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings));
+            var response = Json.Deserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings)).Categories;
 
             return response;
         }
@@ -135,7 +136,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                                  action,
                                  authentication);
 
-            _logger.Debug(url);
+            _logger.Debug("Url: " + url);
 
             return new RestClient(url);
         }
@@ -167,7 +168,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 result.Error = response.Content.Replace("error: ", "");
             }
-            
+
             if (result.Failed)
                 throw new DownloadClientException("Error response received from SABnzbd: {0}", result.Error);
         }

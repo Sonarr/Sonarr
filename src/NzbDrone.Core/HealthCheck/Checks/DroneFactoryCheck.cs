@@ -23,7 +23,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (droneFactoryFolder.IsNullOrWhiteSpace())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Drone factory folder is not configured");
+                return new HealthCheck(GetType());
             }
 
             if (!_diskProvider.FolderExists(droneFactoryFolder))

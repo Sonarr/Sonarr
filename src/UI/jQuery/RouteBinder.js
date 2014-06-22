@@ -48,13 +48,15 @@ define(
                     throw 'couldn\'t find route target';
                 }
 
-
                 if (!href.startsWith('http')) {
                     var relativeHref = href.replace(StatusModel.get('urlBase'), '');
 
                     Backbone.history.navigate(relativeHref, { trigger: true });
                 }
-
+                else if (href.contains('#')) {
+                    //Open in new tab without dereferer (since it doesn't support fragments)
+                    window.open(href, '_blank');
+                }
                 else {
                     //Open in new tab
                     window.open('http://www.dereferer.org/?' + encodeURI(href), '_blank');
