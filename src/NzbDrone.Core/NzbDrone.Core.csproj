@@ -709,6 +709,7 @@
     <Compile Include="Update\UpdateCheckService.cs" />
     <Compile Include="Update\UpdateVerification.cs" />
     <Compile Include="Update\UpdateVerificationFailedException.cs" />
+    <Compile Include="Validation\Paths\SeriesAncestorValidator.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
     <Compile Include="Validation\Paths\RootFolderValidator.cs" />
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />

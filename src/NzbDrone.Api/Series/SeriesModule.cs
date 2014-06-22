@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles.Events;
@@ -40,7 +41,8 @@ namespace NzbDrone.Api.Series
                             PathExistsValidator pathExistsValidator,
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
-                            DroneFactoryValidator droneFactoryValidator
+                            DroneFactoryValidator droneFactoryValidator,
+                            SeriesAncestorValidator seriesAncestorValidator
             )
             : base(commandExecutor)
         {
@@ -59,17 +61,21 @@ namespace NzbDrone.Api.Series
 
             SharedValidator.RuleFor(s => s.QualityProfileId).ValidId();
 
-            PutValidator.RuleFor(s => s.Path)
-                        .Cascade(CascadeMode.StopOnFirstFailure)
-                        .IsValidPath()
-                        .SetValidator(rootFolderValidator)
-                        .SetValidator(seriesPathValidator)
-                        .SetValidator(droneFactoryValidator);
+            SharedValidator.RuleFor(s => s.Path)
+                           .Cascade(CascadeMode.StopOnFirstFailure)
+                           .IsValidPath()
+                           .SetValidator(rootFolderValidator)
+                           .SetValidator(seriesPathValidator)
+                           .SetValidator(droneFactoryValidator)
+                           .SetValidator(seriesAncestorValidator)
+                           .When(s => !s.Path.IsNullOrWhiteSpace());
 
-            PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => String.IsNullOrEmpty(s.RootFolderPath));
-            PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => String.IsNullOrEmpty(s.Path));
+            PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => s.RootFolderPath.IsNullOrWhiteSpace());
+            PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => s.Path.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.Title).NotEmpty();
             PostValidator.RuleFor(s => s.TvdbId).GreaterThan(0).SetValidator(seriesExistsValidator);
+
+            PutValidator.RuleFor(s => s.Path).IsValidPath();
         }
 
         private void PopulateAlternativeTitles(List<SeriesResource> resources)

@@ -12,6 +12,7 @@ namespace NzbDrone.Common.Test
     [TestFixture]
     public class PathExtensionFixture : TestBase
     {
+        private string _parent = @"C:\Test".AsOsAgnostic();
 
         private IAppFolderInfo GetIAppDirectoryInfo()
         {
@@ -86,8 +87,6 @@ namespace NzbDrone.Common.Test
             first.AsOsAgnostic().PathEquals(second.AsOsAgnostic()).Should().BeFalse();
         }
         
-        private string _parent = @"C:\Test".AsOsAgnostic();
-
         [Test]
         public void should_return_false_when_not_a_child()
         {
@@ -135,6 +134,15 @@ namespace NzbDrone.Common.Test
             var expectedResult = OsInfo.IsWindows;
 
             parentPath.IsParentPath(childPath).Should().Be(expectedResult);
+        }
+
+        [Test]
+        [Ignore]
+        public void should_not_be_parent_when_it_is_grandparent()
+        {
+            var path = Path.Combine(_parent, "parent", "child");
+
+            _parent.IsParentPath(path).Should().BeFalse();
         }
 
         [Test]
