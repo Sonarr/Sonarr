@@ -10,9 +10,14 @@
             <div class="row">
                 <h2 class="series-title">
                     {{titleWithYear}}
-                    {{#unless_eq status compare="continuing"}}
-                        <span class="label label-important">Ended</span>
-                    {{/unless_eq}}
+
+                    <span class="labels">
+                        <span class="label label-primary">{{network}}</span>
+                        {{#unless_eq status compare="continuing"}}
+                            <span class="label label-danger">Ended</span>
+                        {{/unless_eq}}
+                    </span>
+
                 </h2>
             </div>
             <div class="row new-series-overview x-overview">
