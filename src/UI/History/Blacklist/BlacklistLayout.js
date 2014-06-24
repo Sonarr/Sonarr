@@ -67,8 +67,9 @@ define(
 
             initialize: function () {
                 this.collection = new BlacklistCollection({ tableName: 'blacklist' });
+
                 this.listenTo(this.collection, 'sync', this._showTable);
-                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
+                this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
             },
 
             onShow: function () {

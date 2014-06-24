@@ -59,8 +59,7 @@ define(
             initialize: function () {
                 this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
                 this.listenTo(vent, vent.Events.SeriesDeleted, this._onSeriesDeleted);
-
-                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
+                this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
             },
 
             onShow: function () {
