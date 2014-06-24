@@ -6,11 +6,11 @@ using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend.Mappers
 {
-    public class UpdateLogFileMapper : StaticResourceMapperBase
+    public class LogFileMapper : StaticResourceMapperBase
     {
         private readonly IAppFolderInfo _appFolderInfo;
 
-        public UpdateLogFileMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+        public LogFileMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
             : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;
@@ -21,12 +21,12 @@ namespace NzbDrone.Api.Frontend.Mappers
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = Path.GetFileName(path);
 
-            return Path.Combine(_appFolderInfo.GetUpdateLogFolder(), path);
+            return Path.Combine(_appFolderInfo.GetLogFolder(), path);
         }
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/updatelogfile/") && resourceUrl.EndsWith(".txt");
+            return resourceUrl.StartsWith("/logfile/") && resourceUrl.EndsWith(".txt");
         }
     }
 }

@@ -7,7 +7,6 @@ define(
         'System/Logs/Files/FilenameCell',
         'Cells/RelativeDateCell',
         'System/Logs/Files/DownloadLogCell',
-        'System/Logs/Files/LogFileCollection',
         'System/Logs/Files/Row',
         'System/Logs/Files/ContentsView',
         'System/Logs/Files/ContentsModel',
@@ -20,7 +19,6 @@ define(
         FilenameCell,
         RelativeDateCell,
         DownloadLogCell,
-        LogFileCollection,
         LogFileRow,
         ContentsView,
         ContentsModel,
@@ -48,18 +46,19 @@ define(
                         cell : RelativeDateCell
                     },
                     {
-                        name    : 'filename',
+                        name    : 'downloadUrl',
                         label   : '',
                         cell    : DownloadLogCell,
                         sortable: false
                     }
                 ],
 
-            initialize: function () {
-                this.collection = new LogFileCollection();
+            initialize: function (options) {
+                this.collection = options.collection;
+                this.deleteFilesCommand = options.deleteFilesCommand;
 
-                vent.on(vent.Commands.ShowLogFile, this._fetchLogFileContents, this);
-                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
+                this.listenTo(vent, vent.Commands.ShowLogFile, this._fetchLogFileContents);
+                this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
                 this.listenTo(this.collection, 'sync', this._collectionSynced);
 
                 this.collection.fetch();
@@ -83,11 +82,10 @@ define(
                                 ownerContext  : this,
                                 callback      : this._refreshTable
                             },
-
                             {
                                 title          : 'Delete Log Files',
                                 icon           : 'icon-trash',
-                                command        : 'deleteLogFiles',
+                                command        : this.deleteFilesCommand,
                                 successMessage : 'Log files have been deleted',
                                 errorMessage   : 'Failed to delete log files'
                             }
@@ -125,11 +123,7 @@ define(
                 this.contents.show(new LoadingView());
 
                 var model = options.model;
-                var filename = model.get('filename');
-
-                var contentsModel = new ContentsModel({
-                    filename: filename
-                });
+                var contentsModel = new ContentsModel(model.toJSON());
 
                 this.listenToOnce(contentsModel, 'sync', this._showDetails);
 
@@ -151,7 +145,7 @@ define(
             },
 
             _commandComplete: function (options) {
-                if (options.command.get('name') === 'deletelogfiles') {
+                if (options.command.get('name') === this.deleteFilesCommand.toLowerCase()) {
                     this._refreshTable();
                 }
             }

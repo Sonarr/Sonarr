@@ -1,12 +1,11 @@
 ﻿﻿'use strict';
 define(
     [
-        'backbone',
-        'System/StatusModel'
-    ], function (Backbone, StatusModel) {
+        'backbone'
+    ], function (Backbone) {
         return Backbone.Model.extend({
             url: function () {
-                return StatusModel.get('urlBase') + '/api/log/file/' + this.get('filename');
+                return this.get('contentsUrl');
             },
 
             parse: function (contents) {
