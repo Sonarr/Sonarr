@@ -14,7 +14,8 @@ define([
     'Shared/LoadingView',
     'Shared/Messenger',
     'Commands/CommandController',
-    'backgrid.selectall'
+    'backgrid.selectall',
+    'Mixins/backbone.signalr.mixin'
 ], function (_,
              Marionette,
              Backgrid,
@@ -81,7 +82,7 @@ define([
         ],
 
         initialize : function () {
-            this.collection = new MissingCollection();
+            this.collection = new MissingCollection().bindSignalR({ updateOnly: true });
 
             this.listenTo(this.collection, 'sync', this._showTable);
         },

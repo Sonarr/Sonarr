@@ -117,6 +117,7 @@
     <Compile Include="EpisodeFiles\EpisodeFileResource.cs" />
     <Compile Include="Directories\DirectoryLookupService.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
+    <Compile Include="Episodes\EpisodeModuleWithSignalR.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Episodes\RenameEpisodeModule.cs" />

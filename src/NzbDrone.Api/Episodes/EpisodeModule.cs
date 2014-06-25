@@ -5,14 +5,11 @@ using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
-    public class EpisodeModule : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
-                                 IHandle<EpisodeGrabbedEvent>,                         
-                                 IHandle<EpisodeDownloadedEvent>
+    public class EpisodeModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
                                  
     {
         private readonly IEpisodeService _episodeService;
