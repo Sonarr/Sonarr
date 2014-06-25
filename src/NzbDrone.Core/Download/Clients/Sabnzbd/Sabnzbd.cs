@@ -222,7 +222,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var categories = _proxy.GetCategories(settings);
 
-            if (!categories.Any(v => v == settings.TvCategory))
+            if (!settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v == settings.TvCategory))
             {
                 throw new ApplicationException("Category does not exist");
             }

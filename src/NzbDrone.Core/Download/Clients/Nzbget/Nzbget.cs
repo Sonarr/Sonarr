@@ -42,9 +42,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title + ".nzb";
-
-            string category = Settings.TvCategory;
-            int priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
+            var category = Settings.TvCategory;
+            var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
             _logger.Info("Adding report [{0}] to the queue.", title);
 
@@ -271,10 +270,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _proxy.GetVersion(settings);
 
             var config = _proxy.GetConfig(settings);
-
             var categories = GetCategories(config);
 
-            if (!categories.Any(v => v.Name == settings.TvCategory))
+            if (!settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == settings.TvCategory))
             {
                 throw new ApplicationException("Category does not exist");
             }
