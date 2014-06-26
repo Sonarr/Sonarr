@@ -15,7 +15,7 @@ define(
 
             templateHelpers: {
                 icalHttpUrl   : window.location.protocol + '//' + window.location.host + StatusModel.get('urlBase') + '/feed/calendar/NzbDrone.ics?apikey=' + window.NzbDrone.ApiKey,
-                icalWebCalUrl : 'webcal://' + window.location.host + StatusModel.get('urlBase') + '/feed/calendar/NzbDrone.ics'
+                icalWebCalUrl : 'webcal://' + window.location.host + StatusModel.get('urlBase') + '/feed/calendar/NzbDrone.ics?apikey=' + window.NzbDrone.ApiKey
             },
 
             onShow: function () {
