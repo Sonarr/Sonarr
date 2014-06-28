@@ -8,11 +8,9 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
-    public abstract class EpisodeModuleWithSignalR<TResource, TModel> : NzbDroneRestModuleWithSignalR<TResource, TModel>,
+    public abstract class EpisodeModuleWithSignalR : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
         IHandle<EpisodeGrabbedEvent>,                         
         IHandle<EpisodeDownloadedEvent>
-        where TResource : EpisodeResource, new()
-        where TModel : Episode
     {
         private readonly IEpisodeService _episodeService;
 
@@ -20,6 +18,8 @@ namespace NzbDrone.Api.Episodes
             : base(commandExecutor)
         {
             _episodeService = episodeService;
+
+            GetResourceById = GetEpisode;
         }
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor, string resource)
@@ -37,7 +37,7 @@ namespace NzbDrone.Api.Episodes
         {
             foreach (var episode in message.Episode.Episodes)
             {
-                var resource = episode.InjectTo<TResource>();
+                var resource = episode.InjectTo<EpisodeResource>();
                 resource.Grabbed = true;
 
                 BroadcastResourceChange(ModelAction.Updated, resource);

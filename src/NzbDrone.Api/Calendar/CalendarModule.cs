@@ -8,7 +8,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Calendar
 {
-    public class CalendarModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
+    public class CalendarModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeService _episodeService;
         private readonly SeriesRepository _seriesRepository;
@@ -22,7 +22,6 @@ namespace NzbDrone.Api.Calendar
             _seriesRepository = seriesRepository;
 
             GetResourceAll = GetCalendar;
-            GetResourceById = GetEpisode;
         }
 
         private List<EpisodeResource> GetCalendar()

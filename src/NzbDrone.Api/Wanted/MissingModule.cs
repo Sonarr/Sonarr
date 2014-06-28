@@ -7,7 +7,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Wanted
 {
-    public class MissingModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
+    public class MissingModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;

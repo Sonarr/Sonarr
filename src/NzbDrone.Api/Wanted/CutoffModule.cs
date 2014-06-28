@@ -7,7 +7,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Wanted
 {
-    public class CutoffModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
+    public class CutoffModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeCutoffService _episodeCutoffService;
         private readonly ISeriesRepository _seriesRepository;

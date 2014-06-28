@@ -5,8 +5,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
-    public class EpisodeModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
-                                 
+    public class EpisodeModule : EpisodeModuleWithSignalR     
     {
         private readonly IEpisodeService _episodeService;
 
