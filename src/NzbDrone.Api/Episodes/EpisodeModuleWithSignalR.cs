@@ -14,14 +14,23 @@ namespace NzbDrone.Api.Episodes
         where TResource : EpisodeResource, new()
         where TModel : Episode
     {
-        protected EpisodeModuleWithSignalR(ICommandExecutor commandExecutor)
+        private readonly IEpisodeService _episodeService;
+
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor)
             : base(commandExecutor)
         {
+            _episodeService = episodeService;
         }
 
-        protected EpisodeModuleWithSignalR(ICommandExecutor commandExecutor, string resource)
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor, string resource)
             : base(commandExecutor, resource)
         {
+            _episodeService = episodeService;
+        }
+
+        protected EpisodeResource GetEpisode(int id)
+        {
+            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
         }
 
         public void Handle(EpisodeGrabbedEvent message)

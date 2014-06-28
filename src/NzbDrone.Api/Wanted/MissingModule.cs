@@ -13,7 +13,7 @@ namespace NzbDrone.Api.Wanted
         private readonly ISeriesRepository _seriesRepository;
 
         public MissingModule(IEpisodeService episodeService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
-            :base(commandExecutor, "wanted/missing")
+            :base(episodeService, commandExecutor, "wanted/missing")
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;

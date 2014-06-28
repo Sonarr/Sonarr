@@ -12,8 +12,8 @@ namespace NzbDrone.Api.Wanted
         private readonly IEpisodeCutoffService _episodeCutoffService;
         private readonly ISeriesRepository _seriesRepository;
 
-        public CutoffModule(IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
-            :base(commandExecutor, "wanted/cutoff")
+        public CutoffModule(IEpisodeService episodeService, IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
+            :base(episodeService, commandExecutor, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
             _seriesRepository = seriesRepository;
