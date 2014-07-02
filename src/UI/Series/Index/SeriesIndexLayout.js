@@ -53,25 +53,26 @@ define(
                     cell      : SeriesStatusCell
                 },
                 {
-                    name     : 'title',
-                    label    : 'Title',
-                    cell     : SeriesTitleCell,
-                    cellValue: 'this'
+                    name      : 'title',
+                    label     : 'Title',
+                    cell      : SeriesTitleCell,
+                    cellValue : 'this',
+                    sortValue : 'sortTitle'
                 },
                 {
-                    name : 'seasonCount',
-                    label: 'Seasons',
-                    cell : 'integer'
+                    name      : 'seasonCount',
+                    label     : 'Seasons',
+                    cell      : 'integer'
                 },
                 {
-                    name : 'qualityProfileId',
-                    label: 'Quality',
-                    cell : QualityProfileCell
+                    name      : 'qualityProfileId',
+                    label     : 'Quality',
+                    cell      : QualityProfileCell
                 },
                 {
-                    name : 'network',
-                    label: 'Network',
-                    cell : 'string'
+                    name      : 'network',
+                    label     : 'Network',
+                    cell      : 'string'
                 },
                 {
                     name      : 'nextAiring',
@@ -80,16 +81,16 @@ define(
                     sortValue : SeriesCollection.nextAiring
                 },
                 {
-                    name     : 'percentOfEpisodes',
-                    label    : 'Episodes',
-                    cell     : EpisodeProgressCell,
-                    className: 'episode-progress-cell'
+                    name      : 'percentOfEpisodes',
+                    label     : 'Episodes',
+                    cell      : EpisodeProgressCell,
+                    className : 'episode-progress-cell'
                 },
                 {
-                    name    : 'this',
-                    label   : '',
-                    sortable: false,
-                    cell    : SeriesActionsCell
+                    name      : 'this',
+                    label     : '',
+                    sortable  : false,
+                    cell      : SeriesActionsCell
                 }
             ],
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
@@ -29,6 +30,12 @@ namespace NzbDrone.Api.Wanted
                 SortKey = pagingResource.SortKey,
                 SortDirection = pagingResource.SortDirection
             };
+
+            //This is a hack to deal with backgrid setting the sortKey to the column name instead of sortValue
+            if (pagingSpec.SortKey.Equals("series", StringComparison.InvariantCultureIgnoreCase))
+            {
+                pagingSpec.SortKey = "series.sortTitle";
+            }
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {

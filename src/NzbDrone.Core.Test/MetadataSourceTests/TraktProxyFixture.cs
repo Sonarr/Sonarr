@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
 
         [TestCase(75978)]
         [TestCase(83462)]
+        [TestCase(266189)]
         public void should_be_able_to_get_series_detail(int tvdbId)
         {
             var details = Subject.GetSeriesInfo(tvdbId);
@@ -69,6 +70,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             series.Should().NotBeNull();
             series.Title.Should().NotBeBlank();
             series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
+            series.SortTitle.Should().Be(Parser.Parser.NormalizeEpisodeTitle(series.Title));
             series.Overview.Should().NotBeBlank();
             series.AirTime.Should().NotBeBlank();
             series.FirstAired.Should().HaveValue();

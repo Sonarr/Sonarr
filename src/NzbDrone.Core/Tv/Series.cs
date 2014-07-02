@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Tv
         public string ImdbId { get; set; }
         public string Title { get; set; }
         public string CleanTitle { get; set; }
+        public string SortTitle { get; set; }
         public SeriesStatusType Status { get; set; }
         public string Overview { get; set; }
         public String AirTime { get; set; }

@@ -163,6 +163,7 @@ namespace NzbDrone.Api.Series
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
             resource.NextAiring = seriesStatistics.NextAiring;
+            resource.PreviousAiring = seriesStatistics.PreviousAiring;
         }
 
         private void PopulateAlternateTitles(List<SeriesResource> resources)
