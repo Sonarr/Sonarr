@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    _logger.Debug("Download was not grabbed by drone, ignoring.");
+                    _logger.Trace("Download was not grabbed by drone, ignoring download: " + trackedDownload.DownloadItem.Title);
                     return;
                 }
 
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Download
 
                 if (failedItems.Any())
                 {
-                    _logger.Debug("Already added to history as failed");
+                    _logger.Trace("Already added to history as failed: " + trackedDownload.DownloadItem.Title);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    _logger.Debug("Download was not grabbed by drone, ignoring.");
+                    _logger.Trace("Download was not grabbed by drone, ignoring download: " + trackedDownload.DownloadItem.Title);
                     return;
                 }
 
@@ -86,13 +86,13 @@ namespace NzbDrone.Core.Download
                 if (trackedDownload.DownloadItem.Message.Equals("Unpacking failed, write error or disk is full?",
                     StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _logger.Debug("Failed due to lack of disk space, do not blacklist");
+                    _logger.Trace("Failed due to lack of disk space, do not blacklist: " + trackedDownload.DownloadItem.Title);
                     return;
                 }
 
                 if (FailedDownloadForRecentRelease(downloadClient, trackedDownload, grabbedItems))
                 {
-                    _logger.Debug("Recent release Failed, do not blacklist");
+                    _logger.Trace("Recent release Failed, do not blacklist: " + trackedDownload.DownloadItem.Title);
                     return;
                 }
 
@@ -102,11 +102,23 @@ namespace NzbDrone.Core.Download
 
                 if (failedItems.Any())
                 {
-                    _logger.Debug("Already added to history as failed");
+                    _logger.Trace("Already added to history as failed: " + trackedDownload.DownloadItem.Title);
                 }
                 else
                 {
                     PublishDownloadFailedEvent(grabbedItems, trackedDownload.DownloadItem.Message);
+                }
+            }
+
+            if (trackedDownload.DownloadItem.Status != DownloadItemStatus.Failed && trackedDownload.State == TrackedDownloadState.Downloading)
+            {
+                var grabbedItems = GetHistoryItems(grabbedHistory, trackedDownload.DownloadItem.DownloadClientId);
+                var failedItems = GetHistoryItems(failedHistory, trackedDownload.DownloadItem.DownloadClientId);
+
+                if (grabbedItems.Any() && failedItems.Any())
+                {
+                    _logger.Trace("Already added to history as failed, updating tracked state: " + trackedDownload.DownloadItem.Title);
+                    trackedDownload.State = TrackedDownloadState.DownloadFailed;
                 }
             }
 
@@ -121,7 +133,7 @@ namespace NzbDrone.Core.Download
                 }
                 catch (NotSupportedException)
                 {
-                    _logger.Debug("Removing item not supported by your download client");
+                    _logger.Trace("Removing item not supported by your download client");
                 }
             }
         }
@@ -132,25 +144,25 @@ namespace NzbDrone.Core.Download
 
             if (!Double.TryParse(matchingHistoryItems.First().Data.GetValueOrDefault("ageHours"), out ageHours))
             {
-                _logger.Debug("Unable to determine age of failed download");
+                _logger.Debug("Unable to determine age of failed download: " + trackedDownload.DownloadItem.Title);
                 return false;
             }
 
             if (ageHours > _configService.BlacklistGracePeriod)
             {
-                _logger.Debug("Failed download is older than the grace period");
+                _logger.Debug("Failed download is older than the grace period: " + trackedDownload.DownloadItem.Title);
                 return false;
             }
 
             if (trackedDownload.RetryCount >= _configService.BlacklistRetryLimit)
             {
-                _logger.Debug("Retry limit reached");
+                _logger.Debug("Retry limit reached: " + trackedDownload.DownloadItem.Title);
                 return false;
             }
 
             if (trackedDownload.RetryCount == 0 || trackedDownload.LastRetry.AddMinutes(_configService.BlacklistRetryInterval) < DateTime.UtcNow)
             {
-                _logger.Debug("Retrying failed release");
+                _logger.Debug("Retrying failed release: " + trackedDownload.DownloadItem.Title);
                 trackedDownload.LastRetry = DateTime.UtcNow;
                 trackedDownload.RetryCount++;
 

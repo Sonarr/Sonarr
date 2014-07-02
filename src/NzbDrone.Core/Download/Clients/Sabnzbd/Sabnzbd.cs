@@ -161,10 +161,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (!sabHistoryItem.Storage.IsNullOrWhiteSpace())
                 {
-                    var parent = Directory.GetParent(sabHistoryItem.Storage);
-                    if (parent != null && parent.Name == sabHistoryItem.Title)
+                    var parent = sabHistoryItem.Storage.GetParentPath();
+                    if (parent != null && Path.GetFileName(parent) == sabHistoryItem.Title)
                     {
-                        historyItem.OutputPath = parent.FullName;
+                        historyItem.OutputPath = parent;
                     }
                     else
                     {

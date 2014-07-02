@@ -53,6 +53,22 @@ namespace NzbDrone.Common
             return childPath.Substring(parentPath.Length).Trim(Path.DirectorySeparatorChar);
         }
 
+        public static string GetParentPath(this string childPath)
+        {
+            var parentPath = childPath.TrimEnd('\\', '/');
+
+            var index = parentPath.LastIndexOfAny(new[] { '\\', '/' });
+
+            if (index != -1)
+            {
+                return parentPath.Substring(0, index);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static bool IsParentPath(this string parentPath, string childPath)
         {
             parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);

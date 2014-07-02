@@ -112,6 +112,9 @@ namespace NzbDrone.Core.Parser
             {
                 // Generic match for md5 and mixed-case hashes.
                 new Regex(@"^[0-9a-zA-Z]{32}", RegexOptions.Compiled),
+                
+                // Generic match for shorter lower-case hashes.
+                new Regex(@"^[a-z0-9]{24}$", RegexOptions.Compiled),
 
                 // Format seen on some NZBGeek releases
                 new Regex(@"^[A-Z]{11}\d{3}$", RegexOptions.Compiled)
