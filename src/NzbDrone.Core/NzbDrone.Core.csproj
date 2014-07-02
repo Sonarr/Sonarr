@@ -383,6 +383,8 @@
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadata.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadataSettings.cs" />
+    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
+    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
