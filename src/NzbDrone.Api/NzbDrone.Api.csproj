@@ -117,6 +117,7 @@
     <Compile Include="EpisodeFiles\EpisodeFileResource.cs" />
     <Compile Include="Directories\DirectoryLookupService.cs" />
     <Compile Include="Directories\DirectoryModule.cs" />
+    <Compile Include="Episodes\EpisodeModuleWithSignalR.cs" />
     <Compile Include="Episodes\EpisodeModule.cs" />
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Episodes\RenameEpisodeModule.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Frontend\IsCacheableSpecification.cs" />
+    <Compile Include="Frontend\Mappers\UpdateLogFileMapper.cs" />
     <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
     <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\LogFileMapper.cs" />
@@ -141,6 +143,8 @@
     <Compile Include="Health\HealthModule.cs" />
     <Compile Include="History\HistoryResource.cs" />
     <Compile Include="History\HistoryModule.cs" />
+    <Compile Include="Logs\LogFileModuleBase.cs" />
+    <Compile Include="Logs\UpdateLogFileModule.cs" />
     <Compile Include="MediaCovers\MediaCoverModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />

@@ -31,7 +31,7 @@ define(
             },
 
             initialize: function () {
-                vent.on(vent.Events.CommandComplete, this._commandComplete, this);
+                this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
             },
 
             onRender: function(){

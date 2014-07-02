@@ -73,8 +73,9 @@ namespace NzbDrone.Core.MediaFiles
 
         private IEnumerable<RenameEpisodeFilePreview> GetPreviews(Series series, List<Episode> episodes, List<EpisodeFile> files)
         {
-            foreach (var file in files)
+            foreach (var f in files)
             {
+                var file = f;
                 var episodesInFile = episodes.Where(e => e.EpisodeFileId == file.Id).ToList();
 
                 if (!episodesInFile.Any())
@@ -95,16 +96,11 @@ namespace NzbDrone.Core.MediaFiles
                                      SeasonNumber = seasonNumber,
                                      EpisodeNumbers = episodesInFile.Select(e => e.EpisodeNumber).ToList(),
                                      EpisodeFileId = file.Id,
-                                     ExistingPath = GetRelativePath(series.Path, file.Path),
-                                     NewPath = GetRelativePath(series.Path, newPath)
+                                     ExistingPath = series.Path.GetRelativePath(file.Path),
+                                     NewPath = series.Path.GetRelativePath(newPath)
                                  };
                 }
             }
-        }
-
-        private string GetRelativePath(string seriesPath, string path)
-        {
-            return path.Substring(seriesPath.Length + 1);
         }
 
         private void RenameFiles(List<EpisodeFile> episodeFiles, Series series)

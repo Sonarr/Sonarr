@@ -1,7 +1,7 @@
 'use strict';
 define(
     [
-        'Cells/NzbDroneCell'
+        '../../../Cells/NzbDroneCell'
     ], function (NzbDroneCell) {
         return NzbDroneCell.extend({
 

@@ -55,7 +55,7 @@ define(
 
             _importSeries: function () {
                 this.rootFolderLayout = new RootFolderLayout();
-                this.rootFolderLayout.on('folderSelected', this._folderSelected, this);
+                this.listenTo(this.rootFolderLayout, 'folderSelected', this._folderSelected);
                 AppLayout.modalRegion.show(this.rootFolderLayout);
             },
 

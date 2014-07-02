@@ -334,6 +334,7 @@
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
     <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
+    <Compile Include="Instrumentation\Commands\DeleteUpdateLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />

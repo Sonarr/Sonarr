@@ -1,7 +1,7 @@
 'use strict';
 define(
     [
-        'vent',
+        '../../../vent',
         'backgrid'
     ], function (vent, Backgrid) {
 
