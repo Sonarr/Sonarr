@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
 
         [TestCase(75978)]
         [TestCase(83462)]
+        [TestCase(266189)]
         public void should_be_able_to_get_series_detail(int tvdbId)
         {
             var details = Subject.GetSeriesInfo(tvdbId);
@@ -56,11 +57,20 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [Test]
+        public void should_not_have_period_at_start_of_title_slug()
+        {
+            var details = Subject.GetSeriesInfo(79099);
+
+            details.Item1.TitleSlug.Should().Be("dothack");
+        }
+
         private void ValidateSeries(Series series)
         {
             series.Should().NotBeNull();
             series.Title.Should().NotBeBlank();
             series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
+            series.SortTitle.Should().Be(Parser.Parser.NormalizeEpisodeTitle(series.Title));
             series.Overview.Should().NotBeBlank();
             series.AirTime.Should().NotBeBlank();
             series.FirstAired.Should().HaveValue();

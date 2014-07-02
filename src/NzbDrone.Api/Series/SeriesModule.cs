@@ -15,6 +15,7 @@ using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Series
 {
@@ -78,21 +79,6 @@ namespace NzbDrone.Api.Series
             PutValidator.RuleFor(s => s.Path).IsValidPath();
         }
 
-        private void PopulateAlternativeTitles(List<SeriesResource> resources)
-        {
-            foreach (var resource in resources)
-            {
-                PopulateAlternativeTitles(resource);
-            }
-        }
-
-        private void PopulateAlternativeTitles(SeriesResource resource)
-        {
-            var mapping = _sceneMappingService.FindByTvdbid(resource.TvdbId);
-            if (mapping == null) return;
-            resource.AlternativeTitles = mapping.Select(x => x.Title).Distinct().ToList();
-        }
-
         private SeriesResource GetSeries(int id)
         {
             var series = _seriesService.GetSeries(id);
@@ -106,7 +92,7 @@ namespace NzbDrone.Api.Series
             var resource = series.InjectTo<SeriesResource>();
             MapCoversToLocal(resource);
             FetchAndLinkSeriesStatistics(resource);
-            PopulateAlternativeTitles(resource);
+            PopulateAlternateTitles(resource);
 
             return resource;
         }
@@ -118,7 +104,7 @@ namespace NzbDrone.Api.Series
 
             MapCoversToLocal(seriesResources.ToArray());
             LinkSeriesStatistics(seriesResources, seriesStats);
-            PopulateAlternativeTitles(seriesResources);
+            PopulateAlternateTitles(seriesResources);
 
             return seriesResources;
         }
@@ -177,6 +163,24 @@ namespace NzbDrone.Api.Series
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
             resource.NextAiring = seriesStatistics.NextAiring;
+            resource.PreviousAiring = seriesStatistics.PreviousAiring;
+        }
+
+        private void PopulateAlternateTitles(List<SeriesResource> resources)
+        {
+            foreach (var resource in resources)
+            {
+                PopulateAlternateTitles(resource);
+            }
+        }
+
+        private void PopulateAlternateTitles(SeriesResource resource)
+        {
+            var mappings = _sceneMappingService.FindByTvdbid(resource.TvdbId);
+
+            if (mappings == null) return;
+
+            resource.AlternateTitles = mappings.InjectTo<List<AlternateTitleResource>>();
         }
 
         public void Handle(EpisodeImportedEvent message)

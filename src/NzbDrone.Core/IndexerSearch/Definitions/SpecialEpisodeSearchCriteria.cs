@@ -11,7 +11,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            return string.Format("[{0} : {1}]", SceneTitle, String.Join(",", EpisodeQueryTitles));
+            return string.Format("[{0} : {1}]", Series.Title, String.Join(",", EpisodeQueryTitles));
         }
     }
 }

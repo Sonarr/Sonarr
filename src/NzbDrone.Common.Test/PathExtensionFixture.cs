@@ -136,6 +136,23 @@ namespace NzbDrone.Common.Test
             parentPath.IsParentPath(childPath).Should().Be(expectedResult);
         }
 
+        [TestCase(@"C:\Test\mydir", @"C:\Test")]
+        [TestCase(@"C:\Test\", @"C:")]
+        [TestCase(@"C:\", null)]
+        public void path_should_return_parent(string path, string parentPath)
+        {
+            path.GetParentPath().Should().Be(parentPath);
+        }
+
+        [Test]
+        public void path_should_return_parent_for_oversized_path()
+        {
+            var path       = @"/media/2e168617-f2ae-43fb-b88c-3663af1c8eea/downloads/sabnzbd/nzbdrone/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories";
+            var parentPath = @"/media/2e168617-f2ae-43fb-b88c-3663af1c8eea/downloads/sabnzbd/nzbdrone/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing/With.Alot.Of.Nested.Directories/Some.Real.Big.Thing";
+
+            path.GetParentPath().Should().Be(parentPath);
+        }
+
         [Test]
         [Ignore]
         public void should_not_be_parent_when_it_is_grandparent()

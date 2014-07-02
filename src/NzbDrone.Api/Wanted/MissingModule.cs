@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
@@ -7,13 +8,13 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Wanted
 {
-    public class MissingModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
+    public class MissingModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;
 
         public MissingModule(IEpisodeService episodeService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
-            :base(commandExecutor, "wanted/missing")
+            :base(episodeService, commandExecutor, "wanted/missing")
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;
@@ -29,6 +30,12 @@ namespace NzbDrone.Api.Wanted
                 SortKey = pagingResource.SortKey,
                 SortDirection = pagingResource.SortDirection
             };
+
+            //This is a hack to deal with backgrid setting the sortKey to the column name instead of sortValue
+            if (pagingSpec.SortKey.Equals("series", StringComparison.InvariantCultureIgnoreCase))
+            {
+                pagingSpec.SortKey = "series.sortTitle";
+            }
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {

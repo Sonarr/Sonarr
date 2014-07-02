@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Download
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
 
-                    _logger.Debug("Already added to history as imported: " + trackedDownload.DownloadItem.Title);
+                    _logger.Trace("Already added to history as imported: " + trackedDownload.DownloadItem.Title);
                 }
                 else
                 {
@@ -137,13 +137,13 @@ namespace NzbDrone.Core.Download
                                     importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID];
                                     _historyService.UpdateHistoryData(importedItems.First().Id, importedItems.First().Data);
 
-                                    _logger.Debug("Storage path does not exist, but found probable drone factory ImportEvent: " + trackedDownload.DownloadItem.Title);
+                                    _logger.Trace("Storage path does not exist, but found probable drone factory ImportEvent: " + trackedDownload.DownloadItem.Title);
                                     return;
                                 }
                             }
                         }
 
-                        _logger.Debug("Storage path does not exist: " + trackedDownload.DownloadItem.Title);
+                        _logger.Trace("Storage path does not exist: " + trackedDownload.DownloadItem.Title);
                         return;
                     }
                 }

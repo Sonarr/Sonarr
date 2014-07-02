@@ -8,27 +8,36 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Episodes
 {
-    public abstract class EpisodeModuleWithSignalR<TResource, TModel> : NzbDroneRestModuleWithSignalR<TResource, TModel>,
+    public abstract class EpisodeModuleWithSignalR : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
         IHandle<EpisodeGrabbedEvent>,                         
         IHandle<EpisodeDownloadedEvent>
-        where TResource : EpisodeResource, new()
-        where TModel : Episode
     {
-        protected EpisodeModuleWithSignalR(ICommandExecutor commandExecutor)
+        private readonly IEpisodeService _episodeService;
+
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor)
             : base(commandExecutor)
         {
+            _episodeService = episodeService;
+
+            GetResourceById = GetEpisode;
         }
 
-        protected EpisodeModuleWithSignalR(ICommandExecutor commandExecutor, string resource)
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor, string resource)
             : base(commandExecutor, resource)
         {
+            _episodeService = episodeService;
+        }
+
+        protected EpisodeResource GetEpisode(int id)
+        {
+            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
         }
 
         public void Handle(EpisodeGrabbedEvent message)
         {
             foreach (var episode in message.Episode.Episodes)
             {
-                var resource = episode.InjectTo<TResource>();
+                var resource = episode.InjectTo<EpisodeResource>();
                 resource.Grabbed = true;
 
                 BroadcastResourceChange(ModelAction.Updated, resource);

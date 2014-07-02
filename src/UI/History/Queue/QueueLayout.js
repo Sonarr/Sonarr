@@ -32,33 +32,34 @@ define(
             columns:
                 [
                     {
-                        name : 'status',
-                        label: '',
-                        cell : QueueStatusCell,
-                        cellValue: 'this'
+                        name      : 'status',
+                        label     : '',
+                        cell      : QueueStatusCell,
+                        cellValue : 'this'
                     },
                     {
-                        name : 'series',
-                        label: 'Series',
-                        cell : SeriesTitleCell
+                        name      : 'series',
+                        label     : 'Series',
+                        cell      : SeriesTitleCell,
+                        sortable  : false
                     },
                     {
-                        name    : 'episode',
-                        label   : 'Episode',
-                        sortable: false,
-                        cell    : EpisodeNumberCell
+                        name      : 'episode',
+                        label     : 'Episode',
+                        cell      : EpisodeNumberCell,
+                        sortable  : false
                     },
                     {
-                        name    : 'episode',
-                        label   : 'Episode Title',
-                        sortable: false,
-                        cell    : EpisodeTitleCell
+                        name      : 'episode',
+                        label     : 'Episode Title',
+                        cell      : EpisodeTitleCell,
+                        sortable  : false
                     },
                     {
-                        name    : 'quality',
-                        label   : 'Quality',
-                        cell    : QualityCell,
-                        sortable: false
+                        name      : 'quality',
+                        label     : 'Quality',
+                        cell      : QualityCell,
+                        sortable  : false
                     },
                     {
                         name      : 'timeleft',

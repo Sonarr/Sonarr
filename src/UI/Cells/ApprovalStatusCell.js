@@ -11,7 +11,6 @@ define(
             className: 'approval-status-cell',
             template : 'Cells/ApprovalStatusCellTemplate',
 
-
             render: function () {
 
                 var rejections = this.model.get(this.column.get('name'));

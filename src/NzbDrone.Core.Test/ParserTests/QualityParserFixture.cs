@@ -52,6 +52,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sonny.With.a.Chance.S02E15.divx", false)]
         [TestCase("The.Girls.Next.Door.S03E06.HDTV-WiDE", false)]
         [TestCase("Degrassi.S10E27.WS.DSR.XviD-2HD", false)]
+        [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [480p]", false)]
+        [TestCase("[CR] Sailor Moon - 004 [480p][48CE2D0F]", false)]
+        [TestCase("[Hatsuyuki] Naruto Shippuuden - 363 [848x480][ADE35E38]", false)]
         public void should_parse_sdtv_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.SDTV, proper);
@@ -69,8 +72,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Girls.Next.Door.S03E06.DVD.Rip.XviD-WiDE", false)]
         [TestCase("the.shield.1x13.circles.ws.xvidvd-tns", false)]
         [TestCase("the_x-files.9x18.sunshine_days.ac3.ws_dvdrip_xvid-fov.avi", false)]
+        [TestCase("[FroZen] Miyuki - 23 [DVD][7F6170E6]", false)]
         [TestCase("Hannibal.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
+        [TestCase("Heidi Girl of the Alps (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);
@@ -96,6 +101,11 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sonny.With.a.Chance.S02E15.mkv", false)]
         [TestCase(@"E:\Downloads\tv\The.Big.Bang.Theory.S01E01.720p.HDTV\ajifajjjeaeaeqwer_eppj.avi", false)]
         [TestCase("Gem.Hunt.S01E08.Tourmaline.Nepal.720p.HDTV.x264-DHD", false)]
+        [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0]", false)]
+        [TestCase("[Doki] Mahouka Koukou no Rettousei - 07 (1280x720 Hi10P AAC) [80AF7DDE]", false)]
+        [TestCase("[Doremi].Yes.Pretty.Cure.5.Go.Go!.31.[1280x720].[C65D4B1F].mkv", false)]
+        [TestCase("[HorribleSubs]_Fairy_Tail_-_145_[720p]", false)]
+        [TestCase("[Eveyuu] No Game No Life - 10 [Hi10P 1280x720 H264][10B23BD8]", false)]
         public void should_parse_hdtv720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV720p, proper);
@@ -106,6 +116,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("DEXTER.S07E01.ARE.YOU.1080P.HDTV.x264-QCF", false)]
         [TestCase("DEXTER.S07E01.ARE.YOU.1080P.HDTV.proper.X264-QCF", true)]
         [TestCase("Dexter - S01E01 - Title [HDTV-1080p]", false)]
+        [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [1080p]", false)]
         public void should_parse_hdtv1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV1080p, proper);
@@ -144,6 +155,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Chuck - S01E03 - Come Fly With Me - 720p BluRay.mkv", false)]
         [TestCase("The Big Bang Theory.S03E01.The Electric Can Opener Fluctuation.m2ts", false)]
         [TestCase("Revolution.S01E02.Chained.Heat.[Bluray720p].mkv", false)]
+        [TestCase("[FFF] DATE A LIVE - 01 [BD][720p-AAC][0601BED4]", false)]
+        [TestCase("[coldhell] Pupa v3 [BD720p][03192D4C]", false)]
+        [TestCase("[RandomRemux] Nobunagun - 01 [720p BD][043EA407].mkv", false)]
+        [TestCase("[Kaylith] Isshuukan Friends Specials - 01 [BD 720p AAC][B7EEE164].mkv", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
@@ -152,6 +167,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Chuck - S01E03 - Come Fly With Me - 1080p BluRay.mkv", false)]
         [TestCase("Sons.Of.Anarchy.S02E13.1080p.BluRay.x264-AVCDVD", false)]
         [TestCase("Revolution.S01E02.Chained.Heat.[Bluray1080p].mkv", false)]
+        [TestCase("[FFF] Namiuchigiwa no Muromi-san - 10 [BD][1080p-FLAC][0C4091AF]", false)]
+        [TestCase("[coldhell] Pupa v2 [BD1080p][5A45EABE].mkv", false)]
+        [TestCase("[Kaylith] Isshuukan Friends Specials - 01 [BD 1080p FLAC][429FD8C7].mkv", false)]
+        [TestCase("[Zurako] Log Horizon - 01 - The Apocalypse (BD 1080p AAC) [7AE12174].mkv", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);

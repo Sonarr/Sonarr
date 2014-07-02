@@ -39,45 +39,45 @@ define(
             columns:
                 [
                     {
-                        name     : 'eventType',
-                        label    : '',
-                        cell     : EventTypeCell,
-                        cellValue: 'this'
+                        name      : 'eventType',
+                        label     : '',
+                        cell      : EventTypeCell,
+                        cellValue : 'this'
                     },
                     {
-                        name : 'series',
-                        label: 'Series',
-                        cell : SeriesTitleCell,
-                        sortValue: 'series.title'
+                        name      : 'series',
+                        label     : 'Series',
+                        cell      : SeriesTitleCell,
+                        sortValue : 'series.sortTitle'
                     },
                     {
-                        name    : 'episode',
-                        label   : 'Episode',
-                        sortable: false,
-                        cell    : EpisodeNumberCell
+                        name      : 'episode',
+                        label     : 'Episode',
+                        cell      : EpisodeNumberCell,
+                        sortable  : false
                     },
                     {
-                        name    : 'episode',
-                        label   : 'Episode Title',
-                        sortable: false,
-                        cell    : EpisodeTitleCell
+                        name      : 'episode',
+                        label     : 'Episode Title',
+                        cell      : EpisodeTitleCell,
+                        sortable  : false
                     },
                     {
-                        name    : 'quality',
-                        label   : 'Quality',
-                        cell    : QualityCell,
-                        sortable: false
+                        name      : 'quality',
+                        label     : 'Quality',
+                        cell      : QualityCell,
+                        sortable  : false
                     },
                     {
-                        name : 'date',
-                        label: 'Date',
-                        cell : RelativeDateCell
+                        name      : 'date',
+                        label     : 'Date',
+                        cell      : RelativeDateCell
                     },
                     {
-                        name    : 'this',
-                        label   : '',
-                        cell    : HistoryDetailsCell,
-                        sortable: false
+                        name      : 'this',
+                        label     : '',
+                        cell      : HistoryDetailsCell,
+                        sortable  : false
                     }
                 ],
 

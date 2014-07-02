@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
@@ -7,13 +8,13 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Wanted
 {
-    public class CutoffModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
+    public class CutoffModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeCutoffService _episodeCutoffService;
         private readonly ISeriesRepository _seriesRepository;
 
-        public CutoffModule(IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
-            :base(commandExecutor, "wanted/cutoff")
+        public CutoffModule(IEpisodeService episodeService, IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
+            :base(episodeService, commandExecutor, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
             _seriesRepository = seriesRepository;
@@ -29,6 +30,12 @@ namespace NzbDrone.Api.Wanted
                 SortKey = pagingResource.SortKey,
                 SortDirection = pagingResource.SortDirection
             };
+
+            //This is a hack to deal with backgrid setting the sortKey to the column name instead of sortValue
+            if (pagingSpec.SortKey.Equals("series", StringComparison.InvariantCultureIgnoreCase))
+            {
+                pagingSpec.SortKey = "series.sortTitle";
+            }
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {

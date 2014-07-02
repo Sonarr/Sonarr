@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Parser.Model
         public Language Language { get; set; }
         public bool FullSeason { get; set; }
         public string ReleaseGroup { get; set; }
+        public string ReleaseHash { get; set; }
 
         public ParsedEpisodeInfo()
         {
@@ -57,6 +58,10 @@ namespace NzbDrone.Core.Parser.Model
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {
                 episodeString = string.Format("S{0:00}E{1}", SeasonNumber, String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+            }
+            else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
+            {
+                episodeString = string.Format("{0}", String.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
             }
 
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);

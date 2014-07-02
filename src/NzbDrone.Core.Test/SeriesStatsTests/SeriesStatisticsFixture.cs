@@ -39,6 +39,11 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             _episode.EpisodeFileId = 1;
         }
 
+        private void GivenOldEpisode()
+        {
+            _episode.AirDateUtc = DateTime.Now.AddSeconds(-10);
+        }
+
         private void GivenMonitoredEpisode()
         {
             _episode.Monitored = true;
@@ -59,6 +64,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().Be(_episode.AirDateUtc);
+            stats.First().PreviousAiring.Should().NotHaveValue();
         }
 
         [Test]
@@ -71,6 +77,47 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void should_have_previous_airing_for_old_episode_with_file()
+        {
+            GivenEpisodeWithFile();
+            GivenOldEpisode();
+            GivenFile();
+
+            var stats = Subject.SeriesStatistics();
+
+            stats.Should().HaveCount(1);
+            stats.First().NextAiring.Should().NotHaveValue();
+            stats.First().PreviousAiring.Should().Be(_episode.AirDateUtc);
+        }
+
+        [Test]
+        public void should_have_previous_airing_for_old_episode_without_file_monitored()
+        {
+            GivenMonitoredEpisode();
+            GivenOldEpisode();
+            GivenFile();
+
+            var stats = Subject.SeriesStatistics();
+
+            stats.Should().HaveCount(1);
+            stats.First().NextAiring.Should().NotHaveValue();
+            stats.First().PreviousAiring.Should().Be(_episode.AirDateUtc);
+        }
+
+        [Test]
+        public void should_not_have_previous_airing_for_old_episode_without_file_unmonitored()
+        {
+            GivenOldEpisode();
+            GivenFile();
+
+            var stats = Subject.SeriesStatistics();
+
+            stats.Should().HaveCount(1);
+            stats.First().NextAiring.Should().NotHaveValue();
+            stats.First().PreviousAiring.Should().NotHaveValue();
         }
 
         [Test]

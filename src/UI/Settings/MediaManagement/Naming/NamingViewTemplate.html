@@ -87,6 +87,37 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group advanced-setting">
+            <label class="col-sm-3 control-label">Anime Episode Format</label>
+
+            <div class="col-sm-1 col-sm-push-8 help-inline">
+                <i class="icon-nd-form-info" title="" data-original-title="All caps or all lower-case can also be used"></i>
+                <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-nd-form-info-link"/></a>
+            </div>
+
+            <div class="col-sm-8 col-sm-pull-1">
+                <div class="input-group x-helper-input">
+                    <input type="text" class="form-control naming-format" name="animeEpisodeFormat" data-onkeyup="true" />
+                    <div class="input-group-btn btn-group x-naming-token-helper">
+                        <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-plus"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{> SeriesTitleNamingPartial}}
+                            {{> AbsoluteEpisodeNamingPartial}}
+                            {{> SeasonNamingPartial}}
+                            {{> EpisodeNamingPartial}}
+                            {{> EpisodeTitleNamingPartial}}
+                            {{> QualityTitleNamingPartial}}
+                            {{> ReleaseGroupNamingPartial}}
+                            {{> OriginalTitleNamingPartial}}
+                            {{> SeparatorNamingPartial}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="form-group advanced-setting">
@@ -167,6 +198,14 @@
 
         <div class="col-sm-8">
             <p class="form-control-static x-daily-episode-example naming-example"></p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Anime Episode Example</label>
+
+        <div class="col-sm-8">
+            <p class="form-control-static x-anime-episode-example naming-example"></p>
         </div>
     </div>
 

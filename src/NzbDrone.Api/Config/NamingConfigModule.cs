@@ -39,6 +39,7 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
             SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
             SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
+            SharedValidator.RuleFor(c => c.AnimeEpisodeFormat).ValidAnimeEpisodeFormat();
             SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
             SharedValidator.RuleFor(c => c.SeasonFolderFormat).ValidSeasonFolderFormat();
         }
@@ -80,6 +81,7 @@ namespace NzbDrone.Api.Config
             var singleEpisodeSampleResult = _filenameSampleService.GetStandardSample(nameSpec);
             var multiEpisodeSampleResult = _filenameSampleService.GetMultiEpisodeSample(nameSpec);
             var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
+            var animeEpisodeSampleResult = _filenameSampleService.GetAnimeSample(nameSpec);
 
             sampleResource.SingleEpisodeExample = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult) != null
                     ? "Invalid format"
@@ -92,6 +94,10 @@ namespace NzbDrone.Api.Config
             sampleResource.DailyEpisodeExample = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult) != null
                     ? "Invalid format"
                     : dailyEpisodeSampleResult.Filename;
+
+            sampleResource.AnimeEpisodeExample = _filenameValidationService.ValidateAnimeFilename(animeEpisodeSampleResult) != null
+                    ? "Invalid format"
+                    : animeEpisodeSampleResult.Filename;
 
             sampleResource.SeriesFolderExample = nameSpec.SeriesFolderFormat.IsNullOrWhiteSpace()
                 ? "Invalid format"

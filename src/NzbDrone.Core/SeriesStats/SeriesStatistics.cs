@@ -7,6 +7,7 @@ namespace NzbDrone.Core.SeriesStats
     {
         public int SeriesId { get; set; }
         public string NextAiringString { get; set; }
+        public string PreviousAiringString { get; set; }
         public int EpisodeFileCount { get; set; }
         public int EpisodeCount { get; set; }
 
@@ -19,6 +20,18 @@ namespace NzbDrone.Core.SeriesStats
                 if (!DateTime.TryParse(NextAiringString, out nextAiring)) return null;
 
                 return nextAiring;
+            }
+        }
+
+        public DateTime? PreviousAiring
+        {
+            get
+            {
+                DateTime previousAiring;
+
+                if (!DateTime.TryParse(PreviousAiringString, out previousAiring)) return null;
+
+                return previousAiring;
             }
         }
     }

@@ -30,8 +30,10 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        {{#each alternativeTitles}}
-        <span class="label label-default">{{this}}</span>
+        {{#each alternateTitles}}
+            {{#if_eq seasonNumber compare="-1"}}
+                <span class="label label-default">{{title}}</span>
+            {{/if_eq}}
         {{/each}}
     </div>
 </div>

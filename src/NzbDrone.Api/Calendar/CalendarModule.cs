@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Api.Calendar
 {
-    public class CalendarModule : EpisodeModuleWithSignalR<EpisodeResource, Episode>
+    public class CalendarModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeService _episodeService;
         private readonly SeriesRepository _seriesRepository;
@@ -17,18 +16,12 @@ namespace NzbDrone.Api.Calendar
         public CalendarModule(ICommandExecutor commandExecutor,
                               IEpisodeService episodeService,
                               SeriesRepository seriesRepository)
-            : base(commandExecutor, "calendar")
+            : base(episodeService, commandExecutor, "calendar")
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;
 
             GetResourceAll = GetCalendar;
-            GetResourceById = GetEpisode;
-        }
-
-        private EpisodeResource GetEpisode(int id)
-        {
-            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
         }
 
         private List<EpisodeResource> GetCalendar()

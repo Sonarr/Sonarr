@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {
-    public class XemService : IHandle<SeriesUpdatedEvent>, IHandle<SeriesRefreshStartingEvent>
+    public class XemService : ISceneMappingProvider, IHandle<SeriesUpdatedEvent>, IHandle<SeriesRefreshStartingEvent>
     {
         private readonly IEpisodeService _episodeService;
         private readonly IXemProxy _xemProxy;
@@ -47,7 +49,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                 foreach (var episode in episodes)
                 {
-                    episode.AbsoluteEpisodeNumber = 0;
+                    episode.SceneAbsoluteEpisodeNumber = 0;
                     episode.SceneSeasonNumber = 0;
                     episode.SceneEpisodeNumber = 0;
                 }
@@ -64,7 +66,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                         continue;
                     }
 
-                    episode.AbsoluteEpisodeNumber = mapping.Scene.Absolute;
+                    episode.SceneAbsoluteEpisodeNumber = mapping.Scene.Absolute;
                     episode.SceneSeasonNumber = mapping.Scene.Season;
                     episode.SceneEpisodeNumber = mapping.Scene.Episode;
                 }
@@ -94,6 +96,24 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             {
                 _cache.Set(id.ToString(), true, TimeSpan.FromHours(1));
             }
+        }
+
+        public List<SceneMapping> GetSceneMappings()
+        {
+            var mappings = _xemProxy.GetSceneTvdbNames();
+
+            return mappings.Where(m =>
+            {
+                int id;
+
+                if (Int32.TryParse(m.Title, out id))
+                {
+                    _logger.Debug("Skipping all numeric name: {0} for {1}", m.Title, m.TvdbId);
+                    return false;
+                }
+
+                return true;
+            }).ToList();
         }
 
         public void Handle(SeriesUpdatedEvent message)
