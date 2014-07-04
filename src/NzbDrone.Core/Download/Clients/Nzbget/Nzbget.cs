@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
@@ -14,7 +15,7 @@ using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
-    public class Nzbget : DownloadClientBase<NzbgetSettings>, IExecute<TestNzbgetCommand>
+    public class Nzbget : DownloadClientBase<NzbgetSettings>
     {
         private readonly INzbgetProxy _proxy;
         private readonly IHttpProvider _httpProvider;
@@ -265,25 +266,42 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return _proxy.GetVersion(Settings);
         }
 
-        public override void Test(NzbgetSettings settings)
+        public override IEnumerable<ValidationFailure> Test()
         {
-            _proxy.GetVersion(settings);
+            var failures = new List<ValidationFailure>();
 
-            var config = _proxy.GetConfig(settings);
-            var categories = GetCategories(config);
+            failures.AddIfNotNull(ConnectionTest());
+            failures.AddIfNotNull(ValidateCategory());
 
-            if (!settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == settings.TvCategory))
-            {
-                throw new ApplicationException("Category does not exist");
-            }
+            return failures;
         }
 
-        public void Execute(TestNzbgetCommand message)
+        private ValidationFailure ConnectionTest()
         {
-            var settings = new NzbgetSettings();
-            settings.InjectFrom(message);
+            try
+            {
+                _proxy.GetVersion(Settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to connect to NZBGet");
+            }
 
-            Test(settings);
+            return null;
+        }
+
+        private ValidationFailure ValidateCategory()
+        {
+            var config = _proxy.GetConfig(Settings);
+            var categories = GetCategories(config);
+
+            if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.TvCategory))
+            {
+                return new ValidationFailure("TvCategory", "Category does not exist");
+            }
+
+            return null;
         }
 
         // Javascript doesn't support 64 bit integers natively so json officially doesn't either. 

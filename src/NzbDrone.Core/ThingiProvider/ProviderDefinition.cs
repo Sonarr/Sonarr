@@ -1,14 +1,16 @@
-﻿using NzbDrone.Core.Datastore;
+﻿using System;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.ThingiProvider
 {
     public abstract class ProviderDefinition : ModelBase
     {
         private IProviderConfig _settings;
-        public string Name { get; set; }
-        public string Implementation { get; set; }
 
-        public string ConfigContract { get; set; }
+        public String Name { get; set; }
+        public String Implementation { get; set; }
+        public String ConfigContract { get; set; }
+        public virtual Boolean Enable { get; set; }
 
         public IProviderConfig Settings
         {

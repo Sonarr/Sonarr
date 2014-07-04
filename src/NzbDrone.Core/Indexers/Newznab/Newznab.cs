@@ -1,14 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using FluentValidation;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : IndexerBase<NewznabSettings>
     {
+        private readonly IFetchFeedFromIndexers _feedFetcher;
+        private readonly HttpProvider _httpProvider;
+        private readonly Logger _logger;
+
+
+
+        public Newznab(IFetchFeedFromIndexers feedFetcher, HttpProvider httpProvider, Logger logger)
+        {
+            _feedFetcher = feedFetcher;
+            _httpProvider = httpProvider;
+            _logger = logger;
+        }
+
+        public Newznab()
+        {
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
         public override Int32 SupportedPageSize { get { return 100; } }
 
@@ -167,6 +188,41 @@ namespace NzbDrone.Core.Indexers.Newznab
             query = query.Replace("+", " ");
             query = System.Web.HttpUtility.UrlEncode(query);
             return RecentFeed.Select(url => String.Format("{0}&offset={1}&limit=100&q={2}", url.Replace("t=tvsearch", "t=search"), offset, query));
+        }
+
+        public override IEnumerable<ValidationFailure> Test()
+        {
+            var releases = _feedFetcher.FetchRss(this);
+
+            if (releases.Any()) return Enumerable.Empty<ValidationFailure>();
+
+            try
+            {
+                var url = RecentFeed.First();
+                var xml = _httpProvider.DownloadString(url);
+
+                NewznabPreProcessor.Process(xml, url);
+            }
+            catch (ApiKeyException)
+            {
+                _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
+
+                var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
+                return new List<ValidationFailure> { apiKeyFailure };
+            }
+            catch (RequestLimitReachedException)
+            {
+                _logger.Warn("Request limit reached");
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+
+                var failure = new ValidationFailure("Url", "Unable to connect to indexer, check the log for more details");
+                return new List<ValidationFailure> { failure };
+            }
+
+            return Enumerable.Empty<ValidationFailure>();
         }
 
         private static string NewsnabifyTitle(string title)

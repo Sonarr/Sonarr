@@ -1,14 +1,17 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
     public class Growl : NotificationBase<GrowlSettings>
     {
-        private readonly IGrowlService _growlProvider;
+        private readonly IGrowlService _growlService;
 
-        public Growl(IGrowlService growlProvider)
+        public Growl(IGrowlService growlService)
         {
-            _growlProvider = growlProvider;
+            _growlService = growlService;
         }
 
         public override string Link
@@ -20,18 +23,27 @@ namespace NzbDrone.Core.Notifications.Growl
         {
             const string title = "Episode Grabbed";
 
-            _growlProvider.SendNotification(title, message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
+            _growlService.SendNotification(title, message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _growlProvider.SendNotification(title, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
+            _growlService.SendNotification(title, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
         }
 
         public override void AfterRename(Series series)
         {
+        }
+
+        public override IEnumerable<ValidationFailure> Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_growlService.Test(Settings));
+
+            return failures;
         }
     }
 }

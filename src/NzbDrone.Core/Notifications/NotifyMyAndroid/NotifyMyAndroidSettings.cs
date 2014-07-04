@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(ApiKey) && Priority != null & Priority >= -1 && Priority <= 2;
+                return !String.IsNullOrWhiteSpace(ApiKey) && Priority >= -1 && Priority <= 2;
             }
         }
 

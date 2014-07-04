@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
 
@@ -19,18 +18,20 @@ namespace NzbDrone.Core.Notifications.Xbmc
         void Update(XbmcSettings settings, Series series);
         void Clean(XbmcSettings settings);
         XbmcVersion GetJsonVersion(XbmcSettings settings);
+        ValidationFailure Test(XbmcSettings settings);
     }
 
-    public class XbmcService : IXbmcService, IExecute<TestXbmcCommand>
+    public class XbmcService : IXbmcService
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
         private readonly IHttpProvider _httpProvider;
         private readonly IEnumerable<IApiProvider> _apiProviders;
+        private readonly Logger _logger;
 
-        public XbmcService(IHttpProvider httpProvider, IEnumerable<IApiProvider> apiProviders)
+        public XbmcService(IHttpProvider httpProvider, IEnumerable<IApiProvider> apiProviders, Logger logger)
         {
             _httpProvider = httpProvider;
             _apiProviders = apiProviders;
+            _logger = logger;
         }
 
         public void Notify(XbmcSettings settings, string title, string message)
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
 
-                Logger.Debug("Getting version from response: " + response);
+                _logger.Debug("Getting version from response: " + response);
                 var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
 
                 var versionObject = result.Result.Property("version");
@@ -78,7 +79,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             catch (Exception ex)
             {
-                Logger.DebugException(ex.Message, ex);
+                _logger.DebugException(ex.Message, ex);
             }
 
             return new XbmcVersion();
@@ -98,27 +99,28 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return apiProvider;
         }
 
-        public void Execute(TestXbmcCommand message)
+        public ValidationFailure Test(XbmcSettings settings)
         {
-            var settings = new XbmcSettings
-                               {
-                                   Host = message.Host,
-                                   Port = message.Port,
-                                   Username = message.Username,
-                                   Password = message.Password,
-                                   DisplayTime = message.DisplayTime
-                               };
-             
-            Logger.Debug("Determining version of XBMC Host: {0}", settings.Address);
-            var version = GetJsonVersion(settings);
-            Logger.Debug("Version is: {0}", version);
-
-            if (version == new XbmcVersion(0))
+            try
             {
-                throw new InvalidXbmcVersionException("Verion received from XBMC is invalid, please correct your settings.");
+                _logger.Debug("Determining version of XBMC Host: {0}", settings.Address);
+                var version = GetJsonVersion(settings);
+                _logger.Debug("Version is: {0}", version);
+
+                if (version == new XbmcVersion(0))
+                {
+                    throw new InvalidXbmcVersionException("Verion received from XBMC is invalid, please correct your settings.");
+                }
+
+                Notify(settings, "Test Notification", "Success! XBMC has been successfully configured!");
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to send test message");
             }
 
-            Notify(settings, "Test Notification", "Success! XBMC has been successfully configured!");
+            return null;
         }
     }
 }

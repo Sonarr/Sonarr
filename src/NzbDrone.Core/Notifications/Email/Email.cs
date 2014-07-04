@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Email
 {
     public class Email : NotificationBase<EmailSettings>
     {
-        private readonly IEmailService _smtpProvider;
+        private readonly IEmailService _emailService;
 
-        public Email(IEmailService smtpProvider)
+        public Email(IEmailService emailService)
         {
-            _smtpProvider = smtpProvider;
+            _emailService = emailService;
         }
 
         public override string Link
@@ -20,9 +23,9 @@ namespace NzbDrone.Core.Notifications.Email
         public override void OnGrab(string message)
         {
             const string subject = "NzbDrone [TV] - Grabbed";
-            var body = String.Format("{0} sent to SABnzbd queue.", message);
+            var body = String.Format("{0} sent to queue.", message);
 
-            _smtpProvider.SendEmail(Settings, subject, body);
+            _emailService.SendEmail(Settings, subject, body);
         }
 
         public override void OnDownload(DownloadMessage message)
@@ -30,11 +33,20 @@ namespace NzbDrone.Core.Notifications.Email
             const string subject = "NzbDrone [TV] - Downloaded";
             var body = String.Format("{0} Downloaded and sorted.", message.Message);
 
-            _smtpProvider.SendEmail(Settings, subject, body);
+            _emailService.SendEmail(Settings, subject, body);
         }
 
         public override void AfterRename(Series series)
         {
+        }
+
+        public override IEnumerable<ValidationFailure> Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_emailService.Test(Settings));
+
+            return failures;
         }
     }
 }

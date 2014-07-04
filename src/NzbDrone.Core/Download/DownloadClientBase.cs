@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using FluentValidation.Results;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Download
         }
 
         public ProviderDefinition Definition { get; set; }
+        public abstract IEnumerable<ValidationFailure> Test();
 
         protected TSettings Settings
         {
@@ -55,8 +56,6 @@ namespace NzbDrone.Core.Download
             return GetType().Name;
         }
 
-
-
         public abstract DownloadProtocol Protocol
         {
             get;
@@ -67,8 +66,6 @@ namespace NzbDrone.Core.Download
         public abstract void RemoveItem(string id);
         public abstract void RetryDownload(string id);
         public abstract DownloadClientStatus GetStatus();
-
-        public abstract void Test(TSettings settings);
 
         protected RemoteEpisode GetRemoteEpisode(String title)
         {

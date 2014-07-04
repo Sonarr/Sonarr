@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Wombles
@@ -45,6 +47,11 @@ namespace NzbDrone.Core.Indexers.Wombles
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
         {
             return new List<string>();
+        }
+
+        public override IEnumerable<ValidationFailure> Test()
+        {
+            return Enumerable.Empty<ValidationFailure>();
         }
     }
 }

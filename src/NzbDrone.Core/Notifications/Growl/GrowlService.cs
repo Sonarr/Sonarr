@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using FluentValidation.Results;
 using Growl.Connector;
 using NLog;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Messaging.Commands;
 using GrowlNotification = Growl.Connector.Notification;
 
 namespace NzbDrone.Core.Notifications.Growl
@@ -13,18 +13,20 @@ namespace NzbDrone.Core.Notifications.Growl
     public interface IGrowlService
     {
         void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password);
+        ValidationFailure Test(GrowlSettings settings);
     }
 
-    public class GrowlService : IGrowlService, IExecute<TestGrowlCommand>
+    public class GrowlService : IGrowlService
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private readonly Logger _logger;
 
         private readonly Application _growlApplication = new Application("NzbDrone");
         private GrowlConnector _growlConnector;
         private readonly List<NotificationType> _notificationTypes;
 
-        public GrowlService()
+        public GrowlService(Logger logger)
         {
+            _logger = logger;
             _notificationTypes = GetNotificationTypes();
             _growlApplication.Icon = "https://raw.github.com/NzbDrone/NzbDrone/master/Logo/64.png";
         }
@@ -36,13 +38,13 @@ namespace NzbDrone.Core.Notifications.Growl
 
             _growlConnector = new GrowlConnector(password, hostname, port);
 
-            Logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
+            _logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
             _growlConnector.Notify(notification);
         }
 
         private void Register(string host, int port, string password)
         {
-            Logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
+            _logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
             _growlConnector = new GrowlConnector(password, host, port);
             _growlConnector.Register(_growlApplication, _notificationTypes.ToArray());
         }
@@ -57,16 +59,26 @@ namespace NzbDrone.Core.Notifications.Growl
             return notificationTypes;
         }
 
-        public void Execute(TestGrowlCommand message)
+        public ValidationFailure Test(GrowlSettings settings)
         {
-            Register(message.Host, message.Port, message.Password);
+            try
+            {
+                Register(settings.Host, settings.Port, settings.Password);
 
-            const string title = "Test Notification";
-            const string body = "This is a test message from NzbDrone";
+                const string title = "Test Notification";
+                const string body = "This is a test message from NzbDrone";
 
-            Thread.Sleep(5000);
+                Thread.Sleep(5000);
 
-            SendNotification(title, body, "TEST", message.Host, message.Port, message.Password);
+                SendNotification(title, body, "TEST", settings.Host, settings.Port, settings.Password);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to send test message");
+            }
+
+            return null;
         }
     }
 }

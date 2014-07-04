@@ -57,13 +57,17 @@ define(
         };
 
         $.fn.addFormError = function (error) {
-            var t1 = this.find('.form-horizontal');
-            var t2 = this.find('.form-horizontal').parent();
-
-            this.prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
+            if (this.find('.modal-body')) {
+                this.find('.modal-body').prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
+            }
+            
+            else {
+                this.prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
+            }
         };
 
         $.fn.removeAllErrors = function () {
+            this.find('.has-error').removeClass('has-error');
             this.find('.error').removeClass('error');
             this.find('.validation-errors').removeClass('alert').removeClass('alert-danger').html('');
             this.find('.validation-error').remove();

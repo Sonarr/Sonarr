@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Lifecycle;
@@ -73,6 +74,11 @@ namespace NzbDrone.Core.ThingiProvider
                    .ToList();
 
             return definitions;
+        }
+
+        public IEnumerable<ValidationFailure> Test(TProviderDefinition definition)
+        {
+            return GetInstance(definition).Test();
         }
 
         public List<TProvider> GetAvailableProviders()
