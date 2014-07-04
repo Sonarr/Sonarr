@@ -3,9 +3,10 @@ define(
     [
         'History/Blacklist/BlacklistModel',
         'backbone.pageable',
+        'Mixins/AsSortedCollection',
         'Mixins/AsPersistedStateCollection'
-    ], function (BlacklistModel, PageableCollection, AsPersistedStateCollection) {
-        var collection = PageableCollection.extend({
+    ], function (BlacklistModel, PageableCollection, AsSortedCollection, AsPersistedStateCollection) {
+        var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/blacklist',
             model: BlacklistModel,
 
@@ -27,6 +28,10 @@ define(
                 }
             },
 
+            sortMappings: {
+                'series'   : { sortKey: 'series.sortTitle' }
+            },
+
             parseState: function (resp) {
                 return { totalRecords: resp.totalRecords };
             },
@@ -40,5 +45,6 @@ define(
             }
         });
 
-        return AsPersistedStateCollection.apply(collection);
+        Collection = AsSortedCollection.call(Collection);
+        return AsPersistedStateCollection.call(Collection);
     });

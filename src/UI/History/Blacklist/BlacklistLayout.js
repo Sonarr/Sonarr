@@ -37,14 +37,12 @@ define(
                     {
                         name      : 'series',
                         label     : 'Series',
-                        cell      : SeriesTitleCell,
-                        sortValue : 'series.sortTitle'
+                        cell      : SeriesTitleCell
                     },
                     {
                         name      : 'sourceTitle',
                         label     : 'Source Title',
-                        cell      : 'string',
-                        sortValue : 'sourceTitle'
+                        cell      : 'string'
                     },
                     {
                         name      : 'quality',

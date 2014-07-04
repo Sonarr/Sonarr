@@ -39,13 +39,12 @@ define(
                 this.direction(column.get('direction'));
 
                 if (this.collection.state) {
-                    var key = this.collection.state.sortKey;
+                    var name = this._getSortMapping().name;
                     var order = this.collection.state.order;
 
-                    if (key === this.column.get('name')) {
+                    if (name === column.get('name')) {
                         this._setSortIcon(order);
                     }
-
                     else {
                         this._removeSortIcon();
                     }
@@ -69,15 +68,25 @@ define(
                 var columnDirection = this.column.get('direction');
 
                 if (!columnDirection && this.collection.state) {
-                    var key = this.collection.state.sortKey;
+                    var name = this._getSortMapping().name;
                     var order = this.collection.state.order;
 
-                    if (key === this.column.get('name')) {
+                    if (name === this.column.get('name')) {
                         columnDirection = order;
                     }
                 }
 
                 return columnDirection;
+            },
+
+            _getSortMapping: function() {
+                var sortKey = this.collection.state.sortKey;
+
+                if (this.collection._getSortMapping) {
+                    return this.collection._getSortMapping(sortKey);
+                }
+
+                return { name: sortKey, sortKey: sortKey };
             },
 
             onClick: function (e) {
@@ -86,25 +95,25 @@ define(
                 var collection = this.collection;
                 var event = 'backgrid:sort';
 
-                function toggleSort(header, col) {
-                    collection.state.sortKey = col.get('name');
-                    var direction = header.direction();
-                    if (direction === 'ascending' || direction === -1)
-                    {
-                        collection.state.order = 'descending';
-                        collection.trigger(event, col, 'descending');
-                    }
-                    else
-                    {
-                        collection.state.order = 'ascending';
-                        collection.trigger(event, col, 'ascending');
-                    }
-                }
-
                 var column = this.column;
-                var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
+                var sortable = Backgrid.callByNeed(column.sortable(), column, collection);
                 if (sortable) {
-                    toggleSort(this, column);
+                    var direction = collection.state.order;
+                    if (direction === 'ascending' || direction === -1) {
+                        direction = 'descending';
+                    }
+                    else {
+                        direction = 'ascending';
+                    }
+
+                    if (collection.setSorting) {
+                        collection.setSorting(column.get('name'), direction);
+                    }
+                    else {
+                        collection.state.sortKey = column.get('name');
+                        collection.state.order = direction;
+                    }
+                    collection.trigger(event, column, direction);
                 }
             },
 

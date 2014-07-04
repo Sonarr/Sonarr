@@ -47,8 +47,7 @@ define(
                     {
                         name      : 'series',
                         label     : 'Series',
-                        cell      : SeriesTitleCell,
-                        sortValue : 'series.sortTitle'
+                        cell      : SeriesTitleCell
                     },
                     {
                         name      : 'episode',

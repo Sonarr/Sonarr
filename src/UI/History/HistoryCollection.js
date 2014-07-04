@@ -4,9 +4,10 @@ define(
         'History/HistoryModel',
         'backbone.pageable',
         'Mixins/AsFilteredCollection',
+        'Mixins/AsSortedCollection',
         'Mixins/AsPersistedStateCollection'
-    ], function (HistoryModel, PageableCollection, AsFilteredCollection, AsPersistedStateCollection) {
-        var collection = PageableCollection.extend({
+    ], function (HistoryModel, PageableCollection, AsFilteredCollection, AsSortedCollection, AsPersistedStateCollection) {
+        var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/history',
             model: HistoryModel,
 
@@ -35,6 +36,10 @@ define(
                 'failed'   : ['eventType', '4']
             },
 
+            sortMappings: {
+                'series'   : { sortKey: 'series.sortTitle' }
+            },
+
             initialize: function (options) {
                 delete this.queryParams.episodeId;
 
@@ -58,6 +63,7 @@ define(
             }
         });
 
-        collection = AsFilteredCollection.call(collection);
-        return AsPersistedStateCollection.call(collection);
+        Collection = AsFilteredCollection.call(Collection);
+        Collection = AsSortedCollection.call(Collection);
+        return AsPersistedStateCollection.call(Collection);
     });

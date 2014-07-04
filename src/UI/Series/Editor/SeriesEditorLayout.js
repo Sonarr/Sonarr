@@ -60,8 +60,7 @@ define(
                         name      : 'title',
                         label     : 'Title',
                         cell      : SeriesTitleCell,
-                        cellValue : 'this',
-                        sortValue : 'sortTitle'
+                        cellValue : 'this'
                     },
                     {
                         name      : 'qualityProfileId',
