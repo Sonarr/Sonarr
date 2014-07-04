@@ -5,6 +5,7 @@ using System.Linq;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
@@ -18,15 +19,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         private readonly IHttpProvider _httpProvider;
         private readonly ISabnzbdProxy _proxy;
 
-        public Sabnzbd(IHttpProvider httpProvider,
-                       ISabnzbdProxy proxy,
+        public Sabnzbd(ISabnzbdProxy proxy,
+                       IHttpProvider httpProvider,
                        IConfigService configService,
+                       IDiskProvider diskProvider,
                        IParsingService parsingService,
                        Logger logger)
-            : base(configService, parsingService, logger)
+            : base(configService, diskProvider, parsingService, logger)
         {
-            _httpProvider = httpProvider;
             _proxy = proxy;
+            _httpProvider = httpProvider;
         }
 
         public override DownloadProtocol Protocol
@@ -207,12 +209,66 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _proxy.RetryDownload(id, Settings);
         }
 
+        protected IEnumerable<SabnzbdCategory> GetCategories(SabnzbdConfig config)
+        {
+            var completeDir = config.Misc.complete_dir.TrimEnd('\\', '/');
+
+            foreach (var category in config.Categories)
+            {
+                var relativeDir = category.Dir.TrimEnd('*');
+
+                if (relativeDir.IsNullOrWhiteSpace())
+                {
+                    category.FullPath = completeDir;
+                }
+                else if (completeDir.StartsWith("/"))
+                { // Process remote Linux paths irrespective of our own OS.
+                    if (relativeDir.StartsWith("/"))
+                    {
+                        category.FullPath = relativeDir;
+                    }
+                    else
+                    {
+                        category.FullPath = completeDir + "/" + relativeDir;
+                    }
+                }
+                else
+                { // Process remote Windows paths irrespective of our own OS.
+                    if (relativeDir.StartsWith("\\") || relativeDir.Contains(':'))
+                    {
+                        category.FullPath = relativeDir;
+                    }
+                    else
+                    {
+                        category.FullPath = completeDir + "\\" + relativeDir;
+                    }
+                }
+
+                yield return category;
+            }
+        }
+
         public override DownloadClientStatus GetStatus()
         {
+            var config = _proxy.GetConfig(Settings);
+            var categories = GetCategories(config).ToArray();
+
+            var category = categories.FirstOrDefault(v => v.Name == Settings.TvCategory);
+
+            if (category == null)
+            {
+                category = categories.FirstOrDefault(v => v.Name == "*");
+            }
+
             var status = new DownloadClientStatus
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };
+
+            if (category != null)
+            {
+                status.OutputRootFolders = new List<String> { category.FullPath };
+            }
 
             return status;
         }
@@ -224,6 +280,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestCategory());
 
+            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+            {
+                failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
+            }
+
             return new ValidationResult(failures);
         }
 
@@ -231,7 +292,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             try
             {
-                _proxy.GetCategories(Settings);
+                _proxy.GetVersion(Settings);
             }
             catch (Exception ex)
             {
@@ -244,11 +305,32 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private ValidationFailure TestCategory()
         {
-            var categories = _proxy.GetCategories(Settings);
+            var config = this._proxy.GetConfig(Settings);
+            var category = GetCategories(config).FirstOrDefault((SabnzbdCategory v) => v.Name == Settings.TvCategory);
 
-            if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v == Settings.TvCategory))
+            if (category != null)
             {
-                return new ValidationFailure("TvCategory", "Category does not exist");
+                if (category.Dir.EndsWith("*"))
+                {
+                    return new ValidationFailure(String.Empty, String.Format("Remove * from Sabnzbd <a class=\"no-router\" target=\"_blank\" href=\"http://{0}:{1}/sabnzbd/config/categories/\">'{2}' category</a> Folder/Path so job folders will be created", Settings.Host, Settings.Port, Settings.TvCategory));
+                }
+            }
+            else
+            {
+                if (!Settings.TvCategory.IsNullOrWhiteSpace())
+                {
+                    return new ValidationFailure("TvCategory", String.Format("<a class=\"no-router\" target=\"_blank\" href=\"http://{0}:{1}/sabnzbd/config/categories/\">Category</a> does not exist", Settings.Host, Settings.Port));
+                }
+            }
+
+            if (config.Misc.enable_tv_sorting)
+            {
+                if (!config.Misc.tv_categories.Any<string>() ||
+                    config.Misc.tv_categories.Contains(Settings.TvCategory) ||
+                    (Settings.TvCategory.IsNullOrWhiteSpace() && config.Misc.tv_categories.Contains("Default")))
+                {
+                    return new ValidationFailure(String.Empty, String.Format("Disable <a class=\"no-router\" target=\"_blank\" href=\"http://{0}:{1}/sabnzbd/config/sorting/\">TV Sorting</a> for the '{2}' category", Settings.Host, Settings.Port, Settings.TvCategory));
+                }
             }
 
             return null;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
@@ -19,11 +20,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         private readonly IHttpProvider _httpProvider;
 
         public Nzbget(INzbgetProxy proxy,
-                      IConfigService configService,
-                      IParsingService parsingService,
                       IHttpProvider httpProvider,
+                      IConfigService configService,
+                      IDiskProvider diskProvider,
+                      IParsingService parsingService,
                       Logger logger)
-            : base(configService, parsingService, logger)
+            : base(configService, diskProvider, parsingService, logger)
         {
             _proxy = proxy;
             _httpProvider = httpProvider;
@@ -259,17 +261,17 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
         }
 
-        private String GetVersion(string host = null, int port = 0, string username = null, string password = null)
-        {
-            return _proxy.GetVersion(Settings);
-        }
-
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestCategory());
+
+            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+            {
+                failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
+            }
 
             return new ValidationResult(failures);
         }

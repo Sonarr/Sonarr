@@ -18,19 +18,17 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
     public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>
     {
-        private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
         private readonly IHttpProvider _httpProvider;
 
-        public UsenetBlackhole(IDiskProvider diskProvider,
-                               IDiskScanService diskScanService,
+        public UsenetBlackhole(IDiskScanService diskScanService,
                                IHttpProvider httpProvider,
                                IConfigService configService,
+                               IDiskProvider diskProvider,
                                IParsingService parsingService,
                                Logger logger)
-            : base(configService, parsingService, logger)
+            : base(configService, diskProvider, parsingService, logger)
         {
-            _diskProvider = diskProvider;
             _diskScanService = diskScanService;
             _httpProvider = httpProvider;
         }
@@ -149,32 +147,10 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
-            failures.AddIfNotNull(TestWrite(Settings.WatchFolder, "WatchFolder"));
+            failures.AddIfNotNull(TestFolder(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestFolder(Settings.WatchFolder, "WatchFolder"));
 
             return new ValidationResult(failures);
-        }
-
-        private ValidationFailure TestWrite(String folder, String propertyName)
-        {
-            if (!_diskProvider.FolderExists(folder))
-            {
-                return new ValidationFailure(propertyName, "Folder does not exist");
-            }
-
-            try
-            {
-                var testPath = Path.Combine(folder, "drone_test.txt");
-                _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                _diskProvider.DeleteFile(testPath);
-            }
-            catch (Exception ex)
-            {
-                _logger.ErrorException(ex.Message, ex);
-                return new ValidationFailure(propertyName, "Unable to write to folder");
-            }
-
-            return null;
         }
     }
 }

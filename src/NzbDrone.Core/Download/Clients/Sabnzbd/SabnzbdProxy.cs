@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         void RemoveFrom(string source, string id, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
-        List<String> GetCategories(SabnzbdSettings settings);
+        SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
         void RetryDownload(string id, SabnzbdSettings settings);
@@ -85,14 +85,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response;
         }
 
-        public List<String> GetCategories(SabnzbdSettings settings)
+        public SabnzbdConfig GetConfig(SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = "mode=get_cats";
+            var action = "mode=get_config";
 
-            var response = Json.Deserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings)).Categories;
+            var response = Json.Deserialize<SabnzbdConfigResponse>(ProcessRequest(request, action, settings));
 
-            return response;
+            return response.Config;
         }
 
         public SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings)

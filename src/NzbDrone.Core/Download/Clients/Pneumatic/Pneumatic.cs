@@ -17,17 +17,15 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
     public class Pneumatic : DownloadClientBase<PneumaticSettings>
     {
         private readonly IHttpProvider _httpProvider;
-        private readonly IDiskProvider _diskProvider;
 
         public Pneumatic(IHttpProvider httpProvider,
-                         IDiskProvider diskProvider,
                          IConfigService configService,
+                         IDiskProvider diskProvider,
                          IParsingService parsingService,
                          Logger logger)
-            : base(configService, parsingService, logger)
+            : base(configService, diskProvider, parsingService, logger)
         {
             _httpProvider = httpProvider;
-            _diskProvider = diskProvider;
         }
 
         public override DownloadProtocol Protocol
