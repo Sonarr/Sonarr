@@ -75,7 +75,6 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             var request = BuildRequest("allNames");
             request.AddParameter("origin", "tvdb");
-            //request.AddParameter("language", "us");
             request.AddParameter("seasonNumbers", true);
 
             var response = restClient.ExecuteAndValidate<XemResult<Dictionary<Int32, List<JObject>>>>(request);
@@ -91,6 +90,12 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                     {
                         int seasonNumber;
                         if (!Int32.TryParse(n.Value.ToString(), out seasonNumber))
+                        {
+                            continue;
+                        }
+
+                        //hack to deal with Fate/Zero 
+                        if (series.Key == 79151 && seasonNumber > 1)
                         {
                             continue;
                         }
