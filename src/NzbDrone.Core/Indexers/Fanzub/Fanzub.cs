@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FluentValidation.Results;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Fanzub
@@ -67,6 +68,11 @@ namespace NzbDrone.Core.Indexers.Fanzub
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
         {
             return new List<string>();
+        }
+
+        public override ValidationResult Test()
+        {
+            return new ValidationResult();
         }
 
         private IEnumerable<String> GetTitleSearchStrings(string title, int absoluteEpisodeNumber)

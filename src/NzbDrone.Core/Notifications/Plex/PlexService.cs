@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Xml.Linq;
+using FluentValidation.Results;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
@@ -14,9 +11,11 @@ namespace NzbDrone.Core.Notifications.Plex
     {
         void Notify(PlexClientSettings settings, string header, string message);
         void UpdateLibrary(PlexServerSettings settings);
+        ValidationFailure Test(PlexClientSettings settings);
+        ValidationFailure Test(PlexServerSettings settings);
     }
 
-    public class PlexService : IPlexService, IExecute<TestPlexClientCommand>, IExecute<TestPlexServerCommand>
+    public class PlexService : IPlexService
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IPlexServerProxy _plexServerProxy;
@@ -84,31 +83,51 @@ namespace NzbDrone.Core.Notifications.Plex
             return _httpProvider.DownloadString(url);
         }
 
-        public void Execute(TestPlexClientCommand message)
+        public ValidationFailure Test(PlexClientSettings settings)
         {
-            _logger.Debug("Sending Test Notifcation to Plex Client: {0}", message.Host);
-            var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
-            var result = SendCommand(message.Host, message.Port, command, message.Username, message.Password);
-
-            if (String.IsNullOrWhiteSpace(result) ||
-                result.IndexOf("error", StringComparison.InvariantCultureIgnoreCase) > -1)
+            try
             {
-                throw new Exception("Unable to connect to Plex Client");
+                _logger.Debug("Sending Test Notifcation to Plex Client: {0}", settings.Host);
+                var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
+                var result = SendCommand(settings.Host, settings.Port, command, settings.Username, settings.Password);
+
+                if (String.IsNullOrWhiteSpace(result) ||
+                    result.IndexOf("error", StringComparison.InvariantCultureIgnoreCase) > -1)
+                {
+                    throw new Exception("Unable to connect to Plex Client");
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to send test message");
+            }
+
+            return null;
         }
 
-        public void Execute(TestPlexServerCommand message)
+        public ValidationFailure Test(PlexServerSettings settings)
         {
-            if (!GetSectionKeys(new PlexServerSettings
-                                {
-                                    Host = message.Host,
-                                    Port = message.Port,
-                                    Username = message.Username,
-                                    Password =  message.Password
-                                }).Any())
+            try
             {
-                throw new Exception("Unable to connect to Plex Server");
+                if (!GetSectionKeys(new PlexServerSettings
+                {
+                    Host = settings.Host,
+                    Port = settings.Port,
+                    Username = settings.Username,
+                    Password = settings.Password
+                }).Any())
+                {
+                    throw new Exception("Unable to connect to Plex Server");
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Unable to connect to Plex Server: " + ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to connect to Plex Server");
+            }
+
+            return null;
         }
     }
 }

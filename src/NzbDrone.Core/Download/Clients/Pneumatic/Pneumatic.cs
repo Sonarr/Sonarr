@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
-    public class Pneumatic : DownloadClientBase<PneumaticSettings>, IExecute<TestPneumaticCommand>
+    public class Pneumatic : DownloadClientBase<PneumaticSettings>
     {
         private readonly IHttpProvider _httpProvider;
         private readonly IDiskProvider _diskProvider;
-
-        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
 
         public Pneumatic(IHttpProvider httpProvider,
                          IDiskProvider diskProvider,
@@ -57,10 +53,10 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
             var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
-            logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
+            _logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
             _httpProvider.DownloadFile(url, filename);
 
-            logger.Debug("NZB Download succeeded, saved to: {0}", filename);
+            _logger.Debug("NZB Download succeeded, saved to: {0}", filename);
 
             var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
             _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
@@ -101,24 +97,35 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return status;
         }
 
-        public override void Test(PneumaticSettings settings)
+        public override ValidationResult Test()
         {
-            PerformWriteTest(settings.NzbFolder);
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
+
+            return new ValidationResult(failures);
         }
 
-        private void PerformWriteTest(string folder)
+        private ValidationFailure TestWrite(String folder, String propertyName)
         {
-            var testPath = Path.Combine(folder, "drone_test.txt");
-            _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-            _diskProvider.DeleteFile(testPath);
-        }
+            if (!_diskProvider.FolderExists(folder))
+            {
+                return new ValidationFailure(propertyName, "Folder does not exist");
+            }
 
-        public void Execute(TestPneumaticCommand message)
-        {
-            var settings = new PneumaticSettings();
-            settings.InjectFrom(message);
+            try
+            {
+                var testPath = Path.Combine(folder, "drone_test.txt");
+                _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
+                _diskProvider.DeleteFile(testPath);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new ValidationFailure(propertyName, "Unable to write to folder");
+            }
 
-            Test(settings);
+            return null;
         }
     }
 }

@@ -2,19 +2,18 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class Sabnzbd : DownloadClientBase<SabnzbdSettings>, IExecute<TestSabnzbdCommand>
+    public class Sabnzbd : DownloadClientBase<SabnzbdSettings>
     {
         private readonly IHttpProvider _httpProvider;
         private readonly ISabnzbdProxy _proxy;
@@ -218,22 +217,41 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return status;
         }
 
-        public override void Test(SabnzbdSettings settings)
+        public override ValidationResult Test()
         {
-            var categories = _proxy.GetCategories(settings);
+            var failures = new List<ValidationFailure>();
 
-            if (!settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v == settings.TvCategory))
-            {
-                throw new ApplicationException("Category does not exist");
-            }
+            failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestCategory());
+
+            return new ValidationResult(failures);
         }
 
-        public void Execute(TestSabnzbdCommand message)
+        private ValidationFailure TestConnection()
         {
-            var settings = new SabnzbdSettings();
-            settings.InjectFrom(message);
+            try
+            {
+                _proxy.GetCategories(Settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to connect to SABnzbd");
+            }
 
-            Test(settings);
+            return null;
+        }
+
+        private ValidationFailure TestCategory()
+        {
+            var categories = _proxy.GetCategories(Settings);
+
+            if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v == Settings.TvCategory))
+            {
+                return new ValidationFailure("TvCategory", "Category does not exist");
+            }
+
+            return null;
         }
     }
 }

@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
-    public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>, IExecute<TestUsenetBlackholeCommand>
+    public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
@@ -146,25 +145,36 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             };
         }
 
-        public override void Test(UsenetBlackholeSettings settings)
+        public override ValidationResult Test()
         {
-            PerformWriteTest(settings.NzbFolder);
-            PerformWriteTest(settings.WatchFolder);
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestWrite(Settings.WatchFolder, "WatchFolder"));
+
+            return new ValidationResult(failures);
         }
 
-        private void PerformWriteTest(string folder)
+        private ValidationFailure TestWrite(String folder, String propertyName)
         {
-            var testPath = Path.Combine(folder, "drone_test.txt");
-            _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-            _diskProvider.DeleteFile(testPath);
-        }
+            if (!_diskProvider.FolderExists(folder))
+            {
+                return new ValidationFailure(propertyName, "Folder does not exist");
+            }
 
-        public void Execute(TestUsenetBlackholeCommand message)
-        {
-            var settings = new UsenetBlackholeSettings();
-            settings.InjectFrom(message);
+            try
+            {
+                var testPath = Path.Combine(folder, "drone_test.txt");
+                _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
+                _diskProvider.DeleteFile(testPath);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new ValidationFailure(propertyName, "Unable to write to folder");
+            }
 
-            Test(settings);
+            return null;
         }
     }
 }

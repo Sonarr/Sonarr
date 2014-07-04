@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(UserKey) && Priority != null & Priority >= -1 && Priority <= 2;
+                return !string.IsNullOrWhiteSpace(UserKey) && Priority >= -1 && Priority <= 2;
             }
         }
 

@@ -1,14 +1,17 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
     public class Pushover : NotificationBase<PushoverSettings>
     {
-        private readonly IPushoverProxy _pushoverProxy;
+        private readonly IPushoverProxy _proxy;
         
-        public Pushover(IPushoverProxy pushoverProxy)
+        public Pushover(IPushoverProxy proxy)
         {
-            _pushoverProxy = pushoverProxy;
+            _proxy = proxy;
         }
 
         public override string Link
@@ -20,18 +23,27 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
             const string title = "Episode Grabbed";
 
-            _pushoverProxy.SendNotification(title, message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
+            _proxy.SendNotification(title, message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _pushoverProxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
+            _proxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
         public override void AfterRename(Series series)
         {
+        }
+
+        public override ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_proxy.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

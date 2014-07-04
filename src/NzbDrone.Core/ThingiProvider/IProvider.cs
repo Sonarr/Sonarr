@@ -1,6 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FluentValidation.Results;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -10,5 +10,6 @@ namespace NzbDrone.Core.ThingiProvider
 
         IEnumerable<ProviderDefinition> DefaultDefinitions { get; }
         ProviderDefinition Definition { get; set; }
+        ValidationResult Test();
     }
 }

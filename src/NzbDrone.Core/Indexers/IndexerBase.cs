@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentValidation.Results;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
@@ -32,6 +33,7 @@ namespace NzbDrone.Core.Indexers
 
         public virtual ProviderDefinition Definition { get; set; }
 
+        public abstract ValidationResult Test();
         public abstract DownloadProtocol Protocol { get; }
 
         public virtual Boolean SupportsFeed { get { return true; } }

@@ -8,5 +8,13 @@ namespace NzbDrone.Core.Notifications
         public Boolean OnGrab { get; set; }
         public Boolean OnDownload { get; set; }
         public Boolean OnUpgrade { get; set; }
+
+        public override Boolean Enable
+        {
+            get
+            {
+                return OnGrab || OnDownload || OnUpgrade;
+            }
+        }
     }
 }

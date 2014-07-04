@@ -1,14 +1,17 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexClient : NotificationBase<PlexClientSettings>
     {
-        private readonly IPlexService _plexProvider;
+        private readonly IPlexService _plexService;
 
-        public PlexClient(IPlexService plexProvider)
+        public PlexClient(IPlexService plexService)
         {
-            _plexProvider = plexProvider;
+            _plexService = plexService;
         }
 
         public override string Link
@@ -19,17 +22,26 @@ namespace NzbDrone.Core.Notifications.Plex
         public override void OnGrab(string message)
         {
             const string header = "NzbDrone [TV] - Grabbed";
-            _plexProvider.Notify(Settings, header, message);
+            _plexService.Notify(Settings, header, message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string header = "NzbDrone [TV] - Downloaded";
-            _plexProvider.Notify(Settings, header, message.Message);
+            _plexService.Notify(Settings, header, message.Message);
         }
 
         public override void AfterRename(Series series)
         {
+        }
+
+        public override ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_plexService.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.ThingiProvider;
@@ -26,6 +28,11 @@ namespace NzbDrone.Core.Metadata
         }
 
         public ProviderDefinition Definition { get; set; }
+
+        public ValidationResult Test()
+        {
+            return new ValidationResult();
+        }
 
         public abstract List<MetadataFile> AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles);
         public abstract MetadataFile FindMetadataFile(Series series, string path);

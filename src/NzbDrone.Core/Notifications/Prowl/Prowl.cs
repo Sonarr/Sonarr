@@ -1,15 +1,18 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
     public class Prowl : NotificationBase<ProwlSettings>
     {
-        private readonly IProwlService _prowlProvider;
+        private readonly IProwlService _prowlService;
 
-        public Prowl(IProwlService prowlProvider)
+        public Prowl(IProwlService prowlService)
         {
-            _prowlProvider = prowlProvider;
+            _prowlService = prowlService;
         }
 
         public override string Link
@@ -21,18 +24,27 @@ namespace NzbDrone.Core.Notifications.Prowl
         {
             const string title = "Episode Grabbed";
 
-            _prowlProvider.SendNotification(title, message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlService.SendNotification(title, message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _prowlProvider.SendNotification(title, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlService.SendNotification(title, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
         public override void AfterRename(Series series)
         {
+        }
+
+        public override ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_prowlService.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

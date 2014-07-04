@@ -23,7 +23,10 @@ namespace NzbDrone.Api
             : base(resource)
         {
             _providerFactory = providerFactory;
+
             Get["schema"] = x => GetTemplates();
+            Post["test"] = x => Test(ReadResourceFromRequest());
+
             GetResourceAll = GetAll;
             GetResourceById = GetProviderById;
             CreateResource = CreateProvider;
@@ -63,16 +66,26 @@ namespace NzbDrone.Api
 
         private int CreateProvider(TProviderResource providerResource)
         {
-            var provider = GetDefinition(providerResource);
-            provider = _providerFactory.Create(provider);
-            return provider.Id;
+            var providerDefinition = GetDefinition(providerResource);
+
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition);
+            }
+
+            providerDefinition = _providerFactory.Create(providerDefinition);
+
+            return providerDefinition.Id;
         }
 
         private void UpdateProvider(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource);
 
-            Validate(providerDefinition);
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition);
+            }
 
             _providerFactory.Update(providerDefinition);
         }
@@ -131,6 +144,25 @@ namespace NzbDrone.Api
             }
 
             return result.AsResponse();
+        }
+
+        private Response Test(TProviderResource providerResource)
+        {
+            var providerDefinition = GetDefinition(providerResource);
+
+            Test(providerDefinition);
+
+            return "{}";
+        }
+
+        private void Test(TProviderDefinition providerDefinition)
+        {
+            var result = _providerFactory.Test(providerDefinition);
+
+            if (!result.IsValid)
+            {
+                throw new ValidationException(result.Errors);
+            }
         }
 
         protected virtual void Validate(TProviderDefinition definition)

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using FluentValidation.Results;
 using NLog;
-using NzbDrone.Core.Messaging.Commands;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Notifications.Email
 {
     public interface IEmailService
     {
         void SendEmail(EmailSettings settings, string subject, string body, bool htmlBody = false);
+        ValidationFailure Test(EmailSettings settings);
     }
 
-    public class EmailService : IEmailService, IExecute<TestEmailCommand>
+    public class EmailService : IEmailService
     {
         private readonly Logger _logger;
 
@@ -66,14 +66,21 @@ namespace NzbDrone.Core.Notifications.Email
             }
         }
 
-        public void Execute(TestEmailCommand message)
+        public ValidationFailure Test(EmailSettings settings)
         {
-            var settings = new EmailSettings();
-            settings.InjectFrom(message);
-
             const string body = "Success! You have properly configured your email notification settings";
 
-            SendEmail(settings, "NzbDrone - Test Notification", body);
+            try
+            {
+                SendEmail(settings, "NzbDrone - Test Notification", body);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Unable to send test email: " + ex.Message, ex);
+                return new ValidationFailure("Server", "Unable to send test email");
+            }
+
+            return null;
         }
     }
 }

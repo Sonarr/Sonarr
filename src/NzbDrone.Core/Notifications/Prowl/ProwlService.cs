@@ -1,6 +1,6 @@
 ﻿using System;
+using FluentValidation.Results;
 using NLog;
-using NzbDrone.Core.Messaging.Commands;
 using Prowlin;
 
 namespace NzbDrone.Core.Notifications.Prowl
@@ -8,9 +8,10 @@ namespace NzbDrone.Core.Notifications.Prowl
     public interface IProwlService
     {
         void SendNotification(string title, string message, string apiKey, NotificationPriority priority = NotificationPriority.Normal, string url = null);
+        ValidationFailure Test(ProwlSettings settings);
     }
 
-    public class ProwlService : IProwlService, IExecute<TestProwlCommand>
+    public class ProwlService : IProwlService
     {
         private readonly Logger _logger;
 
@@ -80,14 +81,24 @@ namespace NzbDrone.Core.Notifications.Prowl
             }
         }
 
-        public void Execute(TestProwlCommand message)
+        public ValidationFailure Test(ProwlSettings settings)
         {
-            Verify(message.ApiKey);
+            try
+            {
+                Verify(settings.ApiKey);
 
-            const string title = "Test Notification";
-            const string body = "This is a test message from NzbDrone";
+                const string title = "Test Notification";
+                const string body = "This is a test message from NzbDrone";
 
-            SendNotification(title, body, message.ApiKey);
+                SendNotification(title, body, settings.ApiKey);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                return new ValidationFailure("ApiKey", "Unable to send test message");
+            }
+
+            return null;
         }
     }
 }
