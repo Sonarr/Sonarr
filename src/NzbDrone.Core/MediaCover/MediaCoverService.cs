@@ -18,7 +18,6 @@ namespace NzbDrone.Core.MediaCover
     {
         void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
         string GetCoverPath(int seriesId, MediaCoverTypes mediaCoverTypes);
-
     }
 
     public class MediaCoverService :
