@@ -1,17 +1,18 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Test.Common;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new NzbgetSettings
                                           {
-                                              Host = "192.168.5.55",
+                                              Host = "127.0.0.1",
                                               Port = 2222,
                                               Username = "admin",
                                               Password = "pass",
@@ -65,7 +66,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                     FileSizeLo = 1000,
                     Category = "tv",
                     Name = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE",
-                    DestDir = "somedirectory",
+                    DestDir = "/remote/mount/tv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE",
                     Parameters = new List<NzbgetParameter> { new NzbgetParameter { Name = "drone", Value = "id" } },
                     ParStatus = "SUCCESS",
                     UnpackStatus = "NONE",
@@ -81,6 +82,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                 {
                     DownloadRate = 7000000
                 });
+
+            var configItems = new Dictionary<String, String>();
+            configItems.Add("Category1.Name", "tv");
+            configItems.Add("Category1.DestDir", @"/remote/mount/tv");
+
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetConfig(It.IsAny<NzbgetSettings>()))
+                .Returns(configItems);
+        }
+
+        protected void WithMountPoint(String mountPath)
+        {
+            (Subject.Definition.Settings as NzbgetSettings).TvCategoryLocalPath = mountPath;
         }
 
         protected void WithFailedDownload()
@@ -222,6 +236,41 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var items = Subject.GetItems();
 
             items.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_return_status_with_outputdir()
+        {
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(@"/remote/mount/tv");
+        }
+
+        [Test]
+        public void should_return_status_with_mounted_outputdir()
+        {
+            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(@"O:\mymount".AsOsAgnostic());
+        }
+
+        [Test]
+        public void should_remap_storage_if_mounted()
+        {
+            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+
+            WithQueue(null);
+            WithHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.OutputPath.Should().Be(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
         }
     }
 }

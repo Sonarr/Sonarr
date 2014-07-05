@@ -189,14 +189,36 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
+            Dictionary<String,String> config = null;
+            NzbgetCategory category = null;
+            try
+            {
+                if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+                {
+                    config = _proxy.GetConfig(Settings);
+                    category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+                }
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                yield break;
+            }
+
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
-                if (downloadClientItem.Category != Settings.TvCategory) continue;
+                if (downloadClientItem.Category == Settings.TvCategory)
+                {
+                    if (category != null)
+                    {
+                        RemapStorage(downloadClientItem, category.DestDir, Settings.TvCategoryLocalPath);
+                    }
 
-                downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
-                if (downloadClientItem.RemoteEpisode == null) continue;
+                    downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
+                    if (downloadClientItem.RemoteEpisode == null) continue;
 
-                yield return downloadClientItem;
+                    yield return downloadClientItem;
+                }
             }
         }
 
@@ -223,7 +245,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (category != null)
             {
-                status.OutputRootFolders = new List<string> { category.DestDir };
+                if (Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+                {
+                    status.OutputRootFolders = new List<String> { category.DestDir };
+                }
+                else
+                {
+                    status.OutputRootFolders = new List<String> { Settings.TvCategoryLocalPath };
+                }
             }
 
             return status;

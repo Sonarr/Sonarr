@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Collections.Generic;
-using FluentValidation.Results;
+using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
@@ -8,6 +10,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
 using NLog;
+using FluentValidation.Results;
 
 namespace NzbDrone.Core.Download
 {
@@ -79,6 +82,23 @@ namespace NzbDrone.Core.Download
             if (remoteEpisode.Series == null) return null;
 
             return remoteEpisode;
+        }
+
+        protected void RemapStorage(DownloadClientItem downloadClientItem, String remotePath, String localPath)
+        {
+            if (downloadClientItem.OutputPath.IsNullOrWhiteSpace() || localPath.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            remotePath = remotePath.TrimEnd('/', '\\');
+            localPath = localPath.TrimEnd('/', '\\');
+
+            if (downloadClientItem.OutputPath.StartsWith(remotePath))
+            {
+                downloadClientItem.OutputPath = localPath + downloadClientItem.OutputPath.Substring(remotePath.Length);
+                downloadClientItem.OutputPath = downloadClientItem.OutputPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            }
         }
 
         protected ValidationFailure TestFolder(String folder, String propertyName, Boolean mustBeWritable = true)

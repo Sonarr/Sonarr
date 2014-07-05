@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new SabnzbdSettings
                                           {
-                                              Host = "192.168.5.55",
+                                              Host = "127.0.0.1",
                                               Port = 2222,
                                               ApiKey = "5c770e3197e4fe763423ee7c392c25d1",
                                               Username = "admin",
@@ -82,10 +82,29 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                             Category = "tv", 
                             Id = "sabnzbd_nzb12345",
                             Title = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE",
-                            Storage = "somedirectory"
+                            Storage = "/remote/mount/vv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE"
                         }
                     }
                 };
+
+            Mocker.GetMock<ISabnzbdProxy>()
+                .Setup(s => s.GetConfig(It.IsAny<SabnzbdSettings>()))
+                .Returns(new SabnzbdConfig
+                {
+                    Misc = new SabnzbdConfigMisc 
+                        {
+                            complete_dir = "/remote/mount/"
+                        },
+                    Categories = new List<SabnzbdCategory>
+                        {
+                            new SabnzbdCategory  { Name = "tv", Dir = "vv" }
+                        }
+                });
+        }
+
+        protected void WithMountPoint(String mountPath)
+        {
+            (Subject.Definition.Settings as SabnzbdSettings).TvCategoryLocalPath = mountPath;
         }
 
         protected void WithFailedDownload()
@@ -270,6 +289,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         }
 
         [Test]
+        public void should_remap_storage_if_mounted()
+        {
+            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+
+            WithQueue(null);
+            WithHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.OutputPath.Should().Be(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
+        }
+
+        [Test]
         public void should_not_blow_up_if_storage_is_drive_root()
         {
             _completed.Items.First().Storage = @"C:\".AsOsAgnostic();
@@ -280,6 +312,28 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             var result = Subject.GetItems().Single();
 
             result.OutputPath.Should().Be(@"C:\".AsOsAgnostic());
+        }
+
+        [Test]
+        public void should_return_status_with_outputdir()
+        {
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(@"/remote/mount/vv");
+        }
+
+        [Test]
+        public void should_return_status_with_mounted_outputdir()
+        {
+            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(@"O:\mymount".AsOsAgnostic());
         }
     }
 }
