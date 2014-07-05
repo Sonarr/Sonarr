@@ -33,7 +33,7 @@ namespace NzbDrone.Common.Disk
             return new DirectoryInfo(path).CreationTimeUtc;
         }
 
-        public DateTime FolderGetLastWrite(string path)
+        public DateTime FolderGetLastWriteUtc(string path)
         {
             CheckFolderExists(path);
 

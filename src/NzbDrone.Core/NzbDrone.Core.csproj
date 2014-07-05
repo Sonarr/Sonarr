@@ -104,6 +104,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
+    <Compile Include="Backup\Backup.cs" />
+    <Compile Include="Backup\BackupCommand.cs" />
+    <Compile Include="Backup\BackupService.cs" />
     <Compile Include="Blacklisting\Blacklist.cs" />
     <Compile Include="Blacklisting\BlacklistRepository.cs" />
     <Compile Include="Blacklisting\BlacklistService.cs" />
