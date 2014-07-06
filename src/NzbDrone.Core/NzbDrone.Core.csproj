@@ -683,6 +683,7 @@
     <Compile Include="Parser\Model\LocalEpisode.cs" />
     <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />
     <Compile Include="Parser\Model\ReleaseInfo.cs" />
+    <Compile Include="Parser\Model\ReleaseUserRatings.cs" />
     <Compile Include="Parser\Model\RemoteEpisode.cs" />
     <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
     <Compile Include="Parser\Model\TorrentInfo.cs" />
