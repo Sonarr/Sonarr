@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download
         }
 
         public ProviderDefinition Definition { get; set; }
-        public abstract IEnumerable<ValidationFailure> Test();
+        public abstract ValidationResult Test();
 
         protected TSettings Settings
         {

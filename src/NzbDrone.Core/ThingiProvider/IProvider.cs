@@ -10,6 +10,6 @@ namespace NzbDrone.Core.ThingiProvider
 
         IEnumerable<ProviderDefinition> DefaultDefinitions { get; }
         ProviderDefinition Definition { get; set; }
-        IEnumerable<ValidationFailure> Test();
+        ValidationResult Test();
     }
 }

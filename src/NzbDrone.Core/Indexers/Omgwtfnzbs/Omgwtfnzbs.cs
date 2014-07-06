@@ -82,9 +82,9 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return new List<string>();
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
-            return Enumerable.Empty<ValidationFailure>();
+            return new ValidationResult();
         }
     }
 }

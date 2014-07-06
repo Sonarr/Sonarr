@@ -38,13 +38,13 @@ namespace NzbDrone.Core.Notifications.Prowl
         {
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
             failures.AddIfNotNull(_prowlService.Test(Settings));
 
-            return failures;
+            return new ValidationResult(failures);
         }
     }
 }

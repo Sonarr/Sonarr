@@ -40,13 +40,13 @@ namespace NzbDrone.Core.Notifications.Email
         {
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
             failures.AddIfNotNull(_emailService.Test(Settings));
 
-            return failures;
+            return new ValidationResult(failures);
         }
     }
 }

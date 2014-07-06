@@ -37,13 +37,13 @@ namespace NzbDrone.Core.Notifications.Growl
         {
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
             failures.AddIfNotNull(_growlService.Test(Settings));
 
-            return failures;
+            return new ValidationResult(failures);
         }
     }
 }

@@ -47,13 +47,13 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
             failures.AddIfNotNull(_xbmcService.Test(Settings));
 
-            return failures;
+            return new ValidationResult(failures);
         }
 
         private void UpdateAndClean(Series series, bool clean = true)

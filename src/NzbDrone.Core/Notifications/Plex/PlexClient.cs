@@ -35,13 +35,13 @@ namespace NzbDrone.Core.Notifications.Plex
         {
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
             failures.AddIfNotNull(_plexService.Test(Settings));
 
-            return failures;
+            return new ValidationResult(failures);
         }
     }
 }

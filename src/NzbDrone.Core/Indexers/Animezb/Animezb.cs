@@ -73,9 +73,9 @@ namespace NzbDrone.Core.Indexers.Animezb
             return new List<string>();
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
-            return Enumerable.Empty<ValidationFailure>();
+            return new ValidationResult();
         }
 
         private String GetSearchQuery(string title, int absoluteEpisodeNumber)

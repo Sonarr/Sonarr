@@ -8,10 +8,8 @@ using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -266,17 +264,17 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return _proxy.GetVersion(Settings);
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(ConnectionTest());
-            failures.AddIfNotNull(ValidateCategory());
+            failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestCategory());
 
-            return failures;
+            return new ValidationResult(failures);
         }
 
-        private ValidationFailure ConnectionTest()
+        private ValidationFailure TestConnection()
         {
             try
             {
@@ -291,7 +289,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return null;
         }
 
-        private ValidationFailure ValidateCategory()
+        private ValidationFailure TestCategory()
         {
             var config = _proxy.GetConfig(Settings);
             var categories = GetCategories(config);

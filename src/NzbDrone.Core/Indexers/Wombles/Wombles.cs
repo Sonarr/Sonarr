@@ -49,9 +49,9 @@ namespace NzbDrone.Core.Indexers.Wombles
             return new List<string>();
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
-            return Enumerable.Empty<ValidationFailure>();
+            return new ValidationResult();
         }
     }
 }

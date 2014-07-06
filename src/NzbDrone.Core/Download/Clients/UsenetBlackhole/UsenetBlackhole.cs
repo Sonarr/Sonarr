@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
@@ -10,12 +9,10 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
@@ -148,17 +145,17 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             };
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(PerformWriteTest(Settings.NzbFolder, "NzbFolder"));
-            failures.AddIfNotNull(PerformWriteTest(Settings.WatchFolder, "WatchFolder"));
+            failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestWrite(Settings.WatchFolder, "WatchFolder"));
 
-            return failures;
+            return new ValidationResult(failures);
         }
 
-        private ValidationFailure PerformWriteTest(String folder, String propertyName)
+        private ValidationFailure TestWrite(String folder, String propertyName)
         {
             if (!_diskProvider.FolderExists(folder))
             {

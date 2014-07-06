@@ -15,6 +15,6 @@ namespace NzbDrone.Core.ThingiProvider
         void Delete(int id);
         IEnumerable<TProviderDefinition> GetDefaultDefinitions();
         IEnumerable<TProviderDefinition> GetPresetDefinitions(TProviderDefinition providerDefinition);
-        IEnumerable<ValidationFailure> Test(TProviderDefinition definition);
+        ValidationResult Test(TProviderDefinition definition);
     }
 }

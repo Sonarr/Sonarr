@@ -29,9 +29,9 @@ namespace NzbDrone.Core.Metadata
 
         public ProviderDefinition Definition { get; set; }
 
-        public IEnumerable<ValidationFailure> Test()
+        public ValidationResult Test()
         {
-            return Enumerable.Empty<ValidationFailure>();
+            return new ValidationResult();
         }
 
         public abstract List<MetadataFile> AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles);

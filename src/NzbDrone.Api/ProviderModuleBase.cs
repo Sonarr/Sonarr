@@ -157,11 +157,11 @@ namespace NzbDrone.Api
 
         private void Test(TProviderDefinition providerDefinition)
         {
-            var errors = _providerFactory.Test(providerDefinition).ToList();
+            var result = _providerFactory.Test(providerDefinition);
 
-            if (errors.Any())
+            if (!result.IsValid)
             {
-                throw new ValidationException(errors);
+                throw new ValidationException(result.Errors);
             }
         }
 

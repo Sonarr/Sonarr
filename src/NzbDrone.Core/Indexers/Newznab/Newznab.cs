@@ -190,11 +190,11 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&offset={1}&limit=100&q={2}", url.Replace("t=tvsearch", "t=search"), offset, query));
         }
 
-        public override IEnumerable<ValidationFailure> Test()
+        public override ValidationResult Test()
         {
             var releases = _feedFetcher.FetchRss(this);
 
-            if (releases.Any()) return Enumerable.Empty<ValidationFailure>();
+            if (releases.Any()) return new ValidationResult();
 
             try
             {
@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
 
                 var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
-                return new List<ValidationFailure> { apiKeyFailure };
+                return new ValidationResult(new List<ValidationFailure> { apiKeyFailure });
             }
             catch (RequestLimitReachedException)
             {
@@ -219,10 +219,10 @@ namespace NzbDrone.Core.Indexers.Newznab
                 _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
 
                 var failure = new ValidationFailure("Url", "Unable to connect to indexer, check the log for more details");
-                return new List<ValidationFailure> { failure };
+                return new ValidationResult(new List<ValidationFailure> { failure });
             }
 
-            return Enumerable.Empty<ValidationFailure>();
+            return new ValidationResult();
         }
 
         private static string NewsnabifyTitle(string title)
