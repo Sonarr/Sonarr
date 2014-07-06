@@ -180,13 +180,16 @@ namespace NzbDrone.Core.Indexers
             }
 
             //convert any rating system to an out of 10 system, e.g. rating 3 out of 5 or 12 out of 20 all become 6 out of 10.
-            int ratingMultiplier = highestPossibleRating / 10;
+            int ratingMultiplier = 10 / highestPossibleRating;
             int videoRatingOf10 = (int)Math.Round(videoRating * ratingMultiplier);
             int audioRatingOf10 = (int)Math.Round(audioRating * ratingMultiplier);
 
             //increase or decrease weight for quality rating, 4 and under are considered bad quality and are negative weighted.
-            weightedPriority += (videoRatingOf10 >= 4 ? videoRatingOf10 : videoRatingOf10 - 5);
-            weightedPriority += (audioRatingOf10 >= 4 ? audioRatingOf10 : videoRatingOf10 - 5);
+            if (videoRating + audioRating != 0)
+            {
+                weightedPriority += (videoRatingOf10 >= 4 ? videoRatingOf10 : videoRatingOf10 - 5);
+                weightedPriority += (audioRatingOf10 >= 4 ? audioRatingOf10 : videoRatingOf10 - 5);
+            }
 
             return weightedPriority;
         }

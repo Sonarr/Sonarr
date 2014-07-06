@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected override int GetOZnzbUpVotes(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
-            var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_up_votes ", StringComparison.CurrentCultureIgnoreCase));
+            var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_up_votes", StringComparison.CurrentCultureIgnoreCase));
 
             if (usenetdateElement != null)
             {
