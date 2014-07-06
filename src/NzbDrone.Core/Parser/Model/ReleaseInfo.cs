@@ -51,5 +51,17 @@ namespace NzbDrone.Core.Parser.Model
         {
             return String.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);
         }
+
+        public int WeightedQuality { get; set; }
+
+        //OZnzb specific properties.
+        public int OZnzbSpamReports { get; set; }
+        public bool OZnzbIsSpamConfirmed { get; set; }
+        public int OZnzbPasswordedReports { get; set; }
+        public bool OZnzbIsPasswordedConfirmed { get; set; }
+        public int OZnzbUpVotes { get; set; }
+        public int OZnzbDownVotes { get; set; }
+        public double OZnzbVideoRating { get; set; }
+        public double OZnzbAudioRating { get; set; }
     }
 }
