@@ -155,10 +155,13 @@ define(
                 var seriesType = this.ui.seriesType.val();
                 var seasonFolder = this.ui.seasonFolder.prop('checked');
 
-                this.model.set('qualityProfileId', quality);
-                this.model.set('rootFolderPath', rootFolderPath);
-                this.model.set('seasonFolder', seasonFolder);
-                this.model.set('seriesType', seriesType);
+                this.model.set({
+                    qualityProfileId: quality,
+                    rootFolderPath: rootFolderPath,
+                    seasonFolder: seasonFolder,
+                    seriesType: seriesType
+                }, { silent: true });
+                
                 this.model.setSeasonPass(startingSeason);
 
                 var self = this;
