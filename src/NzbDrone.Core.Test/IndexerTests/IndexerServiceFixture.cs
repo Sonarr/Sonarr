@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             _indexers = new List<IIndexer>();
 
-            _indexers.Add(new Newznab());
+            _indexers.Add(Mocker.GetMock<Newznab>().Object);
             _indexers.Add(new Omgwtfnzbs());
             _indexers.Add(new Wombles());
 

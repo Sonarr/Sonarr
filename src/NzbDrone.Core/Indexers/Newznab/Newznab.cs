@@ -16,9 +16,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly HttpProvider _httpProvider;
         private readonly Logger _logger;
-
-
-
+        
         public Newznab(IFetchFeedFromIndexers feedFetcher, HttpProvider httpProvider, Logger logger)
         {
             _feedFetcher = feedFetcher;
@@ -26,7 +24,9 @@ namespace NzbDrone.Core.Indexers.Newznab
             _logger = logger;
         }
 
-        public Newznab()
+        //protected so it can be mocked, but not used for DI
+        //TODO: Is there a better way to achieve this?
+        protected Newznab()
         {
         }
 
