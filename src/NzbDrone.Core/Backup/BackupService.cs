@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Backup
             }
             
             _diskProvider.EnsureFolder(_backupTempFolder);
-            _diskProvider.EnsureFolder(_appFolderInfo.GetBackupFolder());
+            _diskProvider.EnsureFolder(GetBackupFolder(backupType));
 
             BackupConfigFile();
             BackupDatabase();
