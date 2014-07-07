@@ -161,7 +161,7 @@ define(
                     seasonFolder: seasonFolder,
                     seriesType: seriesType
                 }, { silent: true });
-                
+
                 this.model.setSeasonPass(startingSeason);
 
                 var self = this;

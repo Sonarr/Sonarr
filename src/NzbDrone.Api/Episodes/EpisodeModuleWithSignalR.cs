@@ -26,6 +26,8 @@ namespace NzbDrone.Api.Episodes
             : base(commandExecutor, resource)
         {
             _episodeService = episodeService;
+
+            GetResourceById = GetEpisode;
         }
 
         protected EpisodeResource GetEpisode(int id)
