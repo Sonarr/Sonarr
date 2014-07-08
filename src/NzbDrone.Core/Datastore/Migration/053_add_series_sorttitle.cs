@@ -1,12 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Data;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Data;
 using FluentMigrator;
-using Newtonsoft.Json;
-using NzbDrone.Common;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
