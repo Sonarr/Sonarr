@@ -223,7 +223,7 @@ namespace NzbDrone.Core.Parser
 
                     if (episodes != null && episodes.Any())
                     {
-                        _logger.Info("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}",
+                        _logger.Debug("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}",
                                     series.Title,
                                     episodes.First().SceneSeasonNumber,
                                     episodes.First().SceneEpisodeNumber,
