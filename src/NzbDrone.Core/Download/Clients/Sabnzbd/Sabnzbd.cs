@@ -11,6 +11,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -312,14 +313,22 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 if (category.Dir.EndsWith("*"))
                 {
-                    return new ValidationFailure(String.Empty, String.Format("Remove * from Sabnzbd <a class=\"no-router\" target=\"_blank\" href=\"http://{0}:{1}/sabnzbd/config/categories/\">'{2}' category</a> Folder/Path so job folders will be created", Settings.Host, Settings.Port, Settings.TvCategory));
+                    return new NzbDroneValidationFailure("TvCategory", "Enable Job folders")
+                    {
+                        InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/categories/", Settings.Host, Settings.Port),
+                        DetailedDescription = "NzbDrone prefers each download to have a separate folder. With * appended to the Folder/Path Sabnzbd will not create these job folders. Go to Sabnzbd to fix it."
+                    };
                 }
             }
             else
             {
                 if (!Settings.TvCategory.IsNullOrWhiteSpace())
                 {
-                    return new ValidationFailure("TvCategory", String.Format("<a class=\"no-router\" target=\"_blank\" href=\"http://{0}:{1}/sabnzbd/config/categories/\">Category</a> does not exist", Settings.Host, Settings.Port));
+                    return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
+                    {
+                        InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/categories/", Settings.Host, Settings.Port),
+                        DetailedDescription = "The Category your entered doesn't exist in Sabnzbd. Go to Sabnzbd to create it."
+                    };
                 }
             }
 
@@ -329,7 +338,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     config.Misc.tv_categories.Contains(Settings.TvCategory) ||
                     (Settings.TvCategory.IsNullOrWhiteSpace() && config.Misc.tv_categories.Contains("Default")))
                 {
-                    return new ValidationFailure(String.Empty, String.Format("Disable <a class=\"no-router\" target=\"_blank\" href=\"http://{0}:{1}/sabnzbd/config/sorting/\">TV Sorting</a> for the '{2}' category", Settings.Host, Settings.Port, Settings.TvCategory));
+                    return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
+                    {
+                        InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
+                        DetailedDescription = "You must disable Sabnzbd TV Sorting for the category NzbDrone uses to prevent import issues. Go to Sabnzbd to fix it."
+                    };
                 }
             }
 

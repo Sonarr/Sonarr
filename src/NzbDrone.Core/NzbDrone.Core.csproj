@@ -725,6 +725,7 @@
     <Compile Include="Validation\Paths\PathExistsValidator.cs" />
     <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
+    <Compile Include="Validation\NzbDroneValidationFailure.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

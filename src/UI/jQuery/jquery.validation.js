@@ -8,9 +8,16 @@ define(
 
             var validationName = error.propertyName.toLowerCase();
 
+            var errorMessage = this.formatErrorMessage(error);
+
             this.find('.validation-errors')
                 .addClass('alert alert-danger')
-                .append('<div><i class="icon-exclamation-sign"></i>' + error.errorMessage + '</div>');
+                .append('<div><i class="icon-exclamation-sign"></i>' + errorMessage + '</div>');
+
+            if (!validationName || validationName === "") {
+                this.addFormError(error);
+                return;
+            }
 
             var input = this.find('[name]').filter(function () {
                 return this.name.toLowerCase() === validationName;
@@ -38,11 +45,11 @@ define(
                 var inputGroup = controlGroup.find('.input-group');
 
                 if (inputGroup.length === 0) {
-                    controlGroup.append('<span class="help-inline error-message">' + error.errorMessage + '</span>');
+                    controlGroup.append('<span class="help-inline validation-error">' + errorMessage + '</span>');
                 }
 
                 else {
-                    inputGroup.parent().append('<span class="help-block error-message">' + error.errorMessage + '</span>');
+                    inputGroup.parent().append('<span class="help-block validation-error">' + errorMessage + '</span>');
                 }
             }
 
@@ -57,12 +64,15 @@ define(
         };
 
         $.fn.addFormError = function (error) {
+
+            var errorMessage = this.formatErrorMessage(error);
+
             if (this.find('.modal-body')) {
-                this.find('.modal-body').prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
+                this.find('.modal-body').prepend('<div class="alert alert-danger validation-error">' + errorMessage + '</div>');
             }
-            
+
             else {
-                this.prepend('<div class="alert alert-danger validation-error">' + error.errorMessage + '</div>');
+                this.prepend('<div class="alert alert-danger validation-error">' + errorMessage + '</div>');
             }
         };
 
@@ -73,5 +83,25 @@ define(
             this.find('.validation-error').remove();
             return this.find('.help-inline.error-message').remove();
         };
+
+        $.fn.formatErrorMessage = function (error) {
+
+            var errorMessage = error.errorMessage;
+            var infoLink = "";
+
+            if (error.infoLink) {
+                if (error.detailedDescription) {
+                    errorMessage += " <a class=\"no-router\" target=\"_blank\" href=\"" + error.infoLink + "\"><i class=\"icon-external-link\" title=\"" + error.detailedDescription + "\"></i></a>";
+                }
+                else {
+                    errorMessage += " <a class=\"no-router\" target=\"_blank\" href=\"" + error.infoLink + "\"><i class=\"icon-external-link\"></i></a>";
+                }
+            }
+            else if (error.detailedDescription) {
+                errorMessage += " <i class=\"icon-nd-form-info\" title=\"" + error.detailedDescription + "\"></i>";
+            }
+
+            return errorMessage;
+        }
 
     });
