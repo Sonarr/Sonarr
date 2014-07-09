@@ -41,6 +41,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex AnimeBlurayRegex = new Regex(@"bd(?:720|1080)|(?<=\[|\(|\s)bd(?=\s|\)|\])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex HighDefPdtvRegex = new Regex(@"hr[-_. ]ws", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static QualityModel ParseQuality(string name)
         {
             Logger.Debug("Trying to parse quality for {0}", name);
@@ -163,6 +165,12 @@ namespace NzbDrone.Core.Parser
                 sourceMatch.Groups["sdtv"].Success ||
                 sourceMatch.Groups["dsr"].Success)
             {
+                if (HighDefPdtvRegex.IsMatch(normalizedName))
+                {
+                    result.Quality = Quality.HDTV720p;
+                    return result;
+                }
+
                 result.Quality = Quality.SDTV;
                 return result;
             }
