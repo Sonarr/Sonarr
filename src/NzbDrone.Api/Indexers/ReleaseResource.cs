@@ -35,5 +35,9 @@ namespace NzbDrone.Api.Indexers
         public String InfoUrl { get; set; }
         public Boolean DownloadAllowed { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
+
+        public Boolean IsDaily { get; set; }
+        public Boolean IsAbsoluteNumbering { get; set; }
+        public Boolean IsPossibleSpecialEpisode { get; set; }
     }
 }
