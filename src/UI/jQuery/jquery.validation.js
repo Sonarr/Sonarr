@@ -14,9 +14,9 @@ define(
                 .addClass('alert alert-danger')
                 .append('<div><i class="icon-exclamation-sign"></i>' + errorMessage + '</div>');
 
-            if (!validationName || validationName === "") {
+            if (!validationName || validationName === '') {
                 this.addFormError(error);
-                return;
+                return this;
             }
 
             var input = this.find('[name]').filter(function () {
@@ -87,21 +87,19 @@ define(
         $.fn.formatErrorMessage = function (error) {
 
             var errorMessage = error.errorMessage;
-            var infoLink = "";
 
             if (error.infoLink) {
                 if (error.detailedDescription) {
-                    errorMessage += " <a class=\"no-router\" target=\"_blank\" href=\"" + error.infoLink + "\"><i class=\"icon-external-link\" title=\"" + error.detailedDescription + "\"></i></a>";
+                    errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-external-link" title="' + error.detailedDescription + '"></i></a>';
                 }
                 else {
-                    errorMessage += " <a class=\"no-router\" target=\"_blank\" href=\"" + error.infoLink + "\"><i class=\"icon-external-link\"></i></a>";
+                    errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-external-link"></i></a>';
                 }
             }
             else if (error.detailedDescription) {
-                errorMessage += " <i class=\"icon-nd-form-info\" title=\"" + error.detailedDescription + "\"></i>";
+                errorMessage += ' <i class="icon-nd-form-info" title="' + error.detailedDescription + '"></i>';
             }
 
             return errorMessage;
-        }
-
+        };
     });
