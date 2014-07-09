@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Organizer
                 return validationFailure;
             }
 
-            if (parsedEpisodeInfo.IsDaily())
+            if (parsedEpisodeInfo.IsDaily)
             {
                 if (!parsedEpisodeInfo.AirDate.Equals(sampleResult.Episodes.Single().AirDate))
                 {

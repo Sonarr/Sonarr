@@ -1,23 +1,24 @@
 using System;
 using System.Linq;
+using NzbDrone.Common;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
 {
     public class ParsedEpisodeInfo
     {
-        public string SeriesTitle { get; set; }
+        public String SeriesTitle { get; set; }
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
-        public int SeasonNumber { get; set; }
-        public int[] EpisodeNumbers { get; set; }
-        public int[] AbsoluteEpisodeNumbers { get; set; }
+        public Int32 SeasonNumber { get; set; }
+        public Int32[] EpisodeNumbers { get; set; }
+        public Int32[] AbsoluteEpisodeNumbers { get; set; }
         public String AirDate { get; set; }
         public Language Language { get; set; }
-        public bool FullSeason { get; set; }
-        public string ReleaseGroup { get; set; }
-        public string ReleaseHash { get; set; }
+        public Boolean FullSeason { get; set; }
+        public Boolean Special { get; set; }
+        public String ReleaseGroup { get; set; }
+        public String ReleaseHash { get; set; }
 
         public ParsedEpisodeInfo()
         {
@@ -25,46 +26,56 @@ namespace NzbDrone.Core.Parser.Model
             AbsoluteEpisodeNumbers = new int[0];
         }
 
-        public bool IsDaily()
+        public bool IsDaily
         {
-            return !String.IsNullOrWhiteSpace(AirDate);
+            get
+            {
+                return !String.IsNullOrWhiteSpace(AirDate);
+            }
         }
 
-        public bool IsAbsoluteNumbering()
+        public bool IsAbsoluteNumbering
         {
-            return AbsoluteEpisodeNumbers.Any();
+            get
+            {
+                return AbsoluteEpisodeNumbers.Any();
+            }
         }
 
-        public bool IsPossibleSpecialEpisode()
+        public bool IsPossibleSpecialEpisode
         {
-            // if we dont have eny episode numbers we are likely a special episode and need to do a search by episode title
-            return String.IsNullOrWhiteSpace(AirDate) && 
-                    (EpisodeNumbers.Length == 0 || SeasonNumber == 0) &&
-                    String.IsNullOrWhiteSpace(SeriesTitle);
+            get
+            {
+                // if we don't have eny episode numbers we are likely a special episode and need to do a search by episode title
+                return (AirDate.IsNullOrWhiteSpace() &&
+                       SeriesTitle.IsNullOrWhiteSpace() &&
+                       (EpisodeNumbers.Length == 0 || SeasonNumber == 0) ||
+                       !SeriesTitle.IsNullOrWhiteSpace() && Special);
+            }
         }
 
         public override string ToString()
         {
             string episodeString = "[Unknown Episode]";
 
-            if (IsDaily() && EpisodeNumbers == null)
+            if (IsDaily && EpisodeNumbers == null)
             {
-                episodeString = string.Format("{0}", AirDate);
+                episodeString = String.Format("{0}", AirDate);
             }
             else if (FullSeason)
             {
-                episodeString = string.Format("Season {0:00}", SeasonNumber);
+                episodeString = String.Format("Season {0:00}", SeasonNumber);
             }
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {
-                episodeString = string.Format("S{0:00}E{1}", SeasonNumber, String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+                episodeString = String.Format("S{0:00}E{1}", SeasonNumber, String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
             }
             else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
             {
-                episodeString = string.Format("{0}", String.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
+                episodeString = String.Format("{0}", String.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
             }
 
-            return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
+            return String.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
         }
     }
 }

@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Parser
                     var titleWithoutExtension = RemoveFileExtension(title).ToCharArray();
                     Array.Reverse(titleWithoutExtension);
 
-                    title = new string(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
+                    title = new String(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
 
                     Logger.Debug("Reversed name detected. Converted to '{0}'", title);
                 }
@@ -213,8 +213,15 @@ namespace NzbDrone.Core.Parser
                         try
                         {
                             var result = ParseMatchCollection(match);
+
                             if (result != null)
                             {
+                                if (result.FullSeason && title.ContainsIgnoreCase("Special"))
+                                {
+                                    result.FullSeason = false;
+                                    result.Special = true;
+                                }
+
                                 result.Language = ParseLanguage(title);
                                 Logger.Debug("Language parsed: {0}", result.Language);
 
@@ -379,12 +386,10 @@ namespace NzbDrone.Core.Parser
                 }
 
                 //If no season was found it should be treated as a mini series and season 1
-                if (seasons.Count == 0)
-                    seasons.Add(1);
+                if (seasons.Count == 0) seasons.Add(1);
 
                 //If more than 1 season was parsed go to the next REGEX (A multi-season release is unlikely)
-                if (seasons.Distinct().Count() > 1)
-                    return null;
+                if (seasons.Distinct().Count() > 1) return null;
 
                 result = new ParsedEpisodeInfo
                 {
@@ -431,12 +436,12 @@ namespace NzbDrone.Core.Parser
                     {
                         //Check to see if this is an "Extras" or "SUBPACK" release, if it is, return NULL
                         //Todo: Set a "Extras" flag in EpisodeParseResult if we want to download them ever
-                        if (!String.IsNullOrWhiteSpace(matchCollection[0].Groups["extras"].Value))
-                            return null;
+                        if (!matchCollection[0].Groups["extras"].Value.IsNullOrWhiteSpace()) return null;
 
                         result.FullSeason = true;
                     }
                 }
+
                 if (result.AbsoluteEpisodeNumbers.Any() && !result.EpisodeNumbers.Any())
                 {
                     result.SeasonNumber = 0;

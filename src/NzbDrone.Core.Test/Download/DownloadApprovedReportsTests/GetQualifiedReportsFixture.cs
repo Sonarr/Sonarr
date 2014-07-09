@@ -14,7 +14,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
 {
     [TestFixture]
-    public class DownloadApprovedReportsFixture : CoreTest<DownloadApprovedReports>
+    public class GetQualifiedReportsFixture : CoreTest<DownloadApprovedReports>
     {
         private Episode GetEpisode(int id)
         {
