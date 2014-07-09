@@ -143,14 +143,10 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             };
         }
 
-        public override ValidationResult Test()
+        protected override void Test(List<ValidationFailure> failures)
         {
-            var failures = new List<ValidationFailure>();
-
             failures.AddIfNotNull(TestFolder(Settings.NzbFolder, "NzbFolder"));
             failures.AddIfNotNull(TestFolder(Settings.WatchFolder, "WatchFolder"));
-
-            return new ValidationResult(failures);
         }
     }
 }

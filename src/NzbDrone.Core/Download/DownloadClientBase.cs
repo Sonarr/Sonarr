@@ -11,6 +11,7 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
 using NLog;
 using FluentValidation.Results;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download
 {
@@ -39,7 +40,6 @@ namespace NzbDrone.Core.Download
         }
 
         public ProviderDefinition Definition { get; set; }
-        public abstract ValidationResult Test();
 
         protected TSettings Settings
         {
@@ -101,11 +101,33 @@ namespace NzbDrone.Core.Download
             }
         }
 
+        public ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+            
+            try
+            {
+                Test(failures);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Test aborted due to exception", ex);
+                failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
+            }
+
+            return new ValidationResult(failures);
+        }
+
+        protected abstract void Test(List<ValidationFailure> failures);
+
         protected ValidationFailure TestFolder(String folder, String propertyName, Boolean mustBeWritable = true)
         {
             if (!_diskProvider.FolderExists(folder))
             {
-                return new ValidationFailure(propertyName, "Folder does not exist");
+                return new NzbDroneValidationFailure(propertyName, "Folder does not exist")
+                {
+                    DetailedDescription = "The folder you specified does not exist or is inaccessible. Please verify the folder permissions for the user account that is used to execute NzbDrone."
+                };
             }
 
             if (mustBeWritable)
@@ -119,7 +141,10 @@ namespace NzbDrone.Core.Download
                 catch (Exception ex)
                 {
                     _logger.ErrorException(ex.Message, ex);
-                    return new ValidationFailure(propertyName, "Unable to write to folder");
+                    return new NzbDroneValidationFailure(propertyName, "Unable to write to folder")
+                    {
+                        DetailedDescription = "The folder you specified is not writable. Please verify the folder permissions for the user account that is used to execute NzbDrone."
+                    };
                 }
             }
 

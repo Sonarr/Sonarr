@@ -193,7 +193,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                throw new DownloadClientException("Unable to connect to NzbGet, please check your settings");
+                throw new DownloadClientException("Unable to connect to NzbGet, please check your settings", response.ErrorException);
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                throw new DownloadClientException("Authentication failed for NzbGet, please check your settings", response.ErrorException);
             }
 
             var result = Json.Deserialize<JsonError>(response.Content);

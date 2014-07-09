@@ -95,13 +95,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return status;
         }
 
-        public override ValidationResult Test()
+        protected override void Test(List<ValidationFailure> failures)
         {
-            var failures = new List<ValidationFailure>();
-
             failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
-
-            return new ValidationResult(failures);
         }
 
         private ValidationFailure TestWrite(String folder, String propertyName)

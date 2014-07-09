@@ -303,19 +303,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return status;
         }
 
-        public override ValidationResult Test()
+        protected override void Test(List<ValidationFailure> failures)
         {
-            var failures = new List<ValidationFailure>();
-
             failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestAuthentication());
             failures.AddIfNotNull(TestCategory());
 
             if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
             {
                 failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
             }
-
-            return new ValidationResult(failures);
         }
 
         private ValidationFailure TestConnection()
@@ -328,6 +325,28 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 _logger.ErrorException(ex.Message, ex);
                 return new ValidationFailure("Host", "Unable to connect to SABnzbd");
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestAuthentication()
+        {
+            try
+            {
+                _proxy.GetConfig(Settings);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.ContainsIgnoreCase("API Key Incorrect"))
+                {
+                    return new ValidationFailure("APIKey", "API Key Incorrect");
+                }
+                if (ex.Message.ContainsIgnoreCase("API Key Required"))
+                {
+                    return new ValidationFailure("APIKey", "API Key Required");
+                }
+                throw;
             }
 
             return null;

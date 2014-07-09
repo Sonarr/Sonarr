@@ -11,6 +11,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -290,10 +291,8 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
         }
 
-        public override ValidationResult Test()
+        protected override void Test(List<ValidationFailure> failures)
         {
-            var failures = new List<ValidationFailure>();
-
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestCategory());
 
@@ -301,8 +300,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
             }
-
-            return new ValidationResult(failures);
         }
 
         private ValidationFailure TestConnection()
@@ -313,6 +310,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
             catch (Exception ex)
             {
+                if (ex.Message.ContainsIgnoreCase("Authentication failed"))
+                {
+                    return new ValidationFailure("Username", "Authentication failed");
+                }
                 _logger.ErrorException(ex.Message, ex);
                 return new ValidationFailure("Host", "Unable to connect to NZBGet");
             }
@@ -327,7 +328,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.TvCategory))
             {
-                return new ValidationFailure("TvCategory", "Category does not exist");
+                return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
+                {
+                    InfoLink = String.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    DetailedDescription = "The Category your entered doesn't exist in NzbGet. Go to NzbGet to create it."
+                };
             }
 
             return null;
