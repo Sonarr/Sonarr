@@ -1,10 +1,11 @@
 'use strict';
 define(
     [
+        'jquery',
         'vent',
         'marionette',
-        'jquery'
-    ], function (vent, Marionette, $) {
+        'History/Details/HistoryDetailsAge'
+    ], function ($, vent, Marionette) {
 
         return Marionette.ItemView.extend({
             template: 'History/Details/HistoryDetailsViewTemplate',
