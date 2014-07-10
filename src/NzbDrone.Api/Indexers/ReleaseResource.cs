@@ -39,5 +39,6 @@ namespace NzbDrone.Api.Indexers
         public Boolean IsDaily { get; set; }
         public Boolean IsAbsoluteNumbering { get; set; }
         public Boolean IsPossibleSpecialEpisode { get; set; }
+        public Boolean Special { get; set; }
     }
 }
