@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Indexers
                     dateString = RemoveTimeZoneRegex.Replace(dateString, "");
                     result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
                 }
-                return result.ToUniversalTime().Date;
+                return result.ToUniversalTime();
             }
             catch (FormatException e)
             {
