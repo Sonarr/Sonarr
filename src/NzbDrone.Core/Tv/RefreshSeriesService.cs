@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Tv
 
             series.Title = seriesInfo.Title;
             series.TitleSlug = seriesInfo.TitleSlug;
+            series.TvRageId = seriesInfo.TvRageId;
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;
