@@ -51,6 +51,9 @@ namespace NzbDrone.Core.Backup
         {
             _logger.ProgressInfo("Starting Backup");
 
+            _diskProvider.EnsureFolder(_backupTempFolder);
+            _diskProvider.EnsureFolder(GetBackupFolder(backupType));
+
             var backupFilename = String.Format("nzbdrone_backup_{0:yyyy.MM.dd_HH.mm.ss}.zip", DateTime.Now);
             var backupPath = Path.Combine(GetBackupFolder(backupType), backupFilename);
 
@@ -61,9 +64,6 @@ namespace NzbDrone.Core.Backup
                 CleanupOldBackups(backupType);
             }
             
-            _diskProvider.EnsureFolder(_backupTempFolder);
-            _diskProvider.EnsureFolder(GetBackupFolder(backupType));
-
             BackupConfigFile();
             BackupDatabase();
 
