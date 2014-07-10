@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Parser.Model
         public string CommentUrl { get; set; }
         public String Indexer { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
-
+        public int TvRageId { get; set; }
         public DateTime PublishDate { get; set; }
 
         public Int32 Age
@@ -24,10 +24,7 @@ namespace NzbDrone.Core.Parser.Model
 
             //This prevents manually downloading a release from blowing up in mono
             //TODO: Is there a better way?
-            private set
-            {
-                
-            }
+            private set { }
         }
 
         public Double AgeHours
@@ -39,13 +36,8 @@ namespace NzbDrone.Core.Parser.Model
 
             //This prevents manually downloading a release from blowing up in mono
             //TODO: Is there a better way?
-            private set
-            {
-
-            }
+            private set { }
         }
-
-        public int TvRageId { get; set; }
 
         public override string ToString()
         {

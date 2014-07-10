@@ -32,6 +32,10 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return !String.IsNullOrWhiteSpace(AirDate);
             }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set { }
         }
 
         public bool IsAbsoluteNumbering
@@ -40,6 +44,10 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return AbsoluteEpisodeNumbers.Any();
             }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set { }
         }
 
         public bool IsPossibleSpecialEpisode
@@ -52,6 +60,10 @@ namespace NzbDrone.Core.Parser.Model
                        (EpisodeNumbers.Length == 0 || SeasonNumber == 0) ||
                        !SeriesTitle.IsNullOrWhiteSpace() && Special);
             }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set {}
         }
 
         public override string ToString()
