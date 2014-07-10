@@ -42,10 +42,11 @@ define(
             },
 
             events: {
-                'click .x-add'             : '_addSeries',
-                'change .x-quality-profile': '_qualityProfileChanged',
-                'change .x-root-folder'    : '_rootFolderChanged',
-                'change .x-season-folder'  : '_seasonFolderChanged'
+                'click .x-add'              : '_addSeries',
+                'change .x-quality-profile' : '_qualityProfileChanged',
+                'change .x-root-folder'     : '_rootFolderChanged',
+                'change .x-season-folder'   : '_seasonFolderChanged',
+                'change .x-series-type'     : '_seriesTypeChanged'
             },
 
             initialize: function () {
@@ -67,6 +68,7 @@ define(
                 var defaultQuality = Config.getValue(Config.Keys.DefaultQualityProfileId);
                 var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
                 var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
+                var defaultSeriesType = Config.getValueBoolean(Config.Keys.DefaultSeriesType, true);
 
                 if (QualityProfiles.get(defaultQuality)) {
                     this.ui.qualityProfile.val(defaultQuality);
@@ -77,6 +79,7 @@ define(
                 }
 
                 this.ui.seasonFolder.prop('checked', useSeasonFolder);
+                this.ui.rootFolder.val(defaultSeriesType);
 
                 var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
 
@@ -117,6 +120,10 @@ define(
                 else if (options.key === Config.Keys.UseSeasonFolder) {
                     this.ui.seasonFolder.prop('checked', options.value);
                 }
+
+                else if (options.key === Config.Keys.DefaultSeriesType) {
+                    this.ui.seriesType.val(options.value);
+                }
             },
 
             _qualityProfileChanged: function () {
@@ -137,6 +144,10 @@ define(
                 else {
                     Config.setValue(Config.Keys.DefaultRootFolderId, rootFolderValue);
                 }
+            },
+
+            _seriesTypeChanged: function () {
+                Config.setValue(Config.Keys.DefaultSeriesType, this.ui.seriesType.val());
             },
 
             _setRootFolder: function (options) {

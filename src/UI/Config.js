@@ -8,10 +8,11 @@ define(
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
             Keys  : {
-                DefaultQualityProfileId: 'DefaultQualityProfileId',
-                DefaultRootFolderId    : 'DefaultRootFolderId',
-                UseSeasonFolder        : 'UseSeasonFolder',
-                AdvancedSettings       : 'advancedSettings'
+                DefaultQualityProfileId : 'DefaultQualityProfileId',
+                DefaultRootFolderId     : 'DefaultRootFolderId',
+                UseSeasonFolder         : 'UseSeasonFolder',
+                DefaultSeriesType       : 'DefaultSeriesType',
+                AdvancedSettings        : 'advancedSettings'
             },
 
             getValueBoolean: function (key, defaultValue) {

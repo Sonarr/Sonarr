@@ -35,6 +35,10 @@ define(
                 //Do we need this?
                 this.$el.addClass(column.get('name'));
 
+                if (column.has('className')) {
+                    this.$el.addClass(column.get('className'));
+                }
+
                 this.delegateEvents();
                 this.direction(column.get('direction'));
 

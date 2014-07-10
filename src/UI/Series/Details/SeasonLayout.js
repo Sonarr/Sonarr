@@ -10,6 +10,7 @@ define(
         'Cells/EpisodeStatusCell',
         'Cells/EpisodeActionsCell',
         'Series/Details/EpisodeNumberCell',
+        'Series/Details/EpisodeWarningCell',
         'Commands/CommandController',
         'moment',
         'underscore',
@@ -23,6 +24,7 @@ define(
                 EpisodeStatusCell,
                 EpisodeActionsCell,
                 EpisodeNumberCell,
+                EpisodeWarningCell,
                 CommandController,
                 Moment,
                 _,
@@ -63,6 +65,13 @@ define(
                         name : 'this',
                         label: '#',
                         cell : EpisodeNumberCell
+                    },
+                    {
+                        name          : 'this',
+                        label         : '',
+                        cell          : EpisodeWarningCell,
+                        sortable      : false,
+                        className     : 'episode-warning-cell'
                     },
                     {
                         name          : 'this',

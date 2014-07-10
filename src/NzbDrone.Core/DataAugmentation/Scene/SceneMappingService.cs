@@ -8,6 +8,7 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using System.Collections.Generic;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
     public class SceneMappingService : ISceneMappingService,
                                        IHandleAsync<ApplicationStartedEvent>,
+                                       IHandle<SeriesRefreshStartingEvent>,
                                        IExecute<UpdateSceneMappingCommand>
     {
         private readonly ISceneMappingRepository _repository;
@@ -80,9 +82,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public Nullable<Int32> GetSeasonNumber(string title)
         {
-            //TODO: we should be able to override xem aliases with ones from services
-            //Example Fairy Tail - Alias is assigned to season 2 (anidb), but we're still using tvdb for everything
-
             var mapping = _gettvdbIdCache.Find(title.CleanSeriesTitle());
 
             if (mapping == null)
@@ -151,6 +150,11 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         }
 
         public void HandleAsync(ApplicationStartedEvent message)
+        {
+            UpdateMappings();
+        }
+
+        public void Handle(SeriesRefreshStartingEvent message)
         {
             UpdateMappings();
         }

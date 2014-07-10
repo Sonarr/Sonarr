@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Tv
             }
 
             var updatedSeries = _seriesRepository.Update(series);
-            _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries));
+            _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));
 
             return updatedSeries;
         }
