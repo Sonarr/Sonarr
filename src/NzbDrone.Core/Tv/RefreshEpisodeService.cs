@@ -42,11 +42,16 @@ namespace NzbDrone.Core.Tv
             var newList = new List<Episode>();
             var dupeFreeRemoteEpisodes = remoteEpisodes.DistinctBy(m => new { m.SeasonNumber, m.EpisodeNumber }).ToList();
 
-            foreach (var episode in dupeFreeRemoteEpisodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(series, dupeFreeRemoteEpisodes);
+            }
+
+            foreach (var episode in OrderEpsiodes(series, dupeFreeRemoteEpisodes))
             {
                 try
                 {
-                    var episodeToUpdate = existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    var episodeToUpdate = GetEpisodeToUpdate(series, episode, existingEpisodes);
 
                     if (episodeToUpdate != null)
                     {
@@ -63,19 +68,13 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.SeriesId = series.Id;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
+                    episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
                     episodeToUpdate.Title = episode.Title;
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
                     episodeToUpdate.AirDateUtc = episode.AirDateUtc;
                     episodeToUpdate.Ratings = episode.Ratings;
                     episodeToUpdate.Images = episode.Images;
-
-                    //Reset the absolute episode number to zero if the series is not anime
-                    if (series.SeriesType != SeriesTypes.Anime)
-                    {
-                        episodeToUpdate.AbsoluteEpisodeNumber = 0;
-                    }
-                    
 
                     successCount++;
                 }
@@ -91,7 +90,6 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(updateList);
 
             AdjustMultiEpisodeAirTime(series, allEpisodes);
-            SetAbsoluteEpisodeNumber(series, allEpisodes);
 
             _episodeService.DeleteMany(existingEpisodes);
             _episodeService.UpdateMany(updateList);
@@ -153,18 +151,11 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private void SetAbsoluteEpisodeNumber(Series series, IEnumerable<Episode> allEpisodes)
+        private List<Episode> MapAbsoluteEpisodeNumbers(Series series, List<Episode> traktEpisodes)
         {
-            if (series.SeriesType != SeriesTypes.Anime)
-            {
-                _logger.Debug("Skipping absolute number lookup for non-anime");
-
-                return;
-            }
-
             var tvdbEpisodes = _tvdbProxy.GetEpisodeInfo(series.TvdbId);
 
-            foreach (var episode in allEpisodes)
+            foreach (var episode in traktEpisodes)
             {
                 //I'd use single, but then I'd have to trust the tvdb data... and I don't
                 var tvdbEpisode = tvdbEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber &&
@@ -178,6 +169,38 @@ namespace NzbDrone.Core.Tv
 
                 episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
             }
+
+            return traktEpisodes.DistinctBy(e => e.AbsoluteEpisodeNumber).ToList();
+        }
+
+        private Episode GetEpisodeToUpdate(Series series, Episode episode, IEnumerable<Episode> existingEpisodes)
+        {
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                if (episode.AbsoluteEpisodeNumber > 0)
+                {
+                    return existingEpisodes.FirstOrDefault(e => e.AbsoluteEpisodeNumber == episode.AbsoluteEpisodeNumber);
+                }
+            }
+
+            return existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+        }
+
+        private IEnumerable<Episode> OrderEpsiodes(Series series, List<Episode> episodes)
+        {
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                var withAbs = episodes.Where(e => e.AbsoluteEpisodeNumber > 0)
+                                      .OrderBy(e => e.AbsoluteEpisodeNumber);
+
+                var withoutAbs = episodes.Where(e => e.AbsoluteEpisodeNumber == 0)
+                                         .OrderBy(e => e.SeasonNumber)
+                                         .ThenBy(e => e.EpisodeNumber);
+
+                return withAbs.Concat(withoutAbs);
+            }
+
+            return episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber);
         }
     }
 }

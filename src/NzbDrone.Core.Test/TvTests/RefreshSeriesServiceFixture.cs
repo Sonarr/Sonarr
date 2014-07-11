@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Test.TvTests
         [Test]
         public void should_monitor_new_seasons_automatically()
         {
-            var series = _series.JsonClone();
-            series.Seasons.Add(Builder<Season>.CreateNew()
+            var newSeriesInfo = _series.JsonClone();
+            newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 
-            GivenNewSeriesInfo(series);
+            GivenNewSeriesInfo(newSeriesInfo);
 
             Subject.Execute(new RefreshSeriesCommand(_series.Id));
 
@@ -76,6 +76,20 @@ namespace NzbDrone.Core.Test.TvTests
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2 && s.Seasons.Single(season => season.SeasonNumber == 0).Monitored == false)));
+        }
+
+        [Test]
+        public void should_update_tvrage_id_if_changed()
+        {
+            var newSeriesInfo = _series.JsonClone();
+            newSeriesInfo.TvRageId = _series.TvRageId + 1;
+
+            GivenNewSeriesInfo(newSeriesInfo);
+
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvRageId == newSeriesInfo.TvRageId)));
         }
     }
 }
