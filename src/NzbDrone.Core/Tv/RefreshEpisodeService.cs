@@ -173,13 +173,15 @@ namespace NzbDrone.Core.Tv
             return traktEpisodes.DistinctBy(e => e.AbsoluteEpisodeNumber).ToList();
         }
 
-        private Episode GetEpisodeToUpdate(Series series, Episode episode, IEnumerable<Episode> existingEpisodes)
+        private Episode GetEpisodeToUpdate(Series series, Episode episode, List<Episode> existingEpisodes)
         {
             if (series.SeriesType == SeriesTypes.Anime)
             {
                 if (episode.AbsoluteEpisodeNumber > 0)
                 {
-                    return existingEpisodes.FirstOrDefault(e => e.AbsoluteEpisodeNumber == episode.AbsoluteEpisodeNumber);
+                    var matchingEpisode = existingEpisodes.FirstOrDefault(e => e.AbsoluteEpisodeNumber == episode.AbsoluteEpisodeNumber);
+
+                    if (matchingEpisode != null) return matchingEpisode;
                 }
             }
 
