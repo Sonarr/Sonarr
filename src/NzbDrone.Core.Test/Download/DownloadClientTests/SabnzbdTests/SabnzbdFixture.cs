@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         private SabnzbdQueue _queued;
         private SabnzbdHistory _failed;
         private SabnzbdHistory _completed;
+        private SabnzbdConfig _config;
 
         [SetUp]
         public void Setup()
@@ -40,6 +41,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                                           };
             _queued = new SabnzbdQueue
                 {
+                    DefaultRootFolder = @"Y:\nzbget\root".AsOsAgnostic(),
                     Paused = false,
                     Items = new List<SabnzbdQueueItem>()
                     {
@@ -87,19 +89,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                     }
                 };
 
-            Mocker.GetMock<ISabnzbdProxy>()
-                .Setup(s => s.GetConfig(It.IsAny<SabnzbdSettings>()))
-                .Returns(new SabnzbdConfig
+            _config = new SabnzbdConfig
                 {
-                    Misc = new SabnzbdConfigMisc 
+                    Misc = new SabnzbdConfigMisc
                         {
-                            complete_dir = "/remote/mount/"
+                            complete_dir = @"/remote/mount"
                         },
                     Categories = new List<SabnzbdCategory>
                         {
                             new SabnzbdCategory  { Name = "tv", Dir = "vv" }
                         }
-                });
+                };
+
+            Mocker.GetMock<ISabnzbdProxy>()
+                .Setup(s => s.GetConfig(It.IsAny<SabnzbdSettings>()))
+                .Returns(_config);
         }
 
         protected void WithMountPoint(String mountPath)
@@ -129,7 +133,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         {
             if (queue == null)
             {
-                queue = new SabnzbdQueue() { Items = new List<SabnzbdQueueItem>() };
+                queue = new SabnzbdQueue()
+                {
+                    DefaultRootFolder = _queued.DefaultRootFolder,
+                    Items = new List<SabnzbdQueueItem>()
+                };
             }
 
             Mocker.GetMock<ISabnzbdProxy>()
@@ -314,20 +322,31 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             result.OutputPath.Should().Be(@"C:\".AsOsAgnostic());
         }
 
-        [Test]
-        public void should_return_status_with_outputdir()
+        [TestCase(@"Y:\nzbget\root", @"completed\downloads", @"vv", @"Y:\nzbget\root\completed\downloads\vv")]
+        [TestCase(@"Y:\nzbget\root", @"completed", @"vv", @"Y:\nzbget\root\completed\vv")]
+        [TestCase(@"/nzbget/root", @"completed/downloads", @"vv", @"/nzbget/root/completed/downloads/vv")]
+        [TestCase(@"/nzbget/root", @"completed", @"vv", @"/nzbget/root/completed/vv")]
+        public void should_return_status_with_outputdir(String rootFolder, String completeDir, String categoryDir, String expectedDir)
         {
+            _queued.DefaultRootFolder = rootFolder;
+            _config.Misc.complete_dir = completeDir;
+            _config.Categories.First().Dir = categoryDir;
+            
+            WithQueue(null);
+
             var result = Subject.GetStatus();
 
             result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
-            result.OutputRootFolders.First().Should().Be(@"/remote/mount/vv");
+            result.OutputRootFolders.First().Should().Be(expectedDir);
         }
 
         [Test]
         public void should_return_status_with_mounted_outputdir()
         {
             WithMountPoint(@"O:\mymount".AsOsAgnostic());
+
+            WithQueue(null);
 
             var result = Subject.GetStatus();
 

@@ -236,6 +236,20 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var completeDir = config.Misc.complete_dir.TrimEnd('\\', '/');
 
+            if (!completeDir.StartsWith("/") && !completeDir.StartsWith("\\") && !completeDir.Contains(':'))
+            {
+                var queue = _proxy.GetQueue(0, 1, Settings);
+
+                if (queue.DefaultRootFolder.StartsWith("/"))
+                {
+                    completeDir = queue.DefaultRootFolder + "/" + completeDir;
+                }
+                else
+                {
+                    completeDir = queue.DefaultRootFolder + "\\" + completeDir;
+                }
+            }
+
             foreach (var category in config.Categories)
             {
                 var relativeDir = category.Dir.TrimEnd('*');
