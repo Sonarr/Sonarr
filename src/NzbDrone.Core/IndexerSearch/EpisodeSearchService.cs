@@ -64,7 +64,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             foreach (var episodeId in message.EpisodeIds)
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId);
+                var decisions = _nzbSearchService.EpisodeSearch(episodeId).OrderByDescending(x => x.RemoteEpisode.Release.WeightedQuality).ToList();
                 var downloaded = _downloadApprovedReports.DownloadApproved(decisions);
 
                 _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", downloaded.Count);

@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Indexers
                     {
                         var reportInfo = ParseFeedItem(item.StripNameSpace(), url);
 
-                        if (reportInfo != null && reportInfo.OZnzbIsPasswordedConfirmed != true && reportInfo.OZnzbIsSpamConfirmed != true) //don't add any confirmed passworded or codec spam releases 
+                        if (reportInfo != null)
                         {
                             reportInfo.DownloadUrl = GetNzbUrl(item);
                             reportInfo.InfoUrl = GetNzbInfoUrl(item);
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Indexers
                     }
                 }
 
-                return result.OrderByDescending(x => x.WeightedQuality);
+                return result;
             }
         }
 
@@ -77,17 +77,21 @@ namespace NzbDrone.Core.Indexers
 
             if (url.Contains("oznzb.com"))
             {
-                
-                reportInfo.OZnzbSpamReports = GetOZnzbSpamReports(item);
                 reportInfo.OZnzbIsSpamConfirmed = GetOZnzbIsSpamConfirmed(item);
-                reportInfo.OZnzbPasswordedReports = GetOZnzbPasswordedReports(item);
                 reportInfo.OZnzbIsPasswordedConfirmed = GetOZnzbIsPasswordedConfirmed(item);
+                reportInfo.OZnzbSpamReports = GetOZnzbSpamReports(item);                
+                reportInfo.OZnzbPasswordedReports = GetOZnzbPasswordedReports(item);
                 reportInfo.OZnzbUpVotes = GetOZnzbUpVotes(item);
                 reportInfo.OZnzbDownVotes = GetOZnzbDownVotes(item);
                 reportInfo.OZnzbVideoRating = GetOZnzbVideoRating(item);
                 reportInfo.OZnzbAudioRating = GetOZnzbAudioRating(item);
                 reportInfo.WeightedQuality = GetWeightedQuality(reportInfo.OZnzbSpamReports + reportInfo.OZnzbPasswordedReports, reportInfo.OZnzbUpVotes, 
                                                 reportInfo.OZnzbDownVotes, reportInfo.OZnzbVideoRating, reportInfo.OZnzbAudioRating, 10);
+
+                if (reportInfo.OZnzbIsPasswordedConfirmed == true || reportInfo.OZnzbIsSpamConfirmed == true)
+                {
+                    return null;
+                }
             }
 
             try
