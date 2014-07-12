@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
             var episode = Mocker.Resolve<EpisodeService>().GetEpisode(1);
 
             
-            episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes());
+            episode.ShouldHave().AllPropertiesBut(e => e.Series, e => e.EpisodeFile).EqualTo(fakeEpisodes.First());
             episode.Series.ShouldHave().AllPropertiesBut(s => s.EpisodeCount, s => s.EpisodeFileCount, s => s.SeasonCount, s => s.NextAiring).EqualTo(fakeSeries);
         }
 
