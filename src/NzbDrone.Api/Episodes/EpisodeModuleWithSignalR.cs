@@ -32,7 +32,9 @@ namespace NzbDrone.Api.Episodes
 
         protected EpisodeResource GetEpisode(int id)
         {
-            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
+            var episode = _episodeService.GetEpisode(id);
+            episode.EpisodeFile.LazyLoad();
+            return episode.InjectTo<EpisodeResource>();
         }
 
         public void Handle(EpisodeGrabbedEvent message)
