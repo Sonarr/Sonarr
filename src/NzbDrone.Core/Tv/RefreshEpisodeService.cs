@@ -170,7 +170,11 @@ namespace NzbDrone.Core.Tv
                 episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
             }
 
-            return traktEpisodes.DistinctBy(e => e.AbsoluteEpisodeNumber).ToList();
+            //Return all episodes with abs 0, but distinct by abs for ones greater than 0
+            return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber > 0)
+                                .DistinctBy(e => e.AbsoluteEpisodeNumber)
+                                .Concat(traktEpisodes.Where(e => e.AbsoluteEpisodeNumber == 0))
+                                .ToList();
         }
 
         private Episode GetEpisodeToUpdate(Series series, Episode episode, List<Episode> existingEpisodes)
