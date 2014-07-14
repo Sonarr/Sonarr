@@ -48,7 +48,7 @@ namespace NzbDrone.Api.Indexers
 
         private Response DownloadRelease(ReleaseResource release)
         {
-            var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), 0);
+            var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), release.TvRageId);
             remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
             _downloadService.DownloadReport(remoteEpisode);
 
