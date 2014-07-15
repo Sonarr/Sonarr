@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FizzWare.NBuilder;
-using FluentAssertions;
-using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
+using NUnit.Framework;
+using FluentAssertions;
+using FizzWare.NBuilder;
+using NzbDrone.Core.Test.Framework;
 
-namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
+namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class GetQualifiedReportsFixture : CoreTest<DownloadApprovedReports>
+    public class PrioritizeDownloadDecisionFixture : CoreTest<DownloadDecisionPriorizationService>
     {
         private Episode GetEpisode(int id)
         {
@@ -45,16 +46,6 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         }
 
         [Test]
-        public void should_return_an_empty_list_when_none_are_appproved()
-        {
-            var decisions = new List<DownloadDecision>();
-            decisions.Add(new DownloadDecision(null, "Failure!"));
-            decisions.Add(new DownloadDecision(null, "Failure!"));
-
-            Subject.GetQualifiedReports(decisions).Should().BeEmpty();
-        }
-
-        [Test]
         public void should_put_propers_before_non_propers()
         {
             var remoteEpisode1 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p, false));
@@ -64,7 +55,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            var qualifiedReports = Subject.GetQualifiedReports(decisions);
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Proper.Should().BeTrue();
         }
 
@@ -78,7 +69,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            var qualifiedReports = Subject.GetQualifiedReports(decisions);
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Quality.Should().Be(Quality.HDTV720p);
         }
 
@@ -92,7 +83,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            var qualifiedReports = Subject.GetQualifiedReports(decisions);
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Episodes.First().EpisodeNumber.Should().Be(1);
         }
 
@@ -106,7 +97,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            var qualifiedReports = Subject.GetQualifiedReports(decisions);
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Episodes.First().EpisodeNumber.Should().Be(1);
         }
 
@@ -125,7 +116,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisodeHdSmallYounge));
             decisions.Add(new DownloadDecision(remoteEpisodeHdLargeYounge));
 
-            var qualifiedReports = Subject.GetQualifiedReports(decisions);
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisodeHdSmallYounge);
         }
 
@@ -140,7 +131,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            var qualifiedReports = Subject.GetQualifiedReports(decisions);
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisode2);
         }
     }

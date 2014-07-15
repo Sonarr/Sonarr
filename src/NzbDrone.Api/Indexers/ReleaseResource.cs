@@ -10,6 +10,7 @@ namespace NzbDrone.Api.Indexers
     public class ReleaseResource : RestResource
     {
         public QualityModel Quality { get; set; }
+        public Int32 QualityWeight { get; set; }
         public Int32 Age { get; set; }
         public Double AgeHours { get; set; }
         public Int64 Size { get; set; }
@@ -35,6 +36,7 @@ namespace NzbDrone.Api.Indexers
         public String InfoUrl { get; set; }
         public Boolean DownloadAllowed { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
+        public Int32 ReleaseWeight { get; set; }
 
         public Boolean IsDaily { get; set; }
         public Boolean IsAbsoluteNumbering { get; set; }
