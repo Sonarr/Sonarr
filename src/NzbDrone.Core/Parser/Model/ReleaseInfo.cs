@@ -52,16 +52,53 @@ namespace NzbDrone.Core.Parser.Model
             return String.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);
         }
 
-        public int WeightedQuality { get; set; }
+        public int SpamReports { get; set; }
+        public bool IsSpamConfirmed { get; set; }
+        public int PasswordedReports { get; set; }
+        public bool IsPasswordedConfirmed { get; set; }
+        public int UpVotes { get; set; }
+        public int DownVotes { get; set; }
+        public double VideoRating { get; set; }
+        public double AudioRating { get; set; }
+        public double RatingCeiling { get; set; }
+        public bool IsUsingWeightedQuality { get; set; }
+        public int WeightedQuality { get { return CalculateWeightedQuality(); } }
 
-        //OZnzb specific properties.
-        public int OZnzbSpamReports { get; set; }
-        public bool OZnzbIsSpamConfirmed { get; set; }
-        public int OZnzbPasswordedReports { get; set; }
-        public bool OZnzbIsPasswordedConfirmed { get; set; }
-        public int OZnzbUpVotes { get; set; }
-        public int OZnzbDownVotes { get; set; }
-        public double OZnzbVideoRating { get; set; }
-        public double OZnzbAudioRating { get; set; }
+        private int CalculateWeightedQuality()
+        {
+            if (IsUsingWeightedQuality)
+            {
+                //Generate a weighted priority which any indexer should be able to hook into while trying to keep the numbers fair across all indexers. May require some tweaking
+                int weightedPriority = 0;
+                int totalNegativeReports = PasswordedReports + SpamReports;
+                weightedPriority = totalNegativeReports * -20; //drastically reduce weight for negative reports such as virus spam or passwords.
+                weightedPriority += UpVotes - DownVotes; //add or substact a point for every up or down vote
+                if (DownVotes > UpVotes && DownVotes >= 2)
+                {
+                    weightedPriority += -20; // drastically reduce weight if there are more down votes than up votes and at least two down votes.
+                }
+
+                if (RatingCeiling != 0)
+                {
+                    //convert any rating system to an out of 10 system, e.g. rating 3 out of 5 or 12 out of 20 all become 6 out of 10.
+                    double ratingMultiplier = 10 / RatingCeiling;
+                    int videoRatingOf10 = (int)Math.Round(VideoRating * ratingMultiplier);
+                    int audioRatingOf10 = (int)Math.Round(AudioRating * ratingMultiplier);
+
+                    //increase or decrease weight for quality rating, 4 and under are considered bad quality and are negative weighted.
+                    if (VideoRating + AudioRating != 0)
+                    {
+                        weightedPriority += (videoRatingOf10 >= 4 ? videoRatingOf10 : videoRatingOf10 - 5);
+                        weightedPriority += (audioRatingOf10 >= 4 ? audioRatingOf10 : videoRatingOf10 - 5);
+                    }
+                }
+
+                return weightedPriority;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

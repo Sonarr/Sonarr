@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             return base.GetPublishDate(item);
         }
 
-        protected override int GetOZnzbSpamReports(XElement item)
+        protected override int GetSpamReports(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_num_spam_reports", StringComparison.CurrentCultureIgnoreCase));
@@ -46,9 +46,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return Convert.ToInt32(dateString);
             }
 
-            return base.GetOZnzbSpamReports(item);
+            return base.GetSpamReports(item);
         }
-        protected override bool GetOZnzbIsSpamConfirmed(XElement item)
+        protected override bool GetIsSpamConfirmed(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_spam_confirmed", StringComparison.CurrentCultureIgnoreCase));
@@ -59,9 +59,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return (dateString == "yes");
             }
 
-            return base.GetOZnzbIsSpamConfirmed(item);
+            return base.GetIsSpamConfirmed(item);
         }
-        protected override int GetOZnzbPasswordedReports(XElement item)
+        protected override int GetPasswordedReports(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_num_passworded_reports", StringComparison.CurrentCultureIgnoreCase));
@@ -72,9 +72,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return Convert.ToInt32(dateString);
             }
 
-            return base.GetOZnzbPasswordedReports(item);
+            return base.GetPasswordedReports(item);
         }
-        protected override bool GetOZnzbIsPasswordedConfirmed(XElement item)
+        protected override bool GetIsPasswordedConfirmed(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_passworded_confirmed", StringComparison.CurrentCultureIgnoreCase));
@@ -85,9 +85,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return (dateString == "yes");
             }
 
-            return base.GetOZnzbIsPasswordedConfirmed(item);
+            return base.GetIsPasswordedConfirmed(item);
         }
-        protected override int GetOZnzbUpVotes(XElement item)
+        protected override int GetUpVotes(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_up_votes", StringComparison.CurrentCultureIgnoreCase));
@@ -98,9 +98,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return Convert.ToInt32(dateString);
             }
 
-            return base.GetOZnzbUpVotes(item);
+            return base.GetUpVotes(item);
         }
-        protected override int GetOZnzbDownVotes(XElement item)
+        protected override int GetDownVotes(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_down_votes", StringComparison.CurrentCultureIgnoreCase));
@@ -111,9 +111,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return Convert.ToInt32(dateString);
             }
 
-            return base.GetOZnzbDownVotes(item);
+            return base.GetDownVotes(item);
         }
-        protected override double GetOZnzbVideoRating(XElement item)
+        protected override double GetVideoRating(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_video_quality_rating", StringComparison.CurrentCultureIgnoreCase));
@@ -124,9 +124,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return !(dateString == "-") ? Convert.ToDouble(dateString) : 0;
             }
 
-            return base.GetOZnzbVideoRating(item);
+            return base.GetVideoRating(item);
         }
-        protected override double GetOZnzbAudioRating(XElement item)
+        protected override double GetAudioRating(XElement item)
         {
             var attributes = item.Elements("attr").ToList();
             var usenetdateElement = attributes.SingleOrDefault(e => e.Attribute("name").Value.Equals("oz_audio_quality_rating", StringComparison.CurrentCultureIgnoreCase));
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return !(dateString == "-") ? Convert.ToDouble(dateString) : 0;
             }
 
-            return base.GetOZnzbAudioRating(item);
+            return base.GetAudioRating(item);
         }
         protected override long GetSize(XElement item)
         {

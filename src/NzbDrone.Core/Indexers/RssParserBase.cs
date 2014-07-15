@@ -77,21 +77,21 @@ namespace NzbDrone.Core.Indexers
 
             if (url.Contains("oznzb.com"))
             {
-                reportInfo.OZnzbIsSpamConfirmed = GetOZnzbIsSpamConfirmed(item);
-                reportInfo.OZnzbIsPasswordedConfirmed = GetOZnzbIsPasswordedConfirmed(item);
-                reportInfo.OZnzbSpamReports = GetOZnzbSpamReports(item);                
-                reportInfo.OZnzbPasswordedReports = GetOZnzbPasswordedReports(item);
-                reportInfo.OZnzbUpVotes = GetOZnzbUpVotes(item);
-                reportInfo.OZnzbDownVotes = GetOZnzbDownVotes(item);
-                reportInfo.OZnzbVideoRating = GetOZnzbVideoRating(item);
-                reportInfo.OZnzbAudioRating = GetOZnzbAudioRating(item);
-                reportInfo.WeightedQuality = GetWeightedQuality(reportInfo.OZnzbSpamReports + reportInfo.OZnzbPasswordedReports, reportInfo.OZnzbUpVotes, 
-                                                reportInfo.OZnzbDownVotes, reportInfo.OZnzbVideoRating, reportInfo.OZnzbAudioRating, 10);
+                reportInfo.IsUsingWeightedQuality = true;
+                reportInfo.IsSpamConfirmed = GetIsSpamConfirmed(item);
+                reportInfo.IsPasswordedConfirmed = GetIsPasswordedConfirmed(item);
+                reportInfo.SpamReports = GetSpamReports(item);                
+                reportInfo.PasswordedReports = GetPasswordedReports(item);
+                reportInfo.UpVotes = GetUpVotes(item);
+                reportInfo.DownVotes = GetDownVotes(item);
+                reportInfo.VideoRating = GetVideoRating(item);
+                reportInfo.AudioRating = GetAudioRating(item);
+                reportInfo.RatingCeiling = 10;
+            }
 
-                if (reportInfo.OZnzbIsPasswordedConfirmed == true || reportInfo.OZnzbIsSpamConfirmed == true)
-                {
-                    return null;
-                }
+            if (reportInfo.IsPasswordedConfirmed == true || reportInfo.IsSpamConfirmed == true)
+            {
+                return null;
             }
 
             try
@@ -130,72 +130,37 @@ namespace NzbDrone.Core.Indexers
 
         protected abstract long GetSize(XElement item);
 
-        protected virtual int GetOZnzbSpamReports(XElement item)
+        protected virtual int GetSpamReports(XElement item)
         {
             return 0;
         }
-        protected virtual bool GetOZnzbIsSpamConfirmed(XElement item)
+        protected virtual bool GetIsSpamConfirmed(XElement item)
         {
             return false;
         }
-        protected virtual int GetOZnzbPasswordedReports(XElement item)
+        protected virtual int GetPasswordedReports(XElement item)
         {
             return 0;
         }
-        protected virtual bool GetOZnzbIsPasswordedConfirmed(XElement item)
+        protected virtual bool GetIsPasswordedConfirmed(XElement item)
         {
             return false;
         }
-        protected virtual int GetOZnzbUpVotes(XElement item)
+        protected virtual int GetUpVotes(XElement item)
         {
             return 0;
         }
-        protected virtual int GetOZnzbDownVotes(XElement item)
+        protected virtual int GetDownVotes(XElement item)
         {
             return 0;
         }
-        protected virtual double GetOZnzbVideoRating(XElement item)
+        protected virtual double GetVideoRating(XElement item)
         {
             return 0;
         }
-        protected virtual double GetOZnzbAudioRating(XElement item)
+        protected virtual double GetAudioRating(XElement item)
         {
             return 0;
-        }
-        /// <summary>
-        /// Retreive a weighted quality based on user collected information such as Quality rating, up votes and reported issues.
-        /// </summary>
-        /// <param name="totalNegativeReports">Total number of negative reports. Use 0 if information is unavailable.</param>
-        /// <param name="upVotes">Total number of up votes or thumbs up received. Use 0 if information is unavailable.</param>
-        /// <param name="downVotes">Total number of down votes or thumbs down received. Use 0 if information is unavailable.</param>
-        /// <param name="videoRating">Video quality rating, for example 4.5 out of 10 stars would be 4.5, 4.5 out of 5 stars would be 4.5</param>
-        /// <param name="audioRating">Audio quality rating, for example 4.5 out of 10 stars would be 4.5, 4.5 out of 5 stars would be 4.5</param>
-        /// <param name="highestPossibleRating">Maximum rating available in your rating system, for example 4.5 out of 10 stars would be 10, 4.5 out of 5 stars would be 5</param>
-        /// <returns>Calculated weight based on user collected information</returns>
-        protected virtual int GetWeightedQuality(int totalNegativeReports, int upVotes, int downVotes, double videoRating, double audioRating, int highestPossibleRating)
-        {
-            //Generate a weighted priority which any indexer should be able to hook into while trying to keep the numbers fair across all indexers. May require some tweaking
-            int weightedPriority = 0;
-            weightedPriority = totalNegativeReports * -20; //drastically reduce weight for negative reports such as virus spam or passwords.
-            weightedPriority += upVotes - downVotes; //add or substact a point for every up or down vote
-            if (downVotes > upVotes && downVotes >= 2)
-            {
-                weightedPriority += -20; // drastically reduce weight if there are more down votes than up votes and at least two down votes.
-            }
-
-            //convert any rating system to an out of 10 system, e.g. rating 3 out of 5 or 12 out of 20 all become 6 out of 10.
-            int ratingMultiplier = 10 / highestPossibleRating;
-            int videoRatingOf10 = (int)Math.Round(videoRating * ratingMultiplier);
-            int audioRatingOf10 = (int)Math.Round(audioRating * ratingMultiplier);
-
-            //increase or decrease weight for quality rating, 4 and under are considered bad quality and are negative weighted.
-            if (videoRating + audioRating != 0)
-            {
-                weightedPriority += (videoRatingOf10 >= 4 ? videoRatingOf10 : videoRatingOf10 - 5);
-                weightedPriority += (audioRatingOf10 >= 4 ? audioRatingOf10 : videoRatingOf10 - 5);
-            }
-
-            return weightedPriority;
         }
         protected virtual void PreProcess(string source, string url)
         {
