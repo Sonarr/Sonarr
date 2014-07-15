@@ -478,13 +478,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
-        public void should_replace_multiple_absolute_numbering_when_series_is_anime()
+        public void should_use_dash_as_separator_when_multi_episode_style_is_extend_for_anime()
         {
             _series.SeriesType = SeriesTypes.Anime;
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
 
             Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
-                   .Should().Be("South Park - 100 - 101 - City Sushi");
+                   .Should().Be("South Park - 100-101 - City Sushi");
         }
 
         [Test]
@@ -498,6 +498,17 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFilename(new List<Episode> { _episode1, }, _series, _episodeFile)
                    .Should().Be("South Park - 15x06 - City Sushi");
+        }
+
+        [Test]
+        public void should_duplicate_absolute_pattern_when_multi_episode_style_is_duplicate()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.MultiEpisodeStyle = (int)MultiEpisodeStyle.Duplicate;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
+
+            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("South Park - 100 - 101 - City Sushi");
         }
     }
 }

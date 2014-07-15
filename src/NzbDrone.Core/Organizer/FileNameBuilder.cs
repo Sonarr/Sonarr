@@ -183,8 +183,27 @@ namespace NzbDrone.Core.Organizer
 
                     foreach (var episode in sortedEpisodes.Skip(1))
                     {
-                        absoluteEpisodePattern += absoluteEpisodeFormat.Separator +
-                                                  absoluteEpisodeFormat.AbsoluteEpisodePattern;
+                        switch ((MultiEpisodeStyle)namingConfig.MultiEpisodeStyle)
+                        {
+                            case MultiEpisodeStyle.Duplicate:
+                                absoluteEpisodePattern += absoluteEpisodeFormat.Separator +
+                                                          absoluteEpisodeFormat.AbsoluteEpisodePattern;
+                                break;
+
+                            case MultiEpisodeStyle.Repeat:
+                                absoluteEpisodePattern += absoluteEpisodeFormat.Separator +
+                                                          absoluteEpisodeFormat.AbsoluteEpisodePattern;
+                                break;
+
+                            case MultiEpisodeStyle.Scene:
+                                absoluteEpisodePattern += "-" + absoluteEpisodeFormat.AbsoluteEpisodePattern;
+                                break;
+
+                            //MultiEpisodeStyle.Extend
+                            default:
+                                absoluteEpisodePattern += "-" + absoluteEpisodeFormat.AbsoluteEpisodePattern;
+                                break;
+                        }
 
                         episodeTitles.Add(episode.Title.TrimEnd(EpisodeTitleTrimCharaters));
                     }
