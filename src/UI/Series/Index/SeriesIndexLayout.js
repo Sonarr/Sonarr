@@ -216,27 +216,6 @@ define(
                                 tooltip : 'Ended Only',
                                 icon    : 'icon-stop',
                                 callback: this._setFilter
-                            },
-                            {
-                                key     : 'standard',
-                                title   : '',
-                                tooltip : 'Standard Series Only',
-                                icon    : 'icon-nd-standard-series',
-                                callback: this._setFilter
-                            },
-                            {
-                                key     : 'daily',
-                                title   : '',
-                                tooltip : 'Daily Series Only',
-                                icon    : 'icon-nd-daily-series',
-                                callback: this._setFilter
-                            },
-                            {
-                                key     : 'anime',
-                                title   : '',
-                                tooltip : 'Anime Only',
-                                icon    : 'icon-nd-anime',
-                                callback: this._setFilter
                             }
                         ]
                 };
