@@ -54,7 +54,10 @@ define(
                 'all'        : [null, null],
                 'continuing' : ['status', 'continuing'],
                 'ended'      : ['status', 'ended'],
-                'monitored'  : ['monitored', true]
+                'monitored'  : ['monitored', true],
+                'standard'   : ['seriesType', 'standard'],
+                'daily'      : ['seriesType', 'daily'],
+                'anime'      : ['seriesType', 'anime']
             },
             
             sortMappings: {
