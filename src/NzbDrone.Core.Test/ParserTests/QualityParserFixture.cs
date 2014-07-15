@@ -161,6 +161,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[coldhell] Pupa v3 [BD720p][03192D4C]", false)]
         [TestCase("[RandomRemux] Nobunagun - 01 [720p BD][043EA407].mkv", false)]
         [TestCase("[Kaylith] Isshuukan Friends Specials - 01 [BD 720p AAC][B7EEE164].mkv", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.Blu-ray.AC3.-HELLYWOOD.avi", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.720p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
@@ -173,6 +175,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[coldhell] Pupa v2 [BD1080p][5A45EABE].mkv", false)]
         [TestCase("[Kaylith] Isshuukan Friends Specials - 01 [BD 1080p FLAC][429FD8C7].mkv", false)]
         [TestCase("[Zurako] Log Horizon - 01 - The Apocalypse (BD 1080p AAC) [7AE12174].mkv", false)]
+        [TestCase("WEEDS.S03E01-06.DUAL.1080p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);

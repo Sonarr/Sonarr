@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
-                                                                (?<bluray>BluRay)|
+                                                                (?<bluray>BluRay|Blu-Ray)|
                                                                 (?<webdl>WEB[-_. ]DL|WEBDL|WebRip)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRiP)|
