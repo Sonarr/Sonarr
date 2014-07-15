@@ -59,7 +59,8 @@ namespace NzbDrone.Core.Download
         {
             return decisions.Where(c => c.Approved && c.RemoteEpisode.Episodes.Any())
                 .GroupBy(c => c.RemoteEpisode.Series.Id, (i,s) => s
-                    .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(s.First().RemoteEpisode.Series.QualityProfile))
+                    .OrderByDescending(c => c.RemoteEpisode.Release.WeightedQuality)
+                    .ThenBy(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(s.First().RemoteEpisode.Series.QualityProfile))
                     .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
                     .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / c.RemoteEpisode.Episodes.Count)
                     .ThenBy(c => c.RemoteEpisode.Release.Age))

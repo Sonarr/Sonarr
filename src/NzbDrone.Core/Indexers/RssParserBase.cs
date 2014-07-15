@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Indexers
                             reportInfo.InfoUrl = GetNzbInfoUrl(item);
                             result.Add(reportInfo);
                         }
+                        
                     }
                     catch (Exception itemEx)
                     {
@@ -73,6 +74,25 @@ namespace NzbDrone.Core.Indexers
             reportInfo.PublishDate = GetPublishDate(item);
             reportInfo.DownloadUrl = GetNzbUrl(item);
             reportInfo.InfoUrl = GetNzbInfoUrl(item);
+
+            if (url.Contains("oznzb.com"))
+            {
+                reportInfo.IsUsingWeightedQuality = true;
+                reportInfo.IsSpamConfirmed = GetIsSpamConfirmed(item);
+                reportInfo.IsPasswordedConfirmed = GetIsPasswordedConfirmed(item);
+                reportInfo.SpamReports = GetSpamReports(item);                
+                reportInfo.PasswordedReports = GetPasswordedReports(item);
+                reportInfo.UpVotes = GetUpVotes(item);
+                reportInfo.DownVotes = GetDownVotes(item);
+                reportInfo.VideoRating = GetVideoRating(item);
+                reportInfo.AudioRating = GetAudioRating(item);
+                reportInfo.RatingCeiling = 10;
+            }
+
+            if (reportInfo.IsPasswordedConfirmed == true || reportInfo.IsSpamConfirmed == true)
+            {
+                return null;
+            }
 
             try
             {
@@ -110,6 +130,38 @@ namespace NzbDrone.Core.Indexers
 
         protected abstract long GetSize(XElement item);
 
+        protected virtual int GetSpamReports(XElement item)
+        {
+            return 0;
+        }
+        protected virtual bool GetIsSpamConfirmed(XElement item)
+        {
+            return false;
+        }
+        protected virtual int GetPasswordedReports(XElement item)
+        {
+            return 0;
+        }
+        protected virtual bool GetIsPasswordedConfirmed(XElement item)
+        {
+            return false;
+        }
+        protected virtual int GetUpVotes(XElement item)
+        {
+            return 0;
+        }
+        protected virtual int GetDownVotes(XElement item)
+        {
+            return 0;
+        }
+        protected virtual double GetVideoRating(XElement item)
+        {
+            return 0;
+        }
+        protected virtual double GetAudioRating(XElement item)
+        {
+            return 0;
+        }
         protected virtual void PreProcess(string source, string url)
         {
         }
@@ -118,6 +170,7 @@ namespace NzbDrone.Core.Indexers
         {
             return currentResult;
         }
+
 
         private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
