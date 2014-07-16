@@ -31,6 +31,18 @@ namespace NzbDrone.Core.MetadataSource
         {
             try
             {
+                if (title.StartsWith("imdb:") || title.StartsWith("imdbid:"))
+                {
+                    var slug = title.Split(':')[1].TrimStart('t');
+
+                    if (slug.IsNullOrWhiteSpace() || !slug.All(char.IsDigit) || slug.Length < 7)
+                    {
+                        return new List<Series>();
+                    }
+
+                    title = "tt" + slug;
+                }
+
                 if (title.StartsWith("tvdb:") || title.StartsWith("tvdbid:") || title.StartsWith("slug:"))
                 {
                     try

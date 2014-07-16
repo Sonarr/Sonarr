@@ -5,7 +5,7 @@ define(
     ], function (TemplatedCell) {
         return TemplatedCell.extend({
 
-            className: 'series-title',
+            className: 'series-title-cell',
             template : 'System/Backup/BackupFilenameCellTemplate'
 
         });
