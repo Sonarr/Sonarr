@@ -12,6 +12,8 @@ namespace NzbDrone.Core.Download
         public DateTime StartedTracking { get; set; }
         public DateTime LastRetry { get; set; }
         public Int32 RetryCount { get; set; }
+        public Boolean HasError { get; set; }
+        public String StatusMessage { get; set; }
     }
 
     public enum TrackedDownloadState

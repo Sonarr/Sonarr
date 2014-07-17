@@ -82,7 +82,7 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.DeleteFolder(directoryInfo.FullName, true);
             }
 
-            return importedDecisions;
+            return importedDecisions.Union(decisions).ToList();
         }
 
         public List<ImportDecision> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem)
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var importedDecisions = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
 
-            return importedDecisions;
+            return importedDecisions.Union(decisions).ToList();
         }
 
         private void ProcessDownloadedEpisodesFolder()

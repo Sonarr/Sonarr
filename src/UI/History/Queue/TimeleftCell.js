@@ -22,9 +22,8 @@ define(
                         this.$el.html("-");
                     }
                     else {
-                        this.$el.html(timeleft);
+                        this.$el.html('<span title="{1} / {2}">{0}</span>'.format(timeleft, remainingSize, totalSize));
                     }
-                    this.$el.attr('title', '{0} / {1}'.format(remainingSize, totalSize));
                 }
 
                 return this;

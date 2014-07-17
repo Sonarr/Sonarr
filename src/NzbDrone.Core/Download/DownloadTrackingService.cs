@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Download
         TrackedDownload[] GetQueuedDownloads();
     }
 
-    public class DownloadTrackingService : IDownloadTrackingService, IExecute<CheckForFinishedDownloadCommand>, IHandle<ApplicationStartedEvent>, IHandle<EpisodeGrabbedEvent>
+    public class DownloadTrackingService : IDownloadTrackingService, IExecute<CheckForFinishedDownloadCommand>, IHandleAsync<ApplicationStartedEvent>, IHandle<EpisodeGrabbedEvent>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IHistoryService _historyService;
@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Download
             ProcessTrackedDownloads();
         }
 
-        public void Handle(ApplicationStartedEvent message)
+        public void HandleAsync(ApplicationStartedEvent message)
         {
             ProcessTrackedDownloads();
         }

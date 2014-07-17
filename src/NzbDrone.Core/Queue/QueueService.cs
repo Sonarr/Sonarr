@@ -25,32 +25,37 @@ namespace NzbDrone.Core.Queue
         public List<Queue> GetQueue()
         {
             var queueItems = _downloadTrackingService.GetQueuedDownloads()
-                .Select(v => v.DownloadItem)
-                .OrderBy(v => v.RemainingTime)
+                .OrderBy(v => v.DownloadItem.RemainingTime)
                 .ToList();
 
             return MapQueue(queueItems);
         }
 
-        private List<Queue> MapQueue(IEnumerable<DownloadClientItem> queueItems)
+        private List<Queue> MapQueue(IEnumerable<TrackedDownload> queueItems)
         {
             var queued = new List<Queue>();
 
             foreach (var queueItem in queueItems)
             {
-                foreach (var episode in queueItem.RemoteEpisode.Episodes)
+                foreach (var episode in queueItem.DownloadItem.RemoteEpisode.Episodes)
                 {
                     var queue = new Queue();
-                    queue.Id = queueItem.DownloadClientId.GetHashCode() + episode.Id;
-                    queue.Series = queueItem.RemoteEpisode.Series;
+                    queue.Id = queueItem.DownloadItem.DownloadClientId.GetHashCode() + episode.Id;
+                    queue.Series = queueItem.DownloadItem.RemoteEpisode.Series;
                     queue.Episode = episode;
-                    queue.Quality = queueItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
-                    queue.Title = queueItem.Title;
-                    queue.Size = queueItem.TotalSize;
-                    queue.Sizeleft = queueItem.RemainingSize;
-                    queue.Timeleft = queueItem.RemainingTime;
-                    queue.Status = queueItem.Status.ToString();
-                    queue.RemoteEpisode = queueItem.RemoteEpisode;
+                    queue.Quality = queueItem.DownloadItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
+                    queue.Title = queueItem.DownloadItem.Title;
+                    queue.Size = queueItem.DownloadItem.TotalSize;
+                    queue.Sizeleft = queueItem.DownloadItem.RemainingSize;
+                    queue.Timeleft = queueItem.DownloadItem.RemainingTime;
+                    queue.Status = queueItem.DownloadItem.Status.ToString();
+                    queue.RemoteEpisode = queueItem.DownloadItem.RemoteEpisode;
+
+                    if (queueItem.HasError)
+                    {
+                        queue.ErrorMessage = queueItem.StatusMessage;
+                    }
+
                     queued.Add(queue);
                 }
             }
