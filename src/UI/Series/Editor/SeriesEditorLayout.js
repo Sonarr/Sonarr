@@ -11,7 +11,8 @@ define(
         'Cells/SeriesStatusCell',
         'Cells/SeasonFolderCell',
         'Shared/Toolbar/ToolbarLayout',
-        'Series/Editor/SeriesEditorFooterView'
+        'Series/Editor/SeriesEditorFooterView',
+        'Mixins/backbone.signalr.mixin'
     ], function (vent,
                  Marionette,
                  Backgrid,
@@ -99,11 +100,54 @@ define(
                     ]
             },
 
+            initialize: function () {
+
+                this.seriesCollection = SeriesCollection.clone();
+                this.seriesCollection.shadowCollection.bindSignalR();
+                this.listenTo(this.seriesCollection, 'save', this.render);
+
+                this.filteringOptions = {
+                    type         : 'radio',
+                    storeState   : true,
+                    menuKey      : 'serieseditor.filterMode',
+                    defaultAction: 'all',
+                    items        :
+                        [
+                            {
+                                key     : 'all',
+                                title   : '',
+                                tooltip : 'All',
+                                icon    : 'icon-circle-blank',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'monitored',
+                                title   : '',
+                                tooltip : 'Monitored Only',
+                                icon    : 'icon-nd-monitored',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'continuing',
+                                title   : '',
+                                tooltip : 'Continuing Only',
+                                icon    : 'icon-play',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'ended',
+                                title   : '',
+                                tooltip : 'Ended Only',
+                                icon    : 'icon-stop',
+                                callback: this._setFilter
+                            }
+                        ]
+                };
+            },
+
             onRender: function () {
                 this._showToolbar();
                 this._showTable();
-
-                this._fetchCollection();
             },
 
             onClose: function () {
@@ -111,14 +155,14 @@ define(
             },
 
             _showTable: function () {
-                if (SeriesCollection.length === 0) {
+                if (this.seriesCollection.shadowCollection.length === 0) {
                     this.seriesRegion.show(new EmptyView());
                     this.toolbar.close();
                     return;
                 }
 
                 this.editorGrid = new Backgrid.Grid({
-                    collection: SeriesCollection,
+                    collection: this.seriesCollection,
                     columns   : this.columns,
                     className : 'table table-hover'
                 });
@@ -127,22 +171,28 @@ define(
                 this._showFooter();
             },
 
-            _fetchCollection: function () {
-                SeriesCollection.fetch();
-            },
-
             _showToolbar: function () {
                 this.toolbar.show(new ToolbarLayout({
                     left   :
                         [
                             this.leftSideButtons
                         ],
+                    right  :
+                        [
+                           this.filteringOptions
+                        ],
                     context: this
                 }));
             },
 
             _showFooter: function () {
-                vent.trigger(vent.Commands.OpenControlPanelCommand, new FooterView({ editorGrid: this.editorGrid }));
+                vent.trigger(vent.Commands.OpenControlPanelCommand, new FooterView({ editorGrid: this.editorGrid, collection: this.seriesCollection }));
+            },
+
+            _setFilter: function(buttonContext) {
+                var mode = buttonContext.model.get('key');
+
+                this.seriesCollection.setFilterMode(mode);
             }
         });
     });
