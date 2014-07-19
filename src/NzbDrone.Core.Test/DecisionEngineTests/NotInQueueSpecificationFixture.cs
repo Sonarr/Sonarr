@@ -54,26 +54,30 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenEmptyQueue()
         {
-            Mocker.GetMock<IQueueService>()
-                .Setup(s => s.GetQueue())
-                .Returns(new List<Queue.Queue>());
+            Mocker.GetMock<IDownloadTrackingService>()
+                .Setup(s => s.GetQueuedDownloads())
+                .Returns(new TrackedDownload[0]);
         }
 
-        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes)
+        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes, TrackedDownloadState state = TrackedDownloadState.Downloading)
         {
-            var queue = new List<Queue.Queue>();
+            var queue = new List<TrackedDownload>();
 
             foreach (var remoteEpisode in remoteEpisodes)
             {
-                queue.Add(new Queue.Queue
+                queue.Add(new TrackedDownload
                 {
-                    RemoteEpisode = remoteEpisode
-                          });
+                    State = state,
+                    DownloadItem = new DownloadClientItem
+                        {
+                            RemoteEpisode = remoteEpisode
+                        }
+                });
             }
 
-            Mocker.GetMock<IQueueService>()
-                .Setup(s => s.GetQueue())
-                .Returns(queue);
+            Mocker.GetMock<IDownloadTrackingService>()
+                .Setup(s => s.GetQueuedDownloads())
+                .Returns(queue.ToArray());
         }
 
         [Test]
@@ -92,6 +96,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                        .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_download_is_failed()
+        {
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(r => r.Series = _series)
+                                                      .With(r => r.Episodes = new List<Episode> { _episode })
+                                                      .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
+                                                                                       {
+                                                                                           Quality = new QualityModel(Quality.DVD)
+                                                                                       })
+                                                      .Build();
+
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode }, TrackedDownloadState.DownloadFailed);
+
             Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
         }
 
