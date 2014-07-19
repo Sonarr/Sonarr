@@ -283,17 +283,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                   .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());
         }
 
-        [Test]
-        public void should_return_path_to_folder_instead_of_file()
+        [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE", @"Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
+        [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE", @"SubDir\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
+        [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv", @"SubDir\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
+        [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv", @"SubDir\SubDir\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
+        public void should_return_path_to_jobfolder(String title, String storage)
         {
-            _completed.Items.First().Storage = @"C:\sorted\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv".AsOsAgnostic();
+            _completed.Items.First().Title = title;
+            _completed.Items.First().Storage = (@"C:\sorted\" + title + @"\" + storage).AsOsAgnostic();
 
             WithQueue(null);
             WithHistory(_completed);
-            
+
             var result = Subject.GetItems().Single();
 
-            result.OutputPath.Should().Be(@"C:\sorted\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
+            result.OutputPath.Should().Be((@"C:\sorted\" + title).AsOsAgnostic());
         }
 
         [Test]
@@ -320,6 +324,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             var result = Subject.GetItems().Single();
 
             result.OutputPath.Should().Be(@"C:\".AsOsAgnostic());
+        }
+
+        [Test]
+        public void should_not_blow_up_if_storage_doesnt_have_jobfolder()
+        {
+            _completed.Items.First().Storage = @"C:\sorted\somewhere\asdfasdf\asdfasdf.mkv".AsOsAgnostic();
+
+            WithQueue(null);
+            WithHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.OutputPath.Should().Be(@"C:\sorted\somewhere\asdfasdf\asdfasdf.mkv".AsOsAgnostic());
         }
 
         [TestCase(@"Y:\nzbget\root", @"completed\downloads", @"vv", @"Y:\nzbget\root\completed\downloads\vv")]
