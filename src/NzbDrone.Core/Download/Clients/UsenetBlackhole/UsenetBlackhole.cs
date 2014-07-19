@@ -124,12 +124,12 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             }
         }
 
-        public override void RemoveItem(string id)
+        public override void RemoveItem(String id)
         {
             throw new NotSupportedException();
         }
 
-        public override void RetryDownload(string id)
+        public override String RetryDownload(String id)
         {
             throw new NotSupportedException();
         }

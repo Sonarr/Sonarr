@@ -10,12 +10,12 @@ namespace NzbDrone.Api.History
     public class HistoryModule : NzbDroneRestModule<HistoryResource>
     {
         private readonly IHistoryService _historyService;
-        private readonly IFailedDownloadService _failedDownloadService;
+        private readonly IDownloadTrackingService _downloadTrackingService;
 
-        public HistoryModule(IHistoryService historyService, IFailedDownloadService failedDownloadService)
+        public HistoryModule(IHistoryService historyService, IDownloadTrackingService downloadTrackingService)
         {
             _historyService = historyService;
-            _failedDownloadService = failedDownloadService;
+            _downloadTrackingService = downloadTrackingService;
             GetResourcePaged = GetHistory;
 
             Post["/failed"] = x => MarkAsFailed();
@@ -51,7 +51,7 @@ namespace NzbDrone.Api.History
         private Response MarkAsFailed()
         {
             var id = (int)Request.Form.Id;
-            _failedDownloadService.MarkAsFailed(id);
+            _downloadTrackingService.MarkAsFailed(id);
             return new Object().AsResponse();
         }
     }

@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Download
                 }
             }
         }
-    
+
         private void UpdateStatusMessage(TrackedDownload trackedDownload, LogLevel logLevel, String message, params object[] args)
         {
             var statusMessage = String.Format(message, args);

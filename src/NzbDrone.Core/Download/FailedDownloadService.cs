@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IFailedDownloadService
     {
-        void MarkAsFailed(int historyId);
+        void MarkAsFailed(TrackedDownload trackedDownload, History.History grabbedHistory);
         void CheckForFailedItem(IDownloadClient downloadClient, TrackedDownload trackedDownload, List<History.History> grabbedHistory, List<History.History> failedHistory);
     }
 
@@ -35,10 +35,14 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void MarkAsFailed(int historyId)
+        public void MarkAsFailed(TrackedDownload trackedDownload, History.History grabbedHistory)
         {
-            var item = _historyService.Get(historyId);
-            PublishDownloadFailedEvent(new List<History.History> { item }, "Manually marked as failed");
+            if (trackedDownload != null && trackedDownload.State == TrackedDownloadState.Downloading)
+            {
+                trackedDownload.State = TrackedDownloadState.DownloadFailed;
+            }
+
+            PublishDownloadFailedEvent(new List<History.History> { grabbedHistory }, "Manually marked as failed");
         }
 
         public void CheckForFailedItem(IDownloadClient downloadClient, TrackedDownload trackedDownload, List<History.History> grabbedHistory, List<History.History> failedHistory)
@@ -54,7 +58,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Download was not grabbed by drone, ignoring download");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Download was not grabbed by drone, ignoring download");
                     return;
                 }
 
@@ -64,7 +68,7 @@ namespace NzbDrone.Core.Download
 
                 if (failedItems.Any())
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Already added to history as failed");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as failed.");
                 }
                 else
                 {
@@ -78,7 +82,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Download wasn't grabbed by drone or not in a category, ignoring download.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Download wasn't grabbed by drone or not in a category, ignoring download.");
                     return;
                 }
 
@@ -86,13 +90,13 @@ namespace NzbDrone.Core.Download
                 if (trackedDownload.DownloadItem.Message.Equals("Unpacking failed, write error or disk is full?",
                     StringComparison.InvariantCultureIgnoreCase))
                 {
-                    UpdateStatusMessage(LogLevel.Error, trackedDownload, "Download failed due to lack of disk space, not blacklisting.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Error, "Download failed due to lack of disk space, not blacklisting.");
                     return;
                 }
 
                 if (FailedDownloadForRecentRelease(downloadClient, trackedDownload, grabbedItems))
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Recent release Failed, do not blacklist.");
+                    _logger.Debug("[{0}] Recent release Failed, do not blacklist.", trackedDownload.DownloadItem.Title);
                     return;
                 }
 
@@ -102,7 +106,7 @@ namespace NzbDrone.Core.Download
 
                 if (failedItems.Any())
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Already added to history as failed.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as failed.");
                 }
                 else
                 {
@@ -117,7 +121,7 @@ namespace NzbDrone.Core.Download
 
                 if (grabbedItems.Any() && failedItems.Any())
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Already added to history as failed, updating tracked state.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as failed, updating tracked state.");
                     trackedDownload.State = TrackedDownloadState.DownloadFailed;
                 }
             }
@@ -126,14 +130,14 @@ namespace NzbDrone.Core.Download
             {
                 try
                 {
-                    _logger.Debug("[{0}] Removing failed download from client", trackedDownload.DownloadItem.Title);
+                    _logger.Debug("[{0}] Removing failed download from client.", trackedDownload.DownloadItem.Title);
                     downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadClientId);
 
                     trackedDownload.State = TrackedDownloadState.Removed;
                 }
                 catch (NotSupportedException)
                 {
-                    UpdateStatusMessage(LogLevel.Debug, trackedDownload, "Removing item not supported by your download client.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Removing item not supported by your download client.");
                 }
             }
         }
@@ -144,37 +148,61 @@ namespace NzbDrone.Core.Download
 
             if (!Double.TryParse(matchingHistoryItems.First().Data.GetValueOrDefault("ageHours"), out ageHours))
             {
-                _logger.Info("[{0}] Unable to determine age of failed download.", trackedDownload.DownloadItem.Title);
+                UpdateStatusMessage(trackedDownload, LogLevel.Info, "Unable to determine age of failed download.");
                 return false;
             }
 
             if (ageHours > _configService.BlacklistGracePeriod)
             {
-                _logger.Info("[{0}] Failed download is older than the grace period.", trackedDownload.DownloadItem.Title);
+                UpdateStatusMessage(trackedDownload, LogLevel.Info, "Download Failed, Failed download is older than the grace period.");
                 return false;
             }
 
             if (trackedDownload.RetryCount >= _configService.BlacklistRetryLimit)
             {
-                _logger.Info("[{0}] Retry limit reached.", trackedDownload.DownloadItem.Title);
+                UpdateStatusMessage(trackedDownload, LogLevel.Info, "Download Failed, Retry limit reached.");
                 return false;
             }
 
-            if (trackedDownload.RetryCount == 0 || trackedDownload.LastRetry.AddMinutes(_configService.BlacklistRetryInterval) < DateTime.UtcNow)
+            if (trackedDownload.LastRetry == new DateTime())
             {
-                _logger.Info("[{0}] Retrying failed release.", trackedDownload.DownloadItem.Title);
+                trackedDownload.LastRetry = DateTime.UtcNow;
+            }
+
+            if (trackedDownload.LastRetry.AddMinutes(_configService.BlacklistRetryInterval) < DateTime.UtcNow)
+            {
                 trackedDownload.LastRetry = DateTime.UtcNow;
                 trackedDownload.RetryCount++;
 
+                UpdateStatusMessage(trackedDownload, LogLevel.Info, "Download Failed, initiating retry attempt {0}/{1}.", trackedDownload.RetryCount, _configService.BlacklistRetryLimit);
+
                 try
                 {
-                    downloadClient.RetryDownload(trackedDownload.DownloadItem.DownloadClientId);
+                    var newDownloadClientId = downloadClient.RetryDownload(trackedDownload.DownloadItem.DownloadClientId);
+
+                    if (newDownloadClientId != trackedDownload.DownloadItem.DownloadClientId)
+                    {
+                        var oldTrackingId = trackedDownload.TrackingId;
+                        var newTrackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, newDownloadClientId);
+
+                        trackedDownload.TrackingId = newTrackingId;
+                        trackedDownload.DownloadItem.DownloadClientId = newDownloadClientId;
+
+                        _logger.Debug("[{0}] Changed id from {1} to {2}.", trackedDownload.DownloadItem.Title, oldTrackingId, newTrackingId);
+                        var newHistoryData = new Dictionary<String, String>(matchingHistoryItems.First().Data);
+                        newHistoryData[DownloadTrackingService.DOWNLOAD_CLIENT_ID] = newDownloadClientId;
+                        _historyService.UpdateHistoryData(matchingHistoryItems.First().Id, newHistoryData);
+                    }
                 }
                 catch (NotSupportedException ex)
                 {
-                    _logger.Debug("Retrying failed downloads is not supported by your download client");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Retrying failed downloads is not supported by your download client.");
                     return false;
                 }
+            }
+            else
+            {
+                UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download Failed, waiting for retry interval to expire.");
             }
 
             return true;
@@ -206,16 +234,16 @@ namespace NzbDrone.Core.Download
             _eventAggregator.PublishEvent(downloadFailedEvent);
         }
 
-        private void UpdateStatusMessage(LogLevel logLevel, TrackedDownload trackedDownload, String message, params object[] args)
+        private void UpdateStatusMessage(TrackedDownload trackedDownload, LogLevel logLevel, String message, params object[] args)
         {
             var statusMessage = String.Format(message, args);
-            var logMessage = String.Format("[{0}] {1}", trackedDownload.DownloadItem.Title, message);
+            var logMessage = String.Format("[{0}] {1}", trackedDownload.DownloadItem.Title, statusMessage);
 
             if (trackedDownload.StatusMessage != statusMessage)
             {
                 trackedDownload.HasError = logLevel >= LogLevel.Warn;
                 trackedDownload.StatusMessage = statusMessage;
-                _logger.Log(logLevel, statusMessage);
+                _logger.Log(logLevel, logMessage);
             }
             else
             {

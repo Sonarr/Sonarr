@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override void RemoveItem(string id)
+        public override void RemoveItem(String id)
         {
             if (GetQueue().Any(v => v.DownloadClientId == id))
             {
@@ -227,9 +227,27 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override void RetryDownload(string id)
+        public override String RetryDownload(String id)
         {
+            // Sabnzbd changed the nzo_id for retried downloads without reporting it back to us. We need to try to determine the new ID.
+
+            var history = GetHistory().Where(v => v.DownloadClientId == id).ToList();
+
             _proxy.RetryDownload(id, Settings);
+
+            if (history.Count() != 1)
+            {
+                return id;
+            }
+
+            var queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
+
+            if (queue.Count() != 1)
+            {
+                return id;
+            }
+
+            return queue.First().DownloadClientId;
         }
 
         protected IEnumerable<SabnzbdCategory> GetCategories(SabnzbdConfig config)

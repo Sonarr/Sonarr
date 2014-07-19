@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
@@ -9,10 +10,10 @@ namespace NzbDrone.Core.Download
     {
         DownloadProtocol Protocol { get; }
 
-        string Download(RemoteEpisode remoteEpisode);
+        String Download(RemoteEpisode remoteEpisode);
         IEnumerable<DownloadClientItem> GetItems();
-        void RemoveItem(string id);
-        void RetryDownload(string id);
+        void RemoveItem(String id);
+        String RetryDownload(String id);
 
         DownloadClientStatus GetStatus();
     }

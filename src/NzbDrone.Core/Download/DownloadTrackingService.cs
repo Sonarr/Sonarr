@@ -18,6 +18,8 @@ namespace NzbDrone.Core.Download
         TrackedDownload[] GetTrackedDownloads();
         TrackedDownload[] GetCompletedDownloads();
         TrackedDownload[] GetQueuedDownloads();
+
+        void MarkAsFailed(Int32 historyId);
     }
 
     public class DownloadTrackingService : IDownloadTrackingService, IExecute<CheckForFinishedDownloadCommand>, IHandleAsync<ApplicationStartedEvent>, IHandle<EpisodeGrabbedEvent>
@@ -76,6 +78,22 @@ namespace NzbDrone.Core.Download
                     return FilterQueuedDownloads(GetTrackedDownloads());
 
                 }, TimeSpan.FromSeconds(5.0));
+        }
+
+        public void MarkAsFailed(Int32 historyId)
+        {
+            var item = _historyService.Get(historyId);
+            
+            var trackedDownload = GetTrackedDownloads()
+                .Where(h => h.DownloadItem.DownloadClientId.Equals(item.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID)))
+                .FirstOrDefault();
+
+            if (trackedDownload != null && trackedDownload.State == TrackedDownloadState.Unknown)
+            {
+                ProcessTrackedDownloads();
+            }
+
+            _failedDownloadService.MarkAsFailed(trackedDownload, item);
         }
 
         private TrackedDownload[] FilterQueuedDownloads(IEnumerable<TrackedDownload> trackedDownloads)

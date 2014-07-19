@@ -67,10 +67,10 @@ namespace NzbDrone.Core.Download
             get;
         }
 
-        public abstract string Download(RemoteEpisode remoteEpisode);
+        public abstract String Download(RemoteEpisode remoteEpisode);
         public abstract IEnumerable<DownloadClientItem> GetItems();
         public abstract void RemoveItem(string id);
-        public abstract void RetryDownload(string id);
+        public abstract String RetryDownload(string id);
         public abstract DownloadClientStatus GetStatus();
 
         protected RemoteEpisode GetRemoteEpisode(String title)
