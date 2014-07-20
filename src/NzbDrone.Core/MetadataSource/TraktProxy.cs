@@ -106,7 +106,7 @@ namespace NzbDrone.Core.MetadataSource
 
         private static IRestClient BuildClient(string resource, string method)
         {
-            return new RestClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
+            return RestClientFactory.BuildClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
         }
 
         private static Series MapSeries(Show show)

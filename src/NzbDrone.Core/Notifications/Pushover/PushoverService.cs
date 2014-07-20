@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Notifications.Pushover
 
         public void SendNotification(string title, string message, string apiKey, string userKey, PushoverPriority priority, string sound)
         {
-            var client = new RestClient(URL);
+            var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest(Method.POST);
             request.AddParameter("token", apiKey);
             request.AddParameter("user", userKey);

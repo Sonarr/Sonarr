@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
         public void SendNotification(string title, string message, string apiKey, string deviceId)
         {
-            var client = new RestClient(URL);
+            var client = RestClientFactory.BuildClient(URL);
             var request = BuildRequest(deviceId); 
             
             request.AddParameter("type", "note");

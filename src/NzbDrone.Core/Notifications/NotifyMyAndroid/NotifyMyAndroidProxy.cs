@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 
         public void SendNotification(string title, string message, string apiKey, NotifyMyAndroidPriority priority)
         {
-            var client = new RestClient(URL);
+            var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest("notify", Method.POST);
             request.RequestFormat = DataFormat.Xml;
             request.AddParameter("apikey", apiKey);
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 
         private void Verify(string apiKey)
         {
-            var client = new RestClient(URL);
+            var client = RestClientFactory.BuildClient(URL);
             var request = new RestRequest("verify", Method.GET);
             request.RequestFormat = DataFormat.Xml;
             request.AddParameter("apikey", apiKey, ParameterType.GetOrPost);
