@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using NzbDrone.Core.Rest;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
 using RestSharp;
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.MetadataSource.Tvdb
 
         private static IRestClient BuildClient(string resource)
         {
-            return new RestClient(String.Format("http://thetvdb.com/data/{0}", resource));
+            return RestClientFactory.BuildClient(String.Format("http://thetvdb.com/data/{0}", resource));
         }
 
         private static Series MapSeries(XElement item)

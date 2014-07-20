@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Rest;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using RestSharp;
 
@@ -138,7 +139,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             _logger.Debug("Url: " + url);
 
-            return new RestClient(url);
+            return RestClientFactory.BuildClient(url);
         }
 
         private void CheckForError(IRestResponse response)

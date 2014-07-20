@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Update
     {
         public UpdatePackage GetLatestUpdate(string branch, Version currentVersion)
         {
-            var restClient = new RestClient(Services.RootUrl);
+            var restClient = RestClientFactory.BuildClient(Services.RootUrl);
 
             var request = new RestRequest("/v1/update/{branch}");
 
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Update
 
         public List<UpdatePackage> GetRecentUpdates(string branch)
         {
-            var restClient = new RestClient(Services.RootUrl);
+            var restClient = RestClientFactory.BuildClient(Services.RootUrl);
 
             var request = new RestRequest("/v1/update/{branch}/changes");
 

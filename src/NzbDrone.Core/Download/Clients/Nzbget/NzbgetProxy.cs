@@ -172,7 +172,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             _logger.Debug("Url: " + url);
 
-            var client = new RestClient(url);
+            var client = RestClientFactory.BuildClient(url);
             client.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
 
             return client;

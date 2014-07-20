@@ -43,7 +43,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             _logger.Debug("Fetching Series IDs from");
 
-            var restClient = new RestClient(XEM_BASE_URL);
+            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
             var request = BuildRequest("havemap");
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             _logger.Debug("Fetching Mappings for: {0}", id);
 
-            var restClient = new RestClient(XEM_BASE_URL);
+            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
             var request = BuildRequest("all");
             request.AddParameter("id", id);
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         public List<SceneMapping> GetSceneTvdbNames()
         {
             _logger.Debug("Fetching alternate names");
-            var restClient = new RestClient(XEM_BASE_URL);
+            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
             var request = BuildRequest("allNames");
             request.AddParameter("origin", "tvdb");
