@@ -88,6 +88,14 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Settings = GetSettings("https://nzbplanet.net", new List<Int32>())
                 });
 
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "NZBgeek",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("https://api.nzbgeek.info", new List<Int32>())
+                });
+
                 return list;
             }
         }
