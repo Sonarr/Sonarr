@@ -35,14 +35,24 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void MarkAsFailed(TrackedDownload trackedDownload, History.History grabbedHistory)
+        public void MarkAsFailed(TrackedDownload trackedDownload, History.History history)
         {
             if (trackedDownload != null && trackedDownload.State == TrackedDownloadState.Downloading)
             {
                 trackedDownload.State = TrackedDownloadState.DownloadFailed;
             }
 
-            PublishDownloadFailedEvent(new List<History.History> { grabbedHistory }, "Manually marked as failed");
+            var downloadClientId = history.Data.GetValueOrDefault(DownloadTrackingService.DOWNLOAD_CLIENT_ID);
+            if (downloadClientId.IsNullOrWhiteSpace())
+            {
+                PublishDownloadFailedEvent(new List<History.History> { history }, "Manually marked as failed");
+            }
+            else
+            {
+                var grabbedHistory = GetHistoryItems(_historyService.Grabbed(), downloadClientId);
+
+                PublishDownloadFailedEvent(grabbedHistory, "Manually marked as failed");
+            }
         }
 
         public void CheckForFailedItem(IDownloadClient downloadClient, TrackedDownload trackedDownload, List<History.History> grabbedHistory, List<History.History> failedHistory)
