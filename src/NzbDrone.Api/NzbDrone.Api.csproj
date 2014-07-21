@@ -166,6 +166,7 @@
     <Compile Include="Mapping\ResourceMappingException.cs" />
     <Compile Include="Mapping\ValueInjectorExtensions.cs" />
     <Compile Include="Series\AlternateTitleResource.cs" />
+    <Compile Include="Series\SeasonResource.cs" />
     <Compile Include="System\Backup\BackupModule.cs" />
     <Compile Include="System\Backup\BackupResource.cs" />
     <Compile Include="Update\UpdateResource.cs" />

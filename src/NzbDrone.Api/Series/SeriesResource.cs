@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
@@ -40,7 +41,7 @@ namespace NzbDrone.Api.Series
         public List<MediaCover> Images { get; set; }
 
         public String RemotePoster { get; set; }
-        public List<Season> Seasons { get; set; }
+        public List<SeasonResource> Seasons { get; set; }
         public Int32 Year { get; set; }
 
         //View & Edit
