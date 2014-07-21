@@ -1,5 +1,6 @@
 using System;
 using Nancy;
+using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Api.Frontend
@@ -20,7 +21,13 @@ namespace NzbDrone.Api.Frontend
 
             if (context.Request.Query.v == BuildInfo.Version) return true;
 
-            if (context.Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase)) return false;
+            if (context.Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase))
+            {
+                if (context.Request.Path.ContainsIgnoreCase("/MediaCover")) return true;
+
+                return false;
+            }
+
             if (context.Request.Path.StartsWith("/signalr", StringComparison.CurrentCultureIgnoreCase)) return false;
             if (context.Request.Path.EndsWith("main.js")) return false;
             if (context.Request.Path.StartsWith("/feed", StringComparison.CurrentCultureIgnoreCase)) return false;

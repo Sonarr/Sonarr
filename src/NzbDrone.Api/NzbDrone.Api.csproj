@@ -122,14 +122,14 @@
     <Compile Include="Episodes\EpisodeResource.cs" />
     <Compile Include="Episodes\RenameEpisodeModule.cs" />
     <Compile Include="Episodes\RenameEpisodeResource.cs" />
-    <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\Pipelines\NzbDroneVersionPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IfModifiedPipeline.cs" />
     <Compile Include="Extensions\Pipelines\IRegisterNancyPipeline.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\RequestExtensions.cs" />
-    <Compile Include="Frontend\IsCacheableSpecification.cs" />
+    <Compile Include="Frontend\CacheableSpecification.cs" />
     <Compile Include="Frontend\Mappers\UpdateLogFileMapper.cs" />
     <Compile Include="Frontend\Mappers\BackupFileMapper.cs" />
     <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
