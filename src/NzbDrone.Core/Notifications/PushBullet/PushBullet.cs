@@ -21,14 +21,14 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
         public override void OnGrab(string message)
         {
-            const string title = "Episode Grabbed";
+            const string title = "NzbDrone - Episode Grabbed";
 
             _proxy.SendNotification(title, message, Settings.ApiKey, Settings.DeviceId);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string title = "Episode Downloaded";
+            const string title = "NzbDrone - Episode Downloaded";
 
             _proxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.DeviceId);
         }
