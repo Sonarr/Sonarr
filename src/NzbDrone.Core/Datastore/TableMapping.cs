@@ -56,16 +56,17 @@ namespace NzbDrone.Core.Datastore
                   .Relationship()
                   .HasOne(s => s.Profile, s => s.ProfileId);
 
+            Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles")
+                  .Ignore(f => f.Path)
+                  .Relationships.AutoMapICollectionOrComplexProperties();
+
             Mapper.Entity<Episode>().RegisterModel("Episodes")
                   .Ignore(e => e.SeriesTitle)
                   .Ignore(e => e.Series)
                   .Ignore(e => e.HasFile)
                   .Relationship()
                   .HasOne(episode => episode.EpisodeFile, episode => episode.EpisodeFileId);
-
-            Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles")
-                  .Relationships.AutoMapICollectionOrComplexProperties();
-
+            
             Mapper.Entity<Profile>().RegisterModel("Profiles");
             Mapper.Entity<QualityDefinition>().RegisterModel("QualityDefinitions");
             Mapper.Entity<Log>().RegisterModel("Logs");

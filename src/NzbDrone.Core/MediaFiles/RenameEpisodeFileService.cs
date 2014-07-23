@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
@@ -77,18 +77,19 @@ namespace NzbDrone.Core.MediaFiles
             {
                 var file = f;
                 var episodesInFile = episodes.Where(e => e.EpisodeFileId == file.Id).ToList();
+                var episodeFilePath = Path.Combine(series.Path, file.RelativePath);
 
                 if (!episodesInFile.Any())
                 {
-                    _logger.Warn("File ({0}) is not linked to any episodes", file.Path);
+                    _logger.Warn("File ({0}) is not linked to any episodes", episodeFilePath);
                     continue;
                 }
 
                 var seasonNumber = episodesInFile.First().SeasonNumber;
                 var newName = _filenameBuilder.BuildFileName(episodesInFile, series, file);
-                var newPath = _filenameBuilder.BuildFilePath(series, seasonNumber, newName, Path.GetExtension(file.Path));
+                var newPath = _filenameBuilder.BuildFilePath(series, seasonNumber, newName, Path.GetExtension(episodeFilePath));
 
-                if (!file.Path.PathEquals(newPath))
+                if (!episodeFilePath.PathEquals(newPath))
                 {
                     yield return new RenameEpisodeFilePreview
                                  {
@@ -96,7 +97,7 @@ namespace NzbDrone.Core.MediaFiles
                                      SeasonNumber = seasonNumber,
                                      EpisodeNumbers = episodesInFile.Select(e => e.EpisodeNumber).ToList(),
                                      EpisodeFileId = file.Id,
-                                     ExistingPath = series.Path.GetRelativePath(file.Path),
+                                     ExistingPath = file.RelativePath,
                                      NewPath = series.Path.GetRelativePath(newPath)
                                  };
                 }
@@ -109,6 +110,8 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var episodeFile in episodeFiles)
             {
+                var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
                 try
                 {
                     _logger.Debug("Renaming episode file: {0}", episodeFile);
@@ -125,7 +128,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Failed to rename file: " + episodeFile.Path, ex);
+                    _logger.ErrorException("Failed to rename file: " + episodeFilePath, ex);
                 }
             }
 

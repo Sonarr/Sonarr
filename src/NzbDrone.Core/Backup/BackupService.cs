@@ -8,8 +8,8 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Backup

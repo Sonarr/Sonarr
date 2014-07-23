@@ -1,7 +1,7 @@
 ﻿using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation.Extensions;
 
 namespace NzbDrone.Core.Update
 {

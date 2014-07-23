@@ -174,18 +174,18 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            var relativePath = series.Path.GetRelativePath(episodeMetadata.Path);
+            var fullPath = Path.Combine(series.Path, episodeMetadata.Path);
 
             var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeMetadata &&
                                                                               c.EpisodeFileId == episodeFile.Id);
 
             if (existingMetadata != null)
             {
-                var fullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
-                if (!episodeMetadata.Path.PathEquals(fullPath))
+                var existingFullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
+                if (!episodeMetadata.Path.PathEquals(existingFullPath))
                 {
-                    _diskProvider.MoveFile(fullPath, episodeMetadata.Path);
-                    existingMetadata.RelativePath = relativePath;
+                    _diskProvider.MoveFile(existingFullPath, fullPath);
+                    existingMetadata.RelativePath = episodeMetadata.Path;
                 }
             }
 
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Metadata
                                EpisodeFileId = episodeFile.Id,
                                Consumer = consumer.GetType().Name,
                                Type = MetadataType.EpisodeMetadata,
-                               RelativePath = relativePath
+                               RelativePath = episodeMetadata.Path
                            };
 
             if (hash == metadata.Hash)
@@ -206,8 +206,8 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            _logger.Debug("Writing Episode Metadata to: {0}", episodeMetadata.Path);
-            _diskProvider.WriteAllText(episodeMetadata.Path, episodeMetadata.Contents);
+            _logger.Debug("Writing Episode Metadata to: {0}", fullPath);
+            _diskProvider.WriteAllText(fullPath, episodeMetadata.Contents);
 
             metadata.Hash = hash;
 
@@ -289,24 +289,24 @@ namespace NzbDrone.Core.Metadata
 
             foreach (var image in consumer.EpisodeImages(series, episodeFile))
             {
+                var fullPath = Path.Combine(series.Path, image.Path);
+
                 if (_diskProvider.FileExists(image.Path))
                 {
                     _logger.Debug("Episode image already exists: {0}", image.Path);
                     continue;
                 }
 
-                var relativePath = series.Path.GetRelativePath(image.Path);
-
                 var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
                                                                                   c.EpisodeFileId == episodeFile.Id);
 
                 if (existingMetadata != null)
                 {
-                    var fullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
-                    if (!image.Path.PathEquals(fullPath))
+                    var existingFullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
+                    if (!fullPath.PathEquals(existingFullPath))
                     {
-                        _diskProvider.MoveFile(fullPath, image.Path);
-                        existingMetadata.RelativePath = relativePath;
+                        _diskProvider.MoveFile(fullPath, fullPath);
+                        existingMetadata.RelativePath = image.Path;
 
                         return new List<MetadataFile>{ existingMetadata };
                     }

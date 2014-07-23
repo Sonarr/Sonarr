@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Tv
             foreach (var episode in message.EpisodeFile.Episodes.Value)
             {
                 _episodeRepository.SetFileId(episode.Id, message.EpisodeFile.Id);
-                _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.Path, episode);
+                _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.RelativePath, episode);
             }
         }
     }

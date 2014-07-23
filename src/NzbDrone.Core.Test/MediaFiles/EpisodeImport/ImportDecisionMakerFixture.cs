@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
 
             Mocker.GetMock<IMediaFileService>()
-                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<int>()))
+                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
                 .Returns(_videoFiles);
         }
 
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
 
             Mocker.GetMock<IMediaFileService>()
-                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<int>()))
+                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
                 .Returns(_videoFiles);
 
             Subject.GetImportDecisions(_videoFiles, _series, false);

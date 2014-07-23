@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             var series = Builder<Series>.CreateNew()
                                         .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                        .With(s => s.Path = @"C:\Test\TV\30 Rock".AsOsAgnostic())
                                         .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(5)
@@ -48,7 +50,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                                                {
                                                    Series = series,
                                                    Episodes = new List<Episode> {episode},
-                                                   Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilot.avi".AsOsAgnostic(),
+                                                   Path = Path.Combine(series.Path, "30 Rock - S01E01 - Pilot.avi"),
                                                    Quality = new QualityModel(Quality.Bluray720p),
                                                    ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                                        {

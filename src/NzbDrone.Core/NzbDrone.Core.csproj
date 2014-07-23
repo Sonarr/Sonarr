@@ -215,6 +215,8 @@
     <Compile Include="Datastore\Migration\054_rename_profiles.cs" />
     <Compile Include="Datastore\Migration\055_drop_old_profile_columns.cs" />
     <Compile Include="Datastore\Migration\056_add_mediainfo_to_episodefile.cs" />
+    <Compile Include="Datastore\Migration\057_convert_episode_file_path_to_relative.cs" />
+    <Compile Include="Datastore\Migration\058_drop_epsiode_file_path.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -427,7 +429,6 @@
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
     <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
-    <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
@@ -701,6 +702,7 @@
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="Tv\Actor.cs" />
+    <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Tv\EpisodeCutoffService.cs" />
@@ -714,8 +716,10 @@
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesDeletedEvent.cs" />
     <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesMovedEvent.cs" />
     <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />
     <Compile Include="Tv\Events\SeriesUpdatedEvent.cs" />
+    <Compile Include="Tv\MoveSeriesService.cs" />
     <Compile Include="Tv\Ratings.cs" />
     <Compile Include="Tv\RefreshEpisodeService.cs" />
     <Compile Include="Tv\RefreshSeriesService.cs" />
