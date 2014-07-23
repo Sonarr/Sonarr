@@ -1,15 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
+using NzbDrone.Common;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
     public class Xbmc : NotificationBase<XbmcSettings>
     {
-        private readonly IXbmcService _xbmcProvider;
+        private readonly IXbmcService _xbmcService;
 
-        public Xbmc(IXbmcService xbmcProvider)
+        public Xbmc(IXbmcService xbmcService)
         {
-            _xbmcProvider = xbmcProvider;
+            _xbmcService = xbmcService;
         }
 
         public override string Link
@@ -23,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             if (Settings.Notify)
             {
-                _xbmcProvider.Notify(Settings, header, message);
+                _xbmcService.Notify(Settings, header, message);
             }
         }
 
@@ -33,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             if (Settings.Notify)
             {
-                _xbmcProvider.Notify(Settings, header, message.Message);
+                _xbmcService.Notify(Settings, header, message.Message);
             }
 
             UpdateAndClean(message.Series, message.OldFiles.Any());
@@ -44,16 +47,25 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
+        public override ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_xbmcService.Test(Settings));
+
+            return new ValidationResult(failures);
+        }
+
         private void UpdateAndClean(Series series, bool clean = true)
         {
             if (Settings.UpdateLibrary)
             {
-                _xbmcProvider.Update(Settings, series);
+                _xbmcService.Update(Settings, series);
             }
 
             if (clean && Settings.CleanLibrary)
             {
-                _xbmcProvider.Clean(Settings);
+                _xbmcService.Clean(Settings);
             }
         }
     }

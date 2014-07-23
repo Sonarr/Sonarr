@@ -9,6 +9,8 @@ define(
         'Cells/RelativeDateCell',
         'Cells/EpisodeStatusCell',
         'Cells/EpisodeActionsCell',
+        'Series/Details/EpisodeNumberCell',
+        'Series/Details/EpisodeWarningCell',
         'Commands/CommandController',
         'moment',
         'underscore',
@@ -21,6 +23,8 @@ define(
                 RelativeDateCell,
                 EpisodeStatusCell,
                 EpisodeActionsCell,
+                EpisodeNumberCell,
+                EpisodeWarningCell,
                 CommandController,
                 Moment,
                 _,
@@ -58,11 +62,16 @@ define(
                         sortable  : false
                     },
                     {
-                        name : 'episodeNumber',
+                        name : 'this',
                         label: '#',
-                        cell : Backgrid.IntegerCell.extend({
-                            className: 'episode-number-cell'
-                        })
+                        cell : EpisodeNumberCell
+                    },
+                    {
+                        name          : 'this',
+                        label         : '',
+                        cell          : EpisodeWarningCell,
+                        sortable      : false,
+                        className     : 'episode-warning-cell'
                     },
                     {
                         name          : 'this',

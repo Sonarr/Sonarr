@@ -3,14 +3,14 @@
         <div class="col-md-12">
             <i class="icon-chevron-right x-expander expander pull-left"/>
             <i class="x-series-monitored series-monitor-toggle pull-left" title="Toggle monitored state for entire series"/>
-            <span class="title col-md-5">
+            <div class="title col-md-5">
                 <a href="{{route}}">
                     {{title}}
                 </a>
-            </span>
+            </div>
 
-            <span class="col-md-3">
-                <select class="x-season-select season-select">
+            <div class="col-md-2">
+                <select class="form-control x-season-select season-select">
                     <option value="-1">Select season...</option>
                     {{#each seasons}}
                         {{#if_eq seasonNumber compare="0"}}
@@ -20,11 +20,13 @@
                         {{/if_eq}}
                     {{/each}}
                 </select>
+            </div>
 
+            <div class="col-md-1">
                 <span class="help-inline">
                     <i class="icon-nd-form-info" title="Selecting a season will unmonitor all previous seasons"/>
                 </span>
-            </span>
+            </div>
 
             <span class="season-pass-button">
                 <button class="btn x-latest last">Latest Season Only</button>

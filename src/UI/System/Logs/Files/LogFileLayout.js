@@ -38,12 +38,14 @@ define(
                     {
                         name : 'filename',
                         label: 'Filename',
-                        cell : FilenameCell
+                        cell : FilenameCell,
+                        sortable: false
                     },
                     {
                         name : 'lastWriteTime',
                         label: 'Last Write Time',
-                        cell : RelativeDateCell
+                        cell : RelativeDateCell,
+                        sortable: false
                     },
                     {
                         name    : 'downloadUrl',

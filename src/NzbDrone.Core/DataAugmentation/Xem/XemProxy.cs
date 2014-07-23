@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 using NLog;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DataAugmentation.Xem.Model;
 using NzbDrone.Core.Rest;
 using RestSharp;
@@ -12,6 +14,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
     {
         List<int> GetXemSeriesIds();
         List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id);
+        List<SceneMapping> GetSceneTvdbNames();
     }
 
     public class XemProxy : IXemProxy
@@ -40,7 +43,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             _logger.Debug("Fetching Series IDs from");
 
-            var restClient = new RestClient(XEM_BASE_URL);
+            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
             var request = BuildRequest("havemap");
 
@@ -54,7 +57,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             _logger.Debug("Fetching Mappings for: {0}", id);
 
-            var restClient = new RestClient(XEM_BASE_URL);
+            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
             var request = BuildRequest("all");
             request.AddParameter("id", id);
@@ -65,6 +68,52 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             return response.Data.Where(c => c.Scene != null).ToList();
         }
 
+        public List<SceneMapping> GetSceneTvdbNames()
+        {
+            _logger.Debug("Fetching alternate names");
+            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
+
+            var request = BuildRequest("allNames");
+            request.AddParameter("origin", "tvdb");
+            request.AddParameter("seasonNumbers", true);
+
+            var response = restClient.ExecuteAndValidate<XemResult<Dictionary<Int32, List<JObject>>>>(request);
+            CheckForFailureResult(response);
+
+            var result = new List<SceneMapping>();
+
+            foreach (var series in response.Data)
+            {
+                foreach (var name in series.Value)
+                {
+                    foreach (var n in name)
+                    {
+                        int seasonNumber;
+                        if (!Int32.TryParse(n.Value.ToString(), out seasonNumber))
+                        {
+                            continue;
+                        }
+
+                        //hack to deal with Fate/Zero 
+                        if (series.Key == 79151 && seasonNumber > 1)
+                        {
+                            continue;
+                        }
+
+                        result.Add(new SceneMapping
+                                   {
+                                       Title = n.Key,
+                                       SearchTerm = n.Key,
+                                       SeasonNumber = seasonNumber,
+                                       TvdbId = series.Key
+                                   });
+                    }
+                }
+            }
+
+            return result;
+        }
+
         private static void CheckForFailureResult<T>(XemResult<T> response)
         {
             if (response.Result.Equals("failure", StringComparison.InvariantCultureIgnoreCase) &&
@@ -73,7 +122,5 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 throw new Exception("Error response received from Xem: " + response.Message);
             }
         }
-
-
     }
 }

@@ -11,8 +11,7 @@ define(
             render: function () {
 
                 var date = Moment(this._getValue());
-                this.$el.html(date.format('LT'));
-                this.$el.attr('title', date.format('LLLL'));
+                this.$el.html('<span title="{1}">{0}</span>'.format(date.format('LT'), date.format('LLLL')));
 
                 return this;
             }

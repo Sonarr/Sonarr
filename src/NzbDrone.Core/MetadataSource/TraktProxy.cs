@@ -31,6 +31,18 @@ namespace NzbDrone.Core.MetadataSource
         {
             try
             {
+                if (title.StartsWith("imdb:") || title.StartsWith("imdbid:"))
+                {
+                    var slug = title.Split(':')[1].TrimStart('t');
+
+                    if (slug.IsNullOrWhiteSpace() || !slug.All(char.IsDigit) || slug.Length < 7)
+                    {
+                        return new List<Series>();
+                    }
+
+                    title = "tt" + slug;
+                }
+
                 if (title.StartsWith("tvdb:") || title.StartsWith("tvdbid:") || title.StartsWith("slug:"))
                 {
                     try
@@ -69,7 +81,7 @@ namespace NzbDrone.Core.MetadataSource
                         .ToList();
                 }
             }
-            catch (WebException ex)
+            catch (WebException)
             {
                 throw new TraktException("Search for '{0}' failed. Unable to communicate with Trakt.", title);
             }
@@ -80,10 +92,10 @@ namespace NzbDrone.Core.MetadataSource
             }
         }
 
-        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvDbSeriesId)
+        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
             var client = BuildClient("show", "summary");
-            var restRequest = new RestRequest(tvDbSeriesId.ToString() + "/extended");
+            var restRequest = new RestRequest(tvdbSeriesId.ToString() + "/extended");
             var response = client.ExecuteAndValidate<Show>(restRequest);
 
             var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
@@ -94,7 +106,7 @@ namespace NzbDrone.Core.MetadataSource
 
         private static IRestClient BuildClient(string resource, string method)
         {
-            return new RestClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
+            return RestClientFactory.BuildClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
         }
 
         private static Series MapSeries(Show show)
@@ -105,13 +117,14 @@ namespace NzbDrone.Core.MetadataSource
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
+            series.SortTitle = Parser.Parser.NormalizeEpisodeTitle(show.title).ToLower();
             series.Year = GetYear(show.year, show.first_aired);
             series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
             series.Runtime = show.runtime;
             series.Network = show.network;
             series.AirTime = show.air_time;
-            series.TitleSlug = show.url.ToLower().Replace("http://trakt.tv/show/", "");
+            series.TitleSlug = GetTitleSlug(show.url);
             series.Status = GetSeriesStatus(show.status, show.ended);
             series.Ratings = GetRatings(show.ratings);
             series.Genres = show.genres;
@@ -131,7 +144,6 @@ namespace NzbDrone.Core.MetadataSource
             var episode = new Episode();
             episode.Overview = traktEpisode.overview;
             episode.SeasonNumber = traktEpisode.season;
-            episode.EpisodeNumber = traktEpisode.episode;
             episode.EpisodeNumber = traktEpisode.number;
             episode.Title = traktEpisode.title;
             episode.AirDate = FromIsoToString(traktEpisode.first_aired_iso);
@@ -272,6 +284,18 @@ namespace NzbDrone.Core.MetadataSource
             }
 
             return seasons;
+        }
+
+        private static String GetTitleSlug(String url)
+        {
+            var slug = url.ToLower().Replace("http://trakt.tv/show/", "");
+
+            if (slug.StartsWith("."))
+            {
+                slug = "dot" + slug.Substring(1);
+            }
+
+            return slug;
         }
     }
 }

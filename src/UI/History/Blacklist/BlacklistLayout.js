@@ -35,33 +35,31 @@ define(
             columns:
                 [
                     {
-                        name : 'series',
-                        label: 'Series',
-                        cell : SeriesTitleCell,
-                        sortValue: 'series.title'
+                        name      : 'series',
+                        label     : 'Series',
+                        cell      : SeriesTitleCell
                     },
                     {
-                        name : 'sourceTitle',
-                        label: 'Source Title',
-                        cell : 'string',
-                        sortValue: 'sourceTitle'
+                        name      : 'sourceTitle',
+                        label     : 'Source Title',
+                        cell      : 'string'
                     },
                     {
-                        name    : 'quality',
-                        label   : 'Quality',
-                        cell    : QualityCell,
-                        sortable: false
+                        name      : 'quality',
+                        label     : 'Quality',
+                        cell      : QualityCell,
+                        sortable  : false
                     },
                     {
-                        name : 'date',
-                        label: 'Date',
-                        cell : RelativeDateCell
+                        name      : 'date',
+                        label     : 'Date',
+                        cell      : RelativeDateCell
                     },
                     {
-                        name    : 'this',
-                        label   : '',
-                        cell    : BlacklistActionsCell,
-                        sortable: false
+                        name      : 'this',
+                        label     : '',
+                        cell      : BlacklistActionsCell,
+                        sortable  : false
                     }
                 ],
 

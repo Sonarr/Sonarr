@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
@@ -24,6 +26,7 @@ namespace NzbDrone.Core.Notifications
         }
 
         public ProviderDefinition Definition { get; set; }
+        public abstract ValidationResult Test();
 
         public abstract string Link { get; }
 

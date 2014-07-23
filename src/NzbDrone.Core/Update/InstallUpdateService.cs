@@ -6,6 +6,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Processes;
+using NzbDrone.Core.Backup;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Update
         private readonly IVerifyUpdates _updateVerifier;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IBackupService _backupService;
 
 
         public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppFolderInfo appFolderInfo,
@@ -38,7 +40,9 @@ namespace NzbDrone.Core.Update
                                     IArchiveService archiveService, IProcessProvider processProvider,
                                     IVerifyUpdates updateVerifier,
                                     IConfigFileProvider configFileProvider,
-                                    IRuntimeInfo runtimeInfo, Logger logger)
+                                    IRuntimeInfo runtimeInfo,
+                                    IBackupService backupService,
+                                    Logger logger)
         {
             if (configFileProvider == null)
             {
@@ -53,6 +57,7 @@ namespace NzbDrone.Core.Update
             _updateVerifier = updateVerifier;
             _configFileProvider = configFileProvider;
             _runtimeInfo = runtimeInfo;
+            _backupService = backupService;
             _logger = logger;
         }
 
@@ -89,6 +94,8 @@ namespace NzbDrone.Core.Update
                 _logger.ProgressInfo("Extracting Update package");
                 _archiveService.Extract(packageDestination, updateSandboxFolder);
                 _logger.Info("Update package extracted successfully");
+
+                _backupService.Backup(BackupType.Update);
 
                 if (OsInfo.IsMono && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
                 {

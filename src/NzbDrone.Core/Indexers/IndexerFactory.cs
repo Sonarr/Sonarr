@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
-        private readonly IIndexerRepository _providerRepository;
         private readonly INewznabTestService _newznabTestService;
 
         public IndexerFactory(IIndexerRepository providerRepository,
@@ -25,7 +24,6 @@ namespace NzbDrone.Core.Indexers
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
-            _providerRepository = providerRepository;
             _newznabTestService = newznabTestService;
         }
 
@@ -37,17 +35,6 @@ namespace NzbDrone.Core.Indexers
         protected override List<IndexerDefinition> Active()
         {
             return base.Active().Where(c => c.Enable).ToList();
-        }
-
-        public override IndexerDefinition Create(IndexerDefinition definition)
-        {
-            if (definition.Implementation == typeof(Newznab.Newznab).Name)
-            {
-                var indexer = GetInstance(definition);
-                _newznabTestService.Test(indexer);
-            }
-
-            return base.Create(definition);
         }
 
         protected override IndexerDefinition GetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)

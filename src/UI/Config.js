@@ -8,10 +8,11 @@ define(
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
             Keys  : {
-                DefaultQualityProfileId: 'DefaultQualityProfileId',
-                DefaultRootFolderId    : 'DefaultRootFolderId',
-                UseSeasonFolder        : 'UseSeasonFolder',
-                AdvancedSettings       : 'advancedSettings'
+                DefaultQualityProfileId : 'DefaultQualityProfileId',
+                DefaultRootFolderId     : 'DefaultRootFolderId',
+                UseSeasonFolder         : 'UseSeasonFolder',
+                DefaultSeriesType       : 'DefaultSeriesType',
+                AdvancedSettings        : 'advancedSettings'
             },
 
             getValueBoolean: function (key, defaultValue) {
@@ -32,15 +33,19 @@ define(
 
             setValue: function (key, value) {
 
-                console.log('Config: [{0}] => [{1}] '.format(key, value));
+                console.log('Config: [{0}] => [{1}]'.format(key, value));
 
                 if (this.getValue(key) === value.toString()) {
                     return;
                 }
 
-                window.localStorage.setItem(key, value);
-                vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
-
+                try {
+                    window.localStorage.setItem(key, value);
+                    vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
+                }
+                catch (error) {
+                    console.error('Unable to save config: [{0}] => [{1}]'.format(key, value));
+                }
             }
         };
     });

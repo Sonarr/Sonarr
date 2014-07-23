@@ -34,52 +34,11 @@ define(
                 else {
                     order = null;
                 }
-
-                var comparator = this.makeComparator(sortModel.get('name'), order,
-                    order ?
-                        sortModel.sortValue() :
-                        function (model) {
-                            return model.cid;
-                        });
-
-                if (PageableCollection &&
-                    collection instanceof PageableCollection) {
-
-                    collection.setSorting(order && sortModel.get('name'), order,
-                        {sortValue: sortModel.sortValue()});
-
-                    if (collection.mode === 'client') {
-                        if (collection.fullCollection.comparator === null) {
-                            collection.fullCollection.comparator = comparator;
-                        }
-                        collection.fullCollection.sort();
-                    }
-                    else {
-                        collection.fetch({reset: true});
-                    }
-                }
-                else {
-                    collection.comparator = comparator;
-                    collection.sort();
-                }
+                
+                collection.setSorting(sortModel.get('name'), order);
+                collection.fullCollection.sort();
 
                 return this;
-            },
-
-            makeComparator: function (attr, order, func) {
-
-                return function (left, right) {
-                    // extract the values from the models
-                    var l = func(left, attr), r = func(right, attr), t;
-
-                    // if descending order, swap left and right
-                    if (order === 1) t = l, l = r, r = t;
-
-                    // compare as usual
-                    if (l === r) return 0;
-                    else if (l < r) return -1;
-                    return 1;
-                };
             }
         });
     });

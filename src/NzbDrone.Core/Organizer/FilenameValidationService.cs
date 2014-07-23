@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.Parser.Model;
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Organizer
     {
         ValidationFailure ValidateStandardFilename(SampleResult sampleResult);
         ValidationFailure ValidateDailyFilename(SampleResult sampleResult);
+        ValidationFailure ValidateAnimeFilename(SampleResult sampleResult);
     }
 
     public class FilenameValidationService : IFilenameValidationService
@@ -44,9 +46,37 @@ namespace NzbDrone.Core.Organizer
                 return validationFailure;
             }
 
-            if (parsedEpisodeInfo.IsDaily())
+            if (parsedEpisodeInfo.IsDaily)
             {
                 if (!parsedEpisodeInfo.AirDate.Equals(sampleResult.Episodes.Single().AirDate))
+                {
+                    return validationFailure;
+                }
+
+                return null;
+            }
+
+            if (!ValidateSeasonAndEpisodeNumbers(sampleResult.Episodes, parsedEpisodeInfo))
+            {
+                return validationFailure;
+            }
+
+            return null;
+        }
+
+        public ValidationFailure ValidateAnimeFilename(SampleResult sampleResult)
+        {
+            var validationFailure = new ValidationFailure("AnimeEpisodeFormat", ERROR_MESSAGE);
+            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.Filename);
+
+            if (parsedEpisodeInfo == null)
+            {
+                return validationFailure;
+            }
+
+            if (parsedEpisodeInfo.AbsoluteEpisodeNumbers.Any())
+            {
+                if (!parsedEpisodeInfo.AbsoluteEpisodeNumbers.First().Equals(sampleResult.Episodes.First().AbsoluteEpisodeNumber))
                 {
                     return validationFailure;
                 }

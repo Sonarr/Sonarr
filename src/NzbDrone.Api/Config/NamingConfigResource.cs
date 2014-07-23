@@ -9,6 +9,7 @@ namespace NzbDrone.Api.Config
         public Int32 MultiEpisodeStyle { get; set; }
         public string StandardEpisodeFormat { get; set; }
         public string DailyEpisodeFormat { get; set; }
+        public string AnimeEpisodeFormat { get; set; }
         public string SeriesFolderFormat { get; set; }
         public string SeasonFolderFormat { get; set; }
         public bool IncludeSeriesTitle { get; set; }

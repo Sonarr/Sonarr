@@ -104,6 +104,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
+    <Compile Include="Backup\Backup.cs" />
+    <Compile Include="Backup\BackupCommand.cs" />
+    <Compile Include="Backup\BackupService.cs" />
     <Compile Include="Blacklisting\Blacklist.cs" />
     <Compile Include="Blacklisting\BlacklistRepository.cs" />
     <Compile Include="Blacklisting\BlacklistService.cs" />
@@ -118,10 +121,12 @@
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
+    <Compile Include="DataAugmentation\Scene\ISceneMappingProvider.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
+    <Compile Include="DataAugmentation\Scene\ServicesProvider.cs" />
     <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemResult.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemSceneTvdbMapping.cs" />
@@ -198,6 +203,8 @@
     <Compile Include="Datastore\Migration\049_fix_dognzb_url.cs" />
     <Compile Include="Datastore\Migration\050_add_hash_to_metadata_files.cs" />
     <Compile Include="Datastore\Migration\051_download_client_import.cs" />
+    <Compile Include="Datastore\Migration\052_add_columns_for_anime.cs" />
+    <Compile Include="Datastore\Migration\053_add_series_sorttitle.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -216,6 +223,7 @@
     <Compile Include="Datastore\PagingSpec.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\Specifications\RetrySpecification.cs" />
+    <Compile Include="DecisionEngine\DownloadDecisionPriorizationService.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
@@ -244,23 +252,21 @@
     <Compile Include="Download\Clients\Nzbget\NzbgetConfigItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetGlobalStatus.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetPostQueueItem.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
-    <Compile Include="Download\Clients\UsenetBlackhole\TestUsenetBlackholeCommand.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\Pneumatic\PneumaticSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetHistoryItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetParameter.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
-    <Compile Include="Download\Clients\Nzbget\TestNzbgetCommand.cs" />
     <Compile Include="Download\Clients\Pneumatic\Pneumatic.cs" />
-    <Compile Include="Download\Clients\Pneumatic\TestPneumaticCommand.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdAddResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdCategoryResponse.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdConfigResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdVersionResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\TestSabnzbdCommand.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdCategory.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
     <Compile Include="Download\DownloadClientBase.cs" />
     <Compile Include="Download\DownloadClientDefinition.cs" />
@@ -305,12 +311,14 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
+    <Compile Include="Housekeeping\Housekeepers\UpdateAnimeCategories.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
+    <Compile Include="IndexerSearch\Definitions\AnimeEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\MissingEpisodeSearchCommand.cs" />
     <Compile Include="IndexerSearch\Definitions\SpecialEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
@@ -320,9 +328,13 @@
     <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
     <Compile Include="IndexerSearch\SeasonSearchService.cs" />
     <Compile Include="Indexers\BasicTorrentRssParser.cs" />
+    <Compile Include="Indexers\Animezb\Animezb.cs" />
+    <Compile Include="Indexers\Animezb\AnimezbParser.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
+    <Compile Include="Indexers\Fanzub\Fanzub.cs" />
+    <Compile Include="Indexers\Fanzub\FanzubParser.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
@@ -368,10 +380,13 @@
     <Compile Include="MetadataSource\Trakt\Actor.cs" />
     <Compile Include="MetadataSource\Trakt\People.cs" />
     <Compile Include="MetadataSource\Trakt\Ratings.cs" />
+    <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadata.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadataSettings.cs" />
+    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
+    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
@@ -403,12 +418,10 @@
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
-    <Compile Include="Notifications\PushBullet\TestPushBulletCommand.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroid.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidPriority.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
-    <Compile Include="Notifications\NotifyMyAndroid\TestNotifyMyAndroidCommand.cs" />
     <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
     <Compile Include="Messaging\Commands\Command.cs" />
@@ -429,6 +442,7 @@
     <Compile Include="Notifications\Xbmc\Model\XbmcJsonResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcVersion.cs" />
     <Compile Include="Organizer\BasicNamingConfig.cs" />
+    <Compile Include="Organizer\AbsoluteEpisodeFormat.cs" />
     <Compile Include="Organizer\FilenameValidationService.cs" />
     <Compile Include="Organizer\EpisodeFormat.cs" />
     <Compile Include="Organizer\Exception.cs" />
@@ -463,9 +477,7 @@
     <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
     <Compile Include="MediaFiles\SameFilenameException.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
-    <Compile Include="Notifications\Email\TestEmailCommand.cs" />
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
-    <Compile Include="Notifications\Growl\TestGrowlCommand.cs" />
     <Compile Include="Notifications\INotification.cs" />
     <Compile Include="Notifications\NotificationRepository.cs" />
     <Compile Include="Fluent.cs" />
@@ -506,27 +518,22 @@
     <Compile Include="MetadataSource\Trakt\Images.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\FullShow.cs" />
-    <Compile Include="Notifications\Plex\TestPlexServerCommand.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
-    <Compile Include="Notifications\Plex\TestPlexClientCommand.cs" />
     <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
     <Compile Include="Notifications\Prowl\ProwlPriority.cs" />
     <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
     <Compile Include="Notifications\Email\EmailSettings.cs" />
-    <Compile Include="Notifications\Prowl\TestProwlCommand.cs" />
     <Compile Include="Notifications\Pushover\InvalidResponseException.cs" />
     <Compile Include="Notifications\Pushover\Pushover.cs" />
     <Compile Include="Notifications\Pushover\PushoverPriority.cs" />
     <Compile Include="Notifications\Pushover\PushoverService.cs" />
     <Compile Include="Notifications\Pushover\PushoverSettings.cs" />
-    <Compile Include="Notifications\Pushover\TestPushoverCommand.cs" />
     <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\IApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\InvalidXbmcVersionException.cs" />
     <Compile Include="Notifications\Xbmc\JsonApiProvider.cs" />
-    <Compile Include="Notifications\Xbmc\TestXbmcCommand.cs" />
     <Compile Include="Notifications\Xbmc\XbmcSettings.cs" />
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
@@ -552,6 +559,7 @@
     <Compile Include="Qualities\QualityModelComparer.cs" />
     <Compile Include="Qualities\QualityProfileItem.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
+    <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
@@ -589,6 +597,7 @@
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Ratings.cs" />
     <Compile Include="Tv\RefreshEpisodeService.cs" />
+    <Compile Include="Tv\SeriesEditedService.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Qualities\QualityModel.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistoryItem.cs" />
@@ -719,6 +728,7 @@
     <Compile Include="Validation\Paths\PathExistsValidator.cs" />
     <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
+    <Compile Include="Validation\NzbDroneValidationFailure.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

@@ -27,14 +27,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         }
 
         [Test]
-        public void should_get_free_space_for_drive_that_doesnt_exist()
-        {
-            WindowsOnly();
-
-            Assert.Throws<DirectoryNotFoundException>(() => Subject.GetAvailableSpace("J:\\").Should().NotBe(0));
-        }
-
-        [Test]
         public void should_be_able_to_check_space_on_ramdrive()
         {
             MonoOnly();

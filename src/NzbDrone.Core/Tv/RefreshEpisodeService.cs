@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -17,12 +17,14 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
+        private readonly ITvdbProxy _tvdbProxy;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, ITvdbProxy tvdbProxy, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeService = episodeService;
+            _tvdbProxy = tvdbProxy;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -40,11 +42,16 @@ namespace NzbDrone.Core.Tv
             var newList = new List<Episode>();
             var dupeFreeRemoteEpisodes = remoteEpisodes.DistinctBy(m => new { m.SeasonNumber, m.EpisodeNumber }).ToList();
 
-            foreach (var episode in dupeFreeRemoteEpisodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(series, dupeFreeRemoteEpisodes);
+            }
+
+            foreach (var episode in OrderEpsiodes(series, dupeFreeRemoteEpisodes))
             {
                 try
                 {
-                    var episodeToUpdate = existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    var episodeToUpdate = GetEpisodeToUpdate(series, episode, existingEpisodes);
 
                     if (episodeToUpdate != null)
                     {
@@ -61,6 +68,7 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.SeriesId = series.Id;
                     episodeToUpdate.EpisodeNumber = episode.EpisodeNumber;
                     episodeToUpdate.SeasonNumber = episode.SeasonNumber;
+                    episodeToUpdate.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
                     episodeToUpdate.Title = episode.Title;
                     episodeToUpdate.Overview = episode.Overview;
                     episodeToUpdate.AirDate = episode.AirDate;
@@ -82,7 +90,6 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(updateList);
 
             AdjustMultiEpisodeAirTime(series, allEpisodes);
-            SetAbsoluteEpisodeNumber(allEpisodes);
 
             _episodeService.DeleteMany(existingEpisodes);
             _episodeService.UpdateMany(updateList);
@@ -144,16 +151,62 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private static void SetAbsoluteEpisodeNumber(IEnumerable<Episode> allEpisodes)
+        private List<Episode> MapAbsoluteEpisodeNumbers(Series series, List<Episode> traktEpisodes)
         {
-            var episodes = allEpisodes.Where(e => e.SeasonNumber > 0 && e.EpisodeNumber > 0)
-                                      .OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber)
-                                      .ToList();
+            var tvdbEpisodes = _tvdbProxy.GetEpisodeInfo(series.TvdbId);
 
-            for (int i = 0; i < episodes.Count(); i++)
+            foreach (var episode in traktEpisodes)
             {
-                episodes[i].AbsoluteEpisodeNumber = i + 1;
+                //I'd use single, but then I'd have to trust the tvdb data... and I don't
+                var tvdbEpisode = tvdbEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber &&
+                                                                    e.EpisodeNumber == episode.EpisodeNumber);
+
+                if (tvdbEpisode == null)
+                {
+                    _logger.Debug("Cannot find matching episode from the tvdb: {0}x{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+                    continue;
+                }
+
+                episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
             }
+
+            //Return all episodes with abs 0, but distinct by abs for ones greater than 0
+            return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber > 0)
+                                .DistinctBy(e => e.AbsoluteEpisodeNumber)
+                                .Concat(traktEpisodes.Where(e => e.AbsoluteEpisodeNumber == 0))
+                                .ToList();
+        }
+
+        private Episode GetEpisodeToUpdate(Series series, Episode episode, List<Episode> existingEpisodes)
+        {
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                if (episode.AbsoluteEpisodeNumber > 0)
+                {
+                    var matchingEpisode = existingEpisodes.FirstOrDefault(e => e.AbsoluteEpisodeNumber == episode.AbsoluteEpisodeNumber);
+
+                    if (matchingEpisode != null) return matchingEpisode;
+                }
+            }
+
+            return existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+        }
+
+        private IEnumerable<Episode> OrderEpsiodes(Series series, List<Episode> episodes)
+        {
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                var withAbs = episodes.Where(e => e.AbsoluteEpisodeNumber > 0)
+                                      .OrderBy(e => e.AbsoluteEpisodeNumber);
+
+                var withoutAbs = episodes.Where(e => e.AbsoluteEpisodeNumber == 0)
+                                         .OrderBy(e => e.SeasonNumber)
+                                         .ThenBy(e => e.EpisodeNumber);
+
+                return withAbs.Concat(withoutAbs);
+            }
+
+            return episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber);
         }
     }
 }

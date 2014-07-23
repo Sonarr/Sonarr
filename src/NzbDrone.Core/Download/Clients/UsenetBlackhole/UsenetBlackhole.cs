@@ -2,36 +2,33 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
-    public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>, IExecute<TestUsenetBlackholeCommand>
+    public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>
     {
-        private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
         private readonly IHttpProvider _httpProvider;
 
-        public UsenetBlackhole(IDiskProvider diskProvider,
-                               IDiskScanService diskScanService,
+        public UsenetBlackhole(IDiskScanService diskScanService,
                                IHttpProvider httpProvider,
                                IConfigService configService,
+                               IDiskProvider diskProvider,
                                IParsingService parsingService,
                                Logger logger)
-            : base(configService, parsingService, logger)
+            : base(configService, diskProvider, parsingService, logger)
         {
-            _diskProvider = diskProvider;
             _diskScanService = diskScanService;
             _httpProvider = httpProvider;
         }
@@ -127,12 +124,12 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             }
         }
 
-        public override void RemoveItem(string id)
+        public override void RemoveItem(String id)
         {
             throw new NotSupportedException();
         }
 
-        public override void RetryDownload(string id)
+        public override String RetryDownload(String id)
         {
             throw new NotSupportedException();
         }
@@ -146,25 +143,10 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             };
         }
 
-        public override void Test(UsenetBlackholeSettings settings)
+        protected override void Test(List<ValidationFailure> failures)
         {
-            PerformWriteTest(settings.NzbFolder);
-            PerformWriteTest(settings.WatchFolder);
-        }
-
-        private void PerformWriteTest(string folder)
-        {
-            var testPath = Path.Combine(folder, "drone_test.txt");
-            _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-            _diskProvider.DeleteFile(testPath);
-        }
-
-        public void Execute(TestUsenetBlackholeCommand message)
-        {
-            var settings = new UsenetBlackholeSettings();
-            settings.InjectFrom(message);
-
-            Test(settings);
+            failures.AddIfNotNull(TestFolder(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestFolder(Settings.WatchFolder, "WatchFolder"));
         }
     }
 }

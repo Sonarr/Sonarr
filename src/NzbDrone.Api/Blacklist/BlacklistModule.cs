@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Blacklist
         {
             _blacklistService = blacklistService;
             GetResourcePaged = GetBlacklist;
-            DeleteResource = Delete;
+            DeleteResource = DeleteBlacklist;
         }
 
         private PagingResource<BlacklistResource> GetBlacklist(PagingResource<BlacklistResource> pagingResource)
@@ -25,16 +25,10 @@ namespace NzbDrone.Api.Blacklist
                                      SortDirection = pagingResource.SortDirection
                                  };
 
-            //This is a hack to deal with backgrid setting the sortKey to the column name instead of sortValue
-            if (pagingSpec.SortKey.Equals("series", StringComparison.InvariantCultureIgnoreCase))
-            {
-                pagingSpec.SortKey = "series.title";
-            }
-
             return ApplyToPage(_blacklistService.Paged, pagingSpec);
         }
 
-        private void Delete(int id)
+        private void DeleteBlacklist(int id)
         {
             _blacklistService.Delete(id);
         }

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
-                                                                (?<bluray>BluRay)|
+                                                                (?<bluray>BluRay|Blu-Ray)|
                                                                 (?<webdl>WEB[-_. ]DL|WEBDL|WebRip)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRiP)|
@@ -31,13 +31,17 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper|repack)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p)|(?<_576p>576p)|(?<_720p>720p)|(?<_1080p>1080p))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex OtherSourceRegex = new Regex(@"(?<hdtv>HD[-_. ]TV)|(?<sdtv>SD[-_. ]TV)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex AnimeBlurayRegex = new Regex(@"bd(?:720|1080)|(?<=\[|\(|\s)bd(?=\s|\)|\])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex HighDefPdtvRegex = new Regex(@"hr[-_. ]ws", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static QualityModel ParseQuality(string name)
         {
@@ -161,7 +165,32 @@ namespace NzbDrone.Core.Parser
                 sourceMatch.Groups["sdtv"].Success ||
                 sourceMatch.Groups["dsr"].Success)
             {
+                if (HighDefPdtvRegex.IsMatch(normalizedName))
+                {
+                    result.Quality = Quality.HDTV720p;
+                    return result;
+                }
+
                 result.Quality = Quality.SDTV;
+                return result;
+            }
+
+            //Anime Bluray matching
+            if (AnimeBlurayRegex.Match(normalizedName).Success)
+            {
+                if (resolution == Resolution._480p || resolution == Resolution._576p || normalizedName.Contains("480p"))
+                {
+                    result.Quality = Quality.DVD;
+                    return result;
+                }
+
+                if (resolution == Resolution._1080p || normalizedName.Contains("1080p"))
+                {
+                    result.Quality = Quality.Bluray1080p;
+                    return result;
+                }
+
+                result.Quality = Quality.Bluray720p;
                 return result;
             }
 
@@ -177,10 +206,46 @@ namespace NzbDrone.Core.Parser
                 return result;
             }
 
+            if (resolution == Resolution._480p)
+            {
+                result.Quality = Quality.SDTV;
+                return result;
+            }
+
             if (codecRegex.Groups["x264"].Success)
             {
                 result.Quality = Quality.SDTV;
                 return result;
+            }
+
+            if (normalizedName.Contains("848x480"))
+            {
+                if (normalizedName.Contains("dvd"))
+                {
+                    result.Quality = Quality.DVD;
+                }
+
+                result.Quality = Quality.SDTV;
+            }
+
+            if (normalizedName.Contains("1280x720"))
+            {
+                if (normalizedName.Contains("bluray"))
+                {
+                    result.Quality = Quality.Bluray720p;
+                }
+
+                result.Quality = Quality.HDTV720p;
+            }
+
+            if (normalizedName.Contains("1920x1080"))
+            {
+                if (normalizedName.Contains("bluray"))
+                {
+                    result.Quality = Quality.Bluray1080p;
+                }
+
+                result.Quality = Quality.HDTV1080p;
             }
 
             if (normalizedName.Contains("bluray720p"))

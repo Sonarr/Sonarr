@@ -5,10 +5,11 @@ define(
         'marionette',
         'AddSeries/AddSeriesCollection',
         'AddSeries/SearchResultCollectionView',
+        'AddSeries/EmptyView',
         'AddSeries/NotFoundView',
         'Shared/LoadingView',
         'underscore'
-    ], function (vent, Marionette, AddSeriesCollection, SearchResultCollectionView, NotFoundView, LoadingView, _) {
+    ], function (vent, Marionette, AddSeriesCollection, SearchResultCollectionView, EmptyView, NotFoundView, LoadingView, _) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesViewTemplate',
 
@@ -64,12 +65,13 @@ define(
                         return;
                     }
 
-                    self.searchResult.close();
                     self._abortExistingSearch();
                     self.throttledSearch({
                         term: self.ui.seriesSearch.val()
                     });
                 });
+
+                this._clearResults();
 
                 if (this.isExisting) {
                     this.ui.searchBar.hide();
@@ -104,7 +106,7 @@ define(
 
                 else if (!this.isExisting) {
                     this.collection.reset();
-                    this.searchResult.close();
+                    this._clearResults();
                     this.ui.seriesSearch.val('');
                     this.ui.seriesSearch.focus();
                 }
@@ -116,6 +118,15 @@ define(
 
                 if (showingAll) {
                     this.ui.loadMore.hide();
+                }
+            },
+            
+            _clearResults: function () {
+                if (!this.isExisting) {
+                    this.searchResult.show(new EmptyView());
+                }
+                else {
+                    this.searchResult.close();
                 }
             },
 
@@ -138,6 +149,9 @@ define(
                 if (this.currentSearchPromise && this.currentSearchPromise.readyState > 0 && this.currentSearchPromise.readyState < 4) {
                     console.log('aborting previous pending search request.');
                     this.currentSearchPromise.abort();
+                }
+                else {
+                    this._clearResults();
                 }
             }
         });

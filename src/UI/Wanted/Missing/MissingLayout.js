@@ -45,39 +45,39 @@ define([
 
         columns : [
             {
-                name       : '',
-                cell       : 'select-row',
-                headerCell : 'select-all',
-                sortable   : false
+                name      : '',
+                cell      : 'select-row',
+                headerCell: 'select-all',
+                sortable  : false
             },
             {
-                name     : 'series',
-                label    : 'Series Title',
-                sortable : false,
-                cell     : SeriesTitleCell
+                name      : 'series',
+                label     : 'Series Title',
+                cell      : SeriesTitleCell,
+                sortValue : 'series.sortTitle'
             },
             {
-                name     : 'this',
-                label    : 'Episode',
-                sortable : false,
-                cell     : EpisodeNumberCell
+                name      : 'this',
+                label     : 'Episode',
+                cell      : EpisodeNumberCell,
+                sortable  : false
             },
             {
-                name     : 'this',
-                label    : 'Episode Title',
-                sortable : false,
-                cell     : EpisodeTitleCell
+                name      : 'this',
+                label     : 'Episode Title',
+                cell      : EpisodeTitleCell,
+                sortable  : false
             },
             {
-                name  : 'airDateUtc',
-                label : 'Air Date',
-                cell  : RelativeDateCell
+                name      : 'airDateUtc',
+                label     : 'Air Date',
+                cell      : RelativeDateCell
             },
             {
-                name     : 'status',
-                label    : 'Status',
-                cell     : EpisodeStatusCell,
-                sortable : false
+                name      : 'status',
+                label     : 'Status',
+                cell      : EpisodeStatusCell,
+                sortable  : false
             }
         ],
 

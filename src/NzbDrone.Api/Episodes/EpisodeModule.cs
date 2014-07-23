@@ -16,7 +16,6 @@ namespace NzbDrone.Api.Episodes
 
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;
-            GetResourceById = GetEpisode;
         }
 
         private List<EpisodeResource> GetEpisodes()

@@ -12,6 +12,7 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Parser.Model;
@@ -103,14 +104,20 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
-                .Returns(new List<Core.MediaFiles.EpisodeImport.ImportDecision>() { new Core.MediaFiles.EpisodeImport.ImportDecision(null) });
+                .Returns(new List<ImportDecision>() 
+                    {
+                        new ImportDecision(null) 
+                    });
         }
 
         private void GivenFailedImport()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
-                .Returns(new List<Core.MediaFiles.EpisodeImport.ImportDecision>());
+                .Returns(new List<ImportDecision>() 
+                    {
+                        new ImportDecision(new LocalEpisode() { Path = @"C:\TestPath\Droned.S01E01.mkv" }, "Test Failure") 
+                    });
         }
 
         private void VerifyNoImports()
@@ -265,6 +272,8 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoImports();
+
+            ExceptionVerification.IgnoreErrors();
         }
 
         [Test]
@@ -289,6 +298,8 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoImports();
+
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
@@ -412,6 +423,8 @@ namespace NzbDrone.Core.Test.Download
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(c => c.DeleteFolder(It.IsAny<string>(), true), Times.Never());
+
+            ExceptionVerification.IgnoreErrors();
         }
 
         [Test]

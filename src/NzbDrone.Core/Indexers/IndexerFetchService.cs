@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Indexers
         IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(IIndexer indexer, AnimeEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria);
     }
 
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0} offset: {1}", searchCriteria, offset);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, offset);
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, offset);
             var result = Fetch(indexer, searchUrls);
 
             _logger.Info("{0} offset {1}. Found {2}", indexer, searchCriteria, result.Count);
@@ -75,7 +76,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
+            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
             var result = Fetch(indexer, searchUrls);
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
 
@@ -86,10 +87,21 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitle, searchCriteria.Series.TvRageId, searchCriteria.AirDate);
+            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.AirDate);
             var result = Fetch(indexer, searchUrls);
 
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            return result;
+        }
+
+        public IList<ReleaseInfo> Fetch(IIndexer indexer, AnimeEpisodeSearchCriteria searchCriteria)
+        {
+            _logger.Debug("Searching for {0}", searchCriteria);
+
+            var searchUrls = indexer.GetAnimeEpisodeSearchUrls(searchCriteria.SceneTitles, searchCriteria.Series.TvRageId, searchCriteria.AbsoluteEpisodeNumber);
+            var result = Fetch(indexer, searchUrls);
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+
             return result;
         }
 

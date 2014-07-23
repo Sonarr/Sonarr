@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications.Prowl
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(ApiKey) && Priority != null & Priority >= -2 && Priority <= 2;
+                return !string.IsNullOrWhiteSpace(ApiKey) && Priority >= -2 && Priority <= 2;
             }
         }
 

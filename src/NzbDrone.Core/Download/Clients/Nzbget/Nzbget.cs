@@ -2,29 +2,31 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using Omu.ValueInjecter;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
-    public class Nzbget : DownloadClientBase<NzbgetSettings>, IExecute<TestNzbgetCommand>
+    public class Nzbget : DownloadClientBase<NzbgetSettings>
     {
         private readonly INzbgetProxy _proxy;
         private readonly IHttpProvider _httpProvider;
 
         public Nzbget(INzbgetProxy proxy,
-                      IConfigService configService,
-                      IParsingService parsingService,
                       IHttpProvider httpProvider,
+                      IConfigService configService,
+                      IDiskProvider diskProvider,
+                      IParsingService parsingService,
                       Logger logger)
-            : base(configService, parsingService, logger)
+            : base(configService, diskProvider, parsingService, logger)
         {
             _proxy = proxy;
             _httpProvider = httpProvider;
@@ -188,25 +190,49 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
+            Dictionary<String,String> config = null;
+            NzbgetCategory category = null;
+            try
+            {
+                if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+                {
+                    config = _proxy.GetConfig(Settings);
+                    category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+                }
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                yield break;
+            }
+
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
-                if (downloadClientItem.Category != Settings.TvCategory) continue;
+                if (downloadClientItem.Category == Settings.TvCategory)
+                {
+                    if (category != null)
+                    {
+                        RemapStorage(downloadClientItem, category.DestDir, Settings.TvCategoryLocalPath);
+                    }
 
-                downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
-                if (downloadClientItem.RemoteEpisode == null) continue;
+                    downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
+                    if (downloadClientItem.RemoteEpisode == null) continue;
 
-                yield return downloadClientItem;
+                    yield return downloadClientItem;
+                }
             }
         }
 
-        public override void RemoveItem(string id)
+        public override void RemoveItem(String id)
         {
             _proxy.RemoveFromHistory(id, Settings);
         }
 
-        public override void RetryDownload(string id)
+        public override String RetryDownload(String id)
         {
             _proxy.RetryDownload(id, Settings);
+
+            return id;
         }
 
         public override DownloadClientStatus GetStatus()
@@ -222,7 +248,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (category != null)
             {
-                status.OutputRootFolders = new List<string> { category.DestDir };
+                if (Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+                {
+                    status.OutputRootFolders = new List<String> { category.DestDir };
+                }
+                else
+                {
+                    status.OutputRootFolders = new List<String> { Settings.TvCategoryLocalPath };
+                }
             }
 
             return status;
@@ -260,30 +293,51 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
         }
 
-        private String GetVersion(string host = null, int port = 0, string username = null, string password = null)
+        protected override void Test(List<ValidationFailure> failures)
         {
-            return _proxy.GetVersion(Settings);
-        }
+            failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestCategory());
 
-        public override void Test(NzbgetSettings settings)
-        {
-            _proxy.GetVersion(settings);
-
-            var config = _proxy.GetConfig(settings);
-            var categories = GetCategories(config);
-
-            if (!settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == settings.TvCategory))
+            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
             {
-                throw new ApplicationException("Category does not exist");
+                failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
             }
         }
 
-        public void Execute(TestNzbgetCommand message)
+        private ValidationFailure TestConnection()
         {
-            var settings = new NzbgetSettings();
-            settings.InjectFrom(message);
+            try
+            {
+                _proxy.GetVersion(Settings);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.ContainsIgnoreCase("Authentication failed"))
+                {
+                    return new ValidationFailure("Username", "Authentication failed");
+                }
+                _logger.ErrorException(ex.Message, ex);
+                return new ValidationFailure("Host", "Unable to connect to NZBGet");
+            }
 
-            Test(settings);
+            return null;
+        }
+
+        private ValidationFailure TestCategory()
+        {
+            var config = _proxy.GetConfig(Settings);
+            var categories = GetCategories(config);
+
+            if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.TvCategory))
+            {
+                return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
+                {
+                    InfoLink = String.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    DetailedDescription = "The Category your entered doesn't exist in NzbGet. Go to NzbGet to create it."
+                };
+            }
+
+            return null;
         }
 
         // Javascript doesn't support 64 bit integers natively so json officially doesn't either. 

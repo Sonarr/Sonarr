@@ -26,11 +26,15 @@ namespace NzbDrone.Api.Episodes
             : base(commandExecutor, resource)
         {
             _episodeService = episodeService;
+
+            GetResourceById = GetEpisode;
         }
 
         protected EpisodeResource GetEpisode(int id)
         {
-            return _episodeService.GetEpisode(id).InjectTo<EpisodeResource>();
+            var episode = _episodeService.GetEpisode(id);
+            episode.EpisodeFile.LazyLoad();
+            return episode.InjectTo<EpisodeResource>();
         }
 
         public void Handle(EpisodeGrabbedEvent message)

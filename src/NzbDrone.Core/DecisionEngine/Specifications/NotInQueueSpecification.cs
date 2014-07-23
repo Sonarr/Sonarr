@@ -11,12 +11,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class NotInQueueSpecification : IDecisionEngineSpecification
     {
-        private readonly IQueueService _queueService;
+        private readonly IDownloadTrackingService _downloadTrackingService;
         private readonly Logger _logger;
 
-        public NotInQueueSpecification(IQueueService queueService, Logger logger)
+        public NotInQueueSpecification(IDownloadTrackingService downloadTrackingService, Logger logger)
         {
-            _queueService = queueService;
+            _downloadTrackingService = downloadTrackingService;
             _logger = logger;
         }
 
@@ -30,7 +30,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            var queue = _queueService.GetQueue().Select(q => q.RemoteEpisode);
+            var queue = _downloadTrackingService.GetQueuedDownloads()
+                            .Where(v => v.State == TrackedDownloadState.Downloading)
+                            .Select(q => q.DownloadItem.RemoteEpisode).ToList();
 
             if (IsInQueue(subject, queue))
             {

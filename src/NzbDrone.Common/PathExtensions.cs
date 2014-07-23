@@ -11,9 +11,9 @@ namespace NzbDrone.Common
         private const string APP_CONFIG_FILE = "config.xml";
         private const string NZBDRONE_DB = "nzbdrone.db";
         private const string NZBDRONE_LOG_DB = "logs.db";
-        private const string BACKUP_ZIP_FILE = "NzbDrone_Backup.zip";
         private const string NLOG_CONFIG_FILE = "nlog.config";
         private const string UPDATE_CLIENT_EXE = "NzbDrone.Update.exe";
+        private const string BACKUP_FOLDER = "Backups";
 
         private static readonly string UPDATE_SANDBOX_FOLDER_NAME = "nzbdrone_update" + Path.DirectorySeparatorChar;
         private static readonly string UPDATE_PACKAGE_FOLDER_NAME = "NzbDrone" + Path.DirectorySeparatorChar;
@@ -51,6 +51,22 @@ namespace NzbDrone.Common
             }
 
             return childPath.Substring(parentPath.Length).Trim(Path.DirectorySeparatorChar);
+        }
+
+        public static string GetParentPath(this string childPath)
+        {
+            var parentPath = childPath.TrimEnd('\\', '/');
+
+            var index = parentPath.LastIndexOfAny(new[] { '\\', '/' });
+
+            if (index != -1)
+            {
+                return parentPath.Substring(0, index);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static bool IsParentPath(this string parentPath, string childPath)
@@ -210,9 +226,9 @@ namespace NzbDrone.Common
             return Path.Combine(GetUpdateSandboxFolder(appFolderInfo), UPDATE_CLIENT_EXE);
         }
 
-        public static string GetConfigBackupFile(this IAppFolderInfo appFolderInfo)
+        public static string GetBackupFolder(this IAppFolderInfo appFolderInfo)
         {
-            return Path.Combine(GetAppDataPath(appFolderInfo), BACKUP_ZIP_FILE);
+            return Path.Combine(GetAppDataPath(appFolderInfo), BACKUP_FOLDER);
         }
 
         public static string GetNzbDroneDatabase(this IAppFolderInfo appFolderInfo)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
@@ -134,6 +135,11 @@ namespace NzbDrone.Core.History
                 if (!String.IsNullOrWhiteSpace(message.DownloadClientId))
                 {
                     history.Data.Add("DownloadClientId", message.DownloadClientId);
+                }
+
+                if (!message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
+                {
+                    history.Data.Add("ReleaseHash", message.Episode.ParsedEpisodeInfo.ReleaseHash);
                 }
 
                 _historyRepository.Insert(history);

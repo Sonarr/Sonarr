@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Rest;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using RestSharp;
 
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         void RemoveFrom(string source, string id, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
-        List<String> GetCategories(SabnzbdSettings settings);
+        SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
         void RetryDownload(string id, SabnzbdSettings settings);
@@ -85,14 +86,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response;
         }
 
-        public List<String> GetCategories(SabnzbdSettings settings)
+        public SabnzbdConfig GetConfig(SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = "mode=get_cats";
+            var action = "mode=get_config";
 
-            var response = Json.Deserialize<SabnzbdCategoryResponse>(ProcessRequest(request, action, settings)).Categories;
+            var response = Json.Deserialize<SabnzbdConfigResponse>(ProcessRequest(request, action, settings));
 
-            return response;
+            return response.Config;
         }
 
         public SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings)
@@ -138,14 +139,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             _logger.Debug("Url: " + url);
 
-            return new RestClient(url);
+            return RestClientFactory.BuildClient(url);
         }
 
         private void CheckForError(IRestResponse response)
         {
             if (response.ResponseStatus != ResponseStatus.Completed)
             {
-                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings");
+                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", response.ErrorException);
             }
 
             SabnzbdJsonError result;

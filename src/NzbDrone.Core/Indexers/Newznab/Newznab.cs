@@ -1,12 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation;
+using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : IndexerBase<NewznabSettings>
     {
+        private readonly IFetchFeedFromIndexers _feedFetcher;
+        private readonly HttpProvider _httpProvider;
+        private readonly Logger _logger;
+        
+        public Newznab(IFetchFeedFromIndexers feedFetcher, HttpProvider httpProvider, Logger logger)
+        {
+            _feedFetcher = feedFetcher;
+            _httpProvider = httpProvider;
+            _logger = logger;
+        }
+
+        //protected so it can be mocked, but not used for DI
+        //TODO: Is there a better way to achieve this?
+        protected Newznab()
+        {
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
         public override Int32 SupportedPageSize { get { return 100; } }
 
@@ -57,6 +80,22 @@ namespace NzbDrone.Core.Indexers.Newznab
                     Settings = GetSettings("https://www.oznzb.com", new List<Int32>())
                 });
 
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "nzbplanet.net",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("https://nzbplanet.net", new List<Int32>())
+                });
+
+                list.Add(new IndexerDefinition
+                {
+                    Enable = false,
+                    Name = "NZBgeek",
+                    Implementation = GetType().Name,
+                    Settings = GetSettings("https://api.nzbgeek.info", new List<Int32>())
+                });
+
                 return list;
             }
         }
@@ -79,13 +118,9 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             get
             {
-                //Todo: We should be able to update settings on start
-                if (Settings.Url.Contains("nzbs.org"))
-                {
-                    Settings.Categories = new List<int> { 5000 };
-                }
+                var categories = String.Join(",", Settings.Categories.Concat(Settings.AnimeCategories));
 
-                var url = String.Format("{0}/api?t=tvsearch&cat={1}&extended=1", Settings.Url.TrimEnd('/'), String.Join(",", Settings.Categories));
+                var url = String.Format("{0}/api?t=tvsearch&cat={1}&extended=1{2}", Settings.Url.TrimEnd('/'), categories, Settings.AdditionalParameters);
 
                 if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
                 {
@@ -96,14 +131,71 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
+        public override IEnumerable<string> GetEpisodeSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int episodeNumber)
         {
+            if (Settings.Categories.Empty())
+            {
+                return Enumerable.Empty<String>();
+            }
+
             if (tvRageId > 0)
             {
                 return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&ep={3}", url, tvRageId, seasonNumber, episodeNumber));
             }
 
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
+            return titles.SelectMany(title =>
+                        RecentFeed.Select(url =>
+                                String.Format("{0}&limit=100&q={1}&season={2}&ep={3}",
+                                url, NewsnabifyTitle(title), seasonNumber, episodeNumber)));
+        }
+
+        public override IEnumerable<string> GetDailyEpisodeSearchUrls(List<String> titles, int tvRageId, DateTime date)
+        {
+            if (Settings.Categories.Empty())
+            {
+                return Enumerable.Empty<String>();
+            }
+
+            if (tvRageId > 0)
+            {
+                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM}/{2:dd}", url, tvRageId, date)).ToList();
+            }
+
+            return titles.SelectMany(title => 
+                        RecentFeed.Select(url =>
+                                String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM}/{2:dd}",
+                                url, NewsnabifyTitle(title), date)).ToList());
+        }
+
+        public override IEnumerable<string> GetAnimeEpisodeSearchUrls(List<String> titles, int tvRageId, int absoluteEpisodeNumber)
+        {
+            if (Settings.AnimeCategories.Empty())
+            {
+                return Enumerable.Empty<String>();
+            }
+
+            return titles.SelectMany(title =>
+                        RecentFeed.Select(url =>
+                                String.Format("{0}&limit=100&q={1}+{2:00}",
+                                url.Replace("t=tvsearch", "t=search"), NewsnabifyTitle(title), absoluteEpisodeNumber)));
+        }
+
+        public override IEnumerable<string> GetSeasonSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int offset)
+        {
+            if (Settings.Categories.Empty())
+            {
+                return Enumerable.Empty<String>();
+            }
+
+            if (tvRageId > 0)
+            {
+                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&offset={3}", url, tvRageId, seasonNumber, offset));
+            }
+
+            return titles.SelectMany(title =>
+                        RecentFeed.Select(url =>
+                                String.Format("{0}&limit=100&q={1}&season={2}&offset={3}",
+                                url, NewsnabifyTitle(title), seasonNumber, offset)));
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)
@@ -114,25 +206,39 @@ namespace NzbDrone.Core.Indexers.Newznab
             return RecentFeed.Select(url => String.Format("{0}&offset={1}&limit=100&q={2}", url.Replace("t=tvsearch", "t=search"), offset, query));
         }
 
-
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)
+        public override ValidationResult Test()
         {
-            if (tvRageId > 0)
+            var releases = _feedFetcher.FetchRss(this);
+
+            if (releases.Any()) return new ValidationResult();
+
+            try
             {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2:yyyy}&ep={2:MM}/{2:dd}", url, tvRageId, date)).ToList();
+                var url = RecentFeed.First();
+                var xml = _httpProvider.DownloadString(url);
+
+                NewznabPreProcessor.Process(xml, url);
+            }
+            catch (ApiKeyException)
+            {
+                _logger.Warn("Indexer returned result for Newznab RSS URL, API Key appears to be invalid");
+
+                var apiKeyFailure = new ValidationFailure("ApiKey", "Invalid API Key");
+                return new ValidationResult(new List<ValidationFailure> { apiKeyFailure });
+            }
+            catch (RequestLimitReachedException)
+            {
+                _logger.Warn("Request limit reached");
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+
+                var failure = new ValidationFailure("Url", "Unable to connect to indexer, check the log for more details");
+                return new ValidationResult(new List<ValidationFailure> { failure });
             }
 
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2:yyyy}&ep={2:MM}/{2:dd}", url, NewsnabifyTitle(seriesTitle), date)).ToList();
-        }
-
-        public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
-        {
-            if (tvRageId > 0)
-            {
-                return RecentFeed.Select(url => String.Format("{0}&limit=100&rid={1}&season={2}&offset={3}", url, tvRageId, seasonNumber, offset));
-            }
-
-            return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&offset={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, offset));
+            return new ValidationResult();
         }
 
         private static string NewsnabifyTitle(string title)

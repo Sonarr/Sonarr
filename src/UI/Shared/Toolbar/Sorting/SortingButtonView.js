@@ -26,13 +26,13 @@ define(
 
             onRender: function () {
                 if (this.viewCollection.state) {
-                    var key = this.viewCollection.state.sortKey;
+                    var sortKey = this.viewCollection.state.sortKey;
+                    var name = this.viewCollection._getSortMapping(sortKey).name;
                     var order = this.viewCollection.state.order;
 
-                    if (key === this.model.get('name')) {
+                    if (name === this.model.get('name')) {
                         this._setSortIcon(order);
                     }
-
                     else {
                         this._removeSortIcon();
                     }
@@ -45,19 +45,16 @@ define(
                 var collection = this.viewCollection;
                 var event = 'drone:sort';
 
-                collection.state.sortKey = this.model.get('name');
                 var direction = collection.state.order;
+                if (direction === 'ascending' || direction === -1) {
+                    direction = 'descending';
+                }
+                else {
+                    direction = 'ascending';
+                }
 
-                if (direction === 'ascending' || direction === -1)
-                {
-                    collection.state.order = 'descending';
-                    collection.trigger(event, this.model, 'descending');
-                }
-                else
-                {
-                    collection.state.order = 'ascending';
-                    collection.trigger(event, this.model, 'ascending');
-                }
+                collection.setSorting(this.model.get('name'), direction);
+                collection.trigger(event, this.model, direction);
             },
 
             _convertDirectionToIcon: function (dir) {

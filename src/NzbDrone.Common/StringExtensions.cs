@@ -32,6 +32,13 @@ namespace NzbDrone.Common
 
         private static readonly Regex CollapseSpace = new Regex(@"\s+", RegexOptions.Compiled);
 
+        public static string Replace(this string text, int index, int length, string replacement)
+        {
+            text = text.Remove(index, length);
+            text = text.Insert(index, replacement);
+            return text;
+        }
+
         public static string RemoveAccent(this string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);

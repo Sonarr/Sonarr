@@ -5,7 +5,6 @@ define(
         'marionette',
         'backgrid',
         'vent',
-        'Series/SeriesCollection',
         'Quality/QualityProfileCollection',
         'AddSeries/RootFolders/RootFolderCollection',
         'Shared/Toolbar/ToolbarLayout',
@@ -16,7 +15,6 @@ define(
                  Marionette,
                  Backgrid,
                  vent,
-                 SeriesCollection,
                  QualityProfiles,
                  RootFolders,
                  ToolbarLayout,
@@ -51,12 +49,14 @@ define(
             },
 
             initialize: function (options) {
+                this.seriesCollection = options.collection;
+
                 RootFolders.fetch().done(function () {
                     RootFolders.synced = true;
                 });
 
                 this.editorGrid = options.editorGrid;
-                this.listenTo(SeriesCollection, 'backgrid:selected', this._updateInfo);
+                this.listenTo(this.seriesCollection, 'backgrid:selected', this._updateInfo);
                 this.listenTo(RootFolders, 'all', this.render);
             },
 
@@ -102,9 +102,7 @@ define(
                     model.edited = true;
                 });
 
-                SeriesCollection.save();
-
-                this.listenTo(SeriesCollection, 'save', this._afterSave);
+                this.seriesCollection.save();
             },
 
             _updateInfo: function () {
@@ -148,18 +146,6 @@ define(
                 vent.trigger(vent.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
                 this._rootFolderChanged();
-            },
-
-            _afterSave: function () {
-                this.ui.monitored.val('noChange');
-                this.ui.qualityProfile.val('noChange');
-                this.ui.seasonFolder.val('noChange');
-                this.ui.rootFolder.val('noChange');
-
-                SeriesCollection.each(function (model) {
-                    model.trigger('backgrid:select', model, false);
-                    model.edited = false;
-                });
             },
 
             _organizeFiles: function () {

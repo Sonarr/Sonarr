@@ -4,7 +4,6 @@ using FizzWare.NBuilder;
 using FluentValidation.Results;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -38,7 +37,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             indexer.Setup(s => s.Parser.Process(It.IsAny<String>(), It.IsAny<String>()))
                    .Returns(results);
 
-            indexer.Setup(s => s.GetSeasonSearchUrls(It.IsAny<String>(), It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32>()))
+            indexer.Setup(s => s.GetSeasonSearchUrls(It.IsAny<List<String>>(), It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32>()))
                 .Returns(new List<string> { "http://www.nzbdrone.com" });
 
             indexer.SetupGet(s => s.SupportedPageSize).Returns(paging ? 100 : 0);
@@ -56,7 +55,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         public void should_not_use_offset_if_result_count_is_less_than_90()
         {
             var indexer = WithIndexer(true, 25);
-            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitle =  _series.Title });
+            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
 
             Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Once());
         }
@@ -65,7 +64,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         public void should_not_use_offset_for_sites_that_do_not_support_it()
         {
             var indexer = WithIndexer(false, 125);
-            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitle = _series.Title });
+            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
             Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Once());
         }
@@ -74,7 +73,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         public void should_not_use_offset_if_its_already_tried_10_times()
         {
             var indexer = WithIndexer(true, 100);
-            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitle = _series.Title });
+            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
             Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Exactly(10));
         }

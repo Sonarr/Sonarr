@@ -58,10 +58,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="inputQualityProfile">Quality Profile</label>
+                            <label class="col-sm-4 control-label">Quality Profile</label>
 
                             <div class="col-sm-4">
-                                <select class="form-control x-quality-profile" id="inputQualityProfile" name="qualityProfileId">
+                                <select class="form-control x-quality-profile" name="qualityProfileId">
                                     {{#each qualityProfiles.models}}
                                     <option value="{{id}}">{{attributes.name}}</option>
                                     {{/each}}
@@ -71,10 +71,17 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="inputPath">Path</label>
+                            <label class="col-sm-4 control-label">Series Type</label>
+                            <div class="col-sm-4">
+                                {{> SeriesTypeSelectionPartial}}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Path</label>
 
                             <div class="col-sm-6">
-                                <input type="text" id="inputPath" class="form-control x-path" placeholder="Path" name="path">
+                                <input type="text" class="form-control x-path" placeholder="Path" name="path">
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -70,6 +72,10 @@ namespace NzbDrone.Core.IndexerSearch
 
                 return SearchDaily(series, episode);
             }
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                return SearchAnime(series, episode);
+            }
 
             if (episode.SeasonNumber == 0)
             {
@@ -80,57 +86,15 @@ namespace NzbDrone.Core.IndexerSearch
             return SearchSingle(series, episode);
         }
 
-        private List<DownloadDecision> SearchSingle(Series series, Episode episode)
-        {
-            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode>{episode});
-
-            if (series.UseSceneNumbering)
-            {
-                if (episode.SceneSeasonNumber > 0 && episode.SceneEpisodeNumber > 0)
-                {
-                    searchSpec.EpisodeNumber = episode.SceneEpisodeNumber;
-                    searchSpec.SeasonNumber = episode.SceneSeasonNumber;
-                }
-
-                else
-                {
-                    searchSpec.EpisodeNumber = episode.EpisodeNumber;
-                    searchSpec.SeasonNumber = episode.SeasonNumber;
-                }
-            }
-            else
-            {
-                searchSpec.EpisodeNumber = episode.EpisodeNumber;
-                searchSpec.SeasonNumber = episode.SeasonNumber;
-            }
-
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
-        }
-
-        private List<DownloadDecision> SearchDaily(Series series, Episode episode)
-        {
-            var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
-            var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
-            searchSpec.AirDate = airDate;
-
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
-        }
-
-        private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes)
-        {
-            var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes);
-            // build list of queries for each episode in the form: "<series> <episode-title>"
-            searchSpec.EpisodeQueryTitles = episodes.Where(e => !String.IsNullOrWhiteSpace(e.Title))
-                                                    .Select(e => searchSpec.QueryTitle + " " + SearchCriteriaBase.GetQueryTitle(e.Title))
-                                                    .ToArray();
-
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
-        }
-
         public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
             var series = _seriesService.GetSeries(seriesId);
             var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
+
+            if (series.SeriesType == SeriesTypes.Anime)
+            {
+                return SearchAnimeSeason(series, episodes);
+            }
 
             if (seasonNumber == 0)
             {
@@ -138,17 +102,17 @@ namespace NzbDrone.Core.IndexerSearch
                 return SearchSpecial(series, episodes);
             }
 
-            List<DownloadDecision> downloadDecisions = new List<DownloadDecision>();
+            var downloadDecisions = new List<DownloadDecision>();
 
             if (series.UseSceneNumbering)
             {
-                var sceneSeasonGroups = episodes.GroupBy(v => 
-                    {
-                        if (v.SceneSeasonNumber == 0 && v.SceneEpisodeNumber == 0)
-                            return v.SeasonNumber;
-                        else
-                            return v.SceneSeasonNumber;
-                    }).Distinct();
+                var sceneSeasonGroups = episodes.GroupBy(v =>
+                {
+                    if (v.SceneSeasonNumber == 0 && v.SceneEpisodeNumber == 0)
+                        return v.SeasonNumber;
+                    else
+                        return v.SceneSeasonNumber;
+                }).Distinct();
 
                 foreach (var sceneSeasonEpisodes in sceneSeasonGroups)
                 {
@@ -187,18 +151,96 @@ namespace NzbDrone.Core.IndexerSearch
             return downloadDecisions;
         }
 
+        private List<DownloadDecision> SearchSingle(Series series, Episode episode)
+        {
+            var searchSpec = Get<SingleEpisodeSearchCriteria>(series, new List<Episode>{episode});
+
+            if (series.UseSceneNumbering)
+            {
+                if (episode.SceneSeasonNumber > 0 && episode.SceneEpisodeNumber > 0)
+                {
+                    searchSpec.EpisodeNumber = episode.SceneEpisodeNumber;
+                    searchSpec.SeasonNumber = episode.SceneSeasonNumber;
+                }
+
+                else
+                {
+                    searchSpec.EpisodeNumber = episode.EpisodeNumber;
+                    searchSpec.SeasonNumber = episode.SeasonNumber;
+                }
+            }
+            else
+            {
+                searchSpec.EpisodeNumber = episode.EpisodeNumber;
+                searchSpec.SeasonNumber = episode.SeasonNumber;
+            }
+
+            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+        }
+
+        private List<DownloadDecision> SearchDaily(Series series, Episode episode)
+        {
+            var airDate = DateTime.ParseExact(episode.AirDate, Episode.AIR_DATE_FORMAT, CultureInfo.InvariantCulture);
+            var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
+            searchSpec.AirDate = airDate;
+
+            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+        }
+
+        private List<DownloadDecision> SearchAnime(Series series, Episode episode)
+        {
+            var searchSpec = Get<AnimeEpisodeSearchCriteria>(series, new List<Episode> { episode });
+            searchSpec.AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber.GetValueOrDefault(0);
+
+            if (searchSpec.AbsoluteEpisodeNumber == 0)
+            {
+                searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.GetValueOrDefault(0);
+            }
+
+            if (searchSpec.AbsoluteEpisodeNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", "Can not search for an episode absolute episode number of zero");
+            }
+
+            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+        }
+
+        private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes)
+        {
+            var searchSpec = Get<SpecialEpisodeSearchCriteria>(series, episodes);
+            // build list of queries for each episode in the form: "<series> <episode-title>"
+            searchSpec.EpisodeQueryTitles = episodes.Where(e => !String.IsNullOrWhiteSpace(e.Title))
+                                                    .SelectMany(e => searchSpec.QueryTitles.Select(title => title + " " + SearchCriteriaBase.GetQueryTitle(e.Title)))
+                                                    .ToArray();
+
+            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+        }
+
+        private List<DownloadDecision> SearchAnimeSeason(Series series, List<Episode> episodes)
+        {
+            var downloadDecisions = new List<DownloadDecision>();
+
+            foreach (var episode in episodes)
+            {
+                downloadDecisions.AddRange(SearchAnime(series, episode));
+            }
+
+            return downloadDecisions;
+        }
+
         private TSpec Get<TSpec>(Series series, List<Episode> episodes) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
 
             spec.Series = series;
-            spec.SceneTitle = _sceneMapping.GetSceneName(series.TvdbId);
+            spec.SceneTitles = _sceneMapping.GetSceneNames(series.TvdbId,
+                                                           episodes.Select(e => e.SeasonNumber)
+                                                                   .Concat(episodes.Select(e => e.SceneSeasonNumber)
+                                                                   .Distinct()));
+
             spec.Episodes = episodes;
 
-            if (string.IsNullOrWhiteSpace(spec.SceneTitle))
-            {
-                spec.SceneTitle = series.Title;
-            }
+            spec.SceneTitles.Add(series.Title);
 
             return spec;
         }

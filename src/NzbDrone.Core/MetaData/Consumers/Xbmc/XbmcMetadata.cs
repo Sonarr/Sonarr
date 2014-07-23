@@ -9,10 +9,8 @@ using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 

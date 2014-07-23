@@ -7,16 +7,17 @@ define(
         'Series/SeriesModel',
         'api!series',
         'Mixins/AsFilteredCollection',
+        'Mixins/AsSortedCollection',
         'Mixins/AsPersistedStateCollection',
         'moment'
-    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsFilteredCollection, AsPersistedStateCollection, Moment) {
+    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsFilteredCollection, AsSortedCollection, AsPersistedStateCollection, Moment) {
         var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
             tableName: 'series',
 
             state: {
-                sortKey: 'title',
+                sortKey: 'sortTitle',
                 order  : -1,
                 pageSize: 100000
             },
@@ -56,21 +57,30 @@ define(
                 'monitored'  : ['monitored', true]
             },
             
-            //Sorters
-            nextAiring: function (model, attr) {
-                var nextAiring = model.get(attr);
+            sortMappings: {
+                'title'      : { sortKey: 'sortTitle' },
+                'nextAiring' : { sortValue: function (model, attr) {
+                                    var nextAiring = model.get(attr);
+                                    
+                                    if (nextAiring) {
+                                        return Moment(nextAiring).unix();
+                                    }
+                                    
+                                    var previousAiring = model.get(attr.replace('nextAiring', 'previousAiring'));
+                                    
+                                    if (previousAiring) {
+                                        return 10000000000 - Moment(previousAiring).unix();
+                                    }
 
-                if (!nextAiring) {
-                    return Number.MAX_VALUE;
+                                    return Number.MAX_VALUE;
+                                }
                 }
-
-                return Moment(nextAiring).unix();
             }
         });
 
-        var FilteredCollection = AsFilteredCollection.call(Collection);
-        var MixedIn = AsPersistedStateCollection.call(FilteredCollection);
-        var collection = new MixedIn(SeriesData, { full: true });
+        Collection = AsFilteredCollection.call(Collection);
+        Collection = AsSortedCollection.call(Collection);
+        Collection = AsPersistedStateCollection.call(Collection);
 
-        return collection;
+        return new Collection(SeriesData, { full: true });
     });

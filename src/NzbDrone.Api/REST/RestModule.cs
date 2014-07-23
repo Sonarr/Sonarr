@@ -194,7 +194,7 @@ namespace NzbDrone.Api.REST
 
             var errors = SharedValidator.Validate(resource).Errors.ToList();
 
-            if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase))
+            if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase) && !Request.Url.Path.EndsWith("/test", StringComparison.InvariantCultureIgnoreCase))
             {
                 errors.AddRange(PostValidator.Validate(resource).Errors);
             }

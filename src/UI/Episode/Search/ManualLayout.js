@@ -20,48 +20,40 @@ define(
             columns:
                 [
                     {
-                        name    : 'age',
-                        label   : 'Age',
-                        sortable: true,
-                        cell    : AgeCell
+                        name      : 'age',
+                        label     : 'Age',
+                        cell      : AgeCell
                     },
                     {
-                        name    : 'title',
-                        label   : 'Title',
-                        sortable: true,
-                        cell    : Backgrid.StringCell.extend({ className: 'nzb-title-cell' })
+                        name      : 'title',
+                        label     : 'Title',
+                        cell      : Backgrid.StringCell.extend({ className: 'nzb-title-cell' })
                     },
                     {
-                        name    : 'indexer',
-                        label   : 'Indexer',
-                        sortable: true,
-                        cell    : Backgrid.StringCell
+                        name      : 'indexer',
+                        label     : 'Indexer',
+                        cell      : Backgrid.StringCell
                     },
                     {
-                        name    : 'size',
-                        label   : 'Size',
-                        sortable: true,
-                        cell    : FileSizeCell
+                        name      : 'size',
+                        label     : 'Size',
+                        cell      : FileSizeCell
                     },
                     {
                         name      : 'quality',
                         label     : 'Quality',
-                        sortable  : true,
-                        cell      : QualityCell,
-                        sortValue : function (model) {
-                            return model.get('quality').quality.weight;
-                        }
+                        cell      : QualityCell
                     },
 
                     {
-                        name : 'rejections',
-                        label: '',
-                        cell : ApprovalStatusCell
+                        name      : 'rejections',
+                        label     : '',
+                        cell      : ApprovalStatusCell
                     },
                     {
-                        name : 'download',
-                        label: '',
-                        cell : DownloadReportCell
+                        name      : 'download',
+                        label     : '',
+                        cell      : DownloadReportCell
                     }
                 ],
 

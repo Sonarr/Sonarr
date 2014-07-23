@@ -11,12 +11,21 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.DecisionEngine;
 
 namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
 {
     [TestFixture]
     public class DownloadApprovedFixture : CoreTest<DownloadApprovedReports>
     {
+        [SetUp]
+        public void SetUp()
+        {
+            Mocker.GetMock<IPrioritizeDownloadDecision>()
+                .Setup(v => v.PrioritizeDecisions(It.IsAny<List<DownloadDecision>>()))
+                .Returns<List<DownloadDecision>>(v => v);
+        }
+
         private Episode GetEpisode(int id)
         {
             return Builder<Episode>.CreateNew()
@@ -162,6 +171,16 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>())).Throws(new Exception());
             Subject.DownloadApproved(decisions).Should().BeEmpty();
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_return_an_empty_list_when_none_are_appproved()
+        {
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(null, "Failure!"));
+            decisions.Add(new DownloadDecision(null, "Failure!"));
+
+            Subject.GetQualifiedReports(decisions).Should().BeEmpty();
         }
     }
 }

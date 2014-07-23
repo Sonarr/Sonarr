@@ -5,27 +5,19 @@
             <h3>NzbDrone Calendar feed</h3>
         </div>
         <div class="modal-body edit-series-modal">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-horizontal">
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">iCal feed</label>
-
-                            <div class="col-sm-1 col-sm-push-8 help-inline">
-                                <i class="icon-nd-form-info" title="Copy this url into your clients subscription form or use the subscribe button if your browser support webcal"/>
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">iCal feed</label>
+                    <div class="col-sm-1 col-sm-push-9 help-inline">
+                        <i class="icon-nd-form-info" title="Copy this url into your clients subscription form or use the subscribe button if your browser support webcal" />
+                    </div>
+                    <div class="col-sm-9 col-sm-pull-1">
+                        <div class="input-group ical-url">
+                            <input type="text" class="form-control x-ical-url" value="{{icalHttpUrl}}" readonly="readonly" />
+                            <div class="input-group-btn">
+                                <button class="btn btn-icon-only x-ical-copy" title="Copy to clipboard"><i class="icon-copy"></i></button>
+                                <button class="btn btn-icon-only no-router" title="Subscribe" href="{{icalWebCalUrl}}" target="_blank" data-container=".modal-body"><i class="icon-calendar-empty"></i></button>
                             </div>
-
-                            <div class="col-sm-8 col-sm-pull-1">
-                                <div class="input-group ical-url">
-                                    <input type="text" class="form-control x-ical-url" value="{{icalHttpUrl}}" readonly="readonly" />
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-icon-only x-ical-copy" title="Copy to clipboard"><i class="icon-copy"></i></button>
-                                        <button class="btn btn-icon-only no-router"><a title="Subscribe" href="{{icalWebCalUrl}}" target="_blank"><i class="icon-calendar-empty"></i></a></button>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>

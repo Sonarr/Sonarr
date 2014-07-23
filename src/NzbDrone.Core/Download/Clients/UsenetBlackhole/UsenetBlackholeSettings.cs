@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentValidation;
 using FluentValidation.Results;
-using NzbDrone.Common.Disk;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation.Paths;
@@ -12,7 +11,6 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
     {
         public UsenetBlackholeSettingsValidator()
         {
-            //Todo: Validate that the path actually exists
             RuleFor(c => c.NzbFolder).IsValidPath();
             RuleFor(c => c.WatchFolder).IsValidPath();
         }

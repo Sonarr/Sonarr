@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
@@ -54,10 +53,13 @@ namespace NzbDrone.Core.Tv
             var seriesInfo = tuple.Item1;
 
             series.Title = seriesInfo.Title;
+            series.TitleSlug = seriesInfo.TitleSlug;
+            series.TvRageId = seriesInfo.TvRageId;
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;
             series.CleanTitle = seriesInfo.CleanTitle;
+            series.SortTitle = seriesInfo.SortTitle;
             series.LastInfoSync = DateTime.UtcNow;
             series.Runtime = seriesInfo.Runtime;
             series.Images = seriesInfo.Images;

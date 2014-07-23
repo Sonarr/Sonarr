@@ -37,6 +37,7 @@ module.exports = function (grunt) {
                             'Content/theme.less',
                             'Content/overrides.less',
                             'Series/series.less',
+                            'History/history.less',
                             'AddSeries/addSeries.less',
                             'Calendar/calendar.less',
                             'Cells/cells.less',

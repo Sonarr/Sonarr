@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.Indexers
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Indexers
                     dateString = RemoveTimeZoneRegex.Replace(dateString, "");
                     result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
                 }
-                return result.ToUniversalTime().Date;
+                return result.ToUniversalTime();
             }
             catch (FormatException e)
             {
@@ -88,6 +89,31 @@ namespace NzbDrone.Core.Indexers
             var element = item.Element(elementName);
 
             return element != null ? element.Value : defaultValue;
+        }
+
+        public static T TryGetValue<T>(this XElement item, string elementName, T defaultValue)
+        {
+            var element = item.Element(elementName);
+
+            if (element == null)
+            {
+                return defaultValue;
+            }
+
+            if (element.Value.IsNullOrWhiteSpace())
+            {
+                return defaultValue;
+            }
+
+            try
+            {
+                return (T)Convert.ChangeType(element.Value, typeof(T));
+            }
+
+            catch (InvalidCastException)
+            {
+                return defaultValue;
+            }
         }
     }
 }

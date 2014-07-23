@@ -42,7 +42,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                 if (downloadClients.All(v => v.downloadClient is Sabnzbd))
                 {
-                    // With Sabnzbd we cannot check the category settings.
+                    // With Sabnzbd we can check if the category should be changed.
+                    if (downloadClientOutputInDroneFactory)
+                    {
+                        return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd - Conflicting Category)", "Migrating-to-Completed-Download-Handling#sabnzbd-conflicting-download-client-category");
+                    }
 
                     return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd)", "Migrating-to-Completed-Download-Handling#sabnzbd-enable-completed-download-handling");
                 }

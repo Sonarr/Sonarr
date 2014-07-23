@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Rest;
 using RestSharp;
 
 namespace NzbDrone.Core.Notifications.Plex
@@ -75,7 +76,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         private RestClient GetMyPlexClient(string username, string password)
         {
-            var client = new RestClient("https://my.plexapp.com");
+            var client = RestClientFactory.BuildClient("https://my.plexapp.com");
             client.Authenticator = new HttpBasicAuthenticator(username, password);
 
             return client;
@@ -96,7 +97,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         private RestClient GetPlexServerClient(PlexServerSettings settings)
         {
-            return new RestClient(String.Format("http://{0}:{1}", settings.Host, settings.Port));
+            return RestClientFactory.BuildClient(String.Format("http://{0}:{1}", settings.Host, settings.Port));
         }
 
         private RestRequest GetPlexServerRequest(string resource, Method method, PlexServerSettings settings)

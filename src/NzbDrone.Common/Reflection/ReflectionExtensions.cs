@@ -15,16 +15,16 @@ namespace NzbDrone.Common.Reflection
             return properties.Where(c => c.PropertyType.IsSimpleType()).ToList();
         }
 
-
         public static List<Type> ImplementationsOf<T>(this Assembly assembly)
         {
             return assembly.GetTypes().Where(c => typeof(T).IsAssignableFrom(c)).ToList();
         }
 
-
         public static bool IsSimpleType(this Type type)
         {
-            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>) || type.GetGenericTypeDefinition() == typeof(List<>)))
+            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>) ||
+                                       type.GetGenericTypeDefinition() == typeof(List<>) ||
+                                       type.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
             {
                 type = type.GetGenericArguments()[0];
             }

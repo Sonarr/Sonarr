@@ -5,29 +5,93 @@ define(
         'Series/SeriesCollection',
         'Series/SeasonCollection',
         'SeasonPass/SeriesCollectionView',
-        'Shared/LoadingView'
+        'Shared/LoadingView',
+        'Shared/Toolbar/ToolbarLayout',
+        'Mixins/backbone.signalr.mixin'
     ], function (Marionette,
                  SeriesCollection,
                  SeasonCollection,
                  SeriesCollectionView,
-                 LoadingView) {
+                 LoadingView,
+                 ToolbarLayout) {
         return Marionette.Layout.extend({
             template: 'SeasonPass/SeasonPassLayoutTemplate',
 
             regions: {
-                series: '#x-series'
+                toolbar : '#x-toolbar',
+                series  : '#x-series'
             },
 
-            onShow: function () {
-                var self = this;
+            initialize: function () {
 
-                this.series.show(new LoadingView());
+                this.seriesCollection = SeriesCollection.clone();
+                this.seriesCollection.shadowCollection.bindSignalR();
 
-                this.seriesCollection = SeriesCollection;
+                this.listenTo(this.seriesCollection, 'sync', this.render);
 
-                self.series.show(new SeriesCollectionView({
-                    collection: self.seriesCollection
+                this.filteringOptions = {
+                    type         : 'radio',
+                    storeState   : true,
+                    menuKey      : 'seasonpass.filterMode',
+                    defaultAction: 'all',
+                    items        :
+                        [
+                            {
+                                key     : 'all',
+                                title   : '',
+                                tooltip : 'All',
+                                icon    : 'icon-circle-blank',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'monitored',
+                                title   : '',
+                                tooltip : 'Monitored Only',
+                                icon    : 'icon-nd-monitored',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'continuing',
+                                title   : '',
+                                tooltip : 'Continuing Only',
+                                icon    : 'icon-play',
+                                callback: this._setFilter
+                            },
+                            {
+                                key     : 'ended',
+                                title   : '',
+                                tooltip : 'Ended Only',
+                                icon    : 'icon-stop',
+                                callback: this._setFilter
+                            }
+                        ]
+                };
+            },
+
+            onRender: function () {
+
+                this.series.show(new SeriesCollectionView({
+                    collection: this.seriesCollection
                 }));
+
+                this._showToolbar();
+            },
+
+            _showToolbar: function () {
+
+                this.toolbar.show(new ToolbarLayout({
+                    right  :
+                        [
+                            this.filteringOptions
+                        ],
+                    context: this
+                }));
+            },
+
+            _setFilter: function(buttonContext) {
+                var mode = buttonContext.model.get('key');
+
+                this.seriesCollection.setFilterMode(mode);
             }
         });
     });

@@ -53,43 +53,43 @@ define(
                     cell      : SeriesStatusCell
                 },
                 {
-                    name     : 'title',
-                    label    : 'Title',
-                    cell     : SeriesTitleCell,
-                    cellValue: 'this'
+                    name      : 'title',
+                    label     : 'Title',
+                    cell      : SeriesTitleCell,
+                    cellValue : 'this',
+                    sortValue : 'sortTitle'
                 },
                 {
-                    name : 'seasonCount',
-                    label: 'Seasons',
-                    cell : 'integer'
+                    name      : 'seasonCount',
+                    label     : 'Seasons',
+                    cell      : 'integer'
                 },
                 {
-                    name : 'qualityProfileId',
-                    label: 'Quality',
-                    cell : QualityProfileCell
+                    name      : 'qualityProfileId',
+                    label     : 'Quality',
+                    cell      : QualityProfileCell
                 },
                 {
-                    name : 'network',
-                    label: 'Network',
-                    cell : 'string'
+                    name      : 'network',
+                    label     : 'Network',
+                    cell      : 'string'
                 },
                 {
                     name      : 'nextAiring',
                     label     : 'Next Airing',
-                    cell      : RelativeDateCell,
-                    sortValue : SeriesCollection.nextAiring
+                    cell      : RelativeDateCell
                 },
                 {
-                    name     : 'percentOfEpisodes',
-                    label    : 'Episodes',
-                    cell     : EpisodeProgressCell,
-                    className: 'episode-progress-cell'
+                    name      : 'percentOfEpisodes',
+                    label     : 'Episodes',
+                    cell      : EpisodeProgressCell,
+                    className : 'episode-progress-cell'
                 },
                 {
-                    name    : 'this',
-                    label   : '',
-                    sortable: false,
-                    cell    : SeriesActionsCell
+                    name      : 'this',
+                    label     : '',
+                    sortable  : false,
+                    cell      : SeriesActionsCell
                 }
             ],
 
@@ -172,9 +172,8 @@ define(
                                 name : 'network'
                             },
                             {
-                                title     : 'Next Airing',
-                                name      : 'nextAiring',
-                                sortValue : SeriesCollection.nextAiring
+                                title: 'Next Airing',
+                                name : 'nextAiring'
                             },
                             {
                                 title: 'Episodes',

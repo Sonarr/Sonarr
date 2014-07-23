@@ -32,19 +32,21 @@ define(
             template: 'AddSeries/SearchResultViewTemplate',
 
             ui: {
-                qualityProfile: '.x-quality-profile',
-                rootFolder    : '.x-root-folder',
-                seasonFolder  : '.x-season-folder',
-                addButton     : '.x-add',
-                overview      : '.x-overview',
-                startingSeason: '.x-starting-season'
+                qualityProfile : '.x-quality-profile',
+                rootFolder     : '.x-root-folder',
+                seasonFolder   : '.x-season-folder',
+                seriesType     : '.x-series-type',
+                startingSeason : '.x-starting-season',
+                addButton      : '.x-add',
+                overview       : '.x-overview'
             },
 
             events: {
-                'click .x-add'             : '_addSeries',
-                'change .x-quality-profile': '_qualityProfileChanged',
-                'change .x-root-folder'    : '_rootFolderChanged',
-                'change .x-season-folder'  : '_seasonFolderChanged'
+                'click .x-add'              : '_addSeries',
+                'change .x-quality-profile' : '_qualityProfileChanged',
+                'change .x-root-folder'     : '_rootFolderChanged',
+                'change .x-season-folder'   : '_seasonFolderChanged',
+                'change .x-series-type'     : '_seriesTypeChanged'
             },
 
             initialize: function () {
@@ -66,6 +68,7 @@ define(
                 var defaultQuality = Config.getValue(Config.Keys.DefaultQualityProfileId);
                 var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
                 var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
+                var defaultSeriesType = Config.getValueBoolean(Config.Keys.DefaultSeriesType, true);
 
                 if (QualityProfiles.get(defaultQuality)) {
                     this.ui.qualityProfile.val(defaultQuality);
@@ -76,6 +79,7 @@ define(
                 }
 
                 this.ui.seasonFolder.prop('checked', useSeasonFolder);
+                this.ui.rootFolder.val(defaultSeriesType);
 
                 var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
 
@@ -116,6 +120,10 @@ define(
                 else if (options.key === Config.Keys.UseSeasonFolder) {
                     this.ui.seasonFolder.prop('checked', options.value);
                 }
+
+                else if (options.key === Config.Keys.DefaultSeriesType) {
+                    this.ui.seriesType.val(options.value);
+                }
             },
 
             _qualityProfileChanged: function () {
@@ -138,6 +146,10 @@ define(
                 }
             },
 
+            _seriesTypeChanged: function () {
+                Config.setValue(Config.Keys.DefaultSeriesType, this.ui.seriesType.val());
+            },
+
             _setRootFolder: function (options) {
                 vent.trigger(vent.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
@@ -151,12 +163,17 @@ define(
                 var quality = this.ui.qualityProfile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
                 var startingSeason = this.ui.startingSeason.val();
+                var seriesType = this.ui.seriesType.val();
                 var seasonFolder = this.ui.seasonFolder.prop('checked');
 
-                this.model.set('qualityProfileId', quality);
-                this.model.set('rootFolderPath', rootFolderPath);
+                this.model.set({
+                    qualityProfileId: quality,
+                    rootFolderPath: rootFolderPath,
+                    seasonFolder: seasonFolder,
+                    seriesType: seriesType
+                }, { silent: true });
+
                 this.model.setSeasonPass(startingSeason);
-                this.model.set('seasonFolder', seasonFolder);
 
                 var self = this;
                 var promise = this.model.save();

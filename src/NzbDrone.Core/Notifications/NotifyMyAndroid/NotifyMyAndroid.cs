@@ -1,14 +1,19 @@
-﻿using NzbDrone.Core.Tv;
+﻿
+using System.Collections.Generic;
+using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.NotifyMyAndroid
 {
     public class NotifyMyAndroid : NotificationBase<NotifyMyAndroidSettings>
     {
-        private readonly INotifyMyAndroidProxy _notifyMyAndroidProxy;
+        private readonly INotifyMyAndroidProxy _proxy;
 
-        public NotifyMyAndroid(INotifyMyAndroidProxy notifyMyAndroidProxy)
+        public NotifyMyAndroid(INotifyMyAndroidProxy proxy)
         {
-            _notifyMyAndroidProxy = notifyMyAndroidProxy;
+            _proxy = proxy;
         }
 
         public override string Link
@@ -20,18 +25,27 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         {
             const string title = "Episode Grabbed";
 
-            _notifyMyAndroidProxy.SendNotification(title, message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(title, message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _notifyMyAndroidProxy.SendNotification(title, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(title, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
         public override void AfterRename(Series series)
         {
+        }
+
+        public override ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_proxy.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

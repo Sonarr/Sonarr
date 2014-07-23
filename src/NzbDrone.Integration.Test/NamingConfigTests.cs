@@ -30,11 +30,13 @@ namespace NzbDrone.Integration.Test
             config.RenameEpisodes = false;
             config.StandardEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
             config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
+            config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
 
             var result = NamingConfig.Put(config);
             result.RenameEpisodes.Should().BeFalse();
             result.StandardEpisodeFormat.Should().Be(config.StandardEpisodeFormat);
             result.DailyEpisodeFormat.Should().Be(config.DailyEpisodeFormat);
+            result.AnimeEpisodeFormat.Should().Be(config.AnimeEpisodeFormat);
         }
 
         [Test]
@@ -44,6 +46,7 @@ namespace NzbDrone.Integration.Test
             config.RenameEpisodes = true;
             config.StandardEpisodeFormat = "";
             config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
+            config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
             errors.Should().NotBeEmpty();
@@ -56,6 +59,7 @@ namespace NzbDrone.Integration.Test
             config.RenameEpisodes = true;
             config.StandardEpisodeFormat = "{season}";
             config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
+            config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
             errors.Should().NotBeEmpty();
@@ -68,6 +72,20 @@ namespace NzbDrone.Integration.Test
             config.RenameEpisodes = true;
             config.StandardEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
             config.DailyEpisodeFormat = "{Series Title} - {season} - {Episode Title}";
+            config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
+
+            var errors = NamingConfig.InvalidPut(config);
+            errors.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_get_bad_request_if_anime_format_doesnt_contain_season_and_episode_or_absolute()
+        {
+            var config = NamingConfig.GetSingle();
+            config.RenameEpisodes = false;
+            config.StandardEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
+            config.DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title}";
+            config.AnimeEpisodeFormat = "{Series Title} - {season} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
             errors.Should().NotBeEmpty();

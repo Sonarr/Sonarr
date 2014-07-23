@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any() && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
                 {
-                    _logger.Trace("Ignoring download that wasn't grabbed by drone: " + trackedDownload.DownloadItem.Title);
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Download wasn't grabbed by drone or not in a category, ignoring download.");
                     return;
                 }
 
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Download
                 {
                     trackedDownload.State = TrackedDownloadState.Imported;
 
-                    _logger.Debug("Already added to history as imported: " + trackedDownload.DownloadItem.Title);
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as imported.");
                 }
                 else
                 {
@@ -85,13 +85,13 @@ namespace NzbDrone.Core.Download
                     string downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
                     if (downloadItemOutputPath.IsNullOrWhiteSpace())
                     {
-                        _logger.Trace("Storage path not specified: " + trackedDownload.DownloadItem.Title);
+                        UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download doesn't contain intermediate path, ignoring download.");
                         return;
                     }
 
                     if (!downloadedEpisodesFolder.IsNullOrWhiteSpace() && (downloadedEpisodesFolder.PathEquals(downloadItemOutputPath) || downloadedEpisodesFolder.IsParentPath(downloadItemOutputPath)))
                     {
-                        _logger.Trace("Storage path inside drone factory, ignoring download: " + trackedDownload.DownloadItem.Title);
+                        UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Intermediate Download path inside drone factory, ignoring download.");
                         return;
                     }
 
@@ -99,18 +99,48 @@ namespace NzbDrone.Core.Download
                     {
                         var decisions = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
 
-                        if (decisions.Any())
+                        if (!decisions.Any())
                         {
+                            UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
+                        } 
+                        else if (decisions.Any(v => v.Approved))
+                        {
+                            UpdateStatusMessage(trackedDownload, LogLevel.Info, "Imported {0} files.", decisions.Count(v => v.Approved));
+
                             trackedDownload.State = TrackedDownloadState.Imported;
+                        }
+                        else
+                        {
+                            var rejections = decisions
+                                .Where(v => !v.Approved)
+                                .Select(v => v.Rejections.Aggregate(Path.GetFileName(v.LocalEpisode.Path), (a, r) => a + "\r\n- " + r))
+                                .Aggregate("Failed to import:", (a, r) => a + "\r\n" + r);
+
+                            UpdateStatusMessage(trackedDownload, LogLevel.Error, rejections);
                         }
                     }
                     else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
                     {
                         var decisions = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
 
-                        if (decisions.Any())
+                        if (!decisions.Any())
                         {
+                            UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
+                        }
+                        else if (decisions.Any(v => v.Approved))
+                        {
+                            UpdateStatusMessage(trackedDownload, LogLevel.Info, "Imported {0} files.", decisions.Count(v => v.Approved));
+
                             trackedDownload.State = TrackedDownloadState.Imported;
+                        }
+                        else
+                        {
+                            var rejections = decisions
+                                .Where(v => !v.Approved)
+                                .Select(v => v.Rejections.Aggregate(Path.GetFileName(v.LocalEpisode.Path), (a, r) => a + "\r\n- " + r))
+                                .Aggregate("Failed to import:", (a, r) => a + "\r\n" + r);
+
+                            UpdateStatusMessage(trackedDownload, LogLevel.Error, rejections);
                         }
                     }
                     else
@@ -137,13 +167,13 @@ namespace NzbDrone.Core.Download
                                     importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID];
                                     _historyService.UpdateHistoryData(importedItems.First().Id, importedItems.First().Data);
 
-                                    _logger.Debug("Storage path does not exist, but found probable drone factory ImportEvent: " + trackedDownload.DownloadItem.Title);
+                                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Intermediate Download path does not exist, but found probable drone factory ImportEvent.");
                                     return;
                                 }
                             }
                         }
 
-                        _logger.Debug("Storage path does not exist: " + trackedDownload.DownloadItem.Title);
+                        UpdateStatusMessage(trackedDownload, LogLevel.Error, "Intermediate Download path does not exist: {0}", trackedDownload.DownloadItem.OutputPath);
                         return;
                     }
                 }
@@ -153,17 +183,17 @@ namespace NzbDrone.Core.Download
             {
                 try
                 {
-                    _logger.Info("Removing completed download from history: {0}", trackedDownload.DownloadItem.Title);
+                    _logger.Debug("[{0}] Removing completed download from history.", trackedDownload.DownloadItem.Title);
                     downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadClientId);
 
                     if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
                     {
-                        _logger.Info("Removing completed download directory: {0}", trackedDownload.DownloadItem.OutputPath);
+                        _logger.Debug("Removing completed download directory: {0}", trackedDownload.DownloadItem.OutputPath);
                         _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath, true);
                     }
                     else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
                     {
-                        _logger.Info("Removing completed download file: {0}", trackedDownload.DownloadItem.OutputPath);
+                        _logger.Debug("Removing completed download file: {0}", trackedDownload.DownloadItem.OutputPath);
                         _diskProvider.DeleteFile(trackedDownload.DownloadItem.OutputPath);
                     }
 
@@ -171,8 +201,25 @@ namespace NzbDrone.Core.Download
                 }
                 catch (NotSupportedException)
                 {
-                    _logger.Debug("Removing item not supported by your download client");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Removing item not supported by your download client.");
                 }
+            }
+        }
+
+        private void UpdateStatusMessage(TrackedDownload trackedDownload, LogLevel logLevel, String message, params object[] args)
+        {
+            var statusMessage = String.Format(message, args);
+            var logMessage = String.Format("[{0}] {1}", trackedDownload.DownloadItem.Title, statusMessage);
+
+            if (trackedDownload.StatusMessage != statusMessage)
+            {
+                trackedDownload.HasError = logLevel >= LogLevel.Warn;
+                trackedDownload.StatusMessage = statusMessage;
+                _logger.Log(logLevel, logMessage);
+            }
+            else
+            {
+                _logger.Debug(logMessage);
             }
         }
     }

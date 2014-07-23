@@ -5,7 +5,7 @@
 @import "../Content/mixins";
 @import "../Content/variables";
 
-.series-title {
+.series-title-cell {
   .text-overflow();
 
   @media @sm {
@@ -163,4 +163,21 @@ td.delete-episode-file-cell {
 
 .series-status-cell {
   width: 16px;
+}
+
+.episode-number-cell {
+  cursor : default;
+}
+
+.backup-type-cell {
+  width : 20px;
+}
+
+.table>tbody>tr>td, .table>thead>tr>th {
+
+  &.episode-warning-cell {
+    width         : 1px;
+    padding-left  : 0px;
+    padding-right : 0px;
+  }
 }

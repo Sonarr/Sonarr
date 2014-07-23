@@ -1,14 +1,17 @@
-﻿using NzbDrone.Core.Tv;
+﻿using System.Collections.Generic;
+using FluentValidation.Results;
+using NzbDrone.Common;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexServer : NotificationBase<PlexServerSettings>
     {
-        private readonly IPlexService _plexProvider;
+        private readonly IPlexService _plexService;
 
-        public PlexServer(IPlexService plexProvider)
+        public PlexServer(IPlexService plexService)
         {
-            _plexProvider = plexProvider;
+            _plexService = plexService;
         }
 
         public override string Link
@@ -34,8 +37,17 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             if (Settings.UpdateLibrary)
             {
-                _plexProvider.UpdateLibrary(Settings);
+                _plexService.UpdateLibrary(Settings);
             }
+        }
+
+        public override ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            failures.AddIfNotNull(_plexService.Test(Settings));
+
+            return new ValidationResult(failures);
         }
     }
 }

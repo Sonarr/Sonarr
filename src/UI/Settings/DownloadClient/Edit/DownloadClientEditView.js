@@ -78,14 +78,7 @@ define([
         },
 
         _test: function () {
-            var testCommand = 'test{0}'.format(this.model.get('implementation'));
-            var properties = {};
-
-            _.each(this.model.get('fields'), function (field) {
-                properties[field.name] = field.value;
-            });
-
-            CommandController.Execute(testCommand, properties);
+            this.model.test();
         }
     });
 

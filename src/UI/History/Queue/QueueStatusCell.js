@@ -13,6 +13,7 @@ define(
 
                 if (this.cellValue) {
                     var status = this.cellValue.get('status').toLowerCase();
+                    var errorMessage = (this.cellValue.get('errorMessage') || '');
                     var icon = 'icon-nd-downloading';
                     var title = 'Downloading';
 
@@ -31,7 +32,29 @@ define(
                         title = 'Downloaded';
                     }
 
-                    this.$el.html('<i class="{0}" title="{1}"></i>'.format(icon, title));
+                    if (errorMessage !== '') {
+                        if (status === 'completed') {
+                            icon = 'icon-nd-import-failed';
+                            title = "Import failed";
+                        }
+                        else {
+                            icon = 'icon-nd-download-failed';
+                            title = "Download failed";
+                        }
+                        this.$el.html('<i class="{0}"></i>'.format(icon));
+                        
+                        this.$el.popover({
+                            content  : errorMessage.replace(new RegExp('\r\n', 'g'), '<br/>'),
+                            html     : true,
+                            trigger  : 'hover',
+                            title    : title,
+                            placement: 'right',
+                            container: this.$el
+                        });
+                    }
+                    else {
+                        this.$el.html('<i class="{0}" title="{1}"></i>'.format(icon, title));
+                    }
                 }
 
                 return this;

@@ -5,9 +5,10 @@ define(
         'Series/EpisodeModel',
         'backbone.pageable',
         'Mixins/AsFilteredCollection',
+        'Mixins/AsSortedCollection',
         'Mixins/AsPersistedStateCollection'
-    ], function (_, EpisodeModel, PagableCollection, AsFilteredCollection, AsPersistedStateCollection) {
-        var collection = PagableCollection.extend({
+    ], function (_, EpisodeModel, PagableCollection, AsFilteredCollection, AsSortedCollection, AsPersistedStateCollection) {
+        var Collection = PagableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/wanted/missing',
             model: EpisodeModel,
             tableName: 'wanted.missing',
@@ -35,6 +36,10 @@ define(
                 'unmonitored' : ['monitored', 'false']
             },
 
+            sortMappings: {
+                'series'   : { sortKey: 'series.sortTitle' }
+            },
+
             parseState: function (resp) {
                 return {totalRecords: resp.totalRecords};
             },
@@ -48,6 +53,7 @@ define(
             }
         });
 
-        collection = AsFilteredCollection.call(collection);
-        return AsPersistedStateCollection.call(collection);
+        Collection = AsFilteredCollection.call(Collection);
+        Collection = AsSortedCollection.call(Collection);
+        return AsPersistedStateCollection.call(Collection);
     });

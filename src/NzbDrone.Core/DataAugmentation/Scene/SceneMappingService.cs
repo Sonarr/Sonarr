@@ -1,56 +1,66 @@
 using System;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using System.Collections.Generic;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        string GetSceneName(int tvdbId);
-        Nullable<int> GetTvDbId(string cleanName);
+        List<String> GetSceneNames(int tvdbId, IEnumerable<Int32> seasonNumbers);
+        Nullable<int> GetTvDbId(string title);
         List<SceneMapping> FindByTvdbid(int tvdbId);
+        Nullable<Int32> GetSeasonNumber(string title);
     }
 
     public class SceneMappingService : ISceneMappingService,
-        IHandleAsync<ApplicationStartedEvent>,
-        IExecute<UpdateSceneMappingCommand>
+                                       IHandleAsync<ApplicationStartedEvent>,
+                                       IHandle<SeriesRefreshStartingEvent>,
+                                       IExecute<UpdateSceneMappingCommand>
     {
         private readonly ISceneMappingRepository _repository;
-        private readonly ISceneMappingProxy _sceneMappingProxy;
+        private readonly IEnumerable<ISceneMappingProvider> _sceneMappingProviders;
         private readonly Logger _logger;
-        private readonly ICached<SceneMapping> _getSceneNameCache;
         private readonly ICached<SceneMapping> _gettvdbIdCache;
         private readonly ICached<List<SceneMapping>> _findbytvdbIdCache;
 
-        public SceneMappingService(ISceneMappingRepository repository, ISceneMappingProxy sceneMappingProxy, ICacheManager cacheManager, Logger logger)
+        public SceneMappingService(ISceneMappingRepository repository,
+                                   ICacheManager cacheManager,
+                                   IEnumerable<ISceneMappingProvider> sceneMappingProviders,
+                                   Logger logger)
         {
             _repository = repository;
-            _sceneMappingProxy = sceneMappingProxy;
+            _sceneMappingProviders = sceneMappingProviders;
 
-            _getSceneNameCache = cacheManager.GetCache<SceneMapping>(GetType(), "scene_name");
             _gettvdbIdCache = cacheManager.GetCache<SceneMapping>(GetType(), "tvdb_id");
             _findbytvdbIdCache = cacheManager.GetCache<List<SceneMapping>>(GetType(), "find_tvdb_id");
             _logger = logger;
         }
 
-        public string GetSceneName(int tvdbId)
+        public List<String> GetSceneNames(int tvdbId, IEnumerable<Int32> seasonNumbers)
         {
-            var mapping = _getSceneNameCache.Find(tvdbId.ToString());
+            var names = _findbytvdbIdCache.Find(tvdbId.ToString());
 
-            if (mapping == null) return null;
+            if (names == null)
+            {
+                return new List<String>();
+            }
 
-            return mapping.SearchTerm;
+            return FilterNonEnglish(names.Where(s => seasonNumbers.Contains(s.SeasonNumber) ||
+                                                     s.SeasonNumber == -1)
+                                         .Select(m => m.SearchTerm).Distinct().ToList());
         }
 
-        public Nullable<Int32> GetTvDbId(string cleanName)
+        public Nullable<Int32> GetTvDbId(string title)
         {
-            var mapping = _gettvdbIdCache.Find(cleanName.CleanSeriesTitle());
+            var mapping = _gettvdbIdCache.Find(title.CleanSeriesTitle());
 
             if (mapping == null)
                 return null;
@@ -60,62 +70,91 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public List<SceneMapping> FindByTvdbid(int tvdbId)
         {
-            return _findbytvdbIdCache.Find(tvdbId.ToString());
+            var mappings = _findbytvdbIdCache.Find(tvdbId.ToString());
+
+            if (mappings == null)
+            {
+                return new List<SceneMapping>();
+            }
+
+            return mappings;
+        }
+
+        public Nullable<Int32> GetSeasonNumber(string title)
+        {
+            var mapping = _gettvdbIdCache.Find(title.CleanSeriesTitle());
+
+            if (mapping == null)
+                return null;
+
+            return mapping.SeasonNumber;
         }
 
         private void UpdateMappings()
         {
-            _logger.Info("Updating Scene mapping");
+            _logger.Info("Updating Scene mappings");
 
-            try
+            foreach (var sceneMappingProvider in _sceneMappingProviders)
             {
-                var mappings = _sceneMappingProxy.Fetch();
-
-                if (mappings.Any())
+                try
                 {
-                    _repository.Purge();
+                    var mappings = sceneMappingProvider.GetSceneMappings();
 
-                    foreach (var sceneMapping in mappings)
+                    if (mappings.Any())
                     {
-                        sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
+                        _repository.Clear(sceneMappingProvider.GetType().Name);
+
+                        foreach (var sceneMapping in mappings)
+                        {
+                            sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
+                            sceneMapping.Type = sceneMappingProvider.GetType().Name;
+                        }
+
+                        _repository.InsertMany(mappings.DistinctBy(s => s.ParseTerm).ToList());
                     }
-
-                    _repository.InsertMany(mappings);
+                    else
+                    {
+                        _logger.Warn("Received empty list of mapping. will not update.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _logger.Warn("Received empty list of mapping. will not update.");
+                    _logger.ErrorException("Failed to Update Scene Mappings:", ex);
                 }
             }
-            catch (Exception ex)
-            {
-                _logger.ErrorException("Failed to Update Scene Mappings:", ex);
-            }
-
+            
             RefreshCache();
         }
 
         private void RefreshCache()
         {
-            var mappings = _repository.All();
+            var mappings = _repository.All().ToList();
 
             _gettvdbIdCache.Clear();
-            _getSceneNameCache.Clear();
             _findbytvdbIdCache.Clear();
 
             foreach (var sceneMapping in mappings)
             {
-                _getSceneNameCache.Set(sceneMapping.TvdbId.ToString(), sceneMapping);
                 _gettvdbIdCache.Set(sceneMapping.ParseTerm.CleanSeriesTitle(), sceneMapping);
             }
+
             foreach (var sceneMapping in mappings.GroupBy(x => x.TvdbId))
             {
                 _findbytvdbIdCache.Set(sceneMapping.Key.ToString(), sceneMapping.ToList());
             }
         }
 
+        private List<String> FilterNonEnglish(List<String> titles)
+        {
+            return titles.Where(title => title.All(c => c <= 255)).ToList();
+        }
 
         public void HandleAsync(ApplicationStartedEvent message)
+        {
+            UpdateMappings();
+        }
+
+        public void Handle(SeriesRefreshStartingEvent message)
         {
             UpdateMappings();
         }

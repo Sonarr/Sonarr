@@ -191,6 +191,14 @@ define(
                     return self.episodeFileCollection.get(episodeFileId);
                 });
 
+                reqres.setHandler(reqres.Requests.GetAlternateNameBySeasonNumber, function (seriesId, seasonNumber) {
+                    if (self.model.get('id') !== seriesId) {
+                        return [];
+                    }
+
+                    return _.where(self.model.get('alternateTitles'), { seasonNumber: seasonNumber });
+                });
+
                 $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function () {
                     var seasonCollectionView = new SeasonCollectionView({
                         collection       : self.seasonCollection,

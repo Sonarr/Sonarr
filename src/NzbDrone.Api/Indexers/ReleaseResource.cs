@@ -10,11 +10,14 @@ namespace NzbDrone.Api.Indexers
     public class ReleaseResource : RestResource
     {
         public QualityModel Quality { get; set; }
+        public Int32 QualityWeight { get; set; }
         public Int32 Age { get; set; }
         public Double AgeHours { get; set; }
         public Int64 Size { get; set; }
         public String Indexer { get; set; }
         public String ReleaseGroup { get; set; }
+        public String SubGroup { get; set; }
+        public String ReleaseHash { get; set; }
         public String Title { get; set; }
         public Boolean FullSeason { get; set; }
         public Boolean SceneSource { get; set; }
@@ -23,14 +26,21 @@ namespace NzbDrone.Api.Indexers
         public String AirDate { get; set; }
         public String SeriesTitle { get; set; }
         public int[] EpisodeNumbers { get; set; }
+        public int[] AbsoluteEpisodeNumbers { get; set; }
         public Boolean Approved { get; set; }
         public Int32 TvRageId { get; set; }
-        public List<string> Rejections { get; set; }
+        public IEnumerable<String> Rejections { get; set; }
         public DateTime PublishDate { get; set; }
         public String CommentUrl { get; set; }
         public String DownloadUrl { get; set; }
         public String InfoUrl { get; set; }
         public Boolean DownloadAllowed { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
+        public Int32 ReleaseWeight { get; set; }
+
+        public Boolean IsDaily { get; set; }
+        public Boolean IsAbsoluteNumbering { get; set; }
+        public Boolean IsPossibleSpecialEpisode { get; set; }
+        public Boolean Special { get; set; }
     }
 }
