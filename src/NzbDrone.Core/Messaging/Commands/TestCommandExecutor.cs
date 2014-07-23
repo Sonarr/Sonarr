@@ -1,6 +1,6 @@
 using System.Threading;
 using NLog;
-using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 
 namespace NzbDrone.Core.Messaging.Commands
 {

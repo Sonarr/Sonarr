@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
@@ -43,11 +44,12 @@ namespace NzbDrone.Core.MediaFiles
             foreach (var existingFile in existingFiles)
             {
                 var file = existingFile.First();
+                var episodeFilePath = Path.Combine(localEpisode.Series.Path, file.RelativePath);
 
-                if (_diskProvider.FileExists(file.Path))
+                if (_diskProvider.FileExists(episodeFilePath))
                 {
                     _logger.Debug("Removing existing episode file: {0}", file);
-                    _recycleBinProvider.DeleteFile(file.Path);
+                    _recycleBinProvider.DeleteFile(episodeFilePath);
                 }
 
                 moveFileResult.OldFiles.Add(file);

@@ -37,7 +37,6 @@ namespace NzbDrone.Api.Series
                             ISceneMappingService sceneMappingService,
                             IMapCoversToLocal coverMapper,
                             RootFolderValidator rootFolderValidator,
-                            PathExistsValidator pathExistsValidator,
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
                             DroneFactoryValidator droneFactoryValidator,

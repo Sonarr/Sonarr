@@ -86,6 +86,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         oldFiles = moveResult.OldFiles;
                     }
 
+                    else
+                    {
+                        episodeFile.RelativePath = localEpisode.Series.Path.GetRelativePath(episodeFile.Path);
+                    }
+
                     _mediaFileService.Add(episodeFile);
                     imported.Add(importDecision);
 

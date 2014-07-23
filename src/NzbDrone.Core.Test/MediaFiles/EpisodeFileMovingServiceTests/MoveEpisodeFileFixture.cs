@@ -30,7 +30,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                                      .Build();
 
             _episodeFile = Builder<EpisodeFile>.CreateNew()
-                                               .With(f => f.Path = @"C:\Test\File.avi")
+                                               .With(f => f.Path = null)
+                                               .With(f => f.RelativePath = @"Season 1\File.avi")
                                                .Build();
 
             _localEpisode = Builder<LocalEpisode>.CreateNew()
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
 
             Mocker.GetMock<IBuildFileNames>()
                   .Setup(s => s.BuildFilePath(It.IsAny<Series>(), It.IsAny<Int32>(), It.IsAny<String>(), It.IsAny<String>()))
-                  .Returns(@"C:\Test\File Name.avi");
+                  .Returns(@"C:\Test\TV\Series\File Name.avi");
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FileExists(It.IsAny<String>()))

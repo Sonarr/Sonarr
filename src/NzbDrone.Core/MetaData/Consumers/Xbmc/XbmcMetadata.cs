@@ -50,12 +50,12 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
                     if (metadataFile.Type == MetadataType.EpisodeImage)
                     {
-                        newFilename = GetEpisodeImageFilename(episodeFile.Path);
+                        newFilename = GetEpisodeImageFilename(episodeFile.RelativePath);
                     }
 
                     else if (metadataFile.Type == MetadataType.EpisodeMetadata)
                     {
-                        newFilename = GetEpisodeNfoFilename(episodeFile.Path);
+                        newFilename = GetEpisodeNfoFilename(episodeFile.RelativePath);
                     }
 
                     else
@@ -65,6 +65,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     }
 
                     var existingFilename = Path.Combine(series.Path, metadataFile.RelativePath);
+                    newFilename = Path.Combine(series.Path, newFilename);
 
                     if (!newFilename.PathEquals(existingFilename))
                     {
@@ -214,7 +215,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 return null;
             }
 
-            _logger.Debug("Generating Episode Metadata for: {0}", episodeFile.Path);
+            _logger.Debug("Generating Episode Metadata for: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
 
             var xmlResult = String.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
@@ -265,7 +266,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 }
             }
 
-            return new MetadataFileResult(GetEpisodeNfoFilename(episodeFile.Path), xmlResult.Trim(Environment.NewLine.ToCharArray()));
+            return new MetadataFileResult(GetEpisodeNfoFilename(episodeFile.RelativePath), xmlResult.Trim(Environment.NewLine.ToCharArray()));
         }
 
         public override List<ImageFileResult> SeriesImages(Series series)
@@ -305,7 +306,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
             return new List<ImageFileResult>
                    {
-                       new ImageFileResult(GetEpisodeImageFilename(episodeFile.Path), screenshot.Url)
+                       new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url)
                    };
         }
 

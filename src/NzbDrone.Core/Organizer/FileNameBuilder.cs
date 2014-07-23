@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -77,7 +78,7 @@ namespace NzbDrone.Core.Organizer
             {
                 if (episodeFile.SceneName.IsNullOrWhiteSpace())
                 {
-                    return Path.GetFileNameWithoutExtension(episodeFile.Path);
+                    return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
                 }
 
                 return episodeFile.SceneName;
@@ -204,6 +205,8 @@ namespace NzbDrone.Core.Organizer
 
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
         {
+            Ensure.That(extension, () => extension).IsNotNullOrWhiteSpace();
+
             string path = series.Path;
 
             if (series.SeasonFolder)

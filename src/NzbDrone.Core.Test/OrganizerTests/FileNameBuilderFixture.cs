@@ -64,6 +64,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episodeFile.Quality.Proper = true;
         }
 
+
+
         [Test]
         public void should_replace_Series_space_Title()
         {
@@ -227,10 +229,10 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void use_file_name_when_sceneName_is_null()
         {
             _namingConfig.RenameEpisodes = false;
-            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.Path));
+                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.RelativePath));
         }
 
         [Test]
@@ -238,7 +240,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.RenameEpisodes = false;
             _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
-            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30.Rock.S01E01.xvid-LOL");
@@ -378,7 +380,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - {Original Title}";
 
             _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
-            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30 Rock - 30.Rock.S01E01.xvid-LOL");

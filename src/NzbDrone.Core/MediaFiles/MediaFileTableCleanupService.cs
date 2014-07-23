@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -39,25 +40,20 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var episodeFile in seriesFile)
             {
+                var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
                 try
                 {
-                    if (!_diskProvider.FileExists(episodeFile.Path))
+                    if (!_diskProvider.FileExists(episodeFilePath))
                     {
-                        _logger.Debug("File [{0}] no longer exists on disk, removing from db", episodeFile.Path);
+                        _logger.Debug("File [{0}] no longer exists on disk, removing from db", episodeFilePath);
                         _mediaFileService.Delete(episodeFile);
                         continue;
                     }
 
-                    if (!series.Path.IsParentPath(episodeFile.Path))
-                    {
-                        _logger.Debug("File [{0}] does not belong to this series, removing from db", episodeFile.Path);
-                        _mediaFileService.Delete(episodeFile);
-                        continue; 
-                    }
-
                     if (!episodes.Any(e => e.EpisodeFileId == episodeFile.Id))
                     {
-                        _logger.Debug("File [{0}] is not assigned to any episodes, removing from db", episodeFile.Path);
+                        _logger.Debug("File [{0}] is not assigned to any episodes, removing from db", episodeFilePath);
                         _mediaFileService.Delete(episodeFile);
                         continue;
                     }

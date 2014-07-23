@@ -188,7 +188,8 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
-    <Compile Include="MediaFiles\MediaFileServiceTest.cs" />
+    <Compile Include="OrganizerTests\CleanFixture.cs" />
+    <Compile Include="MediaFiles\MediaFileServiceTests\FilterFixture.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoServiceFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReaderFixture.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithoutFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />
+    <Compile Include="TvTests\MoveSeriesServiceFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />

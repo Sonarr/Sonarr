@@ -16,8 +16,6 @@ namespace NzbDrone.Core.Tv
 
         public void Handle(SeriesEditedEvent message)
         {
-            //TODO: Refresh if path has changed (also move files)
-
             if (message.Series.SeriesType != message.OldSeries.SeriesType)
             {
                 _commandExecutor.PublishCommandAsync(new RefreshSeriesCommand(message.Series.Id));

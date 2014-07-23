@@ -8,7 +8,6 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.ProgressMessaging
 {
-
     public class ProgressMessageTarget : Target, IHandle<ApplicationStartedEvent>
     {
         private readonly IEventAggregator _eventAggregator;
