@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.DecisionEngine;
@@ -17,7 +16,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     [TestFixture]
     public class PrioritizeDownloadDecisionFixture : CoreTest<DownloadDecisionPriorizationService>
     {
-        private Episode GetEpisode(int id)
+        private Episode GivenEpisode(int id)
         {
             return Builder<Episode>.CreateNew()
                             .With(e => e.Id = id)
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                             .Build();
         }
 
-        private RemoteEpisode GetRemoteEpisode(List<Episode> episodes, QualityModel quality, int Age = 0, long size = 0)
+        private RemoteEpisode GivenRemoteEpisode(List<Episode> episodes, QualityModel quality, int age = 0, long size = 0)
         {
             var remoteEpisode = new RemoteEpisode();
             remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
@@ -35,7 +34,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Episodes.AddRange(episodes);
 
             remoteEpisode.Release = new ReleaseInfo();
-            remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-Age);
+            remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-age);
             remoteEpisode.Release.Size = size;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
@@ -48,8 +47,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_put_propers_before_non_propers()
         {
-            var remoteEpisode1 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p, false));
-            var remoteEpisode2 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p, true));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p, false));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p, true));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));
@@ -62,8 +61,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_put_higher_quality_before_lower()
         {
-            var remoteEpisode1 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.SDTV));
-            var remoteEpisode2 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.SDTV));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));
@@ -76,8 +75,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_order_by_lowest_number_of_episodes()
         {
-            var remoteEpisode1 = GetRemoteEpisode(new List<Episode> { GetEpisode(2) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(2) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));
@@ -90,8 +89,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_order_by_lowest_number_of_episodes_with_multiple_episodes()
         {
-            var remoteEpisode1 = GetRemoteEpisode(new List<Episode> { GetEpisode(2), GetEpisode(3) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GetRemoteEpisode(new List<Episode> { GetEpisode(1), GetEpisode(2) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(2), GivenEpisode(3) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1), GivenEpisode(2) }, new QualityModel(Quality.HDTV720p));
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode1));
@@ -101,30 +100,29 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             qualifiedReports.First().RemoteEpisode.Episodes.First().EpisodeNumber.Should().Be(1);
         }
 
-
         [Test]
         public void should_order_by_smallest_rounded_to_200mb_then_age()
         {
-            var remoteEpisodeSd = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.SDTV), size: 100.Megabytes(), Age: 1);
-            var remoteEpisodeHdSmallOld = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 1200.Megabytes(), Age: 1000);
-            var remoteEpisodeHdSmallYounge = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 1250.Megabytes(), Age: 10);
-            var remoteEpisodeHdLargeYounge = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 3000.Megabytes(), Age: 1);
+            var remoteEpisodeSd = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.SDTV), size: 100.Megabytes(), age: 1);
+            var remoteEpisodeHdSmallOld = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 1200.Megabytes(), age: 1000);
+            var remoteEpisodeSmallYoung = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 1250.Megabytes(), age: 10);
+            var remoteEpisodeHdLargeYoung = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 3000.Megabytes(), age: 1);
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisodeSd));
             decisions.Add(new DownloadDecision(remoteEpisodeHdSmallOld));
-            decisions.Add(new DownloadDecision(remoteEpisodeHdSmallYounge));
-            decisions.Add(new DownloadDecision(remoteEpisodeHdLargeYounge));
+            decisions.Add(new DownloadDecision(remoteEpisodeSmallYoung));
+            decisions.Add(new DownloadDecision(remoteEpisodeHdLargeYoung));
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
-            qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisodeHdSmallYounge);
+            qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisodeSmallYoung);
         }
 
         [Test]
         public void should_order_by_youngest()
         {
-            var remoteEpisode1 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), Age: 10);
-            var remoteEpisode2 = GetRemoteEpisode(new List<Episode> { GetEpisode(1) }, new QualityModel(Quality.HDTV720p), Age: 5);
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), age: 10);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), age: 5);
 
 
             var decisions = new List<DownloadDecision>();
@@ -133,6 +131,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisode2);
+        }
+
+        [Test]
+        public void should_not_throw_if_no_episodes_are_found()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 500.Megabytes());
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), size: 500.Megabytes());
+
+            remoteEpisode1.Episodes = new List<Episode>();
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            Subject.PrioritizeDecisions(decisions);
         }
     }
 }
