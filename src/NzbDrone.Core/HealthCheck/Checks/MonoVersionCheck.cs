@@ -8,13 +8,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
 {
     public class MonoVersionCheck : HealthCheckBase
     {
-        private readonly IProcessProvider _processProvider;
+        private readonly IRuntimeProvider _runtimeProvider;
         private readonly Logger _logger;
         private static readonly Regex VersionRegex = new Regex(@"(?<=\W)(?<version>\d+\.\d+\.\d+(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public MonoVersionCheck(IProcessProvider processProvider, Logger logger)
+        public MonoVersionCheck(IRuntimeProvider runtimeProvider, Logger logger)
         {
-            _processProvider = processProvider;
+            _runtimeProvider = runtimeProvider;
             _logger = logger;
         }
 
@@ -25,21 +25,16 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
-            var output = _processProvider.StartAndCapture("mono", "--version");
+            var versionMatch = VersionRegex.Match(_runtimeProvider.GetVersion());
 
-            foreach (var line in output.Standard)
+            if (versionMatch.Success)
             {
-                var versionMatch = VersionRegex.Match(line);
+                var version = new Version(versionMatch.Groups["version"].Value);
 
-                if (versionMatch.Success)
+                if (version >= new Version(3, 2))
                 {
-                    var version = new Version(versionMatch.Groups["version"].Value);
-
-                    if (version >= new Version(3, 2))
-                    {
-                        _logger.Debug("mono version is 3.2 or better: {0}", version.ToString());
-                        return new HealthCheck(GetType());
-                    }
+                    _logger.Debug("mono version is 3.2 or better: {0}", version.ToString());
+                    return new HealthCheck(GetType());
                 }
             }
 
