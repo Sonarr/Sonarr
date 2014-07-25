@@ -132,6 +132,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex SixDigitAirDateRegex = new Regex(@"^(?:.*?)(?<airdate>(?<!\d)(?<airyear>\d{2})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))",
+                                                                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)\b(?<!WEB-DL|480p|720p|1080p)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -201,6 +204,16 @@ namespace NzbDrone.Core.Parser
                 if (airDateMatch.Success)
                 {
                     simpleTitle = airDateMatch.Groups[1].Value + airDateMatch.Groups["airyear"].Value + "." + airDateMatch.Groups["airmonth"].Value + "." + airDateMatch.Groups["airday"].Value;
+                }
+
+                var sixDigitAirDateMatch = SixDigitAirDateRegex.Match(simpleTitle);
+                if (sixDigitAirDateMatch.Success)
+                {
+                    var fixedDate = String.Format("20{0}.{1}.{2}", sixDigitAirDateMatch.Groups["airyear"].Value,
+                                                                   sixDigitAirDateMatch.Groups["airmonth"].Value,
+                                                                   sixDigitAirDateMatch.Groups["airday"].Value);
+
+                    simpleTitle = simpleTitle.Replace(sixDigitAirDateMatch.Groups["airdate"].Value, fixedDate);
                 }
 
                 foreach (var regex in ReportTitleRegex)
