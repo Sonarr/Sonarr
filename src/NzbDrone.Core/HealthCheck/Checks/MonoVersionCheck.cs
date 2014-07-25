@@ -10,7 +10,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IRuntimeProvider _runtimeProvider;
         private readonly Logger _logger;
-        private static readonly Regex VersionRegex = new Regex(@"(?<=\W)(?<version>\d+\.\d+\.\d+(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex VersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+\.\d+(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public MonoVersionCheck(IRuntimeProvider runtimeProvider, Logger logger)
         {
@@ -25,7 +25,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
-            var versionMatch = VersionRegex.Match(_runtimeProvider.GetVersion());
+            var versionString = _runtimeProvider.GetVersion();
+            var versionMatch = VersionRegex.Match(versionString);
 
             if (versionMatch.Success)
             {
