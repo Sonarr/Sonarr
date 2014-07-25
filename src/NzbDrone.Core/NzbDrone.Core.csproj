@@ -415,6 +415,11 @@
     <Compile Include="Notifications\Plex\PlexSection.cs" />
     <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
     <Compile Include="Notifications\Plex\PlexUser.cs" />
+    <Compile Include="Notifications\Pushalot\Pushalot.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotProxy.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotResponse.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotSettings.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotPriority.cs" />
     <Compile Include="Notifications\PushBullet\PushBullet.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
