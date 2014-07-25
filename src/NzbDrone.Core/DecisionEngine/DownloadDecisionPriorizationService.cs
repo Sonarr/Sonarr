@@ -21,7 +21,7 @@ namespace NzbDrone.Core.DecisionEngine
                 .GroupBy(c => c.RemoteEpisode.Series.Id, (i, s) => s
                     .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(s.First().RemoteEpisode.Series.QualityProfile))
                     .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
-                    .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / c.RemoteEpisode.Episodes.Count)
+                    .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / Math.Max(1, c.RemoteEpisode.Episodes.Count))
                     .ThenBy(c => c.RemoteEpisode.Release.Age))
                 .SelectMany(c => c)
                 .Union(decisions.Where(c => c.RemoteEpisode.Series == null))
