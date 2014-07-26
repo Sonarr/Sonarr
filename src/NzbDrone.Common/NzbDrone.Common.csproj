@@ -39,19 +39,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Loggly">
       <HintPath>..\packages\loggly-csharp.2.3\lib\net35\Loggly.dll</HintPath>
     </Reference>
@@ -61,18 +57,24 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConvertBase32.cs" />
     <Compile Include="ArchiveService.cs" />
     <Compile Include="Cache\Cached.cs" />
     <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\ICached.cs" />
     <Compile Include="Composition\Container.cs" />
-    <Compile Include="Composition\IContainer.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
+    <Compile Include="Composition\IContainer.cs" />
+    <Compile Include="ConsoleService.cs" />
+    <Compile Include="ConvertBase32.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
+    <Compile Include="Disk\IDiskProvider.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
     <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />
@@ -91,62 +93,60 @@
     <Compile Include="EnsureThat\ExpressionExtensions.cs" />
     <Compile Include="EnsureThat\Param.cs" />
     <Compile Include="EnsureThat\Resources\ExceptionMessages.Designer.cs" />
+    <Compile Include="EnsureThat\TypeParam.cs" />
     <Compile Include="EnvironmentInfo\AppFolderFactory.cs" />
+    <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="EnvironmentInfo\BuildInfo.cs" />
-    <Compile Include="EnvironmentInfo\StartupContext.cs" />
-    <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
+    <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
+    <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
-    <Compile Include="Http\NzbDroneWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="IEnumerableExtensions.cs" />
-    <Compile Include="Instrumentation\CleanseLogMessage.cs" />
-    <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
-    <Compile Include="Instrumentation\ExceptronTarget.cs" />
-    <Compile Include="Instrumentation\LogEventExtensions.cs" />
-    <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
-    <Compile Include="Instrumentation\NzbDroneLogger.cs" />
-    <Compile Include="Instrumentation\LogTargets.cs" />
-    <Compile Include="Messaging\IEvent.cs" />
-    <Compile Include="Messaging\IMessage.cs" />
-    <Compile Include="PathEqualityComparer.cs" />
-    <Compile Include="Processes\IRuntimeProvider.cs" />
-    <Compile Include="Processes\PidFileProvider.cs" />
-    <Compile Include="Processes\ProcessOutput.cs" />
-    <Compile Include="RateGate.cs" />
-    <Compile Include="Serializer\IntConverter.cs" />
-    <Compile Include="Services.cs" />
-    <Compile Include="Extensions\StreamExtensions.cs" />
-    <Compile Include="LevenstheinExtensions.cs" />
-    <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
-    <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="EnsureThat\TypeParam.cs" />
-    <Compile Include="HashUtil.cs" />
-    <Compile Include="Instrumentation\LogglyTarget.cs" />
-    <Compile Include="Serializer\Json.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
-    <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
-    <Compile Include="Reflection\ReflectionExtensions.cs" />
-    <Compile Include="ServiceFactory.cs" />
+    <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="HashUtil.cs" />
     <Compile Include="Http\HttpProvider.cs" />
-    <Compile Include="ConsoleService.cs" />
-    <Compile Include="PathExtensions.cs" />
-    <Compile Include="Disk\IDiskProvider.cs" />
-    <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
+    <Compile Include="Http\NzbDroneWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IEnumerableExtensions.cs" />
+    <Compile Include="Instrumentation\CleanseLogMessage.cs" />
+    <Compile Include="Instrumentation\ExceptronTarget.cs" />
+    <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
+    <Compile Include="Instrumentation\LogEventExtensions.cs" />
+    <Compile Include="Instrumentation\LogglyTarget.cs" />
+    <Compile Include="Instrumentation\LogTargets.cs" />
+    <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
+    <Compile Include="Instrumentation\NzbDroneLogger.cs" />
+    <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
+    <Compile Include="LevenstheinExtensions.cs" />
+    <Compile Include="Messaging\IEvent.cs" />
+    <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
+    <Compile Include="PathEqualityComparer.cs" />
+    <Compile Include="PathExtensions.cs" />
+    <Compile Include="Processes\IRuntimeProvider.cs" />
+    <Compile Include="Processes\PidFileProvider.cs" />
+    <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="Processes\ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
+    <Compile Include="RateGate.cs" />
+    <Compile Include="Reflection\ReflectionExtensions.cs" />
+    <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
+    <Compile Include="Serializer\IntConverter.cs" />
+    <Compile Include="Serializer\Json.cs" />
+    <Compile Include="ServiceFactory.cs" />
     <Compile Include="ServiceProvider.cs" />
+    <Compile Include="Services.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="TinyIoC.cs" />
+    <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
     <Compile Include="TryParseExtension.cs" />
   </ItemGroup>

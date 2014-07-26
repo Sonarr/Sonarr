@@ -51,9 +51,8 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppType.cs" />
-    <Compile Include="UpdateStartupContext.cs" />
-    <Compile Include="UpdateApp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateApp.cs" />
     <Compile Include="UpdateContainerBuilder.cs" />
     <Compile Include="UpdateEngine\BackupAndRestore.cs" />
     <Compile Include="UpdateEngine\BackupAppData.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="UpdateEngine\InstallUpdateService.cs" />
     <Compile Include="UpdateEngine\StartNzbDrone.cs" />
     <Compile Include="UpdateEngine\TerminateNzbDrone.cs" />
+    <Compile Include="UpdateStartupContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

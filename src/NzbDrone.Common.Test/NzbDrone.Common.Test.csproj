@@ -37,19 +37,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
@@ -59,21 +59,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="CacheTests\CachedFixture.cs" />
+    <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
+    <Compile Include="DiskProviderTests\DiskProviderFixtureBase.cs" />
     <Compile Include="DiskProviderTests\FreeSpaceFixtureBase.cs" />
     <Compile Include="DiskProviderTests\IsParentFixtureBase.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
-    <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
+    <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
+    <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="InstrumentationTests\CleanseLogMessageFixture.cs" />
     <Compile Include="LevenshteinDistanceFixture.cs" />
-    <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="PathExtensionFixture.cs" />
-    <Compile Include="DiskProviderTests\DiskProviderFixtureBase.cs" />
-    <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="ProcessProviderTests.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="ReflectionTests\ReflectionExtensionFixture.cs" />
     <Compile Include="ServiceProviderTests.cs" />
     <Compile Include="WebClientTests.cs" />
@@ -97,6 +97,10 @@
       <Project>{95C11A9E-56ED-456A-8447-2C89C1139266}</Project>
       <Name>NzbDrone.Host</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NzbDrone\NzbDrone.csproj">
+      <Project>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</Project>
+      <Name>NzbDrone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
       <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
@@ -104,10 +108,6 @@
     <ProjectReference Include="..\NzbDrone.Test.Dummy\NzbDrone.Test.Dummy.csproj">
       <Project>{FAFB5948-A222-4CF6-AD14-026BE7564802}</Project>
       <Name>NzbDrone.Test.Dummy</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NzbDrone\NzbDrone.csproj">
-      <Project>{D12F7F2F-8A3C-415F-88FA-6DD061A84869}</Project>
-      <Name>NzbDrone</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

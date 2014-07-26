@@ -52,30 +52,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Growl.Connector">
-      <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
-    </Reference>
-    <Reference Include="Growl.CoreLibrary">
-      <HintPath>..\packages\Growl.0.6\lib\Growl.CoreLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="MediaInfoDotNet">
-      <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="FluentMigrator">
       <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
@@ -85,19 +70,34 @@
     <Reference Include="FluentValidation">
       <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
+    <Reference Include="Growl.Connector">
+      <HintPath>..\packages\Growl.0.6\lib\Growl.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Growl.CoreLibrary">
+      <HintPath>..\packages\Growl.0.6\lib\Growl.CoreLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="MediaInfoDotNet">
+      <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="Omu.ValueInjecter">
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite">
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
@@ -114,6 +114,9 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
+    <Compile Include="Configuration\ConfigService.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Configuration\Events\ConfigFileSavedEvent.cs" />
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
@@ -123,9 +126,9 @@
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
     <Compile Include="DataAugmentation\Scene\ISceneMappingProvider.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMapping.cs" />
-    <Compile Include="DataAugmentation\Scene\SceneMappingService.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingService.cs" />
     <Compile Include="DataAugmentation\Scene\ServicesProvider.cs" />
     <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemResult.cs" />
@@ -133,22 +136,24 @@
     <Compile Include="DataAugmentation\Xem\Model\XemValues.cs" />
     <Compile Include="DataAugmentation\Xem\XemProxy.cs" />
     <Compile Include="DataAugmentation\Xem\XemService.cs" />
+    <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ConnectionStringFactory.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
+    <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
+    <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
+    <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
-    <Compile Include="Datastore\Converters\Int32Converter.cs" />
-    <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\UtcConverter.cs" />
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
-    <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
     <Compile Include="Datastore\Extensions\MappingExtensions.cs" />
     <Compile Include="Datastore\Extensions\PagingSpecExtensions.cs" />
     <Compile Include="Datastore\Extensions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
+    <Compile Include="Datastore\Migration\001_initialSetup.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
@@ -172,16 +177,15 @@
     <Compile Include="Datastore\Migration\022_move_indexer_to_generic_provider.cs" />
     <Compile Include="Datastore\Migration\023_add_config_contract_to_indexers.cs" />
     <Compile Include="Datastore\Migration\024_drop_tvdb_episodeid.cs" />
-    <Compile Include="Datastore\Migration\026_add_config_contract_to_notifications.cs" />
     <Compile Include="Datastore\Migration\025_move_notification_to_generic_provider.cs" />
+    <Compile Include="Datastore\Migration\026_add_config_contract_to_notifications.cs" />
     <Compile Include="Datastore\Migration\027_fix_omgwtfnzbs.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\029_add_formats_to_naming_config.cs" />
-    <Compile Include="Datastore\Migration\031_delete_old_naming_config_columns.cs" />
-    <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\030_add_season_folder_format_to_naming_config.cs" />
+    <Compile Include="Datastore\Migration\031_delete_old_naming_config_columns.cs" />
     <Compile Include="Datastore\Migration\032_set_default_release_group.cs" />
     <Compile Include="Datastore\Migration\033_add_api_key_to_pushover.cs" />
     <Compile Include="Datastore\Migration\034_remove_series_contraints.cs" />
@@ -189,14 +193,15 @@
     <Compile Include="Datastore\Migration\036_update_with_quality_converters.cs" />
     <Compile Include="Datastore\Migration\037_add_configurable_qualities.cs" />
     <Compile Include="Datastore\Migration\038_add_on_upgrade_to_notifications.cs" />
-    <Compile Include="Datastore\Migration\040_add_metadata_to_episodes_and_series.cs" />
     <Compile Include="Datastore\Migration\039_add_metadata_tables.cs" />
+    <Compile Include="Datastore\Migration\040_add_metadata_to_episodes_and_series.cs" />
     <Compile Include="Datastore\Migration\041_fix_xbmc_season_images_metadata.cs" />
     <Compile Include="Datastore\Migration\042_add_download_clients_table.cs" />
     <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
     <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
     <Compile Include="Datastore\Migration\048_add_title_to_scenemappings.cs" />
@@ -210,9 +215,8 @@
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
-    <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationLogger.cs" />
-    <Compile Include="Datastore\Migration\001_initialSetup.cs" />
+    <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
@@ -220,127 +224,151 @@
     <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
     <Compile Include="Datastore\Migration\Framework\SQLiteMigrationHelper.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
-    <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
+    <Compile Include="Datastore\ResultSet.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
+    <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
+    <Compile Include="DecisionEngine\DownloadDecisionPriorizationService.cs" />
+    <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
+    <Compile Include="DecisionEngine\IRejectWithReason.cs" />
+    <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Rejection.cs" />
     <Compile Include="DecisionEngine\RejectionType.cs" />
-    <Compile Include="DecisionEngine\Specifications\RetrySpecification.cs" />
-    <Compile Include="DecisionEngine\DownloadDecisionPriorizationService.cs" />
+    <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
-    <Compile Include="DecisionEngine\IRejectWithReason.cs" />
-    <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotRestrictedReleaseSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RssSync\DelaySpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\EpisodeRequestedSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
-    <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
-    <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RssSync\MonitoredEpisodeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />
-    <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DecisionEngine\Specifications\RetrySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\DelaySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\MonitoredEpisodeSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\EpisodeRequestedSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
+    <Compile Include="Download\CheckForFinishedDownloadCommand.cs" />
+    <Compile Include="Download\Clients\DownloadClientException.cs" />
+    <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
+    <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
+    <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
+    <Compile Include="Download\Clients\Nzbget\Nzbget.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetCategory.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetConfigItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetGlobalStatus.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetPostQueueItem.cs" />
-    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
-    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
-    <Compile Include="Download\Clients\DownloadClientException.cs" />
-    <Compile Include="Download\Clients\Pneumatic\PneumaticSettings.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetHistoryItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetParameter.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetPostQueueItem.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetPriority.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetProxy.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetQueueItem.cs" />
+    <Compile Include="Download\Clients\Nzbget\NzbgetResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
     <Compile Include="Download\Clients\Pneumatic\Pneumatic.cs" />
+    <Compile Include="Download\Clients\Pneumatic\PneumaticSettings.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdAddResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdCategoryResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdConfigResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdVersionResponse.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\Sabnzbd.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdCategory.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistory.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistoryItem.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdJsonError.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdPriority.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdProxy.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueue.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueueItem.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
+    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
+    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
     <Compile Include="Download\DownloadClientBase.cs" />
     <Compile Include="Download\DownloadClientDefinition.cs" />
     <Compile Include="Download\DownloadClientFactory.cs" />
-    <Compile Include="Download\DownloadClientRepository.cs" />
-    <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetProxy.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdProxy.cs" />
-    <Compile Include="Download\CheckForFinishedDownloadCommand.cs" />
     <Compile Include="Download\DownloadClientItem.cs" />
+    <Compile Include="Download\DownloadClientProvider.cs" />
+    <Compile Include="Download\DownloadClientRepository.cs" />
     <Compile Include="Download\DownloadClientStatus.cs" />
-    <Compile Include="Download\FailedDownloadService.cs" />
+    <Compile Include="Download\DownloadClientType.cs" />
+    <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadItemStatus.cs" />
+    <Compile Include="Download\DownloadService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Download\DownloadTrackingService.cs" />
+    <Compile Include="Download\EpisodeGrabbedEvent.cs" />
+    <Compile Include="Download\FailedDownloadService.cs" />
+    <Compile Include="Download\IDownloadClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Download\Pending\PendingRelease.cs" />
     <Compile Include="Download\Pending\PendingReleaseRepository.cs" />
     <Compile Include="Download\Pending\PendingReleaseService.cs" />
     <Compile Include="Download\Pending\PendingReleasesUpdatedEvent.cs" />
-    <Compile Include="Download\ProcessedDecisions.cs" />
-    <Compile Include="Download\TrackedDownload.cs" />
-    <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\ProcessDownloadDecisions.cs" />
-    <Compile Include="Download\DownloadClientProvider.cs" />
-    <Compile Include="Download\DownloadClientType.cs" />
-    <Compile Include="Download\DownloadTrackingService.cs" />
+    <Compile Include="Download\ProcessedDecisions.cs" />
     <Compile Include="Download\RedownloadFailedDownloadService.cs" />
+    <Compile Include="Download\TrackedDownload.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
+    <Compile Include="Fluent.cs" />
     <Compile Include="HealthCheck\CheckHealthCommand.cs" />
     <Compile Include="HealthCheck\Checks\AppDataLocationCheck.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheck.cs" />
-    <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
-    <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
     <Compile Include="HealthCheck\Checks\DroneFactoryCheck.cs" />
+    <Compile Include="HealthCheck\Checks\ImportMechanismCheck.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
+    <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
     <Compile Include="HealthCheck\HealthCheckBase.cs" />
     <Compile Include="HealthCheck\HealthCheckCompleteEvent.cs" />
+    <Compile Include="HealthCheck\HealthCheckService.cs" />
+    <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
+    <Compile Include="History\History.cs" />
+    <Compile Include="History\HistoryRepository.cs" />
+    <Compile Include="History\HistoryService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
-    <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
-    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
-    <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleases.cs" />
+    <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateAnimeCategories.cs" />
     <Compile Include="Housekeeping\Housekeepers\UpdateCleanTitleForSeries.cs" />
-    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
-    <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
-    <Compile Include="IndexerSearch\Definitions\AnimeEpisodeSearchCriteria.cs" />
-    <Compile Include="IndexerSearch\MissingEpisodeSearchCommand.cs" />
-    <Compile Include="IndexerSearch\Definitions\SpecialEpisodeSearchCriteria.cs" />
-    <Compile Include="IndexerSearch\SeriesSearchService.cs" />
-    <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
-    <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
-    <Compile Include="IndexerSearch\EpisodeSearchCommand.cs" />
-    <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
-    <Compile Include="IndexerSearch\SeasonSearchService.cs" />
-    <Compile Include="Indexers\BasicTorrentRssParser.cs" />
     <Compile Include="Indexers\Animezb\Animezb.cs" />
     <Compile Include="Indexers\Animezb\AnimezbParser.cs" />
+    <Compile Include="Indexers\BasicTorrentRssParser.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
@@ -348,106 +376,237 @@
     <Compile Include="Indexers\Fanzub\FanzubParser.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
+    <Compile Include="Indexers\IndexerBase.cs" />
+    <Compile Include="Indexers\IndexerDefinition.cs" />
+    <Compile Include="Indexers\IndexerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Indexers\IndexerFetchService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
-    <Compile Include="Indexers\NewznabTestService.cs" />
     <Compile Include="Indexers\IParseFeed.cs" />
+    <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
+    <Compile Include="Indexers\Newznab\NewznabParser.cs" />
     <Compile Include="Indexers\Newznab\NewznabPreProcessor.cs" />
+    <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
+    <Compile Include="Indexers\NewznabTestService.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
+    <Compile Include="Indexers\RssParserBase.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\RssSyncCompleteEvent.cs" />
+    <Compile Include="Indexers\RssSyncService.cs" />
+    <Compile Include="Indexers\Wombles\Wombles.cs" />
+    <Compile Include="Indexers\Wombles\WomblesParser.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
+    <Compile Include="IndexerSearch\Definitions\AnimeEpisodeSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\Definitions\DailyEpisodeSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\Definitions\SearchCriteriaBase.cs" />
+    <Compile Include="IndexerSearch\Definitions\SeasonSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\Definitions\SpecialEpisodeSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\EpisodeSearchCommand.cs" />
+    <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
+    <Compile Include="IndexerSearch\MissingEpisodeSearchCommand.cs" />
+    <Compile Include="IndexerSearch\NzbSearchService.cs" />
+    <Compile Include="IndexerSearch\SeasonSearchCommand.cs" />
+    <Compile Include="IndexerSearch\SeasonSearchService.cs" />
+    <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
+    <Compile Include="IndexerSearch\SeriesSearchService.cs" />
     <Compile Include="Instrumentation\Commands\ClearLogCommand.cs" />
-    <Compile Include="Instrumentation\Commands\DeleteUpdateLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\DeleteLogFilesCommand.cs" />
+    <Compile Include="Instrumentation\Commands\DeleteUpdateLogFilesCommand.cs" />
     <Compile Include="Instrumentation\Commands\TrimLogCommand.cs" />
+    <Compile Include="Instrumentation\DatabaseTarget.cs" />
     <Compile Include="Instrumentation\DeleteLogFilesService.cs" />
     <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
+    <Compile Include="Instrumentation\Log.cs" />
+    <Compile Include="Instrumentation\LogRepository.cs" />
+    <Compile Include="Instrumentation\LogService.cs" />
+    <Compile Include="Instrumentation\SetLoggingLevel.cs" />
+    <Compile Include="Jobs\JobRepository.cs" />
+    <Compile Include="Jobs\ScheduledTask.cs" />
+    <Compile Include="Jobs\Scheduler.cs" />
+    <Compile Include="Jobs\TaskManager.cs" />
+    <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
+    <Compile Include="Lifecycle\ApplicationStartedEvent.cs" />
+    <Compile Include="Lifecycle\Commands\RestartCommand.cs" />
+    <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
+    <Compile Include="Lifecycle\LifecycleService.cs" />
+    <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
+    <Compile Include="MediaCover\MediaCover.cs" />
+    <Compile Include="MediaCover\MediaCoverService.cs" />
+    <Compile Include="MediaCover\MediaCoversUpdatedEvent.cs" />
+    <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
+    <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
+    <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
+    <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
+    <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
-    <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
-    <Compile Include="Lifecycle\Commands\RestartCommand.cs" />
-    <Compile Include="Lifecycle\LifecycleService.cs" />
-    <Compile Include="MediaCover\MediaCoversUpdatedEvent.cs" />
-    <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
+    <Compile Include="MediaFiles\DiskScanService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
+    <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\IImportDecisionEngineSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportApprovedEpisodes.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
     <Compile Include="MediaFiles\EpisodeImport\SampleService.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
+    <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesScannedEvent.cs" />
     <Compile Include="MediaFiles\FileDateType.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
+    <Compile Include="MediaFiles\MediaFileRepository.cs" />
+    <Compile Include="MediaFiles\MediaFileService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
+    <Compile Include="MediaFiles\RecycleBinProvider.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFilePreview.cs" />
+    <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
+    <Compile Include="MediaFiles\SameFilenameException.cs" />
     <Compile Include="MediaFiles\UpdateEpisodeFileService.cs" />
+    <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
+    <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
+    <Compile Include="Messaging\Commands\Command.cs" />
+    <Compile Include="Messaging\Commands\CommandEqualityComparer.cs" />
     <Compile Include="Messaging\Commands\CommandExecutor.cs" />
     <Compile Include="Messaging\Commands\ICommandExecutor.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />
+    <Compile Include="Messaging\Commands\TestCommand.cs" />
+    <Compile Include="Messaging\Commands\TestCommandExecutor.cs" />
     <Compile Include="Messaging\Commands\Tracking\CommandStatus.cs" />
     <Compile Include="Messaging\Commands\Tracking\CommandTrackingService.cs" />
     <Compile Include="Messaging\Commands\Tracking\ExistingCommand.cs" />
     <Compile Include="Messaging\Commands\Tracking\TrackedCommandCleanupCommand.cs" />
+    <Compile Include="Messaging\Events\CommandCreatedEvent.cs" />
+    <Compile Include="Messaging\Events\CommandExecutedEvent.cs" />
     <Compile Include="Messaging\Events\EventAggregator.cs" />
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
-    <Compile Include="MetadataSource\Trakt\Actor.cs" />
-    <Compile Include="MetadataSource\Trakt\People.cs" />
-    <Compile Include="MetadataSource\Trakt\Ratings.cs" />
-    <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
+    <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
+    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadata.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\WdtvMetadataSettings.cs" />
-    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
-    <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
-    <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadata.cs" />
     <Compile Include="Metadata\Consumers\Xbmc\XbmcMetadataSettings.cs" />
     <Compile Include="Metadata\ExistingMetadataService.cs" />
+    <Compile Include="Metadata\Files\CleanMetadataService.cs" />
     <Compile Include="Metadata\Files\ImageFileResult.cs" />
-    <Compile Include="Metadata\Files\MetadataFileResult.cs" />
-    <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\Files\MetadataFile.cs" />
     <Compile Include="Metadata\Files\MetadataFileRepository.cs" />
+    <Compile Include="Metadata\Files\MetadataFileResult.cs" />
     <Compile Include="Metadata\Files\MetadataFileService.cs" />
+    <Compile Include="Metadata\Files\MetadataFilesUpdated.cs" />
     <Compile Include="Metadata\IMetadata.cs" />
     <Compile Include="Metadata\MetadataBase.cs" />
-    <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="Metadata\MetadataDefinition.cs" />
     <Compile Include="Metadata\MetadataFactory.cs" />
     <Compile Include="Metadata\MetadataRepository.cs" />
     <Compile Include="Metadata\MetadataService.cs" />
     <Compile Include="Metadata\MetadataType.cs" />
-    <Compile Include="HealthCheck\HealthCheckService.cs" />
-    <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
-    <Compile Include="Notifications\NotificationFactory.cs" />
-    <Compile Include="Notifications\NotificationService.cs" />
+    <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
+    <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
+    <Compile Include="MetadataSource\Trakt\Actor.cs" />
+    <Compile Include="MetadataSource\Trakt\Episode.cs" />
+    <Compile Include="MetadataSource\Trakt\FullShow.cs" />
+    <Compile Include="MetadataSource\Trakt\Images.cs" />
+    <Compile Include="MetadataSource\Trakt\People.cs" />
+    <Compile Include="MetadataSource\Trakt\Ratings.cs" />
+    <Compile Include="MetadataSource\Trakt\Season.cs" />
+    <Compile Include="MetadataSource\Trakt\TraktException.cs" />
+    <Compile Include="MetadataSource\TraktProxy.cs" />
+    <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
-    <Compile Include="Notifications\Plex\PlexError.cs" />
-    <Compile Include="Notifications\Plex\PlexException.cs" />
-    <Compile Include="Notifications\Plex\PlexSection.cs" />
-    <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
-    <Compile Include="Notifications\Plex\PlexUser.cs" />
-    <Compile Include="Notifications\Pushalot\Pushalot.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotProxy.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotResponse.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotSettings.cs" />
-    <Compile Include="Notifications\Pushalot\PushalotPriority.cs" />
-    <Compile Include="Notifications\PushBullet\PushBullet.cs" />
-    <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
-    <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
+    <Compile Include="Notifications\Email\Email.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Email\EmailService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Email\EmailSettings.cs" />
+    <Compile Include="Notifications\Growl\Growl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Growl\GrowlService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Growl\GrowlSettings.cs" />
+    <Compile Include="Notifications\INotification.cs" />
+    <Compile Include="Notifications\NotificationBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\NotificationDefinition.cs" />
+    <Compile Include="Notifications\NotificationFactory.cs" />
+    <Compile Include="Notifications\NotificationRepository.cs" />
+    <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroid.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidPriority.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidProxy.cs" />
     <Compile Include="Notifications\NotifyMyAndroid\NotifyMyAndroidSettings.cs" />
-    <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />
-    <Compile Include="Messaging\Commands\BackendCommandAttribute.cs" />
-    <Compile Include="Messaging\Commands\Command.cs" />
-    <Compile Include="Messaging\Commands\CommandEqualityComparer.cs" />
-    <Compile Include="Messaging\Commands\TestCommand.cs" />
-    <Compile Include="Messaging\Commands\TestCommandExecutor.cs" />
-    <Compile Include="Messaging\Events\CommandCreatedEvent.cs" />
-    <Compile Include="Messaging\Events\CommandExecutedEvent.cs" />
-    <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="Notifications\Plex\PlexClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
+    <Compile Include="Notifications\Plex\PlexError.cs" />
+    <Compile Include="Notifications\Plex\PlexException.cs" />
+    <Compile Include="Notifications\Plex\PlexSection.cs" />
+    <Compile Include="Notifications\Plex\PlexServer.cs" />
+    <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
+    <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
+    <Compile Include="Notifications\Plex\PlexService.cs" />
+    <Compile Include="Notifications\Plex\PlexUser.cs" />
+    <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
+    <Compile Include="Notifications\Prowl\Prowl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Prowl\ProwlPriority.cs" />
+    <Compile Include="Notifications\Prowl\ProwlService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
+    <Compile Include="Notifications\Pushalot\Pushalot.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotPriority.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotProxy.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotResponse.cs" />
+    <Compile Include="Notifications\Pushalot\PushalotSettings.cs" />
+    <Compile Include="Notifications\PushBullet\PushBullet.cs" />
+    <Compile Include="Notifications\PushBullet\PushBulletProxy.cs" />
+    <Compile Include="Notifications\PushBullet\PushBulletSettings.cs" />
+    <Compile Include="Notifications\Pushover\InvalidResponseException.cs" />
+    <Compile Include="Notifications\Pushover\Pushover.cs" />
+    <Compile Include="Notifications\Pushover\PushoverPriority.cs" />
+    <Compile Include="Notifications\Pushover\PushoverService.cs" />
+    <Compile Include="Notifications\Pushover\PushoverSettings.cs" />
+    <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
+    <Compile Include="Notifications\Xbmc\IApiProvider.cs" />
+    <Compile Include="Notifications\Xbmc\InvalidXbmcVersionException.cs" />
+    <Compile Include="Notifications\Xbmc\JsonApiProvider.cs" />
     <Compile Include="Notifications\Xbmc\Model\ActivePlayer.cs" />
     <Compile Include="Notifications\Xbmc\Model\ActivePlayersDharmaResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\ActivePlayersEdenResult.cs" />
@@ -458,18 +617,37 @@
     <Compile Include="Notifications\Xbmc\Model\VersionResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcJsonResult.cs" />
     <Compile Include="Notifications\Xbmc\Model\XbmcVersion.cs" />
-    <Compile Include="Organizer\BasicNamingConfig.cs" />
+    <Compile Include="Notifications\Xbmc\Xbmc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Xbmc\XbmcService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notifications\Xbmc\XbmcSettings.cs" />
     <Compile Include="Organizer\AbsoluteEpisodeFormat.cs" />
-    <Compile Include="Organizer\FilenameValidationService.cs" />
+    <Compile Include="Organizer\BasicNamingConfig.cs" />
     <Compile Include="Organizer\EpisodeFormat.cs" />
+    <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\Exception.cs" />
+    <Compile Include="Organizer\FileNameBuilder.cs" />
     <Compile Include="Organizer\FilenameBuilderTokenEqualityComparer.cs" />
-    <Compile Include="Organizer\FileNameValidation.cs" />
-    <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\FilenameSampleService.cs" />
+    <Compile Include="Organizer\FileNameValidation.cs" />
+    <Compile Include="Organizer\FilenameValidationService.cs" />
+    <Compile Include="Organizer\NamingConfig.cs" />
+    <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
+    <Compile Include="Parser\Language.cs" />
+    <Compile Include="Parser\Model\LocalEpisode.cs" />
+    <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />
+    <Compile Include="Parser\Model\ReleaseInfo.cs" />
+    <Compile Include="Parser\Model\RemoteEpisode.cs" />
     <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
+    <Compile Include="Parser\Model\TorrentInfo.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\ParsingService.cs" />
+    <Compile Include="Parser\QualityParser.cs" />
     <Compile Include="Profiles\GrabDelayMode.cs" />
     <Compile Include="Profiles\Profile.cs" />
     <Compile Include="Profiles\ProfileInUseException.cs" />
@@ -478,274 +656,96 @@
     <Compile Include="Profiles\ProfileService.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />
-    <Compile Include="Instrumentation\SetLoggingLevel.cs" />
-    <Compile Include="Jobs\TaskManager.cs" />
-    <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
-    <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
-    <Compile Include="MediaFiles\Commands\CleanMediaFileDb.cs" />
-    <Compile Include="MediaFiles\Commands\CleanUpRecycleBinCommand.cs" />
-    <Compile Include="MediaFiles\Commands\DownloadedEpisodesScanCommand.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\IImportDecisionEngineSpecification.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\ImportApprovedEpisodes.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecification.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
-    <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
-    <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
-    <Compile Include="Download\EpisodeGrabbedEvent.cs" />
-    <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
-    <Compile Include="MediaFiles\RenameEpisodeFileService.cs" />
-    <Compile Include="MediaFiles\SameFilenameException.cs" />
-    <Compile Include="MediaFiles\UpgradeMediaFileService.cs" />
-    <Compile Include="Notifications\Growl\GrowlSettings.cs" />
-    <Compile Include="Notifications\INotification.cs" />
-    <Compile Include="Notifications\NotificationRepository.cs" />
-    <Compile Include="Fluent.cs" />
-    <Compile Include="History\HistoryRepository.cs" />
-    <Compile Include="IndexerSearch\Definitions\DailyEpisodeSearchCriteria.cs" />
-    <Compile Include="IndexerSearch\Definitions\SearchCriteriaBase.cs" />
-    <Compile Include="IndexerSearch\Definitions\SeasonSearchCriteria.cs" />
-    <Compile Include="IndexerSearch\Definitions\SingleEpisodeSearchCriteria.cs" />
-    <Compile Include="IndexerSearch\NzbSearchService.cs" />
-    <Compile Include="Indexers\RssParserBase.cs" />
-    <Compile Include="Indexers\RssSyncService.cs" />
-    <Compile Include="Indexers\IndexerBase.cs" />
-    <Compile Include="Indexers\IndexerDefinition.cs" />
-    <Compile Include="Indexers\IndexerRepository.cs" />
-    <Compile Include="Indexers\Newznab\Newznab.cs" />
-    <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
-    <Compile Include="Indexers\Newznab\NewznabParser.cs" />
-    <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
-    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
-    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
-    <Compile Include="Indexers\Wombles\Wombles.cs" />
-    <Compile Include="Indexers\Wombles\WomblesParser.cs" />
-    <Compile Include="Instrumentation\LogRepository.cs" />
-    <Compile Include="Jobs\ScheduledTask.cs" />
-    <Compile Include="Jobs\JobRepository.cs" />
-    <Compile Include="Jobs\Scheduler.cs" />
-    <Compile Include="Lifecycle\ApplicationStartedEvent.cs" />
-    <Compile Include="MediaCover\MediaCover.cs" />
-    <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
-    <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
-    <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
-    <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
-    <Compile Include="MediaFiles\MediaFileRepository.cs" />
-    <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
-    <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
-    <Compile Include="MetadataSource\TraktProxy.cs" />
-    <Compile Include="MetadataSource\Trakt\Episode.cs" />
-    <Compile Include="MetadataSource\Trakt\Images.cs" />
-    <Compile Include="MetadataSource\Trakt\Season.cs" />
-    <Compile Include="MetadataSource\Trakt\FullShow.cs" />
-    <Compile Include="Notifications\Plex\PlexServer.cs" />
-    <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
-    <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
-    <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
-    <Compile Include="Notifications\Prowl\ProwlPriority.cs" />
-    <Compile Include="Notifications\Prowl\ProwlSettings.cs" />
-    <Compile Include="Notifications\Email\EmailSettings.cs" />
-    <Compile Include="Notifications\Pushover\InvalidResponseException.cs" />
-    <Compile Include="Notifications\Pushover\Pushover.cs" />
-    <Compile Include="Notifications\Pushover\PushoverPriority.cs" />
-    <Compile Include="Notifications\Pushover\PushoverService.cs" />
-    <Compile Include="Notifications\Pushover\PushoverSettings.cs" />
-    <Compile Include="Notifications\Xbmc\HttpApiProvider.cs" />
-    <Compile Include="Notifications\Xbmc\IApiProvider.cs" />
-    <Compile Include="Notifications\Xbmc\InvalidXbmcVersionException.cs" />
-    <Compile Include="Notifications\Xbmc\JsonApiProvider.cs" />
-    <Compile Include="Notifications\Xbmc\XbmcSettings.cs" />
-    <Compile Include="Organizer\EpisodeSortingType.cs" />
-    <Compile Include="Organizer\FileNameBuilder.cs" />
-    <Compile Include="Instrumentation\LogService.cs" />
-    <Compile Include="Instrumentation\DatabaseTarget.cs" />
-    <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
-    <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
-    <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetResponse.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetQueueItem.cs" />
-    <Compile Include="Download\Clients\Nzbget\NzbgetPriority.cs" />
-    <Compile Include="Organizer\NamingConfig.cs" />
-    <Compile Include="Parser\Language.cs" />
-    <Compile Include="Parser\Model\LocalEpisode.cs" />
-    <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />
-    <Compile Include="Parser\Model\RemoteEpisode.cs" />
-    <Compile Include="Parser\Model\ReleaseInfo.cs" />
-    <Compile Include="Parser\Model\TorrentInfo.cs" />
-    <Compile Include="Parser\Parser.cs" />
-    <Compile Include="Parser\ParsingService.cs" />
-    <Compile Include="Parser\QualityParser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qualities\QualitiesBelowCutoff.cs" />
+    <Compile Include="Qualities\Quality.cs" />
+    <Compile Include="Qualities\QualityDefinition.cs" />
+    <Compile Include="Qualities\QualityDefinitionRepository.cs" />
+    <Compile Include="Qualities\QualityDefinitionService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Qualities\QualityModel.cs" />
     <Compile Include="Qualities\QualityModelComparer.cs" />
+    <Compile Include="Queue\Queue.cs" />
+    <Compile Include="Queue\QueueScheduler.cs" />
+    <Compile Include="Queue\QueueService.cs" />
+    <Compile Include="Queue\UpdateQueueEvent.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="Rest\RestClientFactory.cs" />
+    <Compile Include="Rest\RestException.cs" />
+    <Compile Include="Rest\RestSharpExtensions.cs" />
+    <Compile Include="RootFolders\RootFolder.cs" />
     <Compile Include="RootFolders\RootFolderRepository.cs" />
+    <Compile Include="RootFolders\RootFolderService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RootFolders\UnmappedFolder.cs" />
     <Compile Include="Security.cs" />
+    <Compile Include="SeriesStats\SeriesStatistics.cs" />
+    <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
+    <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
-    <Compile Include="Qualities\QualityDefinitionRepository.cs" />
-    <Compile Include="Queue\Queue.cs" />
-    <Compile Include="Queue\UpdateQueueEvent.cs" />
-    <Compile Include="Queue\QueueScheduler.cs" />
-    <Compile Include="Queue\QueueService.cs" />
-    <Compile Include="Rest\RestSharpExtensions.cs" />
-    <Compile Include="Rest\RestException.cs" />
-    <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="ThingiProvider\IProviderConfig.cs" />
     <Compile Include="ThingiProvider\IProviderFactory.cs" />
     <Compile Include="ThingiProvider\IProviderRepository.cs" />
     <Compile Include="ThingiProvider\NullConfig.cs" />
     <Compile Include="ThingiProvider\ProviderDefinition.cs" />
-    <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
+    <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="Tv\Actor.cs" />
-    <Compile Include="Tv\EpisodeCutoffService.cs" />
-    <Compile Include="Tv\EpisodeService.cs" />
-    <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
-    <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />
-    <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
-    <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
-    <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
-    <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
-    <Compile Include="Tv\Events\SeriesDeletedEvent.cs" />
-    <Compile Include="Tv\Events\SeriesUpdatedEvent.cs" />
-    <Compile Include="Datastore\ResultSet.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
-    <Compile Include="Tv\Ratings.cs" />
-    <Compile Include="Tv\RefreshEpisodeService.cs" />
-    <Compile Include="Tv\SeriesEditedService.cs" />
-    <Compile Include="Tv\SeriesRepository.cs" />
-    <Compile Include="Qualities\QualityModel.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistoryItem.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistory.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdJsonError.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueue.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueueItem.cs" />
-    <Compile Include="MediaCover\MediaCoverService.cs" />
-    <Compile Include="Download\Clients\Nzbget\Nzbget.cs" />
-    <Compile Include="MediaFiles\RecycleBinProvider.cs" />
-    <Compile Include="SeriesStats\SeriesStatistics.cs" />
-    <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
-    <Compile Include="Tv\SeriesTypes.cs" />
-    <Compile Include="Qualities\Quality.cs" />
-    <Compile Include="Tv\Season.cs" />
-    <Compile Include="Configuration\ConfigService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MediaFiles\DiskScanService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Download\IDownloadClient.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Download\Clients\Sabnzbd\Sabnzbd.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Download\DownloadService.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Tv\Episode.cs" />
+    <Compile Include="Tv\EpisodeCutoffService.cs" />
     <Compile Include="Tv\EpisodeRepository.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\NotificationBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Growl\Growl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Plex\PlexClient.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Prowl\Prowl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Email\Email.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Xbmc\Xbmc.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Growl\GrowlService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="History\HistoryService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Indexers\IndexerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Indexers\IndexerFetchService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MediaFiles\MediaFileService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Plex\PlexService.cs" />
-    <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Prowl\ProwlService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Qualities\QualityDefinitionService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RootFolders\UnmappedFolder.cs" />
-    <Compile Include="RootFolders\RootFolderService.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Tv\EpisodeService.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesDeletedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesEditedEvent.cs" />
+    <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />
+    <Compile Include="Tv\Events\SeriesUpdatedEvent.cs" />
+    <Compile Include="Tv\Ratings.cs" />
+    <Compile Include="Tv\RefreshEpisodeService.cs" />
+    <Compile Include="Tv\RefreshSeriesService.cs" />
+    <Compile Include="Tv\Season.cs" />
+    <Compile Include="Tv\Series.cs" />
+    <Compile Include="Tv\SeriesEditedService.cs" />
+    <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\SeriesService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Notifications\Email\EmailService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\Xbmc\XbmcService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Notifications\NotificationDefinition.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\SabnzbdPriority.cs" />
-    <Compile Include="MediaFiles\EpisodeFile.cs" />
-    <Compile Include="Tv\Episode.cs" />
-    <Compile Include="Instrumentation\Log.cs" />
-    <Compile Include="History\History.cs" />
-    <Compile Include="Qualities\QualityDefinition.cs" />
-    <Compile Include="RootFolders\RootFolder.cs" />
-    <Compile Include="Tv\Series.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tv\SeriesStatusType.cs" />
-    <Compile Include="Tv\RefreshSeriesService.cs" />
+    <Compile Include="Tv\SeriesTypes.cs" />
     <Compile Include="Tv\ShouldRefreshSeries.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
     <Compile Include="Update\Commands\InstallUpdateCommand.cs" />
     <Compile Include="Update\InstallUpdateService.cs" />
     <Compile Include="Update\RecentUpdateProvider.cs" />
     <Compile Include="Update\UpdateChanges.cs" />
+    <Compile Include="Update\UpdateCheckService.cs" />
     <Compile Include="Update\UpdateMechanism.cs" />
+    <Compile Include="Update\UpdatePackage.cs" />
     <Compile Include="Update\UpdatePackageAvailable.cs" />
     <Compile Include="Update\UpdatePackageProvider.cs" />
-    <Compile Include="Update\UpdatePackage.cs" />
-    <Compile Include="Update\UpdateCheckService.cs" />
     <Compile Include="Update\UpdateVerification.cs" />
     <Compile Include="Update\UpdateVerificationFailedException.cs" />
+    <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\LangaugeValidator.cs" />
+    <Compile Include="Validation\NzbDroneValidationFailure.cs" />
+    <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
+    <Compile Include="Validation\Paths\PathExistsValidator.cs" />
+    <Compile Include="Validation\Paths\PathValidator.cs" />
+    <Compile Include="Validation\Paths\RootFolderValidator.cs" />
     <Compile Include="Validation\Paths\SeriesAncestorValidator.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
-    <Compile Include="Validation\Paths\RootFolderValidator.cs" />
-    <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
-    <Compile Include="Validation\Paths\PathValidator.cs" />
     <Compile Include="Validation\Paths\SeriesPathValidator.cs" />
-    <Compile Include="Validation\Paths\PathExistsValidator.cs" />
-    <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
-    <Compile Include="Validation\NzbDroneValidationFailure.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

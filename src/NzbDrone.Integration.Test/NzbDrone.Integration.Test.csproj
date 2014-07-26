@@ -38,23 +38,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\packages\Microsoft.Owin.1.1.0-beta2\lib\net40\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
@@ -63,6 +53,9 @@
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.1.1.3\lib\net40\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.1.1.0-beta2\lib\net40\Microsoft.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.HttpListener">
       <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.1.1.0-beta2\lib\net40\Microsoft.Owin.Host.HttpListener.dll</HintPath>
@@ -85,29 +78,36 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\ClientBase.cs" />
-    <Compile Include="Client\NotificationClient.cs" />
     <Compile Include="Client\EpisodeClient.cs" />
     <Compile Include="Client\IndexerClient.cs" />
+    <Compile Include="Client\NotificationClient.cs" />
     <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
     <Compile Include="CommandIntegerationTests.cs" />
-    <Compile Include="NotificationIntegrationFixture.cs" />
-    <Compile Include="SeriesEditorIntegrationTest.cs" />
-    <Compile Include="HistoryIntegrationTest.cs" />
-    <Compile Include="NamingConfigTests.cs" />
     <Compile Include="EpisodeIntegrationTests.cs" />
+    <Compile Include="HistoryIntegrationTest.cs" />
     <Compile Include="IndexerIntegrationFixture.cs" />
-    <Compile Include="IntegrationTestDirectoryInfo.cs" />
-    <Compile Include="ReleaseIntegrationTest.cs" />
     <Compile Include="IntegrationTest.cs" />
+    <Compile Include="IntegrationTestDirectoryInfo.cs" />
+    <Compile Include="NamingConfigTests.cs" />
+    <Compile Include="NotificationIntegrationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReleaseIntegrationTest.cs" />
     <Compile Include="RootFolderIntegrationTest.cs" />
+    <Compile Include="SeriesEditorIntegrationTest.cs" />
     <Compile Include="SeriesIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
