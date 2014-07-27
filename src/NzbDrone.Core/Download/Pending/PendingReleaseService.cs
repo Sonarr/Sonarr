@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
@@ -77,15 +78,30 @@ namespace NzbDrone.Core.Download.Pending
                 var decisionLocal = decision;
                 var episodeIds = decisionLocal.RemoteEpisode.Episodes.Select(e => e.Id);
 
-
                 var existingReports = alreadyPending.Where(r => r.RemoteEpisode.Episodes.Select(e => e.Id)
                                                                  .Intersect(episodeIds)
-                                                                 .Any());
+                                                                 .Any())
+                                                                 .ToList();
 
+                if (existingReports.Empty())
+                {
+                    continue;
+                }
+
+                var profile = decisionLocal.RemoteEpisode.Series.Profile.Value;
+                
                 foreach (var existingReport in existingReports)
                 {
-                    _logger.Debug("Removing previously pending release, as it was grabbed.");
-                    Delete(existingReport);
+                    var compare = new QualityModelComparer(profile).Compare(decision.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                                                                            existingReport.RemoteEpisode.ParsedEpisodeInfo.Quality);
+
+                    //Only remove lower/equal quality pending releases
+                    //It is safer to retry these releases on the next round than remove it and try to re-add it (if its still in the feed)
+                    if (compare >= 0)
+                    {
+                        _logger.Debug("Removing previously pending release, as it was grabbed.");
+                        Delete(existingReport);
+                    }
                 }
             }
         }

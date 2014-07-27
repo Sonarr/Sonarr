@@ -135,7 +135,9 @@
     <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
-    <Compile Include="Download\Pending\PendingReleaseServiceTests\ProcessFixture.cs" />
+    <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
+    <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveGrabbedFixture.cs" />
+    <Compile Include="Download\Pending\PendingReleaseServiceTests\AddFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />

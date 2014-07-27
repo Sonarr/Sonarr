@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
@@ -181,6 +182,48 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(null, new Rejection("Failure!")));
 
             Subject.GetQualifiedReports(decisions).Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_not_grab_if_pending()
+        {
+            var episodes = new List<Episode> { GetEpisode(1) };
+            var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
+            decisions.Add(new DownloadDecision(remoteEpisode));
+
+            Subject.ProcessDecisions(decisions);
+            Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>()), Times.Never());
+        }
+
+        [Test]
+        public void should_not_add_to_pending_if_episode_was_grabbed()
+        {
+            var episodes = new List<Episode> { GetEpisode(1) };
+            var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode));
+            decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
+
+            Subject.ProcessDecisions(decisions);
+            Mocker.GetMock<IPendingReleaseService>().Verify(v => v.Add(It.IsAny<DownloadDecision>()), Times.Never());
+        }
+
+        [Test]
+        public void should_add_to_pending_even_if_already_added_to_pending()
+        {
+            var episodes = new List<Episode> { GetEpisode(1) };
+            var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
+            decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
+
+            Subject.ProcessDecisions(decisions);
+            Mocker.GetMock<IPendingReleaseService>().Verify(v => v.Add(It.IsAny<DownloadDecision>()), Times.Exactly(2));
         }
     }
 }

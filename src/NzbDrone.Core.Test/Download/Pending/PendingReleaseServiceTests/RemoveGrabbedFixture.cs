@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FizzWare.NBuilder;
-using FluentAssertions;
 using Marr.Data;
 using Moq;
 using NUnit.Framework;
@@ -20,7 +17,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 {
     [TestFixture]
-    public class ProcessFixture : CoreTest<PendingReleaseService>
+    public class RemoveGrabbedFixture : CoreTest<PendingReleaseService>
     {
         private DownloadDecision _temporarilyRejected;
         private Series _series;
@@ -84,18 +81,16 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns((List<DownloadDecision> d) => d);
         }
 
-        private void GivenHeldRelease(String title, String indexer, DateTime publishDate)
+        private void GivenHeldRelease(QualityModel quality)
         {
-            var release = _release.JsonClone();
-            release.Indexer = indexer;
-            release.PublishDate = publishDate;
-
+            var parsedEpisodeInfo = _parsedEpisodeInfo.JsonClone();
+            parsedEpisodeInfo.Quality = quality;
 
             var heldReleases = Builder<PendingRelease>.CreateListOfSize(1)
                                                    .All()
                                                    .With(h => h.SeriesId = _series.Id)
-                                                   .With(h => h.Title = title)
-                                                   .With(h => h.Release = release)
+                                                   .With(h => h.Release = _release.JsonClone())
+                                                   .With(h => h.ParsedEpisodeInfo = parsedEpisodeInfo)
                                                    .Build();
 
             Mocker.GetMock<IPendingReleaseRepository>()
@@ -104,62 +99,45 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         }
 
         [Test]
-        public void should_add()
+        public void should_delete_if_the_grabbed_quality_is_the_same()
         {
-            Subject.Add(_temporarilyRejected);
+            GivenHeldRelease(_parsedEpisodeInfo.Quality);
 
-            VerifyInsert();
+            Subject.RemoveGrabbed(new List<DownloadDecision> { _temporarilyRejected });
+
+            VerifyDelete();
         }
 
         [Test]
-        public void should_not_add_if_it_is_the_same_release_from_the_same_indexer()
+        public void should_delete_if_the_grabbed_quality_is_the_higher()
         {
-            GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate);
+            GivenHeldRelease(new QualityModel(Quality.SDTV));
 
-            Subject.Add(_temporarilyRejected);
+            Subject.RemoveGrabbed(new List<DownloadDecision> { _temporarilyRejected });
 
-            VerifyNoInsert();
+            VerifyDelete();
         }
 
         [Test]
-        public void should_add_if_title_is_different()
+        public void should_not_delete_if_the_grabbed_quality_is_the_lower()
         {
-            GivenHeldRelease(_release.Title + "-RP", _release.Indexer, _release.PublishDate);
+            GivenHeldRelease(new QualityModel(Quality.Bluray720p));
 
-            Subject.Add(_temporarilyRejected);
+            Subject.RemoveGrabbed(new List<DownloadDecision> { _temporarilyRejected });
 
-            VerifyInsert();
+            VerifyNoDelete();
         }
 
-        [Test]
-        public void should_add_if_indexer_is_different()
-        {
-            GivenHeldRelease(_release.Title, "AnotherIndexer", _release.PublishDate);
-
-            Subject.Add(_temporarilyRejected);
-
-            VerifyInsert();
-        }
-        [Test]
-        public void should_add_if_publish_date_is_different()
-        {
-            GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate.AddHours(1));
-
-            Subject.Add(_temporarilyRejected);
-
-            VerifyInsert();
-        }
-
-        private void VerifyInsert()
+        private void VerifyDelete()
         {
             Mocker.GetMock<IPendingReleaseRepository>()
-                .Verify(v => v.Insert(It.IsAny<PendingRelease>()), Times.Once());
+                .Verify(v => v.Delete(It.IsAny<PendingRelease>()), Times.Once());
         }
 
-        private void VerifyNoInsert()
+        private void VerifyNoDelete()
         {
             Mocker.GetMock<IPendingReleaseRepository>()
-                .Verify(v => v.Insert(It.IsAny<PendingRelease>()), Times.Never());
+                .Verify(v => v.Delete(It.IsAny<PendingRelease>()), Times.Never());
         }
     }
 }
