@@ -77,21 +77,12 @@ namespace NzbDrone.Core.Indexers
 
             if (url.Contains("oznzb.com"))
             {
-                reportInfo.IsUsingWeightedQuality = true;
-                reportInfo.IsSpamConfirmed = GetIsSpamConfirmed(item);
-                reportInfo.IsPasswordedConfirmed = GetIsPasswordedConfirmed(item);
-                reportInfo.SpamReports = GetSpamReports(item);                
-                reportInfo.PasswordedReports = GetPasswordedReports(item);
-                reportInfo.UpVotes = GetUpVotes(item);
-                reportInfo.DownVotes = GetDownVotes(item);
-                reportInfo.VideoRating = GetVideoRating(item);
-                reportInfo.AudioRating = GetAudioRating(item);
-                reportInfo.RatingCeiling = 10;
-            }
-
-            if (reportInfo.IsPasswordedConfirmed == true || reportInfo.IsSpamConfirmed == true)
-            {
-                return null;
+                reportInfo.UserRatings = GetUserRatings(item);
+                reportInfo.UserRatings.RatingCeiling = 10;
+                if (reportInfo.UserRatings.IsPasswordedConfirmed == true || reportInfo.UserRatings.IsSpamConfirmed == true)
+                {
+                    return null;
+                }
             }
 
             try
@@ -130,38 +121,11 @@ namespace NzbDrone.Core.Indexers
 
         protected abstract long GetSize(XElement item);
 
-        protected virtual int GetSpamReports(XElement item)
+        protected virtual ReleaseUserRatings GetUserRatings(XElement item)
         {
-            return 0;
+            return null;
         }
-        protected virtual bool GetIsSpamConfirmed(XElement item)
-        {
-            return false;
-        }
-        protected virtual int GetPasswordedReports(XElement item)
-        {
-            return 0;
-        }
-        protected virtual bool GetIsPasswordedConfirmed(XElement item)
-        {
-            return false;
-        }
-        protected virtual int GetUpVotes(XElement item)
-        {
-            return 0;
-        }
-        protected virtual int GetDownVotes(XElement item)
-        {
-            return 0;
-        }
-        protected virtual double GetVideoRating(XElement item)
-        {
-            return 0;
-        }
-        protected virtual double GetAudioRating(XElement item)
-        {
-            return 0;
-        }
+
         protected virtual void PreProcess(string source, string url)
         {
         }

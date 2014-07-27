@@ -452,6 +452,7 @@
     <Compile Include="Organizer\FilenameSampleService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
+    <Compile Include="Parser\Model\ReleaseUserRatings.cs" />
     <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />
