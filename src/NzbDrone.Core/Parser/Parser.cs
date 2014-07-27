@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex SixDigitAirDateRegex = new Regex(@"^(?:.*?)(?<airdate>(?<!\d)(?<airyear>\d{2})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))",
+        private static readonly Regex SixDigitAirDateRegex = new Regex(@"^(?:.+?)(?<airdate>(?<!\d)(?<airyear>\d{2})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))",
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)\b(?<!WEB-DL|480p|720p|1080p)",
