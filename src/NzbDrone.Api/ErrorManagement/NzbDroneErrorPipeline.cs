@@ -20,6 +20,7 @@ namespace NzbDrone.Api.ErrorManagement
 
         public Response HandleException(NancyContext context, Exception exception)
         {
+            _logger.Trace("Handling Exception");
 
             var apiException = exception as ApiException;
 
@@ -48,7 +49,6 @@ namespace NzbDrone.Api.ErrorManagement
                     Description = exception.ToString()
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
             }
-
 
             if (context.Request.Method == "PUT" || context.Request.Method == "POST")
             {
