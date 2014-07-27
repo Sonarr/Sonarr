@@ -25,7 +25,14 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public override IParseIndexerResponse GetParser()
         {
-            return new NewznabRssParser();
+            if (Settings.Url.Contains("oznzb.com"))
+            {
+                return new OzNzbRssParser();
+            }
+            else
+            {
+            	return new NewznabRssParser();
+            }
         }
 
         public override IEnumerable<ProviderDefinition> DefaultDefinitions

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/"
+     xmlns:oznzb="http://www.oznzb.com/DTD/2014/feeds/attributes/">
+  <channel>
+    <atom:link href="..." rel="self" type="application/rss+xml" />
+    <title>...</title>
+    <description>...</description>
+    <category></category>
+    <item>
+      <title>Droned.S01E01.720p.HDTV.X264-DIMENSION</title>
+      <pubDate>Mon, 27 Feb 2012 11:09:39 -0500</pubDate>
+      <link>http://mysite.com/1234</link>
+      <description>Droned.S01E01.720p.HDTV.X264-DIMENSION</description>
+      <oznzb:attr name="oz_num_spam_reports" value="10" />
+      <oznzb:attr name="oz_spam_confirmed" value="yes" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="2" />
+      <oznzb:attr name="oz_down_votes" value="2" />
+      <oznzb:attr name="oz_video_quality_rating" value="6" />
+      <oznzb:attr name="oz_audio_quality_rating" value="6" />
+    </item>
+  </channel>
+</rss>

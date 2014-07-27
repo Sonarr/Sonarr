@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/"
+	xmlns:oznzb="http://www.oznzb.com/DTD/2014/feeds/attributes/">
+  <channel>
+    <atom:link href="https://www.oznzb.com/api?t=tvsearch&amp;cat=5030,5040&amp;extended=1&amp;apikey=57b005152e47e59533b7e37a218eff3a&amp;rid=12662&amp;limit=20&amp;season=7&amp;ep=4" rel="self" type="application/rss+xml" />
+    <title>oznzb</title>
+    <description>oznzb Feed</description>
+    <link>https://www.oznzb.com/</link>
+    <language>en-gb</language>
+    <webMaster>webadmin@oznzb.com (oznzb)</webMaster>
+    <category></category>
+    <image>
+      <url>https://www.oznzb.com/templates/default/images/banner.jpg</url>
+      <title>oznzb</title>
+      <link>https://www.oznzb.com/</link>
+      <description>Visit oznzb - The Best NZB Indexer - search and download NZB files.</description>
+    </image>
+    <newznab:response offset="0" total="7" />
+    <item>
+      <title>True.Blood.S07E04.720p.WEB-DL.DD5.1.H.264</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/a4719d392c389dd463958be77b082824</guid>
+      <link>https://www.oznzb.com/getnzb/a4719d392c389dd463958be77b082824.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/a4719d392c389dd463958be77b082824#comments</comments>
+      <pubDate>Tue, 15 Jul 2014 21:38:59 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>True.Blood.S07E04.720p.WEB-DL.DD5.1.H.264</description>
+      <enclosure url="https://www.oznzb.com/getnzb/a4719d392c389dd463958be77b082824.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="2386681206" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2386681206" />
+      <newznab:attr name="guid" value="a4719d392c389dd463958be77b082824" />
+      <newznab:attr name="files" value="49" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="690" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Tue, 15 Jul 2014 21:19:20 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="6" />
+      <oznzb:attr name="oz_down_votes" value="1" />
+      <oznzb:attr name="oz_video_quality_rating" value="7.1250" />
+      <oznzb:attr name="oz_audio_quality_rating" value="6.7143" />
+    </item>
+    <item>
+      <title>true.blood.s07e04.720p.hdtv.x264-killers</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/68bd1b5938b28f127139b959b0f48a32</guid>
+      <link>https://www.oznzb.com/getnzb/68bd1b5938b28f127139b959b0f48a32.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/68bd1b5938b28f127139b959b0f48a32#comments</comments>
+      <pubDate>Mon, 14 Jul 2014 14:29:49 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>true.blood.s07e04.720p.hdtv.x264-killers</description>
+      <enclosure url="https://www.oznzb.com/getnzb/68bd1b5938b28f127139b959b0f48a32.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="361232753" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="361232753" />
+      <newznab:attr name="guid" value="68bd1b5938b28f127139b959b0f48a32" />
+      <newznab:attr name="files" value="4" />
+      <newznab:attr name="poster" value="Speedy &lt;poster@anon.com&gt;" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="425" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 14 Jul 2014 12:17:29 +1000" />
+      <newznab:attr name="group" value="alt.binaries.boneless" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="1" />
+      <oznzb:attr name="oz_down_votes" value="6" />
+      <oznzb:attr name="oz_video_quality_rating" value="3.4000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="3.2000" />
+    </item>
+    <item>
+      <title>True.Blood.S07E04.720p.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/5aeed69deb7609d1d8b5155eb94b797d</guid>
+      <link>https://www.oznzb.com/getnzb/5aeed69deb7609d1d8b5155eb94b797d.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/5aeed69deb7609d1d8b5155eb94b797d#comments</comments>
+      <pubDate>Mon, 14 Jul 2014 14:29:50 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>True.Blood.S07E04.720p.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/5aeed69deb7609d1d8b5155eb94b797d.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="3009162592" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3009162592" />
+      <newznab:attr name="guid" value="5aeed69deb7609d1d8b5155eb94b797d" />
+      <newznab:attr name="files" value="61" />
+      <newznab:attr name="poster" value="Speedy &lt;poster@anon.com&gt;" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="282" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 14 Jul 2014 12:12:36 +1000" />
+      <newznab:attr name="group" value="alt.binaries.boneless" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="3" />
+      <oznzb:attr name="oz_down_votes" value="1" />
+      <oznzb:attr name="oz_video_quality_rating" value="6.7778" />
+      <oznzb:attr name="oz_audio_quality_rating" value="6.7778" />
+    </item>
+    <item>
+      <title>True.Blood.S07E04.720p.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/8c8bc9e21976e71376a1016370fc5034</guid>
+      <link>https://www.oznzb.com/getnzb/8c8bc9e21976e71376a1016370fc5034.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/8c8bc9e21976e71376a1016370fc5034#comments</comments>
+      <pubDate>Mon, 14 Jul 2014 12:22:01 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>True.Blood.S07E04.720p.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/8c8bc9e21976e71376a1016370fc5034.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="3414429231" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3414429231" />
+      <newznab:attr name="guid" value="8c8bc9e21976e71376a1016370fc5034" />
+      <newznab:attr name="files" value="79" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="9846" />
+      <newznab:attr name="comments" value="1" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 14 Jul 2014 12:11:05 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="16" />
+      <oznzb:attr name="oz_down_votes" value="2" />
+      <oznzb:attr name="oz_video_quality_rating" value="6.8824" />
+      <oznzb:attr name="oz_audio_quality_rating" value="6.9412" />
+    </item>
+    <item>
+      <title>True.Blood.S07E04.720p.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/c470ec74fa6b2b5b9888c9d7d9a5694b</guid>
+      <link>https://www.oznzb.com/getnzb/c470ec74fa6b2b5b9888c9d7d9a5694b.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/c470ec74fa6b2b5b9888c9d7d9a5694b#comments</comments>
+      <pubDate>Mon, 14 Jul 2014 12:41:05 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>True.Blood.S07E04.720p.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/c470ec74fa6b2b5b9888c9d7d9a5694b.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="3412764961" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="3412764961" />
+      <newznab:attr name="guid" value="c470ec74fa6b2b5b9888c9d7d9a5694b" />
+      <newznab:attr name="files" value="79" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="337" />
+      <newznab:attr name="comments" value="1" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 14 Jul 2014 12:11:04 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="3" />
+      <oznzb:attr name="oz_down_votes" value="1" />
+      <oznzb:attr name="oz_video_quality_rating" value="8.2222" />
+      <oznzb:attr name="oz_audio_quality_rating" value="8.2500" />
+    </item>
+    <item>
+      <title>True.Blood.S07E04.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/dd44c0f7711b9362db125e43df865461</guid>
+      <link>https://www.oznzb.com/getnzb/dd44c0f7711b9362db125e43df865461.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/dd44c0f7711b9362db125e43df865461#comments</comments>
+      <pubDate>Mon, 14 Jul 2014 12:19:06 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>True.Blood.S07E04.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/dd44c0f7711b9362db125e43df865461.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="603779335" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="603779335" />
+      <newznab:attr name="guid" value="dd44c0f7711b9362db125e43df865461" />
+      <newznab:attr name="files" value="20" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="1414" />
+      <newznab:attr name="comments" value="1" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 14 Jul 2014 12:01:37 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="15" />
+      <oznzb:attr name="oz_down_votes" value="4" />
+      <oznzb:attr name="oz_video_quality_rating" value="6.3077" />
+      <oznzb:attr name="oz_audio_quality_rating" value="5.9231" />
+    </item>
+    <item>
+      <title>True.Blood.S07E04.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/4275a646c2862b4f7a5fb6a3d48e0a3d</guid>
+      <link>https://www.oznzb.com/getnzb/4275a646c2862b4f7a5fb6a3d48e0a3d.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a</link>
+      <comments>https://www.oznzb.com/details/4275a646c2862b4f7a5fb6a3d48e0a3d#comments</comments>
+      <pubDate>Mon, 14 Jul 2014 14:07:38 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>True.Blood.S07E04.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/4275a646c2862b4f7a5fb6a3d48e0a3d.nzb&amp;i=113597&amp;r=57b005152e47e59533b7e37a218eff3a" length="548082491" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="548082491" />
+      <newznab:attr name="guid" value="4275a646c2862b4f7a5fb6a3d48e0a3d" />
+      <newznab:attr name="files" value="13" />
+      <newznab:attr name="poster" value="Speedy &lt;poster@anon.com&gt;" />
+      <newznab:attr name="season" value="S07" />
+      <newznab:attr name="episode" value="E04" />
+      <newznab:attr name="rageid" value="12662" />
+      <newznab:attr name="tvtitle" value="Death Is Not the End" />
+      <newznab:attr name="tvairdate" value="Sun, 13 Jul 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="153" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 14 Jul 2014 12:01:16 +1000" />
+      <newznab:attr name="group" value="alt.binaries.boneless" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="3" />
+      <oznzb:attr name="oz_down_votes" value="0" />
+      <oznzb:attr name="oz_video_quality_rating" value="4.5000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="4.5000" />
+    </item>
+  </channel>
+</rss>

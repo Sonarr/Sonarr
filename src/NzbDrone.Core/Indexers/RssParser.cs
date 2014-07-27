@@ -101,6 +101,8 @@ namespace NzbDrone.Core.Indexers
             releaseInfo.InfoUrl = GetInfoUrl(item);
             releaseInfo.CommentUrl = GetCommentUrl(item);
 
+            releaseInfo.UserRatings = GetUserRatings(item);
+
             try
             {
                 releaseInfo.Size = GetSize(item);
@@ -186,6 +188,11 @@ namespace NzbDrone.Core.Indexers
             }
 
             return 0;
+        }
+
+        protected virtual ReleaseUserRatings GetUserRatings(XElement item)
+        {
+            return null;
         }
 
         private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>[KMG]i?B)",

@@ -1,0 +1,531 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/"
+	xmlns:oznzb="http://www.oznzb.com/DTD/2014/feeds/attributes/">
+  <channel>
+    <atom:link href="https://www.oznzb.com/api?t=tvsearch&amp;cat=5030,5040&amp;extended=1&amp;apikey=012345678&amp;rid=24493&amp;limit=20&amp;season=4&amp;ep=8" rel="self" type="application/rss+xml" />
+    <title>oznzb</title>
+    <description>oznzb Feed</description>
+    <link>https://www.oznzb.com/</link>
+    <language>en-gb</language>
+    <webMaster>webadmin@oznzb.com (oznzb)</webMaster>
+    <category></category>
+    <image>
+      <url>https://www.oznzb.com/templates/default/images/banner.jpg</url>
+      <title>oznzb</title>
+      <link>https://www.oznzb.com/</link>
+      <description>Visit oznzb - The Best NZB Indexer - search and download NZB files.</description>
+    </image>
+    <newznab:response offset="0" total="15" />
+    <item>
+      <title>Game.of.Thrones.S04E08.The.Mountain.and.the.Viper.720p.WEB-DL.DD5.1.H.264-NTb</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/757e5763a4fad013b207470c0479f898</guid>
+      <link>https://www.oznzb.com/getnzb/757e5763a4fad013b207470c0479f898.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/757e5763a4fad013b207470c0479f898#comments</comments>
+      <pubDate>Thu, 17 Jul 2014 10:34:04 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.The.Mountain.and.the.Viper.720p.WEB-DL.DD5.1.H.264-NTb</description>
+      <enclosure url="https://www.oznzb.com/getnzb/757e5763a4fad013b207470c0479f898.nzb&amp;i=113597&amp;r=012345678" length="2148471743" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2148471743" />
+      <newznab:attr name="guid" value="757e5763a4fad013b207470c0479f898" />
+      <newznab:attr name="files" value="45" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="4270" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Thu, 17 Jul 2014 07:30:05 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="5" />
+      <oznzb:attr name="oz_down_votes" value="0" />
+      <oznzb:attr name="oz_video_quality_rating" value="8.0000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="8.0000" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.720p.HDTV.DD5.1.x264-DON</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/702324b56e903a79019931edb0050fff</guid>
+      <link>https://www.oznzb.com/getnzb/702324b56e903a79019931edb0050fff.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/702324b56e903a79019931edb0050fff#comments</comments>
+      <pubDate>Wed, 18 Jun 2014 21:11:41 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.720p.HDTV.DD5.1.x264-DON</description>
+      <enclosure url="https://www.oznzb.com/getnzb/702324b56e903a79019931edb0050fff.nzb&amp;i=113597&amp;r=012345678" length="2559193245" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2559193245" />
+      <newznab:attr name="guid" value="702324b56e903a79019931edb0050fff" />
+      <newznab:attr name="files" value="53" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="385" />
+      <newznab:attr name="comments" value="2" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Wed, 18 Jun 2014 18:19:07 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="2" />
+      <oznzb:attr name="oz_down_votes" value="0" />
+      <oznzb:attr name="oz_video_quality_rating" value="4.5000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="4.5000" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.1080i.HDTV.MPEG2.DD5.1-CtrlHD</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/ba0a23526777f1e5776f30c3a2986ff2</guid>
+      <link>https://www.oznzb.com/getnzb/ba0a23526777f1e5776f30c3a2986ff2.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/ba0a23526777f1e5776f30c3a2986ff2#comments</comments>
+      <pubDate>Tue, 10 Jun 2014 08:44:58 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.1080i.HDTV.MPEG2.DD5.1-CtrlHD</description>
+      <enclosure url="https://www.oznzb.com/getnzb/ba0a23526777f1e5776f30c3a2986ff2.nzb&amp;i=113597&amp;r=012345678" length="6227840388" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="6227840388" />
+      <newznab:attr name="guid" value="ba0a23526777f1e5776f30c3a2986ff2" />
+      <newznab:attr name="files" value="49" />
+      <newznab:attr name="poster" value="SSL-News.info &lt;ssl-news.info@ssl.local&gt;" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="97" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Tue, 10 Jun 2014 07:01:19 +1000" />
+      <newznab:attr name="group" value="alt.binaries.mom" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="1" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="2" />
+      <oznzb:attr name="oz_down_votes" value="0" />
+      <oznzb:attr name="oz_video_quality_rating" value="9.6667" />
+      <oznzb:attr name="oz_audio_quality_rating" value="9.6667" />
+    </item>
+    <item>
+      <title>game.of.thrones.s04e08.gs.hdtv.x264-killers</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/3c0b842a410500378f4e00f68b8a778f</guid>
+      <link>https://www.oznzb.com/getnzb/3c0b842a410500378f4e00f68b8a778f.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/3c0b842a410500378f4e00f68b8a778f#comments</comments>
+      <pubDate>Fri, 06 Jun 2014 19:36:38 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>game.of.thrones.s04e08.gs.hdtv.x264-killers</description>
+      <enclosure url="https://www.oznzb.com/getnzb/3c0b842a410500378f4e00f68b8a778f.nzb&amp;i=113597&amp;r=012345678" length="397095866" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="397095866" />
+      <newznab:attr name="guid" value="3c0b842a410500378f4e00f68b8a778f" />
+      <newznab:attr name="files" value="15" />
+      <newznab:attr name="poster" value="magic &lt;JBinUp@JBinUp.local&gt;" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="293" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Fri, 06 Jun 2014 19:16:22 +1000" />
+      <newznab:attr name="group" value="alt.binaries.mom" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="6" />
+      <oznzb:attr name="oz_down_votes" value="3" />
+      <oznzb:attr name="oz_video_quality_rating" value="2.8000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="2.8000" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.1080p.HDTV.x264-BATV</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/7b73ae43f3cbe31181b391b787bf009b</guid>
+      <link>https://www.oznzb.com/getnzb/7b73ae43f3cbe31181b391b787bf009b.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/7b73ae43f3cbe31181b391b787bf009b#comments</comments>
+      <pubDate>Wed, 04 Jun 2014 14:29:15 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.1080p.HDTV.x264-BATV</description>
+      <enclosure url="https://www.oznzb.com/getnzb/7b73ae43f3cbe31181b391b787bf009b.nzb&amp;i=113597&amp;r=012345678" length="4281968788" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4281968788" />
+      <newznab:attr name="guid" value="7b73ae43f3cbe31181b391b787bf009b" />
+      <newznab:attr name="files" value="91" />
+      <newznab:attr name="poster" value="Joe.C" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="3287" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Wed, 04 Jun 2014 10:28:58 +1000" />
+      <newznab:attr name="group" value="alt.binaries.teevee" />
+      <oznzb:attr name="oz_num_spam_reports" value="1" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="1" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="7" />
+      <oznzb:attr name="oz_down_votes" value="7" />
+      <oznzb:attr name="oz_video_quality_rating" value="5.3636" />
+      <oznzb:attr name="oz_audio_quality_rating" value="5.3636" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.720p.HDTV.DD5.1.x264-DON</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/d59cb2df888011fc816ef1ef26033a14</guid>
+      <link>https://www.oznzb.com/getnzb/d59cb2df888011fc816ef1ef26033a14.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/d59cb2df888011fc816ef1ef26033a14#comments</comments>
+      <pubDate>Tue, 03 Jun 2014 21:03:37 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.720p.HDTV.DD5.1.x264-DON</description>
+      <enclosure url="https://www.oznzb.com/getnzb/d59cb2df888011fc816ef1ef26033a14.nzb&amp;i=113597&amp;r=012345678" length="2557650454" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="2557650454" />
+      <newznab:attr name="guid" value="d59cb2df888011fc816ef1ef26033a14" />
+      <newznab:attr name="files" value="53" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="707" />
+      <newznab:attr name="comments" value="2" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Tue, 03 Jun 2014 20:15:15 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="7" />
+      <oznzb:attr name="oz_down_votes" value="9" />
+      <oznzb:attr name="oz_video_quality_rating" value="5.1667" />
+      <oznzb:attr name="oz_audio_quality_rating" value="5.3636" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.1080p.HDTV.x264-BATV</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/a627318b7e3e0fb94926920fb70682c2</guid>
+      <link>https://www.oznzb.com/getnzb/a627318b7e3e0fb94926920fb70682c2.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/a627318b7e3e0fb94926920fb70682c2#comments</comments>
+      <pubDate>Tue, 03 Jun 2014 07:09:30 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.1080p.HDTV.x264-BATV</description>
+      <enclosure url="https://www.oznzb.com/getnzb/a627318b7e3e0fb94926920fb70682c2.nzb&amp;i=113597&amp;r=012345678" length="4292747796" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="4292747796" />
+      <newznab:attr name="guid" value="a627318b7e3e0fb94926920fb70682c2" />
+      <newznab:attr name="files" value="83" />
+      <newznab:attr name="poster" value="CPP-gebruiker@domein.nl (BoerHarms)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="384" />
+      <newznab:attr name="comments" value="1" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Tue, 03 Jun 2014 03:08:02 +1000" />
+      <newznab:attr name="group" value="alt.binaries.teevee" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="1" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="6" />
+      <oznzb:attr name="oz_down_votes" value="6" />
+      <oznzb:attr name="oz_video_quality_rating" value="7.0000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="7.2500" />
+    </item>
+    <item>
+      <title>Game of Thrones S04E08 HDTV x264-KILLERS-RP</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/765367f0d5bc685c8591d38248730db9</guid>
+      <link>https://www.oznzb.com/getnzb/765367f0d5bc685c8591d38248730db9.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/765367f0d5bc685c8591d38248730db9#comments</comments>
+      <pubDate>Tue, 03 Jun 2014 02:39:11 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Game of Thrones S04E08 HDTV x264-KILLERS-RP</description>
+      <enclosure url="https://www.oznzb.com/getnzb/765367f0d5bc685c8591d38248730db9.nzb&amp;i=113597&amp;r=012345678" length="393083567" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="393083567" />
+      <newznab:attr name="guid" value="765367f0d5bc685c8591d38248730db9" />
+      <newznab:attr name="files" value="33" />
+      <newznab:attr name="poster" value="mr@white.com (walterwhite)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="2521" />
+      <newznab:attr name="comments" value="0" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 22:33:46 +1000" />
+      <newznab:attr name="group" value="alt.binaries.teevee" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="4" />
+      <oznzb:attr name="oz_down_votes" value="3" />
+      <oznzb:attr name="oz_video_quality_rating" value="5.0000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="5.0000" />
+    </item>
+    <item>
+      <title>game.of.thrones.s04e08.720p.hdtv.x264-killers</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/11f6674af65773f0459d9cb508892672</guid>
+      <link>https://www.oznzb.com/getnzb/11f6674af65773f0459d9cb508892672.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/11f6674af65773f0459d9cb508892672#comments</comments>
+      <pubDate>Tue, 03 Jun 2014 01:59:16 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>game.of.thrones.s04e08.720p.hdtv.x264-killers</description>
+      <enclosure url="https://www.oznzb.com/getnzb/11f6674af65773f0459d9cb508892672.nzb&amp;i=113597&amp;r=012345678" length="1493711374" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1493711374" />
+      <newznab:attr name="guid" value="11f6674af65773f0459d9cb508892672" />
+      <newznab:attr name="files" value="93" />
+      <newznab:attr name="poster" value="mr@white.com (walterwhite)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="743" />
+      <newznab:attr name="comments" value="4" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 21:57:09 +1000" />
+      <newznab:attr name="group" value="alt.binaries.teevee" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="13" />
+      <oznzb:attr name="oz_down_votes" value="7" />
+      <oznzb:attr name="oz_video_quality_rating" value="4.5833" />
+      <oznzb:attr name="oz_audio_quality_rating" value="4.6667" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.1080p.HDTV.x264-BATV</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/33eecaaaec9c603d18c3f2926db1be5c</guid>
+      <link>https://www.oznzb.com/getnzb/33eecaaaec9c603d18c3f2926db1be5c.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/33eecaaaec9c603d18c3f2926db1be5c#comments</comments>
+      <pubDate>Mon, 02 Jun 2014 19:00:58 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.1080p.HDTV.x264-BATV</description>
+      <enclosure url="https://www.oznzb.com/getnzb/33eecaaaec9c603d18c3f2926db1be5c.nzb&amp;i=113597&amp;r=012345678" length="8392142697" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="8392142697" />
+      <newznab:attr name="guid" value="33eecaaaec9c603d18c3f2926db1be5c" />
+      <newznab:attr name="files" value="58" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="584" />
+      <newznab:attr name="comments" value="2" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 18:32:03 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="10" />
+      <oznzb:attr name="oz_down_votes" value="0" />
+      <oznzb:attr name="oz_video_quality_rating" value="8.6364" />
+      <oznzb:attr name="oz_audio_quality_rating" value="8.6364" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.HDTV.HebSub.XviD-Silver007</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/3f23bda11e35d0efd7b3d7253c4f7ea0</guid>
+      <link>https://www.oznzb.com/getnzb/3f23bda11e35d0efd7b3d7253c4f7ea0.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/3f23bda11e35d0efd7b3d7253c4f7ea0#comments</comments>
+      <pubDate>Mon, 02 Jun 2014 17:01:38 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Game.of.Thrones.S04E08.HDTV.HebSub.XviD-Silver007</description>
+      <enclosure url="https://www.oznzb.com/getnzb/3f23bda11e35d0efd7b3d7253c4f7ea0.nzb&amp;i=113597&amp;r=012345678" length="499350350" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="499350350" />
+      <newznab:attr name="guid" value="3f23bda11e35d0efd7b3d7253c4f7ea0" />
+      <newznab:attr name="files" value="25" />
+      <newznab:attr name="poster" value="ddownrev@gmail.com (DownRev)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="357" />
+      <newznab:attr name="comments" value="1" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 16:49:03 +1000" />
+      <newznab:attr name="group" value="alt.binaries.multimedia" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="5" />
+      <oznzb:attr name="oz_down_votes" value="0" />
+      <oznzb:attr name="oz_video_quality_rating" value="6.2222" />
+      <oznzb:attr name="oz_audio_quality_rating" value="6.5556" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.720p.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/d59076f5cceee4473a27fcbdc75c6f0f</guid>
+      <link>https://www.oznzb.com/getnzb/d59076f5cceee4473a27fcbdc75c6f0f.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/d59076f5cceee4473a27fcbdc75c6f0f#comments</comments>
+      <pubDate>Mon, 02 Jun 2014 13:03:12 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.720p.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/d59076f5cceee4473a27fcbdc75c6f0f.nzb&amp;i=113597&amp;r=012345678" length="1547856451" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1547856451" />
+      <newznab:attr name="guid" value="d59076f5cceee4473a27fcbdc75c6f0f" />
+      <newznab:attr name="files" value="45" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="2628" />
+      <newznab:attr name="comments" value="4" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 12:09:09 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="1" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="1" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="41" />
+      <oznzb:attr name="oz_down_votes" value="12" />
+      <oznzb:attr name="oz_video_quality_rating" value="7.8367" />
+      <oznzb:attr name="oz_audio_quality_rating" value="7.9792" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.720p.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/c076323082a09262aa39f1a22c088c6a</guid>
+      <link>https://www.oznzb.com/getnzb/c076323082a09262aa39f1a22c088c6a.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/c076323082a09262aa39f1a22c088c6a#comments</comments>
+      <pubDate>Mon, 02 Jun 2014 12:31:13 +1000</pubDate>
+      <category>TV &gt; HD</category>
+      <description>Game.of.Thrones.S04E08.720p.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/c076323082a09262aa39f1a22c088c6a.nzb&amp;i=113597&amp;r=012345678" length="1545516510" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5040" />
+      <newznab:attr name="size" value="1545516510" />
+      <newznab:attr name="guid" value="c076323082a09262aa39f1a22c088c6a" />
+      <newznab:attr name="files" value="45" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="2739" />
+      <newznab:attr name="comments" value="2" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 12:09:08 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="46" />
+      <oznzb:attr name="oz_down_votes" value="12" />
+      <oznzb:attr name="oz_video_quality_rating" value="8.3846" />
+      <oznzb:attr name="oz_audio_quality_rating" value="8.1923" />
+    </item>
+    <item>
+      <title>game.of.thrones.s04e08.hdtv.x264-killers</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/4fd46a1f0779f60167ded7954ee2db5f</guid>
+      <link>https://www.oznzb.com/getnzb/4fd46a1f0779f60167ded7954ee2db5f.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/4fd46a1f0779f60167ded7954ee2db5f#comments</comments>
+      <pubDate>Mon, 02 Jun 2014 13:03:12 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>game.of.thrones.s04e08.hdtv.x264-killers</description>
+      <enclosure url="https://www.oznzb.com/getnzb/4fd46a1f0779f60167ded7954ee2db5f.nzb&amp;i=113597&amp;r=012345678" length="393427623" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="393427623" />
+      <newznab:attr name="guid" value="4fd46a1f0779f60167ded7954ee2db5f" />
+      <newznab:attr name="files" value="27" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="2299" />
+      <newznab:attr name="comments" value="2" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 11:58:35 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="9" />
+      <oznzb:attr name="oz_down_votes" value="4" />
+      <oznzb:attr name="oz_video_quality_rating" value="7.5000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="7.4167" />
+    </item>
+    <item>
+      <title>Game.of.Thrones.S04E08.HDTV.x264-KILLERS</title>
+      <guid isPermaLink="true">https://www.oznzb.com/details/e496740f55dc8c571372e9bab1322cc2</guid>
+      <link>https://www.oznzb.com/getnzb/e496740f55dc8c571372e9bab1322cc2.nzb&amp;i=113597&amp;r=012345678</link>
+      <comments>https://www.oznzb.com/details/e496740f55dc8c571372e9bab1322cc2#comments</comments>
+      <pubDate>Mon, 02 Jun 2014 12:31:13 +1000</pubDate>
+      <category>TV &gt; SD</category>
+      <description>Game.of.Thrones.S04E08.HDTV.x264-KILLERS</description>
+      <enclosure url="https://www.oznzb.com/getnzb/e496740f55dc8c571372e9bab1322cc2.nzb&amp;i=113597&amp;r=012345678" length="396079370" type="application/x-nzb" />
+      <newznab:attr name="category" value="5000" />
+      <newznab:attr name="category" value="5030" />
+      <newznab:attr name="size" value="396079370" />
+      <newznab:attr name="guid" value="e496740f55dc8c571372e9bab1322cc2" />
+      <newznab:attr name="files" value="27" />
+      <newznab:attr name="poster" value="kingofpr0n (brian@iamking.ws)" />
+      <newznab:attr name="season" value="S04" />
+      <newznab:attr name="episode" value="E08" />
+      <newznab:attr name="rageid" value="24493" />
+      <newznab:attr name="tvtitle" value="The Mountain and the Viper" />
+      <newznab:attr name="tvairdate" value="Sun, 01 Jun 2014 21:00:00 +1000" />
+      <newznab:attr name="grabs" value="1028" />
+      <newznab:attr name="comments" value="2" />
+      <newznab:attr name="password" value="0" />
+      <newznab:attr name="usenetdate" value="Mon, 02 Jun 2014 11:58:34 +1000" />
+      <newznab:attr name="group" value="alt.binaries.etc" />
+      <oznzb:attr name="oz_num_spam_reports" value="0" />
+      <oznzb:attr name="oz_spam_confirmed" value="no" />
+      <oznzb:attr name="oz_num_passworded_reports" value="0" />
+      <oznzb:attr name="oz_passworded_confirmed" value="no" />
+      <oznzb:attr name="oz_up_votes" value="15" />
+      <oznzb:attr name="oz_down_votes" value="5" />
+      <oznzb:attr name="oz_video_quality_rating" value="6.0000" />
+      <oznzb:attr name="oz_audio_quality_rating" value="6.3333" />
+    </item>
+  </channel>
+</rss>

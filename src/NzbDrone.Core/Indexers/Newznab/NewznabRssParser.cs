@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabRssParser : RssParser
     {
-        public const String ns = "{http://www.newznab.com/DTD/2010/feeds/attributes/}";
+        public const String ns_newznab = "{http://www.newznab.com/DTD/2010/feeds/attributes/}";
 
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         protected String TryGetNewznabAttribute(XElement item, String key, String defaultValue = "")
         {
-            var attr = item.Elements(ns + "attr").SingleOrDefault(e => e.Attribute("name").Value.Equals(key, StringComparison.CurrentCultureIgnoreCase));
+            var attr = item.Elements(ns_newznab + "attr").SingleOrDefault(e => e.Attribute("name").Value.Equals(key, StringComparison.CurrentCultureIgnoreCase));
 
             if (attr != null)
             {
