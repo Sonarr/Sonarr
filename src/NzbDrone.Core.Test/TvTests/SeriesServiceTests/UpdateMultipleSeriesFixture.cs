@@ -54,5 +54,20 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 s.Path.Should().Be(expectedPath);
             });
         }
+
+        [Test]
+        public void should_be_able_to_update_many_series()
+        {
+            var series = Builder<Series>.CreateListOfSize(50)
+                                        .All()
+                                        .With(s => s.Path = (@"C:\Test\TV\" + s.Path).AsOsAgnostic())
+                                        .Build()
+                                        .ToList();
+
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Subject.UpdateSeries(series);
+        }
     }
 }
