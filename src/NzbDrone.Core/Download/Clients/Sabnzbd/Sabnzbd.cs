@@ -239,17 +239,31 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (history.Count() != 1)
             {
+                _logger.Debug("History item missing. Couldn't get the new nzoid.");
                 return id;
             }
 
-            var queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
-
-            if (queue.Count() != 1)
+            var queue = new List<DownloadClientItem>();
+            for (int i = 0; i < 3; i++)
             {
-                return id;
+                queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
+
+                if (queue.Count() == 1)
+                {
+                    return queue.First().DownloadClientId;
+                }
+
+                if (queue.Count() > 2)
+                {
+                    _logger.Debug("Multiple items with the correct title. Couldn't get the new nzoid.");
+                    return id;
+                }
+
+                System.Threading.Thread.Sleep(500);
             }
 
-            return queue.First().DownloadClientId;
+            _logger.Debug("No items with the correct title. Couldn't get the new nzoid.");
+            return id;
         }
 
         protected IEnumerable<SabnzbdCategory> GetCategories(SabnzbdConfig config)

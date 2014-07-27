@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Download
                             State = TrackedDownloadState.Unknown
                         };
 
-                        _logger.Trace("Started tracking download from history: {0}: {1}", trackedDownload.TrackingId, downloadItem.Title);
+                        _logger.Debug("Started tracking download from history: {0}: {1}", trackedDownload.TrackingId, downloadItem.Title);
                         stateChanged = true;
                     }
 
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Download
                     _logger.Debug("Item removed from download client by user: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
                 }
 
-                _logger.Trace("Stopped tracking download: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
+                _logger.Debug("Stopped tracking download: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
             }
 
             _trackedDownloadCache.Set("tracked", newTrackedDownloads.Values.ToArray());
