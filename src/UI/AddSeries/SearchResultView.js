@@ -68,7 +68,7 @@ define(
                 var defaultProfile = Config.getValue(Config.Keys.DefaultProfileId);
                 var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
                 var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
-                var defaultSeriesType = Config.getValueBoolean(Config.Keys.DefaultSeriesType, true);
+                var defaultSeriesType = Config.getValue(Config.Keys.DefaultSeriesType, 'standard');
 
                 if (Profiles.get(defaultProfile)) {
                     this.ui.profile.val(defaultProfile);
@@ -79,7 +79,7 @@ define(
                 }
 
                 this.ui.seasonFolder.prop('checked', useSeasonFolder);
-                this.ui.rootFolder.val(defaultSeriesType);
+                this.ui.seriesType.val(defaultSeriesType);
 
                 var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
 
