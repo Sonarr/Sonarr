@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
@@ -12,6 +13,13 @@ namespace NzbDrone.Core.Indexers.Wombles
         protected override long GetSize(XElement item)
         {
             return 0;
+        }
+
+        protected override DateTime GetPublishDate(XElement item)
+        {
+            var dateString = item.TryGetValue("pubDate") + " +0000";
+
+            return XElementExtensions.ParseDate(dateString);
         }
     }
 }

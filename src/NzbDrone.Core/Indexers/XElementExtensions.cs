@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Indexers
 
         public static DateTime PublishDate(this XElement item)
         {
-            string dateString = item.TryGetValue("pubDate");
+            var dateString = item.TryGetValue("pubDate");
 
             return ParseDate(dateString);
         }
