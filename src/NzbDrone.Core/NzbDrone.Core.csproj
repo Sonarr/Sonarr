@@ -634,10 +634,10 @@
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\Exception.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
-    <Compile Include="Organizer\FilenameBuilderTokenEqualityComparer.cs" />
-    <Compile Include="Organizer\FilenameSampleService.cs" />
+    <Compile Include="Organizer\FileNameBuilderTokenEqualityComparer.cs" />
+    <Compile Include="Organizer\FileNameSampleService.cs" />
     <Compile Include="Organizer\FileNameValidation.cs" />
-    <Compile Include="Organizer\FilenameValidationService.cs" />
+    <Compile Include="Organizer\FileNameValidationService.cs" />
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />
