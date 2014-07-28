@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.Execute(new DownloadedEpisodesScanCommand());
 
             Mocker.GetMock<IMakeImportDecision>()
-                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<Core.Qualities.QualityModel>()),
+                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<QualityModel>()),
                     Times.Never());
 
             VerifyNoImport();

@@ -6,6 +6,7 @@ using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_episode_files()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
+                                                  .With(h => h.Quality = new QualityModel())
                                                   .BuildNew();
 
             Db.Insert(episodeFile);
@@ -27,6 +29,8 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_not_delete_unorphaned_episode_files()
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
+                                                   .All()
+                                                   .With(h => h.Quality = new QualityModel())
                                                    .BuildListOfNew();
 
             Db.InsertMany(episodeFiles);

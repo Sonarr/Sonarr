@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -25,7 +26,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_get_episodes_by_file()
         {
-            var episodeFile = Builder<EpisodeFile>.CreateNew().BuildNew();
+            var episodeFile = Builder<EpisodeFile>.CreateNew()
+                .With(h => h.Quality = new QualityModel())
+                .BuildNew();
 
             Db.Insert(episodeFile);
 
