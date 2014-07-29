@@ -7,6 +7,7 @@ define(
             Events: {
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
+
             Keys  : {
                 DefaultProfileId    : 'DefaultProfileId',
                 DefaultRootFolderId     : 'DefaultRootFolderId',

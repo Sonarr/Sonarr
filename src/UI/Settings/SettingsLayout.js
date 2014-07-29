@@ -89,6 +89,8 @@ define(
                 if (options.action) {
                     this.action = options.action.toLowerCase();
                 }
+
+                this.listenTo(vent, vent.Hotkeys.SaveSettings, this._save);
             },
 
             onRender: function () {
