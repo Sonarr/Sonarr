@@ -1,41 +1,45 @@
 ﻿using System;
 using System.Reflection;
 using NLog;
-using NzbDrone.Common.Processes;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Mono
 {
-    public class MonoRuntimeProvider : IRuntimeProvider
+    public class MonoRuntimeProvider : RuntimeInfoBase
     {
         private readonly Logger _logger;
 
-        public MonoRuntimeProvider(Logger logger)
+        public MonoRuntimeProvider(Common.IServiceProvider serviceProvider, Logger logger)
+            :base(serviceProvider, logger)
         {
             _logger = logger;
         }
 
-        public String GetVersion()
+        public override String RuntimeVersion
         {
-            try
+            get
             {
-                var type = Type.GetType("Mono.Runtime");
-
-                if (type != null)
+                try
                 {
-                    var displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+                    var type = Type.GetType("Mono.Runtime");
 
-                    if (displayName != null)
+                    if (type != null)
                     {
-                        return displayName.Invoke(null, null).ToString();
+                        var displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+
+                        if (displayName != null)
+                        {
+                            return displayName.Invoke(null, null).ToString();
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.ErrorException("Unable to get mono version: " + ex.Message, ex);
-            }
+                catch (Exception ex)
+                {
+                    _logger.ErrorException("Unable to get mono version: " + ex.Message, ex);
+                }
 
-            return String.Empty;
+                return String.Empty;
+            }
         }
     }
 }

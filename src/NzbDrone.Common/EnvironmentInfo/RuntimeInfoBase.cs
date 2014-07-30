@@ -9,23 +9,12 @@ using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
-    public interface IRuntimeInfo
-    {
-        bool IsUserInteractive { get; }
-        bool IsAdmin { get; }
-        bool IsWindowsService { get; }
-        bool IsConsole { get; }
-        bool IsRunning { get; set; }
-        bool RestartPending { get; set; }
-        string ExecutingApplication { get; }
-    }
-
-    public class RuntimeInfo : IRuntimeInfo
+    public abstract class RuntimeInfoBase : IRuntimeInfo
     {
         private readonly Logger _logger;
         private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
-        public RuntimeInfo(Logger logger, IServiceProvider serviceProvider)
+        public RuntimeInfoBase(IServiceProvider serviceProvider, Logger logger)
         {
             _logger = logger;
 
@@ -43,14 +32,22 @@ namespace NzbDrone.Common.EnvironmentInfo
             }            
         }
 
-        static RuntimeInfo()
+        static RuntimeInfoBase()
         {
             IsProduction = InternalIsProduction();
         }
 
-        public bool IsUserInteractive
+        public static bool IsUserInteractive
         {
             get { return Environment.UserInteractive; }
+        }
+
+        bool IRuntimeInfo.IsUserInteractive
+        {
+            get
+            {
+                return IsUserInteractive;
+            }
         }
 
         public bool IsAdmin
@@ -79,13 +76,15 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return (OsInfo.IsWindows &&
                         IsUserInteractive &&
                         ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase)) ||
-                        OsInfo.IsMono;
+                       OsInfo.IsMono;
             } 
         }
 
         public bool IsRunning { get; set; }
         public bool RestartPending { get; set; }
         public string ExecutingApplication { get; private set; }
+
+        public abstract string RuntimeVersion { get; }
 
         public static bool IsProduction { get; private set; }
 

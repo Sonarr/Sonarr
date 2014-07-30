@@ -32,7 +32,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             else
             {
-                if (inConsole && (OsInfo.IsMono || new RuntimeInfo(null, new ServiceProvider(new ProcessProvider())).IsUserInteractive))
+                if (inConsole && (OsInfo.IsMono || RuntimeInfoBase.IsUserInteractive))
                 {
                     RegisterConsole();
                 }
@@ -59,7 +59,7 @@ namespace NzbDrone.Common.Instrumentation
         {
             var level = LogLevel.Trace;
 
-            if (RuntimeInfo.IsProduction)
+            if (RuntimeInfoBase.IsProduction)
             {
                 level = LogLevel.Info;
             }

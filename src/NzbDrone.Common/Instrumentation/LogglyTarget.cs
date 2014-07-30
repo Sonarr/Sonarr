@@ -22,7 +22,7 @@ namespace NzbDrone.Common.Instrumentation
         {
             string apiKey = string.Empty;
 
-            if (RuntimeInfo.IsProduction)
+            if (RuntimeInfoBase.IsProduction)
             {
                 apiKey = "4c4ecb69-d1b9-4e2a-b54b-b0c4cc143a95";
             }

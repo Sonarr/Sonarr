@@ -3,6 +3,7 @@ using Nancy.Routing;
 using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
@@ -46,9 +47,9 @@ namespace NzbDrone.Api.System
                     Version = BuildInfo.Version.ToString(),
                     BuildTime = BuildInfo.BuildDateTime,
                     IsDebug = BuildInfo.IsDebug,
-                    IsProduction = RuntimeInfo.IsProduction,
+                    IsProduction = RuntimeInfoBase.IsProduction,
                     IsAdmin = _runtimeInfo.IsAdmin,
-                    IsUserInteractive = _runtimeInfo.IsUserInteractive,
+                    IsUserInteractive = RuntimeInfoBase.IsUserInteractive,
                     StartupPath = _appFolderInfo.StartUpFolder,
                     AppData = _appFolderInfo.GetAppDataPath(),
                     OsVersion = OsInfo.Version.ToString(),
@@ -61,7 +62,8 @@ namespace NzbDrone.Api.System
                     Authentication = _configFileProvider.AuthenticationEnabled,
                     StartOfWeek = (int)OsInfo.FirstDayOfWeek,
                     SqliteVersion = _database.Version,
-                    UrlBase = _configFileProvider.UrlBase
+                    UrlBase = _configFileProvider.UrlBase,
+                    RuntimeVersion = OsInfo.IsMono ? _runtimeInfo.RuntimeVersion : null
                 }.AsResponse();
         }
 

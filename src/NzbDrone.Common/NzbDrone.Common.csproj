@@ -98,7 +98,8 @@
     <Compile Include="EnvironmentInfo\AppFolderInfo.cs" />
     <Compile Include="EnvironmentInfo\BuildInfo.cs" />
     <Compile Include="EnvironmentInfo\OsInfo.cs" />
-    <Compile Include="EnvironmentInfo\RuntimeInfo.cs" />
+    <Compile Include="EnvironmentInfo\IRuntimeInfo.cs" />
+    <Compile Include="EnvironmentInfo\RuntimeInfoBase.cs" />
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="PathEqualityComparer.cs" />
     <Compile Include="PathExtensions.cs" />
-    <Compile Include="Processes\IRuntimeProvider.cs" />
     <Compile Include="Processes\PidFileProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="Processes\ProcessProvider.cs" />

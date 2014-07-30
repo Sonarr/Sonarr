@@ -1,13 +1,22 @@
 ﻿using System;
-using NzbDrone.Common.Processes;
+using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Windows
 {
-    public class DotNetRuntimeProvider : IRuntimeProvider
+    public class DotNetRuntimeProvider : RuntimeInfoBase
     {
-        public String GetVersion()
+        public DotNetRuntimeProvider(Common.IServiceProvider serviceProvider, Logger logger)
+            : base(serviceProvider, logger)
         {
-            return Environment.Version.ToString();
+        }
+
+        public override string RuntimeVersion
+        {
+            get
+            {
+                return Environment.Version.ToString();
+            }
         }
     }
 }

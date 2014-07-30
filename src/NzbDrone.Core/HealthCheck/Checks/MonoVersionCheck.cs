@@ -2,19 +2,18 @@
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
     public class MonoVersionCheck : HealthCheckBase
     {
-        private readonly IRuntimeProvider _runtimeProvider;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
         private static readonly Regex VersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+\.\d+(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public MonoVersionCheck(IRuntimeProvider runtimeProvider, Logger logger)
+        public MonoVersionCheck(IRuntimeInfo runtimeInfo, Logger logger)
         {
-            _runtimeProvider = runtimeProvider;
+            _runtimeInfo = runtimeInfo;
             _logger = logger;
         }
 
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
-            var versionString = _runtimeProvider.GetVersion();
+            var versionString = _runtimeInfo.RuntimeVersion;
             var versionMatch = VersionRegex.Match(versionString);
 
             if (versionMatch.Success)

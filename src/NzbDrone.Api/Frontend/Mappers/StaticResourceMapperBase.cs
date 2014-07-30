@@ -21,7 +21,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             _diskProvider = diskProvider;
             _logger = logger;
 
-            if (!RuntimeInfo.IsProduction)
+            if (!RuntimeInfoBase.IsProduction)
             {
                 _caseSensitive = true;
             }
