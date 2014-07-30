@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using NzbDrone.Common.Processes;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Test.Framework;
 
@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
         private void GivenOutput(string version)
         {
-            Mocker.GetMock<IRuntimeProvider>()
-                  .Setup(s => s.GetVersion())
+            Mocker.GetMock<IRuntimeInfo>()
+                  .SetupGet(s => s.RuntimeVersion)
                   .Returns(String.Format("{0} (tarball Wed Sep 25 16:35:44 CDT 2013)", version));
         }
 

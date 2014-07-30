@@ -59,10 +59,10 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0} offset: {1}", searchCriteria, offset);
 
-            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, offset);
+            var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, offset).ToList();
             var result = Fetch(indexer, searchUrls);
 
-            _logger.Info("{0} offset {1}. Found {2}", indexer, searchCriteria, result.Count);
+            _logger.Info("{0} offset {1}. Found {2}", indexer, offset, result.Count);
 
             if (indexer.SupportsPaging && result.Count >= indexer.SupportedPageSize &&  offset < 900)
             {
@@ -76,9 +76,13 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
+            var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber).ToList();
             var result = Fetch(indexer, searchUrls);
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+
+            if (searchUrls.Any())
+            {
+                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            }
 
             return result;
         }
@@ -87,10 +91,14 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.AirDate);
+            var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.AirDate).ToList();
             var result = Fetch(indexer, searchUrls);
 
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            if (searchUrls.Any())
+            {
+                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            }
+            
             return result;
         }
 
@@ -98,24 +106,34 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.Debug("Searching for {0}", searchCriteria);
 
-            var searchUrls = indexer.GetAnimeEpisodeSearchUrls(searchCriteria.SceneTitles, searchCriteria.Series.TvRageId, searchCriteria.AbsoluteEpisodeNumber);
+            var searchUrls = indexer.GetAnimeEpisodeSearchUrls(searchCriteria.SceneTitles, searchCriteria.Series.TvRageId, searchCriteria.AbsoluteEpisodeNumber).ToList();
             var result = Fetch(indexer, searchUrls);
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+
+            if (searchUrls.Any())
+            {
+                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            }
 
             return result;
         }
 
         public IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria)
         {
-            var queryUrls = new List<String>();
+            var searchUrls = new List<String>();
+
             foreach (var episodeQueryTitle in searchCriteria.EpisodeQueryTitles)
             {
                 _logger.Debug("Performing query of {0} for {1}", indexer, episodeQueryTitle);
-                queryUrls.AddRange(indexer.GetSearchUrls(episodeQueryTitle));
+                searchUrls.AddRange(indexer.GetSearchUrls(episodeQueryTitle));
             }
 
-            var result = Fetch(indexer, queryUrls);
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            var result = Fetch(indexer, searchUrls);
+
+            if (searchUrls.Any())
+            {
+                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+            }
+
             return result;
         }
 
