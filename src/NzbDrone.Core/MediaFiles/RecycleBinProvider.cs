@@ -84,10 +84,25 @@ namespace NzbDrone.Core.MediaFiles
 
             else
             {
-                var destination = Path.Combine(recyclingBin, new FileInfo(path).Name);
+                var fileInfo = new FileInfo(path);
+                var destination = Path.Combine(recyclingBin, fileInfo.Name);
+
+                var index = 1;
+                while (_diskProvider.FileExists(destination))
+                {
+                    index++;
+                    if (fileInfo.Extension.IsNullOrWhiteSpace())
+                    {
+                        destination = Path.Combine(recyclingBin, fileInfo.Name + "_" + index);
+                    }
+                    else
+                    {
+                        destination = Path.Combine(recyclingBin, Path.GetFileNameWithoutExtension(fileInfo.Name) + "_" + index + fileInfo.Extension);
+                    }
+                }
 
                 logger.Debug("Moving '{0}' to '{1}'", path, destination);
-                _diskProvider.MoveFile(path, destination);
+                _diskProvider.MoveFile(path, destination, true);
                 _diskProvider.FileSetLastWriteTimeUtc(destination, DateTime.UtcNow);
                 logger.Debug("File has been moved to the recycling bin: {0}", destination);
             }

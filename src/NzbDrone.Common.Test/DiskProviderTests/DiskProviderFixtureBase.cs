@@ -63,7 +63,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             File.WriteAllText(source2, "SourceFile2");
 
             Subject.MoveFile(source1, destination);
-            Subject.MoveFile(source2, destination);
+            Subject.MoveFile(source2, destination, true);
 
             File.Exists(destination).Should().BeTrue();
         }
@@ -75,7 +75,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 
             File.WriteAllText(source, "SourceFile1");
 
-            Subject.MoveFile(source, source);
+            Subject.MoveFile(source, source, true);
 
             File.Exists(source).Should().BeTrue();
             ExceptionVerification.ExpectedWarns(1);
@@ -148,7 +148,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             File.SetAttributes(source, FileAttributes.ReadOnly);
             File.SetAttributes(destination, FileAttributes.ReadOnly);
 
-            Subject.MoveFile(source, destination);
+            Subject.MoveFile(source, destination, true);
         }
 
         [Test]

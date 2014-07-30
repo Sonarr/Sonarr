@@ -220,7 +220,7 @@ namespace NzbDrone.Common.Disk
                         }
                     case TransferAction.Move:
                         {
-                            MoveFile(sourceFile.FullName, destFile);
+                            MoveFile(sourceFile.FullName, destFile, true);
                             break;
                         }
                 }
@@ -251,7 +251,7 @@ namespace NzbDrone.Common.Disk
             File.Copy(source, destination, overwrite);
         }
 
-        public void MoveFile(string source, string destination)
+        public void MoveFile(string source, string destination, bool overwrite = false)
         {
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(destination, () => destination).IsValidPath();
@@ -262,7 +262,7 @@ namespace NzbDrone.Common.Disk
                 return;
             }
 
-            if (FileExists(destination))
+            if (FileExists(destination) && overwrite)
             {
                 DeleteFile(destination);
             }
