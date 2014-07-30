@@ -6,16 +6,20 @@ define(
         'vent',
         'Hotkeys/HotkeysView'
     ], function ($, vent, HotkeysView) {
-        $(document).on('keydown', function (e) {
-            if (e.ctrlKey && e.keyCode === 83) {
-                vent.trigger(vent.Hotkeys.SaveSettings);
-                e.preventDefault();
+
+        $(document).on('keypress', function (e) {
+            if ($(e.target).is('input') || $(e.target).is('textarea')) {
                 return;
             }
 
-            if (e.shiftKey && e.keyCode === 191) {
+            if (e.charCode === 63) {
                 vent.trigger(vent.Commands.OpenModalCommand, new HotkeysView());
-//                vent.trigger(vent.Hotkeys.ShowHotkeys);
+            }
+        });
+
+        $(document).on('keydown', function (e) {
+            if (e.ctrlKey && e.keyCode === 83) {
+                vent.trigger(vent.Hotkeys.SaveSettings);
                 e.preventDefault();
                 return;
             }
