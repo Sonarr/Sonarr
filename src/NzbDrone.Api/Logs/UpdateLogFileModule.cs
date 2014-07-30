@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace NzbDrone.Api.Logs
 
         protected override IEnumerable<String> GetLogFiles()
         {
+            if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdateLogFolder())) return Enumerable.Empty<String>();
+
             return _diskProvider.GetFiles(_appFolderInfo.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly)
                                      .Where(f => Regex.IsMatch(Path.GetFileName(f), LOGFILE_ROUTE.TrimStart('/'), RegexOptions.IgnoreCase))
                                      .ToList();
