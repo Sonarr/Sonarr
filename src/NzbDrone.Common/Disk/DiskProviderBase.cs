@@ -5,7 +5,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Exceptions;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Disk
@@ -106,17 +106,19 @@ namespace NzbDrone.Common.Disk
         public bool FileExists(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
-            return File.Exists(path);
+            return FileExists(path, OsInfo.IsMono);
         }
 
         public bool FileExists(string path, bool caseSensitive)
         {
+            Ensure.That(path, () => path).IsValidPath();
+
             if (caseSensitive)
             {
-                return FileExists(path) && path == path.GetActualCasing();
+                return File.Exists(path) && path == path.GetActualCasing();
             }
 
-            return FileExists(path);
+            return File.Exists(path);
         }
 
         public string[] GetDirectories(string path)
@@ -315,6 +317,7 @@ namespace NzbDrone.Common.Disk
 
             File.SetLastWriteTime(path, dateTime);
         }
+
         public void FileSetLastAccessTime(string path, DateTime dateTime)
         {
             Ensure.That(path, () => path).IsValidPath();
