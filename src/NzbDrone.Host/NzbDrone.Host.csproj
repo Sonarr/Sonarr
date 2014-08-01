@@ -116,7 +116,6 @@
     <Compile Include="Owin\OwinTraceOutputFactory.cs" />
     <Compile Include="Owin\PortInUseException.cs" />
     <Compile Include="PlatformValidation.cs" />
-    <Compile Include="PriorityMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Router.cs" />
     <Compile Include="SingleInstancePolicy.cs" />

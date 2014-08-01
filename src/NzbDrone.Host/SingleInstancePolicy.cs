@@ -52,19 +52,28 @@ namespace NzbDrone.Host
 
         private List<int> GetOtherNzbDroneProcessIds()
         {
-            var currentId = _processProvider.GetCurrentProcess().Id;
-            var otherProcesses = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME)
-                                                 .Union(_processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME))
-                                                 .Select(c => c.Id)
-                                                 .Except(new[] {currentId})
-                                                 .ToList();
-
-            if (otherProcesses.Any())
+            try
             {
-                _logger.Info("{0} instance(s) of NzbDrone are running", otherProcesses.Count);
-            }
+                var currentId = _processProvider.GetCurrentProcess().Id;
 
-            return otherProcesses;
+                var otherProcesses = _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME)
+                                                     .Union(_processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                                                     .Select(c => c.Id)
+                                                     .Except(new[] { currentId })
+                                                     .ToList();
+
+                if (otherProcesses.Any())
+                {
+                    _logger.Info("{0} instance(s) of NzbDrone are running", otherProcesses.Count);
+                }
+
+                return otherProcesses;
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Failed to check for multiple instances of NzbDrone.", ex);
+                return new List<int>();
+            }
         }
     }
 }

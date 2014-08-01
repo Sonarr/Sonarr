@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerFixture.cs" />
-    <Compile Include="MonitoringProviderTest.cs" />
     <Compile Include="NzbDroneProcessServiceFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouterTest.cs" />
