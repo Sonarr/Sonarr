@@ -12,7 +12,6 @@ namespace NzbDrone.Common.EnvironmentInfo
     public abstract class RuntimeInfoBase : IRuntimeInfo
     {
         private readonly Logger _logger;
-        private static readonly string ProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
 
         public RuntimeInfoBase(IServiceProvider serviceProvider, Logger logger)
         {
@@ -73,10 +72,12 @@ namespace NzbDrone.Common.EnvironmentInfo
         { 
             get
             {
-                return (OsInfo.IsWindows &&
-                        IsUserInteractive &&
-                        ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase)) ||
-                       OsInfo.IsMono;
+                if (OsInfo.IsWindows)
+                {
+                    return IsUserInteractive && Process.GetCurrentProcess().ProcessName.Equals(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME, StringComparison.InvariantCultureIgnoreCase);
+                }
+
+                return true;
             } 
         }
 
@@ -93,11 +94,19 @@ namespace NzbDrone.Common.EnvironmentInfo
             if (BuildInfo.IsDebug || Debugger.IsAttached) return false;
             if (BuildInfo.Version.Revision > 10000) return false; //Official builds will never have such a high revision
 
-            var lowerProcessName = ProcessName.ToLower();
-            if (lowerProcessName.Contains("vshost")) return false;
-            if (lowerProcessName.Contains("nunit")) return false;
-            if (lowerProcessName.Contains("jetbrain")) return false;
-            if (lowerProcessName.Contains("resharper")) return false;
+            try
+            {
+                var lowerProcessName = Process.GetCurrentProcess().ProcessName.ToLower();
+
+                if (lowerProcessName.Contains("vshost")) return false;
+                if (lowerProcessName.Contains("nunit")) return false;
+                if (lowerProcessName.Contains("jetbrain")) return false;
+                if (lowerProcessName.Contains("resharper")) return false;
+            }
+            catch
+            {
+                
+            }
 
             string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
