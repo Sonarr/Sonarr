@@ -13,26 +13,23 @@ namespace NzbDrone.Core.Notifications.Xbmc
 {
     public class JsonApiProvider : IApiProvider
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IXbmcJsonApiProxy _proxy;
         private readonly Logger _logger;
 
-        public JsonApiProvider(IHttpProvider httpProvider, Logger logger)
+        public JsonApiProvider(IXbmcJsonApiProxy proxy, Logger logger)
         {
-            _httpProvider = httpProvider;
+            _proxy = proxy;
             _logger = logger;
+        }
+
+        public bool CanHandle(XbmcVersion version)
+        {
+            return version >= new XbmcVersion(5);
         }
 
         public void Notify(XbmcSettings settings, string title, string message)
         {
-            var parameters = new JObject(
-                                        new JProperty("title", title),
-                                        new JProperty("message", message),
-                                        new JProperty("image", "https://raw.github.com/NzbDrone/NzbDrone/develop/Logo/64.png"),
-                                        new JProperty("displaytime", settings.DisplayTime * 1000));
-
-            var postJson = BuildJsonRequest("GUI.ShowNotification", parameters);
-
-            _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
+            _proxy.Notify(settings, title, message);
         }
 
         public void Update(XbmcSettings settings, Series series)
@@ -40,7 +37,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             if (!settings.AlwaysUpdate)
             {
                 _logger.Debug("Determining if there are any active players on XBMC host: {0}", settings.Address);
-                var activePlayers = GetActivePlayers(settings);
+                var activePlayers = _proxy.GetActivePlayers(settings);
 
                 if (activePlayers.Any(a => a.Type.Equals("video")))
                 {
@@ -54,64 +51,17 @@ namespace NzbDrone.Core.Notifications.Xbmc
         
         public void Clean(XbmcSettings settings)
         {
-            var postJson = BuildJsonRequest("VideoLibrary.Clean");
-
-            _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
+            _proxy.CleanLibrary(settings);
         }
 
         public List<ActivePlayer> GetActivePlayers(XbmcSettings settings)
         {
-            try
-            {
-                var postJson = new JObject();
-                postJson.Add(new JProperty("jsonrpc", "2.0"));
-                postJson.Add(new JProperty("method", "Player.GetActivePlayers"));
-                postJson.Add(new JProperty("id", 10));
-
-                var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
-
-                if (CheckForError(response))
-                    return new List<ActivePlayer>();
-
-                var result = Json.Deserialize<ActivePlayersEdenResult>(response);
-
-                return result.Result;
-            }
-
-            catch (Exception ex)
-            {
-                _logger.DebugException(ex.Message, ex);
-            }
-
-            return new List<ActivePlayer>();
+            return _proxy.GetActivePlayers(settings); 
         }
 
-        public bool CheckForError(string response)
+        public String GetSeriesPath(XbmcSettings settings, Series series)
         {
-            _logger.Debug("Looking for error in response: {0}", response);
-
-            if (String.IsNullOrWhiteSpace(response))
-            {
-                _logger.Debug("Invalid response from XBMC, the response is not valid JSON");
-                return true;
-            }
-
-            if (response.StartsWith("{\"error\""))
-            {
-                var error = Json.Deserialize<ErrorResult>(response);
-                var code = error.Error["code"];
-                var message = error.Error["message"];
-
-                _logger.Debug("XBMC Json Error. Code = {0}, Message: {1}", code, message);
-                return true;
-            }
-
-            return false;
-        }
-
-        public string GetSeriesPath(XbmcSettings settings, Series series)
-        {
-            var allSeries = GetSeries(settings);
+            var allSeries = _proxy.GetSeries(settings);
 
             if (!allSeries.Any())
             {
@@ -126,11 +76,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return null;
         }
 
-        public bool CanHandle(XbmcVersion version)
-        {
-            return version >= new XbmcVersion(5);
-        }
-
         private void UpdateLibrary(XbmcSettings settings, Series series)
         {
             try
@@ -142,27 +87,17 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 if (seriesPath != null)
                 {
                     _logger.Debug("Updating series {0} (Path: {1}) on XBMC host: {2}", series, seriesPath, settings.Address);
-
-                    var parameters = new JObject(new JObject(new JProperty("directory", seriesPath)));
-                    postJson = BuildJsonRequest("VideoLibrary.Scan", parameters);
                 }
 
                 else
                 {
                     _logger.Debug("Series {0} doesn't exist on XBMC host: {1}, Updating Entire Library", series,
                                  settings.Address);
-
-                    postJson = BuildJsonRequest("VideoLibrary.Scan");
                 }
 
-                var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
+                var response = _proxy.UpdateLibrary(settings, null);
 
-                if (CheckForError(response)) return;
-
-                _logger.Debug(" from response");
-                var result = Json.Deserialize<XbmcJsonResult<String>>(response);
-
-                if (!result.Result.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
+                if (!response.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                 {
                     _logger.Debug("Failed to update library for: {0}", settings.Address);
                 }
@@ -172,52 +107,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
             {
                 _logger.DebugException(ex.Message, ex);
             }
-        }
-
-        private List<TvShow> GetSeries(XbmcSettings settings)
-        {
-            try
-            {
-                var properties = new JObject { new JProperty("properties", new[] { "file", "imdbnumber" }) };
-                var postJson = BuildJsonRequest("VideoLibrary.GetTvShows", properties);
-
-                var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
-
-                if (CheckForError(response))
-                    return new List<TvShow>();
-
-                var result = Json.Deserialize<TvShowResponse>(response);
-                var shows = result.Result.TvShows;
-
-                return shows;
-            }
-            catch (Exception ex)
-            {
-                _logger.DebugException(ex.Message, ex);
-            }
-
-            return new List<TvShow>();
-        }
-
-        private JObject BuildJsonRequest(string method)
-        {
-            return BuildJsonRequest(method, null);
-        }
-
-        private JObject BuildJsonRequest(string method, JObject parameters)
-        {
-            var postJson = new JObject();
-            postJson.Add(new JProperty("jsonrpc", "2.0"));
-            postJson.Add(new JProperty("method", method));
-
-            if (parameters != null)
-            {
-                postJson.Add(new JProperty("params", parameters));
-            }
-
-            postJson.Add(new JProperty("id", 2));
-
-            return postJson;
         }
     }
 }

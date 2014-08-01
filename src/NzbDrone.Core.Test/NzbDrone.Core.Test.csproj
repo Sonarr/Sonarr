@@ -208,8 +208,6 @@
     <Compile Include="NotificationTests\Xbmc\Http\CheckForErrorFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\GetSeriesPathFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\UpdateFixture.cs" />
-    <Compile Include="NotificationTests\Xbmc\Json\ActivePlayersFixture.cs" />
-    <Compile Include="NotificationTests\Xbmc\Json\CheckForErrorFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\GetSeriesPathFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />

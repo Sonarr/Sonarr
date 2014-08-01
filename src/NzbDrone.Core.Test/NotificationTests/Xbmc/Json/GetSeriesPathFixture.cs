@@ -1,9 +1,14 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Xbmc;
+using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -15,42 +20,28 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         private XbmcSettings _settings;
         private Series _series;
         private string _response;
+        private List<TvShow> _xbmcSeries;
 
         [SetUp]
         public void Setup()
         {
-            _settings = new XbmcSettings
-            {
-                Host = "localhost",
-                Port = 8080,
-                Username = "xbmc",
-                Password = "xbmc",
-                AlwaysUpdate = false,
-                CleanLibrary = false,
-                UpdateLibrary = true
-            };
+            _settings = Builder<XbmcSettings>.CreateNew()
+                                             .Build();
 
-            _response = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"limits\":" + 
-                        "{\"end\":5,\"start\":0,\"total\":5},\"tvshows\":[{\"file\"" + 
-                        ":\"smb://HOMESERVER/TV/7th Heaven/\",\"imdbnumber\":\"73928\"," +
-                        "\"label\":\"7th Heaven\",\"tvshowid\":3},{\"file\":\"smb://HOMESERVER/TV/8 Simple Rules/\"" + 
-                        ",\"imdbnumber\":\"78461\",\"label\":\"8 Simple Rules\",\"tvshowid\":4},{\"file\":" +
-                        "\"smb://HOMESERVER/TV/24-7 Penguins-Capitals- Road to the NHL Winter Classic/\",\"imdbnumber\"" +
-                        ":\"213041\",\"label\":\"24/7 Penguins/Capitals: Road to the NHL Winter Classic\",\"tvshowid\":1}," +
-                        "{\"file\":\"smb://HOMESERVER/TV/30 Rock/\",\"imdbnumber\":\"79488\",\"label\":\"30 Rock\",\"tvshowid\":2}" +
-                        ",{\"file\":\"smb://HOMESERVER/TV/90210/\",\"imdbnumber\":\"82716\",\"label\":\"90210\",\"tvshowid\":5}]}}";
+            _xbmcSeries = Builder<TvShow>.CreateListOfSize(3)
+                                            .Build()
+                                            .ToList();
 
-            Mocker.GetMock<IHttpProvider>()
-                  .Setup(
-                      s => s.PostCommand(_settings.Address, _settings.Username, _settings.Password, It.IsAny<string>()))
-                  .Returns(_response);
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Setup(s => s.GetSeries(_settings))
+                  .Returns(_xbmcSeries);
         }
 
         private void WithMatchingTvdbId()
         {
             _series = new Series
                           {
-                              TvdbId = 78461,
+                              TvdbId = _xbmcSeries.First().ImdbNumber,
                               Title = "TV Show"
                           };
         }
@@ -59,8 +50,8 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         {
             _series = new Series
             {
-                TvdbId = 1,
-                Title = "30 Rock"
+                TvdbId = 1000,
+                Title = _xbmcSeries.First().Label
             };
         }
 
@@ -68,7 +59,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         {
             _series = new Series
             {
-                TvdbId = 1,
+                TvdbId = 1000,
                 Title = "Does not exist"
             }; 
         }
@@ -86,7 +77,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         {
             WithMatchingTvdbId();
 
-            Subject.GetSeriesPath(_settings, _series).Should().Be("smb://HOMESERVER/TV/8 Simple Rules/");
+            Subject.GetSeriesPath(_settings, _series).Should().Be(_xbmcSeries.First().File);
         }
 
         [Test]
@@ -94,7 +85,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         {
             WithMatchingTitle();
 
-            Subject.GetSeriesPath(_settings, _series).Should().Be("smb://HOMESERVER/TV/30 Rock/");
+            Subject.GetSeriesPath(_settings, _series).Should().Be(_xbmcSeries.First().File);
         }
     }
 }

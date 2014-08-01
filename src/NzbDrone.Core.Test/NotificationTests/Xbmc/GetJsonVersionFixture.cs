@@ -1,8 +1,7 @@
-﻿using FluentAssertions;
-using Moq;
+﻿using System;
+using FizzWare.NBuilder;
+using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Test.Framework;
@@ -17,16 +16,15 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
         [SetUp]
         public void Setup()
         {
-            _settings = new XbmcSettings
-                            {
-                                Host = "localhost",
-                                Port = 8080,
-                                Username = "xbmc",
-                                Password = "xbmc",
-                                AlwaysUpdate = false,
-                                CleanLibrary = false,
-                                UpdateLibrary = true
-                            };
+            _settings = Builder<XbmcSettings>.CreateNew()
+                                             .Build();
+        }
+
+        private void GivenVersionResponse(String response)
+        {
+            Mocker.GetMock<IXbmcJsonApiProxy>()
+                  .Setup(s => s.GetJsonVersion(_settings))
+                  .Returns(response);
         }
 
         [TestCase(3)]
@@ -34,11 +32,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
         [TestCase(0)]
         public void should_get_version_from_major_only(int number)
         {
-            var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":" + number + "}}";
-
-            var fakeHttp = Mocker.GetMock<IHttpProvider>();
-            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
-                .Returns(message);
+            GivenVersionResponse("{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":" + number + "}}");
 
             Subject.GetJsonVersion(_settings).Should().Be(new XbmcVersion(number));
         }
@@ -50,11 +44,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
         [TestCase(0, 0, 0)]
         public void should_get_version_from_semantic_version(int major, int minor, int patch)
         {
-            var message = "{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":{\"major\":" + major + ",\"minor\":" + minor + ",\"patch\":" + patch + "}}}";
-
-            var fakeHttp = Mocker.GetMock<IHttpProvider>();
-            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
-                .Returns(message);
+            GivenVersionResponse("{\"id\":10,\"jsonrpc\":\"2.0\",\"result\":{\"version\":{\"major\":" + major + ",\"minor\":" + minor + ",\"patch\":" + patch + "}}}");
 
             Subject.GetJsonVersion(_settings).Should().Be(new XbmcVersion(major, minor, patch));
         }
@@ -62,11 +52,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
         [Test]
         public void should_get_version_zero_when_an_error_is_received()
         {
-            var message = "{\"error\":{\"code\":-32601,\"message\":\"Method not found.\"},\"id\":10,\"jsonrpc\":\"2.0\"}";
-
-            var fakeHttp = Mocker.GetMock<IHttpProvider>();
-            fakeHttp.Setup(s => s.PostCommand("localhost:8080", "xbmc", "xbmc", It.IsAny<string>()))
-                .Returns(message);
+            GivenVersionResponse("{\"error\":{\"code\":-32601,\"message\":\"Method not found.\"},\"id\":10,\"jsonrpc\":\"2.0\"}");
 
             Subject.GetJsonVersion(_settings).Should().Be(new XbmcVersion(0));
         }

@@ -22,6 +22,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             _logger = logger;
         }
 
+        public bool CanHandle(XbmcVersion version)
+        {
+            return version < new XbmcVersion(5);
+        }
+
         public void Notify(XbmcSettings settings, string title, string message)
         {
             var notification = String.Format("Notification({0},{1},{2},{3})", title, message, settings.DisplayTime * 1000, "https://raw.github.com/NzbDrone/NzbDrone/develop/Logo/64.png");
@@ -55,7 +60,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             SendCommand(settings, command);
         }
 
-        public List<ActivePlayer> GetActivePlayers(XbmcSettings settings)
+        internal List<ActivePlayer> GetActivePlayers(XbmcSettings settings)
         {
             try
             {
@@ -75,32 +80,8 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             return new List<ActivePlayer>();
         }
-
-        public bool CheckForError(string response)
-        {
-            _logger.Debug("Looking for error in response: {0}", response);
-
-            if (String.IsNullOrWhiteSpace(response))
-            {
-                _logger.Debug("Invalid response from XBMC, the response is not valid JSON");
-                return true;
-            }
-
-            var errorIndex = response.IndexOf("Error", StringComparison.InvariantCultureIgnoreCase);
-
-            if (errorIndex > -1)
-            {
-                var errorMessage = response.Substring(errorIndex + 6);
-                errorMessage = errorMessage.Substring(0, errorMessage.IndexOfAny(new char[] { '<', ';' }));
-
-                _logger.Debug("Error found in response: {0}", errorMessage);
-                return true;
-            }
-
-            return false;
-        }
-
-        public string GetSeriesPath(XbmcSettings settings, Series series)
+        
+        internal string GetSeriesPath(XbmcSettings settings, Series series)
         {
             var query =
                 String.Format(
@@ -133,9 +114,28 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return field.Value;
         }
 
-        public bool CanHandle(XbmcVersion version)
+        internal bool CheckForError(string response)
         {
-            return version < new XbmcVersion(5);
+            _logger.Debug("Looking for error in response: {0}", response);
+
+            if (String.IsNullOrWhiteSpace(response))
+            {
+                _logger.Debug("Invalid response from XBMC, the response is not valid JSON");
+                return true;
+            }
+
+            var errorIndex = response.IndexOf("Error", StringComparison.InvariantCultureIgnoreCase);
+
+            if (errorIndex > -1)
+            {
+                var errorMessage = response.Substring(errorIndex + 6);
+                errorMessage = errorMessage.Substring(0, errorMessage.IndexOfAny(new char[] { '<', ';' }));
+
+                _logger.Debug("Error found in response: {0}", errorMessage);
+                return true;
+            }
+
+            return false;
         }
 
         private void UpdateLibrary(XbmcSettings settings, Series series)

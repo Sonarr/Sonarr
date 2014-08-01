@@ -4,8 +4,6 @@ using System.Linq;
 using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
@@ -23,13 +21,13 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
     public class XbmcService : IXbmcService
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IXbmcJsonApiProxy _proxy;
         private readonly IEnumerable<IApiProvider> _apiProviders;
         private readonly Logger _logger;
 
-        public XbmcService(IHttpProvider httpProvider, IEnumerable<IApiProvider> apiProviders, Logger logger)
+        public XbmcService(IXbmcJsonApiProxy proxy, IEnumerable<IApiProvider> apiProviders, Logger logger)
         {
-            _httpProvider = httpProvider;
+            _proxy = proxy;
             _apiProviders = apiProviders;
             _logger = logger;
         }
@@ -56,12 +54,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             try
             {
-                var postJson = new JObject();
-                postJson.Add(new JProperty("jsonrpc", "2.0"));
-                postJson.Add(new JProperty("method", "JSONRPC.Version"));
-                postJson.Add(new JProperty("id", 1));
-
-                var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
+                var response = _proxy.GetJsonVersion(settings);
 
                 _logger.Debug("Getting version from response: " + response);
                 var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
