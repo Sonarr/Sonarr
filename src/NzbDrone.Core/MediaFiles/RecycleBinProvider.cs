@@ -170,7 +170,10 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (message.DeleteFiles)
             {
-                DeleteFolder(message.Series.Path);
+                if (_diskProvider.FolderExists(message.Series.Path))
+                {
+                    DeleteFolder(message.Series.Path);
+                }
             }
         }
 
