@@ -130,15 +130,13 @@ namespace NzbDrone.Core.MediaFiles
 
             try
             {
-                _logger.Debug("Setting last write time on series folder: {0}", series.Path);
-                _diskProvider.FolderSetLastWriteTimeUtc(series.Path, episodeFile.DateAdded);
+                SetFolderLastWriteTime(series.Path, episodeFile.DateAdded);
 
                 if (series.SeasonFolder)
                 {
                     var seasonFolder = Path.GetDirectoryName(destinationFilename);
 
-                    _logger.Debug("Setting last write time on season folder: {0}", seasonFolder);
-                    _diskProvider.FolderSetLastWriteTimeUtc(seasonFolder, episodeFile.DateAdded);
+                    SetFolderLastWriteTime(seasonFolder, episodeFile.DateAdded);
                 }
             }
 
@@ -201,6 +199,14 @@ namespace NzbDrone.Core.MediaFiles
         private void SetFolderPermissions(string path)
         {
             SetPermissions(path, _configService.FolderChmod);
+        }
+
+        private void SetFolderLastWriteTime(String path, DateTime time)
+        {
+            if (OsInfo.IsMono) return;
+
+            _logger.Debug("Setting last write time on series folder: {0}", path);
+            _diskProvider.FolderSetLastWriteTimeUtc(path, time);
         }
     }
 }
