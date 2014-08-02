@@ -355,6 +355,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestAuthentication());
+            failures.AddIfNotNull(TestGlobalConfig());
             failures.AddIfNotNull(TestCategory());
 
             if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
@@ -399,10 +400,25 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             return null;
         }
+        
+        private ValidationFailure TestGlobalConfig()
+        {
+            var config = _proxy.GetConfig(Settings);
+            if (config.Misc.pre_check)
+            {
+                return new NzbDroneValidationFailure("", "Disable 'Check before download' option in Sabnbzd")
+                {
+                    InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/switches/", Settings.Host, Settings.Port),
+                    DetailedDescription = "Using Check before download affects NzbDrone ability to track new downloads. Also Sabnzbd recommends 'Abort jobs that cannot be completed' instead since it's more effective."
+                };
+            }
+
+            return null;
+        }
 
         private ValidationFailure TestCategory()
         {
-            var config = this._proxy.GetConfig(Settings);
+            var config = _proxy.GetConfig(Settings);
             var category = GetCategories(config).FirstOrDefault((SabnzbdCategory v) => v.Name == Settings.TvCategory);
 
             if (category != null)
