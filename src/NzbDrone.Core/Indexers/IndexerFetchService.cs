@@ -6,7 +6,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser.Model;
 using System.Linq;
 
@@ -46,75 +45,54 @@ namespace NzbDrone.Core.Indexers
 
         public IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchCriteria);
-
-            var result = Fetch(indexer, searchCriteria, 0).DistinctBy(c => c.DownloadUrl).ToList();
-
-            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
-
-            return result;
+            return Fetch(indexer, searchCriteria, 0).DistinctBy(c => c.DownloadUrl).ToList();
         }
 
         private IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria, int offset)
         {
-            _logger.Debug("Searching for {0} offset: {1}", searchCriteria, offset);
-
             var searchUrls = indexer.GetSeasonSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, offset).ToList();
-            var result = Fetch(indexer, searchUrls);
 
-            _logger.Info("{0} offset {1}. Found {2}", indexer, offset, result.Count);
-
-            if (indexer.SupportsPaging && result.Count >= indexer.SupportedPageSize &&  offset < 900)
+            if (searchUrls.Any())
             {
-                result.AddRange(Fetch(indexer, searchCriteria, offset + indexer.SupportedPageSize));
+                _logger.Debug("Searching for {0} offset: {1}", searchCriteria, offset);
+
+                var result = Fetch(indexer, searchUrls);
+
+                _logger.Info("{0} offset {1}. Found {2}", indexer, offset, result.Count);
+
+                if (indexer.SupportsPaging && result.Count >= indexer.SupportedPageSize && offset < 900)
+                {
+                    result.AddRange(Fetch(indexer, searchCriteria, offset + indexer.SupportedPageSize));
+                }
+
+                //Only log finish for the first call to this recursive method
+                if (offset == 0)
+                {
+                    _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+                }
+
+                return result;
             }
 
-            return result;
+            return new List<ReleaseInfo>();
         }
 
         public IList<ReleaseInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchCriteria);
-
             var searchUrls = indexer.GetEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber).ToList();
-            var result = Fetch(indexer, searchUrls);
-
-            if (searchUrls.Any())
-            {
-                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
-            }
-
-            return result;
+            return Fetch(indexer, searchUrls, searchCriteria);
         }
 
         public IList<ReleaseInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchCriteria);
-
             var searchUrls = indexer.GetDailyEpisodeSearchUrls(searchCriteria.QueryTitles, searchCriteria.Series.TvRageId, searchCriteria.AirDate).ToList();
-            var result = Fetch(indexer, searchUrls);
-
-            if (searchUrls.Any())
-            {
-                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
-            }
-            
-            return result;
+            return Fetch(indexer, searchUrls, searchCriteria);
         }
 
         public IList<ReleaseInfo> Fetch(IIndexer indexer, AnimeEpisodeSearchCriteria searchCriteria)
         {
-            _logger.Debug("Searching for {0}", searchCriteria);
-
             var searchUrls = indexer.GetAnimeEpisodeSearchUrls(searchCriteria.SceneTitles, searchCriteria.Series.TvRageId, searchCriteria.AbsoluteEpisodeNumber).ToList();
-            var result = Fetch(indexer, searchUrls);
-
-            if (searchUrls.Any())
-            {
-                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
-            }
-
-            return result;
+            return Fetch(indexer, searchUrls, searchCriteria);
         }
 
         public IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria)
@@ -123,16 +101,32 @@ namespace NzbDrone.Core.Indexers
 
             foreach (var episodeQueryTitle in searchCriteria.EpisodeQueryTitles)
             {
-                _logger.Debug("Performing query of {0} for {1}", indexer, episodeQueryTitle);
-                searchUrls.AddRange(indexer.GetSearchUrls(episodeQueryTitle));
+                var urls = indexer.GetSearchUrls(episodeQueryTitle).ToList();
+
+                if (urls.Any())
+                {
+                    _logger.Debug("Performing query of {0} for {1}", indexer, episodeQueryTitle);
+                    searchUrls.AddRange(urls);
+                }
             }
 
-            var result = Fetch(indexer, searchUrls);
+            return Fetch(indexer, searchUrls, searchCriteria);
+        }
 
-            if (searchUrls.Any())
+        private List<ReleaseInfo> Fetch(IIndexer indexer, IEnumerable<string> urls, SearchCriteriaBase searchCriteria)
+        {
+            var urlList = urls.ToList();
+
+            if (urlList.Empty())
             {
-                _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
+                return new List<ReleaseInfo>();
             }
+
+            _logger.Debug("Searching for {0}", searchCriteria);
+
+            var result = Fetch(indexer, urlList);
+
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
 
             return result;
         }
