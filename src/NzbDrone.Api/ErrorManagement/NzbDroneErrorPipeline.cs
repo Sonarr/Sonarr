@@ -50,11 +50,11 @@ namespace NzbDrone.Api.ErrorManagement
                 }.AsResponse((HttpStatusCode)clientException.StatusCode);
             }
 
-            if (context.Request.Method == "PUT" || context.Request.Method == "POST")
-            {
-                var sqLiteException = exception as SQLiteException;
+            var sqLiteException = exception as SQLiteException;
 
-                if (sqLiteException != null)
+            if (sqLiteException != null)
+            {
+                if (context.Request.Method == "PUT" || context.Request.Method == "POST")
                 {
                     if (sqLiteException.Message.Contains("constraint failed"))
                         return new ErrorModel
@@ -62,8 +62,12 @@ namespace NzbDrone.Api.ErrorManagement
                             Message = exception.Message,
                         }.AsResponse(HttpStatusCode.Conflict);
                 }
-            }
 
+                var sqlErrorMessage = String.Format("[{0} {1}?{2}]", context.Request.Method, context.Request.Path, context.Request.Query);
+
+                _logger.ErrorException(sqlErrorMessage, sqLiteException);
+            }
+            
             _logger.FatalException("Request Failed", exception);
 
             return new ErrorModel
