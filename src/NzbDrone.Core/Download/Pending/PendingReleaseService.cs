@@ -29,21 +29,18 @@ namespace NzbDrone.Core.Download.Pending
         private readonly IPendingReleaseRepository _repository;
         private readonly ISeriesService _seriesService;
         private readonly IParsingService _parsingService;
-        private readonly IDownloadService _downloadService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public PendingReleaseService(IPendingReleaseRepository repository,
                                     ISeriesService seriesService,
                                     IParsingService parsingService,
-                                    IDownloadService downloadService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
             _repository = repository;
             _seriesService = seriesService;
             _parsingService = parsingService;
-            _downloadService = downloadService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -141,6 +138,9 @@ namespace NzbDrone.Core.Download.Pending
             {
                 foreach (var episode in pendingRelease.RemoteEpisode.Episodes)
                 {
+                    var ect = pendingRelease.Release.PublishDate.AddHours(
+                              pendingRelease.RemoteEpisode.Series.Profile.Value.GrabDelay);
+
                     var queue = new Queue.Queue
                                 {
                                     Id = episode.Id ^ (pendingRelease.Id << 16),
@@ -150,10 +150,8 @@ namespace NzbDrone.Core.Download.Pending
                                     Title = pendingRelease.Title,
                                     Size = pendingRelease.RemoteEpisode.Release.Size,
                                     Sizeleft = pendingRelease.RemoteEpisode.Release.Size,
-                                    Timeleft =
-                                        pendingRelease.Release.PublishDate.AddHours(
-                                            pendingRelease.RemoteEpisode.Series.Profile.Value.GrabDelay)
-                                                      .Subtract(DateTime.UtcNow),
+                                    Timeleft = ect.Subtract(DateTime.UtcNow),
+                                    EstimatedCompletionTime = ect,
                                     Status = "Pending",
                                     RemoteEpisode = pendingRelease.RemoteEpisode
                                 };

@@ -10,10 +10,11 @@ define(
         'System/StatusModel',
         'History/Queue/QueueCollection',
         'Config',
+        'Shared/FormatHelpers',
         'Mixins/backbone.signalr.mixin',
         'fullcalendar',
         'jquery.easypiechart'
-    ], function ($, vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config) {
+    ], function ($, vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config, FormatHelpers) {
 
         return Marionette.ItemView.extend({
             storageKey: 'calendar.view',
@@ -62,6 +63,16 @@ define(
                         container: 'body'
                     });
                 }
+
+                if (event.pending) {
+                    this.$(element).find('.fc-event-time')
+                        .after('<span class="pending pull-right"><i class="icon-time"></i></span>');
+
+                    this.$(element).find('.pending').tooltip({
+                        title: 'Release will be processed {0}'.format(event.pending),
+                        container: 'body'
+                    });
+                }
             },
             
             _getEvents: function (view) {
@@ -94,7 +105,9 @@ define(
                         allDay      : false,
                         statusLevel : self._getStatusLevel(model, end),
                         progress    : self._getDownloadProgress(model),
+                        pending     : self._getPendingInfo(model),
                         releaseTitle: self._getReleaseTitle(model),
+                        downloading : QueueCollection.findEpisode(model.get('id')),
                         model       : model
                     };
 
@@ -149,6 +162,16 @@ define(
                 }
 
                 return 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
+            },
+
+            _getPendingInfo: function (element) {
+                var pending = QueueCollection.findEpisode(element.get('id'));
+
+                if (!pending || pending.get('status').toLocaleLowerCase() !== 'pending') {
+                    return undefined;
+                }
+
+                return new moment(pending.get('estimatedCompletionTime')).fromNow();
             },
 
             _getReleaseTitle: function (element) {

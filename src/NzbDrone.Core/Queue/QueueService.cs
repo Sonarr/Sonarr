@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Download;
@@ -52,9 +53,14 @@ namespace NzbDrone.Core.Queue
                                     RemoteEpisode = queueItem.DownloadItem.RemoteEpisode
                                 };
 
-                if (queueItem.HasError)
+                    if (queueItem.HasError)
                     {
                         queue.ErrorMessage = queueItem.StatusMessage;
+                    }
+
+                    if (queue.Timeleft.HasValue)
+                    {
+                        queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
                     }
 
                     queued.Add(queue);

@@ -1,7 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Episodes;
 
@@ -16,6 +15,7 @@ namespace NzbDrone.Api.Queue
         public String Title { get; set; }
         public Decimal Sizeleft { get; set; }
         public TimeSpan? Timeleft { get; set; }
+        public DateTime? EstimatedCompletionTime { get; set; }
         public String Status { get; set; }
         public String ErrorMessage { get; set; }
     }
