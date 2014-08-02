@@ -10,11 +10,10 @@ define(
         'System/StatusModel',
         'History/Queue/QueueCollection',
         'Config',
-        'Shared/FormatHelpers',
         'Mixins/backbone.signalr.mixin',
         'fullcalendar',
         'jquery.easypiechart'
-    ], function ($, vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config, FormatHelpers) {
+    ], function ($, vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config) {
 
         return Marionette.ItemView.extend({
             storageKey: 'calendar.view',
@@ -171,7 +170,7 @@ define(
                     return undefined;
                 }
 
-                return new moment(pending.get('estimatedCompletionTime')).fromNow();
+                return moment(pending.get('estimatedCompletionTime')).fromNow();
             },
 
             _getReleaseTitle: function (element) {

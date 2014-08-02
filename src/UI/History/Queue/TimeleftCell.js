@@ -5,7 +5,7 @@ define(
         'Cells/NzbDroneCell',
         'filesize',
         'moment'
-    ], function (NzbDroneCell, fileSize, Moment) {
+    ], function (NzbDroneCell, fileSize, moment) {
         return NzbDroneCell.extend({
 
             className: 'timeleft-cell',
@@ -18,7 +18,7 @@ define(
                     //If the release is pending we want to use the timeleft as the time it will be processed at
                     if (this.cellValue.get('status').toLowerCase() === 'pending') {
                         this.$el.html('-');
-                        this.$el.attr('title', 'Will be processed {0}'.format(new Moment(this.cellValue.get('estimatedCompletionTime')).calendar()));
+                        this.$el.attr('title', 'Will be processed {0}'.format(moment(this.cellValue.get('estimatedCompletionTime')).calendar()));
                         this.$el.attr('data-container', 'body');
 
                         return this;
