@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public String complete_dir { get; set; }
         public String[] tv_categories { get; set; }
         public Boolean enable_tv_sorting { get; set; }
+        public Boolean pre_check { get; set; }
     }
 
     public class SabnzbdCategory

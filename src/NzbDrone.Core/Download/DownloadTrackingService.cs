@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Download
                             State = TrackedDownloadState.Unknown
                         };
 
-                        _logger.Debug("Started tracking download from history: {0}: {1}", trackedDownload.TrackingId, downloadItem.Title);
+                        _logger.Debug("[{0}] Started tracking download with id {1}.", downloadItem.Title, trackingId);
                         stateChanged = true;
                     }
 
@@ -157,17 +157,17 @@ namespace NzbDrone.Core.Download
                 }
             }
 
-            foreach (var downloadItem in oldTrackedDownloads.Values.Where(v => !newTrackedDownloads.ContainsKey(v.TrackingId)))
+            foreach (var trackedDownload in oldTrackedDownloads.Values.Where(v => !newTrackedDownloads.ContainsKey(v.TrackingId)))
             {
-                if (downloadItem.State != TrackedDownloadState.Removed)
+                if (trackedDownload.State != TrackedDownloadState.Removed)
                 {
-                    downloadItem.State = TrackedDownloadState.Removed;
+                    trackedDownload.State = TrackedDownloadState.Removed;
                     stateChanged = true;
 
-                    _logger.Debug("Item removed from download client by user: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
+                    _logger.Debug("[{0}] Item with id {1} removed from download client directly (possibly by user).", trackedDownload.DownloadItem.Title, trackedDownload.TrackingId);
                 }
 
-                _logger.Debug("Stopped tracking download: {0}: {1}", downloadItem.TrackingId, downloadItem.DownloadItem.Title);
+                _logger.Debug("[{0}] Stopped tracking download with id {1}.", trackedDownload.DownloadItem.Title, trackedDownload.TrackingId);
             }
 
             _trackedDownloadCache.Set("tracked", newTrackedDownloads.Values.ToArray());
