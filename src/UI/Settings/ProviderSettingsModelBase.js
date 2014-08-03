@@ -31,6 +31,8 @@ define([
             promise.fail(function (response) {
                 self.trigger('validation:failed', response);
             });
+
+            return promise;
         }
     });
 });

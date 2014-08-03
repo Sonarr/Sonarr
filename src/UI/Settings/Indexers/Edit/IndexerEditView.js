@@ -8,22 +8,25 @@ define([
     'Commands/CommandController',
     'Mixins/AsModelBoundView',
     'Mixins/AsValidatedView',
-    'underscore',
     'Form/FormBuilder',
     'Mixins/AutoComplete',
     'bootstrap'
-], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, _) {
+], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView) {
 
     var view = Marionette.ItemView.extend({
         template: 'Settings/Indexers/Edit/IndexerEditViewTemplate',
 
+        ui: {
+            indicator : '.x-indicator'
+        },
+
         events: {
-            'click .x-save'        : '_save',
-            'click .x-save-and-add': '_saveAndAdd',
-            'click .x-delete'      : '_delete',
-            'click .x-back'        : '_back',
-            'click .x-close'       : '_close',
-            'click .x-test'        : '_test'
+            'click .x-save'         : '_save',
+            'click .x-save-and-add' : '_saveAndAdd',
+            'click .x-delete'       : '_delete',
+            'click .x-back'         : '_back',
+            'click .x-close'        : '_close',
+            'click .x-test'         : '_test'
         },
 
         initialize: function (options) {
@@ -31,6 +34,8 @@ define([
         },
 
         _save: function () {
+            this.ui.indicator.show();
+
             var self = this;
             var promise = this.model.save();
 
@@ -39,10 +44,16 @@ define([
                     self.targetCollection.add(self.model, { merge: true });
                     vent.trigger(vent.Commands.CloseModalCommand);
                 });
+
+                promise.fail(function () {
+                    self.ui.indicator.hide();
+                });
             }
         },
 
         _saveAndAdd: function () {
+            this.ui.indicator.show();
+
             var self = this;
             var promise = this.model.save();
 
@@ -51,6 +62,10 @@ define([
                     self.targetCollection.add(self.model, { merge: true });
 
                     require('Settings/Indexers/Add/IndexerSchemaModal').open(self.targetCollection);
+                });
+
+                promise.fail(function () {
+                    self.ui.indicator.hide();
                 });
             }
         },
@@ -82,7 +97,13 @@ define([
         },
 
         _test: function () {
-            this.model.test();
+            var self = this;
+
+            this.ui.indicator.show();
+
+            this.model.test().always(function () {
+                self.ui.indicator.hide();
+            });
         }
     });
 

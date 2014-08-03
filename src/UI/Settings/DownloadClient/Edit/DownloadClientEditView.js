@@ -19,7 +19,8 @@ define([
 
         ui: {
             path      : '.x-path',
-            modalBody : '.modal-body'
+            modalBody : '.modal-body',
+            indicator : '.x-indicator'
         },
 
         events: {
@@ -44,6 +45,8 @@ define([
         },
 
         _save: function () {
+            this.ui.indicator.show();
+
             var self = this;
             var promise = this.model.save();
 
@@ -52,10 +55,16 @@ define([
                     self.targetCollection.add(self.model, { merge: true });
                     vent.trigger(vent.Commands.CloseModalCommand);
                 });
+
+                promise.fail(function () {
+                    self.ui.indicator.hide();
+                });
             }
         },
 
         _saveAndAdd: function () {
+            this.ui.indicator.show();
+
             var self = this;
             var promise = this.model.save();
 
@@ -64,6 +73,10 @@ define([
                     self.targetCollection.add(self.model, { merge: true });
 
                     require('Settings/DownloadClient/Add/DownloadClientSchemaModal').open(self.targetCollection);
+                });
+
+                promise.fail(function () {
+                    self.ui.indicator.hide();
                 });
             }
         },
@@ -78,7 +91,13 @@ define([
         },
 
         _test: function () {
-            this.model.test();
+            var self = this;
+
+            this.ui.indicator.show();
+
+            this.model.test().always(function () {
+                self.ui.indicator.hide();
+            });
         }
     });
 

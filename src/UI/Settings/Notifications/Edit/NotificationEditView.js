@@ -16,9 +16,10 @@ define([
         template: 'Settings/Notifications/Edit/NotificationEditViewTemplate',
 
         ui: {
-            onDownloadToggle: '.x-on-download',
-            onUpgradeSection: '.x-on-upgrade'
-       },
+            onDownloadToggle : '.x-on-download',
+            onUpgradeSection : '.x-on-upgrade',
+            indicator        : '.x-indicator'
+        },
 
         events: {
             'click .x-save'        : '_save',
@@ -39,6 +40,8 @@ define([
         },
 
         _save: function () {
+            this.ui.indicator.show();
+
             var self = this;
             var promise = this.model.save();
 
@@ -47,10 +50,16 @@ define([
                     self.targetCollection.add(self.model, { merge: true });
                     vent.trigger(vent.Commands.CloseModalCommand);
                 });
+
+                promise.fail(function () {
+                    self.ui.indicator.hide();
+                });
             }
         },
 
         _saveAndAdd: function () {
+            this.ui.indicator.show();
+
             var self = this;
             var promise = this.model.save();
 
@@ -59,6 +68,10 @@ define([
                     self.targetCollection.add(self.model, { merge: true });
 
                     require('Settings/Notifications/Add/NotificationSchemaModal').open(self.targetCollection);
+                });
+
+                promise.fail(function () {
+                    self.ui.indicator.hide();
                 });
             }
         },
@@ -83,7 +96,13 @@ define([
         },
 
         _test: function () {
-            this.model.test();
+            var self = this;
+
+            this.ui.indicator.show();
+
+            this.model.test().always(function () {
+                self.ui.indicator.hide();
+            });
         },
 
         _onDownloadChanged: function () {
