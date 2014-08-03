@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.DecisionEngine.Specifications;
 
 namespace NzbDrone.Core.DecisionEngine
 {
