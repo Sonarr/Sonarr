@@ -109,10 +109,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private IRestClient BuildClient(XbmcSettings settings)
         {
-            var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
-
-            _logger.Debug("Url: " + url);
-
+            var url = String.Format(@"http://{0}/jsonrpc", settings.Address);
             var client = RestClientFactory.BuildClient(url);
 
             if (!settings.Username.IsNullOrWhiteSpace())
