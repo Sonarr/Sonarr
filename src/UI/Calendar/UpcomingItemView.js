@@ -5,7 +5,7 @@ define(
         'vent',
         'marionette',
         'moment'
-    ], function (vent, Marionette, Moment) {
+    ], function (vent, Marionette, moment) {
         return Marionette.ItemView.extend({
             template: 'Calendar/UpcomingItemViewTemplate',
             tagName : 'div',
@@ -17,7 +17,7 @@ define(
             initialize: function () {
                 var start = this.model.get('airDateUtc');
                 var runtime = this.model.get('series').runtime;
-                var end = Moment(start).add('minutes', runtime);
+                var end = moment(start).add('minutes', runtime);
 
                 this.model.set({
                     end: end.toISOString()

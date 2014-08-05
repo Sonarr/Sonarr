@@ -8,7 +8,7 @@ define(
         'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (reqres, Backbone, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
+    ], function (reqres, Backbone, NzbDroneCell, QueueCollection, moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -29,7 +29,7 @@ define(
                     var icon;
                     var tooltip;
 
-                    var hasAired = Moment(this.model.get('airDateUtc')).isBefore(Moment());
+                    var hasAired = moment(this.model.get('airDateUtc')).isBefore(moment());
                     var hasFile = this.model.get('hasFile');
 
                     if (hasFile) {

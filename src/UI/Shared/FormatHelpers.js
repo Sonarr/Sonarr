@@ -3,8 +3,9 @@
 define(
     [
         'moment',
-        'filesize'
-    ], function (Moment, Filesize) {
+        'filesize',
+        'Shared/UiSettingsModel'
+    ], function (moment, filesize, UiSettings) {
 
         return {
 
@@ -15,16 +16,15 @@ define(
                     return '';
                 }
 
-                return Filesize(size, { base: 2, round: 1 });
+                return filesize(size, { base: 2, round: 1 });
             },
 
-            dateHelper: function (sourceDate) {
+            relativeDate: function (sourceDate) {
                 if (!sourceDate) {
                     return '';
                 }
 
-                var date = Moment(sourceDate);
-
+                var date = moment(sourceDate);
                 var calendarDate = date.calendar();
 
                 //TODO: It would be nice to not have to hack this...
@@ -34,12 +34,12 @@ define(
                     return strippedCalendarDate;
                 }
 
-                if (date.isAfter(Moment())) {
+                if (date.isAfter(moment())) {
                     return date.fromNow(true);
                 }
 
-                if (date.isBefore(Moment().add('years', -1))) {
-                    return date.format('ll');
+                if (date.isBefore(moment().add('years', -1))) {
+                    return date.format(UiSettings.get('shortDateFormat'));
                 }
 
                 return date.fromNow();

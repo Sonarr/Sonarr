@@ -92,6 +92,8 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="Config\UiConfigModule.cs" />
+    <Compile Include="Config\UiConfigResource.cs" />
     <Compile Include="Config\DownloadClientConfigModule.cs" />
     <Compile Include="Config\DownloadClientConfigResource.cs" />
     <Compile Include="Config\HostConfigModule.cs" />

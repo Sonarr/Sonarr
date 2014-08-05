@@ -10,7 +10,7 @@ define(
         'Mixins/AsSortedCollection',
         'Mixins/AsPersistedStateCollection',
         'moment'
-    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsFilteredCollection, AsSortedCollection, AsPersistedStateCollection, Moment) {
+    ], function (_, Backbone, PageableCollection, SeriesModel, SeriesData, AsFilteredCollection, AsSortedCollection, AsPersistedStateCollection, moment) {
         var Collection = PageableCollection.extend({
             url  : window.NzbDrone.ApiRoot + '/series',
             model: SeriesModel,
@@ -63,13 +63,13 @@ define(
                                     var nextAiring = model.get(attr);
                                     
                                     if (nextAiring) {
-                                        return Moment(nextAiring).unix();
+                                        return moment(nextAiring).unix();
                                     }
                                     
                                     var previousAiring = model.get(attr.replace('nextAiring', 'previousAiring'));
                                     
                                     if (previousAiring) {
-                                        return 10000000000 - Moment(previousAiring).unix();
+                                        return 10000000000 - moment(previousAiring).unix();
                                     }
 
                                     return Number.MAX_VALUE;

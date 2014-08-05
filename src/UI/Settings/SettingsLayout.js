@@ -21,6 +21,8 @@ define(
         'Settings/Notifications/NotificationCollection',
         'Settings/Metadata/MetadataLayout',
         'Settings/General/GeneralView',
+        'Settings/UI/UiView',
+        'Settings/UI/UiSettingsModel',
         'Shared/LoadingView',
         'Config'
     ], function ($,
@@ -43,6 +45,8 @@ define(
                  NotificationCollection,
                  MetadataLayout,
                  GeneralView,
+                 UiView,
+                 UiSettingsModel,
                  LoadingView,
                  Config) {
         return Marionette.Layout.extend({
@@ -57,6 +61,7 @@ define(
                 notifications   : '#notifications',
                 metadata        : '#metadata',
                 general         : '#general',
+                uiRegion        : '#ui',
                 loading         : '#loading-region'
             },
 
@@ -69,6 +74,7 @@ define(
                 notificationsTab   : '.x-notifications-tab',
                 metadataTab        : '.x-metadata-tab',
                 generalTab         : '.x-general-tab',
+                uiTab              : '.x-ui-tab',
                 advancedSettings   : '.x-advanced-settings'
             },
 
@@ -81,6 +87,7 @@ define(
                 'click .x-notifications-tab'    : '_showNotifications',
                 'click .x-metadata-tab'         : '_showMetadata',
                 'click .x-general-tab'          : '_showGeneral',
+                'click .x-ui-tab'               : '_showUi',
                 'click .x-save-settings'        : '_save',
                 'change .x-advanced-settings'   : '_toggleAdvancedSettings'
             },
@@ -103,6 +110,7 @@ define(
                 this.downloadClientSettings = new DownloadClientSettingsModel();
                 this.notificationCollection = new NotificationCollection();
                 this.generalSettings = new GeneralSettingsModel();
+                this.uiSettings = new UiSettingsModel();
 
                 Backbone.$.when(
                         this.mediaManagementSettings.fetch(),
@@ -110,7 +118,8 @@ define(
                         this.indexerSettings.fetch(),
                         this.downloadClientSettings.fetch(),
                         this.notificationCollection.fetch(),
-                        this.generalSettings.fetch()
+                        this.generalSettings.fetch(),
+                        this.uiSettings.fetch()
                     ).done(function () {
                         if(!self.isClosed)
                         {
@@ -123,6 +132,7 @@ define(
                         self.notifications.show(new NotificationCollectionView({ collection: self.notificationCollection }));
                         self.metadata.show(new MetadataLayout());
                         self.general.show(new GeneralView({ model: self.generalSettings }));
+                        self.uiRegion.show(new UiView({ model: self.uiSettings }));
                         }
                     });
 
@@ -154,6 +164,9 @@ define(
                         break;
                     case 'general':
                         this._showGeneral();
+                        break;
+                    case 'ui':
+                        this._showUi();
                         break;
                     default:
                         this._showMediaManagement();
@@ -230,6 +243,15 @@ define(
 
                 this.ui.generalTab.tab('show');
                 this._navigate('settings/general');
+            },
+
+            _showUi: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.ui.uiTab.tab('show');
+                this._navigate('settings/ui');
             },
 
             _navigate:function(route){

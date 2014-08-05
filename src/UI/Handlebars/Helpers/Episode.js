@@ -4,11 +4,11 @@ define(
         'handlebars',
         'Shared/FormatHelpers',
         'moment'
-    ], function (Handlebars, FormatHelpers, Moment) {
+    ], function (Handlebars, FormatHelpers, moment) {
         Handlebars.registerHelper('EpisodeNumber', function () {
 
             if (this.series.seriesType === 'daily') {
-                return Moment(this.airDate).format('L');
+                return moment(this.airDate).format('L');
             }
 
             else {
@@ -21,9 +21,9 @@ define(
 
             var hasFile = this.hasFile;
             var downloading = require('History/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
-            var currentTime = Moment();
-            var start = Moment(this.airDateUtc);
-            var end = Moment(this.end);
+            var currentTime = moment();
+            var start = moment(this.airDateUtc);
+            var end = moment(this.end);
 
             if (hasFile) {
                 return 'success';

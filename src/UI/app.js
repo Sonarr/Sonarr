@@ -199,7 +199,6 @@ require.config({
                             headerCell: 'NzbDrone',
                             sortType  : 'toggle'
                         };
-
                     });
             }
         },
@@ -247,7 +246,19 @@ define(
         'Instrumentation/StringFormat',
         'LifeCycle',
         'Hotkeys/Hotkeys'
-    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel, Tooltip) {
+    ], function ($,
+                 Backbone,
+                 Marionette,
+                 RouteBinder,
+                 SignalRBroadcaster,
+                 NavbarView,
+                 AppLayout,
+                 SeriesController,
+                 Router,
+                 ModalController,
+                 ControlPanelController,
+                 serverStatusModel,
+                 Tooltip) {
 
         new SeriesController();
         new ModalController();

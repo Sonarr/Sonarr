@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
@@ -252,6 +253,48 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("ChownGroup", ""); }
 
             set { SetValue("ChownGroup", value); }
+        }
+
+        public Int32 FirstDayOfWeek
+        {
+            get { return GetValueInt("FirstDayOfWeek", (int)OsInfo.FirstDayOfWeek); }
+
+            set { SetValue("FirstDayOfWeek", value); }
+        }
+
+        public String CalendarWeekColumnHeader
+        {
+            get { return GetValue("CalendarWeekColumnHeader", "ddd M/D"); }
+
+            set { SetValue("CalendarWeekColumnHeader", value); }
+        }
+
+        public String ShortDateFormat
+        {
+            get { return GetValue("ShortDateFormat", "MMM D YYYY"); }
+
+            set { SetValue("ShortDateFormat", value); }
+        }
+
+        public String LongDateFormat
+        {
+            get { return GetValue("LongDateFormat", "dddd, MMMM D YYYY"); }
+
+            set { SetValue("LongDateFormat", value); }
+        }
+
+        public String TimeFormat
+        {
+            get { return GetValue("TimeFormat", "h(:mm)a"); }
+
+            set { SetValue("TimeFormat", value); }
+        }
+
+        public Boolean ShowRelativeDates
+        {
+            get { return GetValueBoolean("ShowRelativeDates", true); }
+
+            set { SetValue("ShowRelativeDates", value); }
         }
 
         private string GetValue(string key)

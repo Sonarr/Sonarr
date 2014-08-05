@@ -3,26 +3,39 @@ define(
     [
         'handlebars',
         'moment',
-        'Shared/FormatHelpers'
-    ], function (Handlebars, Moment, FormatHelpers) {
+        'Shared/FormatHelpers',
+        'Shared/UiSettingsModel'
+    ], function (Handlebars, moment, FormatHelpers, UiSettings) {
         Handlebars.registerHelper('ShortDate', function (input) {
             if (!input) {
                 return '';
             }
 
-            var date = Moment(input);
-            var result = '<span title="' + date.format('LLLL') + '">' + date.format('LL') + '</span>';
+            var date = moment(input);
+            var result = '<span title="' + date.format(UiSettings.longDateTime()) + '">' + date.format(UiSettings.get('shortDateFormat')) + '</span>';
 
             return new Handlebars.SafeString(result);
         });
 
-        Handlebars.registerHelper('NextAiring', function (input) {
+        Handlebars.registerHelper('RelativeDate', function (input) {
             if (!input) {
                 return '';
             }
 
-            var date = Moment(input);
-            var result = '<span title="' + date.format('LLLL') + '">' + FormatHelpers.dateHelper(input) + '</span>';
+            var date = moment(input);
+            var result = '<span title="{0}">{1}</span>';
+            var tooltip = date.format(UiSettings.longDateTime());
+            var text;
+
+            if (UiSettings.get('showRelativeDates')) {
+                text = FormatHelpers.relativeDate(input);
+            }
+
+            else {
+                text = date.format(UiSettings.get('shortDateFormat'));
+            }
+
+            result = result.format(tooltip, text);
 
             return new Handlebars.SafeString(result);
         });
@@ -32,7 +45,7 @@ define(
                 return '';
             }
 
-            return Moment(input).format('DD');
+            return moment(input).format('DD');
         });
 
         Handlebars.registerHelper('Month', function (input) {
@@ -40,7 +53,7 @@ define(
                 return '';
             }
 
-            return Moment(input).format('MMM');
+            return moment(input).format('MMM');
         });
 
         Handlebars.registerHelper('StartTime', function (input) {
@@ -48,11 +61,11 @@ define(
                 return '';
             }
 
-            var date = Moment(input);
+            var date = moment(input);
             if (date.format('mm') === '00') {
                 return date.format('ha');
             }
 
-            return date.format('h.mma');
+            return date.format('h:mma');
         });
     });

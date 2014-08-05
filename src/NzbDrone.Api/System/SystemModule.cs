@@ -3,11 +3,9 @@ using Nancy.Routing;
 using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Lifecycle.Commands;
 
 namespace NzbDrone.Api.System
 {
@@ -60,7 +58,6 @@ namespace NzbDrone.Api.System
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled,
-                    StartOfWeek = (int)OsInfo.FirstDayOfWeek,
                     SqliteVersion = _database.Version,
                     UrlBase = _configFileProvider.UrlBase,
                     RuntimeVersion = OsInfo.IsMono ? _runtimeInfo.RuntimeVersion : null

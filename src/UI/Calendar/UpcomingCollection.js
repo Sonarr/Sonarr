@@ -4,18 +4,18 @@ define(
         'backbone',
         'moment',
         'Series/EpisodeModel'
-    ], function (Backbone, Moment, EpisodeModel) {
+    ], function (Backbone, moment, EpisodeModel) {
         return Backbone.Collection.extend({
             url  : window.NzbDrone.ApiRoot + '/calendar',
             model: EpisodeModel,
 
             comparator: function (model1, model2) {
                 var airDate1 = model1.get('airDateUtc');
-                var date1 = Moment(airDate1);
+                var date1 = moment(airDate1);
                 var time1 = date1.unix();
 
                 var airDate2 = model2.get('airDateUtc');
-                var date2 = Moment(airDate2);
+                var date2 = moment(airDate2);
                 var time2 = date2.unix();
 
                 if (time1 < time2){

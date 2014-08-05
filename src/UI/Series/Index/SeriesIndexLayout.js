@@ -65,9 +65,9 @@ define(
                     cell      : 'integer'
                 },
                 {
-                    name : 'profileId',
-                    label: 'Profile',
-                    cell : ProfileCell
+                    name      : 'profileId',
+                    label     : 'Profile',
+                    cell      : ProfileCell
                 },
                 {
                     name      : 'network',
