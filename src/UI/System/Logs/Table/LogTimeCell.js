@@ -12,7 +12,7 @@ define(
             render: function () {
 
                 var date = moment(this._getValue());
-                this.$el.html('<span title="{1}">{0}</span>'.format(date.format(UiSettings.get('timeFormat')), date.format(UiSettings.longDateFormat())));
+                this.$el.html('<span title="{1}">{0}</span>'.format(date.format(UiSettings.get('timeFormat').replace('(', '').replace(')', '')), date.format(UiSettings.longDateTime())));
 
                 return this;
             }
