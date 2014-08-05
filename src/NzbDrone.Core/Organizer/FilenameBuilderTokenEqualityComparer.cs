@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Organizer
 {
-    public class FilenameBuilderTokenEqualityComparer : IEqualityComparer<String>
+    public class FileNameBuilderTokenEqualityComparer : IEqualityComparer<String>
     {
-        public static readonly FilenameBuilderTokenEqualityComparer Instance = new FilenameBuilderTokenEqualityComparer();
+        public static readonly FileNameBuilderTokenEqualityComparer Instance = new FileNameBuilderTokenEqualityComparer();
 
         private static readonly Regex SimpleTokenRegex = new Regex(@"\s|_|\W", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private FilenameBuilderTokenEqualityComparer()
+        private FileNameBuilderTokenEqualityComparer()
         {
             
         }

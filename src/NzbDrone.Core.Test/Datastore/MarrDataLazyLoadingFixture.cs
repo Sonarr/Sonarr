@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Test.Datastore
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(1)
                 .All()
                 .With(v => v.SeriesId = series[0].Id)
+                .With(v => v.Quality = new QualityModel())
                 .BuildListOfNew();
 
             Db.InsertMany(episodeFiles);

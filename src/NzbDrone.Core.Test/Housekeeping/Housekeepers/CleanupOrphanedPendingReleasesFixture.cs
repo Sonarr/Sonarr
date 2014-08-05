@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -15,7 +16,9 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_pending_items()
         {
             var pendingRelease = Builder<PendingRelease>.CreateNew()
-                                                  .BuildNew();
+                .With(h => h.ParsedEpisodeInfo = new ParsedEpisodeInfo())
+                .With(h => h.Release = new ReleaseInfo())
+                .BuildNew();
 
             Db.Insert(pendingRelease);
             Subject.Clean();
@@ -30,8 +33,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Db.Insert(series);
 
             var pendingRelease = Builder<PendingRelease>.CreateNew()
-                                               .With(h => h.SeriesId = series.Id)
-                                               .BuildNew();
+                .With(h => h.SeriesId = series.Id)
+                .With(h => h.ParsedEpisodeInfo = new ParsedEpisodeInfo())
+                .With(h => h.Release = new ReleaseInfo())
+                .BuildNew();
 
             Db.Insert(pendingRelease);
 

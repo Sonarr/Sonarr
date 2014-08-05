@@ -73,6 +73,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.Path = localEpisode.Path.CleanFilePath();
                     episodeFile.Size = _diskProvider.GetFileSize(localEpisode.Path);
                     episodeFile.Quality = localEpisode.Quality;
+                    episodeFile.MediaInfo = localEpisode.MediaInfo;
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
                     episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;

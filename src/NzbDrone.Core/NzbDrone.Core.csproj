@@ -212,6 +212,7 @@
     <Compile Include="Datastore\Migration\053_add_series_sorttitle.cs" />
     <Compile Include="Datastore\Migration\054_rename_profiles.cs" />
     <Compile Include="Datastore\Migration\055_drop_old_profile_columns.cs" />
+    <Compile Include="Datastore\Migration\056_add_mediainfo_to_episodefile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -482,6 +483,7 @@
     </Compile>
     <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
+    <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoService.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
     <Compile Include="MediaFiles\RecycleBinProvider.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFilePreview.cs" />
@@ -632,10 +634,10 @@
     <Compile Include="Organizer\EpisodeSortingType.cs" />
     <Compile Include="Organizer\Exception.cs" />
     <Compile Include="Organizer\FileNameBuilder.cs" />
-    <Compile Include="Organizer\FilenameBuilderTokenEqualityComparer.cs" />
-    <Compile Include="Organizer\FilenameSampleService.cs" />
+    <Compile Include="Organizer\FileNameBuilderTokenEqualityComparer.cs" />
+    <Compile Include="Organizer\FileNameSampleService.cs" />
     <Compile Include="Organizer\FileNameValidation.cs" />
-    <Compile Include="Organizer\FilenameValidationService.cs" />
+    <Compile Include="Organizer\FileNameValidationService.cs" />
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />

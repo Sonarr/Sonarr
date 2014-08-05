@@ -3,8 +3,11 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using System;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
@@ -15,6 +18,8 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_blacklist_items()
         {
             var blacklist = Builder<Blacklist>.CreateNew()
+                                              .With(h => h.EpisodeIds = new List<Int32>())
+                                              .With(h => h.Quality = new QualityModel())
                                               .BuildNew();
 
             Db.Insert(blacklist);
@@ -30,8 +35,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Db.Insert(series);
 
             var blacklist = Builder<Blacklist>.CreateNew()
-                                               .With(b => b.SeriesId = series.Id)
-                                               .BuildNew();
+                                              .With(h => h.EpisodeIds = new List<Int32>())
+                                              .With(h => h.Quality = new QualityModel())
+                                              .With(b => b.SeriesId = series.Id)
+                                              .BuildNew();
 
             Db.Insert(blacklist);
 

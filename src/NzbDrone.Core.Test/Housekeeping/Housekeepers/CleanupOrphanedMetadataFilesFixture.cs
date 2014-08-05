@@ -5,6 +5,7 @@ using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -68,6 +69,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                         .BuildNew();
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
+                                                  .With(h => h.Quality = new QualityModel())
                                                   .BuildNew();
 
             Db.Insert(series);

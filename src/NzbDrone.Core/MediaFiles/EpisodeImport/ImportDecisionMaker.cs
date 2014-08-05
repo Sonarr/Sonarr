@@ -8,6 +8,7 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
@@ -23,19 +24,21 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IParsingService _parsingService;
         private readonly IMediaFileService _mediaFileService;
         private readonly IDiskProvider _diskProvider;
+        private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly Logger _logger;
 
         public ImportDecisionMaker(IEnumerable<IRejectWithReason> specifications,
                                    IParsingService parsingService,
                                    IMediaFileService mediaFileService,
                                    IDiskProvider diskProvider,
-
+                                   IVideoFileInfoReader videoFileInfoReader,
                                    Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
             _mediaFileService = mediaFileService;
             _diskProvider = diskProvider;
+            _videoFileInfoReader = videoFileInfoReader;
             _logger = logger;
         }
 
@@ -68,6 +71,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                         parsedEpisode.Size = _diskProvider.GetFileSize(file);
                         _logger.Debug("Size: {0}", parsedEpisode.Size);
+
+                        parsedEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
 
                         decision = GetDecision(parsedEpisode);
                     }

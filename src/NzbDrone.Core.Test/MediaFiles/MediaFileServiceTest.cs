@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             "Law & Order- Criminal Intent - S10E07 - Icarus [HDTV-720p]")]
         public void CleanFileName(string name, string expectedName)
         {
-            FileNameBuilder.CleanFilename(name).Should().Be(expectedName);
+            FileNameBuilder.CleanFileName(name).Should().Be(expectedName);
         }
 
         [Test]

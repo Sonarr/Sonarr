@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
             fakeSeries.RootFolderPath = @"C:\Test\TV";
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.GetSeriesFolder(fakeSeries.Title))
+                  .Setup(s => s.GetSeriesFolder(fakeSeries, null))
                   .Returns(fakeSeries.Title);
 
             var series = Subject.AddSeries(fakeSeries);
