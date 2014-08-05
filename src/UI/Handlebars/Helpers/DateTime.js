@@ -61,11 +61,6 @@ define(
                 return '';
             }
 
-            var date = moment(input);
-            if (date.format('mm') === '00') {
-                return date.format('ha');
-            }
-
-            return date.format('h:mma');
+            return moment(input).format(UiSettings.time(false));
         });
     });
