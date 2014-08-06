@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Newtonsoft.Json.Linq;
-using NzbDrone.Common;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
 
@@ -81,8 +77,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
             try
             {
                 var seriesPath = GetSeriesPath(settings, series);
-
-                JObject postJson;
 
                 if (seriesPath != null)
                 {
