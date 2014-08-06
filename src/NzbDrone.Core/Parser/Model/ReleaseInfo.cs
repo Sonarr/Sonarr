@@ -5,14 +5,15 @@ namespace NzbDrone.Core.Parser.Model
 {
     public class ReleaseInfo
     {
-        public string Title { get; set; }
-        public long Size { get; set; }
-        public string DownloadUrl { get; set; }
-        public string InfoUrl { get; set; }
-        public string CommentUrl { get; set; }
+        public String Guid { get; set; }
+        public String Title { get; set; }
+        public Int64 Size { get; set; }
+        public String DownloadUrl { get; set; }
+        public String InfoUrl { get; set; }
+        public String CommentUrl { get; set; }
         public String Indexer { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
-        public int TvRageId { get; set; }
+        public Int32 TvRageId { get; set; }
         public DateTime PublishDate { get; set; }
 
         public Int32 Age

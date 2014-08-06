@@ -47,8 +47,6 @@ namespace NzbDrone.Core.Indexers
 
                         if (reportInfo != null)
                         {
-                            reportInfo.DownloadUrl = GetNzbUrl(item);
-                            reportInfo.InfoUrl = GetNzbInfoUrl(item);
                             result.Add(reportInfo);
                         }
                     }
@@ -65,11 +63,10 @@ namespace NzbDrone.Core.Indexers
 
         private ReleaseInfo ParseFeedItem(XElement item, string url)
         {
-            var title = GetTitle(item);
-
             var reportInfo = CreateNewReleaseInfo();
 
-            reportInfo.Title = title;
+            reportInfo.Guid = GetGuid(item);
+            reportInfo.Title = GetTitle(item);
             reportInfo.PublishDate = GetPublishDate(item);
             reportInfo.DownloadUrl = GetNzbUrl(item);
             reportInfo.InfoUrl = GetNzbInfoUrl(item);
@@ -83,9 +80,14 @@ namespace NzbDrone.Core.Indexers
                 throw new SizeParsingException("Unable to parse size from: {0} [{1}]", reportInfo.Title, url);
             }
 
-            _logger.Trace("Parsed: {0}", item.Title());
+            _logger.Trace("Parsed: {0}", reportInfo.Title);
 
             return PostProcessor(item, reportInfo);
+        }
+
+        protected virtual String GetGuid(XElement item)
+        {
+            return item.TryGetValue("guid", Guid.NewGuid().ToString());
         }
 
         protected virtual string GetTitle(XElement item)

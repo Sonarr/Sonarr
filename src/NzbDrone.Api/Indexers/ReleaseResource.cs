@@ -9,6 +9,7 @@ namespace NzbDrone.Api.Indexers
 {
     public class ReleaseResource : RestResource
     {
+        public String Guid { get; set; }
         public QualityModel Quality { get; set; }
         public Int32 QualityWeight { get; set; }
         public Int32 Age { get; set; }

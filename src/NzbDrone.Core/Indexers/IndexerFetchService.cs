@@ -174,6 +174,8 @@ namespace NzbDrone.Core.Indexers
                 }
             }
 
+            result = result.DistinctBy(v => v.Guid).ToList();
+
             result.ForEach(c => 
             { 
                 c.Indexer = indexer.Definition.Name;

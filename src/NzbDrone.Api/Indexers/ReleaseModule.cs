@@ -14,6 +14,8 @@ using Omu.ValueInjecter;
 using System.Linq;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Common.Cache;
+using System.Threading;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -27,12 +29,15 @@ namespace NzbDrone.Api.Indexers
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
+        private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
+
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
                              ISearchForNzb nzbSearchService,
                              IMakeDownloadDecision downloadDecisionMaker,
                              IPrioritizeDownloadDecision prioritizeDownloadDecision,
                              IDownloadService downloadService,
                              IParsingService parsingService,
+                             ICacheManager cacheManager,
                              Logger logger)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
@@ -43,15 +48,24 @@ namespace NzbDrone.Api.Indexers
             _parsingService = parsingService;
             _logger = logger;
             GetResourceAll = GetReleases;
-            Post["/"] = x=> DownloadRelease(this.Bind<ReleaseResource>());
+            Post["/"] = x => DownloadRelease(this.Bind<ReleaseResource>());
 
             PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
+
+            _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
         }
 
         private Response DownloadRelease(ReleaseResource release)
         {
-            var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), release.TvRageId);
-            remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
+            var remoteEpisode = _remoteEpisodeCache.Find(release.Guid);
+            
+            if (remoteEpisode == null)
+            {
+                _logger.Debug("Couldn't find requested release in cache, cache timeout probably expired.");
+
+                return new NotFoundResponse();
+            }
+
             _downloadService.DownloadReport(remoteEpisode);
 
             return release.AsResponse();
@@ -93,12 +107,14 @@ namespace NzbDrone.Api.Indexers
             return MapDecisions(prioritizedDecisions);
         }
 
-        private static List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
+        private List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
         {
             var result = new List<ReleaseResource>();
 
             foreach (var downloadDecision in decisions)
             {
+                _remoteEpisodeCache.Set(downloadDecision.RemoteEpisode.Release.Guid, downloadDecision.RemoteEpisode, TimeSpan.FromMinutes(30));
+
                 var release = new ReleaseResource();
 
                 release.InjectFrom(downloadDecision.RemoteEpisode.Release);
