@@ -1,7 +1,11 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Indexers;
+using NzbDrone.Api.Series;
+using NzbDrone.Test.Common;
+using System.Linq;
+using System.Net;
+using System.Threading;
 
 namespace NzbDrone.Integration.Test
 {
@@ -18,8 +22,31 @@ namespace NzbDrone.Integration.Test
             releases.Should().OnlyContain(c => BeValidRelease(c));
         }
 
+        [Test]
+        public void should_reject_unknown_release()
+        {
+            var result = Releases.Post(new ReleaseResource { Guid = "unknown" }, HttpStatusCode.NotFound);
+
+            result.Id.Should().Be(0);
+        }
+
+        [Test]
+        public void should_accept_request_with_only_guid_supplied()
+        {
+            var releases = Releases.All();
+
+            // InternalServerError is caused by the Release being invalid for download (no Series).
+            // But if it didn't accept it, it would return NotFound.
+            // TODO: Maybe we should create a full mock Newznab server endpoint.
+            //var result = Releases.Post(new ReleaseResource { Guid = releases.First().Guid });
+            //result.Guid.Should().Be(releases.First().Guid); 
+            
+            var result = Releases.Post(new ReleaseResource { Guid = releases.First().Guid }, HttpStatusCode.InternalServerError);
+        }
+
         private bool BeValidRelease(ReleaseResource releaseResource)
         {
+            releaseResource.Guid.Should().NotBeNullOrEmpty();
             releaseResource.Age.Should().BeGreaterOrEqualTo(-1);
             releaseResource.Title.Should().NotBeBlank();
             releaseResource.DownloadUrl.Should().NotBeBlank();
