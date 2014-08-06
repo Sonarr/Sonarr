@@ -33,6 +33,18 @@ define(
             },
 
             _viewRender: function (view) {
+
+                if ($(window).width() < 768) {
+                    this.$('.fc-header-title').show();
+                    this.$('.calendar-title').remove();
+
+                    var title = this.$('.fc-header-title').text();
+                    var titleDiv = '<div class="calendar-title"><h2>{0}</h2></div>'.format(title);
+
+                    this.$('.fc-header').before(titleDiv);
+                    this.$('.fc-header-title').hide();
+                }
+
                 if (Config.getValue(this.storageKey) !== view.name) {
                     Config.setValue(this.storageKey, view.name);
                 }
