@@ -14,12 +14,10 @@ namespace NzbDrone.Core.Queue
     public class QueueService : IQueueService
     {
         private readonly IDownloadTrackingService _downloadTrackingService;
-        private readonly Logger _logger;
 
-        public QueueService(IDownloadTrackingService downloadTrackingService, Logger logger)
+        public QueueService(IDownloadTrackingService downloadTrackingService)
         {
             _downloadTrackingService = downloadTrackingService;
-            _logger = logger;
         }
 
         public List<Queue> GetQueue()
