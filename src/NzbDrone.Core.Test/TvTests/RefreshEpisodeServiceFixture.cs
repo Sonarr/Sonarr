@@ -306,5 +306,30 @@ namespace NzbDrone.Core.Test.TvTests
             _insertedEpisodes.Should().HaveCount(episodes.Count);
 
         }
+
+        [Test]
+        public void should_override_empty_airdate_for_direct_to_dvd()
+        {
+            var series = GetSeries();
+            series.Status = SeriesStatusType.Ended;
+
+            var episodes = Builder<Episode>.CreateListOfSize(10)
+                                           .All()
+                                           .With(v => v.AirDateUtc = null)
+                                           .BuildListOfNew();
+
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
+                .Returns(new List<Episode>());
+
+            List<Episode> updateEpisodes = null;
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.InsertMany(It.IsAny<List<Episode>>()))
+                .Callback<List<Episode>>(c => updateEpisodes = c);
+
+            Subject.RefreshEpisodeInfo(series, episodes);
+
+            updateEpisodes.Should().NotBeNull();
+            updateEpisodes.Should().NotBeEmpty();
+            updateEpisodes.All(v => v.AirDateUtc.HasValue).Should().BeTrue();
+        }
     }
 }
