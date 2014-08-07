@@ -37,14 +37,19 @@ define(
                         title = 'Pending';
                     }
 
+                    if (status === 'failed') {
+                        icon = 'icon-nd-download-failed';
+                        title = 'Download failed: check download client for more details';
+                    }
+
                     if (errorMessage !== '') {
                         if (status === 'completed') {
                             icon = 'icon-nd-import-failed';
-                            title = "Import failed";
+                            title = 'Import failed';
                         }
                         else {
                             icon = 'icon-nd-download-failed';
-                            title = "Download failed";
+                            title = 'Download failed';
                         }
                         this.$el.html('<i class="{0}"></i>'.format(icon));
                         

@@ -60,15 +60,24 @@ define(
                     var progress = 100 - (event.downloading.get('sizeleft') / event.downloading.get('size') * 100);
                     var releaseTitle = event.downloading.get('title');
                     var estimatedCompletionTime = moment(event.downloading.get('estimatedCompletionTime')).fromNow();
+                    var status = event.downloading.get('status').toLocaleLowerCase();
+                    var errorMessage = event.downloading.get('errorMessage');
 
-                    if (event.downloading.get('status').toLocaleLowerCase() === 'pending') {
-                        this.$(element).find('.fc-event-time')
-                            .after('<span class="pending pull-right"><i class="icon-time"></i></span>');
+                    if (status === 'pending') {
+                        this._addStatusIcon(element, 'icon-time', 'Release will be processed {0}'.format(estimatedCompletionTime));
+                    }
 
-                        this.$(element).find('.pending').tooltip({
-                            title: 'Release will be processed {0}'.format(estimatedCompletionTime),
-                            container: 'body'
-                        });
+                    else if (errorMessage) {
+                        if (status === 'completed') {
+                            this._addStatusIcon(element, 'icon-nd-import-failed', 'Import failed: {0}'.format(errorMessage));
+                        }
+                        else {
+                            this._addStatusIcon(element, 'icon-nd-download-failed', 'Download failed: {0}'.format(errorMessage));
+                        }
+                    }
+
+                    else if (status === 'failed') {
+                        this._addStatusIcon(element, 'icon-nd-download-failed', 'Download failed: check download client for more details');
                     }
 
                     else {
@@ -218,6 +227,16 @@ define(
                 };
 
                 return options;
+            },
+
+            _addStatusIcon: function (element, icon, tooltip) {
+                this.$(element).find('.fc-event-time')
+                    .after('<span class="status pull-right"><i class="{0}"></i></span>'.format(icon));
+
+                this.$(element).find('.status').tooltip({
+                    title: tooltip,
+                    container: 'body'
+                });
             }
         });
     });
