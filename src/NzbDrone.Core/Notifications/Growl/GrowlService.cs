@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Drawing;
 using FluentValidation.Results;
+using Growl.CoreLibrary;
 using Growl.Connector;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 using GrowlNotification = Growl.Connector.Notification;
+using System.Reflection;
+using System.IO;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
@@ -21,42 +25,105 @@ namespace NzbDrone.Core.Notifications.Growl
         private readonly Logger _logger;
 
         private readonly Application _growlApplication = new Application("NzbDrone");
-        private GrowlConnector _growlConnector;
-        private readonly List<NotificationType> _notificationTypes;
+        private readonly NotificationType[] _notificationTypes;
+
+        private class GrowlResult
+        {
+            private AutoResetEvent _autoEvent = new AutoResetEvent(false);
+            private bool _isError = false;
+            private int _code;
+            private string _description;
+
+            public void Wait(int timeoutMs)
+            {
+                try
+                {
+                    if (!_autoEvent.WaitOne(timeoutMs))
+                    {
+                        throw new InvalidOperationException("timed out waiting for server");
+                    }
+                    if (_isError)
+                    {
+                        throw new InvalidOperationException(String.Format("{0}: {1}", _code, _description));
+                    }
+                }
+                finally
+                {
+                    _autoEvent.Reset();
+                    _isError = false;
+                    _code = 0;
+                    _description = null;
+                }
+            }
+
+            public void Notify()
+            {
+                _autoEvent.Set();
+            }
+
+            public void Notify(int code, string description)
+            {
+                _code = code;
+                _description = description;
+                _isError = true;
+                _autoEvent.Set();
+            }
+        }
 
         public GrowlService(Logger logger)
         {
             _logger = logger;
             _notificationTypes = GetNotificationTypes();
-            _growlApplication.Icon = "https://raw.github.com/NzbDrone/NzbDrone/master/Logo/64.png";
+            Bitmap icon = NzbDrone.Core.Properties.Resources.growlIcon;
+            MemoryStream stream = new MemoryStream();
+            icon.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            _growlApplication.Icon = new BinaryData(stream.ToArray());
         }
 
         public void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password)
         {
-            var notificationType = _notificationTypes.Single(n => n.Name == notificationTypeName);
-            var notification = new GrowlNotification("NzbDrone", notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
-
-            _growlConnector = new GrowlConnector(password, hostname, port);
-
             _logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
-            _growlConnector.Notify(notification);
+            GrowlConnector growlConnector = new GrowlConnector(password, hostname, port);
+            growlConnector.OKResponse += GrowlOKResponse;
+            growlConnector.ErrorResponse += GrowlErrorResponse;
+            GrowlResult result = new GrowlResult();
+            var notificationType = _notificationTypes.Single(n => n.Name == notificationTypeName);
+            var notification = new GrowlNotification(_growlApplication.Name, notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
+            growlConnector.Notify(notification, result);
+            result.Wait(10000);
         }
 
         private void Register(string host, int port, string password)
         {
             _logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
-            _growlConnector = new GrowlConnector(password, host, port);
-            _growlConnector.Register(_growlApplication, _notificationTypes.ToArray());
+            GrowlConnector growlConnector = new GrowlConnector(password, host, port);
+            growlConnector.OKResponse += GrowlOKResponse;
+            growlConnector.ErrorResponse += GrowlErrorResponse;
+            GrowlResult result = new GrowlResult();
+            growlConnector.Register(_growlApplication, _notificationTypes, result);
+            result.Wait(20000);
         }
 
-        private List<NotificationType> GetNotificationTypes()
+        private void GrowlErrorResponse(Response response, object state)
+        {
+            GrowlResult result = state as GrowlResult;
+            result.Notify(response.ErrorCode, response.ErrorDescription);
+        }
+
+        private void GrowlOKResponse(Response response, object state)
+        {
+            GrowlResult result = state as GrowlResult;
+            result.Notify();
+        }
+
+        private NotificationType[] GetNotificationTypes()
         {
             var notificationTypes = new List<NotificationType>();
             notificationTypes.Add(new NotificationType("TEST", "Test"));
             notificationTypes.Add(new NotificationType("GRAB", "Episode Grabbed"));
             notificationTypes.Add(new NotificationType("DOWNLOAD", "Episode Complete"));
 
-            return notificationTypes;
+            return notificationTypes.ToArray();
         }
 
         public ValidationFailure Test(GrowlSettings settings)
@@ -67,8 +134,6 @@ namespace NzbDrone.Core.Notifications.Growl
 
                 const string title = "Test Notification";
                 const string body = "This is a test message from NzbDrone";
-
-                Thread.Sleep(5000);
 
                 SendNotification(title, body, "TEST", settings.Host, settings.Port, settings.Password);
             }
