@@ -74,8 +74,8 @@ namespace NzbDrone.Core.Notifications.Growl
         {
             _logger = logger;
             _notificationTypes = GetNotificationTypes();
-            Bitmap icon = NzbDrone.Core.Properties.Resources.growlIcon;
-            MemoryStream stream = new MemoryStream();
+            var icon = NzbDrone.Core.Properties.Resources.growlIcon;
+            var stream = new MemoryStream();
             icon.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
             _growlApplication.Icon = new BinaryData(stream.ToArray());
         }
@@ -83,10 +83,10 @@ namespace NzbDrone.Core.Notifications.Growl
         public void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password)
         {
             _logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
-            GrowlConnector growlConnector = new GrowlConnector(password, hostname, port);
+            var growlConnector = new GrowlConnector(password, hostname, port);
             growlConnector.OKResponse += GrowlOKResponse;
             growlConnector.ErrorResponse += GrowlErrorResponse;
-            GrowlResult result = new GrowlResult();
+            var result = new GrowlResult();
             var notificationType = _notificationTypes.Single(n => n.Name == notificationTypeName);
             var notification = new GrowlNotification(_growlApplication.Name, notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
             growlConnector.Notify(notification, result);
@@ -96,23 +96,23 @@ namespace NzbDrone.Core.Notifications.Growl
         private void Register(string host, int port, string password)
         {
             _logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
-            GrowlConnector growlConnector = new GrowlConnector(password, host, port);
+            var growlConnector = new GrowlConnector(password, host, port);
             growlConnector.OKResponse += GrowlOKResponse;
             growlConnector.ErrorResponse += GrowlErrorResponse;
-            GrowlResult result = new GrowlResult();
+            var result = new GrowlResult();
             growlConnector.Register(_growlApplication, _notificationTypes, result);
             result.Wait(20000);
         }
 
         private void GrowlErrorResponse(Response response, object state)
         {
-            GrowlResult result = state as GrowlResult;
+            var result = state as GrowlResult;
             result.Notify(response.ErrorCode, response.ErrorDescription);
         }
 
         private void GrowlOKResponse(Response response, object state)
         {
-            GrowlResult result = state as GrowlResult;
+            var result = state as GrowlResult;
             result.Notify();
         }
 
