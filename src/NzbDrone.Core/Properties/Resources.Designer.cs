@@ -63,9 +63,9 @@ namespace NzbDrone.Core.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap growlIcon {
+        internal static System.Drawing.Bitmap Icon64 {
             get {
-                object obj = ResourceManager.GetObject("growlIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("Icon64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

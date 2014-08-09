@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Drawing;
+using System.Drawing.Imaging;
 using FluentValidation.Results;
 using Growl.CoreLibrary;
 using Growl.Connector;
@@ -40,11 +41,11 @@ namespace NzbDrone.Core.Notifications.Growl
                 {
                     if (!_autoEvent.WaitOne(timeoutMs))
                     {
-                        throw new InvalidOperationException("timed out waiting for server");
+                        throw new GrowlException(ErrorCode.TIMED_OUT, ErrorDescription.TIMED_OUT, null);
                     }
                     if (_isError)
                     {
-                        throw new InvalidOperationException(String.Format("{0}: {1}", _code, _description));
+                        throw new GrowlException(_code, _description, null);
                     }
                 }
                 finally
@@ -74,46 +75,62 @@ namespace NzbDrone.Core.Notifications.Growl
         {
             _logger = logger;
             _notificationTypes = GetNotificationTypes();
-            var icon = NzbDrone.Core.Properties.Resources.growlIcon;
+
+            var icon = Properties.Resources.Icon64;
             var stream = new MemoryStream();
-            icon.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+            icon.Save(stream, ImageFormat.Bmp);
             _growlApplication.Icon = new BinaryData(stream.ToArray());
+        }
+
+        private GrowlConnector GetGrowlConnector(string hostname, int port, string password)
+        {
+            var growlConnector = new GrowlConnector(password, hostname, port);
+            growlConnector.OKResponse += GrowlOKResponse;
+            growlConnector.ErrorResponse += GrowlErrorResponse;
+            return growlConnector;
         }
 
         public void SendNotification(string title, string message, string notificationTypeName, string hostname, int port, string password)
         {
             _logger.Debug("Sending Notification to: {0}:{1}", hostname, port);
-            var growlConnector = new GrowlConnector(password, hostname, port);
-            growlConnector.OKResponse += GrowlOKResponse;
-            growlConnector.ErrorResponse += GrowlErrorResponse;
-            var result = new GrowlResult();
+
             var notificationType = _notificationTypes.Single(n => n.Name == notificationTypeName);
             var notification = new GrowlNotification(_growlApplication.Name, notificationType.Name, DateTime.Now.Ticks.ToString(), title, message);
+
+            var growlConnector = GetGrowlConnector(hostname, port, password);
+
+            var result = new GrowlResult();
             growlConnector.Notify(notification, result);
-            result.Wait(10000);
+            result.Wait(5000);
         }
 
         private void Register(string host, int port, string password)
         {
             _logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
-            var growlConnector = new GrowlConnector(password, host, port);
-            growlConnector.OKResponse += GrowlOKResponse;
-            growlConnector.ErrorResponse += GrowlErrorResponse;
+
+            var growlConnector = GetGrowlConnector(host, port, password);
+
             var result = new GrowlResult();
             growlConnector.Register(_growlApplication, _notificationTypes, result);
-            result.Wait(20000);
+            result.Wait(5000);
         }
 
         private void GrowlErrorResponse(Response response, object state)
         {
             var result = state as GrowlResult;
-            result.Notify(response.ErrorCode, response.ErrorDescription);
+            if (result != null)
+            {
+                result.Notify(response.ErrorCode, response.ErrorDescription);
+            }
         }
 
         private void GrowlOKResponse(Response response, object state)
         {
             var result = state as GrowlResult;
-            result.Notify();
+            if (result != null)
+            {
+                result.Notify();
+            }
         }
 
         private NotificationType[] GetNotificationTypes()
