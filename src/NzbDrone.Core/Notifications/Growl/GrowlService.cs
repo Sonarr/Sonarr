@@ -1,13 +1,14 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using Growl.Connector;
+using Growl.CoreLibrary;
+using GrowlNotification = Growl.Connector.Notification;
+using NLog;
+using NzbDrone.Common;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
-using FluentValidation.Results;
-using Growl.CoreLibrary;
-using Growl.Connector;
-using NLog;
-using GrowlNotification = Growl.Connector.Notification;
-using System.IO;
 
 namespace NzbDrone.Core.Notifications.Growl
 {
@@ -72,9 +73,9 @@ namespace NzbDrone.Core.Notifications.Growl
             _logger = logger;
             _notificationTypes = GetNotificationTypes();
 
-//            var bytes = File.ReadAllBytes("64.png");
-//
-//            _growlApplication.Icon = new BinaryData(bytes);
+            var logo = typeof(GrowlService).Assembly.GetManifestResourceBytes("NzbDrone.Core.Resources.Logo.64.png");
+
+            _growlApplication.Icon = new BinaryData(logo);
         }
 
         private GrowlConnector GetGrowlConnector(string hostname, int port, string password)

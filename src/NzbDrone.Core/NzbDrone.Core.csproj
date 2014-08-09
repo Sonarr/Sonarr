@@ -794,10 +794,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Logo\64.png">
-      <Link>64.png</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="..\..\Logo\64.png">
+      <Link>Resources\Logo\64.png</Link>
+    </EmbeddedResource>
     <Content Include="MediaInfo.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
