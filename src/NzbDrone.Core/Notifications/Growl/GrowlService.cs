@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Drawing;
-using System.Drawing.Imaging;
 using FluentValidation.Results;
 using Growl.CoreLibrary;
 using Growl.Connector;
 using NLog;
-using NzbDrone.Common.Instrumentation;
 using GrowlNotification = Growl.Connector.Notification;
-using System.Reflection;
 using System.IO;
 
 namespace NzbDrone.Core.Notifications.Growl
@@ -31,7 +27,7 @@ namespace NzbDrone.Core.Notifications.Growl
         private class GrowlRequestState
         {
             private AutoResetEvent _autoEvent = new AutoResetEvent(false);
-            private bool _isError = false;
+            private bool _isError;
             private int _code;
             private string _description;
 
@@ -76,10 +72,10 @@ namespace NzbDrone.Core.Notifications.Growl
             _logger = logger;
             _notificationTypes = GetNotificationTypes();
 
-            var icon = Properties.Resources.Icon64;
-            var stream = new MemoryStream();
-            icon.Save(stream, ImageFormat.Bmp);
-            _growlApplication.Icon = new BinaryData(stream.ToArray());
+            var iconPath = Path.Combine("UI", "Content", "Images", "logos", "64.png");
+            var bytes = File.ReadAllBytes(iconPath);
+
+            _growlApplication.Icon = new BinaryData(bytes);
         }
 
         private GrowlConnector GetGrowlConnector(string hostname, int port, string password)
