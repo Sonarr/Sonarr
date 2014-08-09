@@ -138,6 +138,7 @@
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="RateGate.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
+    <Compile Include="ResourceExtensions.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Serializer\Json.cs" />
