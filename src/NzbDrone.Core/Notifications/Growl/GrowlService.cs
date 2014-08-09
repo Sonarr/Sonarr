@@ -72,8 +72,7 @@ namespace NzbDrone.Core.Notifications.Growl
             _logger = logger;
             _notificationTypes = GetNotificationTypes();
 
-            var iconPath = Path.Combine("UI", "Content", "Images", "logos", "64.png");
-            var bytes = File.ReadAllBytes(iconPath);
+            var bytes = File.ReadAllBytes("64.png");
 
             _growlApplication.Icon = new BinaryData(bytes);
         }

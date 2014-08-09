@@ -161,7 +161,7 @@ Function PackageTests()
     Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force
 
-    Copy-Item .\*.sh               -Destination $testPackageFolder -Force
+    Copy-Item .\*.sh              -Destination $testPackageFolder -Force
 
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 
@@ -169,6 +169,8 @@ Function PackageTests()
 
     Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
     Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" -Destination $testPackageFolder -Force
+
+    Copy-Item "$outputFolder\64.png" -Destination $testPackageFolder -Force
 
     Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }

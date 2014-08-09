@@ -794,6 +794,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="MediaInfo.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
