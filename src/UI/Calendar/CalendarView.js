@@ -95,7 +95,7 @@ define(
 
                         this.$(element).find('.chart').tooltip({
                             title: 'Episode is downloading - {0}% {1}'.format(progress.toFixed(1), releaseTitle),
-                            container: 'body'
+                            container: '.fc-content'
                         });
                     }
                 }
@@ -235,7 +235,7 @@ define(
 
                 this.$(element).find('.status').tooltip({
                     title: tooltip,
-                    container: 'body'
+                    container: '.fc-content'
                 });
             }
         });
