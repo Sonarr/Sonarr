@@ -39,7 +39,20 @@ Function Build()
 Function CleanFolder($path)
 {
     Write-Host Removing XMLDoc files
-    get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {remove-item $_.fullname}
+    get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {
+
+        $filename = $_.FullName
+        $exeFilename = $filename -replace "xml", "exe"
+        $dllFilename = $filename -replace "xml", "dll"
+
+        if (Test-Path $exeFilename) {
+            remove-item $_.fullname
+        }
+
+        if (Test-Path $dllFilename) {
+            remove-item $_.fullname
+        }
+    }
 
     get-childitem $path -File -Filter *.transform -Recurse | foreach ($_) {remove-item $_.fullname}
     
@@ -209,8 +222,8 @@ Function CleanupWindowsPackage()
 }
 
 Build
-RunGrunt
-PackageMono
-PackageOsx
-PackageTests
-CleanupWindowsPackage
+# RunGrunt
+# PackageMono
+# PackageOsx
+# PackageTests
+# CleanupWindowsPackage
