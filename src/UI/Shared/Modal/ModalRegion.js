@@ -5,7 +5,7 @@ define(
         'backbone',
         'marionette',
         'bootstrap'
-    ], function ($,Backbone, Marionette) {
+    ], function ($, Backbone, Marionette) {
         var region = Marionette.Region.extend({
             el: '#modal-region',
 
@@ -27,9 +27,12 @@ define(
                 //https://github.com/twitter/bootstrap/issues/4663
                 this.$el.attr('tabindex', '-1');
                 this.$el.modal({
-                    'show'    : true,
-                    'keyboard': true,
-                    'backdrop': 'static'});
+                    show     : true,
+                    keyboard : true,
+                    backdrop : true
+                });
+
+                this.currentView.$el.addClass('modal-dialog');
             },
 
             closeModal: function () {
