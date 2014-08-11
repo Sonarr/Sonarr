@@ -222,8 +222,8 @@ Function CleanupWindowsPackage()
 }
 
 Build
-# RunGrunt
-# PackageMono
-# PackageOsx
-# PackageTests
-# CleanupWindowsPackage
+RunGrunt
+PackageMono
+PackageOsx
+PackageTests
+CleanupWindowsPackage
