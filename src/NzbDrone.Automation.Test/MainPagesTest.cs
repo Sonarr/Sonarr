@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Automation.Test.PageModel;
+using NzbDrone.Test.Common;
 using OpenQA.Selenium;
 
 namespace NzbDrone.Automation.Test
@@ -15,8 +16,8 @@ namespace NzbDrone.Automation.Test
         public void Setup()
         {
             page = new PageBase(driver);
+            ExceptionVerification.MarkInconclusive(typeof(StaleElementReferenceException));
         }
-
 
         [Test]
         public void series_page()
@@ -62,7 +63,6 @@ namespace NzbDrone.Automation.Test
             page.FindByClass("iv-system-systemlayout").Should().NotBeNull();
         }
 
-
         [Test]
         public void add_series_page()
         {
@@ -75,7 +75,5 @@ namespace NzbDrone.Automation.Test
 
             page.FindByClass("iv-addseries-addserieslayout").Should().NotBeNull();
         }
-
-
     }
 }
