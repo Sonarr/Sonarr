@@ -40,5 +40,13 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseSeriesName(postTitle);
             result.Should().Be(title.CleanSeriesTitle());
         }
+
+        [Test]
+        public void should_remove_accents_from_title()
+        {
+            const String title = "Carnivàle";
+            
+            title.CleanSeriesTitle().Should().Be("carnivale");
+        }
     }
 }

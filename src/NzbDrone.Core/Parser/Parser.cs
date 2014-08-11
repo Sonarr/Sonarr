@@ -300,7 +300,7 @@ namespace NzbDrone.Core.Parser
             if (Int64.TryParse(title, out number))
                 return title;
 
-            return NormalizeRegex.Replace(title, String.Empty).ToLower();
+            return NormalizeRegex.Replace(title, String.Empty).ToLower().RemoveAccent();
         }
 
         public static string CleanupEpisodeTitle(string title)

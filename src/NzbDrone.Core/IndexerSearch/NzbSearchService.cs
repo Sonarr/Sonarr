@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Extensions;
@@ -109,9 +106,12 @@ namespace NzbDrone.Core.IndexerSearch
                 var sceneSeasonGroups = episodes.GroupBy(v =>
                 {
                     if (v.SceneSeasonNumber == 0 && v.SceneEpisodeNumber == 0)
+                    {
                         return v.SeasonNumber;
-                    else
-                        return v.SceneSeasonNumber;
+                    }
+
+                    return v.SceneSeasonNumber;
+
                 }).Distinct();
 
                 foreach (var sceneSeasonEpisodes in sceneSeasonGroups)
