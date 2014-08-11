@@ -8,6 +8,7 @@ define(
         'Cells/QualityCell',
         'Cells/RelativeDateCell',
         'Episode/Activity/EpisodeActivityActionsCell',
+        'Episode/Activity/EpisodeActivityDetailsCell',
         'Episode/Activity/NoActivityView',
         'Shared/LoadingView'
     ], function (Marionette,
@@ -17,6 +18,7 @@ define(
                  QualityCell,
                  RelativeDateCell,
                  EpisodeActivityActionsCell,
+                 EpisodeActivityDetailsCell,
                  NoActivityView,
                  LoadingView) {
 
@@ -49,6 +51,12 @@ define(
                         name : 'date',
                         label: 'Date',
                         cell : RelativeDateCell
+                    },
+                    {
+                        name    : 'this',
+                        label   : '',
+                        cell    : EpisodeActivityDetailsCell,
+                        sortable: false
                     },
                     {
                         name    : 'this',

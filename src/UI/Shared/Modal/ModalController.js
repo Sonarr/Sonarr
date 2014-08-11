@@ -7,10 +7,10 @@ define(
         'Series/Edit/EditSeriesView',
         'Series/Delete/DeleteSeriesView',
         'Episode/EpisodeDetailsLayout',
-        'History/Details/HistoryDetailsView',
+        'History/Details/HistoryDetailsLayout',
         'System/Logs/Table/Details/LogDetailsView',
         'Rename/RenamePreviewLayout'
-    ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsView, LogDetailsView, RenamePreviewLayout) {
+    ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsLayout, LogDetailsView, RenamePreviewLayout) {
 
         return Marionette.AppRouter.extend({
 
@@ -49,7 +49,7 @@ define(
             },
 
             _showHistory: function (options) {
-                var view = new HistoryDetailsView({ model: options.model });
+                var view = new HistoryDetailsLayout({ model: options.model });
                 AppLayout.modalRegion.show(view);
             },
 

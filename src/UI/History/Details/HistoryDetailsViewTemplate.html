@@ -1,93 +1,71 @@
-﻿<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="history-detail-modal">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+﻿{{#if_eq eventType compare="grabbed"}}
+<dl class="dl-horizontal">
 
-                <h3>
-                    {{#if_eq eventType compare="grabbed"}}Grabbed{{/if_eq}}
-                    {{#if_eq eventType compare="downloadFailed"}}Download Failed{{/if_eq}}
-                    {{#if_eq eventType compare="downloadFolderImported"}}Episode Imported{{/if_eq}}
-                </h3>
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
 
-            </div>
-            <div class="modal-body">
-                {{#if_eq eventType compare="grabbed"}}
-                    <dl class="dl-horizontal">
+    {{#with data}}
+    {{#if indexer}}
+    <dt>Indexer:</dt>
+    <dd>{{indexer}}</dd>
+    {{/if}}
 
-                        <dt>Name:</dt>
-                        <dd>{{sourceTitle}}</dd>
+    {{#if releaseGroup}}
+    <dt>Release Group:</dt>
+    <dd>{{releaseGroup}}</dd>
+    {{/if}}
 
-                        {{#with data}}
-                            {{#if indexer}}
-                                <dt>Indexer:</dt>
-                                <dd>{{indexer}}</dd>
-                            {{/if}}
+    {{#if nzbInfoUrl}}
+    <dt>Info:</dt>
+    <dd><a href="{{nzbInfoUrl}}">{{nzbInfoUrl}}</a></dd>
+    {{/if}}
 
-                            {{#if releaseGroup}}
-                                <dt>Release Group:</dt>
-                                <dd>{{releaseGroup}}</dd>
-                            {{/if}}
+    {{#if downloadClient}}
+    <dt>Download Client:</dt>
+    <dd>{{downloadClient}}</dd>
+    {{/if}}
 
-                            {{#if nzbInfoUrl}}
-                                <dt>Info:</dt>
-                                <dd><a href="{{nzbInfoUrl}}">{{nzbInfoUrl}}</a></dd>
-                            {{/if}}
+    {{#if downloadClientId}}
+    <dt>Download Client ID:</dt>
+    <dd>{{downloadClientId}}</dd>
+    {{/if}}
 
-                            {{#if downloadClient}}
-                                <dt>Download Client:</dt>
-                                <dd>{{downloadClient}}</dd>
-                            {{/if}}
+    {{#if age}}
+    {{historyAge}}
+    {{/if}}
+    {{/with}}
+</dl>
+{{/if_eq}}
+{{#if_eq eventType compare="downloadFailed"}}
+<dl class="dl-horizontal">
 
-                            {{#if downloadClientId}}
-                                <dt>Download Client ID:</dt>
-                                <dd>{{downloadClientId}}</dd>
-                            {{/if}}
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
 
-                            {{#if age}}
-                                {{historyAge}}
-                            {{/if}}
-                        {{/with}}
-                    </dl>
-                {{/if_eq}}
-                {{#if_eq eventType compare="downloadFailed"}}
-                    <dl class="dl-horizontal">
+    {{#with data}}
+    <dt>Message:</dt>
+    <dd>{{message}}</dd>
+    {{/with}}
+</dl>
+{{/if_eq}}
+{{#if_eq eventType compare="downloadFolderImported"}}
+<dl class="dl-horizontal">
 
-                        <dt>Name:</dt>
-                        <dd>{{sourceTitle}}</dd>
+    {{#if sourceTitle}}
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
+    {{/if}}
 
-                        {{#with data}}
-                            <dt>Message:</dt>
-                            <dd>{{message}}</dd>
-                        {{/with}}
-                    </dl>
-                {{/if_eq}}
-                {{#if_eq eventType compare="downloadFolderImported"}}
-                    <dl class="dl-horizontal">
+    {{#with data}}
+    {{#if droppedPath}}
+    <dt>Source:</dt>
+    <dd>{{droppedPath}}</dd>
+    {{/if}}
 
-                        {{#if sourceTitle}}
-                            <dt>Name:</dt>
-                            <dd>{{sourceTitle}}</dd>
-                        {{/if}}
-
-                        {{#with data}}
-                            {{#if droppedPath}}
-                                <dt>Source:</dt>
-                                <dd>{{droppedPath}}</dd>
-                            {{/if}}
-
-                            {{#if importedPath}}
-                                <dt>Imported To:</dt>
-                                <dd>{{importedPath}}</dd>
-                            {{/if}}
-                        {{/with}}
-                    </dl>
-                {{/if_eq}}
-            </div>
-            <div class="modal-footer">
-                {{#if_eq eventType compare="grabbed"}}<button class="btn btn-danger x-mark-as-failed">mark as failed</button>{{/if_eq}}
-                <button class="btn" data-dismiss="modal">close</button>
-            </div>
-        </div>
-    </div>
-</div>
+    {{#if importedPath}}
+    <dt>Imported To:</dt>
+    <dd>{{importedPath}}</dd>
+    {{/if}}
+    {{/with}}
+</dl>
+{{/if_eq}}
