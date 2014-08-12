@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Automation.Test.PageModel;
-using NzbDrone.Test.Common;
 using OpenQA.Selenium;
 
 namespace NzbDrone.Automation.Test
@@ -11,12 +10,10 @@ namespace NzbDrone.Automation.Test
     {
         private PageBase page;
 
-
         [SetUp]
         public void Setup()
         {
             page = new PageBase(driver);
-            ExceptionVerification.MarkInconclusive(typeof(StaleElementReferenceException));
         }
 
         [Test]

@@ -27,11 +27,10 @@ namespace NzbDrone.Automation.Test.PageModel
             return wait.Until(d => d.FindElement(by));
         }
 
-
         public void WaitForNoSpinner(int timeout = 30)
         {
             //give the spinner some time to show up.
-            Thread.Sleep(100);
+            Thread.Sleep(200);
 
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeout));
             wait.Until(d =>
@@ -47,7 +46,6 @@ namespace NzbDrone.Automation.Test.PageModel
                 }
             });
         }
-
 
         public IWebElement SeriesNavIcon
         {
@@ -96,6 +94,5 @@ namespace NzbDrone.Automation.Test.PageModel
                 return FindByClass("x-system-nav");
             }
         }
-
     }
 }
