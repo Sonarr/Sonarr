@@ -153,6 +153,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex RequestInfoRegex = new Regex(@"\[.+?\]", RegexOptions.Compiled);
+
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
@@ -381,6 +383,7 @@ namespace NzbDrone.Core.Parser
         private static ParsedEpisodeInfo ParseMatchCollection(MatchCollection matchCollection)
         {
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ');
+            seriesName = RequestInfoRegex.Replace(seriesName, "").Trim(' ');
 
             int airYear;
             Int32.TryParse(matchCollection[0].Groups["airyear"].Value, out airYear);
