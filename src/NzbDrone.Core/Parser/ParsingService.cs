@@ -27,19 +27,16 @@ namespace NzbDrone.Core.Parser
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesService _seriesService;
         private readonly ISceneMappingService _sceneMappingService;
-        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public ParsingService(IEpisodeService episodeService,
                               ISeriesService seriesService,
                               ISceneMappingService sceneMappingService,
-                              IDiskProvider diskProvider,
                               Logger logger)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
             _sceneMappingService = sceneMappingService;
-            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -158,9 +155,14 @@ namespace NzbDrone.Core.Parser
                 {
                     Episode episode = null;
 
-                    if (sceneSource)
+                    if (parsedEpisodeInfo.Special)
                     {
-                        if (sceneSeasonNumber.HasValue && sceneSeasonNumber > 1)
+                        episode = _episodeService.FindEpisode(series.Id, 0, absoluteEpisodeNumber);
+                    }
+
+                    else if (sceneSource)
+                    {
+                        if (sceneSeasonNumber.HasValue && (sceneSeasonNumber == 0 || sceneSeasonNumber > 1))
                         {
                             var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
 

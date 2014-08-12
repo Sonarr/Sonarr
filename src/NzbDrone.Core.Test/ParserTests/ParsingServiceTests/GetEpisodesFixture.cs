@@ -4,6 +4,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -183,6 +184,44 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<IEpisodeService>()
                 .Verify(v => v.FindEpisode(It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32>()), Times.Once());
+        }
+
+        [Test]
+        public void should_use_scene_numbering_when_season_0_for_anime()
+        {
+            GivenAbsoluteNumberingSeries();
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.SeriesTitle))
+                  .Returns(0);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<Int32>(), 0, It.IsAny<Int32>()))
+                  .Returns(new List<Episode>());
+
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisodesBySceneNumbering(It.IsAny<Int32>(), 0, It.IsAny<Int32>()), Times.Once());
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisode(It.IsAny<Int32>(), 0, It.IsAny<Int32>()), Times.Once());
+        }
+
+        [Test]
+        public void should_look_for_episode_in_season_zero_if_absolute_special()
+        {
+            GivenAbsoluteNumberingSeries();
+
+            _parsedEpisodeInfo.Special = true;
+            
+            Subject.GetEpisodes(_parsedEpisodeInfo, _series, true, null);
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisodesBySceneNumbering(It.IsAny<Int32>(), 0, It.IsAny<Int32>()), Times.Never());
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.FindEpisode(It.IsAny<Int32>(), 0, It.IsAny<Int32>()), Times.Once());
         }
     }
 }

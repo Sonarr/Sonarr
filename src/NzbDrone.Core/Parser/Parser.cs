@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - [SubGroup] Title Absolute Episode Number
-                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:[-_. ]+(?<absoluteepisode>\d{2,}))+.*?(?<hash>\[[a-z0-9]{8}\])?(?:$|\.mkv)",
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:[-_. ]+(?<absoluteepisode>\d{2,}))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[[a-z0-9]{8}\])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-Part episodes without a title (S01E05.S01E06)
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title Absolute Episode Number Hash
-                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[.{8}\])(?:$|\.)",
+                new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[.{8}\])(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 103/113 naming
@@ -443,6 +443,11 @@ namespace NzbDrone.Core.Parser
 
                         var count = last - first + 1;
                         result.AbsoluteEpisodeNumbers = Enumerable.Range(first, count).ToArray();
+
+                        if (matchGroup.Groups["special"].Success)
+                        {
+                            result.Special = true;
+                        }
                     }
 
                     if (!episodeCaptures.Any() && !absoluteEpisodeCaptures.Any())
