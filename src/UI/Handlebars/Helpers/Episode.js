@@ -54,6 +54,10 @@ define(
                 return 'progress-bar-success';
             }
 
-            return 'progress-bar-danger';
+            if (this.monitored) {
+                return 'progress-bar-danger';
+            }
+
+            return 'progress-bar-warning';
         });
     });
