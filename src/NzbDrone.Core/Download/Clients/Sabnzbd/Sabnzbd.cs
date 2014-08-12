@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
@@ -239,14 +240,13 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (history.Count() != 1)
             {
-                _logger.Debug("History item missing. Couldn't get the new nzoid.");
+                _logger.Warn("History item missing. Couldn't get the new nzoid.");
                 return id;
             }
 
-            var queue = new List<DownloadClientItem>();
             for (int i = 0; i < 3; i++)
             {
-                queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
+                var queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
 
                 if (queue.Count() == 1)
                 {
@@ -255,14 +255,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (queue.Count() > 2)
                 {
-                    _logger.Debug("Multiple items with the correct title. Couldn't get the new nzoid.");
+                    _logger.Warn("Multiple items with the correct title. Couldn't get the new nzoid.");
                     return id;
                 }
 
-                System.Threading.Thread.Sleep(500);
+                Thread.Sleep(500);
             }
 
-            _logger.Debug("No items with the correct title. Couldn't get the new nzoid.");
+            _logger.Warn("No items with the correct title. Couldn't get the new nzoid.");
             return id;
         }
 
