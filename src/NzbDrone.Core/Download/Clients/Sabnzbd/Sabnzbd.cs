@@ -361,6 +361,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
             {
                 failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
+                failures.AddIfNotNull(TestCategoryLocalPath());
             }
         }
 
@@ -456,6 +457,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                         DetailedDescription = "You must disable Sabnzbd TV Sorting for the category NzbDrone uses to prevent import issues. Go to Sabnzbd to fix it."
                     };
                 }
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestCategoryLocalPath()
+        {
+            if (Settings.Host == "127.0.0.1" || Settings.Host == "localhost")
+            {
+                return new ValidationFailure("TvCategoryLocalPath", "Do not set when SABnzbd is running on the same system as NzbDrone");
             }
 
             return null;
