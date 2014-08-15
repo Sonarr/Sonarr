@@ -6,19 +6,19 @@ define(
         'Profile/ProfileCollection',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
+        'Mixins/AsEditModalView',
         'Mixins/AutoComplete'
-    ], function (vent, Marionette, Profiles, AsModelBoundView, AsValidatedView) {
+    ], function (vent, Marionette, Profiles, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Series/Edit/EditSeriesViewTemplate',
 
             ui: {
-                profile: '.x-profile',
-                path          : '.x-path'
+                profile : '.x-profile',
+                path    : '.x-path'
             },
 
             events: {
-                'click .x-save'  : '_saveSeries',
                 'click .x-remove': '_removeSeries'
             },
 
@@ -27,16 +27,14 @@ define(
                 this.model.set('profiles', Profiles);
             },
 
-            _saveSeries: function () {
-
-                var self = this;
+            _onBeforeSave: function () {
                 var profileId = this.ui.profile.val();
                 this.model.set({ profileId: profileId});
+            },
 
-                this.model.save().done(function () {
-                    self.trigger('saved');
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                });
+            _onAfterSave: function () {
+                this.trigger('saved');
+                vent.trigger(vent.Commands.CloseModalCommand);
             },
 
             onRender: function () {
@@ -48,7 +46,9 @@ define(
             }
         });
 
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+        AsEditModalView.call(view);
 
-        AsModelBoundView.apply(view);
-        return AsValidatedView.apply(view);
+        return view;
     });

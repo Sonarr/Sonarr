@@ -1,6 +1,6 @@
 ﻿<div class="modal-content">
     <div class="modal-header">
-    <button type="button" class="close x-cancel" aria-hidden="true">&times;</button>
+    <button type="button" class="close" aria-hidden="true" data-dismiss="modal">&times;</button>
     {{#if id}}
     <h3>Edit</h3>
     {{else}}
@@ -29,7 +29,8 @@
         {{#if id}}
         <button class="btn btn-danger pull-left x-delete">delete</button>
         {{/if}}
-        <button class="btn x-cancel">cancel</button>
+        <span class="indicator x-indicator"><i class="icon-spinner icon-spin"></i></span>
+        <button class="btn" data-dismiss="modal">cancel</button>
         <button class="btn btn-primary x-save">save</button>
     </div>
 </div>

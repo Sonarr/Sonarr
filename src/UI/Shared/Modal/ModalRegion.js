@@ -32,14 +32,24 @@ define(
                     backdrop : true
                 });
 
+                this.$el.on('hide.bs.modal', $.proxy(this._closing, this));
+
                 this.currentView.$el.addClass('modal-dialog');
             },
 
             closeModal: function () {
                 $(this.el).modal('hide');
                 this.reset();
-            }
+            },
 
+            _closing: function () {
+
+                if (this.$el) {
+                    this.$el.off('hide.bs.modal');
+                }
+
+                this.reset();
+            }
         });
 
         return region;

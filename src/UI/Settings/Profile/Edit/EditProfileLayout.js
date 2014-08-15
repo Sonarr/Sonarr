@@ -11,7 +11,8 @@ define(
         'Settings/Profile/Edit/EditProfileView',
         'Settings/Profile/DeleteProfileView',
         'Series/SeriesCollection',
-        'Config'
+        'Config',
+        'Mixins/AsEditModalView'
     ], function (_,
                  vent,
                  AppLayout,
@@ -22,9 +23,10 @@ define(
                  EditProfileView,
                  DeleteView,
                  SeriesCollection,
-                 Config) {
+                 Config,
+                 AsEditModalView) {
 
-        return Marionette.Layout.extend({
+        var view = Marionette.Layout.extend({
             template: 'Settings/Profile/Edit/EditProfileLayoutTemplate',
 
             regions: {
@@ -36,11 +38,7 @@ define(
                 deleteButton: '.x-delete'
             },
 
-            events: {
-                'click .x-save'   : '_saveProfile',
-                'click .x-cancel' : '_cancelProfile',
-                'click .x-delete' : '_delete'
-            },
+            _deleteView: DeleteView,
 
             initialize: function (options) {
                 this.profileCollection = options.profileCollection;
@@ -77,7 +75,17 @@ define(
                 this.listenTo(this.sortableListView, 'selectionChanged', this._selectionChanged);
                 this.listenTo(this.sortableListView, 'sortStop', this._updateModel);
             },
-            
+
+            _onBeforeSave: function () {
+                var cutoff = this.fieldsView.getCutoff();
+                this.model.set('cutoff', cutoff);
+            },
+
+            _onAfterSave: function () {
+                this.profileCollection.add(this.model, { merge: true });
+                vent.trigger(vent.Commands.CloseModalCommand);
+            },
+
             _selectionChanged: function(newSelectedModels, oldSelectedModels) {
                 var addedModels = _.difference(newSelectedModels, oldSelectedModels);
                 var removeModels = _.difference(oldSelectedModels, newSelectedModels);
@@ -93,44 +101,9 @@ define(
 
                 this._showFieldsView();
             },
-            
-            _saveProfile: function () {
-                var self = this;
-                var cutoff = this.fieldsView.getCutoff();
-                this.model.set('cutoff', cutoff);
-
-                var promise = this.model.save();
-
-                if (promise) {
-                    promise.done(function () {
-                        self.profileCollection.add(self.model, { merge: true });
-                        vent.trigger(vent.Commands.CloseModalCommand);
-                    });
-                }
-            },
-
-            _cancelProfile: function () {
-                if (!this.model.has('id')) {
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                    return;
-                }
-
-                var promise = this.model.fetch();
-
-                if (promise) {
-                    promise.done(function () {
-                        vent.trigger(vent.Commands.CloseModalCommand);
-                    });
-                }
-            },
 
             _showFieldsView: function () {
                 this.fields.show(this.fieldsView);
-            },
-
-            _delete: function () {
-                var view = new DeleteView({ model: this.model });
-                AppLayout.modalRegion.show(view);
             },
 
             _updateDisableStatus: function () {
@@ -147,4 +120,6 @@ define(
                 return SeriesCollection.where({'profileId': this.model.id}).length !== 0;
             }
         });
+
+        return AsEditModalView.call(view);
     });

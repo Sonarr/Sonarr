@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 define([
+    'underscore',
     'vent',
     'AppLayout',
     'marionette',
@@ -8,28 +9,25 @@ define([
     'Commands/CommandController',
     'Mixins/AsModelBoundView',
     'Mixins/AsValidatedView',
-    'underscore',
+    'Mixins/AsEditModalView',
     'Form/FormBuilder',
     'Mixins/AutoComplete',
     'bootstrap'
-], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, _) {
+], function (_, vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
     var view = Marionette.ItemView.extend({
         template: 'Settings/DownloadClient/Edit/DownloadClientEditViewTemplate',
 
         ui: {
             path      : '.x-path',
-            modalBody : '.modal-body',
-            indicator : '.x-indicator'
+            modalBody : '.modal-body'
         },
 
         events: {
-            'click .x-save'        : '_save',
-            'click .x-save-and-add': '_saveAndAdd',
-            'click .x-delete'      : '_delete',
-            'click .x-back'        : '_back',
-            'click .x-test'        : '_test'
+            'click .x-back' : '_back'
         },
+
+        _deleteView: DeleteView,
 
         initialize: function (options) {
             this.targetCollection = options.targetCollection;
@@ -44,65 +42,25 @@ define([
             this.ui.path.autoComplete('/directories');
         },
 
-        _save: function () {
-            this.ui.indicator.show();
-
-            var self = this;
-            var promise = this.model.save();
-
-            if (promise) {
-                promise.done(function () {
-                    self.targetCollection.add(self.model, { merge: true });
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                });
-
-                promise.fail(function () {
-                    self.ui.indicator.hide();
-                });
-            }
+        _onAfterSave: function () {
+            this.targetCollection.add(this.model, { merge: true });
+            vent.trigger(vent.Commands.CloseModalCommand);
         },
 
-        _saveAndAdd: function () {
-            this.ui.indicator.show();
+        _onAfterSaveAndAdd: function () {
+            this.targetCollection.add(this.model, { merge: true });
 
-            var self = this;
-            var promise = this.model.save();
-
-            if (promise) {
-                promise.done(function () {
-                    self.targetCollection.add(self.model, { merge: true });
-
-                    require('Settings/DownloadClient/Add/DownloadClientSchemaModal').open(self.targetCollection);
-                });
-
-                promise.fail(function () {
-                    self.ui.indicator.hide();
-                });
-            }
-        },
-
-        _delete: function () {
-            var view = new DeleteView({ model: this.model });
-            AppLayout.modalRegion.show(view);
+            require('Settings/DownloadClient/Add/DownloadClientSchemaModal').open(this.targetCollection);
         },
 
         _back: function () {
             require('Settings/DownloadClient/Add/DownloadClientSchemaModal').open(this.targetCollection);
-        },
-
-        _test: function () {
-            var self = this;
-
-            this.ui.indicator.show();
-
-            this.model.test().always(function () {
-                self.ui.indicator.hide();
-            });
         }
     });
 
     AsModelBoundView.call(view);
     AsValidatedView.call(view);
+    AsEditModalView.call(view);
 
     return view;
 });

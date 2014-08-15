@@ -6,8 +6,7 @@
     <div class="modal-body edit-series-modal">
         <div class="row">
             <div class="col-sm-3 hidden-xs">
-                <img class="series-poster" src="{{poster}}"
-                {{defaultImg}}>
+                <img class="series-poster" src="{{poster}}" {{defaultImg}}>
             </div>
             <div class="col-sm-9">
                 <div class="form-horizontal">
@@ -89,6 +88,8 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-danger pull-left x-remove">delete</button>
+
+        <span class="indicator x-indicator"><i class="icon-spinner icon-spin"></i></span>
         <button class="btn" data-dismiss="modal">cancel</button>
         <button class="btn btn-primary x-save">save</button>
     </div>

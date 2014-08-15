@@ -3,7 +3,7 @@ define(
     [
         'backbone.deepmodel'
     ], function (DeepModel) {
-        return DeepModel.DeepModel.extend({
+        return  DeepModel.DeepModel.extend({
             defaults: {
                 id    : null,
                 name  : '',
