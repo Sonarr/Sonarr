@@ -63,7 +63,8 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             foreach (var seriesTitle in titles)
             {
-                yield return CreateSearchUrl(String.Format("{0}+{1}", seriesTitle, absoluteEpisodeNumber), 0);
+                yield return CreateSearchUrl(String.Format("{0}+{1:0}+-volume", seriesTitle, absoluteEpisodeNumber), 0);
+                yield return CreateSearchUrl(String.Format("{0}+{1:00}+-volume", seriesTitle, absoluteEpisodeNumber), 0);
             }
         }
 
