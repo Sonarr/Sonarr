@@ -21,6 +21,7 @@ namespace NzbDrone.Core.MediaFiles
         List<string> FilterExistingFiles(List<string> files, Series series);
         EpisodeFile Get(int id);
         List<EpisodeFile> Get(IEnumerable<int> ids);
+
     }
 
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
