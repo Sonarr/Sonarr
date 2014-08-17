@@ -25,10 +25,10 @@
     </div>
 </fieldset>
 
-{{#if_mono}}
 <fieldset class="advanced-setting">
     <legend>Importing</legend>
 
+{{#if_mono}}
     <div class="form-group">
         <label class="col-sm-3 control-label">Skip Free Space Check</label>
 
@@ -51,5 +51,29 @@
             </div>
         </div>
     </div>
-</fieldset>
 {{/if_mono}}
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Use Hardlinks instead of Copy</label>
+
+        <div class="col-sm-9">
+            <div class="input-group">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="copyUsingHardlinks"/>
+
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-nd-form-info" title="Use Hardlinks when trying to copy files from seeding torrents"/>
+                    <i class="icon-nd-form-warn" title="Occassionally, file locks may prevent renaming files that are currently seeding. Temporarily disable seeding while using the Rename UI to rename existing episodes to work around it."/>
+                </span>
+            </div>
+        </div>
+    </div>
+</fieldset>

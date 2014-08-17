@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Instrumentation;
+using Mono.Unix;
 
 namespace NzbDrone.Mono
 {
@@ -141,6 +142,19 @@ namespace NzbDrone.Mono
                     drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
                     .OrderByDescending(drive => drive.Name.Length)
                     .FirstOrDefault();
+        }
+
+        public override bool TryCreateHardLink(string source, string destination)
+        {
+            try
+            {
+                UnixFileSystemInfo.GetFileSystemEntry(source).CreateLink(destination);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
