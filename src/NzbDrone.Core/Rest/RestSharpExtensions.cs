@@ -49,6 +49,11 @@ namespace NzbDrone.Core.Rest
         {
             restResponse.ValidateResponse(restClient);
 
+            if (restResponse.Content != null)
+            {
+                Logger.Trace("Response: " + restResponse.Content);
+            }
+
             return Json.Deserialize<T>(restResponse.Content);
         }
 
