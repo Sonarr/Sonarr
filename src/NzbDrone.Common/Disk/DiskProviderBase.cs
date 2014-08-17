@@ -13,12 +13,6 @@ namespace NzbDrone.Common.Disk
 {
     public abstract class DiskProviderBase : IDiskProvider
     {
-        enum TransferAction
-        {
-            Copy,
-            Move
-        }
-
         private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
         public abstract long? GetAvailableSpace(string path);
@@ -152,7 +146,7 @@ namespace NzbDrone.Common.Disk
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(destination, () => destination).IsValidPath();
 
-            TransferFolder(source, destination, TransferAction.Copy);
+            TransferFolder(source, destination, TransferMode.Copy);
         }
 
         public void MoveFolder(string source, string destination)
@@ -162,7 +156,7 @@ namespace NzbDrone.Common.Disk
 
             try
             {
-                TransferFolder(source, destination, TransferAction.Move);
+                TransferFolder(source, destination, TransferMode.Move);
                 DeleteFolder(source, true);
             }
             catch (Exception e)
@@ -173,15 +167,15 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        private void TransferFolder(string source, string target, TransferAction transferAction)
+        public void TransferFolder(string source, string destination, TransferMode mode)
         {
             Ensure.That(source, () => source).IsValidPath();
-            Ensure.That(target, () => target).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
 
-            Logger.ProgressDebug("{0} {1} -> {2}", transferAction, source, target);
+            Logger.ProgressDebug("{0} {1} -> {2}", mode, source, destination);
 
             var sourceFolder = new DirectoryInfo(source);
-            var targetFolder = new DirectoryInfo(target);
+            var targetFolder = new DirectoryInfo(destination);
 
             if (!targetFolder.Exists)
             {
@@ -190,28 +184,16 @@ namespace NzbDrone.Common.Disk
 
             foreach (var subDir in sourceFolder.GetDirectories())
             {
-                TransferFolder(subDir.FullName, Path.Combine(target, subDir.Name), transferAction);
+                TransferFolder(subDir.FullName, Path.Combine(destination, subDir.Name), mode);
             }
 
             foreach (var sourceFile in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                var destFile = Path.Combine(target, sourceFile.Name);
+                var destFile = Path.Combine(destination, sourceFile.Name);
 
-                Logger.ProgressDebug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
+                Logger.ProgressDebug("{0} {1} -> {2}", mode, sourceFile, destFile);
 
-                switch (transferAction)
-                {
-                    case TransferAction.Copy:
-                        {
-                            sourceFile.CopyTo(destFile, true);
-                            break;
-                        }
-                    case TransferAction.Move:
-                        {
-                            MoveFile(sourceFile.FullName, destFile, true);
-                            break;
-                        }
-                }
+                TransferFile(sourceFile.FullName, destFile, mode, true);
             }
         }
 
@@ -227,19 +209,15 @@ namespace NzbDrone.Common.Disk
 
         public void CopyFile(string source, string destination, bool overwrite = false)
         {
-            Ensure.That(source, () => source).IsValidPath();
-            Ensure.That(destination, () => destination).IsValidPath();
-
-            if (source.PathEquals(destination))
-            {
-                Logger.Warn("Source and destination can't be the same {0}", source);
-                return;
-            }
-
-            File.Copy(source, destination, overwrite);
+            TransferFile(source, destination, TransferMode.Copy, overwrite);
         }
 
         public void MoveFile(string source, string destination, bool overwrite = false)
+        {
+            TransferFile(source, destination, TransferMode.Move, overwrite);
+        }
+
+        public TransferMode TransferFile(string source, string destination, TransferMode mode, bool overwrite)
         {
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(destination, () => destination).IsValidPath();
@@ -247,7 +225,7 @@ namespace NzbDrone.Common.Disk
             if (source.PathEquals(destination))
             {
                 Logger.Warn("Source and destination can't be the same {0}", source);
-                return;
+                return TransferMode.None;
             }
 
             if (FileExists(destination) && overwrite)
@@ -255,9 +233,36 @@ namespace NzbDrone.Common.Disk
                 DeleteFile(destination);
             }
 
-            RemoveReadOnly(source);
-            File.Move(source, destination);
+            if (mode.HasFlag(TransferMode.HardLink))
+            {
+                bool createdHardlink = TryCreateHardLink(source, destination);
+                if (createdHardlink)
+                {
+                    return TransferMode.HardLink;
+                }
+                else if (!mode.HasFlag(TransferMode.Copy))
+                {
+                    throw new IOException("Hardlinking from '" + source + "' to '" + destination + "' failed.");
+                }
+            }
+
+            if (mode.HasFlag(TransferMode.Copy))
+            {
+                File.Copy(source, destination, overwrite);
+                return TransferMode.Copy;
+            }
+
+            if (mode.HasFlag(TransferMode.Move))
+            {
+                RemoveReadOnly(source);
+                File.Move(source, destination);
+                return TransferMode.Move;
+            }
+
+            return TransferMode.None;
         }
+
+        public abstract bool TryCreateHardLink(string source, string destination);
 
         public void DeleteFolder(string path, bool recursive)
         {

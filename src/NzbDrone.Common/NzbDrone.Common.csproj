@@ -73,6 +73,7 @@
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />
+    <Compile Include="Disk\TransferMode.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />
     <Compile Include="EnsureThat\EnsureCollectionExtensions.cs" />

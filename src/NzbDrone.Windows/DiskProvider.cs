@@ -19,6 +19,10 @@ namespace NzbDrone.Windows
         out ulong lpTotalNumberOfBytes,
         out ulong lpTotalNumberOfFreeBytes);
 
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
+
         public override long? GetAvailableSpace(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
@@ -97,6 +101,19 @@ namespace NzbDrone.Windows
             }
 
             return 0;
+        }
+
+        
+        public override bool TryCreateHardLink(string source, string destination)
+        {
+            try
+            {
+                return CreateHardLink(destination, source, IntPtr.Zero);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
