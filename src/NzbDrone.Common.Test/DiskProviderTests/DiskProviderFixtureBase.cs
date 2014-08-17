@@ -163,6 +163,72 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         }
 
         [Test]
+        public void should_be_able_to_hardlink_file()
+        {
+            var sourceDir = GetTempFilePath();
+            var source = Path.Combine(sourceDir, "test.txt");
+            var destination = Path.Combine(sourceDir, "destination.txt");
+
+            Directory.CreateDirectory(sourceDir);
+
+            Subject.WriteAllText(source, "SourceFile");
+
+            var result = Subject.TransferFile(source, destination, TransferMode.HardLink);
+
+            result.Should().Be(TransferMode.HardLink);
+
+            File.AppendAllText(source, "Test");
+            File.ReadAllText(destination).Should().Be("SourceFileTest");
+        }
+
+        private void DoHardLinkRename(FileShare fileShare)
+        {
+            var sourceDir = GetTempFilePath();
+            var source = Path.Combine(sourceDir, "test.txt");
+            var destination = Path.Combine(sourceDir, "destination.txt");
+            var rename = Path.Combine(sourceDir, "rename.txt");
+
+            Directory.CreateDirectory(sourceDir);
+
+            Subject.WriteAllText(source, "SourceFile");
+
+            Subject.TransferFile(source, destination, TransferMode.HardLink);
+
+            using (var stream = new FileStream(source, FileMode.Open, FileAccess.Read, fileShare))
+            {
+                stream.ReadByte();
+
+                Subject.MoveFile(destination, rename);
+
+                stream.ReadByte();
+            }
+
+            File.Exists(rename).Should().BeTrue();
+            File.Exists(destination).Should().BeFalse();
+
+            File.AppendAllText(source, "Test");
+            File.ReadAllText(rename).Should().Be("SourceFileTest");
+        }
+
+        [Test]
+        public void should_be_able_to_rename_open_hardlinks_with_fileshare_delete()
+        {
+            DoHardLinkRename(FileShare.Delete);
+        }
+
+        [Test]
+        public void should_not_be_able_to_rename_open_hardlinks_with_fileshare_none()
+        {
+            Assert.Throws<IOException>(() => DoHardLinkRename(FileShare.None));
+        }
+
+        [Test]
+        public void should_not_be_able_to_rename_open_hardlinks_with_fileshare_write()
+        {
+            Assert.Throws<IOException>(() => DoHardLinkRename(FileShare.Read));
+        }
+
+        [Test]
         public void empty_folder_should_return_folder_modified_date()
         {
             var tempfolder = new DirectoryInfo(TempFolder);
