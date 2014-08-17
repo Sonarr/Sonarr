@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         public String Name { get; set; }
         public String State { get; set; }
         public Double Progress { get; set; }
-        public Int32 Eta { get; set; }
+        public Double Eta { get; set; }
         public String Message { get; set; }
 
         [JsonProperty(PropertyName = "is_finished")]
