@@ -19,5 +19,6 @@ namespace NzbDrone.Api.Config
         public String ChownGroup { get; set; }
 
         public Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
+        public Boolean CopyUsingHardlinks { get; set; }
     }
 }

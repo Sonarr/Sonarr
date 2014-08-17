@@ -220,6 +220,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("SkipFreeSpaceCheckWhenImporting", value); }
         }
 
+        public Boolean CopyUsingHardlinks
+        {
+            get { return GetValueBoolean("CopyUsingHardlinks", false); }
+
+            set { SetValue("CopyUsingHardlinks", value); }
+        }
+
         public Boolean SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }
