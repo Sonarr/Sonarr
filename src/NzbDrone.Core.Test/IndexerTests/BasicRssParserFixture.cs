@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [TestCase("845 MB", 886046720)]
         public void parse_size(string sizeString, long expectedSize)
         {
-            var result = RssParserBase.ParseSize(sizeString);
+            var result = RssParserBase.ParseSize(sizeString, true);
 
             result.Should().Be(expectedSize);
         }

@@ -48,18 +48,18 @@ namespace NzbDrone.Integration.Test.Client
 
         }
 
-        public TResource Post(TResource body)
+        public TResource Post(TResource body, HttpStatusCode statusCode = HttpStatusCode.Created)
         {
             var request = BuildRequest();
             request.AddBody(body);
-            return Post<TResource>(request);
+            return Post<TResource>(request, statusCode);
         }
 
-        public TResource Put(TResource body)
+        public TResource Put(TResource body, HttpStatusCode statusCode = HttpStatusCode.Accepted)
         {
             var request = BuildRequest();
             request.AddBody(body);
-            return Put<TResource>(request);
+            return Put<TResource>(request, statusCode);
         }
 
         public TResource Get(int id, HttpStatusCode statusCode = HttpStatusCode.OK)

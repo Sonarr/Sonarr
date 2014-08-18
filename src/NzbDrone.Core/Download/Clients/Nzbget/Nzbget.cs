@@ -314,7 +314,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 if (ex.Message.ContainsIgnoreCase("Authentication failed"))
                 {
-                    return new ValidationFailure("Username", "Authentication failed");
+                    return new NzbDroneValidationFailure("Username", "Authentication failed");
                 }
                 _logger.ErrorException(ex.Message, ex);
                 return new ValidationFailure("Host", "Unable to connect to NZBGet");

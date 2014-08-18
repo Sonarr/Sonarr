@@ -23,6 +23,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Real Time with Bill Maher S12E17 May 23, 2014.mp4", "DRONE")]
         [TestCase("Reizen Waes - S01E08 - Transistrië, Zuid-Ossetië en Abchazië SDTV.avi", "DRONE")]
         [TestCase("Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi", "DRONE")]
+        [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "DIMENSION")]
+        [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "2HD")]
         public void should_parse_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);

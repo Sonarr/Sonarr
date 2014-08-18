@@ -26,22 +26,22 @@ namespace NzbDrone.Core.Indexers.Wombles
 
         public override IEnumerable<string> GetEpisodeSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int episodeNumber)
         {
-            return new List<string>();
+            return Enumerable.Empty<String>();
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int offset)
         {
-            return new List<string>();
+            return Enumerable.Empty<String>();
         }
 
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(List<String> titles, int tvRageId, DateTime date)
         {
-            return new List<string>();
+            return Enumerable.Empty<String>();
         }
 
         public override IEnumerable<string> GetAnimeEpisodeSearchUrls(List<String> titles, int tvRageId, int absoluteEpisodeNumber)
         {
-            return new string[0];
+            return Enumerable.Empty<String>();
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)

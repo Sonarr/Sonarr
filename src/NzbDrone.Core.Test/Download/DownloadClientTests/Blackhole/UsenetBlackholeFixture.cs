@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Linq;
@@ -39,12 +40,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             };
         }
 
-        protected void WithSuccessfulDownload()
-        {
-
-        }
-
-        protected void WithFailedDownload()
+        protected void GivenFailedDownload()
         {
             Mocker.GetMock<IHttpProvider>()
                 .Setup(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
@@ -113,6 +109,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var result = Subject.GetItems().Single();
 
             result.Status.Should().Be(DownloadItemStatus.Downloading);
+        }
+
+        [Test]
+        public void should_return_status_with_outputdirs()
+        {
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(_completedDownloadFolder);
         }
     }
 }

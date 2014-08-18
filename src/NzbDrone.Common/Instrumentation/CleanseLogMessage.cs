@@ -7,8 +7,8 @@ namespace NzbDrone.Common.Instrumentation
         private static readonly Regex[] CleansingRules = new[] 
             {
                 // Url
-                new Regex(@"(<=\?|&)apikey=(?<secret>\w+?)(?=\W|$|_)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                new Regex(@"(<=\?|&)[^=]*?(username|password)=(?<secret>\w+?)(?=\W|$|_)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"(?<=\?|&)(apikey|token)=(?<secret>\w+?)(?= |&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"(?<=\?|&)[^=]*?(username|password)=(?<secret>\w+?)(?= |&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
                 
                 // NzbGet
                 new Regex(@"""Name""\s*:\s*""[^""]*(username|password)""\s*,\s*""Value""\s*:\s*""(?<secret>[^""]+?)""", RegexOptions.Compiled | RegexOptions.IgnoreCase),
