@@ -183,8 +183,6 @@ Function PackageTests()
     Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
     Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" -Destination $testPackageFolder -Force
 
-    Copy-Item "$outputFolder\64.png" -Destination $testPackageFolder -Force
-
     Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }
 
