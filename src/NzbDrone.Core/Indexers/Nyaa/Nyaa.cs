@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             get
             {
-                yield return CreateRssUrl("?page=rss");
+                yield return CreateRssUrl("?page=rss&cats=1_37&filter=1");
             }
         }
 
@@ -63,8 +63,11 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             foreach (var seriesTitle in titles)
             {
-                yield return CreateSearchUrl(String.Format("{0}+{1:0}+-volume", seriesTitle, absoluteEpisodeNumber), 0);
-                yield return CreateSearchUrl(String.Format("{0}+{1:00}+-volume", seriesTitle, absoluteEpisodeNumber), 0);
+                yield return CreateSearchUrl(String.Format("{0}+{1:0}", seriesTitle.Replace(' ', '+'), absoluteEpisodeNumber), 0);
+                if (absoluteEpisodeNumber < 10)
+                {
+                    yield return CreateSearchUrl(String.Format("{0}+{1:00}", seriesTitle.Replace(' ', '+'), absoluteEpisodeNumber), 0);
+                }
             }
         }
 
