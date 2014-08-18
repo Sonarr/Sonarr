@@ -16,6 +16,7 @@ using NzbDrone.Core.Validation;
 using NLog;
 using Omu.ValueInjecter;
 using FluentValidation.Results;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {
@@ -176,18 +177,30 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 _proxy.GetVersion(Settings);
             }
+            catch (DownloadClientAuthenticationException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new NzbDroneValidationFailure("Password", "Authentication failed");
+            }
+            catch (WebException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                if (ex.Status == WebExceptionStatus.ConnectFailure)
+                {
+                    return new NzbDroneValidationFailure("Host", "Unable to connect")
+                    {
+                        DetailedDescription = "Please verify the hostname and port."
+                    };
+                }
+                else
+                {
+                    return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                }
+            }
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                if ((ex is DelugeException) && (ex as DelugeException).Code == 1)
-                {
-                    return new NzbDroneValidationFailure("Password", "Authentication failed");
-                }
-
-                return new NzbDroneValidationFailure("Host", "Unable to connect to Deluge")
-                {
-                    DetailedDescription = "Unable to connect. Please verify that the WebUI plugin is enabled in Deluge."
-                };
+                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
             }
 
             return null;

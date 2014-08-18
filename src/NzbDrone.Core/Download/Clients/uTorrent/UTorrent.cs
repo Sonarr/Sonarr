@@ -6,14 +6,12 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NLog;
-using Omu.ValueInjecter;
+using NzbDrone.Core.Validation;
 using FluentValidation.Results;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -191,10 +189,33 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                     return new ValidationFailure(string.Empty, "Old uTorrent client with unsupported API, need 3.0 or higher");
                 }
             }
+            catch (DownloadClientAuthenticationException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new NzbDroneValidationFailure("Username", "Authentication failure")
+                {
+                    DetailedDescription = "Please verify your username and password."
+                };
+            }
+            catch (WebException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                if (ex.Status == WebExceptionStatus.ConnectFailure)
+                {
+                    return new NzbDroneValidationFailure("Host", "Unable to connect")
+                    {
+                        DetailedDescription = "Please verify the hostname and port."
+                    };
+                }
+                else
+                {
+                    return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                }
+            }
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return new ValidationFailure("Host", "Unable to connect to uTorrent");
+                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
             }
 
             return null;

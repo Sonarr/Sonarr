@@ -11,6 +11,8 @@ using NzbDrone.Core.Configuration;
 using NLog;
 using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
+using NzbDrone.Core.Validation;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -151,10 +153,33 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     return new ValidationFailure(string.Empty, "Transmission version not supported, should be 2.40 or higher.");
                 }
             }
+            catch (DownloadClientAuthenticationException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new NzbDroneValidationFailure("Username", "Authentication failure")
+                {
+                    DetailedDescription = "Please verify your username and password. Also verify if the host running NzbDrone isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
+                };
+            }
+            catch (WebException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                if (ex.Status == WebExceptionStatus.ConnectFailure)
+                {
+                    return new NzbDroneValidationFailure("Host", "Unable to connect")
+                    {
+                        DetailedDescription = "Please verify the hostname and port."
+                    };
+                }
+                else
+                {
+                    return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                }
+            }
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return new ValidationFailure("Host", "Unable to connect to Transmission");
+                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
             }
 
             return null;

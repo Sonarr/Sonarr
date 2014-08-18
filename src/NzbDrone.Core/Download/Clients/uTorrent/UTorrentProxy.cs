@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Rest;
 using RestSharp;
 
@@ -171,16 +169,20 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
 
             var clientResponse = client.Execute(request);
-            
+
             if (clientResponse.StatusCode == HttpStatusCode.BadRequest)
             {
                 // Token has expired. If the settings were incorrect or the API is disabled we'd have gotten an error 400 during GetAuthToken
-                _logger.Debug("uTorrent authentication error.");
+                _logger.Debug("uTorrent authentication token error.");
 
                 _authToken = GetAuthToken(client);
 
                 request.Parameters.First(v => v.Name == "token").Value = _authToken;
                 clientResponse = client.Execute(request);
+            }
+            else if (clientResponse.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new DownloadClientAuthenticationException("Failed to authenticate");
             }
 
             var uTorrentResult = clientResponse.Read<UTorrentResponse>(client);
@@ -195,10 +197,12 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             request.Resource = "/gui/token.html";
             var response = client.Execute(request);
 
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                throw new Exception("Unable to connect to µTorrent");
+                throw new DownloadClientAuthenticationException("Failed to authenticate");
             }
+
+            response.ValidateResponse(client);
 
             var xmlDoc = new System.Xml.XmlDocument();
             xmlDoc.LoadXml(response.Content);

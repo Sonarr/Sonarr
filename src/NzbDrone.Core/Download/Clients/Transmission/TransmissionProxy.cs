@@ -140,9 +140,17 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
 
             var sessionIdResponse = client.Execute(sessionIdRequest);
-            var sessionId = (String)sessionIdResponse.Headers.Single(o => o.Name == "X-Transmission-Session-Id").Value;
 
-            return sessionId;
+            sessionIdResponse.ValidateResponse(client);
+
+            var sessionId = sessionIdResponse.Headers.SingleOrDefault(o => o.Name == "X-Transmission-Session-Id");
+
+            if (sessionId == null)
+            {
+                throw new DownloadClientAuthenticationException("Getting Transmission session id failed. Wrong username or password?");
+            }
+
+            return (String)sessionId.Value;
         }
 
         public TransmissionResponse ProcessRequest(String action, Object arguments, TransmissionSettings settings)

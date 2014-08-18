@@ -144,6 +144,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     {
                         return response;
                     }
+
+                    throw new DownloadClientAuthenticationException(response.Error.Message);
                 }
 
                 throw new DelugeException(response.Error.Message, response.Error.Code);
@@ -205,6 +207,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             if (!result.Result)
             {
                 _logger.Debug("Deluge authentication failed.");
+                throw new DownloadClientAuthenticationException("Failed to authenticate with Deluge.");
             }
             else
             {
