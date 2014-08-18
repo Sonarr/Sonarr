@@ -18,8 +18,15 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [JsonProperty(PropertyName = "is_finished")]
         public Boolean IsFinished { get; set; }
         
-        // TODO: Also 'move_on_completed_path'. What is the difference?
+        // Other paths: What is the difference between  'move_completed_path' and 'move_on_completed_path'?
+        /*
         [JsonProperty(PropertyName = "move_completed_path")] 
+        public String DownloadPathMoveCompleted { get; set; }
+        [JsonProperty(PropertyName = "move_on_completed_path")] 
+        public String DownloadPathMoveOnCompleted { get; set; }
+        */
+
+        [JsonProperty(PropertyName = "save_path")] 
         public String DownloadPath { get; set; }
 
         [JsonProperty(PropertyName = "total_size")]

@@ -49,7 +49,6 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public Dictionary<String, Object> GetConfig(DelugeSettings settings)
         {
-            var arguments = new List<Object>();
             var response = ProcessRequest<Dictionary<String, Object>>(settings, "core.get_config");
 
             return response.Result;
