@@ -133,6 +133,12 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var sessionIdRequest = new RestRequest();
             sessionIdRequest.RequestFormat = DataFormat.Json;
+            
+            if (!settings.Username.IsNullOrWhiteSpace())
+            {
+                sessionIdRequest.Credentials = new NetworkCredential(settings.Username, settings.Password);
+            }
+
             var sessionIdResponse = client.Execute(sessionIdRequest);
             var sessionId = (String)sessionIdResponse.Headers.Single(o => o.Name == "X-Transmission-Session-Id").Value;
 
