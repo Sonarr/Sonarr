@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentValidation;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
@@ -47,72 +46,18 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 var list = new List<IndexerDefinition>();
 
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "Nzbs.org",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("http://nzbs.org", new List<Int32> { 5000 })
-                });
-
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "Nzb.su",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://api.nzb.su", new List<Int32>())
-                });
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "Dognzb.cr",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://api.dognzb.cr", new List<Int32>())
-                });
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "OZnzb.com",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://www.oznzb.com", new List<Int32>())
-                });
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "nzbplanet.net",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://nzbplanet.net", new List<Int32>())
-                });
-
-                list.Add(new IndexerDefinition
-                {
-                    Enable = false,
-                    Name = "NZBgeek",
-                    Implementation = GetType().Name,
-                    Settings = GetSettings("https://api.nzbgeek.info", new List<Int32>())
-                });
+                list.Add(GetDefinition("Nzbs.org", GetSettings("http://nzbs.org", new List<Int32> { 5000 })));
+                list.Add(GetDefinition("Nzb.su", GetSettings("https://api.nzb.su", new List<Int32>())));
+                list.Add(GetDefinition("Dognzb.cr", GetSettings("https://api.dognzb.cr", new List<Int32>())));
+                list.Add(GetDefinition("OZnzb.com", GetSettings("https://www.oznzb.com", new List<Int32>())));
+                list.Add(GetDefinition("nzbplanet.net", GetSettings("https://nzbplanet.net", new List<Int32>())));
+                list.Add(GetDefinition("NZBgeek", GetSettings("https://api.nzbgeek.info", new List<Int32>())));
 
                 return list;
             }
         }
 
         public override ProviderDefinition Definition { get; set; }
-
-        private NewznabSettings GetSettings(string url, List<int> categories)
-        {
-            var settings = new NewznabSettings { Url = url };
-
-            if (categories.Any())
-            {
-                settings.Categories = categories;
-            }
-
-            return settings;
-        }
 
         public override IEnumerable<string> RecentFeed
         {
@@ -239,6 +184,32 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return new ValidationResult();
+        }
+
+        private IndexerDefinition GetDefinition(String name, NewznabSettings settings)
+        {
+            return new IndexerDefinition
+                   {
+                       EnableRss = false,
+                       EnableSearch = false,
+                       Name = name,
+                       Implementation = GetType().Name,
+                       Settings = settings,
+                       Protocol = DownloadProtocol.Usenet,
+                       SupportsSearch = SupportsSearch
+                   };
+        }
+
+        private NewznabSettings GetSettings(String url, List<Int32> categories)
+        {
+            var settings = new NewznabSettings { Url = url };
+
+            if (categories.Any())
+            {
+                settings.Categories = categories;
+            }
+
+            return settings;
         }
 
         private static string NewsnabifyTitle(string title)

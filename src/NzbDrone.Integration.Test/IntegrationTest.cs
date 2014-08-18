@@ -72,7 +72,7 @@ namespace NzbDrone.Integration.Test
             // Add Wombles
             var wombles = Indexers.Post(new Api.Indexers.IndexerResource
             {
-                Enable = true,
+                EnableRss = true,
                 ConfigContract = "NullConfig",
                 Implementation = "Wombles",
                 Name = "Wombles",

@@ -43,7 +43,12 @@ namespace NzbDrone.Api
 
         private TProviderResource GetProviderById(int id)
         {
-            return _providerFactory.Get(id).InjectTo<TProviderResource>();
+            var definition = _providerFactory.Get(id);
+            var resource = definition.InjectTo<TProviderResource>();
+
+            resource.InjectFrom(_providerFactory.GetProviderCharacteristics(_providerFactory.GetInstance(definition), definition));
+
+            return resource;
         }
 
         private List<TProviderResource> GetAll()
@@ -56,6 +61,7 @@ namespace NzbDrone.Api
             {
                 var providerResource = new TProviderResource();
                 providerResource.InjectFrom(definition);
+                providerResource.InjectFrom(_providerFactory.GetProviderCharacteristics(_providerFactory.GetInstance(definition), definition));
                 providerResource.Fields = SchemaBuilder.ToSchema(definition.Settings);
 
                 result.Add(providerResource);
@@ -116,7 +122,7 @@ namespace NzbDrone.Api
 
         private Response GetTemplates()
         {
-            var defaultDefinitions = _providerFactory.GetDefaultDefinitions();
+            var defaultDefinitions = _providerFactory.GetDefaultDefinitions().ToList();
 
             var result = new List<TProviderResource>(defaultDefinitions.Count());
 

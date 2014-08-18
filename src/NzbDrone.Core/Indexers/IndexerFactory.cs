@@ -9,22 +9,19 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerFactory : IProviderFactory<IIndexer, IndexerDefinition>
     {
-
+        List<IIndexer> RssEnabled();
+        List<IIndexer> SearchEnabled();
     }
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
-        private readonly INewznabTestService _newznabTestService;
-
         public IndexerFactory(IIndexerRepository providerRepository,
                               IEnumerable<IIndexer> providers,
                               IContainer container, 
-                              IEventAggregator eventAggregator, 
-                              INewznabTestService newznabTestService, 
+                              IEventAggregator eventAggregator,
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
-            _newznabTestService = newznabTestService;
         }
 
         protected override void InitializeProviders()
@@ -37,13 +34,25 @@ namespace NzbDrone.Core.Indexers
             return base.Active().Where(c => c.Enable).ToList();
         }
 
-        protected override IndexerDefinition GetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
+        public override IndexerDefinition GetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
             definition = base.GetProviderCharacteristics(provider, definition);
 
             definition.Protocol = provider.Protocol;
+            definition.SupportsRss = provider.SupportsRss;
+            definition.SupportsSearch = provider.SupportsSearch;
 
             return definition;
         }
+
+        public List<IIndexer> RssEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableRss).ToList();
+        }
+
+        public List<IIndexer> SearchEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableSearch).ToList();
+        }        
     }
 }

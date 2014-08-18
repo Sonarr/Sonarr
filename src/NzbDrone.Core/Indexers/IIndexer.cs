@@ -10,7 +10,8 @@ namespace NzbDrone.Core.Indexers
         DownloadProtocol Protocol { get; }
         Int32 SupportedPageSize { get; }
         Boolean SupportsPaging { get; }
-        Boolean SupportsSearching { get; }
+        Boolean SupportsRss { get; }
+        Boolean SupportsSearch { get; }
 
         IEnumerable<string> RecentFeed { get; }
         IEnumerable<string> GetEpisodeSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int episodeNumber);

@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Indexers.Animezb
             }
         }
 
-        public override bool SupportsSearching
+        public override bool SupportsSearch
         {
             get
             {
