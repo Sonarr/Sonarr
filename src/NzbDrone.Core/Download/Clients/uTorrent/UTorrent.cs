@@ -176,6 +176,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
+            if (failures.Any())
+                return;
+            failures.AddIfNotNull(TestGetTorrents());
         }
 
         private ValidationFailure TestConnection()
@@ -216,6 +219,21 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             {
                 _logger.ErrorException(ex.Message, ex);
                 return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestGetTorrents()
+        {
+            try
+            {
+                _proxy.GetTorrents(Settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 
             return null;

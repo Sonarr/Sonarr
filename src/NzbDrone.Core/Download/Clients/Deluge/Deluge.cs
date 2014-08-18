@@ -168,7 +168,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
+            if (failures.Any())
+                return;
             failures.AddIfNotNull(TestCategory());
+            failures.AddIfNotNull(TestGetTorrents());
         }
 
         private ValidationFailure TestConnection()
@@ -237,6 +240,21 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                         DetailedDescription = "NzbDrone as unable to add the label to Deluge."
                     };
                 }
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestGetTorrents()
+        {
+            try
+            {
+                _proxy.GetTorrents(Settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 
             return null;
