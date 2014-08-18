@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
             }
         }
 
-        public override bool SupportsSearching
+        public override bool SupportsSearch
         {
             get
             {

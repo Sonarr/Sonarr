@@ -107,7 +107,7 @@ namespace NzbDrone.Core.ThingiProvider
             _providerRepository.Delete(id);
         }
 
-        protected TProvider GetInstance(TProviderDefinition definition)
+        public TProvider GetInstance(TProviderDefinition definition)
         {
             var type = GetImplementation(definition);
             var instance = (TProvider)_container.Resolve(type);
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.ThingiProvider
             return All().Where(c => c.Settings.Validate().IsValid).ToList();
         }
 
-        protected virtual TProviderDefinition GetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
+        public virtual TProviderDefinition GetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
         {
             return definition;
         }

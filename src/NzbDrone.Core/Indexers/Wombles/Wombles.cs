@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.ThingiProvider;
 
@@ -9,7 +8,7 @@ namespace NzbDrone.Core.Indexers.Wombles
     public class Wombles : IndexerBase<NullConfig>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
-        public override bool SupportsSearching { get { return false; } }
+        public override bool SupportsSearch { get { return false; } }
 
         public override IParseFeed Parser
         {

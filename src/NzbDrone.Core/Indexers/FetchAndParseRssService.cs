@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers
         {
             var result = new List<ReleaseInfo>();
 
-            var indexers = _indexerFactory.GetAvailableProviders().ToList();
+            var indexers = _indexerFactory.RssEnabled().ToList();
 
             if (!indexers.Any())
             {
