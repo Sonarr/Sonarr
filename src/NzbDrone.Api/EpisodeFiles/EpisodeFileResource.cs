@@ -14,5 +14,7 @@ namespace NzbDrone.Api.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public String SceneName { get; set; }
         public QualityModel Quality { get; set; }
+
+        public Boolean QualityCutoffNotMet { get; set; }
     }
 }

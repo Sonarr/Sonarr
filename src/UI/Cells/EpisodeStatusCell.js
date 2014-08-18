@@ -52,7 +52,13 @@ define(
                             title += ' - {0}'.format(size);
                         }
 
-                        this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        if (this.episodeFile.get('qualityCutoffNotMet')) {
+                            this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        }
+                        else {
+                            this.$el.html('<span class="badge" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        }
+
 
                         return;
                     }
