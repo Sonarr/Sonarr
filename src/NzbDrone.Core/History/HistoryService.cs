@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Profiles;
@@ -31,7 +32,11 @@ namespace NzbDrone.Core.History
         void UpdateHistoryData(Int32 historyId, Dictionary<String, String> data);
     }
 
-    public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
+    public class HistoryService : IHistoryService,
+                                  IHandle<EpisodeGrabbedEvent>,
+                                  IHandle<EpisodeImportedEvent>,
+                                  IHandle<DownloadFailedEvent>,
+                                  IHandle<EpisodeFileDeletedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -195,6 +200,32 @@ namespace NzbDrone.Core.History
                 history.Data.Add("DownloadClient", message.DownloadClient);
                 history.Data.Add("DownloadClientId", message.DownloadClientId);
                 history.Data.Add("Message", message.Message);
+
+                _historyRepository.Insert(history);
+            }
+        }
+
+        public void Handle(EpisodeFileDeletedEvent message)
+        {
+            if (message.Reason == DeleteMediaFileReason.NoLinkedEpisodes)
+            {
+                _logger.Debug("Removing episode file from DB as part of cleanup routine.");
+                return;
+            }
+
+            foreach (var episode in message.EpisodeFile.Episodes.Value)
+            {
+                var history = new History
+                {
+                    EventType = HistoryEventType.EpisodeFileDeleted,
+                    Date = DateTime.UtcNow,
+                    Quality = message.EpisodeFile.Quality,
+                    SourceTitle = message.EpisodeFile.Path,
+                    SeriesId = message.EpisodeFile.SeriesId,
+                    EpisodeId = episode.Id,
+                };
+
+                history.Data.Add("Reason", message.Reason.ToString());
 
                 _historyRepository.Insert(history);
             }

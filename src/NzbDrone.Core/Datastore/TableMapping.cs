@@ -64,7 +64,11 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles")
                   .Ignore(f => f.Path)
-                  .Relationships.AutoMapICollectionOrComplexProperties();
+                  .Relationships.AutoMapICollectionOrComplexProperties()
+                  .For("Episodes")
+                  .LazyLoad(condition: parent => parent.Id > 0, 
+                            query: (db, parent) => db.Query<Episode>().Where(c => c.EpisodeFileId == parent.Id).ToList())
+                  .HasOne(file => file.Series, file => file.SeriesId);
 
             Mapper.Entity<Episode>().RegisterModel("Episodes")
                   .Ignore(e => e.SeriesTitle)

@@ -459,6 +459,7 @@
     <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
+    <Compile Include="MediaFiles\DeleteMediaFileReason.cs" />
     <Compile Include="MediaFiles\DiskScanService.cs">
       <SubType>Code</SubType>
     </Compile>
