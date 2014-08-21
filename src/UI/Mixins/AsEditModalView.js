@@ -20,7 +20,9 @@ define(
                 var promise = this.model.save();
 
                 promise.always(function () {
-                    self.ui.indicator.hide();
+                    if (!self.isClosed) {
+                        self.ui.indicator.hide();
+                    }
                 });
 
                 promise.done(function () {
