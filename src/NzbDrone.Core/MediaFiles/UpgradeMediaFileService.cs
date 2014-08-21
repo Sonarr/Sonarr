@@ -53,7 +53,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
 
                 moveFileResult.OldFiles.Add(file);
-                _mediaFileService.Delete(file, true);
+                _mediaFileService.Delete(file, DeleteMediaFileReason.Upgrade);
             }
 
             if (copyOnly)

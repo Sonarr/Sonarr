@@ -80,7 +80,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
             _logger.Info("Deleting episode file: {0}", fullPath);
             _recycleBinProvider.DeleteFile(fullPath);
-            _mediaFileService.Delete(episodeFile);
+            _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
         }
 
         private EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)

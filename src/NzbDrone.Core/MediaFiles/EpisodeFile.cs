@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -18,7 +20,8 @@ namespace NzbDrone.Core.MediaFiles
         public String ReleaseGroup { get; set; }
         public QualityModel Quality { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
-        public LazyList<Episode> Episodes { get; set; }
+        public LazyLoaded<List<Episode>> Episodes { get; set; }
+        public LazyLoaded<Series> Series { get; set; }
 
         public override String ToString()
         {

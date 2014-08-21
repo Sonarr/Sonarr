@@ -1,17 +1,16 @@
-﻿using System;
-using NzbDrone.Common.Messaging;
+﻿using NzbDrone.Common.Messaging;
 
 namespace NzbDrone.Core.MediaFiles.Events
 {
     public class EpisodeFileDeletedEvent : IEvent
     {
         public EpisodeFile EpisodeFile { get; private set; }
-        public Boolean ForUpgrade { get; private set; }
+        public DeleteMediaFileReason Reason { get; private set; }
 
-        public EpisodeFileDeletedEvent(EpisodeFile episodeFile, Boolean forUpgrade)
+        public EpisodeFileDeletedEvent(EpisodeFile episodeFile, DeleteMediaFileReason reason)
         {
             EpisodeFile = episodeFile;
-            ForUpgrade = forUpgrade;
+            Reason = reason;
         }
     }
 }

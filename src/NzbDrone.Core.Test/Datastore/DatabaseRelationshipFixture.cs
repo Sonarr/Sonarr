@@ -93,7 +93,9 @@ namespace NzbDrone.Core.Test.Datastore
                 options => options
                     .IncludingAllRuntimeProperties()
                     .Excluding(c => c.DateAdded)
-                    .Excluding(c => c.Path));
+                    .Excluding(c => c.Path)
+                    .Excluding(c => c.Series)
+                    .Excluding(c => c.Episodes));
         }
 
         [Test]

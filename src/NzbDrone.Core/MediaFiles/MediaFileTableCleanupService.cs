@@ -47,14 +47,14 @@ namespace NzbDrone.Core.MediaFiles
                     if (!_diskProvider.FileExists(episodeFilePath))
                     {
                         _logger.Debug("File [{0}] no longer exists on disk, removing from db", episodeFilePath);
-                        _mediaFileService.Delete(episodeFile);
+                        _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.MissingFromDisk);
                         continue;
                     }
 
                     if (!episodes.Any(e => e.EpisodeFileId == episodeFile.Id))
                     {
                         _logger.Debug("File [{0}] is not assigned to any episodes, removing from db", episodeFilePath);
-                        _mediaFileService.Delete(episodeFile);
+                        _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.NoLinkedEpisodes);
                         continue;
                     }
 
