@@ -57,7 +57,11 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.FolderSetLastWriteTimeUtc(destination, DateTime.UtcNow);
                 foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
                 {
-                    _diskProvider.FileSetLastWriteTimeUtc(file, DateTime.UtcNow);
+                    if (OsInfo.IsWindows)
+                    {
+                        //TODO: Better fix than this for non-Windows?
+                        _diskProvider.FileSetLastWriteTimeUtc(file, DateTime.UtcNow);
+                    }
                 }
 
                 logger.Debug("Folder has been moved to the recycling bin: {0}", destination);
@@ -73,7 +77,7 @@ namespace NzbDrone.Core.MediaFiles
             {
                 logger.Info("Recycling Bin has not been configured, deleting permanently.");
 
-                if (!OsInfo.IsMono)
+                if (OsInfo.IsWindows)
                 {
                     logger.Debug(_diskProvider.GetFileAttributes(path));
                 }
@@ -103,7 +107,13 @@ namespace NzbDrone.Core.MediaFiles
 
                 logger.Debug("Moving '{0}' to '{1}'", path, destination);
                 _diskProvider.MoveFile(path, destination, true);
-                _diskProvider.FileSetLastWriteTimeUtc(destination, DateTime.UtcNow);
+
+                //TODO: Better fix than this for non-Windows?
+                if (OsInfo.IsWindows)
+                {
+                    _diskProvider.FileSetLastWriteTimeUtc(destination, DateTime.UtcNow);
+                }
+
                 logger.Debug("File has been moved to the recycling bin: {0}", destination);
             }
         }
