@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using NLog;
 using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.Queue

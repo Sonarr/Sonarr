@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using System.IO;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Download
 {
@@ -97,51 +91,15 @@ namespace NzbDrone.Core.Download
 
                     if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
                     {
-                        var decisions = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+                        var importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
 
-                        if (!decisions.Any())
-                        {
-                            UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
-                        } 
-                        else if (decisions.Any(v => v.Approved))
-                        {
-                            UpdateStatusMessage(trackedDownload, LogLevel.Info, "Imported {0} files.", decisions.Count(v => v.Approved));
-
-                            trackedDownload.State = TrackedDownloadState.Imported;
-                        }
-                        else
-                        {
-                            var rejections = decisions
-                                .Where(v => !v.Approved)
-                                .Select(v => v.Rejections.Aggregate(Path.GetFileName(v.LocalEpisode.Path), (a, r) => a + "\r\n- " + r))
-                                .Aggregate("Failed to import:", (a, r) => a + "\r\n" + r);
-
-                            UpdateStatusMessage(trackedDownload, LogLevel.Error, rejections);
-                        }
+                        ProcessImportResults(trackedDownload, importResults);
                     }
                     else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
                     {
-                        var decisions = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+                        var importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
 
-                        if (!decisions.Any())
-                        {
-                            UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
-                        }
-                        else if (decisions.Any(v => v.Approved))
-                        {
-                            UpdateStatusMessage(trackedDownload, LogLevel.Info, "Imported {0} files.", decisions.Count(v => v.Approved));
-
-                            trackedDownload.State = TrackedDownloadState.Imported;
-                        }
-                        else
-                        {
-                            var rejections = decisions
-                                .Where(v => !v.Approved)
-                                .Select(v => v.Rejections.Aggregate(Path.GetFileName(v.LocalEpisode.Path), (a, r) => a + "\r\n- " + r))
-                                .Aggregate("Failed to import:", (a, r) => a + "\r\n" + r);
-
-                            UpdateStatusMessage(trackedDownload, LogLevel.Error, rejections);
-                        }
+                        ProcessImportResults(trackedDownload, importResults);
                     }
                     else
                     {
@@ -220,6 +178,29 @@ namespace NzbDrone.Core.Download
             else
             {
                 _logger.Debug(logMessage);
+            }
+        }
+
+        private void ProcessImportResults(TrackedDownload trackedDownload, List<ImportResult> importResults)
+        {
+            if (importResults.Empty())
+            {
+                UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found are eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
+            }
+            else if (importResults.All(v => v.Result == ImportResultType.Imported || v.Result == ImportResultType.Rejected))
+            {
+                UpdateStatusMessage(trackedDownload, LogLevel.Info, "Imported {0} files.", importResults.Count(v => v.Result == ImportResultType.Imported));
+
+                trackedDownload.State = TrackedDownloadState.Imported;
+            }
+            else
+            {
+                var errors = importResults
+                    .Where(v => v.Result == ImportResultType.Skipped || v.Result == ImportResultType.Rejected)
+                    .Select(v => v.Errors.Aggregate(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), (a, r) => a + "\r\n- " + r))
+                    .Aggregate("Failed to import:", (a, r) => a + "\r\n" + r);
+
+                UpdateStatusMessage(trackedDownload, LogLevel.Error, errors);
             }
         }
     }

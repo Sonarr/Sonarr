@@ -9,7 +9,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -104,9 +103,9 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
-                .Returns(new List<ImportDecision>() 
+                .Returns(new List<ImportResult>
                     {
-                        new ImportDecision(null) 
+                        new ImportResult(null)
                     });
         }
 
@@ -114,9 +113,9 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
-                .Returns(new List<ImportDecision>() 
+                .Returns(new List<ImportResult>() 
                     {
-                        new ImportDecision(new LocalEpisode() { Path = @"C:\TestPath\Droned.S01E01.mkv" }, "Test Failure") 
+                        new ImportResult(new ImportDecision(new LocalEpisode() { Path = @"C:\TestPath\Droned.S01E01.mkv" }, "Test Failure")) 
                     });
         }
 
@@ -447,6 +446,38 @@ namespace NzbDrone.Core.Test.Download
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(c => c.DeleteFolder(It.IsAny<string>(), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_mark_as_successful_if_no_files_were_imported()
+        {
+            GivenCompletedDownloadClientHistory();
+
+            var history = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            GivenGrabbedHistory(history);
+            GivenNoImportedHistory();
+
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
+                  .Returns(new List<ImportResult>
+                           {
+                               new ImportResult(
+                                   new ImportDecision(new LocalEpisode() {Path = @"C:\TestPath\Droned.S01E01.mkv"}),
+                                   "Test Failure")
+                           });
+
+            history.First().Data.Add("downloadClient", "SabnzbdClient");
+            history.First().Data.Add("downloadClientId", _completed.First().DownloadClientId);
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFolder(It.IsAny<string>(), true), Times.Never());
+
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

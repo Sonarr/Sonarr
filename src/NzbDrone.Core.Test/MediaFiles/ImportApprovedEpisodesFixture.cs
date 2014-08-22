@@ -65,9 +65,11 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
             
         [Test]
-        public void should_return_empty_list_if_there_are_no_approved_decisions()
+        public void should_not_import_any_if_there_are_no_approved_decisions()
         {
-            Subject.Import(_rejectedDecisions, false).Should().BeEmpty();
+            Subject.Import(_rejectedDecisions, false).Where(i => i.Result == ImportResultType.Imported).Should().BeEmpty();
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.IsAny<EpisodeFile>()), Times.Never());
         }
 
         [Test]
@@ -83,7 +85,10 @@ namespace NzbDrone.Core.Test.MediaFiles
             all.AddRange(_rejectedDecisions);
             all.AddRange(_approvedDecisions);
 
-            Subject.Import(all, false).Should().HaveCount(5);
+            var result = Subject.Import(all, false);
+            
+            result.Should().HaveCount(all.Count);
+            result.Where(i => i.Result == ImportResultType.Imported).Should().HaveCount(_approvedDecisions.Count);
         }
 
         [Test]
@@ -93,7 +98,9 @@ namespace NzbDrone.Core.Test.MediaFiles
             all.AddRange(_approvedDecisions);
             all.Add(new ImportDecision(_approvedDecisions.First().LocalEpisode));
 
-            Subject.Import(all, false).Should().HaveCount(5);
+            var result = Subject.Import(all, false);
+
+            result.Where(i => i.Result == ImportResultType.Imported).Should().HaveCount(_approvedDecisions.Count);
         }
 
         [Test]
@@ -136,7 +143,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                  {
                      Series = fileDecision.LocalEpisode.Series,
                      Episodes = new List<Episode> {fileDecision.LocalEpisode.Episodes.First()},
-                     Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilit.avi".AsOsAgnostic(),
+                     Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilot.avi".AsOsAgnostic(),
                      Quality = new QualityModel(Quality.Bluray720p),
                      Size = 80.Megabytes()
                  });
@@ -148,8 +155,9 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             var results = Subject.Import(all, false);
 
-            results.Should().HaveCount(1);
-            results.Should().ContainSingle(d => d.LocalEpisode.Size == fileDecision.LocalEpisode.Size);
+            results.Should().HaveCount(all.Count);
+            results.Should().ContainSingle(d => d.Result == ImportResultType.Imported);
+            results.Should().ContainSingle(d => d.Result == ImportResultType.Imported && d.ImportDecision.LocalEpisode.Size == fileDecision.LocalEpisode.Size);
         }
     }
 }

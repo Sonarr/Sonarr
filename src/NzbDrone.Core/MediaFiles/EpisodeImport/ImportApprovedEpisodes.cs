@@ -8,7 +8,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Download;
 
 
@@ -16,7 +15,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IImportApprovedEpisodes
     {
-        List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null);
+        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null);
     }
 
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
@@ -40,7 +39,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public List<ImportDecision> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null)
+        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null)
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
@@ -49,7 +48,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                .SelectMany(c => c)
                .ToList();
 
-            var imported = new List<ImportDecision>();
+            var importResults = new List<ImportResult>();
 
             foreach (var importDecision in qualifiedImports.OrderByDescending(e => e.LocalEpisode.Size))
             {
@@ -59,11 +58,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 try
                 {
                     //check if already imported
-                    if (imported.SelectMany(r => r.LocalEpisode.Episodes)
+                    if (importResults.SelectMany(r => r.ImportDecision.LocalEpisode.Episodes)
                                          .Select(e => e.Id)
                                          .Intersect(localEpisode.Episodes.Select(e => e.Id))
                                          .Any())
                     {
+                        importResults.Add(new ImportResult(importDecision, "Episode has already been imported"));
                         continue;
                     }
 
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     }
 
                     _mediaFileService.Add(episodeFile);
-                    imported.Add(importDecision);
+                    importResults.Add(new ImportResult(importDecision));
 
                     if (historyItem != null)
                     {
@@ -111,10 +111,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 catch (Exception e)
                 {
                     _logger.WarnException("Couldn't import episode " + localEpisode, e);
+                    importResults.Add(new ImportResult(importDecision, "Failed to import episode"));
                 }
             }
 
-            return imported;
+            //Adding all the rejected decisions
+            importResults.AddRange(decisions.Where(c => !c.Approved)
+                                            .Select(d => new ImportResult(d, d.Rejections.ToArray())));
+
+            return importResults;
         }
     }
 }
