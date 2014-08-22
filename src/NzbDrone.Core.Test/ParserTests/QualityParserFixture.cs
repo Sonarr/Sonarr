@@ -164,6 +164,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Kaylith] Isshuukan Friends Specials - 01 [BD 720p AAC][B7EEE164].mkv", false)]
         [TestCase("WEEDS.S03E01-06.DUAL.Blu-ray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("WEEDS.S03E01-06.DUAL.720p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
+        [TestCase("[Elysium]Lucky.Star.01(BD.720p.AAC.DA)[0BB96AD8].mkv", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
