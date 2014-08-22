@@ -1,9 +1,6 @@
-﻿
-
-using System;
+﻿using System;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
@@ -69,6 +66,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
         [Test]
         public void should_call_fileSetLastWriteTime_for_each_file()
         {
+            WindowsOnly();
             WithRecycleBin();
             var path = @"C:\Test\TV\30 Rock\S01E01.avi".AsOsAgnostic();
 
