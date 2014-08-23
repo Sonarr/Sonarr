@@ -4,8 +4,9 @@ define(
     [
         'marionette',
         'Cells/NzbDroneCell',
-        'reqres'
-    ], function (Marionette, NzbDroneCell, reqres) {
+        'reqres',
+        'Series/SeriesCollection'
+    ], function (Marionette, NzbDroneCell, reqres, SeriesCollection) {
         return NzbDroneCell.extend({
 
             className: 'episode-number-cell',
@@ -15,6 +16,12 @@ define(
 
                 this.$el.empty();
                 this.$el.html(this.model.get('episodeNumber'));
+
+                var series = SeriesCollection.get(this.model.get('seriesId'));
+
+                if (series.get('seriesType') === 'anime' && this.model.has('absoluteEpisodeNumber')) {
+                    this.$el.html('{0} ({1})'.format(this.model.get('episodeNumber'), this.model.get('absoluteEpisodeNumber')));
+                }
 
                 var alternateTitles = [];
 

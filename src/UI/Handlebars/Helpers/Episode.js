@@ -11,6 +11,10 @@ define(
                 return moment(this.airDate).format('L');
             }
 
+            else if (this.series.seriesType === 'anime' && this.absoluteEpisodeNumber > 0) {
+                return '{0}x{1} ({2})'.format(this.seasonNumber, FormatHelpers.pad(this.episodeNumber, 2), FormatHelpers.pad(this.absoluteEpisodeNumber, 2));
+            }
+
             else {
                 return '{0}x{1}'.format(this.seasonNumber, FormatHelpers.pad(this.episodeNumber, 2));
             }
