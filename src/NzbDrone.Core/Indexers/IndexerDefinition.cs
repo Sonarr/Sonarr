@@ -17,8 +17,6 @@ namespace NzbDrone.Core.Indexers
             {
                 return EnableRss || EnableSearch;
             }
-
-            set {}
         }
     }
 }

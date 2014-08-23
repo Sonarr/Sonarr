@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
 
             Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers")
+                  .Ignore(i => i.Enable)
                   .Ignore(i => i.Protocol)
                   .Ignore(i => i.SupportsRss)
                   .Ignore(i => i.SupportsSearch);
