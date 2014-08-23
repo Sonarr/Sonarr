@@ -151,11 +151,13 @@
     }
   }
 
-  .navbar-collapse {
-    .navbar-nav {
-      li {
-        &:focus, &:hover {
-          background-color: #535353;
+  @media (max-width: @screen-xs-max) {
+    .navbar-collapse {
+      .navbar-nav {
+        li {
+          &:focus, &:hover {
+            background-color : #555555;
+          }
         }
       }
     }
@@ -206,34 +208,3 @@
     }
   }
 }
-
-//.screen-size {
-//  color: @droneTeal;
-//  &:after {
-//    content: "unknown";
-//  }
-//
-//  @media (min-width: @screen-xs-min) {
-//    &:after {
-//      content: "xs";
-//    }
-//  }
-//
-//  @media (min-width: @screen-sm-min) {
-//    &:after {
-//      content: "sm";
-//    }
-//  }
-//
-//  @media (min-width: @screen-md-min) {
-//    &:after {
-//      content: "md";
-//    }
-//  }
-//
-//  @media (min-width: @screen-lg-min) {
-//    &:after {
-//      content: "lg";
-//    }
-//  }
-//}
