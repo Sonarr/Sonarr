@@ -4,6 +4,7 @@ using MediaInfoLib;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using System.Globalization;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
-                    Decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), out videoFrameRate);
+                    Decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out videoFrameRate);
 
                     //Runtime
                     Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
