@@ -8,5 +8,4 @@ define(
             successMessage: 'MediaManagement settings saved',
             errorMessage  : 'Couldn\'t save naming settings'
         });
-
     });

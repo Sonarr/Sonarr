@@ -5,8 +5,9 @@ define(
         'marionette',
         'Config',
         'Settings/MediaManagement/Naming/NamingSampleModel',
+        'Settings/MediaManagement/Naming/Basic/BasicNamingModel',
         'Mixins/AsModelBoundView'
-    ], function (_, Marionette, Config, NamingSampleModel, AsModelBoundView) {
+    ], function (_, Marionette, Config, NamingSampleModel, BasicNamingModel, AsModelBoundView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/Naming/Basic/BasicNamingViewTemplate',
@@ -18,28 +19,46 @@ define(
                 dailyEpisodeExample   : '.x-daily-episode-example'
             },
 
-            onRender: function () {
+            initialize: function (options) {
+                this.namingModel = options.model;
+                this.model = new BasicNamingModel();
+
+                this._parseNamingModel();
+
                 this.listenTo(this.model, 'change', this._buildFormat);
-                this._buildFormat();
+                this.listenTo(this.namingModel, 'sync', this._parseNamingModel);
             },
 
-            _updateSamples: function () {
-                var data = {
-                    renameEpisodes: true,
-                    standardEpisodeFormat: this.standardEpisodeFormat,
-                    dailyEpisodeFormat: this.dailyEpisodeFormat,
-                    multiEpisodeStyle: this.model.get('multiEpisodeStyle')
-                };
+            _parseNamingModel: function () {
+                var standardFormat = this.namingModel.get('standardEpisodeFormat');
 
-                this.namingSampleModel.fetch({data: data});
+                var includeSeriesTitle = standardFormat.match(/\{Series[-_. ]Title\}/i);
+                var includeEpisodeTitle = standardFormat.match(/\{Episode[-_. ]Title\}/i);
+                var includeQuality = standardFormat.match(/\{Quality[-_. ]Title\}/i);
+                var numberStyle = standardFormat.match(/s?\{season(?:\:00)?\}[ex]\{episode(?:\:00)?\}/i);
+                var replaceSpaces = standardFormat.indexOf(' ') === -1;
+                var separator = standardFormat.match(/\}( - |\.-\.|\.| )|( - |\.-\.|\.| )\{/i);
+
+                if (separator === null || separator[1] === '.-.') {
+                    separator = ' - ';
+                }
+
+                else {
+                    separator = separator[1];
+                }
+
+                this.model.set({
+                    includeSeriesTitle: includeSeriesTitle !== null,
+                    includeEpisodeTitle: includeEpisodeTitle !== null,
+                    includeQuality: includeQuality !== null,
+                    numberStyle: numberStyle[0],
+                    replaceSpaces: replaceSpaces,
+                    separator: separator
+                }, { silent: true });
             },
 
             _buildFormat: function () {
                 if (Config.getValueBoolean(Config.Keys.AdvancedSettings)) {
-                    return;
-                }
-
-                if (_.has(this.model.changed, 'standardEpisodeFormat') || _.has(this.model.changed, 'dailyEpisodeFormat')) {
                     return;
                 }
 
@@ -96,8 +115,9 @@ define(
                     dailyEpisodeFormat = dailyEpisodeFormat.replace(/\s/g, '.');
                 }
 
-                this.model.set('standardEpisodeFormat', standardEpisodeFormat);
-                this.model.set('dailyEpisodeFormat', dailyEpisodeFormat);
+                this.namingModel.set('standardEpisodeFormat', standardEpisodeFormat);
+                this.namingModel.set('dailyEpisodeFormat', dailyEpisodeFormat);
+                this.namingModel.set('animeEpisodeFormat', standardEpisodeFormat);
             }
         });
 
