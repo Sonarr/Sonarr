@@ -38,7 +38,7 @@ define(
             }
 
             if (this.episodeNumber === 1) {
-                return 'pink';
+                return 'premiere';
             }
 
             if (currentTime.isAfter(start) && currentTime.isBefore(end)) {

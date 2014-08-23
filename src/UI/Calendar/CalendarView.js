@@ -166,7 +166,7 @@ define(
                 }
 
                 else if (element.get('episodeNumber') === 1) {
-                    statusLevel = 'pink';
+                    statusLevel = 'premiere';
                 }
 
                 if (end.isBefore(currentTime.startOf('day'))) {
