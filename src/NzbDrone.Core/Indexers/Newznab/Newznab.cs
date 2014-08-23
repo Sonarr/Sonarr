@@ -46,12 +46,12 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 var list = new List<IndexerDefinition>();
 
-                list.Add(GetDefinition("Nzbs.org", GetSettings("http://nzbs.org", new List<Int32> { 5000 })));
-                list.Add(GetDefinition("Nzb.su", GetSettings("https://api.nzb.su", new List<Int32>())));
-                list.Add(GetDefinition("Dognzb.cr", GetSettings("https://api.dognzb.cr", new List<Int32>())));
-                list.Add(GetDefinition("OZnzb.com", GetSettings("https://www.oznzb.com", new List<Int32>())));
-                list.Add(GetDefinition("nzbplanet.net", GetSettings("https://nzbplanet.net", new List<Int32>())));
-                list.Add(GetDefinition("NZBgeek", GetSettings("https://api.nzbgeek.info", new List<Int32>())));
+                list.Add(GetDefinition("Nzbs.org", GetSettings("http://nzbs.org", 5000)));
+                list.Add(GetDefinition("Nzb.su", GetSettings("https://api.nzb.su")));
+                list.Add(GetDefinition("Dognzb.cr", GetSettings("https://api.dognzb.cr")));
+                list.Add(GetDefinition("OZnzb.com", GetSettings("https://www.oznzb.com")));
+                list.Add(GetDefinition("nzbplanet.net", GetSettings("https://nzbplanet.net")));
+                list.Add(GetDefinition("NZBgeek", GetSettings("https://api.nzbgeek.info")));
 
                 return list;
             }
@@ -196,11 +196,12 @@ namespace NzbDrone.Core.Indexers.Newznab
                        Implementation = GetType().Name,
                        Settings = settings,
                        Protocol = DownloadProtocol.Usenet,
+                       SupportsRss = SupportsRss,
                        SupportsSearch = SupportsSearch
                    };
         }
 
-        private NewznabSettings GetSettings(String url, List<Int32> categories)
+        private NewznabSettings GetSettings(String url, params int[] categories)
         {
             var settings = new NewznabSettings { Url = url };
 

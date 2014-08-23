@@ -47,7 +47,9 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
             Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
             Mapper.Entity<MetadataDefinition>().RegisterModel("Metadata");
-            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients");
+
+            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients")
+                  .Ignore(d => d.Protocol);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
