@@ -165,6 +165,10 @@ define(
                     statusLevel = 'danger';
                 }
 
+                else if (element.get('episodeNumber') === 1) {
+                    statusLevel = 'pink';
+                }
+
                 if (end.isBefore(currentTime.startOf('day'))) {
                     statusLevel += ' past';
                 }

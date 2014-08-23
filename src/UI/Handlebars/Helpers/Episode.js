@@ -37,6 +37,10 @@ define(
                 return 'purple';
             }
 
+            if (this.episodeNumber === 1) {
+                return 'pink';
+            }
+
             if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
                 return 'warning';
             }
