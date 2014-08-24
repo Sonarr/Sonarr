@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Owin;
 using NzbDrone.Common.EnvironmentInfo;
 using Owin;
@@ -11,7 +12,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
 
         public void Attach(IAppBuilder appBuilder)
         {
-            appBuilder.Use(typeof (AddApplicationVersionHeader));
+            appBuilder.Use(typeof(AddApplicationVersionHeader));
         }
     }
 
@@ -21,12 +22,10 @@ namespace NzbDrone.Host.Owin.MiddleWare
             : base(next)
         {
         }
-
-        public override Task Invoke(OwinRequest request, OwinResponse response)
+        public override Task Invoke(IOwinContext context)
         {
-            response.AddHeader("X-ApplicationVersion", BuildInfo.Version.ToString());
-
-            return Next.Invoke(request, response);
+            context.Response.Headers.Add("X-ApplicationVersion", new string[] { BuildInfo.Version.ToString() });
+            return Next.Invoke(context);
         }
     }
 }
