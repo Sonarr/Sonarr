@@ -8,12 +8,14 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.AddIndexes("Series", 
-                new SQLiteIndex { Column = "TvdbId", Table = "Series", Unique = true },
-                new SQLiteIndex { Column = "TitleSlug", Table = "Series", Unique = true });
+            // During an earlier version of drone, the indexes weren't recreated during alter table.
+            Execute.Sql("DROP INDEX IF EXISTS \"IX_Series_TvdbId\"");
+            Execute.Sql("DROP INDEX IF EXISTS \"IX_Series_TitleSlug\"");
+            Execute.Sql("DROP INDEX IF EXISTS \"IX_Episodes_TvDbEpisodeId\"");
 
-            SqLiteAlter.AddIndexes("Episodes", 
-                new SQLiteIndex { Column = "TvDbEpisodeId", Table = "Episodes", Unique = true });
+            Create.Index().OnTable("Series").OnColumn("TvdbId").Unique();
+            Create.Index().OnTable("Series").OnColumn("TitleSlug").Unique();
+            Create.Index().OnTable("Episodes").OnColumn("TvDbEpisodeId").Unique();
         }
 
     }

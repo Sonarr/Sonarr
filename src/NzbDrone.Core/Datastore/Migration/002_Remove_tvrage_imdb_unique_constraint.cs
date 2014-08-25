@@ -8,8 +8,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("DROP INDEX IX_Series_TvRageId;");
-            Execute.Sql("DROP INDEX IX_Series_ImdbId;");
+            Delete.Index().OnTable("Series").OnColumn("TvRageId");
+            Delete.Index().OnTable("Series").OnColumn("ImdbId");
         }
     }
 }

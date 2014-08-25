@@ -92,8 +92,6 @@ namespace NzbDrone.Core.Test.Framework
 
             Mocker.SetConstant<IAnnouncer>(Mocker.Resolve<MigrationLogger>());
             Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
-            Mocker.SetConstant<ISqLiteMigrationHelper>(Mocker.Resolve<SqLiteMigrationHelper>());
-            Mocker.SetConstant<ISQLiteAlter>(Mocker.Resolve<SQLiteAlter>());
             Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());
 
             MapRepository.Instance.EnableTraceLogging = true;

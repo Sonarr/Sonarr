@@ -230,10 +230,10 @@
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteColumn.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteMigrationHelper.cs" />
+    <Compile Include="Datastore\Migration\Framework\NzbDroneSqliteProcessor.cs" />
+    <Compile Include="Datastore\Migration\Framework\NzbDroneSqliteProcessorFactory.cs" />
+    <Compile Include="Datastore\Migration\Framework\SqliteSchemaDumper.cs" />
+    <Compile Include="Datastore\Migration\Framework\SqliteSyntaxReader.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />

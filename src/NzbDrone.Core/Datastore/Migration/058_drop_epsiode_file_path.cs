@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.DropColumns("EpisodeFiles", new [] { "Path" });
+            Delete.Column("Path").FromTable("EpisodeFiles");
         }
     }
 }
