@@ -11,6 +11,7 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.DecisionEngine;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -20,18 +21,21 @@ namespace NzbDrone.Api.EpisodeFiles
         private readonly IMediaFileService _mediaFileService;
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly ISeriesService _seriesService;
+        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;
 
         public EpisodeModule(ICommandExecutor commandExecutor,
                              IMediaFileService mediaFileService,
                              IRecycleBinProvider recycleBinProvider,
                              ISeriesService seriesService,
+                             IQualityUpgradableSpecification qualityUpgradableSpecification,
                              Logger logger)
             : base(commandExecutor)
         {
             _mediaFileService = mediaFileService;
             _recycleBinProvider = recycleBinProvider;
             _seriesService = seriesService;
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
             _logger = logger;
             GetResourceById = GetEpisodeFile;
             GetResourceAll = GetEpisodeFiles;
@@ -80,10 +84,12 @@ namespace NzbDrone.Api.EpisodeFiles
             _mediaFileService.Delete(episodeFile);
         }
 
-        private static EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)
+        private EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)
         {
             var resource = episodeFile.InjectTo<EpisodeFileResource>();
             resource.Path = Path.Combine(series.Path, episodeFile.RelativePath);
+
+            resource.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, episodeFile.Quality);
 
             return resource;
         }

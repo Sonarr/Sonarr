@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using NzbDrone.Api.EpisodeFiles;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.MediaFiles;
 
@@ -15,7 +16,7 @@ namespace NzbDrone.Api.Episodes
         public String AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
         public String Overview { get; set; }
-        public EpisodeFile EpisodeFile { get; set; }
+        public EpisodeFileResource EpisodeFile { get; set; }
 
         public Boolean HasFile { get; set; }
         public Boolean Monitored { get; set; }

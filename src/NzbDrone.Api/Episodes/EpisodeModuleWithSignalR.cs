@@ -9,7 +9,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Api.Episodes
 {
     public abstract class EpisodeModuleWithSignalR : NzbDroneRestModuleWithSignalR<EpisodeResource, Episode>,
-        IHandle<EpisodeGrabbedEvent>,                         
+        IHandle<EpisodeGrabbedEvent>,
         IHandle<EpisodeDownloadedEvent>
     {
         private readonly IEpisodeService _episodeService;
