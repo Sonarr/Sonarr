@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.DropColumns("Series", new[] { "CustomStartDate" });
+            Delete.Column("CustomStartDate").FromTable("Series");
         }
     }
 }

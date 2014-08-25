@@ -8,8 +8,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.DropColumns("Episodes", new[] { "Ignored" });
-            SqLiteAlter.DropColumns("Seasons", new[] { "Ignored" });
+            Delete.Column("Ignored").FromTable("Seasons");
+            Delete.Column("Ignored").FromTable("Episodes");
         }
     }
 }

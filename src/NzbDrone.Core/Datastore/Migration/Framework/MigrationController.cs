@@ -13,14 +13,10 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     public class MigrationController : IMigrationController
     {
         private readonly IAnnouncer _announcer;
-        private readonly ISQLiteAlter _sqLiteAlter;
-        private readonly ISqLiteMigrationHelper _migrationHelper;
 
-        public MigrationController(IAnnouncer announcer, ISQLiteAlter sqLiteAlter, ISqLiteMigrationHelper migrationHelper)
+        public MigrationController(IAnnouncer announcer)
         {
             _announcer = announcer;
-            _sqLiteAlter = sqLiteAlter;
-            _migrationHelper = migrationHelper;
         }
 
         public void MigrateToLatest(string connectionString, MigrationType migrationType)
@@ -34,14 +30,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                     Namespace = "NzbDrone.Core.Datastore.Migration",
                     ApplicationContext = new MigrationContext
                         {
-                            MigrationType = migrationType,
-                            SQLiteAlter = _sqLiteAlter,
-                            MigrationHelper = _migrationHelper,
+                            MigrationType = migrationType
                         }
                 };
 
             var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
-            var factory = new SqliteProcessorFactory();
+            var factory = new NzbDroneSqliteProcessorFactory();
             var processor = factory.Create(connectionString, _announcer, options);
             var runner = new MigrationRunner(assembly, migrationContext, processor);
             runner.MigrateUp(true);

@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System.Data;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -8,7 +9,9 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.Nullify("Series", new[] { "ImdbId", "TitleSlug" });
+            Alter.Table("Series")
+                .AlterColumn("ImdbId").AsString().Nullable()
+                .AlterColumn("TitleSlug").AsString().Nullable();
         }
     }
 }
