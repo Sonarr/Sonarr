@@ -28,6 +28,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria != null)

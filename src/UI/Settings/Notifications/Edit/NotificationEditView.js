@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 define([
+    'underscore',
     'vent',
     'AppLayout',
     'marionette',
@@ -8,27 +9,24 @@ define([
     'Commands/CommandController',
     'Mixins/AsModelBoundView',
     'Mixins/AsValidatedView',
-    'underscore',
+    'Mixins/AsEditModalView',
     'Form/FormBuilder'
-], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, _) {
+], function (_, vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
     var view = Marionette.ItemView.extend({
         template: 'Settings/Notifications/Edit/NotificationEditViewTemplate',
 
         ui: {
-            onDownloadToggle: '.x-on-download',
-            onUpgradeSection: '.x-on-upgrade'
-       },
+            onDownloadToggle : '.x-on-download',
+            onUpgradeSection : '.x-on-upgrade'
+        },
 
         events: {
-            'click .x-save'        : '_save',
-            'click .x-save-and-add': '_saveAndAdd',
-            'click .x-delete'      : '_delete',
             'click .x-back'        : '_back',
-            'click .x-cancel'      : '_cancel',
-            'click .x-test'        : '_test',
             'change .x-on-download': '_onDownloadChanged'
         },
+
+        _deleteView: DeleteView,
 
         initialize: function (options) {
             this.targetCollection = options.targetCollection;
@@ -38,34 +36,15 @@ define([
             this._onDownloadChanged();
         },
 
-        _save: function () {
-            var self = this;
-            var promise = this.model.save();
-
-            if (promise) {
-                promise.done(function () {
-                    self.targetCollection.add(self.model, { merge: true });
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                });
-            }
+        _onAfterSave: function () {
+            this.targetCollection.add(this.model, { merge: true });
+            vent.trigger(vent.Commands.CloseModalCommand);
         },
 
-        _saveAndAdd: function () {
-            var self = this;
-            var promise = this.model.save();
+        _onAfterSaveAndAdd: function () {
+            this.targetCollection.add(this.model, { merge: true });
 
-            if (promise) {
-                promise.done(function () {
-                    self.targetCollection.add(self.model, { merge: true });
-
-                    require('Settings/Notifications/Add/NotificationSchemaModal').open(self.targetCollection);
-                });
-            }
-        },
-
-        _delete: function () {
-            var view = new DeleteView({ model: this.model });
-            AppLayout.modalRegion.show(view);
+            require('Settings/Notifications/Add/NotificationSchemaModal').open(this.targetCollection);
         },
 
         _back: function () {
@@ -74,16 +53,6 @@ define([
             }
 
             require('Settings/Notifications/Add/NotificationSchemaModal').open(this.targetCollection);
-        },
-
-        _cancel: function () {
-            if (this.model.isNew()) {
-                this.model.destroy();
-            }
-        },
-
-        _test: function () {
-            this.model.test();
         },
 
         _onDownloadChanged: function () {
@@ -101,6 +70,7 @@ define([
 
     AsModelBoundView.call(view);
     AsValidatedView.call(view);
+    AsEditModalView.call(view);
 
     return view;
 });

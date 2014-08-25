@@ -33,7 +33,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public string CreateSql(string tableName)
         {
-            return string.Format(@"CREATE UNIQUE INDEX ""{2}"" ON ""{0}"" (""{1}"" ASC)", tableName, Column, IndexName);
+            if (Unique)
+            {
+                return String.Format(@"CREATE UNIQUE INDEX ""{2}"" ON ""{0}"" (""{1}"" ASC)", tableName, Column, IndexName);
+            }
+
+            return String.Format(@"CREATE INDEX ""{2}"" ON ""{0}"" (""{1}"" ASC)", tableName, Column, IndexName);
         }
     }
 }

@@ -30,5 +30,11 @@ define(
             CloseControlPanelCommand  : 'CloseControlPanelCommand'
         };
 
+        vent.Hotkeys = {
+            NavbarSearch : 'navbar:search',
+            SaveSettings : 'settings:save',
+            ShowHotkeys  : 'hotkeys:show'
+        };
+
         return vent;
     });

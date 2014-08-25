@@ -5,9 +5,10 @@
 
 .backdrop  {
   .navbar-nzbdrone {
-    background-color : #000000;
     .opacity(0.85);
+    background-color : #000000;
     padding-bottom: 10px;
+    z-index: 10;
   }
 }
 
@@ -149,6 +150,18 @@
       }
     }
   }
+
+  @media (max-width: @screen-xs-max) {
+    .navbar-collapse {
+      .navbar-nav {
+        li {
+          &:focus, &:hover {
+            background-color : #555555;
+          }
+        }
+      }
+    }
+  }
 }
 
 .search {
@@ -176,7 +189,7 @@
 
     background-color: #333333;
     color: #cccccc;
-    opacity: .95;
+    .opacity(0.95);
 
     .tt-suggestion {
       color: #cccccc;
@@ -195,34 +208,3 @@
     }
   }
 }
-
-//.screen-size {
-//  color: @droneTeal;
-//  &:after {
-//    content: "unknown";
-//  }
-//
-//  @media (min-width: @screen-xs-min) {
-//    &:after {
-//      content: "xs";
-//    }
-//  }
-//
-//  @media (min-width: @screen-sm-min) {
-//    &:after {
-//      content: "sm";
-//    }
-//  }
-//
-//  @media (min-width: @screen-md-min) {
-//    &:after {
-//      content: "md";
-//    }
-//  }
-//
-//  @media (min-width: @screen-lg-min) {
-//    &:after {
-//      content: "lg";
-//    }
-//  }
-//}

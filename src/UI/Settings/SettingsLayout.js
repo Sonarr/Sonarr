@@ -10,6 +10,7 @@ define(
         'Settings/MediaManagement/Naming/NamingModel',
         'Settings/MediaManagement/MediaManagementLayout',
         'Settings/MediaManagement/MediaManagementSettingsModel',
+        'Settings/Profile/ProfileLayout',
         'Settings/Quality/QualityLayout',
         'Settings/Indexers/IndexerLayout',
         'Settings/Indexers/IndexerCollection',
@@ -20,6 +21,8 @@ define(
         'Settings/Notifications/NotificationCollection',
         'Settings/Metadata/MetadataLayout',
         'Settings/General/GeneralView',
+        'Settings/UI/UiView',
+        'Settings/UI/UiSettingsModel',
         'Shared/LoadingView',
         'Config'
     ], function ($,
@@ -31,6 +34,7 @@ define(
                  NamingModel,
                  MediaManagementLayout,
                  MediaManagementSettingsModel,
+                 ProfileLayout,
                  QualityLayout,
                  IndexerLayout,
                  IndexerCollection,
@@ -41,6 +45,8 @@ define(
                  NotificationCollection,
                  MetadataLayout,
                  GeneralView,
+                 UiView,
+                 UiSettingsModel,
                  LoadingView,
                  Config) {
         return Marionette.Layout.extend({
@@ -48,34 +54,40 @@ define(
 
             regions: {
                 mediaManagement : '#media-management',
+                profiles        : '#profiles',
                 quality         : '#quality',
                 indexers        : '#indexers',
                 downloadClient  : '#download-client',
                 notifications   : '#notifications',
                 metadata        : '#metadata',
                 general         : '#general',
+                uiRegion        : '#ui',
                 loading         : '#loading-region'
             },
 
             ui: {
                 mediaManagementTab : '.x-media-management-tab',
+                profilesTab        : '.x-profiles-tab',
                 qualityTab         : '.x-quality-tab',
                 indexersTab        : '.x-indexers-tab',
                 downloadClientTab  : '.x-download-client-tab',
                 notificationsTab   : '.x-notifications-tab',
                 metadataTab        : '.x-metadata-tab',
                 generalTab         : '.x-general-tab',
+                uiTab              : '.x-ui-tab',
                 advancedSettings   : '.x-advanced-settings'
             },
 
             events: {
                 'click .x-media-management-tab' : '_showMediaManagement',
+                'click .x-profiles-tab'         : '_showProfiles',
                 'click .x-quality-tab'          : '_showQuality',
                 'click .x-indexers-tab'         : '_showIndexers',
                 'click .x-download-client-tab'  : '_showDownloadClient',
                 'click .x-notifications-tab'    : '_showNotifications',
                 'click .x-metadata-tab'         : '_showMetadata',
                 'click .x-general-tab'          : '_showGeneral',
+                'click .x-ui-tab'               : '_showUi',
                 'click .x-save-settings'        : '_save',
                 'change .x-advanced-settings'   : '_toggleAdvancedSettings'
             },
@@ -84,6 +96,8 @@ define(
                 if (options.action) {
                     this.action = options.action.toLowerCase();
                 }
+
+                this.listenTo(vent, vent.Hotkeys.SaveSettings, this._save);
             },
 
             onRender: function () {
@@ -96,6 +110,7 @@ define(
                 this.downloadClientSettings = new DownloadClientSettingsModel();
                 this.notificationCollection = new NotificationCollection();
                 this.generalSettings = new GeneralSettingsModel();
+                this.uiSettings = new UiSettingsModel();
 
                 Backbone.$.when(
                         this.mediaManagementSettings.fetch(),
@@ -103,18 +118,21 @@ define(
                         this.indexerSettings.fetch(),
                         this.downloadClientSettings.fetch(),
                         this.notificationCollection.fetch(),
-                        this.generalSettings.fetch()
+                        this.generalSettings.fetch(),
+                        this.uiSettings.fetch()
                     ).done(function () {
                         if(!self.isClosed)
                         {
                         self.loading.$el.hide();
                         self.mediaManagement.show(new MediaManagementLayout({ settings: self.mediaManagementSettings, namingSettings: self.namingSettings }));
+                        self.profiles.show(new ProfileLayout());
                         self.quality.show(new QualityLayout());
                         self.indexers.show(new IndexerLayout({ model: self.indexerSettings }));
                         self.downloadClient.show(new DownloadClientLayout({ model: self.downloadClientSettings }));
                         self.notifications.show(new NotificationCollectionView({ collection: self.notificationCollection }));
                         self.metadata.show(new MetadataLayout());
                         self.general.show(new GeneralView({ model: self.generalSettings }));
+                        self.uiRegion.show(new UiView({ model: self.uiSettings }));
                         }
                     });
 
@@ -123,6 +141,9 @@ define(
 
             onShow: function () {
                 switch (this.action) {
+                    case 'profiles':
+                        this._showProfiles();
+                        break;
                     case 'quality':
                         this._showQuality();
                         break;
@@ -144,6 +165,9 @@ define(
                     case 'general':
                         this._showGeneral();
                         break;
+                    case 'ui':
+                        this._showUi();
+                        break;
                     default:
                         this._showMediaManagement();
                 }
@@ -156,6 +180,15 @@ define(
 
                 this.ui.mediaManagementTab.tab('show');
                 this._navigate('settings/mediamanagement');
+            },
+
+            _showProfiles: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.ui.profilesTab.tab('show');
+                this._navigate('settings/profiles');
             },
 
             _showQuality: function (e) {
@@ -210,6 +243,15 @@ define(
 
                 this.ui.generalTab.tab('show');
                 this._navigate('settings/general');
+            },
+
+            _showUi: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.ui.uiTab.tab('show');
+                this._navigate('settings/ui');
             },
 
             _navigate:function(route){

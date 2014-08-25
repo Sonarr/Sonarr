@@ -1,12 +1,13 @@
 using NLog;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.DecisionEngine
 {
     public interface IQualityUpgradableSpecification
     {
-        bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
-        bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null);
+        bool IsUpgradable(Profile profile, QualityModel currentQuality, QualityModel newQuality = null);
+        bool CutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null);
         bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality);
     }
 
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.DecisionEngine
             _logger = logger;
         }
 
-        public bool IsUpgradable(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
+        public bool IsUpgradable(Profile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
             if (newQuality != null)
             {
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.DecisionEngine
             return true;
         }
 
-        public bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, QualityModel newQuality = null)
+        public bool CutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
             int compare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
 

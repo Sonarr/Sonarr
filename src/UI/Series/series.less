@@ -19,6 +19,12 @@
   .form-horizontal {
     margin-top : 10px;
   }
+
+  .twitter-typeahead {
+    .form-control[disabled] {
+      background-color: #ffffff;
+    }
+  }
 }
 
 .delete-series-modal {
@@ -45,18 +51,18 @@
 
 .series-page-header {
   .card(black);
+  .opacity(0.9);
   background : #000000;
   color      : #ffffff;
-  .opacity(0.9);
   padding    : 30px 30px;
   margin     : 50px 10px;
 }
 
 .series-season {
   .card;
+  .opacity(0.9);
   margin  : 30px 10px;
   padding : 10px 25px;
-  .opacity(0.9);
 
   .show-hide-episodes {
     .clickable();
@@ -238,6 +244,7 @@
 
   .episode-number-cell {
     width : 22px;
+    white-space: nowrap;
   }
   .episode-air-date-cell {
     width : 150px;
@@ -265,6 +272,10 @@
   .episode-file-info {
     margin-top : 30px;
     font-size  : 12px;
+  }
+
+  .episode-activity-details-cell .popover {
+    max-width: 800px;
   }
 }
 

@@ -25,12 +25,12 @@ namespace NzbDrone.Core.Test.Datastore.SQLiteMigrationHelperTests
         {
             var series = Builder<Series>.CreateListOfSize(10)
                                         .Random(3)
-                                        .With(c => c.QualityProfileId = 100)
+                                        .With(c => c.ProfileId = 100)
                                         .BuildListOfNew();
 
             Db.InsertMany(series);
 
-            var duplicates = _subject.GetDuplicates<int>("series", "QualityProfileId").ToList();
+            var duplicates = _subject.GetDuplicates<int>("series", "ProfileId").ToList();
 
 
             duplicates.Should().HaveCount(1);

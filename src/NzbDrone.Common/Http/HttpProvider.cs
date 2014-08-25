@@ -22,6 +22,16 @@ namespace NzbDrone.Common.Http
 
     public class HttpProvider : IHttpProvider
     {
+        private class GZipWebClient : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                return request;
+            }
+        }
+
         private readonly Logger _logger;
 
         public const string CONTENT_LENGTH_HEADER = "Content-Length";
@@ -49,7 +59,7 @@ namespace NzbDrone.Common.Http
         {
             try
             {
-                var client = new WebClient { Credentials = identity };
+                var client = new GZipWebClient { Credentials = identity };
                 client.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
                 return client.DownloadString(url);
             }
@@ -107,7 +117,7 @@ namespace NzbDrone.Common.Http
                 _logger.Debug("Downloading [{0}] to [{1}]", url, fileName);
 
                 var stopWatch = Stopwatch.StartNew();
-                var webClient = new WebClient();
+                var webClient = new GZipWebClient();
                 webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
                 webClient.DownloadFile(url, fileName);
                 stopWatch.Stop();

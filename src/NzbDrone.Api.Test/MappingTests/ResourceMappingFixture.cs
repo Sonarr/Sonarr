@@ -11,15 +11,16 @@ using NzbDrone.Api.History;
 using NzbDrone.Api.Indexers;
 using NzbDrone.Api.Logs;
 using NzbDrone.Api.Mapping;
-using NzbDrone.Api.Qualities;
+using NzbDrone.Api.Profiles;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
-using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
@@ -41,8 +42,8 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
         [TestCase(typeof(Core.History.History), typeof(HistoryResource))]
-        [TestCase(typeof(QualityProfile), typeof(QualityProfileResource))]
-        [TestCase(typeof(QualityProfileItem), typeof(QualityProfileItemResource))]
+        [TestCase(typeof(Profile), typeof(ProfileResource))]
+        [TestCase(typeof(ProfileQualityItem), typeof(ProfileQualityItemResource))]
         [TestCase(typeof(Log), typeof(LogResource))]
         [TestCase(typeof(Command), typeof(CommandResource))]
         public void matching_fields(Type modelType, Type resourceType)
@@ -105,16 +106,16 @@ namespace NzbDrone.Api.Test.MappingTests
 
 
         [Test]
-        public void should_map_qualityprofile()
+        public void should_map_profile()
         {
-            var profileResource = new QualityProfileResource
+            var profileResource = new ProfileResource
                 {
                     Cutoff = Quality.WEBDL1080p,
-                    Items = new List<QualityProfileItemResource> { new QualityProfileItemResource { Quality = Quality.WEBDL1080p, Allowed = true } }
+                    Items = new List<ProfileQualityItemResource> { new ProfileQualityItemResource { Quality = Quality.WEBDL1080p, Allowed = true } }
                 };
 
 
-            profileResource.InjectTo<QualityProfile>();
+            profileResource.InjectTo<Profile>();
 
         }
 

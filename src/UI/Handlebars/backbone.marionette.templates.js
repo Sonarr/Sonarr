@@ -11,7 +11,7 @@ define(
         'Handlebars/Helpers/Quality',
         'Handlebars/Helpers/System',
         'Handlebars/Helpers/EachReverse',
-        'Handlebars/Helpers/EachReverse',
+        'Handlebars/Helpers/String',
         'Handlebars/Handlebars.Debug'
     ], function (Templates) {
         return function () {

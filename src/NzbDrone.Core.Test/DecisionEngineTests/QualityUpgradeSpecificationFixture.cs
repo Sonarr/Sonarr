@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
@@ -43,9 +44,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(true);
 
-            var qualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() };
+            var profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() };
 
-            Subject.IsUpgradable(qualityProfile, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
+            Subject.IsUpgradable(profile, new QualityModel(current, currentProper), new QualityModel(newQuality, newProper))
                     .Should().Be(expected);
         }
 
@@ -54,9 +55,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(false);
 
-            var qualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() };
+            var profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() };
 
-            Subject.IsUpgradable(qualityProfile, new QualityModel(Quality.DVD, true), new QualityModel(Quality.DVD, false))
+            Subject.IsUpgradable(profile, new QualityModel(Quality.DVD, true), new QualityModel(Quality.DVD, false))
                     .Should().BeFalse();
         }
     }

@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -17,6 +15,7 @@ namespace NzbDrone.Core.DecisionEngine
     {
         List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports);
         List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase);
+        DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -87,7 +86,7 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                         else
                         {
-                            decision = new DownloadDecision(remoteEpisode, "Unknown Series");
+                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unknown Series"));
                         }
                     }
                 }
@@ -110,19 +109,19 @@ namespace NzbDrone.Core.DecisionEngine
             }
         }
 
-        private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null)
+        public DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null)
         {
             var reasons = _specifications.Select(c => EvaluateSpec(c, remoteEpisode, searchCriteria))
-                                         .Where(c => !string.IsNullOrWhiteSpace(c));
+                                         .Where(c => c != null);
 
             return new DownloadDecision(remoteEpisode, reasons.ToArray());
         }
 
-        private string EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase = null)
+        private Rejection EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase = null)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(spec.RejectionReason))
+                if (spec.RejectionReason.IsNullOrWhiteSpace())
                 {
                     throw new InvalidOperationException("[Need Rejection Text]");
                 }
@@ -130,7 +129,7 @@ namespace NzbDrone.Core.DecisionEngine
                 var generalSpecification = spec as IDecisionEngineSpecification;
                 if (generalSpecification != null && !generalSpecification.IsSatisfiedBy(remoteEpisode, searchCriteriaBase))
                 {
-                    return spec.RejectionReason;
+                    return new Rejection(spec.RejectionReason, generalSpecification.Type);
                 }
             }
             catch (Exception e)
@@ -138,7 +137,7 @@ namespace NzbDrone.Core.DecisionEngine
                 e.Data.Add("report", remoteEpisode.Release.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
                 _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Release.Title, e);
-                return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
+                return new Rejection(String.Format("{0}: {1}", spec.GetType().Name, e.Message));
             }
 
             return null;

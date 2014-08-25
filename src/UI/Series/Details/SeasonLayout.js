@@ -26,7 +26,7 @@ define(
                 EpisodeNumberCell,
                 EpisodeWarningCell,
                 CommandController,
-                Moment,
+                moment,
                 _,
                 Messenger) {
         return Marionette.Layout.extend({
@@ -213,15 +213,15 @@ define(
             },
 
             _shouldShowEpisodes: function () {
-                var startDate = Moment().add('month', -1);
-                var endDate = Moment().add('year', 1);
+                var startDate = moment().add('month', -1);
+                var endDate = moment().add('year', 1);
 
                 return this.episodeCollection.some(function (episode) {
 
                     var airDate = episode.get('airDateUtc');
 
                     if (airDate) {
-                        var airDateMoment = Moment(airDate);
+                        var airDateMoment = moment(airDate);
 
                         if (airDateMoment.isAfter(startDate) && airDateMoment.isBefore(endDate)) {
                             return true;
@@ -235,7 +235,7 @@ define(
             templateHelpers: function () {
 
                 var episodeCount = this.episodeCollection.filter(function (episode) {
-                    return episode.get('hasFile') || (episode.get('monitored') && Moment(episode.get('airDateUtc')).isBefore(Moment()));
+                    return episode.get('hasFile') || (episode.get('monitored') && moment(episode.get('airDateUtc')).isBefore(moment()));
                 }).length;
 
                 var episodeFileCount = this.episodeCollection.where({ hasFile: true }).length;

@@ -17,6 +17,7 @@ define(
                 var airDateField = this.column.get('airDateUtc') || 'airDateUtc';
                 var seasonField = this.column.get('seasonNumber') || 'seasonNumber';
                 var episodeField = this.column.get('episodes') || 'episodeNumber';
+                var absoluteEpisodeField = 'absoluteEpisodeNumber';
 
                 if (this.model) {
                     var result = 'Unknown';
@@ -24,6 +25,7 @@ define(
                     var airDate = this.model.get(airDateField);
                     var seasonNumber = this.model.get(seasonField);
                     var episodes = this.model.get(episodeField);
+                    var absoluteEpisodeNumber = this.model.get(absoluteEpisodeField);
 
                     if (this.cellValue) {
                         if (!seasonNumber) {
@@ -34,6 +36,10 @@ define(
                             episodes = this.cellValue.get(episodeField);
                         }
 
+                        if (!absoluteEpisodeNumber) {
+                            absoluteEpisodeNumber = this.cellValue.get(absoluteEpisodeField);
+                        }
+
                         if (!airDate) {
                             this.model.get(airDateField);
                         }
@@ -42,6 +48,7 @@ define(
                     if (episodes) {
 
                         var paddedEpisodes;
+                        var paddedAbsoluteEpisode;
 
                         if (episodes.constructor === Array) {
                             paddedEpisodes = _.map(episodes,function (episodeNumber) {
@@ -50,9 +57,14 @@ define(
                         }
                         else {
                             paddedEpisodes = FormatHelpers.pad(episodes, 2);
+                            paddedAbsoluteEpisode = FormatHelpers.pad(absoluteEpisodeNumber, 2);
                         }
 
                         result = '{0}x{1}'.format(seasonNumber, paddedEpisodes);
+
+                        if (absoluteEpisodeNumber > 0 && paddedAbsoluteEpisode) {
+                            result += ' ({0})'.format(paddedAbsoluteEpisode);
+                        }
                     }
                     else if (airDate) {
                         result = new Date(airDate).toLocaleDateString();

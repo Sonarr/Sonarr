@@ -76,5 +76,20 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.FullSeason.Should().BeFalse();
         }
+
+        [TestCase("[DeadFish] Kenzen Robo Daimidaler - 01 - Special [BD][720p][AAC]", "Kenzen Robo Daimidaler", 1)]
+        [TestCase("[DeadFish] Kenzen Robo Daimidaler - 01 - OVA [BD][720p][AAC]", "Kenzen Robo Daimidaler", 1)]
+        [TestCase("[DeadFish] Kenzen Robo Daimidaler - 01 - OVD [BD][720p][AAC]", "Kenzen Robo Daimidaler", 1)]
+        public void should_parse_absolute_specials(String postTitle, String title, Int32 absoluteEpisodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
+            result.SeasonNumber.Should().Be(0);
+            result.EpisodeNumbers.SingleOrDefault().Should().Be(0);
+            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.FullSeason.Should().BeFalse();
+            result.Special.Should().BeTrue();
+        }
     }
 }

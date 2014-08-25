@@ -27,7 +27,9 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             namingConfig.SeriesFolderFormat = format;
 
-            Subject.GetSeriesFolder(seriesTitle).Should().Be(expected);
+            var series = new NzbDrone.Core.Tv.Series { Title = seriesTitle };
+
+            Subject.GetSeriesFolder(series).Should().Be(expected);
         }
     }
 }

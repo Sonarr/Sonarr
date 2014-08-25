@@ -6,8 +6,8 @@ define(
 
         return function () {
 
-            var originalOnRender = this.prototype.onRender,
-                originalBeforeClose = this.prototype.onBeforeClose;
+            var originalOnRender = this.prototype.onRender;
+            var originalBeforeClose = this.prototype.onBeforeClose;
 
             this.prototype.onRender = function () {
 

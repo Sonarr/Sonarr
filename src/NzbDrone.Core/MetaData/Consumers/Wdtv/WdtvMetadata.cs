@@ -48,12 +48,12 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
 
                     if (metadataFile.Type == MetadataType.EpisodeImage)
                     {
-                        newFilename = GetEpisodeImageFilename(episodeFile.Path);
+                        newFilename = GetEpisodeImageFilename(episodeFile.RelativePath);
                     }
 
                     else if (metadataFile.Type == MetadataType.EpisodeMetadata)
                     {
-                        newFilename = GetEpisodeMetadataFilename(episodeFile.Path);
+                        newFilename = GetEpisodeMetadataFilename(episodeFile.RelativePath);
                     }
 
                     else
@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                     }
 
                     var existingFilename = Path.Combine(series.Path, metadataFile.RelativePath);
+                    newFilename = Path.Combine(series.Path, newFilename);
 
                     if (!newFilename.PathEquals(existingFilename))
                     {
@@ -151,7 +152,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                 return null;
             }
 
-            _logger.Debug("Generating Episode Metadata for: {0}", episodeFile.Path);
+            _logger.Debug("Generating Episode Metadata for: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
 
             var xmlResult = String.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
@@ -190,7 +191,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                 }
             }
 
-            var filename = GetEpisodeMetadataFilename(episodeFile.Path);
+            var filename = GetEpisodeMetadataFilename(episodeFile.RelativePath);
 
             return new MetadataFileResult(filename, xmlResult.Trim(Environment.NewLine.ToCharArray()));
         }
@@ -264,7 +265,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                 return new List<ImageFileResult>();
             }
 
-            return new List<ImageFileResult>{ new ImageFileResult(GetEpisodeImageFilename(episodeFile.Path), screenshot.Url) };
+            return new List<ImageFileResult>{ new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url) };
         }
 
         private string GetEpisodeMetadataFilename(string episodeFilePath)

@@ -21,6 +21,10 @@
 
   .fc-event {
     .clickable;
+
+    .status {
+      margin-right : 4px;
+    }
   }
 
   th {
@@ -107,6 +111,14 @@
     border-color : @nzbdronePurple;
   }
 
+  .pink {
+    border-color : @nzbdronePink;
+  }
+
+  .premiere {
+    border-color : @droneTeal;
+  }
+
   .episode-title {
     .btn-link;
     .text-overflow;
@@ -163,14 +175,23 @@
     background-color : @nzbdronePurple;
   }
 
+  .pink {
+    border-color     : @nzbdronePink;
+    background-color : @nzbdronePink;
+  }
+
+  .premiere {
+    border-color     : @droneTeal;
+    background-color : @droneTeal;
+  }
+
   .chart {
     margin-top  : 2px;
     margin-right: 2px;
   }
 }
 
-.ical
-{
+.ical {
   color: @btn-link-disabled-color;
   cursor: pointer;
 }
@@ -179,5 +200,14 @@
 
   input, input[readonly] {
     cursor : text;
+  }
+}
+
+.calendar-title {
+    text-align : center;
+
+  h2 {
+    margin-top    : 0px;
+    margin-bottom : 5px;
   }
 }

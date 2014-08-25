@@ -21,11 +21,11 @@
         </div>
 
         <div class="form-group col-md-2">
-            <label>Quality Profile</label>
+            <label>Profile</label>
 
-            <select class="form-control x-quality-profiles">
+            <select class="form-control x-profiles">
                 <option value="noChange">No change</option>
-                {{#each qualityProfiles.models}}
+                {{#each profiles.models}}
                     <option value="{{id}}">{{attributes.name}}</option>
                 {{/each}}
             </select>

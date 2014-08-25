@@ -28,6 +28,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var queue = _downloadTrackingService.GetQueuedDownloads()
@@ -46,7 +48,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)
         {
             var matchingSeries = queue.Where(q => q.Series.Id == newEpisode.Series.Id);
-            var matchingSeriesAndQuality = matchingSeries.Where(q => new QualityModelComparer(q.Series.QualityProfile).Compare(q.ParsedEpisodeInfo.Quality, newEpisode.ParsedEpisodeInfo.Quality) >= 0);
+            var matchingSeriesAndQuality = matchingSeries.Where(q => new QualityModelComparer(q.Series.Profile).Compare(q.ParsedEpisodeInfo.Quality, newEpisode.ParsedEpisodeInfo.Quality) >= 0);
 
             return matchingSeriesAndQuality.Any(q => q.Episodes.Select(e => e.Id).Intersect(newEpisode.Episodes.Select(e => e.Id)).Any());
         }

@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper|repack)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480|848x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",

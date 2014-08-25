@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
 
-            title = FileNameBuilder.CleanFilename(title);
+            title = FileNameBuilder.CleanFileName(title);
 
             var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
         {
             foreach (var folder in _diskProvider.GetDirectories(Settings.WatchFolder))
             {
-                var title = FileNameBuilder.CleanFilename(Path.GetFileName(folder));
+                var title = FileNameBuilder.CleanFileName(Path.GetFileName(folder));
 
                 var files = _diskProvider.GetFiles(folder, SearchOption.AllDirectories);
 
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 
             foreach (var videoFile in _diskScanService.GetVideoFiles(Settings.WatchFolder, false))
             {
-                var title = FileNameBuilder.CleanFilename(Path.GetFileName(videoFile));
+                var title = FileNameBuilder.CleanFileName(Path.GetFileName(videoFile));
 
                 var historyItem = new DownloadClientItem
                 {

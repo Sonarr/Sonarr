@@ -3,23 +3,14 @@ define(
     [
         'underscore',
         'jquery',
+        'vent',
         'backbone',
         'Series/SeriesCollection',
         'typeahead'
-    ], function (_, $, Backbone, SeriesCollection) {
-        $(document).on('keydown', function (e) {
-            if ($(e.target).is('input') || $(e.target).is('textarea')) {
-                return;
-            }
+    ], function (_, $, vent, Backbone, SeriesCollection) {
 
-            if (e.ctrlKey || e.metaKey || e.altKey) {
-                return;
-            }
-
-            if (e.keyCode === 84) {
-                $('.x-series-search').focus();
-                e.preventDefault();
-            }
+        vent.on(vent.Hotkeys.NavbarSearch, function () {
+            $('.x-series-search').focus();
         });
 
         $.fn.bindSearch = function () {

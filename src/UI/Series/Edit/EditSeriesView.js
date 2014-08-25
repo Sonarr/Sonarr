@@ -3,40 +3,38 @@ define(
     [
         'vent',
         'marionette',
-        'Quality/QualityProfileCollection',
+        'Profile/ProfileCollection',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
+        'Mixins/AsEditModalView',
         'Mixins/AutoComplete'
-    ], function (vent, Marionette, QualityProfiles, AsModelBoundView, AsValidatedView) {
+    ], function (vent, Marionette, Profiles, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Series/Edit/EditSeriesViewTemplate',
 
             ui: {
-                qualityProfile: '.x-quality-profile',
-                path          : '.x-path'
+                profile : '.x-profile',
+                path    : '.x-path'
             },
 
             events: {
-                'click .x-save'  : '_saveSeries',
                 'click .x-remove': '_removeSeries'
             },
 
 
             initialize: function () {
-                this.model.set('qualityProfiles', QualityProfiles);
+                this.model.set('profiles', Profiles);
             },
 
-            _saveSeries: function () {
+            _onBeforeSave: function () {
+                var profileId = this.ui.profile.val();
+                this.model.set({ profileId: profileId});
+            },
 
-                var self = this;
-                var qualityProfileId = this.ui.qualityProfile.val();
-                this.model.set({ qualityProfileId: qualityProfileId});
-
-                this.model.save().done(function () {
-                    self.trigger('saved');
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                });
+            _onAfterSave: function () {
+                this.trigger('saved');
+                vent.trigger(vent.Commands.CloseModalCommand);
             },
 
             onRender: function () {
@@ -48,7 +46,9 @@ define(
             }
         });
 
+        AsModelBoundView.call(view);
+        AsValidatedView.call(view);
+        AsEditModalView.call(view);
 
-        AsModelBoundView.apply(view);
-        return AsValidatedView.apply(view);
+        return view;
     });

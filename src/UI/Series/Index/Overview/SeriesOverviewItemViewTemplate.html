@@ -37,7 +37,7 @@
                 <div class="col-md-10 col-xs-8">
                     {{#if_eq status compare="continuing"}}
                         {{#if nextAiring}}
-                            <span class="label label-default">{{NextAiring nextAiring}}</span>
+                            <span class="label label-default">{{RelativeDate nextAiring}}</span>
                         {{/if}}
                     {{else}}
                         <span class="label label-danger">Ended</span>
@@ -45,7 +45,7 @@
 
                     {{seasonCountHelper}}
 
-                    {{qualityProfile qualityProfileId}}
+                    {{profile profileId}}
                 </div>
                 <div class="col-md-2 col-xs-4">
                     {{> EpisodeProgressPartial }}

@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Tv
                 dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(series, dupeFreeRemoteEpisodes);
             }
 
-            foreach (var episode in OrderEpsiodes(series, dupeFreeRemoteEpisodes))
+            foreach (var episode in OrderEpisodes(series, dupeFreeRemoteEpisodes))
             {
                 try
                 {
@@ -90,6 +90,7 @@ namespace NzbDrone.Core.Tv
             allEpisodes.AddRange(updateList);
 
             AdjustMultiEpisodeAirTime(series, allEpisodes);
+            AdjustDirectToDvdAirDate(series, allEpisodes);
 
             _episodeService.DeleteMany(existingEpisodes);
             _episodeService.UpdateMany(updateList);
@@ -151,6 +152,18 @@ namespace NzbDrone.Core.Tv
             }
         }
 
+        private static void AdjustDirectToDvdAirDate(Series series, IEnumerable<Episode> allEpisodes)
+        {
+            if (series.Status == SeriesStatusType.Ended && allEpisodes.All(v => !v.AirDateUtc.HasValue) && series.FirstAired.HasValue)
+            {
+                foreach (var episode in allEpisodes)
+                {
+                    episode.AirDateUtc = series.FirstAired;
+                    episode.AirDate = series.FirstAired.Value.ToString("yyyy-MM-dd");
+                }
+            }
+        }
+
         private List<Episode> MapAbsoluteEpisodeNumbers(Series series, List<Episode> traktEpisodes)
         {
             var tvdbEpisodes = _tvdbProxy.GetEpisodeInfo(series.TvdbId);
@@ -192,7 +205,7 @@ namespace NzbDrone.Core.Tv
             return existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
         }
 
-        private IEnumerable<Episode> OrderEpsiodes(Series series, List<Episode> episodes)
+        private IEnumerable<Episode> OrderEpisodes(Series series, List<Episode> episodes)
         {
             if (series.SeriesType == SeriesTypes.Anime)
             {

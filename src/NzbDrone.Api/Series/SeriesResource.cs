@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Series
     {
         //Todo: Sorters should be done completely on the client
         //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
-        //Todo: We should get the entire QualityProfile instead of ID and Name separately
+        //Todo: We should get the entire Profile instead of ID and Name separately
 
         //View Only
         public String Title { get; set; }
@@ -31,8 +31,9 @@ namespace NzbDrone.Api.Series
 
         public Int32 EpisodeCount { get; set; }
         public Int32 EpisodeFileCount { get; set; }
+        public Int64 SizeOnDisk { get; set; }
         public SeriesStatusType Status { get; set; }
-        public String QualityProfileName { get; set; }
+        public String ProfileName { get; set; }
         public String Overview { get; set; }
         public DateTime? NextAiring { get; set; }
         public DateTime? PreviousAiring { get; set; }
@@ -46,7 +47,7 @@ namespace NzbDrone.Api.Series
 
         //View & Edit
         public String Path { get; set; }
-        public Int32 QualityProfileId { get; set; }
+        public Int32 ProfileId { get; set; }
 
         //Editing Only
         public Boolean SeasonFolder { get; set; }
@@ -65,5 +66,21 @@ namespace NzbDrone.Api.Series
         public String RootFolderPath { get; set; }
         public String Certification { get; set; }
         public List<String> Genres { get; set; }
+
+        //Used to support legacy consumers
+        public Int32 QualityProfileId
+        {
+            get
+            {
+                return ProfileId;
+            }
+            set
+            {
+                if (value > 0 && ProfileId == 0)
+                {
+                    ProfileId = value;
+                }
+            }
+        }
     }
 }

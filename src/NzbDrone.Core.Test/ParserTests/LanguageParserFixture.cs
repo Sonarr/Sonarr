@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("True.Detective.S01E01.1080p.WEB-DL.Rus.Eng.TVKlondike", Language.Russian)]
         [TestCase("The.Trip.To.Italy.S02E01.720p.HDTV.x264-TLA", Language.English)]
         [TestCase("Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv", Language.Norwegian)]
+        [TestCase("Extant.S01E01.VOSTFR.HDTV.x264-RiDERS", Language.French)]
         public void should_parse_language(string postTitle, Language language)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

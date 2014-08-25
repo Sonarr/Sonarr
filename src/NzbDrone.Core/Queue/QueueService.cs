@@ -14,12 +14,10 @@ namespace NzbDrone.Core.Queue
     public class QueueService : IQueueService
     {
         private readonly IDownloadTrackingService _downloadTrackingService;
-        private readonly Logger _logger;
 
-        public QueueService(IDownloadTrackingService downloadTrackingService, Logger logger)
+        public QueueService(IDownloadTrackingService downloadTrackingService)
         {
             _downloadTrackingService = downloadTrackingService;
-            _logger = logger;
         }
 
         public List<Queue> GetQueue()
@@ -39,21 +37,28 @@ namespace NzbDrone.Core.Queue
             {
                 foreach (var episode in queueItem.DownloadItem.RemoteEpisode.Episodes)
                 {
-                    var queue = new Queue();
-                    queue.Id = queueItem.DownloadItem.DownloadClientId.GetHashCode() + episode.Id;
-                    queue.Series = queueItem.DownloadItem.RemoteEpisode.Series;
-                    queue.Episode = episode;
-                    queue.Quality = queueItem.DownloadItem.RemoteEpisode.ParsedEpisodeInfo.Quality;
-                    queue.Title = queueItem.DownloadItem.Title;
-                    queue.Size = queueItem.DownloadItem.TotalSize;
-                    queue.Sizeleft = queueItem.DownloadItem.RemainingSize;
-                    queue.Timeleft = queueItem.DownloadItem.RemainingTime;
-                    queue.Status = queueItem.DownloadItem.Status.ToString();
-                    queue.RemoteEpisode = queueItem.DownloadItem.RemoteEpisode;
+                    var queue = new Queue
+                                {
+                                    Id = episode.Id ^ (queueItem.DownloadItem.DownloadClientId.GetHashCode().GetHashCode() << 16),
+                                    Series = queueItem.DownloadItem.RemoteEpisode.Series,
+                                    Episode = episode,
+                                    Quality = queueItem.DownloadItem.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                                    Title = queueItem.DownloadItem.Title,
+                                    Size = queueItem.DownloadItem.TotalSize,
+                                    Sizeleft = queueItem.DownloadItem.RemainingSize,
+                                    Timeleft = queueItem.DownloadItem.RemainingTime,
+                                    Status = queueItem.DownloadItem.Status.ToString(),
+                                    RemoteEpisode = queueItem.DownloadItem.RemoteEpisode
+                                };
 
                     if (queueItem.HasError)
                     {
                         queue.ErrorMessage = queueItem.StatusMessage;
+                    }
+
+                    if (queue.Timeleft.HasValue)
+                    {
+                        queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
                     }
 
                     queued.Add(queue);

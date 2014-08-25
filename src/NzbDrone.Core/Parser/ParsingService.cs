@@ -155,9 +155,14 @@ namespace NzbDrone.Core.Parser
                 {
                     Episode episode = null;
 
-                    if (sceneSource)
+                    if (parsedEpisodeInfo.Special)
                     {
-                        if (sceneSeasonNumber.HasValue && sceneSeasonNumber > 1)
+                        episode = _episodeService.FindEpisode(series.Id, 0, absoluteEpisodeNumber);
+                    }
+
+                    else if (sceneSource)
+                    {
+                        if (sceneSeasonNumber.HasValue && (sceneSeasonNumber == 0 || sceneSeasonNumber > 1))
                         {
                             var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
 
@@ -186,7 +191,7 @@ namespace NzbDrone.Core.Parser
                    
                     if (episode != null)
                     {
-                        _logger.Info("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
+                        _logger.Debug("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
                                     absoluteEpisodeNumber,
                                     series.Title,
                                     episode.SeasonNumber,

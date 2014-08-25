@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Housekeeping
             }
 
             //Only Vaccuum the DB in production
-            if (RuntimeInfo.IsProduction)
+            if (RuntimeInfoBase.IsProduction)
             {
                 // Vacuuming the log db isn't needed since that's done hourly at the TrimLogCommand.
                 _logger.Debug("Compressing main database after housekeeping");

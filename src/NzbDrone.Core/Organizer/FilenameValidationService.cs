@@ -14,14 +14,14 @@ namespace NzbDrone.Core.Organizer
         ValidationFailure ValidateAnimeFilename(SampleResult sampleResult);
     }
 
-    public class FilenameValidationService : IFilenameValidationService
+    public class FileNameValidationService : IFilenameValidationService
     {
         private const string ERROR_MESSAGE = "Produces invalid file names";
 
         public ValidationFailure ValidateStandardFilename(SampleResult sampleResult)
         {
             var validationFailure = new ValidationFailure("StandardEpisodeFormat", ERROR_MESSAGE);
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.Filename);
+            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.FileName);
 
             if (parsedEpisodeInfo == null)
             {
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Organizer
         public ValidationFailure ValidateDailyFilename(SampleResult sampleResult)
         {
             var validationFailure = new ValidationFailure("DailyEpisodeFormat", ERROR_MESSAGE);
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.Filename);
+            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.FileName);
 
             if (parsedEpisodeInfo == null)
             {
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Organizer
         public ValidationFailure ValidateAnimeFilename(SampleResult sampleResult)
         {
             var validationFailure = new ValidationFailure("AnimeEpisodeFormat", ERROR_MESSAGE);
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.Filename);
+            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.FileName);
 
             if (parsedEpisodeInfo == null)
             {

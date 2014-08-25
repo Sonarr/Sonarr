@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DataAugmentation.DailySeries;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -55,6 +55,7 @@ namespace NzbDrone.Core.Tv
             series.Title = seriesInfo.Title;
             series.TitleSlug = seriesInfo.TitleSlug;
             series.TvRageId = seriesInfo.TvRageId;
+            series.ImdbId = seriesInfo.ImdbId;
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.Status = seriesInfo.Status;

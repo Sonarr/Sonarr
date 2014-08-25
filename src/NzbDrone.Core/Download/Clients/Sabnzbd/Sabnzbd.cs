@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
@@ -239,17 +240,30 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (history.Count() != 1)
             {
+                _logger.Warn("History item missing. Couldn't get the new nzoid.");
                 return id;
             }
 
-            var queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
-
-            if (queue.Count() != 1)
+            for (int i = 0; i < 3; i++)
             {
-                return id;
+                var queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
+
+                if (queue.Count() == 1)
+                {
+                    return queue.First().DownloadClientId;
+                }
+
+                if (queue.Count() > 2)
+                {
+                    _logger.Warn("Multiple items with the correct title. Couldn't get the new nzoid.");
+                    return id;
+                }
+
+                Thread.Sleep(500);
             }
 
-            return queue.First().DownloadClientId;
+            _logger.Warn("No items with the correct title. Couldn't get the new nzoid.");
+            return id;
         }
 
         protected IEnumerable<SabnzbdCategory> GetCategories(SabnzbdConfig config)
@@ -341,11 +355,13 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestAuthentication());
+            failures.AddIfNotNull(TestGlobalConfig());
             failures.AddIfNotNull(TestCategory());
 
             if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
             {
                 failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
+                failures.AddIfNotNull(TestCategoryLocalPath());
             }
         }
 
@@ -385,10 +401,25 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             return null;
         }
+        
+        private ValidationFailure TestGlobalConfig()
+        {
+            var config = _proxy.GetConfig(Settings);
+            if (config.Misc.pre_check)
+            {
+                return new NzbDroneValidationFailure("", "Disable 'Check before download' option in Sabnbzd")
+                {
+                    InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/switches/", Settings.Host, Settings.Port),
+                    DetailedDescription = "Using Check before download affects NzbDrone ability to track new downloads. Also Sabnzbd recommends 'Abort jobs that cannot be completed' instead since it's more effective."
+                };
+            }
+
+            return null;
+        }
 
         private ValidationFailure TestCategory()
         {
-            var config = this._proxy.GetConfig(Settings);
+            var config = _proxy.GetConfig(Settings);
             var category = GetCategories(config).FirstOrDefault((SabnzbdCategory v) => v.Name == Settings.TvCategory);
 
             if (category != null)
@@ -426,6 +457,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                         DetailedDescription = "You must disable Sabnzbd TV Sorting for the category NzbDrone uses to prevent import issues. Go to Sabnzbd to fix it."
                     };
                 }
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestCategoryLocalPath()
+        {
+            if (Settings.Host == "127.0.0.1" || Settings.Host == "localhost")
+            {
+                return new ValidationFailure("TvCategoryLocalPath", "Do not set when SABnzbd is running on the same system as NzbDrone");
             }
 
             return null;

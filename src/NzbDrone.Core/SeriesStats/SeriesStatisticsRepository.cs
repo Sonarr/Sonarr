@@ -8,7 +8,7 @@ namespace NzbDrone.Core.SeriesStats
     public interface ISeriesStatisticsRepository
     {
         List<SeriesStatistics> SeriesStatistics();
-        SeriesStatistics SeriesStatistics(int seriesId);
+        SeriesStatistics SeriesStatistics(Int32 seriesId);
     }
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
@@ -28,13 +28,14 @@ namespace NzbDrone.Core.SeriesStats
 
             var sb = new StringBuilder();
             sb.AppendLine(GetSelectClause());
+            sb.AppendLine(GetEpisodeFilesJoin());
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
             return mapper.Query<SeriesStatistics>(queryText);
         }
 
-        public SeriesStatistics SeriesStatistics(int seriesId)
+        public SeriesStatistics SeriesStatistics(Int32 seriesId)
         {
             var mapper = _database.GetDataMapper();
 
@@ -43,27 +44,36 @@ namespace NzbDrone.Core.SeriesStats
 
             var sb = new StringBuilder();
             sb.AppendLine(GetSelectClause());
-            sb.AppendLine("WHERE SeriesId = @seriesId");
+            sb.AppendLine(GetEpisodeFilesJoin());
+            sb.AppendLine("WHERE Episodes.SeriesId = @seriesId");
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
             return mapper.Find<SeriesStatistics>(queryText);
         }
 
-        private string GetSelectClause()
+        private String GetSelectClause()
         {
-            return @"SELECT
-                     SeriesId,
+            return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk FROM
+                     (SELECT
+                     Episodes.SeriesId,
                      SUM(CASE WHEN (Monitored = 1 AND AirdateUtc <= @currentDate) OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
                      SUM(CASE WHEN EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
                      MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 OR Monitored = 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString,
                      MAX(CASE WHEN AirDateUtc >= @currentDate OR EpisodeFileId = 0 AND Monitored = 0 THEN NULL ELSE AirDateUtc END) AS PreviousAiringString
-                     FROM Episodes";
+                     FROM Episodes
+                     GROUP BY Episodes.SeriesId) as Episodes";
         }
 
-        private string GetGroupByClause()
+        private String GetGroupByClause()
         {
-            return "GROUP BY SeriesId";
+            return "GROUP BY Episodes.SeriesId";
+        }
+
+        private String GetEpisodeFilesJoin()
+        {
+            return @"LEFT OUTER JOIN EpisodeFiles
+                     ON EpisodeFiles.SeriesId = Episodes.SeriesId";
         }
     }
 }

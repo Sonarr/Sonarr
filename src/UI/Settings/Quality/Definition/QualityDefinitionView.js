@@ -25,7 +25,7 @@ define(
             },
 
             initialize: function (options) {
-                this.qualityProfileCollection = options.qualityProfiles;
+                this.profileCollection = options.profiles;
                 this.filesize = fileSize;
             },
 

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
@@ -76,6 +75,7 @@ namespace NzbDrone.Core.MediaFiles
                 {
                     _logger.Debug("Creating missing series folder: {0}", series.Path);
                     _diskProvider.CreateFolder(series.Path);
+                    SetPermissions(series.Path);
                 }
                 else
                 {
@@ -112,6 +112,27 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();
+        }
+
+        private void SetPermissions(String path)
+        {
+            if (!_configService.SetPermissionsLinux)
+            {
+                return;
+            }
+
+            try
+            {
+                var permissions = _configService.FolderChmod;
+                _diskProvider.SetPermissions(path, permissions, _configService.ChownUser, _configService.ChownGroup);
+            }
+
+            catch (Exception ex)
+            {
+
+                _logger.WarnException("Unable to apply permissions to: " + path, ex);
+                _logger.DebugException(ex.Message, ex);
+            }
         }
 
         public void Handle(SeriesUpdatedEvent message)

@@ -199,7 +199,6 @@ require.config({
                             headerCell: 'NzbDrone',
                             sortType  : 'toggle'
                         };
-
                     });
             }
         },
@@ -245,8 +244,21 @@ define(
         'System/StatusModel',
         'Shared/Tooltip',
         'Instrumentation/StringFormat',
-        'LifeCycle'
-    ], function ($, Backbone, Marionette, RouteBinder, SignalRBroadcaster, NavbarView, AppLayout, SeriesController, Router, ModalController, ControlPanelController, serverStatusModel, Tooltip) {
+        'LifeCycle',
+        'Hotkeys/Hotkeys'
+    ], function ($,
+                 Backbone,
+                 Marionette,
+                 RouteBinder,
+                 SignalRBroadcaster,
+                 NavbarView,
+                 AppLayout,
+                 SeriesController,
+                 Router,
+                 ModalController,
+                 ControlPanelController,
+                 serverStatusModel,
+                 Tooltip) {
 
         new SeriesController();
         new ModalController();

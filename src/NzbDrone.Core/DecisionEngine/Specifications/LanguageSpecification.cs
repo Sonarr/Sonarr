@@ -1,6 +1,5 @@
 using NLog;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -18,16 +17,21 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             get
             {
-                return "Not English";
+                return "Language is not wanted";
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            var wantedLanguage = subject.Series.Profile.Value.Language;
+            
             _logger.Debug("Checking if report meets language requirements. {0}", subject.ParsedEpisodeInfo.Language);
-            if (subject.ParsedEpisodeInfo.Language != Language.English)
+
+            if (subject.ParsedEpisodeInfo.Language != wantedLanguage)
             {
-                _logger.Debug("Report Language: {0} rejected because it is not English", subject.ParsedEpisodeInfo.Language);
+                _logger.Debug("Report Language: {0} rejected because it is not wanted, wanted {1}", subject.ParsedEpisodeInfo.Language, wantedLanguage);
                 return false;
             }
 

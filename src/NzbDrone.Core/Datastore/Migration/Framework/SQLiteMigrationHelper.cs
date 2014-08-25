@@ -147,13 +147,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             }
         }
 
-
         public void DropTable(string tableName)
         {
             var dropCommand = BuildCommand("DROP TABLE {0};", tableName);
             dropCommand.ExecuteNonQuery();
         }
-
 
         public void RenameTable(string tableName, string newName)
         {
@@ -184,7 +182,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return Convert.ToInt32(countCommand.ExecuteScalar());
         }
 
-
         public SQLiteTransaction BeginTransaction()
         {
             return _connection.BeginTransaction();
@@ -196,7 +193,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             command.Connection = _connection;
             return command;
         }
-
 
         public void ExecuteNonQuery(string command, params string[] args)
         {
@@ -226,7 +222,5 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             }
         }
-
-
     }
 }

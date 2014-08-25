@@ -7,13 +7,13 @@ define(
         'marionette',
         'moment',
         'Calendar/Collection',
-        'System/StatusModel',
+        'Shared/UiSettingsModel',
         'History/Queue/QueueCollection',
         'Config',
         'Mixins/backbone.signalr.mixin',
         'fullcalendar',
         'jquery.easypiechart'
-    ], function ($, vent, Marionette, moment, CalendarCollection, StatusModel, QueueCollection, Config) {
+    ], function ($, vent, Marionette, moment, CalendarCollection, UiSettings, QueueCollection, Config) {
 
         return Marionette.ItemView.extend({
             storageKey: 'calendar.view',
@@ -33,6 +33,18 @@ define(
             },
 
             _viewRender: function (view) {
+
+                if ($(window).width() < 768) {
+                    this.$('.fc-header-title').show();
+                    this.$('.calendar-title').remove();
+
+                    var title = this.$('.fc-header-title').text();
+                    var titleDiv = '<div class="calendar-title"><h2>{0}</h2></div>'.format(title);
+
+                    this.$('.fc-header').before(titleDiv);
+                    this.$('.fc-header-title').hide();
+                }
+
                 if (Config.getValue(this.storageKey) !== view.name) {
                     Config.setValue(this.storageKey, view.name);
                 }
@@ -44,29 +56,54 @@ define(
                 this.$(element).addClass(event.statusLevel);
                 this.$(element).children('.fc-event-inner').addClass(event.statusLevel);
 
-                if (event.progress > 0) {
-                    this.$(element).find('.fc-event-time')
-                        .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(event.progress));
+                if (event.downloading) {
+                    var progress = 100 - (event.downloading.get('sizeleft') / event.downloading.get('size') * 100);
+                    var releaseTitle = event.downloading.get('title');
+                    var estimatedCompletionTime = moment(event.downloading.get('estimatedCompletionTime')).fromNow();
+                    var status = event.downloading.get('status').toLocaleLowerCase();
+                    var errorMessage = event.downloading.get('errorMessage');
 
-                    this.$(element).find('.chart').easyPieChart({
-                        barColor  : '#ffffff',
-                        trackColor: false,
-                        scaleColor: false,
-                        lineWidth : 2,
-                        size      : 14,
-                        animate   : false
-                    });
+                    if (status === 'pending') {
+                        this._addStatusIcon(element, 'icon-time', 'Release will be processed {0}'.format(estimatedCompletionTime));
+                    }
 
-                    this.$(element).find('.chart').tooltip({
-                        title: 'Episode is downloading - {0}% {1}'.format(event.progress.toFixed(1), event.releaseTitle),
-                        container: 'body'
-                    });
+                    else if (errorMessage) {
+                        if (status === 'completed') {
+                            this._addStatusIcon(element, 'icon-nd-import-failed', 'Import failed: {0}'.format(errorMessage));
+                        }
+                        else {
+                            this._addStatusIcon(element, 'icon-nd-download-failed', 'Download failed: {0}'.format(errorMessage));
+                        }
+                    }
+
+                    else if (status === 'failed') {
+                        this._addStatusIcon(element, 'icon-nd-download-failed', 'Download failed: check download client for more details');
+                    }
+
+                    else {
+                        this.$(element).find('.fc-event-time')
+                            .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(progress));
+
+                        this.$(element).find('.chart').easyPieChart({
+                            barColor  : '#ffffff',
+                            trackColor: false,
+                            scaleColor: false,
+                            lineWidth : 2,
+                            size      : 14,
+                            animate   : false
+                        });
+
+                        this.$(element).find('.chart').tooltip({
+                            title: 'Episode is downloading - {0}% {1}'.format(progress.toFixed(1), releaseTitle),
+                            container: '.fc-content'
+                        });
+                    }
                 }
             },
             
             _getEvents: function (view) {
-                var start = moment(view.visStart).toISOString();
-                var end = moment(view.visEnd).toISOString();
+                var start = view.start.toISOString();
+                var end = view.end.toISOString();
 
                 this.$el.fullCalendar('removeEvents');
 
@@ -89,12 +126,11 @@ define(
 
                     var event = {
                         title       : seriesTitle,
-                        start       : start,
-                        end         : end,
+                        start       : moment(start),
+                        end         : moment(end),
                         allDay      : false,
                         statusLevel : self._getStatusLevel(model, end),
-                        progress    : self._getDownloadProgress(model),
-                        releaseTitle: self._getReleaseTitle(model),
+                        downloading : QueueCollection.findEpisode(model.get('id')),
                         model       : model
                     };
 
@@ -129,6 +165,10 @@ define(
                     statusLevel = 'danger';
                 }
 
+                else if (element.get('episodeNumber') === 1) {
+                    statusLevel = 'premiere';
+                }
+
                 if (end.isBefore(currentTime.startOf('day'))) {
                     statusLevel += ' past';
                 }
@@ -141,37 +181,12 @@ define(
                 this._setEventData(this.collection);
             },
 
-            _getDownloadProgress: function (element) {
-                var downloading = QueueCollection.findEpisode(element.get('id'));
-
-                if (!downloading) {
-                    return 0;
-                }
-
-                return 100 - (downloading.get('sizeleft') / downloading.get('size') * 100);
-            },
-
-            _getReleaseTitle: function (element) {
-                var downloading = QueueCollection.findEpisode(element.get('id'));
-
-                if (!downloading) {
-                    return '';
-                }
-
-                return downloading.get('title');
-            },
-
             _getOptions: function () {
                 var options = {
                     allDayDefault : false,
-                    ignoreTimezone: false,
                     weekMode      : 'variable',
-                    firstDay      : StatusModel.get('startOfWeek'),
-                    timeFormat    : 'h(:mm)tt',
-                    buttonText    : {
-                        prev: '<i class="icon-arrow-left"></i>',
-                        next: '<i class="icon-arrow-right"></i>'
-                    },
+                    firstDay      : UiSettings.get('firstDayOfWeek'),
+                    timeFormat    : 'h(:mm)a',
                     viewRender    : this._viewRender.bind(this),
                     eventRender   : this._eventRender.bind(this),
                     eventClick    : function (event) {
@@ -181,12 +196,6 @@ define(
 
                 if ($(window).width() < 768) {
                     options.defaultView = Config.getValue(this.storageKey, 'basicDay');
-
-                    options.titleFormat = {
-                        month: 'MMM yyyy',                             // September 2009
-                        week: 'MMM d[ yyyy]{ \'&#8212;\'[ MMM] d yyyy}', // Sep 7 - 13 2009
-                        day: 'ddd, MMM d, yyyy'                  // Tuesday, Sep 8, 2009
-                    };
 
                     options.header = {
                         left  : 'prev,next today',
@@ -198,12 +207,6 @@ define(
                 else {
                     options.defaultView = Config.getValue(this.storageKey, 'basicWeek');
 
-                    options.titleFormat = {
-                        month: 'MMM yyyy',                             // September 2009
-                        week: 'MMM d[ yyyy]{ \'&#8212;\'[ MMM] d yyyy}', // Sep 7 - 13 2009
-                        day: 'dddd, MMM d, yyyy'                  // Tues, Sep 8, 2009
-                    };
-
                     options.header = {
                         left  : 'prev,next today',
                         center: 'title',
@@ -211,7 +214,33 @@ define(
                     };
                 }
 
+                options.titleFormat = {
+                    month : 'MMMM YYYY',
+                    week  : UiSettings.get('shortDateFormat'),
+                    day   : UiSettings.get('longDateFormat')
+                };
+
+                options.columnFormat = {
+                    month : 'ddd',    // Mon
+                    week  : UiSettings.get('calendarWeekColumnHeader'),
+                    day   : 'dddd'      // Monday
+                };
+
+                options.timeFormat = {
+                    'default': UiSettings.get('timeFormat')
+                };
+
                 return options;
+            },
+
+            _addStatusIcon: function (element, icon, tooltip) {
+                this.$(element).find('.fc-event-time')
+                    .after('<span class="status pull-right"><i class="{0}"></i></span>'.format(icon));
+
+                this.$(element).find('.status').tooltip({
+                    title: tooltip,
+                    container: '.fc-content'
+                });
             }
         });
     });

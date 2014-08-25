@@ -4,8 +4,7 @@ using System.Linq;
 using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Tv;
@@ -23,15 +22,22 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
     public class XbmcService : IXbmcService
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IXbmcJsonApiProxy _proxy;
         private readonly IEnumerable<IApiProvider> _apiProviders;
         private readonly Logger _logger;
 
-        public XbmcService(IHttpProvider httpProvider, IEnumerable<IApiProvider> apiProviders, Logger logger)
+        private readonly ICached<XbmcVersion> _xbmcVersionCache;
+
+        public XbmcService(IXbmcJsonApiProxy proxy,
+                           IEnumerable<IApiProvider> apiProviders,
+                           ICacheManager cacheManager,
+                           Logger logger)
         {
-            _httpProvider = httpProvider;
+            _proxy = proxy;
             _apiProviders = apiProviders;
             _logger = logger;
+
+            _xbmcVersionCache = cacheManager.GetCache<XbmcVersion>(GetType());
         }
 
         public void Notify(XbmcSettings settings, string title, string message)
@@ -56,25 +62,22 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             try
             {
-                var postJson = new JObject();
-                postJson.Add(new JProperty("jsonrpc", "2.0"));
-                postJson.Add(new JProperty("method", "JSONRPC.Version"));
-                postJson.Add(new JProperty("id", 1));
+                return _xbmcVersionCache.Get(settings.Address, () =>
+                {
 
-                var response = _httpProvider.PostCommand(settings.Address, settings.Username, settings.Password, postJson.ToString());
+                    var response = _proxy.GetJsonVersion(settings);
 
-                _logger.Debug("Getting version from response: " + response);
-                var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
+                    _logger.Debug("Getting version from response: " + response);
+                    var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
 
-                var versionObject = result.Result.Property("version");
+                    var versionObject = result.Result.Property("version");
 
-                if (versionObject.Value.Type == JTokenType.Integer)
-                    return new XbmcVersion((int)versionObject.Value);
+                    if (versionObject.Value.Type == JTokenType.Integer) return new XbmcVersion((int) versionObject.Value);
 
-                if (versionObject.Value.Type == JTokenType.Object)
-                    return Json.Deserialize<XbmcVersion>(versionObject.Value.ToString());
+                    if (versionObject.Value.Type == JTokenType.Object) return Json.Deserialize<XbmcVersion>(versionObject.Value.ToString());
 
-                throw new InvalidCastException("Unknown Version structure!: " + versionObject);
+                    throw new InvalidCastException("Unknown Version structure!: " + versionObject);
+                }, TimeSpan.FromHours(12));
             }
 
             catch (Exception ex)
@@ -101,6 +104,8 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public ValidationFailure Test(XbmcSettings settings)
         {
+            _xbmcVersionCache.Clear();
+
             try
             {
                 _logger.Debug("Determining version of XBMC Host: {0}", settings.Address);

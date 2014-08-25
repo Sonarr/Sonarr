@@ -23,6 +23,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             }
         }
 
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
         public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria == null)

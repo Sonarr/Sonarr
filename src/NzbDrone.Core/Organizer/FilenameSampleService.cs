@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 
 namespace NzbDrone.Core.Organizer
 {
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Organizer
         String GetSeasonFolderSample(NamingConfig nameSpec);
     }
 
-    public class FilenameSampleService : IFilenameSampleService
+    public class FileNameSampleService : IFilenameSampleService
     {
         private readonly IBuildFileNames _buildFileNames;
         private static Series _standardSeries;
@@ -31,26 +32,26 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
 
-        public FilenameSampleService(IBuildFileNames buildFileNames)
+        public FileNameSampleService(IBuildFileNames buildFileNames)
         {
             _buildFileNames = buildFileNames;
 
             _standardSeries = new Series
-                              {
-                                  SeriesType = SeriesTypes.Standard,
-                                  Title = "Series Title"
-                              };
+            {
+                SeriesType = SeriesTypes.Standard,
+                Title = "Series Title (2010)"
+            };
 
             _dailySeries = new Series
             {
                 SeriesType = SeriesTypes.Daily,
-                Title = "Series Title"
+                Title = "Series Title (2010)"
             };
 
             _animeSeries = new Series
             {
                 SeriesType = SeriesTypes.Anime,
-                Title = "Series Title"
+                Title = "Series Title (2010)"
             };
 
             _episode1 = new Episode
@@ -73,32 +74,52 @@ namespace NzbDrone.Core.Organizer
             _singleEpisode = new List<Episode> { _episode1 };
             _multiEpisodes = new List<Episode> { _episode1, _episode2 };
 
+            var mediaInfo = new MediaInfoModel()
+            {
+                VideoCodec = "AVC",
+                AudioFormat = "DTS",
+                AudioLanguages = "English",
+                Subtitles = "English/German"
+            };
+
+            var mediaInfoAnime = new MediaInfoModel()
+            {
+                VideoCodec = "AVC",
+                AudioFormat = "DTS",
+                AudioLanguages = "Japanese",
+                Subtitles = "Japanese/English"
+            };
+
             _singleEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
-                ReleaseGroup = "RlsGrp"
+                RelativePath = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
+                ReleaseGroup = "RlsGrp",
+                MediaInfo = mediaInfo
             };
 
             _multiEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv",
-                ReleaseGroup = "RlsGrp"
+                RelativePath = "Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv",
+                ReleaseGroup = "RlsGrp",
+                MediaInfo = mediaInfo
             };
 
             _dailyEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
-                ReleaseGroup = "RlsGrp"
+                RelativePath = "Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
+                ReleaseGroup = "RlsGrp",
+                MediaInfo = mediaInfo
             };
 
             _animeEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.001.HDTV.x264-EVOLVE.mkv",
-                ReleaseGroup = "RlsGrp"
+                RelativePath = "Series.Title.001.HDTV.x264-EVOLVE.mkv",
+                ReleaseGroup = "RlsGrp",
+                MediaInfo = mediaInfoAnime
             };
         }
 
@@ -106,7 +127,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                Filename = BuildSample(_singleEpisode, _standardSeries, _singleEpisodeFile, nameSpec),
+                FileName = BuildSample(_singleEpisode, _standardSeries, _singleEpisodeFile, nameSpec),
                 Series = _standardSeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _singleEpisodeFile
@@ -119,7 +140,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                Filename = BuildSample(_multiEpisodes, _standardSeries, _multiEpisodeFile, nameSpec),
+                FileName = BuildSample(_multiEpisodes, _standardSeries, _multiEpisodeFile, nameSpec),
                 Series = _standardSeries,
                 Episodes = _multiEpisodes,
                 EpisodeFile = _multiEpisodeFile
@@ -132,7 +153,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                Filename = BuildSample(_singleEpisode, _dailySeries, _dailyEpisodeFile, nameSpec),
+                FileName = BuildSample(_singleEpisode, _dailySeries, _dailyEpisodeFile, nameSpec),
                 Series = _dailySeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _dailyEpisodeFile
@@ -145,7 +166,7 @@ namespace NzbDrone.Core.Organizer
         {
             var result = new SampleResult
             {
-                Filename = BuildSample(_singleEpisode, _animeSeries, _animeEpisodeFile, nameSpec),
+                FileName = BuildSample(_singleEpisode, _animeSeries, _animeEpisodeFile, nameSpec),
                 Series = _animeSeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _animeEpisodeFile
@@ -156,19 +177,19 @@ namespace NzbDrone.Core.Organizer
 
         public string GetSeriesFolderSample(NamingConfig nameSpec)
         {
-            return _buildFileNames.GetSeriesFolder(_standardSeries.Title, nameSpec);
+            return _buildFileNames.GetSeriesFolder(_standardSeries, nameSpec);
         }
 
         public string GetSeasonFolderSample(NamingConfig nameSpec)
         {
-            return _buildFileNames.GetSeasonFolder(_standardSeries.Title, _episode1.SeasonNumber, nameSpec);
+            return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, nameSpec);
         }
 
         private string BuildSample(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec)
         {
             try
             {
-                return _buildFileNames.BuildFilename(episodes, series, episodeFile, nameSpec);
+                return _buildFileNames.BuildFileName(episodes, series, episodeFile, nameSpec);
             }
             catch (NamingFormatException)
             {

@@ -3,12 +3,13 @@ define(
     [
         'marionette',
         'backgrid',
+        'Cells/ReleaseTitleCell',
         'Cells/FileSizeCell',
         'Cells/QualityCell',
         'Cells/ApprovalStatusCell',
         'Release/DownloadReportCell',
         'Release/AgeCell'
-    ], function (Marionette, Backgrid, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, AgeCell) {
+    ], function (Marionette, Backgrid, ReleaseTitleCell, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, AgeCell) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/ManualLayoutTemplate',
@@ -25,9 +26,9 @@ define(
                         cell      : AgeCell
                     },
                     {
-                        name      : 'title',
+                        name      : 'this',
                         label     : 'Title',
-                        cell      : Backgrid.StringCell.extend({ className: 'nzb-title-cell' })
+                        cell      : ReleaseTitleCell
                     },
                     {
                         name      : 'indexer',
@@ -44,7 +45,6 @@ define(
                         label     : 'Quality',
                         cell      : QualityCell
                     },
-
                     {
                         name      : 'rejections',
                         label     : '',

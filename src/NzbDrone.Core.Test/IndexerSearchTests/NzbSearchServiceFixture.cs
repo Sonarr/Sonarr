@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.DataAugmentation.Scene;
+﻿using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Test.Framework;
 using FizzWare.NBuilder;
@@ -30,9 +31,9 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                   .Setup(s => s.GetAvailableProviders())
                   .Returns(new List<IIndexer> { indexer.Object });
 
-            Mocker.GetMock<DecisionEngine.IMakeDownloadDecision>()
+            Mocker.GetMock<IMakeDownloadDecision>()
                 .Setup(s => s.GetSearchDecision(It.IsAny<List<Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
-                .Returns(new List<DecisionEngine.Specifications.DownloadDecision>());
+                .Returns(new List<DownloadDecision>());
 
             _xemSeries = Builder<Series>.CreateNew()
                 .With(v => v.UseSceneNumbering = true)

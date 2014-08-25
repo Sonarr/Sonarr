@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(Builder<Series>.CreateNew().Build());
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(e => e.FileExists(It.Is<String>(c => c != DELETED_PATH)))
+                  .Setup(e => e.FileExists(It.Is<String>(c => !c.Contains(DELETED_PATH))))
                   .Returns(true);
 
             Mocker.GetMock<IEpisodeService>()
@@ -68,18 +68,18 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_delete_none_existing_files()
+        public void should_delete_non_existent_files()
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                 .Random(2)
-                .With(c => c.Path = DELETED_PATH)
+                .With(c => c.RelativePath = DELETED_PATH)
                 .Build();
 
             GivenEpisodeFiles(episodeFiles);
 
             Subject.Execute(new CleanMediaFileDb(0));
 
-            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.Path == DELETED_PATH), false), Times.Exactly(2));
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.RelativePath == DELETED_PATH), false), Times.Exactly(2));
         }
 
         [Test]
@@ -87,26 +87,11 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                                 .Random(10)
-                                .With(c => c.Path = "ExistingPath")
+                                .With(c => c.RelativePath = "ExistingPath")
                                 .Build();
 
             GivenEpisodeFiles(episodeFiles);
             GivenFilesAreNotAttachedToEpisode();
-
-            Subject.Execute(new CleanMediaFileDb(0));
-
-            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>(), false), Times.Exactly(10));
-        }
-
-        [Test]
-        public void should_delete_files_that_do_not_belong_to_the_series_path()
-        {
-            var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
-                                .Random(10)
-                                .With(c => c.Path = "ExistingPath")
-                                .Build();
-
-            GivenEpisodeFiles(episodeFiles);
 
             Subject.Execute(new CleanMediaFileDb(0));
 
@@ -128,7 +113,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
                                 .Random(10)
-                                .With(c => c.Path = "ExistingPath")
+                                .With(c => c.RelativePath = "ExistingPath")
                                 .Build();
 
             GivenEpisodeFiles(episodeFiles);

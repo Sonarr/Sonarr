@@ -44,7 +44,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
-                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
+                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.Profile))
                    .ThenByDescending(c => c.LocalEpisode.Size))
                .SelectMany(c => c)
                .ToList();
@@ -73,6 +73,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.Path = localEpisode.Path.CleanFilePath();
                     episodeFile.Size = _diskProvider.GetFileSize(localEpisode.Path);
                     episodeFile.Quality = localEpisode.Quality;
+                    episodeFile.MediaInfo = localEpisode.MediaInfo;
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
                     episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;
@@ -83,6 +84,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
                         var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly);
                         oldFiles = moveResult.OldFiles;
+                    }
+
+                    else
+                    {
+                        episodeFile.RelativePath = localEpisode.Series.Path.GetRelativePath(episodeFile.Path);
                     }
 
                     _mediaFileService.Add(episodeFile);

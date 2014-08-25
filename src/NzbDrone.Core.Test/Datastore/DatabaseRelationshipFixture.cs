@@ -86,14 +86,10 @@ namespace NzbDrone.Core.Test.Datastore
 
             Db.Insert(episode);
 
-
-
-
-
             var loadedEpisodeFile = Db.Single<Episode>().EpisodeFile.Value;
 
             loadedEpisodeFile.Should().NotBeNull();
-            loadedEpisodeFile.ShouldHave().AllProperties().But(c => c.DateAdded).EqualTo(episodeFile);
+            loadedEpisodeFile.ShouldHave().AllProperties().But(c => c.DateAdded).But(c => c.Path).EqualTo(episodeFile);
         }
 
         [Test]

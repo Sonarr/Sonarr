@@ -70,5 +70,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             return Validator.Validate(this);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

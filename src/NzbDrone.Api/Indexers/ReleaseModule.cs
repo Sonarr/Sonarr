@@ -5,7 +5,6 @@ using Nancy;
 using NLog;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
@@ -15,7 +14,6 @@ using Omu.ValueInjecter;
 using System.Linq;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -106,14 +104,14 @@ namespace NzbDrone.Api.Indexers
                 release.InjectFrom(downloadDecision.RemoteEpisode.Release);
                 release.InjectFrom(downloadDecision.RemoteEpisode.ParsedEpisodeInfo);
                 release.InjectFrom(downloadDecision);
-                release.Rejections = downloadDecision.Rejections.ToList();
+                release.Rejections = downloadDecision.Rejections.Select(r => r.Reason).ToList();
                 release.DownloadAllowed = downloadDecision.RemoteEpisode.DownloadAllowed;
 
                 release.ReleaseWeight = result.Count;
 
                 if (downloadDecision.RemoteEpisode.Series != null)
                 {
-                    release.QualityWeight = downloadDecision.RemoteEpisode.Series.QualityProfile.Value.Items.FindIndex(v => v.Quality == release.Quality.Quality) * 2;
+                    release.QualityWeight = downloadDecision.RemoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == release.Quality.Quality) * 2;
                 }
 
                 if (!release.Quality.Proper)

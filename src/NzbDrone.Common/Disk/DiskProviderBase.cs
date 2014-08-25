@@ -5,8 +5,9 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Exceptions;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Instrumentation.Extensions;
 
 namespace NzbDrone.Common.Disk
 {
@@ -106,17 +107,19 @@ namespace NzbDrone.Common.Disk
         public bool FileExists(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
-            return File.Exists(path);
+            return FileExists(path, OsInfo.IsMono);
         }
 
         public bool FileExists(string path, bool caseSensitive)
         {
+            Ensure.That(path, () => path).IsValidPath();
+
             if (caseSensitive)
             {
-                return FileExists(path) && path == path.GetActualCasing();
+                return File.Exists(path) && path == path.GetActualCasing();
             }
 
-            return FileExists(path);
+            return File.Exists(path);
         }
 
         public string[] GetDirectories(string path)
@@ -190,7 +193,7 @@ namespace NzbDrone.Common.Disk
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(target, () => target).IsValidPath();
 
-            Logger.Debug("{0} {1} -> {2}", transferAction, source, target);
+            Logger.ProgressDebug("{0} {1} -> {2}", transferAction, source, target);
 
             var sourceFolder = new DirectoryInfo(source);
             var targetFolder = new DirectoryInfo(target);
@@ -209,7 +212,7 @@ namespace NzbDrone.Common.Disk
             {
                 var destFile = Path.Combine(target, sourceFile.Name);
 
-                Logger.Debug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
+                Logger.ProgressDebug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
 
                 switch (transferAction)
                 {
@@ -220,7 +223,7 @@ namespace NzbDrone.Common.Disk
                         }
                     case TransferAction.Move:
                         {
-                            MoveFile(sourceFile.FullName, destFile);
+                            MoveFile(sourceFile.FullName, destFile, true);
                             break;
                         }
                 }
@@ -251,7 +254,7 @@ namespace NzbDrone.Common.Disk
             File.Copy(source, destination, overwrite);
         }
 
-        public void MoveFile(string source, string destination)
+        public void MoveFile(string source, string destination, bool overwrite = false)
         {
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(destination, () => destination).IsValidPath();
@@ -262,7 +265,7 @@ namespace NzbDrone.Common.Disk
                 return;
             }
 
-            if (FileExists(destination))
+            if (FileExists(destination) && overwrite)
             {
                 DeleteFile(destination);
             }
@@ -315,6 +318,7 @@ namespace NzbDrone.Common.Disk
 
             File.SetLastWriteTime(path, dateTime);
         }
+
         public void FileSetLastAccessTime(string path, DateTime dateTime)
         {
             Ensure.That(path, () => path).IsValidPath();

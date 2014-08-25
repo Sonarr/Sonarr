@@ -27,7 +27,7 @@ namespace NzbDrone.Api
         {
             _logger.Info("Starting NzbDrone API");
 
-            if (RuntimeInfo.IsProduction)
+            if (RuntimeInfoBase.IsProduction)
             {
                 DiagnosticsHook.Disable(pipelines);
             }

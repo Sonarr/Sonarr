@@ -21,23 +21,20 @@ namespace NzbDrone.Host
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IHostController _hostController;
-        private readonly PriorityMonitor _priorityMonitor;
         private readonly IStartupContext _startupContext;
         private readonly IBrowserService _browserService;
         private readonly Logger _logger;
 
-        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider, 
+        public NzbDroneServiceFactory(IConfigFileProvider configFileProvider,
                                       IHostController hostController,
-                                      IRuntimeInfo runtimeInfo, 
-                                      PriorityMonitor priorityMonitor, 
-                                      IStartupContext startupContext, 
-                                      IBrowserService browserService, 
+                                      IRuntimeInfo runtimeInfo,
+                                      IStartupContext startupContext,
+                                      IBrowserService browserService,
                                       Logger logger)
         {
             _configFileProvider = configFileProvider;
             _hostController = hostController;
             _runtimeInfo = runtimeInfo;
-            _priorityMonitor = priorityMonitor;
             _startupContext = startupContext;
             _browserService = browserService;
             _logger = logger;
@@ -63,8 +60,6 @@ namespace NzbDrone.Host
             {
                 _browserService.LaunchWebUI();
             }
-
-            _priorityMonitor.Start();
         }
 
         protected override void OnStop()

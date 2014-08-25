@@ -4,12 +4,12 @@ namespace NzbDrone.Core.Metadata.Files
 {
     public class ImageFileResult
     {
-        public String Path { get; set; }
+        public String RelativePath { get; set; }
         public String Url { get; set; }
 
-        public ImageFileResult(string path, string url)
+        public ImageFileResult(string relativePath, string url)
         {
-            Path = path;
+            RelativePath = relativePath;
             Url = url;
         }
     }

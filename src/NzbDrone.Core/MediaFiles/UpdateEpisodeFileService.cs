@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -43,6 +44,8 @@ namespace NzbDrone.Core.MediaFiles
 
         private bool ChangeFileDate(EpisodeFile episodeFile, Series series, List<Episode> episodes)
         {
+            var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
             switch (_configService.FileDate)
             {
                 case FileDateType.LocalAirDate:
@@ -55,7 +58,7 @@ namespace NzbDrone.Core.MediaFiles
                         return false;
                     }
 
-                    return ChangeFileDateToLocalAirDate(episodeFile.Path, airDate, airTime);
+                    return ChangeFileDateToLocalAirDate(episodeFilePath, airDate, airTime);
                 }
 
                 case FileDateType.UtcAirDate:
@@ -67,7 +70,7 @@ namespace NzbDrone.Core.MediaFiles
                         return false;
                     }
 
-                    return ChangeFileDateToUtcAirDate(episodeFile.Path, airDateUtc.Value);
+                    return ChangeFileDateToUtcAirDate(episodeFilePath, airDateUtc.Value);
                 }
             }
 

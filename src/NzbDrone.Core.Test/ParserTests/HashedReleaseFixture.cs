@@ -26,9 +26,16 @@ namespace NzbDrone.Core.Test.ParserTests
             },
             new object[]
             {
-                @"C:\Test\Some.Hashed.Release.S01E01.720p.WEB-DL.AAC2.0.H.264-Mercury.mkv\yrucreM-462.H.0.2CAA.LD-BEW.p027.10E10S.esaeleR.dehsaH.emoS.mkv".AsOsAgnostic(),
+                @"C:\Test\Fake.Dir.S01E01-Test\yrucreM-462.H.0.2CAA.LD-BEW.p027.10E10S.esaeleR.dehsaH.emoS.mkv".AsOsAgnostic(),
                 "somehashedrelease",
                 "WEBDL-720p",
+                "Mercury"
+            },
+            new object[]
+            {
+                @"C:\Test\Fake.Dir.S01E01-Test\yrucreM-LN 1.5DD LD-BEW P0801 10E10S esaeleR dehsaH emoS.mkv".AsOsAgnostic(),
+                "somehashedrelease",
+                "WEBDL-1080p",
                 "Mercury"
             },
             new object[]

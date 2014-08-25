@@ -10,13 +10,11 @@ namespace NzbDrone.Automation.Test
     {
         private PageBase page;
 
-
         [SetUp]
         public void Setup()
         {
             page = new PageBase(driver);
         }
-
 
         [Test]
         public void series_page()
@@ -62,7 +60,6 @@ namespace NzbDrone.Automation.Test
             page.FindByClass("iv-system-systemlayout").Should().NotBeNull();
         }
 
-
         [Test]
         public void add_series_page()
         {
@@ -75,7 +72,5 @@ namespace NzbDrone.Automation.Test
 
             page.FindByClass("iv-addseries-addserieslayout").Should().NotBeNull();
         }
-
-
     }
 }

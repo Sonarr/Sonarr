@@ -1,10 +1,10 @@
 ﻿<div class="episode-info">
     {{#with series}}
-        {{qualityProfile qualityProfileId}}
+        {{profile profileId}}
         <span class="label label-info">{{network}}</span>
     {{/with}}
     <span class="label label-info">{{StartTime airDateUtc}}</span>
-    <span class="label label-info">{{NextAiring airDateUtc}}</span>
+    <span class="label label-info">{{RelativeDate airDateUtc}}</span>
 </div>
 
 <div class="episode-overview">

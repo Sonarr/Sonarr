@@ -85,6 +85,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Top Gear - 06x11 - 2005.08.07", "Top Gear", 6, 11)]
         [TestCase("The_Voice_US_s06e19_04.28.2014_hdtv.x264.Poke.mp4", "The Voice US", 6, 19)]
         [TestCase("the.100.110.hdtv-lol", "The 100", 1, 10)]
+        [TestCase("2009x09 [SDTV].avi", "", 2009, 9)]
+        [TestCase("S2009E09 [SDTV].avi", "", 2009, 9)]
+        [TestCase("Shark Week S2009E09 [SDTV].avi", "Shark Week", 2009, 9)]
+//        [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

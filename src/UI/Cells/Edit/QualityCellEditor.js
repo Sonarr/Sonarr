@@ -4,8 +4,8 @@ define(
         'backgrid',
         'marionette',
         'underscore',
-        'Settings/Quality/Profile/QualityProfileSchemaCollection',
-    ], function (Backgrid, Marionette, _, QualityProfileSchemaCollection) {
+        'Settings/Profile/ProfileSchemaCollection'
+    ], function (Backgrid, Marionette, _, ProfileSchemaCollection) {
         return Backgrid.CellEditor.extend({
 
             className: 'quality-cell-editor',
@@ -21,12 +21,12 @@ define(
             render: function () {
                 var self = this;
 
-                var qualityProfileSchemaCollection = new QualityProfileSchemaCollection();
-                var promise = qualityProfileSchemaCollection.fetch();
+                var profileSchemaCollection = new ProfileSchemaCollection();
+                var promise = profileSchemaCollection.fetch();
 
                 promise.done(function () {
                     var templateName = self.template;
-                    self.schema = qualityProfileSchemaCollection.first();
+                    self.schema = profileSchemaCollection.first();
 
                     var selected = _.find(self.schema.get('items'), function (model) {
                         return model.quality.id === self.model.get(self.column.get('name')).quality.id;
@@ -50,13 +50,13 @@ define(
                 var column = this.column;
                 var selected = parseInt(this.$el.val(), 10);
 
-                var qualityProfileItem = _.find(this.schema.get('items'), function(model) {
+                var profileItem = _.find(this.schema.get('items'), function(model) {
                     return model.quality.id === selected;
                 });
 
                 var newQuality = {
                     proper : false,
-                    quality: qualityProfileItem.quality
+                    quality: profileItem.quality
                 };
 
                 model.set(column.get('name'), newQuality);

@@ -28,6 +28,8 @@ namespace NzbDrone.Api.Indexers
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
         public Boolean Approved { get; set; }
+        public Boolean TemporarilyRejected { get; set; }
+        public Boolean Rejected { get; set; }
         public Int32 TvRageId { get; set; }
         public IEnumerable<String> Rejections { get; set; }
         public DateTime PublishDate { get; set; }

@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Test.HistoryTests
 {
@@ -15,7 +16,8 @@ namespace NzbDrone.Core.Test.HistoryTests
         {
             var historyItem = Builder<History.History>.CreateListOfSize(30)
                 .All()
-                .With(c=>c.Id = 0)
+                .With(c => c.Id = 0)
+                .With(c => c.Quality = new QualityModel())
                 .TheFirst(10).With(c => c.Date = DateTime.Now)
                 .TheNext(20).With(c => c.Date = DateTime.Now.AddDays(-31))
                 .Build();
@@ -32,7 +34,9 @@ namespace NzbDrone.Core.Test.HistoryTests
         [Test]
         public void should_read_write_dictionary()
         {
-            var history = Builder<History.History>.CreateNew().BuildNew();
+            var history = Builder<History.History>.CreateNew()
+                .With(c => c.Quality = new QualityModel())
+                .BuildNew();
 
             history.Data.Add("key1","value1");
             history.Data.Add("key2","value2");
@@ -48,6 +52,7 @@ namespace NzbDrone.Core.Test.HistoryTests
             var history = Builder<History.History>
                 .CreateListOfSize(5)
                 .All()
+                .With(c => c.Quality = new QualityModel())
                 .With(c => c.EventType = HistoryEventType.Unknown)
                 .Random(3)
                 .With(c => c.EventType = HistoryEventType.Grabbed)

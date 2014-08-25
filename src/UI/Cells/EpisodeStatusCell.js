@@ -8,7 +8,7 @@ define(
         'History/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
-    ], function (reqres, Backbone, NzbDroneCell, QueueCollection, Moment, FormatHelpers) {
+    ], function (reqres, Backbone, NzbDroneCell, QueueCollection, moment, FormatHelpers) {
         return  NzbDroneCell.extend({
 
             className: 'episode-status-cell',
@@ -22,6 +22,11 @@ define(
             },
 
             _renderCell: function () {
+
+                if (this.episodeFile) {
+                    this.stopListening(this.episodeFile, 'change', this._refresh);
+                }
+
                 this.$el.empty();
 
                 if (this.model) {
@@ -29,24 +34,14 @@ define(
                     var icon;
                     var tooltip;
 
-                    var hasAired = Moment(this.model.get('airDateUtc')).isBefore(Moment());
-                    var hasFile = this.model.get('hasFile');
+                    var hasAired = moment(this.model.get('airDateUtc')).isBefore(moment());
+                    this.episodeFile = this._getFile();
 
-                    if (hasFile) {
-                        var episodeFile;
+                    if (this.episodeFile) {
+                        this.listenTo(this.episodeFile, 'change', this._refresh);
 
-                        if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
-                            episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
-                        }
-
-                        else {
-                            episodeFile = new Backbone.Model(this.model.get('episodeFile'));
-                        }
-
-                        this.listenTo(episodeFile, 'change', this._refresh);
-
-                        var quality = episodeFile.get('quality');
-                        var size = FormatHelpers.bytes(episodeFile.get('size'));
+                        var quality = this.episodeFile.get('quality');
+                        var size = FormatHelpers.bytes(this.episodeFile.get('size'));
                         var title = 'Episode downloaded';
 
                         if (quality.proper) {
@@ -103,6 +98,28 @@ define(
 
                     this.$el.html('<i class="{0}" title="{1}"/>'.format(icon, tooltip));
                 }
+            },
+
+            _getFile: function () {
+                var hasFile = this.model.get('hasFile');
+
+                if (hasFile) {
+                    var episodeFile;
+
+                    if (reqres.hasHandler(reqres.Requests.GetEpisodeFileById)) {
+                        episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
+                    }
+
+                    else {
+                        episodeFile = new Backbone.Model(this.model.get('episodeFile'));
+                    }
+
+                    if (episodeFile) {
+                        return episodeFile;
+                    }
+                }
+
+                return undefined;
             }
         });
     });

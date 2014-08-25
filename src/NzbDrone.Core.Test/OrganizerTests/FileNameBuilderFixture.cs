@@ -64,12 +64,14 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episodeFile.Quality.Proper = true;
         }
 
+
+
         [Test]
         public void should_replace_Series_space_Title()
         {
             _namingConfig.StandardEpisodeFormat = "{Series Title}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("South Park");
         }
 
@@ -78,7 +80,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series_Title}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("South_Park");
         }
 
@@ -87,7 +89,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("South.Park");
         }
 
@@ -96,7 +98,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series-Title}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("South-Park");
         }
 
@@ -105,7 +107,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{SERIES TITLE}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("SOUTH PARK");
         }
 
@@ -114,7 +116,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{sErIES-tItLE}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(_series.Title.Replace(' ', '-'));
         }
 
@@ -123,8 +125,18 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{series title}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("south park");
+        }
+
+        [Test]
+        public void should_cleanup_Series_Title()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.CleanTitle}";
+            _series.Title = "South Park (1997)";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.1997");
         }
 
         [Test]
@@ -132,7 +144,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Episode Title}";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("City Sushi");
         }
 
@@ -141,7 +153,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{ePisOde-TitLe}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("City-Sushi");
         }
 
@@ -151,7 +163,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.SeasonNumber = 1;
             _namingConfig.StandardEpisodeFormat = "{season}x{episode}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("1x6");
         }
 
@@ -161,7 +173,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.SeasonNumber = 1;
             _namingConfig.StandardEpisodeFormat = "{season:00}x{episode}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("01x6");
         }
 
@@ -171,7 +183,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.SeasonNumber = 1;
             _namingConfig.StandardEpisodeFormat = "{season}x{episode}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("1x6");
         }
 
@@ -181,7 +193,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.SeasonNumber = 1;
             _namingConfig.StandardEpisodeFormat = "{season}x{episode:00}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("1x06");
         }
 
@@ -190,7 +202,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Quality Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("HDTV-720p");
         }
 
@@ -200,7 +212,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Quality Title}";
             _episodeFile.Quality.Proper = true;
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("HDTV-720p Proper");
         }
 
@@ -209,7 +221,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} [{Quality Title}]";
 
-            Subject.BuildFilename(new List<Episode> {_episode1}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1}, _series, _episodeFile)
                    .Should().Be("South Park - S15E06 - City Sushi [HDTV-720p]");
         }
 
@@ -217,10 +229,10 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void use_file_name_when_sceneName_is_null()
         {
             _namingConfig.RenameEpisodes = false;
-            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.Path));
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.RelativePath));
         }
 
         [Test]
@@ -228,9 +240,9 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.RenameEpisodes = false;
             _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
-            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30.Rock.S01E01.xvid-LOL");
         }
 
@@ -253,7 +265,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .Build();
 
 
-            Subject.BuildFilename(new List<Episode> {episode2, episode}, new Series {Title = "30 Rock"}, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {episode2, episode}, new Series {Title = "30 Rock"}, _episodeFile)
                    .Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong!");
         }
 
@@ -266,7 +278,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.Title = "Hello";
             _episode2.Title = "World";
 
-            Subject.BuildFilename(new List<Episode> {_episode1, _episode2}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1, _episode2}, _series, _episodeFile)
                    .Should().Be("South Park - S15E06-E07 - Hello + World");
         }
 
@@ -281,7 +293,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.AirDate = "2012-12-13";
             _episode1.Title = "Kristen Stewart";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("The Daily Show with Jon Stewart - 2012-12-13 - Kristen Stewart");
         }
 
@@ -296,7 +308,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episode1.AirDate = null;
             _episode1.Title = "Kristen Stewart";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("The Daily Show with Jon Stewart - Unknown - Kristen Stewart");
         }
 
@@ -306,7 +318,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
             _namingConfig.MultiEpisodeStyle = 0;
 
-            Subject.BuildFilename(new List<Episode> {_episode1, _episode2}, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> {_episode1, _episode2}, _series, _episodeFile)
                 .Should().Be("South Park - S15E06-07 - City Sushi");
         }
 
@@ -316,7 +328,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
             _namingConfig.MultiEpisodeStyle = 1;
 
-            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                 .Should().Be("South Park - S15E06 - S15E07 - City Sushi");
         }
 
@@ -326,7 +338,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
             _namingConfig.MultiEpisodeStyle = 2;
 
-            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                 .Should().Be("South Park - S15E06E07 - City Sushi");
         }
 
@@ -336,7 +348,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
             _namingConfig.MultiEpisodeStyle = 3;
 
-            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                 .Should().Be("South Park - S15E06-E07 - City Sushi");
         }
 
@@ -348,7 +360,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             _namingConfig.StandardEpisodeFormat = "{Episode Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(title);
         }
 
@@ -357,7 +369,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Release Group}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(_episodeFile.ReleaseGroup);
         }
 
@@ -368,9 +380,9 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - {Original Title}";
 
             _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
-            _episodeFile.Path = @"C:\Test\TV\30 Rock - S01E01 - Test";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30 Rock - 30.Rock.S01E01.xvid-LOL");
         }
 
@@ -387,7 +399,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .Build();
 
 
-            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "30 Rock" }, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { episode }, new Series { Title = "30 Rock" }, _episodeFile)
                    .Should().Be("30 Rock - S06E06 - Part 1");
         }
 
@@ -404,7 +416,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .Build();
 
 
-            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "30 Rock" }, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { episode }, new Series { Title = "30 Rock" }, _episodeFile)
                    .Should().Be("30 Rock - S06E06 - Part 1");
         }
 
@@ -419,7 +431,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .With(e => e.EpisodeNumber = 6)
                             .Build();
 
-            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "Chicago P.D." }, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { episode }, new Series { Title = "Chicago P.D." }, _episodeFile)
                    .Should().Be("Chicago.P.D.S06E06.Part.1");
         }
 
@@ -434,7 +446,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .With(e => e.EpisodeNumber = 6)
                             .Build();
 
-            Subject.BuildFilename(new List<Episode> { episode }, new Series { Title = "Chicago P.D.." }, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { episode }, new Series { Title = "Chicago P.D.." }, _episodeFile)
                    .Should().Be("Chicago.P.D.S06E06.Part.1");
         }
 
@@ -443,7 +455,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South.Park.S15E06.City.Sushi");
         }
 
@@ -453,7 +465,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _series.SeriesType = SeriesTypes.Anime;
             _namingConfig.AnimeEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South.Park.S15E06.100.City.Sushi");
         }
 
@@ -463,7 +475,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _series.SeriesType = SeriesTypes.Anime;
             _namingConfig.AnimeEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South.Park.S15E06.City.Sushi");
         }
 
@@ -473,7 +485,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _series.SeriesType = SeriesTypes.Anime;
             _namingConfig.AnimeEpisodeFormat = "{Series.Title}.{absolute:00}.{Episode.Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South.Park.100.City.Sushi");
         }
 
@@ -483,7 +495,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _series.SeriesType = SeriesTypes.Anime;
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - 100-101 - City Sushi");
         }
 
@@ -496,7 +508,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Series Title} - {season:0}x{episode:00} - {Episode Title}";
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1, }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1, }, _series, _episodeFile)
                    .Should().Be("South Park - 15x06 - City Sushi");
         }
 
@@ -507,8 +519,62 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.MultiEpisodeStyle = (int)MultiEpisodeStyle.Duplicate;
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
 
-            Subject.BuildFilename(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - 100 - 101 - City Sushi");
+        }
+
+        [Test]
+        public void should_include_affixes_if_value_not_empty()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}{_Episode.Title_}";
+            
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06_City.Sushi_");
+        }
+
+        [Test]
+        public void should_not_include_affixes_if_value_empty()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}{_Episode.Title_}";
+
+            _episode1.Title = "";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06");
+        }
+
+        [Test]
+        public void should_format_mediainfo_properly()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
+
+            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            {
+                VideoCodec = "AVC",
+                AudioFormat = "DTS",
+                AudioLanguages = "English/Spanish",
+                Subtitles = "English/Spanish/Italian"
+            };
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS[EN+ES].[EN+ES+IT]");
+        }
+
+        [Test]
+        public void should_exclude_english_in_mediainfo_audio_language()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
+
+            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            {
+                VideoCodec = "AVC",
+                AudioFormat = "DTS",
+                AudioLanguages = "English",
+                Subtitles = "English/Spanish/Italian"
+            };
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS.[EN+ES+IT]");
         }
     }
 }

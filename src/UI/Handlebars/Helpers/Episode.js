@@ -4,11 +4,15 @@ define(
         'handlebars',
         'Shared/FormatHelpers',
         'moment'
-    ], function (Handlebars, FormatHelpers, Moment) {
+    ], function (Handlebars, FormatHelpers, moment) {
         Handlebars.registerHelper('EpisodeNumber', function () {
 
             if (this.series.seriesType === 'daily') {
-                return Moment(this.airDate).format('L');
+                return moment(this.airDate).format('L');
+            }
+
+            else if (this.series.seriesType === 'anime' && this.absoluteEpisodeNumber > 0) {
+                return '{0}x{1} ({2})'.format(this.seasonNumber, FormatHelpers.pad(this.episodeNumber, 2), FormatHelpers.pad(this.absoluteEpisodeNumber, 2));
             }
 
             else {
@@ -21,9 +25,9 @@ define(
 
             var hasFile = this.hasFile;
             var downloading = require('History/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
-            var currentTime = Moment();
-            var start = Moment(this.airDateUtc);
-            var end = Moment(this.end);
+            var currentTime = moment();
+            var start = moment(this.airDateUtc);
+            var end = moment(this.end);
 
             if (hasFile) {
                 return 'success';
@@ -31,6 +35,10 @@ define(
 
             if (downloading) {
                 return 'purple';
+            }
+
+            if (this.episodeNumber === 1) {
+                return 'premiere';
             }
 
             if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
@@ -54,6 +62,10 @@ define(
                 return 'progress-bar-success';
             }
 
-            return 'progress-bar-danger';
+            if (this.monitored) {
+                return 'progress-bar-danger';
+            }
+
+            return 'progress-bar-warning';
         });
     });

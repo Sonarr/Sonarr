@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Validation
 {
@@ -30,6 +31,11 @@ namespace NzbDrone.Core.Validation
         public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
         {
             return ruleBuilder.SetValidator(new InclusiveBetweenValidator(0, 65535));
+        }
+
+        public static IRuleBuilderOptions<T, Language> ValidLanguage<T>(this IRuleBuilder<T, Language> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new LangaugeValidator());
         }
     }
 }

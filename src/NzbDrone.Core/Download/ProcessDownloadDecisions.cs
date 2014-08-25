@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NLog;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Parser.Model;
+
+namespace NzbDrone.Core.Download
+{
+    public interface IProcessDownloadDecisions
+    {
+        ProcessedDecisions ProcessDecisions(List<DownloadDecision> decisions);
+    }
+
+    public class ProcessDownloadDecisions : IProcessDownloadDecisions
+    {
+        private readonly IDownloadService _downloadService;
+        private readonly IPrioritizeDownloadDecision _prioritizeDownloadDecision;
+        private readonly IPendingReleaseService _pendingReleaseService;
+        private readonly Logger _logger;
+
+        public ProcessDownloadDecisions(IDownloadService downloadService,
+                                        IPrioritizeDownloadDecision prioritizeDownloadDecision,
+                                        IPendingReleaseService pendingReleaseService,
+                                        Logger logger)
+        {
+            _downloadService = downloadService;
+            _prioritizeDownloadDecision = prioritizeDownloadDecision;
+            _pendingReleaseService = pendingReleaseService;
+            _logger = logger;
+        }
+
+        public ProcessedDecisions ProcessDecisions(List<DownloadDecision> decisions)
+        {
+            var qualifiedReports = GetQualifiedReports(decisions);
+            var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(qualifiedReports);
+            var grabbed = new List<DownloadDecision>();
+            var pending = new List<DownloadDecision>();
+
+            foreach (var report in prioritizedDecisions)
+            {
+                var remoteEpisode = report.RemoteEpisode;
+
+                var episodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList();
+
+                //Skip if already grabbed
+                if (grabbed.SelectMany(r => r.RemoteEpisode.Episodes)
+                               .Select(e => e.Id)
+                               .ToList()
+                               .Intersect(episodeIds)
+                               .Any())
+                {
+                    continue;
+                }
+
+                if (report.TemporarilyRejected)
+                {
+                    _pendingReleaseService.Add(report);
+                    pending.Add(report);
+                    continue;
+                }
+
+                if (pending.SelectMany(r => r.RemoteEpisode.Episodes)
+                       .Select(e => e.Id)
+                       .ToList()
+                       .Intersect(episodeIds)
+                       .Any())
+                {
+                    continue;
+                }
+
+                try
+                {
+                    _downloadService.DownloadReport(remoteEpisode);
+                    grabbed.Add(report);
+                }
+                catch (Exception e)
+                {
+                    //TODO: support for store & forward
+                    //We'll need to differentiate between a download client error and an indexer error
+                    _logger.WarnException("Couldn't add report to download queue. " + remoteEpisode, e);
+                }
+            }
+
+            return new ProcessedDecisions(grabbed, pending);
+        }
+
+        internal List<DownloadDecision> GetQualifiedReports(IEnumerable<DownloadDecision> decisions)
+        {
+            //Process both approved and temporarily rejected
+            return decisions.Where(c => (c.Approved || c.TemporarilyRejected) && c.RemoteEpisode.Episodes.Any()).ToList();
+        }
+    }
+}

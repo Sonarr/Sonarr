@@ -36,16 +36,16 @@ define(
                 }
             }
 
-            var controlGroup = input.parents('.form-group');
+            var formGroup = input.parents('.form-group');
 
-            if(controlGroup.length === 0) {
-                controlGroup = input.parent();
+            if(formGroup.length === 0) {
+                formGroup = input.parent();
             }
             else{
-                var inputGroup = controlGroup.find('.input-group');
+                var inputGroup = formGroup.find('.input-group');
 
                 if (inputGroup.length === 0) {
-                    controlGroup.append('<span class="help-inline validation-error">' + errorMessage + '</span>');
+                    formGroup.append('<span class="help-inline validation-error">' + errorMessage + '</span>');
                 }
 
                 else {
@@ -53,9 +53,9 @@ define(
                 }
             }
 
-            controlGroup.addClass('has-error');
+            formGroup.addClass('has-error');
 
-            return controlGroup.find('.help-inline').text();
+            return formGroup.find('.help-inline').text();
         };
 
 

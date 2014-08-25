@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Common;
 
@@ -15,9 +17,11 @@ namespace NzbDrone.Core.MediaFiles
         void Delete(EpisodeFile episodeFile, bool forUpgrade = false);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
-        List<string> FilterExistingFiles(List<string> files, int seriesId);
+        List<EpisodeFile> GetFilesWithoutMediaInfo();
+        List<string> FilterExistingFiles(List<string> files, Series series);
         EpisodeFile Get(int id);
         List<EpisodeFile> Get(IEnumerable<int> ids);
+
     }
 
     public class MediaFileService : IMediaFileService, IHandleAsync<SeriesDeletedEvent>
@@ -62,9 +66,14 @@ namespace NzbDrone.Core.MediaFiles
             return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
         }
 
-        public List<string> FilterExistingFiles(List<string> files, int seriesId)
+        public List<EpisodeFile> GetFilesWithoutMediaInfo()
         {
-            var seriesFiles = GetFilesBySeries(seriesId).Select(f => f.Path).ToList();
+            return _mediaFileRepository.GetFilesWithoutMediaInfo();
+        }
+
+        public List<string> FilterExistingFiles(List<string> files, Series series)
+        {
+            var seriesFiles = GetFilesBySeries(series.Id).Select(f => Path.Combine(series.Path, f.RelativePath)).ToList();
 
             if (!seriesFiles.Any()) return files;
 

@@ -30,7 +30,7 @@ namespace NzbDrone.Common.Instrumentation
                     IncludeMachineName = true,
                 };
 
-            if (RuntimeInfo.IsProduction)
+            if (RuntimeInfoBase.IsProduction)
             {
                 config.ApiKey = "cc4728a35aa9414f9a0baa8eed56bc67";
             }

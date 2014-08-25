@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         {
             _series = Builder<Series>.CreateListOfSize(5)
                 .All()
-                .With(s => s.QualityProfileId = 1)
+                .With(s => s.ProfileId = 1)
                 .With(s => s.Monitored)
                 .With(s => s.SeasonFolder)
                 .With(s => s.Path = @"C:\Test\name".AsOsAgnostic())
@@ -53,6 +53,21 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 var expectedPath = _series.Single(ser => ser.Id == s.Id).Path;
                 s.Path.Should().Be(expectedPath);
             });
+        }
+
+        [Test]
+        public void should_be_able_to_update_many_series()
+        {
+            var series = Builder<Series>.CreateListOfSize(50)
+                                        .All()
+                                        .With(s => s.Path = (@"C:\Test\TV\" + s.Path).AsOsAgnostic())
+                                        .Build()
+                                        .ToList();
+
+            var newRoot = @"C:\Test\TV2".AsOsAgnostic();
+            series.ForEach(s => s.RootFolderPath = newRoot);
+
+            Subject.UpdateSeries(series);
         }
     }
 }

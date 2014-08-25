@@ -8,6 +8,7 @@ define(
 
         return function () {
 
+            var originalInitialize = this.prototype.initialize;
             var originalOnRender = this.prototype.onRender;
             var originalBeforeClose = this.prototype.onBeforeClose;
 
@@ -47,7 +48,7 @@ define(
                 }
             };
 
-            this.prototype.onRender = function () {
+            this.prototype.initialize = function (options) {
 
                 if (this.model) {
                     this.listenTo(this.model, 'validation:sync', function () {
@@ -64,6 +65,13 @@ define(
 
                     this.listenTo(this, 'validation:failed', validationFailed);
                 }
+
+                if (originalInitialize) {
+                    originalInitialize.call(this, options);
+                }
+            };
+
+            this.prototype.onRender = function () {
 
                 Validation.bind(this);
                 this.bindToModelValidation = bindToModel.bind(this);

@@ -50,6 +50,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
@@ -57,13 +64,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
@@ -75,13 +75,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Common.Test\NzbDrone.Common.Test.csproj">
-      <Project>{bec74619-ddbb-4fba-b517-d3e20afc9997}</Project>
-      <Name>NzbDrone.Common.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{f2be0fdf-6e47-4827-a420-dd4ef82407f8}</Project>
       <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Common.Test\NzbDrone.Common.Test.csproj">
+      <Project>{bec74619-ddbb-4fba-b517-d3e20afc9997}</Project>
+      <Name>NzbDrone.Common.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
       <Project>{ff5ee3b6-913b-47ce-9ceb-11c51b4e1205}</Project>

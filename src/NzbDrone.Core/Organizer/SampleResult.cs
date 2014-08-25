@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Organizer
 {
     public class SampleResult
     {
-        public string Filename { get; set; }
+        public String FileName { get; set; }
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
         public EpisodeFile EpisodeFile { get; set; }

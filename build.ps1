@@ -39,7 +39,20 @@ Function Build()
 Function CleanFolder($path)
 {
     Write-Host Removing XMLDoc files
-    get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {remove-item $_.fullname}
+    get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {
+
+        $filename = $_.FullName
+        $exeFilename = $filename -replace "xml", "exe"
+        $dllFilename = $filename -replace "xml", "dll"
+
+        if (Test-Path $exeFilename) {
+            remove-item $_.fullname
+        }
+
+        if (Test-Path $dllFilename) {
+            remove-item $_.fullname
+        }
+    }
 
     get-childitem $path -File -Filter *.transform -Recurse | foreach ($_) {remove-item $_.fullname}
     
@@ -161,7 +174,7 @@ Function PackageTests()
     Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force
 
-    Copy-Item .\*.sh               -Destination $testPackageFolder -Force
+    Copy-Item .\*.sh              -Destination $testPackageFolder -Force
 
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 

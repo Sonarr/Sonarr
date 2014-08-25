@@ -22,7 +22,7 @@ namespace NzbDrone.Integration.Test
         {
             var newSeries = Series.Lookup("archer").First();
 
-            newSeries.QualityProfileId = 1;
+            newSeries.ProfileId = 1;
             newSeries.Path = @"C:\Test\Archer".AsOsAgnostic();
 
             newSeries = Series.Post(newSeries);

@@ -85,19 +85,19 @@ namespace NzbDrone.Api.Config
 
             sampleResource.SingleEpisodeExample = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult) != null
                     ? "Invalid format"
-                    : singleEpisodeSampleResult.Filename;
+                    : singleEpisodeSampleResult.FileName;
 
             sampleResource.MultiEpisodeExample = _filenameValidationService.ValidateStandardFilename(multiEpisodeSampleResult) != null
                     ? "Invalid format"
-                    : multiEpisodeSampleResult.Filename;
+                    : multiEpisodeSampleResult.FileName;
 
             sampleResource.DailyEpisodeExample = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult) != null
                     ? "Invalid format"
-                    : dailyEpisodeSampleResult.Filename;
+                    : dailyEpisodeSampleResult.FileName;
 
             sampleResource.AnimeEpisodeExample = _filenameValidationService.ValidateAnimeFilename(animeEpisodeSampleResult) != null
                     ? "Invalid format"
-                    : animeEpisodeSampleResult.Filename;
+                    : animeEpisodeSampleResult.FileName;
 
             sampleResource.SeriesFolderExample = nameSpec.SeriesFolderFormat.IsNullOrWhiteSpace()
                 ? "Invalid format"

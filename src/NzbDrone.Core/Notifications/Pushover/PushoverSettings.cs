@@ -18,6 +18,11 @@ namespace NzbDrone.Core.Notifications.Pushover
     {
         private static readonly PushoverSettingsValidator Validator = new PushoverSettingsValidator();
 
+        public PushoverSettings()
+        {
+            Priority = 0;
+        }
+
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://pushover.net/apps/clone/nzbdrone")]
         public String ApiKey { get; set; }
 

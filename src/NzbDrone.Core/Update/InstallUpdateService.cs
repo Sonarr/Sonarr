@@ -5,10 +5,10 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Backup;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
 

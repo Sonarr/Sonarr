@@ -17,7 +17,7 @@ namespace NzbDrone.Integration.Test
             {
                 var newSeries = Series.Lookup(title).First();
 
-                newSeries.QualityProfileId = 1;
+                newSeries.ProfileId = 1;
                 newSeries.Path = String.Format(@"C:\Test\{0}", title).AsOsAgnostic();
 
                 Series.Post(newSeries);
@@ -33,13 +33,13 @@ namespace NzbDrone.Integration.Test
 
             foreach (var s in series)
             {
-                s.QualityProfileId = 2;
+                s.ProfileId = 2;
             }
 
             var result = Series.Editor(series);
 
             result.Should().HaveCount(2);
-            result.TrueForAll(s => s.QualityProfileId == 2).Should().BeTrue();
+            result.TrueForAll(s => s.ProfileId == 2).Should().BeTrue();
         }
     }
 }

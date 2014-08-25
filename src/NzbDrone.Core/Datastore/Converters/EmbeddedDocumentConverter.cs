@@ -55,6 +55,7 @@ namespace NzbDrone.Core.Datastore.Converters
         public object ToDB(object clrValue)
         {
             if (clrValue == null) return null;
+            if (clrValue == DBNull.Value) return DBNull.Value;
 
             return JsonConvert.SerializeObject(clrValue, SerializerSetting);
         }

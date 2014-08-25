@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -39,6 +40,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenEpisode();
 
             var history = Builder<History.History>.CreateNew()
+                                                  .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.EpisodeId = _episode.Id)
                                                   .BuildNew();
             Db.Insert(history);
@@ -53,6 +55,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenSeries();
 
             var history = Builder<History.History>.CreateNew()
+                                                  .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.SeriesId = _series.Id)
                                                   .BuildNew();
             Db.Insert(history);
@@ -69,6 +72,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var history = Builder<History.History>.CreateListOfSize(2)
                                                   .All()
+                                                  .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.EpisodeId = _episode.Id)
                                                   .TheFirst(1)
                                                   .With(h => h.SeriesId = _series.Id)
@@ -89,6 +93,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var history = Builder<History.History>.CreateListOfSize(2)
                                                   .All()
+                                                  .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.SeriesId = _series.Id)
                                                   .TheFirst(1)
                                                   .With(h => h.EpisodeId = _episode.Id)

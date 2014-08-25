@@ -9,6 +9,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download
 {
@@ -379,6 +380,30 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
+
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_manual_mark_all_episodes_of_release_as_failed()
+        {
+            var historyFailed = Builder<History.History>.CreateListOfSize(2)
+                .All()
+                .With(v => v.EventType == HistoryEventType.Grabbed)
+                .Do(v => v.Data.Add("downloadClient", "SabnzbdClient"))
+                .Do(v => v.Data.Add("downloadClientId", "test"))
+                .Build()
+                .ToList();
+
+            GivenGrabbedHistory(historyFailed);
+
+            Mocker.GetMock<IHistoryService>()
+                .Setup(s => s.Get(It.IsAny<Int32>()))
+                .Returns<Int32>(i => historyFailed.FirstOrDefault(v => v.Id == i));
+
+            Subject.MarkAsFailed(1);
+
+            VerifyFailedDownloads(2);
         }
     }
 }

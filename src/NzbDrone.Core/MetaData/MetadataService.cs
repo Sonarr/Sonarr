@@ -156,11 +156,11 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            _logger.Debug("Writing Series Metadata to: {0}", seriesMetadata.Path);
-            _diskProvider.WriteAllText(seriesMetadata.Path, seriesMetadata.Contents);
+            _logger.Debug("Writing Series Metadata to: {0}", seriesMetadata.RelativePath);
+            _diskProvider.WriteAllText(seriesMetadata.RelativePath, seriesMetadata.Contents);
 
             metadata.Hash = hash;
-            metadata.RelativePath = series.Path.GetRelativePath(seriesMetadata.Path);
+            metadata.RelativePath = series.Path.GetRelativePath(seriesMetadata.RelativePath);
 
             return metadata;
         }
@@ -174,18 +174,18 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            var relativePath = series.Path.GetRelativePath(episodeMetadata.Path);
+            var fullPath = Path.Combine(series.Path, episodeMetadata.RelativePath);
 
             var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeMetadata &&
                                                                               c.EpisodeFileId == episodeFile.Id);
 
             if (existingMetadata != null)
             {
-                var fullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
-                if (!episodeMetadata.Path.PathEquals(fullPath))
+                var existingFullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
+                if (!fullPath.PathEquals(existingFullPath))
                 {
-                    _diskProvider.MoveFile(fullPath, episodeMetadata.Path);
-                    existingMetadata.RelativePath = relativePath;
+                    _diskProvider.MoveFile(existingFullPath, fullPath);
+                    existingMetadata.RelativePath = episodeMetadata.RelativePath;
                 }
             }
 
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Metadata
                                EpisodeFileId = episodeFile.Id,
                                Consumer = consumer.GetType().Name,
                                Type = MetadataType.EpisodeMetadata,
-                               RelativePath = relativePath
+                               RelativePath = episodeMetadata.RelativePath
                            };
 
             if (hash == metadata.Hash)
@@ -206,8 +206,8 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            _logger.Debug("Writing Episode Metadata to: {0}", episodeMetadata.Path);
-            _diskProvider.WriteAllText(episodeMetadata.Path, episodeMetadata.Contents);
+            _logger.Debug("Writing Episode Metadata to: {0}", fullPath);
+            _diskProvider.WriteAllText(fullPath, episodeMetadata.Contents);
 
             metadata.Hash = hash;
 
@@ -220,25 +220,23 @@ namespace NzbDrone.Core.Metadata
 
             foreach (var image in consumer.SeriesImages(series))
             {
-                if (_diskProvider.FileExists(image.Path))
+                if (_diskProvider.FileExists(image.RelativePath))
                 {
-                    _logger.Debug("Series image already exists: {0}", image.Path);
+                    _logger.Debug("Series image already exists: {0}", image.RelativePath);
                     continue;
                 }
 
-                var relativePath = series.Path.GetRelativePath(image.Path);
-
                 var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage &&
-                                                                          c.RelativePath == relativePath) ??
+                                                                          c.RelativePath == image.RelativePath) ??
                                new MetadataFile
                                {
                                    SeriesId = series.Id,
                                    Consumer = consumer.GetType().Name,
                                    Type = MetadataType.SeriesImage,
-                                   RelativePath = relativePath
+                                   RelativePath = image.RelativePath
                                };
 
-                _diskProvider.CopyFile(image.Url, image.Path);
+                _diskProvider.CopyFile(image.Url, image.RelativePath);
 
                 result.Add(metadata);
             }
@@ -254,27 +252,25 @@ namespace NzbDrone.Core.Metadata
             {
                 foreach (var image in consumer.SeasonImages(series, season))
                 {
-                    if (_diskProvider.FileExists(image.Path))
+                    if (_diskProvider.FileExists(image.RelativePath))
                     {
-                        _logger.Debug("Season image already exists: {0}", image.Path);
+                        _logger.Debug("Season image already exists: {0}", image.RelativePath);
                         continue;
                     }
 
-                    var relativePath = series.Path.GetRelativePath(image.Path);
-
                     var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeasonImage &&
                                                                             c.SeasonNumber == season.SeasonNumber &&
-                                                                            c.RelativePath == relativePath) ??
+                                                                            c.RelativePath == image.RelativePath) ??
                                 new MetadataFile
                                 {
                                     SeriesId = series.Id,
                                     SeasonNumber = season.SeasonNumber,
                                     Consumer = consumer.GetType().Name,
                                     Type = MetadataType.SeasonImage,
-                                    RelativePath = relativePath
+                                    RelativePath = image.RelativePath
                                 };
 
-                    DownloadImage(series, image.Url, image.Path);
+                    DownloadImage(series, image.Url, image.RelativePath);
 
                     result.Add(metadata);
                 }
@@ -289,24 +285,24 @@ namespace NzbDrone.Core.Metadata
 
             foreach (var image in consumer.EpisodeImages(series, episodeFile))
             {
-                if (_diskProvider.FileExists(image.Path))
+                var fullPath = Path.Combine(series.Path, image.RelativePath);
+
+                if (_diskProvider.FileExists(fullPath))
                 {
-                    _logger.Debug("Episode image already exists: {0}", image.Path);
+                    _logger.Debug("Episode image already exists: {0}", image.RelativePath);
                     continue;
                 }
-
-                var relativePath = series.Path.GetRelativePath(image.Path);
 
                 var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
                                                                                   c.EpisodeFileId == episodeFile.Id);
 
                 if (existingMetadata != null)
                 {
-                    var fullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
-                    if (!image.Path.PathEquals(fullPath))
+                    var existingFullPath = Path.Combine(series.Path, existingMetadata.RelativePath);
+                    if (!fullPath.PathEquals(existingFullPath))
                     {
-                        _diskProvider.MoveFile(fullPath, image.Path);
-                        existingMetadata.RelativePath = relativePath;
+                        _diskProvider.MoveFile(fullPath, fullPath);
+                        existingMetadata.RelativePath = image.RelativePath;
 
                         return new List<MetadataFile>{ existingMetadata };
                     }
@@ -319,10 +315,10 @@ namespace NzbDrone.Core.Metadata
                                    EpisodeFileId = episodeFile.Id,
                                    Consumer = consumer.GetType().Name,
                                    Type = MetadataType.EpisodeImage,
-                                   RelativePath = series.Path.GetRelativePath(image.Path)
+                                   RelativePath = image.RelativePath
                                };
 
-                DownloadImage(series, image.Url, image.Path);
+                DownloadImage(series, image.Url, fullPath);
 
                 result.Add(metadata);
             }

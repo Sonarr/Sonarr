@@ -7,6 +7,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 {
@@ -21,8 +22,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         public void Setup()
         {
             _episodeFiles = Builder<EpisodeFile>.CreateListOfSize(5)
-                                                .BuildListOfNew()
-                                                .ToList();
+                                                .All()
+                                                .With(c => c.Quality = new QualityModel())
+                                                .BuildListOfNew();
 
             Db.InsertMany(_episodeFiles);
 
@@ -55,7 +57,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         public void should_only_contain_episodes_for_the_given_series()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                                                  .With(f => f.Path = "another path")
+                                                  .With(f => f.RelativePath = "another path")
+                                                  .With(c => c.Quality = new QualityModel())
                                                   .BuildNew();
 
             Db.Insert(episodeFile);

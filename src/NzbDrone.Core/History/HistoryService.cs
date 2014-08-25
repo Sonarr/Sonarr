@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
@@ -7,6 +8,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -17,7 +19,7 @@ namespace NzbDrone.Core.History
         List<History> All();
         void Purge();
         void Trim();
-        QualityModel GetBestQualityInHistory(QualityProfile qualityProfile, int episodeId);
+        QualityModel GetBestQualityInHistory(Profile profile, int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
         List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
         List<History> Failed();
@@ -95,9 +97,9 @@ namespace NzbDrone.Core.History
             _historyRepository.Trim();
         }
 
-        public QualityModel GetBestQualityInHistory(QualityProfile qualityProfile, int episodeId)
+        public QualityModel GetBestQualityInHistory(Profile profile, int episodeId)
         {
-            var comparer = new QualityModelComparer(qualityProfile);
+            var comparer = new QualityModelComparer(profile);
             return _historyRepository.GetBestQualityInHistory(episodeId)
                 .OrderByDescending(q => q, comparer)
                 .FirstOrDefault();
@@ -168,7 +170,7 @@ namespace NzbDrone.Core.History
                 //Won't have a value since we publish this event before saving to DB.
                 //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
                 history.Data.Add("DroppedPath", message.EpisodeInfo.Path);
-                history.Data.Add("ImportedPath", message.ImportedEpisode.Path);
+                history.Data.Add("ImportedPath", Path.Combine(message.EpisodeInfo.Series.Path, message.ImportedEpisode.RelativePath));
                 history.Data.Add("DownloadClient", message.DownloadClient);
                 history.Data.Add("DownloadClientId", message.DownloadClientId);
 

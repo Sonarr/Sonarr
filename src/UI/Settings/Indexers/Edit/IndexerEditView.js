@@ -1,4 +1,4 @@
-﻿'use strict';
+﻿ 'use strict';
 
 define([
     'vent',
@@ -8,56 +8,34 @@ define([
     'Commands/CommandController',
     'Mixins/AsModelBoundView',
     'Mixins/AsValidatedView',
-    'underscore',
+    'Mixins/AsEditModalView',
     'Form/FormBuilder',
     'Mixins/AutoComplete',
     'bootstrap'
-], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, _) {
+], function (vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
     var view = Marionette.ItemView.extend({
         template: 'Settings/Indexers/Edit/IndexerEditViewTemplate',
 
         events: {
-            'click .x-save'        : '_save',
-            'click .x-save-and-add': '_saveAndAdd',
-            'click .x-delete'      : '_delete',
-            'click .x-back'        : '_back',
-            'click .x-close'       : '_close',
-            'click .x-test'        : '_test'
+            'click .x-back' : '_back'
         },
+
+        _deleteView: DeleteView,
 
         initialize: function (options) {
             this.targetCollection = options.targetCollection;
         },
 
-        _save: function () {
-            var self = this;
-            var promise = this.model.save();
-
-            if (promise) {
-                promise.done(function () {
-                    self.targetCollection.add(self.model, { merge: true });
-                    vent.trigger(vent.Commands.CloseModalCommand);
-                });
-            }
+        _onAfterSave: function () {
+            this.targetCollection.add(this.model, { merge: true });
+            vent.trigger(vent.Commands.CloseModalCommand);
         },
 
-        _saveAndAdd: function () {
-            var self = this;
-            var promise = this.model.save();
+        _onAfterSaveAndAdd: function () {
+            this.targetCollection.add(this.model, { merge: true });
 
-            if (promise) {
-                promise.done(function () {
-                    self.targetCollection.add(self.model, { merge: true });
-
-                    require('Settings/Indexers/Add/IndexerSchemaModal').open(self.targetCollection);
-                });
-            }
-        },
-
-        _delete: function () {
-            var view = new DeleteView({ model: this.model });
-            AppLayout.modalRegion.show(view);
+            require('Settings/Indexers/Add/IndexerSchemaModal').open(this.targetCollection);
         },
 
         _back: function () {
@@ -66,28 +44,12 @@ define([
             }
 
             require('Settings/Indexers/Add/IndexerSchemaModal').open(this.targetCollection);
-        },
-
-        _close: function () {
-
-            if (this.model.isNew()) {
-                this.model.destroy();
-            }
-
-            else {
-                this.model.fetch();
-            }
-
-            vent.trigger(vent.Commands.CloseModalCommand);
-        },
-
-        _test: function () {
-            this.model.test();
         }
     });
 
     AsModelBoundView.call(view);
     AsValidatedView.call(view);
+    AsEditModalView.call(view);
 
     return view;
 });
