@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     {
         private readonly SQLiteConnection _connection;
 
-        private static readonly Regex SchemaRegex = new Regex(@"['\""\[](?<name>\w+)['\""\]]\s(?<schema>[\w-\s]+)",
+        private static readonly Regex SchemaRegex = new Regex(@"[`'\""\[](?<name>\w+)[`'\""\]]\s(?<schema>[\w-\s]+)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
         private static readonly Regex IndexRegex = new Regex(@"\((?:""|')(?<col>.*)(?:""|')\s(?<direction>ASC|DESC)\)$",
