@@ -90,6 +90,10 @@ namespace NzbDrone.Core.Test.Datastore
 
             loadedEpisodeFile.Should().NotBeNull();
             loadedEpisodeFile.ShouldBeEquivalentTo(episodeFile,
+                options => options
+                    .IncludingAllRuntimeProperties()
+                    .Excluding(c => c.DateAdded)
+                    .Excluding(c => c.Path));
         }
 
         [Test]
