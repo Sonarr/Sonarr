@@ -63,9 +63,8 @@ namespace NzbDrone.Core.Test.Datastore
         {
             Subject.Insert(_basicType);
             Subject.Get(_basicType.Id)
-                   .ShouldHave()
-                   .AllProperties()
-                   .EqualTo(_basicType);
+                .Should()
+                .ShouldBeEquivalentTo(_basicType);
         }
 
         [Test]

@@ -21,11 +21,11 @@ namespace NzbDrone.Integration.Test
         private bool BeValidRelease(ReleaseResource releaseResource)
         {
             releaseResource.Age.Should().BeGreaterOrEqualTo(-1);
-            releaseResource.Title.Should().NotBeBlank();
-            releaseResource.DownloadUrl.Should().NotBeBlank();
-            releaseResource.SeriesTitle.Should().NotBeBlank();
+            releaseResource.Title.Should().NotBeNullOrWhiteSpace();
+            releaseResource.DownloadUrl.Should().NotBeNullOrWhiteSpace();
+            releaseResource.SeriesTitle.Should().NotBeNullOrWhiteSpace();
             //TODO: uncomment these after moving to restsharp for rss
-            //releaseResource.NzbInfoUrl.Should().NotBeBlank();
+            //releaseResource.NzbInfoUrl.Should().NotBeNullOrWhiteSpace();
             //releaseResource.Size.Should().BeGreaterThan(0);
 
             return true;

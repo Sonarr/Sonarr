@@ -68,18 +68,18 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         private void ValidateSeries(Series series)
         {
             series.Should().NotBeNull();
-            series.Title.Should().NotBeBlank();
+            series.Title.Should().NotBeNullOrWhiteSpace();
             series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
             series.SortTitle.Should().Be(Parser.Parser.NormalizeEpisodeTitle(series.Title));
-            series.Overview.Should().NotBeBlank();
-            series.AirTime.Should().NotBeBlank();
+            series.Overview.Should().NotBeNullOrWhiteSpace();
+            series.AirTime.Should().NotBeNullOrWhiteSpace();
             series.FirstAired.Should().HaveValue();
             series.FirstAired.Value.Kind.Should().Be(DateTimeKind.Utc);
             series.Images.Should().NotBeEmpty();
-            series.ImdbId.Should().NotBeBlank();
-            series.Network.Should().NotBeBlank();
+            series.ImdbId.Should().NotBeNullOrWhiteSpace();
+            series.Network.Should().NotBeNullOrWhiteSpace();
             series.Runtime.Should().BeGreaterThan(0);
-            series.TitleSlug.Should().NotBeBlank();
+            series.TitleSlug.Should().NotBeNullOrWhiteSpace();
             series.TvRageId.Should().BeGreaterThan(0);
             series.TvdbId.Should().BeGreaterThan(0);
         }

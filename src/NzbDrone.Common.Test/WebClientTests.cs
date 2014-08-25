@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Test
         {
             var jquery = Subject.DownloadString("http://www.google.com/robots.txt");
 
-            jquery.Should().NotBeBlank();
+            jquery.Should().NotBeNullOrWhiteSpace();
             jquery.Should().Contain("Sitemap");
         }
 

@@ -144,7 +144,7 @@ namespace NzbDrone.Integration.Test.Client
 
             AssertDisableCache(response.Headers);
 
-            response.ErrorMessage.Should().BeBlank();
+            response.ErrorMessage.Should().BeNullOrWhiteSpace();
 
             response.StatusCode.Should().Be(statusCode);
 
