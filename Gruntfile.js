@@ -53,18 +53,18 @@ module.exports = function (grunt) {
         handlebars: {
             options: {
                 namespace   : 'T',
-                partialRegex: /Partial.html/,
+                partialRegex: /Partial.hbs/,
                 wrapped     : true,
                 amd         : true,
                 processName: function (fileName) {
                     return fileName
                         .replace(srcRoot, '')
-                        .replace('.html', '')
+                        .replace('.hbs', '')
                         .toLowerCase();
                 }
             },
             files  : {
-                src : [ srcRoot + '**/*Template.html', srcRoot + '**/*Partial.html'],
+                src : [ srcRoot + '**/*Template.hbs', srcRoot + '**/*Partial.hbs'],
                 dest: outputDir + 'templates.js'
             }
         },
