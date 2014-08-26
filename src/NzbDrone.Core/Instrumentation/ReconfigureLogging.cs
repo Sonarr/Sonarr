@@ -10,16 +10,11 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation
 {
-    public interface ISetLoggingLevel
-    {
-        void Reconfigure();
-    }
-
-    public class SetLoggingLevel : ISetLoggingLevel, IHandleAsync<ConfigFileSavedEvent>, IHandleAsync<ApplicationStartedEvent>
+    public class ReconfigureLogging : IHandleAsync<ConfigFileSavedEvent>, IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IConfigFileProvider _configFileProvider;
 
-        public SetLoggingLevel(IConfigFileProvider configFileProvider)
+        public ReconfigureLogging(IConfigFileProvider configFileProvider)
         {
             _configFileProvider = configFileProvider;
         }
@@ -29,10 +24,11 @@ namespace NzbDrone.Core.Instrumentation
             var minimumLogLevel = LogLevel.FromString(_configFileProvider.LogLevel);
 
             var rules = LogManager.Configuration.LoggingRules;
-            var rollingFileLogger = rules.Single(s => s.Targets.Any(t => t is NzbDroneFileTarget));
-            rollingFileLogger.EnableLoggingForLevel(LogLevel.Trace);
-
-            SetMinimumLogLevel(rollingFileLogger, minimumLogLevel);
+            var rollingFileLoggerRule = rules.Single(s => s.Targets.Any(t => t is NzbDroneFileTarget));
+            rollingFileLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
+            
+            SetMinimumLogLevel(rollingFileLoggerRule, minimumLogLevel);
+            SetMaxArchiveFiles(rollingFileLoggerRule, minimumLogLevel);
 
             LogManager.ReconfigExistingLoggers();
         }
@@ -50,6 +46,23 @@ namespace NzbDrone.Core.Instrumentation
                 {
                     rule.EnableLoggingForLevel(logLevel);
                 }
+            }
+        }
+
+        private void SetMaxArchiveFiles(LoggingRule rule, LogLevel minimumLogLevel)
+        {
+            var target = rule.Targets.Single(t => t is NzbDroneFileTarget) as NzbDroneFileTarget;
+
+            if (target == null) return;
+
+            if (minimumLogLevel >= LogLevel.Info)
+            {
+                target.MaxArchiveFiles = 5;
+            }
+
+            else
+            {
+                target.MaxArchiveFiles = 50;
             }
         }
 

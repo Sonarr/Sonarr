@@ -436,7 +436,7 @@
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
-    <Compile Include="Instrumentation\SetLoggingLevel.cs" />
+    <Compile Include="Instrumentation\ReconfigureLogging.cs" />
     <Compile Include="Jobs\JobRepository.cs" />
     <Compile Include="Jobs\ScheduledTask.cs" />
     <Compile Include="Jobs\Scheduler.cs" />
