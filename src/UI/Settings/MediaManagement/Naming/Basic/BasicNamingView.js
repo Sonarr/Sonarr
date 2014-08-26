@@ -35,7 +35,7 @@ define(
                 var includeSeriesTitle = standardFormat.match(/\{Series[-_. ]Title\}/i);
                 var includeEpisodeTitle = standardFormat.match(/\{Episode[-_. ]Title\}/i);
                 var includeQuality = standardFormat.match(/\{Quality[-_. ]Title\}/i);
-                var numberStyle = standardFormat.match(/s?\{season(?:\:00)?\}[ex]\{episode(?:\:00)?\}/i);
+                var numberStyle = standardFormat.match(/s?\{season(?:\:0+)?\}[ex]\{episode(?:\:0+)?\}/i);
                 var replaceSpaces = standardFormat.indexOf(' ') === -1;
                 var separator = standardFormat.match(/\}( - |\.-\.|\.| )|( - |\.-\.|\.| )\{/i);
 
@@ -47,11 +47,19 @@ define(
                     separator = separator[1];
                 }
 
+                if (numberStyle === null) {
+                    numberStyle = 'S{season:00}E{episode:00}';
+                }
+
+                else {
+                    numberStyle = numberStyle[0];
+                }
+
                 this.model.set({
                     includeSeriesTitle: includeSeriesTitle !== null,
                     includeEpisodeTitle: includeEpisodeTitle !== null,
                     includeQuality: includeQuality !== null,
-                    numberStyle: numberStyle[0],
+                    numberStyle: numberStyle,
                     replaceSpaces: replaceSpaces,
                     separator: separator
                 }, { silent: true });
