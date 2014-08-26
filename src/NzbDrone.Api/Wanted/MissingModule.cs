@@ -5,6 +5,7 @@ using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Wanted
 {
@@ -13,8 +14,8 @@ namespace NzbDrone.Api.Wanted
         private readonly IEpisodeService _episodeService;
         private readonly ISeriesRepository _seriesRepository;
 
-        public MissingModule(IEpisodeService episodeService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
-            :base(episodeService, commandExecutor, "wanted/missing")
+        public MissingModule(IEpisodeService episodeService, ISeriesRepository seriesRepository, IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, signalRBroadcaster, "wanted/missing")
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;

@@ -102,9 +102,6 @@ namespace NzbDrone.Core.Jobs
 
         public void Handle(CommandExecutedEvent message)
         {
-            if (message.Command.GetType().Name == "BroadcastSignalRMessage")
-                return;
-
             var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
 
             if (scheduledTask != null)
@@ -122,7 +119,7 @@ namespace NzbDrone.Core.Jobs
             var downloadedEpisodes = _scheduledTaskRepository.GetDefinition(typeof(DownloadedEpisodesScanCommand));
             downloadedEpisodes.Interval = _configService.DownloadedEpisodesScanInterval;
 
-            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask>{ rss, downloadedEpisodes });
+            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, downloadedEpisodes });
         }
     }
 }

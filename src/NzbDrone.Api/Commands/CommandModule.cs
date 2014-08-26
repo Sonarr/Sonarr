@@ -10,6 +10,7 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
+using NzbDrone.SignalR;
 
 
 namespace NzbDrone.Api.Commands
@@ -20,8 +21,8 @@ namespace NzbDrone.Api.Commands
         private readonly IContainer _container;
         private readonly ITrackCommands _trackCommands;
 
-        public CommandModule(ICommandExecutor commandExecutor, IContainer container, ITrackCommands trackCommands)
-            : base(commandExecutor)
+        public CommandModule(ICommandExecutor commandExecutor,IBroadcastSignalRMessage signalRBroadcaster, IContainer container, ITrackCommands trackCommands)
+            : base(signalRBroadcaster)
         {
             _commandExecutor = commandExecutor;
             _container = container;

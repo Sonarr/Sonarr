@@ -2,9 +2,9 @@
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Episodes
 {
@@ -14,16 +14,16 @@ namespace NzbDrone.Api.Episodes
     {
         private readonly IEpisodeService _episodeService;
 
-        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor)
-            : base(commandExecutor)
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, IBroadcastSignalRMessage signalRBroadcaster)
+            : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
 
             GetResourceById = GetEpisode;
         }
 
-        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, ICommandExecutor commandExecutor, string resource)
-            : base(commandExecutor, resource)
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, IBroadcastSignalRMessage signalRBroadcaster, string resource)
+            : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;
 

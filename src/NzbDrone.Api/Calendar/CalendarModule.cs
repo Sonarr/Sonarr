@@ -5,6 +5,7 @@ using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Calendar
 {
@@ -13,10 +14,10 @@ namespace NzbDrone.Api.Calendar
         private readonly IEpisodeService _episodeService;
         private readonly SeriesRepository _seriesRepository;
 
-        public CalendarModule(ICommandExecutor commandExecutor,
+        public CalendarModule(IBroadcastSignalRMessage signalRBroadcaster,
                               IEpisodeService episodeService,
                               SeriesRepository seriesRepository)
-            : base(episodeService, commandExecutor, "calendar")
+            : base(episodeService, signalRBroadcaster, "calendar")
         {
             _episodeService = episodeService;
             _seriesRepository = seriesRepository;

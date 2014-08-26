@@ -2,16 +2,15 @@
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -24,13 +23,13 @@ namespace NzbDrone.Api.EpisodeFiles
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;
 
-        public EpisodeModule(ICommandExecutor commandExecutor,
+        public EpisodeModule(IBroadcastSignalRMessage signalRBroadcaster,
                              IMediaFileService mediaFileService,
                              IRecycleBinProvider recycleBinProvider,
                              ISeriesService seriesService,
                              IQualityUpgradableSpecification qualityUpgradableSpecification,
                              Logger logger)
-            : base(commandExecutor)
+            : base(signalRBroadcaster)
         {
             _mediaFileService = mediaFileService;
             _recycleBinProvider = recycleBinProvider;

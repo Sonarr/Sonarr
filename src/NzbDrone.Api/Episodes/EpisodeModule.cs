@@ -4,6 +4,7 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Episodes
 {
@@ -13,8 +14,9 @@ namespace NzbDrone.Api.Episodes
         private readonly IEpisodeService _episodeService;
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
 
-        public EpisodeModule(ICommandExecutor commandExecutor, ISeriesService seriesService, IEpisodeService episodeService, IQualityUpgradableSpecification qualityUpgradableSpecification)
-            : base(episodeService, commandExecutor)
+        public EpisodeModule(IBroadcastSignalRMessage signalRBroadcaster, ISeriesService seriesService, IEpisodeService episodeService, 
+            IQualityUpgradableSpecification qualityUpgradableSpecification)
+            : base(episodeService, signalRBroadcaster)
         {
             _seriesService = seriesService;
             _episodeService = episodeService;

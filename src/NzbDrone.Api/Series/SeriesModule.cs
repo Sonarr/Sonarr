@@ -15,6 +15,7 @@ using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Series
 {
@@ -31,7 +32,7 @@ namespace NzbDrone.Api.Series
         private readonly ISceneMappingService _sceneMappingService;
         private readonly IMapCoversToLocal _coverMapper;
 
-        public SeriesModule(ICommandExecutor commandExecutor,
+        public SeriesModule(IBroadcastSignalRMessage signalRBroadcaster,
                             ISeriesService seriesService,
                             ISeriesStatisticsService seriesStatisticsService,
                             ISceneMappingService sceneMappingService,
@@ -42,7 +43,7 @@ namespace NzbDrone.Api.Series
                             DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator
             )
-            : base(commandExecutor)
+            : base(signalRBroadcaster)
         {
             _seriesService = seriesService;
             _seriesStatisticsService = seriesStatisticsService;

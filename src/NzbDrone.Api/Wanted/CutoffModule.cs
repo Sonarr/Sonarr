@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Wanted
 {
@@ -13,8 +12,8 @@ namespace NzbDrone.Api.Wanted
         private readonly IEpisodeCutoffService _episodeCutoffService;
         private readonly ISeriesRepository _seriesRepository;
 
-        public CutoffModule(IEpisodeService episodeService, IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, ICommandExecutor commandExecutor)
-            :base(episodeService, commandExecutor, "wanted/cutoff")
+        public CutoffModule(IEpisodeService episodeService, IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, signalRBroadcaster, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
             _seriesRepository = seriesRepository;

@@ -2,9 +2,9 @@
 using System.Linq;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Queue;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Queue
 {
@@ -14,8 +14,8 @@ namespace NzbDrone.Api.Queue
         private readonly IQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
 
-        public QueueModule(ICommandExecutor commandExecutor, IQueueService queueService, IPendingReleaseService pendingReleaseService)
-            : base(commandExecutor)
+        public QueueModule(IBroadcastSignalRMessage broadcastSignalRMessage, IQueueService queueService, IPendingReleaseService pendingReleaseService)
+            : base(broadcastSignalRMessage)
         {
             _queueService = queueService;
             _pendingReleaseService = pendingReleaseService;
