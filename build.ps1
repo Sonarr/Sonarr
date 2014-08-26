@@ -36,7 +36,7 @@ Function Build()
     Write-Host "##teamcity[progressFinish 'Build']"    
 }
 
-Function CleanFolder($path)
+Function CleanFolder($path, $keepConfigFiles)
 {
     Write-Host Removing XMLDoc files
     get-childitem $path -File -Filter *.xml -Recurse | foreach ($_) {
@@ -56,8 +56,11 @@ Function CleanFolder($path)
 
     get-childitem $path -File -Filter *.transform -Recurse | foreach ($_) {remove-item $_.fullname}
     
-    get-childitem $path -File -Filter *.dll.config -Recurse | foreach ($_) {remove-item $_.fullname}
-
+    if($keepConfigFiles -ne $true)
+    {
+        get-childitem $path -File -Filter *.dll.config -Recurse | foreach ($_) {remove-item $_.fullname}
+    }
+    
     Write-Host Removing FluentValidation.Resources  files
     get-childitem $path -File -Filter FluentValidation.resources.dll -recurse | foreach ($_) {remove-item $_.fullname}
 
@@ -178,7 +181,7 @@ Function PackageTests()
 
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 
-    CleanFolder $testPackageFolder
+    CleanFolder $testPackageFolder $true
 
     Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
     Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" -Destination $testPackageFolder -Force
