@@ -62,14 +62,33 @@ namespace NzbDrone.Api.Mapping
 
         private static object MapLazy(ConventionInfo conventionInfo)
         {
-
-            var genericArgument = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
+            var sourceArgument = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
 
             dynamic lazy = conventionInfo.SourceProp.Value;
 
-            if (lazy.IsLoaded && conventionInfo.TargetProp.Type.IsAssignableFrom(genericArgument))
+            if (lazy.IsLoaded)
             {
-                return lazy.Value;
+                if (conventionInfo.TargetProp.Type.IsAssignableFrom(sourceArgument))
+                {
+                    return lazy.Value;
+                }
+
+                var genericArgument = conventionInfo.TargetProp.Type;
+
+                if (genericArgument.IsValueType || genericArgument == typeof(string))
+                {
+                    return lazy.Value;
+                }
+
+                if (genericArgument.IsGenericType)
+                {
+                    if (conventionInfo.SourceProp.Type.GetGenericTypeDefinition().GetInterfaces().Any(d => d == typeof(IEnumerable)))
+                    {
+                        return MapLists(genericArgument, lazy.Value);
+                    }
+                }
+
+                return Activator.CreateInstance(genericArgument).InjectFrom((object)lazy.Value);
             }
 
             return null;
@@ -78,25 +97,29 @@ namespace NzbDrone.Api.Mapping
         private static object MapLists(ConventionInfo conventionInfo)
         {
             var genericArgument = conventionInfo.TargetProp.Type.GetGenericArguments()[0];
-            if (genericArgument.IsValueType || genericArgument == typeof(string))
+
+            return MapLists(genericArgument, conventionInfo.SourceProp.Value);
+        }
+
+        private static object MapLists(Type targetType, object sourceValue)
+        {
+            if (targetType.IsValueType || targetType == typeof(string))
             {
-                return conventionInfo.SourceProp.Value;
+                return sourceValue;
             }
 
-
-            var listType = typeof(List<>).MakeGenericType(genericArgument);
+            var listType = typeof(List<>).MakeGenericType(targetType);
             var addMethod = listType.GetMethod("Add");
 
             var result = Activator.CreateInstance(listType);
 
-            foreach (var sourceItem in (IEnumerable)conventionInfo.SourceProp.Value)
+            foreach (var sourceItem in (IEnumerable)sourceValue)
             {
-                var e = Activator.CreateInstance(genericArgument).InjectFrom<CloneInjection>(sourceItem);
-                addMethod.Invoke(result, new[] {e });
+                var e = Activator.CreateInstance(targetType).InjectFrom<CloneInjection>(sourceItem);
+                addMethod.Invoke(result, new[] { e });
             }
 
             return result;
-
         }
     }
 }

@@ -58,7 +58,6 @@ namespace NzbDrone.Api.Episodes
             {
                 if (episode.EpisodeFile.IsLoaded && episode.EpisodeFile.Value != null)
                 {
-                    resource.EpisodeFile = episode.EpisodeFile.Value.InjectTo<EpisodeFileResource>();
                     resource.EpisodeFile.Path = Path.Combine(episode.Series.Path, episode.EpisodeFile.Value.RelativePath);
                     resource.EpisodeFile.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(episode.Series.Profile.Value, episode.EpisodeFile.Value.Quality);
                 }

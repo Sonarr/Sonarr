@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.REST;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;

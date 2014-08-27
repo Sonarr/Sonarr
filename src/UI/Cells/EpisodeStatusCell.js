@@ -116,7 +116,7 @@ define(
                         episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
                     }
 
-                    else {
+                    else if (this.model.has('episodeFile')) {
                         episodeFile = new Backbone.Model(this.model.get('episodeFile'));
                     }
 
