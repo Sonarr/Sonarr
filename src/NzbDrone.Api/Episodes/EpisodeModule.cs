@@ -10,17 +10,15 @@ namespace NzbDrone.Api.Episodes
 {
     public class EpisodeModule : EpisodeModuleWithSignalR
     {
-        private readonly ISeriesService _seriesService;
-        private readonly IEpisodeService _episodeService;
-        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        protected readonly ISeriesService _seriesService;
 
-        public EpisodeModule(IBroadcastSignalRMessage signalRBroadcaster, ISeriesService seriesService, IEpisodeService episodeService, 
-            IQualityUpgradableSpecification qualityUpgradableSpecification)
-            : base(episodeService, signalRBroadcaster)
+        public EpisodeModule(ISeriesService seriesService,
+                             IEpisodeService episodeService,
+                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, qualityUpgradableSpecification, signalRBroadcaster)
         {
             _seriesService = seriesService;
-            _episodeService = episodeService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
 
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;
@@ -37,17 +35,7 @@ namespace NzbDrone.Api.Episodes
 
             var series = _seriesService.GetSeries(seriesId.Value);
 
-            var resources = new List<EpisodeResource>();
-            foreach (var episode in _episodeService.GetEpisodeBySeries(seriesId.Value))
-            {
-                var resource = episode.InjectTo<EpisodeResource>();
-                if (episode.EpisodeFile.IsLoaded)
-                {
-                    resource.EpisodeFile.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, episode.EpisodeFile.Value.Quality);
-                }
-
-                resources.Add(resource);
-            }
+            var resources = ToListResource(_episodeService.GetEpisodeBySeries(seriesId.Value));
 
             return resources;
         }

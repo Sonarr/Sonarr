@@ -1,5 +1,9 @@
-﻿using NzbDrone.Api.Mapping;
+﻿using System;
+using System.IO;
+using NzbDrone.Api.EpisodeFiles;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
@@ -12,20 +16,28 @@ namespace NzbDrone.Api.Episodes
         IHandle<EpisodeGrabbedEvent>,
         IHandle<EpisodeDownloadedEvent>
     {
-        private readonly IEpisodeService _episodeService;
+        protected readonly IEpisodeService _episodeService;
+        protected readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
 
-        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, IBroadcastSignalRMessage signalRBroadcaster)
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
+                                          IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                          IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
 
-        protected EpisodeModuleWithSignalR(IEpisodeService episodeService, IBroadcastSignalRMessage signalRBroadcaster, string resource)
+        protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
+                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IBroadcastSignalRMessage signalRBroadcaster,
+                                           String resource)
             : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
@@ -34,7 +46,25 @@ namespace NzbDrone.Api.Episodes
         {
             var episode = _episodeService.GetEpisode(id);
             episode.EpisodeFile.LazyLoad();
-            return episode.InjectTo<EpisodeResource>();
+            return ToResource(episode);
+        }
+
+        protected override EpisodeResource ToResource<TModel>(TModel model)
+        {
+            var resource = base.ToResource(model);
+
+            var episode = model as Episode;
+            if (episode != null)
+            {
+                if (episode.EpisodeFile.IsLoaded && episode.EpisodeFile.Value != null)
+                {
+                    resource.EpisodeFile = episode.EpisodeFile.Value.InjectTo<EpisodeFileResource>();
+                    resource.EpisodeFile.Path = Path.Combine(episode.Series.Path, episode.EpisodeFile.Value.RelativePath);
+                    resource.EpisodeFile.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(episode.Series.Profile.Value, episode.EpisodeFile.Value.Quality);
+                }
+            }
+
+            return resource;
         }
 
         public void Handle(EpisodeGrabbedEvent message)

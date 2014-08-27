@@ -8,7 +8,7 @@ define(
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
-        'Cells/QualityCell',
+        'History/Table/HistoryQualityCell',
         'Cells/RelativeDateCell',
         'History/Table/HistoryDetailsCell',
         'Shared/Grid/Pager',
@@ -21,7 +21,7 @@ define(
                  SeriesTitleCell,
                  EpisodeNumberCell,
                  EpisodeTitleCell,
-                 QualityCell,
+                 HistoryQualityCell,
                  RelativeDateCell,
                  HistoryDetailsCell,
                  GridPager,
@@ -62,9 +62,9 @@ define(
                         sortable  : false
                     },
                     {
-                        name      : 'quality',
+                        name      : 'this',
                         label     : 'Quality',
-                        cell      : QualityCell,
+                        cell      : HistoryQualityCell,
                         sortable  : false
                     },
                     {

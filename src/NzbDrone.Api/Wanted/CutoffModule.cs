@@ -2,6 +2,7 @@
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 
@@ -10,13 +11,14 @@ namespace NzbDrone.Api.Wanted
     public class CutoffModule : EpisodeModuleWithSignalR
     {
         private readonly IEpisodeCutoffService _episodeCutoffService;
-        private readonly ISeriesRepository _seriesRepository;
 
-        public CutoffModule(IEpisodeService episodeService, IEpisodeCutoffService episodeCutoffService, ISeriesRepository seriesRepository, IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, signalRBroadcaster, "wanted/cutoff")
+        public CutoffModule(IEpisodeCutoffService episodeCutoffService,
+                            IEpisodeService episodeService,
+                            IQualityUpgradableSpecification qualityUpgradableSpecification,
+                            IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
-            _seriesRepository = seriesRepository;
             GetResourcePaged = GetCutoffUnmetEpisodes;
         }
 
@@ -40,8 +42,6 @@ namespace NzbDrone.Api.Wanted
             }
 
             PagingResource<EpisodeResource> resource = ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, pagingSpec);
-
-            resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
 
             return resource;
         }

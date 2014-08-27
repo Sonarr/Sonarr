@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Validation;
@@ -34,7 +35,17 @@ namespace NzbDrone.Api
         protected List<TResource> ToListResource<TModel>(Func<IEnumerable<TModel>> function) where TModel : class
         {
             var modelList = function();
-            return modelList.InjectTo<List<TResource>>();
+            return ToListResource(modelList);
+        }
+
+        protected virtual List<TResource> ToListResource<TModel>(IEnumerable<TModel> modelList) where TModel : class
+        {
+            return modelList.Select(ToResource).ToList();
+        }
+
+        protected virtual TResource ToResource<TModel>(TModel model) where TModel : class
+        {
+            return model.InjectTo<TResource>();
         }
 
         protected PagingResource<TResource> ApplyToPage<TModel>(Func<PagingSpec<TModel>, PagingSpec<TModel>> function, PagingSpec<TModel> pagingSpec) where TModel : ModelBase, new()
@@ -48,7 +59,7 @@ namespace NzbDrone.Api
                            SortDirection = pagingSpec.SortDirection,
                            SortKey = pagingSpec.SortKey,
                            TotalRecords = pagingSpec.TotalRecords,
-                           Records = pagingSpec.Records.InjectTo<List<TResource>>()
+                           Records = ToListResource(pagingSpec.Records)
                        };
         }
     }

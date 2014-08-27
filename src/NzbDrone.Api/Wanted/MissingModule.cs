@@ -3,6 +3,7 @@ using System.Linq;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
@@ -11,14 +12,11 @@ namespace NzbDrone.Api.Wanted
 {
     public class MissingModule : EpisodeModuleWithSignalR
     {
-        private readonly IEpisodeService _episodeService;
-        private readonly ISeriesRepository _seriesRepository;
-
-        public MissingModule(IEpisodeService episodeService, ISeriesRepository seriesRepository, IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, signalRBroadcaster, "wanted/missing")
+        public MissingModule(IEpisodeService episodeService,
+                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/missing")
         {
-            _episodeService = episodeService;
-            _seriesRepository = seriesRepository;
             GetResourcePaged = GetMissingEpisodes;
         }
 
@@ -42,8 +40,6 @@ namespace NzbDrone.Api.Wanted
             }
 
             PagingResource<EpisodeResource> resource = ApplyToPage(v => _episodeService.EpisodesWithoutFiles(v), pagingSpec);
-
-            resource.Records = resource.Records.LoadSubtype(e => e.SeriesId, _seriesRepository).ToList();
 
             return resource;
         }
