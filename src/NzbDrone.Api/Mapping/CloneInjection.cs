@@ -66,7 +66,7 @@ namespace NzbDrone.Api.Mapping
 
             dynamic lazy = conventionInfo.SourceProp.Value;
 
-            if (lazy.IsLoaded)
+            if (lazy.IsLoaded && lazy.Value != null)
             {
                 if (conventionInfo.TargetProp.Type.IsAssignableFrom(sourceArgument))
                 {
