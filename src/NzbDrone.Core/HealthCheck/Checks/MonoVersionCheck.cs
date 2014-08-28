@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -31,6 +33,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 var version = new Version(versionMatch.Groups["version"].Value);
 
+                if (version == new Version(3, 4, 0) && HasMonoBug18599())
+                {
+                    _logger.Debug("mono version 3.4.0, checking for mono bug #18599 returned positive.");
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, "your mono version 3.4.0 has a critical bug, you should upgrade to a higher version");
+                }
+
                 if (version >= new Version(3, 2))
                 {
                     _logger.Debug("mono version is 3.2 or better: {0}", version.ToString());
@@ -55,6 +63,34 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return false;
             }
+        }
+
+        private bool HasMonoBug18599()
+        {
+            _logger.Debug("mono version 3.4.0, checking for mono bug #18599.");
+            var numberFormatterType = Type.GetType("System.NumberFormatter");
+
+            if (numberFormatterType == null)
+            {
+                _logger.Debug("Couldn't find System.NumberFormatter. Aborting test.");
+                return false;
+            }
+
+            var fieldInfo = numberFormatterType.GetField("userFormatProvider", BindingFlags.Static | BindingFlags.NonPublic);
+
+            if (fieldInfo == null)
+            {
+                _logger.Debug("userFormatProvider field not found, version likely preceeds the official v3.4.0.");
+                return false;
+            }
+
+            if (fieldInfo.GetCustomAttributes(false).Any(v => v is ThreadStaticAttribute))
+            {
+                _logger.Debug("userFormatProvider field doesn't contain the ThreadStatic Attribute, version is affected by the critical bug #18599.");
+                return true;
+            }
+
+            return false;
         }
     }
 }
