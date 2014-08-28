@@ -17,26 +17,31 @@ namespace NzbDrone.Api.Episodes
         IHandle<EpisodeDownloadedEvent>
     {
         protected readonly IEpisodeService _episodeService;
+        protected readonly ISeriesService _seriesService;
         protected readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
-                                          IQualityUpgradableSpecification qualityUpgradableSpecification,
-                                          IBroadcastSignalRMessage signalRBroadcaster)
+                                           ISeriesService seriesService,
+                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
+            _seriesService = seriesService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
+                                           ISeriesService seriesService,
                                            IQualityUpgradableSpecification qualityUpgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster,
                                            String resource)
             : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;
+            _seriesService = seriesService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
 
             GetResourceById = GetEpisode;
@@ -46,6 +51,7 @@ namespace NzbDrone.Api.Episodes
         {
             var episode = _episodeService.GetEpisode(id);
             episode.EpisodeFile.LazyLoad();
+            episode.Series = _seriesService.GetSeries(episode.SeriesId);
             return ToResource(episode);
         }
 

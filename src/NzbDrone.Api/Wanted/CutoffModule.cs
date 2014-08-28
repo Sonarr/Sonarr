@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using NzbDrone.Api.Episodes;
-using NzbDrone.Api.Extensions;
+﻿using NzbDrone.Api.Episodes;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Tv;
@@ -14,9 +12,10 @@ namespace NzbDrone.Api.Wanted
 
         public CutoffModule(IEpisodeCutoffService episodeCutoffService,
                             IEpisodeService episodeService,
+                            ISeriesService seriesService,
                             IQualityUpgradableSpecification qualityUpgradableSpecification,
                             IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/cutoff")
+            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
             GetResourcePaged = GetCutoffUnmetEpisodes;
