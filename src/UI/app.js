@@ -5,7 +5,7 @@ require.config({
         'backbone'                : 'JsLibraries/backbone',
         'moment'                  : 'JsLibraries/moment',
         'filesize'                : 'JsLibraries/filesize',
-        'handlebars'              : 'JsLibraries/handlebars.runtime',
+        'handlebars'              : 'Shared/Shims/handlebars',
         'handlebars.helpers'      : 'JsLibraries/handlebars.helpers',
         'bootstrap'               : 'JsLibraries/bootstrap',
         'backbone.deepmodel'      : 'JsLibraries/backbone.deep.model',
