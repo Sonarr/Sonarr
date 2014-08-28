@@ -110,6 +110,18 @@ namespace NzbDrone.Core.Test.Download
                 .Verify(v => v.PublishEvent(It.Is<DownloadFailedEvent>(d => d.EpisodeIds.Count == count)), Times.Once());
         }
 
+        private void VerifyRetryDownload()
+        {
+            Mocker.GetMock<IDownloadClient>()
+                .Verify(v => v.RetryDownload(It.IsAny<String>()), Times.Once());
+        }
+
+        private void VerifyNoRetryDownload()
+        {
+            Mocker.GetMock<IDownloadClient>()
+                .Verify(v => v.RetryDownload(It.IsAny<String>()), Times.Never());
+        }
+
         [Test]
         public void should_not_process_if_no_download_client_history()
         {
@@ -314,6 +326,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
+            VerifyNoRetryDownload();
         }
 
         [Test]
@@ -335,6 +348,31 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
+            VerifyNoRetryDownload();
+        }
+
+        [Test]
+        public void should_not_retry_if_already_failed()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
+            historyGrabbed.First().Data.Add("ageHours", "1");
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenFailedHistory(historyGrabbed);
+            GivenGracePeriod(6);
+            GivenRetryLimit(1);
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
+            VerifyNoFailedDownloads();
+            VerifyNoRetryDownload();
         }
 
         [Test]
@@ -357,6 +395,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
+            VerifyNoRetryDownload();
         }
 
         [Test]
@@ -380,6 +419,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
+            VerifyRetryDownload();
 
             ExceptionVerification.IgnoreWarns();
         }

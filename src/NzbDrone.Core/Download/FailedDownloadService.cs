@@ -96,30 +96,31 @@ namespace NzbDrone.Core.Download
                     return;
                 }
 
-                //TODO: Make this more configurable (ignore failure reasons) to support changes and other failures that should be ignored
-                if (trackedDownload.DownloadItem.Message.Equals("Unpacking failed, write error or disk is full?",
-                    StringComparison.InvariantCultureIgnoreCase))
-                {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Error, "Download failed due to lack of disk space, not blacklisting.");
-                    return;
-                }
-
-                if (FailedDownloadForRecentRelease(downloadClient, trackedDownload, grabbedItems))
-                {
-                    _logger.Debug("[{0}] Recent release Failed, do not blacklist.", trackedDownload.DownloadItem.Title);
-                    return;
-                }
-
-                trackedDownload.State = TrackedDownloadState.DownloadFailed;
-
                 var failedItems = GetHistoryItems(failedHistory, trackedDownload.DownloadItem.DownloadClientId);
 
                 if (failedItems.Any())
                 {
+                    trackedDownload.State = TrackedDownloadState.DownloadFailed;
                     UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as failed.");
                 }
                 else
                 {
+                    //TODO: Make this more configurable (ignore failure reasons) to support changes and other failures that should be ignored
+                    if (trackedDownload.DownloadItem.Message.Equals("Unpacking failed, write error or disk is full?",
+                        StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        UpdateStatusMessage(trackedDownload, LogLevel.Error, "Download failed due to lack of disk space, not blacklisting.");
+                        return;
+                    }
+
+                    if (FailedDownloadForRecentRelease(downloadClient, trackedDownload, grabbedItems))
+                    {
+                        _logger.Debug("[{0}] Recent release Failed, do not blacklist.", trackedDownload.DownloadItem.Title);
+                        return;
+                    }
+
+                    trackedDownload.State = TrackedDownloadState.DownloadFailed;
+
                     PublishDownloadFailedEvent(grabbedItems, trackedDownload.DownloadItem.Message);
                 }
             }
