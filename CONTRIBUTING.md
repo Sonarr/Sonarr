@@ -8,7 +8,7 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 ## Development ##
 
 ### Tools required ###
-- Visual Studio 2012
+- Visual Studio 2012/2013
 - HTML/Javascript editor of choice (Sublime Text/Webstorm/etc)
 - npm (node package manager)
 - git
@@ -18,8 +18,9 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 1.  Fork NzbDrone 
 2.  Clone (develop branch)
 3.  Run `npm install`
-4.  Run `grunt` - Used to compile the UI components and copy them (leave this window open)
-5.  Compile in Visual Studio
+4.  Run `npm install gulp -g`
+5.  Run `gulp watch` - Used to compile the UI components and copy them (leave this window open)
+6.  Compile in Visual Studio
 
 ### Contributing Code ###
 - If you're adding a new, already requested feature, please move it to In Progress on [Trello](http://trello.nzbdrone.com "Trello") so work is not duplicated.
@@ -29,10 +30,10 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 - Reach out to us on the forums or on IRC if you have any questions
 - Add tests (unit/integration)
 - Commit with *nix line endings for consistency (We checkout Windows and commit *nix)
-- Try to stick to one feature per request to keep things clean and easy to understand
+- One feature/fix per pull request to keep things clean and easy to understand
 - Use 4 spaces instead of tabs, this is the default for VS 2012 and WebStorm (to my knowledge)
 
-### Pull Requesting ###
+### Pull Requests ###
 - You're probably going to get some comments or questions from us, they will be to ensure consistency and maintainability
 - We'll try to respond to pull requests as soon as possible, if its been a day or two, please reach out to us, we may have missed it
 
