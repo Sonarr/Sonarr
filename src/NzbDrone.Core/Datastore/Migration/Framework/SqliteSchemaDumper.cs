@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             var reader = new SqliteSyntaxReader(sqlSchema);
 
-            var result = ParseCreateTableStmt(reader);
+            var result = ParseCreateTableStatement(reader);
 
             return result;
         }
@@ -37,12 +37,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             var reader = new SqliteSyntaxReader(sqlSchema);
 
-            var result = ParseCreateIndexStmt(reader);
+            var result = ParseCreateIndexStatement(reader);
 
             return result;
         }
 
-        protected virtual TableDefinition ParseCreateTableStmt(SqliteSyntaxReader reader)
+        protected virtual TableDefinition ParseCreateTableStatement(SqliteSyntaxReader reader)
         {
             var table = new TableDefinition();
 
@@ -68,15 +68,21 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             foreach (var columnReader in list)
             {
-                var upper = columnReader.Buffer.Trim().ToUpperInvariant();
+                columnReader.SkipWhitespace();
 
-                if (upper.StartsWith("CONSTRAINT ") || upper.StartsWith("PRIMARY KEY ") || upper.StartsWith("UNIQUE ") ||
-                    upper.StartsWith("CHECK ") || upper.StartsWith("FOREIGN KEY "))
+                if (columnReader.Read() == SqliteSyntaxReader.TokenType.StringToken)
                 {
-                    continue;
+                    if (columnReader.ValueToUpper == "CONSTRAINT" ||
+                        columnReader.ValueToUpper == "PRIMARY" || columnReader.ValueToUpper == "UNIQUE" ||
+                        columnReader.ValueToUpper == "CHECK" || columnReader.ValueToUpper == "FOREIGN")
+                    {
+                        continue;
+                    }
                 }
 
-                var column = ParseColumnDef(columnReader);
+                columnReader.Rollback();
+
+                var column = ParseColumnDefinition(columnReader);
                 column.TableName = table.Name;
                 table.Columns.Add(column);
             }
@@ -84,7 +90,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return table;
         }
 
-        protected virtual ColumnDefinition ParseColumnDef(SqliteSyntaxReader reader)
+        protected virtual ColumnDefinition ParseColumnDefinition(SqliteSyntaxReader reader)
         {
             var column = new ColumnDefinition();
 
@@ -92,7 +98,6 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             
             reader.TrimBuffer();
 
-            // Strictly speaking the type isn't mandatory in sqlite but it's very likely.
             reader.Read();
             if (reader.Type != SqliteSyntaxReader.TokenType.End)
             {
@@ -108,7 +113,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return column;
         }
 
-        protected virtual IndexDefinition ParseCreateIndexStmt(SqliteSyntaxReader reader)
+        protected virtual IndexDefinition ParseCreateIndexStatement(SqliteSyntaxReader reader)
         {
             var index = new IndexDefinition();
 

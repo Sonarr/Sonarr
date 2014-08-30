@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public void SkipWhitespace()
         {
-            while (!IsEndOfFile && Buffer[Index] == ' ') Index++;
+            while (!IsEndOfFile && char.IsWhiteSpace(Buffer[Index])) Index++;
         }
 
         public void SkipTillToken(TokenType tokenType)
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public TokenType Read()
         {
-            if (!IsEndOfFile && Buffer[Index] == ' ')
+            if (!IsEndOfFile && char.IsWhiteSpace(Buffer[Index]))
             {
                 Type = TokenType.Whitespace;
                 SkipWhitespace();
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 var start = Index;
                 var end = start + 1;
                 while (end < Buffer.Length && (char.IsLetter(Buffer[end]) || Buffer[end] == '_')) end++;
-                if (end >= Buffer.Length || Buffer[end] == ',' || Buffer[end] == ')' || Buffer[end] == ' ')
+                if (end >= Buffer.Length || Buffer[end] == ',' || Buffer[end] == ')' || char.IsWhiteSpace(Buffer[end]))
                 {
                     Index = end;
                 }

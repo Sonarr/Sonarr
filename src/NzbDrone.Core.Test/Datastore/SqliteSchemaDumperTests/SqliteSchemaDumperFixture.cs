@@ -56,6 +56,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
 
         [TestCase(@"CREATE TABLE TestTable (MyId)")]
         [TestCase(@"CREATE TABLE TestTable (MyId  NOT NULL PRIMARY KEY AUTOINCREMENT)")]
+        [TestCase("CREATE TABLE TestTable\r\n(\t`MyId`\t NOT NULL PRIMARY KEY AUTOINCREMENT\n)")]
         public void should_parse_column_attributes(String sql)
         {
             var result = Subject.ReadTableSchema(sql);

@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             var schemaDumper = new SqliteSchemaDumper(this, Announcer);
             var schema = schemaDumper.ReadDbSchema();
 
-            return schema.First(v => v.Name == tableName);
+            return schema.Single(v => v.Name == tableName);
         }
 
         protected virtual void ProcessAlterTable(TableDefinition tableDefinition)
