@@ -191,17 +191,17 @@ Function PackageTests()
 
 Function RunGrunt()
 {
-   Write-Host "##teamcity[progressStart 'Running Grunt']"
-   $gruntPath = [environment]::getfolderpath("applicationdata") + '\npm\node_modules\grunt-cli\bin\grunt'
+   Write-Host "##teamcity[progressStart 'Running Gulp']"
+   $gulpPath = '.\node_modules\gulp\bin\gulp'
    Invoke-Expression  'npm install'
    CheckExitCode
     
-   Invoke-Expression  ('node ' + $gruntPath + ' packagerjs') -ErrorAction Continue -Verbose
+   Invoke-Expression  ('node ' + $gulpPath + ' build') -ErrorAction Continue -Verbose
    CheckExitCode
 
    Remove-Item $outputFolder\UI\build.txt -ErrorAction Continue
 
-   Write-Host "##teamcity[progressFinish 'Running Grunt']"
+   Write-Host "##teamcity[progressFinish 'Running Gulp']"
 }
 
 Function CheckExitCode()
