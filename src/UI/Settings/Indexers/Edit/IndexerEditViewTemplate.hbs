@@ -17,14 +17,13 @@
                 </div>
             </div>
 
-            {{#if supportsRss}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Enable RSS Sync</label>
 
                 <div class="col-sm-5">
                     <div class="input-group">
                         <label class="checkbox toggle well">
-                            <input type="checkbox" name="enableRss"/>
+                            <input type="checkbox" name="enableRss" {{#unless supportsRss}}disabled="disabled"{{/unless}}/>
                             <p>
                                 <span>Yes</span>
                                 <span>No</span>
@@ -32,19 +31,23 @@
 
                             <div class="btn btn-primary slide-button"/>
                         </label>
+                        {{#unless supportsRss}}
+                        <span class="help-inline-checkbox">
+                            <i class="icon-nd-form-warning" title="" data-original-title="RSS is not supported with this indexer"></i>
+                        </span>
+                        {{/unless}}
                     </div>
                 </div>
             </div>
-            {{/if}}
 
-            {{#if supportsSearch}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Enable Search</label>
 
                 <div class="col-sm-5">
                     <div class="input-group">
                         <label class="checkbox toggle well">
-                            <input type="checkbox" name="enableSearch"/>
+
+                            <input type="checkbox" name="enableSearch" {{#unless supportsSearch}}disabled="disabled"{{/unless}}/>
                             <p>
                                 <span>Yes</span>
                                 <span>No</span>
@@ -52,10 +55,14 @@
 
                             <div class="btn btn-primary slide-button"/>
                         </label>
+                        {{#unless supportsSearch}}
+                        <span class="help-inline-checkbox">
+                            <i class="icon-nd-form-warning" title="" data-original-title="Search is not supported with this indexer"></i>
+                        </span>
+                        {{/unless}}
                     </div>
                 </div>
             </div>
-            {{/if}}
 
             {{formBuilder}}
         </div>
