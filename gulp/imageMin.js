@@ -12,5 +12,5 @@ gulp.task('imageMin', function () {
             svgoPlugins: [{removeViewBox: false}]
         }))
         .pipe(print())
-        .pipe(gulp.dest(paths.src.images));
+        .pipe(gulp.dest(paths.src.content + 'Images/'));
 });
