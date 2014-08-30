@@ -73,6 +73,7 @@
     <Compile Include="Composition\IContainer.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="ConvertBase32.cs" />
+    <Compile Include="Crypto\Md5HashProvider.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
+    <Compile Include="Extensions\Base64Extentions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="HashUtil.cs" />
     <Compile Include="Http\HttpProvider.cs" />

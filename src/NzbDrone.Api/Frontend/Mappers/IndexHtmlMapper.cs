@@ -51,7 +51,16 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         protected override Stream GetContentStream(string filePath)
         {
-            return StringToStream(GetIndexText());
+            var text = GetIndexText();
+
+            var stream = new MemoryStream();
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write(text);
+                writer.Flush();
+            }
+            stream.Position = 0;
+            return stream;
         }
 
         private string GetIndexText()
