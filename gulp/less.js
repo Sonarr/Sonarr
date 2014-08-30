@@ -3,6 +3,7 @@ var less = require('gulp-less');
 var print = require('gulp-print');
 
 var paths = require('./paths');
+var errorHandler = require('./errorHandler');
 
 gulp.task('less', function () {
     return  gulp.src([
@@ -26,5 +27,6 @@ gulp.task('less', function () {
             ieCompat: true,
             strictImports: true
         }))
+        .on('error', errorHandler.onError)
         .pipe(gulp.dest(paths.dest.content));
 });

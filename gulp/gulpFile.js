@@ -7,5 +7,6 @@ require('./handlebars.js');
 require('./copy.js');
 require('./less.js');
 require('./stripBom.js');
+require('./imageMin.js');
 
 

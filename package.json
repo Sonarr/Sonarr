@@ -15,22 +15,22 @@
   "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
   "readmeFilename": "readme.md",
   "dependencies": {
+    "fs-extra": "^0.11.0",
     "gulp": "^3.8.7",
-    "gulp-handlebars": "^2.2.0",
-    "gulp-declare": "^0.3.0",
+    "gulp-cached": "^1.0.1",
     "gulp-clean": "^0.3.1",
     "gulp-concat": "^2.3.4",
-    "gulp-wrap-amd": "^0.3.1",
-    "gulp-wrap": "^0.3.0",
-    "streamqueue": "^0.1.1",
-    "gulp-replace": "^0.4.0",
-    "fs-extra": "^0.11.0",
-    "gulp-print": "^1.1.0",
-    "gulp-less": "^1.3.5",
+    "gulp-declare": "^0.3.0",
+    "gulp-handlebars": "^2.2.0",
     "gulp-jshint": "^1.8.4",
-    "gulp-cached": "^1.0.1",
+    "gulp-less": "^1.3.5",
+    "gulp-print": "^1.1.0",
+    "gulp-replace": "^0.4.0",
+    "gulp-wrap": "^0.3.0",
+    "gulp-wrap-amd": "^0.3.1",
     "jshint-stylish": "^0.4.0",
     "requirejs": "^2.1.14",
-    "run-sequence": "^0.3.6"
+    "run-sequence": "^0.3.6",
+    "streamqueue": "^0.1.1"
   }
 }

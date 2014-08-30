@@ -7,6 +7,7 @@ module.exports = {
         scripts: './src/UI/**/*.js',
         less: ['./src/UI/**/*.less'],
         content: './src/UI/Content/',
+        images: './src/UI/Content/Images/**/*',
         exclude :{
             libs:'!./src/UI/JsLibraries/**'
         }
