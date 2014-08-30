@@ -7,7 +7,7 @@ var paths = require('./paths.js');
 
 gulp.task('jshint', function () {
     return gulp.src([paths.src.scripts, paths.src.exclude.libs])
-        .pipe(cache())
+        .pipe(cache('jshint'))
         .pipe(jshint({
             '-W030': false,
             '-W064': false,

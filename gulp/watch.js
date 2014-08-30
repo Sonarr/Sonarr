@@ -10,7 +10,7 @@ require('./less.js');
 require('./copy.js');
 
 
-gulp.task('watch', ['jshint', 'handlebars', 'less', 'copyJs'], function () {
+gulp.task('watch', ['jshint', 'handlebars', 'less', 'copyJs','copyIndex', 'copyContent'], function () {
     gulp.watch([paths.src.scripts, paths.src.exclude.libs], ['jshint', 'copyJs']);
     gulp.watch(paths.src.templates, ['handlebars']);
     gulp.watch([paths.src.less, paths.src.exclude.libs], ['less']);

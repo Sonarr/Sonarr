@@ -1,12 +1,4 @@
 module.exports = {
-    js: [
-        './app/**/*.js',
-        './src/**/*.js',
-        '!./**/libs/**',
-        '!./**/vendor/**',
-        '!./**/templates.js'
-    ],
-
     src: {
         root: './src/UI/',
         templates: './src/UI/**/*.hbs',

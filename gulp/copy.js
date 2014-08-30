@@ -5,14 +5,15 @@ var cache = require('gulp-cached');
 var paths = require('./paths.js');
 
 gulp.task('copyJs', function () {
-    return gulp.src([paths.src.scripts])
-        .pipe(cache())
+    return gulp.src(paths.src.scripts)
+        .pipe(cache('copyJs'))
+        .pipe(print())
         .pipe(gulp.dest(paths.dest.root));
 });
 
 gulp.task('copyIndex', function () {
     return gulp.src(paths.src.index)
-        .pipe(cache())
+        .pipe(cache('copyIndex'))
         .pipe(gulp.dest(paths.dest.root));
 });
 
