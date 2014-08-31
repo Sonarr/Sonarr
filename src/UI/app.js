@@ -235,7 +235,7 @@ define(
         'marionette',
         'jQuery/RouteBinder',
         'Shared/SignalRBroadcaster',
-        'Navbar/NavbarView',
+        'Navbar/NavbarLayout',
         'AppLayout',
         'Series/SeriesController',
         'Router',
@@ -251,7 +251,7 @@ define(
                  Marionette,
                  RouteBinder,
                  SignalRBroadcaster,
-                 NavbarView,
+                 NavbarLayout,
                  AppLayout,
                  SeriesController,
                  Router,
@@ -282,7 +282,7 @@ define(
         app.addInitializer(function () {
             Backbone.history.start({ pushState: true, root: serverStatusModel.get('urlBase') });
             RouteBinder.bind();
-            AppLayout.navbarRegion.show(new NavbarView());
+            AppLayout.navbarRegion.show(new NavbarLayout());
             $('body').addClass('started');
         });
 

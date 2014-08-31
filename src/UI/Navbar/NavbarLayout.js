@@ -4,13 +4,15 @@ define(
         'marionette',
         'jquery',
         'Health/HealthView',
+        'History/Queue/QueueView',
         'Navbar/Search'
-    ], function (Marionette, $, HealthView) {
+    ], function (Marionette, $, HealthView, QueueView) {
         return Marionette.Layout.extend({
             template: 'Navbar/NavbarLayoutTemplate',
 
             regions: {
-                health: '#x-health'
+                health : '#x-health',
+                queue  : '#x-queue-count'
             },
 
             ui: {
@@ -25,6 +27,7 @@ define(
             onRender: function () {
                 this.ui.search.bindSearch();
                 this.health.show(new HealthView());
+                this.queue.show(new QueueView());
             },
 
             onClick: function (event) {
