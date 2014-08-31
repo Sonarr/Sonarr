@@ -27,7 +27,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             }
         }
 
-        protected abstract string Map(string resourceUrl);
+        public abstract string Map(string resourceUrl);
 
         public abstract bool CanHandle(string resourceUrl);
 
