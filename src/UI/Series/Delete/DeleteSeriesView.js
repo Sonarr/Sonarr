@@ -13,12 +13,14 @@ define(
             },
 
             ui: {
-                deleteFiles: '.x-delete-files'
+                deleteFiles : '.x-delete-files',
+                indicator   : '.x-indicator'
             },
 
             removeSeries: function () {
                 var self = this;
                 var deleteFiles = this.ui.deleteFiles.prop('checked');
+                this.ui.indicator.show();
 
                 this.model.destroy({
                     data: { 'deleteFiles': deleteFiles },
