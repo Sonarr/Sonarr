@@ -243,6 +243,7 @@
     <Compile Include="ParserTests\SeasonParserFixture.cs" />
     <Compile Include="ParserTests\SeriesTitleInfoFixture.cs" />
     <Compile Include="ParserTests\SingleEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\SceneCheckerFixture.cs" />
     <Compile Include="Profiles\ProfileRepositoryFixture.cs" />
     <Compile Include="Profiles\ProfileServiceFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

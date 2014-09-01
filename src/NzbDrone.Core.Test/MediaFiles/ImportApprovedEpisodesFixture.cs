@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
@@ -24,6 +25,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         private List<ImportDecision> _rejectedDecisions;
         private List<ImportDecision> _approvedDecisions;
 
+        private DownloadClientItem _downloadClientItem;
+
         [SetUp]
         public void Setup()
         {
@@ -38,6 +41,8 @@ namespace NzbDrone.Core.Test.MediaFiles
             var episodes = Builder<Episode>.CreateListOfSize(5)
                                            .Build();
 
+
+
             _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), "Rejected!"));
             _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), "Rejected!"));
             _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), "Rejected!"));
@@ -49,7 +54,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                                            new LocalEpisode
                                                {
                                                    Series = series,
-                                                   Episodes = new List<Episode> {episode},
+                                                   Episodes = new List<Episode> { episode },
                                                    Path = Path.Combine(series.Path, "30 Rock - S01E01 - Pilot.avi"),
                                                    Quality = new QualityModel(Quality.Bluray720p),
                                                    ParsedEpisodeInfo = new ParsedEpisodeInfo
@@ -62,6 +67,8 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IUpgradeMediaFiles>()
                   .Setup(s => s.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<LocalEpisode>(), false))
                   .Returns(new EpisodeFileMoveResult());
+
+            _downloadClientItem = Builder<DownloadClientItem>.CreateNew().Build();
         }
             
         [Test]
@@ -106,7 +113,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_move_new_downloads()
         {
-            Subject.Import(new List<ImportDecision> {_approvedDecisions.First()}, true);
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
             Mocker.GetMock<IUpgradeMediaFiles>()
                   .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, false),
@@ -132,6 +139,52 @@ namespace NzbDrone.Core.Test.MediaFiles
                           Times.Never());
         }
 
+
+        [Test]
+        public void should_use_nzb_title_as_scene_name()
+        {
+            _downloadClientItem.Title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == _downloadClientItem.Title)));
+        }
+
+
+        [Test]
+        public void should_not_use_nzb_title_as_scene_name_if_full_season()
+        {
+            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\season1\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv";
+            _downloadClientItem.Title = "malcolm.in.the.middle.s02.dvdrip.xvid-ingot";
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == "malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot")));
+        }
+
+        [Test]
+        public void should_use_file_name_as_scenename_only_if_it_looks_like_scenename()
+        {
+
+            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv";
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == "malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot")));
+        }
+
+        [Test]
+        public void should_not_use_file_name_as_scenename_if_it_doesnt_looks_like_scenename()
+        {
+            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\aaaaa.mkv";
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == null)));
+        }
+
+
+
         [Test]
         public void should_import_larger_files_first()
         {
@@ -142,7 +195,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                 (new LocalEpisode
                  {
                      Series = fileDecision.LocalEpisode.Series,
-                     Episodes = new List<Episode> {fileDecision.LocalEpisode.Episodes.First()},
+                     Episodes = new List<Episode> { fileDecision.LocalEpisode.Episodes.First() },
                      Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilot.avi".AsOsAgnostic(),
                      Quality = new QualityModel(Quality.Bluray720p),
                      Size = 80.Megabytes()
