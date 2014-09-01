@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                     {
                                         Series = series,
                                         Release = new ReleaseInfo(),
-                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, true) },
+                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
                                         Episodes = new List<Episode> { new Episode(), new Episode(), new Episode(), new Episode(), new Episode(), new Episode() }
                                     };
 
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                     {
                                         Series = series,
                                         Release = new ReleaseInfo(),
-                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, true) },
+                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
                                         Episodes = new List<Episode> { new Episode(), new Episode() }
                                     };
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                     {
                                         Series = series,
                                         Release = new ReleaseInfo(),
-                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, true) },
+                                        ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.SDTV, new Revision(version: 2)) },
                                         Episodes = new List<Episode> { new Episode() { Id = 2 } }
 
                                     };
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var parseResult = new RemoteEpisode
                 {
-                    ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.RAWHD, false) },
+                    ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.RAWHD) },
                 };
 
             Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var parseResult = new RemoteEpisode
             {
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.Unknown, false) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.Unknown) },
             };
 
             Subject.IsSatisfiedBy(parseResult, null).Should().BeFalse();

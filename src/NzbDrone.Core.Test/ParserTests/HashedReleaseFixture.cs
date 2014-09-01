@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = Parser.Parser.ParsePath(path);
             result.SeriesTitle.Should().Be(title);
-            result.Quality.ToString().Should().Be(quality);
+            result.Quality.ToString().Should().Be(quality + " v1");
             result.ReleaseGroup.Should().Be(releaseGroup);
         }
     }

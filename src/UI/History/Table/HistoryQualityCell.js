@@ -11,10 +11,17 @@ define(
 
                 var title = '';
                 var quality = this.model.get('quality');
+                var revision = quality.revision;
 
-                if (quality.proper) {
-                    title = 'PROPER';
+                if (revision.real && revision.real > 0) {
+                    title += ' REAL';
                 }
+
+                if (revision.version && revision.version > 1) {
+                    title += ' PROPER';
+                }
+
+                title = title.trim();
 
                 if (this.model.get('qualityCutoffNotMet')) {
                     this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));

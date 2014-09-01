@@ -197,6 +197,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
+    <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
     <Compile Include="OrganizerTests\CleanFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTests\FilterFixture.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
     <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
     <Compile Include="ParserTests\AnimeMetadataParserFixture.cs" />
+    <Compile Include="ParserTests\ExtendedQualityParserRegex.cs" />
     <Compile Include="ParserTests\CrapParserFixture.cs" />
     <Compile Include="ParserTests\DailyEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\HashedReleaseFixture.cs" />

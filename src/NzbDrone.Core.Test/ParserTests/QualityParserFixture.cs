@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
@@ -206,7 +207,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void parsing_our_own_quality_enum_name(Quality quality)
         {
             var fileName = String.Format("My series S01E01 [{0}]", quality.Name);
-            var result = Parser.QualityParser.ParseQuality(fileName);
+            var result = QualityParser.ParseQuality(fileName);
             result.Quality.Should().Be(quality);
         }
 
@@ -221,12 +222,13 @@ namespace NzbDrone.Core.Test.ParserTests
             }
         }
 
-
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)
         {
-            var result = Parser.QualityParser.ParseQuality(title);
+            var result = QualityParser.ParseQuality(title);
             result.Quality.Should().Be(quality);
-            result.Proper.Should().Be(proper);
+
+            var version = proper ? 2 : 1;
+            result.Revision.Version.Should().Be(version);
         }
     }
 }

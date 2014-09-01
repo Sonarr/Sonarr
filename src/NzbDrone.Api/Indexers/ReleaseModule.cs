@@ -131,13 +131,16 @@ namespace NzbDrone.Api.Indexers
 
                 if (downloadDecision.RemoteEpisode.Series != null)
                 {
-                    release.QualityWeight = downloadDecision.RemoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == release.Quality.Quality) * 2;
+                    release.QualityWeight = downloadDecision.RemoteEpisode
+                                                            .Series
+                                                            .Profile
+                                                            .Value
+                                                            .Items
+                                                            .FindIndex(v => v.Quality == release.Quality.Quality) * 100;
                 }
 
-                if (!release.Quality.Proper)
-                {
-                    release.QualityWeight++;
-                }
+                release.QualityWeight += release.Quality.Revision.Real * 10;
+                release.QualityWeight += release.Quality.Revision.Version;
 
                 result.Add(release);
             }

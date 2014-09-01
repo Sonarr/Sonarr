@@ -29,7 +29,9 @@ namespace NzbDrone.Core.Qualities
             int result = Compare(left.Quality, right.Quality);
 
             if (result == 0)
-                result = left.Proper.CompareTo(right.Proper);
+            {
+                result = left.Revision.CompareTo(right.Revision);
+            }
 
             return result;
         }

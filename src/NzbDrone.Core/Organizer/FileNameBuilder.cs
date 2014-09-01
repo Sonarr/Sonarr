@@ -102,7 +102,6 @@ namespace NzbDrone.Core.Organizer
             }
 
             var pattern = namingConfig.StandardEpisodeFormat;
-
             var tokenHandlers = new Dictionary<String, Func<TokenMatch, String>>(FileNameBuilderTokenEqualityComparer.Instance);
 
             episodes = episodes.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber).ToList();
@@ -118,15 +117,11 @@ namespace NzbDrone.Core.Organizer
             }
 
             pattern = AddSeasonEpisodeNumberingTokens(pattern, tokenHandlers, episodes, namingConfig);
-
             pattern = AddAbsoluteNumberingTokens(pattern, tokenHandlers, series, episodes, namingConfig);
 
             AddSeriesTokens(tokenHandlers, series);
-
             AddEpisodeTokens(tokenHandlers, episodes);
-
-            AddEpisodeFileTokens(tokenHandlers, episodeFile);
-
+            AddEpisodeFileTokens(tokenHandlers, series, episodeFile);
             AddMediaInfoTokens(tokenHandlers, episodeFile);
             
             var filename = ReplaceTokens(pattern, tokenHandlers).Trim();
@@ -401,11 +396,11 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(episodes);
         }
 
-        private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, EpisodeFile episodeFile)
+        private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
         {
             tokenHandlers["{Original Title}"] = m => episodeFile.SceneName;
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? "DRONE";
-            tokenHandlers["{Quality Title}"] = m => GetQualityTitle(episodeFile.Quality);
+            tokenHandlers["{Quality Title}"] = m => GetQualityTitle(series, episodeFile.Quality);
         }
 
         private void AddMediaInfoTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, EpisodeFile episodeFile)
@@ -651,12 +646,24 @@ namespace NzbDrone.Core.Organizer
             return String.Join(" + ", titles);
         }
 
-        private String GetQualityTitle(QualityModel quality)
+        private String GetQualityTitle(Series series, QualityModel quality)
         {
-            if (quality.Proper)
-                return _qualityDefinitionService.Get(quality.Quality).Title + " Proper";
-            else
-                return _qualityDefinitionService.Get(quality.Quality).Title;
+            var qualitySuffix = String.Empty;
+
+            if (quality.Revision.Version > 1)
+            {
+                if (series.SeriesType == SeriesTypes.Anime)
+                {
+                    qualitySuffix = " v" + quality.Revision.Version;
+                }
+
+                else
+                {
+                    qualitySuffix = " Proper";
+                }
+            }
+
+            return _qualityDefinitionService.Get(quality.Quality).Title + qualitySuffix;
         }
     }
 

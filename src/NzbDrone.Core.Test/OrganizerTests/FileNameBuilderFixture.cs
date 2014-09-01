@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
         private void GivenProper()
         {
-            _episodeFile.Quality.Proper = true;
+            _episodeFile.Quality.Revision.Version =2;
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void should_replace_quality_title_with_proper()
         {
             _namingConfig.StandardEpisodeFormat = "{Quality Title}";
-            _episodeFile.Quality.Proper = true;
+            GivenProper();
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("HDTV-720p Proper");

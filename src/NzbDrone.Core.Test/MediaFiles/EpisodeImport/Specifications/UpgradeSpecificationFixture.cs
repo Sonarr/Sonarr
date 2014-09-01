@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode = new LocalEpisode
                                 {
                                     Path = @"C:\Test\30 Rock\30.rock.s01e01.avi",
-                                    Quality = new QualityModel(Quality.HDTV720p, false),
+                                    Quality = new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                                     Series = _series
                                 };
         }
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.SDTV, false)
+                                                                                    Quality = new QualityModel(Quality.SDTV, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.SDTV, false)
+                                                                                    Quality = new QualityModel(Quality.SDTV, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.Bluray720p, false)
+                                                                                    Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.Bluray720p, false)
+                                                                                    Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();
@@ -138,14 +138,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.SDTV, false)
+                                                                                    Quality = new QualityModel(Quality.SDTV, new Revision(version: 1))
                                                                                 }))
                                                      .TheNext(1)
                                                      .With(e => e.EpisodeFileId = 2)
                                                      .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
                                                                                 new EpisodeFile
                                                                                 {
-                                                                                    Quality = new QualityModel(Quality.Bluray720p, false)
+                                                                                    Quality = new QualityModel(Quality.Bluray720p, new Revision(version: 1))
                                                                                 }))
                                                      .Build()
                                                      .ToList();

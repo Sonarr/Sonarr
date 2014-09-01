@@ -55,8 +55,11 @@ define(
                 });
 
                 var newQuality = {
-                    proper : false,
-                    quality: profileItem.quality
+                    quality : profileItem.quality,
+                    revision : {
+                        version : 1,
+                        real    : 0
+                    }
                 };
 
                 model.set(column.get('name'), newQuality);

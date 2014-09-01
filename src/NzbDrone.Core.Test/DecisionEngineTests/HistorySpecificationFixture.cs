@@ -49,19 +49,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultMulti = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
                 Episodes = doubleEpisodeList
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
                 Episodes = singleEpisodeList
             };
 
-            _upgradableQuality = new QualityModel(Quality.SDTV, false);
-            _notupgradableQuality = new QualityModel(Quality.HDTV1080p, true);
+            _upgradableQuality = new QualityModel(Quality.SDTV, new Revision(version: 1));
+            _notupgradableQuality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 1)).Returns(_notupgradableQuality);
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 2)).Returns(_notupgradableQuality);
@@ -134,8 +134,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_not_be_upgradable_if_episode_is_of_same_quality_as_existing()
         {
             _fakeSeries.Profile = new Profile { Cutoff = Quality.WEBDL1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
-            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, false);
-            _upgradableQuality = new QualityModel(Quality.WEBDL1080p, false);
+            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
+            _upgradableQuality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 1)).Returns(_upgradableQuality);
 

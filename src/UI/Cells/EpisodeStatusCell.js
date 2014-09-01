@@ -41,10 +41,15 @@ define(
                         this.listenTo(this.episodeFile, 'change', this._refresh);
 
                         var quality = this.episodeFile.get('quality');
+                        var revision = quality.revision;
                         var size = FormatHelpers.bytes(this.episodeFile.get('size'));
                         var title = 'Episode downloaded';
 
-                        if (quality.proper) {
+                        if (revision.real && revision.real > 0) {
+                            title += '[REAL]';
+                        }
+
+                        if (revision.version && revision.version > 1) {
                             title += ' [PROPER]';
                         }
 
@@ -58,7 +63,6 @@ define(
                         else {
                             this.$el.html('<span class="badge" title="{0}">{1}</span>'.format(title, quality.quality.name));
                         }
-
 
                         return;
                     }
