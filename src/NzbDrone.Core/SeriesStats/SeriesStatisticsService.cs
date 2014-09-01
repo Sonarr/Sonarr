@@ -10,9 +10,9 @@ namespace NzbDrone.Core.SeriesStats
 
     public class SeriesStatisticsService : ISeriesStatisticsService
     {
-        private readonly SeriesStatisticsRepository _seriesStatisticsRepository;
+        private readonly ISeriesStatisticsRepository _seriesStatisticsRepository;
 
-        public SeriesStatisticsService(SeriesStatisticsRepository seriesStatisticsRepository)
+        public SeriesStatisticsService(ISeriesStatisticsRepository seriesStatisticsRepository)
         {
             _seriesStatisticsRepository = seriesStatisticsRepository;
         }

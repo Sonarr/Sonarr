@@ -9,12 +9,14 @@ define(
             template: 'Series/Delete/DeleteSeriesTemplate',
 
             events: {
-                'click .x-confirm-delete': 'removeSeries'
+                'click .x-confirm-delete' : 'removeSeries',
+                'change .x-delete-files'  : 'changeDeletedFiles'
             },
 
             ui: {
-                deleteFiles : '.x-delete-files',
-                indicator   : '.x-indicator'
+                deleteFiles     : '.x-delete-files',
+                deleteFilesInfo : '.x-delete-files-info',
+                indicator       : '.x-indicator'
             },
 
             removeSeries: function () {
@@ -29,6 +31,18 @@ define(
                         vent.trigger(vent.Events.SeriesDeleted, { series: self.model });
                         vent.trigger(vent.Commands.CloseModalCommand);
                     });
+            },
+
+            changeDeletedFiles: function () {
+                var deleteFiles = this.ui.deleteFiles.prop('checked');
+
+                if (deleteFiles) {
+                    this.ui.deleteFilesInfo.show();
+                }
+
+                else {
+                    this.ui.deleteFilesInfo.hide();
+                }
             }
         });
     });
