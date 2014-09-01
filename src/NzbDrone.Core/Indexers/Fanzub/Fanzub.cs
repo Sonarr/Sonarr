@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         {
             get
             {
-                yield return "https://fanzub.com/rss/?cat=anime&max=100";
+                yield return "http://fanzub.com/rss/?cat=anime&max=100";
             }
         }
 
