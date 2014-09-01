@@ -50,6 +50,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return false;
             }
 
+            if (extension != null && extension.Equals(".strm", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _logger.Debug("Skipping sample check for .strm file");
+                return false;
+            }
+
             try
             {
                 var runTime = _videoFileInfoReader.GetRunTime(path);

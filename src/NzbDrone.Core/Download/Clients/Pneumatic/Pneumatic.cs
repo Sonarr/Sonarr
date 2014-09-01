@@ -56,7 +56,8 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
             _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 
-            WriteStrmFile(title, nzbFile);
+            var strmFile = WriteStrmFile(title, nzbFile);
+            return GetDownloadClientId(strmFile);
 
             return null;
         }
@@ -71,27 +72,27 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            foreach (var videoFile in _diskProvider.GetFiles(Settings.StrmFolder, SearchOption.TopDirectoryOnly))
+            foreach (var file in _diskProvider.GetFiles(Settings.StrmFolder, SearchOption.TopDirectoryOnly))
             {
-                if (Path.GetExtension(videoFile) != ".strm")
+                if (Path.GetExtension(file) != ".strm")
                 {
                     continue;
                 }
 
-                var title = FileNameBuilder.CleanFileName(Path.GetFileName(videoFile));
+                var title = FileNameBuilder.CleanFileName(Path.GetFileName(file));
 
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWriteUtc(videoFile).Ticks,
+                    DownloadClientId = GetDownloadClientId(file),
                     Title = title,
 
-                    TotalSize = _diskProvider.GetFileSize(videoFile),
+                    TotalSize = _diskProvider.GetFileSize(file),
 
-                    OutputPath = videoFile
+                    OutputPath = file
                 };
 
-                if (_diskProvider.IsFileLocked(videoFile))
+                if (_diskProvider.IsFileLocked(file))
                 {
                     historyItem.Status = DownloadItemStatus.Downloading;
                 }
@@ -155,7 +156,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return null;
         }
 
-        private void WriteStrmFile(String title, String nzbFile)
+        private String WriteStrmFile(String title, String nzbFile)
         {
             String folder;
 
@@ -175,7 +176,16 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             }
 
             var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", nzbFile, title);
-            _diskProvider.WriteAllText(Path.Combine(folder, title + ".strm"), contents);
+            var filename = Path.Combine(folder, title + ".strm");
+
+            _diskProvider.WriteAllText(filename, contents);
+
+            return filename;
+        }
+
+        private String GetDownloadClientId(String filename)
+        {
+            return Definition.Name + "_" + Path.GetFileName(filename) + "_" + _diskProvider.FileGetLastWriteUtc(filename).Ticks;
         }
     }
 }
