@@ -78,7 +78,11 @@ namespace NzbDrone.Api.Frontend.Mappers
 
             var cacheBreakProvider = _cacheBreakProviderFactory();
 
-            _generatedContent = ReplaceRegex.Replace(_generatedContent, match => cacheBreakProvider.AddCacheBreakerToPath(URL_BASE + match.Value));
+            _generatedContent = ReplaceRegex.Replace(_generatedContent, match =>
+            {
+                var url = cacheBreakProvider.AddCacheBreakerToPath(match.Value);
+                return URL_BASE + url;
+            });
 
             _generatedContent = _generatedContent.Replace("API_ROOT", URL_BASE + "/api");
             _generatedContent = _generatedContent.Replace("API_KEY", API_KEY);
