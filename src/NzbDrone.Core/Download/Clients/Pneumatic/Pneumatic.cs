@@ -49,15 +49,14 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             title = FileNameBuilder.CleanFileName(title);
 
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
-            var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
+            var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
-            _logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
-            _httpProvider.DownloadFile(url, filename);
+            _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
+            _httpProvider.DownloadFile(url, nzbFile);
 
-            _logger.Debug("NZB Download succeeded, saved to: {0}", filename);
+            _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 
-            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
-            _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
+            WriteStrmFile(title, nzbFile);
 
             return null;
         }
@@ -72,7 +71,40 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            return new DownloadClientItem[0];
+            foreach (var videoFile in _diskProvider.GetFiles(Settings.StrmFolder, SearchOption.TopDirectoryOnly))
+            {
+                if (Path.GetExtension(videoFile) != ".strm")
+                {
+                    continue;
+                }
+
+                var title = FileNameBuilder.CleanFileName(Path.GetFileName(videoFile));
+
+                var historyItem = new DownloadClientItem
+                {
+                    DownloadClient = Definition.Name,
+                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWriteUtc(videoFile).Ticks,
+                    Title = title,
+
+                    TotalSize = _diskProvider.GetFileSize(videoFile),
+
+                    OutputPath = videoFile
+                };
+
+                if (_diskProvider.IsFileLocked(videoFile))
+                {
+                    historyItem.Status = DownloadItemStatus.Downloading;
+                }
+                else
+                {
+                    historyItem.Status = DownloadItemStatus.Completed;
+                }
+
+                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
+                if (historyItem.RemoteEpisode == null) continue;
+
+                yield return historyItem;
+            }
         }
 
         public override void RemoveItem(String id)
@@ -98,6 +130,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestWrite(Settings.StrmFolder, "StrmFolder"));
         }
 
         private ValidationFailure TestWrite(String folder, String propertyName)
@@ -120,6 +153,29 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             }
 
             return null;
+        }
+
+        private void WriteStrmFile(String title, String nzbFile)
+        {
+            String folder;
+
+            if (Settings.StrmFolder.IsNullOrWhiteSpace())
+            {
+                folder = _configService.DownloadedEpisodesFolder;
+
+                if (folder.IsNullOrWhiteSpace())
+                {
+                    throw new DownloadClientException("Strm Folder needs to be set for Pneumatic Downloader");
+                }
+            }
+
+            else
+            {
+                folder = Settings.StrmFolder;
+            }
+
+            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", nzbFile, title);
+            _diskProvider.WriteAllText(Path.Combine(folder, title + ".strm"), contents);
         }
     }
 }
