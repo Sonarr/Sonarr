@@ -139,6 +139,7 @@
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Frontend\CacheableSpecification.cs" />
     <Compile Include="Frontend\Mappers\BackupFileMapper.cs" />
+    <Compile Include="Frontend\Mappers\CacheBreakerProvider.cs" />
     <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
     <Compile Include="Frontend\Mappers\IMapHttpRequestsToDisk.cs" />
     <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />

@@ -19,7 +19,7 @@ namespace NzbDrone.Api.Frontend
                 return false;
             }
 
-            if (context.Request.Query.v == BuildInfo.Version) return true;
+            if (((DynamicDictionary)context.Request.Query).ContainsKey("h")) return true;
 
             if (context.Request.Path.StartsWith("/api", StringComparison.CurrentCultureIgnoreCase))
             {
