@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_not_use_nzb_title_as_scene_name_if_full_season()
         {
-            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\season1\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv";
+            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\season1\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv".AsOsAgnostic();
             _downloadClientItem.Title = "malcolm.in.the.middle.s02.dvdrip.xvid-ingot";
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         public void should_use_file_name_as_scenename_only_if_it_looks_like_scenename()
         {
 
-            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv";
+            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv".AsOsAgnostic();
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_not_use_file_name_as_scenename_if_it_doesnt_looks_like_scenename()
         {
-            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\aaaaa.mkv";
+            _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\aaaaa.mkv".AsOsAgnostic();
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
