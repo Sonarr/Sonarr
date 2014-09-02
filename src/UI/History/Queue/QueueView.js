@@ -20,10 +20,10 @@ define(
                     return this;
                 }
 
-                var count = QueueCollection.length;
+                var count = QueueCollection.fullCollection.length;
                 var label = 'label-info';
-                var errors = QueueCollection.some(function (model) {
-                    return model.get('errorMessage') !== '';
+                var errors = QueueCollection.fullCollection.some(function (model) {
+                    return model.has('errorMessage');
                 });
 
                 if (errors) {
