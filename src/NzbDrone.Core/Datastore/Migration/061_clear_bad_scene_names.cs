@@ -14,7 +14,6 @@ namespace NzbDrone.Core.Datastore.Migration
                         "   ReleaseGroup IS NULL " +
                         "   OR SceneName IS NULL " +
                         "   OR ReleaseGroup =='DRONE' " +
-                        "   OR LENGTH(SceneName) == 40 " +
                         "   OR LENGTH(SceneName) <10 " +
                         "   OR LENGTH(ReleaseGroup) > 20 " +
                         "   OR SceneName NOT LIKE '%.%'");
