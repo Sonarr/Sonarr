@@ -110,6 +110,7 @@
     <Compile Include="EpisodeIntegrationTests.cs" />
     <Compile Include="HistoryIntegrationTest.cs" />
     <Compile Include="IndexerIntegrationFixture.cs" />
+    <Compile Include="IndexHtmlIntegrationFixture.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="IntegrationTestDirectoryInfo.cs" />
     <Compile Include="NamingConfigTests.cs" />

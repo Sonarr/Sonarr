@@ -41,6 +41,9 @@ namespace NzbDrone.Integration.Test
         private List<SignalRMessage> _signalRReceived;
         private Connection _signalrConnection;
 
+
+        protected static readonly string RootUrl = "http://localhost:8989/";
+
         protected IEnumerable<SignalRMessage> SignalRMessages
         {
             get
@@ -83,7 +86,7 @@ namespace NzbDrone.Integration.Test
 
         private void InitRestClients()
         {
-            RestClient = new RestClient("http://localhost:8989/api");
+            RestClient = new RestClient(RootUrl + "api/");
             Series = new SeriesClient(RestClient, _runner.ApiKey);
             Releases = new ReleaseClient(RestClient, _runner.ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, _runner.ApiKey);
