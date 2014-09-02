@@ -74,19 +74,21 @@ namespace NzbDrone.Api.Frontend.Mappers
                 return _generatedContent;
             }
 
-            _generatedContent = _diskProvider.ReadAllText(_indexPath);
+            var text = _diskProvider.ReadAllText(_indexPath);
 
             var cacheBreakProvider = _cacheBreakProviderFactory();
 
-            _generatedContent = ReplaceRegex.Replace(_generatedContent, match =>
+            text = ReplaceRegex.Replace(text, match =>
             {
                 var url = cacheBreakProvider.AddCacheBreakerToPath(match.Value);
                 return URL_BASE + url;
             });
 
-            _generatedContent = _generatedContent.Replace("API_ROOT", URL_BASE + "/api");
-            _generatedContent = _generatedContent.Replace("API_KEY", API_KEY);
-            _generatedContent = _generatedContent.Replace("APP_VERSION", BuildInfo.Version.ToString());
+            text = text.Replace("API_ROOT", URL_BASE + "/api");
+            text = text.Replace("API_KEY", API_KEY);
+            text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
+
+            _generatedContent = text;
 
             return _generatedContent;
         }
