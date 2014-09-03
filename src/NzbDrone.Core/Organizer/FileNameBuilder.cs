@@ -289,7 +289,7 @@ namespace NzbDrone.Core.Organizer
 
             AddSeriesTokens(tokenHandlers, series);
 
-            return ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers);
+            return CleanFolderName(ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers));
         }
 
         public string GetSeasonFolder(Series series, Int32 seasonNumber, NamingConfig namingConfig = null)
@@ -302,10 +302,9 @@ namespace NzbDrone.Core.Organizer
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, String>>(FileNameBuilderTokenEqualityComparer.Instance);
 
             AddSeriesTokens(tokenHandlers, series);
-
             AddSeasonTokens(tokenHandlers, seasonNumber);
 
-            return ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers);
+            return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers));
         }
 
         public static string CleanTitle(string name)
@@ -334,6 +333,12 @@ namespace NzbDrone.Core.Organizer
             }
 
             return result.Trim();
+        }
+
+        public static string CleanFolderName(string name)
+        {
+            name = FileNameCleanupRegex.Replace(name, match => match.Captures[0].Value[0].ToString());
+            return name.Trim(' ', '.');
         }
 
         private void AddSeriesTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series)

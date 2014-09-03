@@ -222,6 +222,7 @@
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
+    <Compile Include="OrganizerTests\GetSeasonFolderFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
     <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />

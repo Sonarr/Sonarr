@@ -64,8 +64,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episodeFile.Quality.Proper = true;
         }
 
-
-
         [Test]
         public void should_replace_Series_space_Title()
         {
@@ -575,6 +573,16 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS.[EN+ES+IT]");
+        }
+
+        [Test]
+        public void should_remove_duplicate_non_word_characters()
+        {
+            _series.Title = "Venture Bros.";
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.{season}x{episode:00}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("Venture.Bros.15x06");
         }
     }
 }
