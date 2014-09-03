@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.Metadata
         private readonly IEpisodeService _episodeService;
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpProvider _httpProvider;
+        private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -39,6 +41,7 @@ namespace NzbDrone.Core.Metadata
                                IEpisodeService episodeService,
                                IDiskProvider diskProvider,
                                IHttpProvider httpProvider,
+                               IConfigService configService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
@@ -49,6 +52,7 @@ namespace NzbDrone.Core.Metadata
             _episodeService = episodeService;
             _diskProvider = diskProvider;
             _httpProvider = httpProvider;
+            _configService = configService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -156,11 +160,13 @@ namespace NzbDrone.Core.Metadata
                 return null;
             }
 
-            _logger.Debug("Writing Series Metadata to: {0}", seriesMetadata.RelativePath);
-            _diskProvider.WriteAllText(seriesMetadata.RelativePath, seriesMetadata.Contents);
+            var fullPath = Path.Combine(series.Path, seriesMetadata.RelativePath);
+
+            _logger.Debug("Writing Series Metadata to: {0}", fullPath);
+            SaveMetadataFile(fullPath, seriesMetadata.Contents);
 
             metadata.Hash = hash;
-            metadata.RelativePath = series.Path.GetRelativePath(seriesMetadata.RelativePath);
+            metadata.RelativePath = seriesMetadata.RelativePath;
 
             return metadata;
         }
@@ -207,7 +213,7 @@ namespace NzbDrone.Core.Metadata
             }
 
             _logger.Debug("Writing Episode Metadata to: {0}", fullPath);
-            _diskProvider.WriteAllText(fullPath, episodeMetadata.Contents);
+            SaveMetadataFile(fullPath, episodeMetadata.Contents);
 
             metadata.Hash = hash;
 
@@ -326,11 +332,12 @@ namespace NzbDrone.Core.Metadata
             return result;
         }
 
-        private void DownloadImage(Series series, string url, string path)
+        private void DownloadImage(Series series, String url, String path)
         {
             try
             {
                 _httpProvider.DownloadFile(url, path);
+                SetFilePermissions(path);
             }
             catch (WebException e)
             {
@@ -339,6 +346,32 @@ namespace NzbDrone.Core.Metadata
             catch (Exception e)
             {
                 _logger.ErrorException("Couldn't download image " + url + " for " + series, e);
+            }
+        }
+
+        private void SaveMetadataFile(String path, String contents)
+        {
+            _diskProvider.WriteAllText(path, contents);
+            SetFilePermissions(path);
+        }
+
+        private void SetFilePermissions(String path)
+        {
+            if (!_configService.SetPermissionsLinux)
+            {
+                return;
+            }
+
+            try
+            {
+                _diskProvider.SetPermissions(path, _configService.FileChmod, _configService.ChownUser, _configService.ChownGroup);
+            }
+
+            catch (Exception ex)
+            {
+
+                _logger.WarnException("Unable to apply permissions to: " + path, ex);
+                _logger.DebugException(ex.Message, ex);
             }
         }
     }
