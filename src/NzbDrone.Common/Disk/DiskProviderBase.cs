@@ -451,7 +451,7 @@ namespace NzbDrone.Common.Disk
                 throw new FileNotFoundException("Unable to find file: " + path, path);
             }
 
-            return new FileStream(path, FileMode.Open);
+            return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
     }
 }
