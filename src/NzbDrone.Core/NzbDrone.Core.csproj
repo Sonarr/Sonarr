@@ -222,6 +222,7 @@
     <Compile Include="Datastore\Migration\057_convert_episode_file_path_to_relative.cs" />
     <Compile Include="Datastore\Migration\058_drop_epsiode_file_path.cs" />
     <Compile Include="Datastore\Migration\059_add_enable_options_to_indexers.cs" />
+    <Compile Include="Datastore\Migration\061_clear_bad_scene_names.cs" />
     <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -663,6 +664,7 @@
     <Compile Include="Parser\Model\TorrentInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
+    <Compile Include="Parser\SceneChecker.cs" />
     <Compile Include="Parser\QualityParser.cs" />
     <Compile Include="Profiles\GrabDelayMode.cs" />
     <Compile Include="Profiles\Profile.cs" />

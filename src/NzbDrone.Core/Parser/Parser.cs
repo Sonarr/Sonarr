@@ -322,8 +322,6 @@ namespace NzbDrone.Core.Parser
 
         public static string ParseReleaseGroup(string title)
         {
-            const string defaultReleaseGroup = "DRONE";
-
             title = title.Trim();
             title = RemoveFileExtension(title);
             title = title.TrimEnd("-RP");
@@ -337,13 +335,13 @@ namespace NzbDrone.Core.Parser
 
                 if (Int32.TryParse(group, out groupIsNumeric))
                 {
-                    return defaultReleaseGroup;
+                    return null;
                 }
 
                 return group;
             }
 
-            return defaultReleaseGroup;
+            return null;
         }
 
         public static string RemoveFileExtension(string title)

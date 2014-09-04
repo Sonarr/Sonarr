@@ -7,6 +7,8 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Download;
 
@@ -15,7 +17,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IImportApprovedEpisodes
     {
-        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null);
+        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null);
     }
 
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
@@ -39,7 +41,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem historyItem = null)
+        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null)
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
@@ -80,12 +82,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        bool copyOnly = historyItem != null && historyItem.IsReadOnly;
-                        episodeFile.SceneName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
+                        bool copyOnly = downloadClientItem != null && downloadClientItem.IsReadOnly;
+
+                        episodeFile.SceneName = GetSceneName(downloadClientItem, localEpisode);
+
                         var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly);
                         oldFiles = moveResult.OldFiles;
                     }
-
                     else
                     {
                         episodeFile.RelativePath = localEpisode.Series.Path.GetRelativePath(episodeFile.Path);
@@ -94,9 +97,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     _mediaFileService.Add(episodeFile);
                     importResults.Add(new ImportResult(importDecision));
 
-                    if (historyItem != null)
+                    if (downloadClientItem != null)
                     {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, historyItem.DownloadClient, historyItem.DownloadClientId));
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadClientId));
                     }
                     else
                     {
@@ -120,6 +123,28 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                             .Select(d => new ImportResult(d, d.Rejections.ToArray())));
 
             return importResults;
+        }
+
+        private string GetSceneName(DownloadClientItem downloadClientItem, LocalEpisode localEpisode)
+        {
+            if (downloadClientItem != null)
+            {
+                var parsedTitle = Parser.Parser.ParseTitle(downloadClientItem.Title);
+
+                if (parsedTitle != null && !parsedTitle.FullSeason)
+                {
+                    return downloadClientItem.Title;
+                }
+            }
+
+            var fileName = Path.GetFileNameWithoutExtension(localEpisode.Path.CleanFilePath());
+
+            if (SceneChecker.IsSceneTitle(fileName))
+            {
+                return fileName;
+            }
+
+            return null;
         }
     }
 }

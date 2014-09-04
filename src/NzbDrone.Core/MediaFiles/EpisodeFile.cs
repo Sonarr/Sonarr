@@ -24,10 +24,5 @@ namespace NzbDrone.Core.MediaFiles
         {
             return String.Format("[{0}] {1}", Id, RelativePath);
         }
-//
-//        public String Path(Series series)
-//        {
-//            return System.IO.Path.Combine(series.Path, RelativePath);
-//        }
     }
 }
