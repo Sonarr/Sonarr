@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Download
             {
                 UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found are eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
             }
-            else if (importResults.All(v => v.Result == ImportResultType.Imported || v.Result == ImportResultType.Rejected))
+            else if (importResults.Any(v => v.Result == ImportResultType.Imported) && importResults.All(v => v.Result == ImportResultType.Imported || v.Result == ImportResultType.Rejected))
             {
                 UpdateStatusMessage(trackedDownload, LogLevel.Info, "Imported {0} files.", importResults.Count(v => v.Result == ImportResultType.Imported));
 

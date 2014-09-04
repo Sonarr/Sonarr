@@ -59,21 +59,30 @@ namespace NzbDrone.Core.Metadata
                     if (metadata.Type == MetadataType.EpisodeImage ||
                         metadata.Type == MetadataType.EpisodeMetadata)
                     {
-                        var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series, false);
+                        try
+                        {
+                            var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series, false);
 
-                        if (localEpisode == null)
+                            if (localEpisode == null)
+                            {
+                                _logger.Debug("Unable to parse meta data file: {0}", possibleMetadataFile);
+                                break;
+                            }
+
+                            if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
+                            {
+                                _logger.Debug("Metadata file: {0} does not match existing files.", possibleMetadataFile);
+                                break;
+                            }
+
+                            metadata.EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId;
+
+                        }
+                        catch (EpisodeNotFoundException e)
                         {
                             _logger.Debug("Cannot find related episodes for: {0}", possibleMetadataFile);
-                            break;
+                            continue;
                         }
-
-                        if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
-                        {
-                            _logger.Debug("Metadata file: {0} does not match existing files.", possibleMetadataFile);
-                            break;
-                        }
-
-                        metadata.EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId;
                     }
 
                     metadataFiles.Add(metadata);

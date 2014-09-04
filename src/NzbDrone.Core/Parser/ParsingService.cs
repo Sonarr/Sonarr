@@ -62,10 +62,10 @@ namespace NzbDrone.Core.Parser
 
             var episodes = GetEpisodes(parsedEpisodeInfo, series, sceneSource);
 
-            if (!episodes.Any())
+            if (episodes.Empty())
             {
                 _logger.Debug("No matching episodes found for: {0}", parsedEpisodeInfo);
-                return null;
+                throw new EpisodeNotFoundException("Unable to find episodes for file: {0}", parsedEpisodeInfo);
             }
 
             return new LocalEpisode

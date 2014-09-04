@@ -81,7 +81,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                   .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()))
                   .Returns(_localEpisode);
 
-
             Mocker.GetMock<IMediaFileService>()
                 .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
                 .Returns(_videoFiles);
@@ -147,12 +146,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void failed_parse_shouldnt_blowup_the_process()
+        public void should_not_blowup_the_process_due_to_failed_parse()
         {
             GivenSpecifications(_pass1);
 
-            Mocker.GetMock<IParsingService>().Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()))
-                     .Throws<TestException>();
+            Mocker.GetMock<IParsingService>()
+                  .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()))
+                  .Throws<TestException>();
 
             _videoFiles = new List<String>
                 {
@@ -160,7 +160,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                     "The.Office.S03E115.DVDRip.XviD-OSiTV",
                     "The.Office.S03E115.DVDRip.XviD-OSiTV"
                 };
-
 
             Mocker.GetMock<IMediaFileService>()
                 .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
@@ -205,6 +204,32 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             var result = Subject.GetImportDecisions(_videoFiles, _series, false, expectedQuality);
 
             result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+        }
+
+        [Test]
+        public void should_not_throw_if_episodes_are_not_found()
+        {
+            GivenSpecifications(_pass1);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()))
+                  .Throws(new EpisodeNotFoundException("Episode not found"));
+
+            _videoFiles = new List<String>
+                {
+                    "The.Office.S03E115.DVDRip.XviD-OSiTV",
+                    "The.Office.S03E115.DVDRip.XviD-OSiTV",
+                    "The.Office.S03E115.DVDRip.XviD-OSiTV"
+                };
+
+            Mocker.GetMock<IMediaFileService>()
+                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
+                .Returns(_videoFiles);
+
+            Subject.GetImportDecisions(_videoFiles, _series, false);
+
+            Mocker.GetMock<IParsingService>()
+                  .Verify(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
         }
     }
 }
