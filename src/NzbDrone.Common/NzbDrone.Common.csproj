@@ -114,15 +114,15 @@
     <Compile Include="Extensions\Base64Extentions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="HashUtil.cs" />
-    <Compile Include="Http\Rest\HttpClient.cs" />
+    <Compile Include="Http\HttpClient.cs" />
+    <Compile Include="Http\HttpException.cs" />
     <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\HttpProvider.cs" />
+    <Compile Include="Http\HttpRequest.cs" />
+    <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\NzbDroneWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Http\Rest\RestException.cs" />
-    <Compile Include="Http\Rest\HttpRequest.cs" />
-    <Compile Include="Http\Rest\HttpResponse.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
