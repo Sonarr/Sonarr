@@ -488,6 +488,26 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
+        public void should_replace_duplicate_numbering_individually()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.{season}x{episode:00}.{absolute:000}\\{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.15x06.100\\South.Park.S15E06.100.City.Sushi");
+        }
+
+        [Test]
+        public void should_replace_individual_season_episode_tokens()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} Season {season:0000} Episode {episode:0000}\\{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("South Park Season 0015 Episode 0006-0007\\South.Park.S15E06-07.100-101.City.Sushi");
+        }
+
+        [Test]
         public void should_use_dash_as_separator_when_multi_episode_style_is_extend_for_anime()
         {
             _series.SeriesType = SeriesTypes.Anime;
