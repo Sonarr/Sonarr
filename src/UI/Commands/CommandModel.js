@@ -1,8 +1,9 @@
 'use strict';
 define(
     [
+        'underscore',
         'backbone'
-    ], function (Backbone) {
+    ], function (_, Backbone) {
         return Backbone.Model.extend({
             url: window.NzbDrone.ApiRoot + '/command',
 
@@ -18,8 +19,16 @@ define(
                 }
 
                 for (var key in command) {
-                    if (key !== 'name' && command[key] !== this.get(key)) {
-                        return false;
+                    if (key !== 'name') {
+                        if (Array.isArray(command[key])) {
+                            if (_.difference(command[key], this.get(key)).length > 0) {
+                                return false;
+                            }
+                        }
+
+                        else if (command[key] !== this.get(key)) {
+                            return false;
+                        }
                     }
                 }
 

@@ -3,37 +3,31 @@
 define(
     [
         'vent',
-        'marionette',
         'Cells/NzbDroneCell',
         'Commands/CommandController'
-    ], function (vent, Marionette, NzbDroneCell, CommandController) {
+    ], function (vent, NzbDroneCell, CommandController) {
         return NzbDroneCell.extend({
 
             className: 'episode-actions-cell',
-            template : 'Cells/EpisodeActionsCellTemplate',
-
-            ui: {
-                automaticSearch: '.x-automatic-search-icon'
-            },
 
             events: {
-                'click .x-automatic-search': '_automaticSearch',
-                'click .x-manual-search'   : '_manualSearch'
+                'click .x-automatic-search' : '_automaticSearch',
+                'click .x-manual-search'    : '_manualSearch'
             },
 
             render: function () {
-                var templateName = this.column.get('template') || this.template;
+                this.$el.empty();
 
-                this.templateFunction = Marionette.TemplateCache.get(templateName);
-                var data = this.cellValue.toJSON();
-                var html = this.templateFunction(data);
-                this.$el.html(html);
+                this.$el.html(
+                    '<i class="icon-search x-automatic-search" title="Automatic Search"></i>' +
+                    '<i class="icon-nd-manual-search x-manual-search" title="Manual Search"></i>'
+                );
 
                 CommandController.bindToCommand({
-                    element: this.$(this.ui.automaticSearch),
+                    element: this.$el.find('.x-automatic-search'),
                     command: {
-                        name        : 'episodeSearch',
-                        episodeId: this.model.get('id')
+                        name       : 'episodeSearch',
+                        episodeIds : [ this.model.get('id') ]
                     }
                 });
 
@@ -43,8 +37,8 @@ define(
 
             _automaticSearch: function () {
                 CommandController.Execute('episodeSearch', {
-                    name        : 'episodeSearch',
-                    episodeIds: [ this.model.get('id') ]
+                    name       : 'episodeSearch',
+                    episodeIds : [ this.model.get('id') ]
                 });
             },
 

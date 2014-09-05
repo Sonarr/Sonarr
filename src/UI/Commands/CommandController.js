@@ -52,7 +52,6 @@ define(
                 bindToCommand: function (options) {
 
                     var self = this;
-
                     var existingCommand = CommandCollection.findCommand(options.command);
 
                     if (existingCommand) {
