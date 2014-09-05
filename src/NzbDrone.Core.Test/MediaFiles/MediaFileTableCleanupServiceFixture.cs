@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.Execute(new CleanMediaFileDb(0));
 
-            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.RelativePath == DELETED_PATH), false), Times.Exactly(2));
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.RelativePath == DELETED_PATH), DeleteMediaFileReason.RemovedFromDisk), Times.Exactly(2));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.Execute(new CleanMediaFileDb(0));
 
-            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>(), false), Times.Exactly(10));
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>(), DeleteMediaFileReason.NoLinkedEpisodes), Times.Exactly(10));
         }
 
         [Test]

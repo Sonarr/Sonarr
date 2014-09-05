@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
 
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), true), Times.Once());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), DeleteMediaFileReason.Upgrade), Times.Once());
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
 
-            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, true), Times.Once());
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, DeleteMediaFileReason.Upgrade), Times.Once());
         }
 
         [Test]

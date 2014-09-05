@@ -5,6 +5,7 @@ using FluentValidation;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -188,7 +189,7 @@ namespace NzbDrone.Api.Series
 
         public void Handle(EpisodeFileDeletedEvent message)
         {
-            if (message.ForUpgrade) return;
+            if (message.Reason == DeleteMediaFileReason.Upgrade) return;
 
             BroadcastResourceChange(ModelAction.Updated, message.EpisodeFile.SeriesId);
         }

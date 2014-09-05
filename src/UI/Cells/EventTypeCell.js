@@ -33,6 +33,10 @@ define(
                             icon = 'icon-nd-download-failed';
                             toolTip = 'Episode download failed';
                             break;
+                        case 'episodeFileDeleted':
+                            icon = 'icon-nd-deleted';
+                            toolTip = 'Episode file deleted';
+                            break;
                         default :
                             icon = 'icon-question';
                             toolTip = 'unknown event';
