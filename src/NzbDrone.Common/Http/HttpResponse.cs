@@ -6,7 +6,7 @@ namespace NzbDrone.Common.Http
 {
     public class HttpResponse
     {
-        public HttpResponse(HttpRequest request, WebHeaderCollection headers, string content, HttpStatusCode statusCode)
+        public HttpResponse(HttpRequest request, HttpHeader headers, string content, HttpStatusCode statusCode)
         {
             Request = request;
             Headers = headers;
@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Http
         }
 
         public HttpRequest Request { get; private set; }
-        public WebHeaderCollection Headers { get; private set; }
+        public HttpHeader Headers { get; private set; }
         public HttpStatusCode StatusCode { get; private set; }
         public string Content { get; private set; }
 
@@ -39,6 +39,7 @@ namespace NzbDrone.Common.Http
             return result;
         }
     }
+
 
     public class HttpResponse<T> : HttpResponse where T : new()
     {

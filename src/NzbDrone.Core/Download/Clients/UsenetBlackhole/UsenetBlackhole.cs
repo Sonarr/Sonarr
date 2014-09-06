@@ -19,10 +19,10 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
     public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>
     {
         private readonly IDiskScanService _diskScanService;
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
 
         public UsenetBlackhole(IDiskScanService diskScanService,
-                               IHttpProvider httpProvider,
+                               IHttpClient httpClient,
                                IConfigService configService,
                                IDiskProvider diskProvider,
                                IParsingService parsingService,
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             : base(configService, diskProvider, parsingService, logger)
         {
             _diskScanService = diskScanService;
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
         }
 
         public override DownloadProtocol Protocol
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
             _logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
-            _httpProvider.DownloadFile(url, filename);
+            _httpClient.DownloadFile(url, filename);
             _logger.Debug("NZB Download succeeded, saved to: {0}", filename);
 
             return null;

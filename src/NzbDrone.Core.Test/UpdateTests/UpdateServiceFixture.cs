@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Subject.Execute(new ApplicationUpdateCommand());
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive));
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive));
         }
 
         [Test]
@@ -123,8 +123,6 @@ namespace NzbDrone.Core.Test.UpdateTests
             var updateClientFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateClientFolder();
 
             Subject.Execute(new ApplicationUpdateCommand());
-
-
 
             Mocker.GetMock<IDiskProvider>().Verify(c => c.MoveFolder(updateClientFolder, _sandboxFolder));
         }

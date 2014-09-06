@@ -16,16 +16,16 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
     public class Pneumatic : DownloadClientBase<PneumaticSettings>
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
 
-        public Pneumatic(IHttpProvider httpProvider,
+        public Pneumatic(IHttpClient httpClient,
                          IConfigService configService,
                          IDiskProvider diskProvider,
                          IParsingService parsingService,
                          Logger logger)
             : base(configService, diskProvider, parsingService, logger)
         {
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
         }
 
         public override DownloadProtocol Protocol
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
             _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
-            _httpProvider.DownloadFile(url, nzbFile);
+            _httpClient.DownloadFile(url, nzbFile);
 
             _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 

@@ -1,24 +1,30 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Http
 {
     public interface IHttpClient
     {
         HttpResponse Execute(HttpRequest request);
-
+        void DownloadFile(string url, string fileName);
         HttpResponse Get(HttpRequest request);
         HttpResponse<T> Get<T>(HttpRequest request) where T : new();
+        HttpResponse Head(HttpRequest request);
     }
 
     public class HttpClient : IHttpClient
     {
         private readonly Logger _logger;
+        private readonly string _userAgent;
 
         public HttpClient(Logger logger)
         {
             _logger = logger;
+            _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
         }
 
         public HttpResponse Execute(HttpRequest request)
@@ -61,7 +67,7 @@ namespace NzbDrone.Common.Http
                 httpWebResponse = (HttpWebResponse)e.Response;
             }
 
-            var content = string.Empty;
+            string content = null;
 
             using (var responseStream = httpWebResponse.GetResponseStream())
             {
@@ -74,7 +80,7 @@ namespace NzbDrone.Common.Http
                 }
             }
 
-            var response = new HttpResponse(request, httpWebResponse.Headers, content, httpWebResponse.StatusCode);
+            var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), content, httpWebResponse.StatusCode);
 
 
             _logger.Trace(response);
@@ -88,6 +94,38 @@ namespace NzbDrone.Common.Http
             return response;
         }
 
+        public void DownloadFile(string url, string fileName)
+        {
+            try
+            {
+                var fileInfo = new FileInfo(fileName);
+                if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
+                {
+                    fileInfo.Directory.Create();
+                }
+
+                _logger.Debug("Downloading [{0}] to [{1}]", url, fileName);
+
+                var stopWatch = Stopwatch.StartNew();
+                var webClient = new GZipWebClient();
+                webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
+                webClient.DownloadFile(url, fileName);
+                stopWatch.Stop();
+                _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
+            }
+            catch (WebException e)
+            {
+                _logger.Warn("Failed to get response from: {0} {1}", url, e.Message);
+                throw;
+            }
+            catch (Exception e)
+            {
+                _logger.WarnException("Failed to get response from: " + url, e);
+                throw;
+            }
+        }
+
+
         public HttpResponse Get(HttpRequest request)
         {
             request.Method = HttpMethod.GET;
@@ -98,6 +136,12 @@ namespace NzbDrone.Common.Http
         {
             var response = Get(request);
             return new HttpResponse<T>(response);
+        }
+
+        public HttpResponse Head(HttpRequest request)
+        {
+            request.Method = HttpMethod.HEAD;
+            return Execute(request);
         }
 
     }

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Update
         private readonly IAppFolderInfo _appFolderInfo;
 
         private readonly IDiskProvider _diskProvider;
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
         private readonly IArchiveService _archiveService;
         private readonly IProcessProvider _processProvider;
         private readonly IVerifyUpdates _updateVerifier;
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Update
 
 
         public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppFolderInfo appFolderInfo,
-                                    IDiskProvider diskProvider, IHttpProvider httpProvider,
+                                    IDiskProvider diskProvider, IHttpClient httpClient,
                                     IArchiveService archiveService, IProcessProvider processProvider,
                                     IVerifyUpdates updateVerifier,
                                     IConfigFileProvider configFileProvider,
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Update
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
             _archiveService = archiveService;
             _processProvider = processProvider;
             _updateVerifier = updateVerifier;
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Update
 
                 _logger.ProgressInfo("Downloading update {0}", updatePackage.Version);
                 _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
-                _httpProvider.DownloadFile(updatePackage.Url, packageDestination);
+                _httpClient.DownloadFile(updatePackage.Url, packageDestination);
 
                 _logger.ProgressInfo("Verifying update package");
 

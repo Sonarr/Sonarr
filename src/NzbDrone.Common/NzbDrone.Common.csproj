@@ -115,8 +115,12 @@
     <Compile Include="Extensions\Base64Extentions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="HashUtil.cs" />
+    <Compile Include="Http\GZipWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Http\HttpClient.cs" />
     <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\HttpHeader.cs" />
     <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\HttpProvider.cs" />
     <Compile Include="Http\HttpRequest.cs" />
