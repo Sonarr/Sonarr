@@ -6,8 +6,8 @@ namespace NzbDrone.Common.Http
 {
     public interface IHttpClient
     {
-        HttpResponse Exetcute(HttpRequest request);
-        
+        HttpResponse Execute(HttpRequest request);
+
         HttpResponse Get(HttpRequest request);
         HttpResponse<T> Get<T>(HttpRequest request) where T : new();
     }
@@ -21,8 +21,10 @@ namespace NzbDrone.Common.Http
             _logger = logger;
         }
 
-        public HttpResponse Exetcute(HttpRequest request)
+        public HttpResponse Execute(HttpRequest request)
         {
+            _logger.Trace(request);
+
             var webRequest = (HttpWebRequest)WebRequest.Create(request.Url);
 
             // Deflate is not a standard and could break depending on implementation.
@@ -46,6 +48,7 @@ namespace NzbDrone.Common.Http
                     writeStream.Write(bytes, 0, bytes.Length);
                 }
             }
+
 
             HttpWebResponse httpWebResponse;
 
@@ -71,9 +74,13 @@ namespace NzbDrone.Common.Http
                 }
             }
 
-            var response = new HttpResponse(httpWebResponse.Headers, content, httpWebResponse.StatusCode);
+            var response = new HttpResponse(request, httpWebResponse.Headers, content, httpWebResponse.StatusCode);
 
-            if (!supressHttpError && (int)response.StatusCode >= 400)
+
+            _logger.Trace(response);
+
+
+            if (!request.SuppressHttpError && (int)response.StatusCode >= 400)
             {
                 throw new HttpException(request, response);
             }
@@ -84,13 +91,13 @@ namespace NzbDrone.Common.Http
         public HttpResponse Get(HttpRequest request)
         {
             request.Method = HttpMethod.GET;
-            return Exetcute(request);
+            return Execute(request);
         }
 
         public HttpResponse<T> Get<T>(HttpRequest request) where T : new()
         {
             var response = Get(request);
-            return new HttpResponse<T>(response.Headers, response.Content, response.StatusCode);
+            return new HttpResponse<T>(response);
         }
 
     }

@@ -25,7 +25,7 @@ namespace NzbDrone.Common.Http
 
             var request = new HttpRequest(BaseUri + path)
             {
-                SupressHttpError = SupressHttpError,
+                SuppressHttpError = SupressHttpError,
                 NetworkCredential = NetworkCredential
             };
 

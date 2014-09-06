@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Test.Http
         {
             var request = new HttpRequest("http://eu.httpbin.org/get");
 
-            var response = Subject.Exetcute(request);
+            var response = Subject.Execute(request);
 
             response.Content.Should().NotBeNullOrWhiteSpace();
         }

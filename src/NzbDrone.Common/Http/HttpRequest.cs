@@ -18,7 +18,17 @@ namespace NzbDrone.Common.Http
         public Dictionary<string, string> Headers { get; set; }
         public string Body { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
-        public bool SupressHttpError { get; set; }
+        public bool SuppressHttpError { get; set; }
+
+        public override string ToString()
+        {
+            if (Body == null)
+            {
+                return string.Format("Req: [{0}] {1}", Method, Url);
+            }
+
+            return string.Format("Req: [{0}] {1} {2} {3}", Method, Url, Environment.NewLine, Body);
+        }
     }
 
     public class JsonHttpRequest : HttpRequest
