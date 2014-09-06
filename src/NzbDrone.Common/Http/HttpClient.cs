@@ -80,7 +80,7 @@ namespace NzbDrone.Common.Http
             _logger.Trace(response);
 
 
-            if (!request.SuppressHttpError && (int)response.StatusCode >= 400)
+            if (!request.SuppressHttpError && response.HasHttpError)
             {
                 throw new HttpException(request, response);
             }

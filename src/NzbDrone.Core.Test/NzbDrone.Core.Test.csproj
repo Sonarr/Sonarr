@@ -381,9 +381,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Files\SceneMappings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

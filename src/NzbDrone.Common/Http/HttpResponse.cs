@@ -1,8 +1,6 @@
 using System;
 using System.Net;
-using System.Security.Policy;
 using NzbDrone.Common.Serializer;
-using RestSharp;
 
 namespace NzbDrone.Common.Http
 {
@@ -21,10 +19,24 @@ namespace NzbDrone.Common.Http
         public HttpStatusCode StatusCode { get; private set; }
         public string Content { get; private set; }
 
+        public bool HasHttpError
+        {
+            get
+            {
+                return (int)StatusCode >= 400;
+            }
+        }
 
         public override string ToString()
         {
-            return string.Format("Res: [{0}] {1} : {2} {3} {4}", Request.Method, Request.Url, StatusCode, Environment.NewLine, Content);
+            var result = string.Format("Res: [{0}] {1} : {2}.{3}", Request.Method, Request.Url, (int)StatusCode, StatusCode);
+
+            if (HasHttpError)
+            {
+                result += Environment.NewLine + Content;
+            }
+
+            return result;
         }
     }
 
