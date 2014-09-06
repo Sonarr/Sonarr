@@ -10,7 +10,8 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation
 {
-    public class ReconfigureLogging : IHandleAsync<ConfigFileSavedEvent>, IHandleAsync<ApplicationStartedEvent>
+    public class ReconfigureLogging : IHandleAsync<ConfigFileSavedEvent>,
+                                      IHandle<ApplicationStartedEvent>
     {
         private readonly IConfigFileProvider _configFileProvider;
 
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Instrumentation
             Reconfigure();
         }
 
-        public void HandleAsync(ApplicationStartedEvent message)
+        public void Handle(ApplicationStartedEvent message)
         {
             Reconfigure();
         }

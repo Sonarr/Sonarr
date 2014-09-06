@@ -94,7 +94,7 @@ namespace NzbDrone.Common.Instrumentation
             fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
             fileTarget.Layout = FILE_LOG_LAYOUT;
 
-            var loggingRule = new LoggingRule("*", LogLevel.Info, fileTarget);
+            var loggingRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
 
             LogManager.Configuration.AddTarget("appfile", fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
