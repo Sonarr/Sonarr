@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using FluentAssertions;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Parser;
@@ -30,6 +32,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             Mocker.GetMock<IParsingService>()
                 .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), null))
                 .Returns(CreateRemoteEpisode());
+
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(c => c.Get(It.IsAny<HttpRequest>()))
+                .Returns(new HttpResponse(null, null, "", HttpStatusCode.OK));
+
         }
 
         protected virtual RemoteEpisode CreateRemoteEpisode()
