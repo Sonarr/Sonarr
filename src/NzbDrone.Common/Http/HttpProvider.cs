@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using System.Net;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -11,7 +9,6 @@ namespace NzbDrone.Common.Http
     {
         string DownloadString(string url);
         string DownloadString(string url, string username, string password);
-        Stream DownloadStream(string url, NetworkCredential credential = null);
     }
 
     public class HttpProvider : IHttpProvider
@@ -57,19 +54,6 @@ namespace NzbDrone.Common.Http
                 _logger.WarnException("Failed to get response from: " + url, e);
                 throw;
             }
-        }
-
-        public Stream DownloadStream(string url, NetworkCredential credential = null)
-        {
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-            request.UserAgent = _userAgent;
-            request.Timeout = 20 * 1000;
-
-            request.Credentials = credential;
-            var response = request.GetResponse();
-
-            return response.GetResponseStream();
         }
 
     

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using NzbDrone.Common.Serializer;
 
@@ -37,6 +38,16 @@ namespace NzbDrone.Common.Http
             }
 
             return result;
+        }
+
+        public Stream GetStream()
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(Content);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 

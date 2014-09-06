@@ -125,7 +125,6 @@ namespace NzbDrone.Common.Http
             }
         }
 
-
         public HttpResponse Get(HttpRequest request)
         {
             request.Method = HttpMethod.GET;
