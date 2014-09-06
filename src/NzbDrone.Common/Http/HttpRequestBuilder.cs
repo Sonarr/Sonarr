@@ -1,10 +1,13 @@
 using System;
+using System.Net;
 
 namespace NzbDrone.Common.Http
 {
     public class HttpRequestBuilder
     {
         public Uri BaseUri { get; private set; }
+        public bool SupressHttpError { get; set; }
+        public NetworkCredential NetworkCredential { get; set; }
 
         public Action<HttpRequest> PostProcess { get; set; }
 
@@ -20,7 +23,11 @@ namespace NzbDrone.Common.Http
                 path = path.TrimStart('/');
             }
 
-            var request = new HttpRequest(BaseUri + path);
+            var request = new HttpRequest(BaseUri + path)
+            {
+                SupressHttpError = SupressHttpError,
+                NetworkCredential = NetworkCredential
+            };
 
             if (PostProcess != null)
             {

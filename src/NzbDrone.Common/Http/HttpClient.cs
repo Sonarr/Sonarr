@@ -6,10 +6,10 @@ namespace NzbDrone.Common.Http
 {
     public interface IHttpClient
     {
-        HttpResponse Exetcute(HttpRequest request, bool supressHttpError = false);
+        HttpResponse Exetcute(HttpRequest request);
         
-        HttpResponse Get(HttpRequest request, bool suppressHttpErrors = false);
-        HttpResponse<T> Get<T>(HttpRequest request, bool suppressHttpErrors = false) where T : new();
+        HttpResponse Get(HttpRequest request);
+        HttpResponse<T> Get<T>(HttpRequest request) where T : new();
     }
 
     public class HttpClient : IHttpClient
@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Http
             _logger = logger;
         }
 
-        public HttpResponse Exetcute(HttpRequest request, bool supressHttpError = false)
+        public HttpResponse Exetcute(HttpRequest request)
         {
             var webRequest = (HttpWebRequest)WebRequest.Create(request.Url);
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Common.Http
             //http://stackoverflow.com/questions/8490718/how-to-decompress-stream-deflated-with-java-util-zip-deflater-in-net
             webRequest.AutomaticDecompression = DecompressionMethods.GZip;
 
-            webRequest.Credentials = request.Credential;
+            webRequest.Credentials = request.NetworkCredential;
             webRequest.Method = request.Method.ToString();
             webRequest.KeepAlive = false;
             webRequest.ServicePoint.Expect100Continue = false;
@@ -81,15 +81,15 @@ namespace NzbDrone.Common.Http
             return response;
         }
 
-        public HttpResponse Get(HttpRequest request, bool suppressHttpErrors = false)
+        public HttpResponse Get(HttpRequest request)
         {
             request.Method = HttpMethod.GET;
-            return Exetcute(request, suppressHttpErrors);
+            return Exetcute(request);
         }
 
-        public HttpResponse<T> Get<T>(HttpRequest request, bool suppressHttpErrors = false) where T : new()
+        public HttpResponse<T> Get<T>(HttpRequest request) where T : new()
         {
-            var response = Get(request, suppressHttpErrors);
+            var response = Get(request);
             return new HttpResponse<T>(response.Headers, response.Content, response.StatusCode);
         }
 

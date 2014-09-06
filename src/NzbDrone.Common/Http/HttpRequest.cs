@@ -17,7 +17,8 @@ namespace NzbDrone.Common.Http
         public HttpMethod Method { get; set; }
         public Dictionary<string, string> Headers { get; set; }
         public string Body { get; set; }
-        public NetworkCredential Credential { get; set; }
+        public NetworkCredential NetworkCredential { get; set; }
+        public bool SupressHttpError { get; set; }
     }
 
     public class JsonHttpRequest : HttpRequest
