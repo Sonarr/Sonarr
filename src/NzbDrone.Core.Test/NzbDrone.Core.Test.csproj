@@ -107,6 +107,7 @@
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
+    <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxyFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
     <Compile Include="Datastore\DatabaseFixture.cs" />

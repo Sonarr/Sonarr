@@ -68,6 +68,7 @@
     <Compile Include="Cache\Cached.cs" />
     <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\ICached.cs" />
+    <Compile Include="Cloud\CloudClient.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
     <Compile Include="Composition\IContainer.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Http\NzbDroneWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />

@@ -10,6 +10,7 @@ namespace NzbDrone.Common.Http
         public HttpRequest(string url)
         {
             Url = new Uri(url);
+            Headers = new Dictionary<string, string>();
         }
 
         public Uri Url { get; private set; }

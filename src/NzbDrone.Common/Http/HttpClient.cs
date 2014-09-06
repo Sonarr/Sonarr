@@ -4,7 +4,15 @@ using NLog;
 
 namespace NzbDrone.Common.Http
 {
-    public class HttpClient
+    public interface IHttpClient
+    {
+        HttpResponse Exetcute(HttpRequest request, bool supressHttpError = false);
+        
+        HttpResponse Get(HttpRequest request, bool suppressHttpErrors = false);
+        HttpResponse<T> Get<T>(HttpRequest request, bool suppressHttpErrors = false) where T : new();
+    }
+
+    public class HttpClient : IHttpClient
     {
         private readonly Logger _logger;
 
@@ -13,10 +21,15 @@ namespace NzbDrone.Common.Http
             _logger = logger;
         }
 
-        public HttpResponse Exetcute(HttpRequest request)
+        public HttpResponse Exetcute(HttpRequest request, bool supressHttpError = false)
         {
             var webRequest = (HttpWebRequest)WebRequest.Create(request.Url);
-            webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+
+            // Deflate is not a standard and could break depending on implementation.
+            // we should just stick with the more compatible Gzip
+            //http://stackoverflow.com/questions/8490718/how-to-decompress-stream-deflated-with-java-util-zip-deflater-in-net
+            webRequest.AutomaticDecompression = DecompressionMethods.GZip;
+
             webRequest.Credentials = request.Credential;
             webRequest.Method = request.Method.ToString();
             webRequest.KeepAlive = false;
@@ -34,51 +47,51 @@ namespace NzbDrone.Common.Http
                 }
             }
 
-            using (var response = (HttpWebResponse)webRequest.GetResponse())
-            {
-                var content = string.Empty;
+            HttpWebResponse httpWebResponse;
 
-                using (var responseStream = response.GetResponseStream())
+            try
+            {
+                httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
+            }
+            catch (WebException e)
+            {
+                httpWebResponse = (HttpWebResponse)e.Response;
+            }
+
+            var content = string.Empty;
+
+            using (var responseStream = httpWebResponse.GetResponseStream())
+            {
+                if (responseStream != null)
                 {
-                    if (responseStream != null)
+                    using (var reader = new StreamReader(responseStream))
                     {
-                        using (var reader = new StreamReader(responseStream))
-                        {
-                            content = reader.ReadToEnd();
-                        }
+                        content = reader.ReadToEnd();
                     }
                 }
-
-                return new HttpResponse(response.Headers, content, response.StatusCode);
             }
+
+            var response = new HttpResponse(httpWebResponse.Headers, content, httpWebResponse.StatusCode);
+
+            if (!supressHttpError && (int)response.StatusCode >= 400)
+            {
+                throw new HttpException(request, response);
+            }
+
+            return response;
         }
 
+        public HttpResponse Get(HttpRequest request, bool suppressHttpErrors = false)
+        {
+            request.Method = HttpMethod.GET;
+            return Exetcute(request, suppressHttpErrors);
+        }
 
-        /*
-
-                public HttpResponse<T> Execute<T>(HttpRequest httpRequest, bool supressResponseStatus = false) where T : new()
-                {
-
-                    var
-
-
-                    var restSharpRequest = new RestSharp.RestRequest(httpRequest.Url, ConvertToRestsharpMethod(httpRequest.Method));
-                    restSharpRequest.AddBody(httpRequest.Body);
-
-                    var response = ExecuteWithRestSharp<T>(restSharpRequest);
-
-                    if (!supressResponseStatus)
-                    {
-                        ValidateStatusCode(httpRequest, response);
-                    }
-
-                    var headers = response.Headers.ToDictionary(c => c.Name, c => c.Value.ToString());
-                    var restResponse = new HttpResponse<T>(headers, response.Data, response.StatusCode);
-
-                    return restResponse;
-                }
-
-        */
+        public HttpResponse<T> Get<T>(HttpRequest request, bool suppressHttpErrors = false) where T : new()
+        {
+            var response = Get(request, suppressHttpErrors);
+            return new HttpResponse<T>(response.Headers, response.Content, response.StatusCode);
+        }
 
     }
 }

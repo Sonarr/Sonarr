@@ -1,27 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
-using NzbDrone.Common;
+using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.DataAugmentation.DailySeries
 {
-
     public interface IDailySeriesDataProxy
     {
         IEnumerable<int> GetDailySeriesIds();
-        bool IsDailySeries(int tvdbid);
     }
 
     public class DailySeriesDataProxy : IDailySeriesDataProxy
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
+        private readonly IDroneServicesRequestBuilder _requestBuilder;
         private readonly Logger _logger;
 
-        public DailySeriesDataProxy(IHttpProvider httpProvider, Logger logger)
+        public DailySeriesDataProxy(IHttpClient httpClient, IDroneServicesRequestBuilder requestBuilder, Logger logger)
         {
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
+            _requestBuilder = requestBuilder;
             _logger = logger;
         }
 
@@ -29,31 +29,14 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
         {
             try
             {
-                var dailySeriesIds = _httpProvider.DownloadString(Services.RootUrl + "/v1/DailySeries");
-
-                var seriesIds = Json.Deserialize<List<int>>(dailySeriesIds);
-
-                return seriesIds;
+                var dailySeriesRequest = _requestBuilder.Build("dailyseries");
+                var response = _httpClient.Get<List<DailySeries>>(dailySeriesRequest);
+                return response.Resource.Select(c => c.TvdbId);
             }
             catch (Exception ex)
             {
                 _logger.WarnException("Failed to get Daily Series", ex);
                 return new List<int>();
-            }
-
-        }
-
-        public bool IsDailySeries(int tvdbid)
-        {
-            try
-            {
-                var result = _httpProvider.DownloadString(Services.RootUrl + "/v1/DailySeries?seriesId=" + tvdbid);
-                return Convert.ToBoolean(result);
-            }
-            catch (Exception ex)
-            {
-                _logger.WarnException("Failed to check Daily Series status for: " + tvdbid, ex);
-                return false;
             }
         }
     }
