@@ -20,10 +20,15 @@ namespace NzbDrone.Common.Http
 
         }
 
-        public long ContentLength
+        public long? ContentLength
         {
             get
             {
+
+                if (!ContainsKey("ContentLength"))
+                {
+                    return null;
+                }
                 return Convert.ToInt64(this["ContentLength"]);
             }
             set

@@ -15,7 +15,6 @@ namespace NzbDrone.Common.Http
     {
         private readonly Logger _logger;
 
-        public const string CONTENT_LENGTH_HEADER = "Content-Length";
 
         private readonly string _userAgent;
 

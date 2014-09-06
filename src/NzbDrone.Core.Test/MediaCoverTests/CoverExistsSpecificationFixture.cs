@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         public void should_return_false_if_file_exists_but_diffrent_size()
         {
             GivenExistingFileSize(100);
-            _httpResponse.Headers.Add(HttpProvider.CONTENT_LENGTH_HEADER, "200");
+            _httpResponse.Headers.ContentLength = 200;
 
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeFalse();
         }
@@ -61,8 +61,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         public void should_return_ture_if_file_exists_and_same_size()
         {
             GivenExistingFileSize(100);
-            _httpResponse.Headers.Add(HttpProvider.CONTENT_LENGTH_HEADER, "100");
-
+            _httpResponse.Headers.ContentLength = 100;
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeTrue();
         }
 
@@ -71,8 +70,6 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         {
             GivenExistingFileSize(100);
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeFalse();
-
-            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
