@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using NzbDrone.Common.Serializer;
 
@@ -10,12 +9,12 @@ namespace NzbDrone.Common.Http
         public HttpRequest(string url)
         {
             Url = new Uri(url);
-            Headers = new Dictionary<string, string>();
+            Headers = new HttpHeader();
         }
 
         public Uri Url { get; private set; }
         public HttpMethod Method { get; set; }
-        public Dictionary<string, string> Headers { get; set; }
+        public HttpHeader Headers { get; set; }
         public string Body { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
         public bool SuppressHttpError { get; set; }
@@ -36,7 +35,7 @@ namespace NzbDrone.Common.Http
         public JsonHttpRequest(string url, object body)
             : base(url)
         {
-            Headers["ContentType"] = "application/json";
+            Headers.ContentType = "application/json";
             Body = body.ToJson();
         }
     }

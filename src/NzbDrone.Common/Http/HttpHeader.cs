@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Net;
 
 namespace NzbDrone.Common.Http
 {
@@ -24,16 +23,31 @@ namespace NzbDrone.Common.Http
         {
             get
             {
-
-                if (!ContainsKey("ContentLength"))
+                if (!ContainsKey("Content-Length"))
                 {
                     return null;
                 }
-                return Convert.ToInt64(this["ContentLength"]);
+                return Convert.ToInt64(this["Content-Length"]);
             }
             set
             {
-                this["ContentLength"] = value;
+                this["Content-Length"] = value;
+            }
+        }
+
+        public string ContentType
+        {
+            get
+            {
+                if (!ContainsKey("Content-Type"))
+                {
+                    return null;
+                }
+                return this["Content-Type"].ToString();
+            }
+            set
+            {
+                this["Content-Type"] = value;
             }
         }
     }

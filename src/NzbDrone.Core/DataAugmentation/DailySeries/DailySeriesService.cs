@@ -13,13 +13,12 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
     public class DailySeriesService : IDailySeriesService
     {
         private readonly IDailySeriesDataProxy _proxy;
-
         private readonly ICached<List<int>> _cache;
 
-        public DailySeriesService(IDailySeriesDataProxy proxy, ICached<List<int>> cache)
+        public DailySeriesService(IDailySeriesDataProxy proxy, ICacheManager cacheManager)
         {
             _proxy = proxy;
-            _cache = cache;
+            _cache = cacheManager.GetCache<List<int>>(GetType());
         }
 
         public bool IsDailySeries(int tvdbid)

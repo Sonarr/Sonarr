@@ -40,7 +40,7 @@ namespace NzbDrone.Common.Test.Http
             var response = Subject.Get<HttpBinResource>(request);
 
             response.Resource.Headers["Accept-Encoding"].ToString().Should().Be(compression);
-            response.Headers["Content-Lenght"].As<int>().Should().BeLessOrEqualTo(response.Content.Length);
+            response.Headers.ContentLength.Should().BeLessOrEqualTo(response.Content.Length);
         }
 
         [TestCase(HttpStatusCode.Unauthorized)]
