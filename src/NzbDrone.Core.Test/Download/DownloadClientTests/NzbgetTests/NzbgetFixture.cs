@@ -100,14 +100,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
                 .Returns((String)null);
         }
 
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
                 .Returns(Guid.NewGuid().ToString().Replace("-", ""));
         }
 

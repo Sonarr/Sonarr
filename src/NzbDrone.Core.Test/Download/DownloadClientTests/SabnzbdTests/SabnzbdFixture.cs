@@ -114,14 +114,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
                 .Returns((SabnzbdAddResponse)null);
         }
 
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
                 .Returns(new SabnzbdAddResponse()
                 {
                     Status = true,
@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         public void Download_should_use_sabRecentTvPriority_when_recentEpisode_is_true()
         {
             Mocker.GetMock<ISabnzbdProxy>()
-                    .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()))
+                    .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()))
                     .Returns(new SabnzbdAddResponse());
 
             var remoteEpisode = CreateRemoteEpisode();
@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             Subject.Download(remoteEpisode);
 
             Mocker.GetMock<ISabnzbdProxy>()
-                  .Verify(v => v.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());
+                  .Verify(v => v.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());
         }
 
         [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE", @"Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]

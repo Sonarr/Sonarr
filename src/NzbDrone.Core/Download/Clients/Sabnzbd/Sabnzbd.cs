@@ -16,10 +16,9 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class Sabnzbd : DownloadClientBase<SabnzbdSettings>
+    public class Sabnzbd : UsenetClientBase<SabnzbdSettings>
     {
         private readonly ISabnzbdProxy _proxy;
-        private readonly IHttpClient _httpClient;
 
         public Sabnzbd(ISabnzbdProxy proxy,
                        IHttpClient httpClient,
@@ -27,39 +26,25 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                        IDiskProvider diskProvider,
                        IParsingService parsingService,
                        Logger logger)
-            : base(configService, diskProvider, parsingService, logger)
+            : base(httpClient, configService, diskProvider, parsingService, logger)
         {
             _proxy = proxy;
-            _httpClient = httpClient;
         }
 
-        public override DownloadProtocol Protocol
+        protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
-
-        public override string Download(RemoteEpisode remoteEpisode)
-        {
-            var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
             var category = Settings.TvCategory;
             var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
-            using (var nzb = _httpClient.Get(new HttpRequest(url)).GetStream())
+            var response = _proxy.DownloadNzb(fileContent, title, category, priority, Settings);
+
+            if (response != null && response.Ids.Any())
             {
-                _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
-
-                if (response != null && response.Ids.Any())
-                {
-                    return response.Ids.First();
-                }
-
-                return null;
+                return response.Ids.First();
             }
+
+            return null;
         }
 
         private IEnumerable<DownloadClientItem> GetQueue()

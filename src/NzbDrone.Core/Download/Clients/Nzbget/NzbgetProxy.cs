@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public interface INzbgetProxy
     {
-        string DownloadNzb(Stream nzb, string title, string category, int priority, NzbgetSettings settings);
+        string DownloadNzb(Byte[] nzbData, string title, string category, int priority, NzbgetSettings settings);
         NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings);
         List<NzbgetQueueItem> GetQueue(NzbgetSettings settings);
         List<NzbgetPostQueueItem> GetPostQueue(NzbgetSettings settings);
@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public string DownloadNzb(Stream nzb, string title, string category, int priority, NzbgetSettings settings)
+        public string DownloadNzb(Byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
         {
-            var parameters = new object[] { title, category, priority, false, Convert.ToBase64String(nzb.ToBytes()) };
+            var parameters = new object[] { title, category, priority, false, Convert.ToBase64String(nzbData) };
             var request = BuildRequest(new JsonRequest("append", parameters));
 
             var response = Json.Deserialize<NzbgetResponse<Boolean>>(ProcessRequest(request, settings));

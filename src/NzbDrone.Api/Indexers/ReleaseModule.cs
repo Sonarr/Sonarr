@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
@@ -16,6 +17,7 @@ using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Cache;
 using System.Threading;
+using SystemNetHttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -66,7 +68,15 @@ namespace NzbDrone.Api.Indexers
                 return new NotFoundResponse();
             }
 
-            _downloadService.DownloadReport(remoteEpisode);
+            try
+            {
+                _downloadService.DownloadReport(remoteEpisode);
+            }
+            catch (ReleaseDownloadException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                throw new NzbDroneClientException(SystemNetHttpStatusCode.Conflict, "Getting release from indexer failed");
+            }
 
             return release.AsResponse();
         }

@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public interface ISabnzbdProxy
     {
-        SabnzbdAddResponse DownloadNzb(Stream nzb, string name, string category, int priority, SabnzbdSettings settings);
+        SabnzbdAddResponse DownloadNzb(Byte[] nzbData, string name, string category, int priority, SabnzbdSettings settings);
         void RemoveFrom(string source, string id, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
@@ -34,12 +34,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public SabnzbdAddResponse DownloadNzb(Stream nzb, string title, string category, int priority, SabnzbdSettings settings)
+        public SabnzbdAddResponse DownloadNzb(Byte[] nzbData, string title, string category, int priority, SabnzbdSettings settings)
         {
             var request = new RestRequest(Method.POST);
             var action = String.Format("mode=addfile&cat={0}&priority={1}", category, priority);
 
-            request.AddFile("name", nzb.ToBytes(), title, "application/x-nzb");
+            request.AddFile("name", nzbData, title, "application/x-nzb");
 
             SabnzbdAddResponse response;
 

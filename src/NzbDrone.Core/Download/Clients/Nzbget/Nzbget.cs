@@ -15,10 +15,9 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
-    public class Nzbget : DownloadClientBase<NzbgetSettings>
+    public class Nzbget : UsenetClientBase<NzbgetSettings>
     {
         private readonly INzbgetProxy _proxy;
-        private readonly IHttpClient _httpClient;
 
         public Nzbget(INzbgetProxy proxy,
                       IHttpClient httpClient,
@@ -26,36 +25,19 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                       IDiskProvider diskProvider,
                       IParsingService parsingService,
                       Logger logger)
-            : base(configService, diskProvider, parsingService, logger)
+            : base(httpClient, configService, diskProvider, parsingService, logger)
         {
             _proxy = proxy;
-            _httpClient = httpClient;
         }
 
-        public override DownloadProtocol Protocol
+        protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
-
-        public override string Download(RemoteEpisode remoteEpisode)
-        {
-            var url = remoteEpisode.Release.DownloadUrl;
-            var title = remoteEpisode.Release.Title + ".nzb";
             var category = Settings.TvCategory;
             var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
-            _logger.Info("Adding report [{0}] to the queue.", title);
+            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
 
-            using (var nzb = _httpClient.Get(new HttpRequest(url)).GetStream())
-            {
-                _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
-
-                return response;
-            }
+            return response;
         }
 
         private IEnumerable<DownloadClientItem> GetQueue()
