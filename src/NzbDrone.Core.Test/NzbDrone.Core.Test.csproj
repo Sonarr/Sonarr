@@ -174,11 +174,18 @@
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasksFixture.cs" />
     <Compile Include="IndexerSearchTests\NzbSearchServiceFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
+    <Compile Include="IndexerTests\AnimezbTests\AnimezbFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
+    <Compile Include="IndexerTests\NewznabTests\NewznabFixture.cs" />
+    <Compile Include="IndexerTests\NewznabTests\NewznabRequestGeneratorFixture.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabSettingFixture.cs" />
+    <Compile Include="IndexerTests\FanzubTests\FanzubFixture.cs" />
+    <Compile Include="IndexerTests\OmgwtfnzbsTests\OmgwtfnzbsFixture.cs" />
     <Compile Include="IndexerTests\SeasonSearchFixture.cs" />
+    <Compile Include="IndexerTests\TestIndexer.cs" />
+    <Compile Include="IndexerTests\TestIndexerSettings.cs" />
     <Compile Include="IndexerTests\XElementExtensionsFixture.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
@@ -317,6 +324,10 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\RSS\fanzub.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="License.txt" />
     <None Include="..\NzbDrone.Test.Common\App.config">
       <Link>App.config</Link>
     </None>
@@ -348,7 +359,7 @@
     <Content Include="Files\RSS\filesharingtalk.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\newznab.xml">
+    <Content Include="Files\RSS\newznab_nzb_su.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\nzbclub.xml">

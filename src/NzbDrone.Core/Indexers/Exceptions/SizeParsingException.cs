@@ -1,6 +1,6 @@
 ﻿using NzbDrone.Common.Exceptions;
 
-namespace NzbDrone.Core.Indexers.Newznab
+namespace NzbDrone.Core.Indexers.Exceptions
 {
     public class SizeParsingException : NzbDroneException
     {

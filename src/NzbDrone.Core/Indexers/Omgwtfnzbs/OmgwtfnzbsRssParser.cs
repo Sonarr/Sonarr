@@ -4,9 +4,15 @@ using System.Xml.Linq;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
-    public class OmgwtfnzbsParser : RssParserBase
+    public class OmgwtfnzbsRssParser : RssParser
     {
-        protected override string GetNzbInfoUrl(XElement item)
+        public OmgwtfnzbsRssParser()
+        {
+            UseEnclosureUrl = true;
+            UseEnclosureLength = true;
+        }
+
+        protected override string GetInfoUrl(XElement item)
         {
             //Todo: Me thinks I need to parse details to get this...
             var match = Regex.Match(item.Description(), @"(?:\<b\>View NZB\:\<\/b\>\s\<a\shref\=\"")(?<URL>.+)(?:\""\starget)",
@@ -18,12 +24,6 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             }
 
             return String.Empty;
-        }
-
-        protected override long GetSize(XElement item)
-        {
-            var sizeString = Regex.Match(item.Description(), @"(?:Size:\<\/b\>\s\d+\.)\d{1,2}\s\w{2}(?:\<br \/\>)", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
-            return ParseSize(sizeString, true);
         }
     }
 }

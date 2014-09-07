@@ -114,6 +114,7 @@
     <Compile Include="Http\GZipWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Http\HttpAccept.cs" />
     <Compile Include="Http\HttpClient.cs" />
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Http\HttpHeader.cs" />

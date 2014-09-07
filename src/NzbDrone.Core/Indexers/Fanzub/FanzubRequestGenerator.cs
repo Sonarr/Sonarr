@@ -1,0 +1,90 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using NzbDrone.Common;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.IndexerSearch.Definitions;
+
+namespace NzbDrone.Core.Indexers.Fanzub
+{
+    public class FanzubRequestGenerator : IIndexerRequestGenerator
+    {
+        private static readonly Regex RemoveCharactersRegex = new Regex(@"[!?`]", RegexOptions.Compiled);
+
+        public String BaseUrl { get; set; }
+        public Int32 PageSize { get; set; }
+
+        public FanzubRequestGenerator()
+        {
+            BaseUrl = "http://fanzub.com/rss/?cat=anime";
+            PageSize = 100;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        {
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+
+            pageableRequests.AddIfNotNull(GetPagedRequests(null));
+
+            return pageableRequests;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+
+            var searchTitles = searchCriteria.QueryTitles.SelectMany(v => GetTitleSearchStrings(v, searchCriteria.AbsoluteEpisodeNumber)).ToList();
+
+            pageableRequests.Add(GetPagedRequests(String.Join("|", searchTitles)));
+
+            return pageableRequests;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        private IEnumerable<IndexerRequest> GetPagedRequests(String query)
+        {
+            var url = new StringBuilder();
+            url.AppendFormat("{0}&max={1}", BaseUrl, PageSize);
+
+            if (query.IsNotNullOrWhiteSpace())
+            {
+                url.AppendFormat("&q={0}", query);
+            }
+
+            yield return new IndexerRequest(url.ToString(), HttpAccept.Rss);
+        }
+
+        private IEnumerable<String> GetTitleSearchStrings(string title, int absoluteEpisodeNumber)
+        {
+            var formats = new[] { "{0}%20{1:00}", "{0}%20-%20{1:00}" };
+
+            return formats.Select(s => "\"" + String.Format(s, CleanTitle(title), absoluteEpisodeNumber) + "\"");
+        }
+
+        private String CleanTitle(String title)
+        {
+            return RemoveCharactersRegex.Replace(title, "");
+        }
+    }
+}
