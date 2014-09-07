@@ -4,7 +4,8 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
-    public class BasicTorrentRssParser : RssParserBase
+    // TODO: Disabled here, but it's used in the torrent branch, so don't remove.
+    /*public class BasicTorrentRssParser : LegacyRssParserBase
     {
         protected override ReleaseInfo CreateNewReleaseInfo()
         {
@@ -43,5 +44,5 @@ namespace NzbDrone.Core.Indexers
         {
             return item.Element("torrent");
         }
-    }
+    }*/
 }

@@ -13,7 +13,7 @@ using System.Linq;
 namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 {
     [IntegrationTest]
-    public class IndexerIntegrationTests : CoreTest<FetchFeedService>
+    public class IndexerIntegrationTests : CoreTest<Wombles>
     {
         [SetUp]
         public void SetUp()
@@ -24,15 +24,13 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         [Test]
         public void wombles_rss()
         {
-            var indexer = new Wombles();
-
-            indexer.Definition = new IndexerDefinition
+            Subject.Definition = new IndexerDefinition
             {
                 Name = "Wombles",
                 Settings = NullConfig.Instance
             };
 
-            var result = Subject.FetchRss(indexer);
+            var result = Subject.FetchRecent();
 
             ValidateResult(result, skipSize: true, skipInfo: true);
         }

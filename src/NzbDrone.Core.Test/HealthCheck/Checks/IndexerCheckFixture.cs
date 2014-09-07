@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             indexer1.SetupGet(s => s.SupportsRss).Returns(true);
             indexer1.SetupGet(s => s.SupportsSearch).Returns(true);
 
-            var indexer2 = Mocker.GetMock<Wombles>();
+            var indexer2 = Mocker.GetMock<IIndexer>();
             indexer2.SetupGet(s => s.SupportsRss).Returns(true);
             indexer2.SetupGet(s => s.SupportsSearch).Returns(false);
 

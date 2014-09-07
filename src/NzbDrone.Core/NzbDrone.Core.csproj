@@ -384,42 +384,43 @@
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
     <Compile Include="Indexers\Animezb\Animezb.cs" />
-    <Compile Include="Indexers\Animezb\AnimezbParser.cs" />
+    <Compile Include="Indexers\Animezb\AnimezbRequestGenerator.cs" />
     <Compile Include="Indexers\BasicTorrentRssParser.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
-    <Compile Include="Indexers\Fanzub\FanzubParser.cs" />
+    <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
+    <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Indexers\IndexerFetchService.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Indexers\IndexerRepository.cs" />
+    <Compile Include="Indexers\IndexerRequest.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
-    <Compile Include="Indexers\IParseFeed.cs" />
+    <Compile Include="Indexers\IProcessIndexerResponse.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
-    <Compile Include="Indexers\Newznab\NewznabParser.cs" />
-    <Compile Include="Indexers\Newznab\NewznabPreProcessor.cs" />
+    <Compile Include="Indexers\Newznab\NewznabRequestGenerator.cs" />
+    <Compile Include="Indexers\Newznab\NewznabRssParser.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
-    <Compile Include="Indexers\Newznab\SizeParsingException.cs" />
-    <Compile Include="Indexers\NewznabTestService.cs" />
+    <Compile Include="Indexers\Exceptions\SizeParsingException.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRequestGenerator.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
-    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsParser.cs" />
+    <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
-    <Compile Include="Indexers\RssParserBase.cs" />
+    <Compile Include="Indexers\RssIndexerBase.cs" />
+    <Compile Include="Indexers\RssIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\RssParser.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\RssSyncCompleteEvent.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
-    <Compile Include="Indexers\Wombles\WomblesParser.cs" />
+    <Compile Include="Indexers\Wombles\WomblesRssParser.cs" />
     <Compile Include="Indexers\XElementExtensions.cs" />
     <Compile Include="IndexerSearch\Definitions\AnimeEpisodeSearchCriteria.cs" />
     <Compile Include="IndexerSearch\Definitions\DailyEpisodeSearchCriteria.cs" />

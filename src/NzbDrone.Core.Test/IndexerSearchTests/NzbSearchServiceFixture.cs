@@ -17,18 +17,19 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 {
     public class NzbSearchServiceFixture : CoreTest<NzbSearchService>
     {
+        private Mock<IIndexer> _mockIndexer;
         private Series _xemSeries;
         private List<Episode> _xemEpisodes;
 
         [SetUp]
         public void SetUp()
         {
-            var indexer = Mocker.GetMock<IIndexer>();
-            indexer.SetupGet(s => s.SupportsSearch).Returns(true);
+            _mockIndexer = Mocker.GetMock<IIndexer>();
+            _mockIndexer.SetupGet(s => s.SupportsSearch).Returns(true);
 
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.SearchEnabled())
-                  .Returns(new List<IIndexer> { indexer.Object });
+                  .Returns(new List<IIndexer> { _mockIndexer.Object });
 
             Mocker.GetMock<IMakeDownloadDecision>()
                 .Setup(s => s.GetSearchDecision(It.IsAny<List<Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
@@ -97,19 +98,16 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         {
             var result = new List<SearchCriteriaBase>();
 
-            Mocker.GetMock<IFetchFeedFromIndexers>()
-                .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<SingleEpisodeSearchCriteria>()))
-                .Callback<IIndexer, SingleEpisodeSearchCriteria>((i, s) => result.Add(s))
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<SingleEpisodeSearchCriteria>()))
+                .Callback<SingleEpisodeSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
-            Mocker.GetMock<IFetchFeedFromIndexers>()
-                .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<SeasonSearchCriteria>()))
-                .Callback<IIndexer, SeasonSearchCriteria>((i, s) => result.Add(s))
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<SeasonSearchCriteria>()))
+                .Callback<SeasonSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
-            Mocker.GetMock<IFetchFeedFromIndexers>()
-                .Setup(v => v.Fetch(It.IsAny<IIndexer>(), It.IsAny<AnimeEpisodeSearchCriteria>()))
-                .Callback<IIndexer, AnimeEpisodeSearchCriteria>((i, s) => result.Add(s))
+            _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeEpisodeSearchCriteria>()))
+                .Callback<AnimeEpisodeSearchCriteria>(s => result.Add(s))
                 .Returns(new List<Parser.Model.ReleaseInfo>());
 
             return result;

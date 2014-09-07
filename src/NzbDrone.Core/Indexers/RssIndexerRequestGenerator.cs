@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NzbDrone.Core.IndexerSearch.Definitions;
+
+namespace NzbDrone.Core.Indexers
+{
+    public class RssIndexerRequestGenerator : IIndexerRequestGenerator
+    {
+        private readonly String _baseUrl;
+
+        public RssIndexerRequestGenerator(String baseUrl)
+        {
+            _baseUrl = baseUrl;
+        }
+
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        {
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+
+            pageableRequests.Add(new[] { new IndexerRequest(_baseUrl) });
+
+            return pageableRequests;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+    }
+}

@@ -15,13 +15,11 @@ namespace NzbDrone.Core.Indexers
     public class FetchAndParseRssService : IFetchAndParseRss
     {
         private readonly IIndexerFactory _indexerFactory;
-        private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly Logger _logger;
 
-        public FetchAndParseRssService(IIndexerFactory indexerFactory, IFetchFeedFromIndexers feedFetcher, Logger logger)
+        public FetchAndParseRssService(IIndexerFactory indexerFactory, Logger logger)
         {
             _indexerFactory = indexerFactory;
-            _feedFetcher = feedFetcher;
             _logger = logger;
         }
 
@@ -48,7 +46,7 @@ namespace NzbDrone.Core.Indexers
 
                 var task = taskFactory.StartNew(() =>
                      {
-                         var indexerFeed = _feedFetcher.FetchRss(indexerLocal);
+                         var indexerFeed = indexerLocal.FetchRecent();
 
                          lock (result)
                          {

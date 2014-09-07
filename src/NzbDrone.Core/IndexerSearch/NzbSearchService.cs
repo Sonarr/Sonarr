@@ -25,7 +25,6 @@ namespace NzbDrone.Core.IndexerSearch
     public class NzbSearchService : ISearchForNzb
     {
         private readonly IIndexerFactory _indexerFactory;
-        private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly ISceneMappingService _sceneMapping;
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
@@ -33,7 +32,6 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly Logger _logger;
 
         public NzbSearchService(IIndexerFactory indexerFactory,
-                                IFetchFeedFromIndexers feedFetcher,
                                 ISceneMappingService sceneMapping,
                                 ISeriesService seriesService,
                                 IEpisodeService episodeService,
@@ -41,7 +39,6 @@ namespace NzbDrone.Core.IndexerSearch
                                 Logger logger)
         {
             _indexerFactory = indexerFactory;
-            _feedFetcher = feedFetcher;
             _sceneMapping = sceneMapping;
             _seriesService = seriesService;
             _episodeService = episodeService;
@@ -126,7 +123,7 @@ namespace NzbDrone.Core.IndexerSearch
                         else
                             searchSpec.EpisodeNumber = episode.SceneEpisodeNumber;
 
-                        var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+                        var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                         downloadDecisions.AddRange(decisions);
                     }
                     else
@@ -134,7 +131,7 @@ namespace NzbDrone.Core.IndexerSearch
                         var searchSpec = Get<SeasonSearchCriteria>(series, sceneSeasonEpisodes.ToList());
                         searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
 
-                        var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+                        var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                         downloadDecisions.AddRange(decisions);
                     }
                 }
@@ -144,7 +141,7 @@ namespace NzbDrone.Core.IndexerSearch
                 var searchSpec = Get<SeasonSearchCriteria>(series, episodes);
                 searchSpec.SeasonNumber = seasonNumber;
 
-                var decisions = Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+                var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                 downloadDecisions.AddRange(decisions);
             }
 
@@ -175,7 +172,7 @@ namespace NzbDrone.Core.IndexerSearch
                 searchSpec.SeasonNumber = episode.SeasonNumber;
             }
 
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+            return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
         private List<DownloadDecision> SearchDaily(Series series, Episode episode)
@@ -184,7 +181,7 @@ namespace NzbDrone.Core.IndexerSearch
             var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode>{ episode });
             searchSpec.AirDate = airDate;
 
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+            return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
         private List<DownloadDecision> SearchAnime(Series series, Episode episode)
@@ -202,7 +199,7 @@ namespace NzbDrone.Core.IndexerSearch
                 throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", "Can not search for an episode absolute episode number of zero");
             }
 
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+            return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
         private List<DownloadDecision> SearchSpecial(Series series, List<Episode> episodes)
@@ -213,7 +210,7 @@ namespace NzbDrone.Core.IndexerSearch
                                                     .SelectMany(e => searchSpec.QueryTitles.Select(title => title + " " + SearchCriteriaBase.GetQueryTitle(e.Title)))
                                                     .ToArray();
 
-            return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+            return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
         private List<DownloadDecision> SearchAnimeSeason(Series series, List<Episode> episodes)
