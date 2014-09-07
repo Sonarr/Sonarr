@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Indexers
         {
             PreProcess(xml, url);
 
-            using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, IgnoreComments = true }))
+            using (var xmlTextReader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
             {
 
                 var document = XDocument.Load(xmlTextReader);
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Indexers
         private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
                                                                   RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public static long ParseSize(string sizeString)
+        public static Int64 ParseSize(String sizeString, Boolean defaultToBinaryPrefix)
         {
             var match = ReportSizeRegex.Matches(sizeString);
 
@@ -133,26 +133,33 @@ namespace NzbDrone.Core.Indexers
                 var cultureInfo = new CultureInfo("en-US");
                 var value = Decimal.Parse(Regex.Replace(match[0].Groups["value"].Value, "\\,", ""), cultureInfo);
 
-                var unit = match[0].Groups["unit"].Value;
+                var unit = match[0].Groups["unit"].Value.ToLower();
 
-                if (unit.Equals("MB", StringComparison.InvariantCultureIgnoreCase) ||
-                    unit.Equals("MiB", StringComparison.InvariantCultureIgnoreCase))
+                switch (unit)
                 {
-                    return ConvertToBytes(Convert.ToDouble(value), 2);
-                }
-
-                if (unit.Equals("GB", StringComparison.InvariantCultureIgnoreCase) ||
-                        unit.Equals("GiB", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return ConvertToBytes(Convert.ToDouble(value), 3);
+                    case "kb":
+                        return ConvertToBytes(Convert.ToDouble(value), 1, defaultToBinaryPrefix);
+                    case "mb":
+                        return ConvertToBytes(Convert.ToDouble(value), 2, defaultToBinaryPrefix);
+                    case "gb":
+                        return ConvertToBytes(Convert.ToDouble(value), 3, defaultToBinaryPrefix);
+                    case "kib":
+                        return ConvertToBytes(Convert.ToDouble(value), 1, true);
+                    case "mib":
+                        return ConvertToBytes(Convert.ToDouble(value), 2, true);
+                    case "gib":
+                        return ConvertToBytes(Convert.ToDouble(value), 3, true);
+                    default:
+                        return (Int64)value;
                 }
             }
             return 0;
         }
 
-        private static long ConvertToBytes(double value, int power)
+        private static Int64 ConvertToBytes(Double value, Int32 power, Boolean binaryPrefix)
         {
-            var multiplier = Math.Pow(1024, power);
+            var prefix = binaryPrefix ? 1024 : 1000;
+            var multiplier = Math.Pow(prefix, power);
             var result = value * multiplier;
 
             return Convert.ToInt64(result);
