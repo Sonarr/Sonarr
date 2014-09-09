@@ -5,12 +5,15 @@ using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Http
 {
+    [Obsolete("Use IHttpClient")]
     public interface IHttpProvider
     {
         string DownloadString(string url);
         string DownloadString(string url, string username, string password);
     }
 
+
+    [Obsolete("Use HttpProvider")]
     public class HttpProvider : IHttpProvider
     {
         private readonly Logger _logger;
