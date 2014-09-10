@@ -8,6 +8,7 @@ require.config({
         'handlebars'              : 'Shared/Shims/handlebars',
         'handlebars.helpers'      : 'JsLibraries/handlebars.helpers',
         'bootstrap'               : 'JsLibraries/bootstrap',
+        'bootstrap.tagsinput'     : 'JsLibraries/bootstrap.tagsinput',
         'backbone.deepmodel'      : 'JsLibraries/backbone.deep.model',
         'backbone.pageable'       : 'JsLibraries/backbone.pageable',
         'backbone.validation'     : 'JsLibraries/backbone.validation',
@@ -68,6 +69,13 @@ require.config({
             deps:
                 [
                     'jquery'
+                ]
+        },
+        'bootstrap.tagsinput' : {
+            deps:
+                [
+                    'bootstrap',
+                    'typeahead'
                 ]
         },
         backstrech            : {

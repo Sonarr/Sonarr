@@ -10,7 +10,8 @@ define([
     'Mixins/AsModelBoundView',
     'Mixins/AsValidatedView',
     'Mixins/AsEditModalView',
-    'Form/FormBuilder'
+    'Form/FormBuilder',
+    'Mixins/TagInput'
 ], function (_, vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
     var view = Marionette.ItemView.extend({
@@ -18,7 +19,8 @@ define([
 
         ui: {
             onDownloadToggle : '.x-on-download',
-            onUpgradeSection : '.x-on-upgrade'
+            onUpgradeSection : '.x-on-upgrade',
+            tags             : '.x-tags'
         },
 
         events: {
@@ -34,6 +36,11 @@ define([
 
         onRender: function () {
             this._onDownloadChanged();
+
+            this.ui.tags.tagInput({
+                model    : this.model,
+                property : 'tags'
+            });
         },
 
         _onAfterSave: function () {
