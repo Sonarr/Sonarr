@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             recent.Should().NotBeEmpty();
             recent.Should().OnlyContain(c => c.Hash.IsNotNullOrWhiteSpace());
-            recent.Should().OnlyContain(c => c.FileName.EndsWith("zip"));
+            recent.Should().OnlyContain(c => c.FileName.StartsWith("http://update.nzbdrone.com/"));
             recent.Should().OnlyContain(c => c.ReleaseDate.Year == 2014);
             recent.Should().OnlyContain(c => c.Changes.New != null);
             recent.Should().OnlyContain(c => c.Changes.Fixed != null);
