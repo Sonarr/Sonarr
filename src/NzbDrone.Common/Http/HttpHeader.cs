@@ -50,5 +50,21 @@ namespace NzbDrone.Common.Http
                 this["Content-Type"] = value;
             }
         }
+
+        public string Accept
+        {
+            get
+            {
+                if (!ContainsKey("Accept"))
+                {
+                    return null;
+                }
+                return this["Accept"].ToString();
+            }
+            set
+            {
+                this["Accept"] = value;
+            }
+        }
     }
 }

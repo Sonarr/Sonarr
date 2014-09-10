@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DataAugmentation.Xem.Model;
-using NzbDrone.Core.Rest;
-using RestSharp;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {
@@ -20,34 +19,32 @@ namespace NzbDrone.Core.DataAugmentation.Xem
     public class XemProxy : IXemProxy
     {
         private readonly Logger _logger;
+        private readonly IHttpClient _httpClient;
 
         private const string XEM_BASE_URL = "http://thexem.de/map/";
 
         private static readonly string[] IgnoredErrors = { "no single connection", "no show with the tvdb_id" };
+        private HttpRequestBuilder _xemRequestBuilder;
 
 
-        public XemProxy(Logger logger)
+        public XemProxy(Logger logger, IHttpClient httpClient)
         {
             _logger = logger;
+            _httpClient = httpClient;
+
+            _xemRequestBuilder = new HttpRequestBuilder(XEM_BASE_URL)
+            {
+                PostProcess = r => r.UriBuilder.SetQueryParam("origin", "tvdb")
+            };
         }
 
-
-        private static RestRequest BuildRequest(string resource)
-        {
-            var req = new RestRequest(resource, Method.GET);
-            req.AddParameter("origin", "tvdb");
-            return req;
-        }
 
         public List<int> GetXemSeriesIds()
         {
             _logger.Debug("Fetching Series IDs from");
 
-            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
-
-            var request = BuildRequest("havemap");
-
-            var response = restClient.ExecuteAndValidate<XemResult<List<int>>>(request);
+            var request = _xemRequestBuilder.Build("/havemap");
+            var response = _httpClient.Get<XemResult<List<int>>>(request).Resource;
             CheckForFailureResult(response);
 
             return response.Data.ToList();
@@ -57,13 +54,11 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             _logger.Debug("Fetching Mappings for: {0}", id);
 
-            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
-            var request = BuildRequest("all");
-            request.AddParameter("id", id);
+            var request = _xemRequestBuilder.Build("/all");
+            request.UriBuilder.SetQueryParam("id", id);
 
-            var response = restClient.ExecuteAndValidate<XemResult<List<XemSceneTvdbMapping>>>(request);
-            CheckForFailureResult(response);
+            var response = _httpClient.Get<XemResult<List<XemSceneTvdbMapping>>>(request).Resource;
 
             return response.Data.Where(c => c.Scene != null).ToList();
         }
@@ -71,14 +66,11 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         public List<SceneMapping> GetSceneTvdbNames()
         {
             _logger.Debug("Fetching alternate names");
-            var restClient = RestClientFactory.BuildClient(XEM_BASE_URL);
 
-            var request = BuildRequest("allNames");
-            request.AddParameter("origin", "tvdb");
-            request.AddParameter("seasonNumbers", true);
+            var request = _xemRequestBuilder.Build("/allNames");
+            request.UriBuilder.SetQueryParam("seasonNumbers", true);
 
-            var response = restClient.ExecuteAndValidate<XemResult<Dictionary<Int32, List<JObject>>>>(request);
-            CheckForFailureResult(response);
+            var response = _httpClient.Get<XemResult<Dictionary<Int32, List<JObject>>>>(request).Resource;
 
             var result = new List<SceneMapping>();
 

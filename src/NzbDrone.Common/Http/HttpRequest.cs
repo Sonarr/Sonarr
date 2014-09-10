@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Http
 {
@@ -8,11 +7,21 @@ namespace NzbDrone.Common.Http
     {
         public HttpRequest(string url)
         {
-            Url = new Uri(url);
+            UriBuilder = new UriBuilder(url);
             Headers = new HttpHeader();
+            Headers.Accept = "application/json";
         }
 
-        public Uri Url { get; private set; }
+        public UriBuilder UriBuilder { get; private set; }
+
+        public Uri Url
+        {
+            get
+            {
+                return UriBuilder.Uri;
+            }
+        }
+
         public HttpMethod Method { get; set; }
         public HttpHeader Headers { get; set; }
         public string Body { get; set; }
@@ -29,15 +38,4 @@ namespace NzbDrone.Common.Http
             return string.Format("Req: [{0}] {1} {2} {3}", Method, Url, Environment.NewLine, Body);
         }
     }
-
-    public class JsonHttpRequest : HttpRequest
-    {
-        public JsonHttpRequest(string url, object body)
-            : base(url)
-        {
-            Headers.ContentType = "application/json";
-            Body = body.ToJson();
-        }
-    }
-
 }

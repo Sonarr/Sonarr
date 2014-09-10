@@ -58,10 +58,6 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveService.cs" />
@@ -129,6 +125,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Http\HttpRequestBuilder.cs" />
+    <Compile Include="Http\UriExtensions.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
