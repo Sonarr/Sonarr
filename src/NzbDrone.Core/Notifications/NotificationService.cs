@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications
@@ -65,6 +67,25 @@ namespace NzbDrone.Core.Notifications
                                     qualityString);
         }
 
+        private bool HandleTag(ProviderDefinition definition, Series series)
+        {
+            var notificationDefinition = (NotificationDefinition) definition;
+
+            if (notificationDefinition.Tags.Empty())
+            {
+                return true;
+            }
+
+            if (notificationDefinition.Tags.Intersect(series.Tags).Any())
+            {
+                return true;
+            }
+
+            //TODO: this message could be more clear
+            _logger.Debug("{0} does not have any tags that match {1}'s tags", notificationDefinition.Name, series.Title);
+            return false;
+        }
+
         public void Handle(EpisodeGrabbedEvent message)
         {
             var messageBody = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
@@ -73,6 +94,7 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
+                    if (!HandleTag(notification.Definition, message.Episode.Series)) continue;
                     notification.OnGrab(messageBody);
                 }
 
@@ -95,6 +117,8 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
+                    if (!HandleTag(notification.Definition, message.Episode.Series)) continue;
+
                     if (downloadMessage.OldFiles.Any() && !((NotificationDefinition) notification.Definition).OnUpgrade)
                     {
                         continue;
@@ -116,6 +140,7 @@ namespace NzbDrone.Core.Notifications
             {
                 try
                 {
+                    if (!HandleTag(notification.Definition, message.Series)) continue;
                     notification.AfterRename(message.Series);
                 }
 
