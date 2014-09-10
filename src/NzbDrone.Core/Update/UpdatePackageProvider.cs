@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Update
     public interface IUpdatePackageProvider
     {
         UpdatePackage GetLatestUpdate(string branch, Version currentVersion);
-        List<UpdatePackage> GetRecentUpdates(string branch);
+        List<UpdatePackage> GetRecentUpdates(string branch, int majorVersion);
     }
 
     public class UpdatePackageProvider : IUpdatePackageProvider
@@ -32,13 +32,13 @@ namespace NzbDrone.Core.Update
             return update.UpdatePackage;
         }
 
-        public List<UpdatePackage> GetRecentUpdates(string branch)
+        public List<UpdatePackage> GetRecentUpdates(string branch, int majorVersion)
         {
             var restClient = RestClientFactory.BuildClient(Services.RootUrl);
 
             var request = new RestRequest("/v1/update/{branch}/changes");
 
-            request.AddParameter("majorVersion", BuildInfo.Version.Major);
+            request.AddParameter("majorVersion", majorVersion);
             request.AddParameter("os", OsInfo.Os.ToString().ToLowerInvariant());
             request.AddUrlSegment("branch", branch);
 
