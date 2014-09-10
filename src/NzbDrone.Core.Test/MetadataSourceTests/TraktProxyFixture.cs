@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("Mr. D", "Mr. D")]
         [TestCase("Rob & Big", "Rob and Big")]
         [TestCase("M*A*S*H", "M*A*S*H")]
+        [TestCase("imdb:tt0436992", "Doctor Who (2005)")]
+        [TestCase("tvdb:78804", "Doctor Who (2005)")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
