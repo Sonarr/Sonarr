@@ -25,6 +25,7 @@ namespace NzbDrone.Common.Http
         {
             _logger = logger;
             _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
+            ServicePointManager.DefaultConnectionLimit = 12;
         }
 
         public HttpResponse Execute(HttpRequest request)
@@ -41,12 +42,13 @@ namespace NzbDrone.Common.Http
             webRequest.Credentials = request.NetworkCredential;
             webRequest.Method = request.Method.ToString();
             webRequest.KeepAlive = false;
-            webRequest.ServicePoint.Expect100Continue = false;
+
+            var stopWatch = Stopwatch.StartNew();
 
             if (!request.Body.IsNullOrWhiteSpace())
             {
                 var bytes = new byte[request.Body.Length * sizeof(char)];
-                System.Buffer.BlockCopy(request.Body.ToCharArray(), 0, bytes, 0, bytes.Length);
+                Buffer.BlockCopy(request.Body.ToCharArray(), 0, bytes, 0, bytes.Length);
 
                 webRequest.ContentLength = bytes.Length;
                 using (var writeStream = webRequest.GetRequestStream())
@@ -54,7 +56,6 @@ namespace NzbDrone.Common.Http
                     writeStream.Write(bytes, 0, bytes.Length);
                 }
             }
-
 
             HttpWebResponse httpWebResponse;
 
@@ -80,11 +81,10 @@ namespace NzbDrone.Common.Http
                 }
             }
 
+            stopWatch.Stop();
+
             var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), content, httpWebResponse.StatusCode);
-
-
-            _logger.Trace(response);
-
+            _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
 
             if (!request.SuppressHttpError && response.HasHttpError)
             {
