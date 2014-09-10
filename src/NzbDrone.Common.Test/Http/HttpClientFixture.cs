@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
@@ -56,6 +57,17 @@ namespace NzbDrone.Common.Test.Http
             var exception = Assert.Throws<HttpException>(() => Subject.Get<HttpBinResource>(request));
 
             exception.Response.StatusCode.Should().Be(statusCode);
+        }
+
+
+        [TestCase(HttpStatusCode.Moved)]
+        [TestCase(HttpStatusCode.MovedPermanently)]
+        public void should_not_follow_redirects_when_not_in_production(HttpStatusCode statusCode)
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/status/" + (int)statusCode);
+
+             Assert.Throws<Exception>(() => Subject.Get<HttpBinResource>(request));
+            
         }
     }
 

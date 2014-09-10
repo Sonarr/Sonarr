@@ -43,6 +43,11 @@ namespace NzbDrone.Common.Http
             webRequest.Method = request.Method.ToString();
             webRequest.KeepAlive = false;
 
+            if (!RuntimeInfoBase.IsProduction)
+            {
+                webRequest.AllowAutoRedirect = false;
+            }
+
             var stopWatch = Stopwatch.StartNew();
 
             if (!request.Body.IsNullOrWhiteSpace())
@@ -85,6 +90,13 @@ namespace NzbDrone.Common.Http
 
             var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), content, httpWebResponse.StatusCode);
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
+
+            if (!RuntimeInfoBase.IsProduction &&
+                (response.StatusCode == HttpStatusCode.Moved ||
+                response.StatusCode == HttpStatusCode.MovedPermanently))
+            {
+                throw new Exception("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
+            }
 
             if (!request.SuppressHttpError && response.HasHttpError)
             {
