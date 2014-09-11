@@ -18,11 +18,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class Sabnzbd : DownloadClientBase<SabnzbdSettings>
     {
-        private readonly IHttpProvider _httpProvider;
         private readonly ISabnzbdProxy _proxy;
+        private readonly IHttpClient _httpClient;
 
         public Sabnzbd(ISabnzbdProxy proxy,
-                       IHttpProvider httpProvider,
+                       IHttpClient httpClient,
                        IConfigService configService,
                        IDiskProvider diskProvider,
                        IParsingService parsingService,
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             : base(configService, diskProvider, parsingService, logger)
         {
             _proxy = proxy;
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
         }
 
         public override DownloadProtocol Protocol
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var category = Settings.TvCategory;
             var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
-            using (var nzb = _httpProvider.DownloadStream(url))
+            using (var nzb = _httpClient.Get(new HttpRequest(url)).GetStream())
             {
                 _logger.Info("Adding report [{0}] to the queue.", title);
                 var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
@@ -401,7 +401,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             return null;
         }
-        
+
         private ValidationFailure TestGlobalConfig()
         {
             var config = _proxy.GetConfig(Settings);

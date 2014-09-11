@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Rest;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -16,12 +16,27 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
     [IntegrationTest]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
+
+
+        [SetUp]
+        public void Setup()
+        {
+            UseRealHttp();
+        }
+
         [TestCase("The Simpsons", "The Simpsons")]
         [TestCase("South Park", "South Park")]
         [TestCase("Franklin & Bash", "Franklin & Bash")]
         [TestCase("Mr. D", "Mr. D")]
         [TestCase("Rob & Big", "Rob and Big")]
         [TestCase("M*A*S*H", "M*A*S*H")]
+        [TestCase("imdb:tt0436992", "Doctor Who (2005)")]
+        [TestCase("imdb:0436992", "Doctor Who (2005)")]
+        [TestCase("IMDB:0436992", "Doctor Who (2005)")]
+        [TestCase("IMDB: 0436992 ", "Doctor Who (2005)")]
+        [TestCase("tvdb:78804", "Doctor Who (2005)")]
+        [TestCase("TVDB:78804", "Doctor Who (2005)")]
+        [TestCase("TVDB: 78804 ", "Doctor Who (2005)")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
@@ -52,7 +67,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [Test]
         public void getting_details_of_invalid_series()
         {
-            Assert.Throws<RestException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
+            Assert.Throws<HttpException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
 
             ExceptionVerification.ExpectedWarns(1);
         }

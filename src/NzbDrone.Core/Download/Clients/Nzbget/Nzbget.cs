@@ -18,10 +18,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
     public class Nzbget : DownloadClientBase<NzbgetSettings>
     {
         private readonly INzbgetProxy _proxy;
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
 
         public Nzbget(INzbgetProxy proxy,
-                      IHttpProvider httpProvider,
+                      IHttpClient httpClient,
                       IConfigService configService,
                       IDiskProvider diskProvider,
                       IParsingService parsingService,
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             : base(configService, diskProvider, parsingService, logger)
         {
             _proxy = proxy;
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
         }
 
         public override DownloadProtocol Protocol
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             _logger.Info("Adding report [{0}] to the queue.", title);
 
-            using (var nzb = _httpProvider.DownloadStream(url))
+            using (var nzb = _httpClient.Get(new HttpRequest(url)).GetStream())
             {
                 _logger.Info("Adding report [{0}] to the queue.", title);
                 var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var totalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
                 var pausedSize = MakeInt64(item.PausedSizeHi, item.PausedSizeLo);
                 var remainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
-                
+
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
 
                 var queueItem = new DownloadClientItem();
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
 
             var historyItems = new List<DownloadClientItem>();
-            var successStatus = new[] {"SUCCESS", "NONE"};
+            var successStatus = new[] { "SUCCESS", "NONE" };
 
             foreach (var item in history)
             {
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            Dictionary<String,String> config = null;
+            Dictionary<String, String> config = null;
             NzbgetCategory category = null;
             try
             {
@@ -270,7 +270,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 if (name == null) yield break;
 
                 var destDir = config.GetValueOrDefault("Category" + i + ".DestDir");
-                
+
                 if (destDir.IsNullOrWhiteSpace())
                 {
                     var mainDir = config.GetValueOrDefault("MainDir");

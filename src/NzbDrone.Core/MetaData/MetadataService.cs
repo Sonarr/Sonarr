@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Metadata
         private readonly IMediaFileService _mediaFileService;
         private readonly IEpisodeService _episodeService;
         private readonly IDiskProvider _diskProvider;
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
         private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Metadata
                                IMediaFileService mediaFileService,
                                IEpisodeService episodeService,
                                IDiskProvider diskProvider,
-                               IHttpProvider httpProvider,
+                               IHttpClient httpClient,
                                IConfigService configService,
                                IEventAggregator eventAggregator,
                                Logger logger)
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Metadata
             _mediaFileService = mediaFileService;
             _episodeService = episodeService;
             _diskProvider = diskProvider;
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
             _configService = configService;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Metadata
         {
             try
             {
-                _httpProvider.DownloadFile(url, path);
+                _httpClient.DownloadFile(url, path);
                 SetFilePermissions(path);
             }
             catch (WebException e)

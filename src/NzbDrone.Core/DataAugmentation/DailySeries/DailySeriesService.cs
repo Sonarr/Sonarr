@@ -1,44 +1,30 @@
-using NzbDrone.Core.Tv;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Core.DataAugmentation.DailySeries
 {
     public interface IDailySeriesService
     {
-        void UpdateDailySeries();
         bool IsDailySeries(int tvdbid);
     }
 
     public class DailySeriesService : IDailySeriesService
     {
-        //TODO: add timer command
-
         private readonly IDailySeriesDataProxy _proxy;
-        private readonly ISeriesService _seriesService;
+        private readonly ICached<List<int>> _cache;
 
-        public DailySeriesService(IDailySeriesDataProxy proxy, ISeriesService seriesService)
+        public DailySeriesService(IDailySeriesDataProxy proxy, ICacheManager cacheManager)
         {
             _proxy = proxy;
-            _seriesService = seriesService;
-        }
-
-        public void UpdateDailySeries()
-        {
-            var dailySeries = _proxy.GetDailySeriesIds();
-
-            foreach (var tvdbId in dailySeries)
-            {
-                var series = _seriesService.FindByTvdbId(tvdbId);
-
-                if (series != null)
-                {
-                    _seriesService.SetSeriesType(series.Id, SeriesTypes.Daily);
-                }
-            }
+            _cache = cacheManager.GetCache<List<int>>(GetType());
         }
 
         public bool IsDailySeries(int tvdbid)
         {
-            return _proxy.IsDailySeries(tvdbid);
+            var dailySeries = _cache.Get("all", () => _proxy.GetDailySeriesIds().ToList(), TimeSpan.FromHours(1));
+            return dailySeries.Any(i => i == tvdbid);
         }
     }
 }

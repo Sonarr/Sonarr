@@ -1,8 +1,5 @@
-﻿using NLog;
-using NzbDrone.Common;
-using NzbDrone.Common.Disk;
+﻿using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.MediaCover
 {
@@ -14,14 +11,12 @@ namespace NzbDrone.Core.MediaCover
     public class CoverAlreadyExistsSpecification : ICoverExistsSpecification
     {
         private readonly IDiskProvider _diskProvider;
-        private readonly IHttpProvider _httpProvider;
-        private readonly Logger _logger;
+        private readonly IHttpClient _httpClient;
 
-        public CoverAlreadyExistsSpecification(IDiskProvider diskProvider, IHttpProvider httpProvider, Logger logger)
+        public CoverAlreadyExistsSpecification(IDiskProvider diskProvider, IHttpClient httpClient)
         {
             _diskProvider = diskProvider;
-            _httpProvider = httpProvider;
-            _logger = logger;
+            _httpClient = httpClient;
         }
 
         public bool AlreadyExists(string url, string path)
@@ -31,22 +26,9 @@ namespace NzbDrone.Core.MediaCover
                 return false;
             }
 
-            var headers = _httpProvider.GetHeader(url);
-
-            string sizeString;
-
-            if (headers.TryGetValue(HttpProvider.CONTENT_LENGTH_HEADER, out sizeString))
-            {
-                int size;
-                int.TryParse(sizeString, out size);
-                var fileSize = _diskProvider.GetFileSize(path);
-
-                return fileSize == size;
-            }
-
-            _logger.Warn("Couldn't find content-length header {0}", headers.ToJson());
-
-            return false;
+            var headers = _httpClient.Head(new HttpRequest(url)).Headers;
+            var fileSize = _diskProvider.GetFileSize(path);
+            return fileSize == headers.ContentLength;
         }
     }
 }

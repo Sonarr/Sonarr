@@ -8,13 +8,11 @@ namespace NzbDrone.Test.Common
 {
     public abstract class LoggingTest
     {
-        protected static Logger TestLogger;
+        protected static readonly Logger TestLogger = LogManager.GetLogger("TestLogger");
 
         protected static void InitLogging()
         {
             new StartupContext();
-
-            TestLogger = LogManager.GetLogger("TestLogger");
 
             if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
             {
@@ -44,8 +42,6 @@ namespace NzbDrone.Test.Common
         [TearDown]
         public void LoggingDownBase()
         {
-
-
             //can't use because of a bug in mono with 2.6.2,
             //https://bugs.launchpad.net/nunitv2/+bug/1076932
             if (BuildInfo.IsDebug && TestContext.CurrentContext.Result.State == TestState.Success)

@@ -26,13 +26,5 @@ namespace NzbDrone.Common.Test
             Assert.Throws<ArgumentException>(() => Subject.DownloadString(url));
             ExceptionVerification.ExpectedWarns(1);
         }
-
-
-        [Test]
-        public void should_get_headers()
-        {
-            Subject.GetHeader("http://www.google.com").Should().NotBeEmpty();
-        }
     }
-
 }
