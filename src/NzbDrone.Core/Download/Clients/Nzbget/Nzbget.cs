@@ -12,6 +12,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -24,8 +25,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                       IConfigService configService,
                       IDiskProvider diskProvider,
                       IParsingService parsingService,
+                      IRemotePathMappingService remotePathMappingService,
                       Logger logger)
-            : base(httpClient, configService, diskProvider, parsingService, logger)
+            : base(httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -145,7 +147,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.DownloadClientId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
-                historyItem.OutputPath = item.DestDir;
+                historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, item.DestDir);
                 historyItem.Category = item.Category;
                 historyItem.Message = String.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
                 historyItem.Status = DownloadItemStatus.Completed;
@@ -172,31 +174,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            Dictionary<String, String> config = null;
-            NzbgetCategory category = null;
-            try
-            {
-                if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-                {
-                    config = _proxy.GetConfig(Settings);
-                    category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
-                }
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.ErrorException(ex.Message, ex);
-                yield break;
-            }
+            MigrateLocalCategoryPath();
 
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
                 if (downloadClientItem.Category == Settings.TvCategory)
                 {
-                    if (category != null)
-                    {
-                        RemapStorage(downloadClientItem, category.DestDir, Settings.TvCategoryLocalPath);
-                    }
-
                     downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
                     if (downloadClientItem.RemoteEpisode == null) continue;
 
@@ -230,14 +213,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (category != null)
             {
-                if (Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-                {
-                    status.OutputRootFolders = new List<String> { category.DestDir };
-                }
-                else
-                {
-                    status.OutputRootFolders = new List<String> { Settings.TvCategoryLocalPath };
-                }
+                status.OutputRootFolders = new List<String> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.DestDir) };
             }
 
             return status;
@@ -279,11 +255,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             failures.AddIfNotNull(TestConnection());
             failures.AddIfNotNull(TestCategory());
-
-            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-            {
-                failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
-            }
         }
 
         private ValidationFailure TestConnection()
@@ -332,6 +303,36 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             result = (result << 32) | (Int64)low;
 
             return result;
+        }
+
+        // TODO: Remove around January 2015, this code moves the settings to the RemotePathMappingService.
+        private void MigrateLocalCategoryPath()
+        {
+            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
+            {
+                try
+                {
+                    _logger.Debug("Has legacy TvCategoryLocalPath, trying to migrate to RemotePathMapping list.");
+
+                    var config = _proxy.GetConfig(Settings);
+                    var category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+
+                    if (category != null)
+                    {
+                        var localPath = Settings.TvCategoryLocalPath;
+                        Settings.TvCategoryLocalPath = null;
+
+                        _remotePathMappingService.MigrateLocalCategoryPath(Definition.Id, Settings, Settings.Host, category.DestDir, localPath);
+
+                        _logger.Info("Discovered Local Category Path for {0}, the setting was automatically moved to the Remote Path Mapping table.", Definition.Name);
+                    }
+                }
+                catch (DownloadClientException ex)
+                {
+                    _logger.ErrorException("Unable to migrate local category path", ex);
+                    throw;
+                }
+            }
         }
     }
 }

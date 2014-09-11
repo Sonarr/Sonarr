@@ -13,6 +13,7 @@ using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -90,11 +91,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<NzbgetSettings>()))
                 .Returns(configItems);
-        }
-
-        protected void GivenMountPoint(String mountPath)
-        {
-            (Subject.Definition.Settings as NzbgetSettings).TvCategoryLocalPath = mountPath;
         }
 
         protected void GivenFailedDownload()
@@ -251,7 +247,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void should_return_status_with_mounted_outputdir()
         {
-            GivenMountPoint(@"O:\mymount".AsOsAgnostic());
+            Mocker.GetMock<IRemotePathMappingService>()
+                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", "/remote/mount/tv"))
+                .Returns(@"O:\mymount".AsOsAgnostic());
 
             var result = Subject.GetStatus();
 
@@ -263,7 +261,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void should_remap_storage_if_mounted()
         {
-            GivenMountPoint(@"O:\mymount".AsOsAgnostic());
+            Mocker.GetMock<IRemotePathMappingService>()
+                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", "/remote/mount/tv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE"))
+                .Returns(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
 
             GivenQueue(null);
             GivenHistory(_completed);

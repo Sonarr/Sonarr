@@ -11,6 +11,8 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {
@@ -29,13 +31,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
             Mocker.GetMock<IParsingService>()
                 .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), null))
-                .Returns(CreateRemoteEpisode());
-
+                .Returns(() => CreateRemoteEpisode());
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
 
+            Mocker.GetMock<IRemotePathMappingService>()
+                .Setup(v => v.RemapRemoteToLocal(It.IsAny<String>(), It.IsAny<String>()))
+                .Returns<String, String>((h,r) => r);
         }
 
         protected virtual RemoteEpisode CreateRemoteEpisode()

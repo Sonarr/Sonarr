@@ -12,6 +12,7 @@ using NzbDrone.Core.Configuration;
 using NLog;
 using FluentValidation.Results;
 using NzbDrone.Core.Validation;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download
 {
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Download
         protected readonly IConfigService _configService;
         protected readonly IDiskProvider _diskProvider;
         protected readonly IParsingService _parsingService;
+        protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
 
         public Type ConfigContract
@@ -49,11 +51,12 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        protected DownloadClientBase(IConfigService configService, IDiskProvider diskProvider, IParsingService parsingService, Logger logger)
+        protected DownloadClientBase(IConfigService configService, IDiskProvider diskProvider, IParsingService parsingService, IRemotePathMappingService remotePathMappingService, Logger logger)
         {
             _configService = configService;
             _diskProvider = diskProvider;
             _parsingService = parsingService;
+            _remotePathMappingService = remotePathMappingService;
             _logger = logger;
         }
 
@@ -82,23 +85,6 @@ namespace NzbDrone.Core.Download
             if (remoteEpisode.Series == null) return null;
 
             return remoteEpisode;
-        }
-
-        protected void RemapStorage(DownloadClientItem downloadClientItem, String remotePath, String localPath)
-        {
-            if (downloadClientItem.OutputPath.IsNullOrWhiteSpace() || localPath.IsNullOrWhiteSpace())
-            {
-                return;
-            }
-
-            remotePath = remotePath.TrimEnd('/', '\\');
-            localPath = localPath.TrimEnd('/', '\\');
-
-            if (downloadClientItem.OutputPath.StartsWith(remotePath))
-            {
-                downloadClientItem.OutputPath = localPath + downloadClientItem.OutputPath.Substring(remotePath.Length);
-                downloadClientItem.OutputPath = downloadClientItem.OutputPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-            }
         }
 
         public ValidationResult Test()

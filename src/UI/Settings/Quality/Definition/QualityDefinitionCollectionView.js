@@ -10,7 +10,7 @@ define(
         return Marionette.CompositeView.extend({
             template: 'Settings/Quality/Definition/QualityDefinitionCollectionTemplate',
             
-            itemViewContainer: ".x-rows",
+            itemViewContainer: '.x-rows',
             
             itemView: QualityDefinitionView
         });

@@ -14,6 +14,7 @@ using NzbDrone.Core.MediaFiles;
 using NLog;
 using Omu.ValueInjecter;
 using FluentValidation.Results;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
@@ -27,8 +28,9 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                                IConfigService configService,
                                IDiskProvider diskProvider,
                                IParsingService parsingService,
+                               IRemotePathMappingService remotePathMappingService,
                                Logger logger)
-            : base(configService, diskProvider, parsingService, logger)
+            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
             _httpClient = httpClient;

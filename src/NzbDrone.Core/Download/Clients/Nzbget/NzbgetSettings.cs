@@ -49,16 +49,16 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(4, Label = "Category", Type = FieldType.Textbox)]
         public String TvCategory { get; set; }
 
-        [FieldDefinition(5, Label = "Category Local Path", Type = FieldType.Textbox, Advanced = true, HelpText = "Local path to the category output dir. Useful if Nzbget runs on another computer.")]
+        // TODO: Remove around January 2015, this setting was superceded by the RemotePathMappingService, but has to remain for a while to properly migrate.
         public String TvCategoryLocalPath { get; set; }
 
-        [FieldDefinition(6, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
+        [FieldDefinition(5, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
         public Int32 RecentTvPriority { get; set; }
 
-        [FieldDefinition(7, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
+        [FieldDefinition(6, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public Int32 OlderTvPriority { get; set; }
 
-        [FieldDefinition(8, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
 
         public ValidationResult Validate()

@@ -197,6 +197,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
+    <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
     <Compile Include="OrganizerTests\CleanFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTests\FilterFixture.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />

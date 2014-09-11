@@ -15,6 +15,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
 using NLog;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download
 {
@@ -24,11 +25,12 @@ namespace NzbDrone.Core.Download
         protected readonly IHttpClient _httpClient;
 
         protected UsenetClientBase(IHttpClient httpClient,
-                                    IConfigService configService,
-                                    IDiskProvider diskProvider,
-                                    IParsingService parsingService,
-                                    Logger logger)
-            : base(configService, diskProvider, parsingService, logger)
+                                   IConfigService configService,
+                                   IDiskProvider diskProvider,
+                                   IParsingService parsingService,
+                                   IRemotePathMappingService remotePathMappingService,
+                                   Logger logger)
+            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
         {
             _httpClient = httpClient;
         }
