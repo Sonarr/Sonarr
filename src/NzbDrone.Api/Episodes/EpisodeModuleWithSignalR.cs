@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using NzbDrone.Api.EpisodeFiles;
+using System.Linq;
+using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
@@ -70,6 +73,13 @@ namespace NzbDrone.Api.Episodes
             }
 
             return resource;
+        }
+
+        protected override List<EpisodeResource> ToListResource<TModel>(IEnumerable<TModel> modelList)
+        {
+            var resources =  base.ToListResource(modelList);
+
+            return resources.LoadSubtype<EpisodeResource, SeriesResource, Core.Tv.Series>(e => e.SeriesId, _seriesService.GetSeries).ToList();
         }
 
         public void Handle(EpisodeGrabbedEvent message)

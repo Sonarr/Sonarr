@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using NzbDrone.Api.EpisodeFiles;
 using NzbDrone.Api.REST;
+using NzbDrone.Api.Series;
 
 namespace NzbDrone.Api.Episodes
 {
@@ -27,9 +28,7 @@ namespace NzbDrone.Api.Episodes
         public DateTime? EndTime { get; set; }
         public DateTime? GrabDate { get; set; }
         public String SeriesTitle { get; set; }
-
-        //I'd like to replace this with SeriesResource, but LoadSubType would need to be reworked to support that
-        public Core.Tv.Series Series { get; set; }
+        public SeriesResource Series { get; set; }
 
         //Hiding this so people don't think its usable (only used to set the initial state)
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
