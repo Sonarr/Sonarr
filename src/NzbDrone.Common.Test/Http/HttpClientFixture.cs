@@ -50,7 +50,7 @@ namespace NzbDrone.Common.Test.Http
         [TestCase(HttpStatusCode.InternalServerError)]
         [TestCase(HttpStatusCode.ServiceUnavailable)]
         [TestCase(HttpStatusCode.BadGateway)]
-        public void should_throw_on_none_success_error_codes(HttpStatusCode statusCode)
+        public void should_throw_on_unsuccessful_status_codes(HttpStatusCode statusCode)
         {
             var request = new HttpRequest("http://eu.httpbin.org/status/" + (int)statusCode);
 

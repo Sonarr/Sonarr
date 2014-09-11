@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Http
         {
             var query = uriBuilder.Query;
 
-            if (!query.IsNullOrWhiteSpace())
+            if (query.IsNotNullOrWhiteSpace())
             {
                 query += "&";
             }
