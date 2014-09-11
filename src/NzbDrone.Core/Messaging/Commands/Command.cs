@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Messaging.Commands
         public CommandStatus State { get; private set; }
         public DateTime StateChangeTime { get; private set; }
 
-        public virtual bool SendUpdatesToClient
+        public virtual Boolean SendUpdatesToClient
         {
             get
             {
@@ -31,10 +31,11 @@ namespace NzbDrone.Core.Messaging.Commands
             }
         }
 
+        public Boolean Manual { get; set; }
         public Exception Exception { get; private set; }
-        public string Message { get; private set; }
+        public String Message { get; private set; }
 
-        public string Name { get; private set; }
+        public String Name { get; private set; }
         public DateTime? LastExecutionTime { get; set; }
 
         protected Command()
@@ -43,6 +44,7 @@ namespace NzbDrone.Core.Messaging.Commands
             StateChangeTime = DateTime.UtcNow;
             State = CommandStatus.Pending;
             _stopWatch = new StopWatch();
+            Manual = false;
 
             lock (Mutex)
             {

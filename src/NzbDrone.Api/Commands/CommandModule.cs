@@ -21,7 +21,10 @@ namespace NzbDrone.Api.Commands
         private readonly IContainer _container;
         private readonly ITrackCommands _trackCommands;
 
-        public CommandModule(ICommandExecutor commandExecutor,IBroadcastSignalRMessage signalRBroadcaster, IContainer container, ITrackCommands trackCommands)
+        public CommandModule(ICommandExecutor commandExecutor,
+                             IBroadcastSignalRMessage signalRBroadcaster,
+                             IContainer container,
+                             ITrackCommands trackCommands)
             : base(signalRBroadcaster)
         {
             _commandExecutor = commandExecutor;
@@ -48,6 +51,7 @@ namespace NzbDrone.Api.Commands
                         .Equals(commandResource.Name, StringComparison.InvariantCultureIgnoreCase));
 
             dynamic command = Request.Body.FromJson(commandType);
+            command.Manual = true;
 
             var trackedCommand = (Command)_commandExecutor.PublishCommandAsync(command);
             return trackedCommand.Id;
