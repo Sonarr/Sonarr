@@ -100,6 +100,7 @@ namespace NzbDrone.Common.Http
 
             if (!request.SuppressHttpError && response.HasHttpError)
             {
+                _logger.Warn("HTTP Error - {0}", response);
                 throw new HttpException(request, response);
             }
 
