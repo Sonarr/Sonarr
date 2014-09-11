@@ -5,13 +5,9 @@ using Moq;
 using NUnit.Framework;
 using FluentAssertions;
 using NzbDrone.Test.Common;
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.UsenetBlackhole;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
@@ -46,7 +42,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
         protected void WithFailedDownload()
         {
-            Mocker.GetMock<IHttpProvider>()
+            Mocker.GetMock<IHttpClient>()
                 .Setup(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new WebException());
         }
@@ -84,7 +80,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             Subject.Download(remoteEpisode);
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_downloadUrl, _filePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_downloadUrl, _filePath), Times.Once());
         }
 
         [Test]
@@ -98,7 +94,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             Subject.Download(remoteEpisode);
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }
 
         [Test]

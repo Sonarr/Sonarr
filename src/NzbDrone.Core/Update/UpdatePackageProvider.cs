@@ -1,50 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Common;
+using NzbDrone.Common.Cloud;
 using NzbDrone.Common.EnvironmentInfo;
-using RestSharp;
-using NzbDrone.Core.Rest;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Update
 {
     public interface IUpdatePackageProvider
     {
         UpdatePackage GetLatestUpdate(string branch, Version currentVersion);
-        List<UpdatePackage> GetRecentUpdates(string branch);
+        List<UpdatePackage> GetRecentUpdates(string branch, int majorVersion);
     }
 
     public class UpdatePackageProvider : IUpdatePackageProvider
     {
+        private readonly IHttpClient _httpClient;
+        private readonly IDroneServicesRequestBuilder _requestBuilder;
+
+        public UpdatePackageProvider(IHttpClient httpClient, IDroneServicesRequestBuilder requestBuilder)
+        {
+            _httpClient = httpClient;
+            _requestBuilder = requestBuilder;
+        }
+
         public UpdatePackage GetLatestUpdate(string branch, Version currentVersion)
         {
-            var restClient = RestClientFactory.BuildClient(Services.RootUrl);
+            var request = _requestBuilder.Build("/update/{branch}");
+            request.UriBuilder.SetQueryParam("version", currentVersion);
+            request.UriBuilder.SetQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant());
+            request.AddSegment("branch", branch);
 
-            var request = new RestRequest("/v1/update/{branch}");
-
-            request.AddParameter("version", currentVersion);
-            request.AddParameter("os", OsInfo.Os.ToString().ToLowerInvariant());
-            request.AddUrlSegment("branch", branch);
-
-            var update = restClient.ExecuteAndValidate<UpdatePackageAvailable>(request);
+            var update = _httpClient.Get<UpdatePackageAvailable>(request).Resource;
 
             if (!update.Available) return null;
 
             return update.UpdatePackage;
         }
 
-        public List<UpdatePackage> GetRecentUpdates(string branch)
+        public List<UpdatePackage> GetRecentUpdates(string branch, int majorVersion)
         {
-            var restClient = RestClientFactory.BuildClient(Services.RootUrl);
+            var request = _requestBuilder.Build("/update/{branch}/changes");
+            request.UriBuilder.SetQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant());
+            request.AddSegment("branch", branch);
 
-            var request = new RestRequest("/v1/update/{branch}/changes");
+            var updates = _httpClient.Get<List<UpdatePackage>>(request);
 
-            request.AddParameter("majorVersion", BuildInfo.Version.Major);
-            request.AddParameter("os", OsInfo.Os.ToString().ToLowerInvariant());
-            request.AddUrlSegment("branch", branch);
-
-            var updates = restClient.ExecuteAndValidate<List<UpdatePackage>>(request);
-
-            return updates;
+            return updates.Resource;
         }
     }
 }

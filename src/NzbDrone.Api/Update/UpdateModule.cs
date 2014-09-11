@@ -9,13 +9,10 @@ namespace NzbDrone.Api.Update
     public class UpdateModule : NzbDroneRestModule<UpdateResource>
     {
         private readonly IRecentUpdateProvider _recentUpdateProvider;
-        private readonly IInstallUpdates _installUpdateService;
 
-        public UpdateModule(IRecentUpdateProvider recentUpdateProvider,
-                            IInstallUpdates installUpdateService)
+        public UpdateModule(IRecentUpdateProvider recentUpdateProvider)
         {
             _recentUpdateProvider = recentUpdateProvider;
-            _installUpdateService = installUpdateService;
             GetResourceAll = GetRecentUpdates;
         }
 

@@ -54,6 +54,9 @@ namespace NzbDrone.Test.Common
                 if (_mocker == null)
                 {
                     _mocker = new AutoMoqer();
+                    _mocker.SetConstant<ICacheManager>(new CacheManager());
+                    _mocker.SetConstant<IStartupContext>(new StartupContext(new string[0]));
+                    _mocker.SetConstant(TestLogger);
                 }
 
                 return _mocker;
@@ -89,11 +92,7 @@ namespace NzbDrone.Test.Common
 
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
 
-            Mocker.SetConstant<ICacheManager>(new CacheManager());
 
-            Mocker.SetConstant(LogManager.GetLogger("TestLogger"));
-
-            Mocker.SetConstant<IStartupContext>(new StartupContext(new string[0]));
 
             LogManager.ReconfigExistingLoggers();
 
@@ -140,7 +139,7 @@ namespace NzbDrone.Test.Common
         {
             if (!OsInfo.IsMono)
             {
-                throw new IgnoreException("linux specific test");
+                throw new IgnoreException("mono specific test");
             }
         }
 

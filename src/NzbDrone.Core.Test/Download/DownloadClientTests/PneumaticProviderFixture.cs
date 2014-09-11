@@ -51,14 +51,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             };
         }
 
-        private void WithExistingFile()
-        {
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(_nzbPath)).Returns(true);
-        }
-
         private void WithFailedDownload()
         {
-            Mocker.GetMock<IHttpProvider>().Setup(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new WebException());
+            Mocker.GetMock<IHttpClient>().Setup(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new WebException());
         }
 
         [Test]
@@ -66,7 +61,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             Subject.Download(_remoteEpisode);
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
         }
 
 
@@ -102,7 +97,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
             Subject.Download(_remoteEpisode);
 
-            Mocker.GetMock<IHttpProvider>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }
     }
 }

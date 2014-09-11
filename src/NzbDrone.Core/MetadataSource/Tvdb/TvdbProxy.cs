@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using NzbDrone.Core.Rest;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
-using RestSharp;
 
 namespace NzbDrone.Core.MetadataSource.Tvdb
 {
@@ -17,37 +15,22 @@ namespace NzbDrone.Core.MetadataSource.Tvdb
 
     public class TvdbProxy : ITvdbProxy
     {
-        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
+        private readonly IHttpClient _httpClient;
+
+        public TvdbProxy(IHttpClient httpClient)
         {
-            var client = BuildClient("series");
-            var request = new RestRequest(tvdbSeriesId + "/all");
-
-            var response = client.Execute(request);
-
-            var xml = XDocument.Load(new StringReader(response.Content));
-
-            var episodes = xml.Descendants("Episode").Select(MapEpisode).ToList();
-            var series = MapSeries(xml.Element("Series"));
-
-            return new Tuple<Series, List<Episode>>(series, episodes);
+            _httpClient = httpClient;
         }
 
         public List<Episode> GetEpisodeInfo(int tvdbSeriesId)
         {
-            return GetSeriesInfo(tvdbSeriesId).Item2;
-        }
+            var httpRequest = new HttpRequest("http://thetvdb.com/data/series/{tvdbId}/all/");
+            httpRequest.AddSegment("tvdbId", tvdbSeriesId.ToString());
+            var response = _httpClient.Get(httpRequest);
 
-        private static IRestClient BuildClient(string resource)
-        {
-            return RestClientFactory.BuildClient(String.Format("http://thetvdb.com/data/{0}", resource));
-        }
-
-        private static Series MapSeries(XElement item)
-        {
-            //TODO: We should map all the data incase we want to actually use it
-            var series = new Series();
-
-            return series;
+            var xml = XDocument.Load(new StringReader(response.Content));
+            var episodes = xml.Descendants("Episode").Select(MapEpisode).ToList();
+            return episodes;
         }
 
         private static Episode MapEpisode(XElement item)

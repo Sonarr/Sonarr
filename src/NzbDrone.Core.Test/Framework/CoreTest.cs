@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
 using NzbDrone.Test.Common;
 
@@ -15,6 +16,8 @@ namespace NzbDrone.Core.Test.Framework
         protected void UseRealHttp()
         {
             Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));
+            Mocker.SetConstant<IHttpClient>(new HttpClient(TestLogger));
+            Mocker.SetConstant<IDroneServicesRequestBuilder>(new DroneServicesHttpRequestBuilder());
         }
     }
 
