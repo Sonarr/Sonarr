@@ -9,10 +9,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Tv;
-//using RestSharp;
-using RestSharp;
 using Episode = NzbDrone.Core.Tv.Episode;
-using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.MetadataSource
 {
@@ -38,9 +35,11 @@ namespace NzbDrone.Core.MetadataSource
 
             HttpRequest request;
 
-            if (title.StartsWith("tvdb:") || title.StartsWith("tvdbid:") || title.StartsWith("slug:"))
+            var lowerTitle = title.ToLowerInvariant();
+
+            if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:") || lowerTitle.StartsWith("slug:"))
             {
-                var slug = title.Split(':')[1];
+                var slug = lowerTitle.Split(':')[1].Trim();
 
                 if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace))
                 {
@@ -56,9 +55,9 @@ namespace NzbDrone.Core.MetadataSource
                 return new List<Show> { _httpClient.Get<Show>(request).Resource };
             }
 
-            if (title.StartsWith("imdb:") || title.StartsWith("imdbid:"))
+            if (lowerTitle.StartsWith("imdb:") || lowerTitle.StartsWith("imdbid:"))
             {
-                var slug = title.Split(':')[1].TrimStart('t');
+                var slug = lowerTitle.Split(':')[1].TrimStart('t').Trim();
 
                 if (slug.IsNullOrWhiteSpace() || !slug.All(char.IsDigit) || slug.Length < 7)
                 {
@@ -83,7 +82,7 @@ namespace NzbDrone.Core.MetadataSource
         {
             try
             {
-                var series = SearchTrakt(title);
+                var series = SearchTrakt(title.Trim());
 
                 return series.Select(MapSeries)
                     .OrderBy(s => title.LevenshteinDistanceClean(s.Title))
@@ -102,20 +101,31 @@ namespace NzbDrone.Core.MetadataSource
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
-            var client = BuildClient("show", "summary");
-            var restRequest = new RestRequest(tvdbSeriesId + "/extended");
-            var response = client.ExecuteAndValidate<Show>(restRequest);
+
+            var request = _requestBuilder.Build("/{tvdbId}/extended");
+
+            request.AddSegment("path", "show");
+            request.AddSegment("resource", "summary");
+            request.AddSegment("tvdbId", tvdbSeriesId.ToString());
+
+            var response = _httpClient.Get<Show>(request).Resource;
+
+            /*
+
+                        var client = BuildClient("show", "summary");
+                        var restRequest = new RestRequest(tvdbSeriesId + "/extended");
+                        var response = client.ExecuteAndValidate<Show>(restRequest);*/
 
             var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
             var series = MapSeries(response);
 
             return new Tuple<Series, List<Episode>>(series, episodes);
         }
-
-        private static IRestClient BuildClient(string resource, string method)
-        {
-            return RestClientFactory.BuildClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
-        }
+        /*
+                private static IRestClient BuildClient(string resource, string method)
+                {
+                    return RestClientFactory.BuildClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
+                }*/
 
         private static Series MapSeries(Show show)
         {
