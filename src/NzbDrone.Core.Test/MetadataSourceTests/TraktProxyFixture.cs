@@ -16,6 +16,14 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
     [IntegrationTest]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
+
+
+        [SetUp]
+        public void Setup()
+        {
+            UseRealHttp();
+        }
+
         [TestCase("The Simpsons", "The Simpsons")]
         [TestCase("South Park", "South Park")]
         [TestCase("Franklin & Bash", "Franklin & Bash")]

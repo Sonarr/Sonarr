@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common;
@@ -10,6 +9,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Tv;
+//using RestSharp;
 using RestSharp;
 using Episode = NzbDrone.Core.Tv.Episode;
 using NzbDrone.Core.Rest;
@@ -19,19 +19,21 @@ namespace NzbDrone.Core.MetadataSource
     public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo
     {
         private readonly Logger _logger;
+        private readonly IHttpClient _httpClient;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
 
 
-        private readonly HttpRequestBuilder requestBuilder;
+        private readonly HttpRequestBuilder _requestBuilder;
 
-        public TraktProxy(Logger logger)
+        public TraktProxy(Logger logger, IHttpClient httpClient)
         {
-            requestBuilder = new HttpRequestBuilder("http://api.trakt.tv/{resource}/{method}.json/bc3c2c460f22cbb01c264022b540e191");
+            _requestBuilder = new HttpRequestBuilder("http://api.trakt.tv/{path}/{resource}.json/bc3c2c460f22cbb01c264022b540e191");
             _logger = logger;
+            _httpClient = httpClient;
         }
 
-        private HttpRequest BuildSearchRequest(string title)
+        private IEnumerable<Show> SearchTrakt(string title)
         {
 
             HttpRequest request;
@@ -42,16 +44,16 @@ namespace NzbDrone.Core.MetadataSource
 
                 if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace))
                 {
-                    return null;
+                    return Enumerable.Empty<Show>();
                 }
 
-                request = requestBuilder.Build("/{slug}/extended/");
+                request = _requestBuilder.Build("/{slug}/extended");
 
-                request.AddSegment("resource", "show");
-                request.AddSegment("method", "summary");
+                request.AddSegment("path", "show");
+                request.AddSegment("resource", "summary");
                 request.AddSegment("slug", GetSearchTerm(slug));
 
-                return request;
+                return new List<Show> { _httpClient.Get<Show>(request).Resource };
             }
 
             if (title.StartsWith("imdb:") || title.StartsWith("imdbid:"))
@@ -60,85 +62,34 @@ namespace NzbDrone.Core.MetadataSource
 
                 if (slug.IsNullOrWhiteSpace() || !slug.All(char.IsDigit) || slug.Length < 7)
                 {
-                    return null;
+                    return Enumerable.Empty<Show>();
                 }
 
                 title = "tt" + slug;
             }
 
-            request = requestBuilder.Build("/{slug}/30/seasons/");
+            request = _requestBuilder.Build("");
 
-            request.AddSegment("resource", "show");
-            request.AddSegment("method", "search");
-            request.AddSegment("slug", GetSearchTerm(title));
+            request.AddSegment("path", "search");
+            request.AddSegment("resource", "shows");
+            request.UriBuilder.SetQueryParam("query", GetSearchTerm(title));
+            request.UriBuilder.SetQueryParam("seasons", true);
 
-            return request;
+            return _httpClient.Get<List<Show>>(request).Resource;
         }
 
 
         public List<Series> SearchForNewSeries(string title)
         {
-            var request = BuildSearchRequest(title);
-
-            if (request == null)
-            {
-                return new List<Series>();
-            }
-
-
             try
             {
-                if (title.StartsWith("imdb:") || title.StartsWith("imdbid:"))
-                {
-                    var slug = title.Split(':')[1].TrimStart('t');
+                var series = SearchTrakt(title);
 
-                    if (slug.IsNullOrWhiteSpace() || !slug.All(char.IsDigit) || slug.Length < 7)
-                    {
-                        return new List<Series>();
-                    }
-
-                    title = "tt" + slug;
-                }
-
-                if (title.StartsWith("tvdb:") || title.StartsWith("tvdbid:") || title.StartsWith("slug:"))
-                {
-                    try
-                    {
-                        var slug = title.Split(':')[1];
-
-                        if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace))
-                        {
-                            return new List<Series>();
-                        }
-
-                        var client = BuildClient("show", "summary");
-                        var restRequest = new RestRequest(GetSearchTerm(slug) + "/extended");
-                        var response = client.ExecuteAndValidate<Show>(restRequest);
-
-                        return new List<Series> { MapSeries(response) };
-                    }
-                    catch (RestException ex)
-                    {
-                        if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                        {
-                            return new List<Series>();
-                        }
-
-                        throw;
-                    }
-                }
-                else
-                {
-                    var client = BuildClient("search", "shows");
-                    var restRequest = new RestRequest(GetSearchTerm(title) + "/30/seasons");
-                    var response = client.ExecuteAndValidate<List<Show>>(restRequest);
-
-                    return response.Select(MapSeries)
-                        .OrderBy(v => title.LevenshteinDistanceClean(v.Title))
-                        .ToList();
-                }
+                return series.Select(MapSeries)
+                    .OrderBy(s => title.LevenshteinDistanceClean(s.Title))
+                    .ToList();
             }
-            catch (WebException)
+            catch (HttpException)
             {
                 throw new TraktException("Search for '{0}' failed. Unable to communicate with Trakt.", title);
             }
@@ -152,7 +103,7 @@ namespace NzbDrone.Core.MetadataSource
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
             var client = BuildClient("show", "summary");
-            var restRequest = new RestRequest(tvdbSeriesId.ToString() + "/extended");
+            var restRequest = new RestRequest(tvdbSeriesId + "/extended");
             var response = client.ExecuteAndValidate<Show>(restRequest);
 
             var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
