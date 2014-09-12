@@ -44,15 +44,17 @@
   .text-overflow();
 }
 
-.relative-date-cell {
-  width : 150px;
-  cursor: default;
+.relative-date-cell, .relative-time-cell {
   .text-overflow();
+  cursor : default;
+
+  .tooltip-inner {
+    max-width : 250px;
+  }
 }
 
-.relative-time-cell {
-  cursor: default;
-  .text-overflow();
+.relative-date-cell {
+  width : 150px;
 }
 
 .history-event-type-cell {

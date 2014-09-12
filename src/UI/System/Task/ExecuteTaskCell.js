@@ -16,10 +16,11 @@ define(
 
                 this.$el.empty();
 
-                var task = this.model.get('name');
+                var name = this.model.get('name');
+                var task = this.model.get('taskName');
 
                 this.$el.html(
-                    '<i class="icon-cogs x-execute" title="Execute {0}"></i>'.format(task)
+                    '<i class="icon-refresh icon-can-spin x-execute" title="Execute {0}"></i>'.format(name)
                 );
 
                 CommandController.bindToCommand({
@@ -33,8 +34,8 @@ define(
             },
 
             _executeTask: function () {
-                CommandController.Execute(this.model.get('name'), {
-                    name : this.model.get('name')
+                CommandController.Execute(this.model.get('taskName'), {
+                    name : this.model.get('taskName')
                 });
             }
         });
