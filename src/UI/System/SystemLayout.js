@@ -8,6 +8,7 @@ define(
         'System/Logs/LogsLayout',
         'System/Update/UpdateLayout',
         'System/Backup/BackupLayout',
+        'System/Task/TaskLayout',
         'Shared/Messenger'
     ], function ($,
                  Backbone,
@@ -16,6 +17,7 @@ define(
                  LogsLayout,
                  UpdateLayout,
                  BackupLayout,
+                 TaskLayout,
                  Messenger) {
         return Marionette.Layout.extend({
             template: 'System/SystemLayoutTemplate',
@@ -24,23 +26,26 @@ define(
                 info    : '#info',
                 logs    : '#logs',
                 updates : '#updates',
-                backup  : '#backup'
+                backup  : '#backup',
+                tasks   : '#tasks'
             },
 
             ui: {
                 infoTab    : '.x-info-tab',
                 logsTab    : '.x-logs-tab',
                 updatesTab : '.x-updates-tab',
-                backupTab  : '.x-backup-tab'
+                backupTab  : '.x-backup-tab',
+                tasksTab   : '.x-tasks-tab'
             },
 
             events: {
-                'click .x-info-tab'   : '_showInfo',
-                'click .x-logs-tab'   : '_showLogs',
-                'click .x-updates-tab': '_showUpdates',
-                'click .x-backup-tab': '_showBackup',
-                'click .x-shutdown'   : '_shutdown',
-                'click .x-restart'    : '_restart'
+                'click .x-info-tab'    : '_showInfo',
+                'click .x-logs-tab'    : '_showLogs',
+                'click .x-updates-tab' : '_showUpdates',
+                'click .x-backup-tab'  : '_showBackup',
+                'click .x-tasks-tab'   : '_showTasks',
+                'click .x-shutdown'    : '_shutdown',
+                'click .x-restart'     : '_restart'
             },
 
             initialize: function (options) {
@@ -59,6 +64,9 @@ define(
                         break;
                     case 'backup':
                         this._showBackup();
+                        break;
+                    case 'tasks':
+                        this._showTasks();
                         break;
                     default:
                         this._showInfo();
@@ -107,6 +115,16 @@ define(
                 this.backup.show(new BackupLayout());
                 this.ui.backupTab.tab('show');
                 this._navigate('system/backup');
+            },
+
+            _showTasks: function (e) {
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.tasks.show(new TaskLayout());
+                this.ui.tasksTab.tab('show');
+                this._navigate('system/tasks');
             },
 
             _shutdown: function () {

@@ -50,6 +50,11 @@
   .text-overflow();
 }
 
+.relative-time-cell {
+  cursor: default;
+  .text-overflow();
+}
+
 .history-event-type-cell {
   width : 10px;
 }
@@ -192,4 +197,12 @@ td.delete-episode-file-cell {
 .log-message-cell {
   word-break: break-all;
   word-wrap: break-word;
+}
+
+.execute-task-cell {
+  width : 28px;
+
+  i {
+    .clickable();
+  }
 }

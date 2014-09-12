@@ -207,6 +207,8 @@
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="System\Backup\BackupModule.cs" />
     <Compile Include="System\Backup\BackupResource.cs" />
+    <Compile Include="System\Tasks\TaskModule.cs" />
+    <Compile Include="System\Tasks\TaskResource.cs" />
     <Compile Include="System\SystemModule.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
