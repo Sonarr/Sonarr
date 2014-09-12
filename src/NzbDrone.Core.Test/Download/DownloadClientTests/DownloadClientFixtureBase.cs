@@ -33,8 +33,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(c => c.Get(It.IsAny<HttpRequest>()))
-                .Returns(new HttpResponse(null, null, "", HttpStatusCode.OK));
+                  .Setup(s => s.Get(It.IsAny<HttpRequest>()))
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
 
         }
 

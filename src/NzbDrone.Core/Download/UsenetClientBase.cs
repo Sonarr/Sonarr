@@ -52,10 +52,7 @@ namespace NzbDrone.Core.Download
 
             try
             {
-                using (var nzb = _httpClient.Get(new HttpRequest(url)).GetStream())
-                {
-                    nzbData = nzb.ToBytes();
-                }
+                nzbData = _httpClient.Get(new HttpRequest(url)).ResponseData;
             }
             catch (WebException ex)
             {

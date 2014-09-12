@@ -24,9 +24,9 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             _series = Builder<Series>.CreateNew().Build();
 
-            var response = new HttpResponse(null, new HttpHeader(), "<xml></xml>", System.Net.HttpStatusCode.OK);
             Mocker.GetMock<IHttpClient>()
-                .Setup(s => s.Get(It.IsAny<HttpRequest>())).Returns(response);
+                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "<xml></xml>"));
         }
 
         private IndexerBase<TestIndexerSettings> WithIndexer(bool paging, int resultCount)

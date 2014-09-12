@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http
 {
@@ -73,22 +74,19 @@ namespace NzbDrone.Common.Http
                 httpWebResponse = (HttpWebResponse)e.Response;
             }
 
-            string content = null;
+            Byte[] data = null;
 
             using (var responseStream = httpWebResponse.GetResponseStream())
             {
                 if (responseStream != null)
                 {
-                    using (var reader = new StreamReader(responseStream))
-                    {
-                        content = reader.ReadToEnd();
-                    }
+                    data = responseStream.ToBytes();
                 }
             }
 
             stopWatch.Stop();
 
-            var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), content, httpWebResponse.StatusCode);
+            var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
 
             if (!RuntimeInfoBase.IsProduction &&

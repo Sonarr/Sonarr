@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         [SetUp]
         public void Setup()
         {
-            _httpResponse = new HttpResponse(null, new HttpHeader(), null, HttpStatusCode.OK);
+            _httpResponse = new HttpResponse(null, new HttpHeader(), "", HttpStatusCode.OK);
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFileSize(It.IsAny<string>())).Returns(100);
             Mocker.GetMock<IHttpClient>().Setup(c => c.Head(It.IsAny<HttpRequest>())).Returns(_httpResponse);
 
