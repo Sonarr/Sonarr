@@ -24,11 +24,11 @@ namespace NzbDrone.Core.Indexers
     public class FetchFeedService : IFetchFeedFromIndexers
     {
         private readonly Logger _logger;
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
 
-        public FetchFeedService(IHttpProvider httpProvider, Logger logger)
+        public FetchFeedService(IHttpClient httpClient, Logger logger)
         {
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
             _logger = logger;
         }
 
@@ -140,7 +140,16 @@ namespace NzbDrone.Core.Indexers
                 try
                 {
                     _logger.Debug("Downloading Feed " + url);
-                    var xml = _httpProvider.DownloadString(url);
+                    var request = new HttpRequest(url);
+                    request.Headers.Accept = "text/xml, text/rss+xml, application/rss+xml";
+                    var response = _httpClient.Get(request);
+
+                    if (response.Headers.ContentType != null && response.Headers.ContentType.Split(';')[0] == "text/html")
+                    {
+                        throw new WebException("Indexer responded with html content. Site is likely blocked or unavailable.");
+                    }
+
+                    var xml = response.Content;
                     if (!string.IsNullOrWhiteSpace(xml))
                     {
                         result.AddRange(indexer.Parser.Process(xml, url));
