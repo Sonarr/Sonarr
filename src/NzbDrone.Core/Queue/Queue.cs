@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Parser.Model;
@@ -17,7 +19,8 @@ namespace NzbDrone.Core.Queue
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public String Status { get; set; }
-        public String ErrorMessage { get; set; }
+        public String TrackedDownloadStatus { get; set; }
+        public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
         public RemoteEpisode RemoteEpisode { get; set; }
     }
 }

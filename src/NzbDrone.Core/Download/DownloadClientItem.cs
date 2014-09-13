@@ -1,5 +1,4 @@
-﻿using NzbDrone.Core.Parser.Model;
-using System;
+﻿using System;
 
 namespace NzbDrone.Core.Download
 {
@@ -21,7 +20,5 @@ namespace NzbDrone.Core.Download
         public DownloadItemStatus Status { get; set; }
         public Boolean IsEncrypted { get; set; }
         public Boolean IsReadOnly { get; set; }
-
-        public RemoteEpisode RemoteEpisode { get; set; }
     }
 }

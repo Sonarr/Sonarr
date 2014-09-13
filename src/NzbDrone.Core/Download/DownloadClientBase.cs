@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
@@ -21,7 +20,6 @@ namespace NzbDrone.Core.Download
     {
         protected readonly IConfigService _configService;
         protected readonly IDiskProvider _diskProvider;
-        protected readonly IParsingService _parsingService;
         protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
 
@@ -55,7 +53,6 @@ namespace NzbDrone.Core.Download
         {
             _configService = configService;
             _diskProvider = diskProvider;
-            _parsingService = parsingService;
             _remotePathMappingService = remotePathMappingService;
             _logger = logger;
         }
@@ -75,17 +72,6 @@ namespace NzbDrone.Core.Download
         public abstract void RemoveItem(string id);
         public abstract String RetryDownload(string id);
         public abstract DownloadClientStatus GetStatus();
-
-        protected RemoteEpisode GetRemoteEpisode(String title)
-        {
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(title);
-            if (parsedEpisodeInfo == null) return null;
-
-            var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
-            if (remoteEpisode.Series == null) return null;
-
-            return remoteEpisode;
-        }
 
         public ValidationResult Test()
         {

@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Tv
     public interface IEpisodeService
     {
         Episode GetEpisode(int id);
+        List<Episode> GetEpisodes(IEnumerable<Int32> ids);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
         Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle);
@@ -37,9 +38,9 @@ namespace NzbDrone.Core.Tv
     }
 
     public class EpisodeService : IEpisodeService,
-        IHandle<EpisodeFileDeletedEvent>,
-        IHandle<EpisodeFileAddedEvent>,
-        IHandleAsync<SeriesDeletedEvent>
+                                  IHandle<EpisodeFileDeletedEvent>,
+                                  IHandle<EpisodeFileAddedEvent>,
+                                  IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IConfigService _configService;
@@ -55,6 +56,11 @@ namespace NzbDrone.Core.Tv
         public Episode GetEpisode(int id)
         {
             return _episodeRepository.Get(id);
+        }
+
+        public List<Episode> GetEpisodes(IEnumerable<int> ids)
+        {
+            return _episodeRepository.Get(ids).ToList();
         }
 
         public Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber)

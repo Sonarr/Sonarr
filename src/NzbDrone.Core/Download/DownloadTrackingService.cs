@@ -9,6 +9,7 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.Download
@@ -22,7 +23,10 @@ namespace NzbDrone.Core.Download
         void MarkAsFailed(Int32 historyId);
     }
 
-    public class DownloadTrackingService : IDownloadTrackingService, IExecute<CheckForFinishedDownloadCommand>, IHandleAsync<ApplicationStartedEvent>, IHandle<EpisodeGrabbedEvent>
+    public class DownloadTrackingService : IDownloadTrackingService,
+                                           IExecute<CheckForFinishedDownloadCommand>,
+                                           IHandleAsync<ApplicationStartedEvent>,
+                                           IHandle<EpisodeGrabbedEvent>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IHistoryService _historyService;
@@ -30,6 +34,7 @@ namespace NzbDrone.Core.Download
         private readonly IConfigService _configService;
         private readonly IFailedDownloadService _failedDownloadService;
         private readonly ICompletedDownloadService  _completedDownloadService;
+        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
         private readonly ICached<TrackedDownload[]> _trackedDownloadCache;
@@ -44,6 +49,7 @@ namespace NzbDrone.Core.Download
                                      ICacheManager cacheManager,
                                      IFailedDownloadService failedDownloadService,
                                      ICompletedDownloadService completedDownloadService,
+                                     IParsingService parsingService,
                                      Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
@@ -52,6 +58,7 @@ namespace NzbDrone.Core.Download
             _configService = configService;
             _failedDownloadService = failedDownloadService;
             _completedDownloadService = completedDownloadService;
+            _parsingService = parsingService;
             _logger = logger;
 
             _trackedDownloadCache = cacheManager.GetCache<TrackedDownload[]>(GetType());
@@ -73,7 +80,7 @@ namespace NzbDrone.Core.Download
         {
             return _trackedDownloadCache.Get("queued", () =>
                 {
-                    UpdateTrackedDownloads();
+                    UpdateTrackedDownloads(_historyService.Grabbed());
 
                     return FilterQueuedDownloads(GetTrackedDownloads());
 
@@ -119,7 +126,7 @@ namespace NzbDrone.Core.Download
                                  .ToList();
         }
 
-        private Boolean UpdateTrackedDownloads()
+        private Boolean UpdateTrackedDownloads(List<History.History> grabbedHistory)
         {
             var downloadClients = _downloadClientProvider.GetDownloadClients();
 
@@ -140,13 +147,9 @@ namespace NzbDrone.Core.Download
 
                     if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
                     {
-                        trackedDownload = new TrackedDownload
-                        {
-                            TrackingId = trackingId,
-                            DownloadClient = downloadClient.Definition.Id,
-                            StartedTracking = DateTime.UtcNow,
-                            State = TrackedDownloadState.Unknown
-                        };
+                        trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem, grabbedHistory);
+
+                        if (trackedDownload == null) continue;
 
                         _logger.Debug("[{0}] Started tracking download with id {1}.", downloadItem.Title, trackingId);
                         stateChanged = true;
@@ -182,9 +185,9 @@ namespace NzbDrone.Core.Download
             var failedHistory = _historyService.Failed();
             var importedHistory = _historyService.Imported();
 
-            var stateChanged = UpdateTrackedDownloads();
+            var stateChanged = UpdateTrackedDownloads(grabbedHistory);
             
-            var downloadClients = _downloadClientProvider.GetDownloadClients();
+            var downloadClients = _downloadClientProvider.GetDownloadClients().ToList();
             var trackedDownloads = GetTrackedDownloads();
 
             foreach (var trackedDownload in trackedDownloads)
@@ -213,6 +216,50 @@ namespace NzbDrone.Core.Download
             {
                 _eventAggregator.PublishEvent(new UpdateQueueEvent());
             }
+        }
+
+        private TrackedDownload GetTrackedDownload(String trackingId, Int32 downloadClient, DownloadClientItem downloadItem, List<History.History> grabbedHistory)
+        {
+            var trackedDownload = new TrackedDownload
+            {
+                TrackingId = trackingId,
+                DownloadClient = downloadClient,
+                DownloadItem = downloadItem,
+                StartedTracking = DateTime.UtcNow,
+                State = TrackedDownloadState.Unknown,
+                Status = TrackedDownloadStatus.Ok,
+            };
+
+            var historyItems = grabbedHistory.Where(h =>
+                                                        {
+                                                            var downloadClientId = h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID);
+
+                                                            if (downloadClientId == null) return false;
+
+                                                            return downloadClientId.Equals(trackedDownload.DownloadItem.DownloadClientId);
+                                                        }).ToList();
+
+            var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
+            if (parsedEpisodeInfo == null) return null;
+
+            var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
+
+            if (remoteEpisode.Series == null)
+            {
+                if (historyItems.Empty()) return null;
+
+                trackedDownload.Status = TrackedDownloadStatus.Warning;
+                trackedDownload.StatusMessages.Add(new TrackedDownloadStatusMessage(
+                                                    trackedDownload.DownloadItem.Title,
+                                                    "Series title mismatch, automatic import is not possible")
+                                                  );
+
+                remoteEpisode = _parsingService.Map(parsedEpisodeInfo, historyItems.First().SeriesId, historyItems.Select(h => h.EpisodeId));
+            }
+
+            trackedDownload.RemoteEpisode = remoteEpisode;
+
+            return trackedDownload;
         }
 
         public void Execute(CheckForFinishedDownloadCommand message)

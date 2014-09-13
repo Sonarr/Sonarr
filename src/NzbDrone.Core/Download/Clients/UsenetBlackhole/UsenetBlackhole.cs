@@ -90,9 +90,6 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                     historyItem.RemainingTime = TimeSpan.Zero;
                 }
 
-                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
-                if (historyItem.RemoteEpisode == null) continue;
-
                 yield return historyItem;
             }
 
@@ -120,9 +117,6 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                     historyItem.Status = DownloadItemStatus.Completed;
                     historyItem.RemainingTime = TimeSpan.Zero;
                 }
-
-                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
-                if (historyItem.RemoteEpisode == null) continue;
 
                 yield return historyItem;
             }

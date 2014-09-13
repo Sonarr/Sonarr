@@ -201,9 +201,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 if (downloadClientItem.Category == Settings.TvCategory)
                 {
-                    downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
-                    if (downloadClientItem.RemoteEpisode == null) continue;
-
                     yield return downloadClientItem;
                 }
             }

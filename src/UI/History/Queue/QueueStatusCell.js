@@ -2,20 +2,26 @@
 
 define(
     [
+        'marionette',
         'Cells/NzbDroneCell'
-    ], function (NzbDroneCell) {
+    ], function (Marionette, NzbDroneCell) {
         return NzbDroneCell.extend({
 
-            className: 'queue-status-cell',
+            className : 'queue-status-cell',
+            template  : 'History/Queue/QueueStatusCellTemplate',
 
             render: function () {
                 this.$el.empty();
 
                 if (this.cellValue) {
                     var status = this.cellValue.get('status').toLowerCase();
-                    var errorMessage = (this.cellValue.get('errorMessage') || '');
+                    var trackedDownloadStatus = this.cellValue.get('trackedDownloadStatus').toLowerCase();
+                    var hasError = this.cellValue.get('hasError') || false;
+                    var hasWarning = this.cellValue.get('hasWarning') || false;
                     var icon = 'icon-nd-downloading';
                     var title = 'Downloading';
+                    var itemTitle = this.cellValue.get('title');
+                    var content = itemTitle;
 
                     if (status === 'paused') {
                         icon = 'icon-pause';
@@ -39,7 +45,7 @@ define(
 
                     if (status === 'failed') {
                         icon = 'icon-nd-download-failed';
-                        title = 'Download failed: check download client for more details';
+                        title = 'Download failed';
                     }
 
                     if (status === 'warning') {
@@ -47,29 +53,37 @@ define(
                         title = 'Download warning: check download client for more details';
                     }
 
-                    if (errorMessage !== '') {
+                    if (trackedDownloadStatus === 'warning') {
+                        icon += ' icon-nd-warning';
+//                        title = 'Download failed';
+
+                        this.templateFunction = Marionette.TemplateCache.get(this.template);
+                        content = this.templateFunction(this.cellValue.toJSON());
+                    }
+
+                    if (trackedDownloadStatus === 'error') {
                         if (status === 'completed') {
                             icon = 'icon-nd-import-failed';
-                            title = 'Import failed';
+                            title = 'Import failed: ' + itemTitle;
                         }
                         else {
                             icon = 'icon-nd-download-failed';
                             title = 'Download failed';
                         }
-                        this.$el.html('<i class="{0}"></i>'.format(icon));
-                        
-                        this.$el.popover({
-                            content  : errorMessage.replace(new RegExp('\r\n', 'g'), '<br/>'),
-                            html     : true,
-                            trigger  : 'hover',
-                            title    : title,
-                            placement: 'right',
-                            container: this.$el
-                        });
+
+                        this.templateFunction = Marionette.TemplateCache.get(this.template);
+                        content = this.templateFunction(this.cellValue.toJSON());
                     }
-                    else {
-                        this.$el.html('<i class="{0}" title="{1}"></i>'.format(icon, title));
-                    }
+
+                    this.$el.html('<i class="{0}"></i>'.format(icon));
+                    this.$el.popover({
+                        content  : content,
+                        html     : true,
+                        trigger  : 'hover',
+                        title    : title,
+                        placement: 'right',
+                        container: this.$el
+                    });
                 }
 
                 return this;
