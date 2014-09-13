@@ -7,8 +7,17 @@ define(
         'Cells/RelativeTimeCell',
         'System/Task/TaskIntervalCell',
         'System/Task/ExecuteTaskCell',
-        'Shared/LoadingView'
-    ], function (Marionette, Backgrid, BackupCollection, RelativeTimeCell, TaskIntervalCell, ExecuteTaskCell, LoadingView) {
+        'System/Task/NextExecutionCell',
+        'Shared/LoadingView',
+        'Mixins/backbone.signalr.mixin'
+    ], function (Marionette,
+                 Backgrid,
+                 BackupCollection,
+                 RelativeTimeCell,
+                 TaskIntervalCell,
+                 ExecuteTaskCell,
+                 NextExecutionCell,
+                 LoadingView) {
         return Marionette.Layout.extend({
             template: 'System/Task/TaskLayoutTemplate',
 
@@ -39,7 +48,7 @@ define(
                     name     : 'nextExecution',
                     label    : 'Next Execution',
                     sortable : true,
-                    cell     : RelativeTimeCell
+                    cell     : NextExecutionCell
                 },
                 {
                     name     : 'this',
@@ -53,6 +62,7 @@ define(
                 this.taskCollection = new BackupCollection();
 
                 this.listenTo(this.taskCollection, 'sync', this._showTasks);
+                this.taskCollection.bindSignalR();
             },
 
             onRender: function () {

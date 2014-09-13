@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Messaging.Events;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.System.Tasks
 {
-    public class TaskModule : NzbDroneRestModule<TaskResource>
+    public class TaskModule : NzbDroneRestModuleWithSignalR<TaskResource, ScheduledTask>, IHandle<CommandExecutedEvent>
     {
         private readonly ITaskManager _taskManager;
 
         private static readonly Regex NameRegex = new Regex("(?<!^)[A-Z]", RegexOptions.Compiled);
 
-        public TaskModule(ITaskManager taskManager)
-            : base("system/task")
+        public TaskModule(ITaskManager taskManager, IBroadcastSignalRMessage broadcastSignalRMessage)
+            : base(broadcastSignalRMessage, "system/task")
         {
             _taskManager = taskManager;
             GetResourceAll = GetAll;
@@ -37,6 +40,11 @@ namespace NzbDrone.Api.System.Tasks
                        LastExecution = scheduledTask.LastExecution,
                        NextExecution = scheduledTask.LastExecution.AddMinutes(scheduledTask.Interval)
                    };
+        }
+
+        public void Handle(CommandExecutedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Sync);
         }
     }
 }

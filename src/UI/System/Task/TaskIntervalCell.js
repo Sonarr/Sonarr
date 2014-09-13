@@ -13,11 +13,15 @@ define(
                 this.$el.empty();
 
                 var interval = this.model.get('interval');
-                var duration = moment.duration(interval, 'minutes').humanize();
+                var duration = moment.duration(interval, 'minutes').humanize().replace(/an?(?=\s)/, '1');
 
-                this.$el.html(
-                    duration.replace(/an?(?=\s)/, '1')
-                );
+                if (interval === 0 ) {
+                    this.$el.html('disabled');
+                }
+
+                else {
+                    this.$el.html(duration);
+                }
 
                 return this;
             }
