@@ -25,7 +25,9 @@ namespace NzbDrone.Common.Http
         public HttpClient(Logger logger)
         {
             _logger = logger;
-            _userAgent = String.Format("NzbDrone {0}", BuildInfo.Version);
+            _userAgent = String.Format("NzbDrone/{0} ({1} {2})",
+                BuildInfo.Version,
+                OsInfo.Os, OsInfo.Version.ToString(2));
             ServicePointManager.DefaultConnectionLimit = 12;
         }
 
@@ -42,6 +44,7 @@ namespace NzbDrone.Common.Http
 
             webRequest.Credentials = request.NetworkCredential;
             webRequest.Method = request.Method.ToString();
+            webRequest.UserAgent = _userAgent;
             webRequest.KeepAlive = false;
 
             if (!RuntimeInfoBase.IsProduction)
@@ -50,6 +53,11 @@ namespace NzbDrone.Common.Http
             }
 
             var stopWatch = Stopwatch.StartNew();
+
+            if (request.Headers != null)
+            {
+                AddRequestHeaders(webRequest, request.Headers);
+            }
 
             if (!request.Body.IsNullOrWhiteSpace())
             {
@@ -154,5 +162,55 @@ namespace NzbDrone.Common.Http
             return Execute(request);
         }
 
+        protected virtual void AddRequestHeaders(HttpWebRequest webRequest, HttpHeader headers)
+        {
+            foreach (var header in headers)
+            {
+                switch (header.Key)
+                {
+                    case "Accept":
+                        webRequest.Accept = header.Value.ToString();
+                        break;
+                    case "Connection":
+                        webRequest.Connection = header.Value.ToString();
+                        break;
+                    case "Content-Length":
+                        webRequest.ContentLength = Convert.ToInt64(header.Value);
+                        break;
+                    case "Content-Type":
+                        webRequest.ContentType = header.Value.ToString();
+                        break;
+                    case "Date":
+                        webRequest.Date = (DateTime)header.Value;
+                        break;
+                    case "Expect":
+                        webRequest.Expect = header.Value.ToString();
+                        break;
+                    case "Host":
+                        webRequest.Host = header.Value.ToString();
+                        break;
+                    case "If-Modified-Since":
+                        webRequest.IfModifiedSince = (DateTime)header.Value;
+                        break;
+                    case "Range":
+                        throw new NotImplementedException();
+                        break;
+                    case "Referer":
+                        webRequest.Referer = header.Value.ToString();
+                        break;
+                    case "Transfer-Encoding":
+                        webRequest.TransferEncoding = header.Value.ToString();
+                        break;
+                    case "User-Agent":
+                        throw new NotSupportedException("User-Agent other than NzbDrone not allowed.");
+                    case "Proxy-Connection":
+                        throw new NotImplementedException();
+                        break;
+                    default:
+                        webRequest.Headers.Add(header.Key, header.Value.ToString());
+                        break;
+                }
+            }
+        }
     }
 }

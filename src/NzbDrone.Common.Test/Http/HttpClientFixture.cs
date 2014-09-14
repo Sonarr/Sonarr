@@ -57,6 +57,8 @@ namespace NzbDrone.Common.Test.Http
             var exception = Assert.Throws<HttpException>(() => Subject.Get<HttpBinResource>(request));
 
             exception.Response.StatusCode.Should().Be(statusCode);
+
+            ExceptionVerification.IgnoreWarns();
         }
 
 
@@ -66,11 +68,34 @@ namespace NzbDrone.Common.Test.Http
         {
             var request = new HttpRequest("http://eu.httpbin.org/status/" + (int)statusCode);
 
-             Assert.Throws<Exception>(() => Subject.Get<HttpBinResource>(request));
-            
+            Assert.Throws<Exception>(() => Subject.Get<HttpBinResource>(request));
+        }
+
+        [Test]
+        public void should_send_user_agent()
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("User-Agent");
+
+            var userAgent = response.Resource.Headers["User-Agent"].ToString();
+
+            userAgent.Should().Contain("NzbDrone");
+        }
+
+        [TestCase("Accept", "text/xml, text/rss+xml, application/rss+xml")]
+        public void should_send_headers(String header, String value)
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+            request.Headers.Add(header, value);
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers[header].ToString().Should().Be(value);
         }
     }
-
 
     public class HttpBinResource
     {
@@ -78,8 +103,4 @@ namespace NzbDrone.Common.Test.Http
         public string Origin { get; set; }
         public string Url { get; set; }
     }
-
-
-
-
 }

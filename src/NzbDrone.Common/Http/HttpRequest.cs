@@ -14,8 +14,6 @@ namespace NzbDrone.Common.Http
             UriBuilder = new UriBuilder(url);
             Headers = new HttpHeader();
             _segments = new Dictionary<string, string>();
-
-            Headers.Accept = "application/json";
         }
 
         public UriBuilder UriBuilder { get; private set; }
