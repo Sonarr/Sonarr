@@ -11,7 +11,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
-        private static readonly Regex VersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+\.\d+(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex VersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+(\.\d+)?(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public MonoVersionCheck(IRuntimeInfo runtimeInfo, Logger logger)
         {
