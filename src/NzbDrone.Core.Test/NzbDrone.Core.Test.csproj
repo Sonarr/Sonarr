@@ -314,7 +314,6 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="License.txt" />
     <None Include="..\NzbDrone.Test.Common\App.config">
       <Link>App.config</Link>
     </None>

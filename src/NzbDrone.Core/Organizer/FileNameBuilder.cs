@@ -80,6 +80,11 @@ namespace NzbDrone.Core.Organizer
             {
                 if (episodeFile.SceneName.IsNullOrWhiteSpace())
                 {
+                    if (episodeFile.RelativePath.IsNullOrWhiteSpace())
+                    {
+                        return Path.GetFileNameWithoutExtension(episodeFile.Path);                        
+                    }
+
                     return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
                 }
 

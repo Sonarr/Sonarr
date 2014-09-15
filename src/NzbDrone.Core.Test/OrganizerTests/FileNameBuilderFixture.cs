@@ -234,6 +234,17 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
+        public void use_path_when_sceneName_and_relative_path_are_null()
+        {
+            _namingConfig.RenameEpisodes = false;
+            _episodeFile.RelativePath = null;
+            _episodeFile.Path = @"C:\Test\Unsorted\Series - S01E01 - Test";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.Path));
+        }
+
+        [Test]
         public void use_file_name_when_sceneName_is_not_null()
         {
             _namingConfig.RenameEpisodes = false;

@@ -167,7 +167,7 @@ namespace NzbDrone.Core.History
                         EventType = HistoryEventType.DownloadFolderImported,
                         Date = DateTime.UtcNow,
                         Quality = message.EpisodeInfo.Quality,
-                        SourceTitle = message.ImportedEpisode.SceneName,
+                        SourceTitle = message.ImportedEpisode.SceneName ?? Path.GetFileNameWithoutExtension(message.EpisodeInfo.Path),
                         SeriesId = message.ImportedEpisode.SeriesId,
                         EpisodeId = episode.Id
                     };
