@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using FluentValidation;
 using Nancy;
 using NLog;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using Omu.ValueInjecter;
 using System.Linq;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Cache;
-using System.Threading;
 using SystemNetHttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.Indexers
@@ -28,7 +25,6 @@ namespace NzbDrone.Api.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IPrioritizeDownloadDecision _prioritizeDownloadDecision;
         private readonly IDownloadService _downloadService;
-        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
         private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
@@ -38,7 +34,6 @@ namespace NzbDrone.Api.Indexers
                              IMakeDownloadDecision downloadDecisionMaker,
                              IPrioritizeDownloadDecision prioritizeDownloadDecision,
                              IDownloadService downloadService,
-                             IParsingService parsingService,
                              ICacheManager cacheManager,
                              Logger logger)
         {
@@ -47,7 +42,6 @@ namespace NzbDrone.Api.Indexers
             _downloadDecisionMaker = downloadDecisionMaker;
             _prioritizeDownloadDecision = prioritizeDownloadDecision;
             _downloadService = downloadService;
-            _parsingService = parsingService;
             _logger = logger;
             GetResourceAll = GetReleases;
             Post["/"] = x => DownloadRelease(this.Bind<ReleaseResource>());
