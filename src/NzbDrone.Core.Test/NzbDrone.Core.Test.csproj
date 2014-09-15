@@ -181,6 +181,7 @@
     <Compile Include="IndexerTests\AnimezbTests\AnimezbFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\BitMeTvTests\BitMeTvFixture.cs" />
+    <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
     <Compile Include="IndexerTests\EztvTests\EztvFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
@@ -334,6 +335,9 @@
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Files\Indexers\BroadcastheNet\RecentFeed.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Files\RSS\fanzub.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

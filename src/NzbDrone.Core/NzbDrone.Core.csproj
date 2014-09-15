@@ -418,6 +418,13 @@
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvRequestGenerator.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNetRequestGenerator.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNet.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNetSettings.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNetParser.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNetTorrent.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNetTorrentQuery.cs" />
+    <Compile Include="Indexers\BroadcastheNet\BroadcastheNetTorrents.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\IndexerException.cs" />
