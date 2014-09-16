@@ -139,6 +139,13 @@ define(
                                 tooltip  : 'Failed',
                                 icon     : 'icon-nd-download-failed',
                                 callback : this._setFilter
+                            },
+                            {
+                                key      : 'deleted',
+                                title    : '',
+                                tooltip  : 'Deleted',
+                                icon     : 'icon-nd-deleted',
+                                callback : this._setFilter
                             }
                         ]
                 };
