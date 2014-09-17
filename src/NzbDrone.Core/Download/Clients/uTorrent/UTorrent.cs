@@ -100,7 +100,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 item.Category = torrent.Label;
                 item.DownloadClient = Definition.Name;
                 item.RemainingSize = torrent.Remaining;
-                item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
+                if (torrent.Eta != -1)
+                {
+                    item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
+                }
                 item.RemoteEpisode = remoteEpisode;
 
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.RootDownloadPath);
