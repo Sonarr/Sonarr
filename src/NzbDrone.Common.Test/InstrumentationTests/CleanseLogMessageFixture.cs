@@ -11,6 +11,10 @@ namespace NzbDrone.Common.Test.InstrumentationTests
     [TestFixture]
     public class CleanseLogMessageFixture
     {
+        // Indexer Urls
+        [TestCase(@"https://iptorrents.com/torrents/rss?u=mySecret;tp=mySecret;l5;download")]
+        [TestCase(@"http://rss.torrentleech.org/mySecret")]
+        [TestCase(@"http://www.bitmetv.org/rss.php?uid=mySecret&passkey=mySecret")]
         // NzbGet
         [TestCase(@"{ ""Name"" : ""ControlUsername"", ""Value"" : ""mySecret"" }, { ""Name"" : ""ControlPassword"", ""Value"" : ""mySecret"" }, ")]
         [TestCase(@"{ ""Name"" : ""Server1.Username"", ""Value"" : ""mySecret"" }, { ""Name"" : ""Server1.Password"", ""Value"" : ""mySecret"" }, ")]
@@ -34,6 +38,9 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         // Deluge
         [TestCase(@",{""download_location"": ""C:\Users\\mySecret mySecret\\Downloads""}")]
         [TestCase(@",{""download_location"": ""/home/mySecret/Downloads""}")]
+        // BroadcastheNet
+        [TestCase(@"method: ""getTorrents"", ""params"": [ ""mySecret"",")]
+        [TestCase(@"""DownloadURL"":""https:\/\/broadcasthe.net\/torrents.php?action=download&id=123&authkey=mySecret&torrent_pass=mySecret""")]
         public void should_clean_message(String message)
         {
             var cleansedMessage = CleanseLogMessage.Cleanse(message);
