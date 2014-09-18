@@ -260,6 +260,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         }
 
         [Test]
+        public void should_report_diskspace_unpack_error_as_warning()
+        {
+            _completed.Items.First().FailMessage = "Unpacking failed, write error or disk is full?";
+            _completed.Items.First().Status = SabnzbdDownloadStatus.Failed;
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
         public void Download_should_use_sabRecentTvPriority_when_recentEpisode_is_true()
         {
             Mocker.GetMock<ISabnzbdProxy>()

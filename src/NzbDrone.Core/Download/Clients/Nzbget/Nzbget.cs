@@ -159,9 +159,18 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 }
 
                 if (!successStatus.Contains(item.ParStatus) ||
-                         !successStatus.Contains(item.UnpackStatus) ||
-                         !successStatus.Contains(item.MoveStatus) ||
-                         !successStatus.Contains(item.ScriptStatus))
+                    !successStatus.Contains(item.UnpackStatus) ||
+                    !successStatus.Contains(item.MoveStatus))
+                {
+                    historyItem.Status = DownloadItemStatus.Failed;
+                }
+
+                if (!successStatus.Contains(item.ScriptStatus))
+                {
+                    historyItem.Status = DownloadItemStatus.Warning;
+                }
+
+                if (!successStatus.Contains(item.DeleteStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }

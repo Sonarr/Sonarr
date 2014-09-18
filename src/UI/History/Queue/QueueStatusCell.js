@@ -42,6 +42,11 @@ define(
                         title = 'Download failed: check download client for more details';
                     }
 
+                    if (status === 'warning') {
+                        icon = 'icon-nd-download-warning';
+                        title = 'Download warning: check download client for more details';
+                    }
+
                     if (errorMessage !== '') {
                         if (status === 'completed') {
                             icon = 'icon-nd-import-failed';

@@ -210,6 +210,33 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void should_report_health_deletestatus_as_failed()
+        {
+            _completed.DeleteStatus = "HEALTH";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.Status.Should().Be(DownloadItemStatus.Failed);
+        }
+
+        [Test]
+        public void should_report_script_error_as_warning()
+        {
+            _completed.ScriptStatus = "FAILED";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+
+        [Test]
         public void Download_should_return_unique_id()
         {
             GivenSuccessfulDownload();

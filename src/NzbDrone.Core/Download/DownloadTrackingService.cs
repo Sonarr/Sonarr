@@ -107,6 +107,7 @@ namespace NzbDrone.Core.Download
                         v.DownloadItem.Status == DownloadItemStatus.Queued ||
                         v.DownloadItem.Status == DownloadItemStatus.Paused ||
                         v.DownloadItem.Status == DownloadItemStatus.Downloading ||
+                        v.DownloadItem.Status == DownloadItemStatus.Warning ||
                         v.DownloadItem.Status == DownloadItemStatus.Failed && enabledFailedDownloadHandling ||
                         v.DownloadItem.Status == DownloadItemStatus.Completed && enabledCompletedDownloadHandling)
                     .ToArray();

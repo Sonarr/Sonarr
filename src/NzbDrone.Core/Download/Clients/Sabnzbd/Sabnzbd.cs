@@ -138,7 +138,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (sabHistoryItem.Status == SabnzbdDownloadStatus.Failed)
                 {
-                    historyItem.Status = DownloadItemStatus.Failed;
+                    if (sabHistoryItem.FailMessage.IsNotNullOrWhiteSpace() && 
+                        sabHistoryItem.FailMessage.Equals("Unpacking failed, write error or disk is full?", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        historyItem.Status = DownloadItemStatus.Warning;
+                    }
+                    else
+                    {
+                        historyItem.Status = DownloadItemStatus.Failed;
+                    }
                 }
                 else if (sabHistoryItem.Status == SabnzbdDownloadStatus.Completed)
                 {
