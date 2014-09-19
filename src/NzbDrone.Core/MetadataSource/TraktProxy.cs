@@ -82,11 +82,11 @@ namespace NzbDrone.Core.MetadataSource
         {
             try
             {
-                var series = SearchTrakt(title.Trim());
+                var series = SearchTrakt(title.Trim()).Select(MapSeries).ToList();
 
-                return series.Select(MapSeries)
-                    .OrderBy(s => title.LevenshteinDistanceClean(s.Title))
-                    .ToList();
+                series.Sort(new TraktSearchSeriesComparer(title));
+
+                return series;
             }
             catch (HttpException)
             {
