@@ -136,7 +136,16 @@ namespace NzbDrone.Core.Download
 
             foreach (var downloadClient in downloadClients)
             {
-                var downloadClientHistory = downloadClient.GetItems().ToList();
+                List<DownloadClientItem> downloadClientHistory;
+                try
+                {
+                    downloadClientHistory = downloadClient.GetItems().ToList();
+                }
+                catch (Exception ex)
+                {
+                    _logger.WarnException("Unable to retrieve queue and history items from " + downloadClient.Definition.Name, ex);
+                    continue;
+                }
                 foreach (var downloadItem in downloadClientHistory)
                 {
                     try
