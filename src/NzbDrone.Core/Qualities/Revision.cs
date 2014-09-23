@@ -5,6 +5,10 @@ namespace NzbDrone.Core.Qualities
 {
     public class Revision : IEquatable<Revision>, IComparable<Revision>
     {
+        private Revision()
+        {
+        }
+        
         public Revision(Int32 version = 1, Int32 real = 0)
         {
             Version = version;
