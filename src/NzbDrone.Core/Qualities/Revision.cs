@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Qualities
         public override string ToString()
         {
             var sb = new StringBuilder();
+
             sb.AppendFormat("v{0}", Version);
 
             if (Real > 0)
@@ -73,32 +74,32 @@ namespace NzbDrone.Core.Qualities
 
         public static bool operator >(Revision left, Revision right)
         {
-            if (left == null) return false;
-            if (right == null) return true;
+            if (ReferenceEquals(null, left)) return false;
+            if (ReferenceEquals(null, right)) return true;
 
             return left.CompareTo(right) > 0;
         }
 
         public static bool operator <(Revision left, Revision right)
         {
-            if (left == null) return true;
-            if (right == null) return false;
+            if (ReferenceEquals(null, left)) return true;
+            if (ReferenceEquals(null, right)) return false;
 
             return left.CompareTo(right) < 0;
         }
 
         public static bool operator >=(Revision left, Revision right)
         {
-            if (left == null) return false;
-            if (right == null) return true;
+            if (ReferenceEquals(null, left)) return false;
+            if (ReferenceEquals(null, right)) return true;
 
             return left.CompareTo(right) >= 0;
         }
 
         public static bool operator <=(Revision left, Revision right)
         {
-            if (left == null) return true;
-            if (right == null) return false;
+            if (ReferenceEquals(null, left)) return true;
+            if (ReferenceEquals(null, right)) return false;
 
             return left.CompareTo(right) <= 0;
         }
