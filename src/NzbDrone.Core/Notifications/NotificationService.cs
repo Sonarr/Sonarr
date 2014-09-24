@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications
         {
             var qualityString = quality.Quality.ToString();
 
-            if (quality.Revision.Version > 0)
+            if (quality.Revision.Version > 1)
             {
                 if (series.SeriesType == SeriesTypes.Anime)
                 {
