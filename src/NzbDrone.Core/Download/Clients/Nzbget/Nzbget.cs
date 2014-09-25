@@ -158,16 +158,28 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                     continue;
                 }
 
-                if (!successStatus.Contains(item.ParStatus) ||
-                    !successStatus.Contains(item.UnpackStatus) ||
-                    !successStatus.Contains(item.MoveStatus))
+                if (!successStatus.Contains(item.ParStatus))
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
 
-                if (!successStatus.Contains(item.ScriptStatus))
+                if (item.UnpackStatus == "SPACE")
                 {
                     historyItem.Status = DownloadItemStatus.Warning;
+                }
+                else if (!successStatus.Contains(item.UnpackStatus))
+                {
+                    historyItem.Status = DownloadItemStatus.Failed;
+                }
+
+                if (!successStatus.Contains(item.MoveStatus))
+                {
+                    historyItem.Status = DownloadItemStatus.Warning;
+                }
+
+                if (!successStatus.Contains(item.ScriptStatus))
+                {
+                    historyItem.Status = DownloadItemStatus.Failed;
                 }
 
                 if (!successStatus.Contains(item.DeleteStatus))

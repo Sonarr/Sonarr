@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
-        public void should_report_health_deletestatus_as_failed()
+        public void should_report_deletestatus_health_as_failed()
         {
             _completed.DeleteStatus = "HEALTH";
 
@@ -223,9 +223,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
-        public void should_report_script_error_as_warning()
+        public void should_report_unpackstatus_freespace_as_warning()
         {
-            _completed.ScriptStatus = "FAILED";
+            _completed.UnpackStatus = "SPACE";
 
             GivenQueue(null);
             GivenHistory(_completed);
@@ -233,6 +233,35 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var items = Subject.GetItems();
 
             items.First().Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
+        public void should_report_movestatus_failure_as_warning()
+        {
+            _completed.MoveStatus = "FAILURE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
+        public void should_report_scriptstatus_failure_as_failed()
+        {
+            // TODO: We would love to have a way to distinguish between scripts reporting video corruption, or some internal script error.
+            // That way we could return Warning instead of Failed to notify the user to take action.
+
+            _completed.ScriptStatus = "FAILURE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Failed);
         }
 
 
