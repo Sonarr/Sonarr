@@ -20,45 +20,40 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
     [TestFixture]
     public class BitMeTvFixture : CoreTest<BitMeTv>
     {
-        private String _recentFeed;
-
-        [TestFixtureSetUp]
-        public void SetupFixture()
+        [SetUp]
+        public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                                      {
                                          Name = "BitMeTV",
                                          Settings = new BitMeTvSettings()
                                      };
-
-            _recentFeed = ReadAllText(@"Files/RSS/BitMeTv.xml");
         }
 
         [Test]
-        public void Indexer_TestFeedParser_BitMeTv()
+        public void should_parse_recent_feed_from_BitMeTv()
         {
-            var httpClientMock = Mocker.GetMock<IHttpClient>();
-            httpClientMock.Setup(o => o.Get(It.IsAny<HttpRequest>()))
-                          .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), _recentFeed));
+            var recentFeed = ReadAllText(@"Files/RSS/BitMeTv.xml");
+            
+               
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            var httpClient = httpClientMock.Object;
-
-            var fetchService = new FetchFeedService(httpClient, TestLogger);
-            var releases = fetchService.FetchRss(Subject);
+            var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
 
-            var firstRelease = releases.First();
-
-            Assert.IsInstanceOf<TorrentInfo>(firstRelease);
-
-            var torrentInfo = (TorrentInfo)firstRelease;
+            var torrentInfo = releases.First() as TorrentInfo;
 
             torrentInfo.Title.Should().Be("Total.Divas.S02E08.HDTV.x264-CRiMSON");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("http://www.bitmetv.org/download.php/12/Total.Divas.S02E08.HDTV.x264-CRiMSON.torrent");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
-            firstRelease.PublishDate.Should().Be(DateTime.Parse("2014/05/13 17:04:29"));
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2014/05/13 17:04:29"));
             torrentInfo.Size.Should().Be(395009065);
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);
