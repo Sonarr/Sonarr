@@ -20,45 +20,39 @@ namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
     [TestFixture]
     public class IPTorrentsFixture : CoreTest<IPTorrents>
     {
-        private String _recentFeed;
-
-        [TestFixtureSetUp]
-        public void SetupFixture()
+        [SetUp]
+        public void Setup()
         {
             Subject.Definition = new IndexerDefinition()
                                     {
                                         Name = "IPTorrents",
                                         Settings = new IPTorrentsSettings() {  Url = "http://fake.com/" }
                                     };
-
-            _recentFeed = ReadAllText(@"Files/RSS/IPTorrents.xml");
         }
 
         [Test]
-        public void Indexer_TestFeedParser_IPTorrents()
+        public void should_parse_recent_feed_from_IPTorrents()
         {
-            var httpClientMock = Mocker.GetMock<IHttpClient>();
-            httpClientMock.Setup(o => o.Get(It.IsAny<HttpRequest>()))
-                          .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), _recentFeed));
+            var recentFeed = ReadAllText(@"Files/RSS/IPTorrents.xml");
 
-            var httpClient = httpClientMock.Object;
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            var fetchService = new FetchFeedService(httpClient, TestLogger);
-            var releases = fetchService.FetchRss(Subject);
+            var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
 
-            var firstRelease = releases.First();
-
-            Assert.IsInstanceOf<TorrentInfo>(firstRelease);
-
-            var torrentInfo = (TorrentInfo)firstRelease;
+            var torrentInfo = releases.First() as TorrentInfo;
 
             torrentInfo.Title.Should().Be("24 S03E12 720p WEBRip h264-DRAWER");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             torrentInfo.DownloadUrl.Should().Be("http://iptorrents.com/download.php/1234/24.S03E12.720p.WEBRip.h264-DRAWER.torrent?torrent_pass=abcd");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
-            firstRelease.PublishDate.Should().Be(DateTime.Parse("2014/05/12 19:06:34"));
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2014/05/12 19:06:34"));
             torrentInfo.Size.Should().Be(1471026299);
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);
