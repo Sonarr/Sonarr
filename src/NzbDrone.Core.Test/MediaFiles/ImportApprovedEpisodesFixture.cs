@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             _downloadClientItem = Builder<DownloadClientItem>.CreateNew().Build();
         }
-            
+
         [Test]
         public void should_not_import_any_if_there_are_no_approved_decisions()
         {
@@ -139,7 +140,6 @@ namespace NzbDrone.Core.Test.MediaFiles
                           Times.Never());
         }
 
-
         [Test]
         public void should_use_nzb_title_as_scene_name()
         {
@@ -150,6 +150,19 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == _downloadClientItem.Title)));
         }
 
+        [TestCase(".mkv")]
+        [TestCase(".par2")]
+        [TestCase(".nzb")]
+        public void should_remove_extension_from_nzb_title_for_scene_name(String extension)
+        {
+            var title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
+
+            _downloadClientItem.Title = title + extension;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == title)));
+        }
 
         [Test]
         public void should_not_use_nzb_title_as_scene_name_if_full_season()
@@ -165,7 +178,6 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_use_file_name_as_scenename_only_if_it_looks_like_scenename()
         {
-
             _approvedDecisions.First().LocalEpisode.Path = "c:\\tv\\malcolm.in.the.middle.s02e23.dvdrip.xvid-ingot.mkv".AsOsAgnostic();
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
@@ -182,8 +194,6 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Add(It.Is<EpisodeFile>(c => c.SceneName == null)));
         }
-
-
 
         [Test]
         public void should_import_larger_files_first()

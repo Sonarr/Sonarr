@@ -348,7 +348,8 @@ namespace NzbDrone.Core.Parser
         {
             if (!title.ContainsInvalidPathChars())
             {
-                if (MediaFiles.MediaFileExtensions.Extensions.Contains(Path.GetExtension(title).ToLower()))
+                var extension = Path.GetExtension(title).ToLower();
+                if (MediaFiles.MediaFileExtensions.Extensions.Contains(extension) || new [] { ".par2", ".nzb" }.Contains(extension))
                 {
                     title = Path.Combine(Path.GetDirectoryName(title), Path.GetFileNameWithoutExtension(title));
                 }

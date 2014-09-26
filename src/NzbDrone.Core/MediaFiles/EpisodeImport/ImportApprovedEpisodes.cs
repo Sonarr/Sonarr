@@ -129,11 +129,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             if (downloadClientItem != null)
             {
-                var parsedTitle = Parser.Parser.ParseTitle(downloadClientItem.Title);
+                var title = Parser.Parser.RemoveFileExtension(downloadClientItem.Title);
+
+                var parsedTitle = Parser.Parser.ParseTitle(title);
 
                 if (parsedTitle != null && !parsedTitle.FullSeason)
                 {
-                    return downloadClientItem.Title;
+                    return title;
                 }
             }
 
