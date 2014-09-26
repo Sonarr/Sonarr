@@ -7,7 +7,8 @@ define(
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
         'Mixins/AsEditModalView',
-        'Mixins/AutoComplete'
+        'Mixins/AutoComplete',
+        'Mixins/TagInput'
     ], function (vent, Marionette, Profiles, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
         var view = Marionette.ItemView.extend({
@@ -15,7 +16,8 @@ define(
 
             ui: {
                 profile : '.x-profile',
-                path    : '.x-path'
+                path    : '.x-path',
+                tags    : '.x-tags'
             },
 
             events: {
@@ -39,6 +41,7 @@ define(
 
             onRender: function () {
                 this.ui.path.autoComplete('/directories');
+                this.ui.tags.tagInput();
             },
 
             _removeSeries: function () {
