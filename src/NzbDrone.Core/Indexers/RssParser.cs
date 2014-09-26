@@ -19,8 +19,15 @@ namespace NzbDrone.Core.Indexers
     {
         protected readonly Logger _logger;
 
+        // Use the 'guid' element content as InfoUrl.
+        public Boolean UseGuidInfoUrl { get; set; }
+
+        // Use the enclosure as download url and/or length.
         public Boolean UseEnclosureUrl { get; set; }
         public Boolean UseEnclosureLength { get; set; }
+
+        // Parse "Size: 1.3 GB" or "1.3 GB" parts in the description element and use that as Size.
+        public Boolean ParseSizeInDescription { get; set; }
 
         public RssParser()
         {
@@ -67,6 +74,11 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual Boolean PreProcess(IndexerResponse indexerResponse)
         {
+            if (indexerResponse.HttpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                throw new IndexerException(indexerResponse, "Indexer API call resulted in an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+            }
+
             return true;
         }
 
@@ -128,22 +140,27 @@ namespace NzbDrone.Core.Indexers
         {
             if (UseEnclosureUrl)
             {
-                return item.Elements("enclosure").First().Attribute("url").Value;
+                return item.Element("enclosure").Attribute("url").Value;
             }
             else
             {
-                return item.Elements("link").First().Value;
+                return item.Element("link").Value;
             }
         }
 
         protected virtual string GetInfoUrl(XElement item)
         {
+            if (UseGuidInfoUrl)
+            {
+                return (String)item.Element("guid");
+            }
+
             return String.Empty;
         }
 
         protected virtual string GetCommentUrl(XElement item)
         {
-            return String.Empty;
+            return (String)item.Element("comments");
         }
 
         protected virtual long GetSize(XElement item)
@@ -151,6 +168,10 @@ namespace NzbDrone.Core.Indexers
             if (UseEnclosureLength)
             {
                 return GetEnclosureLength(item);
+            }
+            else if (ParseSizeInDescription)
+            {
+                return ParseSize(item.Element("description").Value, true);
             }
 
             return 0;
@@ -168,12 +189,12 @@ namespace NzbDrone.Core.Indexers
             return 0;
         }
 
-        private static readonly Regex ReportSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>GB|MB|GiB|MiB)",
-                                                                  RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>[KMG]i?B)",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static Int64 ParseSize(String sizeString, Boolean defaultToBinaryPrefix)
         {
-            var match = ReportSizeRegex.Matches(sizeString);
+            var match = ParseSizeRegex.Matches(sizeString);
 
             if (match.Count != 0)
             {

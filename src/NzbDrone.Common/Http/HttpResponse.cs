@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Http
         {
             Request = request;
             Headers = headers;
-            ResponseData = Encoding.UTF8.GetBytes(content);
+            ResponseData = Headers.GetEncodingFromContentType().GetBytes(content);
             _content = content;
             StatusCode = statusCode;
         }
@@ -39,7 +39,7 @@ namespace NzbDrone.Common.Http
             {
                 if (_content == null)
                 {
-                    _content = GetStringFromResponseData();
+                    _content = Headers.GetEncodingFromContentType().GetString(ResponseData);
                 }
 
                 return _content;
@@ -65,36 +65,6 @@ namespace NzbDrone.Common.Http
             }
 
             return result;
-        }
-
-        protected virtual String GetStringFromResponseData()
-        {
-            Encoding encoding = null;
-
-            if (Headers.ContentType.IsNotNullOrWhiteSpace())
-            {
-                var charset = Headers.ContentType.ToLowerInvariant()
-                    .Split(';', '=', ' ')
-                    .SkipWhile(v => v != "charset")
-                    .Skip(1).FirstOrDefault();
-
-                if (charset.IsNotNullOrWhiteSpace())
-                {
-                    encoding = Encoding.GetEncoding(charset);
-                }
-            }
-
-            if (encoding == null)
-            {
-                // TODO: Find encoding by Byte order mask.
-            }
-
-            if (encoding == null)
-            {
-                encoding = Encoding.UTF8;
-            }
-
-            return encoding.GetString(ResponseData);
         }
     }
 

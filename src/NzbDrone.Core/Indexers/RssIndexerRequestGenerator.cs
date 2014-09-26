@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers
@@ -20,7 +21,7 @@ namespace NzbDrone.Core.Indexers
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            pageableRequests.Add(new[] { new IndexerRequest(_baseUrl) });
+            pageableRequests.Add(new[] { new IndexerRequest(_baseUrl, HttpAccept.Rss) });
 
             return pageableRequests;
         }

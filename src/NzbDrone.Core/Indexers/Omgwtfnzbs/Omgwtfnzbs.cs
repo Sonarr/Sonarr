@@ -9,7 +9,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
-    public class Omgwtfnzbs : RssIndexerBase<OmgwtfnzbsSettings>
+    public class Omgwtfnzbs : HttpIndexerBase<OmgwtfnzbsSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 

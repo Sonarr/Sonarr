@@ -10,8 +10,7 @@ using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {
-
-    public class TestIndexer : RssIndexerBase<TestIndexerSettings>
+    public class TestIndexer : HttpIndexerBase<TestIndexerSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 

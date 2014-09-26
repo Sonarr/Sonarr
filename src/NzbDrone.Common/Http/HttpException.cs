@@ -14,6 +14,12 @@ namespace NzbDrone.Common.Http
             Response = response;
         }
 
+        public HttpException(HttpResponse response)
+            : this(response.Request, response)
+        {
+
+        }
+
         public override string ToString()
         {
             if (Response != null)

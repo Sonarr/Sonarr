@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             _series = Builder<Series>.CreateNew().Build();
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "<xml></xml>"));
         }
 
@@ -45,9 +45,8 @@ namespace NzbDrone.Core.Test.IndexerTests
             
             var requests = Builder<IndexerRequest>.CreateListOfSize(paging ? 100 : 1)
                 .All()
-                .WithConstructor(() => new IndexerRequest("http://my.feed.local/"))
-                .With(v => v.Method = HttpMethod.GET)
-                .With(v => v.NetworkCredential = null)
+                .WithConstructor(() => new IndexerRequest("http://my.feed.local/", HttpAccept.Rss))
+                .With(v => v.HttpRequest.Method = HttpMethod.GET)
                 .Build();
 
             requestGenerator.Setup(s => s.GetSearchRequests(It.IsAny<SeasonSearchCriteria>()))
@@ -70,7 +69,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
 
-            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }
 
         [Test]
@@ -80,7 +79,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
-            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }
 
         [Test]
@@ -90,7 +89,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
-            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Exactly(10));
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Exactly(10));
         }
     }
 }

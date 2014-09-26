@@ -28,10 +28,10 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
         [Test]
         public void should_parse_recent_feed_from_fanzub()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/Fanzub.xml");
+            var recentFeed = ReadAllText(@"Files/RSS/fanzub.xml");
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
             
             var releases = Subject.FetchRecent();
@@ -43,6 +43,8 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
             releaseInfo.Title.Should().Be("[Vivid] Hanayamata - 10 [A33D6606]");
             releaseInfo.DownloadProtocol.Should().Be(DownloadProtocol.Usenet);
             releaseInfo.DownloadUrl.Should().Be("http://fanzub.com/nzb/296464/Vivid%20Hanayamata%20-%2010.nzb");
+            releaseInfo.InfoUrl.Should().BeNullOrEmpty();
+            releaseInfo.CommentUrl.Should().BeNullOrEmpty();
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
             releaseInfo.PublishDate.Should().Be(DateTime.Parse("2014/09/13 12:56:53"));
             releaseInfo.Size.Should().Be(556246858);

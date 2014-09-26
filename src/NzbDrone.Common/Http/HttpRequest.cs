@@ -6,14 +6,19 @@ namespace NzbDrone.Common.Http
 {
     public class HttpRequest
     {
-
         private readonly Dictionary<string, string> _segments;
 
-        public HttpRequest(string url)
+        public HttpRequest(string url, HttpAccept httpAccept = null)
         {
             UriBuilder = new UriBuilder(url);
             Headers = new HttpHeader();
             _segments = new Dictionary<string, string>();
+            AllowAutoRedirect = true;
+
+            if (httpAccept != null)
+            {
+                Headers.Accept = httpAccept.Value;
+            }
         }
 
         public UriBuilder UriBuilder { get; private set; }
@@ -38,6 +43,7 @@ namespace NzbDrone.Common.Http
         public string Body { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
         public bool SuppressHttpError { get; set; }
+        public bool AllowAutoRedirect { get; set; }
 
         public override string ToString()
         {

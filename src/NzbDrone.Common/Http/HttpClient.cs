@@ -46,6 +46,7 @@ namespace NzbDrone.Common.Http
             webRequest.Method = request.Method.ToString();
             webRequest.UserAgent = _userAgent;
             webRequest.KeepAlive = false;
+            webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
 
             if (!RuntimeInfoBase.IsProduction)
             {
@@ -61,8 +62,7 @@ namespace NzbDrone.Common.Http
 
             if (!request.Body.IsNullOrWhiteSpace())
             {
-                var bytes = new byte[request.Body.Length * sizeof(char)];
-                Buffer.BlockCopy(request.Body.ToCharArray(), 0, bytes, 0, bytes.Length);
+                var bytes = request.Headers.GetEncodingFromContentType().GetBytes(request.Body.ToCharArray());
 
                 webRequest.ContentLength = bytes.Length;
                 using (var writeStream = webRequest.GetRequestStream())

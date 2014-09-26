@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text;
 
 namespace NzbDrone.Common.Http
 {
@@ -65,6 +67,36 @@ namespace NzbDrone.Common.Http
             {
                 this["Accept"] = value;
             }
+        }
+
+        public Encoding GetEncodingFromContentType()
+        {
+            Encoding encoding = null;
+
+            if (ContentType.IsNotNullOrWhiteSpace())
+            {
+                var charset = ContentType.ToLowerInvariant()
+                    .Split(';', '=', ' ')
+                    .SkipWhile(v => v != "charset")
+                    .Skip(1).FirstOrDefault();
+
+                if (charset.IsNotNullOrWhiteSpace())
+                {
+                    encoding = Encoding.GetEncoding(charset);
+                }
+            }
+
+            if (encoding == null)
+            {
+                // TODO: Find encoding by Byte order mask.
+            }
+
+            if (encoding == null)
+            {
+                encoding = Encoding.UTF8;
+            }
+
+            return encoding;
         }
     }
 }

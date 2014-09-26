@@ -10,7 +10,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Wombles
 {
-    public class Wombles : RssIndexerBase<NullConfig>
+    public class Wombles : HttpIndexerBase<NullConfig>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
         public override bool SupportsSearch { get { return false; } }

@@ -16,7 +16,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class RssIndexerBase<TSettings> : IndexerBase<TSettings>
+    public abstract class HttpIndexerBase<TSettings> : IndexerBase<TSettings>
         where TSettings : IProviderConfig, new()
     {
         private const Int32 MaxNumResultsPerQuery = 1000;
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Indexers
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();
 
-        public RssIndexerBase(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+        public HttpIndexerBase(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(configService, parsingService, logger)
         {
             _httpClient = httpClient;
@@ -113,57 +113,31 @@ namespace NzbDrone.Core.Indexers
         protected virtual IList<ReleaseInfo> FetchReleases(IList<IEnumerable<IndexerRequest>> pageableRequests)
         {
             var releases = new List<ReleaseInfo>();
+            var url = String.Empty;
 
-            foreach (var pageableRequest in pageableRequests)
-            {
-                var pagedReleases = new List<ReleaseInfo>();
-
-                foreach (var request in pageableRequest)
-                {
-                    var page = FetchPage(request);
-
-                    pagedReleases.AddRange(page);
-
-                    if (!IsFullPage(page) || pagedReleases.Count >= MaxNumResultsPerQuery)
-                    {
-                        break;
-                    }
-                }
-
-                releases.AddRange(pagedReleases);
-            }
-
-            return CleanupReleases(releases);
-        }
-
-        protected virtual Boolean IsFullPage(IList<ReleaseInfo> page)
-        {
-            return PageSize != 0 && page.Count >= PageSize;
-        }
-
-        protected virtual IList<ReleaseInfo> FetchPage(IndexerRequest request)
-        {
-            var url = request.Url;
+            var parser = GetParser();
 
             try
             {
-                _logger.Debug("Downloading Feed " + request.Url);
-                request.Headers.Accept = "application/rss+xml, text/rss+xml, text/xml";
-                var response = new IndexerResponse(_httpClient.Get(request));
+                foreach (var pageableRequest in pageableRequests)
+                {
+                    var pagedReleases = new List<ReleaseInfo>();
 
-                if (response.Headers.ContentType != null && response.Headers.ContentType.StartsWith("text/html"))
-                {
-                    throw new WebException("Indexer responded with html content. Site is likely blocked or unavailable.");
-                }
+                    foreach (var request in pageableRequest)
+                    {
+                        url = request.Url.ToString();
 
-                var xml = response.Content;
-                if (!string.IsNullOrWhiteSpace(xml))
-                {
-                    return GetParser().ParseResponse(response).ToList();
-                }
-                else
-                {
-                    _logger.Warn("{0} returned empty response.", url);
+                        var page = FetchPage(request, parser);
+
+                        pagedReleases.AddRange(page);
+
+                        if (!IsFullPage(page) || pagedReleases.Count >= MaxNumResultsPerQuery)
+                        {
+                            break;
+                        }
+                    }
+
+                    releases.AddRange(pagedReleases);
                 }
             }
             catch (WebException webException)
@@ -178,6 +152,11 @@ namespace NzbDrone.Core.Indexers
                     _logger.Warn("{0} {1} {2}", this, url, webException.Message);
                 }
             }
+            catch (RequestLimitReachedException)
+            {
+                // TODO: Backoff for x period.
+                _logger.Warn("API Request Limit reached for {0}", this);
+            }
             catch (ApiKeyException)
             {
                 _logger.Warn("Invalid API Key for {0} {1}", this, url);
@@ -188,7 +167,28 @@ namespace NzbDrone.Core.Indexers
                 _logger.ErrorException("An error occurred while processing feed. " + url, feedEx);
             }
 
-            return new List<ReleaseInfo>();
+            return CleanupReleases(releases);
+        }
+
+        protected virtual Boolean IsFullPage(IList<ReleaseInfo> page)
+        {
+            return PageSize != 0 && page.Count >= PageSize;
+        }
+
+        protected virtual IList<ReleaseInfo> FetchPage(IndexerRequest request, IParseIndexerResponse parser)
+        {
+            var url = request.Url;
+
+            _logger.Debug("Downloading Feed " + request.Url);
+            var response = new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
+
+            if (response.HttpResponse.Headers.ContentType != null && response.HttpResponse.Headers.ContentType.Contains("text/html") &&
+                request.HttpRequest.Headers.Accept != null && !request.HttpRequest.Headers.Accept.Contains("text/html"))
+            {
+                throw new WebException("Indexer responded with html content. Site is likely blocked or unavailable.");
+            }
+
+            return parser.ParseResponse(response).ToList();
         }
 
         protected override void Test(List<ValidationFailure> failures)
@@ -198,6 +198,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual ValidationFailure TestConnection()
         {
+            // TODO: This doesn't even work coz those exceptions get catched.
             try
             {
                 var releases = FetchRecent();

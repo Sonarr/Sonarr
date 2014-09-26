@@ -157,13 +157,13 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (PageSize == 0)
             {
-                yield return new IndexerRequest(String.Format("{0}{1}", baseUrl, parameters));
+                yield return new IndexerRequest(String.Format("{0}{1}", baseUrl, parameters), HttpAccept.Rss);
             }
             else
             {
                 for (var page = 0; page < maxPages; page++)
                 {
-                    yield return new IndexerRequest(String.Format("{0}&offset={1}&limit={2}{3}", baseUrl, page * PageSize, PageSize, parameters));
+                    yield return new IndexerRequest(String.Format("{0}&offset={1}&limit={2}{3}", baseUrl, page * PageSize, PageSize, parameters), HttpAccept.Rss);
                 }
             }
         }

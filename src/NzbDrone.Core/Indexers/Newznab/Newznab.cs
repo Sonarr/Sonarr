@@ -12,7 +12,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class Newznab : RssIndexerBase<NewznabSettings>
+    public class Newznab : HttpIndexerBase<NewznabSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
         public override Int32 PageSize { get { return 100; } }

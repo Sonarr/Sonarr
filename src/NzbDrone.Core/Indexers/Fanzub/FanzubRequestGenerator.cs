@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.Fanzub
@@ -71,7 +72,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
                 url.AppendFormat("&q={0}", query);
             }
 
-            yield return new IndexerRequest(url.ToString());
+            yield return new IndexerRequest(url.ToString(), HttpAccept.Rss);
         }
 
         private IEnumerable<String> GetTitleSearchStrings(string title, int absoluteEpisodeNumber)

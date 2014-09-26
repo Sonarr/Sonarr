@@ -11,7 +11,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Fanzub
 {
-    public class Fanzub : RssIndexerBase<NullConfig>
+    public class Fanzub : HttpIndexerBase<NullConfig>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 

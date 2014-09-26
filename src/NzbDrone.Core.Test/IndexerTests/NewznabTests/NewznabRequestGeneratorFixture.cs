@@ -119,11 +119,5 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             pages.Count.Should().BeLessThan(500);
         }
-
-        [Test]
-        public void should_implement_additional_test()
-        {
-            Assert.Fail();
-        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NzbDrone.Common;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
@@ -99,7 +100,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
                 url.AppendFormat("&search={0}", query);
             }
 
-            yield return new IndexerRequest(url.ToString());
+            yield return new IndexerRequest(url.ToString(), HttpAccept.Rss);
         }
     }
 }

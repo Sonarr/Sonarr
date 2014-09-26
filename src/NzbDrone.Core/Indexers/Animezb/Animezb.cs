@@ -11,7 +11,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Animezb
 {
-    public class Animezb : RssIndexerBase<NullConfig>
+    public class Animezb : HttpIndexerBase<NullConfig>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 

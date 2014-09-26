@@ -385,9 +385,9 @@
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
     <Compile Include="Indexers\Animezb\Animezb.cs" />
     <Compile Include="Indexers\Animezb\AnimezbRequestGenerator.cs" />
-    <Compile Include="Indexers\BasicTorrentRssParser.cs" />
     <Compile Include="Indexers\DownloadProtocol.cs" />
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
+    <Compile Include="Indexers\Exceptions\IndexerException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
@@ -413,7 +413,7 @@
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
-    <Compile Include="Indexers\RssIndexerBase.cs" />
+    <Compile Include="Indexers\HttpIndexerBase.cs" />
     <Compile Include="Indexers\RssIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\RssParser.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
