@@ -115,7 +115,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 item.DownloadClient = Definition.Name;
                 item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
 
-                item.OutputPath = Path.Combine(torrent.DownloadPath, torrent.Name);
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.DownloadPath);
+                item.OutputPath = Path.Combine(outputPath, torrent.Name);
                 item.RemainingSize = torrent.Size - torrent.BytesDownloaded;
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 item.TotalSize = torrent.Size;
