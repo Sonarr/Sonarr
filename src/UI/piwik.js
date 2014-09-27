@@ -1,6 +1,4 @@
 ﻿'use strict';
-
-(function () {
 if(window.NzbDrone.Analytics) {
     var d = document;
     var g = d.createElement('script');
@@ -11,4 +9,3 @@ if(window.NzbDrone.Analytics) {
     g.src = 'http://piwik.nzbdrone.com/piwik.js';
     s.parentNode.insertBefore(g, s);
 }
-})();

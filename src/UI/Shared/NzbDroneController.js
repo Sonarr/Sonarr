@@ -26,7 +26,7 @@ define(
                     document.title = title + ' - nzbdrone';
                 }
 
-                if(window.Piwik){
+                if(window.NzbDrone.Analytics && window.Piwik){
                     try {
                         var piwik = window.Piwik.getTracker('http://piwik.nzbdrone.com/piwik.php', 1);
                         piwik.setReferrerUrl('');
