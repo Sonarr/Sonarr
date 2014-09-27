@@ -147,7 +147,26 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var client = BuildClient(settings);
 
-            var response = ProcessRequest<TResult>(client, action, arguments);
+            DelugeResponse<TResult> response;
+
+            try
+            {
+                response = ProcessRequest<TResult>(client, action, arguments);
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.Timeout)
+                {
+                    _logger.Debug("Deluge timeout during request, daemon connection may have been broken. Attempting to reconnect.");
+                    response = new DelugeResponse<TResult>();
+                    response.Error = new DelugeError();
+                    response.Error.Code = 2;
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             if (response.Error != null)
             {
@@ -205,6 +224,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                                  settings.Port);
 
             var restClient = RestClientFactory.BuildClient(url);
+            restClient.Timeout = 4000;
 
             if (_authPassword != settings.Password || _authCookieContainer == null)
             {
@@ -241,10 +261,12 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         private void ConnectDaemon(IRestClient restClient)
         {
-            var resultMethods = ProcessRequest<String[]>(restClient, "system.listMethods", new Object[0]);
+            var resultConnected = ProcessRequest<Boolean>(restClient, "web.connected", new Object[0]);
 
-            if (resultMethods.Result != null && resultMethods.Result.Contains("daemon.info"))
+            if (resultConnected.Result)
+            {
                 return;
+            }
 
             var resultHosts = ProcessRequest<List<Object[]>>(restClient, "web.get_hosts", new Object[0]);
 
