@@ -10,7 +10,8 @@ namespace NzbDrone.Api.Config
         public Int32 SslPort { get; set; }
         public Boolean EnableSsl { get; set; }
         public Boolean LaunchBrowser { get; set; }
-        public Boolean AuthenticationEnabled { get; set; }
+        public bool AuthenticationEnabled { get; set; }
+        public Boolean AnalyticsEnabled { get; set; }
         public String Username { get; set; }
         public String Password { get; set; }
         public String LogLevel { get; set; }

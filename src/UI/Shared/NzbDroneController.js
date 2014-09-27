@@ -25,6 +25,19 @@ define(
                 else {
                     document.title = title + ' - nzbdrone';
                 }
+
+                if(window.Piwik){
+                    try {
+                        var piwik = window.Piwik.getTracker('http://piwik.nzbdrone.com/piwik.php', 1);
+                        piwik.setReferrerUrl('');
+                        piwik.setCustomUrl('http://local' + window.location.pathname);
+                        piwik.setCustomVariable(1, 'version', window.NzbDrone.version, 'page');
+                        piwik.trackPageView(title);
+                    }
+                    catch (e){
+                        console.error(e);
+                    }
+                }
             },
 
             _onServerUpdated: function () {

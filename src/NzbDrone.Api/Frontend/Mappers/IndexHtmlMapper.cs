@@ -13,6 +13,7 @@ namespace NzbDrone.Api.Frontend.Mappers
     public class IndexHtmlMapper : StaticResourceMapperBase
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly Func<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private readonly string _indexPath;
         private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -30,6 +31,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
+            _configFileProvider = configFileProvider;
             _cacheBreakProviderFactory = cacheBreakProviderFactory;
             _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "index.html");
 
@@ -87,6 +89,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             text = text.Replace("API_ROOT", URL_BASE + "/api");
             text = text.Replace("API_KEY", API_KEY);
             text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
+            text = text.Replace("APP_ANALYTICS", _configFileProvider.AnalyticsEnabled.ToString().ToLowerInvariant());
 
             _generatedContent = text;
 
