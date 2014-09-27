@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Nancy;
 using NLog;
@@ -12,26 +13,31 @@ namespace NzbDrone.Api.Frontend.Mappers
     public class IndexHtmlMapper : StaticResourceMapperBase
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly Func<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private readonly string _indexPath;
         private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static String API_KEY;
         private static String URL_BASE;
+        private string _generatedContent
+            ;
 
         public IndexHtmlMapper(IAppFolderInfo appFolderInfo,
                                IDiskProvider diskProvider,
                                IConfigFileProvider configFileProvider,
+                               Func<ICacheBreakerProvider> cacheBreakProviderFactory,
                                Logger logger)
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
+            _cacheBreakProviderFactory = cacheBreakProviderFactory;
             _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "index.html");
 
             API_KEY = configFileProvider.ApiKey;
             URL_BASE = configFileProvider.UrlBase;
         }
 
-        protected override string Map(string resourceUrl)
+        public override string Map(string resourceUrl)
         {
             return _indexPath;
         }
@@ -51,22 +57,40 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         protected override Stream GetContentStream(string filePath)
         {
-            return StringToStream(GetIndexText());
+            var text = GetIndexText();
+
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(text);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         private string GetIndexText()
         {
+            if (RuntimeInfoBase.IsProduction && _generatedContent != null)
+            {
+                return _generatedContent;
+            }
+
             var text = _diskProvider.ReadAllText(_indexPath);
 
-            text = ReplaceRegex.Replace(text, match => URL_BASE + match.Value);
+            var cacheBreakProvider = _cacheBreakProviderFactory();
 
-            text = text.Replace(".css", ".css?v=" + BuildInfo.Version);
-            text = text.Replace(".js", ".js?v=" + BuildInfo.Version);
+            text = ReplaceRegex.Replace(text, match =>
+            {
+                var url = cacheBreakProvider.AddCacheBreakerToPath(match.Value);
+                return URL_BASE + url;
+            });
+
             text = text.Replace("API_ROOT", URL_BASE + "/api");
             text = text.Replace("API_KEY", API_KEY);
             text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
 
-            return text;
+            _generatedContent = text;
+
+            return _generatedContent;
         }
     }
 }

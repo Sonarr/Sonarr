@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                                  settings.Address);
                 }
 
-                var response = _proxy.UpdateLibrary(settings, null);
+                var response = _proxy.UpdateLibrary(settings, seriesPath);
 
                 if (!response.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                 {

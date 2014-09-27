@@ -95,6 +95,15 @@
   font-size : 16px;
 }
 
+.label-white {
+  color            : black;
+  background-color : white;
+}
+
+.label-disabled {
+  opacity: 0.5;
+}
+
 th {
   cursor : default;
 
@@ -113,15 +122,9 @@ a, .btn {
   }
 }
 
-.label-white {
-  color            : black;
-  background-color : white;
-}
-
 body {
   background:
-    url('../Content/Images/background/logo.png') 50px center no-repeat fixed,
-    #1c1c1c url('../Content/Images/background/black.png') top center e('/') cover repeat;
+    url('../Content/Images/background/logo.png') 50px center no-repeat fixed,#272727;
 
   margin-bottom    : 100px;
   p {
@@ -245,5 +248,11 @@ body {
   h3 {
     margin-top    : 0px;
     margin-bottom : 0px;
+  }
+}
+
+.tooltip {
+  .tooltip-inner {
+    max-width : 250px;
   }
 }

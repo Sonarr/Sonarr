@@ -26,7 +26,7 @@ define(
                         cell      : AgeCell
                     },
                     {
-                        name      : 'this',
+                        name      : 'title',
                         label     : 'Title',
                         cell      : ReleaseTitleCell
                     },

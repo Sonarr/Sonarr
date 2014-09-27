@@ -16,6 +16,7 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
+using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -40,11 +41,17 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
 
             Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers")
-                .Ignore(s => s.Protocol);
+                  .Ignore(i => i.Enable)
+                  .Ignore(i => i.Protocol)
+                  .Ignore(i => i.SupportsRss)
+                  .Ignore(i => i.SupportsSearch);
+
             Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
             Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
             Mapper.Entity<MetadataDefinition>().RegisterModel("Metadata");
-            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients");
+
+            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients")
+                  .Ignore(d => d.Protocol);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
 
@@ -58,7 +65,11 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<EpisodeFile>().RegisterModel("EpisodeFiles")
                   .Ignore(f => f.Path)
-                  .Relationships.AutoMapICollectionOrComplexProperties();
+                  .Relationships.AutoMapICollectionOrComplexProperties()
+                  .For("Episodes")
+                  .LazyLoad(condition: parent => parent.Id > 0, 
+                            query: (db, parent) => db.Query<Episode>().Where(c => c.EpisodeFileId == parent.Id).ToList())
+                  .HasOne(file => file.Series, file => file.SeriesId);
 
             Mapper.Entity<Episode>().RegisterModel("Episodes")
                   .Ignore(e => e.SeriesTitle)
@@ -77,6 +88,8 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<PendingRelease>().RegisterModel("PendingReleases")
                   .Ignore(e => e.RemoteEpisode);
+
+            Mapper.Entity<RemotePathMapping>().RegisterModel("RemotePathMappings");
         }
 
         private static void RegisterMappers()

@@ -62,10 +62,9 @@ namespace NzbDrone.Core.Test.Datastore
         public void should_be_able_to_find_by_id()
         {
             Subject.Insert(_basicType);
-            Subject.Get(_basicType.Id)
-                   .ShouldHave()
-                   .AllProperties()
-                   .EqualTo(_basicType);
+            var storeObject = Subject.Get(_basicType.Id);
+
+            storeObject.ShouldBeEquivalentTo(_basicType, o=>o.IncludingAllRuntimeProperties());
         }
 
         [Test]

@@ -31,6 +31,12 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper|repack)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex VersionRegex = new Regex(@"\dv(?<version>\d)\b|\[v(?<version>\d)\]",
+                                                                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex RealRegex = new Regex(@"\b(?<real>)real\b",
+                                                                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480|848x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -39,7 +45,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex OtherSourceRegex = new Regex(@"(?<hdtv>HD[-_. ]TV)|(?<sdtv>SD[-_. ]TV)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex AnimeBlurayRegex = new Regex(@"bd(?:720|1080)|(?<=\[|\(|\s)bd(?=\s|\)|\])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex AnimeBlurayRegex = new Regex(@"bd(?:720|1080)|(?<=[-_. (\[])bd(?=[-_. )\]])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex HighDefPdtvRegex = new Regex(@"hr[-_. ]ws", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -49,9 +55,8 @@ namespace NzbDrone.Core.Parser
 
             name = name.Trim();
             var normalizedName = name.Replace('_', ' ').Trim().ToLower();
-            var result = new QualityModel { Quality = Quality.Unknown };
+            var result = ParseQualityModifiers(normalizedName);
 
-            result.Proper = ProperRegex.IsMatch(normalizedName);
 
             if (RawHDRegex.IsMatch(normalizedName))
             {
@@ -282,7 +287,7 @@ namespace NzbDrone.Core.Parser
             return result;
         }
 
-        private static Resolution ParseResolution(string name)
+        private static Resolution ParseResolution(String name)
         {
             var match = ResolutionRegex.Match(name);
 
@@ -295,7 +300,7 @@ namespace NzbDrone.Core.Parser
             return Resolution.Unknown;
         }
 
-        private static Quality OtherSourceMatch(string name)
+        private static Quality OtherSourceMatch(String name)
         {
             var match = OtherSourceRegex.Match(name);
 
@@ -304,6 +309,34 @@ namespace NzbDrone.Core.Parser
             if (match.Groups["hdtv"].Success) return Quality.HDTV720p;
 
             return Quality.Unknown;
+        }
+
+        private static QualityModel ParseQualityModifiers(String normalizedName)
+        {
+            var result = new QualityModel { Quality = Quality.Unknown };
+
+            if (ProperRegex.IsMatch(normalizedName))
+            {
+                result.Revision.Version = 2;
+            }
+
+            var versionRegexResult = VersionRegex.Match(normalizedName);
+
+            if (versionRegexResult.Success)
+            {
+                result.Revision.Version = Convert.ToInt32(versionRegexResult.Groups["version"].Value);
+            }
+
+            //TODO: re-enable this when we have a reliable way to determine real
+            //TODO: Only treat it as a real if it comes AFTER the season/epsiode number
+//            var realRegexResult = RealRegex.Matches(normalizedName);
+//
+//            if (realRegexResult.Count > 0)
+//            {
+//                result.Revision.Real = realRegexResult.Count;
+//            }
+
+            return result;
         }
     }
 

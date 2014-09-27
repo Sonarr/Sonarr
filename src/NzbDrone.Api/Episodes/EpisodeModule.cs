@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.REST;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Episodes
 {
-    public class EpisodeModule : EpisodeModuleWithSignalR     
+    public class EpisodeModule : EpisodeModuleWithSignalR
     {
-        private readonly IEpisodeService _episodeService;
-
-        public EpisodeModule(ICommandExecutor commandExecutor, IEpisodeService episodeService)
-            : base(episodeService, commandExecutor)
+        public EpisodeModule(ISeriesService seriesService,
+                             IEpisodeService episodeService,
+                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IBroadcastSignalRMessage signalRBroadcaster)
+            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster)
         {
-            _episodeService = episodeService;
-
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;
         }
@@ -27,7 +27,9 @@ namespace NzbDrone.Api.Episodes
                 throw new BadRequestException("seriesId is missing");
             }
 
-            return ToListResource(() => _episodeService.GetEpisodeBySeries(seriesId.Value));
+            var resources = ToListResource(_episodeService.GetEpisodeBySeries(seriesId.Value));
+
+            return resources;
         }
 
         private void SetMonitored(EpisodeResource episodeResource)

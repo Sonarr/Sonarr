@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 return Convert.ToInt64(sizeElement.Attribute("value").Value);
             }
 
-            return ParseSize(item.Description());
+            return ParseSize(item.Description(), true);
         }
 
         public override IEnumerable<ReleaseInfo> Process(string xml, string url)

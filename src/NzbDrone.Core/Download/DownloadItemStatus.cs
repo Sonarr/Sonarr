@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Download
         Paused = 1,
         Downloading = 2,
         Completed = 3,
-        Failed = 4
+        Failed = 4,
+        Warning = 5
     }
 }

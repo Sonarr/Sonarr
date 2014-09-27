@@ -13,5 +13,6 @@ namespace NzbDrone.Api.Commands
         public Boolean SendUpdatesToClient { get; set; }
         public CommandStatus State { get; set; }
         public DateTime? LastExecutionTime { get; set; }
+        public Boolean Manual { get; set; }
     }
 }

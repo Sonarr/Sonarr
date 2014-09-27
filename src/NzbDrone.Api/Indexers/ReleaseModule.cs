@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using FluentValidation;
 using Nancy;
 using NLog;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using Omu.ValueInjecter;
 using System.Linq;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Common.Cache;
+using SystemNetHttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -24,15 +25,16 @@ namespace NzbDrone.Api.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IPrioritizeDownloadDecision _prioritizeDownloadDecision;
         private readonly IDownloadService _downloadService;
-        private readonly IParsingService _parsingService;
         private readonly Logger _logger;
+
+        private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
                              ISearchForNzb nzbSearchService,
                              IMakeDownloadDecision downloadDecisionMaker,
                              IPrioritizeDownloadDecision prioritizeDownloadDecision,
                              IDownloadService downloadService,
-                             IParsingService parsingService,
+                             ICacheManager cacheManager,
                              Logger logger)
         {
             _rssFetcherAndParser = rssFetcherAndParser;
@@ -40,19 +42,35 @@ namespace NzbDrone.Api.Indexers
             _downloadDecisionMaker = downloadDecisionMaker;
             _prioritizeDownloadDecision = prioritizeDownloadDecision;
             _downloadService = downloadService;
-            _parsingService = parsingService;
             _logger = logger;
             GetResourceAll = GetReleases;
-            Post["/"] = x=> DownloadRelease(this.Bind<ReleaseResource>());
+            Post["/"] = x => DownloadRelease(this.Bind<ReleaseResource>());
 
             PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
+
+            _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
         }
 
         private Response DownloadRelease(ReleaseResource release)
         {
-            var remoteEpisode = _parsingService.Map(release.InjectTo<ParsedEpisodeInfo>(), release.TvRageId);
-            remoteEpisode.Release = release.InjectTo<ReleaseInfo>();
-            _downloadService.DownloadReport(remoteEpisode);
+            var remoteEpisode = _remoteEpisodeCache.Find(release.Guid);
+            
+            if (remoteEpisode == null)
+            {
+                _logger.Debug("Couldn't find requested release in cache, cache timeout probably expired.");
+
+                return new NotFoundResponse();
+            }
+
+            try
+            {
+                _downloadService.DownloadReport(remoteEpisode);
+            }
+            catch (ReleaseDownloadException ex)
+            {
+                _logger.ErrorException(ex.Message, ex);
+                throw new NzbDroneClientException(SystemNetHttpStatusCode.Conflict, "Getting release from indexer failed");
+            }
 
             return release.AsResponse();
         }
@@ -93,12 +111,14 @@ namespace NzbDrone.Api.Indexers
             return MapDecisions(prioritizedDecisions);
         }
 
-        private static List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
+        private List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
         {
             var result = new List<ReleaseResource>();
 
             foreach (var downloadDecision in decisions)
             {
+                _remoteEpisodeCache.Set(downloadDecision.RemoteEpisode.Release.Guid, downloadDecision.RemoteEpisode, TimeSpan.FromMinutes(30));
+
                 var release = new ReleaseResource();
 
                 release.InjectFrom(downloadDecision.RemoteEpisode.Release);
@@ -111,13 +131,16 @@ namespace NzbDrone.Api.Indexers
 
                 if (downloadDecision.RemoteEpisode.Series != null)
                 {
-                    release.QualityWeight = downloadDecision.RemoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == release.Quality.Quality) * 2;
+                    release.QualityWeight = downloadDecision.RemoteEpisode
+                                                            .Series
+                                                            .Profile
+                                                            .Value
+                                                            .Items
+                                                            .FindIndex(v => v.Quality == release.Quality.Quality) * 100;
                 }
 
-                if (!release.Quality.Proper)
-                {
-                    release.QualityWeight++;
-                }
+                release.QualityWeight += release.Quality.Revision.Real * 10;
+                release.QualityWeight += release.Quality.Revision.Version;
 
                 result.Add(release);
             }

@@ -8,6 +8,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -16,16 +17,17 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 {
     public class Pneumatic : DownloadClientBase<PneumaticSettings>
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
 
-        public Pneumatic(IHttpProvider httpProvider,
+        public Pneumatic(IHttpClient httpClient,
                          IConfigService configService,
                          IDiskProvider diskProvider,
                          IParsingService parsingService,
+                         IRemotePathMappingService remotePathMappingService,
                          Logger logger)
-            : base(configService, diskProvider, parsingService, logger)
+            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
         {
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
         }
 
         public override DownloadProtocol Protocol
@@ -49,15 +51,15 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             title = FileNameBuilder.CleanFileName(title);
 
             //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
-            var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
+            var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
-            _logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
-            _httpProvider.DownloadFile(url, filename);
+            _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
+            _httpClient.DownloadFile(url, nzbFile);
 
-            _logger.Debug("NZB Download succeeded, saved to: {0}", filename);
+            _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 
-            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", filename, title);
-            _diskProvider.WriteAllText(Path.Combine(_configService.DownloadedEpisodesFolder, title + ".strm"), contents);
+            var strmFile = WriteStrmFile(title, nzbFile);
+            return GetDownloadClientId(strmFile);
 
             return null;
         }
@@ -72,7 +74,40 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            return new DownloadClientItem[0];
+            foreach (var file in _diskProvider.GetFiles(Settings.StrmFolder, SearchOption.TopDirectoryOnly))
+            {
+                if (Path.GetExtension(file) != ".strm")
+                {
+                    continue;
+                }
+
+                var title = FileNameBuilder.CleanFileName(Path.GetFileName(file));
+
+                var historyItem = new DownloadClientItem
+                {
+                    DownloadClient = Definition.Name,
+                    DownloadClientId = GetDownloadClientId(file),
+                    Title = title,
+
+                    TotalSize = _diskProvider.GetFileSize(file),
+
+                    OutputPath = file
+                };
+
+                if (_diskProvider.IsFileLocked(file))
+                {
+                    historyItem.Status = DownloadItemStatus.Downloading;
+                }
+                else
+                {
+                    historyItem.Status = DownloadItemStatus.Completed;
+                }
+
+                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
+                if (historyItem.RemoteEpisode == null) continue;
+
+                yield return historyItem;
+            }
         }
 
         public override void RemoveItem(String id)
@@ -98,6 +133,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestWrite(Settings.StrmFolder, "StrmFolder"));
         }
 
         private ValidationFailure TestWrite(String folder, String propertyName)
@@ -120,6 +156,38 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             }
 
             return null;
+        }
+
+        private String WriteStrmFile(String title, String nzbFile)
+        {
+            String folder;
+
+            if (Settings.StrmFolder.IsNullOrWhiteSpace())
+            {
+                folder = _configService.DownloadedEpisodesFolder;
+
+                if (folder.IsNullOrWhiteSpace())
+                {
+                    throw new DownloadClientException("Strm Folder needs to be set for Pneumatic Downloader");
+                }
+            }
+
+            else
+            {
+                folder = Settings.StrmFolder;
+            }
+
+            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", nzbFile, title);
+            var filename = Path.Combine(folder, title + ".strm");
+
+            _diskProvider.WriteAllText(filename, contents);
+
+            return filename;
+        }
+
+        private String GetDownloadClientId(String filename)
+        {
+            return Definition.Name + "_" + Path.GetFileName(filename) + "_" + _diskProvider.FileGetLastWriteUtc(filename).Ticks;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Disk;
+using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
 using NzbDrone.Test.Common;
 
@@ -9,11 +8,6 @@ namespace NzbDrone.Core.Test.Framework
 {
     public abstract class CoreTest : TestBase
     {
-        protected FileStream OpenRead(params string[] path)
-        {
-            return File.OpenRead(Path.Combine(path));
-        }
-
         protected string ReadAllText(params string[] path)
         {
             return File.ReadAllText(Path.Combine(path));
@@ -22,13 +16,9 @@ namespace NzbDrone.Core.Test.Framework
         protected void UseRealHttp()
         {
             Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));
+            Mocker.SetConstant<IHttpClient>(new HttpClient(TestLogger));
+            Mocker.SetConstant<IDroneServicesRequestBuilder>(new DroneServicesHttpRequestBuilder());
         }
-
-//        protected void UseRealDisk()
-//        {
-//            Mocker.SetConstant<IDiskProvider>(new DiskProvider());
-//            WithTempAsAppPath();
-//        }
     }
 
     public abstract class CoreTest<TSubject> : CoreTest where TSubject : class

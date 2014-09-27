@@ -296,18 +296,27 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 return new List<ImageFileResult>();
             }
 
-            var screenshot = episodeFile.Episodes.Value.First().Images.SingleOrDefault(i => i.CoverType == MediaCoverTypes.Screenshot);
-
-            if (screenshot == null)
+            try
             {
-                _logger.Debug("Episode screenshot not available");
-                return null;
-            }
+                var screenshot = episodeFile.Episodes.Value.First().Images.SingleOrDefault(i => i.CoverType == MediaCoverTypes.Screenshot);
 
-            return new List<ImageFileResult>
+                if (screenshot == null)
+                {
+                    _logger.Debug("Episode screenshot not available");
+                    return null;
+                }
+
+                return new List<ImageFileResult>
                    {
                        new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url)
                    };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Unable to process episode image for file: " + Path.Combine(series.Path, episodeFile.RelativePath), ex);
+                
+                return new List<ImageFileResult>();
+            }
         }
 
         private IEnumerable<ImageFileResult> ProcessSeriesImages(Series series)

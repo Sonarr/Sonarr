@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -14,14 +15,14 @@ namespace NzbDrone.Core.Test.MediaCoverTests
     [TestFixture]
     public class CoverAlreadyExistsSpecificationFixture : CoreTest<CoverAlreadyExistsSpecification>
     {
-        private Dictionary<string, string> _headers;
+        private HttpResponse _httpResponse;
 
         [SetUp]
         public void Setup()
         {
-            _headers = new Dictionary<string, string>();
+            _httpResponse = new HttpResponse(null, new HttpHeader(), "", HttpStatusCode.OK);
             Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFileSize(It.IsAny<string>())).Returns(100);
-            Mocker.GetMock<IHttpProvider>().Setup(c => c.GetHeader(It.IsAny<string>())).Returns(_headers);
+            Mocker.GetMock<IHttpClient>().Setup(c => c.Head(It.IsAny<HttpRequest>())).Returns(_httpResponse);
 
         }
 
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         public void should_return_false_if_file_exists_but_diffrent_size()
         {
             GivenExistingFileSize(100);
-            _headers.Add(HttpProvider.CONTENT_LENGTH_HEADER, "200");
+            _httpResponse.Headers.ContentLength = 200;
 
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeFalse();
         }
@@ -60,8 +61,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         public void should_return_ture_if_file_exists_and_same_size()
         {
             GivenExistingFileSize(100);
-            _headers.Add(HttpProvider.CONTENT_LENGTH_HEADER, "100");
-
+            _httpResponse.Headers.ContentLength = 100;
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeTrue();
         }
 
@@ -70,8 +70,6 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         {
             GivenExistingFileSize(100);
             Subject.AlreadyExists("http://url", "c:\\file.exe").Should().BeFalse();
-
-            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

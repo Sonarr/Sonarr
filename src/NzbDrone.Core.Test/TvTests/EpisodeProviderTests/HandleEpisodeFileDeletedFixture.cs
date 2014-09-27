@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             GivenSingleEpisodeFile();
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Once());
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
         {
             GivenMultiEpisodeFile();
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Exactly(2));
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == false)), Times.Once());
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(false);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, false));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == true)), Times.Once());
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, true));
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade));
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.Update(It.Is<Episode>(e => e.Monitored == true)), Times.Once());

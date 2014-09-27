@@ -80,6 +80,10 @@ define(
                         this._addStatusIcon(element, 'icon-nd-download-failed', 'Download failed: check download client for more details');
                     }
 
+                    else if (status === 'warning') {
+                        this._addStatusIcon(element, 'icon-nd-download-warning', 'Download warning: check download client for more details');
+                    }
+
                     else {
                         this.$(element).find('.fc-event-time')
                             .after('<span class="chart pull-right" data-percent="{0}"></span>'.format(progress));

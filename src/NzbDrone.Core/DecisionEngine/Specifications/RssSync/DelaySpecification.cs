@@ -11,11 +11,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
     public class DelaySpecification : IDecisionEngineSpecification
     {
         private readonly IPendingReleaseService _pendingReleaseService;
+        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;
 
-        public DelaySpecification(IPendingReleaseService pendingReleaseService, Logger logger)
+        public DelaySpecification(IPendingReleaseService pendingReleaseService, IQualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
         {
             _pendingReleaseService = pendingReleaseService;
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
             _logger = logger;
         }
 
@@ -50,19 +52,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             var comparer = new QualityModelComparer(profile);
 
-            if (subject.ParsedEpisodeInfo.Quality.Proper)
+            foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
-                foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
-                {
-                    if (comparer.Compare(subject.ParsedEpisodeInfo.Quality, file.Quality) > 0)
-                    {
-                        var properCompare = subject.ParsedEpisodeInfo.Quality.Proper.CompareTo(file.Quality.Proper);
+                var upgradable = _qualityUpgradableSpecification.IsUpgradable(profile, file.Quality, subject.ParsedEpisodeInfo.Quality);
 
-                        if (subject.ParsedEpisodeInfo.Quality.Quality == file.Quality.Quality && properCompare > 0)
-                        {
-                            _logger.Debug("New quality is a proper for existing quality, skipping delay");
-                            return true;
-                        }
+                if (upgradable)
+                {
+                    var revisionUpgrade = _qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality);
+
+                    if (revisionUpgrade)
+                    {
+                        _logger.Debug("New quality is a better revision for existing quality, skipping delay");
+                        return true;
                     }
                 }
             }

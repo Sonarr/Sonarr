@@ -8,7 +8,7 @@ namespace NzbDrone.Core.DecisionEngine
     {
         bool IsUpgradable(Profile profile, QualityModel currentQuality, QualityModel newQuality = null);
         bool CutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null);
-        bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality);
+        bool IsRevisionUpgrade(QualityModel currentQuality, QualityModel newQuality);
     }
 
     public class QualityUpgradableSpecification : IQualityUpgradableSpecification
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine
                     return false;
                 }
 
-                if (IsProperUpgrade(currentQuality, newQuality))
+                if (IsRevisionUpgrade(currentQuality, newQuality))
                 {
                     return true;
                 }
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.DecisionEngine
 
             if (compare >= 0)
             {
-                if (newQuality != null && IsProperUpgrade(currentQuality, newQuality))
+                if (newQuality != null && IsRevisionUpgrade(currentQuality, newQuality))
                 {
                     return true;
                 }
@@ -58,13 +58,13 @@ namespace NzbDrone.Core.DecisionEngine
             return true;
         }
 
-        public bool IsProperUpgrade(QualityModel currentQuality, QualityModel newQuality)
+        public bool IsRevisionUpgrade(QualityModel currentQuality, QualityModel newQuality)
         {
-            int compare = newQuality.Proper.CompareTo(currentQuality.Proper);
+            int compare = newQuality.Revision.CompareTo(currentQuality.Revision);
 
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
-                _logger.Debug("New quality is a proper for existing quality");
+                _logger.Debug("New quality is a better revision for existing quality");
                 return true;
             }
 

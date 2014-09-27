@@ -16,7 +16,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             _appFolderInfo = appFolderInfo;
         }
 
-        protected override string Map(string resourceUrl)
+        public override string Map(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = Path.GetFileName(path);

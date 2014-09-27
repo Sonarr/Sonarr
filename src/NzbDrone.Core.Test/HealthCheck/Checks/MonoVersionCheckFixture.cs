@@ -85,5 +85,13 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Subject.Check().ShouldBeOk();
         }
+
+        [Test]
+        public void should_return_ok_when_mono_3_10()
+        {
+            GivenOutput("3.10");
+
+            Subject.Check().ShouldBeOk();
+        }
     }
 }

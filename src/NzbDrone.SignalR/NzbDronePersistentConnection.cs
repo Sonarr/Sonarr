@@ -4,7 +4,12 @@ using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.SignalR
 {
-    public sealed class NzbDronePersistentConnection : PersistentConnection, IExecute<BroadcastSignalRMessage>
+    public interface IBroadcastSignalRMessage
+    {
+        void BroadcastMessage(SignalRMessage message);
+    }
+
+    public sealed class NzbDronePersistentConnection : PersistentConnection, IBroadcastSignalRMessage
     {
         private IPersistentConnectionContext Context
         {
@@ -14,9 +19,9 @@ namespace NzbDrone.SignalR
             }
         }
 
-        public void Execute(BroadcastSignalRMessage message)
+        public void BroadcastMessage(SignalRMessage message)
         {
-            Context.Connection.Broadcast(message.Body);
+            Context.Connection.Broadcast(message);
         }
     }
 }

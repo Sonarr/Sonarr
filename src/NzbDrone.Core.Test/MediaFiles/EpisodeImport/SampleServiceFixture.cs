@@ -71,6 +71,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
+        public void should_return_false_for_strm()
+        {
+            _localEpisode.Path = @"C:\Test\some.show.s01e01.strm";
+
+            ShouldBeFalse();
+
+            Mocker.GetMock<IVideoFileInfoReader>().Verify(c => c.GetRunTime(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public void should_use_runtime()
         {
             GivenRuntime(120);

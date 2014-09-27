@@ -25,7 +25,7 @@ namespace NzbDrone.Core.MediaCover
         IHandleAsync<SeriesDeletedEvent>,
         IMapCoversToLocal
     {
-        private readonly IHttpProvider _httpProvider;
+        private readonly IHttpClient _httpClient;
         private readonly IDiskProvider _diskProvider;
         private readonly ICoverExistsSpecification _coverExistsSpecification;
         private readonly IConfigFileProvider _configFileProvider;
@@ -34,15 +34,15 @@ namespace NzbDrone.Core.MediaCover
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(IHttpProvider httpProvider,
+        public MediaCoverService(IHttpClient httpClient,
                                  IDiskProvider diskProvider,
                                  IAppFolderInfo appFolderInfo,
-                                 ICoverExistsSpecification coverExistsSpecification, 
-                                 IConfigFileProvider configFileProvider, 
+                                 ICoverExistsSpecification coverExistsSpecification,
+                                 IConfigFileProvider configFileProvider,
                                  IEventAggregator eventAggregator,
                                  Logger logger)
         {
-            _httpProvider = httpProvider;
+            _httpClient = httpClient;
             _diskProvider = diskProvider;
             _coverExistsSpecification = coverExistsSpecification;
             _configFileProvider = configFileProvider;
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.MediaCover
             var fileName = GetCoverPath(series.Id, cover.CoverType);
 
             _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.Url);
-            _httpProvider.DownloadFile(cover.Url, fileName);
+            _httpClient.DownloadFile(cover.Url, fileName);
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)

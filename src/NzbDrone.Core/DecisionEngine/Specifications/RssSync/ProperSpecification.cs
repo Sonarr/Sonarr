@@ -39,7 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
-                if (_qualityUpgradableSpecification.IsProperUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (_qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {

@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using System.Data;
 using System.Linq;
@@ -82,9 +83,9 @@ namespace NzbDrone.Core.Datastore.Migration
                     {
                         var qualityJson = qualityModelReader.GetString(0);
 
-                        QualityModel quality;
+                        QualityModel036 quality;
 
-                        if (!Json.TryDeserialize<QualityModel>(qualityJson, out quality))
+                        if (!Json.TryDeserialize<QualityModel036>(qualityJson, out quality))
                         {
                             continue;
                         }
@@ -103,6 +104,12 @@ namespace NzbDrone.Core.Datastore.Migration
                     }
                 }
             }
+        }
+
+        private class QualityModel036
+        {
+            public Int32 Quality { get; set; }
+            public Boolean Proper { get; set; }
         }
     }
 }

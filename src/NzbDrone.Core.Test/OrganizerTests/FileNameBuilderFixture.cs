@@ -61,10 +61,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
         private void GivenProper()
         {
-            _episodeFile.Quality.Proper = true;
+            _episodeFile.Quality.Revision.Version =2;
         }
-
-
 
         [Test]
         public void should_replace_Series_space_Title()
@@ -210,7 +208,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         public void should_replace_quality_title_with_proper()
         {
             _namingConfig.StandardEpisodeFormat = "{Quality Title}";
-            _episodeFile.Quality.Proper = true;
+            GivenProper();
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("HDTV-720p Proper");
@@ -233,6 +231,17 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.RelativePath));
+        }
+
+        [Test]
+        public void use_path_when_sceneName_and_relative_path_are_null()
+        {
+            _namingConfig.RenameEpisodes = false;
+            _episodeFile.RelativePath = null;
+            _episodeFile.Path = @"C:\Test\Unsorted\Series - S01E01 - Test";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.Path));
         }
 
         [Test]
@@ -490,6 +499,26 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
+        public void should_replace_duplicate_numbering_individually()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series.Title}.{season}x{episode:00}.{absolute:000}\\{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.15x06.100\\South.Park.S15E06.100.City.Sushi");
+        }
+
+        [Test]
+        public void should_replace_individual_season_episode_tokens()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} Season {season:0000} Episode {episode:0000}\\{Series.Title}.S{season:00}E{episode:00}.{absolute:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("South Park Season 0015 Episode 0006-0007\\South.Park.S15E06-07.100-101.City.Sushi");
+        }
+
+        [Test]
         public void should_use_dash_as_separator_when_multi_episode_style_is_extend_for_anime()
         {
             _series.SeriesType = SeriesTypes.Anime;
@@ -575,6 +604,16 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South.Park.S15E06.City.Sushi.X264.DTS.[EN+ES+IT]");
+        }
+
+        [Test]
+        public void should_remove_duplicate_non_word_characters()
+        {
+            _series.Title = "Venture Bros.";
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.{season}x{episode:00}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("Venture.Bros.15x06");
         }
     }
 }

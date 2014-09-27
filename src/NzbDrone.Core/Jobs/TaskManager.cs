@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Jobs
     public interface ITaskManager
     {
         IList<ScheduledTask> GetPending();
+        List<ScheduledTask> GetAll();
     }
 
     public class TaskManager : ITaskManager, IHandle<ApplicationStartedEvent>, IHandle<CommandExecutedEvent>, IHandleAsync<ConfigSavedEvent>
@@ -43,6 +44,11 @@ namespace NzbDrone.Core.Jobs
             return _scheduledTaskRepository.All()
                                            .Where(c => c.Interval > 0 && c.LastExecution.AddMinutes(c.Interval) < DateTime.UtcNow)
                                            .ToList();
+        }
+
+        public List<ScheduledTask> GetAll()
+        {
+            return _scheduledTaskRepository.All().ToList();
         }
 
         public void Handle(ApplicationStartedEvent message)
@@ -102,9 +108,6 @@ namespace NzbDrone.Core.Jobs
 
         public void Handle(CommandExecutedEvent message)
         {
-            if (message.Command.GetType().Name == "BroadcastSignalRMessage")
-                return;
-
             var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.GetType().FullName);
 
             if (scheduledTask != null)
@@ -122,7 +125,7 @@ namespace NzbDrone.Core.Jobs
             var downloadedEpisodes = _scheduledTaskRepository.GetDefinition(typeof(DownloadedEpisodesScanCommand));
             downloadedEpisodes.Interval = _configService.DownloadedEpisodesScanInterval;
 
-            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask>{ rss, downloadedEpisodes });
+            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, downloadedEpisodes });
         }
     }
 }

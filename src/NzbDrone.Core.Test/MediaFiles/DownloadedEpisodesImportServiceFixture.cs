@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
-                  .Returns(new List<ImportDecision>());
+                  .Returns(new List<ImportResult>());
         }
 
         private void GivenValidSeries()
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), false, null))
-                  .Returns(new List<ImportDecision>());
+                  .Returns(new List<ImportResult>());
 
             Subject.Execute(new DownloadedEpisodesScanCommand());
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
-                  .Returns(imported);
+                  .Returns(imported.Select(i => new ImportResult(i)).ToList());
 
             Subject.Execute(new DownloadedEpisodesScanCommand());
 
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
-                  .Returns(imported);
+                  .Returns(imported.Select(i => new ImportResult(i)).ToList());
 
             Mocker.GetMock<ISampleService>()
                   .Setup(s => s.IsSample(It.IsAny<Series>(),

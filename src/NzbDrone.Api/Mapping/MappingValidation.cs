@@ -18,9 +18,7 @@ namespace NzbDrone.Api.Mapping
             }
 
             PrintExtraProperties(modelType, resourceType);
-
         }
-
 
         private static void PrintExtraProperties(Type modelType, Type resourceType)
         {
@@ -34,8 +32,6 @@ namespace NzbDrone.Api.Mapping
             {
                 Console.WriteLine("Extra: [{0}]", extraProp);
             }
-
-
         }
 
         private static string GetError(Type resourceType, PropertyInfo modelProperty)
@@ -54,6 +50,5 @@ namespace NzbDrone.Api.Mapping
 
             return null;
         }
-
     }
 }

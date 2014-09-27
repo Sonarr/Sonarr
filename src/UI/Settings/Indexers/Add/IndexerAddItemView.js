@@ -25,18 +25,11 @@ define([
         _addPreset: function (e) {
         
             var presetName = $(e.target).closest('.x-preset').attr('data-id');
-
             var presetData = _.where(this.model.get('presets'), {name: presetName})[0];
             
             this.model.set(presetData);
-            
-            this.model.set({
-                id         : undefined,
-                enable     : true
-            });
 
-            var editView = new EditView({ model: this.model, targetCollection: this.targetCollection });
-            AppLayout.modalRegion.show(editView);
+            this._openEdit();
         },
 
         _add: function (e) {
@@ -44,9 +37,14 @@ define([
                 return;
             }
 
+            this._openEdit();
+        },
+
+        _openEdit: function () {
             this.model.set({
-                id         : undefined,
-                enable     : true
+                id           : undefined,
+                enableRss    : this.model.get('supportsRss'),
+                enableSearch : this.model.get('supportsSearch')
             });
 
             var editView = new EditView({ model: this.model, targetCollection: this.targetCollection });

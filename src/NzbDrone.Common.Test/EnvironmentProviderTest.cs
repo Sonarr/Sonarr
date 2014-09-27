@@ -14,7 +14,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void StartupPath_should_not_be_empty()
         {
-            Subject.StartUpFolder.Should().NotBeBlank();
+            Subject.StartUpFolder.Should().NotBeNullOrWhiteSpace();
             Path.IsPathRooted(Subject.StartUpFolder).Should().BeTrue("Path is not rooted");
 
         }
@@ -22,7 +22,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void ApplicationPath_should_not_be_empty()
         {
-            Subject.AppDataFolder.Should().NotBeBlank();
+            Subject.AppDataFolder.Should().NotBeNullOrWhiteSpace();
             Path.IsPathRooted(Subject.AppDataFolder).Should().BeTrue("Path is not rooted");
         }
 

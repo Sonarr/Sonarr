@@ -30,7 +30,7 @@ namespace NzbDrone.Integration.Test
                 throw response.ErrorException;
             }
 
-            response.ErrorMessage.Should().BeBlank();
+            response.ErrorMessage.Should().BeNullOrWhiteSpace();
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             var trackedCommand = Json.Deserialize<CommandResource>(response.Content);

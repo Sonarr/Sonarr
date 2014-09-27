@@ -25,9 +25,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             RuleFor(c => c.Password).NotEmpty()
                                     .WithMessage("Password is required when API key is not configured")
                                     .When(c => String.IsNullOrWhiteSpace(c.ApiKey));
-
-            RuleFor(c => c.TvCategory).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.TvCategoryLocalPath));
-            RuleFor(c => c.TvCategoryLocalPath).IsValidPath().When(c => !String.IsNullOrWhiteSpace(c.TvCategoryLocalPath));
         }
     }
 
@@ -62,16 +59,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox)]
         public String TvCategory { get; set; }
 
-        [FieldDefinition(6, Label = "Category Local Path", Type = FieldType.Textbox, Advanced = true, HelpText = "Local path to the category output dir. Useful if Sabnzbd runs on another computer.")]
+        // TODO: Remove around January 2015, this setting was superceded by the RemotePathMappingService, but has to remain for a while to properly migrate.
         public String TvCategoryLocalPath { get; set; }
 
-        [FieldDefinition(7, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
+        [FieldDefinition(6, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
         public Int32 RecentTvPriority { get; set; }
 
-        [FieldDefinition(8, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
+        [FieldDefinition(7, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public Int32 OlderTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "Use SSL", Type = FieldType.Checkbox)]
+        [FieldDefinition(8, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
 
         public ValidationResult Validate()

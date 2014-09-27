@@ -13,53 +13,40 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
-    public class Sabnzbd : DownloadClientBase<SabnzbdSettings>
+    public class Sabnzbd : UsenetClientBase<SabnzbdSettings>
     {
-        private readonly IHttpProvider _httpProvider;
         private readonly ISabnzbdProxy _proxy;
 
         public Sabnzbd(ISabnzbdProxy proxy,
-                       IHttpProvider httpProvider,
+                       IHttpClient httpClient,
                        IConfigService configService,
                        IDiskProvider diskProvider,
                        IParsingService parsingService,
+                       IRemotePathMappingService remotePathMappingService,
                        Logger logger)
-            : base(configService, diskProvider, parsingService, logger)
+            : base(httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
         {
             _proxy = proxy;
-            _httpProvider = httpProvider;
         }
 
-        public override DownloadProtocol Protocol
+        protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
-
-        public override string Download(RemoteEpisode remoteEpisode)
-        {
-            var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
             var category = Settings.TvCategory;
             var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
-            using (var nzb = _httpProvider.DownloadStream(url))
+            var response = _proxy.DownloadNzb(fileContent, title, category, priority, Settings);
+
+            if (response != null && response.Ids.Any())
             {
-                _logger.Info("Adding report [{0}] to the queue.", title);
-                var response = _proxy.DownloadNzb(nzb, title, category, priority, Settings);
-
-                if (response != null && response.Ids.Any())
-                {
-                    return response.Ids.First();
-                }
-
-                return null;
+                return response.Ids.First();
             }
+
+            return null;
         }
 
         private IEnumerable<DownloadClientItem> GetQueue()
@@ -151,7 +138,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (sabHistoryItem.Status == SabnzbdDownloadStatus.Failed)
                 {
-                    historyItem.Status = DownloadItemStatus.Failed;
+                    if (sabHistoryItem.FailMessage.IsNotNullOrWhiteSpace() && 
+                        sabHistoryItem.FailMessage.Equals("Unpacking failed, write error or disk is full?", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        historyItem.Status = DownloadItemStatus.Warning;
+                    }
+                    else
+                    {
+                        historyItem.Status = DownloadItemStatus.Failed;
+                    }
                 }
                 else if (sabHistoryItem.Status == SabnzbdDownloadStatus.Completed)
                 {
@@ -162,11 +157,13 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     historyItem.Status = DownloadItemStatus.Downloading;
                 }
 
-                if (!sabHistoryItem.Storage.IsNullOrWhiteSpace())
-                {
-                    historyItem.OutputPath = sabHistoryItem.Storage;
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, sabHistoryItem.Storage);
 
-                    var parent = sabHistoryItem.Storage.GetParentPath();
+                if (!outputPath.IsNullOrWhiteSpace())
+                {
+                    historyItem.OutputPath = outputPath;
+
+                    var parent = outputPath.GetParentPath();
                     while (parent != null)
                     {
                         if (Path.GetFileName(parent) == sabHistoryItem.Title)
@@ -185,31 +182,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            SabnzbdConfig config = null;
-            SabnzbdCategory category = null;
-            try
-            {
-                if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-                {
-                    config = _proxy.GetConfig(Settings);
-                    category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
-                }
-            }
-            catch (DownloadClientException ex)
-            {
-                _logger.ErrorException(ex.Message, ex);
-                yield break;
-            }
+            MigrateLocalCategoryPath();
 
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
                 if (downloadClientItem.Category == Settings.TvCategory)
                 {
-                    if (category != null)
-                    {
-                        RemapStorage(downloadClientItem, category.FullPath, Settings.TvCategoryLocalPath);
-                    }
-
                     downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
                     if (downloadClientItem.RemoteEpisode == null) continue;
 
@@ -338,14 +316,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (category != null)
             {
-                if (Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-                {
-                    status.OutputRootFolders = new List<String> { category.FullPath };
-                }
-                else
-                {
-                    status.OutputRootFolders = new List<String> { Settings.TvCategoryLocalPath };
-                }
+                status.OutputRootFolders = new List<String> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.FullPath) };
             }
 
             return status;
@@ -357,12 +328,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             failures.AddIfNotNull(TestAuthentication());
             failures.AddIfNotNull(TestGlobalConfig());
             failures.AddIfNotNull(TestCategory());
-
-            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-            {
-                failures.AddIfNotNull(TestFolder(Settings.TvCategoryLocalPath, "TvCategoryLocalPath"));
-                failures.AddIfNotNull(TestCategoryLocalPath());
-            }
         }
 
         private ValidationFailure TestConnection()
@@ -401,7 +366,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             return null;
         }
-        
+
         private ValidationFailure TestGlobalConfig()
         {
             var config = _proxy.GetConfig(Settings);
@@ -462,14 +427,34 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return null;
         }
 
-        private ValidationFailure TestCategoryLocalPath()
+        private void MigrateLocalCategoryPath()
         {
-            if (Settings.Host == "127.0.0.1" || Settings.Host == "localhost")
+            // TODO: Remove around January 2015, this code moves the settings to the RemotePathMappingService.
+            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
             {
-                return new ValidationFailure("TvCategoryLocalPath", "Do not set when SABnzbd is running on the same system as NzbDrone");
-            }
+                try
+                {
+                    _logger.Debug("Has legacy TvCategoryLocalPath, trying to migrate to RemotePathMapping list.");
 
-            return null;
+                    var config = _proxy.GetConfig(Settings);
+                    var category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+
+                    if (category != null)
+                    {
+                        var localPath = Settings.TvCategoryLocalPath;
+                        Settings.TvCategoryLocalPath = null;
+
+                        _remotePathMappingService.MigrateLocalCategoryPath(Definition.Id, Settings, Settings.Host, category.FullPath, localPath);
+
+                        _logger.Info("Discovered Local Category Path for {0}, the setting was automatically moved to the Remote Path Mapping table.", Definition.Name);
+                    }
+                }
+                catch (DownloadClientException ex)
+                {
+                    _logger.ErrorException("Unable to migrate local category path", ex);
+                    throw;
+                }
+            }
         }
     }
 }

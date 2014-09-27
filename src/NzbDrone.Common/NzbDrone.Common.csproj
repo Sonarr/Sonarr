@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -51,15 +55,8 @@
     <Reference Include="Loggly">
       <HintPath>..\packages\loggly-csharp.2.3\lib\net35\Loggly.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -67,11 +64,13 @@
     <Compile Include="Cache\Cached.cs" />
     <Compile Include="Cache\CacheManager.cs" />
     <Compile Include="Cache\ICached.cs" />
+    <Compile Include="Cloud\CloudClient.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
     <Compile Include="Composition\IContainer.cs" />
     <Compile Include="ConsoleService.cs" />
     <Compile Include="ConvertBase32.cs" />
+    <Compile Include="Crypto\HashProvider.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />
@@ -109,12 +108,24 @@
     <Compile Include="Expansive\Tree.cs" />
     <Compile Include="Expansive\TreeNode.cs" />
     <Compile Include="Expansive\TreeNodeList.cs" />
+    <Compile Include="Extensions\Base64Extentions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="HashUtil.cs" />
+    <Compile Include="Http\GZipWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Http\HttpClient.cs" />
+    <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\HttpHeader.cs" />
+    <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\HttpProvider.cs" />
+    <Compile Include="Http\HttpRequest.cs" />
+    <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\NzbDroneWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Http\HttpRequestBuilder.cs" />
+    <Compile Include="Http\UriExtensions.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
@@ -153,6 +164,7 @@
     <Compile Include="TryParseExtension.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

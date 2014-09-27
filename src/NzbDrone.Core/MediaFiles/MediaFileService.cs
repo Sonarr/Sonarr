@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile Add(EpisodeFile episodeFile);
         void Update(EpisodeFile episodeFile);
-        void Delete(EpisodeFile episodeFile, bool forUpgrade = false);
+        void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
         List<EpisodeFile> GetFilesWithoutMediaInfo();
@@ -49,11 +50,14 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileRepository.Update(episodeFile);
         }
 
-        public void Delete(EpisodeFile episodeFile, bool forUpgrade = false)
+        public void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason)
         {
-            _mediaFileRepository.Delete(episodeFile);
+            //Little hack so we have the episodes and series attached for the event consumers
+            episodeFile.Episodes.LazyLoad();
+            episodeFile.Path = Path.Combine(episodeFile.Series.Value.Path, episodeFile.RelativePath);
 
-            _eventAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile, forUpgrade));
+            _mediaFileRepository.Delete(episodeFile);
+            _eventAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile, reason));
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)

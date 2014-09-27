@@ -31,8 +31,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             Mocker.Resolve<QualityUpgradableSpecification>();
 
-            _firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, false), DateAdded = DateTime.Now };
-            _secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, false), DateAdded = DateTime.Now };
+            _firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 1)), DateAdded = DateTime.Now };
+            _secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 1)), DateAdded = DateTime.Now };
 
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = _secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
@@ -44,14 +44,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _parseResultMulti = new RemoteEpisode
             {
                 Series = fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
                 Episodes = doubleEpisodeList
             };
 
             _parseResultSingle = new RemoteEpisode
             {
                 Series = fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, true) },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
                 Episodes = singleEpisodeList
             };
         }

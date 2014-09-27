@@ -6,7 +6,6 @@ using FizzWare.NBuilder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -25,10 +24,10 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         public void SetUp()
         {
             var indexer = Mocker.GetMock<IIndexer>();
-            indexer.SetupGet(s => s.SupportsSearching).Returns(true);
+            indexer.SetupGet(s => s.SupportsSearch).Returns(true);
 
             Mocker.GetMock<IIndexerFactory>()
-                  .Setup(s => s.GetAvailableProviders())
+                  .Setup(s => s.SearchEnabled())
                   .Returns(new List<IIndexer> { indexer.Object });
 
             Mocker.GetMock<IMakeDownloadDecision>()

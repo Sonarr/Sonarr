@@ -60,10 +60,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 try
                 {
                     var parsedEpisode = _parsingService.GetLocalEpisode(file, series, sceneSource);
-                    
+
                     if (parsedEpisode != null)
                     {
-                        if (quality != null && new QualityModelComparer(parsedEpisode.Series.Profile).Compare(quality, parsedEpisode.Quality) > 0)
+                        if (quality != null &&
+                            new QualityModelComparer(parsedEpisode.Series.Profile).Compare(quality,
+                                parsedEpisode.Quality) > 0)
                         {
                             _logger.Debug("Using quality from folder: {0}", quality);
                             parsedEpisode.Quality = quality;
@@ -85,9 +87,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         decision = new ImportDecision(parsedEpisode, "Unable to parse file");
                     }
                 }
+                catch (EpisodeNotFoundException e)
+                {
+                    var parsedEpisode = new LocalEpisode();
+                    parsedEpisode.Path = file;
+
+                    decision = new ImportDecision(parsedEpisode, e.Message);
+                }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("Couldn't import file." + file, e);
+                    _logger.ErrorException("Couldn't import file. " + file, e);
                 }
 
                 if (decision != null)

@@ -40,28 +40,40 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMoq, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMoq.1.6.2.0\lib\net35\AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions, Version=3.1.229.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentAssertions.3.1.229\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.3.1.229\lib\net40\FluentAssertions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator, Version=1.2.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.2.1.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner, Version=1.1.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.2.1.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.4.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="AutoMoq">
-      <HintPath>..\packages\AutoMoq.1.6.1\lib\AutoMoq.dll</HintPath>
-    </Reference>
     <Reference Include="FizzWare.NBuilder, Version=3.0.1.0, Culture=neutral, PublicKeyToken=5651b03e12e42c12">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions">
-      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator">
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner">
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -77,9 +89,6 @@
     </Reference>
     <Reference Include="NCrunch.Framework">
       <HintPath>..\packages\NCrunch.Framework.1.46.0.9\lib\net35\NCrunch.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
@@ -98,6 +107,7 @@
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
     <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
+    <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxyFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />
     <Compile Include="Datastore\DatabaseFixture.cs" />
@@ -108,8 +118,7 @@
     <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\ToSortDirectionFixture.cs" />
     <Compile Include="Datastore\ReflectionStrategyFixture\Benchmarks.cs" />
-    <Compile Include="Datastore\SQLiteMigrationHelperTests\AlterFixture.cs" />
-    <Compile Include="Datastore\SQLiteMigrationHelperTests\DuplicateFixture.cs" />
+    <Compile Include="Datastore\SqliteSchemaDumperTests\SqliteSchemaDumperFixture.cs" />
     <Compile Include="DecisionEngineTests\AcceptableSizeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\CutoffSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\DownloadDecisionMakerFixture.cs" />
@@ -188,6 +197,9 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
+    <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
+    <Compile Include="Qualities\RevisionComparableFixture.cs" />
+    <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
     <Compile Include="OrganizerTests\CleanFixture.cs" />
     <Compile Include="MediaFiles\MediaFileServiceTests\FilterFixture.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupServiceFixture.cs" />
@@ -214,10 +226,12 @@
     <Compile Include="NotificationTests\Xbmc\Json\UpdateFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
+    <Compile Include="OrganizerTests\GetSeasonFolderFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
     <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
     <Compile Include="ParserTests\AnimeMetadataParserFixture.cs" />
+    <Compile Include="ParserTests\ExtendedQualityParserRegex.cs" />
     <Compile Include="ParserTests\CrapParserFixture.cs" />
     <Compile Include="ParserTests\DailyEpisodeParserFixture.cs" />
     <Compile Include="ParserTests\HashedReleaseFixture.cs" />
@@ -235,6 +249,7 @@
     <Compile Include="ParserTests\SeasonParserFixture.cs" />
     <Compile Include="ParserTests\SeriesTitleInfoFixture.cs" />
     <Compile Include="ParserTests\SingleEpisodeParserFixture.cs" />
+    <Compile Include="ParserTests\SceneCheckerFixture.cs" />
     <Compile Include="Profiles\ProfileRepositoryFixture.cs" />
     <Compile Include="Profiles\ProfileServiceFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -369,9 +384,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Files\SceneMappings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

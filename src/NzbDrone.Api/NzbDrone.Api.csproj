@@ -40,6 +40,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.4.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Basic, Version=0.23.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Authentication.Basic.0.23.2\lib\net40\Nancy.Authentication.Basic.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -47,21 +63,9 @@
     <Reference Include="DDay.iCal">
       <HintPath>..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.1.3\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.0.21.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Authentication.Basic">
-      <HintPath>..\packages\Nancy.Authentication.Basic.0.21.1\lib\net40\Nancy.Authentication.Basic.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
@@ -92,6 +96,8 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
     <Compile Include="Config\UiConfigModule.cs" />
     <Compile Include="Config\UiConfigResource.cs" />
     <Compile Include="Config\DownloadClientConfigModule.cs" />
@@ -135,6 +141,7 @@
     <Compile Include="Extensions\RequestExtensions.cs" />
     <Compile Include="Frontend\CacheableSpecification.cs" />
     <Compile Include="Frontend\Mappers\BackupFileMapper.cs" />
+    <Compile Include="Frontend\Mappers\CacheBreakerProvider.cs" />
     <Compile Include="Frontend\Mappers\FaviconMapper.cs" />
     <Compile Include="Frontend\Mappers\IMapHttpRequestsToDisk.cs" />
     <Compile Include="Frontend\Mappers\IndexHtmlMapper.cs" />
@@ -202,6 +209,8 @@
     <Compile Include="Series\SeriesResource.cs" />
     <Compile Include="System\Backup\BackupModule.cs" />
     <Compile Include="System\Backup\BackupResource.cs" />
+    <Compile Include="System\Tasks\TaskModule.cs" />
+    <Compile Include="System\Tasks\TaskResource.cs" />
     <Compile Include="System\SystemModule.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
@@ -212,6 +221,7 @@
     <Compile Include="Wanted\MissingModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

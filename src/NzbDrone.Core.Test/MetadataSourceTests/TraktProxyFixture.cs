@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Rest;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -16,12 +16,27 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
     [IntegrationTest]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
+
+
+        [SetUp]
+        public void Setup()
+        {
+            UseRealHttp();
+        }
+
         [TestCase("The Simpsons", "The Simpsons")]
         [TestCase("South Park", "South Park")]
         [TestCase("Franklin & Bash", "Franklin & Bash")]
         [TestCase("Mr. D", "Mr. D")]
         [TestCase("Rob & Big", "Rob and Big")]
         [TestCase("M*A*S*H", "M*A*S*H")]
+        [TestCase("imdb:tt0436992", "Doctor Who (2005)")]
+        [TestCase("imdb:0436992", "Doctor Who (2005)")]
+        [TestCase("IMDB:0436992", "Doctor Who (2005)")]
+        [TestCase("IMDB: 0436992 ", "Doctor Who (2005)")]
+        [TestCase("tvdb:78804", "Doctor Who (2005)")]
+        [TestCase("TVDB:78804", "Doctor Who (2005)")]
+        [TestCase("TVDB: 78804 ", "Doctor Who (2005)")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
@@ -52,7 +67,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [Test]
         public void getting_details_of_invalid_series()
         {
-            Assert.Throws<RestException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
+            Assert.Throws<HttpException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
 
             ExceptionVerification.ExpectedWarns(1);
         }
@@ -68,18 +83,18 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         private void ValidateSeries(Series series)
         {
             series.Should().NotBeNull();
-            series.Title.Should().NotBeBlank();
+            series.Title.Should().NotBeNullOrWhiteSpace();
             series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
             series.SortTitle.Should().Be(Parser.Parser.NormalizeEpisodeTitle(series.Title));
-            series.Overview.Should().NotBeBlank();
-            series.AirTime.Should().NotBeBlank();
+            series.Overview.Should().NotBeNullOrWhiteSpace();
+            series.AirTime.Should().NotBeNullOrWhiteSpace();
             series.FirstAired.Should().HaveValue();
             series.FirstAired.Value.Kind.Should().Be(DateTimeKind.Utc);
             series.Images.Should().NotBeEmpty();
-            series.ImdbId.Should().NotBeBlank();
-            series.Network.Should().NotBeBlank();
+            series.ImdbId.Should().NotBeNullOrWhiteSpace();
+            series.Network.Should().NotBeNullOrWhiteSpace();
             series.Runtime.Should().BeGreaterThan(0);
-            series.TitleSlug.Should().NotBeBlank();
+            series.TitleSlug.Should().NotBeNullOrWhiteSpace();
             series.TvRageId.Should().BeGreaterThan(0);
             series.TvdbId.Should().BeGreaterThan(0);
         }

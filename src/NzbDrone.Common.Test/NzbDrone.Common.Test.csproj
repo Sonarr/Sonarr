@@ -37,6 +37,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentAssertions, Version=3.1.229.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentAssertions.3.1.229\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.3.1.229\lib\net40\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -45,9 +52,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="FluentAssertions">
-      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net40\FluentAssertions.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -69,6 +73,9 @@
     <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
+    <Compile Include="Http\HttpClientFixture.cs" />
+    <Compile Include="Http\HttpRequestBuilderFixture.cs" />
+    <Compile Include="Http\HttpRequestFixture.cs" />
     <Compile Include="InstrumentationTests\CleanseLogMessageFixture.cs" />
     <Compile Include="LevenshteinDistanceFixture.cs" />
     <Compile Include="PathExtensionFixture.cs" />

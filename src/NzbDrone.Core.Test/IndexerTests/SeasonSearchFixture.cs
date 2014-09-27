@@ -24,7 +24,9 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             _series = Builder<Series>.CreateNew().Build();
 
-            Mocker.GetMock<IHttpProvider>().Setup(s => s.DownloadString(It.IsAny<String>())).Returns("<xml></xml>");
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "<xml></xml>"));
         }
 
         private IndexerBase<TestIndexerSettings> WithIndexer(bool paging, int resultCount)
@@ -57,7 +59,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             var indexer = WithIndexer(true, 25);
             Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
 
-            Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Once());
         }
 
         [Test]
@@ -66,7 +68,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             var indexer = WithIndexer(false, 125);
             Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
-            Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Once());
         }
 
         [Test]
@@ -75,7 +77,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             var indexer = WithIndexer(true, 100);
             Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
-            Mocker.GetMock<IHttpProvider>().Verify(v => v.DownloadString(It.IsAny<String>()), Times.Exactly(10));
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Exactly(10));
         }
     }
 

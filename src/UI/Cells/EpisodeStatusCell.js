@@ -41,10 +41,15 @@ define(
                         this.listenTo(this.episodeFile, 'change', this._refresh);
 
                         var quality = this.episodeFile.get('quality');
+                        var revision = quality.revision;
                         var size = FormatHelpers.bytes(this.episodeFile.get('size'));
                         var title = 'Episode downloaded';
 
-                        if (quality.proper) {
+                        if (revision.real && revision.real > 0) {
+                            title += '[REAL]';
+                        }
+
+                        if (revision.version && revision.version > 1) {
                             title += ' [PROPER]';
                         }
 
@@ -52,7 +57,12 @@ define(
                             title += ' - {0}'.format(size);
                         }
 
-                        this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        if (this.episodeFile.get('qualityCutoffNotMet')) {
+                            this.$el.html('<span class="badge badge-inverse" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        }
+                        else {
+                            this.$el.html('<span class="badge" title="{0}">{1}</span>'.format(title, quality.quality.name));
+                        }
 
                         return;
                     }
@@ -110,7 +120,7 @@ define(
                         episodeFile = reqres.request(reqres.Requests.GetEpisodeFileById, this.model.get('episodeFileId'));
                     }
 
-                    else {
+                    else if (this.model.has('episodeFile')) {
                         episodeFile = new Backbone.Model(this.model.get('episodeFile'));
                     }
 

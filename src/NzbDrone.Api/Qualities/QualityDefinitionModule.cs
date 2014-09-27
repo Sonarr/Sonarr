@@ -27,7 +27,7 @@ namespace NzbDrone.Api.Qualities
 
         private QualityDefinitionResource GetById(int id)
         {
-            return _qualityDefinitionService.Get((Quality)id).InjectTo<QualityDefinitionResource>();
+            return _qualityDefinitionService.GetById(id).InjectTo<QualityDefinitionResource>();
         }
 
         private List<QualityDefinitionResource> GetAll()

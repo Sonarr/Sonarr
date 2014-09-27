@@ -13,6 +13,7 @@ using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -92,26 +93,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                 .Returns(configItems);
         }
 
-        protected void WithMountPoint(String mountPath)
-        {
-            (Subject.Definition.Settings as NzbgetSettings).TvCategoryLocalPath = mountPath;
-        }
-
-        protected void WithFailedDownload()
+        protected void GivenFailedDownload()
         {
             Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
                 .Returns((String)null);
         }
 
-        protected void WithSuccessfulDownload()
+        protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Stream>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
                 .Returns(Guid.NewGuid().ToString().Replace("-", ""));
         }
 
-        protected virtual void WithQueue(NzbgetQueueItem queue)
+        protected virtual void GivenQueue(NzbgetQueueItem queue)
         {
             var list = new List<NzbgetQueueItem>();
 
@@ -129,7 +125,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                 .Returns(new List<NzbgetPostQueueItem>());
         }
 
-        protected virtual void WithHistory(NzbgetHistoryItem history)
+        protected virtual void GivenHistory(NzbgetHistoryItem history)
         {
             var list = new List<NzbgetHistoryItem>();
 
@@ -146,8 +142,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void GetItems_should_return_no_items_when_queue_is_empty()
         {
-            WithQueue(null);
-            WithHistory(null);
+            GivenQueue(null);
+            GivenHistory(null);
 
             Subject.GetItems().Should().BeEmpty();
         }
@@ -157,8 +153,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         {
             _queued.ActiveDownloads = 0;
 
-            WithQueue(_queued);
-            WithHistory(null);
+            GivenQueue(_queued);
+            GivenHistory(null);
             
             var result = Subject.GetItems().Single();
 
@@ -170,8 +166,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         {
             _queued.PausedSizeLo = _queued.RemainingSizeLo;
 
-            WithQueue(_queued);
-            WithHistory(null);
+            GivenQueue(_queued);
+            GivenHistory(null);
 
             var result = Subject.GetItems().Single();
 
@@ -183,8 +179,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         {
             _queued.ActiveDownloads = 1;
 
-            WithQueue(_queued);
-            WithHistory(null);
+            GivenQueue(_queued);
+            GivenHistory(null);
 
             var result = Subject.GetItems().Single();
 
@@ -194,8 +190,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void completed_download_should_have_required_properties()
         {
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 
@@ -205,8 +201,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void failed_item_should_have_required_properties()
         {
-            WithQueue(null);
-            WithHistory(_failed);
+            GivenQueue(null);
+            GivenHistory(_failed);
 
             var result = Subject.GetItems().Single();
 
@@ -214,9 +210,65 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void should_report_deletestatus_health_as_failed()
+        {
+            _completed.DeleteStatus = "HEALTH";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.Status.Should().Be(DownloadItemStatus.Failed);
+        }
+
+        [Test]
+        public void should_report_unpackstatus_freespace_as_warning()
+        {
+            _completed.UnpackStatus = "SPACE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
+        public void should_report_movestatus_failure_as_warning()
+        {
+            _completed.MoveStatus = "FAILURE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
+        public void should_report_scriptstatus_failure_as_failed()
+        {
+            // TODO: We would love to have a way to distinguish between scripts reporting video corruption, or some internal script error.
+            // That way we could return Warning instead of Failed to notify the user to take action.
+
+            _completed.ScriptStatus = "FAILURE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.First().Status.Should().Be(DownloadItemStatus.Failed);
+        }
+
+
+        [Test]
         public void Download_should_return_unique_id()
         {
-            WithSuccessfulDownload();
+            GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
@@ -230,8 +282,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         {
             _completed.Category = "mycat";
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var items = Subject.GetItems();
 
@@ -251,7 +303,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void should_return_status_with_mounted_outputdir()
         {
-            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+            Mocker.GetMock<IRemotePathMappingService>()
+                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", "/remote/mount/tv"))
+                .Returns(@"O:\mymount".AsOsAgnostic());
 
             var result = Subject.GetStatus();
 
@@ -263,10 +317,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         [Test]
         public void should_remap_storage_if_mounted()
         {
-            WithMountPoint(@"O:\mymount".AsOsAgnostic());
+            Mocker.GetMock<IRemotePathMappingService>()
+                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", "/remote/mount/tv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE"))
+                .Returns(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
 
-            WithQueue(null);
-            WithHistory(_completed);
+            GivenQueue(null);
+            GivenHistory(_completed);
 
             var result = Subject.GetItems().Single();
 

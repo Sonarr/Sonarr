@@ -2,15 +2,15 @@
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.DecisionEngine;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -20,18 +20,21 @@ namespace NzbDrone.Api.EpisodeFiles
         private readonly IMediaFileService _mediaFileService;
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly ISeriesService _seriesService;
+        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly Logger _logger;
 
-        public EpisodeModule(ICommandExecutor commandExecutor,
+        public EpisodeModule(IBroadcastSignalRMessage signalRBroadcaster,
                              IMediaFileService mediaFileService,
                              IRecycleBinProvider recycleBinProvider,
                              ISeriesService seriesService,
+                             IQualityUpgradableSpecification qualityUpgradableSpecification,
                              Logger logger)
-            : base(commandExecutor)
+            : base(signalRBroadcaster)
         {
             _mediaFileService = mediaFileService;
             _recycleBinProvider = recycleBinProvider;
             _seriesService = seriesService;
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
             _logger = logger;
             GetResourceById = GetEpisodeFile;
             GetResourceAll = GetEpisodeFiles;
@@ -77,13 +80,15 @@ namespace NzbDrone.Api.EpisodeFiles
 
             _logger.Info("Deleting episode file: {0}", fullPath);
             _recycleBinProvider.DeleteFile(fullPath);
-            _mediaFileService.Delete(episodeFile);
+            _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
         }
 
-        private static EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)
+        private EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)
         {
             var resource = episodeFile.InjectTo<EpisodeFileResource>();
             resource.Path = Path.Combine(series.Path, episodeFile.RelativePath);
+
+            resource.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, episodeFile.Quality);
 
             return resource;
         }

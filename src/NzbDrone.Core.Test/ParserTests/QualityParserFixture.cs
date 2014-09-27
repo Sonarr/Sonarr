@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
@@ -164,6 +165,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Kaylith] Isshuukan Friends Specials - 01 [BD 720p AAC][B7EEE164].mkv", false)]
         [TestCase("WEEDS.S03E01-06.DUAL.Blu-ray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("WEEDS.S03E01-06.DUAL.720p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
+        [TestCase("[Elysium]Lucky.Star.01(BD.720p.AAC.DA)[0BB96AD8].mkv", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
@@ -205,7 +207,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void parsing_our_own_quality_enum_name(Quality quality)
         {
             var fileName = String.Format("My series S01E01 [{0}]", quality.Name);
-            var result = Parser.QualityParser.ParseQuality(fileName);
+            var result = QualityParser.ParseQuality(fileName);
             result.Quality.Should().Be(quality);
         }
 
@@ -220,12 +222,13 @@ namespace NzbDrone.Core.Test.ParserTests
             }
         }
 
-
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)
         {
-            var result = Parser.QualityParser.ParseQuality(title);
+            var result = QualityParser.ParseQuality(title);
             result.Quality.Should().Be(quality);
-            result.Proper.Should().Be(proper);
+
+            var version = proper ? 2 : 1;
+            result.Revision.Version.Should().Be(version);
         }
     }
 }

@@ -100,7 +100,11 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title Absolute Episode Number 
-                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[.{8}\])?(?:$|\.)",
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>(?<!\d+)\d{2,3}(?!\d+)))+(?:_|-|\s|\.)*?(?<hash>\[.{8}\])?(?:$|\.)?",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Extant, terrible multi-episode naming (extant.10708.hdtv-lol.mp4)
+                new Regex(@"^(?<title>.+?)[-_. ](?<season>[0]?\d?)(?:(?<episode>\d{2}){2}(?!\d+))[-_. ]",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
@@ -128,7 +132,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex AirDateRegex = new Regex(@"^(.*?)(?<!\d)((?<airyear>\d{4})[_.-](?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])|(?<airmonth>[0-1][0-9])[_.-](?<airday>[0-3][0-9])[_.-](?<airyear>\d{4}))(?!\d)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex SixDigitAirDateRegex = new Regex(@"^(?:.+?)(?<airdate>(?<!\d)(?<airyear>\d{2})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))",
+        private static readonly Regex SixDigitAirDateRegex = new Regex(@"^(?:.+?)(?<airdate>(?<!\d)(?<airyear>[1-9]\d{1})(?<airmonth>[0-1][0-9])(?<airday>[0-3][0-9]))",
                                                                         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)\b(?<!WEB-DL|480p|720p|1080p)",
@@ -318,8 +322,6 @@ namespace NzbDrone.Core.Parser
 
         public static string ParseReleaseGroup(string title)
         {
-            const string defaultReleaseGroup = "DRONE";
-
             title = title.Trim();
             title = RemoveFileExtension(title);
             title = title.TrimEnd("-RP");
@@ -333,20 +335,21 @@ namespace NzbDrone.Core.Parser
 
                 if (Int32.TryParse(group, out groupIsNumeric))
                 {
-                    return defaultReleaseGroup;
+                    return null;
                 }
 
                 return group;
             }
 
-            return defaultReleaseGroup;
+            return null;
         }
 
         public static string RemoveFileExtension(string title)
         {
             if (!title.ContainsInvalidPathChars())
             {
-                if (MediaFiles.MediaFileExtensions.Extensions.Contains(Path.GetExtension(title).ToLower()))
+                var extension = Path.GetExtension(title).ToLower();
+                if (MediaFiles.MediaFileExtensions.Extensions.Contains(extension) || new [] { ".par2", ".nzb" }.Contains(extension))
                 {
                     title = Path.Combine(Path.GetDirectoryName(title), Path.GetFileNameWithoutExtension(title));
                 }

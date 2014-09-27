@@ -74,6 +74,11 @@ namespace NzbDrone.Common
             return String.IsNullOrWhiteSpace(text);
         }
 
+        public static bool IsNotNullOrWhiteSpace(this string text)
+        {
+            return !String.IsNullOrWhiteSpace(text);
+        }
+
         public static bool ContainsIgnoreCase(this string text, string contains)
         {
             return text.IndexOf(contains, StringComparison.InvariantCultureIgnoreCase) > -1;

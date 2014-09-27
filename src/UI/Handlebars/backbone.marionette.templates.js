@@ -2,6 +2,7 @@
 define(
     [
         'templates',
+        'handlebars',
         'handlebars.helpers',
         'Handlebars/Helpers/DateTime',
         'Handlebars/Helpers/Html',
@@ -13,11 +14,10 @@ define(
         'Handlebars/Helpers/EachReverse',
         'Handlebars/Helpers/String',
         'Handlebars/Handlebars.Debug'
-    ], function (Templates) {
+    ], function (Templates, Handlebars) {
         return function () {
             this.get = function (templateId) {
-
-                var templateKey = templateId.toLowerCase();
+                var templateKey = templateId.toLowerCase().replace('template', '');
 
                 var templateFunction = Templates[templateKey];
 
@@ -28,7 +28,8 @@ define(
                 return function (data) {
 
                     try {
-                        return templateFunction(data);
+                        var wrappedTemplate = Handlebars.template.call(Handlebars, templateFunction);
+                        return wrappedTemplate(data);
                     }
                     catch (error) {
                         console.error('template render failed for ' + templateKey + ' ' + error);

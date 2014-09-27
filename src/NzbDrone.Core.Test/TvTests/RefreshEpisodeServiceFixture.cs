@@ -24,6 +24,8 @@ namespace NzbDrone.Core.Test.TvTests
         [TestFixtureSetUp]
         public void TestFixture()
         {
+            UseRealHttp();
+
             _gameOfThrones = Mocker.Resolve<TraktProxy>().GetSeriesInfo(121361);//Game of thrones
 
             // Remove specials.

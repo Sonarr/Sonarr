@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NzbDrone.Api.Mapping;
 using NzbDrone.Api.REST;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Datastore;
@@ -12,8 +13,9 @@ namespace NzbDrone.Api.Extensions
     {
         private static readonly ICached<MethodInfo> SetterCache = new Cached<MethodInfo>();
 
-        public static IEnumerable<TParent> LoadSubtype<TParent, TChild>(this IEnumerable<TParent> parents, Func<TParent, int> foreignKeySelector, IBasicRepository<TChild> childRepository)
-            where TChild : ModelBase, new()
+        public static IEnumerable<TParent> LoadSubtype<TParent, TChild, TSourceChild>(this IEnumerable<TParent> parents, Func<TParent, Int32> foreignKeySelector, Func<IEnumerable<Int32>, IEnumerable<TSourceChild>> sourceChildSelector)
+            where TSourceChild : ModelBase, new()
+            where TChild : RestResource, new()
             where TParent : RestResource
         {
             var parentList = parents.Where(p => foreignKeySelector(p) != 0).ToList();
@@ -24,13 +26,13 @@ namespace NzbDrone.Api.Extensions
             }
 
             var ids = parentList.Select(foreignKeySelector).Distinct();
-            var childDictionary = childRepository.Get(ids).ToDictionary(child => child.Id, child => child);
+            var childDictionary = sourceChildSelector(ids).ToDictionary(child => child.Id, child => child);
 
             var childSetter = GetChildSetter<TParent, TChild>();
 
             foreach (var episode in parentList)
             {
-                childSetter.Invoke(episode, new object[] { childDictionary[foreignKeySelector(episode)] });
+                childSetter.Invoke(episode, new object[] { childDictionary[foreignKeySelector(episode)].InjectTo<TChild>() });
             }
 
             return parents;
@@ -38,7 +40,7 @@ namespace NzbDrone.Api.Extensions
 
 
         private static MethodInfo GetChildSetter<TParent, TChild>()
-            where TChild : ModelBase
+            where TChild : RestResource
             where TParent : RestResource
         {
             var key = typeof(TChild).FullName + typeof(TParent).FullName;

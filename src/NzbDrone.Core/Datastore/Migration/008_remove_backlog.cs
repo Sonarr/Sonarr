@@ -8,8 +8,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            SqLiteAlter.DropColumns("Series", new[] { "BacklogSetting" });
-            SqLiteAlter.DropColumns("NamingConfig", new[] { "UseSceneName" });
+            Delete.Column("BacklogSetting").FromTable("Series");
+            Delete.Column("UseSceneName").FromTable("NamingConfig");
         }
     }
 }

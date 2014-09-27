@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -12,7 +11,6 @@ using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Download;
 
@@ -20,8 +18,8 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IDownloadedEpisodesImportService
     {
-        List<ImportDecision> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem);
-        List<ImportDecision> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem);
+        List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem);
+        List<ImportResult> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem);
     }
 
     public class DownloadedEpisodesImportService : IDownloadedEpisodesImportService, IExecute<DownloadedEpisodesScanCommand>
@@ -57,7 +55,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public List<ImportDecision> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem)
+        public List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem)
         {
             var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
             var series = _parsingService.GetSeries(cleanedUpName);
@@ -67,39 +65,35 @@ namespace NzbDrone.Core.MediaFiles
             if (series == null)
             {
                 _logger.Debug("Unknown Series {0}", cleanedUpName);
-                return new List<ImportDecision>();
+                return new List<ImportResult>();
             }
 
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
-
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, true, quality);
 
-            var importedDecisions = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
+            var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
 
-            if (!downloadClientItem.IsReadOnly && importedDecisions.Any() && ShouldDeleteFolder(directoryInfo))
+            if (!downloadClientItem.IsReadOnly && importResults.Any() && ShouldDeleteFolder(directoryInfo))
             {
                 _logger.Debug("Deleting folder after importing valid files");
                 _diskProvider.DeleteFolder(directoryInfo.FullName, true);
             }
 
-            return importedDecisions.Union(decisions).ToList();
+            return importResults;
         }
 
-        public List<ImportDecision> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem)
+        public List<ImportResult> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem)
         {
             var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(fileInfo.Name));
 
             if (series == null)
             {
                 _logger.Debug("Unknown Series for file: {0}", fileInfo.Name);
-                return new List<ImportDecision>();
+                return new List<ImportResult>();
             }
 
-            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, true, null);
-
-            var importedDecisions = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
-
-            return importedDecisions.Union(decisions).ToList();
+            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, true);
+            return _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
         }
 
         private void ProcessDownloadedEpisodesFolder()
@@ -136,7 +130,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        private List<ImportDecision> ProcessFolder(DirectoryInfo directoryInfo)
+        private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo)
         {
             var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
             var series = _parsingService.GetSeries(cleanedUpName);
@@ -146,7 +140,7 @@ namespace NzbDrone.Core.MediaFiles
             if (series == null)
             {
                 _logger.Debug("Unknown Series {0}", cleanedUpName);
-                return new List<ImportDecision>();
+                return new List<ImportResult>();
             }
 
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
@@ -156,7 +150,7 @@ namespace NzbDrone.Core.MediaFiles
                 if (_diskProvider.IsFileLocked(videoFile))
                 {
                     _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
-                    return new List<ImportDecision>();
+                    return new List<ImportResult>();
                 }
             }
 

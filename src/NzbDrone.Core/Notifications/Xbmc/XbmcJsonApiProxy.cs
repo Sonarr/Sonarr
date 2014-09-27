@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Rest;
-using NzbDrone.Core.Tv;
 using RestSharp;
 
 namespace NzbDrone.Core.Notifications.Xbmc
@@ -56,7 +51,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             var request = new RestRequest();
             var parameters = new Dictionary<String, Object>();
-            parameters.Add("directory", path );
+            parameters.Add("directory", path);
 
             if (path.IsNullOrWhiteSpace())
             {

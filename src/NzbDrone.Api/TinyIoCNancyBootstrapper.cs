@@ -83,7 +83,20 @@ namespace NzbDrone.Api
         {
             foreach (var typeRegistration in typeRegistrations)
             {
-                container.Register(typeRegistration.RegistrationType, typeRegistration.ImplementationType).AsSingleton();
+                switch (typeRegistration.Lifetime)
+                {
+                    case Lifetime.Transient:
+                        container.Register(typeRegistration.RegistrationType, typeRegistration.ImplementationType).AsMultiInstance();
+                        break;
+                    case Lifetime.Singleton:
+                        container.Register(typeRegistration.RegistrationType, typeRegistration.ImplementationType).AsSingleton();
+                        break;
+                    case Lifetime.PerRequest:
+                        throw new InvalidOperationException("Unable to directly register a per request lifetime.");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -97,7 +110,20 @@ namespace NzbDrone.Api
         {
             foreach (var collectionTypeRegistration in collectionTypeRegistrationsn)
             {
-                container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes);
+                switch (collectionTypeRegistration.Lifetime)
+                {
+                    case Lifetime.Transient:
+                        container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes).AsMultiInstance();
+                        break;
+                    case Lifetime.Singleton:
+                        container.RegisterMultiple(collectionTypeRegistration.RegistrationType, collectionTypeRegistration.ImplementationTypes).AsSingleton();
+                        break;
+                    case Lifetime.PerRequest:
+                        throw new InvalidOperationException("Unable to directly register a per request lifetime.");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -161,12 +187,23 @@ namespace NzbDrone.Api
         }
 
         /// <summary>
+        /// Gets all registered request startup tasks
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IRequestStartup"/> instances.</returns>
+        protected override IEnumerable<IRequestStartup> RegisterAndGetRequestStartupTasks(TinyIoCContainer container, Type[] requestStartupTypes)
+        {
+            container.RegisterMultiple(typeof(IRequestStartup), requestStartupTypes);
+
+            return container.ResolveAll<IRequestStartup>(false);
+        }
+
+        /// <summary>
         /// Gets all registered application registration tasks
         /// </summary>
-        /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IApplicationRegistrations"/> instances.</returns>
-        protected override IEnumerable<IApplicationRegistrations> GetApplicationRegistrationTasks()
+        /// <returns>An <see cref="IEnumerable{T}"/> instance containing <see cref="IRegistrations"/> instances.</returns>
+        protected override IEnumerable<IRegistrations> GetRegistrationTasks()
         {
-            return this.ApplicationContainer.ResolveAll<IApplicationRegistrations>(false);
+            return this.ApplicationContainer.ResolveAll<IRegistrations>(false);
         }
 
         /// <summary>
@@ -201,9 +238,7 @@ namespace NzbDrone.Api
         {
             var assembly = typeof(NancyEngine).Assembly;
 
-            var whitelist = new Type[] { };
-
-            container.AutoRegister(AppDomain.CurrentDomain.GetAssemblies().Where(a => !ignoredAssemblies.Any(ia => ia(a))), DuplicateImplementationActions.RegisterMultiple, t => t.Assembly != assembly || whitelist.Any(wt => wt == t));
+            container.AutoRegister(AppDomain.CurrentDomain.GetAssemblies().Where(a => !ignoredAssemblies.Any(ia => ia(a))), DuplicateImplementationActions.RegisterMultiple, t => t.Assembly != assembly);
         }
     }
 }

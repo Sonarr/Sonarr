@@ -52,6 +52,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentMigrator, Version=1.2.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.2.1.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner, Version=1.1.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentMigrator.1.2.1.0\tools\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentValidation.5.4.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Growl.Connector.dll</HintPath>
@@ -59,6 +71,10 @@
     <Reference Include="Growl.CoreLibrary, Version=2.0.0.0, Culture=neutral, PublicKeyToken=13e59d82e007b064, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Growl.CoreLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,20 +85,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="FluentMigrator">
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\lib\40\FluentMigrator.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner">
-      <HintPath>..\packages\FluentMigrator.1.1.1.0\tools\FluentMigrator.Runner.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
-    </Reference>
     <Reference Include="MediaInfoDotNet">
       <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
@@ -124,6 +128,7 @@
     <Compile Include="Configuration\IConfigService.cs" />
     <Compile Include="Configuration\InvalidConfigFileException.cs" />
     <Compile Include="Configuration\ResetApiKeyCommand.cs" />
+    <Compile Include="DataAugmentation\DailySeries\DailySeries.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxy.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesService.cs" />
     <Compile Include="DataAugmentation\Scene\ISceneMappingProvider.cs" />
@@ -217,6 +222,11 @@
     <Compile Include="Datastore\Migration\056_add_mediainfo_to_episodefile.cs" />
     <Compile Include="Datastore\Migration\057_convert_episode_file_path_to_relative.cs" />
     <Compile Include="Datastore\Migration\058_drop_epsiode_file_path.cs" />
+    <Compile Include="Datastore\Migration\059_add_enable_options_to_indexers.cs" />
+    <Compile Include="Datastore\Migration\063_add_remotepathmappings.cs" />
+    <Compile Include="Datastore\Migration\061_clear_bad_scene_names.cs" />
+    <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
+    <Compile Include="Datastore\Migration\062_convert_quality_models.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -224,10 +234,10 @@
     <Compile Include="Datastore\Migration\Framework\MigrationOptions.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationType.cs" />
     <Compile Include="Datastore\Migration\Framework\NzbDroneMigrationBase.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteAlter.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteColumn.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteIndex.cs" />
-    <Compile Include="Datastore\Migration\Framework\SQLiteMigrationHelper.cs" />
+    <Compile Include="Datastore\Migration\Framework\NzbDroneSqliteProcessor.cs" />
+    <Compile Include="Datastore\Migration\Framework\NzbDroneSqliteProcessorFactory.cs" />
+    <Compile Include="Datastore\Migration\Framework\SqliteSchemaDumper.cs" />
+    <Compile Include="Datastore\Migration\Framework\SqliteSyntaxReader.cs" />
     <Compile Include="Datastore\ModelBase.cs" />
     <Compile Include="Datastore\ModelNotFoundException.cs" />
     <Compile Include="Datastore\PagingSpec.cs" />
@@ -306,6 +316,7 @@
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
+    <Compile Include="Download\UsenetClientBase.cs" />
     <Compile Include="Download\DownloadClientBase.cs" />
     <Compile Include="Download\DownloadClientDefinition.cs" />
     <Compile Include="Download\DownloadClientFactory.cs" />
@@ -336,6 +347,7 @@
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\DownstreamException.cs" />
     <Compile Include="Exceptions\NzbDroneClientException.cs" />
+    <Compile Include="Exceptions\ReleaseDownloadException.cs" />
     <Compile Include="Exceptions\StatusCodeToExceptions.cs" />
     <Compile Include="Fluent.cs" />
     <Compile Include="HealthCheck\CheckHealthCommand.cs" />
@@ -432,7 +444,7 @@
     <Compile Include="Instrumentation\Log.cs" />
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
-    <Compile Include="Instrumentation\SetLoggingLevel.cs" />
+    <Compile Include="Instrumentation\ReconfigureLogging.cs" />
     <Compile Include="Jobs\JobRepository.cs" />
     <Compile Include="Jobs\ScheduledTask.cs" />
     <Compile Include="Jobs\Scheduler.cs" />
@@ -453,6 +465,7 @@
     <Compile Include="MediaFiles\Commands\RenameFilesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RenameSeriesCommand.cs" />
     <Compile Include="MediaFiles\Commands\RescanSeriesCommand.cs" />
+    <Compile Include="MediaFiles\DeleteMediaFileReason.cs" />
     <Compile Include="MediaFiles\DiskScanService.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -462,10 +475,12 @@
     <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportResult.cs" />
     <Compile Include="MediaFiles\EpisodeImport\IImportDecisionEngineSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportApprovedEpisodes.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportResultType.cs" />
     <Compile Include="MediaFiles\EpisodeImport\SampleService.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
@@ -512,6 +527,7 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="MetadataSource\TraktSearchSeriesComparer.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
@@ -547,6 +563,10 @@
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="MetadataSource\TraktProxy.cs" />
     <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
+    <Compile Include="Qualities\Revision.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
+    <Compile Include="RemotePathMappings\RemotePathMappingService.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
     <Compile Include="Notifications\Email\Email.cs">
       <SubType>Code</SubType>
@@ -644,6 +664,7 @@
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />
+    <Compile Include="Parser\EpisodeNotFoundException.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
     <Compile Include="Parser\Language.cs" />
     <Compile Include="Parser\Model\LocalEpisode.cs" />
@@ -654,6 +675,7 @@
     <Compile Include="Parser\Model\TorrentInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\ParsingService.cs" />
+    <Compile Include="Parser\SceneChecker.cs" />
     <Compile Include="Parser\QualityParser.cs" />
     <Compile Include="Profiles\GrabDelayMode.cs" />
     <Compile Include="Profiles\Profile.cs" />

@@ -18,11 +18,12 @@ define(
             },
 
             setTitle: function (title) {
-                if (title.toLocaleLowerCase() === 'nzbdrone') {
-                    document.title = 'NzbDrone';
+                title = title.toLocaleLowerCase();
+                if (title === 'nzbdrone') {
+                    document.title = 'nzbdrone';
                 }
                 else {
-                    document.title = title + ' - NzbDrone';
+                    document.title = title + ' - nzbdrone';
                 }
             },
 

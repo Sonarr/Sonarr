@@ -15,7 +15,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             _appFolderInfo = appFolderInfo;
         }
 
-        protected override string Map(string resourceUrl)
+        public override string Map(string resourceUrl)
         {
             var path = Path.Combine("Content", "Images", "favicon.ico");
 

@@ -26,7 +26,9 @@ namespace NzbDrone.Api.Extensions.Pipelines
         {
             try
             {
-                if (!response.ContentType.Contains("image")
+                if (
+                   !response.ContentType.Contains("image")
+                && !response.ContentType.Contains("font")
                 && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip"))
                 && (!response.Headers.ContainsKey("Content-Encoding") || response.Headers["Content-Encoding"] != "gzip"))
                 {

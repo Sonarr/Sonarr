@@ -26,6 +26,21 @@ namespace NzbDrone.Core.Notifications
 
         private string GetMessage(Series series, List<Episode> episodes, QualityModel quality)
         {
+            var qualityString = quality.Quality.ToString();
+
+            if (quality.Revision.Version > 1)
+            {
+                if (series.SeriesType == SeriesTypes.Anime)
+                {
+                    qualityString += " v" + quality.Revision.Version;
+                }
+
+                else
+                {
+                    qualityString += " Proper";
+                }
+            }
+            
             if (series.SeriesType == SeriesTypes.Daily)
             {
                 var episode = episodes.First();
@@ -34,7 +49,7 @@ namespace NzbDrone.Core.Notifications
                                          series.Title,
                                          episode.AirDate,
                                          episode.Title,
-                                         quality);
+                                         qualityString);
             }
 
             var episodeNumbers = String.Concat(episodes.Select(e => e.EpisodeNumber)
@@ -47,7 +62,7 @@ namespace NzbDrone.Core.Notifications
                                     episodes.First().SeasonNumber,
                                     episodeNumbers,
                                     episodeTitles,
-                                    quality);
+                                    qualityString);
         }
 
         public void Handle(EpisodeGrabbedEvent message)

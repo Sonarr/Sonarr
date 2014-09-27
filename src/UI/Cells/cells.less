@@ -44,10 +44,13 @@
   .text-overflow();
 }
 
+.relative-date-cell, .relative-time-cell {
+  .text-overflow();
+  cursor : default;
+}
+
 .relative-date-cell {
   width : 150px;
-  cursor: default;
-  .text-overflow();
 }
 
 .history-event-type-cell {
@@ -78,12 +81,18 @@
   }
 }
 
-td.episode-status-cell, td.quality-cell {
+td.episode-status-cell, td.quality-cell, td.history-quality-cell {
   text-align: center;
   width: 80px;
 
   .badge {
     font-size: 9px;
+  }
+
+  .badge-inverse {
+    background-color: #eee;
+    border: 1px solid @badge-bg;
+    color: @badge-bg;
   }
 
   .progress {
@@ -108,24 +117,15 @@ td.episode-status-cell, td.quality-cell {
 }
 
 .episode-actions-cell {
-  width: 65px;
+  width: 55px;
 
-  li {
+  i {
     .clickable();
+    margin-left : 8px;
 
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: normal;
-    line-height: 20px;
-    color: rgb(51, 51, 51);
-    white-space: nowrap;
-  }
-
-  li:hover {
-    text-decoration: none;
-    color: rgb(255, 255, 255);
-    background-color: rgb(0, 129, 194);
+    &:first-of-type {
+      margin-left : 0px;
+    }
   }
 }
 
@@ -195,4 +195,30 @@ td.delete-episode-file-cell {
 .log-message-cell {
   word-break: break-all;
   word-wrap: break-word;
+}
+
+.execute-task-cell {
+  width : 28px;
+
+  i {
+    .clickable();
+  }
+}
+
+.task-interval-cell, .next-execution-cell {
+  cursor : default;
+}
+
+.task-interval-cell {
+  width : 150px;
+}
+
+.next-execution-cell {
+  width : 200px;
+}
+
+.tasks {
+  .relative-time-cell {
+    width : 200px;
+  }
 }

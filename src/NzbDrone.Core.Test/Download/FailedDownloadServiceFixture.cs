@@ -93,9 +93,10 @@ namespace NzbDrone.Core.Test.Download
             Mocker.GetMock<IConfigService>().SetupGet(s => s.BlacklistGracePeriod).Returns(hours);
         }
 
-        private void GivenRetryLimit(int count)
+        private void GivenRetryLimit(int count, int interval = 5)
         {
             Mocker.GetMock<IConfigService>().SetupGet(s => s.BlacklistRetryLimit).Returns(count);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.BlacklistRetryInterval).Returns(interval);
         }
 
         private void VerifyNoFailedDownloads()
@@ -108,6 +109,18 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IEventAggregator>()
                 .Verify(v => v.PublishEvent(It.Is<DownloadFailedEvent>(d => d.EpisodeIds.Count == count)), Times.Once());
+        }
+
+        private void VerifyRetryDownload()
+        {
+            Mocker.GetMock<IDownloadClient>()
+                .Verify(v => v.RetryDownload(It.IsAny<String>()), Times.Once());
+        }
+
+        private void VerifyNoRetryDownload()
+        {
+            Mocker.GetMock<IDownloadClient>()
+                .Verify(v => v.RetryDownload(It.IsAny<String>()), Times.Never());
         }
 
         [Test]
@@ -314,6 +327,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
+            VerifyNoRetryDownload();
         }
 
         [Test]
@@ -335,6 +349,60 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
+            VerifyNoRetryDownload();
+        }
+
+        [Test]
+        public void should_not_retry_if_already_failed()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
+            historyGrabbed.First().Data.Add("ageHours", "1");
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenFailedHistory(historyGrabbed);
+            GivenGracePeriod(6);
+            GivenRetryLimit(1);
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
+            VerifyNoFailedDownloads();
+            VerifyNoRetryDownload();
+        }
+
+        [Test]
+        public void should_retry_if_interval_expired()
+        {
+            GivenFailedDownloadClientHistory();
+
+            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
+                                                  .Build()
+                                                  .ToList();
+
+            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
+            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
+            historyGrabbed.First().Data.Add("ageHours", "1");
+
+            GivenGrabbedHistory(historyGrabbed);
+            GivenNoFailedHistory();
+            GivenGracePeriod(6);
+            GivenRetryLimit(1);
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
+            Subject.GetTrackedDownloads().First().LastRetry -= TimeSpan.FromMinutes(10);
+
+            Subject.Execute(new CheckForFinishedDownloadCommand());
+
+            VerifyRetryDownload();
+
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
@@ -357,6 +425,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyFailedDownloads();
+            VerifyNoRetryDownload();
         }
 
         [Test]
@@ -380,6 +449,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
+            VerifyNoRetryDownload();
 
             ExceptionVerification.IgnoreWarns();
         }

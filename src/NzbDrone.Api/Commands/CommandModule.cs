@@ -10,6 +10,7 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
+using NzbDrone.SignalR;
 
 
 namespace NzbDrone.Api.Commands
@@ -20,8 +21,11 @@ namespace NzbDrone.Api.Commands
         private readonly IContainer _container;
         private readonly ITrackCommands _trackCommands;
 
-        public CommandModule(ICommandExecutor commandExecutor, IContainer container, ITrackCommands trackCommands)
-            : base(commandExecutor)
+        public CommandModule(ICommandExecutor commandExecutor,
+                             IBroadcastSignalRMessage signalRBroadcaster,
+                             IContainer container,
+                             ITrackCommands trackCommands)
+            : base(signalRBroadcaster)
         {
             _commandExecutor = commandExecutor;
             _container = container;
@@ -47,6 +51,7 @@ namespace NzbDrone.Api.Commands
                         .Equals(commandResource.Name, StringComparison.InvariantCultureIgnoreCase));
 
             dynamic command = Request.Body.FromJson(commandType);
+            command.Manual = true;
 
             var trackedCommand = (Command)_commandExecutor.PublishCommandAsync(command);
             return trackedCommand.Id;

@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
@@ -185,7 +186,7 @@ namespace NzbDrone.Core.Tv
                 _logger.Debug("Detaching episode {0} from file.", episode.Id);
                 episode.EpisodeFileId = 0;
 
-                if (!message.ForUpgrade && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes)
+                if (message.Reason != DeleteMediaFileReason.Upgrade && _configService.AutoUnmonitorPreviouslyDownloadedEpisodes)
                 {
                     episode.Monitored = false;
                 }
