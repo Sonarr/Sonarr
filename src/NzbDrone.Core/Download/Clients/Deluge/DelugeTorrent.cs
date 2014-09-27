@@ -40,5 +40,20 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         [JsonProperty(PropertyName = "active_time")]
         public Int32 SecondsDownloading { get; set; }
+
+        [JsonProperty(PropertyName = "ratio")]
+        public Double Ratio { get; set; }
+
+        [JsonProperty(PropertyName = "is_auto_managed")]
+        public Boolean IsAutoManaged { get; set; }
+
+        [JsonProperty(PropertyName = "stop_at_ratio")]
+        public Boolean StopAtRatio { get; set; }
+
+        [JsonProperty(PropertyName = "remove_at_ratio")]
+        public Boolean RemoveAtRatio { get; set; }
+
+        [JsonProperty(PropertyName = "stop_ratio")]
+        public Double StopRatio { get; set; }
     }
 }

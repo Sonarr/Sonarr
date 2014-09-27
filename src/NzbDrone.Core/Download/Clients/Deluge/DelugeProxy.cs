@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         String[] GetEnabledPlugins(DelugeSettings settings);
         String[] GetAvailableLabels(DelugeSettings settings);
         void SetLabel(String hash, String label, DelugeSettings settings);
+        void SetTorrentConfiguration(String hash, String key, Object value, DelugeSettings settings);
         void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings);
         void AddLabel(String label, DelugeSettings settings);
         String AddTorrentFromMagnet(String magnetLink, DelugeSettings settings);
@@ -120,6 +121,14 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             var response = ProcessRequest<String[]>(settings, "label.get_labels");
 
             return response.Result;
+        }
+
+        public void SetTorrentConfiguration(String hash, String key, Object value, DelugeSettings settings)
+        {
+            var arguments = new Dictionary<String, Object>();
+            arguments.Add(key, value);
+
+            ProcessRequest<Object>(settings, "core.set_torrent_options", new String[] { hash }, arguments);
         }
 
         public void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings)

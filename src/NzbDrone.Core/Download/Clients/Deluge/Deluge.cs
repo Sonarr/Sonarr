@@ -47,6 +47,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
 
+            _proxy.SetTorrentConfiguration(actualHash, "remove_at_ratio", false, Settings);
+
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
             if (isRecentEpisode && Settings.RecentTvPriority == (int)DelugePriority.First ||
@@ -66,6 +68,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 _proxy.SetLabel(actualHash, Settings.TvCategory, Settings);
             }
+
+            _proxy.SetTorrentConfiguration(actualHash, "remove_at_ratio", false, Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -142,7 +146,15 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.IsReadOnly = torrent.State != DelugeTorrentStatus.Paused;
+                // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met. This allows drone to delete the torrent as appropriate.
+                if (torrent.IsAutoManaged && torrent.StopAtRatio && torrent.Ratio >= torrent.StopRatio && torrent.State == DelugeTorrentStatus.Paused)
+                {
+                    item.IsReadOnly = false;
+                }
+                else
+                {
+                    item.IsReadOnly = true;
+                }
 
                 items.Add(item);
             }

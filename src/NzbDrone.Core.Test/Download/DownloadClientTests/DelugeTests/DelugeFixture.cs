@@ -254,7 +254,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             item.Status.Should().Be(expectedItemStatus);
         }
 
-        [TestCase(DelugeTorrentStatus.Paused, DownloadItemStatus.Completed, false)]
+        [TestCase(DelugeTorrentStatus.Paused, DownloadItemStatus.Completed, true)]
         [TestCase(DelugeTorrentStatus.Checking, DownloadItemStatus.Downloading, true)]
         [TestCase(DelugeTorrentStatus.Queued, DownloadItemStatus.Completed, true)]
         [TestCase(DelugeTorrentStatus.Seeding, DownloadItemStatus.Completed, true)]
@@ -268,6 +268,23 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
 
             item.Status.Should().Be(expectedItemStatus);
             item.IsReadOnly.Should().Be(expectedReadOnly);
+        }
+
+        [Test]
+        public void GetItems_should_check_share_ratio_for_readonly()
+        {
+            _completed.State = DelugeTorrentStatus.Paused;
+            _completed.IsAutoManaged = true;
+            _completed.StopAtRatio = true;
+            _completed.StopRatio = 1.0;
+            _completed.Ratio = 1.01;
+
+            PrepareClientToReturnCompletedItem();
+
+            var item = Subject.GetItems().Single();
+
+            item.Status.Should().Be(DownloadItemStatus.Completed);
+            item.IsReadOnly.Should().BeFalse();
         }
 
         [Test]
