@@ -398,7 +398,7 @@ namespace NzbDrone.Core.Organizer
 
         private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
         {
-            tokenHandlers["{Original Title}"] = m => episodeFile.SceneName;
+            tokenHandlers["{Original Title}"] = m => episodeFile.SceneName ?? String.Empty;
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? "DRONE";
             tokenHandlers["{Quality Title}"] = m => GetQualityTitle(series, episodeFile.Quality);
         }
