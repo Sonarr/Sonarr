@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NzbDrone.Common;
 using NzbDrone.Common.Http;
@@ -15,7 +14,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
         public OmgwtfnzbsRequestGenerator()
         {
-            BaseUrl = "http://rss.omgwtfnzbs.org/rss-search.php";
+            BaseUrl = "https://rss.omgwtfnzbs.org/rss-search.php";
         }
 
         public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()

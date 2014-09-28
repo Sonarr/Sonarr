@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -46,7 +45,7 @@ namespace NzbDrone.Core.Indexers
             using (var xmlTextReader = XmlReader.Create(new StringReader(indexerResponse.Content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
             {
                 var document = XDocument.Load(xmlTextReader);
-                var items = document.Root.Element("channel").Elements("item");
+                var items = GetItems(document);
 
                 foreach (var item in items)
                 {
@@ -230,6 +229,25 @@ namespace NzbDrone.Core.Indexers
             var result = value * multiplier;
 
             return Convert.ToInt64(result);
+        }
+
+        private IEnumerable<XElement> GetItems(XDocument document)
+        {
+            var root = document.Root;
+
+            if (root == null)
+            {
+                return Enumerable.Empty<XElement>();
+            }
+
+            var channel = root.Element("channel");
+
+            if (channel == null)
+            {
+                return Enumerable.Empty<XElement>();
+            }
+
+            return channel.Elements("item");
         }
     }
 }
