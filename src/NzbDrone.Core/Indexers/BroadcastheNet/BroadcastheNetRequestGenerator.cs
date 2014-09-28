@@ -123,11 +123,12 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             }
 
             var builder = new JsonRpcRequestBuilder(Settings.BaseUrl, "getTorrents", new Object[] { Settings.ApiKey, parameters, PageSize, 0 });
+            builder.SupressHttpError = true;
 
             for (var page = 0; page < maxPages;page++)
             {
                 builder.Parameters[3] = page * PageSize;
-                
+
                 yield return new IndexerRequest(builder.Build(""));
             }
         }

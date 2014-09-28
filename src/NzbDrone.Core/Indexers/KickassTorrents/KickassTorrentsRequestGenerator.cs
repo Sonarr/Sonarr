@@ -117,13 +117,19 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
             if (PageSize == 0)
             {
-                yield return new IndexerRequest(String.Format("{0}/{1}/{2}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl), HttpAccept.Rss);
+                var request = new IndexerRequest(String.Format("{0}/{1}{2}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl), HttpAccept.Rss);
+                request.HttpRequest.SuppressHttpError = true;
+
+                yield return request;
             }
             else
             {
                 for (var page = 0; page < maxPages; page++)
                 {
-                    yield return new IndexerRequest(String.Format("{0}/{1}/{2}/{3}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl, page + 1), HttpAccept.Rss);
+                    var request = new IndexerRequest(String.Format("{0}/{1}{2}/{3}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl, page + 1), HttpAccept.Rss);
+                    request.HttpRequest.SuppressHttpError = true;
+
+                    yield return request;
                 }
             }
         }
