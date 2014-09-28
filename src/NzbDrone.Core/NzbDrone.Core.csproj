@@ -109,6 +109,7 @@
     <Compile Include="..\NzbDrone.Common\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Analytics\AnalyticsService.cs" />
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
     <Compile Include="Backup\Backup.cs" />
     <Compile Include="Backup\BackupCommand.cs" />

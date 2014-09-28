@@ -6,6 +6,7 @@ using Nancy;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Analytics;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Frontend.Mappers
@@ -13,6 +14,8 @@ namespace NzbDrone.Api.Frontend.Mappers
     public class IndexHtmlMapper : StaticResourceMapperBase
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IAnalyticsService _analyticsService;
         private readonly Func<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private readonly string _indexPath;
         private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -25,11 +28,14 @@ namespace NzbDrone.Api.Frontend.Mappers
         public IndexHtmlMapper(IAppFolderInfo appFolderInfo,
                                IDiskProvider diskProvider,
                                IConfigFileProvider configFileProvider,
+                               IAnalyticsService analyticsService,
                                Func<ICacheBreakerProvider> cacheBreakProviderFactory,
                                Logger logger)
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
+            _configFileProvider = configFileProvider;
+            _analyticsService = analyticsService;
             _cacheBreakProviderFactory = cacheBreakProviderFactory;
             _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "index.html");
 
@@ -87,6 +93,8 @@ namespace NzbDrone.Api.Frontend.Mappers
             text = text.Replace("API_ROOT", URL_BASE + "/api");
             text = text.Replace("API_KEY", API_KEY);
             text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
+
+            text = text.Replace("APP_ANALYTICS", _analyticsService.IsEnabled.ToString().ToLowerInvariant());
 
             _generatedContent = text;
 

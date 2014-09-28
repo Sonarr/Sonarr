@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Configuration
         bool EnableSsl { get; }
         bool LaunchBrowser { get; }
         bool AuthenticationEnabled { get; }
+        bool AnalyticsEnabled { get; }
         string Username { get; }
         string Password { get; }
         string LogLevel { get; }
@@ -137,6 +138,14 @@ namespace NzbDrone.Core.Configuration
         public bool AuthenticationEnabled
         {
             get { return GetValueBoolean("AuthenticationEnabled", false); }
+        }
+
+        public bool AnalyticsEnabled
+        {
+            get
+            {
+                return GetValueBoolean("AnalyticsEnabled", true, persist: false);
+            }
         }
 
         public string Branch
