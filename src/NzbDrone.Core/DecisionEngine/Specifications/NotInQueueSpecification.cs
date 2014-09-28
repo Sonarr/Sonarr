@@ -34,7 +34,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             var queue = _downloadTrackingService.GetQueuedDownloads()
                             .Where(v => v.State == TrackedDownloadState.Downloading)
-                            .Select(q => q.DownloadItem.RemoteEpisode).ToList();
+                            .Select(q => q.RemoteEpisode).ToList();
 
             if (IsInQueue(subject, queue))
             {

@@ -7,8 +7,12 @@ using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download
@@ -23,16 +27,24 @@ namespace NzbDrone.Core.Test.Download
         public void Setup()
         {
             _completed = Builder<DownloadClientItem>.CreateListOfSize(5)
-                                             .All()
-                                             .With(h => h.Status = DownloadItemStatus.Completed)
-                                             .Build()
-                                             .ToList();
+                                                    .All()
+                                                    .With(h => h.Status = DownloadItemStatus.Completed)
+                                                    .With(h => h.Title = "Drone.S01E01.HDTV")
+                                                    .Build()
+                                                    .ToList();
 
             _failed = Builder<DownloadClientItem>.CreateListOfSize(1)
-                                          .All()
-                                          .With(h => h.Status = DownloadItemStatus.Failed)
-                                          .Build()
-                                          .ToList();
+                                                 .All()
+                                                 .With(h => h.Status = DownloadItemStatus.Failed)
+                                                 .With(h => h.Title = "Drone.S01E01.HDTV")
+                                                 .Build()
+                                                 .ToList();
+
+            var remoteEpisode = new RemoteEpisode
+            {
+                Series = new Series(),
+                Episodes = new List<Episode> { new Episode { Id = 1 } }
+            };
 
             Mocker.GetMock<IProvideDownloadClient>()
                   .Setup(c => c.GetDownloadClients())
@@ -40,7 +52,7 @@ namespace NzbDrone.Core.Test.Download
 
             Mocker.GetMock<IDownloadClient>()
                   .SetupGet(c => c.Definition)
-                  .Returns(new Core.Download.DownloadClientDefinition { Id = 1, Name = "testClient" });
+                  .Returns(new DownloadClientDefinition { Id = 1, Name = "testClient" });
 
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableFailedDownloadHandling)
@@ -49,6 +61,14 @@ namespace NzbDrone.Core.Test.Download
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.Imported())
                   .Returns(new List<History.History>());
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Int32>(), It.IsAny<IEnumerable<Int32>>()))
+                  .Returns(remoteEpisode);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Int32>(), (SearchCriteriaBase)null))
+                  .Returns(remoteEpisode);
 
             Mocker.SetConstant<IFailedDownloadService>(Mocker.Resolve<FailedDownloadService>());
         }

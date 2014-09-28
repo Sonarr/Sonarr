@@ -9,11 +9,13 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Test.Common;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Test.Download
@@ -27,15 +29,18 @@ namespace NzbDrone.Core.Test.Download
         public void Setup()
         {
             _completed = Builder<DownloadClientItem>.CreateListOfSize(1)
-                                             .All()
-                                             .With(h => h.Status = DownloadItemStatus.Completed)
-                                             .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
-                                             .With(h => h.RemoteEpisode = new RemoteEpisode
-                                                {
-                                                    Episodes = new List<Episode> { new Episode { Id = 1 } }
-                                                })
-                                             .Build()
-                                             .ToList();
+                                                    .All()
+                                                    .With(h => h.Status = DownloadItemStatus.Completed)
+                                                    .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
+                                                    .With(h => h.Title = "Drone.S01E01.HDTV")
+                                                    .Build()
+                                                    .ToList();
+
+            var remoteEpisode = new RemoteEpisode 
+                                {
+                                    Series = new Series(),
+                                    Episodes = new List<Episode> {new Episode {Id = 1}}
+                                };
             
             Mocker.GetMock<IProvideDownloadClient>()
                   .Setup(c => c.GetDownloadClients())
@@ -43,7 +48,7 @@ namespace NzbDrone.Core.Test.Download
 
             Mocker.GetMock<IDownloadClient>()
                   .SetupGet(c => c.Definition)
-                  .Returns(new Core.Download.DownloadClientDefinition { Id = 1, Name = "testClient" });
+                  .Returns(new DownloadClientDefinition { Id = 1, Name = "testClient" });
 
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableCompletedDownloadHandling)
@@ -56,6 +61,14 @@ namespace NzbDrone.Core.Test.Download
             Mocker.GetMock<IHistoryService>()
                   .Setup(s => s.Failed())
                   .Returns(new List<History.History>());
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Int32>(), It.IsAny<IEnumerable<Int32>>()))
+                  .Returns(remoteEpisode);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Int32>(), (SearchCriteriaBase)null))
+                  .Returns(remoteEpisode);
             
             Mocker.SetConstant<ICompletedDownloadService>(Mocker.Resolve<CompletedDownloadService>());
         }
@@ -311,10 +324,7 @@ namespace NzbDrone.Core.Test.Download
                                              .All()
                                              .With(h => h.Status = DownloadItemStatus.Completed)
                                              .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
-                                             .With(h => h.RemoteEpisode = new RemoteEpisode
-                                             {
-                                                 Episodes = new List<Episode> { new Episode { Id = 1 } }
-                                             })
+                                             .With(h => h.Title = "Drone.S01E01.HDTV")
                                              .Build());
 
             var grabbedHistory = Builder<History.History>.CreateListOfSize(2)

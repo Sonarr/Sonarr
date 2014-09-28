@@ -103,9 +103,6 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
                     historyItem.Status = DownloadItemStatus.Completed;
                 }
 
-                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
-                if (historyItem.RemoteEpisode == null) continue;
-
                 yield return historyItem;
             }
         }

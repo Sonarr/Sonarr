@@ -8,7 +8,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Messaging.Events;
 using System.IO;
 
 namespace NzbDrone.Core.Download
@@ -20,21 +19,18 @@ namespace NzbDrone.Core.Download
 
     public class CompletedDownloadService : ICompletedDownloadService
     {
-        private readonly IEventAggregator _eventAggregator;
         private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IHistoryService _historyService;
         private readonly Logger _logger;
 
-        public CompletedDownloadService(IEventAggregator eventAggregator,
-                                     IConfigService configService,
-                                     IDiskProvider diskProvider,
-                                     IDownloadedEpisodesImportService downloadedEpisodesImportService,
-                                     IHistoryService historyService,
-                                     Logger logger)
+        public CompletedDownloadService(IConfigService configService,
+                                        IDiskProvider diskProvider,
+                                        IDownloadedEpisodesImportService downloadedEpisodesImportService,
+                                        IHistoryService historyService,
+                                        Logger logger)
         {
-            _eventAggregator = eventAggregator;
             _configService = configService;
             _diskProvider = diskProvider;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
@@ -61,7 +57,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any() && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
                 {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Download wasn't grabbed by drone or not in a category, ignoring download.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download wasn't grabbed by drone or not in a category, ignoring download.");
                     return;
                 }
 
@@ -73,10 +69,16 @@ namespace NzbDrone.Core.Download
 
                     UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as imported.");
                 }
+                else if (trackedDownload.Status != TrackedDownloadStatus.Ok)
+                {
+                    _logger.Debug("Tracked download status is: {0}, skipping import.", trackedDownload.Status);
+                    return;
+                }
                 else
                 {
-                    string downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
-                    string downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
+                    var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
+                    var downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
+
                     if (downloadItemOutputPath.IsNullOrWhiteSpace())
                     {
                         UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download doesn't contain intermediate path, ignoring download.");
@@ -105,7 +107,7 @@ namespace NzbDrone.Core.Download
                     {
                         if (grabbedItems.Any())
                         {
-                            var episodeIds = trackedDownload.DownloadItem.RemoteEpisode.Episodes.Select(v => v.Id).ToList();
+                            var episodeIds = trackedDownload.RemoteEpisode.Episodes.Select(v => v.Id).ToList();
 
                             // Check if we can associate it with a previous drone factory import.
                             importedItems = importedHistory.Where(v => v.Data.GetValueOrDefault(DownloadTrackingService.DOWNLOAD_CLIENT_ID) == null &&
@@ -171,7 +173,7 @@ namespace NzbDrone.Core.Download
 
             if (trackedDownload.StatusMessage != statusMessage)
             {
-                trackedDownload.HasError = logLevel >= LogLevel.Warn;
+                trackedDownload.SetStatusLevel(logLevel);
                 trackedDownload.StatusMessage = statusMessage;
                 _logger.Log(logLevel, logMessage);
             }
@@ -199,6 +201,9 @@ namespace NzbDrone.Core.Download
                     .Where(v => v.Result == ImportResultType.Skipped || v.Result == ImportResultType.Rejected)
                     .Select(v => v.Errors.Aggregate(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), (a, r) => a + "\r\n- " + r))
                     .Aggregate("Failed to import:", (a, r) => a + "\r\n" + r);
+
+                trackedDownload.StatusMessages = importResults.Where(v => v.Result == ImportResultType.Skipped || v.Result == ImportResultType.Rejected)
+                                                              .Select(v => new TrackedDownloadStatusMessage(Path.GetFileName(v.ImportDecision.LocalEpisode.Path), v.Errors)).ToList();
 
                 UpdateStatusMessage(trackedDownload, LogLevel.Error, errors);
             }

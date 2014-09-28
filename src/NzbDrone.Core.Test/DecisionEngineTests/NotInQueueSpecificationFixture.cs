@@ -69,10 +69,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 queue.Add(new TrackedDownload
                 {
                     State = state,
-                    DownloadItem = new DownloadClientItem
-                        {
-                            RemoteEpisode = remoteEpisode
-                        }
+                    RemoteEpisode = remoteEpisode
                 });
             }
 

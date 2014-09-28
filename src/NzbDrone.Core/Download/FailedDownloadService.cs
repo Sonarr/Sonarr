@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Download
@@ -68,7 +66,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Download was not grabbed by drone, ignoring download");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download was not grabbed by drone, ignoring download");
                     return;
                 }
 
@@ -92,7 +90,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Download wasn't grabbed by drone or not in a category, ignoring download.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download wasn't grabbed by drone or not in a category, ignoring download.");
                     return;
                 }
 
@@ -244,8 +242,12 @@ namespace NzbDrone.Core.Download
 
             if (trackedDownload.StatusMessage != statusMessage)
             {
-                trackedDownload.HasError = logLevel >= LogLevel.Warn;
+                trackedDownload.SetStatusLevel(logLevel);
                 trackedDownload.StatusMessage = statusMessage;
+                trackedDownload.StatusMessages = new List<TrackedDownloadStatusMessage>
+                                                 {
+                                                     new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, statusMessage)
+                                                 };
                 _logger.Log(logLevel, logMessage);
             }
             else

@@ -317,6 +317,7 @@
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
     <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
+    <Compile Include="Download\TrackedDownloadStatusMessage.cs" />
     <Compile Include="Download\UsenetClientBase.cs" />
     <Compile Include="Download\DownloadClientBase.cs" />
     <Compile Include="Download\DownloadClientDefinition.cs" />
