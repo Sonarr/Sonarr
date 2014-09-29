@@ -33,8 +33,6 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            // TODO: add imdb id based search?
-
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
@@ -56,8 +54,6 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            // TODO: add imdb id based search?
-
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
@@ -76,7 +72,17 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
         public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+
+            foreach (var queryTitle in searchCriteria.QueryTitles)
+            {
+                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                    PrepareQuery(queryTitle),
+                    String.Format("{0:yyyy-MM-dd}", searchCriteria.AirDate),
+                    "category:tv"));
+            }
+
+            return pageableRequests;
         }
 
         public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
