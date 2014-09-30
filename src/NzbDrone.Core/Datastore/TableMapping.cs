@@ -24,6 +24,7 @@ using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
+using NzbDrone.Core.Tags;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
@@ -90,6 +91,7 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(e => e.RemoteEpisode);
 
             Mapper.Entity<RemotePathMapping>().RegisterModel("RemotePathMappings");
+            Mapper.Entity<Tag>().RegisterModel("Tags");
         }
 
         private static void RegisterMappers()

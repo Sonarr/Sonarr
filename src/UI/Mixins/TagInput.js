@@ -10,11 +10,11 @@ define(
 
         $.fn.tagInput = function () {
             var input = this;
-            var tagValues = $(this).val().replace(' ', '').split(',');
+            var tagValues = $(this).val();
             var tags = getExistingTags(tagValues);
 
             $(this).attr('placeholder', 'Enter tag');
-            $(this).val('');
+            $(this).val(null);
 
             var tagInput = $(this).tagsinput({
                 freeInput: true,
@@ -41,14 +41,15 @@ define(
                     newTag.set({ label: item });
                     TagCollection.add(newTag);
 
-                    //newTag.save();
-                    newTag.set({ id: 5 });
-
-                    item = newTag.toJSON();
+                    newTag.save().done(function () {
+                        item = newTag.toJSON();
+                        originalAdd.call($(tagInput)[0], item, dontPushVal);
+                    });
                 }
 
-                window.alert('do stuff here');
-                originalAdd.call($(tagInput)[0], item, dontPushVal);
+                else {
+                    originalAdd.call($(tagInput)[0], item, dontPushVal);
+                }
             };
 
             $(this).tagsinput('removeAll');

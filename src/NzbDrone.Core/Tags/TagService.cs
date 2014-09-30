@@ -1,35 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NzbDrone.Core.Tags
 {
     public interface ITagService
     {
-        Tag Add(Tag tag);
-        void Delete(Int32 tagId);
+        Tag GetTag(Int32 tagId);
         List<Tag> All();
+        Tag Add(Tag tag);
+        Tag Update(Tag tag);
+        void Delete(Int32 tagId);
     }
 
     public class TagService : ITagService
     {
-        public Tag Add(Tag tag)
+        private readonly ITagRepository _tagRepository;
+
+        public TagService(ITagRepository tagRepository)
         {
-            throw new NotImplementedException();
+            _tagRepository = tagRepository;
         }
 
-        public void Delete(int tagId)
+        public Tag GetTag(Int32 tagId)
         {
-            throw new NotImplementedException();
+            return _tagRepository.Get(tagId);
         }
 
         public List<Tag> All()
         {
-            return new List<Tag>
-                   {
-                       new Tag { Id = 1, Label = "marktest" },
-                       new Tag { Id = 2, Label = "mark-test" },
-                       new Tag { Id = 3, Label = "mark_test" }
-                   };
+            return _tagRepository.All().ToList();
+        }
+
+        public Tag Add(Tag tag)
+        {
+            return _tagRepository.Insert(tag);
+        }
+
+        public Tag Update(Tag tag)
+        {
+            return _tagRepository.Update(tag);
+        }
+
+        public void Delete(Int32 tagId)
+        {
+            _tagRepository.Delete(tagId);
         }
     }
 }

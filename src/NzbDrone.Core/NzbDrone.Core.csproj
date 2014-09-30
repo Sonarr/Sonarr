@@ -723,6 +723,7 @@
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
     <Compile Include="Tags\Tag.cs" />
+    <Compile Include="Tags\TagRepository.cs" />
     <Compile Include="Tags\TagService.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
