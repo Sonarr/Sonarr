@@ -80,6 +80,11 @@ namespace NzbDrone.Common.Http
             catch (WebException e)
             {
                 httpWebResponse = (HttpWebResponse)e.Response;
+
+                if (httpWebResponse == null)
+                {
+                    throw;
+                }
             }
 
             Byte[] data = null;
