@@ -1,17 +1,13 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
