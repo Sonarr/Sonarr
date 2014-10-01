@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using NzbDrone.Common.EnvironmentInfo;
@@ -24,11 +25,12 @@ namespace NzbDrone.Api.Config
             UpdateResource = SaveHostConfig;
 
             SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
+            SharedValidator.RuleFor(c => c.BindAddress).ValidIp4Address().When(c => !String.Equals(c.BindAddress, "*"));
             SharedValidator.RuleFor(c => c.Port).InclusiveBetween(1, 65535);
             
             SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationEnabled);
             SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationEnabled);
-
+            
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslCertHash).NotEmpty().When(c => c.EnableSsl && OsInfo.IsWindows);
 

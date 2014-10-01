@@ -37,30 +37,30 @@ namespace NzbDrone.Host.AccessControl
 
         public void ConfigureUrl()
         {
-            var localHttpUrls = BuildUrls("http", "localhost", _configFileProvider.Port);
-            var wildcardHttpUrls = BuildUrls("http", "*", _configFileProvider.Port);
+            var localHostHttpUrls = BuildUrls("http", "localhost", _configFileProvider.Port);
+            var interfaceHttpUrls = BuildUrls("http", _configFileProvider.BindAddress, _configFileProvider.Port);
 
-            var localHttpsUrls = BuildUrls("https", "localhost", _configFileProvider.SslPort);
-            var wildcardHttpsUrls = BuildUrls("https", "*", _configFileProvider.SslPort);
+            var localHostHttpsUrls = BuildUrls("https", "localhost", _configFileProvider.SslPort);
+            var interfaceHttpsUrls = BuildUrls("https", _configFileProvider.BindAddress, _configFileProvider.SslPort);
 
             if (!_configFileProvider.EnableSsl)
             {
-                localHttpsUrls.Clear();
-                wildcardHttpsUrls.Clear();
+                Urls.Clear();
+                interfaceHttpsUrls.Clear();
             }
 
             if (OsInfo.IsWindows && !_runtimeInfo.IsAdmin)
             {
-                var httpUrls = wildcardHttpUrls.All(IsRegistered) ? wildcardHttpUrls : localHttpUrls;
-                var httpsUrls = wildcardHttpsUrls.All(IsRegistered) ? wildcardHttpsUrls : localHttpsUrls;
+                var httpUrls = interfaceHttpUrls.All(IsRegistered) ? interfaceHttpUrls : localHostHttpUrls;
+                var httpsUrls = interfaceHttpsUrls.All(IsRegistered) ? interfaceHttpsUrls : localHostHttpsUrls;
 
                 Urls.AddRange(httpUrls);
                 Urls.AddRange(httpsUrls);
             }
             else
             {
-                Urls.AddRange(wildcardHttpUrls);
-                Urls.AddRange(wildcardHttpsUrls);
+                Urls.AddRange(interfaceHttpUrls);
+                Urls.AddRange(interfaceHttpsUrls);
 
                 if (OsInfo.IsWindows)
                 {

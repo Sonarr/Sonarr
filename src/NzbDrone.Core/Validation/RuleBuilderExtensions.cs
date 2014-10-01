@@ -30,7 +30,12 @@ namespace NzbDrone.Core.Validation
 
         public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
         {
-            return ruleBuilder.SetValidator(new InclusiveBetweenValidator(0, 65535));
+            return ruleBuilder.SetValidator(new InclusiveBetweenValidator(0, 65535));            
+        }
+        
+        public static IRuleBuilderOptions<T, string> ValidIp4Address<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new RegularExpressionValidator(@"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b"));
         }
 
         public static IRuleBuilderOptions<T, Language> ValidLanguage<T>(this IRuleBuilder<T, Language> ruleBuilder)
