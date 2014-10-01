@@ -41,7 +41,10 @@ define(
 
             onRender: function () {
                 this.ui.path.autoComplete('/directories');
-                this.ui.tags.tagInput();
+                this.ui.tags.tagInput({
+                    model    : this.model,
+                    property : 'tags'
+                });
             },
 
             _removeSeries: function () {
