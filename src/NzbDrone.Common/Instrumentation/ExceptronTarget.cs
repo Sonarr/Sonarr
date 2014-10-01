@@ -26,13 +26,13 @@ namespace NzbDrone.Common.Instrumentation
         {
             var config = new ExceptronConfiguration
                 {
-                    ApiKey = "57cb75d9eb2d457094d3f67133833eef",
+                    ApiKey = "d64e0a72845d495abc625af3a27cf5f5",
                     IncludeMachineName = true,
                 };
 
             if (RuntimeInfoBase.IsProduction)
             {
-                config.ApiKey = "cc4728a35aa9414f9a0baa8eed56bc67";
+                config.ApiKey = "82c0f66dd2d64d1480cc88b551c9bdd8";
             }
 
             ExceptronClient = new ExceptronClient(config, BuildInfo.Version);
@@ -86,7 +86,6 @@ namespace NzbDrone.Common.Instrumentation
             catch (Exception e)
             {
                 InternalLogger.Warn("Unable to report exception. {0}", e);
-                throw;
             }
         }
     }

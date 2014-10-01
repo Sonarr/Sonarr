@@ -23,7 +23,7 @@ namespace NzbDrone.Common.Instrumentation
             }
 
             //Disabling for now - until its fixed or we yank it out
-            //RegisterExceptron();
+            RegisterExceptron();
 
             if (updateApp)
             {

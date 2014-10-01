@@ -161,7 +161,7 @@ namespace Exceptron.Client
 
                 if (Configuration.ThrowExceptions)
                 {
-                    throw;
+                    //throw;
                 }
 
                 return new ExceptionResponse { Exception = e };
