@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net;
+using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
 using NzbDrone.Core.Parser;
@@ -31,6 +33,21 @@ namespace NzbDrone.Core.Validation
         public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
         {
             return ruleBuilder.SetValidator(new InclusiveBetweenValidator(1, 65535));
+        }
+
+        public static IRuleBuilderOptions<T, string> ValidIp4Address<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+
+            return ruleBuilder.Must(x =>
+            {
+                IPAddress parsedAddress;
+                if (!IPAddress.TryParse(x, out parsedAddress))
+                {
+                    return false;                    
+                }
+
+                return parsedAddress.AddressFamily == AddressFamily.InterNetwork;
+            });
         }
 
         public static IRuleBuilderOptions<T, Language> ValidLanguage<T>(this IRuleBuilder<T, Language> ruleBuilder)

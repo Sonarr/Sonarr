@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Configuration
         Dictionary<string, object> GetConfigDictionary();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
+        string BindAddress { get; }
         int Port { get; }
         int SslPort { get; }
         bool EnableSsl { get; }
@@ -108,6 +109,22 @@ namespace NzbDrone.Core.Configuration
             }
 
             _eventAggregator.PublishEvent(new ConfigFileSavedEvent());
+        }
+
+        public string BindAddress
+        {
+            get
+            {
+                const string defaultValue = "*";
+
+                string bindAddress = GetValue("BindAddress", defaultValue);
+                if (string.IsNullOrWhiteSpace(bindAddress))
+                {
+                    return defaultValue;
+                }
+
+                return bindAddress;
+            }
         }
 
         public int Port
