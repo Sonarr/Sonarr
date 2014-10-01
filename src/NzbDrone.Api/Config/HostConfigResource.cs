@@ -6,6 +6,7 @@ namespace NzbDrone.Api.Config
 {
     public class HostConfigResource : RestResource
     {
+        public String BindAddress { get; set; }
         public Int32 Port { get; set; }
         public Int32 SslPort { get; set; }
         public Boolean EnableSsl { get; set; }
