@@ -24,7 +24,7 @@ namespace NzbDrone.Api.Config
             UpdateResource = SaveHostConfig;
 
             SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
-            SharedValidator.RuleFor(c => c.Port).InclusiveBetween(1, 65535);
+            SharedValidator.RuleFor(c => c.Port).ValidPort();
             
             SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationEnabled);
             SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationEnabled);
