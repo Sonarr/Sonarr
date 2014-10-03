@@ -47,6 +47,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ICSharpCode.SharpZipLib">
@@ -55,6 +56,7 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveService.cs" />
@@ -99,6 +101,22 @@
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
+    <Compile Include="Exceptron\Configuration\ExceptronConfiguration.cs" />
+    <Compile Include="Exceptron\ExceptionData.cs" />
+    <Compile Include="Exceptron\ExceptionSeverity.cs" />
+    <Compile Include="Exceptron\ExceptronApiException.cs" />
+    <Compile Include="Exceptron\ExceptronClient.cs" />
+    <Compile Include="Exceptron\fastJSON\Getters.cs" />
+    <Compile Include="Exceptron\fastJSON\JSON.cs" />
+    <Compile Include="Exceptron\fastJSON\JsonParser.cs" />
+    <Compile Include="Exceptron\fastJSON\JsonSerializer.cs" />
+    <Compile Include="Exceptron\fastJSON\SafeDictionary.cs" />
+    <Compile Include="Exceptron\IExceptronClient.cs" />
+    <Compile Include="Exceptron\IRestClient.cs" />
+    <Compile Include="Exceptron\Message\ExceptionReport.cs" />
+    <Compile Include="Exceptron\Message\ExceptionResponse.cs" />
+    <Compile Include="Exceptron\Message\Frame.cs" />
+    <Compile Include="Exceptron\RestClient.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />
@@ -170,13 +188,8 @@
     <EmbeddedResource Include="EnsureThat\Resources\ExceptionMessages.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Exceptron\fastJSON\license.txt" />
     <Content Include="Expansive\license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Exceptron.Client\Exceptron.Client.csproj">
-      <Project>{B1784698-592E-4132-BDFA-9817409E3A96}</Project>
-      <Name>Exceptron.Client</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

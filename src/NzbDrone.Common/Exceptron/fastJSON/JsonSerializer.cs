@@ -9,7 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-namespace Exceptron.Client.fastJSON
+namespace NzbDrone.Common.Exceptron.fastJSON
 {
     internal class JSONSerializer
     {

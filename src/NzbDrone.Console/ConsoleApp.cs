@@ -25,12 +25,13 @@ namespace NzbDrone.Console
                 Logger.FatalException("EPIC FAIL!", e);
                 System.Console.WriteLine("Press any key to exit...");
                 System.Console.ReadLine();
-                
-                //Need this to terminate on mono (thanks nlog)
-                LogManager.Configuration = null;
             }
 
             Logger.Info("Exiting main.");
+
+            //Need this to terminate on mono (thanks nlog)
+            LogManager.Configuration = null;
+            Environment.Exit(0);
         }
     }
 }

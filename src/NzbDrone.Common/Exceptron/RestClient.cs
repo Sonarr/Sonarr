@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
-using Exceptron.Client.fastJSON;
+using NzbDrone.Common.Exceptron.fastJSON;
 
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
     public sealed class RestClient : IRestClient
     {

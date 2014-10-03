@@ -3,12 +3,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using System.Web;
-using Exceptron.Client.Configuration;
-using Exceptron.Client.Message;
+using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptron.Configuration;
+using NzbDrone.Common.Exceptron.Message;
 
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
+
+    public static class ExceptionExtentions
+    {
+        private const string IgnoreFlag = "exceptron_ignore";
+
+        public static Exception ExceptronIgnoreOnMono(this Exception exception)
+        {
+            if (OsInfo.IsMono)
+            {
+                exception.ExceptronIgnore();
+            }
+
+            return exception;
+        }
+
+        public static Exception ExceptronIgnore(this Exception exception)
+        {
+            exception.Data.Add(IgnoreFlag, true);
+            return exception;
+        }
+
+        public static bool ExceptronShouldIgnore(this Exception exception)
+        {
+            return exception.Data.Contains(IgnoreFlag);
+        }
+    }
+
     public class ExceptronClient : IExceptronClient
     {
         internal IRestClient RestClient { private get; set; }
@@ -103,7 +130,7 @@ namespace Exceptron.Client
         /// <param name="httpContext"><see cref="System.Web.HttpContext"/> in which the exception occurred. If no <see cref="System.Web.HttpContext"/> is provided
         /// <see cref="ExceptronClient"/> will try to get the current <see cref="System.Web.HttpContext"/> from <see cref="System.Web.HttpContext.Current"/></param>
         /// <returns></returns>
-        public ExceptionResponse SubmitException(Exception exception, string component, ExceptionSeverity severity = ExceptionSeverity.None, string message = null, string userId = null, HttpContext httpContext = null)
+        public ExceptionResponse SubmitException(Exception exception, string component, ExceptionSeverity severity = ExceptionSeverity.None, string message = null, string userId = null)
         {
             var exceptionData = new ExceptionData
                                     {
@@ -111,8 +138,7 @@ namespace Exceptron.Client
                                         Component = component,
                                         Severity = severity,
                                         Message = message,
-                                        UserId = userId,
-                                        HttpContext = httpContext
+                                        UserId = userId
                                     };
 
             return SubmitException(exceptionData);
@@ -146,7 +172,6 @@ namespace Exceptron.Client
                 report.fv = _maxFrameworkVersion;
                 report.ft = FrameworkType;
 
-                SetHttpInfo(exceptionData, report);
                 SetEnviromentInfo(report);
 
                 var exceptionResponse = RestClient.Put<ExceptionResponse>(Configuration.Host, report);
@@ -209,37 +234,7 @@ namespace Exceptron.Client
             }
         }
 
-        private void SetHttpInfo(ExceptionData exceptionData, ExceptionReport report)
-        {
-            if (exceptionData.HttpContext == null && HttpContext.Current == null)
-                return;
 
-            if (exceptionData.HttpContext == null)
-            {
-                exceptionData.HttpContext = HttpContext.Current;
-            }
-
-            try
-            {
-
-                report.hm = exceptionData.HttpContext.Request.HttpMethod;
-
-                //TODO:find proper way to find http status code.
-                /*
-                var httpException = exceptionData.Exception as HttpException;                
-                if (httpException != null)
-                {
-                    report.sc = httpException.GetHttpCode();
-                }*/
-
-                report.url = exceptionData.HttpContext.Request.Url.ToString();
-                report.ua = exceptionData.HttpContext.Request.UserAgent;
-            }
-            catch (Exception)
-            {
-                if (Configuration.ThrowExceptions) throw;
-            }
-        }
 
         internal static List<Frame> ConvertToFrames(Exception exception)
         {

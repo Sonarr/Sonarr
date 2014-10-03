@@ -1,9 +1,8 @@
 using System;
-using System.Web;
-using Exceptron.Client.Configuration;
-using Exceptron.Client.Message;
+using NzbDrone.Common.Exceptron.Configuration;
+using NzbDrone.Common.Exceptron.Message;
 
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
     public interface IExceptronClient
     {
@@ -40,6 +39,6 @@ namespace Exceptron.Client
         /// <param name="httpContext"><see cref="System.Web.HttpContext"/> in which the exception occurred. If no <see cref="System.Web.HttpContext"/> is provided
         /// <see cref="ExceptronClient"/> will try to get the current <see cref="System.Web.HttpContext"/> from <see cref="System.Web.HttpContext.Current"/></param>
         /// <returns></returns>
-        ExceptionResponse SubmitException(Exception exception, string component, ExceptionSeverity severity = ExceptionSeverity.None, string message = null, string userId = null, HttpContext httpContext = null);
+        ExceptionResponse SubmitException(Exception exception, string component, ExceptionSeverity severity = ExceptionSeverity.None, string message = null, string userId = null);
     }
 }

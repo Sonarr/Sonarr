@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
-using Exceptron.Client;
-using Exceptron.Client.Configuration;
 using NLog;
 using NLog.Common;
 using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptron;
+using NzbDrone.Common.Exceptron.Configuration;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -46,9 +45,7 @@ namespace NzbDrone.Common.Instrumentation
 
         protected override void Write(LogEventInfo logEvent)
         {
-            if (logEvent == null || logEvent.Exception == null) return;
-
-            InternalLogger.Debug("Sending Exception to api.exceptron.com. Process Name: {0}", Process.GetCurrentProcess().ProcessName);
+            if (logEvent == null || logEvent.Exception == null || logEvent.Exception.ExceptronShouldIgnore()) return;
 
             try
             {

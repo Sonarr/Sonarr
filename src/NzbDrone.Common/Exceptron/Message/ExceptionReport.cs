@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Exceptron.Client.Message
+namespace NzbDrone.Common.Exceptron.Message
 {
     internal class ExceptionReport
     {

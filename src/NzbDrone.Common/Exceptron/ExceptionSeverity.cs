@@ -1,4 +1,4 @@
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
     /// <summary>
     /// Severity of the exception being reported

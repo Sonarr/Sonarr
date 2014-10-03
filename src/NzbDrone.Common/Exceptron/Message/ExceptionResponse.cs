@@ -1,7 +1,7 @@
 using System;
-using Exceptron.Client.Configuration;
+using NzbDrone.Common.Exceptron.Configuration;
 
-namespace Exceptron.Client.Message
+namespace NzbDrone.Common.Exceptron.Message
 {
     public class ExceptionResponse
     {

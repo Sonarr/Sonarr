@@ -1,7 +1,6 @@
 using System;
-using System.Web;
 
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
     /// <summary>
     /// Represents information that will be used to construct an exception report.
@@ -51,12 +50,6 @@ namespace Exceptron.Client
         /// Severity of the exception being reported
         /// </summary>
         public ExceptionSeverity Severity { get; set; }
-
-
-        /// <summary>
-        /// <see cref="System.Web.HttpContext"/> that triggered this exception. If no <see cref="System.Web.HttpContext"/> is provided
-        /// <see cref="ExceptronClient"/> will try to get the current <see cref="System.Web.HttpContext"/> from <see cref="System.Web.HttpContext.Current"/>
-        /// </summary>
-        public HttpContext HttpContext { get; set; }
+    
     }
 }

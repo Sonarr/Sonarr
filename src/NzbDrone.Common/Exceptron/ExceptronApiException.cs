@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
     public class ExceptronApiException : Exception
     {

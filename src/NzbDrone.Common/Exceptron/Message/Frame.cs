@@ -1,4 +1,4 @@
-namespace Exceptron.Client.Message
+namespace NzbDrone.Common.Exceptron.Message
 {
     internal class Frame
     {

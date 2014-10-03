@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Xml.Serialization;
 
-namespace Exceptron.Client.fastJSON
+namespace NzbDrone.Common.Exceptron.fastJSON
 {
 
     internal class JSON

@@ -1,4 +1,4 @@
-namespace Exceptron.Client
+namespace NzbDrone.Common.Exceptron
 {
     internal interface IRestClient
     {

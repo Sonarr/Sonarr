@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Exceptron.Client.fastJSON
+namespace NzbDrone.Common.Exceptron.fastJSON
 {
     /// <summary>
     /// This class encodes and decodes JSON strings.

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Configuration;
-using Exceptron.Client.Message;
+using NzbDrone.Common.Exceptron.Message;
 
-namespace Exceptron.Client.Configuration
+namespace NzbDrone.Common.Exceptron.Configuration
 {
 
     public class ExceptronConfiguration : ConfigurationSection
