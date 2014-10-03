@@ -32,6 +32,7 @@ define(
                         piwik.setReferrerUrl('');
                         piwik.setCustomUrl('http://local' + window.location.pathname);
                         piwik.setCustomVariable(1, 'version', window.NzbDrone.Version, 'page');
+                        piwik.setCustomVariable(2, 'branch', window.NzbDrone.Branch, 'page');
                         piwik.trackPageView(title);
                     }
                     catch (e){
