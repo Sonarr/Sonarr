@@ -226,7 +226,6 @@
     <Compile Include="MetadataSourceTests\TvdbProxyFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
-    <Compile Include="NotificationTests\Xbmc\GetJsonVersionFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\CheckForErrorFixture.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\GetSeriesPathFixture.cs" />
@@ -269,11 +268,9 @@
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteDirectoryFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\DeleteFileFixture.cs" />
     <Compile Include="ProviderTests\RecycleBinProviderTests\EmptyFixture.cs" />
-    <Compile Include="Qualities\QualityDefinitionRepositoryFixture.cs" />
     <Compile Include="Qualities\QualityDefinitionServiceFixture.cs" />
     <Compile Include="Qualities\QualityFixture.cs" />
     <Compile Include="Qualities\QualityModelComparerFixture.cs" />
-    <Compile Include="RootFolderTests\FreeSpaceOnDrivesFixture.cs" />
     <Compile Include="RootFolderTests\RootFolderServiceFixture.cs" />
     <Compile Include="SeriesStatsTests\SeriesStatisticsFixture.cs" />
     <Compile Include="ThingiProvider\ProviderBaseFixture.cs" />

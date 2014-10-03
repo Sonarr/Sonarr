@@ -18,12 +18,10 @@ namespace NzbDrone.Core.Tv
         Series GetSeries(int seriesId);
         List<Series> GetSeries(IEnumerable<int> seriesIds);
         Series AddSeries(Series newSeries);
-        Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
         Series FindByTitle(string title, int year);
         Series FindByTitleInexact(string title);
-        void SetSeriesType(int seriesId, SeriesTypes seriesTypes);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
         Series UpdateSeries(Series series);
@@ -87,11 +85,6 @@ namespace NzbDrone.Core.Tv
             return newSeries;
         }
 
-        public Series FindByTvdbId(int tvdbId)
-        {
-            return _seriesRepository.FindByTvdbId(tvdbId);
-        }
-
         public Series FindByTvRageId(int tvRageId)
         {
             return _seriesRepository.FindByTvRageId(tvRageId);
@@ -103,7 +96,7 @@ namespace NzbDrone.Core.Tv
 
             if (tvdbId.HasValue)
             {
-                return FindByTvdbId(tvdbId.Value);
+                return _seriesRepository.FindByTvdbId(tvdbId.Value);
             }
 
             return _seriesRepository.FindByTitle(title.CleanSeriesTitle());
@@ -157,11 +150,6 @@ namespace NzbDrone.Core.Tv
         public Series FindByTitle(string title, int year)
         {
             return _seriesRepository.FindByTitle(title, year);
-        }
-
-        public void SetSeriesType(int seriesId, SeriesTypes seriesTypes)
-        {
-            _seriesRepository.SetSeriesType(seriesId, seriesTypes);
         }
 
         public void DeleteSeries(int seriesId, bool deleteFiles)

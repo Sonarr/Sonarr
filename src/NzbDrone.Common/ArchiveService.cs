@@ -12,7 +12,6 @@ namespace NzbDrone.Common
     public interface IArchiveService
     {
         void Extract(string compressedFile, string destination);
-        void ExtractZip(string compressedFile, string destination);
         void CreateZip(string path, params string[] files);
     }
 
@@ -57,7 +56,7 @@ namespace NzbDrone.Common
             }
         }
 
-        public void ExtractZip(string compressedFile, string destination)
+        private void ExtractZip(string compressedFile, string destination)
         {
             using (var fileStream = File.OpenRead(compressedFile))
             {

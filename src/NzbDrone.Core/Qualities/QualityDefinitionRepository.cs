@@ -8,7 +8,6 @@ namespace NzbDrone.Core.Qualities
 {
     public interface IQualityDefinitionRepository : IBasicRepository<QualityDefinition>
     {
-        QualityDefinition GetByQualityId(int qualityId);
     }
 
     public class QualityDefinitionRepository : BasicRepository<QualityDefinition>, IQualityDefinitionRepository
@@ -18,16 +17,6 @@ namespace NzbDrone.Core.Qualities
         {
         }
 
-        public QualityDefinition GetByQualityId(int qualityId)
-        {
-            try
-            {
-                return Query.Where(q => (int) q.Quality == qualityId).Single();
-            }
-            catch (InvalidOperationException)
-            {
-                throw new ModelNotFoundException(typeof(QualityDefinition), qualityId);
-            }
-        }
+      
     }
 }

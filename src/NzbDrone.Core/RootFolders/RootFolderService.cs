@@ -17,8 +17,6 @@ namespace NzbDrone.Core.RootFolders
         List<RootFolder> AllWithUnmappedFolders();
         RootFolder Add(RootFolder rootDir);
         void Remove(int id);
-        List<UnmappedFolder> GetUnmappedFolders(string path);
-        Dictionary<string, long?> FreeSpaceOnDrives();
         RootFolder Get(int id);
     }
 
@@ -109,7 +107,7 @@ namespace NzbDrone.Core.RootFolders
             _rootFolderRepository.Delete(id);
         }
 
-        public List<UnmappedFolder> GetUnmappedFolders(string path)
+        private List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             Logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(path))
@@ -138,32 +136,6 @@ namespace NzbDrone.Core.RootFolders
 
             Logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
-        }
-
-        public Dictionary<string, long?> FreeSpaceOnDrives()
-        {
-            var freeSpace = new Dictionary<string, long?>();
-
-            var rootDirs = All();
-
-            foreach (var rootDir in rootDirs)
-            {
-                var pathRoot = _diskProvider.GetPathRoot(rootDir.Path);
-
-                if (!freeSpace.ContainsKey(pathRoot))
-                {
-                    try
-                    {
-                        freeSpace.Add(pathRoot, _diskProvider.GetAvailableSpace(rootDir.Path));
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WarnException("Error getting disk space for: " + pathRoot, ex);
-                    }
-                }
-            }
-
-            return freeSpace;
         }
 
         public RootFolder Get(int id)

@@ -14,12 +14,8 @@ using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
 {
-    public interface IInstallUpdates
-    {
-        void InstallUpdate(UpdatePackage updatePackage);
-    }
 
-    public class InstallUpdateService : IInstallUpdates, IExecute<ApplicationUpdateCommand>, IExecute<InstallUpdateCommand>
+    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>, IExecute<InstallUpdateCommand>
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
@@ -61,7 +57,7 @@ namespace NzbDrone.Core.Update
             _logger = logger;
         }
 
-        public void InstallUpdate(UpdatePackage updatePackage)
+        private void InstallUpdate(UpdatePackage updatePackage)
         {
             try
             {

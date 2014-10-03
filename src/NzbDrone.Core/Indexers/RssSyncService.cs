@@ -12,12 +12,7 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Indexers
 {
-    public interface IRssSyncService
-    {
-        List<DownloadDecision> Sync();
-    }
-
-    public class RssSyncService : IRssSyncService, IExecute<RssSyncCommand>
+    public class RssSyncService : IExecute<RssSyncCommand>
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
@@ -45,7 +40,7 @@ namespace NzbDrone.Core.Indexers
         }
 
 
-        public List<DownloadDecision> Sync()
+        private List<DownloadDecision> Sync()
         {
             _logger.ProgressInfo("Starting RSS Sync");
 

@@ -7,7 +7,6 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
