@@ -29,6 +29,8 @@ namespace NzbDrone.Console
                 //Need this to terminate on mono (thanks nlog)
                 LogManager.Configuration = null;
             }
+
+            Logger.Info("Exiting main.");
         }
     }
 }
