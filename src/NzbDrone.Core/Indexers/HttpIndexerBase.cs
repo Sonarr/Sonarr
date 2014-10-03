@@ -152,6 +152,15 @@ namespace NzbDrone.Core.Indexers
                     _logger.Warn("{0} {1} {2}", this, url, webException.Message);
                 }
             }
+            catch (HttpException httpException)
+            {
+                if ((int)httpException.Response.StatusCode == 429)
+                {
+                    _logger.Warn("API Request Limit reached for {0}", this);
+                }
+
+                _logger.Warn("{0} {1}", this, httpException.Message);
+            }
             catch (RequestLimitReachedException)
             {
                 // TODO: Backoff for x period.

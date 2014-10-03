@@ -5,6 +5,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Exceptron;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Events;
@@ -49,29 +50,29 @@ namespace NzbDrone.Core.MediaFiles
             switch (_configService.FileDate)
             {
                 case FileDateType.LocalAirDate:
-                {
-                    var airDate = episodes.First().AirDate;
-                    var airTime = series.AirTime;
-
-                    if (airDate.IsNullOrWhiteSpace() || airTime.IsNullOrWhiteSpace())
                     {
-                        return false;
-                    }
+                        var airDate = episodes.First().AirDate;
+                        var airTime = series.AirTime;
 
-                    return ChangeFileDateToLocalAirDate(episodeFilePath, airDate, airTime);
-                }
+                        if (airDate.IsNullOrWhiteSpace() || airTime.IsNullOrWhiteSpace())
+                        {
+                            return false;
+                        }
+
+                        return ChangeFileDateToLocalAirDate(episodeFilePath, airDate, airTime);
+                    }
 
                 case FileDateType.UtcAirDate:
-                {
-                    var airDateUtc = episodes.First().AirDateUtc;
-
-                    if (!airDateUtc.HasValue)
                     {
-                        return false;
-                    }
+                        var airDateUtc = episodes.First().AirDateUtc;
 
-                    return ChangeFileDateToUtcAirDate(episodeFilePath, airDateUtc.Value);
-                }
+                        if (!airDateUtc.HasValue)
+                        {
+                            return false;
+                        }
+
+                        return ChangeFileDateToUtcAirDate(episodeFilePath, airDateUtc.Value);
+                    }
             }
 
             return false;
@@ -99,7 +100,7 @@ namespace NzbDrone.Core.MediaFiles
                 if (ChangeFileDate(episodeFile, message.Series, episodesInFile))
                 {
                     updated.Add(episodeFile);
-                }   
+                }
             }
 
             if (updated.Any())
@@ -163,6 +164,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 catch (Exception ex)
                 {
+                    ex.ExceptronIgnoreOnMono();
                     _logger.WarnException("Unable to set date of file [" + filePath + "]", ex);
                 }
             }

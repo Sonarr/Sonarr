@@ -103,6 +103,7 @@
     <Compile Include="Exceptions\NzbDroneException.cs" />
     <Compile Include="Exceptron\Configuration\ExceptronConfiguration.cs" />
     <Compile Include="Exceptron\ExceptionData.cs" />
+    <Compile Include="Exceptron\ExceptionExtentions.cs" />
     <Compile Include="Exceptron\ExceptionSeverity.cs" />
     <Compile Include="Exceptron\ExceptronApiException.cs" />
     <Compile Include="Exceptron\ExceptronClient.cs" />

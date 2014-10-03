@@ -3,39 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptron.Configuration;
 using NzbDrone.Common.Exceptron.Message;
 
 namespace NzbDrone.Common.Exceptron
 {
-
-    public static class ExceptionExtentions
-    {
-        private const string IgnoreFlag = "exceptron_ignore";
-
-        public static Exception ExceptronIgnoreOnMono(this Exception exception)
-        {
-            if (OsInfo.IsMono)
-            {
-                exception.ExceptronIgnore();
-            }
-
-            return exception;
-        }
-
-        public static Exception ExceptronIgnore(this Exception exception)
-        {
-            exception.Data.Add(IgnoreFlag, true);
-            return exception;
-        }
-
-        public static bool ExceptronShouldIgnore(this Exception exception)
-        {
-            return exception.Data.Contains(IgnoreFlag);
-        }
-    }
-
     public class ExceptronClient : IExceptronClient
     {
         internal IRestClient RestClient { private get; set; }
