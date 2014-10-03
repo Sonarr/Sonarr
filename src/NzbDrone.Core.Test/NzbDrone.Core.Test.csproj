@@ -56,9 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentMigrator.1.3.0.0\lib\40\FluentMigrator.dll</HintPath>
     </Reference>
-    <Reference Include="FluentMigrator.Runner, Version=1.1.1.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=x86">
+    <Reference Include="FluentMigrator.Runner, Version=1.3.0.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentMigrator.1.2.1.0\tools\FluentMigrator.Runner.dll</HintPath>
+      <HintPath>..\packages\FluentMigrator.Runner.1.3.0.0\lib\40\FluentMigrator.Runner.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
