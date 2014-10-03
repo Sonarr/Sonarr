@@ -9,7 +9,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -59,7 +58,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Warn("Couldn't get download queue. {0}", ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -138,7 +137,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (sabHistoryItem.Status == SabnzbdDownloadStatus.Failed)
                 {
-                    if (sabHistoryItem.FailMessage.IsNotNullOrWhiteSpace() && 
+                    if (sabHistoryItem.FailMessage.IsNotNullOrWhiteSpace() &&
                         sabHistoryItem.FailMessage.Equals("Unpacking failed, write error or disk is full?", StringComparison.InvariantCultureIgnoreCase))
                     {
                         historyItem.Status = DownloadItemStatus.Warning;
@@ -222,8 +221,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var currentHistoryItem = currentHistoryItems.First();
             var otherItemsWithSameTitle = currentHistory.Where(h => h.Title == currentHistoryItem.Title &&
                                                                h.DownloadClientId != currentHistoryItem.DownloadClientId).ToList();
-            
-            _proxy.RetryDownload(id, Settings);           
+
+            _proxy.RetryDownload(id, Settings);
 
             for (int i = 0; i < 3; i++)
             {
