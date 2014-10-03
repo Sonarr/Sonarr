@@ -52,9 +52,6 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Loggly">
-      <HintPath>..\packages\loggly-csharp.2.3\lib\net35\Loggly.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -133,7 +130,6 @@
     <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
-    <Compile Include="Instrumentation\LogglyTarget.cs" />
     <Compile Include="Instrumentation\LogTargets.cs" />
     <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
     <Compile Include="Instrumentation\NzbDroneLogger.cs" />
