@@ -106,11 +106,12 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<ProfileQualityItem>), new EmbeddedDocumentConverter(new QualityIntConverter()));
             MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter(new QualityIntConverter()));
-            MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<int>), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<string>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<String, String>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<Int32>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<String>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(ParsedEpisodeInfo), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(ReleaseInfo), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(HashSet<Int32>), new EmbeddedDocumentConverter());
         }
 
         private static void RegisterProviderSettingConverter()
@@ -130,9 +131,11 @@ namespace NzbDrone.Core.Datastore
 
             var embeddedConvertor = new EmbeddedDocumentConverter();
             var genericListDefinition = typeof(List<>).GetGenericTypeDefinition();
+
             foreach (var embeddedType in embeddedTypes)
             {
                 var embeddedListType = genericListDefinition.MakeGenericType(embeddedType);
+
                 MapRepository.Instance.RegisterTypeConverter(embeddedType, embeddedConvertor);
                 MapRepository.Instance.RegisterTypeConverter(embeddedListType, embeddedConvertor);
             }

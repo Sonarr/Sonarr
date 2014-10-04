@@ -9,10 +9,10 @@ namespace NzbDrone.Core.Download
     {
         public DownloadClientDefinition()
         {
-            Tags = new List<Int32>();
+            Tags = new HashSet<Int32>();
         }
 
         public DownloadProtocol Protocol { get; set; }
-        public List<Int32> Tags { get; set; }
+        public HashSet<Int32> Tags { get; set; }
     }
 }

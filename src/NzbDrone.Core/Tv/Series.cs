@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Tv
             Images = new List<MediaCover.MediaCover>();
             Genres = new List<String>();
             Actors = new List<Actor>();
-            Tags = new List<Int32>();
+            Tags = new HashSet<Int32>();
         }
 
         public int TvdbId { get; set; }
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Tv
         public LazyLoaded<Profile> Profile { get; set; }
 
         public List<Season> Seasons { get; set; }
-        public List<Int32> Tags { get; set; }
+        public HashSet<Int32> Tags { get; set; }
 
         public override string ToString()
         {
