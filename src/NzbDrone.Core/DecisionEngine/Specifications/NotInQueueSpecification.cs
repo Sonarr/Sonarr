@@ -5,7 +5,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {

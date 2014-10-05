@@ -10,7 +10,6 @@ using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
