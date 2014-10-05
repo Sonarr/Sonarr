@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NzbDrone.Common;
@@ -49,6 +50,7 @@ namespace NzbDrone.Core.Configuration
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
+        private static readonly Regex HiddenCharacterRegex = new Regex("[^a-z0-9]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManager cacheManager, IEventAggregator eventAggregator)
         {
@@ -84,6 +86,12 @@ namespace NzbDrone.Core.Configuration
             {
                 if (configValue.Key.Equals("ApiKey", StringComparison.InvariantCultureIgnoreCase))
                 {
+                    continue;
+                }
+
+                if (configValue.Key.Equals("SslCertHash", StringComparison.InvariantCultureIgnoreCase) && configValue.Value.ToString().IsNotNullOrWhiteSpace())
+                {
+                    SetValue(configValue.Key.FirstCharToUpper(), HiddenCharacterRegex.Replace(configValue.Value.ToString(), String.Empty));
                     continue;
                 }
 
