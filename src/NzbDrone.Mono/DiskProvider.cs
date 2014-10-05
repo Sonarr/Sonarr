@@ -24,7 +24,7 @@ namespace NzbDrone.Mono
 
             try
             {
-                var driveInfo = GetDriveInfoLinux(path);
+                var driveInfo = GetDriveInfo(path);
 
                 if (driveInfo == null)
                 {
@@ -122,7 +122,11 @@ namespace NzbDrone.Mono
 
             try
             {
-                return GetDriveInfoLinux(path).TotalSize;
+                var driveInfo = GetDriveInfo(path);
+
+                if (driveInfo == null) return null;
+
+                return driveInfo.TotalSize;
             }
             catch (InvalidOperationException e)
             {
@@ -132,7 +136,7 @@ namespace NzbDrone.Mono
             return null;
         }
 
-        private DriveInfo GetDriveInfoLinux(string path)
+        private DriveInfo GetDriveInfo(string path)
         {
             var drives = DriveInfo.GetDrives();
 
