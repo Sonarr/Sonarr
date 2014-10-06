@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public void RetryDownload(string id, NzbgetSettings settings)
         {
             var history = GetHistory(settings);
-            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone") != null);
+            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone" && id == (p.Value as string)) != null);
 
             if (item == null)
             {
