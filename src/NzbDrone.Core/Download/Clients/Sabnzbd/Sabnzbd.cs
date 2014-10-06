@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 var history = GetHistory().Where(v => v.Category == currentHistoryItem.Category &&
                                                       v.Title == currentHistoryItem.Title &&
-                                                      otherItemsWithSameTitle.Select(h => h.DownloadClientId)
+                                                      !otherItemsWithSameTitle.Select(h => h.DownloadClientId)
                                                                              .Contains(v.DownloadClientId)).ToList();
 
                 if (queue.Count == 1)
