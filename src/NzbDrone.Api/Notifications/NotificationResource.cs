@@ -10,6 +10,6 @@ namespace NzbDrone.Api.Notifications
         public Boolean OnDownload { get; set; }
         public Boolean OnUpgrade { get; set; }
         public String TestCommand { get; set; }
-        public List<Int32> Tags { get; set; }
+        public HashSet<Int32> Tags { get; set; }
     }
 }

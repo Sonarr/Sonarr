@@ -12,10 +12,11 @@ define(
 
         $.fn.tagsinput.Constructor.prototype.add = function (item, dontPushVal) {
             var self = this;
+            var tagLimitations = new RegExp('[^-_a-z0-9]', 'i');
 
             if (typeof item === 'string') {
 
-                if (item === null || item === '') {
+                if (item === null || item === '' || tagLimitations.test(item)) {
                     return;
                 }
 
