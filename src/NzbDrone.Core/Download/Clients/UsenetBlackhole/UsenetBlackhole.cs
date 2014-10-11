@@ -100,6 +100,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
+                    Category = "nzbdrone",
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),
