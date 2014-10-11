@@ -85,7 +85,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("2009x09 [SDTV].avi", "", 2009, 9)]
         [TestCase("S2009E09 [SDTV].avi", "", 2009, 9)]
         [TestCase("Shark Week S2009E09 [SDTV].avi", "Shark Week", 2009, 9)]
-//        [TestCase("", "", 0, 0)]
+        [TestCase("St_Elsewhere_209_Aids_And_Comfort", "St Elsewhere", 2, 9)]
+        //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
