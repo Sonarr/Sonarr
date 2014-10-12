@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Test.Download
             _completed = Builder<DownloadClientItem>.CreateListOfSize(5)
                                                     .All()
                                                     .With(h => h.Status = DownloadItemStatus.Completed)
+                                                    .With(h => h.IsEncrypted = false)
                                                     .With(h => h.Title = "Drone.S01E01.HDTV")
                                                     .Build()
                                                     .ToList();
@@ -187,6 +188,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -207,6 +209,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoFailedDownloads();
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -306,23 +309,6 @@ namespace NzbDrone.Core.Test.Download
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableFailedDownloadHandling)
                   .Returns(false);
-
-            Subject.Execute(new CheckForFinishedDownloadCommand());
-
-            VerifyNoFailedDownloads();
-        }
-
-        [Test]
-        public void should_not_process_if_failed_due_to_lack_of_disk_space()
-        {
-            var history = Builder<History.History>.CreateListOfSize(1)
-                                                  .Build()
-                                                  .ToList();
-
-            GivenGrabbedHistory(history);
-            GivenFailedDownloadClientHistory();
-
-            _failed.First().Message = "Unpacking failed, write error or disk is full?";
 
             Subject.Execute(new CheckForFinishedDownloadCommand());
 

@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download was not grabbed by drone, ignoring download");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download wasn't grabbed by drone, ignoring download");
                     return;
                 }
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Download
 
                 if (!grabbedItems.Any())
                 {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download wasn't grabbed by drone or not in a category, ignoring download.");
+                    UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download wasn't grabbed by drone, ignoring download");
                     return;
                 }
 

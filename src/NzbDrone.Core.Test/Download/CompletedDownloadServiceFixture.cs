@@ -171,6 +171,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoImports();
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -194,6 +195,7 @@ namespace NzbDrone.Core.Test.Download
             Subject.Execute(new CheckForFinishedDownloadCommand());
 
             VerifyNoImports();
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
