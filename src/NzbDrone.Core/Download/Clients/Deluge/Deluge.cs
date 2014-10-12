@@ -107,13 +107,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             foreach (var torrent in torrents)
             {
-                var remoteEpisode = GetRemoteEpisode(torrent.Name);
-                if (remoteEpisode == null || remoteEpisode.Series == null) continue;
-
                 var item = new DownloadClientItem();
                 item.DownloadClientId = torrent.Hash.ToUpper();
                 item.Title = torrent.Name;
-                item.RemoteEpisode = remoteEpisode;
                 item.Category = Settings.TvCategory;
 
                 item.DownloadClient = Definition.Name;

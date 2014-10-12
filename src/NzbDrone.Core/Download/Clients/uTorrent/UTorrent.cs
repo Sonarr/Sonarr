@@ -90,9 +90,6 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                     continue;
                 }
 
-                var remoteEpisode = GetRemoteEpisode(torrent.Name);
-                if (remoteEpisode == null || remoteEpisode.Series == null) continue;
-
                 var item = new DownloadClientItem();
                 item.DownloadClientId = torrent.Hash;
                 item.Title = torrent.Name;
@@ -104,7 +101,6 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 {
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 }
-                item.RemoteEpisode = remoteEpisode;
 
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.RootDownloadPath);
 

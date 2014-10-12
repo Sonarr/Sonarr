@@ -110,14 +110,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     if (!directories.Contains(String.Format(".{0}", Settings.TvCategory))) continue;
                 }
 
-                var remoteEpisode = GetRemoteEpisode(torrent.Name);
-                if (remoteEpisode == null || remoteEpisode.Series == null) continue;
-
                 var item = new DownloadClientItem();
                 item.DownloadClientId = torrent.HashString.ToUpper();
                 item.Category = Settings.TvCategory;
                 item.Title = torrent.Name;
-                item.RemoteEpisode = remoteEpisode;
 
                 item.DownloadClient = Definition.Name;
                 item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
