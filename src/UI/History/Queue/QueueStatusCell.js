@@ -16,8 +16,6 @@ define(
                 if (this.cellValue) {
                     var status = this.cellValue.get('status').toLowerCase();
                     var trackedDownloadStatus = this.cellValue.get('trackedDownloadStatus').toLowerCase();
-                    var hasError = this.cellValue.get('hasError') || false;
-                    var hasWarning = this.cellValue.get('hasWarning') || false;
                     var icon = 'icon-nd-downloading';
                     var title = 'Downloading';
                     var itemTitle = this.cellValue.get('title');
@@ -55,7 +53,6 @@ define(
 
                     if (trackedDownloadStatus === 'warning') {
                         icon += ' icon-nd-warning';
-//                        title = 'Download failed';
 
                         this.templateFunction = Marionette.TemplateCache.get(this.template);
                         content = this.templateFunction(this.cellValue.toJSON());
