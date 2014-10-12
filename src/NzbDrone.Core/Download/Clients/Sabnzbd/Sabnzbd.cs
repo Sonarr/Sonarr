@@ -156,20 +156,20 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     historyItem.Status = DownloadItemStatus.Downloading;
                 }
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, sabHistoryItem.Storage);
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(sabHistoryItem.Storage));
 
-                if (!outputPath.IsNullOrWhiteSpace())
+                if (!outputPath.IsEmpty)
                 {
                     historyItem.OutputPath = outputPath;
 
-                    var parent = outputPath.GetParentPath();
-                    while (parent != null)
+                    var parent = outputPath.Directory;
+                    while (!parent.IsEmpty)
                     {
-                        if (Path.GetFileName(parent) == sabHistoryItem.Title)
+                        if (parent.FileName == sabHistoryItem.Title)
                         {
                             historyItem.OutputPath = parent;
                         }
-                        parent = parent.GetParentPath();
+                        parent = parent.Directory;
                     }
                 }
 
@@ -259,52 +259,21 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         protected IEnumerable<SabnzbdCategory> GetCategories(SabnzbdConfig config)
         {
-            var completeDir = config.Misc.complete_dir.TrimEnd('\\', '/');
+            var completeDir = new OsPath(config.Misc.complete_dir);
 
-            if (!completeDir.StartsWith("/") && !completeDir.StartsWith("\\") && !completeDir.Contains(':'))
+            if (!completeDir.IsRooted)
             {
                 var queue = _proxy.GetQueue(0, 1, Settings);
+                var defaultRootFolder = new OsPath(queue.DefaultRootFolder);
 
-                if (queue.DefaultRootFolder.StartsWith("/"))
-                {
-                    completeDir = queue.DefaultRootFolder + "/" + completeDir;
-                }
-                else
-                {
-                    completeDir = queue.DefaultRootFolder + "\\" + completeDir;
-                }
+                completeDir = defaultRootFolder + completeDir;
             }
 
             foreach (var category in config.Categories)
             {
-                var relativeDir = category.Dir.TrimEnd('*');
+                var relativeDir = new OsPath(category.Dir.TrimEnd('*'));
 
-                if (relativeDir.IsNullOrWhiteSpace())
-                {
-                    category.FullPath = completeDir;
-                }
-                else if (completeDir.StartsWith("/"))
-                { // Process remote Linux paths irrespective of our own OS.
-                    if (relativeDir.StartsWith("/"))
-                    {
-                        category.FullPath = relativeDir;
-                    }
-                    else
-                    {
-                        category.FullPath = completeDir + "/" + relativeDir;
-                    }
-                }
-                else
-                { // Process remote Windows paths irrespective of our own OS.
-                    if (relativeDir.StartsWith("\\") || relativeDir.Contains(':'))
-                    {
-                        category.FullPath = relativeDir;
-                    }
-                    else
-                    {
-                        category.FullPath = completeDir + "\\" + relativeDir;
-                    }
-                }
+                category.FullPath = completeDir + relativeDir;
 
                 yield return category;
             }
@@ -329,7 +298,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (category != null)
             {
-                status.OutputRootFolders = new List<String> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.FullPath) };
+                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.FullPath) };
             }
 
             return status;
@@ -454,7 +423,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                     if (category != null)
                     {
-                        var localPath = Settings.TvCategoryLocalPath;
+                        var localPath = new OsPath(Settings.TvCategoryLocalPath);
                         Settings.TvCategoryLocalPath = null;
 
                         _remotePathMappingService.MigrateLocalCategoryPath(Definition.Id, Settings, Settings.Host, category.FullPath, localPath);

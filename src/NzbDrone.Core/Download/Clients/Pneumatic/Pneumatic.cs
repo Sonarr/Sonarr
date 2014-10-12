@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
                     TotalSize = _diskProvider.GetFileSize(file),
 
-                    OutputPath = file
+                    OutputPath = new OsPath(file)
                 };
 
                 if (_diskProvider.IsFileLocked(file))

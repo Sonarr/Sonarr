@@ -80,6 +80,7 @@
     <Compile Include="Http\HttpRequestFixture.cs" />
     <Compile Include="InstrumentationTests\CleanseLogMessageFixture.cs" />
     <Compile Include="LevenshteinDistanceFixture.cs" />
+    <Compile Include="OsPathFixture.cs" />
     <Compile Include="PathExtensionFixture.cs" />
     <Compile Include="ProcessProviderTests.cs" />
     <Compile Include="ReflectionExtensions.cs" />

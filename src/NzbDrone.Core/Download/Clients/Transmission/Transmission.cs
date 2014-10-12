@@ -94,19 +94,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             foreach (var torrent in torrents)
             {
-                var outputPath = torrent.DownloadDir;
-
-                // Transmission always returns path with forward slashes, even on windows.
-                if (outputPath.IsNotNullOrWhiteSpace() && (outputPath.StartsWith(@"\\") || outputPath.Contains(':')))
-                {
-                    outputPath = outputPath.Replace('/', '\\');
-                }
-
-                outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadDir));
 
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
-                    var directories = outputPath.Split('\\', '/');
+                    var directories = outputPath.FullPath.Split('\\', '/');
                     if (!directories.Contains(String.Format(".{0}", Settings.TvCategory))) continue;
                 }
 
@@ -119,7 +111,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
                 item.Message = torrent.ErrorString;
 
-                item.OutputPath = Path.Combine(outputPath, torrent.Name);
+                item.OutputPath = outputPath + torrent.Name;
                 item.RemainingSize = torrent.LeftUntilDone;
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 item.TotalSize = torrent.TotalSize;
@@ -173,16 +165,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 destDir = String.Format("{0}/.{1}", destDir, Settings.TvCategory);
             }
 
-            // Transmission always returns path with forward slashes, even on windows.
-            if (destDir.StartsWith(@"\\") || destDir.Contains(':'))
-            {
-                destDir = destDir.Replace('/', '\\');
-            }
-
             return new DownloadClientStatus
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                OutputRootFolders = new List<string> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) }
+                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(destDir)) }
             };
         }
 

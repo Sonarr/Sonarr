@@ -76,30 +76,30 @@ namespace NzbDrone.Core.Download
                 }
                 else
                 {
-                    var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
+                    var downloadedEpisodesFolder = new OsPath(_configService.DownloadedEpisodesFolder);
                     var downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
 
-                    if (downloadItemOutputPath.IsNullOrWhiteSpace())
+                    if (downloadItemOutputPath.IsEmpty)
                     {
                         UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Download doesn't contain intermediate path, ignoring download.");
                         return;
                     }
 
-                    if (!downloadedEpisodesFolder.IsNullOrWhiteSpace() && (downloadedEpisodesFolder.PathEquals(downloadItemOutputPath) || downloadedEpisodesFolder.IsParentPath(downloadItemOutputPath)))
+                    if (!downloadedEpisodesFolder.IsEmpty && downloadedEpisodesFolder.Contains(downloadItemOutputPath))
                     {
                         UpdateStatusMessage(trackedDownload, LogLevel.Warn, "Intermediate Download path inside drone factory, ignoring download.");
                         return;
                     }
 
-                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
+                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath.FullPath))
                     {
-                        var importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+                        var importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath.FullPath), trackedDownload.DownloadItem);
 
                         ProcessImportResults(trackedDownload, importResults);
                     }
-                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
+                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath.FullPath))
                     {
-                        var importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+                        var importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath.FullPath), trackedDownload.DownloadItem);
 
                         ProcessImportResults(trackedDownload, importResults);
                     }
@@ -146,15 +146,15 @@ namespace NzbDrone.Core.Download
                     _logger.Debug("[{0}] Removing completed download from history.", trackedDownload.DownloadItem.Title);
                     downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadClientId);
 
-                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
+                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath.FullPath))
                     {
                         _logger.Debug("Removing completed download directory: {0}", trackedDownload.DownloadItem.OutputPath);
-                        _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath, true);
+                        _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath.FullPath, true);
                     }
-                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
+                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath.FullPath))
                     {
                         _logger.Debug("Removing completed download file: {0}", trackedDownload.DownloadItem.OutputPath);
-                        _diskProvider.DeleteFile(trackedDownload.DownloadItem.OutputPath);
+                        _diskProvider.DeleteFile(trackedDownload.DownloadItem.OutputPath.FullPath);
                     }
 
                     trackedDownload.State = TrackedDownloadState.Removed;

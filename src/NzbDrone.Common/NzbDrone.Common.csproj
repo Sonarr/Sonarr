@@ -71,6 +71,7 @@
     <Compile Include="ConvertBase32.cs" />
     <Compile Include="Crypto\HashProvider.cs" />
     <Compile Include="DictionaryExtensions.cs" />
+    <Compile Include="Disk\OsPath.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />
     <Compile Include="Disk\TransferMode.cs" />
