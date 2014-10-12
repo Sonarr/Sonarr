@@ -14,9 +14,6 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Series")
                  .AddColumn("Tags").AsString().Nullable();
 
-            Alter.Table("DownloadClients")
-                 .AddColumn("Tags").AsString().Nullable();
-
             Alter.Table("Notifications")
                  .AddColumn("Tags").AsString().Nullable();
         }
