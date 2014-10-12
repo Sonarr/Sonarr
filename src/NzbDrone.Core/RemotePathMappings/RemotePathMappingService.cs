@@ -22,11 +22,11 @@ namespace NzbDrone.Core.RemotePathMappings
         RemotePathMapping Get(int id);
         RemotePathMapping Update(RemotePathMapping mapping);
 
-        String RemapRemoteToLocal(String host, String remotePath);
-        String RemapLocalToRemote(String host, String localPath);
+        OsPath RemapRemoteToLocal(String host, OsPath remotePath);
+        OsPath RemapLocalToRemote(String host, OsPath localPath);
 
         // TODO: Remove around January 2015. Used to migrate legacy Local Category Path settings.
-        void MigrateLocalCategoryPath(Int32 downloadClientId, IProviderConfig newSettings, String host, String remotePath, String localPath);
+        void MigrateLocalCategoryPath(Int32 downloadClientId, IProviderConfig newSettings, String host, OsPath remotePath, OsPath localPath);
     }
 
     public class RemotePathMappingService : IRemotePathMappingService
@@ -60,8 +60,8 @@ namespace NzbDrone.Core.RemotePathMappings
 
         public RemotePathMapping Add(RemotePathMapping mapping)
         {
-            mapping.LocalPath = CleanPath(mapping.LocalPath);
-            mapping.RemotePath = CleanPath(mapping.RemotePath);
+            mapping.LocalPath = new OsPath(mapping.LocalPath).AsDirectory().FullPath;
+            mapping.RemotePath = new OsPath(mapping.RemotePath).AsDirectory().FullPath;
 
             var all = All();
 
@@ -106,17 +106,20 @@ namespace NzbDrone.Core.RemotePathMappings
                 throw new ArgumentException("Invalid Host");
             }
 
-            if (mapping.RemotePath.IsNullOrWhiteSpace())
+            var remotePath = new OsPath(mapping.RemotePath);
+            var localPath = new OsPath(mapping.LocalPath);
+
+            if (remotePath.IsEmpty)
             {
                 throw new ArgumentException("Invalid RemotePath");
             }
 
-            if (mapping.LocalPath.IsNullOrWhiteSpace() || !Path.IsPathRooted(mapping.LocalPath))
+            if (localPath.IsEmpty || !localPath.IsRooted)
             {
                 throw new ArgumentException("Invalid LocalPath");
             }
 
-            if (!_diskProvider.FolderExists(mapping.LocalPath))
+            if (!_diskProvider.FolderExists(localPath.FullPath))
             {
                 throw new DirectoryNotFoundException("Can't add mount point directory that doesn't exist.");
             }
@@ -127,27 +130,18 @@ namespace NzbDrone.Core.RemotePathMappings
             }
         }
 
-        public String RemapRemoteToLocal(String host, String remotePath)
+        public OsPath RemapRemoteToLocal(String host, OsPath remotePath)
         {
-            if (remotePath.IsNullOrWhiteSpace())
+            if (remotePath.IsEmpty)
             {
                 return remotePath;
             }
 
-            var cleanRemotePath = CleanPath(remotePath);
-
             foreach (var mapping in All())
             {
-                if (host == mapping.Host && cleanRemotePath.StartsWith(mapping.RemotePath))
+                if (host == mapping.Host && new OsPath(mapping.RemotePath).Contains(remotePath))
                 {
-                    var localPath = mapping.LocalPath + cleanRemotePath.Substring(mapping.RemotePath.Length);
-
-                    localPath = localPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-
-                    if (!remotePath.EndsWith("/") && !remotePath.EndsWith("\\"))
-                    {
-                        localPath = localPath.TrimEnd('/', '\\');
-                    }
+                    var localPath = new OsPath(mapping.LocalPath) + (remotePath - new OsPath(mapping.RemotePath));
 
                     return localPath;
                 }
@@ -156,29 +150,18 @@ namespace NzbDrone.Core.RemotePathMappings
             return remotePath;
         }
 
-        public String RemapLocalToRemote(String host, String localPath)
+        public OsPath RemapLocalToRemote(String host, OsPath localPath)
         {
-            if (localPath.IsNullOrWhiteSpace())
+            if (localPath.IsEmpty)
             {
                 return localPath;
             }
 
-            var cleanLocalPath = CleanPath(localPath);
-
             foreach (var mapping in All())
             {
-                if (host != mapping.Host) continue;
-
-                if (cleanLocalPath.StartsWith(mapping.LocalPath))
+                if (host == mapping.Host && new OsPath(mapping.LocalPath).Contains(localPath))
                 {
-                    var remotePath = mapping.RemotePath + cleanLocalPath.Substring(mapping.LocalPath.Length);
-
-                    remotePath = remotePath.Replace(Path.DirectorySeparatorChar, mapping.RemotePath.Contains('\\') ? '\\' : '/');
-
-                    if (!localPath.EndsWith("/") && !localPath.EndsWith("\\"))
-                    {
-                        remotePath = remotePath.TrimEnd('/', '\\');
-                    }
+                    var remotePath = new OsPath(mapping.RemotePath) + (localPath - new OsPath(mapping.LocalPath));
 
                     return remotePath;
                 }
@@ -188,35 +171,20 @@ namespace NzbDrone.Core.RemotePathMappings
         }
 
         // TODO: Remove around January 2015. Used to migrate legacy Local Category Path settings.
-        public void MigrateLocalCategoryPath(Int32 downloadClientId, IProviderConfig newSettings, String host, String remotePath, String localPath)
+        public void MigrateLocalCategoryPath(Int32 downloadClientId, IProviderConfig newSettings, String host, OsPath remotePath, OsPath localPath)
         {
             _logger.Debug("Migrating local category path for Host {0}/{1} to {2}", host, remotePath, localPath);
 
             var existingMappings = All().Where(v => v.Host == host).ToList();
 
-            remotePath = CleanPath(remotePath);
-            localPath = CleanPath(localPath);
-
-            if (!existingMappings.Any(v => v.LocalPath == localPath && v.RemotePath == remotePath))
+            if (!existingMappings.Any(v => new OsPath(v.LocalPath) == localPath && new OsPath(v.RemotePath) == remotePath))
             {
-                Add(new RemotePathMapping { Host = host, RemotePath = remotePath, LocalPath = localPath });
+                Add(new RemotePathMapping { Host = host, RemotePath = remotePath.FullPath, LocalPath = localPath.FullPath });
             }
 
             var downloadClient = _downloadClientRepository.Get(downloadClientId);
             downloadClient.Settings = newSettings;
             _downloadClientRepository.Update(downloadClient);
-        }
-
-        private static String CleanPath(String path)
-        {
-            if (path.StartsWith(@"\\") || path.Contains(':'))
-            {
-                return path.TrimEnd('\\', '/').Replace('/', '\\') + "\\";
-            }
-            else
-            {
-                return path.TrimEnd('\\', '/').Replace('\\', '/') + "/";
-            }
         }
     }
 }

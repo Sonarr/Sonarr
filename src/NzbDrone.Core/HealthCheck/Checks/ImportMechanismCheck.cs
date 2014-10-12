@@ -25,12 +25,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var droneFactoryFolder = _configService.DownloadedEpisodesFolder;
+            var droneFactoryFolder = new OsPath(_configService.DownloadedEpisodesFolder);
             var downloadClients = _provideDownloadClient.GetDownloadClients().Select(v => new { downloadClient = v, status = v.GetStatus() }).ToList();
 
             var downloadClientIsLocalHost = downloadClients.All(v => v.status.IsLocalhost);
-            var downloadClientOutputInDroneFactory = !droneFactoryFolder.IsNullOrWhiteSpace()
-                && downloadClients.Any(v => v.status.OutputRootFolders != null && v.status.OutputRootFolders.Contains(droneFactoryFolder, PathEqualityComparer.Instance));
+            var downloadClientOutputInDroneFactory = !droneFactoryFolder.IsEmpty
+                && downloadClients.Any(v => v.status.OutputRootFolders != null && v.status.OutputRootFolders.Any(droneFactoryFolder.Contains));
 
             if (!_configService.IsDefined("EnableCompletedDownloadHandling"))
             {
@@ -66,14 +66,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
             }
 
-            if (!_configService.EnableCompletedDownloadHandling && droneFactoryFolder.IsNullOrWhiteSpace())
+            if (!_configService.EnableCompletedDownloadHandling && droneFactoryFolder.IsEmpty)
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling or configure Drone factory");
             }
 
-            if (_configService.EnableCompletedDownloadHandling && !droneFactoryFolder.IsNullOrWhiteSpace())
+            if (_configService.EnableCompletedDownloadHandling && !droneFactoryFolder.IsEmpty)
             {
-                if (_downloadTrackingService.GetCompletedDownloads().Any(v => droneFactoryFolder.PathEquals(v.DownloadItem.OutputPath) || droneFactoryFolder.IsParentPath(v.DownloadItem.OutputPath)))
+                if (_downloadTrackingService.GetCompletedDownloads().Any(v => droneFactoryFolder.Contains(v.DownloadItem.OutputPath)))
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Warning, "Completed Download Handling conflict with Drone Factory (Conflicting History Item)", "Migrating-to-Completed-Download-Handling#conflicting-download-client-category");
                 }

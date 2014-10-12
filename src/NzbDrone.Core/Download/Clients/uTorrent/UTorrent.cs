@@ -102,19 +102,15 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 }
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.RootDownloadPath);
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.RootDownloadPath));
 
-                if (outputPath == null || Path.GetFileName(outputPath) == torrent.Name)
+                if (outputPath == null || outputPath.FileName == torrent.Name)
                 {
                     item.OutputPath = outputPath;
                 }
-                else if (OsInfo.IsWindows && outputPath.EndsWith(":"))
-                {
-                    item.OutputPath = Path.Combine(outputPath + Path.DirectorySeparatorChar, torrent.Name);
-                }
                 else
                 {
-                    item.OutputPath = Path.Combine(outputPath, torrent.Name);
+                    item.OutputPath = outputPath + torrent.Name;
                 }
 
                 if (torrent.Status.HasFlag(UTorrentTorrentStatus.Error))
@@ -162,20 +158,20 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             var config = _proxy.GetConfig(Settings);
 
-            String destDir = null;
+            OsPath destDir = new OsPath(null);
 
             if (config.GetValueOrDefault("dir_active_download_flag") == "true")
             {
-                destDir = config.GetValueOrDefault("dir_active_download");
+                destDir = new OsPath(config.GetValueOrDefault("dir_active_download"));
             }
 
             if (config.GetValueOrDefault("dir_completed_download_flag") == "true")
             {
-                destDir = config.GetValueOrDefault("dir_completed_download");
+                destDir = new OsPath(config.GetValueOrDefault("dir_completed_download"));
 
                 if (config.GetValueOrDefault("dir_add_label") == "true")
                 {
-                    destDir = Path.Combine(destDir, Settings.TvCategory);
+                    destDir = destDir + Settings.TvCategory;
                 }
             }
 
@@ -184,9 +180,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };
 
-            if (destDir != null)
+            if (!destDir.IsEmpty)
             {
-                status.OutputRootFolders = new List<String> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
+                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
             }
 
             return status;

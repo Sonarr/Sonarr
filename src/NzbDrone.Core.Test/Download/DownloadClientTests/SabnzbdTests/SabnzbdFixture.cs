@@ -11,6 +11,7 @@ using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 {
@@ -303,15 +304,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             var result = Subject.GetItems().Single();
 
-            result.OutputPath.Should().Be((@"C:\sorted\" + title).AsOsAgnostic());
+            result.OutputPath.Should().Be(new OsPath((@"C:\sorted\" + title).AsOsAgnostic()).AsDirectory());
         }
 
         [Test]
         public void should_remap_storage_if_mounted()
         {
             Mocker.GetMock<IRemotePathMappingService>()
-                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", "/remote/mount/vv/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE"))
-                .Returns(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
+                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", It.IsAny<OsPath>()))
+                .Returns(new OsPath(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic()));
 
             GivenQueue(null);
             GivenHistory(_completed);
@@ -370,8 +371,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         public void should_return_status_with_mounted_outputdir()
         {
             Mocker.GetMock<IRemotePathMappingService>()
-                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", "/remote/mount/vv"))
-                .Returns(@"O:\mymount".AsOsAgnostic());
+                .Setup(v => v.RemapRemoteToLocal("127.0.0.1", It.IsAny<OsPath>()))
+                .Returns(new OsPath(@"O:\mymount".AsOsAgnostic()));
 
             GivenQueue(null);
 
