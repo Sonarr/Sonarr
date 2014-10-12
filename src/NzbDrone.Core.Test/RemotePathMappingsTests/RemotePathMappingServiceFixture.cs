@@ -97,13 +97,13 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
 
             GivenMapping();
 
-            var result = Subject.RemapRemoteToLocal(host, remotePath);
+            var result = Subject.RemapRemoteToLocal(host, new OsPath(remotePath));
 
             result.Should().Be(expectedLocalPath);
         }
 
         [TestCase("my-server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
-        [TestCase("my-server.localdomain", "/mnt/storage", @"D:\mountedstorage")]
+        [TestCase("my-server.localdomain", "/mnt/storage/", @"D:\mountedstorage")]
         [TestCase("my-2server.localdomain", "/mnt/storage/downloads/tv", "/mnt/storage/downloads/tv")]
         [TestCase("my-server.localdomain", "/mnt/storageabc/downloads/tv", "/mnt/storageabc/downloads/tv")]
         public void should_remap_local_to_remote(String host, String expectedRemotePath, String localPath)
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
 
             GivenMapping();
 
-            var result = Subject.RemapLocalToRemote(host, localPath);
+            var result = Subject.RemapLocalToRemote(host, new OsPath(localPath));
 
             result.Should().Be(expectedRemotePath);
         }

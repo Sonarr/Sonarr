@@ -39,8 +39,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
 
             Mocker.GetMock<IRemotePathMappingService>()
-                .Setup(v => v.RemapRemoteToLocal(It.IsAny<String>(), It.IsAny<String>()))
-                .Returns<String, String>((h,r) => r);
+                .Setup(v => v.RemapRemoteToLocal(It.IsAny<String>(), It.IsAny<OsPath>()))
+                .Returns<String, OsPath>((h, r) => r);
         }
 
         protected virtual RemoteEpisode CreateRemoteEpisode()

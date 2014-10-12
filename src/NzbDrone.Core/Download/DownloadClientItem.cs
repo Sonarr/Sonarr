@@ -1,4 +1,6 @@
 ﻿using System;
+using NzbDrone.Common.Disk;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {
@@ -14,7 +16,7 @@ namespace NzbDrone.Core.Download
         public TimeSpan? DownloadTime { get; set; }
         public TimeSpan? RemainingTime { get; set; }
 
-        public String OutputPath { get; set; }
+        public OsPath OutputPath { get; set; }
         public String Message { get; set; }
 
         public DownloadItemStatus Status { get; set; }

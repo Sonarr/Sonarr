@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.DownloadClientId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
-                historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, item.DestDir);
+                historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(item.DestDir));
                 historyItem.Category = item.Category;
                 historyItem.Message = String.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
                 historyItem.Status = DownloadItemStatus.Completed;
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (category != null)
             {
-                status.OutputRootFolders = new List<String> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.DestDir) };
+                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(category.DestDir)) };
             }
 
             return status;
@@ -336,10 +336,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                     if (category != null)
                     {
-                        var localPath = Settings.TvCategoryLocalPath;
+                        var localPath = new OsPath(Settings.TvCategoryLocalPath);
                         Settings.TvCategoryLocalPath = null;
 
-                        _remotePathMappingService.MigrateLocalCategoryPath(Definition.Id, Settings, Settings.Host, category.DestDir, localPath);
+                        _remotePathMappingService.MigrateLocalCategoryPath(Definition.Id, Settings, Settings.Host, new OsPath(category.DestDir), localPath);
 
                         _logger.Info("Discovered Local Category Path for {0}, the setting was automatically moved to the Remote Path Mapping table.", Definition.Name);
                     }

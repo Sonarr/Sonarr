@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
 
-                    OutputPath = folder
+                    OutputPath = new OsPath(folder)
                 };
 
                 if (files.Any(_diskProvider.IsFileLocked))
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),
 
-                    OutputPath = videoFile
+                    OutputPath = new OsPath(videoFile)
                 };
 
                 if (_diskProvider.IsFileLocked(videoFile))
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             return new DownloadClientStatus
             {
                 IsLocalhost = true,
-                OutputRootFolders = new List<string> { Settings.WatchFolder }
+                OutputRootFolders = new List<OsPath> { new OsPath(Settings.WatchFolder) }
             };
         }
 

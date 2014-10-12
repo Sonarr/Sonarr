@@ -115,8 +115,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 item.DownloadClient = Definition.Name;
                 item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, torrent.DownloadPath);
-                item.OutputPath = Path.Combine(outputPath, torrent.Name);
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadPath));
+                item.OutputPath = outputPath + torrent.Name;
                 item.RemainingSize = torrent.Size - torrent.BytesDownloaded;
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 item.TotalSize = torrent.Size;
@@ -172,11 +172,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var config = _proxy.GetConfig(Settings);
 
-            var destDir = config.GetValueOrDefault("download_location") as string;
+            var destDir = new OsPath(config.GetValueOrDefault("download_location") as string);
 
             if (config.GetValueOrDefault("move_completed", false).ToString() == "True")
             {
-                destDir = config.GetValueOrDefault("move_completed_path") as string;
+                destDir = new OsPath(config.GetValueOrDefault("move_completed_path") as string);
             }
 
             var status = new DownloadClientStatus
@@ -184,9 +184,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };
 
-            if (destDir != null)
+            if (!destDir.IsEmpty)
             {
-                status.OutputRootFolders = new List<string> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
+                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
             }
             
             return status;

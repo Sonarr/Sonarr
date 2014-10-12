@@ -148,6 +148,7 @@
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
+    <Compile Include="Datastore\Converters\OsPathConverter.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\UtcConverter.cs" />
