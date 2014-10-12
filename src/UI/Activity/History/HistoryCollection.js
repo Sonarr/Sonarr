@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(
     [
-        'History/HistoryModel',
+        'Activity/History/HistoryModel',
         'backbone.pageable',
         'Mixins/AsFilteredCollection',
         'Mixins/AsSortedCollection',

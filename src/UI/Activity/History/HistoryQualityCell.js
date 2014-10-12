@@ -32,7 +32,5 @@ define(
 
                 return this;
             }
-
-
         });
     });

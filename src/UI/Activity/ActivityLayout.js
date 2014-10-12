@@ -4,29 +4,29 @@ define(
         'marionette',
         'backbone',
         'backgrid',
-        'History/Table/HistoryTableLayout',
-        'History/Blacklist/BlacklistLayout',
-        'History/Queue/QueueLayout'
-    ], function (Marionette, Backbone, Backgrid, HistoryTableLayout, BlacklistLayout, QueueLayout) {
+        'Activity/History/HistoryLayout',
+        'Activity/Blacklist/BlacklistLayout',
+        'Activity/Queue/QueueLayout'
+    ], function (Marionette, Backbone, Backgrid, HistoryLayout, BlacklistLayout, QueueLayout) {
         return Marionette.Layout.extend({
-            template: 'History/HistoryLayoutTemplate',
+            template: 'Activity/ActivityLayoutTemplate',
 
             regions: {
-                history    : '#history',
-                blacklist  : '#blacklist',
-                queueRegion: '#queue'
+                queueRegion : '#queue',
+                history     : '#history',
+                blacklist   : '#blacklist'
             },
 
             ui: {
-                historyTab: '.x-history-tab',
-                blacklistTab: '.x-blacklist-tab',
-                queueTab  : '.x-queue-tab'
+                queueTab     : '.x-queue-tab',
+                historyTab   : '.x-history-tab',
+                blacklistTab : '.x-blacklist-tab'
             },
 
             events: {
+                'click .x-queue-tab'     : '_showQueue',
                 'click .x-history-tab'   : '_showHistory',
-                'click .x-blacklist-tab' : '_showBlacklist',
-                'click .x-queue-tab'     : '_showQueue'
+                'click .x-blacklist-tab' : '_showBlacklist'
             },
 
             initialize: function (options) {
@@ -37,11 +37,14 @@ define(
 
             onShow: function () {
                 switch (this.action) {
-                    case 'queue':
-                        this._showQueue();
+                    case 'history':
+                        this._showHistory();
+                        break;
+                    case 'blacklist':
+                        this._showBlacklist();
                         break;
                     default:
-                        this._showHistory();
+                        this._showQueue();
                 }
             },
 
@@ -54,9 +57,9 @@ define(
                     e.preventDefault();
                 }
 
-                this.history.show(new HistoryTableLayout());
+                this.history.show(new HistoryLayout());
                 this.ui.historyTab.tab('show');
-                this._navigate('/history');
+                this._navigate('/activity/history');
             },
 
             _showBlacklist: function (e) {
@@ -66,7 +69,7 @@ define(
 
                 this.blacklist.show(new BlacklistLayout());
                 this.ui.blacklistTab.tab('show');
-                this._navigate('/history/blacklist');
+                this._navigate('/activity/blacklist');
             },
 
             _showQueue: function (e) {
@@ -76,7 +79,7 @@ define(
 
                 this.queueRegion.show(new QueueLayout());
                 this.ui.queueTab.tab('show');
-                this._navigate('/history/queue');
+                this._navigate('/activity/queue');
             }
         });
     });

@@ -1,7 +1,7 @@
 ﻿'use strict';
 define(
     [
-        'History/Blacklist/BlacklistModel',
+        'Activity/Blacklist/BlacklistModel',
         'backbone.pageable',
         'Mixins/AsSortedCollection',
         'Mixins/AsPersistedStateCollection'

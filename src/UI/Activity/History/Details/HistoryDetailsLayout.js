@@ -4,11 +4,11 @@ define(
         'jquery',
         'vent',
         'marionette',
-        'History/Details/HistoryDetailsView'
+        'Activity/History/Details/HistoryDetailsView'
     ], function ($, vent, Marionette, HistoryDetailsView) {
 
         return Marionette.Layout.extend({
-            template: 'History/Details/HistoryDetailsLayoutTemplate',
+            template: 'Activity/History/Details/HistoryDetailsLayoutTemplate',
 
             regions: {
                 bodyRegion: '.modal-body'

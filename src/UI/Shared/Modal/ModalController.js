@@ -7,7 +7,7 @@ define(
         'Series/Edit/EditSeriesView',
         'Series/Delete/DeleteSeriesView',
         'Episode/EpisodeDetailsLayout',
-        'History/Details/HistoryDetailsLayout',
+        'Activity/History/Details/HistoryDetailsLayout',
         'System/Logs/Table/Details/LogDetailsView',
         'Rename/RenamePreviewLayout'
     ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsLayout, LogDetailsView, RenamePreviewLayout) {

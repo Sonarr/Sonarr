@@ -6,7 +6,7 @@ define(
         'vent',
         'marionette',
         'Cells/NzbDroneCell',
-        'History/Details/HistoryDetailsView',
+        'Activity/History/Details/HistoryDetailsView',
         'bootstrap'
     ], function ($, vent, Marionette, NzbDroneCell, HistoryDetailsView) {
         return NzbDroneCell.extend({

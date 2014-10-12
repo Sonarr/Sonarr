@@ -2,10 +2,10 @@
 define(
     [
         'marionette',
-        'History/Details/HistoryDetailsAge'
+        'Activity/History/Details/HistoryDetailsAge'
     ], function (Marionette) {
 
         return Marionette.ItemView.extend({
-            template: 'History/Details/HistoryDetailsViewTemplate'
+            template: 'Activity/History/Details/HistoryDetailsViewTemplate'
         });
     });

@@ -3,14 +3,14 @@ define(
     [
         'marionette',
         'backgrid',
-        'History/HistoryCollection',
+        'Activity/History/HistoryCollection',
         'Cells/EventTypeCell',
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
-        'History/Table/HistoryQualityCell',
+        'Activity/History/HistoryQualityCell',
         'Cells/RelativeDateCell',
-        'History/Table/HistoryDetailsCell',
+        'Activity/History/HistoryDetailsCell',
         'Shared/Grid/Pager',
         'Shared/Toolbar/ToolbarLayout',
         'Shared/LoadingView'
@@ -28,7 +28,7 @@ define(
                  ToolbarLayout,
                  LoadingView) {
         return Marionette.Layout.extend({
-            template: 'History/Table/HistoryTableLayoutTemplate',
+            template: 'Activity/History/HistoryLayoutTemplate',
 
             regions: {
                 history: '#x-history',

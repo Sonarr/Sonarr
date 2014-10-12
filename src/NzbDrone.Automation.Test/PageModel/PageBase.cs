@@ -63,11 +63,11 @@ namespace NzbDrone.Automation.Test.PageModel
             }
         }
 
-        public IWebElement HistoryNavIcon
+        public IWebElement ActivityNavIcon
         {
             get
             {
-                return FindByClass("x-history-nav");
+                return FindByClass("x-activity-nav");
             }
         }
 

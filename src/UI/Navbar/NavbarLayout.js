@@ -4,7 +4,7 @@ define(
         'marionette',
         'jquery',
         'Health/HealthView',
-        'History/Queue/QueueView',
+        'Activity/Queue/QueueView',
         'Navbar/Search'
     ], function (Marionette, $, HealthView, QueueView) {
         return Marionette.Layout.extend({

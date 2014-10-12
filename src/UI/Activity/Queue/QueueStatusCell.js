@@ -8,7 +8,7 @@ define(
         return NzbDroneCell.extend({
 
             className : 'queue-status-cell',
-            template  : 'History/Queue/QueueStatusCellTemplate',
+            template  : 'Activity/Queue/QueueStatusCellTemplate',
 
             render: function () {
                 this.$el.empty();

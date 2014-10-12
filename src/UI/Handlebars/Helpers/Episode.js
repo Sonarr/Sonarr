@@ -24,7 +24,7 @@ define(
         Handlebars.registerHelper('StatusLevel', function () {
 
             var hasFile = this.hasFile;
-            var downloading = require('History/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
+            var downloading = require('Activity/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
             var currentTime = moment();
             var start = moment(this.airDateUtc);
             var end = moment(this.end);

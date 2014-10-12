@@ -4,7 +4,7 @@ define(
         'underscore',
         'backbone',
         'backbone.pageable',
-        'History/Queue/QueueModel',
+        'Activity/Queue/QueueModel',
         'Mixins/backbone.signalr.mixin'
     ], function (_, Backbone, PageableCollection, QueueModel) {
         var QueueCollection = PageableCollection.extend({

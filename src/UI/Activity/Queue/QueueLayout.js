@@ -3,13 +3,13 @@ define(
     [
         'marionette',
         'backgrid',
-        'History/Queue/QueueCollection',
+        'Activity/Queue/QueueCollection',
         'Cells/SeriesTitleCell',
         'Cells/EpisodeNumberCell',
         'Cells/EpisodeTitleCell',
         'Cells/QualityCell',
-        'History/Queue/QueueStatusCell',
-        'History/Queue/TimeleftCell',
+        'Activity/Queue/QueueStatusCell',
+        'Activity/Queue/TimeleftCell',
         'Shared/Grid/Pager'
     ], function (Marionette,
                  Backgrid,
@@ -22,7 +22,7 @@ define(
                  TimeleftCell,
                  GridPager) {
         return Marionette.Layout.extend({
-            template: 'History/Queue/QueueLayoutTemplate',
+            template: 'Activity/Queue/QueueLayoutTemplate',
 
             regions: {
                 table: '#x-queue',

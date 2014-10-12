@@ -4,11 +4,11 @@ define(
         'vent',
         'marionette',
         'backgrid',
-        'History/Blacklist/BlacklistCollection',
+        'Activity/Blacklist/BlacklistCollection',
         'Cells/SeriesTitleCell',
         'Cells/QualityCell',
         'Cells/RelativeDateCell',
-        'History/Blacklist/BlacklistActionsCell',
+        'Activity/Blacklist/BlacklistActionsCell',
         'Shared/Grid/Pager',
         'Shared/LoadingView',
         'Shared/Toolbar/ToolbarLayout'
@@ -24,7 +24,7 @@ define(
                  LoadingView,
                  ToolbarLayout) {
         return Marionette.Layout.extend({
-            template: 'History/Blacklist/BlacklistLayoutTemplate',
+            template: 'Activity/Blacklist/BlacklistLayoutTemplate',
 
             regions: {
                 blacklist : '#x-blacklist',

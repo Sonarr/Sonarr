@@ -5,7 +5,7 @@ define(
         'reqres',
         'backbone',
         'Cells/NzbDroneCell',
-        'History/Queue/QueueCollection',
+        'Activity/Queue/QueueCollection',
         'moment',
         'Shared/FormatHelpers'
     ], function (reqres, Backbone, NzbDroneCell, QueueCollection, moment, FormatHelpers) {

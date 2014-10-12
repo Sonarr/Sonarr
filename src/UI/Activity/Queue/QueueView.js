@@ -3,7 +3,7 @@ define(
     [
         'underscore',
         'marionette',
-        'History/Queue/QueueCollection'
+        'Activity/Queue/QueueCollection'
     ], function (_, Marionette, QueueCollection) {
         return Marionette.ItemView.extend({
             tagName: 'span',
