@@ -113,7 +113,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             catch (DllNotFoundException ex)
             {
                 _logger.ErrorException("mediainfo is required but was not found", ex);
-                throw;
             }
             catch (Exception ex)
             {
