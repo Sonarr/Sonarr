@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Download
         private readonly IEventAggregator _eventAggregator;
         private readonly IConfigService _configService;
         private readonly IFailedDownloadService _failedDownloadService;
-        private readonly ICompletedDownloadService  _completedDownloadService;
+        private readonly ICompletedDownloadService _completedDownloadService;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
@@ -140,24 +140,32 @@ namespace NzbDrone.Core.Download
                 var downloadClientHistory = downloadClient.GetItems().ToList();
                 foreach (var downloadItem in downloadClientHistory)
                 {
-                    var trackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, downloadItem.DownloadClientId);
-                    TrackedDownload trackedDownload;
-
-                    if (newTrackedDownloads.ContainsKey(trackingId)) continue;
-
-                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
+                    try
                     {
-                        trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem, grabbedHistory);
+                        var trackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, downloadItem.DownloadClientId);
+                        TrackedDownload trackedDownload;
 
-                        if (trackedDownload == null) continue;
+                        if (newTrackedDownloads.ContainsKey(trackingId)) continue;
 
-                        _logger.Debug("[{0}] Started tracking download with id {1}.", downloadItem.Title, trackingId);
-                        stateChanged = true;
+                        if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
+                        {
+                            trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem,
+                                grabbedHistory);
+
+                            if (trackedDownload == null) continue;
+
+                            _logger.Debug("[{0}] Started tracking download with id {1}.", downloadItem.Title, trackingId);
+                            stateChanged = true;
+                        }
+
+                        trackedDownload.DownloadItem = downloadItem;
+
+                        newTrackedDownloads[trackingId] = trackedDownload;
                     }
-
-                    trackedDownload.DownloadItem = downloadItem;
-
-                    newTrackedDownloads[trackingId] = trackedDownload;
+                    catch (Exception e)
+                    {
+                        _logger.ErrorException("An error occured while tracking download." + downloadItem.Title, e);
+                    }
                 }
             }
 
