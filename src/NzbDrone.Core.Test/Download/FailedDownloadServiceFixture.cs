@@ -383,35 +383,6 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
-        public void should_retry_if_interval_expired()
-        {
-            GivenFailedDownloadClientHistory();
-
-            var historyGrabbed = Builder<History.History>.CreateListOfSize(1)
-                                                  .Build()
-                                                  .ToList();
-
-            historyGrabbed.First().Data.Add("downloadClient", "SabnzbdClient");
-            historyGrabbed.First().Data.Add("downloadClientId", _failed.First().DownloadClientId);
-            historyGrabbed.First().Data.Add("ageHours", "1");
-
-            GivenGrabbedHistory(historyGrabbed);
-            GivenNoFailedHistory();
-            GivenGracePeriod(6);
-            GivenRetryLimit(1);
-
-            Subject.Execute(new CheckForFinishedDownloadCommand());
-
-            Subject.GetTrackedDownloads().First().LastRetry -= TimeSpan.FromMinutes(10);
-
-            Subject.Execute(new CheckForFinishedDownloadCommand());
-
-            VerifyRetryDownload();
-
-            ExceptionVerification.IgnoreWarns();
-        }
-
-        [Test]
         public void should_process_if_retry_count_is_greater_than_grace_period()
         {
             GivenFailedDownloadClientHistory();

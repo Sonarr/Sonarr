@@ -2,7 +2,6 @@
 using FluentValidation;
 using NzbDrone.Api.Config;
 using NzbDrone.Api.Mapping;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation.Paths;
 using Omu.ValueInjecter;
@@ -13,7 +12,7 @@ namespace NzbDrone.Api.RemotePathMappings
     {
         private readonly IRemotePathMappingService _remotePathMappingService;
 
-        public RemotePathMappingModule(IConfigService configService, IRemotePathMappingService remotePathMappingService, PathExistsValidator pathExistsValidator)
+        public RemotePathMappingModule(IRemotePathMappingService remotePathMappingService, PathExistsValidator pathExistsValidator)
         {
             _remotePathMappingService = remotePathMappingService;
 

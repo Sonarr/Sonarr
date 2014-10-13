@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Update
@@ -24,7 +23,7 @@ namespace NzbDrone.Core.Update
         public List<UpdatePackage> GetRecentUpdatePackages()
         {
             var branch = _configFileProvider.Branch;
-            return _updatePackageProvider.GetRecentUpdates(branch, BuildInfo.Version.Major);
+            return _updatePackageProvider.GetRecentUpdates(branch);
         }
     }
 }

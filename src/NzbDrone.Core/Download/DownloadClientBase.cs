@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
@@ -49,7 +47,10 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        protected DownloadClientBase(IConfigService configService, IDiskProvider diskProvider, IParsingService parsingService, IRemotePathMappingService remotePathMappingService, Logger logger)
+        protected DownloadClientBase(IConfigService configService, 
+            IDiskProvider diskProvider, 
+            IRemotePathMappingService remotePathMappingService,
+            Logger logger)
         {
             _configService = configService;
             _diskProvider = diskProvider;

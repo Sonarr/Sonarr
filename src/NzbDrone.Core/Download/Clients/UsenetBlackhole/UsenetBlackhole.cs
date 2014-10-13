@@ -8,7 +8,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
 using NLog;
@@ -27,10 +26,9 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                                IHttpClient httpClient,
                                IConfigService configService,
                                IDiskProvider diskProvider,
-                               IParsingService parsingService,
                                IRemotePathMappingService remotePathMappingService,
                                Logger logger)
-            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
             _httpClient = httpClient;

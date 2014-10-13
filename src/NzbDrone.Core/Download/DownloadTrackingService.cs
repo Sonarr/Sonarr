@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadTrackingService
     {
-        TrackedDownload[] GetTrackedDownloads();
         TrackedDownload[] GetCompletedDownloads();
         TrackedDownload[] GetQueuedDownloads();
 
@@ -64,7 +63,7 @@ namespace NzbDrone.Core.Download
             _trackedDownloadCache = cacheManager.GetCache<TrackedDownload[]>(GetType());
         }
 
-        public TrackedDownload[] GetTrackedDownloads()
+        private TrackedDownload[] GetTrackedDownloads()
         {
             return _trackedDownloadCache.Get("tracked", () => new TrackedDownload[0]);
         }

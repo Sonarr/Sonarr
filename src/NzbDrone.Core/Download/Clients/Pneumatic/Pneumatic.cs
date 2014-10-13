@@ -10,7 +10,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.Clients.Pneumatic
@@ -22,10 +21,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
         public Pneumatic(IHttpClient httpClient,
                          IConfigService configService,
                          IDiskProvider diskProvider,
-                         IParsingService parsingService,
                          IRemotePathMappingService remotePathMappingService,
                          Logger logger)
-            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _httpClient = httpClient;
         }

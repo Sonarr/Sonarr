@@ -10,7 +10,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Configuration;
@@ -27,10 +26,9 @@ namespace NzbDrone.Core.Download
         protected UsenetClientBase(IHttpClient httpClient,
                                    IConfigService configService,
                                    IDiskProvider diskProvider,
-                                   IParsingService parsingService,
                                    IRemotePathMappingService remotePathMappingService,
                                    Logger logger)
-            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _httpClient = httpClient;
         }
