@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public void MoveTorrentToTopInQueue(String hash, DelugeSettings settings)
         {
-            ProcessRequest<Object>(settings, "core.queue_top", new String[] { hash });
+            ProcessRequest<Object>(settings, "core.queue_top", (Object)new String[] { hash });
         }
 
         public String[] GetAvailablePlugins(DelugeSettings settings)
