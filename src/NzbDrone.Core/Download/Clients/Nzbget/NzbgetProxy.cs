@@ -185,15 +185,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             request.JsonSerializer = new JsonNetSerializer();
             request.RequestFormat = DataFormat.Json;
             request.AddBody(jsonRequest);
-            
+
             return request;
         }
 
         private void CheckForError(IRestResponse response)
         {
-            if (response.ResponseStatus != ResponseStatus.Completed)
+            if (response.ErrorException != null)
             {
-                throw new DownloadClientException("Unable to connect to NzbGet, please check your settings", response.ErrorException);
+                throw new DownloadClientException("Unable to connect to NzbGet. " + response.ErrorException.Message, response.ErrorException);
             }
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
