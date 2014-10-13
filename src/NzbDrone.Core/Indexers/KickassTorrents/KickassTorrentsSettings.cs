@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
         [FieldDefinition(0, Label = "Website URL")]
         public String BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Verified Only", Advanced = true, HelpText = "By setting this to No you will likely get more junk and unconfirmed releases, so use it with caution.")]
+        [FieldDefinition(1, Label = "Verified Only", Type = FieldType.Checkbox, Advanced = true, HelpText = "By setting this to No you will likely get more junk and unconfirmed releases, so use it with caution.")]
         public Boolean VerifiedOnly { get; set; }
 
         public ValidationResult Validate()
