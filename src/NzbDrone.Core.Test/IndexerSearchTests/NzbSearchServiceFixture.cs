@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                   .Returns(new List<String>());
         }
 
-        private void WithEpisode(int seasonNumber, int episodeNumber, int sceneSeasonNumber, int sceneEpisodeNumber)
+        private void WithEpisode(Int32 seasonNumber, Int32 episodeNumber, Int32? sceneSeasonNumber, Int32? sceneEpisodeNumber)
         {
             var episode = Builder<Episode>.CreateNew()
                 .With(v => v.SeriesId == _xemSeries.Id)
@@ -90,8 +90,8 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             WithEpisode(5, 1, 6, 12);
 
             // Season 7+ maps normally, so no mapping specified.
-            WithEpisode(7, 1, 0, 0);
-            WithEpisode(7, 2, 0, 0);
+            WithEpisode(7, 1, null, null);
+            WithEpisode(7, 2, null, null);
         }
 
         private List<SearchCriteriaBase> WatchForSearchCriteria()

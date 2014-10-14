@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             Subject.RefreshEpisodeInfo(GetSeries(), GetEpisodes());
 
-            _insertedEpisodes.All(e => e.AbsoluteEpisodeNumber == 0 || !e.AbsoluteEpisodeNumber.HasValue).Should().BeTrue();
+            _insertedEpisodes.All(e => !e.AbsoluteEpisodeNumber.HasValue).Should().BeTrue();
         }
 
         [Test]
@@ -197,7 +197,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             Subject.RefreshEpisodeInfo(GetAnimeSeries(), episodes);
 
-            _insertedEpisodes.All(e => e.AbsoluteEpisodeNumber > 0).Should().BeTrue();
+            _insertedEpisodes.All(e => e.AbsoluteEpisodeNumber.HasValue).Should().BeTrue();
             _updatedEpisodes.Should().BeEmpty();
             _deletedEpisodes.Should().BeEmpty();
         }
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Test.TvTests
             GivenAnimeEpisodes(episodes);
 
             var existingEpisodes = episodes.JsonClone();
-            existingEpisodes.ForEach(e => e.AbsoluteEpisodeNumber = 0);
+            existingEpisodes.ForEach(e => e.AbsoluteEpisodeNumber = null);
 
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
                 .Returns(existingEpisodes);
@@ -217,7 +217,7 @@ namespace NzbDrone.Core.Test.TvTests
             Subject.RefreshEpisodeInfo(GetAnimeSeries(), episodes);
 
             _insertedEpisodes.Should().BeEmpty();
-            _updatedEpisodes.All(e => e.AbsoluteEpisodeNumber > 0).Should().BeTrue();
+            _updatedEpisodes.All(e => e.AbsoluteEpisodeNumber.HasValue).Should().BeTrue();
             _deletedEpisodes.Should().BeEmpty();
         }
 
@@ -261,10 +261,9 @@ namespace NzbDrone.Core.Test.TvTests
                                            .Build()
                                            .ToList();
 
-            episodes[0].AbsoluteEpisodeNumber = 0;
+            episodes[0].AbsoluteEpisodeNumber = null;
             episodes[0].SeasonNumber.Should().NotBe(episodes[1].SeasonNumber);
             episodes[0].EpisodeNumber.Should().NotBe(episodes[1].EpisodeNumber);
-            episodes[0].AbsoluteEpisodeNumber.Should().NotBe(episodes[1].AbsoluteEpisodeNumber);
 
             GivenAnimeEpisodes(episodes);
 
@@ -286,17 +285,17 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_ignore_episodes_with_absolute_episode_of_zero_in_distinct_by_absolute()
+        public void should_ignore_episodes_with_no_absolute_episode_in_distinct_by_absolute()
         {
             var episodes = Builder<Episode>.CreateListOfSize(10)
                                            .Build()
                                            .ToList();
 
-            episodes[0].AbsoluteEpisodeNumber = 0;
-            episodes[1].AbsoluteEpisodeNumber = 0;
-            episodes[2].AbsoluteEpisodeNumber = 0;
-            episodes[3].AbsoluteEpisodeNumber = 0;
-            episodes[4].AbsoluteEpisodeNumber = 0;
+            episodes[0].AbsoluteEpisodeNumber = null;
+            episodes[1].AbsoluteEpisodeNumber = null;
+            episodes[2].AbsoluteEpisodeNumber = null;
+            episodes[3].AbsoluteEpisodeNumber = null;
+            episodes[4].AbsoluteEpisodeNumber = null;
 
             GivenAnimeEpisodes(episodes);
 

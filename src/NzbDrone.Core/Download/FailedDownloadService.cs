@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Download
                 }
                 else
                 {
-                    if (FailedDownloadForRecentRelease(downloadClient, trackedDownload, grabbedItems))
+                 if (FailedDownloadForRecentRelease(downloadClient, trackedDownload, grabbedItems))
                     {
                         _logger.Debug("[{0}] Recent release Failed, do not blacklist.", trackedDownload.DownloadItem.Title);
                         return;

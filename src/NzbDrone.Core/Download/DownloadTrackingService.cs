@@ -139,32 +139,24 @@ namespace NzbDrone.Core.Download
                 var downloadClientHistory = downloadClient.GetItems().ToList();
                 foreach (var downloadItem in downloadClientHistory)
                 {
-                    try
+                    var trackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, downloadItem.DownloadClientId);
+                    TrackedDownload trackedDownload;
+
+                    if (newTrackedDownloads.ContainsKey(trackingId)) continue;
+
+                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
                     {
-                        var trackingId = String.Format("{0}-{1}", downloadClient.Definition.Id, downloadItem.DownloadClientId);
-                        TrackedDownload trackedDownload;
+                        trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem, grabbedHistory);
 
-                        if (newTrackedDownloads.ContainsKey(trackingId)) continue;
+                        if (trackedDownload == null) continue;
 
-                        if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
-                        {
-                            trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem,
-                                grabbedHistory);
-
-                            if (trackedDownload == null) continue;
-
-                            _logger.Debug("[{0}] Started tracking download with id {1}.", downloadItem.Title, trackingId);
-                            stateChanged = true;
-                        }
-
-                        trackedDownload.DownloadItem = downloadItem;
-
-                        newTrackedDownloads[trackingId] = trackedDownload;
+                        _logger.Debug("[{0}] Started tracking download with id {1}.", downloadItem.Title, trackingId);
+                        stateChanged = true;
                     }
-                    catch (Exception e)
-                    {
-                        _logger.ErrorException("An error occured while tracking download." + downloadItem.Title, e);
-                    }
+
+                    trackedDownload.DownloadItem = downloadItem;
+
+                    newTrackedDownloads[trackingId] = trackedDownload;
                 }
             }
 
@@ -243,34 +235,42 @@ namespace NzbDrone.Core.Download
                 Status = TrackedDownloadStatus.Ok,
             };
 
-            var historyItems = grabbedHistory.Where(h =>
-                                                        {
-                                                            var downloadClientId = h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID);
 
-                                                            if (downloadClientId == null) return false;
-
-                                                            return downloadClientId.Equals(trackedDownload.DownloadItem.DownloadClientId);
-                                                        }).ToList();
-
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
-            if (parsedEpisodeInfo == null) return null;
-
-            var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
-
-            if (remoteEpisode.Series == null)
+            try
             {
-                if (historyItems.Empty()) return null;
+                var historyItems = grabbedHistory.Where(h =>
+                                                            {
+                                                                var downloadClientId = h.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID);
 
-                trackedDownload.Status = TrackedDownloadStatus.Warning;
-                trackedDownload.StatusMessages.Add(new TrackedDownloadStatusMessage(
-                                                    trackedDownload.DownloadItem.Title,
-                                                    "Series title mismatch, automatic import is not possible")
-                                                  );
+                                                                if (downloadClientId == null) return false;
 
-                remoteEpisode = _parsingService.Map(parsedEpisodeInfo, historyItems.First().SeriesId, historyItems.Select(h => h.EpisodeId));
+                                                                return downloadClientId.Equals(trackedDownload.DownloadItem.DownloadClientId);
+                                                            }).ToList();
+
+                var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
+                if (parsedEpisodeInfo == null) return null;
+
+                var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0);
+                if (remoteEpisode.Series == null)
+                {
+                    if (historyItems.Empty()) return null;
+
+                    trackedDownload.Status = TrackedDownloadStatus.Warning;
+                    trackedDownload.StatusMessages.Add(new TrackedDownloadStatusMessage(
+                                                        trackedDownload.DownloadItem.Title,
+                                                        "Series title mismatch, automatic import is not possible")
+                                                      );
+
+                    remoteEpisode = _parsingService.Map(parsedEpisodeInfo, historyItems.First().SeriesId, historyItems.Select(h => h.EpisodeId));
+                }
+
+                trackedDownload.RemoteEpisode = remoteEpisode;
             }
-
-            trackedDownload.RemoteEpisode = remoteEpisode;
+            catch (Exception e)
+            {
+                _logger.DebugException("Failed to find episode for " + downloadItem.Title, e);
+                return null;
+            }
 
             return trackedDownload;
         }

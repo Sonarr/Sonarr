@@ -530,10 +530,10 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
-        public void should_use_standard_naming_when_anime_episode_has_absolute_number_of_zero()
+        public void should_use_standard_naming_when_anime_episode_has_no_absolute_number()
         {
             _series.SeriesType = SeriesTypes.Anime;
-            _episode1.AbsoluteEpisodeNumber = 0;
+            _episode1.AbsoluteEpisodeNumber = null;
 
             _namingConfig.StandardEpisodeFormat = "{Series Title} - {season:0}x{episode:00} - {Episode Title}";
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";

@@ -36,7 +36,7 @@ define(
                             episodes = this.cellValue.get(episodeField);
                         }
 
-                        if (!absoluteEpisodeNumber) {
+                        if (absoluteEpisodeNumber === undefined) {
                             absoluteEpisodeNumber = this.cellValue.get(absoluteEpisodeField);
                         }
 
@@ -62,7 +62,7 @@ define(
 
                         result = '{0}x{1}'.format(seasonNumber, paddedEpisodes);
 
-                        if (absoluteEpisodeNumber > 0 && paddedAbsoluteEpisode) {
+                        if (absoluteEpisodeNumber !== undefined && paddedAbsoluteEpisode) {
                             result += ' ({0})'.format(paddedAbsoluteEpisode);
                         }
                     }

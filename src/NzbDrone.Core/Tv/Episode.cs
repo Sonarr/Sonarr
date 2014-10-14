@@ -27,8 +27,8 @@ namespace NzbDrone.Core.Tv
         public Boolean Monitored { get; set; }
         public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
         public Nullable<Int32> SceneAbsoluteEpisodeNumber { get; set; }
-        public int SceneSeasonNumber { get; set; }
-        public int SceneEpisodeNumber { get; set; }
+        public Nullable<Int32> SceneSeasonNumber { get; set; }
+        public Nullable<Int32> SceneEpisodeNumber { get; set; }
         public Ratings Ratings { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
 

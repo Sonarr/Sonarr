@@ -229,6 +229,7 @@
     <Compile Include="Datastore\Migration\061_clear_bad_scene_names.cs" />
     <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
     <Compile Include="Datastore\Migration\062_convert_quality_models.cs" />
+    <Compile Include="Datastore\Migration\065_make_scene_numbering_nullable.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />

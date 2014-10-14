@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Organizer
                 pattern = namingConfig.DailyEpisodeFormat;
             }
 
-            if (series.SeriesType == SeriesTypes.Anime && episodes.All(e => e.AbsoluteEpisodeNumber > 0))
+            if (series.SeriesType == SeriesTypes.Anime && episodes.All(e => e.AbsoluteEpisodeNumber.HasValue))
             {
                 pattern = namingConfig.AnimeEpisodeFormat;
             }
