@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 return;
             }
 
-            if (!EditQueue("HistoryReturn", 0, "", item.Id, settings))
+            if (!EditQueue("HistoryRedownload", 0, "", item.Id, settings))
             {
                 _logger.Warn("Failed to return item to queue from history, {0} [{1}]", item.Name, item.Id);
             }
