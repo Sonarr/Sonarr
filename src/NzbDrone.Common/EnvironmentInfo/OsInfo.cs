@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
@@ -50,6 +51,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         [DllImport("libc")]
         static extern int uname(IntPtr buf);
 
+        [DebuggerStepThrough]
         static bool IsRunningOnMac()
         {
             var buf = IntPtr.Zero;

@@ -110,22 +110,21 @@ namespace NzbDrone.Core.MetadataSource
 
             var response = _httpClient.Get<Show>(request).Resource;
 
-            /*
+            var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode);
 
-                        var client = BuildClient("show", "summary");
-                        var restRequest = new RestRequest(tvdbSeriesId + "/extended");
-                        var response = client.ExecuteAndValidate<Show>(restRequest);*/
-
-            var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode).ToList();
+            episodes = RemoveDuplicates(episodes);
+               
             var series = MapSeries(response);
 
-            return new Tuple<Series, List<Episode>>(series, episodes);
+            return new Tuple<Series, List<Episode>>(series, episodes.ToList());
         }
-        /*
-                private static IRestClient BuildClient(string resource, string method)
-                {
-                    return RestClientFactory.BuildClient(string.Format("http://api.trakt.tv/{0}/{1}.json/bc3c2c460f22cbb01c264022b540e191", resource, method));
-                }*/
+
+        private static IEnumerable<Episode> RemoveDuplicates(IEnumerable<Episode> episodes)
+        {
+            //http://support.trakt.tv/forums/188762-general/suggestions/4430690-anger-management-duplicate-episode
+            var episodeGroup = episodes.GroupBy(e => e.SeasonNumber.ToString("0000") + e.EpisodeNumber.ToString("0000"));
+            return episodeGroup.Select(g => g.First());
+        }
 
         private static Series MapSeries(Show show)
         {
