@@ -24,11 +24,11 @@ define(
                 var label = 'label-info';
 
                 var errors = QueueCollection.fullCollection.some(function (model) {
-                    return model.get('trackedDownloadStatus').toLowerCase() === 'error';
+                    return model.has('trackedDownloadStatus') && model.get('trackedDownloadStatus').toLowerCase() === 'error';
                 });
 
                 var warnings = QueueCollection.fullCollection.some(function (model) {
-                    return model.get('trackedDownloadStatus').toLowerCase() === 'warning';
+                    return model.has('trackedDownloadStatus') && model.get('trackedDownloadStatus').toLowerCase() === 'warning';
                 });
 
                 if (errors) {
