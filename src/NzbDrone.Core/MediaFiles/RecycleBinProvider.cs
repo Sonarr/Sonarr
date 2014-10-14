@@ -54,13 +54,13 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.MoveFolder(path, destination);
 
                 logger.Debug("Setting last accessed: {0}", path);
-                _diskProvider.FolderSetLastWriteTimeUtc(destination, DateTime.UtcNow);
+                _diskProvider.FolderSetLastWriteTime(destination, DateTime.UtcNow);
                 foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
                 {
                     if (OsInfo.IsWindows)
                     {
                         //TODO: Better fix than this for non-Windows?
-                        _diskProvider.FileSetLastWriteTimeUtc(file, DateTime.UtcNow);
+                        _diskProvider.FileSetLastWriteTime(file, DateTime.UtcNow);
                     }
                 }
 
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.MediaFiles
                 //TODO: Better fix than this for non-Windows?
                 if (OsInfo.IsWindows)
                 {
-                    _diskProvider.FileSetLastWriteTimeUtc(destination, DateTime.UtcNow);
+                    _diskProvider.FileSetLastWriteTime(destination, DateTime.UtcNow);
                 }
 
                 logger.Debug("File has been moved to the recycling bin: {0}", destination);
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var folder in _diskProvider.GetDirectories(_configService.RecycleBin))
             {
-                if (_diskProvider.FolderGetLastWriteUtc(folder).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.FolderGetLastWrite(folder).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Debug("Folder hasn't expired yet, skipping: {0}", folder);
                     continue;
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.MediaFiles
 
             foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
             {
-                if (_diskProvider.FileGetLastWriteUtc(file).AddDays(7) > DateTime.UtcNow)
+                if (_diskProvider.FileGetLastWrite(file).AddDays(7) > DateTime.UtcNow)
                 {
                     logger.Debug("File hasn't expired yet, skipping: {0}", file);
                     continue;

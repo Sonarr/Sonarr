@@ -121,7 +121,7 @@ namespace NzbDrone.Core.MediaFiles
             if (DateTime.TryParse(fileDate + ' ' + fileTime, out airDate))
             {
                 // avoiding false +ve checks and set date skewing by not using UTC (Windows)
-                DateTime oldDateTime = _diskProvider.FileGetLastWriteUtc(filePath);
+                DateTime oldDateTime = _diskProvider.FileGetLastWrite(filePath);
 
                 if (!DateTime.Equals(airDate, oldDateTime))
                 {
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private bool ChangeFileDateToUtcAirDate(string filePath, DateTime airDateUtc)
         {
-            DateTime oldLastWrite = _diskProvider.FileGetLastWriteUtc(filePath);
+            DateTime oldLastWrite = _diskProvider.FileGetLastWrite(filePath);
 
             if (!DateTime.Equals(airDateUtc, oldLastWrite))
             {

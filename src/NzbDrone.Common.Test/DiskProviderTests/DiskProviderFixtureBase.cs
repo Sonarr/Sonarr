@@ -10,12 +10,6 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 {
     public class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-
         public DirectoryInfo GetFilledTempFolder()
         {
             var tempFolder = GetTempFilePath();
@@ -98,7 +92,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             var source = GetFilledTempFolder();
             var destination = new DirectoryInfo(GetTempFilePath());
             Subject.CopyFolder(source.FullName, destination.FullName);
-            
+
             //Delete Random File
             destination.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
 
@@ -172,7 +166,7 @@ namespace NzbDrone.Common.Test.DiskProviderTests
         public void empty_folder_should_return_folder_modified_date()
         {
             var tempfolder = new DirectoryInfo(TempFolder);
-            Subject.FolderGetLastWriteUtc(TempFolder).Should().Be(tempfolder.LastWriteTimeUtc);
+            Subject.FolderGetLastWrite(TempFolder).Should().Be(tempfolder.LastWriteTimeUtc);
         }
 
         [Test]
@@ -183,14 +177,14 @@ namespace NzbDrone.Common.Test.DiskProviderTests
 
             Directory.CreateDirectory(testDir);
 
-            Subject.FolderSetLastWriteTimeUtc(TempFolder, DateTime.UtcNow.AddMinutes(-5));
+            Subject.FolderSetLastWriteTime(TempFolder, DateTime.UtcNow.AddMinutes(-5));
 
             TestLogger.Info("Path is: {0}", testFile);
-            
+
             Subject.WriteAllText(testFile, "Test");
 
-            Subject.FolderGetLastWriteUtc(TempFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
-            Subject.FolderGetLastWriteUtc(TempFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
+            Subject.FolderGetLastWrite(TempFolder).Should().BeOnOrAfter(DateTime.UtcNow.AddMinutes(-1));
+            Subject.FolderGetLastWrite(TempFolder).Should().BeBefore(DateTime.UtcNow.AddMinutes(1));
         }
 
         [Test]
@@ -234,11 +228,24 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             Subject.InheritFolderPermissions(testFile);
         }
 
+
+        [Test]
+        public void should_be_set_last_file_write()
+        {
+            var testFile = GetTempFilePath();
+            Subject.WriteAllText(testFile, new Guid().ToString());
+
+            var lastWriteTime = new DateTime(2012, 1, 2);
+
+            Subject.FileSetLastWriteTime(testFile, lastWriteTime);
+            Subject.FileGetLastWrite(testFile).Should().Be(lastWriteTime);
+        }
+
         [Test]
         [Explicit]
         public void check_last_write()
         {
-            Console.WriteLine(Subject.FolderGetLastWriteUtc(GetFilledTempFolder().FullName));
+            Console.WriteLine(Subject.FolderGetLastWrite(GetFilledTempFolder().FullName));
             Console.WriteLine(GetFilledTempFolder().LastWriteTimeUtc);
         }
 

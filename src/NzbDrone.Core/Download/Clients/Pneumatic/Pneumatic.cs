@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         private String GetDownloadClientId(String filename)
         {
-            return Definition.Name + "_" + Path.GetFileName(filename) + "_" + _diskProvider.FileGetLastWriteUtc(filename).Ticks;
+            return Definition.Name + "_" + Path.GetFileName(filename) + "_" + _diskProvider.FileGetLastWrite(filename).Ticks;
         }
     }
 }

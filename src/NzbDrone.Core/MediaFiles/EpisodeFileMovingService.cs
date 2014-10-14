@@ -208,7 +208,7 @@ namespace NzbDrone.Core.MediaFiles
             if (OsInfo.IsMono) return;
 
             _logger.Debug("Setting last write time on series folder: {0}", path);
-            _diskProvider.FolderSetLastWriteTimeUtc(path, time);
+            _diskProvider.FolderSetLastWriteTime(path, time);
         }
     }
 }

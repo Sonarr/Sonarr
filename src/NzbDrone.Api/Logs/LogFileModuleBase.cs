@@ -43,7 +43,7 @@ namespace NzbDrone.Api.Logs
                 {
                     Id = i + 1,
                     Filename = filename,
-                    LastWriteTime = _diskProvider.FileGetLastWriteUtc(file),
+                    LastWriteTime = _diskProvider.FileGetLastWrite(file),
                     ContentsUrl = String.Format("{0}/api/{1}/{2}", _configFileProvider.UrlBase, Resource, filename),
                     DownloadUrl = String.Format("{0}/{1}/{2}", _configFileProvider.UrlBase, DownloadUrlRoot, filename)
                 });

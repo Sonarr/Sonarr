@@ -27,14 +27,14 @@ namespace NzbDrone.Common.Disk
         public abstract long? GetTotalSize(string path);
 
 
-        public DateTime FolderGetCreationTimeUtc(string path)
+        public DateTime FolderGetCreationTime(string path)
         {
             CheckFolderExists(path);
 
             return new DirectoryInfo(path).CreationTimeUtc;
         }
 
-        public DateTime FolderGetLastWriteUtc(string path)
+        public DateTime FolderGetLastWrite(string path)
         {
             CheckFolderExists(path);
 
@@ -45,25 +45,10 @@ namespace NzbDrone.Common.Disk
                 return new DirectoryInfo(path).LastWriteTimeUtc;
             }
 
-            return dirFiles.Select(f => new FileInfo(f))
-                            .Max(c => c.LastWriteTimeUtc);
-        }
-
-        public DateTime FileGetCreationTimeUtc(string path)
-        {
-            CheckFileExists(path);
-
-            return new FileInfo(path).CreationTimeUtc;
+            return dirFiles.Select(f => new FileInfo(f)).Max(c => c.LastWriteTimeUtc);
         }
 
         public DateTime FileGetLastWrite(string path)
-        {
-            CheckFileExists(path);
-
-            return new FileInfo(path).LastWriteTime;
-        }
-
-        public DateTime FileGetLastWriteUtc(string path)
         {
             CheckFileExists(path);
 
@@ -298,14 +283,7 @@ namespace NzbDrone.Common.Disk
             File.WriteAllText(filename, contents);
         }
 
-        public void FileSetLastWriteTimeUtc(string path, DateTime dateTime)
-        {
-            Ensure.That(path, () => path).IsValidPath();
-
-            File.SetLastWriteTimeUtc(path, dateTime);
-        }
-
-        public void FolderSetLastWriteTimeUtc(string path, DateTime dateTime)
+        public void FolderSetLastWriteTime(string path, DateTime dateTime)
         {
             Ensure.That(path, () => path).IsValidPath();
 
@@ -317,20 +295,6 @@ namespace NzbDrone.Common.Disk
             Ensure.That(path, () => path).IsValidPath();
 
             File.SetLastWriteTime(path, dateTime);
-        }
-
-        public void FileSetLastAccessTime(string path, DateTime dateTime)
-        {
-            Ensure.That(path, () => path).IsValidPath();
-
-            File.SetLastAccessTimeUtc(path, dateTime);
-        }
-
-        public void FileSetLastAccessTimeUtc(string path, DateTime dateTime)
-        {
-            Ensure.That(path, () => path).IsValidPath();
-
-            File.SetLastAccessTimeUtc(path, dateTime);
         }
 
         public bool IsFileLocked(string file)
