@@ -199,7 +199,13 @@ namespace NzbDrone.Core.Download
 
             foreach (var trackedDownload in trackedDownloads)
             {
-                var downloadClient = downloadClients.Single(v => v.Definition.Id == trackedDownload.DownloadClient);
+                var downloadClient = downloadClients.SingleOrDefault(v => v.Definition.Id == trackedDownload.DownloadClient);
+
+                if (downloadClient == null)
+                {
+                    _logger.Debug("TrackedDownload for unknown download client, download client was probably removed or disabled between scans.");
+                    continue;
+                }
 
                 var state = trackedDownload.State;
 
