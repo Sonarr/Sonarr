@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             Subject.Definition = new IndexerDefinition()
                 {
                     Name = "Kickass Torrents",
-                    Settings = new KickassTorrentsSettings()
+                    Settings = new KickassTorrentsSettings() { VerifiedOnly = false }
                 };
         }
 
@@ -72,6 +72,22 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             releases.Should().HaveCount(0);
 
             ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_not_return_unverified_releases_if_not_configured()
+        {
+            (Subject.Definition.Settings as KickassTorrentsSettings).VerifiedOnly = true;
+
+            var recentFeed = ReadAllText(@"Files/RSS/KickassTorrents.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(4);
         }
     }
 }

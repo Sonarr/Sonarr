@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
         public override IParseIndexerResponse GetParser()
         {
-            return new KickassTorrentsRssParser();
+            return new KickassTorrentsRssParser() { Settings = Settings };
         }
     }
 }
