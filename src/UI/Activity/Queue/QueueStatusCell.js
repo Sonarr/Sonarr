@@ -15,7 +15,7 @@ define(
 
                 if (this.cellValue) {
                     var status = this.cellValue.get('status').toLowerCase();
-                    var trackedDownloadStatus = this.cellValue.get('trackedDownloadStatus').toLowerCase();
+                    var trackedDownloadStatus = this.cellValue.has('trackedDownloadStatus') ? this.cellValue.get('trackedDownloadStatus').toLowerCase() : 'ok';
                     var icon = 'icon-nd-downloading';
                     var title = 'Downloading';
                     var itemTitle = this.cellValue.get('title');
