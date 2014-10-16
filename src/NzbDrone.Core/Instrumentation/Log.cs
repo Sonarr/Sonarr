@@ -13,8 +13,6 @@ namespace NzbDrone.Core.Instrumentation
 
         public string Logger { get; set; }
 
-        public string Method { get; set; }
-
         public string Exception { get; set; }
 
         public string ExceptionType { get; set; }

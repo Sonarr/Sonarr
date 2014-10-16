@@ -225,6 +225,7 @@
     <Compile Include="Datastore\Migration\058_drop_epsiode_file_path.cs" />
     <Compile Include="Datastore\Migration\059_add_enable_options_to_indexers.cs" />
     <Compile Include="Datastore\Migration\063_add_remotepathmappings.cs" />
+    <Compile Include="Datastore\Migration\064_add_remove_method_from_logs.cs" />
     <Compile Include="Datastore\Migration\061_clear_bad_scene_names.cs" />
     <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
     <Compile Include="Datastore\Migration\062_convert_quality_models.cs" />

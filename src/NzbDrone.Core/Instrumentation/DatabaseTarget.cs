@@ -18,8 +18,8 @@ namespace NzbDrone.Core.Instrumentation
     {
         private readonly SQLiteConnection _connection;
 
-        const string INSERT_COMMAND = "INSERT INTO [Logs]([Message],[Time],[Logger],[Method],[Exception],[ExceptionType],[Level]) " +
-                                      "VALUES(@Message,@Time,@Logger,@Method,@Exception,@ExceptionType,@Level)";
+        const string INSERT_COMMAND = "INSERT INTO [Logs]([Message],[Time],[Logger],[Exception],[ExceptionType],[Level]) " +
+                                      "VALUES(@Message,@Time,@Logger,@Exception,@ExceptionType,@Level)";
 
         public DatabaseTarget(IConnectionStringFactory connectionStringFactory)
         {
@@ -28,8 +28,6 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Register()
         {
-            Layout = new SimpleLayout("${callsite:className=false:fileName=false:includeSourcePath=false:methodName=true}");
-
             Rule = new LoggingRule("*", LogLevel.Info, this);
 
             LogManager.Configuration.AddTarget("DbLogger", this);
@@ -61,7 +59,6 @@ namespace NzbDrone.Core.Instrumentation
                 var log = new Log();
                 log.Time = logEvent.TimeStamp;
                 log.Message = CleanseLogMessage.Cleanse(logEvent.FormattedMessage);
-                log.Method = Layout.Render(logEvent);
 
                 log.Logger = logEvent.LoggerName;
 
@@ -94,7 +91,6 @@ namespace NzbDrone.Core.Instrumentation
                 sqlCommand.Parameters.Add(new SQLiteParameter("Message", DbType.String) { Value = log.Message });
                 sqlCommand.Parameters.Add(new SQLiteParameter("Time", DbType.DateTime) { Value = log.Time });
                 sqlCommand.Parameters.Add(new SQLiteParameter("Logger", DbType.String) { Value = log.Logger });
-                sqlCommand.Parameters.Add(new SQLiteParameter("Method", DbType.String) { Value = log.Method });
                 sqlCommand.Parameters.Add(new SQLiteParameter("Exception", DbType.String) { Value = log.Exception });
                 sqlCommand.Parameters.Add(new SQLiteParameter("ExceptionType", DbType.String) { Value = log.ExceptionType });
                 sqlCommand.Parameters.Add(new SQLiteParameter("Level", DbType.String) { Value = log.Level });

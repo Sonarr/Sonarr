@@ -133,7 +133,6 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             logItem.Time.Should().BeWithin(TimeSpan.FromSeconds(2));
             logItem.Logger.Should().Be(this.GetType().Name);
             logItem.Level.Should().Be(level.Name);
-            logItem.Method.Should().Be(new StackTrace().GetFrame(1).GetMethod().Name);
             _logger.Name.Should().EndWith(logItem.Logger);
         }
     }
