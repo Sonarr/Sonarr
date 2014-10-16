@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using FluentAssertions;
+using Marr.Data;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Instrumentation;
@@ -63,6 +64,19 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             StoredModel.Message.Should().HaveLength(message.Length);
             StoredModel.Message.Should().Be(message);
             VerifyLog(StoredModel, LogLevel.Info);
+        }
+
+
+        [Test]
+        [Explicit]
+        public void perf_test()
+        {
+            MapRepository.Instance.EnableTraceLogging = false;
+            for (int i = 0; i < 1000; i++)
+            {
+                _logger.Info(Guid.NewGuid());
+            }
+            MapRepository.Instance.EnableTraceLogging = true;
         }
 
         [Test]
