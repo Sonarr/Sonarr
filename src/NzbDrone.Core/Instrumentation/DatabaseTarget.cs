@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Instrumentation
                 var sqlCommand = new SQLiteCommand(INSERT_COMMAND, _connection);
 
                 sqlCommand.Parameters.Add(new SQLiteParameter("Message", DbType.String) { Value = log.Message });
-                sqlCommand.Parameters.Add(new SQLiteParameter("Time", DbType.DateTime) { Value = log.Time });
+                sqlCommand.Parameters.Add(new SQLiteParameter("Time", DbType.DateTime) { Value = log.Time.ToUniversalTime() });
                 sqlCommand.Parameters.Add(new SQLiteParameter("Logger", DbType.String) { Value = log.Logger });
                 sqlCommand.Parameters.Add(new SQLiteParameter("Exception", DbType.String) { Value = log.Exception });
                 sqlCommand.Parameters.Add(new SQLiteParameter("ExceptionType", DbType.String) { Value = log.ExceptionType });
