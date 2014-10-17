@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download
                                     IParsingService parsingService,
                                     IRemotePathMappingService remotePathMappingService,
                                     Logger logger)
-            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _httpClient = httpClient;
             _torrentFileInfoReader = torrentFileInfoReader;

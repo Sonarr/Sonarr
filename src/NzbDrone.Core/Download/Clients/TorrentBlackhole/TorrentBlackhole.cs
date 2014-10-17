@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                                 IParsingService parsingService,
                                 IRemotePathMappingService remotePathMappingService,
                                 Logger logger)
-            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
             _httpClient = httpClient;
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTimeUtc(folder).Ticks,
+                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
                     Category = "nzbdrone",
                     Title = title,
 
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWriteUtc(videoFile).Ticks,
+                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),

@@ -121,9 +121,7 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFileProvider.cs" />
     <Compile Include="Configuration\ConfigRepository.cs" />
-    <Compile Include="Configuration\ConfigService.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Configuration\ConfigService.cs" />
     <Compile Include="Configuration\Events\ConfigFileSavedEvent.cs" />
     <Compile Include="Configuration\Events\ConfigSavedEvent.cs" />
     <Compile Include="Configuration\IConfigService.cs" />
@@ -187,9 +185,7 @@
     <Compile Include="Datastore\Migration\024_drop_tvdb_episodeid.cs" />
     <Compile Include="Datastore\Migration\025_move_notification_to_generic_provider.cs" />
     <Compile Include="Datastore\Migration\026_add_config_contract_to_notifications.cs" />
-    <Compile Include="Datastore\Migration\027_fix_omgwtfnzbs.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Datastore\Migration\027_fix_omgwtfnzbs.cs" />
     <Compile Include="Datastore\Migration\028_add_blacklist_table.cs" />
     <Compile Include="Datastore\Migration\029_add_formats_to_naming_config.cs" />
     <Compile Include="Datastore\Migration\030_add_season_folder_format_to_naming_config.cs" />
@@ -206,9 +202,7 @@
     <Compile Include="Datastore\Migration\041_fix_xbmc_season_images_metadata.cs" />
     <Compile Include="Datastore\Migration\042_add_download_clients_table.cs" />
     <Compile Include="Datastore\Migration\043_convert_config_to_download_clients.cs" />
-    <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Datastore\Migration\044_fix_xbmc_episode_metadata.cs" />
     <Compile Include="Datastore\Migration\045_add_indexes.cs" />
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
     <Compile Include="Datastore\Migration\047_add_published_date_blacklist_column.cs" />
@@ -262,9 +256,7 @@
     <Compile Include="DecisionEngine\Specifications\NotRestrictedReleaseSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RetrySpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\DelaySpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\HistorySpecification.cs" />
@@ -314,9 +306,7 @@
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdCategoryResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdConfigResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdVersionResponse.cs" />
-    <Compile Include="Download\Clients\Sabnzbd\Sabnzbd.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Download\Clients\Sabnzbd\Sabnzbd.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdCategory.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdDownloadStatus.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdHistory.cs" />
@@ -361,15 +351,11 @@
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\DownloadFailedEvent.cs" />
     <Compile Include="Download\DownloadItemStatus.cs" />
-    <Compile Include="Download\DownloadService.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Download\DownloadService.cs" />
     <Compile Include="Download\DownloadTrackingService.cs" />
     <Compile Include="Download\EpisodeGrabbedEvent.cs" />
     <Compile Include="Download\FailedDownloadService.cs" />
-    <Compile Include="Download\IDownloadClient.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Download\IDownloadClient.cs" />
     <Compile Include="Download\Pending\PendingRelease.cs" />
     <Compile Include="Download\Pending\PendingReleaseRepository.cs" />
     <Compile Include="Download\Pending\PendingReleaseService.cs" />
@@ -401,9 +387,7 @@
     <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
     <Compile Include="History\History.cs" />
     <Compile Include="History\HistoryRepository.cs" />
-    <Compile Include="History\HistoryService.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="History\HistoryService.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
@@ -445,11 +429,10 @@
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
-    <Compile Include="Indexers\IndexerFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Indexers\IndexerFactory.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\IndexerRequest.cs" />
+    <Compile Include="Indexers\IndexerResponse.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
     <Compile Include="Indexers\IProcessIndexerResponse.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsRequestGenerator.cs" />

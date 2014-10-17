@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Indexers
         {
             if (indexerResponse.HttpResponse.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                throw new IndexerException("Indexer API call resulted in an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+                throw new IndexerException(indexerResponse, "Indexer API call resulted in an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
             }
 
             if (indexerResponse.HttpResponse.Headers.ContentType != null && indexerResponse.HttpResponse.Headers.ContentType.Contains("text/html") &&
