@@ -176,8 +176,13 @@ Function PackageTests()
 
     Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force
-
     Copy-Item .\*.sh              -Destination $testPackageFolder -Force
+    
+    Write-Host Creating MDBs for tests
+    get-childitem $testPackageFolder -File -Include @("*.exe", "*.dll") -Exclude @("MediaInfo.dll", "sqlite3.dll") -Recurse | foreach ($_) {
+        Write-Host "Creating .mdb for $_"
+        & "tools\pdb2mdb\pdb2mdb.exe" $_.fullname
+    }    
 
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 
