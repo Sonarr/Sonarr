@@ -4,7 +4,6 @@ using System.Data.SQLite;
 using NLog.Common;
 using NLog.Config;
 using NLog;
-using NLog.Layouts;
 using NLog.Targets;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
@@ -78,11 +77,9 @@ namespace NzbDrone.Core.Instrumentation
                         log.Message += ": " + logEvent.Exception.Message;
                     }
 
-
                     log.Exception = logEvent.Exception.ToString();
                     log.ExceptionType = logEvent.Exception.GetType().ToString();
                 }
-
 
                 log.Level = logEvent.Level.Name;
 

@@ -55,6 +55,9 @@ namespace NzbDrone.Mono
             catch (NotImplementedException)
             {
             }
+            catch (PlatformNotSupportedException)
+            {
+            }
         }
 
         public override void SetPermissions(string path, string mask, string user, string group)
