@@ -69,9 +69,12 @@ Function CleanFolder($path, $keepConfigFiles)
     Write-Host Removing .less files
     get-childitem $path -File -Filter *.less -Recurse | foreach ($_) {remove-item $_.fullname}
  
-    Write-Host Removing NuGet
-    Remove-Item -Recurse -Force "$path\NuGet"
-  
+    if(Test-Path $$path\NuGet)
+    {
+        Write-Host Removing NuGet
+        Remove-Item -Recurse -Force "$path\NuGet"
+    }
+    
     Write-Host Removing Empty folders
     while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) 
     {
