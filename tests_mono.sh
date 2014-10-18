@@ -7,3 +7,4 @@ mono --debug $NUNIT $EXCLUDE -xml:NzbDrone.Common.Result.xml $TESTDIR/NzbDrone.C
 mono --debug $NUNIT $EXCLUDE -xml:NzbDrone.Core.Result.xml $TESTDIR/NzbDrone.Core.Test.dll
 mono --debug $NUNIT $EXCLUDE -xml:NzbDrone.Host.Result.xml $TESTDIR/NzbDrone.Host.Test.dll
 mono --debug $NUNIT $EXCLUDE -xml:NzbDrone.Libraries.Result.xml $TESTDIR/NzbDrone.Libraries.Test.dll
+mono --debug $NUNIT $EXCLUDE -xml:NzbDrone.Mono.Result.xml $TESTDIR/NzbDrone.Mono.Test.dll
