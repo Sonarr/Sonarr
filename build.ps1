@@ -68,6 +68,9 @@ Function CleanFolder($path, $keepConfigFiles)
 
     Write-Host Removing .less files
     get-childitem $path -File -Filter *.less -Recurse | foreach ($_) {remove-item $_.fullname}
+
+    Write-Host Removing vshost files
+    get-childitem $path -File -Filter *.vshost.exe -Recurse | foreach ($_) {remove-item $_.fullname}
  
     if(Test-Path $$path\NuGet)
     {
@@ -124,8 +127,6 @@ Function PackageMono()
 
         Rename-Item $_.fullname $newName
     }
-
-    Remove-Item "$outputFolderMono\NzbDrone.Console.vshost.exe"
 
     Write-Host Adding NzbDrone.Mono to UpdatePackage
     Copy-Item $outputFolderMono\* $updateFolderMono -Filter NzbDrone.Mono.*
@@ -197,7 +198,7 @@ Function PackageTests()
     Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }
 
-Function RunGrunt()
+Function RunGulp()
 {
    Write-Host "##teamcity[progressStart 'Running Gulp']"
    $gulpPath = '.\node_modules\gulp\bin\gulp'
@@ -231,7 +232,7 @@ Function CleanupWindowsPackage()
 }
 
 Build
-RunGrunt
+RunGulp
 PackageMono
 PackageOsx
 PackageTests
