@@ -228,14 +228,13 @@ namespace NzbDrone.Common.Test.DiskProviderTests
             Subject.InheritFolderPermissions(testFile);
         }
 
-
         [Test]
         public void should_be_set_last_file_write()
         {
             var testFile = GetTempFilePath();
             Subject.WriteAllText(testFile, new Guid().ToString());
 
-            var lastWriteTime = new DateTime(2012, 1, 2);
+            var lastWriteTime = DateTime.SpecifyKind(new DateTime(2012, 1, 2), DateTimeKind.Utc);
 
             Subject.FileSetLastWriteTime(testFile, lastWriteTime);
             Subject.FileGetLastWrite(testFile).Should().Be(lastWriteTime);
