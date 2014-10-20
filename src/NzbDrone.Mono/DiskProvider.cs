@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Mono.Unix.Native;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Instrumentation;
@@ -34,9 +35,9 @@ namespace NzbDrone.Mono
 
                 return driveInfo.AvailableFreeSpace;
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException ex)
             {
-                Logger.ErrorException("Couldn't get free space for " + path, e);
+                Logger.ErrorException("Couldn't get free space for " + path, ex);
             }
 
             return null;
@@ -144,10 +145,11 @@ namespace NzbDrone.Mono
             var drives = DriveInfo.GetDrives();
 
             return
-                drives.Where(drive =>
-                    drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
-                    .OrderByDescending(drive => drive.Name.Length)
-                    .FirstOrDefault();
+                drives.Where(drive => drive.IsReady &&
+                                      drive.Name.IsNotNullOrWhiteSpace() &&
+                                      path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
+                      .OrderByDescending(drive => drive.Name.Length)
+                      .FirstOrDefault();
         }
     }
 }
