@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -10,7 +11,7 @@ namespace NzbDrone.Common.Instrumentation
                 new Regex(@"(?<=\?|&)(apikey|token|passkey|uid)=(?<secret>[^&=]+?)(?= |&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
                 new Regex(@"(?<=\?|&)[^=]*?(username|password)=(?<secret>[^&=]+?)(?= |&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
                 new Regex(@"torrentleech\.org/(?<secret>[0-9a-z]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                new Regex(@"(?<=iptorrents.*?)(?<=\?|&|;)(u|tp)=(?<secret>[^&=;]+?)(?= |;|&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                new Regex(@"iptorrents\.com/[/a-z0-9?&;]*?(?:[?&;](u|tp)=(?<secret>[^&=;]+?))+(?= |;|&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
                 // Path
                 new Regex(@"""C:\\Users\\(?<secret>[^\""]+?)(\\|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
@@ -32,8 +33,6 @@ namespace NzbDrone.Common.Instrumentation
                 new Regex(@"(?<=\?|&)(authkey|torrent_pass)=(?<secret>[^&=]+?)(?=""|&|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
-        //private static readonly Regex CleansingRegex = new Regex(@"(?<=apikey=)(\w+?)(?=\W|$|_)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         public static string Cleanse(string message)
         {
             if (message.IsNullOrWhiteSpace())
@@ -43,7 +42,16 @@ namespace NzbDrone.Common.Instrumentation
 
             foreach (var regex in CleansingRules)
             {
-                message = regex.Replace(message, m => m.Value.Replace(m.Groups["secret"].Index - m.Index, m.Groups["secret"].Length, "<removed>"));
+                message = regex.Replace(message, m =>
+                    {
+                        var value = m.Value;
+                        foreach (var capture in m.Groups["secret"].Captures.OfType<Capture>().Reverse())
+                        {
+                            value = value.Replace(capture.Index - m.Index, capture.Length, "<removed>");
+                        }
+
+                        return value;
+                    });
             }
 
             return message;
