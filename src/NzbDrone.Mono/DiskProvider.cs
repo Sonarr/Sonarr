@@ -165,5 +165,18 @@ namespace NzbDrone.Mono
                 return false;
             }
         }
+
+        public override bool TryCreateHardLink(string source, string destination)
+        {
+            try
+            {
+                UnixFileSystemInfo.GetFileSystemEntry(source).CreateLink(destination);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
