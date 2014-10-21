@@ -30,8 +30,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)(?:\s|\.)(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.|$)+)+.*?(?<hash>\[.{8}\])?(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Anime - [SubGroup] Title Season+Episode
+                new Regex(@"^(?:\[(?<subgroup>.+?)\](?:_|-|\s|\.))(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)(?:\s|\.).*?(?<hash>\[.{8}\])?(?:$|\.)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Anime - [SubGroup] Title Absolute Episode Number
-                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:[-_. ]+(?<absoluteepisode>\d{2,}))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[[a-z0-9]{8}\])?(?:$|\.mkv)",
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+(?:[-_. ]?(?<absoluteepisode>\d{2,}))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[[a-z0-9]{8}\])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Multi-Part episodes without a title (S01E05.S01E06)

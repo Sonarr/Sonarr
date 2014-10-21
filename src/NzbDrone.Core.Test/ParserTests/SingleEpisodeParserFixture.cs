@@ -86,6 +86,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("S2009E09 [SDTV].avi", "", 2009, 9)]
         [TestCase("Shark Week S2009E09 [SDTV].avi", "Shark Week", 2009, 9)]
         [TestCase("St_Elsewhere_209_Aids_And_Comfort", "St Elsewhere", 2, 9)]
+        [TestCase("[Impatience] Locodol - 0x01 [720p][34073169].mkv", "Locodol", 0, 1)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
