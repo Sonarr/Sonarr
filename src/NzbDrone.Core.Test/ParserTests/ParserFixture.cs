@@ -52,6 +52,12 @@ namespace NzbDrone.Core.Test.ParserTests
             title.CleanSeriesTitle().Should().Be("carnivale");
         }
 
+        [TestCase("Discovery TV - Gold Rush : 02 Road From Hell [S04].mp4")]
+        public void should_clean_up_invalid_path_characters(String postTitle)
+        {
+            Parser.Parser.ParseTitle(postTitle);
+        }
+
         [TestCase("[scnzbefnet][509103] 2.Broke.Girls.S03E18.720p.HDTV.X264-DIMENSION", "2 Broke Girls")]
         public void should_remove_request_info_from_title(String postTitle, String title)
         {

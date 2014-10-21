@@ -138,6 +138,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex NormalizeRegex = new Regex(@"((?:\b|_)(?<!^)(a|an|the|and|or|of)(?:\b|_))|\W|_",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex FileExtensionRegex = new Regex(@"\.[a-z0-9]{2,4}$",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[xh][\W_]?264|DD\W?5\W1|\<|\>|\?|\*|\:|\||848x480|1280x720|1920x1080|8bit|10bit",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -371,14 +374,18 @@ namespace NzbDrone.Core.Parser
 
         public static string RemoveFileExtension(string title)
         {
-            if (!title.ContainsInvalidPathChars())
-            {
-                var extension = Path.GetExtension(title).ToLower();
-                if (MediaFiles.MediaFileExtensions.Extensions.Contains(extension) || new [] { ".par2", ".nzb" }.Contains(extension))
+            title = FileExtensionRegex.Replace(title, m =>
                 {
-                    title = Path.Combine(Path.GetDirectoryName(title), Path.GetFileNameWithoutExtension(title));
-                }
-            }
+                    var extension = m.Value.ToLower();
+                    if (MediaFiles.MediaFileExtensions.Extensions.Contains(extension) || new[] { ".par2", ".nzb" }.Contains(extension))
+                    {
+                        return String.Empty;
+                    }
+                    else
+                    {
+                        return m.Value;
+                    }
+                });
 
             return title;
         }
