@@ -21,5 +21,6 @@ namespace NzbDrone.Api.Queue
         public String Status { get; set; }
         public String TrackedDownloadStatus { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
+        public String TrackingId { get; set; }
     }
 }

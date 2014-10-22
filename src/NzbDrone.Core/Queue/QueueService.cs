@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Queue
                 {
                     var queue = new Queue
                                 {
-                                    Id = episode.Id ^ (trackedDownload.DownloadItem.DownloadClientId.GetHashCode().GetHashCode() << 16),
+                                    Id = episode.Id ^ (trackedDownload.DownloadItem.DownloadClientId.GetHashCode() << 16),
                                     Series = trackedDownload.RemoteEpisode.Series,
                                     Episode = episode,
                                     Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
@@ -49,7 +49,8 @@ namespace NzbDrone.Core.Queue
                                     Status = trackedDownload.DownloadItem.Status.ToString(),
                                     RemoteEpisode = trackedDownload.RemoteEpisode,
                                     TrackedDownloadStatus = trackedDownload.Status.ToString(),
-                                    StatusMessages = trackedDownload.StatusMessages
+                                    StatusMessages = trackedDownload.StatusMessages,
+                                    TrackingId = trackedDownload.TrackingId
                                 };
 
                     if (queue.Timeleft.HasValue)
