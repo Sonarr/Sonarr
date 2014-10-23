@@ -134,6 +134,7 @@ define(
                 if (!this.isClosed) {
 
                     if (this.collection.length === 0) {
+                        this.ui.searchBar.show();
                         this.searchResult.show(new NotFoundView({term: this.collection.term}));
                     }
                     else {
