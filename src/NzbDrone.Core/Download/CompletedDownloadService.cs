@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Download
     public interface ICompletedDownloadService
     {
         void CheckForCompletedItem(IDownloadClient downloadClient, TrackedDownload trackedDownload, List<History.History> grabbedHistory, List<History.History> importedHistory);
+        List<ImportResult> Import(TrackedDownload trackedDownload);
     }
 
     public class CompletedDownloadService : ICompletedDownloadService
@@ -69,11 +70,13 @@ namespace NzbDrone.Core.Download
 
                     UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Already added to history as imported.");
                 }
+
                 else if (trackedDownload.Status != TrackedDownloadStatus.Ok)
                 {
                     _logger.Debug("Tracked download status is: {0}, skipping import.", trackedDownload.Status);
                     return;
                 }
+
                 else
                 {
                     var downloadedEpisodesFolder = _configService.DownloadedEpisodesFolder;
@@ -91,79 +94,40 @@ namespace NzbDrone.Core.Download
                         return;
                     }
 
-                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
+                    var importResults = Import(trackedDownload);
+
+                    //Only attempt to associate it with a previous import if its still in the downloading state
+                    if (trackedDownload.State == TrackedDownloadState.Downloading && importResults.Empty())
                     {
-                        var importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
-
-                        ProcessImportResults(trackedDownload, importResults);
-                    }
-                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
-                    {
-                        var importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
-
-                        ProcessImportResults(trackedDownload, importResults);
-                    }
-                    else
-                    {
-                        if (grabbedItems.Any())
-                        {
-                            var episodeIds = trackedDownload.RemoteEpisode.Episodes.Select(v => v.Id).ToList();
-
-                            // Check if we can associate it with a previous drone factory import.
-                            importedItems = importedHistory.Where(v => v.Data.GetValueOrDefault(DownloadTrackingService.DOWNLOAD_CLIENT_ID) == null &&
-                                                                  episodeIds.Contains(v.EpisodeId) && 
-                                                                  v.Data.GetValueOrDefault("droppedPath") != null &&
-                                                                  new FileInfo(v.Data["droppedPath"]).Directory.Name == grabbedItems.First().SourceTitle
-                                                                  ).ToList();
-                            if (importedItems.Count == 1)
-                            {
-                                var importedFile = new FileInfo(importedItems.First().Data["droppedPath"]);
-
-                                if (importedFile.Directory.Name == grabbedItems.First().SourceTitle)
-                                {
-                                    trackedDownload.State = TrackedDownloadState.Imported;
-
-                                    importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT];
-                                    importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID];
-                                    _historyService.UpdateHistoryData(importedItems.First().Id, importedItems.First().Data);
-
-                                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Intermediate Download path does not exist, but found probable drone factory ImportEvent.");
-                                    return;
-                                }
-                            }
-                        }
-
-                        UpdateStatusMessage(trackedDownload, LogLevel.Error, "Intermediate Download path does not exist: {0}", trackedDownload.DownloadItem.OutputPath);
-                        return;
+                        AssociateWithPreviouslyImported(trackedDownload, grabbedItems, importedHistory);
                     }
                 }
             }
 
-            if (_configService.RemoveCompletedDownloads && trackedDownload.State == TrackedDownloadState.Imported && !trackedDownload.DownloadItem.IsReadOnly)
+            if (_configService.RemoveCompletedDownloads)
             {
-                try
-                {
-                    _logger.Debug("[{0}] Removing completed download from history.", trackedDownload.DownloadItem.Title);
-                    downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadClientId);
-
-                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
-                    {
-                        _logger.Debug("Removing completed download directory: {0}", trackedDownload.DownloadItem.OutputPath);
-                        _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath, true);
-                    }
-                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
-                    {
-                        _logger.Debug("Removing completed download file: {0}", trackedDownload.DownloadItem.OutputPath);
-                        _diskProvider.DeleteFile(trackedDownload.DownloadItem.OutputPath);
-                    }
-
-                    trackedDownload.State = TrackedDownloadState.Removed;
-                }
-                catch (NotSupportedException)
-                {
-                    UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Removing item not supported by your download client.");
-                }
+                RemoveCompleted(trackedDownload, downloadClient);
             }
+        }
+
+        public List<ImportResult> Import(TrackedDownload trackedDownload)
+        {
+            var importResults = new List<ImportResult>();
+
+            if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
+            {
+                importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+
+                ProcessImportResults(trackedDownload, importResults);
+            }
+            else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
+            {
+                importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+
+                ProcessImportResults(trackedDownload, importResults);
+            }
+
+            return importResults;
         }
 
         private void UpdateStatusMessage(TrackedDownload trackedDownload, LogLevel logLevel, String message, params object[] args)
@@ -208,5 +172,70 @@ namespace NzbDrone.Core.Download
                 UpdateStatusMessage(trackedDownload, LogLevel.Error, errors);
             }
         }
+
+        private void AssociateWithPreviouslyImported(TrackedDownload trackedDownload, List<History.History> grabbedItems, List<History.History> importedHistory)
+        {
+            if (grabbedItems.Any())
+            {
+                var episodeIds = trackedDownload.RemoteEpisode.Episodes.Select(v => v.Id).ToList();
+
+                // Check if we can associate it with a previous drone factory import.
+                var importedItems = importedHistory.Where(v => v.Data.GetValueOrDefault(DownloadTrackingService.DOWNLOAD_CLIENT_ID) == null &&
+                                                      episodeIds.Contains(v.EpisodeId) &&
+                                                      v.Data.GetValueOrDefault("droppedPath") != null &&
+                                                      new FileInfo(v.Data["droppedPath"]).Directory.Name == grabbedItems.First().SourceTitle
+                                                      ).ToList();
+                if (importedItems.Count == 1)
+                {
+                    var importedFile = new FileInfo(importedItems.First().Data["droppedPath"]);
+
+                    if (importedFile.Directory.Name == grabbedItems.First().SourceTitle)
+                    {
+                        trackedDownload.State = TrackedDownloadState.Imported;
+
+                        importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT];
+                        importedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID] = grabbedItems.First().Data[DownloadTrackingService.DOWNLOAD_CLIENT_ID];
+                        _historyService.UpdateHistoryData(importedItems.First().Id, importedItems.First().Data);
+
+                        UpdateStatusMessage(trackedDownload, LogLevel.Debug, "Intermediate Download path does not exist, but found probable drone factory ImportEvent.");
+                        return;
+                    }
+                }
+            }
+
+            UpdateStatusMessage(trackedDownload, LogLevel.Error, "Intermediate Download path does not exist: {0}", trackedDownload.DownloadItem.OutputPath);
+        }
+
+        private void RemoveCompleted(TrackedDownload trackedDownload, IDownloadClient downloadClient)
+        {
+            if (trackedDownload.State == TrackedDownloadState.Imported && !trackedDownload.DownloadItem.IsReadOnly)
+            {
+                try
+                {
+                    _logger.Debug("[{0}] Removing completed download from history.", trackedDownload.DownloadItem.Title);
+                    downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadClientId);
+
+                    if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
+                    {
+                        _logger.Debug("Removing completed download directory: {0}",
+                            trackedDownload.DownloadItem.OutputPath);
+                        _diskProvider.DeleteFolder(trackedDownload.DownloadItem.OutputPath, true);
+                    }
+                    else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
+                    {
+                        _logger.Debug("Removing completed download file: {0}", trackedDownload.DownloadItem.OutputPath);
+                        _diskProvider.DeleteFile(trackedDownload.DownloadItem.OutputPath);
+                    }
+
+                    trackedDownload.State = TrackedDownloadState.Removed;
+                }
+                catch (NotSupportedException)
+                {
+                    UpdateStatusMessage(trackedDownload, LogLevel.Debug,
+                        "Removing item not supported by your download client.");
+                }
+            }
+        }
+
     }
 }
