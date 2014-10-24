@@ -105,6 +105,7 @@ define(
                 }
 
                 else if (!this.isExisting) {
+                    this.collection.term = '';
                     this.collection.reset();
                     this._clearResults();
                     this.ui.seriesSearch.val('');
