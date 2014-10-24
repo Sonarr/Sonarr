@@ -4,13 +4,17 @@
             <span class="date">
                 - {{ShortDate releaseDate}}
             </span>
-            {{#if installed}}
-                <span class="update-installed"><i class="icon-ok" title="Installed"></i></span>
-            {{/if}}
-
-            {{#if isUpgrade}}
-                <span class="label label-default install-update x-install-update">Install</span>
-            {{/if}}
+            <span class="status">
+                {{#if installed}}
+                    <span class="label label-success">Installed</span>
+                {{else}}
+                    {{#if isUpgrade}}
+                        <span class="label label-default install-update x-install-update">Install</span>
+                    {{else}}
+                        <span class="label label-default label-disabled" title="Cannot install an older version">Install</span>
+                    {{/if}}
+                {{/if}}
+            </span>
         </legend>
 
         {{#with changes}}
