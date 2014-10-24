@@ -41,7 +41,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
-                logger.Info("Recycling Bin has not been configured, deleting permanently.");
+                logger.Info("Recycling Bin has not been configured, deleting permanently. {0}", path);
                 _diskProvider.DeleteFolder(path, true);
                 logger.Debug("Folder has been permanently deleted: {0}", path);
             }
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (String.IsNullOrWhiteSpace(recyclingBin))
             {
-                logger.Info("Recycling Bin has not been configured, deleting permanently.");
+                logger.Info("Recycling Bin has not been configured, deleting permanently. {0}", path);
 
                 if (OsInfo.IsWindows)
                 {
