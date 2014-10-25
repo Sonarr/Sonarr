@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -142,6 +143,25 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
 
             episodes.TotalRecords.Should().Be(4);
+        }
+
+        [Test]
+        public void should_not_return_episodes_on_air()
+        {
+            var onAirEpisode = Builder<Episode>.CreateNew()
+                                               .With(e => e.Id = 0)
+                                               .With(e => e.SeriesId = _monitoredSeries.Id)
+                                               .With(e => e.EpisodeFileId = 0)
+                                               .With(e => e.AirDateUtc = DateTime.Now.AddMinutes(-15))
+                                               .With(e => e.Monitored = true)
+                                               .Build();
+
+            Db.Insert(onAirEpisode);
+
+            var episodes = Subject.EpisodesWithoutFiles(_pagingSpec, false);
+
+            episodes.TotalRecords.Should().Be(4);
+            episodes.Records.Where(e => e.Id == onAirEpisode.Id).Should().BeEmpty();
         }
     }
 }
