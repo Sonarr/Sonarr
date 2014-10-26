@@ -327,7 +327,6 @@
     <Content Include="Files\RSS\fanzub.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="License.txt" />
     <None Include="..\NzbDrone.Test.Common\App.config">
       <Link>App.config</Link>
     </None>

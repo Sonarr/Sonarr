@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Organizer
                 EpisodeNumber = 1,
                 Title = "Episode Title (1)",
                 AirDate = "2013-10-30",
-                AbsoluteEpisodeNumber = 1
+                AbsoluteEpisodeNumber = 1,
             };
 
             _episode2 = new Episode
@@ -94,6 +94,7 @@ namespace NzbDrone.Core.Organizer
             {
                 Quality = new QualityModel(Quality.HDTV720p),
                 RelativePath = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
+                SceneName = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfo
             };
@@ -102,14 +103,16 @@ namespace NzbDrone.Core.Organizer
             {
                 Quality = new QualityModel(Quality.HDTV720p),
                 RelativePath = "Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv",
+                SceneName = "Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
-                MediaInfo = mediaInfo
+                MediaInfo = mediaInfo,
             };
 
             _dailyEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
                 RelativePath = "Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
+                SceneName = "Series.Title.2013.10.30.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfo
             };
@@ -118,6 +121,7 @@ namespace NzbDrone.Core.Organizer
             {
                 Quality = new QualityModel(Quality.HDTV720p),
                 RelativePath = "Series.Title.001.HDTV.x264-EVOLVE.mkv",
+                SceneName = "Series.Title.001.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
