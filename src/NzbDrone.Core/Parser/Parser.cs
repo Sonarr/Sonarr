@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\bita\b|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\bita\b|italian)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
@@ -527,9 +527,6 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("dutch"))
                 return Language.Dutch;
 
-            if (lowerTitle.Contains("nlsub"))
-                return Language.Dutch;
-
             if (lowerTitle.Contains("japanese"))
                 return Language.Japanese;
 
@@ -588,6 +585,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["russian"].Success)
                 return Language.Russian;
+
+            if (match.Groups["dutch"].Success)
+                return Language.Dutch;
 
             return Language.English;
         }
