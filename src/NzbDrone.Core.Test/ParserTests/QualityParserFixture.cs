@@ -136,6 +136,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Fringe S04E22 720p WEB-DL DD5.1 H264-EbP.mkv", false)]
         [TestCase("House.S04.720p.Web-Dl.Dd5.1.h264-P2PACK", false)]
         [TestCase("Da.Vincis.Demons.S02E04.720p.WEB.DL.nSD.x264-NhaNc3", false)]
+        [TestCase("CSI.Miami.S04E25.720p.iTunesHD.AVC-TVS", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
