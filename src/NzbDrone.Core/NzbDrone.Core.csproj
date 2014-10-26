@@ -481,6 +481,7 @@
     <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MediaFiles\DownloadedEpisodesCommandService.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />

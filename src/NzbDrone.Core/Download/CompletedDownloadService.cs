@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Download
     public interface ICompletedDownloadService
     {
         void CheckForCompletedItem(IDownloadClient downloadClient, TrackedDownload trackedDownload, List<History.History> grabbedHistory, List<History.History> importedHistory);
-        List<ImportResult> Import(TrackedDownload trackedDownload);
+        List<ImportResult> Import(TrackedDownload trackedDownload, String overrideOutputPath = null);
     }
 
     public class CompletedDownloadService : ICompletedDownloadService
@@ -110,21 +110,22 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        public List<ImportResult> Import(TrackedDownload trackedDownload)
+        public List<ImportResult> Import(TrackedDownload trackedDownload, String overrideOutputPath = null)
         {
             var importResults = new List<ImportResult>();
+            var outputPath = overrideOutputPath ?? trackedDownload.DownloadItem.OutputPath;
 
-            if (_diskProvider.FolderExists(trackedDownload.DownloadItem.OutputPath))
+            if (_diskProvider.FolderExists(outputPath))
             {
-                importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+                importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(outputPath), trackedDownload.DownloadItem);
 
-                ProcessImportResults(trackedDownload, importResults);
+                ProcessImportResults(trackedDownload, outputPath, importResults);
             }
-            else if (_diskProvider.FileExists(trackedDownload.DownloadItem.OutputPath))
+            else if (_diskProvider.FileExists(outputPath))
             {
-                importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(trackedDownload.DownloadItem.OutputPath), trackedDownload.DownloadItem);
+                importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(outputPath), trackedDownload.DownloadItem);
 
-                ProcessImportResults(trackedDownload, importResults);
+                ProcessImportResults(trackedDownload, outputPath, importResults);
             }
 
             return importResults;
@@ -147,11 +148,11 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        private void ProcessImportResults(TrackedDownload trackedDownload, List<ImportResult> importResults)
+        private void ProcessImportResults(TrackedDownload trackedDownload, String outputPath, List<ImportResult> importResults)
         {
             if (importResults.Empty())
             {
-                UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found are eligible for import in {0}", trackedDownload.DownloadItem.OutputPath);
+                UpdateStatusMessage(trackedDownload, LogLevel.Error, "No files found are eligible for import in {0}", outputPath);
             }
             else if (importResults.Any(v => v.Result == ImportResultType.Imported) && importResults.All(v => v.Result == ImportResultType.Imported || v.Result == ImportResultType.Rejected))
             {
