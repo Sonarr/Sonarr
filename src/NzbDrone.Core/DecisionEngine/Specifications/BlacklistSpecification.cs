@@ -19,31 +19,23 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Release is blacklisted";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (!_configService.EnableFailedDownloadHandling)
             {
                 _logger.Debug("Failed Download Handling is not enabled");
-                return true;
+                return Decision.Accept();
             }
 
             if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release.Title, subject.Release.PublishDate))
             {
                 _logger.Debug("{0} is blacklisted, rejecting.", subject.Release.Title);
-                return false;
+                return Decision.Reject("Release is blacklisted");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

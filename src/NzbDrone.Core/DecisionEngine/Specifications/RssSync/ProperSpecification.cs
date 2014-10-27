@@ -20,21 +20,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Proper for old episode";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria != null)
             {
-                return true;
+                return Decision.Accept();
             }
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
@@ -44,18 +36,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {
                         _logger.Debug("Proper for old file, rejecting: {0}", subject);
-                        return false;
+                        return Decision.Reject("Proper for old file");
                     }
 
                     if (!_configService.AutoDownloadPropers)
                     {
                         _logger.Debug("Auto downloading of propers is disabled");
-                        return false;
+                        return Decision.Reject("Proper downloading is disabled");
                     }
                 }
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

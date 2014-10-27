@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_true_when_restrictions_are_empty()
         {
-            Subject.IsSatisfiedBy(_parseResult, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResult, null).Accepted.Should().BeTrue();
         }
 
         [TestCase("KYR")]
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_false_when_nzb_contains_a_restricted_term(string restrictions)
         {
             Mocker.GetMock<IConfigService>().SetupGet(c => c.ReleaseRestrictions).Returns(restrictions);
-            Subject.IsSatisfiedBy(_parseResult, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResult, null).Accepted.Should().BeFalse();
         }
 
         [TestCase("NotReal")]
@@ -47,14 +47,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_true_when_nzb_does_not_contain_a_restricted_term(string restrictions)
         {
             Mocker.GetMock<IConfigService>().SetupGet(c => c.ReleaseRestrictions).Returns(restrictions);
-            Subject.IsSatisfiedBy(_parseResult, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResult, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_not_try_to_find_empty_string_as_a_match()
         {
             Mocker.GetMock<IConfigService>().SetupGet(c => c.ReleaseRestrictions).Returns("test\n");
-            Subject.IsSatisfiedBy(_parseResult, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResult, null).Accepted.Should().BeTrue();
         }
     }
 }

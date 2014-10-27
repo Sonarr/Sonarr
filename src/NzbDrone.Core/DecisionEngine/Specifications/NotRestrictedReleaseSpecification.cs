@@ -17,17 +17,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Contains restricted term.";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             _logger.Debug("Checking if release contains any restricted terms: {0}", subject);
 
@@ -36,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (String.IsNullOrWhiteSpace(restrictionsString))
             {
                 _logger.Debug("No restrictions configured, allowing: {0}", subject);
-                return true;
+                return Decision.Accept();
             }
 
             var restrictions = restrictionsString.Split(new []{ '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -46,12 +38,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (subject.Release.Title.ToLowerInvariant().Contains(restriction.ToLowerInvariant()))
                 {
                     _logger.Debug("{0} is restricted: {1}", subject, restriction);
-                    return false;
+                    return Decision.Reject("Contains restricted term: {0}", restriction);
                 }
             }
 
             _logger.Debug("No restrictions apply, allowing: {0}", subject);
-            return true;
+            return Decision.Accept();
         }
     }
 }

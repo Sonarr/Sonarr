@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 500, true)]
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 50 * 2, false)]
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultMulti.Series = series;
             parseResultMulti.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Subject.IsSatisfiedBy(parseResultMulti, null).Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultMulti, null).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 50 * 6, false)]
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultMultiSet.Series = series;
             parseResultMultiSet.Release.Size = sizeInMegaBytes.Megabytes();
 
-            Subject.IsSatisfiedBy(parseResultMultiSet, null).Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(parseResultMultiSet, null).Accepted.Should().Be(expectedResult);
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.Release.Size = 18457280000;
             qualityType.MaxSize = 0;
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
         }
         
         [Test]
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             parseResultSingle.Release.Size = 36857280000;
             qualityType.MaxSize = 0;
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();;
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue(); ;
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             qualityType.MaxSize = 10;
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -185,18 +185,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.RAWHD) },
                 };
 
-            Subject.IsSatisfiedBy(parseResult, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
         }
 
         [Test]
-        public void should_always_return_false_if_unknown()
+        public void should_return_true_if_unknown()
         {
             var parseResult = new RemoteEpisode
             {
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.Unknown) },
             };
 
-            Subject.IsSatisfiedBy(parseResult, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
 
             Mocker.GetMock<IQualityDefinitionService>().Verify(c => c.Get(It.IsAny<Quality>()), Times.Never());
         }
