@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_upgradable_if_only_episode_is_upgradable()
         {
             WithFirstReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -107,27 +107,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithFirstReportUpgradable();
             WithSecondReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_not_be_upgradable_if_both_episodes_are_not_upgradable()
         {
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_first_episodes_is_upgradable()
         {
             WithFirstReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_second_episodes_is_upgradable()
         {
             WithSecondReportUpgradable();
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -139,13 +139,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 1)).Returns(_upgradableQuality);
 
-            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_it_is_a_search()
         {
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSabnzbdDownloadClient();
 
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenSabnzbdDownloadClient();
             GivenMostRecentForEpisode(HistoryEventType.Grabbed);
 
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenSabnzbdDownloadClient();
             GivenMostRecentForEpisode(HistoryEventType.DownloadFailed);
 
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenSabnzbdDownloadClient();
             GivenMostRecentForEpisode(HistoryEventType.DownloadFolderImported);
 
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Should().BeTrue();
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
     }
 }

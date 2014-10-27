@@ -247,6 +247,7 @@
     <Compile Include="Datastore\PagingSpec.cs" />
     <Compile Include="Datastore\ResultSet.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
+    <Compile Include="DecisionEngine\Decision.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
     <Compile Include="DecisionEngine\DownloadDecisionPriorizationService.cs" />

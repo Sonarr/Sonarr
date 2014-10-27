@@ -14,39 +14,31 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Episode doesn't match";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public bool IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria == null)
             {
-                return true;
+                return Decision.Accept();
             }
 
             var singleEpisodeSpec = searchCriteria as SingleEpisodeSearchCriteria;
-            if (singleEpisodeSpec == null) return true;
+            if (singleEpisodeSpec == null) return Decision.Accept();
 
             if (singleEpisodeSpec.SeasonNumber != remoteEpisode.ParsedEpisodeInfo.SeasonNumber)
             {
                 _logger.Debug("Season number does not match searched season number, skipping.");
-                return false;
+                return Decision.Reject("Wrong season");
             }
 
             if (!remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers.Contains(singleEpisodeSpec.EpisodeNumber))
             {
                 _logger.Debug("Episode number does not match searched episode number, skipping.");
-                return false;
+                return Decision.Reject("Wrong episode");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

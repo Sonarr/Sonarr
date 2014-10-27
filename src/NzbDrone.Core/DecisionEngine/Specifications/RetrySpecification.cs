@@ -22,22 +22,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Release has been retried too many times";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (!_configService.EnableFailedDownloadHandling)
             {
                 _logger.Debug("Failed Download Handling is not enabled");
-                return true;
+                return Decision.Accept();
             }
 
             var history = _historyService.FindBySourceTitle(subject.Release.Title);
@@ -47,10 +39,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                                    _configService.BlacklistRetryLimit)
             {
                 _logger.Debug("Release has been attempted more times than allowed, rejecting");
-                return false;
+                return Decision.Reject("Retried too many times");
             }
 
-            return true;
+            return Decision.Accept();
         }
 
         private bool HasSamePublishedDate(History.History item, DateTime publishedDate)

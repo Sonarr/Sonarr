@@ -21,17 +21,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Waiting for better quality release";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Temporary; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             //How do we want to handle drone being off and the automatic search being triggered?
             //TODO: Add a flag to the search to state it is a "scheduled" search
@@ -39,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             if (searchCriteria != null)
             {
                 _logger.Debug("Ignore delay for searches");
-                return true;
+                return Decision.Accept();
             }
 
             var profile = subject.Series.Profile.Value;
@@ -47,7 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             if (profile.GrabDelay == 0)
             {
                 _logger.Debug("Profile does not delay before download");
-                return true;
+                return Decision.Accept();
             }
 
             var comparer = new QualityModelComparer(profile);
@@ -63,7 +55,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     if (revisionUpgrade)
                     {
                         _logger.Debug("New quality is a better revision for existing quality, skipping delay");
-                        return true;
+                        return Decision.Accept();
                     }
                 }
             }
@@ -75,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             if (bestCompare >= 0)
             {
                 _logger.Debug("Quality is highest in profile, will not delay");
-                return true;
+                return Decision.Accept();
             }
 
             if (profile.GrabDelayMode == GrabDelayMode.Cutoff)
@@ -86,7 +78,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 if (cutoffCompare >= 0)
                 {
                     _logger.Debug("Quality meets or exceeds the cutoff, will not delay");
-                    return true;
+                    return Decision.Accept();
                 }
             }
 
@@ -101,17 +93,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                 if (oldest != null && oldest.Release.AgeHours > profile.GrabDelay)
                 {
-                    return true;
+                    return Decision.Accept();
                 }
             }
 
             if (subject.Release.AgeHours < profile.GrabDelay)
             {
                 _logger.Debug("Age ({0}) is less than delay {1}, delaying", subject.Release.AgeHours, profile.GrabDelay);
-                return false;
+                return Decision.Reject("Waiting for better quality release");
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }
