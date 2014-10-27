@@ -639,5 +639,23 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - S15E06 - S15E07 - (HDTV-720p, , DRONE) - City Sushi");
         }
+
+        [Test]
+        public void should_allow_period_between_season_and_episode()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}.E{episode:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15.E06.City.Sushi");
+        }
+
+        [Test]
+        public void should_allow_space_between_season_and_episode()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00} E{episode:00} - {Episode Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15 E06 - City Sushi");
+        }
     }
 }
