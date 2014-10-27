@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay|Blu-Ray)|
-                                                                (?<webdl>WEB[-_. ]DL|WEBDL|WebRip|iTunesHD)|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|WebRip|iTunesHD|WebHD)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRiP)|
                                                                 (?<brrip>BRRip)|
