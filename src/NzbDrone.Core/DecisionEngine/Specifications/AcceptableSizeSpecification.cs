@@ -22,14 +22,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public String RejectionReason
-        {
-            get { return "File size too big or small"; }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public  bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             _logger.Debug("Beginning size check for: {0}", subject);
 
@@ -38,13 +33,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (quality == Quality.RAWHD)
             {
                 _logger.Debug("Raw-HD release found, skipping size check.");
-                return true;
+                return Decision.Accept();
             }
 
             if (quality == Quality.Unknown)
             {
                 _logger.Debug("Unknown quality. skipping size check.");
-                return false;
+                return Decision.Accept();
             }
 
             var qualityDefinition = _qualityDefinitionService.Get(quality);
@@ -57,7 +52,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (subject.Release.Size < minSize)
             {
                 _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2}), rejecting.", subject, subject.Release.Size, minSize);
-                return false;
+                return Decision.Reject("{0} is smaller than minimum allowed: {1}", subject.Release.Size, minSize);
             }
             if (qualityDefinition.MaxSize == 0)
             {
@@ -97,11 +92,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (subject.Release.Size > maxSize)
                 {
                     _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
-                    return false;
+                    return Decision.Reject("{0} is larger than maximum allowed: {1}", subject.Release.Size, maxSize);
                 }
             }
+
             _logger.Debug("Item: {0}, meets size constraints.", subject);
-            return true;
+            return Decision.Accept();
         }
     }
 }

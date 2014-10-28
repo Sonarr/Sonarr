@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _firstFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _secondFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _secondFile.Quality.Quality = Quality.DVD;
 
             _secondFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             WithFirstFileUpgradable();
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             WithFirstFileUpgradable();
 
             _firstFile.DateAdded = DateTime.Today.AddDays(-30);
-            Subject.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _firstFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today;
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _firstFile.Quality.Quality = Quality.DVD;
 
             _firstFile.DateAdded = DateTime.Today;
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
     }
 }

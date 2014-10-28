@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         [Test]
         public void should_be_true_when_search()
         {
-            Subject.IsSatisfiedBy(new RemoteEpisode(), new SingleEpisodeSearchCriteria()).Should().BeTrue();
+            Subject.IsSatisfiedBy(new RemoteEpisode(), new SingleEpisodeSearchCriteria()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             _profile.GrabDelay = 0;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             
             _profile.GrabDelay = 1;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _profile.GrabDelay = 12;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Setup(s => s.GetPendingRemoteEpisodes(It.IsAny<Int32>()))
                   .Returns(new List<RemoteEpisode>());
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Setup(s => s.GetPendingRemoteEpisodes(It.IsAny<Int32>()))
                   .Returns(new List<RemoteEpisode> { _remoteEpisode.JsonClone() });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -249,7 +249,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Setup(s => s.GetPendingRemoteEpisodes(It.IsAny<Int32>()))
                   .Returns(new List<RemoteEpisode> { pendingRemoteEpisode });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -271,7 +271,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Setup(s => s.GetPendingRemoteEpisodes(It.IsAny<Int32>()))
                   .Returns(new List<RemoteEpisode> { pendingRemoteEpisode1, pendingRemoteEpisode2 });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

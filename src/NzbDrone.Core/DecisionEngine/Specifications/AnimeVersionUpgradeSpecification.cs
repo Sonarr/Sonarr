@@ -18,23 +18,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Version upgrade for a different release group";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var releaseGroup = subject.ParsedEpisodeInfo.ReleaseGroup;
 
             if (subject.Series.SeriesType != SeriesTypes.Anime)
             {
-                return true;
+                return Decision.Accept();
             }
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
@@ -44,24 +36,24 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     if (file.ReleaseGroup.IsNullOrWhiteSpace())
                     {
                         _logger.Debug("Unable to compare release group, existing file's release group is unknown");
-                        return false;
+                        return Decision.Reject("Existing release group is unknown");
                     }
 
                     if (releaseGroup.IsNullOrWhiteSpace())
                     {
                         _logger.Debug("Unable to compare release group, release's release group is unknown");
-                        return false;
+                        return Decision.Reject("Release group is unknown");
                     }
 
                     if (file.ReleaseGroup != releaseGroup)
                     {
                         _logger.Debug("Existing Release group is: {0} - release's release group is: {1}", file.ReleaseGroup, releaseGroup);
-                        return false;
+                        return Decision.Reject("{0} does not match existing release group {1}", releaseGroup, file.ReleaseGroup);
                     }
                 }
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

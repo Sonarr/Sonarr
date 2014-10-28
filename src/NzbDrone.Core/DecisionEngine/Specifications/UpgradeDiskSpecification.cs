@@ -16,17 +16,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Existing file on disk is of equal or higher quality";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
@@ -34,11 +26,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
-                    return false;
+                    return Decision.Reject("Existing file on disk is of equal or higher quality: {0}", file.Quality);
                 }
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }
