@@ -11,5 +11,6 @@ namespace NzbDrone.Core.Update
         public String Url { get; set; }
         public UpdateChanges Changes { get; set; }
         public String Hash { get; set; }
+        public String Branch { get; set; }
     }
 }
