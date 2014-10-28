@@ -212,6 +212,8 @@
     <Compile Include="System\Tasks\TaskModule.cs" />
     <Compile Include="System\Tasks\TaskResource.cs" />
     <Compile Include="System\SystemModule.cs" />
+    <Compile Include="Tags\TagModule.cs" />
+    <Compile Include="Tags\TagResource.cs" />
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
     <Compile Include="Update\UpdateResource.cs" />
