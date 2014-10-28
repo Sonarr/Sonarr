@@ -7,8 +7,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Update;
-
 
 namespace NzbDrone.Core.Configuration
 {
@@ -101,12 +99,6 @@ namespace NzbDrone.Core.Configuration
         {
             get { return GetValue("RecycleBin", String.Empty); }
             set { SetValue("RecycleBin", value); }
-        }
-
-        public string ReleaseRestrictions
-        {
-            get { return GetValue("ReleaseRestrictions", String.Empty).Trim('\r', '\n'); }
-            set { SetValue("ReleaseRestrictions", value.Trim('\r', '\n')); }
         }
 
         public Int32 RssSyncInterval

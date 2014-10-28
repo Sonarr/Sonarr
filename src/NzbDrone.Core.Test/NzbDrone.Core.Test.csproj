@@ -129,7 +129,7 @@
     <Compile Include="DecisionEngineTests\LanguageSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\MonitoredEpisodeSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\NotInQueueSpecificationFixture.cs" />
-    <Compile Include="DecisionEngineTests\NotRestrictedReleaseSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\ReleaseRestrictionsSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\PrioritizeDownloadDecisionFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityAllowedByProfileSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\QualityUpgradeSpecificationFixture.cs" />

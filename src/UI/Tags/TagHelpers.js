@@ -1,20 +1,32 @@
 'use strict';
 define(
     [
+        'underscore',
         'handlebars',
         'Tags/TagCollection'
-    ], function (Handlebars, TagCollection) {
+    ], function (_, Handlebars, TagCollection) {
 
-        Handlebars.registerHelper('tagInput', function () {
+        Handlebars.registerHelper('tagDisplay', function (tags) {
 
-            var unit = 'days';
-            var age = this.age;
+            var tagLabels = _.map(TagCollection.filter(function (tag) {
+                return _.contains(tags, tag.get('id'));
+            }), function (tag){
+                return '<span class="label label-info">{0}</span>'.format(tag.get('label'));
+            });
 
-            if (age < 2) {
-                unit = 'hours';
-                age = parseFloat(this.ageHours).toFixed(1);
+            return new Handlebars.SafeString(tagLabels.join(' '));
+        });
+
+        Handlebars.registerHelper('genericTagDisplay', function (tags, classes) {
+
+            if (!tags) {
+                return new Handlebars.SafeString('');
             }
 
-            return new Handlebars.SafeString('<dt>Age (when grabbed):</dt><dd>{0} {1}</dd>'.format(age, unit));
+            var tagLabels = _.map(tags.split(','), function (tag) {
+                return '<span class="{0}">{1}</span>'.format(classes, tag);
+            });
+
+            return new Handlebars.SafeString(tagLabels.join(' '));
         });
     });

@@ -197,6 +197,8 @@
     <Compile Include="Queue\QueueModule.cs" />
     <Compile Include="Queue\QueueResource.cs" />
     <Compile Include="ResourceChangeMessage.cs" />
+    <Compile Include="Restrictions\RestrictionModule.cs" />
+    <Compile Include="Restrictions\RestrictionResource.cs" />
     <Compile Include="REST\BadRequestException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />
     <Compile Include="REST\RestModule.cs" />

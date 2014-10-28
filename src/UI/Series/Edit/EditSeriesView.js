@@ -24,7 +24,6 @@ define(
                 'click .x-remove': '_removeSeries'
             },
 
-
             initialize: function () {
                 this.model.set('profiles', Profiles);
             },

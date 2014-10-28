@@ -22,6 +22,7 @@ using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Restrictions;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tags;
@@ -92,6 +93,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<RemotePathMapping>().RegisterModel("RemotePathMappings");
             Mapper.Entity<Tag>().RegisterModel("Tags");
+            Mapper.Entity<Restriction>().RegisterModel("Restrictions");
         }
 
         private static void RegisterMappers()

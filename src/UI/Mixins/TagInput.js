@@ -9,12 +9,14 @@ define(
     ], function ($, _, TagCollection, TagModel) {
 
         var originalAdd = $.fn.tagsinput.Constructor.prototype.add;
+        var originalRemove = $.fn.tagsinput.Constructor.prototype.remove;
+        var originalBuild = $.fn.tagsinput.Constructor.prototype.build;
 
         $.fn.tagsinput.Constructor.prototype.add = function (item, dontPushVal) {
             var self = this;
             var tagLimitations = new RegExp('[^-_a-z0-9]', 'i');
 
-            if (typeof item === 'string') {
+            if (typeof item === 'string' && this.options.tag) {
 
                 if (item === null || item === '' || tagLimitations.test(item)) {
                     return;
@@ -42,6 +44,34 @@ define(
             }
         };
 
+        $.fn.tagsinput.Constructor.prototype.remove = function (item, dontPushVal) {
+            if (item === null) {
+                return;
+            }
+
+            originalRemove.call(this, item, dontPushVal);
+        };
+
+        $.fn.tagsinput.Constructor.prototype.build = function (options) {
+            var self = this;
+            var defaults = {
+                confirmKeys : [9, 13, 32, 44, 59] //tab, enter, space, comma, semi-colon
+            };
+
+            options = $.extend({}, defaults, options);
+
+            self.$input.on('keydown', function (event) {
+                if (event.which === 9) {
+                    var e = $.Event('keypress');
+                    e.which = 9;
+                    self.$input.trigger(e);
+                    event.preventDefault();
+                }
+            });
+
+            originalBuild.call(this, options);
+        };
+
         $.fn.tagInput = function (options) {
             var input = this;
             var model = options.model;
@@ -49,10 +79,11 @@ define(
             var tags = getExistingTags(model.get(property));
 
             var tagInput = $(this).tagsinput({
-                freeInput: true,
-                itemValue : 'id',
-                itemText  : 'label',
-                trimValue : true,
+                tag         : true,
+                freeInput   : true,
+                itemValue   : 'id',
+                itemText    : 'label',
+                trimValue   : true,
                 typeaheadjs : {
                     name: 'tags',
                     displayKey: 'label',

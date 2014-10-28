@@ -230,6 +230,7 @@
     <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
     <Compile Include="Datastore\Migration\062_convert_quality_models.cs" />
     <Compile Include="Datastore\Migration\065_make_scene_numbering_nullable.cs" />
+    <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\066_add_tags.cs" />
     <Compile Include="Datastore\Migration\067_add_added_to_series.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
@@ -263,7 +264,7 @@
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\NotRestrictedReleaseSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\ReleaseRestrictionsSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs">
@@ -711,6 +712,9 @@
     <Compile Include="Queue\QueueScheduler.cs" />
     <Compile Include="Queue\QueueService.cs" />
     <Compile Include="Queue\UpdateQueueEvent.cs" />
+    <Compile Include="Restrictions\Restriction.cs" />
+    <Compile Include="Restrictions\RestrictionRepository.cs" />
+    <Compile Include="Restrictions\RestrictionService.cs" />
     <Compile Include="Rest\JsonNetSerializer.cs" />
     <Compile Include="Rest\RestClientFactory.cs" />
     <Compile Include="Rest\RestException.cs" />

@@ -27,5 +27,15 @@ namespace NzbDrone.Common
         {
             return !source.Any();
         }
+
+        public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            return !source.Any(predicate);
+        }
+
+        public static bool NotAll<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            return !source.All(predicate);
+        }
     }
 }
