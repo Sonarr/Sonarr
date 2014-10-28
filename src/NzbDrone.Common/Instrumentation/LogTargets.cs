@@ -23,11 +23,10 @@ namespace NzbDrone.Common.Instrumentation
             }
 
             //Disabling for now - until its fixed or we yank it out
-            //RegisterExceptron();
+            RegisterExceptron();
 
             if (updateApp)
             {
-                RegisterLoggly();
                 RegisterUpdateFile(appFolderInfo);
             }
             else
@@ -127,15 +126,6 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.AddTarget("ExceptronTarget", exceptronTarget);
             LogManager.Configuration.LoggingRules.Add(rule);
         }
-
-        private static void RegisterLoggly()
-        {
-            var logglyTarger = new LogglyTarget();
-
-            var rule = new LoggingRule("*", LogLevel.Trace, logglyTarger);
-
-            LogManager.Configuration.AddTarget("LogglyLogger", logglyTarger);
-            LogManager.Configuration.LoggingRules.Add(rule);
-        }
+       
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using NzbDrone.Api.REST;
 
-namespace NzbDrone.Api.Config
+namespace NzbDrone.Api.RemotePathMappings
 {
     public class RemotePathMappingResource : RestResource
     {

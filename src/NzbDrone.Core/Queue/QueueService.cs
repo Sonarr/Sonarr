@@ -28,32 +28,29 @@ namespace NzbDrone.Core.Queue
             return MapQueue(queueItems);
         }
 
-        private List<Queue> MapQueue(IEnumerable<TrackedDownload> queueItems)
+        private List<Queue> MapQueue(IEnumerable<TrackedDownload> trackedDownloads)
         {
             var queued = new List<Queue>();
 
-            foreach (var queueItem in queueItems)
+            foreach (var trackedDownload in trackedDownloads)
             {
-                foreach (var episode in queueItem.DownloadItem.RemoteEpisode.Episodes)
+                foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
                 {
                     var queue = new Queue
                                 {
-                                    Id = episode.Id ^ (queueItem.DownloadItem.DownloadClientId.GetHashCode().GetHashCode() << 16),
-                                    Series = queueItem.DownloadItem.RemoteEpisode.Series,
+                                    Id = episode.Id ^ (trackedDownload.DownloadItem.DownloadClientId.GetHashCode().GetHashCode() << 16),
+                                    Series = trackedDownload.RemoteEpisode.Series,
                                     Episode = episode,
-                                    Quality = queueItem.DownloadItem.RemoteEpisode.ParsedEpisodeInfo.Quality,
-                                    Title = queueItem.DownloadItem.Title,
-                                    Size = queueItem.DownloadItem.TotalSize,
-                                    Sizeleft = queueItem.DownloadItem.RemainingSize,
-                                    Timeleft = queueItem.DownloadItem.RemainingTime,
-                                    Status = queueItem.DownloadItem.Status.ToString(),
-                                    RemoteEpisode = queueItem.DownloadItem.RemoteEpisode
+                                    Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                                    Title = trackedDownload.DownloadItem.Title,
+                                    Size = trackedDownload.DownloadItem.TotalSize,
+                                    Sizeleft = trackedDownload.DownloadItem.RemainingSize,
+                                    Timeleft = trackedDownload.DownloadItem.RemainingTime,
+                                    Status = trackedDownload.DownloadItem.Status.ToString(),
+                                    RemoteEpisode = trackedDownload.RemoteEpisode,
+                                    TrackedDownloadStatus = trackedDownload.Status.ToString(),
+                                    StatusMessages = trackedDownload.StatusMessages
                                 };
-
-                    if (queueItem.HasError)
-                    {
-                        queue.ErrorMessage = queueItem.StatusMessage;
-                    }
 
                     if (queue.Timeleft.HasValue)
                     {

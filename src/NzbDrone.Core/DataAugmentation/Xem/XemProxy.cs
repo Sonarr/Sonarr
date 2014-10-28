@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DataAugmentation.Xem.Model;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {
@@ -44,10 +45,16 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             _logger.Debug("Fetching Series IDs from");
 
             var request = _xemRequestBuilder.Build("/havemap");
-            var response = _httpClient.Get<XemResult<List<int>>>(request).Resource;
+            var response = _httpClient.Get<XemResult<List<string>>>(request).Resource;
             CheckForFailureResult(response);
 
-            return response.Data.ToList();
+            return response.Data.Select(d =>
+            {
+                int tvdbId = 0;
+                Int32.TryParse(d, out tvdbId);
+
+                return tvdbId;
+            }).Where(t => t > 0).ToList();
         }
 
         public List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id)

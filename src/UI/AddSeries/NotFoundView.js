@@ -6,7 +6,7 @@ define(
     ], function (Marionette) {
 
         return Marionette.CompositeView.extend({
-            template: 'AddSeries/NotFoundTemplate',
+            template: 'AddSeries/NotFoundViewTemplate',
 
             initialize: function (options) {
                 this.options = options;

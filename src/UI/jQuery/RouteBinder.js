@@ -49,9 +49,15 @@ define(
                 }
 
                 if (!href.startsWith('http')) {
-                    var relativeHref = href.replace(StatusModel.get('urlBase'), '');
+                    if (event.ctrlKey) {
+                        window.open(href, '_blank');
+                    }
 
-                    Backbone.history.navigate(relativeHref, { trigger: true });
+                    else {
+                        var relativeHref = href.replace(StatusModel.get('urlBase'), '');
+
+                        Backbone.history.navigate(relativeHref, { trigger: true });
+                    }
                 }
                 else if (href.contains('#')) {
                     //Open in new tab without dereferer (since it doesn't support fragments)

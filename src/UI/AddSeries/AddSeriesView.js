@@ -105,6 +105,7 @@ define(
                 }
 
                 else if (!this.isExisting) {
+                    this.collection.term = '';
                     this.collection.reset();
                     this._clearResults();
                     this.ui.seriesSearch.val('');
@@ -134,6 +135,7 @@ define(
                 if (!this.isClosed) {
 
                     if (this.collection.length === 0) {
+                        this.ui.searchBar.show();
                         this.searchResult.show(new NotFoundView({term: this.collection.term}));
                     }
                     else {

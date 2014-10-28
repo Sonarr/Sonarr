@@ -32,6 +32,11 @@ namespace NzbDrone.Common.Instrumentation
 
             Console.WriteLine("EPIC FAIL: {0}", exception);
             Logger.FatalException("EPIC FAIL: " + exception.Message, exception);
+
+            if (exception.InnerException != null)
+            {
+                AppDomainException(exception.InnerException);
+            }
         }
     }
 }

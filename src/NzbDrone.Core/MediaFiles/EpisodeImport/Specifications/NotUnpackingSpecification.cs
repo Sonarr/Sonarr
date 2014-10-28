@@ -45,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                             return false;
                         }
 
-                        if (_diskProvider.FileGetLastWriteUtc(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
+                        if (_diskProvider.FileGetLastWrite(localEpisode.Path) > DateTime.UtcNow.AddMinutes(-5))
                         {
                             _logger.Debug("{0} appears to be unpacking still", localEpisode.Path);
                             return false;

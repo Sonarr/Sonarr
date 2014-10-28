@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
         void Notify(XbmcSettings settings, string title, string message);
         void Update(XbmcSettings settings, Series series);
         void Clean(XbmcSettings settings);
-        XbmcVersion GetJsonVersion(XbmcSettings settings);
         ValidationFailure Test(XbmcSettings settings);
     }
 
@@ -58,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             provider.Clean(settings);
         }
 
-        public XbmcVersion GetJsonVersion(XbmcSettings settings)
+        private XbmcVersion GetJsonVersion(XbmcSettings settings)
         {
             try
             {

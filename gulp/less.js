@@ -11,7 +11,7 @@ gulp.task('less', function () {
             paths.src.content + 'theme.less',
             paths.src.content + 'overrides.less',
             paths.src.root + 'Series/series.less',
-            paths.src.root + 'History/history.less',
+            paths.src.root + 'Activity/activity.less',
             paths.src.root + 'AddSeries/addSeries.less',
             paths.src.root + 'Calendar/calendar.less',
             paths.src.root + 'Cells/cells.less',

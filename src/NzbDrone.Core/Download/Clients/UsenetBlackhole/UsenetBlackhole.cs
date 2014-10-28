@@ -8,7 +8,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
 using NLog;
@@ -27,10 +26,9 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                                IHttpClient httpClient,
                                IConfigService configService,
                                IDiskProvider diskProvider,
-                               IParsingService parsingService,
                                IRemotePathMappingService remotePathMappingService,
                                Logger logger)
-            : base(configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(configService, diskProvider, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
             _httpClient = httpClient;
@@ -71,7 +69,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTimeUtc(folder).Ticks,
+                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
                     Title = title,
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
@@ -90,9 +88,6 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                     historyItem.RemainingTime = TimeSpan.Zero;
                 }
 
-                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
-                if (historyItem.RemoteEpisode == null) continue;
-
                 yield return historyItem;
             }
 
@@ -103,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWriteUtc(videoFile).Ticks,
+                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),
@@ -120,9 +115,6 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                     historyItem.Status = DownloadItemStatus.Completed;
                     historyItem.RemainingTime = TimeSpan.Zero;
                 }
-
-                historyItem.RemoteEpisode = GetRemoteEpisode(historyItem.Title);
-                if (historyItem.RemoteEpisode == null) continue;
 
                 yield return historyItem;
             }

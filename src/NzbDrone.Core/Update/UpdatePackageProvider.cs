@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Update
     public interface IUpdatePackageProvider
     {
         UpdatePackage GetLatestUpdate(string branch, Version currentVersion);
-        List<UpdatePackage> GetRecentUpdates(string branch, int majorVersion);
+        List<UpdatePackage> GetRecentUpdates(string branch);
     }
 
     public class UpdatePackageProvider : IUpdatePackageProvider
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Update
             return update.UpdatePackage;
         }
 
-        public List<UpdatePackage> GetRecentUpdates(string branch, int majorVersion)
+        public List<UpdatePackage> GetRecentUpdates(string branch)
         {
             var request = _requestBuilder.Build("/update/{branch}/changes");
             request.UriBuilder.SetQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant());

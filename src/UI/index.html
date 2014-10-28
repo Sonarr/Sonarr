@@ -15,7 +15,7 @@
     <link href="/Content/theme.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/cells.css" rel='stylesheet' type='text/css'>
     <link href="/Content/series.css" rel='stylesheet' type='text/css'/>
-    <link href="/Content/history.css" rel='stylesheet' type='text/css'/>
+    <link href="/Content/activity.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/logs.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/settings.css" rel='stylesheet' type='text/css'/>
     <link href="/Content/addSeries.css" rel='stylesheet' type='text/css'/>
@@ -75,10 +75,13 @@
     window.NzbDrone = {
         ApiRoot: 'API_ROOT',
         ApiKey : 'API_KEY',
-        Version: 'APP_VERSION'
+        Version: 'APP_VERSION',
+        Branch : 'APP_BRANCH',
+        Analytics: APP_ANALYTICS
     };
 </script>
 
+<script src="/piwik.js"></script>
 <script src="/polyfills.js"></script>
 <script src="/JsLibraries/handlebars.runtime.js"></script>
 <script data-main="/main" src="/JsLibraries/require.js"></script>

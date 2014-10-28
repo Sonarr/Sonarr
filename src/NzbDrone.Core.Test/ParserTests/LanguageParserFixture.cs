@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Parser;
@@ -42,6 +40,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Trip.To.Italy.S02E01.720p.HDTV.x264-TLA", Language.English)]
         [TestCase("Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv", Language.Norwegian)]
         [TestCase("Extant.S01E01.VOSTFR.HDTV.x264-RiDERS", Language.French)]
+        [TestCase("Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS", Language.Dutch)]
+        [TestCase("Elementary - S02E16 - Kampfhaehne - mkv - by Videomann", Language.German)]
         public void should_parse_language(string postTitle, Language language)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Backup
                                                                         {
                                                                             Path = Path.GetFileName(b),
                                                                             Type = backupType,
-                                                                            Time = _diskProvider.FileGetLastWriteUtc(b)
+                                                                            Time = _diskProvider.FileGetLastWrite(b)
                                                                         }));
                 }
             }
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Backup
 
             foreach (var file in files)
             {
-                var lastWriteTime = _diskProvider.FileGetLastWriteUtc(file);
+                var lastWriteTime = _diskProvider.FileGetLastWrite(file);
 
                 if (lastWriteTime.AddDays(28) < DateTime.UtcNow)
                 {

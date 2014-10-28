@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Rest;
 using RestSharp;
@@ -127,7 +125,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         public void RetryDownload(string id, NzbgetSettings settings)
         {
             var history = GetHistory(settings);
-            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone") != null);
+            var item = history.SingleOrDefault(h => h.Parameters.SingleOrDefault(p => p.Name == "drone" && id == (p.Value as string)) != null);
 
             if (item == null)
             {
@@ -135,7 +133,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 return;
             }
 
-            if (!EditQueue("HistoryReturn", 0, "", item.Id, settings))
+            if (!EditQueue("HistoryRedownload", 0, "", item.Id, settings))
             {
                 _logger.Warn("Failed to return item to queue from history, {0} [{1}]", item.Name, item.Id);
             }
@@ -185,15 +183,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             request.JsonSerializer = new JsonNetSerializer();
             request.RequestFormat = DataFormat.Json;
             request.AddBody(jsonRequest);
-            
+
             return request;
         }
 
         private void CheckForError(IRestResponse response)
         {
-            if (response.ResponseStatus != ResponseStatus.Completed)
+            if (response.ErrorException != null)
             {
-                throw new DownloadClientException("Unable to connect to NzbGet, please check your settings", response.ErrorException);
+                throw new DownloadClientException("Unable to connect to NzbGet. " + response.ErrorException.Message, response.ErrorException);
             }
 
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)

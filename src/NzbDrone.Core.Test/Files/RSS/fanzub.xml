@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anime :: Fanzub</title>
+    <link>http://www.fanzub.com/</link>
+    <description>A Usenet Search Engine for Japanese Media</description>
+    <language>en-us</language>
+    <atom:link href="http://fanzub.com/rss?cat=anime" rel="self" type="application/rss+xml" />
+    <item>
+      <title>[Vivid] Hanayamata - 10 [A33D6606]</title>
+      <link>http://fanzub.com/nzb/296464</link>
+      <description>&lt;i&gt;Age&lt;/i&gt;: 0 days&lt;br /&gt;&lt;i&gt;Size&lt;/i&gt;: 530.48 MiB&lt;br /&gt;&lt;i&gt;Parts&lt;/i&gt;: 100%&lt;br /&gt;&lt;i&gt;Files&lt;/i&gt;: 1 other, 8 par2&lt;br /&gt;&lt;i&gt;Subject&lt;/i&gt;: [9/9] [Vivid] Hanayamata - 10 [A33D6606].vol63+27.par2 (1/28)</description>
+      <category>Anime</category>
+      <pubDate>Sat, 13 Sep 2014 12:56:53 +0000</pubDate>
+      <enclosure url="http://fanzub.com/nzb/296464/Vivid%20Hanayamata%20-%2010.nzb" length="556246858" type="application/x-nzb" />
+      <guid isPermaLink="false">http://fanzub.com/nzb/296464</guid>
+    </item>
+    <item>
+      <title>(Sniper2000) - Pokemon HD - XY 37</title>
+      <link>http://fanzub.com/nzb/296456</link>
+      <description>&lt;i&gt;Age&lt;/i&gt;: 0 days&lt;br /&gt;&lt;i&gt;Size&lt;/i&gt;: 2.79 GiB&lt;br /&gt;&lt;i&gt;Parts&lt;/i&gt;: 100%&lt;br /&gt;&lt;i&gt;Files&lt;/i&gt;: 1 nzb, 1 other, 77 par2, 30 rar&lt;br /&gt;&lt;i&gt;Subject&lt;/i&gt;: (Sniper2000) [108/108] - &quot;XY 37.vol183+176.PAR2&quot;Pokemon HD (1/272)</description>
+      <category>Anime</category>
+      <pubDate>Sat, 13 Sep 2014 12:38:03 +0000</pubDate>
+      <enclosure url="http://fanzub.com/nzb/296456/Sniper2000%20-%20Pokemon%20HD%20-%20XY%2037.nzb" length="2995093986" type="application/x-nzb" />
+      <guid isPermaLink="false">http://fanzub.com/nzb/296456</guid>
+    </item>
+    <item>
+      <title>[HorribleSubs] Kindaichi Case Files R - 23 [480p].mkv</title>
+      <link>http://fanzub.com/nzb/296472</link>
+      <description>&lt;i&gt;Age&lt;/i&gt;: 0 days&lt;br /&gt;&lt;i&gt;Size&lt;/i&gt;: 153.87 MiB&lt;br /&gt;&lt;i&gt;Parts&lt;/i&gt;: 100%&lt;br /&gt;&lt;i&gt;Files&lt;/i&gt;: 7 par2, 6 split&lt;br /&gt;&lt;i&gt;Subject&lt;/i&gt;: [HorribleSubs] Kindaichi Case Files R - 23 [480p] [13/13] - &quot;[HorribleSubs] Kindaichi Case Files R - 23 [480p].mkv.vol31+06.par2&quot; yEnc (1/7)</description>
+      <category>Anime</category>
+      <pubDate>Sat, 13 Sep 2014 11:51:59 +0000</pubDate>
+      <enclosure url="http://fanzub.com/nzb/296472/HorribleSubs%20Kindaichi%20Case%20Files%20R%20-%2023%20480p.nzb" length="161341092" type="application/x-nzb" />
+      <guid isPermaLink="false">http://fanzub.com/nzb/296472</guid>
+    </item>
+  </channel>
+</rss>

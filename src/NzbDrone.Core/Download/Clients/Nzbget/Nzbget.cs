@@ -8,7 +8,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -27,7 +26,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                       IParsingService parsingService,
                       IRemotePathMappingService remotePathMappingService,
                       Logger logger)
-            : base(httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -201,9 +200,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 if (downloadClientItem.Category == Settings.TvCategory)
                 {
-                    downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
-                    if (downloadClientItem.RemoteEpisode == null) continue;
-
                     yield return downloadClientItem;
                 }
             }

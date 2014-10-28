@@ -11,11 +11,9 @@ namespace NzbDrone.Common.Disk
         void InheritFolderPermissions(string filename);
         void SetPermissions(string path, string mask, string user, string group);
         long? GetTotalSize(string path);
-        DateTime FolderGetCreationTimeUtc(string path);
-        DateTime FolderGetLastWriteUtc(string path);
-        DateTime FileGetCreationTimeUtc(string path);
+        DateTime FolderGetCreationTime(string path);
+        DateTime FolderGetLastWrite(string path);
         DateTime FileGetLastWrite(string path);
-        DateTime FileGetLastWriteUtc(string path);
         void EnsureFolder(string path);
         bool FolderExists(string path);
         bool FileExists(string path);
@@ -33,10 +31,8 @@ namespace NzbDrone.Common.Disk
         void DeleteFolder(string path, bool recursive);
         string ReadAllText(string filePath);
         void WriteAllText(string filename, string contents);
-        void FileSetLastWriteTimeUtc(string path, DateTime dateTime);
-        void FolderSetLastWriteTimeUtc(string path, DateTime dateTime);
+        void FolderSetLastWriteTime(string path, DateTime dateTime);
         void FileSetLastWriteTime(string path, DateTime dateTime);
-        void FileSetLastAccessTime(string path, DateTime dateTime);
         bool IsFileLocked(string path);
         string GetPathRoot(string path);
         string GetParentFolder(string path);

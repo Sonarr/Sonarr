@@ -1,90 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentValidation.Results;
+﻿using NLog;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
-    public class Omgwtfnzbs : IndexerBase<OmgwtfnzbsSettings>
+    public class Omgwtfnzbs : HttpIndexerBase<OmgwtfnzbsSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
-        public override IParseFeed Parser
+        public Omgwtfnzbs(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, configService, parsingService, logger)
         {
-            get
-            {
-                return new OmgwtfnzbsParser();
-            }
+
         }
 
-        public override IEnumerable<string> RecentFeed
+        public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            get
-            {
-                yield return String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
-                                  Settings.Username, Settings.ApiKey);
-            }
+            return new OmgwtfnzbsRequestGenerator() { Settings = Settings };
         }
 
-        public override IEnumerable<string> GetEpisodeSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int episodeNumber)
+        public override IParseIndexerResponse GetParser()
         {
-            var searchUrls = new List<string>();
-
-            foreach (var url in RecentFeed)
-            {
-                foreach (var title in titles)
-                {
-                    searchUrls.Add(String.Format("{0}&search={1}+S{2:00}E{3:00}", url, title, seasonNumber, episodeNumber));
-                }
-            }
-
-            return searchUrls;
-        }
-
-        public override IEnumerable<string> GetDailyEpisodeSearchUrls(List<String> titles, int tvRageId, DateTime date)
-        {
-            var searchUrls = new List<String>();
-
-            foreach (var url in RecentFeed)
-            {
-                foreach (var title in titles)
-                {
-                    searchUrls.Add(String.Format("{0}&search={1}+{2:yyyy MM dd}", url, title, date));
-                }
-            }
-
-            return searchUrls;
-        }
-
-        public override IEnumerable<string> GetAnimeEpisodeSearchUrls(List<String> titles, int tvRageId, int absoluteEpisodeNumber)
-        {
-            // TODO: Implement
-            return new List<string>();
-        }
-
-        public override IEnumerable<string> GetSeasonSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int offset)
-        {
-            var searchUrls = new List<String>();
-
-            foreach (var url in RecentFeed)
-            {
-                foreach (var title in titles)
-                {
-                    searchUrls.Add(String.Format("{0}&search={1}+S{2:00}", url, title, seasonNumber));
-                }
-            }
-
-            return searchUrls;
-        }
-
-        public override IEnumerable<string> GetSearchUrls(string query, int offset)
-        {
-            return new List<string>();
-        }
-
-        public override ValidationResult Test()
-        {
-            return new ValidationResult();
+            return new OmgwtfnzbsRssParser();
         }
     }
 }

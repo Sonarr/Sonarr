@@ -1,18 +1,40 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
-    public abstract class IndexerBase<TSettings> : IIndexer where TSettings : IProviderConfig, new()
+    public abstract class IndexerBase<TSettings> : IIndexer
+        where TSettings : IProviderConfig, new()
     {
+        protected readonly IConfigService _configService;
+        protected readonly IParsingService _parsingService;
+        protected readonly Logger _logger;
+
+        public abstract DownloadProtocol Protocol { get; }
+
+        public abstract Boolean SupportsRss { get; }
+        public abstract Boolean SupportsSearch { get; }
+
+        public IndexerBase(IConfigService configService, IParsingService parsingService, Logger logger)
+        {
+            _configService = configService;
+            _parsingService = parsingService;
+            _logger = logger;
+        }
+
         public Type ConfigContract
         {
-            get
-            {
-                return typeof(TSettings);
-            }
+            get { return typeof(TSettings); }
         }
 
         public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
@@ -24,7 +46,7 @@ namespace NzbDrone.Core.Indexers
                 yield return new IndexerDefinition
                 {
                     Name = GetType().Name,
-                    EnableRss = config.Validate().IsValid,
+                    EnableRss = config.Validate().IsValid && SupportsRss,
                     EnableSearch = config.Validate().IsValid && SupportsSearch,
                     Implementation = GetType().Name,
                     Settings = config
@@ -34,14 +56,6 @@ namespace NzbDrone.Core.Indexers
 
         public virtual ProviderDefinition Definition { get; set; }
 
-        public abstract ValidationResult Test();
-        public abstract DownloadProtocol Protocol { get; }
-
-        public virtual Boolean SupportsRss { get { return true; } }
-        public virtual Boolean SupportsSearch { get { return true; } }
-        public virtual Int32 SupportedPageSize { get { return 0; } }
-        public bool SupportsPaging { get { return SupportedPageSize > 0; } }
-
         protected TSettings Settings
         {
             get
@@ -50,14 +64,44 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        public virtual IParseFeed Parser { get; private set; }
-        
-        public abstract IEnumerable<string> RecentFeed { get; }
-        public abstract IEnumerable<string> GetEpisodeSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int episodeNumber);
-        public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(List<String> titles, int tvRageId, DateTime date);
-        public abstract IEnumerable<string> GetAnimeEpisodeSearchUrls(List<String> titles, int tvRageId, int absoluteEpisodeNumber);
-        public abstract IEnumerable<string> GetSeasonSearchUrls(List<String> titles, int tvRageId, int seasonNumber, int offset);
-        public abstract IEnumerable<string> GetSearchUrls(string query, int offset);
+        public abstract IList<ReleaseInfo> FetchRecent();
+        public abstract IList<ReleaseInfo> Fetch(SeasonSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(SingleEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(DailyEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria);
+
+        protected virtual IList<ReleaseInfo> CleanupReleases(IEnumerable<ReleaseInfo> releases)
+        {
+            var result = releases.DistinctBy(v => v.Guid).ToList();
+
+            result.ForEach(c =>
+            {
+                c.Indexer = Definition.Name;
+                c.DownloadProtocol = Protocol;
+            });
+
+            return result;
+        }
+
+        public ValidationResult Test()
+        {
+            var failures = new List<ValidationFailure>();
+
+            try
+            {
+                Test(failures);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Test aborted due to exception", ex);
+                failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
+            }
+
+            return new ValidationResult(failures);
+        }
+
+        protected abstract void Test(List<ValidationFailure> failures);
 
         public override string ToString()
         {

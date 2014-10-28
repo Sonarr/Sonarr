@@ -5,7 +5,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
@@ -34,7 +33,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             var queue = _downloadTrackingService.GetQueuedDownloads()
                             .Where(v => v.State == TrackedDownloadState.Downloading)
-                            .Select(q => q.DownloadItem.RemoteEpisode).ToList();
+                            .Select(q => q.RemoteEpisode).ToList();
 
             if (IsInQueue(subject, queue))
             {

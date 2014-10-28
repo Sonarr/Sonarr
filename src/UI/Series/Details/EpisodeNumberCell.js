@@ -42,7 +42,7 @@ define(
 
                 if (this.model.get('sceneSeasonNumber') > 0 ||
                     this.model.get('sceneEpisodeNumber') > 0 ||
-                   (this.model.has('sceneAbsoluteEpisodeNumber') && this.model.get('sceneAbsoluteEpisodeNumber') > 0) ||
+                    this.model.has('sceneAbsoluteEpisodeNumber') ||
                     alternateTitles.length > 0)
                 {
                     this.templateFunction = Marionette.TemplateCache.get(this.template);

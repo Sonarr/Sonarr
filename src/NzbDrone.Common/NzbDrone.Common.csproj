@@ -41,23 +41,22 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Loggly">
-      <HintPath>..\packages\loggly-csharp.2.3\lib\net35\Loggly.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveService.cs" />
@@ -102,6 +101,23 @@
     <Compile Include="EnvironmentInfo\StartupContext.cs" />
     <Compile Include="Exceptions\NotParentException.cs" />
     <Compile Include="Exceptions\NzbDroneException.cs" />
+    <Compile Include="Exceptron\Configuration\ExceptronConfiguration.cs" />
+    <Compile Include="Exceptron\ExceptionData.cs" />
+    <Compile Include="Exceptron\ExceptionExtentions.cs" />
+    <Compile Include="Exceptron\ExceptionSeverity.cs" />
+    <Compile Include="Exceptron\ExceptronApiException.cs" />
+    <Compile Include="Exceptron\ExceptronClient.cs" />
+    <Compile Include="Exceptron\fastJSON\Getters.cs" />
+    <Compile Include="Exceptron\fastJSON\JSON.cs" />
+    <Compile Include="Exceptron\fastJSON\JsonParser.cs" />
+    <Compile Include="Exceptron\fastJSON\JsonSerializer.cs" />
+    <Compile Include="Exceptron\fastJSON\SafeDictionary.cs" />
+    <Compile Include="Exceptron\IExceptronClient.cs" />
+    <Compile Include="Exceptron\IRestClient.cs" />
+    <Compile Include="Exceptron\Message\ExceptionReport.cs" />
+    <Compile Include="Exceptron\Message\ExceptionResponse.cs" />
+    <Compile Include="Exceptron\Message\Frame.cs" />
+    <Compile Include="Exceptron\RestClient.cs" />
     <Compile Include="Expansive\CircularReferenceException.cs" />
     <Compile Include="Expansive\Expansive.cs" />
     <Compile Include="Expansive\PatternStyle.cs" />
@@ -114,6 +130,7 @@
     <Compile Include="Http\GZipWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Http\HttpAccept.cs" />
     <Compile Include="Http\HttpClient.cs" />
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Http\HttpHeader.cs" />
@@ -132,7 +149,6 @@
     <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
     <Compile Include="Instrumentation\GlobalExceptionHandlers.cs" />
     <Compile Include="Instrumentation\LogEventExtensions.cs" />
-    <Compile Include="Instrumentation\LogglyTarget.cs" />
     <Compile Include="Instrumentation\LogTargets.cs" />
     <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
     <Compile Include="Instrumentation\NzbDroneLogger.cs" />
@@ -173,13 +189,8 @@
     <EmbeddedResource Include="EnsureThat\Resources\ExceptionMessages.resx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Exceptron\fastJSON\license.txt" />
     <Content Include="Expansive\license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Exceptron.Client\Exceptron.Client.csproj">
-      <Project>{B1784698-592E-4132-BDFA-9817409E3A96}</Project>
-      <Name>Exceptron.Client</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

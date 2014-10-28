@@ -3,7 +3,7 @@ define(
     [
         'marionette',
         'backgrid',
-        'History/HistoryCollection',
+        'Activity/History/HistoryCollection',
         'Cells/EventTypeCell',
         'Cells/QualityCell',
         'Cells/RelativeDateCell',

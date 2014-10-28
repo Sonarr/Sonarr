@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NzbDrone.Common;
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Configuration
         bool EnableSsl { get; }
         bool LaunchBrowser { get; }
         bool AuthenticationEnabled { get; }
+        bool AnalyticsEnabled { get; }
         string Username { get; }
         string Password { get; }
         string LogLevel { get; }
@@ -48,6 +50,7 @@ namespace NzbDrone.Core.Configuration
         private readonly ICached<string> _cache;
 
         private readonly string _configFile;
+        private static readonly Regex HiddenCharacterRegex = new Regex("[^a-z0-9]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public ConfigFileProvider(IAppFolderInfo appFolderInfo, ICacheManager cacheManager, IEventAggregator eventAggregator)
         {
@@ -83,6 +86,12 @@ namespace NzbDrone.Core.Configuration
             {
                 if (configValue.Key.Equals("ApiKey", StringComparison.InvariantCultureIgnoreCase))
                 {
+                    continue;
+                }
+
+                if (configValue.Key.Equals("SslCertHash", StringComparison.InvariantCultureIgnoreCase) && configValue.Value.ToString().IsNotNullOrWhiteSpace())
+                {
+                    SetValue(configValue.Key.FirstCharToUpper(), HiddenCharacterRegex.Replace(configValue.Value.ToString(), String.Empty));
                     continue;
                 }
 
@@ -137,6 +146,14 @@ namespace NzbDrone.Core.Configuration
         public bool AuthenticationEnabled
         {
             get { return GetValueBoolean("AuthenticationEnabled", false); }
+        }
+
+        public bool AnalyticsEnabled
+        {
+            get
+            {
+                return GetValueBoolean("AnalyticsEnabled", true, persist: false);
+            }
         }
 
         public string Branch

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Mono.Unix.Native;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Instrumentation;
@@ -24,7 +25,7 @@ namespace NzbDrone.Mono
 
             try
             {
-                var driveInfo = GetDriveInfoLinux(path);
+                var driveInfo = GetDriveInfo(path);
 
                 if (driveInfo == null)
                 {
@@ -34,9 +35,9 @@ namespace NzbDrone.Mono
 
                 return driveInfo.AvailableFreeSpace;
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException ex)
             {
-                Logger.ErrorException("Couldn't get free space for " + path, e);
+                Logger.ErrorException("Couldn't get free space for " + path, ex);
             }
 
             return null;
@@ -53,6 +54,9 @@ namespace NzbDrone.Mono
                 File.SetAccessControl(filename, fs);
             }
             catch (NotImplementedException)
+            {
+            }
+            catch (PlatformNotSupportedException)
             {
             }
         }
@@ -122,7 +126,11 @@ namespace NzbDrone.Mono
 
             try
             {
-                return GetDriveInfoLinux(path).TotalSize;
+                var driveInfo = GetDriveInfo(path);
+
+                if (driveInfo == null) return null;
+
+                return driveInfo.TotalSize;
             }
             catch (InvalidOperationException e)
             {
@@ -132,15 +140,16 @@ namespace NzbDrone.Mono
             return null;
         }
 
-        private DriveInfo GetDriveInfoLinux(string path)
+        private DriveInfo GetDriveInfo(string path)
         {
             var drives = DriveInfo.GetDrives();
 
             return
-                drives.Where(drive =>
-                    drive.IsReady && path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
-                    .OrderByDescending(drive => drive.Name.Length)
-                    .FirstOrDefault();
+                drives.Where(drive => drive.IsReady &&
+                                      drive.Name.IsNotNullOrWhiteSpace() &&
+                                      path.StartsWith(drive.Name, StringComparison.CurrentCultureIgnoreCase))
+                      .OrderByDescending(drive => drive.Name.Length)
+                      .FirstOrDefault();
         }
     }
 }

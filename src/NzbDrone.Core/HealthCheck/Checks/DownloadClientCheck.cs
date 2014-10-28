@@ -15,9 +15,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var downloadClients = _downloadClientProvider.GetDownloadClients();
+            var downloadClients = _downloadClientProvider.GetDownloadClients().ToList();
 
-            if (downloadClients.Count() == 0)
+            if (!downloadClients.Any())
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available");
             }
@@ -29,9 +29,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     downloadClient.GetItems();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client");
+               return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client " + e.Message);
             }
 
             return new HealthCheck(GetType());

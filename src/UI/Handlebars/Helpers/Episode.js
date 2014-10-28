@@ -11,7 +11,7 @@ define(
                 return moment(this.airDate).format('L');
             }
 
-            else if (this.series.seriesType === 'anime' && this.absoluteEpisodeNumber > 0) {
+            else if (this.series.seriesType === 'anime' && this.absoluteEpisodeNumber !== undefined) {
                 return '{0}x{1} ({2})'.format(this.seasonNumber, FormatHelpers.pad(this.episodeNumber, 2), FormatHelpers.pad(this.absoluteEpisodeNumber, 2));
             }
 
@@ -24,7 +24,7 @@ define(
         Handlebars.registerHelper('StatusLevel', function () {
 
             var hasFile = this.hasFile;
-            var downloading = require('History/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
+            var downloading = require('Activity/Queue/QueueCollection').findEpisode(this.id) || this.downloading;
             var currentTime = moment();
             var start = moment(this.airDateUtc);
             var end = moment(this.end);

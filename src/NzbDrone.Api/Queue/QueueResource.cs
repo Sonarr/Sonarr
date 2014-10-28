@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Episodes;
@@ -17,6 +19,7 @@ namespace NzbDrone.Api.Queue
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public String Status { get; set; }
-        public String ErrorMessage { get; set; }
+        public String TrackedDownloadStatus { get; set; }
+        public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
     }
 }

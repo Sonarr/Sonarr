@@ -8,7 +8,7 @@ define(
         'moment',
         'Calendar/Collection',
         'Shared/UiSettingsModel',
-        'History/Queue/QueueCollection',
+        'Activity/Queue/QueueCollection',
         'Config',
         'Mixins/backbone.signalr.mixin',
         'fullcalendar',

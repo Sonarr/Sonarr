@@ -29,17 +29,17 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             foreach (var s in args)
             {
-                var flag = s.Trim(' ', '/', '-').ToLower();
+                var flag = s.Trim(' ', '/', '-');
 
                 var argParts = flag.Split('=');
 
                 if (argParts.Length == 2)
                 {
-                    Args.Add(argParts[0].Trim(), argParts[1].Trim(' ', '"'));
+                    Args.Add(argParts[0].Trim().ToLower(), argParts[1].Trim(' ', '"'));
                 }
                 else
                 {
-                    Flags.Add(flag);
+                    Flags.Add(flag.ToLower());
                 }
             }
         }

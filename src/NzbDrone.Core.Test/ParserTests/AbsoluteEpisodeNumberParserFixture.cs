@@ -66,6 +66,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Commie] Nobunaga the Fool - 23 [5396CA24].mkv", "Nobunaga the Fool", 23, 0, 0)]
         [TestCase("[FFF] Seikoku no Dragonar - 01 [1FB538B5].mkv", "Seikoku no Dragonar", 1, 0, 0)]
         [TestCase("[Hatsuyuki]Fate_Zero-01[1280x720][122E6EF8]", "Fate/Zero", 1, 0, 0)]
+        [TestCase("[CBM]_Monster_-_11_-_511_Kinderheim_[6C70C4E4].mkv", "Monster", 11, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -90,6 +91,12 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
             result.FullSeason.Should().BeFalse();
             result.Special.Should().BeTrue();
+        }
+
+        [TestCase("[ANBU-AonE]_Naruto_26-27_[F224EF26].avi", "Naruto", new[] { 26, 27 })]
+        public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
+        {
+            
         }
     }
 }

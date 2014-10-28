@@ -15,7 +15,6 @@ namespace NzbDrone.Core.DecisionEngine
     {
         List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports);
         List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase);
-        DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
@@ -109,7 +108,7 @@ namespace NzbDrone.Core.DecisionEngine
             }
         }
 
-        public DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null)
+        private DownloadDecision GetDecisionForReport(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria = null)
         {
             var reasons = _specifications.Select(c => EvaluateSpec(c, remoteEpisode, searchCriteria))
                                          .Where(c => c != null);

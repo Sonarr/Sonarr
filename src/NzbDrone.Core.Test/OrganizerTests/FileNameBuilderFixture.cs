@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -529,10 +530,10 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
-        public void should_use_standard_naming_when_anime_episode_has_absolute_number_of_zero()
+        public void should_use_standard_naming_when_anime_episode_has_no_absolute_number()
         {
             _series.SeriesType = SeriesTypes.Anime;
-            _episode1.AbsoluteEpisodeNumber = 0;
+            _episode1.AbsoluteEpisodeNumber = null;
 
             _namingConfig.StandardEpisodeFormat = "{Series Title} - {season:0}x{episode:00} - {Episode Title}";
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
@@ -614,6 +615,47 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("Venture.Bros.15x06");
+        }
+
+        [Test]
+        public void should_use_empty_string_instead_of_null_when_scene_name_is_not_available()
+        {
+            _namingConfig.RenameEpisodes = true;
+            _namingConfig.StandardEpisodeFormat = "{Original Title}";
+
+            _episodeFile.SceneName = null;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(String.Empty);
+        }
+
+        [Test]
+        public void should_get_proper_filename_when_multi_episode_is_duplicated_and_bracket_follows_pattern()
+        {
+            _namingConfig.StandardEpisodeFormat =
+                "{Series Title} - S{season:00}E{episode:00} - ({Quality Title}, {MediaInfo Full}, {Release Group}) - {Episode Title}";
+            _namingConfig.MultiEpisodeStyle = (int) MultiEpisodeStyle.Duplicate;
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 - S15E07 - (HDTV-720p, , DRONE) - City Sushi");
+        }
+
+        [Test]
+        public void should_allow_period_between_season_and_episode()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}.E{episode:00}.{Episode.Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South.Park.S15.E06.City.Sushi");
+        }
+
+        [Test]
+        public void should_allow_space_between_season_and_episode()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00} E{episode:00} - {Episode Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15 E06 - City Sushi");
         }
     }
 }

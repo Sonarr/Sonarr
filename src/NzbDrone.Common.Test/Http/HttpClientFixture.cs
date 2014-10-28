@@ -50,13 +50,14 @@ namespace NzbDrone.Common.Test.Http
         [TestCase(HttpStatusCode.InternalServerError)]
         [TestCase(HttpStatusCode.ServiceUnavailable)]
         [TestCase(HttpStatusCode.BadGateway)]
-        public void should_throw_on_unsuccessful_status_codes(HttpStatusCode statusCode)
+        [TestCase(429)]
+        public void should_throw_on_unsuccessful_status_codes(int statusCode)
         {
-            var request = new HttpRequest("http://eu.httpbin.org/status/" + (int)statusCode);
+            var request = new HttpRequest("http://eu.httpbin.org/status/" + statusCode);
 
             var exception = Assert.Throws<HttpException>(() => Subject.Get<HttpBinResource>(request));
 
-            exception.Response.StatusCode.Should().Be(statusCode);
+            ((int)exception.Response.StatusCode).Should().Be(statusCode);
 
             ExceptionVerification.IgnoreWarns();
         }

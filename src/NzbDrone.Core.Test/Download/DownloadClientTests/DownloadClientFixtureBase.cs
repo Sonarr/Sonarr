@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using FluentAssertions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Parser;
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
                 .Returns(30);
 
             Mocker.GetMock<IParsingService>()
-                .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), null))
+                .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), (SearchCriteriaBase)null))
                 .Returns(() => CreateRemoteEpisode());
 
             Mocker.GetMock<IHttpClient>()
@@ -64,11 +65,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             downloadClientItem.DownloadClient.Should().Be(Subject.Definition.Name);
             downloadClientItem.DownloadClientId.Should().NotBeNullOrEmpty();
-
             downloadClientItem.Title.Should().NotBeNullOrEmpty();
-
-            downloadClientItem.RemoteEpisode.Should().NotBeNull();
-
         }
 
         protected void VerifyQueued(DownloadClientItem downloadClientItem)

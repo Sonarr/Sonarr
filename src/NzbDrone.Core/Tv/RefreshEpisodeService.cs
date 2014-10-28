@@ -183,10 +183,10 @@ namespace NzbDrone.Core.Tv
                 episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
             }
 
-            //Return all episodes with abs 0, but distinct by abs for ones greater than 0
-            return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber > 0)
-                                .DistinctBy(e => e.AbsoluteEpisodeNumber)
-                                .Concat(traktEpisodes.Where(e => e.AbsoluteEpisodeNumber == 0))
+            //Return all episodes with no abs number, but distinct for those with abs number
+            return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
+                                .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)
+                                .Concat(traktEpisodes.Where(e => !e.AbsoluteEpisodeNumber.HasValue))
                                 .ToList();
         }
 
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Tv
         {
             if (series.SeriesType == SeriesTypes.Anime)
             {
-                if (episode.AbsoluteEpisodeNumber > 0)
+                if (episode.AbsoluteEpisodeNumber.HasValue)
                 {
                     var matchingEpisode = existingEpisodes.FirstOrDefault(e => e.AbsoluteEpisodeNumber == episode.AbsoluteEpisodeNumber);
 
@@ -209,10 +209,10 @@ namespace NzbDrone.Core.Tv
         {
             if (series.SeriesType == SeriesTypes.Anime)
             {
-                var withAbs = episodes.Where(e => e.AbsoluteEpisodeNumber > 0)
+                var withAbs = episodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
                                       .OrderBy(e => e.AbsoluteEpisodeNumber);
 
-                var withoutAbs = episodes.Where(e => e.AbsoluteEpisodeNumber == 0)
+                var withoutAbs = episodes.Where(e => !e.AbsoluteEpisodeNumber.HasValue)
                                          .OrderBy(e => e.SeasonNumber)
                                          .ThenBy(e => e.EpisodeNumber);
 

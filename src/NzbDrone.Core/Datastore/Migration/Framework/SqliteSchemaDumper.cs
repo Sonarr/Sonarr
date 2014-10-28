@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using FluentMigrator.Builders.Execute;
 using FluentMigrator.Model;
 using FluentMigrator.Runner;
 using System;
 using FluentMigrator.Runner.Processors.SQLite;
-using System.Text;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {

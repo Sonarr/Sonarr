@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
@@ -39,7 +40,11 @@ namespace NzbDrone.Core.MetadataSource.Tvdb
             var episode = new Episode();
             episode.SeasonNumber = item.TryGetValue("SeasonNumber", 0);
             episode.EpisodeNumber = item.TryGetValue("EpisodeNumber", 0);
-            episode.AbsoluteEpisodeNumber = item.TryGetValue("absolute_number", 0);
+
+            if (item.TryGetValue("absolute_number").IsNotNullOrWhiteSpace())
+            {
+                episode.AbsoluteEpisodeNumber = item.TryGetValue("absolute_number", 0);
+            }
 
             return episode;
         }

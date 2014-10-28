@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentValidation.Results;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -15,7 +18,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.IndexerTests
 {
     [TestFixture]
-    public class SeasonSearchFixture : TestBase<FetchFeedService>
+    public class SeasonSearchFixture : TestBase<TestIndexer>
     {
         private Series _series;
 
@@ -25,67 +28,68 @@ namespace NzbDrone.Core.Test.IndexerTests
             _series = Builder<Series>.CreateNew().Build();
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Get(It.IsAny<HttpRequest>()))
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "<xml></xml>"));
         }
 
-        private IndexerBase<TestIndexerSettings> WithIndexer(bool paging, int resultCount)
+        private void WithIndexer(bool paging, int resultCount)
         {
+            var definition = new IndexerDefinition();
+            definition.Name = "Test";
+            Subject.Definition = definition;
+
+            Subject._supportedPageSize = paging ? 100 : 0;
+
+            var requestGenerator = Mocker.GetMock<IIndexerRequestGenerator>();
+            Subject._requestGenerator = requestGenerator.Object;
+            
+            var requests = Builder<IndexerRequest>.CreateListOfSize(paging ? 100 : 1)
+                .All()
+                .WithConstructor(() => new IndexerRequest("http://my.feed.local/", HttpAccept.Rss))
+                .With(v => v.HttpRequest.Method = HttpMethod.GET)
+                .Build();
+
+            requestGenerator.Setup(s => s.GetSearchRequests(It.IsAny<SeasonSearchCriteria>()))
+                .Returns(new List<IEnumerable<IndexerRequest>> { requests });
+
+            var parser = Mocker.GetMock<IParseIndexerResponse>();
+            Subject._parser = parser.Object;
+
             var results = Builder<ReleaseInfo>.CreateListOfSize(resultCount)
                 .Build();
 
-            var indexer = Mocker.GetMock<IndexerBase<TestIndexerSettings>>();
-
-            indexer.Setup(s => s.Parser.Process(It.IsAny<String>(), It.IsAny<String>()))
+            parser.Setup(s => s.ParseResponse(It.IsAny<IndexerResponse>()))
                    .Returns(results);
-
-            indexer.Setup(s => s.GetSeasonSearchUrls(It.IsAny<List<String>>(), It.IsAny<Int32>(), It.IsAny<Int32>(), It.IsAny<Int32>()))
-                .Returns(new List<string> { "http://www.nzbdrone.com" });
-
-            indexer.SetupGet(s => s.SupportedPageSize).Returns(paging ? 100 : 0);
-
-            var definition = new IndexerDefinition();
-            definition.Name = "Test";
-
-            indexer.SetupGet(s => s.Definition)
-                .Returns(definition);
-
-            return indexer.Object;
         }
 
         [Test]
         public void should_not_use_offset_if_result_count_is_less_than_90()
         {
-            var indexer = WithIndexer(true, 25);
-            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
+            WithIndexer(true, 25);
 
-            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Once());
+            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
+
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }
 
         [Test]
         public void should_not_use_offset_for_sites_that_do_not_support_it()
         {
-            var indexer = WithIndexer(false, 125);
-            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
+            WithIndexer(false, 125);
 
-            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Once());
+            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
+
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }
 
         [Test]
         public void should_not_use_offset_if_its_already_tried_10_times()
         {
-            var indexer = WithIndexer(true, 100);
-            Subject.Fetch(indexer, new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
+            WithIndexer(true, 100);
 
-            Mocker.GetMock<IHttpClient>().Verify(v => v.Get(It.IsAny<HttpRequest>()), Times.Exactly(10));
-        }
-    }
+            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
 
-    public class TestIndexerSettings : IProviderConfig
-    {
-        public ValidationResult Validate()
-        {
-            throw new NotImplementedException();
+            Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Exactly(10));
         }
     }
 }

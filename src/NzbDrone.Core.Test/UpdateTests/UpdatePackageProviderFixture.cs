@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             const string branch = "master";
             UseRealHttp();
-            var recent = Subject.GetRecentUpdates(branch, 2);
+            var recent = Subject.GetRecentUpdates(branch);
 
             recent.Should().NotBeEmpty();
             recent.Should().OnlyContain(c => c.Hash.IsNotNullOrWhiteSpace());

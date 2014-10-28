@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_find_episode_by_scene_numbering()
         {
-            Subject.FindEpisodesBySceneNumbering(_episode1.SeriesId, _episode1.SceneSeasonNumber, _episode1.SceneEpisodeNumber)
+            Subject.FindEpisodesBySceneNumbering(_episode1.SeriesId, _episode1.SceneSeasonNumber.Value, _episode1.SceneEpisodeNumber.Value)
                    .First()
                    .Id
                    .Should()
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         {
             _episode2 = Db.Insert(_episode2);
 
-            Subject.FindEpisodesBySceneNumbering(_episode1.SeriesId, _episode1.SceneSeasonNumber, _episode1.SceneEpisodeNumber)
+            Subject.FindEpisodesBySceneNumbering(_episode1.SeriesId, _episode1.SceneSeasonNumber.Value, _episode1.SceneEpisodeNumber.Value)
                    .Should()
                    .HaveCount(2);
         }

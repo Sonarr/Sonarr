@@ -4,7 +4,7 @@ define(
         'Shared/NzbDroneController',
         'AppLayout',
         'marionette',
-        'History/HistoryLayout',
+        'Activity/ActivityLayout',
         'Settings/SettingsLayout',
         'AddSeries/AddSeriesLayout',
         'Wanted/WantedLayout',
@@ -16,7 +16,7 @@ define(
     ], function (NzbDroneController,
                  AppLayout,
                  Marionette,
-                 HistoryLayout,
+                 ActivityLayout,
                  SettingsLayout,
                  AddSeriesLayout,
                  WantedLayout,
@@ -48,10 +48,10 @@ define(
                 this.showMainRegion(new WantedLayout({ action: action }));
             },
 
-            history: function (action) {
-                this.setTitle('History');
+            activity: function (action) {
+                this.setTitle('Activity');
 
-                this.showMainRegion(new HistoryLayout({ action: action }));
+                this.showMainRegion(new ActivityLayout({ action: action }));
             },
 
             rss: function () {
@@ -73,7 +73,5 @@ define(
                 this.setTitle('Series Editor');
                 this.showMainRegion(new SeriesEditorLayout());
             }
-
         });
     });
-

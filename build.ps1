@@ -68,10 +68,16 @@ Function CleanFolder($path, $keepConfigFiles)
 
     Write-Host Removing .less files
     get-childitem $path -File -Filter *.less -Recurse | foreach ($_) {remove-item $_.fullname}
+
+    Write-Host Removing vshost files
+    get-childitem $path -File -Filter *.vshost.exe -Recurse | foreach ($_) {remove-item $_.fullname}
  
-    Write-Host Removing NuGet
-    Remove-Item -Recurse -Force "$path\NuGet"
-  
+    if(Test-Path $$path\NuGet)
+    {
+        Write-Host Removing NuGet
+        Remove-Item -Recurse -Force "$path\NuGet"
+    }
+    
     Write-Host Removing Empty folders
     while (Get-ChildItem $path -recurse | where {!@(Get-ChildItem -force $_.fullname)} | Test-Path) 
     {
@@ -121,8 +127,6 @@ Function PackageMono()
 
         Rename-Item $_.fullname $newName
     }
-
-    Remove-Item "$outputFolderMono\NzbDrone.Console.vshost.exe"
 
     Write-Host Adding NzbDrone.Mono to UpdatePackage
     Copy-Item $outputFolderMono\* $updateFolderMono -Filter NzbDrone.Mono.*
@@ -176,8 +180,13 @@ Function PackageTests()
 
     Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force
-
     Copy-Item .\*.sh              -Destination $testPackageFolder -Force
+    
+    Write-Host Creating MDBs for tests
+    get-childitem $testPackageFolder -File -Include @("*.exe", "*.dll") -Exclude @("MediaInfo.dll", "sqlite3.dll") -Recurse | foreach ($_) {
+        Write-Host "Creating .mdb for $_"
+        & "tools\pdb2mdb\pdb2mdb.exe" $_.fullname
+    }    
 
     get-childitem $testPackageFolder -File -Filter *log.config | foreach ($_) {remove-item $_.fullname}
 
@@ -189,7 +198,7 @@ Function PackageTests()
     Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }
 
-Function RunGrunt()
+Function RunGulp()
 {
    Write-Host "##teamcity[progressStart 'Running Gulp']"
    $gulpPath = '.\node_modules\gulp\bin\gulp'
@@ -223,7 +232,7 @@ Function CleanupWindowsPackage()
 }
 
 Build
-RunGrunt
+RunGulp
 PackageMono
 PackageOsx
 PackageTests

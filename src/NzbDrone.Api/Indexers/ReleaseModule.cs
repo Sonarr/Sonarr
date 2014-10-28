@@ -14,7 +14,7 @@ using System.Linq;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Cache;
-using SystemNetHttpStatusCode = System.Net.HttpStatusCode;
+using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -69,7 +69,7 @@ namespace NzbDrone.Api.Indexers
             catch (ReleaseDownloadException ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                throw new NzbDroneClientException(SystemNetHttpStatusCode.Conflict, "Getting release from indexer failed");
+                throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
             }
 
             return release.AsResponse();

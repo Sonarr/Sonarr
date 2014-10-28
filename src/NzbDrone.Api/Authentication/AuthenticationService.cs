@@ -11,7 +11,6 @@ namespace NzbDrone.Api.Authentication
 {
     public interface IAuthenticationService : IUserValidator
     {
-        bool Enabled { get; }
         bool IsAuthenticated(NancyContext context);
     }
 
@@ -43,7 +42,7 @@ namespace NzbDrone.Api.Authentication
             return null;
         }
 
-        public bool Enabled
+        private bool Enabled
         {
             get
             {

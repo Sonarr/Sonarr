@@ -9,7 +9,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -28,7 +27,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                        IParsingService parsingService,
                        IRemotePathMappingService remotePathMappingService,
                        Logger logger)
-            : base(httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -59,7 +58,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Warn("Couldn't get download queue. {0}", ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -138,7 +137,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (sabHistoryItem.Status == SabnzbdDownloadStatus.Failed)
                 {
-                    if (sabHistoryItem.FailMessage.IsNotNullOrWhiteSpace() && 
+                    if (sabHistoryItem.FailMessage.IsNotNullOrWhiteSpace() &&
                         sabHistoryItem.FailMessage.Equals("Unpacking failed, write error or disk is full?", StringComparison.InvariantCultureIgnoreCase))
                     {
                         historyItem.Status = DownloadItemStatus.Warning;
@@ -188,9 +187,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 if (downloadClientItem.Category == Settings.TvCategory)
                 {
-                    downloadClientItem.RemoteEpisode = GetRemoteEpisode(downloadClientItem.Title);
-                    if (downloadClientItem.RemoteEpisode == null) continue;
-
                     yield return downloadClientItem;
                 }
             }
@@ -211,27 +207,44 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public override String RetryDownload(String id)
         {
             // Sabnzbd changed the nzo_id for retried downloads without reporting it back to us. We need to try to determine the new ID.
+            // Check both the queue and history because sometimes SAB keeps item in history to retry post processing (depends on failure reason)
 
-            var history = GetHistory().Where(v => v.DownloadClientId == id).ToList();
+            var currentHistory = GetHistory().ToList();
+            var currentHistoryItems = currentHistory.Where(v => v.DownloadClientId == id).ToList();
 
-            _proxy.RetryDownload(id, Settings);
-
-            if (history.Count() != 1)
+            if (currentHistoryItems.Count != 1)
             {
                 _logger.Warn("History item missing. Couldn't get the new nzoid.");
                 return id;
             }
 
+            var currentHistoryItem = currentHistoryItems.First();
+            var otherItemsWithSameTitle = currentHistory.Where(h => h.Title == currentHistoryItem.Title &&
+                                                               h.DownloadClientId != currentHistoryItem.DownloadClientId).ToList();
+
+            _proxy.RetryDownload(id, Settings);
+
             for (int i = 0; i < 3; i++)
             {
-                var queue = GetQueue().Where(v => v.Category == history.First().Category && v.Title == history.First().Title).ToList();
+                var queue = GetQueue().Where(v => v.Category == currentHistoryItem.Category &&
+                                                  v.Title == currentHistoryItem.Title).ToList();
 
-                if (queue.Count() == 1)
+                var history = GetHistory().Where(v => v.Category == currentHistoryItem.Category &&
+                                                      v.Title == currentHistoryItem.Title &&
+                                                      !otherItemsWithSameTitle.Select(h => h.DownloadClientId)
+                                                                             .Contains(v.DownloadClientId)).ToList();
+
+                if (queue.Count == 1)
                 {
                     return queue.First().DownloadClientId;
                 }
 
-                if (queue.Count() > 2)
+                if (history.Count == 1)
+                {
+                    return history.First().DownloadClientId;
+                }
+
+                if (queue.Count > 1 || history.Count > 1)
                 {
                     _logger.Warn("Multiple items with the correct title. Couldn't get the new nzoid.");
                     return id;

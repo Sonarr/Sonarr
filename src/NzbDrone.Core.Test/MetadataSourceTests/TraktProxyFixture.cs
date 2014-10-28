@@ -103,8 +103,8 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         {
             episodes.Should().NotBeEmpty();
 
-            episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"))
-                .Max(e => e.Count()).Should().Be(1);
+            var episodeGroup=  episodes.GroupBy(e => e.SeasonNumber.ToString("000") + e.EpisodeNumber.ToString("000"));
+            episodeGroup.Should().OnlyContain(c=>c.Count() == 1);
 
             episodes.Should().Contain(c => c.SeasonNumber > 0);
             episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));

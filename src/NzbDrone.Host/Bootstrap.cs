@@ -83,7 +83,7 @@ namespace NzbDrone.Host
             _container.Resolve<IWaitForExit>().Spin();
         }
 
-        private static void EnsureSingleInstance(bool isService, StartupContext startupContext)
+        private static void EnsureSingleInstance(bool isService, IStartupContext startupContext)
         {
             var instancePolicy = _container.Resolve<ISingleInstancePolicy>();
 
@@ -101,7 +101,7 @@ namespace NzbDrone.Host
             }
         }
 
-        private static ApplicationModes GetApplicationMode(StartupContext startupContext)
+        private static ApplicationModes GetApplicationMode(IStartupContext startupContext)
         {
             if (startupContext.Flags.Contains(StartupContext.HELP))
             {

@@ -34,12 +34,12 @@ namespace NzbDrone.Automation.Test
         }
 
         [Test]
-        public void history_page()
+        public void activity_page()
         {
-            page.HistoryNavIcon.Click();
+            page.ActivityNavIcon.Click();
             page.WaitForNoSpinner();
 
-            page.FindByClass("iv-history-historylayout").Should().NotBeNull();
+            page.FindByClass("iv-activity-activitylayout").Should().NotBeNull();
         }
 
         [Test]
