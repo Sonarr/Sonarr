@@ -19,11 +19,11 @@ define(
 
             setTitle: function (title) {
                 title = title.toLocaleLowerCase();
-                if (title === 'nzbdrone') {
-                    document.title = 'nzbdrone';
+                if (title === 'sonarr') {
+                    document.title = 'sonarr';
                 }
                 else {
-                    document.title = title + ' - nzbdrone';
+                    document.title = title + ' - sonarr';
                 }
 
                 if(window.NzbDrone.Analytics && window.Piwik){

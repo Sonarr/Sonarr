@@ -44,7 +44,7 @@ define(
                     }
 
                     messenger.show({
-                        message   : 'NzbDrone has been updated',
+                        message   : 'Sonarr has been updated',
                         hideAfter : 0,
                         id        : 'droneUpdated'
                     });
