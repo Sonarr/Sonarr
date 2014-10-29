@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         public void should_get_master_if_branch_doesnt_exit()
         {
             UseRealHttp();
-            Subject.GetLatestUpdate("master2", new Version(2, 0)).Should().NotBeNull();
+            Subject.GetLatestUpdate("invalid_branch", new Version(2, 0)).Should().NotBeNull();
         }
 
 

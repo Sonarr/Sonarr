@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Update
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("couldn't revert back to master.", e);
+                    _logger.ErrorException("Couldn't revert back to master.", e);
                 }
 
             }
