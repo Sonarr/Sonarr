@@ -31,6 +31,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
     public class DelugeProxy : IDelugeProxy
     {
+        private static readonly String[] requiredProperties = new String[] { "hash", "name", "state", "progress", "eta", "message", "is_finished", "save_path", "total_size", "total_done", "time_added", "active_time", "ratio", "is_auto_managed", "stop_at_ratio", "remove_at_ratio", "stop_ratio" };
+
         private readonly Logger _logger;
 
         private string _authPassword;
@@ -61,9 +63,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var filter = new Dictionary<String, Object>();
 
-            var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
+            // TODO: get_torrents_status returns the files as well, which starts to cause deluge timeouts when you get enough season packs.
+            //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
+            var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", requiredProperties, filter);
 
-            return response.Result.Values.ToArray();
+            return response.Result.Torrents.Values.ToArray();
         }
 
         public DelugeTorrent[] GetTorrentsByLabel(String label, DelugeSettings settings)
@@ -71,9 +75,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             var filter = new Dictionary<String, Object>();
             filter.Add("label", label);
 
-            var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
 
-            return response.Result.Values.ToArray();
+            //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
+            var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", requiredProperties, filter);
+
+            return response.Result.Torrents.Values.ToArray();
         }
 
         public String AddTorrentFromMagnet(String magnetLink, DelugeSettings settings)
