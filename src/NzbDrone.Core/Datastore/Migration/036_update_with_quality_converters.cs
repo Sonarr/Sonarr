@@ -83,14 +83,18 @@ namespace NzbDrone.Core.Datastore.Migration
                     {
                         var qualityJson = qualityModelReader.GetString(0);
 
-                        QualityModel036 quality;
+                        SourceQualityModel036 sourceQuality;
 
-                        if (!Json.TryDeserialize<QualityModel036>(qualityJson, out quality))
+                        if (!Json.TryDeserialize<SourceQualityModel036>(qualityJson, out sourceQuality))
                         {
                             continue;
                         }
 
-                        var qualityNewJson = qualityModelConverter.ToDB(quality);
+                        var qualityNewJson = qualityModelConverter.ToDB(new DestinationQualityModel036
+                                                                        {
+                                                                            Quality = sourceQuality.Quality.Id,
+                                                                            Proper = sourceQuality.Proper
+                                                                        });
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
@@ -106,10 +110,21 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
 
-        private class QualityModel036
+        private class DestinationQualityModel036
         {
             public Int32 Quality { get; set; }
             public Boolean Proper { get; set; }
+        }
+
+        private class SourceQualityModel036
+        {
+            public SourceQuality036 Quality { get; set; }
+            public Boolean Proper { get; set; }
+        }
+
+        private class SourceQuality036
+        {
+            public Int32 Id { get; set; }
         }
     }
 }
