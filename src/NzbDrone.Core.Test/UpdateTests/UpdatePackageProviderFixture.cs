@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common;
@@ -42,8 +43,8 @@ namespace NzbDrone.Core.Test.UpdateTests
             recent.Should().OnlyContain(c => c.Hash.IsNotNullOrWhiteSpace());
             recent.Should().OnlyContain(c => c.FileName.Contains("Drone.master.2"));
             recent.Should().OnlyContain(c => c.ReleaseDate.Year == 2014);
-            recent.Should().OnlyContain(c => c.Changes.New != null);
-            recent.Should().OnlyContain(c => c.Changes.Fixed != null);
+            recent.Where(c => c.Changes != null).Should().OnlyContain(c => c.Changes.New != null);
+            recent.Where(c => c.Changes != null).Should().OnlyContain(c => c.Changes.Fixed != null);
             recent.Should().OnlyContain(c => c.Branch == branch);
         }
     }
