@@ -14,8 +14,9 @@ namespace NzbDrone.Api.Update
         public DateTime ReleaseDate { get; set; }
         public String FileName { get; set; }
         public String Url { get; set; }
-        public Boolean IsUpgrade { get; set; }
         public Boolean Installed { get; set; }
+        public Boolean Installable { get; set; }
+        public Boolean Latest { get; set; }
         public UpdateChanges Changes { get; set; }
         public String Hash { get; set; }
     }
