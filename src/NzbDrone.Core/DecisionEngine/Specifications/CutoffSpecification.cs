@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     _logger.Debug("Cutoff already met, rejecting.");
-                    return Decision.Reject("Existing file meets cutoff: {0}", subject.Series.Profile);
+                    return Decision.Reject("Existing file meets cutoff: {0}", subject.Series.Profile.Value.Cutoff);
                 }
             }
 
