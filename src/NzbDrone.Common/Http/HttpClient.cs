@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Threading;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -75,7 +76,7 @@ namespace NzbDrone.Common.Http
 
             try
             {
-                httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
+                httpWebResponse = TryGetResponse(webRequest, 10);
             }
             catch (WebException e)
             {
@@ -116,6 +117,39 @@ namespace NzbDrone.Common.Http
             }
 
             return response;
+        }
+
+        private HttpWebResponse TryGetResponse(HttpWebRequest webRequest, int maxRetries)
+        {
+            //Add 1 try to at least request once
+            var retryCount = 1;
+            HttpStatusCode lastError = HttpStatusCode.Unused;
+            for (int i = 0; i < retryCount; i++)
+            {
+                try
+                {
+                    var res = (HttpWebResponse)webRequest.GetResponse();
+                    if (i > 0) _logger.Info("Retry count of {1} on webRequest : {0}", webRequest.RequestUri, i);
+                    return res;
+                }
+                catch (WebException e)
+                {
+                    lastError = ((HttpWebResponse)e.Response).StatusCode;
+                    if (lastError == HttpStatusCode.ServiceUnavailable)
+                    {
+                        Thread.Sleep(250 * i);
+                        //Staticly set retry count for temporary unavailable services to maxRetries retries (+1 for primary request) 
+                        retryCount = maxRetries + 1;
+                    }
+                    //Only throw on the last try if it keeps failing (if not any of the status codes above it is on first try)
+                    if (i + 1 >= retryCount)
+                    {
+                        if (i > 0) _logger.Info("Retry count of {1} on webRequest : {0}", webRequest.RequestUri, i);
+                        throw;
+                    }
+                }
+            }
+            return null;
         }
 
         public void DownloadFile(string url, string fileName)

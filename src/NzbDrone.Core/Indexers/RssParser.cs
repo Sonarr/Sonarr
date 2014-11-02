@@ -188,6 +188,8 @@ namespace NzbDrone.Core.Indexers
             return 0;
         }
 
+        private static readonly Regex ParseDescriptionLinksRegex = new Regex("href\\s*=\\s*(?:[\"'](?<1>[^\"']*)[\"']|(?<1>\\S+))",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>[KMG]i?B)",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -221,6 +223,18 @@ namespace NzbDrone.Core.Indexers
             }
             return 0;
         }
+
+        public static IEnumerable<string> GetHrefLinks(string inputString)
+        {
+            var matches = ParseDescriptionLinksRegex.Matches(inputString);
+            var res = new List<string>();
+            foreach (Match match in matches)
+            {
+                res.AddIfNotNull(match.Groups[1].Value);
+            }
+            return res;
+        }
+
 
         private static Int64 ConvertToBytes(Double value, Int32 power, Boolean binaryPrefix)
         {

@@ -185,6 +185,10 @@
     <Compile Include="IndexerTests\NewznabTests\NewznabRequestGeneratorFixture.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabSettingFixture.cs" />
     <Compile Include="IndexerTests\FanzubTests\FanzubFixture.cs" />
+    <Compile Include="IndexerTests\NzbIndexTests\NzbIndexFixture.cs" />
+    <Compile Include="IndexerTests\NzbIndexTests\NzbIndexRequestGeneratorFixture.cs" />
+    <Compile Include="IndexerTests\NzbIndexTests\NzbIndexRssParserFixture.cs" />
+    <Compile Include="IndexerTests\NzbIndexTests\NzbIndexSettingFixture.cs" />
     <Compile Include="IndexerTests\OmgwtfnzbsTests\OmgwtfnzbsFixture.cs" />
     <Compile Include="IndexerTests\SeasonSearchFixture.cs" />
     <Compile Include="IndexerTests\TestIndexer.cs" />
