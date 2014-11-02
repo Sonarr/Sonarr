@@ -1,15 +1,16 @@
 ﻿'use strict';
 define(
     [
+        'underscore',
         'vent',
         'marionette',
         'AddSeries/AddSeriesCollection',
         'AddSeries/SearchResultCollectionView',
         'AddSeries/EmptyView',
         'AddSeries/NotFoundView',
-        'Shared/LoadingView',
-        'underscore'
-    ], function (vent, Marionette, AddSeriesCollection, SearchResultCollectionView, EmptyView, NotFoundView, LoadingView, _) {
+        'AddSeries/ErrorView',
+        'Shared/LoadingView'
+    ], function (_, vent, Marionette, AddSeriesCollection, SearchResultCollectionView, EmptyView, NotFoundView, ErrorView, LoadingView) {
         return Marionette.Layout.extend({
             template: 'AddSeries/AddSeriesViewTemplate',
 
@@ -83,6 +84,7 @@ define(
             },
 
             search: function (options) {
+                var self = this;
 
                 this.collection.reset();
 
@@ -94,6 +96,10 @@ define(
                 this.collection.term = options.term;
                 this.currentSearchPromise = this.collection.fetch({
                     data: { term: options.term }
+                });
+
+                this.currentSearchPromise.fail(function () {
+                    self._showError();
                 });
 
                 return this.currentSearchPromise;
@@ -154,6 +160,13 @@ define(
                 }
                 else {
                     this._clearResults();
+                }
+            },
+
+            _showError: function () {
+                if (!this.isClosed) {
+                    this.ui.searchBar.show();
+                    this.searchResult.show(new ErrorView({term: this.collection.term}));
                 }
             }
         });
