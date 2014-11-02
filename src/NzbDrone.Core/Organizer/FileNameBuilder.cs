@@ -626,7 +626,7 @@ namespace NzbDrone.Core.Organizer
             return _absoluteEpisodeFormatCache.Get(pattern, () =>  AbsoluteEpisodePatternRegex.Matches(pattern).OfType<Match>()
                 .Select(match => new AbsoluteEpisodeFormat
                 {
-                    Separator = match.Groups["separator"].Value,
+                    Separator = match.Groups["separator"].Value.IsNotNullOrWhiteSpace() ? match.Groups["separator"].Value : "-",
                     AbsoluteEpisodePattern = match.Groups["absolute"].Value
                 }).ToArray());
         }
