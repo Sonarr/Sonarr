@@ -657,5 +657,16 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South Park - S15 E06 - City Sushi");
         }
+
+        [Test]
+        public void should_default_to_dash_when_serparator_is_not_set_for_absolute_number()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.MultiEpisodeStyle = (int)MultiEpisodeStyle.Duplicate;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - [{absolute:000}] - {Episode Title} - {Quality Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("South Park - 15x06 - 15x07 - [100-101] - City Sushi - HDTV-720p");
+        }
     }
 }
