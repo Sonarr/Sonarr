@@ -12,6 +12,7 @@ define(
 
             initialize: function (options) {
                 this.seriesId = options.seriesId;
+                this.models = [];
             },
 
             fetch: function (options) {

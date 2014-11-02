@@ -211,7 +211,7 @@ define(
             },
 
             _showInfo: function () {
-                this.info.show(new InfoView({ model: this.model }));
+                this.info.show(new InfoView({ model: this.model, episodeFileCollection: this.episodeFileCollection }));
             },
 
             _commandComplete: function (options) {
