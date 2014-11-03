@@ -41,6 +41,10 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("Agents of S.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
         [TestCase("Marvel's Agents of S.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
         [TestCase("Marvel'sAgentsOfS.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
+        [TestCase("Utopia (US) (2014)", "Utopia (US) (2014)")]
+        [TestCase("Utopia US 2014", "Utopia (US) (2014)")]
+        [TestCase("UtopiaUS2014", "Utopia (US) (2014)")]
+        [TestCase("@Midnight", "@midnight")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);

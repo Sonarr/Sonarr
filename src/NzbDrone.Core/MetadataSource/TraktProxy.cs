@@ -19,11 +19,8 @@ namespace NzbDrone.Core.MetadataSource
         private readonly IHttpClient _httpClient;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
-        private static readonly Regex ExpandCamelCaseRegEx = new Regex(@"
-                (?<=[A-Z])(?=[A-Z][a-z])|
-                (?<=[^A-Z.])(?=[A-Z])|
-                (?<=[A-Za-z])(?=[^A-Za-z0-9.'])", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
+        private static readonly Regex ExpandCamelCaseRegEx = new Regex(@"(?<!^|[A-Z]\.?|[^\w.])(?=[A-Z])", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+    
         private readonly HttpRequestBuilder _requestBuilder;
 
         public TraktProxy(Logger logger, IHttpClient httpClient)
