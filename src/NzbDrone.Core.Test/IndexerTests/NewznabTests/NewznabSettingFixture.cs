@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         [TestCase("http:///www.nzbplanet.net")]
         public void requires_apikey(string url)
         {
-            var setting = new NewznabSettings
+            var setting = new NewznabSettings()
             {
                 ApiKey = "",
                 Url = url
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         [TestCase("http://nzbs2.org")]
         public void doesnt_requires_apikey(string url)
         {
-            var setting = new NewznabSettings
+            var setting = new NewznabSettings()
             {
                 ApiKey = "",
                 Url = url
