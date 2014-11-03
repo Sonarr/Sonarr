@@ -67,6 +67,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[FFF] Seikoku no Dragonar - 01 [1FB538B5].mkv", "Seikoku no Dragonar", 1, 0, 0)]
         [TestCase("[Hatsuyuki]Fate_Zero-01[1280x720][122E6EF8]", "Fate/Zero", 1, 0, 0)]
         [TestCase("[CBM]_Monster_-_11_-_511_Kinderheim_[6C70C4E4].mkv", "Monster", 11, 0, 0)]
+        [TestCase("[HorribleSubs] Log Horizon 2 - 05 [720p].mkv", "Log Horizon 2", 5, 0, 0)]
+        [TestCase("[Commie] Log Horizon 2 - 05 [FCE4D070].mkv", "Log Horizon 2", 5, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
