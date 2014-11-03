@@ -417,10 +417,6 @@
     <Compile Include="Indexers\Newznab\NewznabRssParser.cs" />
     <Compile Include="Indexers\Newznab\NewznabSettings.cs" />
     <Compile Include="Indexers\Exceptions\SizeParsingException.cs" />
-    <Compile Include="Indexers\NzbIndex\NzbIndex.cs" />
-    <Compile Include="Indexers\NzbIndex\NzbIndexRequestGenerator.cs" />
-    <Compile Include="Indexers\NzbIndex\NzbIndexRssParser.cs" />
-    <Compile Include="Indexers\NzbIndex\NzbIndexSettings.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRequestGenerator.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\Omgwtfnzbs.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
