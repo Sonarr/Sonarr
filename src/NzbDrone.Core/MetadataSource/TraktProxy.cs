@@ -19,7 +19,10 @@ namespace NzbDrone.Core.MetadataSource
         private readonly IHttpClient _httpClient;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
-
+        private static readonly Regex ExpandCamelCaseRegEx = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z])|
+                (?<=[^A-Z.])(?=[A-Z])|
+                (?<=[A-Za-z])(?=[^A-Za-z0-9.'])", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         private readonly HttpRequestBuilder _requestBuilder;
 
@@ -230,12 +233,13 @@ namespace NzbDrone.Core.MetadataSource
         }
 
         private static string GetSearchTerm(string phrase)
-        {
-            phrase = phrase.RemoveAccent().ToLower();
+        {           
+            phrase = phrase.RemoveAccent();
             phrase = InvalidSearchCharRegex.Replace(phrase, "");
-            phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim().ToLower();
+            phrase = ExpandCamelCaseRegEx.Replace(phrase, " ");
+            phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim();
             phrase = phrase.Trim('-');
-            phrase = System.Web.HttpUtility.UrlEncode(phrase);
+            phrase = System.Web.HttpUtility.UrlEncode(phrase.ToLower());
 
             return phrase;
         }

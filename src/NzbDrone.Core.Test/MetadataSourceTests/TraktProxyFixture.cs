@@ -37,6 +37,10 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("tvdb:78804", "Doctor Who (2005)")]
         [TestCase("TVDB:78804", "Doctor Who (2005)")]
         [TestCase("TVDB: 78804 ", "Doctor Who (2005)")]
+        [TestCase("TheBigBangTheory", "The Big Bang Theory")]
+        [TestCase("Agents of S.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
+        [TestCase("Marvel's Agents of S.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
+        [TestCase("Marvel'sAgentsOfS.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
