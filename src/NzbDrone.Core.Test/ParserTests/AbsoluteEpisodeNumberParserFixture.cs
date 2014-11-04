@@ -96,9 +96,14 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("[ANBU-AonE]_Naruto_26-27_[F224EF26].avi", "Naruto", new[] { 26, 27 })]
+        [TestCase("[Doutei] Recently, My Sister is Unusual - 01-12 [BD][720p-AAC]", "Recently, My Sister is Unusual", new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 })]
         public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
         {
-            
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(absoluteEpisodeNumbers);
+            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.FullSeason.Should().BeFalse();
         }
     }
 }
