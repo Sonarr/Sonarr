@@ -74,6 +74,14 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?Season\W?)(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)(?:Episode\W)(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Single episode season or episode S1E1 or S1-E1
+                new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?|_)S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)?E(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //3 digit season S010E05
+                new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?|_)S(?<season>(?<!\d+)\d{3}(?!\d+))(?:\W|_)?E(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Supports Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),

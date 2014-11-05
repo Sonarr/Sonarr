@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Parenthood.2010.S02E14.HDTV.XviD-LOL", "Parenthood 2010", 2, 14)]
         [TestCase("Hawaii Five 0 S01E19 720p WEB DL DD5 1 H 264 NT", "Hawaii Five 0", 1, 19)]
         [TestCase("The Event S01E14 A Message Back 720p WEB DL DD5 1 H264 SURFER", "The Event", 1, 14)]
-        [TestCase("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
+        [TestCase("Constantine S1-E1-WEB-DL-1080p-NZBgeek", "Constantine", 1, 1)]
         [TestCase("Adam Hills In Gordon St Tonight S01E07 WS PDTV XviD FUtV", "Adam Hills In Gordon St Tonight", 1, 7)]
         [TestCase("Adventure.Inc.S03E19.DVDRip.XviD-OSiTV", "Adventure.Inc", 3, 19)]
         [TestCase("S03E09 WS PDTV XviD FUtV", "", 3, 9)]
@@ -89,6 +89,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Impatience] Locodol - 0x01 [720p][34073169].mkv", "Locodol", 0, 1)]
         [TestCase("South.Park.S15.E06.City.Sushi", "South Park", 15, 6)]
         [TestCase("South Park - S15 E06 - City Sushi", "South Park", 15, 6)]
+        [TestCase("Constantine S1-E1-WEB-DL-1080p-NZBgeek", "Constantine", 1, 1)]
+        [TestCase("Constantine S1E1-WEB-DL-1080p-NZBgeek", "Constantine", 1, 1)]
+        [TestCase("NCIS.S010E16.720p.HDTV.X264-DIMENSION", "NCIS", 10, 16)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
