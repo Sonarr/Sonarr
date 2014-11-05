@@ -1,12 +1,12 @@
 Section: web
 Priority: optional
-Maintainer: NzbDrone <contact@nzbdrone.com>
+Maintainer: Sonarr <hello@sonarr.tv>
 Source: nzbdrone
-Homepage: http://www.nzbdrone.com
-Vcs-Git: git@github.com:NzbDrone/NzbDrone.git
-Vcs-Browser: https://github.com/NzbDrone/NzbDrone
+Homepage: https://nzbdrone.com
+Vcs-Git: git@github.com:Sonarr/Sonarr.git
+Vcs-Browser: https://github.com/Sonarr/Sonarr
 
 Package: nzbdrone
 Architecture: all
-Depends: libmono-cil-dev (>= 2.10.1), sqlite3 (>= 3.7), mediainfo (>= 0.7.52)
-Description: NZBDrone is a PVR for newsgroup users
+Depends: libmono-cil-dev (>= 3.10), sqlite3 (>= 3.7), mediainfo (>= 0.7.52)
+Description: Sonarr is a an internet PVR
