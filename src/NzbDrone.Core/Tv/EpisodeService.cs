@@ -106,12 +106,12 @@ namespace NzbDrone.Core.Tv
         public Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle) 
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
-            var search = Parser.Parser.NormalizeEpisodeTitle(episodeTitle);
+            var search = Parser.Parser.NormalizeTitle(episodeTitle);
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber)
                 .FirstOrDefault(e => 
                 {
                     // normalize episode title
-                    string title = Parser.Parser.NormalizeEpisodeTitle(e.Title);
+                    string title = Parser.Parser.NormalizeTitle(e.Title);
                     // find episode title within search string
                     return (title.Length > 0) && search.Contains(title); 
                 });

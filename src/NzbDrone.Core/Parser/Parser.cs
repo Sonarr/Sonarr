@@ -323,7 +323,7 @@ namespace NzbDrone.Core.Parser
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
 
-        public static string NormalizeEpisodeTitle(string title)
+        public static string NormalizeTitle(string title)
         {
             string singleSpaces  = WordDelimiterRegex.Replace(title, " ");
             string noPunctuation = PunctuationRegex.Replace(singleSpaces, String.Empty);

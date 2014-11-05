@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var id = seriesReader.GetInt32(0);
                         var title = seriesReader.GetString(1);
 
-                        var sortTitle = Parser.Parser.NormalizeEpisodeTitle(title).ToLower();
+                        var sortTitle = Parser.Parser.NormalizeTitle(title).ToLower();
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {

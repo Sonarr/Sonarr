@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Tv
 
             newSeries.Monitored = true;
             newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
-            newSeries.SortTitle = Parser.Parser.NormalizeEpisodeTitle(newSeries.Title).ToLower();
+            newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
 
             _seriesRepository.Insert(newSeries);
             _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));

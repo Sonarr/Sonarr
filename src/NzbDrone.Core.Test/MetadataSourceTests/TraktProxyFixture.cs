@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             series.Should().NotBeNull();
             series.Title.Should().NotBeNullOrWhiteSpace();
             series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
-            series.SortTitle.Should().Be(Parser.Parser.NormalizeEpisodeTitle(series.Title));
+            series.SortTitle.Should().Be(SeriesTitleNormalizer.Normalize(series.Title, series.TvdbId));
             series.Overview.Should().NotBeNullOrWhiteSpace();
             series.AirTime.Should().NotBeNullOrWhiteSpace();
             series.FirstAired.Should().HaveValue();
