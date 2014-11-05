@@ -21,6 +21,10 @@ define(
 
             var icon = this.find('i').andSelf('i');
 
+            if (!icon || !icon.attr('class')) {
+                return this;
+            }
+
             var iconClasses = icon.attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/);
 
             if (iconClasses.length === 0) {

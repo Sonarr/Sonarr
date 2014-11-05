@@ -34,11 +34,8 @@ define(
 
         var substringMatcher = function() {
             return function findMatches(q, cb) {
-                // regex used to determine if a string contains the substring `q`
-                var substrRegex = new RegExp(q, 'i');
-
                 var matches = _.select(SeriesCollection.toJSON(), function (series) {
-                    return substrRegex.test(series.title);
+                    return series.title.toLowerCase().indexOf(q.toLowerCase()) > -1;
                 });
 
                 cb(matches);
