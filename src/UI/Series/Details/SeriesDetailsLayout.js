@@ -7,6 +7,7 @@ define(
         'reqres',
         'marionette',
         'backbone',
+        'Series/SeriesCollection',
         'Series/EpisodeCollection',
         'Series/EpisodeFileCollection',
         'Series/SeasonCollection',
@@ -22,6 +23,7 @@ define(
                  reqres,
                  Marionette,
                  Backbone,
+                 SeriesCollection,
                  EpisodeCollection,
                  EpisodeFileCollection,
                  SeasonCollection,
@@ -57,9 +59,18 @@ define(
             },
 
             initialize: function () {
+                this.seriesCollection = SeriesCollection.clone();
+                this.seriesCollection.shadowCollection.bindSignalR();
+
                 this.listenTo(this.model, 'change:monitored', this._setMonitoredState);
-                this.listenTo(vent, vent.Events.SeriesDeleted, this._onSeriesDeleted);
+                this.listenTo(this.model, 'remove', this._seriesRemoved);
                 this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
+
+                this.listenTo(this.model, 'change', function (model, options) {
+                    if (options && options.changeSource === 'signalr') {
+                        this._refresh();
+                    }
+                });
             },
 
             onShow: function () {
@@ -96,21 +107,11 @@ define(
                 CommandController.bindToCommand({
                     element: this.ui.rename,
                     command: {
-                        name        : 'renameFiles',
-                        seriesId    : this.model.id,
-                        seasonNumber: -1
+                        name         : 'renameFiles',
+                        seriesId     : this.model.id,
+                        seasonNumber : -1
                     }
                 });
-            },
-
-            _getFanArt: function () {
-                var fanArt = _.where(this.model.get('images'), {coverType: 'fanart'});
-
-                if (fanArt && fanArt[0]) {
-                    return fanArt[0].url;
-                }
-
-                return undefined;
             },
 
             onClose: function () {
@@ -122,6 +123,16 @@ define(
 
                 $('body').removeClass('backdrop');
                 reqres.removeHandler(reqres.Requests.GetEpisodeFileById);
+            },
+
+            _getFanArt: function () {
+                var fanArt = _.where(this.model.get('images'), {coverType: 'fanart'});
+
+                if (fanArt && fanArt[0]) {
+                    return fanArt[0].url;
+                }
+
+                return undefined;
             },
 
             _toggleMonitored: function () {
@@ -160,11 +171,8 @@ define(
                 });
             },
 
-            _onSeriesDeleted: function (event) {
-
-                if (this.model.get('id') === event.series.get('id')) {
-                    Backbone.history.navigate('/', { trigger: true });
-                }
+            _seriesRemoved: function () {
+                Backbone.history.navigate('/', { trigger: true });
             },
 
             _renameSeries: function () {
@@ -215,13 +223,20 @@ define(
             },
 
             _commandComplete: function (options) {
-                if (options.command.get('name') === 'refreshseries' || options.command.get('name') === 'renamefiles') {
+                if (options.command.get('name') === 'renamefiles') {
                     if (options.command.get('seriesId') === this.model.get('id')) {
-                        this._showSeasons();
-                        this._setMonitoredState();
-                        this._showInfo();
+                        this._refresh();
                     }
                 }
+            },
+
+            _refresh: function () {
+                this.seasonCollection.add(this.model.get('seasons'), { merge: true });
+                this.episodeCollection.fetch();
+                this.episodeFileCollection.fetch();
+
+                this._setMonitoredState();
+                this._showInfo();
             }
         });
     });

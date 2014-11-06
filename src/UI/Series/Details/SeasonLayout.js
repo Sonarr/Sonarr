@@ -105,20 +105,17 @@ define(
                     throw 'episodeCollection is needed';
                 }
 
-                this.episodeCollection = options.episodeCollection.bySeason(this.model.get('seasonNumber'));
-
-                var self = this;
-
-                this.episodeCollection.each(function (model) {
-                    model.episodeCollection = self.episodeCollection;
-                });
-
                 this.series = options.series;
+                this.fullEpisodeCollection = options.episodeCollection;
+                this.episodeCollection = this.fullEpisodeCollection.bySeason(this.model.get('seasonNumber'));
+                this._updateEpisodeCollection();
 
                 this.showingEpisodes = this._shouldShowEpisodes();
 
                 this.listenTo(this.model, 'sync', this._afterSeasonMonitored);
                 this.listenTo(this.episodeCollection, 'sync', this.render);
+
+                this.listenTo(this.fullEpisodeCollection, 'sync', this._updateEpisodeCollection);
             },
 
             onRender: function () {
@@ -293,6 +290,16 @@ define(
                 var range = _.range(low + 1, high);
 
                 this.episodeCollection.lastToggled = model;
+            },
+
+            _updateEpisodeCollection: function () {
+                var self = this;
+
+                this.episodeCollection.add(this.fullEpisodeCollection.bySeason(this.model.get('seasonNumber')).models, { merge: true });
+
+                this.episodeCollection.each(function (model) {
+                    model.episodeCollection = self.episodeCollection;
+                });
             }
         });
     });
