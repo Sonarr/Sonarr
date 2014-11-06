@@ -10,10 +10,13 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex SeasonFolderRegex = new Regex(@"(\{season(\:\d+)?\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        internal static readonly Regex OriginalTitleRegex = new Regex(@"(\{original[- ._]title\})",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static IRuleBuilderOptions<T, string> ValidEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             ruleBuilder.SetValidator(new NotEmptyValidator(null));
-            return ruleBuilder.SetValidator(new RegularExpressionValidator(FileNameBuilder.SeasonEpisodePatternRegex)).WithMessage("Must contain season and episode numbers");
+            return ruleBuilder.SetValidator(new ValidStandardEpisodeFormatValidator());
         }
 
         public static IRuleBuilderOptions<T, string> ValidDailyEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
@@ -41,10 +44,10 @@ namespace NzbDrone.Core.Organizer
         }
     }
 
-    public class ValidDailyEpisodeFormatValidator : PropertyValidator
+    public class ValidStandardEpisodeFormatValidator : PropertyValidator
     {
-        public ValidDailyEpisodeFormatValidator()
-            : base("Must contain Air Date or Season and Episode")
+        public ValidStandardEpisodeFormatValidator()
+            : base("Must contain season and episode numbers OR Original Title")
         {
 
         }
@@ -54,7 +57,30 @@ namespace NzbDrone.Core.Organizer
             var value = context.PropertyValue as String;
 
             if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameBuilder.AirDateRegex.IsMatch(value))
+                !FileNameValidation.OriginalTitleRegex.IsMatch(value))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public class ValidDailyEpisodeFormatValidator : PropertyValidator
+    {
+        public ValidDailyEpisodeFormatValidator()
+            : base("Must contain Air Date OR Season and Episode OR Original Title")
+        {
+
+        }
+
+        protected override bool IsValid(PropertyValidatorContext context)
+        {
+            var value = context.PropertyValue as String;
+
+            if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
+                !FileNameBuilder.AirDateRegex.IsMatch(value) &&
+                !FileNameValidation.OriginalTitleRegex.IsMatch(value))
             {
                 return false;
             }
@@ -66,7 +92,7 @@ namespace NzbDrone.Core.Organizer
     public class ValidAnimeEpisodeFormatValidator : PropertyValidator
     {
         public ValidAnimeEpisodeFormatValidator()
-            : base("Must contain Absolute Episode number or Season and Episode")
+            : base("Must contain Absolute Episode number OR Season and Episode OR Original Title")
         {
 
         }
@@ -76,7 +102,8 @@ namespace NzbDrone.Core.Organizer
             var value = context.PropertyValue as String;
 
             if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameBuilder.AbsoluteEpisodePatternRegex.IsMatch(value))
+                !FileNameBuilder.AbsoluteEpisodePatternRegex.IsMatch(value) &&
+                !FileNameValidation.OriginalTitleRegex.IsMatch(value))
             {
                 return false;
             }

@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
-        public void should_be_able_to_use_orginal_title()
+        public void should_be_able_to_use_original_title()
         {
             _series.Title = "30 Rock";
             _namingConfig.StandardEpisodeFormat = "{Series Title} - {Original Title}";
@@ -618,15 +618,16 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
-        public void should_use_empty_string_instead_of_null_when_scene_name_is_not_available()
+        public void should_use_existing_filename_when_scene_name_is_not_available()
         {
             _namingConfig.RenameEpisodes = true;
             _namingConfig.StandardEpisodeFormat = "{Original Title}";
 
             _episodeFile.SceneName = null;
+            _episodeFile.RelativePath = "existing.file.mkv";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be(String.Empty);
+                   .Should().Be(Path.GetFileNameWithoutExtension(_episodeFile.RelativePath));
         }
 
         [Test]
@@ -638,6 +639,19 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - S15E06 - S15E07 - (HDTV-720p, , DRONE) - City Sushi");
+        }
+
+        [Test]
+        public void should_be_able_to_use_only_original_title()
+        {
+            _series.Title = "30 Rock";
+            _namingConfig.StandardEpisodeFormat = "{Original Title}";
+
+            _episodeFile.SceneName = "30.Rock.S01E01.xvid-LOL";
+            _episodeFile.RelativePath = "30 Rock - S01E01 - Test";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("30.Rock.S01E01.xvid-LOL");
         }
 
         [Test]
