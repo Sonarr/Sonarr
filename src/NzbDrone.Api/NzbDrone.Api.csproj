@@ -96,6 +96,8 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="Extensions\AccessControlHeaders.cs" />
+    <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
     <Compile Include="Config\UiConfigModule.cs" />
