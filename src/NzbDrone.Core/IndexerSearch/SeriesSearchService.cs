@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System.Linq;
+using NLog;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             var downloadedCount = 0;
 
-            foreach (var season in series.Seasons)
+            foreach (var season in series.Seasons.OrderBy(s => s.SeasonNumber))
             {
                 if (!season.Monitored)
                 {
