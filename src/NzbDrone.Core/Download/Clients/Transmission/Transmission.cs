@@ -184,9 +184,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             try
             {
-                var versionResult =
-                    Regex.Replace(_proxy.GetVersion(Settings), @"\([^)]*\)", "",
-                        RegexOptions.IgnoreCase | RegexOptions.Multiline).Trim();
+                var versionString = _proxy.GetVersion(Settings);
+
+                _logger.Debug("Transmission version information: {0}", versionString);
+
+                var versionResult = Regex.Replace(versionString, @"\([^)]*\)", "", RegexOptions.IgnoreCase | RegexOptions.Multiline).Trim();
                 var version = Version.Parse(versionResult);
 
                 if (version < new Version(2, 40))
