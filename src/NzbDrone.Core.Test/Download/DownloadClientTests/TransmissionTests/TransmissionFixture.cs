@@ -346,5 +346,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             items.Should().HaveCount(1);
             items.First().OutputPath.Should().Be(@"C:\Downloads\Finished\transmission\" + _title);
         }
+
+        [TestCase("2.84 ()")]
+        [TestCase("2.84+ ()")]
+        [TestCase("2.84 (other info)")]
+        [TestCase("2.84 (2.84)")]
+        public void should_version_should_only_check_version_number(String version)
+        {
+            Mocker.GetMock<ITransmissionProxy>()
+                  .Setup(s => s.GetVersion(It.IsAny<TransmissionSettings>()))
+                  .Returns(version);
+
+            Subject.Test();
+        }
     }
 }

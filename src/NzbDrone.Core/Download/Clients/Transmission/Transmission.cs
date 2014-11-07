@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 _logger.Debug("Transmission version information: {0}", versionString);
 
-                var versionResult = Regex.Replace(versionString, @"\([^)]*\)", "", RegexOptions.IgnoreCase | RegexOptions.Multiline).Trim();
+                var versionResult = Regex.Match(versionString, @"(?<!\(|(\d|\.)+)(\d|\.)+(?!\)|(\d|\.)+)").Value;
                 var version = Version.Parse(versionResult);
 
                 if (version < new Version(2, 40))
