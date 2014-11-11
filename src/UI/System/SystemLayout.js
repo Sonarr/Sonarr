@@ -73,7 +73,7 @@ define(
                 }
             },
 
-            _navigate:function(route){
+            _navigate: function (route){
                 Backbone.history.navigate(route, { trigger: true, replace: true });
             },
 
