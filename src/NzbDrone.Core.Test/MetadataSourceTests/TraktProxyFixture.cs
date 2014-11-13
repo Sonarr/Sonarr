@@ -16,8 +16,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
     [IntegrationTest]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
-
-
         [SetUp]
         public void Setup()
         {
@@ -31,20 +29,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("Rob & Big", "Rob and Big")]
         [TestCase("M*A*S*H", "M*A*S*H")]
         [TestCase("imdb:tt0436992", "Doctor Who (2005)")]
-        [TestCase("imdb:0436992", "Doctor Who (2005)")]
-        [TestCase("IMDB:0436992", "Doctor Who (2005)")]
-        [TestCase("IMDB: 0436992 ", "Doctor Who (2005)")]
         [TestCase("tvdb:78804", "Doctor Who (2005)")]
-        [TestCase("TVDB:78804", "Doctor Who (2005)")]
-        [TestCase("TVDB: 78804 ", "Doctor Who (2005)")]
-        [TestCase("TheBigBangTheory", "The Big Bang Theory")]
-        [TestCase("Agents of S.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
-        [TestCase("Marvel's Agents of S.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
-        [TestCase("Marvel'sAgentsOfS.H.I.E.L.D.", "Marvel's Agents of S.H.I.E.L.D.")]
-        [TestCase("Utopia (US) (2014)", "Utopia (US) (2014)")]
-        [TestCase("Utopia US 2014", "Utopia (US) (2014)")]
-        [TestCase("UtopiaUS2014", "Utopia (US) (2014)")]
-        [TestCase("@Midnight", "@midnight")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
@@ -61,15 +46,17 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             result.Should().BeEmpty();
         }
 
-        [TestCase(75978)]
-        [TestCase(83462)]
-        [TestCase(266189)]
-        public void should_be_able_to_get_series_detail(int tvdbId)
+        [TestCase(75978, "Family Guy")]
+        [TestCase(83462, "Castle (2009)")]
+        [TestCase(266189, "The Blacklist")]
+        public void should_be_able_to_get_series_detail(Int32 tvdbId, String title)
         {
             var details = Subject.GetSeriesInfo(tvdbId);
 
             ValidateSeries(details.Item1);
             ValidateEpisodes(details.Item2);
+
+            details.Item1.Title.Should().Be(title);
         }
 
         [Test]
