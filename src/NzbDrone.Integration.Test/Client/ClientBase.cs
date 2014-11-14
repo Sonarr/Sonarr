@@ -45,7 +45,6 @@ namespace NzbDrone.Integration.Test.Client
             request.AddParameter("sortKey", sortKey);
             request.AddParameter("sortDir", sortDir);
             return Get<PagingResource<TResource>>(request);
-
         }
 
         public TResource Post(TResource body, HttpStatusCode statusCode = HttpStatusCode.Created)
