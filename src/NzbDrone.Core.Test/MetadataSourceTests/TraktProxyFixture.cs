@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -126,6 +127,10 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             {
                 episode.AirDateUtc.Value.Kind.Should().Be(DateTimeKind.Utc);
             }
+
+            episode.Images.Any(i => i.CoverType == MediaCoverTypes.Screenshot && i.Url.Contains("-940."))
+                   .Should()
+                   .BeFalse();
         }
     }
 }

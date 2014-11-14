@@ -32,7 +32,6 @@ namespace NzbDrone.Core.MetadataSource
 
         private IEnumerable<Show> SearchTrakt(string title)
         {
-
             HttpRequest request;
 
             var lowerTitle = title.ToLowerInvariant();
@@ -76,7 +75,6 @@ namespace NzbDrone.Core.MetadataSource
 
             return _httpClient.Get<List<Show>>(request).Resource;
         }
-
 
         public List<Series> SearchForNewSeries(string title)
         {
@@ -179,8 +177,12 @@ namespace NzbDrone.Core.MetadataSource
             episode.AirDateUtc = FromIso(traktEpisode.first_aired_iso);
             episode.Ratings = GetRatings(traktEpisode.ratings);
 
-            episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
-
+            //Don't include series fanart images as episode screenshot
+            if (!traktEpisode.images.screen.Contains("-940."))
+            {
+                episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
+            }
+            
             return episode;
         }
 
@@ -314,7 +316,5 @@ namespace NzbDrone.Core.MetadataSource
 
             return seasons;
         }
-
-
     }
 }
