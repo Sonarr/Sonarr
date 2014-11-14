@@ -214,7 +214,9 @@ define(
                         series           : self.model
                     });
 
-                    self.seasons.show(seasonCollectionView);
+                    if (!self.isClosed) {
+                        self.seasons.show(seasonCollectionView);
+                    }
                 });
             },
 
