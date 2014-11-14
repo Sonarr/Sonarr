@@ -56,7 +56,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private static readonly Regex ExtrasRegex = new Regex(@"(?:\\|\/)extras(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/)(extras|\.appledouble)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
         {
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = GetVideoFiles(series.Path).Where(file => !ExtrasRegex.IsMatch(file)).ToList();
+            var mediaFileList = GetVideoFiles(series.Path).Where(file => !ExcludedSubFoldersRegex.IsMatch(file)).ToList();
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
