@@ -18,7 +18,7 @@ define(
             },
 
             setTitle: function (title) {
-                title = title.toLocaleLowerCase();
+                title = title;
                 if (title === 'Sonarr') {
                     document.title = 'Sonarr';
                 }
