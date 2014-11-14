@@ -19,11 +19,11 @@ define(
 
             setTitle: function (title) {
                 title = title.toLocaleLowerCase();
-                if (title === 'sonarr') {
-                    document.title = 'sonarr';
+                if (title === 'Sonarr') {
+                    document.title = 'Sonarr';
                 }
                 else {
-                    document.title = title + ' - sonarr';
+                    document.title = title + ' - Sonarr';
                 }
 
                 if(window.NzbDrone.Analytics && window.Piwik){
