@@ -168,62 +168,6 @@ namespace NzbDrone.Common.Disk
             Directory.CreateDirectory(path);
         }
 
-        public void CopyFolder(string source, string destination)
-        {
-            Ensure.That(source, () => source).IsValidPath();
-            Ensure.That(destination, () => destination).IsValidPath();
-
-            TransferFolder(source, destination, TransferMode.Copy);
-        }
-
-        public void MoveFolder(string source, string destination)
-        {
-            Ensure.That(source, () => source).IsValidPath();
-            Ensure.That(destination, () => destination).IsValidPath();
-
-            try
-            {
-                TransferFolder(source, destination, TransferMode.Move);
-                DeleteFolder(source, true);
-            }
-            catch (Exception e)
-            {
-                e.Data.Add("Source", source);
-                e.Data.Add("Destination", destination);
-                throw;
-            }
-        }
-
-        public void TransferFolder(string source, string destination, TransferMode mode)
-        {
-            Ensure.That(source, () => source).IsValidPath();
-            Ensure.That(destination, () => destination).IsValidPath();
-
-            Logger.ProgressDebug("{0} {1} -> {2}", mode, source, destination);
-
-            var sourceFolder = new DirectoryInfo(source);
-            var targetFolder = new DirectoryInfo(destination);
-
-            if (!targetFolder.Exists)
-            {
-                targetFolder.Create();
-            }
-
-            foreach (var subDir in sourceFolder.GetDirectories())
-            {
-                TransferFolder(subDir.FullName, Path.Combine(destination, subDir.Name), mode);
-            }
-
-            foreach (var sourceFile in sourceFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly))
-            {
-                var destFile = Path.Combine(destination, sourceFile.Name);
-
-                Logger.ProgressDebug("{0} {1} -> {2}", mode, sourceFile, destFile);
-
-                TransferFile(sourceFile.FullName, destFile, mode, true);
-            }
-        }
-
         public void DeleteFile(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
@@ -236,23 +180,25 @@ namespace NzbDrone.Common.Disk
 
         public void CopyFile(string source, string destination, bool overwrite = false)
         {
-            TransferFile(source, destination, TransferMode.Copy, overwrite);
+            Ensure.That(source, () => source).IsValidPath();
+            Ensure.That(destination, () => destination).IsValidPath();
+
+            if (source.PathEquals(destination))
+            {
+                throw new IOException(string.Format("Source and destination can't be the same {0}", source));
+            }
+
+            File.Copy(source, destination, overwrite);
         }
 
         public void MoveFile(string source, string destination, bool overwrite = false)
-        {
-            TransferFile(source, destination, TransferMode.Move, overwrite);
-        }
-
-        public TransferMode TransferFile(string source, string destination, TransferMode mode, bool overwrite)
         {
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(destination, () => destination).IsValidPath();
 
             if (source.PathEquals(destination))
             {
-                Logger.Warn("Source and destination can't be the same {0}", source);
-                return TransferMode.None;
+                throw new IOException(string.Format("Source and destination can't be the same {0}", source));
             }
 
             if (FileExists(destination) && overwrite)
@@ -260,33 +206,8 @@ namespace NzbDrone.Common.Disk
                 DeleteFile(destination);
             }
 
-            if (mode.HasFlag(TransferMode.HardLink))
-            {
-                bool createdHardlink = TryCreateHardLink(source, destination);
-                if (createdHardlink)
-                {
-                    return TransferMode.HardLink;
-                }
-                if (!mode.HasFlag(TransferMode.Copy))
-                {
-                    throw new IOException("Hardlinking from '" + source + "' to '" + destination + "' failed.");
-                }
-            }
-
-            if (mode.HasFlag(TransferMode.Copy))
-            {
-                File.Copy(source, destination, overwrite);
-                return TransferMode.Copy;
-            }
-
-            if (mode.HasFlag(TransferMode.Move))
-            {
-                RemoveReadOnly(source);
-                File.Move(source, destination);
-                return TransferMode.Move;
-            }
-
-            return TransferMode.None;
+            RemoveReadOnly(source);
+            File.Move(source, destination);
         }
 
         public abstract bool TryCreateHardLink(string source, string destination);

@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Backup
     public class BackupService : IBackupService, IExecute<BackupCommand>
     {
         private readonly IMainDatabase _maindDb;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IArchiveService _archiveService;
@@ -35,12 +36,14 @@ namespace NzbDrone.Core.Backup
         private static readonly Regex BackupFileRegex = new Regex(@"nzbdrone_backup_[._0-9]+\.zip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public BackupService(IMainDatabase maindDb,
-                             IDiskProvider diskProvider, 
-                             IAppFolderInfo appFolderInfo, 
-                             IArchiveService archiveService, 
+                             IDiskTransferService diskTransferService,
+                             IDiskProvider diskProvider,
+                             IAppFolderInfo appFolderInfo,
+                             IArchiveService archiveService,
                              Logger logger)
         {
             _maindDb = maindDb;
+            _diskTransferService = diskTransferService;
             _diskProvider = diskProvider;
             _appFolderInfo = appFolderInfo;
             _archiveService = archiveService;
@@ -115,7 +118,7 @@ namespace NzbDrone.Core.Backup
                 var databaseFile = _appFolderInfo.GetNzbDroneDatabase();
                 var tempDatabaseFile = Path.Combine(_backupTempFolder, Path.GetFileName(databaseFile));
 
-                _diskProvider.CopyFile(databaseFile, tempDatabaseFile, true);
+                _diskTransferService.TransferFile(databaseFile, tempDatabaseFile, TransferMode.Copy);
 
                 unitOfWork.Commit();
             }
@@ -128,7 +131,7 @@ namespace NzbDrone.Core.Backup
             var configFile = _appFolderInfo.GetConfigPath();
             var tempConfigFile = Path.Combine(_backupTempFolder, Path.GetFileName(configFile));
 
-            _diskProvider.CopyFile(configFile, tempConfigFile, true);
+            _diskTransferService.TransferFile(configFile, tempConfigFile, TransferMode.Copy);
         }
 
         private void CleanupOldBackups(BackupType backupType)

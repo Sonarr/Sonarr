@@ -79,6 +79,7 @@
     <Compile Include="Disk\OsPath.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />
+    <Compile Include="Disk\DiskTransferService.cs" />
     <Compile Include="Disk\TransferMode.cs" />
     <Compile Include="EnsureThat\Ensure.cs" />
     <Compile Include="EnsureThat\EnsureBoolExtensions.cs" />

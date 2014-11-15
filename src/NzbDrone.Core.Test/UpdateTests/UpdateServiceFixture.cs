@@ -135,7 +135,8 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Subject.Execute(new ApplicationUpdateCommand());
 
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.MoveFolder(updateClientFolder, _sandboxFolder));
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(c => c.TransferFolder(updateClientFolder, _sandboxFolder, TransferMode.Move, false));
         }
 
         [Test]

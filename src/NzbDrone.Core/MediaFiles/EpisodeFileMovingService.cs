@@ -27,6 +27,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IEpisodeService _episodeService;
         private readonly IUpdateEpisodeFileService _updateEpisodeFileService;
         private readonly IBuildFileNames _buildFileNames;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileAttributeService _mediaFileAttributeService;
         private readonly IEventAggregator _eventAggregator;
@@ -36,6 +37,7 @@ namespace NzbDrone.Core.MediaFiles
         public EpisodeFileMovingService(IEpisodeService episodeService,
                                 IUpdateEpisodeFileService updateEpisodeFileService,
                                 IBuildFileNames buildFileNames,
+                                IDiskTransferService diskTransferService,
                                 IDiskProvider diskProvider,
                                 IMediaFileAttributeService mediaFileAttributeService,
                                 IEventAggregator eventAggregator,
@@ -45,6 +47,7 @@ namespace NzbDrone.Core.MediaFiles
             _episodeService = episodeService;
             _updateEpisodeFileService = updateEpisodeFileService;
             _buildFileNames = buildFileNames;
+            _diskTransferService = diskTransferService;
             _diskProvider = diskProvider;
             _mediaFileAttributeService = mediaFileAttributeService;
             _eventAggregator = eventAggregator;
@@ -112,8 +115,7 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            _logger.Debug("{0} [{1}] > [{2}]", mode, episodeFilePath, destinationFilename);
-            _diskProvider.TransferFile(episodeFilePath, destinationFilename, mode);
+            _diskTransferService.TransferFile(episodeFilePath, destinationFilename, mode);
 
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilename);
 

@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Update
         private readonly IAppFolderInfo _appFolderInfo;
 
         private readonly IDiskProvider _diskProvider;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IHttpClient _httpClient;
         private readonly IArchiveService _archiveService;
         private readonly IProcessProvider _processProvider;
@@ -34,9 +35,13 @@ namespace NzbDrone.Core.Update
         private readonly IBackupService _backupService;
 
 
-        public InstallUpdateService(ICheckUpdateService checkUpdateService, IAppFolderInfo appFolderInfo,
-                                    IDiskProvider diskProvider, IHttpClient httpClient,
-                                    IArchiveService archiveService, IProcessProvider processProvider,
+        public InstallUpdateService(ICheckUpdateService checkUpdateService,
+                                    IAppFolderInfo appFolderInfo,
+                                    IDiskProvider diskProvider,
+                                    IDiskTransferService diskTransferService,
+                                    IHttpClient httpClient,
+                                    IArchiveService archiveService,
+                                    IProcessProvider processProvider,
                                     IVerifyUpdates updateVerifier,
                                     IStartupContext startupContext,
                                     IConfigFileProvider configFileProvider,
@@ -51,6 +56,7 @@ namespace NzbDrone.Core.Update
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
+            _diskTransferService = diskTransferService;
             _httpClient = httpClient;
             _archiveService = archiveService;
             _processProvider = processProvider;
@@ -113,8 +119,7 @@ namespace NzbDrone.Core.Update
             }
 
             _logger.Info("Preparing client");
-            _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
-                                        updateSandboxFolder);
+            _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateClientFolder(), updateSandboxFolder, TransferMode.Move, false);
 
             _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
             _logger.ProgressInfo("Sonarr will restart shortly.");

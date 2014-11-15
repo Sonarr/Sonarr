@@ -16,19 +16,19 @@ namespace NzbDrone.Core.Tv
     {
         private readonly ISeriesService _seriesService;
         private readonly IBuildFileNames _filenameBuilder;
-        private readonly IDiskProvider _diskProvider;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public MoveSeriesService(ISeriesService seriesService,
                                  IBuildFileNames filenameBuilder,
-                                 IDiskProvider diskProvider,
+                                 IDiskTransferService diskTransferService,
                                  IEventAggregator eventAggregator,
                                  Logger logger)
         {
             _seriesService = seriesService;
             _filenameBuilder = filenameBuilder;
-            _diskProvider = diskProvider;
+            _diskTransferService = diskTransferService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Tv
             //TODO: Move to transactional disk operations
             try
             {
-                _diskProvider.MoveFolder(source, destination);
+                _diskTransferService.TransferFolder(source, destination, TransferMode.Move);
             }
             catch (IOException ex)
             {

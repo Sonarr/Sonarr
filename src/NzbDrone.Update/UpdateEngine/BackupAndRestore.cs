@@ -13,13 +13,13 @@ namespace NzbDrone.Update.UpdateEngine
 
     public class BackupAndRestore : IBackupAndRestore
     {
-        private readonly IDiskProvider _diskProvider;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly Logger _logger;
 
-        public BackupAndRestore(IDiskProvider diskProvider, IAppFolderInfo appFolderInfo, Logger logger)
+        public BackupAndRestore(IDiskTransferService diskTransferService, IAppFolderInfo appFolderInfo, Logger logger)
         {
-            _diskProvider = diskProvider;
+            _diskTransferService = diskTransferService;
             _appFolderInfo = appFolderInfo;
             _logger = logger;
         }
@@ -27,13 +27,13 @@ namespace NzbDrone.Update.UpdateEngine
         public void Backup(string source)
         {
             _logger.Info("Creating backup of existing installation");
-            _diskProvider.CopyFolder(source, _appFolderInfo.GetUpdateBackUpFolder());
+            _diskTransferService.TransferFolder(source, _appFolderInfo.GetUpdateBackUpFolder(), TransferMode.Copy, false);
         }
 
         public void Restore(string target)
         {
             _logger.Info("Attempting to rollback upgrade");
-            _diskProvider.CopyFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
+            _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateBackUpFolder(), target, TransferMode.Copy, false);
         }
     }
 }
