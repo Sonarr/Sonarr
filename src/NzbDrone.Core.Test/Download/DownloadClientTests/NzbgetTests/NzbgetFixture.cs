@@ -119,10 +119,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(s => s.GetQueue(It.IsAny<NzbgetSettings>()))
                 .Returns(list);
-
-            Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.GetPostQueue(It.IsAny<NzbgetSettings>()))
-                .Returns(new List<NzbgetPostQueueItem>());
         }
 
         protected virtual void GivenHistory(NzbgetHistoryItem history)

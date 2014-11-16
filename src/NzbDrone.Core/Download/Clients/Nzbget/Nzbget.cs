@@ -51,7 +51,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 globalStatus = _proxy.GetGlobalStatus(Settings);
                 queue = _proxy.GetQueue(Settings);
-                postQueue = _proxy.GetPostQueue(Settings).ToDictionary(v => v.NzbId);
             }
             catch (DownloadClientException ex)
             {
@@ -65,8 +64,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             foreach (var item in queue)
             {
-                var postQueueItem = postQueue.GetValueOrDefault(item.NzbId);
-
                 var totalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
                 var pausedSize = MakeInt64(item.PausedSizeHi, item.PausedSizeLo);
                 var remainingSize = MakeInt64(item.RemainingSizeHi, item.RemainingSizeLo);
@@ -79,17 +76,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.TotalSize = totalSize;
                 queueItem.Category = item.Category;
 
-                if (postQueueItem != null)
-                {
-                    queueItem.Status = DownloadItemStatus.Downloading;
-                    queueItem.Message = postQueueItem.ProgressLabel;
-
-                    if (postQueueItem.StageProgress != 0)
-                    {
-                        queueItem.RemainingTime = TimeSpan.FromSeconds(postQueueItem.StageTimeSec * 1000 / postQueueItem.StageProgress - postQueueItem.StageTimeSec);
-                    }
-                }
-                else if (globalStatus.DownloadPaused || remainingSize == pausedSize)
+                if (globalStatus.DownloadPaused || remainingSize == pausedSize)
                 {
                     queueItem.Status = DownloadItemStatus.Paused;
                     queueItem.RemainingSize = remainingSize;

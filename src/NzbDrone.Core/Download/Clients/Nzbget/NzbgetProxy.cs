@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         string DownloadNzb(Byte[] nzbData, string title, string category, int priority, NzbgetSettings settings);
         NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings);
         List<NzbgetQueueItem> GetQueue(NzbgetSettings settings);
-        List<NzbgetPostQueueItem> GetPostQueue(NzbgetSettings settings);
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
         String GetVersion(NzbgetSettings settings);
         Dictionary<String, String> GetConfig(NzbgetSettings settings);
@@ -74,13 +73,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var request = BuildRequest(new JsonRequest("listgroups"));
 
             return Json.Deserialize<NzbgetResponse<List<NzbgetQueueItem>>>(ProcessRequest(request, settings)).Result;
-        }
-
-        public List<NzbgetPostQueueItem> GetPostQueue(NzbgetSettings settings)
-        {
-            var request = BuildRequest(new JsonRequest("postqueue"));
-
-            return Json.Deserialize<NzbgetResponse<List<NzbgetPostQueueItem>>>(ProcessRequest(request, settings)).Result;
         }
 
         public List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings)
