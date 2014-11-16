@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Notifications.Email
 
         public override void OnGrab(string message)
         {
-            const string subject = "NzbDrone [TV] - Grabbed";
+            const string subject = "Sonarr [TV] - Grabbed";
             var body = String.Format("{0} sent to queue.", message);
 
             _emailService.SendEmail(Settings, subject, body);
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Notifications.Email
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string subject = "NzbDrone [TV] - Downloaded";
+            const string subject = "Sonarr [TV] - Downloaded";
             var body = String.Format("{0} Downloaded and sorted.", message.Message);
 
             _emailService.SendEmail(Settings, subject, body);
