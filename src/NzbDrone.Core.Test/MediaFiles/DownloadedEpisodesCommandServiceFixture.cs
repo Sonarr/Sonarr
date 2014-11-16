@@ -147,27 +147,5 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             ExceptionVerification.ExpectedWarns(1);
         }
-
-        [Test]
-        public void should_not_mark_trackeddownload_as_completed_if_import_rejected()
-        {
-            GivenValidQueueItem();
-            GivenRejectedImport();
-
-            Subject.Execute(new DownloadedEpisodesScanCommand() { Path = _downloadFolder, DownloadClientId = "sab1" });
-
-            _trackedDownload.State.Should().Be(TrackedDownloadState.Downloading);
-        }
-
-        [Test]
-        public void should_mark_trackeddownload_as_completed_if_import_skipped()
-        {
-            GivenValidQueueItem();
-            GivenRejectedImport();
-
-            Subject.Execute(new DownloadedEpisodesScanCommand() { Path = _downloadFolder, DownloadClientId = "sab1" });
-
-            _trackedDownload.State.Should().Be(TrackedDownloadState.Imported);
-        }
     }
 }
