@@ -16,6 +16,7 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using FluentAssertions;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {
@@ -193,6 +194,20 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IParsingService>()
                 .Verify(v => v.GetSeries(It.Is<String>(s => s.StartsWith(prefix))), Times.Never());
+        }
+
+        [Test]
+        public void should_return_importresult_on_unknown_series()
+        {
+            var fileName = @"C:\folder\file.mkv".AsOsAgnostic();
+
+            var result = Subject.ProcessFile(new FileInfo(fileName));
+
+            result.Should().HaveCount(1);
+            result.First().ImportDecision.Should().NotBeNull();
+            result.First().ImportDecision.LocalEpisode.Should().NotBeNull();
+            result.First().ImportDecision.LocalEpisode.Path.Should().Be(fileName);
+            result.First().Result.Should().Be(ImportResultType.Rejected);
         }
 
         private void VerifyNoImport()

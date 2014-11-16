@@ -132,7 +132,7 @@ namespace NzbDrone.Core.MediaFiles
             if (series == null)
             {
                 _logger.Debug("Unknown Series for file: {0}", fileInfo.Name);
-                return new List<ImportResult>() { new ImportResult(null, String.Format("Unknown Series for file: {0}", fileInfo.Name)) };
+                return new List<ImportResult>() { new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName }, "Unknown Series"), String.Format("Unknown Series for file: {0}", fileInfo.Name)) };
             }
 
             if (_diskProvider.IsFileLocked(fileInfo.FullName))
