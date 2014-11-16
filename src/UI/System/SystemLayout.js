@@ -134,7 +134,7 @@ define(
                 });
 
                 Messenger.show({
-                    message: 'NzbDrone will shutdown shortly',
+                    message: 'Sonarr will shutdown shortly',
                     type: 'info'
                 });
             },
@@ -146,7 +146,7 @@ define(
                 });
 
                 Messenger.show({
-                    message: 'NzbDrone will restart shortly',
+                    message: 'Sonarr will restart shortly',
                     type: 'info'
                 });
             }
