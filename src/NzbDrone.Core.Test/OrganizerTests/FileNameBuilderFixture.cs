@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         private Series _series;
         private Episode _episode1;
         private Episode _episode2;
+        private Episode _episode3;
         private EpisodeFile _episodeFile;
         private NamingConfig _namingConfig;
 
@@ -51,6 +52,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .With(e => e.SeasonNumber = 15)
                             .With(e => e.EpisodeNumber = 7)
                             .With(e => e.AbsoluteEpisodeNumber = 101)
+                            .Build();
+
+            _episode3 = Builder<Episode>.CreateNew()
+                            .With(e => e.Title = "City Sushi")
+                            .With(e => e.SeasonNumber = 15)
+                            .With(e => e.EpisodeNumber = 8)
+                            .With(e => e.AbsoluteEpisodeNumber = 102)
                             .Build();
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "DRONE" };
@@ -549,8 +557,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.MultiEpisodeStyle = (int)MultiEpisodeStyle.Duplicate;
             _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
 
-            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
-                   .Should().Be("South Park - 100 - 101 - City Sushi");
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
+                   .Should().Be("South Park - 100 - 101 - 102 - City Sushi");
         }
 
         [Test]
@@ -682,5 +690,59 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - 15x06 - 15x07 - [100-101] - City Sushi - HDTV-720p");
         }
+
+        [Test]
+        public void should_format_range_multi_episode_properly()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
+            _namingConfig.MultiEpisodeStyle = 4;
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
+                .Should().Be("South Park - S15E06-08 - City Sushi");
+        }
+
+        [Test]
+        public void should_format_range_multi_episode_anime_properly()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.MultiEpisodeStyle = 4;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
+                   .Should().Be("South Park - 100-102 - City Sushi");
+        }
+
+        [Test]
+        public void should_format_repeat_multi_episode_anime_properly()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.MultiEpisodeStyle = 2;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
+                   .Should().Be("South Park - 100-101-102 - City Sushi");
+        }
+
+        [Test]
+        public void should_format_single_episode_with_range_multi_episode_properly()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
+            _namingConfig.MultiEpisodeStyle = 4;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                .Should().Be("South Park - S15E06 - City Sushi");
+        }
+
+        [Test]
+        public void should_format_single_anime_episode_with_range_multi_episode_properly()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.MultiEpisodeStyle = 4;
+            _namingConfig.AnimeEpisodeFormat = "{Series Title} - {absolute:000} - {Episode Title}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - 100 - City Sushi");
+        }
+
     }
 }

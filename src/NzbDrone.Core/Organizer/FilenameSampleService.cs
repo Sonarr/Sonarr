@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Organizer
         SampleResult GetMultiEpisodeSample(NamingConfig nameSpec);
         SampleResult GetDailySample(NamingConfig nameSpec);
         SampleResult GetAnimeSample(NamingConfig nameSpec);
+        SampleResult GetAnimeMultiEpisodeSample(NamingConfig nameSpec);
         String GetSeriesFolderSample(NamingConfig nameSpec);
         String GetSeasonFolderSample(NamingConfig nameSpec);
     }
@@ -25,12 +26,14 @@ namespace NzbDrone.Core.Organizer
         private static Series _animeSeries;
         private static Episode _episode1;
         private static Episode _episode2;
+        private static Episode _episode3;
         private static List<Episode> _singleEpisode;
         private static List<Episode> _multiEpisodes;
         private static EpisodeFile _singleEpisodeFile;
         private static EpisodeFile _multiEpisodeFile;
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
+        private static EpisodeFile _animeMultiEpisodeFile;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
@@ -71,8 +74,16 @@ namespace NzbDrone.Core.Organizer
                 AbsoluteEpisodeNumber = 2
             };
 
+            _episode3 = new Episode
+            {
+                SeasonNumber = 1,
+                EpisodeNumber = 3,
+                Title = "Episode Title (3)",
+                AbsoluteEpisodeNumber = 3
+            };
+
             _singleEpisode = new List<Episode> { _episode1 };
-            _multiEpisodes = new List<Episode> { _episode1, _episode2 };
+            _multiEpisodes = new List<Episode> { _episode1, _episode2, _episode3 };
 
             var mediaInfo = new MediaInfoModel()
             {
@@ -102,8 +113,8 @@ namespace NzbDrone.Core.Organizer
             _multiEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                RelativePath = "Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv",
-                SceneName = "Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE",
+                RelativePath = "Series.Title.S01E01-E03.720p.HDTV.x264-EVOLVE.mkv",
+                SceneName = "Series.Title.S01E01-E03.720p.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfo,
             };
@@ -120,8 +131,17 @@ namespace NzbDrone.Core.Organizer
             _animeEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                RelativePath = "Series.Title.001.HDTV.x264-EVOLVE.mkv",
-                SceneName = "Series.Title.001.HDTV.x264-EVOLVE",
+                RelativePath = "[RlsGroup] Series Title - 001 [720p].mkv",
+                SceneName = "[RlsGroup] Series Title - 001 [720p]",
+                ReleaseGroup = "RlsGrp",
+                MediaInfo = mediaInfoAnime
+            };
+
+            _animeMultiEpisodeFile = new EpisodeFile
+            {
+                Quality = new QualityModel(Quality.HDTV720p),
+                RelativePath = "[RlsGroup] Series Title - 001 - 103 [720p].mkv",
+                SceneName = "[RlsGroup] Series Title - 001 - 103 [720p]",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
@@ -174,6 +194,19 @@ namespace NzbDrone.Core.Organizer
                 Series = _animeSeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _animeEpisodeFile
+            };
+
+            return result;
+        }
+
+        public SampleResult GetAnimeMultiEpisodeSample(NamingConfig nameSpec)
+        {
+            var result = new SampleResult
+            {
+                FileName = BuildSample(_multiEpisodes, _animeSeries, _animeMultiEpisodeFile, nameSpec),
+                Series = _animeSeries,
+                Episodes = _multiEpisodes,
+                EpisodeFile = _animeMultiEpisodeFile
             };
 
             return result;
