@@ -8,7 +8,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
@@ -23,7 +22,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                       IHttpClient httpClient,
                       IConfigService configService,
                       IDiskProvider diskProvider,
-                      IParsingService parsingService,
                       IRemotePathMappingService remotePathMappingService,
                       Logger logger)
             : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
