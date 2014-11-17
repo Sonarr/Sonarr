@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Tv
         public string SortTitle { get; set; }
         public SeriesStatusType Status { get; set; }
         public string Overview { get; set; }
-        public String AirTime { get; set; }
+        public string AirTime { get; set; }
         public bool Monitored { get; set; }
         public int ProfileId { get; set; }
         public bool SeasonFolder { get; set; }
@@ -41,10 +41,9 @@ namespace NzbDrone.Core.Tv
         public Ratings Ratings { get; set; }
         public List<String> Genres { get; set; }
         public List<Actor> Actors { get; set; }
-        public String Certification { get; set; }
-
+        public string Certification { get; set; }
         public string RootFolderPath { get; set; }
-
+        public DateTime Added { get; set; }
         public DateTime? FirstAired { get; set; }
         public LazyLoaded<Profile> Profile { get; set; }
 
@@ -53,7 +52,7 @@ namespace NzbDrone.Core.Tv
 
         public override string ToString()
         {
-            return string.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
+            return String.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
         }
     }
 }
