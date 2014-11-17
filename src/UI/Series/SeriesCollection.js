@@ -59,7 +59,8 @@ define(
             
             sortMappings: {
                 'title'      : { sortKey: 'sortTitle' },
-                'nextAiring' : { sortValue: function (model, attr) {
+                'nextAiring' : {
+                    sortValue: function (model, attr) {
                                     var nextAiring = model.get(attr);
                                     
                                     if (nextAiring) {
@@ -74,6 +75,16 @@ define(
 
                                     return Number.MAX_VALUE;
                                 }
+                },
+
+                percentOfEpisodes: {
+                    sortValue: function (model, attr) {
+                        var percentOfEpisodes = model.get(attr);
+                        var episodeCount = model.get('episodeCount');
+
+                        return percentOfEpisodes + episodeCount / 1000000;
+                    }
+
                 }
             }
         });
