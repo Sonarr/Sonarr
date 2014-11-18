@@ -7,7 +7,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
@@ -18,10 +17,9 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Metadata
 {
-    public class MetadataService
-        : IHandle<MediaCoversUpdatedEvent>,
-          IHandle<EpisodeImportedEvent>,
-          IHandle<SeriesRenamedEvent>
+    public class MetadataService : IHandle<MediaCoversUpdatedEvent>,
+                                   IHandle<EpisodeImportedEvent>,
+                                   IHandle<SeriesRenamedEvent>
     {
         private readonly IMetadataFactory _metadataFactory;
         private readonly IMetadataFileService _metadataFileService;
@@ -30,7 +28,7 @@ namespace NzbDrone.Core.Metadata
         private readonly IEpisodeService _episodeService;
         private readonly IDiskProvider _diskProvider;
         private readonly IHttpClient _httpClient;
-        private readonly IConfigService _configService;
+        private readonly IMediaFileAttributeService _mediaFileAttributeService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -41,7 +39,7 @@ namespace NzbDrone.Core.Metadata
                                IEpisodeService episodeService,
                                IDiskProvider diskProvider,
                                IHttpClient httpClient,
-                               IConfigService configService,
+                               IMediaFileAttributeService mediaFileAttributeService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
@@ -52,7 +50,7 @@ namespace NzbDrone.Core.Metadata
             _episodeService = episodeService;
             _diskProvider = diskProvider;
             _httpClient = httpClient;
-            _configService = configService;
+            _mediaFileAttributeService = mediaFileAttributeService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -337,7 +335,7 @@ namespace NzbDrone.Core.Metadata
             try
             {
                 _httpClient.DownloadFile(url, path);
-                SetFilePermissions(path);
+                _mediaFileAttributeService.SetFilePermissions(path);
             }
             catch (WebException e)
             {
@@ -352,27 +350,7 @@ namespace NzbDrone.Core.Metadata
         private void SaveMetadataFile(String path, String contents)
         {
             _diskProvider.WriteAllText(path, contents);
-            SetFilePermissions(path);
-        }
-
-        private void SetFilePermissions(String path)
-        {
-            if (!_configService.SetPermissionsLinux)
-            {
-                return;
-            }
-
-            try
-            {
-                _diskProvider.SetPermissions(path, _configService.FileChmod, _configService.ChownUser, _configService.ChownGroup);
-            }
-
-            catch (Exception ex)
-            {
-
-                _logger.WarnException("Unable to apply permissions to: " + path, ex);
-                _logger.DebugException(ex.Message, ex);
-            }
+            _mediaFileAttributeService.SetFilePermissions(path);
         }
     }
 }

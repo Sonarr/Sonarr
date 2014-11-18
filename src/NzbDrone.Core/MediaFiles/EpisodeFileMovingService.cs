@@ -27,21 +27,21 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IUpdateEpisodeFileService _updateEpisodeFileService;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
-        private readonly IConfigService _configService;
+        private readonly IMediaFileAttributeService _mediaFileAttributeService;
         private readonly Logger _logger;
 
         public EpisodeFileMovingService(IEpisodeService episodeService,
                                 IUpdateEpisodeFileService updateEpisodeFileService,
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
-                                IConfigService configService,
+                                IMediaFileAttributeService mediaFileAttributeService,
                                 Logger logger)
         {
             _episodeService = episodeService;
             _updateEpisodeFileService = updateEpisodeFileService;
             _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
-            _configService = configService;
+            _mediaFileAttributeService = mediaFileAttributeService;
             _logger = logger;
         }
 
@@ -107,11 +107,11 @@ namespace NzbDrone.Core.MediaFiles
                     _logger.ErrorException("Unable to create directory: " + directoryName, ex);
                 }
                 
-                SetFolderPermissions(directoryName);
+                _mediaFileAttributeService.SetFolderPermissions(directoryName);
 
                 if (!directoryName.PathEquals(series.Path))
                 {
-                    SetFolderPermissions(series.Path);
+                    _mediaFileAttributeService.SetFolderPermissions(series.Path);
                 }
             }
 
@@ -132,13 +132,13 @@ namespace NzbDrone.Core.MediaFiles
 
             try
             {
-                SetFolderLastWriteTime(series.Path, episodeFile.DateAdded);
+                _mediaFileAttributeService.SetFolderLastWriteTime(series.Path, episodeFile.DateAdded);
 
                 if (series.SeasonFolder)
                 {
                     var seasonFolder = Path.GetDirectoryName(destinationFilename);
 
-                    SetFolderLastWriteTime(seasonFolder, episodeFile.DateAdded);
+                    _mediaFileAttributeService.SetFolderLastWriteTime(seasonFolder, episodeFile.DateAdded);
                 }
             }
 
@@ -147,68 +147,9 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.WarnException("Unable to set last write time", ex);
             }
 
-            //We should only run this on Windows
-            if (OsInfo.IsWindows)
-            {
-                //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
-                try
-                {
-                    _diskProvider.InheritFolderPermissions(destinationFilename);
-                }
-                catch (Exception ex)
-                {
-                    if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
-                    {
-                        _logger.Debug("Unable to apply folder permissions to: ", destinationFilename);
-                        _logger.DebugException(ex.Message, ex);
-                    }
-
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-
-            else
-            {
-                SetPermissions(destinationFilename, _configService.FileChmod);
-            }
+            _mediaFileAttributeService.SetFilePermissions(destinationFilename);
 
             return episodeFile;
-        }
-
-        private void SetPermissions(string path, string permissions)
-        {
-            if (!_configService.SetPermissionsLinux)
-            {
-                return;
-            }
-
-            try
-            {
-                _diskProvider.SetPermissions(path, permissions, _configService.ChownUser, _configService.ChownGroup);
-            }
-
-            catch (Exception ex)
-            {
-
-                _logger.WarnException("Unable to apply permissions to: " + path, ex);
-                _logger.DebugException(ex.Message, ex);
-            }
-        }
-
-        private void SetFolderPermissions(string path)
-        {
-            SetPermissions(path, _configService.FolderChmod);
-        }
-
-        private void SetFolderLastWriteTime(String path, DateTime time)
-        {
-            if (OsInfo.IsMono) return;
-
-            _logger.Debug("Setting last write time on series folder: {0}", path);
-            _diskProvider.FolderSetLastWriteTime(path, time);
         }
     }
 }
