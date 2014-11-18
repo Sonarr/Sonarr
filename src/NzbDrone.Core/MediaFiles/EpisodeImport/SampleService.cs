@@ -59,6 +59,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             try
             {
                 var runTime = _videoFileInfoReader.GetRunTime(path);
+                var minimumRuntime = GetMinimumAllowedRuntime(series);
 
                 if (runTime.TotalMinutes.Equals(0))
                 {
@@ -66,9 +67,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     return true;
                 }
 
-                if (runTime.TotalSeconds < 90)
+                if (runTime.TotalSeconds < minimumRuntime)
                 {
-                    _logger.Debug("[{0}] appears to be a sample. Size: {1} Runtime: {2}", path, size, runTime);
+                    _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {1} seconds", path, runTime, minimumRuntime);
                     return true;
                 }
             }
@@ -102,6 +103,24 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
 
             return false;
+        }
+
+        private int GetMinimumAllowedRuntime(Series series)
+        {
+            //Webisodes - 90 seconds
+            if (series.Runtime <= 5)
+            {
+                return 90;
+            }
+
+            //30 minute episodes - 5 minutes
+            if (series.Runtime <= 30)
+            {
+                return 300;
+            }
+
+            //60 minute episodes - 10 minutes
+            return 600;
         }
     }
 }

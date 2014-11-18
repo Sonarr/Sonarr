@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)
+                                     .With(s => s.Runtime = 30)
                                      .Build();
 
             var episodes = Builder<Episode>.CreateListOfSize(1)
@@ -106,7 +107,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         [Test]
         public void should_return_false_if_runtime_greater_than_than_minimum()
         {
-            GivenRuntime(120);
+            GivenRuntime(600);
 
             ShouldBeFalse();
         }
