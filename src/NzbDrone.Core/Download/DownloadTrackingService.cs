@@ -91,8 +91,7 @@ namespace NzbDrone.Core.Download
             var item = _historyService.Get(historyId);
             
             var trackedDownload = GetTrackedDownloads()
-                .Where(h => h.DownloadItem.DownloadClientId.Equals(item.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID)))
-                .FirstOrDefault();
+                .FirstOrDefault(h => h.DownloadItem.DownloadClientId.Equals(item.Data.GetValueOrDefault(DOWNLOAD_CLIENT_ID)));
 
             if (trackedDownload != null && trackedDownload.State == TrackedDownloadState.Unknown)
             {
@@ -144,7 +143,8 @@ namespace NzbDrone.Core.Download
 
                     if (newTrackedDownloads.ContainsKey(trackingId)) continue;
 
-                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
+                    //TODO: Rebuilding the tracked download when it is a warning is a total hack to deal with updated scene mappings
+                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload) || trackedDownload.Status == TrackedDownloadStatus.Warning)
                     {
                         trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem, grabbedHistory);
 
