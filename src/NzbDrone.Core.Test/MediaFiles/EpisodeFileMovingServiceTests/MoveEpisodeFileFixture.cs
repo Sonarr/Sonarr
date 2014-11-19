@@ -75,17 +75,5 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
 
             Subject.MoveEpisodeFile(_episodeFile, _localEpisode);
         }
-
-        [Test]
-        public void should_not_catch_generic_Exception_during_folder_inheritance()
-        {
-            WindowsOnly();
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.InheritFolderPermissions(It.IsAny<String>()))
-                  .Throws<Exception>();
-
-            Assert.Throws<Exception>(() => Subject.MoveEpisodeFile(_episodeFile, _localEpisode));
-        }
     }
 }
