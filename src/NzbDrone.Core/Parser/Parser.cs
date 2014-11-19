@@ -323,13 +323,20 @@ namespace NzbDrone.Core.Parser
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
 
+        public static string NormalizeEpisodeTitle(string title)
+        {
+            return SpecialEpisodeWordRegex.Replace(title, String.Empty)
+                                          .Trim()
+                                          .ToLower();
+        }
+
         public static string NormalizeTitle(string title)
         {
-            string singleSpaces  = WordDelimiterRegex.Replace(title, " ");
-            string noPunctuation = PunctuationRegex.Replace(singleSpaces, String.Empty);
-            string noCommonWords = CommonWordRegex.Replace(noPunctuation, String.Empty);
-            string normalized    = SpecialEpisodeWordRegex.Replace(noCommonWords, String.Empty);
-            return normalized.Trim().ToLower();
+            title = WordDelimiterRegex.Replace(title, " ");
+            title = PunctuationRegex.Replace(title, String.Empty);
+            title = CommonWordRegex.Replace(title, String.Empty);
+
+            return title.Trim().ToLower();
         }
 
         public static string ParseReleaseGroup(string title)
