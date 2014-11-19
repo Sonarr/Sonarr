@@ -13,14 +13,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Not enough Torrent seeders";
-            }
-        }
-
         public RejectionType Type
         {
             get
@@ -41,8 +33,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (torrentInfo.Seeds != null && torrentInfo.Seeds < 1)
             {
-                _logger.Debug("Only {0} seeders, skipping.", torrentInfo.Seeds);
-                return Decision.Reject("No seeders");
+                _logger.Debug("Not enough seeders. ({0})", torrentInfo.Seeds);
+                return Decision.Reject("Not enough seeders. ({0})", torrentInfo.Seeds);
             }
 
             return Decision.Accept();

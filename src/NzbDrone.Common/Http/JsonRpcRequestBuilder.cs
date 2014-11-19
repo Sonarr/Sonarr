@@ -11,7 +11,7 @@ namespace NzbDrone.Common.Http
         public String Method { get; private set; }
         public List<Object> Parameters { get; private set; }
 
-        public JsonRpcRequestBuilder(String baseUri, String method, Object[] parameters)
+        public JsonRpcRequestBuilder(String baseUri, String method, IEnumerable<Object> parameters)
             : base (baseUri)
         {
             Method = method;
