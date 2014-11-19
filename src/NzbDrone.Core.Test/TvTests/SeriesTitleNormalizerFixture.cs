@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Test.TvTests
         [TestCase("The Mentalist", "mentalist")]
         [TestCase("The Good Wife", "good wife")]
         [TestCase("The Newsroom (2012)", "newsroom 2012")]
+        [TestCase("Special Agent Oso", "special agent oso")]
         public void should_normalize_title(String title, String expected)
         {
             SeriesTitleNormalizer.Normalize(title, 0).Should().Be(expected);
