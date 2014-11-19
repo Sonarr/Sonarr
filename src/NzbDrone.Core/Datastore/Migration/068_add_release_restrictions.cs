@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (IDbCommand insertCmd = conn.CreateCommand())
                         {
                             insertCmd.Transaction = tran;
-                            insertCmd.CommandText = "INSERT INTO Restrictions (Ignored, Tags) VALUES ('?', '[]')";
+                            insertCmd.CommandText = "INSERT INTO Restrictions (Ignored, Tags) VALUES (?, '[]')";
                             insertCmd.AddParameter(restrictions);
 
                             insertCmd.ExecuteNonQuery();
