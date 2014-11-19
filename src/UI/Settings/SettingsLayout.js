@@ -254,7 +254,7 @@ define(
                 this._navigate('settings/ui');
             },
 
-            _navigate:function(route){
+            _navigate: function (route) {
                 Backbone.history.navigate(route, { trigger: false, replace: true });
             },
 

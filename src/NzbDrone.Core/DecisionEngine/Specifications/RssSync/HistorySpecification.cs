@@ -26,22 +26,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Existing file in history is of equal or higher quality";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria != null)
             {
                 _logger.Debug("Skipping history check during search");
-                return true;
+                return Decision.Accept();
             }
 
             var downloadClients = _downloadClientProvider.GetDownloadClients();
@@ -57,10 +49,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                     {
                         _logger.Debug("Latest history item is downloading, rejecting.");
-                        return false;
+                        return Decision.Reject("Download has not been imported yet");
                     }
                 }
-                return true;
+                return Decision.Accept();
             }
 
             foreach (var episode in subject.Episodes)
@@ -69,12 +61,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 if (bestQualityInHistory != null)
                 {
                     _logger.Debug("Comparing history quality with report. History is {0}", bestQualityInHistory);
+
                     if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
-                        return false;
+                    {
+                        return Decision.Reject("Existing file in history is of equal or higher quality: {0}", bestQualityInHistory);
+                    }
                 }
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

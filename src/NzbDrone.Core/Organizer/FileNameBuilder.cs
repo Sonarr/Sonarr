@@ -53,6 +53,9 @@ namespace NzbDrone.Core.Organizer
         public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex OriginalTitleRegex = new Regex(@"(\^{original[- ._]title\}$)",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly Regex FileNameCleanupRegex = new Regex(@"\.{2,}", RegexOptions.Compiled);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
@@ -78,27 +81,22 @@ namespace NzbDrone.Core.Organizer
 
             if (!namingConfig.RenameEpisodes)
             {
-                if (episodeFile.SceneName.IsNullOrWhiteSpace())
-                {
-                    if (episodeFile.RelativePath.IsNullOrWhiteSpace())
-                    {
-                        return Path.GetFileNameWithoutExtension(episodeFile.Path);                        
-                    }
-
-                    return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
-                }
-
-                return episodeFile.SceneName;
+                return GetOriginalTitle(episodeFile);
             }
 
             if (namingConfig.StandardEpisodeFormat.IsNullOrWhiteSpace() && series.SeriesType == SeriesTypes.Standard)
             {
-                throw new NamingFormatException("Standard episode format cannot be null");
+                throw new NamingFormatException("Standard episode format cannot be empty");
             }
 
             if (namingConfig.DailyEpisodeFormat.IsNullOrWhiteSpace() && series.SeriesType == SeriesTypes.Daily)
             {
-                throw new NamingFormatException("Daily episode format cannot be null");
+                throw new NamingFormatException("Daily episode format cannot be empty");
+            }
+
+            if (namingConfig.AnimeEpisodeFormat.IsNullOrWhiteSpace() && series.SeriesType == SeriesTypes.Anime)
+            {
+                throw new NamingFormatException("Anime episode format cannot be empty");
             }
 
             var pattern = namingConfig.StandardEpisodeFormat;
@@ -124,10 +122,10 @@ namespace NzbDrone.Core.Organizer
             AddEpisodeFileTokens(tokenHandlers, series, episodeFile);
             AddMediaInfoTokens(tokenHandlers, episodeFile);
             
-            var filename = ReplaceTokens(pattern, tokenHandlers).Trim();
-            filename = FileNameCleanupRegex.Replace(filename, match => match.Captures[0].Value[0].ToString());
+            var fileName = ReplaceTokens(pattern, tokenHandlers).Trim();
+            fileName = FileNameCleanupRegex.Replace(fileName, match => match.Captures[0].Value[0].ToString());
 
-            return filename;
+            return fileName;
         }
 
         public string BuildFilePath(Series series, int seasonNumber, string fileName, string extension)
@@ -398,7 +396,7 @@ namespace NzbDrone.Core.Organizer
 
         private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
         {
-            tokenHandlers["{Original Title}"] = m => episodeFile.SceneName ?? String.Empty;
+            tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile);
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? "DRONE";
             tokenHandlers["{Quality Title}"] = m => GetQualityTitle(series, episodeFile.Quality);
         }
@@ -556,17 +554,6 @@ namespace NzbDrone.Core.Organizer
             return replacementText;
         }
 
-
-        private sealed class TokenMatch
-        {
-            public Match RegexMatch { get; set; }
-            public String Prefix { get; set; }
-            public String Separator { get; set; }
-            public String Suffix { get; set; }
-            public String Token { get; set; }
-            public String CustomFormat { get; set; }
-        }
-
         private string ReplaceNumberTokens(string pattern, List<Episode> episodes)
         {
             var episodeIndex = 0;
@@ -626,7 +613,7 @@ namespace NzbDrone.Core.Organizer
             return _absoluteEpisodeFormatCache.Get(pattern, () =>  AbsoluteEpisodePatternRegex.Matches(pattern).OfType<Match>()
                 .Select(match => new AbsoluteEpisodeFormat
                 {
-                    Separator = match.Groups["separator"].Value,
+                    Separator = match.Groups["separator"].Value.IsNotNullOrWhiteSpace() ? match.Groups["separator"].Value : "-",
                     AbsoluteEpisodePattern = match.Groups["absolute"].Value
                 }).ToArray());
         }
@@ -665,6 +652,31 @@ namespace NzbDrone.Core.Organizer
 
             return _qualityDefinitionService.Get(quality.Quality).Title + qualitySuffix;
         }
+
+        private String GetOriginalTitle(EpisodeFile episodeFile)
+        {
+            if (episodeFile.SceneName.IsNullOrWhiteSpace())
+            {
+                if (episodeFile.RelativePath.IsNullOrWhiteSpace())
+                {
+                    return Path.GetFileNameWithoutExtension(episodeFile.Path);
+                }
+
+                return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
+            }
+
+            return episodeFile.SceneName;
+        }
+    }
+
+    internal sealed class TokenMatch
+    {
+        public Match RegexMatch { get; set; }
+        public String Prefix { get; set; }
+        public String Separator { get; set; }
+        public String Suffix { get; set; }
+        public String Token { get; set; }
+        public String CustomFormat { get; set; }
     }
 
     public enum MultiEpisodeStyle

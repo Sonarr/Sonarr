@@ -18,12 +18,12 @@ define(
             },
 
             setTitle: function (title) {
-                title = title.toLocaleLowerCase();
-                if (title === 'nzbdrone') {
-                    document.title = 'nzbdrone';
+                title = title;
+                if (title === 'Sonarr') {
+                    document.title = 'Sonarr';
                 }
                 else {
-                    document.title = title + ' - nzbdrone';
+                    document.title = title + ' - Sonarr';
                 }
 
                 if(window.NzbDrone.Analytics && window.Piwik){

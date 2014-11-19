@@ -21,13 +21,13 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public override void OnGrab(string message)
         {
-            const string header = "NzbDrone [TV] - Grabbed";
+            const string header = "Sonarr [TV] - Grabbed";
             _plexService.Notify(Settings, header, message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            const string header = "NzbDrone [TV] - Downloaded";
+            const string header = "Sonarr [TV] - Downloaded";
             _plexService.Notify(Settings, header, message.Message);
         }
 

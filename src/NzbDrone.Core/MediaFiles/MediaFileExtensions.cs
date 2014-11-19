@@ -60,6 +60,7 @@ namespace NzbDrone.Core.MediaFiles
                 //HD
                 { ".mkv", Quality.HDTV720p },
                 { ".ts", Quality.HDTV720p },
+                { ".wtv", Quality.HDTV720p },
 
                 //Bluray
                 { ".m2ts", Quality.Bluray720p }

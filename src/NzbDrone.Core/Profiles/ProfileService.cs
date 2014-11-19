@@ -79,6 +79,17 @@ namespace NzbDrone.Core.Profiles
 
             _logger.Info("Setting up default quality profiles");
 
+            AddDefaultProfile("Any", Quality.SDTV,
+                Quality.SDTV,
+                Quality.WEBDL480p,
+                Quality.DVD,
+                Quality.HDTV720p,
+                Quality.HDTV1080p,
+                Quality.WEBDL720p,
+                Quality.WEBDL1080p,
+                Quality.Bluray720p,
+                Quality.Bluray1080p);
+
             AddDefaultProfile("SD", Quality.SDTV,
                 Quality.SDTV,
                 Quality.WEBDL480p,

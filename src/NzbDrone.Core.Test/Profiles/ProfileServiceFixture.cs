@@ -15,12 +15,12 @@ namespace NzbDrone.Core.Test.Profiles
     public class ProfileServiceFixture : CoreTest<ProfileService>
     {
         [Test]
-        public void Init_should_add_two_profiles()
+        public void init_should_add_default_profiles()
         {
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IProfileRepository>()
-                .Verify(v => v.Insert(It.IsAny<Profile>()), Times.Exactly(4));
+                .Verify(v => v.Insert(It.IsAny<Profile>()), Times.Exactly(5));
         }
 
         [Test]

@@ -65,6 +65,8 @@ namespace NzbDrone.Api.Series
         public String RootFolderPath { get; set; }
         public String Certification { get; set; }
         public List<String> Genres { get; set; }
+        public HashSet<Int32> Tags { get; set; }
+        public DateTime Added { get; set; }
 
         //Used to support legacy consumers
         public Int32 QualityProfileId

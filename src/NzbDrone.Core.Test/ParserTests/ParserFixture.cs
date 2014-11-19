@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Test.ParserTests
          * The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
          * Superman.-.The.Man.of.Steel.1994-06.34.hybrid.DreamGirl-Novus-HD
          * Superman.-.The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
+         * Constantine S1-E1-WEB-DL-1080p-NZBgeek
          */
 
         [TestCase("Chuck - 4x05 - Title", "Chuck")]

@@ -8,10 +8,12 @@
                 {{#if installed}}
                     <span class="label label-success">Installed</span>
                 {{else}}
-                    {{#if isUpgrade}}
-                        <span class="label label-default install-update x-install-update">Install</span>
-                    {{else}}
-                        <span class="label label-default label-disabled" title="Cannot install an older version">Install</span>
+                    {{#if latest}}
+                        {{#if installable}}
+                            <span class="label label-default install-update x-install-update">Install</span>
+                        {{else}}
+                            <span class="label label-default label-disabled" title="Cannot install an older version">Install</span>
+                        {{/if}}
                     {{/if}}
                 {{/if}}
             </span>

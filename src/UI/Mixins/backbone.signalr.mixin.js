@@ -35,7 +35,7 @@ define(
                         return;
                     }
 
-                    collection.add(model, {merge: true});
+                    collection.add(model, {merge: true, changeSource: 'signalr'});
                     console.log(options.action + ': {0}}'.format(options.resource));
                 };
 

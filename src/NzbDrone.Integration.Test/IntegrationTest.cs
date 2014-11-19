@@ -63,7 +63,6 @@ namespace NzbDrone.Integration.Test
         }
 
         [TestFixtureSetUp]
-        //[SetUp]
         public void SmokeTestSetup()
         {
             _runner = new NzbDroneRunner();
@@ -87,6 +86,8 @@ namespace NzbDrone.Integration.Test
         private void InitRestClients()
         {
             RestClient = new RestClient(RootUrl + "api/");
+            RestClient.AddDefaultHeader("Authentication", _runner.ApiKey);
+
             Series = new SeriesClient(RestClient, _runner.ApiKey);
             Releases = new ReleaseClient(RestClient, _runner.ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, _runner.ApiKey);
@@ -99,7 +100,6 @@ namespace NzbDrone.Integration.Test
         }
 
         [TestFixtureTearDown]
-        //[TearDown]
         public void SmokeTestTearDown()
         {
             _runner.KillAll();
@@ -153,6 +153,5 @@ namespace NzbDrone.Integration.Test
 
             _signalrConnection.Received += json => _signalRReceived.Add(Json.Deserialize<SignalRMessage>(json)); ;
         }
-
     }
 }

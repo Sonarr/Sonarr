@@ -19,17 +19,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Already in download queue.";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var queue = _downloadTrackingService.GetQueuedDownloads()
                             .Where(v => v.State == TrackedDownloadState.Downloading)
@@ -38,10 +30,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (IsInQueue(subject, queue))
             {
                 _logger.Debug("Already in queue, rejecting.");
-                return false;
+                return Decision.Reject("Already in download queue");
             }
 
-            return true;
+            return Decision.Accept();
         }
 
         private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)

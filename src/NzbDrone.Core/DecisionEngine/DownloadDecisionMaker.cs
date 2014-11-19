@@ -8,6 +8,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using Prowlin;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.DecisionEngine
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
     {
-        private readonly IEnumerable<IRejectWithReason> _specifications;
+        private readonly IEnumerable<IDecisionEngineSpecification> _specifications;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
 
@@ -116,19 +117,15 @@ namespace NzbDrone.Core.DecisionEngine
             return new DownloadDecision(remoteEpisode, reasons.ToArray());
         }
 
-        private Rejection EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase = null)
+        private Rejection EvaluateSpec(IDecisionEngineSpecification spec, RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase = null)
         {
             try
             {
-                if (spec.RejectionReason.IsNullOrWhiteSpace())
-                {
-                    throw new InvalidOperationException("[Need Rejection Text]");
-                }
+                var result = spec.IsSatisfiedBy(remoteEpisode, searchCriteriaBase);
 
-                var generalSpecification = spec as IDecisionEngineSpecification;
-                if (generalSpecification != null && !generalSpecification.IsSatisfiedBy(remoteEpisode, searchCriteriaBase))
+                if (!result.Accepted)
                 {
-                    return new Rejection(spec.RejectionReason, generalSpecification.Type);
+                    return new Rejection(result.Reason, spec.Type);
                 }
             }
             catch (Exception e)

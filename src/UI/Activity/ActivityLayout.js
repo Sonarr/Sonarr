@@ -49,7 +49,7 @@ define(
             },
 
             _navigate: function (route) {
-                Backbone.history.navigate(route);
+                Backbone.history.navigate(route, { trigger: false, replace: true });
             },
 
             _showHistory: function (e) {

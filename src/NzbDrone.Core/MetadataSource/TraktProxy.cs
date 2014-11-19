@@ -19,7 +19,7 @@ namespace NzbDrone.Core.MetadataSource
         private readonly IHttpClient _httpClient;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
-
+        private static readonly Regex ExpandCamelCaseRegEx = new Regex(@"(?<!^|[A-Z]\.?|[^\w.])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<!^|\d\.?|[^\w.])(?=\d)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         private readonly HttpRequestBuilder _requestBuilder;
 
@@ -32,7 +32,6 @@ namespace NzbDrone.Core.MetadataSource
 
         private IEnumerable<Show> SearchTrakt(string title)
         {
-
             HttpRequest request;
 
             var lowerTitle = title.ToLowerInvariant();
@@ -76,7 +75,6 @@ namespace NzbDrone.Core.MetadataSource
 
             return _httpClient.Get<List<Show>>(request).Resource;
         }
-
 
         public List<Series> SearchForNewSeries(string title)
         {
@@ -134,7 +132,7 @@ namespace NzbDrone.Core.MetadataSource
             series.ImdbId = show.imdb_id;
             series.Title = show.title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
-            series.SortTitle = Parser.Parser.NormalizeEpisodeTitle(show.title).ToLower();
+            series.SortTitle = SeriesTitleNormalizer.Normalize(show.title, show.tvdb_id);
             series.Year = GetYear(show.year, show.first_aired);
             series.FirstAired = FromIso(show.first_aired_iso);
             series.Overview = show.overview;
@@ -179,8 +177,12 @@ namespace NzbDrone.Core.MetadataSource
             episode.AirDateUtc = FromIso(traktEpisode.first_aired_iso);
             episode.Ratings = GetRatings(traktEpisode.ratings);
 
-            episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
-
+            //Don't include series fanart images as episode screenshot
+            if (!traktEpisode.images.screen.Contains("-940."))
+            {
+                episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
+            }
+            
             return episode;
         }
 
@@ -231,11 +233,18 @@ namespace NzbDrone.Core.MetadataSource
 
         private static string GetSearchTerm(string phrase)
         {
-            phrase = phrase.RemoveAccent().ToLower();
+            phrase = phrase.RemoveAccent();
             phrase = InvalidSearchCharRegex.Replace(phrase, "");
-            phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim().ToLower();
+
+            if (!phrase.Any(char.IsWhiteSpace) && phrase.Any(char.IsUpper) && phrase.Any(char.IsLower) && phrase.Length > 4)
+            {
+                phrase = ExpandCamelCaseRegEx.Replace(phrase, " ");
+            }
+
+            phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim();
             phrase = phrase.Trim('-');
-            phrase = System.Web.HttpUtility.UrlEncode(phrase);
+
+            phrase = System.Web.HttpUtility.UrlEncode(phrase.ToLower());
 
             return phrase;
         }
@@ -307,7 +316,5 @@ namespace NzbDrone.Core.MetadataSource
 
             return seasons;
         }
-
-
     }
 }

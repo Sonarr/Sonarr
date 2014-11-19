@@ -24,8 +24,9 @@ namespace NzbDrone.Api.Series
                                 IHandle<EpisodeFileDeletedEvent>,
                                 IHandle<SeriesUpdatedEvent>,       
                                 IHandle<SeriesEditedEvent>,  
-                                IHandle<SeriesDeletedEvent>
-                                
+                                IHandle<SeriesDeletedEvent>,
+                                IHandle<SeriesRenamedEvent>
+
     {
         private readonly ISeriesService _seriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
@@ -206,6 +207,11 @@ namespace NzbDrone.Api.Series
         public void Handle(SeriesDeletedEvent message)
         {
             BroadcastResourceChange(ModelAction.Deleted, message.Series.InjectTo<SeriesResource>());
+        }
+
+        public void Handle(SeriesRenamedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
         }
     }
 }

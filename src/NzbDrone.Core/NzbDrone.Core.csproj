@@ -230,6 +230,8 @@
     <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
     <Compile Include="Datastore\Migration\062_convert_quality_models.cs" />
     <Compile Include="Datastore\Migration\065_make_scene_numbering_nullable.cs" />
+    <Compile Include="Datastore\Migration\066_add_tags.cs" />
+    <Compile Include="Datastore\Migration\067_add_added_to_series.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Datastore\PagingSpec.cs" />
     <Compile Include="Datastore\ResultSet.cs" />
     <Compile Include="Datastore\TableMapping.cs" />
+    <Compile Include="DecisionEngine\Decision.cs" />
     <Compile Include="DecisionEngine\DownloadDecision.cs" />
     <Compile Include="DecisionEngine\DownloadDecisionMaker.cs" />
     <Compile Include="DecisionEngine\DownloadDecisionPriorizationService.cs" />
@@ -479,6 +482,7 @@
     <Compile Include="MediaFiles\DownloadedEpisodesImportService.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MediaFiles\DownloadedEpisodesCommandService.cs" />
     <Compile Include="MediaFiles\EpisodeFile.cs" />
     <Compile Include="MediaFiles\EpisodeFileMoveResult.cs" />
     <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
@@ -720,6 +724,9 @@
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="Tags\Tag.cs" />
+    <Compile Include="Tags\TagRepository.cs" />
+    <Compile Include="Tags\TagService.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />
@@ -760,6 +767,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tv\SeriesStatusType.cs" />
+    <Compile Include="Tv\SeriesTitleNormalizer.cs" />
     <Compile Include="Tv\SeriesTypes.cs" />
     <Compile Include="Tv\ShouldRefreshSeries.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />

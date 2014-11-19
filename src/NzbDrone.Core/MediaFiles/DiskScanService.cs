@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Instrumentation.Extensions;
@@ -55,6 +56,8 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
+        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/)(extras|\.appledouble)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public void Scan(Series series)
         {
             var rootFolder = _diskProvider.GetParentFolder(series.Path);
@@ -86,7 +89,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = GetVideoFiles(series.Path).Where(file => !file.StartsWith(Path.Combine(series.Path, "EXTRAS"))).ToList();
+            var mediaFileList = GetVideoFiles(series.Path).Where(file => !ExcludedSubFoldersRegex.IsMatch(file)).ToList();
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 

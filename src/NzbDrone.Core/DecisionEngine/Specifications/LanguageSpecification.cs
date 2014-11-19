@@ -13,17 +13,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _logger = logger;
         }
 
-        public string RejectionReason
-        {
-            get
-            {
-                return "Language is not wanted";
-            }
-        }
-
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual bool IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var wantedLanguage = subject.Series.Profile.Value.Language;
             
@@ -32,10 +24,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (subject.ParsedEpisodeInfo.Language != wantedLanguage)
             {
                 _logger.Debug("Report Language: {0} rejected because it is not wanted, wanted {1}", subject.ParsedEpisodeInfo.Language, wantedLanguage);
-                return false;
+                return Decision.Reject("{0} is wanted, but found {1}", wantedLanguage, subject.ParsedEpisodeInfo.Language);
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }

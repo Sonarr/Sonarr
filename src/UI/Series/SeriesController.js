@@ -21,7 +21,7 @@ define(
             },
 
             series: function () {
-                this.setTitle('NzbDrone');
+                this.setTitle('Sonarr');
                 this.showMainRegion(new SeriesIndexLayout());
             },
 

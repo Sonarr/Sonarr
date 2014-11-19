@@ -16,12 +16,14 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using FluentAssertions;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {
     [TestFixture]
     public class DownloadedEpisodesImportServiceFixture : CoreTest<DownloadedEpisodesImportService>
     {
+        private string _droneFactory = "c:\\drop\\".AsOsAgnostic();
         private string[] _subFolders = new[] { "c:\\root\\foldername".AsOsAgnostic() };
         private string[] _videoFiles = new[] { "c:\\root\\foldername\\30.rock.s01e01.ext".AsOsAgnostic() };
 
@@ -36,9 +38,6 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>()))
                   .Returns(true);
-
-            Mocker.GetMock<IConfigService>().SetupGet(c => c.DownloadedEpisodesFolder)
-                  .Returns("c:\\drop\\".AsOsAgnostic());
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
@@ -55,23 +54,9 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_search_for_series_using_folder_name()
         {
-            Subject.Execute(new DownloadedEpisodesScanCommand());
-
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
-        }
-
-        [Test]
-        public void should_skip_import_if_dropfolder_doesnt_exist()
-        {
-            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>())).Returns(false);
-            
-            Subject.Execute(new DownloadedEpisodesScanCommand());
-
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.GetDirectories(It.IsAny<string>()), Times.Never());
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.GetFiles(It.IsAny<string>(), It.IsAny<SearchOption>()), Times.Never());
-
-            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -82,7 +67,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IDiskProvider>().Setup(c => c.IsFileLocked(It.IsAny<string>()))
                   .Returns(true);
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
             
             VerifyNoImport();
         }
@@ -92,7 +77,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             Mocker.GetMock<IParsingService>().Setup(c => c.GetSeries("foldername")).Returns((Series)null);
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IMakeImportDecision>()
                 .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<QualityModel>()),
@@ -112,7 +97,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
                   .Returns(new string[0]);
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IParsingService>()
                   .Verify(v => v.GetSeries(It.IsAny<String>()), Times.Never());
@@ -127,7 +112,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), false, null))
                   .Returns(new List<ImportResult>());
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.GetFolderSize(It.IsAny<String>()), Times.Never());
@@ -151,7 +136,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
                   .Returns(imported.Select(i => new ImportResult(i)).ToList());
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Never());
@@ -185,7 +170,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                       It.IsAny<Int32>()))
                   .Returns(true);
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Once());
@@ -202,13 +187,27 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Setup(c => c.GetDirectories(It.IsAny<string>()))
                   .Returns(folders);
 
-            Subject.Execute(new DownloadedEpisodesScanCommand());
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IParsingService>()
                 .Verify(v => v.GetSeries(folderName), Times.Once());
 
             Mocker.GetMock<IParsingService>()
                 .Verify(v => v.GetSeries(It.Is<String>(s => s.StartsWith(prefix))), Times.Never());
+        }
+
+        [Test]
+        public void should_return_importresult_on_unknown_series()
+        {
+            var fileName = @"C:\folder\file.mkv".AsOsAgnostic();
+
+            var result = Subject.ProcessFile(new FileInfo(fileName));
+
+            result.Should().HaveCount(1);
+            result.First().ImportDecision.Should().NotBeNull();
+            result.First().ImportDecision.LocalEpisode.Should().NotBeNull();
+            result.First().ImportDecision.LocalEpisode.Path.Should().Be(fileName);
+            result.First().Result.Should().Be(ImportResultType.Rejected);
         }
 
         private void VerifyNoImport()

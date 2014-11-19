@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
         {
             _searchCriteria.Series = _series2;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
         {
             _searchCriteria.Series = _series1;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeTrue();
         }
     }
 }

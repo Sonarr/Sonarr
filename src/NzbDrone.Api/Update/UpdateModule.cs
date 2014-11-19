@@ -22,17 +22,19 @@ namespace NzbDrone.Api.Update
                                                  .OrderByDescending(u => u.Version)
                                                  .InjectTo<List<UpdateResource>>();
 
-            foreach (var updateResource in resources)
-            {
-                if (updateResource.Version > BuildInfo.Version)
-                {
-                    updateResource.IsUpgrade = true;
-                }
+            var first = resources.First();
+            first.Latest = true;
 
-                else if (updateResource.Version == BuildInfo.Version)
-                {
-                    updateResource.Installed = true;
-                }
+            if (first.Version > BuildInfo.Version)
+            {
+                first.Installable = true;
+            }
+
+            var installed = resources.SingleOrDefault(r => r.Version == BuildInfo.Version);
+
+            if (installed != null)
+            {
+                installed.Installed = true;
             }
 
             return resources;

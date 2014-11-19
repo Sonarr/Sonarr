@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -16,8 +17,6 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
     [IntegrationTest]
     public class TraktProxyFixture : CoreTest<TraktProxy>
     {
-
-
         [SetUp]
         public void Setup()
         {
@@ -31,12 +30,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("Rob & Big", "Rob and Big")]
         [TestCase("M*A*S*H", "M*A*S*H")]
         [TestCase("imdb:tt0436992", "Doctor Who (2005)")]
-        [TestCase("imdb:0436992", "Doctor Who (2005)")]
-        [TestCase("IMDB:0436992", "Doctor Who (2005)")]
-        [TestCase("IMDB: 0436992 ", "Doctor Who (2005)")]
         [TestCase("tvdb:78804", "Doctor Who (2005)")]
-        [TestCase("TVDB:78804", "Doctor Who (2005)")]
-        [TestCase("TVDB: 78804 ", "Doctor Who (2005)")]
         public void successful_search(string title, string expected)
         {
             var result = Subject.SearchForNewSeries(title);
@@ -53,15 +47,17 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             result.Should().BeEmpty();
         }
 
-        [TestCase(75978)]
-        [TestCase(83462)]
-        [TestCase(266189)]
-        public void should_be_able_to_get_series_detail(int tvdbId)
+        [TestCase(75978, "Family Guy")]
+        [TestCase(83462, "Castle (2009)")]
+        [TestCase(266189, "The Blacklist")]
+        public void should_be_able_to_get_series_detail(Int32 tvdbId, String title)
         {
             var details = Subject.GetSeriesInfo(tvdbId);
 
             ValidateSeries(details.Item1);
             ValidateEpisodes(details.Item2);
+
+            details.Item1.Title.Should().Be(title);
         }
 
         [Test]
@@ -85,7 +81,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             series.Should().NotBeNull();
             series.Title.Should().NotBeNullOrWhiteSpace();
             series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
-            series.SortTitle.Should().Be(Parser.Parser.NormalizeEpisodeTitle(series.Title));
+            series.SortTitle.Should().Be(SeriesTitleNormalizer.Normalize(series.Title, series.TvdbId));
             series.Overview.Should().NotBeNullOrWhiteSpace();
             series.AirTime.Should().NotBeNullOrWhiteSpace();
             series.FirstAired.Should().HaveValue();
@@ -131,6 +127,10 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             {
                 episode.AirDateUtc.Value.Kind.Should().Be(DateTimeKind.Utc);
             }
+
+            episode.Images.Any(i => i.CoverType == MediaCoverTypes.Screenshot && i.Url.Contains("-940."))
+                   .Should()
+                   .BeFalse();
         }
     }
 }

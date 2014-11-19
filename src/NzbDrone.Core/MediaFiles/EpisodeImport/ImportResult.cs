@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common;
+using NzbDrone.Common.EnsureThat;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -27,6 +28,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public ImportResult(ImportDecision importDecision, params String[] errors)
         {
+            Ensure.That(importDecision, () => importDecision).IsNotNull();
+
             ImportDecision = importDecision;
             Errors = errors.ToList();
         }
