@@ -279,7 +279,7 @@ namespace NzbDrone.Core.Parser
         {
             if (searchCriteria != null)
             {
-                var tvdbId = _sceneMappingService.GetTvDbId(title);
+                var tvdbId = _sceneMappingService.FindTvDbId(title);
                 if (tvdbId.HasValue)
                 {
                     if (searchCriteria.Series.TvdbId == tvdbId)
@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Parser
 
         private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria)
         {
-            var tvdbId = _sceneMappingService.GetTvDbId(parsedEpisodeInfo.SeriesTitle);
+            var tvdbId = _sceneMappingService.FindTvDbId(parsedEpisodeInfo.SeriesTitle);
 
             if (tvdbId.HasValue)
             {

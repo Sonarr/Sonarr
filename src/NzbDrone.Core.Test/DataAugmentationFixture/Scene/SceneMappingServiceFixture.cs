@@ -6,6 +6,7 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using FluentAssertions;
@@ -103,6 +104,36 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             _provider2.Verify(c => c.GetSceneMappings(), Times.Once());
         }
 
+        [Test]
+        public void should_refresh_cache_if_cache_is_empty_when_looking_for_tvdb_id()
+        {
+            Subject.FindTvDbId("title");
+
+            Mocker.GetMock<ISceneMappingRepository>()
+                  .Verify(v => v.All(), Times.Once());
+        }
+
+        [Test]
+        public void should_not_refresh_cache_if_cache_is_not_empty_when_looking_for_tvdb_id()
+        {
+            GivenProviders(new[] { _provider1 });
+
+            Mocker.GetMock<ISceneMappingRepository>()
+                  .Setup(s => s.All())
+                  .Returns(Builder<SceneMapping>.CreateListOfSize(1).Build());
+
+
+            Subject.HandleAsync(new ApplicationStartedEvent());
+
+            Mocker.GetMock<ISceneMappingRepository>()
+                  .Verify(v => v.All(), Times.Once());
+
+            Subject.FindTvDbId("title");
+
+            Mocker.GetMock<ISceneMappingRepository>()
+                  .Verify(v => v.All(), Times.Once());
+        }
+
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
@@ -119,7 +150,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
             foreach (var sceneMapping in _fakeMappings)
             {
                 Subject.GetSceneNames(sceneMapping.TvdbId, _fakeMappings.Select(m => m.SeasonNumber)).Should().Contain(sceneMapping.SearchTerm);
-                Subject.GetTvDbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
+                Subject.FindTvDbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
             }
         }
     }

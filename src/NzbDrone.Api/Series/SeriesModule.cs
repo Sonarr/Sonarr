@@ -175,7 +175,7 @@ namespace NzbDrone.Api.Series
 
         private void PopulateAlternateTitles(SeriesResource resource)
         {
-            var mappings = _sceneMappingService.FindByTvdbid(resource.TvdbId);
+            var mappings = _sceneMappingService.FindByTvdbId(resource.TvdbId);
 
             if (mappings == null) return;
 

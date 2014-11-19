@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
-            var tvdbId = _sceneMappingService.GetTvDbId(title);
+            var tvdbId = _sceneMappingService.FindTvDbId(title);
 
             if (tvdbId.HasValue)
             {
