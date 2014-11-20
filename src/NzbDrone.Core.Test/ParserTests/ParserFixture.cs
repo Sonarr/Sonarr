@@ -36,6 +36,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hawaii Five 0", "hawaiifive0")]
         [TestCase("Match of the Day", "matchday")]
         [TestCase("Match of the Day 2", "matchday2")]
+        [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "Revenge")]
+        [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "Seed")]
         public void should_parse_series_name(String postTitle, String title)
         {
             var result = Parser.Parser.ParseSeriesName(postTitle);
@@ -48,6 +50,12 @@ namespace NzbDrone.Core.Test.ParserTests
             const String title = "Carnivàle";
             
             title.CleanSeriesTitle().Should().Be("carnivale");
+        }
+
+        [TestCase("Discovery TV - Gold Rush : 02 Road From Hell [S04].mp4")]
+        public void should_clean_up_invalid_path_characters(String postTitle)
+        {
+            Parser.Parser.ParseTitle(postTitle);
         }
 
         [TestCase("[scnzbefnet][509103] 2.Broke.Girls.S03E18.720p.HDTV.X264-DIMENSION", "2 Broke Girls")]

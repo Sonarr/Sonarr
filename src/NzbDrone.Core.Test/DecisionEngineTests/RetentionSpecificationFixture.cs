@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 
@@ -13,14 +14,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     public class RetentionSpecificationFixture : CoreTest<RetentionSpecification>
     {
 
-        private RemoteEpisode parseResult;
+        private RemoteEpisode _remoteEpisode;
 
         [SetUp]
         public void Setup()
         {
-            parseResult = new RemoteEpisode
+            _remoteEpisode = new RemoteEpisode
             {
-                Release = new ReleaseInfo()
+                Release = new ReleaseInfo() { DownloadProtocol = DownloadProtocol.Usenet }
             };
         }
 
@@ -31,7 +32,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithAge(int days)
         {
-            parseResult.Release.PublishDate = DateTime.Now.AddDays(-days);
+            _remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-days);
         }
 
         [Test]
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithRetention(0);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithRetention(1000);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithRetention(100);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithRetention(10);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -76,7 +77,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithRetention(0);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_release_is_not_usenet()
+        {
+            _remoteEpisode.Release.DownloadProtocol = DownloadProtocol.Torrent;
+
+            WithRetention(10);
+            WithAge(100);
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

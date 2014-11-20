@@ -26,6 +26,10 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
             Mocker.GetMock<IRemotePathMappingRepository>()
                   .Setup(s => s.All())
                   .Returns(new List<RemotePathMapping>());
+
+            Mocker.GetMock<IRemotePathMappingRepository>()
+                  .Setup(s => s.Insert(It.IsAny<RemotePathMapping>()))
+                  .Returns<RemotePathMapping>(m => m);
         }
 
         private void GivenMapping()
@@ -93,13 +97,13 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
 
             GivenMapping();
 
-            var result = Subject.RemapRemoteToLocal(host, remotePath);
+            var result = Subject.RemapRemoteToLocal(host, new OsPath(remotePath));
 
             result.Should().Be(expectedLocalPath);
         }
 
         [TestCase("my-server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
-        [TestCase("my-server.localdomain", "/mnt/storage", @"D:\mountedstorage")]
+        [TestCase("my-server.localdomain", "/mnt/storage/", @"D:\mountedstorage")]
         [TestCase("my-2server.localdomain", "/mnt/storage/downloads/tv", "/mnt/storage/downloads/tv")]
         [TestCase("my-server.localdomain", "/mnt/storageabc/downloads/tv", "/mnt/storageabc/downloads/tv")]
         public void should_remap_local_to_remote(String host, String expectedRemotePath, String localPath)
@@ -108,9 +112,28 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
 
             GivenMapping();
 
-            var result = Subject.RemapLocalToRemote(host, localPath);
+            var result = Subject.RemapLocalToRemote(host, new OsPath(localPath));
 
             result.Should().Be(expectedRemotePath);
+        }
+
+        [TestCase(@"\\server\share\with/mixed/slashes", @"\\server\share\with\mixed\slashes\")]
+        [TestCase(@"D:/with/forward/slashes", @"D:\with\forward\slashes\")]
+        [TestCase(@"D:/with/mixed\slashes", @"D:\with\mixed\slashes\")]
+        public void should_fix_wrong_slashes_on_add(String remotePath, String cleanedPath)
+        {
+            GivenMapping();
+
+            var mapping = new RemotePathMapping
+            {
+                Host = "my-server.localdomain",
+                RemotePath = remotePath,
+                LocalPath = @"D:\mountedstorage\downloads\tv" .AsOsAgnostic()
+            };
+
+            var result = Subject.Add(mapping);
+
+            result.RemotePath.Should().Be(cleanedPath);
         }
     }
 }

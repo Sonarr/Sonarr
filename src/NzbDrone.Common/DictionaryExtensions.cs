@@ -23,5 +23,10 @@ namespace NzbDrone.Common
 
             return merged;
         }
+
+        public static void Add<TKey, TValue>(this  ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
+        {
+            collection.Add(key, value);
+        }
     }
 }

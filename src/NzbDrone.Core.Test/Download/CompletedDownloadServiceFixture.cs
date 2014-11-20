@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.Download
             _completed = Builder<DownloadClientItem>.CreateListOfSize(1)
                                                     .All()
                                                     .With(h => h.Status = DownloadItemStatus.Completed)
-                                                    .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
+                                                    .With(h => h.OutputPath = new OsPath(@"C:\DropFolder\MyDownload".AsOsAgnostic()))
                                                     .With(h => h.Title = "Drone.S01E01.HDTV")
                                                     .Build()
                                                     .ToList();
@@ -325,7 +325,7 @@ namespace NzbDrone.Core.Test.Download
             _completed.AddRange(Builder<DownloadClientItem>.CreateListOfSize(2)
                                              .All()
                                              .With(h => h.Status = DownloadItemStatus.Completed)
-                                             .With(h => h.OutputPath = @"C:\DropFolder\MyDownload".AsOsAgnostic())
+                                             .With(h => h.OutputPath = new OsPath(@"C:\DropFolder\MyDownload".AsOsAgnostic()))
                                              .With(h => h.Title = "Drone.S01E01.HDTV")
                                              .Build());
 

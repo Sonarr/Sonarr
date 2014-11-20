@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                 .With(v => v.State == TrackedDownloadState.Downloading)
                 .With(v => v.DownloadItem = new DownloadClientItem())
                 .With(v => v.DownloadItem.Status = DownloadItemStatus.Completed)
-                .With(v => v.DownloadItem.OutputPath = @"C:\Test\DropFolder\myfile.mkv".AsOsAgnostic())
+                .With(v => v.DownloadItem.OutputPath = new OsPath(@"C:\Test\DropFolder\myfile.mkv".AsOsAgnostic()))
                 .Build();
 
             Mocker.GetMock<IDownloadTrackingService>()
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             GivenCompletedDownloadHandling(true);
             GivenDroneFactoryFolder(true);
 
-            _completed.First().DownloadItem.OutputPath = (DRONE_FACTORY_FOLDER + @"\myfile.mkv").AsOsAgnostic();
+            _completed.First().DownloadItem.OutputPath = new OsPath((DRONE_FACTORY_FOLDER + @"\myfile.mkv").AsOsAgnostic());
 
             Subject.Check().ShouldBeWarning();
         }

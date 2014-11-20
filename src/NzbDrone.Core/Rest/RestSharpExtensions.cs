@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Instrumentation;
@@ -70,6 +72,15 @@ namespace NzbDrone.Core.Rest
         public static void AddQueryString(this IRestRequest request, string name, object value)
         {
             request.AddParameter(name, value.ToString(), ParameterType.GetOrPost);
+        }
+
+        public static object GetHeaderValue(this IRestResponse response, String key)
+        {
+            var header = response.Headers.FirstOrDefault(v => v.Name == key);
+
+            if (header == null) return null;
+
+            return header.Value;
         }
     }
 }

@@ -70,11 +70,12 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
+                    Category = "nzbdrone",
                     Title = title,
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
 
-                    OutputPath = folder
+                    OutputPath = new OsPath(folder)
                 };
 
                 if (files.Any(_diskProvider.IsFileLocked))
@@ -99,11 +100,12 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
+                    Category = "nzbdrone",
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),
 
-                    OutputPath = videoFile
+                    OutputPath = new OsPath(videoFile)
                 };
 
                 if (_diskProvider.IsFileLocked(videoFile))
@@ -135,7 +137,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             return new DownloadClientStatus
             {
                 IsLocalhost = true,
-                OutputRootFolders = new List<string> { Settings.WatchFolder }
+                OutputRootFolders = new List<OsPath> { new OsPath(Settings.WatchFolder) }
             };
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -30,6 +31,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public String Script { get; set; }
         public String Dir { get; set; }
 
-        public String FullPath { get; set; }
+        public OsPath FullPath { get; set; }
     }
 }
