@@ -100,15 +100,18 @@ namespace NzbDrone.Core.MediaFiles
 
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
 
-            foreach (var videoFile in videoFiles)
+            if (downloadClientItem == null)
             {
-                if (_diskProvider.IsFileLocked(videoFile))
+                foreach (var videoFile in videoFiles)
                 {
-                    _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
-                    return new List<ImportResult>
-                    { 
-                        new ImportResult(new ImportDecision(new LocalEpisode { Path = videoFile }, "Locked file, try again later"), "Locked file, try again later")
-                    };
+                    if (_diskProvider.IsFileLocked(videoFile))
+                    {
+                        _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
+                        return new List<ImportResult>
+                        { 
+                            new ImportResult(new ImportDecision(new LocalEpisode { Path = videoFile }, "Locked file, try again later"), "Locked file, try again later")
+                        };
+                    }
                 }
             }
 
