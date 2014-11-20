@@ -110,8 +110,9 @@ namespace NzbDrone.Windows
             {
                 return CreateHardLink(destination, source, IntPtr.Zero);
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.DebugException(String.Format("Hardlink '{0}' to '{1}' failed.", source, destination), ex);
                 return false;
             }
         }

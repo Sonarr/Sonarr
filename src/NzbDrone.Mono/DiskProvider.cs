@@ -160,8 +160,9 @@ namespace NzbDrone.Mono
                 UnixFileSystemInfo.GetFileSystemEntry(source).CreateLink(destination);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.DebugException(String.Format("Hardlink '{0}' to '{1}' failed.", source, destination), ex);
                 return false;
             }
         }
