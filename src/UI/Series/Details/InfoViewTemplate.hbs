@@ -30,6 +30,8 @@
         </span>
     </div>
 </div>
+
+{{#if alternateTitles}}
 <div class="row">
     <div class="col-md-12">
         {{#each alternateTitles}}
@@ -39,3 +41,12 @@
         {{/each}}
     </div>
 </div>
+{{/if}}
+
+{{#if tags}}
+<div class="row">
+    <div class="col-md-12">
+        {{tagDisplay tags}}
+    </div>
+</div>
+{{/if}}
