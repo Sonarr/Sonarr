@@ -1,9 +1,8 @@
 var gulp = require('gulp');
-var rimraf = require('gulp-rimraf');
+var del = require('del');
 
 var paths = require('./paths');
 
-gulp.task('clean', function () {
-    return gulp.src(paths.dest.root, {read: false})
-        .pipe(rimraf());
+gulp.task('clean', function (cb) {
+	del([paths.dest.root], cb);
 });

@@ -1,14 +1,14 @@
 {
-  "name": "NzbDrone",
+  "name": "Sonarr",
   "version": "0.0.0",
-  "description": "NZBDrone",
+  "description": "Sonarr",
   "main": "index.js",
   "scripts": {
     "preinstall": ""
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/NzbDrone/NzbDrone.git"
+    "url": "git://github.com/Sonarr/Sonarr.git"
   },
   "author": "",
   "license": "BSD",
@@ -18,7 +18,7 @@
     "fs-extra": "0.12.0",
     "gulp": "3.8.10",
     "gulp-cached": "1.0.1",
-    "gulp-rimraf": "0.1.1",
+    "del": "0.1.3",
     "gulp-concat": "2.4.2",
     "gulp-declare": "0.3.0",
     "gulp-handlebars": "2.2.0",
