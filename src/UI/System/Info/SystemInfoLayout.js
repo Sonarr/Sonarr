@@ -5,25 +5,29 @@ define(
         'marionette',
         'System/Info/About/AboutView',
         'System/Info/DiskSpace/DiskSpaceLayout',
-        'System/Info/Health/HealthLayout'
+        'System/Info/Health/HealthLayout',
+        'System/Info/MoreInfo/MoreInfoView'
     ], function (Backbone,
                  Marionette,
                  AboutView,
                  DiskSpaceLayout,
-                 HealthLayout) {
+                 HealthLayout,
+                 MoreInfoView) {
         return Marionette.Layout.extend({
             template: 'System/Info/SystemInfoLayoutTemplate',
 
             regions: {
-                about    : '#about',
-                diskSpace: '#diskspace',
-                health   : '#health'
+                about     : '#about',
+                diskSpace : '#diskspace',
+                health    : '#health',
+                moreInfo  : '#more-info'
             },
 
             onRender: function () {
-                this.about.show(new AboutView());
-                this.diskSpace.show(new DiskSpaceLayout());
                 this.health.show(new HealthLayout());
+                this.diskSpace.show(new DiskSpaceLayout());
+                this.about.show(new AboutView());
+                this.moreInfo.show(new MoreInfoView());
             }
         });
     });
