@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.Tv;
 
@@ -9,10 +12,12 @@ namespace NzbDrone.Core.Notifications.Xbmc
     public class Xbmc : NotificationBase<XbmcSettings>
     {
         private readonly IXbmcService _xbmcService;
+        private readonly Logger _logger;
 
-        public Xbmc(IXbmcService xbmcService)
+        public Xbmc(IXbmcService xbmcService, Logger logger)
         {
             _xbmcService = xbmcService;
+            _logger = logger;
         }
 
         public override string Link
@@ -24,21 +29,14 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             const string header = "Sonarr [TV] - Grabbed";
 
-            if (Settings.Notify)
-            {
-                _xbmcService.Notify(Settings, header, message);
-            }
+            Notify(Settings, header, message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string header = "Sonarr [TV] - Downloaded";
 
-            if (Settings.Notify)
-            {
-                _xbmcService.Notify(Settings, header, message.Message);
-            }
-
+            Notify(Settings, header, message.Message);
             UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
@@ -56,16 +54,40 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return new ValidationResult(failures);
         }
 
+        private void Notify(XbmcSettings settings, string header, string message)
+        {
+            try
+            {
+                if (Settings.Notify)
+                {
+                    _xbmcService.Notify(Settings, header, message);
+                }
+            }
+            catch (SocketException ex)
+            {
+                var logMessage = String.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
+                _logger.DebugException(logMessage, ex);
+            }
+        }
+
         private void UpdateAndClean(Series series, bool clean = true)
         {
-            if (Settings.UpdateLibrary)
+            try
             {
-                _xbmcService.Update(Settings, series);
-            }
+                if (Settings.UpdateLibrary)
+                {
+                    _xbmcService.Update(Settings, series);
+                }
 
-            if (clean && Settings.CleanLibrary)
+                if (clean && Settings.CleanLibrary)
+                {
+                    _xbmcService.Clean(Settings);
+                }
+            }
+            catch (SocketException ex)
             {
-                _xbmcService.Clean(Settings);
+                var logMessage = String.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
+                _logger.DebugException(logMessage, ex);
             }
         }
     }
