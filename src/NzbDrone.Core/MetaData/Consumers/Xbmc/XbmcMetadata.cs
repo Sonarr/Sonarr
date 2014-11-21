@@ -303,7 +303,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 if (screenshot == null)
                 {
                     _logger.Debug("Episode screenshot not available");
-                    return null;
+                    return new List<ImageFileResult>();
                 }
 
                 return new List<ImageFileResult>
@@ -340,8 +340,6 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 {
                     filename = String.Format("season-specials-{0}.jpg", image.CoverType.ToString().ToLower());
                 }
-
-                var path = Path.Combine(series.Path, filename);
 
                 yield return new ImageFileResult(Path.Combine(series.Path, filename), image.Url);
             }
