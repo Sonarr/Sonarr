@@ -12,9 +12,9 @@ namespace NzbDrone.Core.Organizer
                     {
                         RenameEpisodes = false,
                         MultiEpisodeStyle = 0,
-                        StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Title}",
-                        DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Title}",
-                        AnimeEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Title}",
+                        StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
+                        DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Full}",
+                        AnimeEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
                         SeriesFolderFormat = "{Series Title}",
                         SeasonFolderFormat = "Season {season}"
                     };

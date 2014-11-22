@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
         private void GivenProper()
         {
-            _episodeFile.Quality.Revision.Version =2;
+            _episodeFile.Quality.Revision.Version = 2;
         }
 
         [Test]
@@ -214,13 +214,13 @@ namespace NzbDrone.Core.Test.OrganizerTests
         }
 
         [Test]
-        public void should_replace_quality_title_with_proper()
+        public void should_replace_quality_proper_with_proper()
         {
-            _namingConfig.StandardEpisodeFormat = "{Quality Title}";
+            _namingConfig.StandardEpisodeFormat = "{Quality Proper}";
             GivenProper();
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("HDTV-720p Proper");
+                   .Should().Be("Proper");
         }
 
         [Test]
@@ -564,10 +564,10 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [Test]
         public void should_include_affixes_if_value_not_empty()
         {
-            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}{_Episode.Title_}";
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}{_Episode.Title_}{Quality.Title}";
             
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("South.Park.S15E06_City.Sushi_");
+                   .Should().Be("South.Park.S15E06_City.Sushi_HDTV-720p");
         }
 
         [Test]
@@ -689,6 +689,91 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - 15x06 - 15x07 - [100-101] - City Sushi - HDTV-720p");
+        }
+
+        [Test]
+        public void should_replace_quality_proper_with_v2_for_anime_v2()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "{Quality Proper}";
+
+            GivenProper();
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("v2");
+        }
+
+        [Test]
+        public void should_not_include_quality_proper_when_release_is_not_a_proper()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Quality Title} {Quality Proper}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("HDTV-720p");
+        }
+
+        [Test]
+        public void should_wrap_proper_in_square_brackets()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} [{Quality Title}] {[Quality Proper]}";
+
+            GivenProper();
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 [HDTV-720p] [Proper]");
+        }
+
+        [Test]
+        public void should_not_wrap_proper_in_square_brackets_when_not_a_proper()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} [{Quality Title}] {[Quality Proper]}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 [HDTV-720p]");
+        }
+
+        [Test]
+        public void should_replace_quality_full_with_quality_title_only_when_not_a_proper()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} [{Quality Full}]";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 [HDTV-720p]");
+        }
+
+        [Test]
+        public void should_replace_quality_full_with_quality_title_and_proper_only_when_a_proper()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} [{Quality Full}]";
+
+            GivenProper();
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 [HDTV-720p Proper]");
+        }
+
+        [TestCase(' ')]
+        [TestCase('-')]
+        [TestCase('.')]
+        [TestCase('_')]
+        public void should_trim_extra_separators_from_end_when_quality_proper_is_not_included(char separator)
+        {
+            _namingConfig.StandardEpisodeFormat = String.Format("{{Quality{0}Title}}{0}{{Quality{0}Proper}}", separator);
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("HDTV-720p");
+        }
+
+        [TestCase(' ')]
+        [TestCase('-')]
+        [TestCase('.')]
+        [TestCase('_')]
+        public void should_trim_extra_separators_from_middle_when_quality_proper_is_not_included(char separator)
+        {
+            _namingConfig.StandardEpisodeFormat = String.Format("{{Quality{0}Title}}{0}{{Quality{0}Proper}}{0}{{Episode{0}Title}}", separator);
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(String.Format("HDTV-720p{0}City{0}Sushi", separator));
         }
 
         [Test]
