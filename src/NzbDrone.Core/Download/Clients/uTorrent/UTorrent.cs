@@ -115,7 +115,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
                 if (torrent.Status.HasFlag(UTorrentTorrentStatus.Error))
                 {
-                    item.Status = DownloadItemStatus.Failed;
+                    item.Status = DownloadItemStatus.Warning;
+                    item.Message = "uTorrent is reporting an error";
                 }
                 else if (torrent.Status.HasFlag(UTorrentTorrentStatus.Loaded) && 
                          torrent.Status.HasFlag(UTorrentTorrentStatus.Checked) && torrent.Remaining == 0 && torrent.Progress == 1.0)

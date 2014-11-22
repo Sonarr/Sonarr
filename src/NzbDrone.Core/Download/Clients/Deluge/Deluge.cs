@@ -123,7 +123,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
                 if (torrent.State == DelugeTorrentStatus.Error)
                 {
-                    item.Status = DownloadItemStatus.Failed;
+                    item.Status = DownloadItemStatus.Warning;
+                    item.Message = "Deluge is reporting an error";
                 }
                 else if (torrent.IsFinished && torrent.State != DelugeTorrentStatus.Checking)
                 {

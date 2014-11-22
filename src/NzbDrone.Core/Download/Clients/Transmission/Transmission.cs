@@ -109,7 +109,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 item.DownloadClient = Definition.Name;
                 item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
-                item.Message = torrent.ErrorString;
 
                 item.OutputPath = outputPath + torrent.Name;
                 item.RemainingSize = torrent.LeftUntilDone;
@@ -118,7 +117,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 if (!torrent.ErrorString.IsNullOrWhiteSpace())
                 {
-                    item.Status = DownloadItemStatus.Failed;
+                    item.Status = DownloadItemStatus.Warning;
+                    item.Message = torrent.ErrorString;
                 }
                 else if (torrent.Status == TransmissionTorrentStatus.Seeding || torrent.Status == TransmissionTorrentStatus.SeedingWait)
                 {
