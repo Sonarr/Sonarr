@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         {
             PrepareClientToReturnFailedItem();
             var item = Subject.GetItems().Single();
-            VerifyFailed(item);
+            VerifyWarning(item);
         }
 
         [Test]

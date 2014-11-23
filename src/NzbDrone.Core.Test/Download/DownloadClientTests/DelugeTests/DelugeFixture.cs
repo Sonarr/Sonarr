@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         {
             PrepareClientToReturnFailedItem();
             var item = Subject.GetItems().Single();
-            VerifyFailed(item);
+            VerifyWarning(item);
         }
 
         [Test]

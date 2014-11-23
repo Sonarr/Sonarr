@@ -108,6 +108,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             downloadClientItem.Status.Should().Be(DownloadItemStatus.Completed);
         }
 
+        protected void VerifyWarning(DownloadClientItem downloadClientItem)
+        {
+            VerifyIdentifiable(downloadClientItem);
+
+            downloadClientItem.Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
         protected void VerifyFailed(DownloadClientItem downloadClientItem)
         {
             VerifyIdentifiable(downloadClientItem);
