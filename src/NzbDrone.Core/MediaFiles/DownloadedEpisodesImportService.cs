@@ -138,10 +138,13 @@ namespace NzbDrone.Core.MediaFiles
                 return new List<ImportResult>() { new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName }, "Unknown Series"), String.Format("Unknown Series for file: {0}", fileInfo.Name)) };
             }
 
-            if (_diskProvider.IsFileLocked(fileInfo.FullName))
+            if (downloadClientItem == null)
             {
-                _logger.Debug("[{0}] is currently locked by another process, skipping", fileInfo.FullName);
-                return new List<ImportResult>();
+                if (_diskProvider.IsFileLocked(fileInfo.FullName))
+                {
+                    _logger.Debug("[{0}] is currently locked by another process, skipping", fileInfo.FullName);
+                    return new List<ImportResult>();
+                }
             }
 
             var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, true);
