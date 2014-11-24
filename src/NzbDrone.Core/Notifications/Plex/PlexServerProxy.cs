@@ -89,6 +89,7 @@ namespace NzbDrone.Core.Notifications.Plex
 	        request.AddHeader("X-Plex-Platform-Version", "7");
 	        request.AddHeader("X-Plex-Provides", "player");
 	        request.AddHeader("X-Plex-Client-Identifier", "AB6CCCC7-5CF5-4523-826A-B969E0FFD8A0");
+	        request.AddHeader("X-Plex-Device-Name", "Sonarr");
 	        request.AddHeader("X-Plex-Product", "PlexWMC");
 	        request.AddHeader("X-Plex-Version", "0");
 
