@@ -57,6 +57,7 @@
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveService.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Extensions\Base64Extentions.cs" />
     <Compile Include="Extensions\Int64Extensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\XmlExtentions.cs" />
     <Compile Include="HashUtil.cs" />
     <Compile Include="Http\GZipWebClient.cs">
       <SubType>Component</SubType>

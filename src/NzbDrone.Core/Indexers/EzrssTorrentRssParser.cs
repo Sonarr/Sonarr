@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using NzbDrone.Core.Parser.Model;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Indexers
 {
     public class EzrssTorrentRssParser : TorrentRssParser
     {
-        public const String ns = "{http://xmlns.ezrss.it/0.1/}";
-        
         public EzrssTorrentRssParser()
         {
             UseGuidInfoUrl = true;
@@ -18,25 +14,9 @@ namespace NzbDrone.Core.Indexers
             UseEnclosureUrl = true;
         }
 
-        protected virtual XElement GetEzrssElement(XElement item, String name)
-        {
-            var element = item.Element(ns + name);
-
-            if (element == null)
-            {
-                element = item.Element(ns + "torrent");
-                if (element != null)
-                {
-                    element = element.Element(ns + name);
-                }
-            }
-
-            return element;
-        }
-
         protected override Int64 GetSize(XElement item)
         {
-            var contentLength = GetEzrssElement(item, "contentLength");
+            var contentLength = item.FindDecendants("contentLength").SingleOrDefault();
 
             if (contentLength != null)
             {
@@ -48,22 +28,19 @@ namespace NzbDrone.Core.Indexers
 
         protected override String GetInfoHash(XElement item)
         {
-            var infoHash = GetEzrssElement(item, "infoHash");
-
+            var infoHash = item.FindDecendants("infoHash").SingleOrDefault();
             return (String)infoHash;
         }
 
         protected override String GetMagnetUrl(XElement item)
         {
-            var magnetURI = GetEzrssElement(item, "magnetURI");
-
+            var magnetURI = item.FindDecendants("magnetURI").SingleOrDefault();
             return (String)magnetURI;
         }
 
         protected override Int32? GetSeeders(XElement item)
         {
-            var seeds = GetEzrssElement(item, "seeds");
-
+            var seeds = item.FindDecendants("seeds").SingleOrDefault();
             if (seeds != null)
             {
                 return (Int32)seeds;
@@ -74,8 +51,7 @@ namespace NzbDrone.Core.Indexers
 
         protected override Int32? GetPeers(XElement item)
         {
-            var peers = GetEzrssElement(item, "peers");
-
+            var peers = item.FindDecendants("peers").SingleOrDefault();
             if (peers != null)
             {
                 return (Int32)peers;

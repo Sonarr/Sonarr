@@ -175,6 +175,22 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             ValidateTorrentResult(result, hasSize: true);
         }
 
+
+
+        private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool hasSize = false, bool hasInfoUrl = false, bool hasMagnet = false)
+        {
+            reports.Should().OnlyContain(c => c.GetType() == typeof(TorrentInfo));
+
+            ValidateResult(reports, hasSize, hasInfoUrl);
+
+            reports.Should().OnlyContain(c => c.DownloadProtocol == DownloadProtocol.Torrent);
+
+            if (hasMagnet)
+            {
+                reports.Cast<TorrentInfo>().Should().OnlyContain(c => c.MagnetUrl.StartsWith("magnet:"));
+            }
+        }
+
         private void ValidateResult(IList<ReleaseInfo> reports, bool hasSize = false, bool hasInfoUrl = false)
         {
             reports.Should().NotBeEmpty();
@@ -191,20 +207,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             if (hasSize)
             {
                 reports.Should().OnlyContain(c => c.Size > 0);
-            }
-        }
-
-        private void ValidateTorrentResult(IList<ReleaseInfo> reports, bool hasSize = false, bool hasInfoUrl = false, bool hasMagnet = false)
-        {
-            reports.Should().OnlyContain(c => c.GetType() == typeof(TorrentInfo));
-
-            ValidateResult(reports, hasSize, hasInfoUrl);
-
-            reports.Should().OnlyContain(c => c.DownloadProtocol == DownloadProtocol.Torrent);
-
-            if (hasMagnet)
-            {
-                reports.Cast<TorrentInfo>().Should().OnlyContain(c => c.MagnetUrl.StartsWith("magnet:"));
             }
         }
 
