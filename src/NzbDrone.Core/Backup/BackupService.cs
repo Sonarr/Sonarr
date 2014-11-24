@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.Backup
 
             using (var unitOfWork = new UnitOfWork(() => _maindDb.GetDataMapper()))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.Serializable);
 
                 var databaseFile = _appFolderInfo.GetNzbDroneDatabase();
                 var tempDatabaseFile = Path.Combine(_backupTempFolder, Path.GetFileName(databaseFile));

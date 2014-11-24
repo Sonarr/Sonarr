@@ -90,7 +90,7 @@ namespace Marr.Data
 
         #region - Connections / Transactions -
 
-        void BeginTransaction();
+        void BeginTransaction(IsolationLevel isolationLevel);
         void RollBack();
         void Commit();
         event EventHandler OpeningConnection;

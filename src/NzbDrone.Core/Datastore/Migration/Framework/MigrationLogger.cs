@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public void ElapsedTime(TimeSpan timeSpan)
         {
+            _logger.Debug("Took: {0}", timeSpan);
         }
 
         public void Error(string message)

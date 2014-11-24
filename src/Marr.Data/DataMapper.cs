@@ -894,10 +894,10 @@ namespace Marr.Data
             ClosingConnection = null;
         }
 
-        public void BeginTransaction()
+        public void BeginTransaction(IsolationLevel isolationLevel)
         {
             OpenConnection();
-            DbTransaction trans = Command.Connection.BeginTransaction();
+            DbTransaction trans = Command.Connection.BeginTransaction(isolationLevel);
             Command.Transaction = trans;
         }
 
