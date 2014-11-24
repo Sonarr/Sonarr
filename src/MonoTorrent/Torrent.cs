@@ -5,7 +5,6 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using MonoTorrent.BEncoding;
-using MonoTorrent.Common;
 
 namespace MonoTorrent
 {

@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
-using System.Text;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace MonoTorrent.Common
+namespace MonoTorrent
 {
 	public delegate long Operation<T>(T target);
 
