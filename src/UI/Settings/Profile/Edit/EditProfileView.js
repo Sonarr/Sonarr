@@ -13,14 +13,7 @@ define(
             template: 'Settings/Profile/Edit/EditProfileViewTemplate',
 
             ui: {
-                cutoff    : '.x-cutoff',
-                delay     : '.x-delay',
-                delayMode : '.x-delay-mode'
-            },
-
-            events: {
-                'change .x-delay': 'toggleDelayMode',
-                'keyup .x-delay': 'toggleDelayMode'
+                cutoff    : '.x-cutoff'
             },
 
             templateHelpers: function () {
@@ -29,30 +22,10 @@ define(
                 };
             },
 
-            onShow: function () {
-                this.toggleDelayMode();
-            },
-
             getCutoff: function () {
                 var self = this;
 
                 return _.findWhere(_.pluck(this.model.get('items'), 'quality'), { id: parseInt(self.ui.cutoff.val(), 10)});
-            },
-
-            toggleDelayMode: function () {
-                var delay = parseInt(this.ui.delay.val(), 10);
-
-                if (isNaN(delay)) {
-                    return;
-                }
-
-                if (delay > 0 && Config.getValueBoolean(Config.Keys.AdvancedSettings)) {
-                    this.ui.delayMode.show();
-                }
-
-                else {
-                    this.ui.delayMode.hide();
-                }
             }
         });
 

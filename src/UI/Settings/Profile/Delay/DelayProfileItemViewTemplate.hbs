@@ -1,0 +1,39 @@
+﻿    <div class="col-sm-2">
+        {{TitleCase preferredProtocol}}
+    </div>
+    <div class="col-sm-2">
+
+        {{#if_eq usenetDelay compare="0"}}
+            No delay
+        {{else}}
+            {{#if_eq usenetDelay compare="1"}}
+                1 minute
+            {{else}}
+                {{usenetDelay}} minutes
+            {{/if_eq}}
+        {{/if_eq}}
+
+    </div>
+    <div class="col-sm-2">
+        {{#if_eq torrentDelay compare="0"}}
+            No delay
+        {{else}}
+            {{#if_eq torrentDelay compare="1"}}
+                1 minute
+            {{else}}
+                {{torrentDelay}} minutes
+            {{/if_eq}}
+        {{/if_eq}}
+    </div>
+    <div class="col-sm-5">
+        {{tagDisplay tags}}
+    </div>
+    <div class="col-sm-1">
+        <div class="pull-right">
+            {{#unless_eq id compare="1"}}
+                <i class="drag-handle icon-reorder x-drag-handle" title="Reorder"/>
+            {{/unless_eq}}
+
+            <i class="icon-nd-edit x-edit" title="Edit"></i>
+        </div>
+    </div>

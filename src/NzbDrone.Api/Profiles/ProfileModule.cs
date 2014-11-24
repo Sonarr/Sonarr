@@ -46,8 +46,6 @@ namespace NzbDrone.Api.Profiles
             model.Cutoff = (Quality)resource.Cutoff.Id;
             model.Items = resource.Items.InjectTo<List<ProfileQualityItem>>();
             model.Language = resource.Language;
-            model.GrabDelay = resource.GrabDelay;
-            model.GrabDelayMode = resource.GrabDelayMode;
 
             _profileService.Update(model);
         }
