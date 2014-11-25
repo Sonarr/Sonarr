@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Notifications.Growl
     {
         private readonly Logger _logger;
 
-        private readonly Application _growlApplication = new Application("NzbDrone");
+        private readonly Application _growlApplication = new Application("Sonarr");
         private readonly NotificationType[] _notificationTypes;
 
         private class GrowlRequestState
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Notifications.Growl
 
         private void Register(string host, int port, string password)
         {
-            _logger.Debug("Registering NzbDrone with Growl host: {0}:{1}", host, port);
+            _logger.Debug("Registering Sonarr with Growl host: {0}:{1}", host, port);
 
             var growlConnector = GetGrowlConnector(host, port, password);
 
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Notifications.Growl
                 Register(settings.Host, settings.Port, settings.Password);
 
                 const string title = "Test Notification";
-                const string body = "This is a test message from NzbDrone";
+                const string body = "This is a test message from Sonarr";
 
                 SendNotification(title, body, "TEST", settings.Host, settings.Port, settings.Password);
             }

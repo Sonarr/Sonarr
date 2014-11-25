@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             try
             {
                 const string title = "Test Notification";
-                const string body = "This is a test message from NzbDrone";
+                const string body = "This is a test message from Sonarr";
 
                 SendNotification(title, body, settings.ApiKey, settings.UserKey, (PushoverPriority)settings.Priority, settings.Sound);
             }
