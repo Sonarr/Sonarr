@@ -25,7 +25,7 @@ namespace NzbDrone.Common.Http
         public HttpClient(Logger logger)
         {
             _logger = logger;
-            _userAgent = String.Format("NzbDrone/{0} ({1} {2})",
+            _userAgent = String.Format("Sonarr/{0} ({1} {2})",
                 BuildInfo.Version,
                 OsInfo.Os, OsInfo.Version.ToString(2));
             ServicePointManager.DefaultConnectionLimit = 12;
@@ -207,7 +207,7 @@ namespace NzbDrone.Common.Http
                         webRequest.TransferEncoding = header.Value.ToString();
                         break;
                     case "User-Agent":
-                        throw new NotSupportedException("User-Agent other than NzbDrone not allowed.");
+                        throw new NotSupportedException("User-Agent other than Sonarr not allowed.");
                     case "Proxy-Connection":
                         throw new NotImplementedException();
                         break;

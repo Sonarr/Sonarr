@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Rest
         {
             var restClient = new RestClient(baseUrl);
 
-            restClient.UserAgent = String.Format("NzbDrone/{0} (RestSharp/{1}; {2}/{3})",
+            restClient.UserAgent = String.Format("Sonarr/{0} (RestSharp/{1}; {2}/{3})",
                 BuildInfo.Version,
                 restClient.GetType().Assembly.GetName().Version,
                 OsInfo.Os, OsInfo.Version.ToString(2));
