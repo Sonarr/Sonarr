@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
             var client = RestClientFactory.BuildClient(URL);
             var request = BuildRequest();
 
-            request.AddParameter("Source", "NzbDrone");
+            request.AddParameter("Source", "Sonarr");
             request.AddParameter("Image", "https://raw.githubusercontent.com/NzbDrone/NzbDrone/master/Logo/128.png");
 
             request.AddParameter("Title", title);
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
             try
             {
                 const string title = "Test Notification";
-                const string body = "This is a test message from NzbDrone";
+                const string body = "This is a test message from Sonarr";
 
                 SendNotification(title, body, settings);
             }
