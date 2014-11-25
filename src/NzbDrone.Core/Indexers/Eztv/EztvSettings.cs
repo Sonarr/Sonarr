@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Indexers.Eztv
 
         public EztvSettings()
         {
-            BaseUrl = "http://www.ezrss.it/";
+            BaseUrl = "https://www.ezrss.it/";
         }
 
         [FieldDefinition(0, Label = "Website URL")]

@@ -11,7 +11,7 @@ namespace NzbDrone.Common.Test.Http
 {
     [TestFixture]
     [IntegrationTest]
-    public class RestClientFixture : TestBase<HttpClient>
+    public class HttpClientFixture : TestBase<HttpClient>
     {
         [Test]
         public void should_execute_simple_get()
@@ -83,7 +83,7 @@ namespace NzbDrone.Common.Test.Http
 
             var userAgent = response.Resource.Headers["User-Agent"].ToString();
 
-            userAgent.Should().Contain("NzbDrone");
+            userAgent.Should().Contain("Sonarr");
         }
 
         [TestCase("Accept", "text/xml, text/rss+xml, application/rss+xml")]
