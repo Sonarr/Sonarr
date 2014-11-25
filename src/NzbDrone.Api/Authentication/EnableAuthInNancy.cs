@@ -16,7 +16,7 @@ namespace NzbDrone.Api.Authentication
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(_authenticationService, "NzbDrone"));
+            pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(_authenticationService, "Sonarr"));
             pipelines.BeforeRequest.AddItemToEndOfPipeline(RequiresAuthentication);
         }
 
