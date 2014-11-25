@@ -22,7 +22,8 @@ namespace NzbDrone.Core.Instrumentation
 
         public DatabaseTarget(IConnectionStringFactory connectionStringFactory)
         {
-            _connection = new SQLiteConnection(connectionStringFactory.LogDbConnectionString).OpenAndReturn();
+            _connection = new SQLiteConnection(connectionStringFactory.LogDbConnectionString);
+            _connection.Open();
         }
 
         public void Register()

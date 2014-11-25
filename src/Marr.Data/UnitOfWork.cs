@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Runtime.Serialization;
 
 namespace Marr.Data
@@ -54,12 +55,12 @@ namespace Marr.Data
             }
         }
 
-        public void BeginTransaction()
+        public void BeginTransaction(IsolationLevel isolationLevel)
         {
             // Only allow one transaction to begin
             if (_transactionCount < 1)
             {
-                DB.BeginTransaction();
+                DB.BeginTransaction(isolationLevel);
             }
 
             _transactionCount++;

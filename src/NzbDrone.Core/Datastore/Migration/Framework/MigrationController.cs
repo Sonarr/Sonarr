@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors.SQLite;
@@ -21,6 +22,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public void MigrateToLatest(string connectionString, MigrationType migrationType)
         {
+            var sw = Stopwatch.StartNew();
+
             _announcer.Heading("Migrating " + connectionString);
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -39,6 +42,10 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             var processor = factory.Create(connectionString, _announcer, options);
             var runner = new MigrationRunner(assembly, migrationContext, processor);
             runner.MigrateUp(true);
+
+            sw.Stop();
+
+           _announcer.ElapsedTime(sw.Elapsed);
         }
     }
 }

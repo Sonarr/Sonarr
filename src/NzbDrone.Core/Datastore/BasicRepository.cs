@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
@@ -145,7 +146,7 @@ namespace NzbDrone.Core.Datastore
         {
             using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 foreach (var model in models)
                 {
@@ -160,7 +161,7 @@ namespace NzbDrone.Core.Datastore
         {
             using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 foreach (var model in models)
                 {
@@ -203,7 +204,7 @@ namespace NzbDrone.Core.Datastore
         {
             using (var unitOfWork = new UnitOfWork(() => DataMapper))
             {
-                unitOfWork.BeginTransaction();
+                unitOfWork.BeginTransaction(IsolationLevel.ReadCommitted);
 
                 foreach (var id in ids)
                 {
