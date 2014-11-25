@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             var parameters = new Dictionary<String, Object>();
             parameters.Add("title", title);
             parameters.Add("message", message);
-            parameters.Add("image", "https://raw.github.com/NzbDrone/NzbDrone/develop/Logo/64.png");
+            parameters.Add("image", "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png");
             parameters.Add("displaytime", settings.DisplayTime * 1000);
 
             ProcessRequest(request, settings, "GUI.ShowNotification", parameters);

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             {
                 var notification = new Prowlin.Notification
                                    {
-                                       Application = "NzbDrone",
+                                       Application = "Sonarr",
                                        Description = message,
                                        Event = title,
                                        Priority = priority,
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Notifications.Prowl
                 Verify(settings.ApiKey);
 
                 const string title = "Test Notification";
-                const string body = "This is a test message from NzbDrone";
+                const string body = "This is a test message from Sonarr";
 
                 SendNotification(title, body, settings.ApiKey);
             }
