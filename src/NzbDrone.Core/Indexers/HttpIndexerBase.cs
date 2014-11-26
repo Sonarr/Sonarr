@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
@@ -186,9 +185,8 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual IList<ReleaseInfo> FetchPage(IndexerRequest request, IParseIndexerResponse parser)
         {
-            var url = request.Url;
-
             _logger.Debug("Downloading Feed " + request.Url);
+
             var response = new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
 
             return parser.ParseResponse(response).ToList();
@@ -201,12 +199,16 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual ValidationFailure TestConnection()
         {
-            // TODO: This doesn't even work coz those exceptions get catched.
             try
             {
-                var releases = FetchRecent();
+                var parser = GetParser();
+                var generator = GetRequestGenerator();
+                var releases = FetchPage(generator.GetRecentRequests().First().First(), parser);
 
-                if (releases.Any()) return null;
+                if (releases.Empty())
+                {
+                    return new ValidationFailure("Url", "No results were returned from your indexer, please check your settings.");
+                }
             }
             catch (ApiKeyException)
             {

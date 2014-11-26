@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using NzbDrone.Core.Indexers.Exceptions;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
@@ -10,6 +12,16 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             UseEnclosureUrl = true;
             UseEnclosureLength = true;
+        }
+
+        protected override bool PreProcess(IndexerResponse indexerResponse)
+        {
+            var xdoc = XDocument.Parse(indexerResponse.Content);
+            var notice = xdoc.Descendants("notice").FirstOrDefault();
+
+            if (notice == null) return true;
+
+            throw new ApiKeyException(notice.Value);
         }
 
         protected override string GetInfoUrl(XElement item)

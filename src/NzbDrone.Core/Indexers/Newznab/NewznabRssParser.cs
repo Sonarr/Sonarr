@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Indexers.Newznab
             return releaseInfo;
         }
 
-
         protected override String GetInfoUrl(XElement item)
         {
             return item.TryGetValue("comments").TrimEnd("#comments");
