@@ -85,6 +85,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     //or is the last episode in a season that has 10 or more episodes
                     if (seasonEpisodes.First().Id == episode.Id || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().Id == episode.Id))
                     {
+                        _logger.Debug("Possible double episode, doubling allowed size.");
                         maxSize = maxSize * 2;
                     }
                 }
