@@ -194,6 +194,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Californication.S07E11.1080i.HDTV.DD5.1.MPEG2-NTb.ts", false)]
         [TestCase("Game of Thrones S04E10 1080i HDTV MPEG2 DD5.1-CtrlHD.ts", false)]
         [TestCase("VICE.S02E05.1080i.HDTV.DD2.0.MPEG2-NTb.ts", false)]
+        [TestCase("Show - S03E01 - Episode Title Raw-HD.ts", false)]
         public void should_parse_raw_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.RAWHD, proper);

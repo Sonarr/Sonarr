@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Converters;
-
 
 namespace NzbDrone.Core.Qualities
 {
