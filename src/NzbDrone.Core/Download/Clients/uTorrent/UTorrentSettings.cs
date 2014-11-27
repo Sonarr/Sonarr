@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             Host = "localhost";
             Port = 9091;
-            TvCategory = "tv-drone";
+            TvCategory = "tv-sonarr";
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
