@@ -796,9 +796,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tv\EpisodeService.cs" />
-    <Compile Include="Tv\Events\EpisodeInfoAddedEvent.cs" />
-    <Compile Include="Tv\Events\EpisodeInfoDeletedEvent.cs" />
-    <Compile Include="Tv\Events\EpisodeInfoUpdatedEvent.cs" />
+    <Compile Include="Tv\Events\EpisodeInfoRefreshedEvent.cs" />
     <Compile Include="Tv\Events\SeriesAddedEvent.cs" />
     <Compile Include="Tv\Events\SeriesDeletedEvent.cs" />
     <Compile Include="Tv\Events\SeriesEditedEvent.cs" />

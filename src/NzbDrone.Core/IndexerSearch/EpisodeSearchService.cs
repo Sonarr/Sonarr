@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Queue;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.IndexerSearch
 {
     public interface IEpisodeSearchService
     {
-        void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed
-            );
+        void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed);
     }
 
-    public class MissingEpisodeSearchService : IEpisodeSearchService, IExecute<EpisodeSearchCommand>, IExecute<MissingEpisodeSearchCommand>
+    public class EpisodeSearchService : IEpisodeSearchService, 
+                                        IExecute<EpisodeSearchCommand>, 
+                                        IExecute<MissingEpisodeSearchCommand>, 
+                                        IHandle<EpisodeInfoRefreshedEvent>
     {
         private readonly ISearchForNzb _nzbSearchService;
         private readonly IProcessDownloadDecisions _processDownloadDecisions;
@@ -26,7 +31,7 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly IQueueService _queueService;
         private readonly Logger _logger;
 
-        public MissingEpisodeSearchService(ISearchForNzb nzbSearchService,
+        public EpisodeSearchService(ISearchForNzb nzbSearchService,
                                     IProcessDownloadDecisions processDownloadDecisions,
                                     IEpisodeService episodeService,
                                     IQueueService queueService,
@@ -104,6 +109,43 @@ namespace NzbDrone.Core.IndexerSearch
             }
 
             _logger.ProgressInfo("Completed missing search for {0} episodes. {1} reports downloaded.", missing.Count, downloadedCount);
+        }
+
+        public void Handle(EpisodeInfoRefreshedEvent message)
+        {
+            if (message.Updated.Empty() || message.Series.Added.InLastDays(1))
+            {
+                _logger.Debug("Appears to be a new series, skipping search.");
+                return;
+            }
+
+            if (message.Added.Empty())
+            {
+                _logger.Debug("No new episodes, skipping search");
+                return;
+            }
+
+            if (message.Added.None(a => a.AirDateUtc.HasValue))
+            {
+                _logger.Debug("No new episodes have an air date");
+                return;
+            }
+
+            var previouslyAired = message.Added.Where(a => a.AirDateUtc.HasValue && a.AirDateUtc.Value.Before(DateTime.UtcNow.AddDays(1))).ToList();
+
+            if (previouslyAired.Empty())
+            {
+                _logger.Debug("Newly added episodes all air in the future");
+                return;
+            }
+
+            foreach (var episode in previouslyAired)
+            {
+                var decisions = _nzbSearchService.EpisodeSearch(episode);
+                var processed = _processDownloadDecisions.ProcessDecisions(decisions);
+
+                _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", processed.Grabbed.Count);
+            }
         }
     }
 }
