@@ -69,6 +69,6 @@ define(
                 return '';
             }
 
-            return moment(input).format('LTS');
+            return moment(input).format('h:mm:ss A');
         });
     });
