@@ -69,6 +69,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[CBM]_Monster_-_11_-_511_Kinderheim_[6C70C4E4].mkv", "Monster", 11, 0, 0)]
         [TestCase("[HorribleSubs] Log Horizon 2 - 05 [720p].mkv", "Log Horizon 2", 5, 0, 0)]
         [TestCase("[Commie] Log Horizon 2 - 05 [FCE4D070].mkv", "Log Horizon 2", 5, 0, 0)]
+        [TestCase("[DRONE]Series.Title.100", "Series Title", 100, 0, 0)]
+        [TestCase("[RlsGrp]Series.Title.2010.S01E01.001.HDTV-720p.x264-DTS", "Series.Title.2010", 1, 1, 1)]
+        //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

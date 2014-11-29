@@ -829,5 +829,14 @@ namespace NzbDrone.Core.Test.OrganizerTests
                    .Should().Be("South Park - 100 - City Sushi");
         }
 
+        [Test]
+        public void should_not_require_a_separator_between_tokens()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _namingConfig.AnimeEpisodeFormat = "[{Release Group}]{Series.CleanTitle}.{absolute:000}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("[DRONE]South.Park.100");
+        }
     }
 }

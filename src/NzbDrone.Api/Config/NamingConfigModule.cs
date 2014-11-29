@@ -139,7 +139,7 @@ namespace NzbDrone.Api.Config
 
             if (validationFailures.Any())
             {
-                throw new ValidationException(validationFailures.ToArray());
+                throw new ValidationException(validationFailures.DistinctBy(v => v.PropertyName).ToArray());
             }
         }
     }
