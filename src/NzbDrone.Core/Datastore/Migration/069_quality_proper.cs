@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     {
                         var currentStandard = configReader.GetString(0);
                         var currentDaily = configReader.GetString(1);
-                        var currentAnime = configReader.GetString(1);
+                        var currentAnime = configReader.GetString(2);
 
                         var newStandard = GetNewFormat(currentStandard);
                         var newDaily = GetNewFormat(currentDaily);

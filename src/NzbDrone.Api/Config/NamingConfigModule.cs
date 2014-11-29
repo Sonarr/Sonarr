@@ -36,7 +36,7 @@ namespace NzbDrone.Api.Config
 
             Get["/samples"] = x => GetExamples(this.Bind<NamingConfigResource>());
 
-            SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 3);
+            SharedValidator.RuleFor(c => c.MultiEpisodeStyle).InclusiveBetween(0, 4);
             SharedValidator.RuleFor(c => c.StandardEpisodeFormat).ValidEpisodeFormat();
             SharedValidator.RuleFor(c => c.DailyEpisodeFormat).ValidDailyEpisodeFormat();
             SharedValidator.RuleFor(c => c.AnimeEpisodeFormat).ValidAnimeEpisodeFormat();
