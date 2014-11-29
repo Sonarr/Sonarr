@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with airdate
-                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])",
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9])",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Supports 1103/1113 naming

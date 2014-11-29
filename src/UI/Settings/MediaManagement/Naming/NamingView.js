@@ -13,16 +13,17 @@ define(
             template: 'Settings/MediaManagement/Naming/NamingViewTemplate',
 
             ui: {
-                namingOptions         : '.x-naming-options',
-                renameEpisodesCheckbox: '.x-rename-episodes',
-                singleEpisodeExample  : '.x-single-episode-example',
-                multiEpisodeExample   : '.x-multi-episode-example',
-                dailyEpisodeExample   : '.x-daily-episode-example',
-                animeEpisodeExample   : '.x-anime-episode-example',
-                namingTokenHelper     : '.x-naming-token-helper',
-                multiEpisodeStyle     : '.x-multi-episode-style',
-                seriesFolderExample   : '.x-series-folder-example',
-                seasonFolderExample   : '.x-season-folder-example'
+                namingOptions              : '.x-naming-options',
+                renameEpisodesCheckbox     : '.x-rename-episodes',
+                singleEpisodeExample       : '.x-single-episode-example',
+                multiEpisodeExample        : '.x-multi-episode-example',
+                dailyEpisodeExample        : '.x-daily-episode-example',
+                animeEpisodeExample        : '.x-anime-episode-example',
+                animeMultiEpisodeExample   : '.x-anime-multi-episode-example',
+                namingTokenHelper          : '.x-naming-token-helper',
+                multiEpisodeStyle          : '.x-multi-episode-style',
+                seriesFolderExample        : '.x-series-folder-example',
+                seasonFolderExample        : '.x-season-folder-example'
             },
 
             events: {
@@ -70,6 +71,7 @@ define(
                 this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
                 this.ui.dailyEpisodeExample.html(this.namingSampleModel.get('dailyEpisodeExample'));
                 this.ui.animeEpisodeExample.html(this.namingSampleModel.get('animeEpisodeExample'));
+                this.ui.animeMultiEpisodeExample.html(this.namingSampleModel.get('animeMultiEpisodeExample'));
                 this.ui.seriesFolderExample.html(this.namingSampleModel.get('seriesFolderExample'));
                 this.ui.seasonFolderExample.html(this.namingSampleModel.get('seasonFolderExample'));
             },

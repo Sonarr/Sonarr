@@ -82,6 +82,7 @@ namespace NzbDrone.Api.Config
             var multiEpisodeSampleResult = _filenameSampleService.GetMultiEpisodeSample(nameSpec);
             var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
             var animeEpisodeSampleResult = _filenameSampleService.GetAnimeSample(nameSpec);
+            var animeMultiEpisodeSampleResult = _filenameSampleService.GetAnimeMultiEpisodeSample(nameSpec);
 
             sampleResource.SingleEpisodeExample = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult) != null
                     ? "Invalid format"
@@ -99,6 +100,10 @@ namespace NzbDrone.Api.Config
                     ? "Invalid format"
                     : animeEpisodeSampleResult.FileName;
 
+            sampleResource.AnimeMultiEpisodeExample = _filenameValidationService.ValidateAnimeFilename(animeMultiEpisodeSampleResult) != null
+                    ? "Invalid format"
+                    : animeMultiEpisodeSampleResult.FileName;
+
             sampleResource.SeriesFolderExample = nameSpec.SeriesFolderFormat.IsNullOrWhiteSpace()
                 ? "Invalid format"
                 : _filenameSampleService.GetSeriesFolderSample(nameSpec);
@@ -115,26 +120,22 @@ namespace NzbDrone.Api.Config
             var singleEpisodeSampleResult = _filenameSampleService.GetStandardSample(nameSpec);
             var multiEpisodeSampleResult = _filenameSampleService.GetMultiEpisodeSample(nameSpec);
             var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
+            var animeEpisodeSampleResult = _filenameSampleService.GetAnimeSample(nameSpec);
+            var animeMultiEpisodeSampleResult = _filenameSampleService.GetAnimeMultiEpisodeSample(nameSpec);
+
             var singleEpisodeValidationResult = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult);
             var multiEpisodeValidationResult = _filenameValidationService.ValidateStandardFilename(multiEpisodeSampleResult);
             var dailyEpisodeValidationResult = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult);
+            var animeEpisodeValidationResult = _filenameValidationService.ValidateAnimeFilename(animeEpisodeSampleResult);
+            var animeMultiEpisodeValidationResult = _filenameValidationService.ValidateAnimeFilename(animeMultiEpisodeSampleResult);
 
             var validationFailures = new List<ValidationFailure>();
 
-            if (singleEpisodeValidationResult != null)
-            {
-                validationFailures.Add(singleEpisodeValidationResult);
-            }
-
-            if (multiEpisodeValidationResult != null)
-            {
-                validationFailures.Add(multiEpisodeValidationResult);
-            }
-
-            if (dailyEpisodeValidationResult != null)
-            {
-                validationFailures.Add(dailyEpisodeValidationResult);
-            }
+            validationFailures.AddIfNotNull(singleEpisodeValidationResult);
+            validationFailures.AddIfNotNull(multiEpisodeValidationResult);
+            validationFailures.AddIfNotNull(dailyEpisodeValidationResult);
+            validationFailures.AddIfNotNull(animeEpisodeValidationResult);
+            validationFailures.AddIfNotNull(animeMultiEpisodeValidationResult);
 
             if (validationFailures.Any())
             {
