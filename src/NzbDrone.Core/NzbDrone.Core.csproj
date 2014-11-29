@@ -228,6 +228,7 @@
     <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\066_add_tags.cs" />
     <Compile Include="Datastore\Migration\067_add_added_to_series.cs" />
+    <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />

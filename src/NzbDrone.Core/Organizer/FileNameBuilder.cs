@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<AbsoluteEpisodeFormat[]> _absoluteEpisodeFormatCache;
         private readonly Logger _logger;
 
-        private static readonly Regex TitleRegex = new Regex(@"\{(?<prefix>[- ._]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._]*)\}",
+        private static readonly Regex TitleRegex = new Regex(@"\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[a-z0-9]+))?(?<suffix>[- ._)\]]*)\}",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
@@ -56,7 +56,8 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex OriginalTitleRegex = new Regex(@"(\^{original[- ._]title\}$)",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex FileNameCleanupRegex = new Regex(@"\.{2,}", RegexOptions.Compiled);
+        private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
+        private static readonly Regex TrimSeparatorsRegex = new Regex(@"[- ._]$", RegexOptions.Compiled);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
@@ -120,10 +121,12 @@ namespace NzbDrone.Core.Organizer
             AddSeriesTokens(tokenHandlers, series);
             AddEpisodeTokens(tokenHandlers, episodes);
             AddEpisodeFileTokens(tokenHandlers, series, episodeFile);
+            AddQualityTokens(tokenHandlers, series, episodeFile);
             AddMediaInfoTokens(tokenHandlers, episodeFile);
             
             var fileName = ReplaceTokens(pattern, tokenHandlers).Trim();
             fileName = FileNameCleanupRegex.Replace(fileName, match => match.Captures[0].Value[0].ToString());
+            fileName = TrimSeparatorsRegex.Replace(fileName, String.Empty);
 
             return fileName;
         }
@@ -417,7 +420,16 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile);
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? "DRONE";
-            tokenHandlers["{Quality Title}"] = m => GetQualityTitle(series, episodeFile.Quality);
+        }
+
+        private void AddQualityTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
+        {
+            var qualityTitle = _qualityDefinitionService.Get(episodeFile.Quality.Quality).Title;
+            var qualityProper = GetQualityProper(series, episodeFile.Quality);
+
+            tokenHandlers["{Quality Full}"] = m => String.Format("{0} {1}", qualityTitle, qualityProper);
+            tokenHandlers["{Quality Title}"] = m => qualityTitle;
+            tokenHandlers["{Quality Proper}"] = m => qualityProper;
         }
 
         private void AddMediaInfoTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, EpisodeFile episodeFile)
@@ -651,24 +663,19 @@ namespace NzbDrone.Core.Organizer
             return String.Join(" + ", titles);
         }
 
-        private String GetQualityTitle(Series series, QualityModel quality)
+        private String GetQualityProper(Series series, QualityModel quality)
         {
-            var qualitySuffix = String.Empty;
-
             if (quality.Revision.Version > 1)
             {
                 if (series.SeriesType == SeriesTypes.Anime)
                 {
-                    qualitySuffix = " v" + quality.Revision.Version;
+                    return "v" + quality.Revision.Version;
                 }
 
-                else
-                {
-                    qualitySuffix = " Proper";
-                }
+                return "Proper";
             }
 
-            return _qualityDefinitionService.Get(quality.Quality).Title + qualitySuffix;
+            return String.Empty;
         }
 
         private String GetOriginalTitle(EpisodeFile episodeFile)
