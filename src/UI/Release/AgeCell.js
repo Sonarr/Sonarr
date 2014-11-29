@@ -1,10 +1,10 @@
-'use strict';
-
 define(
     [
+        'moment',
         'backgrid',
+        'Shared/UiSettingsModel',
         'Shared/FormatHelpers'
-    ], function (Backgrid, FormatHelpers) {
+    ], function (moment, Backgrid, UiSettings, FormatHelpers) {
         return Backgrid.Cell.extend({
 
             className: 'age-cell',
@@ -12,14 +12,17 @@ define(
             render: function () {
                 var age = this.model.get('age');
                 var ageHours = this.model.get('ageHours');
+                var published = moment(this.model.get('publishDate'));
+                var publishedFormatted = published.format('{0} LTS'.format(UiSettings.get('shortDateFormat')));
+                var formatted = age;
+                var suffix = this.plural(age, 'day');
 
                 if (age === 0) {
-                    this.$el.html('{0} {1}'.format(ageHours.toFixed(1), this.plural(Math.round(ageHours), 'hour')));
+                    formatted = ageHours.toFixed(1);
+                    suffix = this.plural(Math.round(ageHours), 'hour');
                 }
 
-                else {
-                    this.$el.html('{0} {1}'.format(age, this.plural(age, 'day')));
-                }
+                this.$el.html('<div title="{2}">{0} {1}</div>'.format(formatted, suffix, publishedFormatted));
 
                 this.delegateEvents();
                 return this;
@@ -34,3 +37,5 @@ define(
             }
         });
     });
+
+'use strict';

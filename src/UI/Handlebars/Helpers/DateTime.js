@@ -63,4 +63,12 @@ define(
 
             return moment(input).format(UiSettings.time(false));
         });
+
+        Handlebars.registerHelper('LTS', function (input) {
+            if (!input) {
+                return '';
+            }
+
+            return moment(input).format('LTS');
+        });
     });

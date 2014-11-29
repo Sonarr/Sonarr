@@ -1,5 +1,5 @@
 {{#if_eq eventType compare="grabbed"}}
-<dl class="dl-horizontal">
+<dl class="dl-horizontal info">
 
     <dt>Name:</dt>
     <dd>{{sourceTitle}}</dd>
@@ -32,6 +32,11 @@
 
     {{#if age}}
     {{historyAge}}
+    {{/if}}
+
+    {{#if publishedDate}}
+    <dt>Published Date:</dt>
+    <dd>{{ShortDate publishedDate}} {{LTS publishedDate}}</dd>
     {{/if}}
     {{/with}}
 </dl>
