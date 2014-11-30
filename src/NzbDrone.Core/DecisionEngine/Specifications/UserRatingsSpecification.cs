@@ -24,26 +24,26 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public Boolean IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var userRatings = subject.Release.UserRatings;
 
             if (userRatings == null)
             {
                 _logger.Debug("Indexer doesn't supply user ratings, skipping check.");
-                return true;
+                return Decision.Accept();
             }
 
             if (userRatings.IsSpamConfirmed)
             {
                 _logger.Debug("Release confirmed as spam.");
-                return false;
+                return Decision.Reject("Release confirmed as spam.");
             }
 
             if (userRatings.IsPasswordedConfirmed)
             {
                 _logger.Debug("Release confirmed as passworded.");
-                return false;
+                return Decision.Reject("Release confirmed as passworded.");
             }
 
             if (userRatings.UpVotes.HasValue && userRatings.DownVotes.HasValue)
@@ -54,11 +54,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (numberOfVotes > 5 && downVotePercentage >= 2 / 3.0)
                 {
                     _logger.Debug("Release received {0} downvotes with only {1} upvotes. ({2:00}%)", userRatings.DownVotes, userRatings.UpVotes, downVotePercentage * 100);
-                    return false;
+                    return Decision.Reject("Release received too much negative votes. ({2:00%})", downVotePercentage * 100);
                 }
             }
 
-            return true;
+            return Decision.Accept();
         }
     }
 }
