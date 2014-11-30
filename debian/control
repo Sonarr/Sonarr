@@ -9,4 +9,4 @@ Vcs-Browser: https://github.com/Sonarr/Sonarr
 Package: nzbdrone
 Architecture: all
 Depends: libmono-cil-dev (>= 3.2), sqlite3 (>= 3.7), mediainfo (>= 0.7.52)
-Description: Sonarr is a an internet PVR
+Description: Sonarr is an internet PVR
