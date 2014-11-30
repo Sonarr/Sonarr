@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using NzbDrone.Common;
 using NzbDrone.Core.Indexers.Exceptions;
 
 namespace NzbDrone.Core.Indexers.Omgwtfnzbs
@@ -20,6 +21,8 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             var notice = xdoc.Descendants("notice").FirstOrDefault();
 
             if (notice == null) return true;
+
+            if (!notice.Value.ContainsIgnoreCase("api")) return true;
 
             throw new ApiKeyException(notice.Value);
         }
