@@ -2,7 +2,7 @@ Section: web
 Priority: optional
 Maintainer: Sonarr <contact@nzbdrone.com>
 Source: nzbdrone
-Homepage: https://nzbdrone.com
+Homepage: https://sonarr.tv
 Vcs-Git: git@github.com:Sonarr/Sonarr.git
 Vcs-Browser: https://github.com/Sonarr/Sonarr
 
