@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -25,7 +26,8 @@ namespace NzbDrone.Core.Download
     public class DownloadTrackingService : IDownloadTrackingService,
                                            IExecute<CheckForFinishedDownloadCommand>,
                                            IHandleAsync<ApplicationStartedEvent>,
-                                           IHandle<EpisodeGrabbedEvent>
+                                           IHandle<EpisodeGrabbedEvent>,
+                                           IHandle<SceneMappingsUpdatedEvent>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IHistoryService _historyService;
@@ -152,8 +154,7 @@ namespace NzbDrone.Core.Download
 
                     if (newTrackedDownloads.ContainsKey(trackingId)) continue;
 
-                    //TODO: Rebuilding the tracked download when it is a warning is a total hack to deal with updated scene mappings
-                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload) || trackedDownload.Status == TrackedDownloadStatus.Warning)
+                    if (!oldTrackedDownloads.TryGetValue(trackingId, out trackedDownload))
                     {
                         trackedDownload = GetTrackedDownload(trackingId, downloadClient.Definition.Id, downloadItem, grabbedHistory);
 
@@ -244,7 +245,6 @@ namespace NzbDrone.Core.Download
                 Status = TrackedDownloadStatus.Ok,
             };
 
-
             try
             {
                 var historyItems = grabbedHistory.Where(h =>
@@ -297,6 +297,19 @@ namespace NzbDrone.Core.Download
         public void Handle(EpisodeGrabbedEvent message)
         {
             ProcessTrackedDownloads();
+        }
+
+        public void Handle(SceneMappingsUpdatedEvent message)
+        {
+            var grabbedHistory = _historyService.Grabbed();
+
+            foreach (var trackedDownload in GetTrackedDownloads().Where(t => t.Status == TrackedDownloadStatus.Warning))
+            {
+                var newTrackedDownload = GetTrackedDownload(trackedDownload.TrackingId, trackedDownload.DownloadClient, trackedDownload.DownloadItem, grabbedHistory);
+
+                trackedDownload.Status = newTrackedDownload.Status;
+                trackedDownload.StatusMessages = newTrackedDownload.StatusMessages;
+            }
         }
     }
 }

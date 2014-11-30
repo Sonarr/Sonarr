@@ -27,6 +27,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     {
         private readonly ISceneMappingRepository _repository;
         private readonly IEnumerable<ISceneMappingProvider> _sceneMappingProviders;
+        private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
         private readonly ICached<SceneMapping> _getTvdbIdCache;
         private readonly ICached<List<SceneMapping>> _findByTvdbIdCache;
@@ -34,10 +35,12 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         public SceneMappingService(ISceneMappingRepository repository,
                                    ICacheManager cacheManager,
                                    IEnumerable<ISceneMappingProvider> sceneMappingProviders,
+                                   IEventAggregator eventAggregator,
                                    Logger logger)
         {
             _repository = repository;
             _sceneMappingProviders = sceneMappingProviders;
+            _eventAggregator = eventAggregator;
 
             _getTvdbIdCache = cacheManager.GetCache<SceneMapping>(GetType(), "tvdb_id");
             _findByTvdbIdCache = cacheManager.GetCache<List<SceneMapping>>(GetType(), "find_tvdb_id");
@@ -129,6 +132,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             }
             
             RefreshCache();
+            _eventAggregator.PublishEvent(new SceneMappingsUpdatedEvent());
         }
 
         private SceneMapping FindTvdbId(string title)

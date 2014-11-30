@@ -135,6 +135,7 @@
     <Compile Include="DataAugmentation\Scene\SceneMappingProxy.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingRepository.cs" />
     <Compile Include="DataAugmentation\Scene\SceneMappingService.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingsUpdatedEvent.cs" />
     <Compile Include="DataAugmentation\Scene\ServicesProvider.cs" />
     <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemResult.cs" />
