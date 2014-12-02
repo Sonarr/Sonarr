@@ -18,19 +18,22 @@ define([
         columns:
             [
                 {
-                    name: 'path',
-                    label: 'Location',
-                    cell: DiskSpacePathCell
+                    name     : 'path',
+                    label    : 'Location',
+                    cell     : DiskSpacePathCell,
+                    sortable : false
                 },
                 {
-                    name: 'freeSpace',
-                    label: 'Free Space',
-                    cell: FileSizeCell
+                    name     : 'freeSpace',
+                    label    : 'Free Space',
+                    cell     : FileSizeCell,
+                    sortable : false
                 },
                 {
-                    name: 'totalSpace',
-                    label: 'Total Space',
-                    cell: FileSizeCell
+                    name     : 'totalSpace',
+                    label    : 'Total Space',
+                    cell     : FileSizeCell,
+                    sortable : false
                 }
             ],
 
