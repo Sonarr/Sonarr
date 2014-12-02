@@ -5,7 +5,6 @@ DIR=$(cd "$(dirname "$0")"; pwd)
  
 #change these values to match your app
 EXE_PATH="$DIR\nzbdrone.exe"
-PROCESS_NAME=appname
 APPNAME="Sonarr"
  
 #set up environment
@@ -18,7 +17,7 @@ REQUIRED_MAJOR=3
 REQUIRED_MINOR=10
  
 VERSION_TITLE="Cannot launch $APPNAME"
-VERSION_MSG="$APPNAME requires Mono Runtime Environment (MRE) version $REQUIRED_MAJOR.$REQUIRED_MINOR or later."
+VERSION_MSG="$APPNAME requires Mono Runtime Environment (MRE) $REQUIRED_MAJOR.$REQUIRED_MINOR or later."
 DOWNLOAD_URL="http://www.mono-project.com/download/#download-mac"
  
 MONO_VERSION="$(mono --version | grep 'Mono JIT compiler version ' |  cut -f5 -d\ )"
@@ -36,13 +35,7 @@ then
     exit 1
 fi
  
-#get an exec command that will work on the current OS version
-OSX_VERSION=$(uname -r | cut -f1 -d.)
-if [ $OSX_VERSION -lt 9 ]; then  # If OSX version is 10.4
-    MONO_EXEC="exec mono --debug"
-else
-    MONO_EXEC="exec -a \"$PROCESS_NAME\" mono --debug"
-fi
+MONO_EXEC="exec mono --debug"
  
 #run app using mono
 $MONO_EXEC --debug "$EXE_PATH"
