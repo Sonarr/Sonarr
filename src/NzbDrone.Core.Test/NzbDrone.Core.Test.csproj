@@ -116,6 +116,7 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
+    <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\ToSortDirectionFixture.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
+    <Compile Include="Framework\MigrationTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
     <Compile Include="Framework\TestDbHelper.cs" />
     <Compile Include="HealthCheck\Checks\AppDataLocationFixture.cs" />

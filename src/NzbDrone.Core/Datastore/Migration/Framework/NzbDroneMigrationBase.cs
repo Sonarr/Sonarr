@@ -8,12 +8,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     public abstract class NzbDroneMigrationBase : FluentMigrator.Migration
     {
         protected readonly Logger _logger;
-        private readonly MigrationContext _migrationContext;
+        private MigrationContext _migrationContext;
 
         protected NzbDroneMigrationBase()
         {
             _logger = NzbDroneLogger.GetLogger(this);
-            _migrationContext = (MigrationContext)ApplicationContext;
         }
 
         protected virtual void MainDbUpgrade()
@@ -37,6 +36,10 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             get
             {
+                if (_migrationContext == null)
+                {
+                    _migrationContext = (MigrationContext)ApplicationContext;
+                }
                 return _migrationContext;
             }
         }
