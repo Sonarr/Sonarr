@@ -71,7 +71,7 @@
     <Compile Include="ConsoleService.cs" />
     <Compile Include="ConvertBase32.cs" />
     <Compile Include="Crypto\HashProvider.cs" />
-    <Compile Include="DictionaryExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Disk\OsPath.cs" />
     <Compile Include="Disk\DiskProviderBase.cs" />
     <Compile Include="Disk\IDiskProvider.cs" />
@@ -151,7 +151,7 @@
     </Compile>
     <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="Http\UriExtensions.cs" />
-    <Compile Include="IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />
@@ -161,12 +161,12 @@
     <Compile Include="Instrumentation\NzbDroneFileTarget.cs" />
     <Compile Include="Instrumentation\NzbDroneLogger.cs" />
     <Compile Include="Instrumentation\VersionLayoutRenderer.cs" />
-    <Compile Include="LevenstheinExtensions.cs" />
+    <Compile Include="Extensions\LevenstheinExtensions.cs" />
     <Compile Include="Messaging\IEvent.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Model\ProcessInfo.cs" />
     <Compile Include="PathEqualityComparer.cs" />
-    <Compile Include="PathExtensions.cs" />
+    <Compile Include="Extensions\PathExtensions.cs" />
     <Compile Include="Processes\PidFileProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="Processes\ProcessProvider.cs" />
@@ -174,18 +174,18 @@
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="RateGate.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
-    <Compile Include="ResourceExtensions.cs" />
+    <Compile Include="Extensions\ResourceExtensions.cs" />
     <Compile Include="Security\IgnoreCertErrorPolicy.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Services.cs" />
-    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
-    <Compile Include="TryParseExtension.cs" />
+    <Compile Include="Extensions\TryParseExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

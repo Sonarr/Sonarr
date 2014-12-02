@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 

@@ -2,12 +2,11 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Eztv;
 using NzbDrone.Core.Indexers.Fanzub;
 using NzbDrone.Core.Indexers.KickassTorrents;
-using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.Nyaa;
 using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.IndexerSearch.Definitions;
