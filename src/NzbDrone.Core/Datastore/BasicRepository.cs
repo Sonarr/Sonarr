@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Marr.Data;
 using Marr.Data.QGen;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Extensions;

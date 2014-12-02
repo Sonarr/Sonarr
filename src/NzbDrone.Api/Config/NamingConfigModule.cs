@@ -4,7 +4,7 @@ using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Nancy.Responses;
-using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Organizer;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Mapping;

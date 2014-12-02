@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using RestSharp;
 using NzbDrone.Core.Rest;
 

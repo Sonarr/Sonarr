@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using Growl.Connector;
 using Growl.CoreLibrary;
+using NzbDrone.Common.Extensions;
 using GrowlNotification = Growl.Connector.Notification;
 using NLog;
 using NzbDrone.Common;

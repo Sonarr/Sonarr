@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Common
 {
-    public static class TryParseExtension
+    public static class TryParseExtensions
     {
         public static Nullable<int> ParseInt32(this string source)
         {

@@ -6,6 +6,7 @@ using System.Net;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaCover;

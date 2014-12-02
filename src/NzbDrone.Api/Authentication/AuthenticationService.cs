@@ -4,7 +4,7 @@ using Nancy;
 using Nancy.Authentication.Basic;
 using Nancy.Security;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication

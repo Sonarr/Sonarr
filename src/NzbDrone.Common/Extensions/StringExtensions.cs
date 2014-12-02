@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Extensions
 {
     public static class StringExtensions
     {

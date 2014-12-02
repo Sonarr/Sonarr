@@ -1,12 +1,8 @@
-﻿using NzbDrone.Common.EnsureThat;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Extensions
 {
     public static class ResourceExtensions
     {

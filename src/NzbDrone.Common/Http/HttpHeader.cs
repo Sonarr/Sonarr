@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http
 {

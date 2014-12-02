@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Extensions
 {
     public static class PathExtensions
     {

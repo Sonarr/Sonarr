@@ -1,11 +1,6 @@
 using System;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using ICSharpCode.SharpZipLib.Zip;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Extensions
 {
     public static class LevenstheinExtensions
     {
