@@ -71,6 +71,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Commie] Log Horizon 2 - 05 [FCE4D070].mkv", "Log Horizon 2", 5, 0, 0)]
         [TestCase("[DRONE]Series.Title.100", "Series Title", 100, 0, 0)]
         [TestCase("[RlsGrp]Series.Title.2010.S01E01.001.HDTV-720p.x264-DTS", "Series.Title.2010", 1, 1, 1)]
+        [TestCase("Dragon Ball Kai - 130 - Found You, Gohan! Harsh Training in the Kaioshin Realm! [Baaro][720p][5A1AD35B].mkv", "Dragon Ball Kai", 130, 0, 0)]
+        [TestCase("Dragon Ball Kai - 131 - A Merged Super-Warrior Is Born, His Name Is Gotenks!! [Baaro][720p][32E03F96].mkv", "Dragon Ball Kai", 131, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
@@ -101,6 +103,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[ANBU-AonE]_Naruto_26-27_[F224EF26].avi", "Naruto", new[] { 26, 27 })]
         [TestCase("[Doutei] Recently, My Sister is Unusual - 01-12 [BD][720p-AAC]", "Recently, My Sister is Unusual", new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 })]
         [TestCase("Series Title (2010) - 01-02-03 - Episode Title (1) HDTV-720p", "Series Title (2010)", new [] { 1, 2, 3 })]
+        [TestCase("Angel.Beats.Clean.Closings.01-09.Bd.Avc.1080p.Flac.[8E381239]", "Angel Beats Clean Closings", new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 })]
         public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
