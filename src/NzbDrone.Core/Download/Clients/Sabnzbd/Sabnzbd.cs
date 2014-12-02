@@ -223,7 +223,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var otherItemsWithSameTitle = currentHistory.Where(h => h.Title == currentHistoryItem.Title &&
                                                                h.DownloadClientId != currentHistoryItem.DownloadClientId).ToList();
 
-            _proxy.RetryDownload(id, Settings);
+            var newId = _proxy.RetryDownload(id, Settings);
+
+            if (newId.IsNotNullOrWhiteSpace())
+            {
+                return newId;
+            }
 
             for (int i = 0; i < 3; i++)
             {

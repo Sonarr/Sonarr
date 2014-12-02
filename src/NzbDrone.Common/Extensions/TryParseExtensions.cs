@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NzbDrone.Common
+namespace NzbDrone.Common.Extensions
 {
     public static class TryParseExtensions
     {

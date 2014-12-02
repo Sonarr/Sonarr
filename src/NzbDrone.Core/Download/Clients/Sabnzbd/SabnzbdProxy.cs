@@ -1,10 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Rest;
@@ -22,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
-        void RetryDownload(string id, SabnzbdSettings settings);
+        string RetryDownload(string id, SabnzbdSettings settings);
     }
 
     public class SabnzbdProxy : ISabnzbdProxy
@@ -114,12 +110,20 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());
         }
 
-        public void RetryDownload(string id, SabnzbdSettings settings)
+        public string RetryDownload(string id, SabnzbdSettings settings)
         {
             var request = new RestRequest();
             var action = String.Format("mode=retry&value={0}", id);
 
-            ProcessRequest(request, action, settings);
+            SabnzbdRetryResponse response;
+
+            if (!Json.TryDeserialize<SabnzbdRetryResponse>(ProcessRequest(request, action, settings), out response))
+            {
+                response = new SabnzbdRetryResponse();
+                response.Status = true;
+            }
+
+            return response.Id;
         }
 
         private IRestClient BuildClient(string action, SabnzbdSettings settings)
