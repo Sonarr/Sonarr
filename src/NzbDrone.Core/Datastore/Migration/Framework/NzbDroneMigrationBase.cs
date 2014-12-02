@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentMigrator;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 
@@ -7,10 +8,12 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     public abstract class NzbDroneMigrationBase : FluentMigrator.Migration
     {
         protected readonly Logger _logger;
+        private readonly MigrationContext _migrationContext;
 
         protected NzbDroneMigrationBase()
         {
             _logger = NzbDroneLogger.GetLogger(this);
+            _migrationContext = (MigrationContext)ApplicationContext;
         }
 
         protected virtual void MainDbUpgrade()
@@ -21,11 +24,32 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
         }
 
+        public int Version
+        {
+            get
+            {
+                var migrationAttribute = (MigrationAttribute)Attribute.GetCustomAttribute(GetType(), typeof(MigrationAttribute));
+                return (int)migrationAttribute.Version;
+            }
+        }
+
+        public MigrationContext Context
+        {
+            get
+            {
+                return _migrationContext;
+            }
+        }
+
         public override void Up()
         {
-            var context = (MigrationContext)ApplicationContext;
 
-            switch (context.MigrationType)
+            if (Context.BeforeMigration != null)
+            {
+                Context.BeforeMigration(this);
+            }
+
+            switch (Context.MigrationType)
             {
                 case MigrationType.Main:
                     MainDbUpgrade();

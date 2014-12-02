@@ -1,14 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
-using FluentMigrator.Runner.Processors.SQLite;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
     public interface IMigrationController
     {
-        void MigrateToLatest(string connectionString, MigrationType migrationType);
+        void MigrateToLatest(string connectionString, MigrationType migrationType, Action<NzbDroneMigrationBase> beforeMigration);
     }
 
     public class MigrationController : IMigrationController
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             _announcer = announcer;
         }
 
-        public void MigrateToLatest(string connectionString, MigrationType migrationType)
+        public void MigrateToLatest(string connectionString, MigrationType migrationType, Action<NzbDroneMigrationBase> beforeMigration)
         {
             var sw = Stopwatch.StartNew();
 
@@ -31,10 +31,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             var migrationContext = new RunnerContext(_announcer)
                 {
                     Namespace = "NzbDrone.Core.Datastore.Migration",
-                    ApplicationContext = new MigrationContext
-                        {
-                            MigrationType = migrationType
-                        }
+                    ApplicationContext = new MigrationContext(migrationType, beforeMigration)
                 };
 
             var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
@@ -45,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             sw.Stop();
 
-           _announcer.ElapsedTime(sw.Elapsed);
+            _announcer.ElapsedTime(sw.Elapsed);
         }
     }
 }
