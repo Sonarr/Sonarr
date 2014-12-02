@@ -129,7 +129,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^[a-z0-9]{24}$", RegexOptions.Compiled),
 
                 // Format seen on some NZBGeek releases
-                new Regex(@"^[A-Z]{11}\d{3}$", RegexOptions.Compiled)
+                new Regex(@"^[A-Z]{11}\d{3}$", RegexOptions.Compiled),
+
+                //Backup filename (Unknown origins)
+                new Regex(@"^Backup_\d{5,}S\d{2}-\d{2}$", RegexOptions.Compiled)
             };
 
         //Regex to detect whether the title was reversed.

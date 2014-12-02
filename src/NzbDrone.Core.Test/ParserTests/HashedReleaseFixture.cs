@@ -44,6 +44,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "weeds",
                 "DVD",
                 "NZBgeek"
+            },
+            new object[]
+            {
+                @"C:\Test\Deadwood.S02E12.1080p.BluRay.x264-SONARR\Backup_72023S02-12".AsOsAgnostic(),
+                "deadwood",
+                "Bluray-1080p",
+                "SONARR"
             }
         };
 
