@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Download
                 }
             }
 
-            return new ProcessedDecisions(grabbed, pending);
+            return new ProcessedDecisions(grabbed, pending, decisions.Where(d => d.Rejected).ToList());
         }
 
         internal List<DownloadDecision> GetQualifiedReports(IEnumerable<DownloadDecision> decisions)

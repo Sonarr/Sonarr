@@ -24,7 +24,8 @@ define(
                 'slide .x-slider': '_updateSize'
             },
 
-            initialize: function () {
+            initialize: function (options) {
+                this.profileCollection = options.profiles;
                 this.filesize = fileSize;
             },
 

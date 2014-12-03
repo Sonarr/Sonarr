@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Queue
     public interface IQueueService
     {
         List<Queue> GetQueue();
+        Queue Find(int id);
     }
 
     public class QueueService : IQueueService
@@ -26,6 +27,11 @@ namespace NzbDrone.Core.Queue
                 .ToList();
 
             return MapQueue(queueItems);
+        }
+
+        public Queue Find(int id)
+        {
+            return GetQueue().SingleOrDefault(q => q.Id == id);
         }
 
         private List<Queue> MapQueue(IEnumerable<TrackedDownload> trackedDownloads)

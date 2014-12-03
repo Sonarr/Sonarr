@@ -59,40 +59,40 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 try
                 {
-                    var parsedEpisode = _parsingService.GetLocalEpisode(file, series, sceneSource);
+                    var localEpisode = _parsingService.GetLocalEpisode(file, series, sceneSource);
 
-                    if (parsedEpisode != null)
+                    if (localEpisode != null)
                     {
                         if (quality != null &&
-                            new QualityModelComparer(parsedEpisode.Series.Profile).Compare(quality,
-                                parsedEpisode.Quality) > 0)
+                            new QualityModelComparer(localEpisode.Series.Profile).Compare(quality,
+                                localEpisode.Quality) > 0)
                         {
                             _logger.Debug("Using quality from folder: {0}", quality);
-                            parsedEpisode.Quality = quality;
+                            localEpisode.Quality = quality;
                         }
 
-                        parsedEpisode.Size = _diskProvider.GetFileSize(file);
-                        _logger.Debug("Size: {0}", parsedEpisode.Size);
+                        localEpisode.Size = _diskProvider.GetFileSize(file);
+                        _logger.Debug("Size: {0}", localEpisode.Size);
 
-                        parsedEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
+                        localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
 
-                        decision = GetDecision(parsedEpisode);
+                        decision = GetDecision(localEpisode);
                     }
 
                     else
                     {
-                        parsedEpisode = new LocalEpisode();
-                        parsedEpisode.Path = file;
+                        localEpisode = new LocalEpisode();
+                        localEpisode.Path = file;
 
-                        decision = new ImportDecision(parsedEpisode, "Unable to parse file");
+                        decision = new ImportDecision(localEpisode, "Unable to parse file");
                     }
                 }
                 catch (EpisodeNotFoundException e)
                 {
-                    var parsedEpisode = new LocalEpisode();
-                    parsedEpisode.Path = file;
+                    var localEpisode = new LocalEpisode();
+                    localEpisode.Path = file;
 
-                    decision = new ImportDecision(parsedEpisode, e.Message);
+                    decision = new ImportDecision(localEpisode, e.Message);
                 }
                 catch (Exception e)
                 {

@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Download
     {
         IDownloadClient GetDownloadClient(DownloadProtocol downloadProtocol);
         IEnumerable<IDownloadClient> GetDownloadClients();
+        IDownloadClient Get(int id);
     }
 
     public class DownloadClientProvider : IProvideDownloadClient
@@ -27,6 +28,11 @@ namespace NzbDrone.Core.Download
         public IEnumerable<IDownloadClient> GetDownloadClients()
         {
             return _downloadClientFactory.GetAvailableProviders();
+        }
+
+        public IDownloadClient Get(int id)
+        {
+            return _downloadClientFactory.GetAvailableProviders().Single(d => d.Definition.Id == id);
         }
     }
 }

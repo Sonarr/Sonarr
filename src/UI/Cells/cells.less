@@ -145,26 +145,36 @@ td.episode-status-cell, td.quality-cell, td.history-quality-cell, td.progress-ce
 }
 
 .timeleft-cell {
-  cursor : default;
-  width  : 80px;
-  text-align: center;
+  cursor     : default;
+  width      : 80px;
+  text-align : center;
 }
 
 .queue-status-cell {
-  width: 20px;
-  text-align: center !important;
+  width      : 20px;
+  text-align : center !important;
+}
+
+.queue-actions-cell {
+  width      : 55px;
+  text-align : right !important;
+
+  i {
+    margin-left  : 3px;
+    margin-right : 3px;
+  }
 }
 
 .download-log-cell {
-  width: 80px;
+  width : 80px;
 }
 
 td.delete-episode-file-cell {
   .clickable();
 
-  text-align: center;
-  width: 20px;
-  font-size: 20px;
+  text-align : center;
+  width      : 20px;
+  font-size  : 20px;
 
   i {
     .clickable();

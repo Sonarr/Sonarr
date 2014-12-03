@@ -118,13 +118,14 @@ namespace NzbDrone.Core.Download
 
             if (_diskProvider.FolderExists(outputPath))
             {
-                importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(outputPath), trackedDownload.DownloadItem);
+                importResults = _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(outputPath), trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
 
                 ProcessImportResults(trackedDownload, outputPath, importResults);
             }
+
             else if (_diskProvider.FileExists(outputPath))
             {
-                importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(outputPath), trackedDownload.DownloadItem);
+                importResults = _downloadedEpisodesImportService.ProcessFile(new FileInfo(outputPath), trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
 
                 ProcessImportResults(trackedDownload, outputPath, importResults);
             }

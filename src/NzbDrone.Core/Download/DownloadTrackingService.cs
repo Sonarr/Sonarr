@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Download
     {
         TrackedDownload[] GetCompletedDownloads();
         TrackedDownload[] GetQueuedDownloads();
-
+        TrackedDownload Find(string trackingId);
         void MarkAsFailed(Int32 historyId);
     }
 
@@ -86,6 +86,11 @@ namespace NzbDrone.Core.Download
                     return FilterQueuedDownloads(GetTrackedDownloads());
 
                 }, TimeSpan.FromSeconds(5.0));
+        }
+
+        public TrackedDownload Find(string trackingId)
+        {
+            return GetQueuedDownloads().SingleOrDefault(t => t.TrackingId == trackingId);
         }
 
         public void MarkAsFailed(Int32 historyId)
