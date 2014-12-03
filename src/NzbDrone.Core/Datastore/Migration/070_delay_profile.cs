@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using FluentMigrator;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -16,15 +15,18 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Create.TableForModel("DelayProfiles")
+                  .WithColumn("EnableUsenet").AsBoolean().NotNullable()
+                  .WithColumn("EnableTorrent").AsBoolean().NotNullable()
                   .WithColumn("PreferredProtocol").AsInt32().NotNullable()
                   .WithColumn("UsenetDelay").AsInt32().NotNullable()
                   .WithColumn("TorrentDelay").AsInt32().NotNullable()
                   .WithColumn("Order").AsInt32().NotNullable()
                   .WithColumn("Tags").AsString().NotNullable();
 
-
             Insert.IntoTable("DelayProfiles").Row(new
                                                   {
+                                                      EnableUsenet = 1,
+                                                      EnableTorrent = 1,
                                                       PreferredProtocol = 1,
                                                       UsenetDelay = 0,
                                                       TorrentDelay = 0,
@@ -55,7 +57,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (IDbCommand insertDelayProfileCmd = conn.CreateCommand())
                 {
                     insertDelayProfileCmd.Transaction = tran;
-                    insertDelayProfileCmd.CommandText = "INSERT INTO DelayProfiles (PreferredProtocol, TorrentDelay, UsenetDelay, [Order], Tags) VALUES (1, 0, ?, ?, ?)";
+                    insertDelayProfileCmd.CommandText = "INSERT INTO DelayProfiles (EnableUsenet, EnableTorrent, PreferredProtocol, TorrentDelay, UsenetDelay, [Order], Tags) VALUES (1, 1, 1, 0, ?, ?, ?)";
                     insertDelayProfileCmd.AddParameter(profile.GrabDelay);
                     insertDelayProfileCmd.AddParameter(order);
                     insertDelayProfileCmd.AddParameter(tags);

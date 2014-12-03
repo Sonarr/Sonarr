@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Validators;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using Omu.ValueInjecter;
 

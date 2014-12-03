@@ -261,6 +261,7 @@
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\ProtocolSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ReleaseRestrictionsSpecification.cs" />

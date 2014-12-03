@@ -10,21 +10,23 @@
     <div class="modal-body indexer-modal">
         <div class="form-horizontal">
             <div class="form-group">
-                <label class="col-sm-3 control-label">Preferred Protocol</label>
+                <label class="col-sm-3 control-label">Protocol</label>
 
                 <div class="col-sm-1 col-sm-push-5 help-inline">
-                    <i class="icon-nd-form-info" title="Choose which protocol to use when choosing between otherwise equal releases" />
+                    <i class="icon-nd-form-info" title="Choose which protocol(s) to use and which one is preferred when choosing between otherwise equal releases" />
                 </div>
 
                 <div class="col-sm-5 col-sm-pull-1">
-                    <select class="form-control" name="preferredProtocol">
-                        <option value="1">Usenet</option>
-                        <option value="2">Torrents</option>
+                    <select class="form-control x-protocol">
+                        <option value="preferUsenet">Prefer Usenet</option>
+                        <option value="preferTorrent">Prefer Torrent</option>
+                        <option value="onlyUsenet">Only Usenet</option>
+                        <option value="onlyTorrent">Only Torrent</option>
                     </select>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group x-usenet-delay">
                 <label class="col-sm-3 control-label">Usenet Delay</label>
 
                 <div class="col-sm-1 col-sm-push-5 help-inline">
@@ -36,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group x-torrent-delay">
                 <label class="col-sm-3 control-label">Torrent Delay</label>
 
                 <div class="col-sm-1 col-sm-push-5 help-inline">
@@ -49,7 +51,7 @@
             </div>
 
             {{#if_eq id compare="1"}}
-                <div class="alert alert-info" role="alert">The default Delay Profile applies to all series unless overridden by a Delay Profile attached to a matching tag</div>
+                <div class="alert alert-info" role="alert">This is the default profile. It applies to all series that don't have an explicit profile.</div>
             {{else}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Tags</label>
@@ -67,7 +69,9 @@
     </div>
     <div class="modal-footer">
         {{#if id}}
-            <button class="btn btn-danger pull-left x-delete">delete</button>
+            {{#if_gt id compare="1"}}
+                <button class="btn btn-danger pull-left x-delete">delete</button>
+            {{/if_gt}}
         {{/if}}
         <span class="indicator x-indicator"><i class="icon-spinner icon-spin"></i></span>
         <button class="btn" data-dismiss="modal">cancel</button>

@@ -1,29 +1,47 @@
 ﻿    <div class="col-sm-2">
-        {{TitleCase preferredProtocol}}
+        {{#if enableUsenet}}
+            {{#if enableTorrent}}
+                {{#if_eq preferredProtocol compare="usenet"}}
+                    Prefer Usenet
+                {{else}}
+                    Prefer Torrent
+                {{/if_eq}}
+            {{else}}
+                Only Usenet
+            {{/if}}
+        {{else}}
+            Only Torrent
+        {{/if}}
     </div>
     <div class="col-sm-2">
-
-        {{#if_eq usenetDelay compare="0"}}
-            No delay
-        {{else}}
-            {{#if_eq usenetDelay compare="1"}}
-                1 minute
+        {{#if enableUsenet}}
+            {{#if_eq usenetDelay compare="0"}}
+                No delay
             {{else}}
-                {{usenetDelay}} minutes
+                {{#if_eq usenetDelay compare="1"}}
+                    1 minute
+                {{else}}
+                    {{usenetDelay}} minutes
+                {{/if_eq}}
             {{/if_eq}}
-        {{/if_eq}}
-
+        {{else}}
+            -
+        {{/if}}
     </div>
     <div class="col-sm-2">
-        {{#if_eq torrentDelay compare="0"}}
-            No delay
-        {{else}}
-            {{#if_eq torrentDelay compare="1"}}
-                1 minute
+        {{#if enableTorrent}}
+            {{#if_eq torrentDelay compare="0"}}
+                No delay
             {{else}}
-                {{torrentDelay}} minutes
+                {{#if_eq torrentDelay compare="1"}}
+                    1 minute
+                {{else}}
+                    {{torrentDelay}} minutes
+                {{/if_eq}}
             {{/if_eq}}
-        {{/if_eq}}
+        {{else}}
+            -
+        {{/if}}
     </div>
     <div class="col-sm-5">
         {{tagDisplay tags}}
