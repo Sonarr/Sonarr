@@ -4,7 +4,7 @@
 DIR=$(cd "$(dirname "$0")"; pwd)
  
 #change these values to match your app
-EXE_PATH="$DIR\nzbdrone.exe"
+EXE_PATH="$DIR/nzbdrone.exe"
 APPNAME="Sonarr"
  
 #set up environment
@@ -17,7 +17,7 @@ REQUIRED_MAJOR=3
 REQUIRED_MINOR=10
  
 VERSION_TITLE="Cannot launch $APPNAME"
-VERSION_MSG="$APPNAME requires Mono Runtime Environment (MRE) $REQUIRED_MAJOR.$REQUIRED_MINOR or later."
+VERSION_MSG="$APPNAME requires Mono Runtime Environment(MRE) $REQUIRED_MAJOR.$REQUIRED_MINOR or later."
 DOWNLOAD_URL="http://www.mono-project.com/download/#download-mac"
  
 MONO_VERSION="$(mono --version | grep 'Mono JIT compiler version ' |  cut -f5 -d\ )"
@@ -38,4 +38,4 @@ fi
 MONO_EXEC="exec mono --debug"
  
 #run app using mono
-$MONO_EXEC --debug "$EXE_PATH"
+$MONO_EXEC "$EXE_PATH"
