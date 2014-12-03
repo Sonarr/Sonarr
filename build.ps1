@@ -166,7 +166,7 @@ Function PackageOsxApp()
     }
 
     Copy-Item .\osx-app $outputFolderOsxApp\ -recurse
-    Copy-Item $outputFolderOsx\* $outputFolderOsxApp\Sonarr.app\MacOS -recurse
+    Copy-Item $outputFolderOsx\* $outputFolderOsxApp\Sonarr.app\Contents\MacOS -recurse
 
     Write-Host "##teamcity[progressFinish 'Creating OS X App Package']"
 }
