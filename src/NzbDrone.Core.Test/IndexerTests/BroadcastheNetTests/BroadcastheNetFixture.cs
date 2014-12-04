@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
 
             VerifyBackOff();
 
-            ExceptionVerification.ExpectedErrors(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
 
             VerifyBackOff();
 
-            ExceptionVerification.ExpectedErrors(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]
