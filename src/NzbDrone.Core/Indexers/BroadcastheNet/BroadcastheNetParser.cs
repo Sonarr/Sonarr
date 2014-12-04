@@ -16,19 +16,19 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             var results = new List<ReleaseInfo>();
 
-            if (indexerResponse.HttpResponse.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (indexerResponse.HttpResponse.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new ApiKeyException("API Key invalid or not authorized");
             }
-            else if (indexerResponse.HttpResponse.StatusCode == System.Net.HttpStatusCode.NotFound)
+            else if (indexerResponse.HttpResponse.StatusCode == HttpStatusCode.NotFound)
             {
                 throw new IndexerException(indexerResponse, "Indexer API call returned NotFound, the Indexer API may have changed.");
             }
-            else if (indexerResponse.HttpResponse.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+            else if (indexerResponse.HttpResponse.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
                 throw new RequestLimitReachedException("Cannot do more than 150 API requests per hour.");
             }
-            else if (indexerResponse.HttpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            else if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
             {
                 throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
             }

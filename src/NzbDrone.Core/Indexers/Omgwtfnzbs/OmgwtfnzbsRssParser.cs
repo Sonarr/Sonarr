@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers.Exceptions;
 

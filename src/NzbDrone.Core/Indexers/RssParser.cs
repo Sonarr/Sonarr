@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Indexers.Exceptions;
@@ -195,6 +194,25 @@ namespace NzbDrone.Core.Indexers
             return 0;
         }
 
+        protected IEnumerable<XElement> GetItems(XDocument document)
+        {
+            var root = document.Root;
+
+            if (root == null)
+            {
+                return Enumerable.Empty<XElement>();
+            }
+
+            var channel = root.Element("channel");
+
+            if (channel == null)
+            {
+                return Enumerable.Empty<XElement>();
+            }
+
+            return channel.Elements("item");
+        }
+
         private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>[KMG]i?B)",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -236,25 +254,6 @@ namespace NzbDrone.Core.Indexers
             var result = value * multiplier;
 
             return Convert.ToInt64(result);
-        }
-
-        private IEnumerable<XElement> GetItems(XDocument document)
-        {
-            var root = document.Root;
-
-            if (root == null)
-            {
-                return Enumerable.Empty<XElement>();
-            }
-
-            var channel = root.Element("channel");
-
-            if (channel == null)
-            {
-                return Enumerable.Empty<XElement>();
-            }
-
-            return channel.Elements("item");
         }
     }
 }

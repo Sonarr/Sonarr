@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Indexers
             }
             catch (HttpException httpException)
             {
-                if ((int)httpException.Response.StatusCode == 429)
+                if ((int) httpException.Response.StatusCode == 429)
                 {
                     _logger.Warn("API Request Limit reached for {0}", this);
                 }
@@ -169,6 +169,11 @@ namespace NzbDrone.Core.Indexers
             catch (ApiKeyException)
             {
                 _logger.Warn("Invalid API Key for {0} {1}", this, url);
+            }
+            catch (IndexerException ex)
+            {
+                var message = String.Format("{0} - {1}", ex.Message, url);
+                _logger.WarnException(message, ex);
             }
             catch (Exception feedEx)
             {
