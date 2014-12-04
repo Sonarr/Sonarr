@@ -74,7 +74,8 @@ namespace NzbDrone.Core.Download
 
                 else if (trackedDownload.Status != TrackedDownloadStatus.Ok)
                 {
-                    _logger.Debug("Tracked download status is: {0}, skipping import.", trackedDownload.Status);
+                    _logger.Debug("Tracked download status is: {0}, skipping import. {1}", trackedDownload.Status,
+                                                                                           String.Join(". ", trackedDownload.StatusMessages));
                     return;
                 }
 
