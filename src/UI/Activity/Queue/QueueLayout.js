@@ -10,6 +10,7 @@ define(
         'Cells/QualityCell',
         'Activity/Queue/QueueStatusCell',
         'Activity/Queue/TimeleftCell',
+        'Activity/Queue/ProgressCell',
         'Shared/Grid/Pager'
     ], function (Marionette,
                  Backgrid,
@@ -20,6 +21,7 @@ define(
                  QualityCell,
                  QueueStatusCell,
                  TimeleftCell,
+                 ProgressCell,
                  GridPager) {
         return Marionette.Layout.extend({
             template: 'Activity/Queue/QueueLayoutTemplate',
@@ -65,6 +67,12 @@ define(
                         name      : 'timeleft',
                         label     : 'Timeleft',
                         cell      : TimeleftCell,
+                        cellValue : 'this'
+                    },
+                    {
+                        name      : 'episode',
+                        label     : 'Progress',
+                        cell      : ProgressCell,
                         cellValue : 'this'
                     }
                 ],
