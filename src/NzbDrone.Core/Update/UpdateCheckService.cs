@@ -45,9 +45,9 @@ namespace NzbDrone.Core.Update
             {
                 try
                 {
-                    _logger.Warn("[{0}] isn't a valid branch. Switching back to [master]", _configFileProvider.Branch);
+                    _logger.Warn("Branch [{0}] is being redirected to [{1}]]", _configFileProvider.Branch, latestAvailable.Branch);
                     var config = _configFileProvider.GetConfigDictionary();
-                    config["Branch"] = _configFileProvider.Branch;
+                    config["Branch"] = latestAvailable.Branch;
                     _configFileProvider.SaveConfigDictionary(config);
                 }
                 catch (Exception e)
