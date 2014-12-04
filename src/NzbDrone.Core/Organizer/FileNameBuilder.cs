@@ -54,9 +54,6 @@ namespace NzbDrone.Core.Organizer
         public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex OriginalTitleRegex = new Regex(@"(\^{original[- ._]title\}$)",
-                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
         private static readonly Regex TrimSeparatorsRegex = new Regex(@"[- ._]$", RegexOptions.Compiled);
 
@@ -420,6 +417,7 @@ namespace NzbDrone.Core.Organizer
         private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
         {
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile);
+            tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile);
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? "DRONE";
         }
 
@@ -649,7 +647,7 @@ namespace NzbDrone.Core.Organizer
                 }).ToArray());
         }
 
-        private String GetEpisodeTitle(List<Episode> episodes)
+        private string GetEpisodeTitle(List<Episode> episodes)
         {
             if (episodes.Count == 1)
             {
@@ -664,7 +662,7 @@ namespace NzbDrone.Core.Organizer
             return String.Join(" + ", titles);
         }
 
-        private String GetQualityProper(Series series, QualityModel quality)
+        private string GetQualityProper(Series series, QualityModel quality)
         {
             if (quality.Revision.Version > 1)
             {
@@ -679,19 +677,24 @@ namespace NzbDrone.Core.Organizer
             return String.Empty;
         }
 
-        private String GetOriginalTitle(EpisodeFile episodeFile)
+        private string GetOriginalTitle(EpisodeFile episodeFile)
         {
             if (episodeFile.SceneName.IsNullOrWhiteSpace())
             {
-                if (episodeFile.RelativePath.IsNullOrWhiteSpace())
-                {
-                    return Path.GetFileNameWithoutExtension(episodeFile.Path);
-                }
-
-                return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
+                return GetOriginalFileName(episodeFile);
             }
 
             return episodeFile.SceneName;
+        }
+
+        private string GetOriginalFileName(EpisodeFile episodeFile)
+        {
+            if (episodeFile.RelativePath.IsNullOrWhiteSpace())
+            {
+                return Path.GetFileNameWithoutExtension(episodeFile.Path);
+            }
+
+            return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
         }
     }
 
