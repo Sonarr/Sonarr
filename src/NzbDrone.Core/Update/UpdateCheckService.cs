@@ -45,14 +45,14 @@ namespace NzbDrone.Core.Update
             {
                 try
                 {
-                    _logger.Warn("Branch [{0}] is being redirected to [{1}]]", _configFileProvider.Branch, latestAvailable.Branch);
+                    _logger.Info("Branch [{0}] is being redirected to [{1}]]", _configFileProvider.Branch, latestAvailable.Branch);
                     var config = _configFileProvider.GetConfigDictionary();
                     config["Branch"] = latestAvailable.Branch;
                     _configFileProvider.SaveConfigDictionary(config);
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("Couldn't revert back to master.", e);
+                    _logger.ErrorException("Couldn't save the branch redirect.", e);
                 }
 
             }
