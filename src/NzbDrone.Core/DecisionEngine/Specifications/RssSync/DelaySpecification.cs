@@ -3,7 +3,7 @@ using NLog;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
@@ -12,12 +12,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
     {
         private readonly IPendingReleaseService _pendingReleaseService;
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly IDelayProfileService _delayProfileService;
         private readonly Logger _logger;
 
-        public DelaySpecification(IPendingReleaseService pendingReleaseService, IQualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        public DelaySpecification(IPendingReleaseService pendingReleaseService,
+                                  IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                  IDelayProfileService delayProfileService,
+                                  Logger logger)
         {
             _pendingReleaseService = pendingReleaseService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _delayProfileService = delayProfileService;
             _logger = logger;
         }
 
@@ -35,71 +40,59 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
 
             var profile = subject.Series.Profile.Value;
+            var delayProfile = _delayProfileService.BestForTags(subject.Series.Tags);
+            var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
+            var isPreferredProtocol = subject.Release.DownloadProtocol == delayProfile.PreferredProtocol;
 
-            if (profile.GrabDelay == 0)
+            if (delay == 0)
             {
-                _logger.Debug("Profile does not delay before download");
+                _logger.Debug("Profile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
                 return Decision.Accept();
             }
 
             var comparer = new QualityModelComparer(profile);
 
-            foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
+            if (isPreferredProtocol)
             {
-                var upgradable = _qualityUpgradableSpecification.IsUpgradable(profile, file.Quality, subject.ParsedEpisodeInfo.Quality);
-
-                if (upgradable)
+                foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
                 {
-                    var revisionUpgrade = _qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality);
+                    var upgradable = _qualityUpgradableSpecification.IsUpgradable(profile, file.Quality, subject.ParsedEpisodeInfo.Quality);
 
-                    if (revisionUpgrade)
+                    if (upgradable)
                     {
-                        _logger.Debug("New quality is a better revision for existing quality, skipping delay");
-                        return Decision.Accept();
+                        var revisionUpgrade = _qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality);
+
+                        if (revisionUpgrade)
+                        {
+                            _logger.Debug("New quality is a better revision for existing quality, skipping delay");
+                            return Decision.Accept();
+                        }
                     }
                 }
             }
 
             //If quality meets or exceeds the best allowed quality in the profile accept it immediately
-            var bestQualityInProfile = new QualityModel(profile.Items.Last(q => q.Allowed).Quality);
-            var bestCompare = comparer.Compare(subject.ParsedEpisodeInfo.Quality, bestQualityInProfile);
+            var bestQualityInProfile = new QualityModel(profile.LastAllowedQuality());
+            var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality, bestQualityInProfile) >= 0;
 
-            if (bestCompare >= 0)
+            if (isBestInProfile && isPreferredProtocol)
             {
-                _logger.Debug("Quality is highest in profile, will not delay");
+                _logger.Debug("Quality is highest in profile for preferred protocol, will not delay");
                 return Decision.Accept();
             }
 
-            if (profile.GrabDelayMode == GrabDelayMode.Cutoff)
-            {
-                var cutoff = new QualityModel(profile.Cutoff);
-                var cutoffCompare = comparer.Compare(subject.ParsedEpisodeInfo.Quality, cutoff);
+            var episodeIds = subject.Episodes.Select(e => e.Id);
 
-                if (cutoffCompare >= 0)
-                {
-                    _logger.Debug("Quality meets or exceeds the cutoff, will not delay");
-                    return Decision.Accept();
-                }
+            var oldest = _pendingReleaseService.OldestPendingRelease(subject.Series.Id, episodeIds);
+
+            if (oldest != null && oldest.Release.AgeHours > delay)
+            {
+                return Decision.Accept();
             }
 
-            if (profile.GrabDelayMode == GrabDelayMode.First)
+            if (subject.Release.AgeHours < delay)
             {
-                var episodeIds = subject.Episodes.Select(e => e.Id);
-
-                var oldest = _pendingReleaseService.GetPendingRemoteEpisodes(subject.Series.Id)
-                                                            .Where(r => r.Episodes.Select(e => e.Id).Intersect(episodeIds).Any())
-                                                            .OrderByDescending(p => p.Release.AgeHours)
-                                                            .FirstOrDefault();
-
-                if (oldest != null && oldest.Release.AgeHours > profile.GrabDelay)
-                {
-                    return Decision.Accept();
-                }
-            }
-
-            if (subject.Release.AgeHours < profile.GrabDelay)
-            {
-                _logger.Debug("Age ({0}) is less than delay {1}, delaying", subject.Release.AgeHours, profile.GrabDelay);
+                _logger.Debug("Waiting for better quality release, There is a {0} hour delay on {1}", delay, subject.Release.DownloadProtocol);
                 return Decision.Reject("Waiting for better quality release");
             }
 

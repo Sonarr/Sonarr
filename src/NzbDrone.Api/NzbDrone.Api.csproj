@@ -98,6 +98,9 @@
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Extensions\AccessControlHeaders.cs" />
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
     <Compile Include="Config\UiConfigModule.cs" />
@@ -200,6 +203,7 @@
     <Compile Include="Restrictions\RestrictionModule.cs" />
     <Compile Include="Restrictions\RestrictionResource.cs" />
     <Compile Include="REST\BadRequestException.cs" />
+    <Compile Include="REST\MethodNotAllowedException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />
     <Compile Include="REST\RestModule.cs" />
     <Compile Include="REST\RestResource.cs" />
@@ -221,6 +225,7 @@
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
     <Compile Include="Update\UpdateResource.cs" />
+    <Compile Include="Validation\EmptyCollectionValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Wanted\CutoffModule.cs" />
     <Compile Include="Wanted\LegacyMissingModule.cs" />

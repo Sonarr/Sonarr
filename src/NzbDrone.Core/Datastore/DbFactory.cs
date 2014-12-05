@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IDbFactory
     {
-        IDatabase Create(MigrationType migrationType = MigrationType.Main);
+        IDatabase Create(MigrationType migrationType = MigrationType.Main, Action<NzbDroneMigrationBase> beforeMigration = null);
     }
 
     public class DbFactory : IDbFactory
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Datastore
             _connectionStringFactory = connectionStringFactory;
         }
 
-        public IDatabase Create(MigrationType migrationType = MigrationType.Main)
+        public IDatabase Create(MigrationType migrationType = MigrationType.Main, Action<NzbDroneMigrationBase> beforeMigration = null)
         {
             string connectionString;
 
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Datastore
                     }
             }
 
-            _migrationController.MigrateToLatest(connectionString, migrationType);
+            _migrationController.MigrateToLatest(connectionString, migrationType, beforeMigration);
 
             var db = new Database(() =>
                 {

@@ -26,21 +26,26 @@ define(
 
                 if (existing) {
                     originalAdd.call(this, existing, dontPushVal);
-                    return;
                 }
 
-                var newTag = new TagModel();
-                newTag.set({ label: item.toLowerCase() });
-                TagCollection.add(newTag);
+                else {
+                    var newTag = new TagModel();
+                    newTag.set({ label: item.toLowerCase() });
+                    TagCollection.add(newTag);
 
-                newTag.save().done(function () {
-                    item = newTag.toJSON();
-                    originalAdd.call(self, item, dontPushVal);
-                });
+                    newTag.save().done(function () {
+                        item = newTag.toJSON();
+                        originalAdd.call(self, item, dontPushVal);
+                    });
+                }
             }
 
             else {
                 originalAdd.call(this, item, dontPushVal);
+            }
+
+            if (this.options.tag) {
+                self.$input.typeahead('val', '');
             }
         };
 
@@ -67,6 +72,11 @@ define(
                     self.$input.trigger(e);
                     event.preventDefault();
                 }
+            });
+
+            self.$input.on('focusout', function () {
+                self.add(self.$input.val());
+                self.$input.val('');
             });
 
             originalBuild.call(this, options);

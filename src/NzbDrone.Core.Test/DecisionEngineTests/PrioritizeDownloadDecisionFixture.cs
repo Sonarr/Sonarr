@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NUnit.Framework;
 using FluentAssertions;
 using FizzWare.NBuilder;
@@ -17,6 +19,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     [TestFixture]
     public class PrioritizeDownloadDecisionFixture : CoreTest<DownloadDecisionPriorizationService>
     {
+        [SetUp]
+        public void Setup()
+        {
+            GivenPreferredDownloadProtocol(DownloadProtocol.Usenet);
+        }
+
         private Episode GivenEpisode(int id)
         {
             return Builder<Episode>.CreateNew()
@@ -25,7 +33,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                             .Build();
         }
 
-        private RemoteEpisode GivenRemoteEpisode(List<Episode> episodes, QualityModel quality, int age = 0, long size = 0)
+        private RemoteEpisode GivenRemoteEpisode(List<Episode> episodes, QualityModel quality, int age = 0, long size = 0, DownloadProtocol downloadProtocol = DownloadProtocol.Usenet)
         {
             var remoteEpisode = new RemoteEpisode();
             remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
@@ -37,12 +45,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release = new ReleaseInfo();
             remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-age);
             remoteEpisode.Release.Size = size;
+            remoteEpisode.Release.DownloadProtocol = downloadProtocol;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
                                                   .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                                   .Build();
 
             return remoteEpisode;
+        }
+
+        private void GivenPreferredDownloadProtocol(DownloadProtocol downloadProtocol)
+        {
+            Mocker.GetMock<IDelayProfileService>()
+                  .Setup(s => s.BestForTags(It.IsAny<HashSet<int>>()))
+                  .Returns(new DelayProfile
+                  {
+                      PreferredProtocol = downloadProtocol
+                  });
         }
 
         [Test]
@@ -147,6 +166,38 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
             Subject.PrioritizeDecisions(decisions);
+        }
+
+        [Test]
+        public void should_put_usenet_above_torrent_when_usenet_is_preferred()
+        {
+            GivenPreferredDownloadProtocol(DownloadProtocol.Usenet);
+
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), downloadProtocol: DownloadProtocol.Torrent);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), downloadProtocol: DownloadProtocol.Usenet);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.Release.DownloadProtocol.Should().Be(DownloadProtocol.Usenet);
+        }
+
+        [Test]
+        public void should_put_torrent_above_usenet_when_torrent_is_preferred()
+        {
+            GivenPreferredDownloadProtocol(DownloadProtocol.Torrent);
+
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), downloadProtocol: DownloadProtocol.Torrent);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), downloadProtocol: DownloadProtocol.Usenet);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.Release.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
         }
     }
 }

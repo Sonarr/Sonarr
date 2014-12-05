@@ -230,6 +230,7 @@
     <Compile Include="Datastore\Migration\066_add_tags.cs" />
     <Compile Include="Datastore\Migration\067_add_added_to_series.cs" />
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
+    <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\ProtocolSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ReleaseRestrictionsSpecification.cs" />
@@ -623,6 +625,10 @@
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
     <Compile Include="MetadataSource\TraktProxy.cs" />
     <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
+    <Compile Include="Profiles\Delay\DelayProfile.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileService.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
+    <Compile Include="Profiles\ProfileRepository.cs" />
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
@@ -738,11 +744,10 @@
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\SceneChecker.cs" />
     <Compile Include="Parser\QualityParser.cs" />
-    <Compile Include="Profiles\GrabDelayMode.cs" />
     <Compile Include="Profiles\Profile.cs" />
     <Compile Include="Profiles\ProfileInUseException.cs" />
     <Compile Include="Profiles\ProfileQualityItem.cs" />
-    <Compile Include="Profiles\ProfileRepository.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileRepository.cs" />
     <Compile Include="Profiles\ProfileService.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FluentMigrator;
 using FluentMigrator.Runner;
 using Marr.Data;
 using Moq;
@@ -13,7 +14,6 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Test.Framework
 {
-
     public abstract class DbTest<TSubject, TModel> : DbTest
         where TSubject : class
         where TModel : ModelBase, new()
@@ -85,27 +85,34 @@ namespace NzbDrone.Core.Test.Framework
             }
         }
 
-        private void WithTestDb()
+        protected virtual TestDatabase WithTestDb(Action<MigrationBase> beforeMigration)
+        {
+            var factory = Mocker.Resolve<DbFactory>();
+            var database = factory.Create(MigrationType);
+            Mocker.SetConstant(database);
+
+            var testDb = new TestDatabase(database);
+
+            return testDb;
+        }
+
+
+        protected void SetupContainer()
         {
             WithTempAsAppPath();
-
 
             Mocker.SetConstant<IAnnouncer>(Mocker.Resolve<MigrationLogger>());
             Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
             Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());
 
             MapRepository.Instance.EnableTraceLogging = true;
-
-            var factory = Mocker.Resolve<DbFactory>();
-            var _database = factory.Create(MigrationType);
-            _db = new TestDatabase(_database);
-            Mocker.SetConstant(_database);
         }
 
         [SetUp]
-        public void SetupReadDb()
+        public virtual void SetupDb()
         {
-            WithTestDb();
+            SetupContainer();
+            _db = WithTestDb(null);
         }
 
         [TearDown]

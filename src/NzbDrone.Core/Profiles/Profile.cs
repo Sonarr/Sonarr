@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
@@ -12,7 +13,10 @@ namespace NzbDrone.Core.Profiles
         public Quality Cutoff { get; set; }
         public List<ProfileQualityItem> Items { get; set; }
         public Language Language { get; set; }
-        public Int32 GrabDelay { get; set; }
-        public GrabDelayMode GrabDelayMode { get; set; }
+
+        public Quality LastAllowedQuality()
+        {
+            return Items.Last(q => q.Allowed).Quality;
+        }
     }
 }

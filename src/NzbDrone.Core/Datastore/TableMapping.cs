@@ -16,6 +16,7 @@ using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
+using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
@@ -95,6 +96,8 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<RemotePathMapping>().RegisterModel("RemotePathMappings");
             Mapper.Entity<Tag>().RegisterModel("Tags");
             Mapper.Entity<Restriction>().RegisterModel("Restrictions");
+
+            Mapper.Entity<DelayProfile>().RegisterModel("DelayProfiles");
         }
 
         private static void RegisterMappers()

@@ -99,6 +99,27 @@ define(
                     }
                 ],
 
+            templateHelpers: function () {
+
+                var episodeCount = this.episodeCollection.filter(function (episode) {
+                    return episode.get('hasFile') || (episode.get('monitored') && moment(episode.get('airDateUtc')).isBefore(moment()));
+                }).length;
+
+                var episodeFileCount = this.episodeCollection.where({ hasFile: true }).length;
+                var percentOfEpisodes = 100;
+
+                if (episodeCount > 0) {
+                    percentOfEpisodes = episodeFileCount / episodeCount * 100;
+                }
+
+                return {
+                    showingEpisodes  : this.showingEpisodes,
+                    episodeCount     : episodeCount,
+                    episodeFileCount : episodeFileCount,
+                    percentOfEpisodes: percentOfEpisodes
+                };
+            },
+
             initialize: function (options) {
 
                 if (!options.episodeCollection) {
@@ -227,27 +248,6 @@ define(
 
                     return false;
                 });
-            },
-
-            templateHelpers: function () {
-
-                var episodeCount = this.episodeCollection.filter(function (episode) {
-                    return episode.get('hasFile') || (episode.get('monitored') && moment(episode.get('airDateUtc')).isBefore(moment()));
-                }).length;
-
-                var episodeFileCount = this.episodeCollection.where({ hasFile: true }).length;
-                var percentOfEpisodes = 100;
-
-                if (episodeCount > 0) {
-                    percentOfEpisodes = episodeFileCount / episodeCount * 100;
-                }
-
-                return {
-                    showingEpisodes  : this.showingEpisodes,
-                    episodeCount     : episodeCount,
-                    episodeFileCount : episodeFileCount,
-                    percentOfEpisodes: percentOfEpisodes
-                };
             },
 
             _showHideEpisodes: function () {

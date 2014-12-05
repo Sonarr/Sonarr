@@ -26,7 +26,7 @@ define(
                 });
 
                 promise.done(function () {
-                    self.originalModelData = self.model.toJSON();
+                    self.originalModelData = JSON.stringify(self.model.toJSON());
                 });
 
                 return promise;
@@ -38,7 +38,7 @@ define(
                     throw 'View has no model';
                 }
 
-                this.originalModelData = this.model.toJSON();
+                this.originalModelData = JSON.stringify(this.model.toJSON());
 
                 this.events = this.events || {};
                 this.events['click .x-save'] = '_save';
@@ -63,8 +63,6 @@ define(
                     if (self._onAfterSave) {
                         self._onAfterSave.call(self);
                     }
-
-                    self.originalModelData = self.model.toJSON();
                 });
             };
 
@@ -96,7 +94,7 @@ define(
             };
 
             this.prototype.onBeforeClose = function () {
-                this.model.set(this.originalModelData);
+                this.model.set(JSON.parse(this.originalModelData));
 
                 if (originalOnBeforeClose) {
                     originalOnBeforeClose.call(this);

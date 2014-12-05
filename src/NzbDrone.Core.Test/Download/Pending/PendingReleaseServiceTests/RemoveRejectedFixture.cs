@@ -40,7 +40,6 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                        {
                            Name = "Test",
                            Cutoff = Quality.HDTV720p,
-                           GrabDelay = 1,
                            Items = new List<ProfileQualityItem>
                                    {
                                        new ProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },
