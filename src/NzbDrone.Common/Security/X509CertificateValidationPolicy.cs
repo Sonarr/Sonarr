@@ -6,9 +6,9 @@ using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Security
 {
-    public static class IgnoreCertErrorPolicy
+    public static class X509CertificateValidationPolicy
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger("IgnoreCertErrorPolicy");
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
 
         public static void Register()
         {

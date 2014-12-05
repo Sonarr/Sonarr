@@ -36,7 +36,7 @@ namespace NzbDrone.Update
 
                 Console.WriteLine("Starting NzbDrone Update Client");
 
-                IgnoreCertErrorPolicy.Register();
+                X509CertificateValidationPolicy.Register();
 
                 GlobalExceptionHandlers.Register();
 
