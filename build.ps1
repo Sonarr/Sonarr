@@ -2,6 +2,7 @@ $msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
 $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
 $outputFolderOsx = '.\_output_osx'
+$outputFolderOsxApp = '.\_output_osx_app'
 $testPackageFolder = '.\_tests\'
 $testSearchPattern = '*.Test\bin\x86\Release'
 $sourceFolder = '.\src'
@@ -154,6 +155,22 @@ Function PackageOsx()
     Write-Host "##teamcity[progressFinish 'Creating OS X Package']"
 }
 
+
+Function PackageOsxApp()
+{
+    Write-Host "##teamcity[progressStart 'Creating OS X App Package']"
+
+    if(Test-Path $outputFolderOsxApp)
+    {
+        Remove-Item -Recurse -Force $outputFolderOsxApp -ErrorAction Continue
+    }
+
+    Copy-Item .\osx-app $outputFolderOsxApp\ -recurse
+    Copy-Item $outputFolderOsx\* $outputFolderOsxApp\Sonarr.app\Contents\MacOS -recurse
+
+    Write-Host "##teamcity[progressFinish 'Creating OS X App Package']"
+}
+
 Function AddJsonNet()
 {
     get-childitem $outputFolder -File -Filter Newtonsoft.Json.* -Recurse | foreach ($_) {remove-item $_.fullname}
@@ -235,5 +252,6 @@ Build
 RunGulp
 PackageMono
 PackageOsx
+PackageOsxApp
 PackageTests
 CleanupWindowsPackage
