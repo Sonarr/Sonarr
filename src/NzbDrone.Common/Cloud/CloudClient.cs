@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Cloud
 
     public class DroneServicesHttpRequestBuilder : HttpRequestBuilder, IDroneServicesRequestBuilder
     {
-        private const string ROOT_URL = "http://services.nzbdrone.com/v1/";
+        private const string ROOT_URL = "https://services.sonarr.tv/v1/";
 
         public DroneServicesHttpRequestBuilder()
             : base(ROOT_URL)

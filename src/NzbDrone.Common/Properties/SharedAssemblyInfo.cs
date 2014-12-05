@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("www.nzbdrone.com")]
+[assembly: AssemblyCompany("sonarr.tv")]
 [assembly: AssemblyProduct("NzbDrone")]
 [assembly: AssemblyCopyright("GNU General Public v3")]
 [assembly: AssemblyTrademark("")]

@@ -3,8 +3,8 @@
 
 #define AppName "NzbDrone"
 #define AppPublisher "NzbDrone"
-#define AppURL "http://www.nzbdrone.com/"
-#define ForumsURL "http://forums.nzbdrone.com/"
+#define AppURL "https://sonarr.tv/"
+#define ForumsURL "https://forums.sonarr.tv/"
 #define AppExeName "NzbDrone.exe"
 #define BuildNumber "2.0"
 #define BuildNumber GetEnv('BUILD_NUMBER')

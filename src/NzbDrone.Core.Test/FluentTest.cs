@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test
         public void ParentUriString_should_return_self_if_already_parent()
         {
             
-            var url = "http://www.nzbdrone.com";
+            var url = "http://www.sonarr.tv";
             var uri = new Uri(url);
 
             
@@ -102,70 +102,70 @@ namespace NzbDrone.Core.Test
         public void ParentUriString_should_return_parent_url_when_path_is_passed()
         {
             
-            var url = "http://www.nzbdrone.com/test/";
+            var url = "http://www.sonarr.tv/test/";
             var uri = new Uri(url);
 
             
             var result = uri.ParentUriString();
 
             //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
+            result.Should().Be("http://www.sonarr.tv");
         }
 
         [Test]
         public void ParentUriString_should_return_parent_url_when_multiple_paths_are_passed()
         {
             
-            var url = "http://www.nzbdrone.com/test/test2";
+            var url = "http://www.sonarr.tv/test/test2";
             var uri = new Uri(url);
 
             
             var result = uri.ParentUriString();
 
             //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
+            result.Should().Be("http://www.sonarr.tv");
         }
 
         [Test]
         public void ParentUriString_should_return_parent_url_when_url_with_query_string_is_passed()
         {
             
-            var url = "http://www.nzbdrone.com/test.aspx?test=10";
+            var url = "http://www.sonarr.tv/test.aspx?test=10";
             var uri = new Uri(url);
 
             
             var result = uri.ParentUriString();
 
             //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
+            result.Should().Be("http://www.sonarr.tv");
         }
 
         [Test]
         public void ParentUriString_should_return_parent_url_when_url_with_path_and_query_strings_is_passed()
         {
             
-            var url = "http://www.nzbdrone.com/tester/test.aspx?test=10";
+            var url = "http://www.sonarr.tv/tester/test.aspx?test=10";
             var uri = new Uri(url);
 
             
             var result = uri.ParentUriString();
 
             //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
+            result.Should().Be("http://www.sonarr.tv");
         }
 
         [Test]
         public void ParentUriString_should_return_parent_url_when_url_with_query_strings_is_passed()
         {
             
-            var url = "http://www.nzbdrone.com/test.aspx?test=10&test2=5";
+            var url = "http://www.sonarr.tv/test.aspx?test=10&test2=5";
             var uri = new Uri(url);
 
             
             var result = uri.ParentUriString();
 
             //Resolve
-            result.Should().Be("http://www.nzbdrone.com");
+            result.Should().Be("http://www.sonarr.tv");
         }
 
         [Test]

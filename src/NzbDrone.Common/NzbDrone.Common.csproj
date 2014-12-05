@@ -180,7 +180,6 @@
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="ServiceProvider.cs" />
-    <Compile Include="Services.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />

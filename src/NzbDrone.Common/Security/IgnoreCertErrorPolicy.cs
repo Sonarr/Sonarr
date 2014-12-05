@@ -16,9 +16,9 @@ namespace NzbDrone.Common.Security
         {
             var request = sender as HttpWebRequest;
 
-            if (request != null &&
-                request.Address.OriginalString.ContainsIgnoreCase("nzbdrone.com") &&
-                sslpolicyerrors != SslPolicyErrors.None)
+            if (request != null &&  sslpolicyerrors != SslPolicyErrors.None &&
+                (request.Address.OriginalString.ContainsIgnoreCase("nzbdrone.com") || request.Address.OriginalString.ContainsIgnoreCase("sonarr.tv"))
+               )
             {
                 return false;
             }
