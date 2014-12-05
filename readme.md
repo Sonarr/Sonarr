@@ -1,24 +1,24 @@
-# NzbDrone #
+# Sonarr #
 
 
-NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new episodes of your favourite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded if a better quality format becomes available.
+Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sorts and renames them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
 ## Major Features Include: ##
 
-* Support for major platforms: Windows, Linux, OSX
+* Support for major platforms: Windows, Linux, OSX, Rubbery Pi, etc. 
 * Automatically detects new episodes
-* can scan your existing library and then download any old seasons that are missing
-* can watch for better versions and upgrade your existing episodes. *eg. from DVD to Blu-Ray*
-* automatic failed download handling
-* manual search so you can pick any release or to see why a release was rejected
-* fully configurable episode renaming
-* full integration with SABNzbd and NzbGet
-* full integration with XBMC,Plex (notification, library update, metadata)
-* full support for specials and multi-episode releases
-* beautiful UI
+* Can scan your existing library and download any missing episodes
+* Can watch for better quality of the episodes you already have and do an automatic upgrade. *eg. from DVD to Blu-Ray*
+* Automatic failed download handling will try another release if one fails
+* Manual search so you can pick any release or to see why a release was not downloaded automatically
+* Fully configurable episode renaming
+* Full integration with SABNzbd and NzbGet
+* Full integration with XBMC, Plex (notification, library update, metadata)
+* Full support for specials and multi-episode releases
+* And a beautiful UI
 
 
-## Configuring Development Enviroment: ##
+## Configuring Development Environment: ##
 
 ### Requirements ###
 - Visual Studio 2013 ([Express Edition](http://www.microsoft.com/visualstudio/eng/products/visual-studio-express-for-web "Express Edition") might work but not tested.)
@@ -49,6 +49,6 @@ Copyright 2010-2014
 
 ### Sponsors ###
 - [JetBrains](http://www.jetbrains.com/) for providing us with free licenses to their great tools
-	- [ReSharper](http://www.jetbrains.com/resharper/)
-	- [WebStorm](http://www.jetbrains.com/webstorm/)
-	- [TeamCity](http://www.jetbrains.com/teamcity/)
+    - [ReSharper](http://www.jetbrains.com/resharper/)
+    - [WebStorm](http://www.jetbrains.com/webstorm/)
+    - [TeamCity](http://www.jetbrains.com/teamcity/)
