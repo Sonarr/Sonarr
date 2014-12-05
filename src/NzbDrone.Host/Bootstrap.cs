@@ -23,7 +23,7 @@ namespace NzbDrone.Host
             try
             {
                 GlobalExceptionHandlers.Register();
-                IgnoreCertErrorPolicy.Register();
+                X509CertificateValidationPolicy.Register();
 
                 Logger.Info("Starting NzbDrone - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
 

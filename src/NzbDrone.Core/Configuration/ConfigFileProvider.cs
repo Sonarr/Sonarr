@@ -332,7 +332,7 @@ namespace NzbDrone.Core.Configuration
 
             catch (XmlException ex)
             {
-                throw new InvalidConfigFileException(_configFile + " is invalid, please see the http://wiki.nzbdrone.com for steps to resolve this issue.", ex);
+                throw new InvalidConfigFileException(_configFile + " is invalid, please see the http://wiki.sonarr.tv for steps to resolve this issue.", ex);
             }
         }
 
