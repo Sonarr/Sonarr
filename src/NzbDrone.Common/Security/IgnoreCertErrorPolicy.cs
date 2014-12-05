@@ -2,14 +2,13 @@
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Common.Security
 {
     public static class IgnoreCertErrorPolicy
     {
-        private static Logger _logger = NzbDroneLogger.GetLogger("IgnoreCertErrorPolicy");
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger("IgnoreCertErrorPolicy");
 
         public static void Register()
         {
@@ -30,19 +29,7 @@ namespace NzbDrone.Common.Security
                 return true;
             }
 
-            _logger.Warn("Request for {0} failed certificated validation. {1}", request.Address, sslpolicyerrors);
-
-            if (OsInfo.IsMono)
-            {
-                return true;
-            }
-
-            var host = request.Address.Host.ToLower();
-
-            if (host.EndsWith("nzbdrone.com") || host.EndsWith("sonarr.tv"))
-            {
-                return false;
-            }
+            Logger.Error("Request for {0} failed certificated validation. {1}", request.Address, sslpolicyerrors);
 
             return true;
         }
