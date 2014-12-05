@@ -5,7 +5,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ## Major Features Include: ##
 
-* Support for major platforms: Windows, Linux, OSX, Rubbery Pi, etc. 
+* Support for major platforms: Windows, Linux, OSX, Raspberry Pi, etc. 
 * Automatically detects new episodes
 * Can scan your existing library and download any missing episodes
 * Can watch for better quality of the episodes you already have and do an automatic upgrade. *eg. from DVD to Blu-Ray*
