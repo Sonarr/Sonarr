@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
         [TestCase(@"CREATE TABLE ""TestTable"" (""MyId"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
         [TestCase(@"CREATE TABLE [TestTable] ([MyId] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
         [TestCase(@"CREATE TABLE `TestTable` (`MyId` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
+        [TestCase(@"CREATE TABLE 'Config' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Key' TEXT NOT NULL, 'Value' TEXT NOT NULL)", "Config", "Id")]
         [TestCase(@"CREATE TABLE ""Test """"Table"" (""My""""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "Test \"Table", "My\"Id")]
         [TestCase(@"CREATE TABLE [Test Table] ([My Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "Test Table", "My Id")]
         [TestCase(@" CREATE  TABLE  `Test ``Table`  ( `My``  Id`  INTEGER  NOT  NULL  PRIMARY  KEY  AUTOINCREMENT ) ", "Test `Table", "My`  Id")]

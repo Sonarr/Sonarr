@@ -55,9 +55,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             switch (Context.MigrationType)
             {
                 case MigrationType.Main:
+                    _logger.Info("Starting migration  to " + Version);
                     MainDbUpgrade();
                     return;
                 case MigrationType.Log:
+                    _logger.Info("Starting migration to " + Version);
                     LogDbUpgrade();
                     return;
                 default:
