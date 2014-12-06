@@ -52,16 +52,16 @@ namespace NzbDrone.Api.System
                     StartupPath = _appFolderInfo.StartUpFolder,
                     AppData = _appFolderInfo.GetAppDataPath(),
                     OsVersion = OsInfo.Version.ToString(),
-                    IsMonoRuntime = OsInfo.IsMono,
-                    IsMono = OsInfo.IsMono,
-                    IsLinux = OsInfo.IsMono,
+                    IsMonoRuntime = OsInfo.IsNotWindows,
+                    IsMono = OsInfo.IsNotWindows,
+                    IsLinux = OsInfo.IsNotWindows,
                     IsOsx = OsInfo.IsOsx,
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled,
                     SqliteVersion = _database.Version,
                     UrlBase = _configFileProvider.UrlBase,
-                    RuntimeVersion = OsInfo.IsMono ? _runtimeInfo.RuntimeVersion : null
+                    RuntimeVersion = OsInfo.IsNotWindows ? _runtimeInfo.RuntimeVersion : null
                 }.AsResponse();
         }
 

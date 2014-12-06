@@ -96,7 +96,7 @@ namespace NzbDrone.Common.Processes
 
         public Process Start(string path, string args = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null)
         {
-            if (OsInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+            if (OsInfo.IsMonoRuntime && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
             {
                 args = path + " " + args;
                 path = "mono";
@@ -155,7 +155,7 @@ namespace NzbDrone.Common.Processes
 
         public Process SpawnNewProcess(string path, string args = null)
         {
-            if (OsInfo.IsMono && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+            if (OsInfo.IsMonoRuntime && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
             {
                 args = path + " " + args;
                 path = "mono";

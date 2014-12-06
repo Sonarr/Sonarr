@@ -173,7 +173,7 @@ namespace NzbDrone.Test.Common.AutoMoq
         {
             var assemblyName = "NzbDrone.Windows";
 
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 assemblyName = "NzbDrone.Mono";
             }

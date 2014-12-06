@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Disk
         void EnsureFolder(string path);
         bool FolderExists(string path);
         bool FileExists(string path);
-        bool FileExists(string path, bool caseSensitive);
+        bool FileExists(string path, StringComparison stringComparison);
         string[] GetDirectories(string path);
         string[] GetFiles(string path, SearchOption searchOption);
         long GetFolderSize(string path);

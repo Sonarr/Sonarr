@@ -128,16 +128,15 @@ namespace NzbDrone.Test.Common
 
         protected void WindowsOnly()
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 throw new IgnoreException("windows specific test");
             }
         }
 
-
         protected void MonoOnly()
         {
-            if (!OsInfo.IsMono)
+            if (OsInfo.IsWindows)
             {
                 throw new IgnoreException("mono specific test");
             }

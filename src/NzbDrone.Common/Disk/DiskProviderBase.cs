@@ -87,19 +87,26 @@ namespace NzbDrone.Common.Disk
         public bool FileExists(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
-            return FileExists(path, OsInfo.IsMono);
+            return FileExists(path, OsInfo.PathStringComparison);
         }
 
-        public bool FileExists(string path, bool caseSensitive)
+        public bool FileExists(string path, StringComparison stringComparison)
         {
             Ensure.That(path, () => path).IsValidPath();
 
-            if (caseSensitive)
+            switch (stringComparison)
             {
-                return File.Exists(path) && path == path.GetActualCasing();
+                    case StringComparison.CurrentCulture:
+                    case StringComparison.InvariantCulture:
+                    case StringComparison.Ordinal:
+                {
+                     return File.Exists(path) && path == path.GetActualCasing();
+                }
+                default:
+                {
+                     return File.Exists(path);
+                }
             }
-
-            return File.Exists(path);
         }
 
         public string[] GetDirectories(string path)

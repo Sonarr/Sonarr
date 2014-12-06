@@ -25,19 +25,20 @@ namespace NzbDrone.Common.Processes
 
         public void Write()
         {
-            var filename = Path.Combine(_appFolderInfo.AppDataFolder, "nzbdrone.pid");
-
-            if (OsInfo.IsMono)
+            if (OsInfo.IsWindows)
             {
-                try
-                {
-                    File.WriteAllText(filename, _processProvider.GetCurrentProcess().Id.ToString());
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error("Unable to write PID file: " + filename, ex);
-                    throw;
-                }
+                return;
+            }
+
+            var filename = Path.Combine(_appFolderInfo.AppDataFolder, "nzbdrone.pid");
+            try
+            {
+                File.WriteAllText(filename, _processProvider.GetCurrentProcess().Id.ToString());
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Unable to write PID file: " + filename, ex);
+                throw;
             }
         }
     }
