@@ -170,7 +170,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             reader.Read();
 
             if (reader.Type != SqliteSyntaxReader.TokenType.Identifier &&
-                reader.Type != SqliteSyntaxReader.TokenType.StringToken)
+                reader.Type != SqliteSyntaxReader.TokenType.StringToken &&
+                reader.Type != SqliteSyntaxReader.TokenType.StringLiteral)
             {
                 throw reader.CreateSyntaxException("Expected Identifier but found {0}", reader.Type);
             }

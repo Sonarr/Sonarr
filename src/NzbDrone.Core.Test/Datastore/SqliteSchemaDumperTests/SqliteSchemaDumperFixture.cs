@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
         [TestCase(@"CREATE TABLE ""TestTable"" (""MyId"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
         [TestCase(@"CREATE TABLE [TestTable] ([MyId] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
         [TestCase(@"CREATE TABLE `TestTable` (`MyId` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
-        [TestCase(@"CREATE TABLE 'Config' ('Id' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 'Key' TEXT NOT NULL, 'Value' TEXT NOT NULL)", "Config", "Id")]
+        [TestCase(@"CREATE TABLE 'TestTable' ('MyId' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "TestTable", "MyId")]
         [TestCase(@"CREATE TABLE ""Test """"Table"" (""My""""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "Test \"Table", "My\"Id")]
         [TestCase(@"CREATE TABLE [Test Table] ([My Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "Test Table", "My Id")]
         [TestCase(@" CREATE  TABLE  `Test ``Table`  ( `My``  Id`  INTEGER  NOT  NULL  PRIMARY  KEY  AUTOINCREMENT ) ", "Test `Table", "My`  Id")]
@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
 
         [TestCase(@"CREATE INDEX TestIndex ON TestTable (MyId)", "TestIndex", "TestTable", "MyId")]
         [TestCase(@"CREATE INDEX ""TestIndex"" ON ""TestTable"" (""MyId"" ASC)", "TestIndex", "TestTable", "MyId")]
+        [TestCase(@"CREATE INDEX 'TestIndex' ON 'TestTable' ('MyId' ASC)", "TestIndex", "TestTable", "MyId")]
         [TestCase(@"CREATE INDEX [TestIndex] ON ""TestTable"" ([MyId] DESC)", "TestIndex", "TestTable", "MyId")]
         [TestCase(@"CREATE INDEX `TestIndex`  ON `TestTable`  (`MyId` COLLATE abc ASC)", "TestIndex", "TestTable", "MyId")]
         [TestCase(@"CREATE INDEX ""Test """"Index"" ON ""TestTable"" (""My""""Id"" ASC)", "Test \"Index", "TestTable", "My\"Id")]
