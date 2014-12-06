@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Security
             ServicePointManager.ServerCertificateValidationCallback = ShouldByPassValidationError;
         }
 
-        private static bool ShouldByPassValidationError(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+        private static bool ShouldByPassValidationError(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             var request = sender as HttpWebRequest;
 
@@ -24,12 +24,12 @@ namespace NzbDrone.Common.Security
                 return true;
             }
 
-            if (sslpolicyerrors == SslPolicyErrors.None)
+            if (sslPolicyErrors == SslPolicyErrors.None)
             {
                 return true;
             }
 
-            Logger.Error("Request for {0} failed certificated validation. {1}", request.Address, sslpolicyerrors);
+            Logger.Debug("Certificate validation for {0} failed. {1}", request.Address, sslPolicyErrors);
 
             return true;
         }
