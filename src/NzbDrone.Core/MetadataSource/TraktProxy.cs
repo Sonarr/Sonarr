@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
@@ -237,10 +236,10 @@ namespace NzbDrone.Core.MetadataSource
             phrase = phrase.RemoveAccent();
             phrase = InvalidSearchCharRegex.Replace(phrase, "");
 
-            if (!phrase.Any(char.IsWhiteSpace) && phrase.Any(char.IsUpper) && phrase.Any(char.IsLower) && phrase.Length > 4)
-            {
-                phrase = ExpandCamelCaseRegEx.Replace(phrase, " ");
-            }
+//            if (!phrase.Any(char.IsWhiteSpace) && phrase.Any(char.IsUpper) && phrase.Any(char.IsLower) && phrase.Length > 4)
+//            {
+//                phrase = ExpandCamelCaseRegEx.Replace(phrase, " ");
+//            }
 
             phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim();
             phrase = phrase.Trim('-');
