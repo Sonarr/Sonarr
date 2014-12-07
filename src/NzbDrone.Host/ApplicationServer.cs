@@ -47,7 +47,7 @@ namespace NzbDrone.Host
 
         public void Start()
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 Console.CancelKeyPress += (sender, eventArgs) => LogManager.Configuration = null;
             }

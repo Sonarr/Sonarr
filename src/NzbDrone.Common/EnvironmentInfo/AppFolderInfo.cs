@@ -17,7 +17,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public AppFolderInfo(IStartupContext startupContext)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 DATA_SPECIAL_FOLDER = Environment.SpecialFolder.ApplicationData;
             }

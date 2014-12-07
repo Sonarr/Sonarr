@@ -39,7 +39,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 {
                     if (parent.Name.StartsWith(workingFolder))
                     {
-                        if (OsInfo.IsMono)
+                        if (OsInfo.IsNotWindows)
                         {
                             _logger.Debug("{0} is still being unpacked", localEpisode.Path);
                             return false;

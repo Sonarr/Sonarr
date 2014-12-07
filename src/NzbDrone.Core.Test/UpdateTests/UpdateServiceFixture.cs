@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.UpdateTests
                   .Returns(path);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FileExists(path, true))
+                  .Setup(s => s.FileExists(path, StringComparison.Ordinal))
                   .Returns(true);
         }
 
@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             GivenInstallScript(scriptPath);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FileExists(scriptPath, true))
+                  .Setup(s => s.FileExists(scriptPath, StringComparison.Ordinal))
                   .Returns(false);
 
             Subject.Execute(new ApplicationUpdateCommand());

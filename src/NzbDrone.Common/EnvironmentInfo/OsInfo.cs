@@ -15,17 +15,16 @@ namespace NzbDrone.Common.EnvironmentInfo
             Version = Environment.OSVersion.Version;
 
             IsMonoRuntime = Type.GetType("Mono.Runtime") != null;           
-            IsMono = (platform == 4) || (platform == 6) || (platform == 128);
+            IsNotWindows = (platform == 4) || (platform == 6) || (platform == 128);
             IsOsx = IsRunningOnMac();
-            IsLinux = IsMono && !IsOsx;
-            IsWindows = !IsMono;
+            IsLinux = IsNotWindows && !IsOsx;
+            IsWindows = !IsNotWindows;
 
             FirstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 
-            if (!IsMono)
+            if (IsWindows)
             {
                 Os = Os.Windows;
-
                 PathStringComparison = StringComparison.OrdinalIgnoreCase;
             }
             else
@@ -38,7 +37,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public static Version Version { get; private set; }
         public static bool IsMonoRuntime { get; private set; }
-        public static bool IsMono { get; private set; }
+        public static bool IsNotWindows { get; private set; }
         public static bool IsLinux { get; private set; }
         public static bool IsOsx { get; private set; }
         public static bool IsWindows { get; private set; }

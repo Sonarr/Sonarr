@@ -22,7 +22,7 @@ namespace NzbDrone.Update.UpdateEngine
 
         public AppType GetAppType()
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 //Tehcnically its the console, but its been renamed for mono (Linux/OS X)
                 return AppType.Normal;

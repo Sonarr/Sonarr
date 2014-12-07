@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
-            if (OsInfo.IsMono && !_configFileProvider.UpdateAutomatically)
+            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically)
             {
                 return null;
             }

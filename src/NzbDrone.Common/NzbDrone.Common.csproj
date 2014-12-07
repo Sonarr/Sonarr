@@ -152,6 +152,7 @@
     <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="Http\UriExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Http\UserAgentBuilder.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
     <Compile Include="Instrumentation\ExceptronTarget.cs" />
     <Compile Include="Instrumentation\Extensions\LoggerProgressExtensions.cs" />

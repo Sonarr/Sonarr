@@ -33,7 +33,7 @@ namespace NzbDrone.Test.Common
 
             var nzbdroneConsoleExe = "NzbDrone.Console.exe";
 
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 nzbdroneConsoleExe = "NzbDrone.exe";
             }

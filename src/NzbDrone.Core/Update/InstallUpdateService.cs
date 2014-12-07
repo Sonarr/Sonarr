@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Update
 
                 _backupService.Backup(BackupType.Update);
 
-                if (OsInfo.IsMono && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
+                if (OsInfo.IsNotWindows && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
                 {
                     InstallUpdateWithScript(updateSandboxFolder);
                     return;
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Update
                 throw new ArgumentException("Update Script has not been defined");
             }
 
-            if (!_diskProvider.FileExists(scriptPath, true))
+            if (!_diskProvider.FileExists(scriptPath, StringComparison.Ordinal))
             {
                 var message = String.Format("Update Script: '{0}' does not exist", scriptPath);
                 throw new FileNotFoundException(message, scriptPath);

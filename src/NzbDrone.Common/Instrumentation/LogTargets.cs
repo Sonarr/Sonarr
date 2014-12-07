@@ -32,7 +32,7 @@ namespace NzbDrone.Common.Instrumentation
             }
             else
             {
-                if (inConsole && (OsInfo.IsMono || RuntimeInfoBase.IsUserInteractive))
+                if (inConsole && (OsInfo.IsNotWindows || RuntimeInfoBase.IsUserInteractive))
                 {
                     RegisterConsole();
                 }
