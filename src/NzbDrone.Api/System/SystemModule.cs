@@ -1,6 +1,5 @@
 ﻿using Nancy;
 using Nancy.Routing;
-using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -52,16 +51,16 @@ namespace NzbDrone.Api.System
                     StartupPath = _appFolderInfo.StartUpFolder,
                     AppData = _appFolderInfo.GetAppDataPath(),
                     OsVersion = OsInfo.Version.ToString(),
-                    IsMonoRuntime = OsInfo.IsNotWindows,
+                    IsMonoRuntime = OsInfo.IsMonoRuntime,
                     IsMono = OsInfo.IsNotWindows,
-                    IsLinux = OsInfo.IsNotWindows,
+                    IsLinux = OsInfo.IsLinux,
                     IsOsx = OsInfo.IsOsx,
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
                     Authentication = _configFileProvider.AuthenticationEnabled,
                     SqliteVersion = _database.Version,
                     UrlBase = _configFileProvider.UrlBase,
-                    RuntimeVersion = OsInfo.IsNotWindows ? _runtimeInfo.RuntimeVersion : null
+                    RuntimeVersion = _runtimeInfo.RuntimeVersion
                 }.AsResponse();
         }
 
@@ -83,4 +82,3 @@ namespace NzbDrone.Api.System
         }
     }
 }
- 
