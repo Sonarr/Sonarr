@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {

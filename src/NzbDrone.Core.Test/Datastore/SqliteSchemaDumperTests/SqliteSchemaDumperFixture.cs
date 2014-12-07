@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
 {

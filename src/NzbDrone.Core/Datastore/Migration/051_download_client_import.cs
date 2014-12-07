@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 using FluentMigrator;
 using Newtonsoft.Json;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;

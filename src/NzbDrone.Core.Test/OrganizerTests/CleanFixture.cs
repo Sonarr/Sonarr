@@ -1,14 +1,7 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.OrganizerTests
 {

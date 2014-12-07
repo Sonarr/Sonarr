@@ -1,6 +1,5 @@
 ﻿using Nancy;
 using Nancy.Routing;
-using NzbDrone.Common;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;

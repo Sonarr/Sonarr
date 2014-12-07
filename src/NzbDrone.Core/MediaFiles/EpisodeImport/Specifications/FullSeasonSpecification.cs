@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using NLog;
-using NzbDrone.Common;
+﻿using NLog;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications

@@ -1,8 +1,5 @@
 using System;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Http
@@ -59,7 +56,7 @@ namespace NzbDrone.Common.Http
         {
             var result = string.Format("Res: [{0}] {1} : {2}.{3}", Request.Method, Request.Url, (int)StatusCode, StatusCode);
 
-            if (HasHttpError)
+            if (HasHttpError && !Headers.ContentType.Equals("text/html", StringComparison.InvariantCultureIgnoreCase))
             {
                 result += Environment.NewLine + Content;
             }

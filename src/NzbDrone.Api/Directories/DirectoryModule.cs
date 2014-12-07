@@ -2,7 +2,6 @@
 using System.Linq;
 using Nancy;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Api.Directories

@@ -7,8 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
-
 #if !UTILS
 using Microsoft.AspNet.SignalR.Tracing;
 #endif

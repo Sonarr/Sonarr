@@ -5,13 +5,9 @@ using Moq;
 using NUnit.Framework;
 using FluentAssertions;
 using NzbDrone.Test.Common;
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Clients.TorrentBlackhole;
 using System;
 

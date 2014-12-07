@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using NzbDrone.Common;
+﻿using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;

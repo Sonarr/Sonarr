@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
-using FluentAssertions;
-using Moq;
 using FizzWare.NBuilder;
 using NUnit.Framework;
 using NzbDrone.Test.Common;

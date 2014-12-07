@@ -1,6 +1,5 @@
 ﻿using System;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {

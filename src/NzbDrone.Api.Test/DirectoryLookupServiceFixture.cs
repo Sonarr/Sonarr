@@ -5,7 +5,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Api.Directories;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
 

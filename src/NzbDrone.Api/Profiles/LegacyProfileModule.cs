@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Nancy;
-using Nancy.Responses;
 
 namespace NzbDrone.Api.Profiles
 {

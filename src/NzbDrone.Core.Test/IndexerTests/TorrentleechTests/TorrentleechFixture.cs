@@ -1,18 +1,12 @@
 ﻿using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Torrentleech;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.ThingiProvider;
-using NzbDrone.Test.Common;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using FluentAssertions;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests

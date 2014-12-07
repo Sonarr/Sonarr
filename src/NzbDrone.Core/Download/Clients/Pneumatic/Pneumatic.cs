@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using FluentValidation.Results;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;

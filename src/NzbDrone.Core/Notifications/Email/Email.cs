@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 

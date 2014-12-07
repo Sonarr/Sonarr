@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using NLog;
-using NzbDrone.Common;
+﻿using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;

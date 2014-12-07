@@ -1,11 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Indexers;
-using NzbDrone.Api.Series;
-using NzbDrone.Test.Common;
 using System.Linq;
 using System.Net;
-using System.Threading;
 
 namespace NzbDrone.Integration.Test
 {

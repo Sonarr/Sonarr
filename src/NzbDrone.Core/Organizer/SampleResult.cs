@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 

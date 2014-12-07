@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TinyIoC;
 
 namespace NzbDrone.Common.Composition
 {

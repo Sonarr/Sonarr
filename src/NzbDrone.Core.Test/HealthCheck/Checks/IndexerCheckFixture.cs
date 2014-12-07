@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using FizzWare.NBuilder;
-using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Wombles;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks

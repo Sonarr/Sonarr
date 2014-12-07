@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using FluentAssertions;
 using Marr.Data;
 using NLog;

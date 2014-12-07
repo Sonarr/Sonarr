@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Lifecycle;

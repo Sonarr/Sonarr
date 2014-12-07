@@ -1,5 +1,4 @@
-﻿using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
+﻿using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.HealthCheck.Checks

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.Metadata
+﻿namespace NzbDrone.Core.Metadata
 {
     public enum MetadataType
     {

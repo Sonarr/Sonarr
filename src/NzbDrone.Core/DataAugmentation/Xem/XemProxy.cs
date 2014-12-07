@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DataAugmentation.Xem.Model;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.DataAugmentation.Xem
 {

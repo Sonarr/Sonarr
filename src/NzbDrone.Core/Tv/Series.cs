@@ -4,7 +4,6 @@ using Marr.Data;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Profiles;
-using NzbDrone.Common;
 
 namespace NzbDrone.Core.Tv
 {

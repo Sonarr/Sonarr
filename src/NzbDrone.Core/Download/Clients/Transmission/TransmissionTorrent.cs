@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {

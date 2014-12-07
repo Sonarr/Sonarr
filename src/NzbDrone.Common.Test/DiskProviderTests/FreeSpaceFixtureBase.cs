@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;

@@ -1,4 +1,3 @@
-using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using System.Collections.Generic;

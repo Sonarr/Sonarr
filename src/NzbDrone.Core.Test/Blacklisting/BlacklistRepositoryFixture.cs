@@ -6,7 +6,6 @@ using NUnit.Framework;
 using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Blacklisting
 {

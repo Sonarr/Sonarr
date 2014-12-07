@@ -2,7 +2,6 @@
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Jobs;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {

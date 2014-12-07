@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using NzbDrone.Core.ThingiProvider;
-using FluentValidation.Results;
-using System.Linq;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;

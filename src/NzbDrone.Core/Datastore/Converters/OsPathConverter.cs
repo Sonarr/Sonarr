@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Marr.Data.Converters;
 using Marr.Data.Mapping;
-using Newtonsoft.Json;
 using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Datastore.Converters

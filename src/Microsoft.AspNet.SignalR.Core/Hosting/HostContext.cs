@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Security.Principal;
 
 namespace Microsoft.AspNet.SignalR.Hosting
 {

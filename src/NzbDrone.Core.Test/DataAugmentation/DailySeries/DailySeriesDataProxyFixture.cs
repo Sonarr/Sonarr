@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.DataAugmentation.DailySeries

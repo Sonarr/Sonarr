@@ -5,7 +5,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Config

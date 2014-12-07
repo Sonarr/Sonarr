@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Mono.Unix.Native;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;

@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Common.EnsureThat
 {

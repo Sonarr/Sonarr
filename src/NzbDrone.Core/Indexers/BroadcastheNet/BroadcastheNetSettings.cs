@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;

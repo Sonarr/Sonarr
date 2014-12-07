@@ -2,7 +2,6 @@
 using System.Data;
 using System.Linq;
 using FluentMigrator;
-using FluentMigrator.Exceptions;
 using FluentMigrator.Expressions;
 using FluentMigrator.Model;
 using FluentMigrator.Runner;

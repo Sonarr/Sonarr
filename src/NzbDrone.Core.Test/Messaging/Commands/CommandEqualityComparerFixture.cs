@@ -6,7 +6,6 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
-using NzbDrone.SignalR;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
 {

@@ -3,7 +3,6 @@ using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
-using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {

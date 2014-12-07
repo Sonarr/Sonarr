@@ -2,7 +2,6 @@
 using System.IO;
 using MediaInfoLib;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using System.Globalization;
 

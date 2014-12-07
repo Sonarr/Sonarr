@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NzbDrone.Core.IndexerSearch.Definitions
+﻿namespace NzbDrone.Core.IndexerSearch.Definitions
 {
     public class AnimeEpisodeSearchCriteria : SearchCriteriaBase
     {

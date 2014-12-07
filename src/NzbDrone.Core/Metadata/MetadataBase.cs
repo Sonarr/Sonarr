@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata.Files;

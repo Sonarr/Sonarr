@@ -4,10 +4,8 @@ using Growl.CoreLibrary;
 using NzbDrone.Common.Extensions;
 using GrowlNotification = Growl.Connector.Notification;
 using NLog;
-using NzbDrone.Common;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 

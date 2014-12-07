@@ -15,7 +15,6 @@ using NzbDrone.Api.Profiles;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Organizer;

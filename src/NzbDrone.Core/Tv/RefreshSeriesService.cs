@@ -12,7 +12,6 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
-using NzbDrone.Common;
 
 namespace NzbDrone.Core.Tv
 {

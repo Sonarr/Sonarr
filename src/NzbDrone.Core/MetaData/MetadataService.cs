@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;

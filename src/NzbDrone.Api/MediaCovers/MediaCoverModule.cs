@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Nancy;
 using Nancy.Responses;
-using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;

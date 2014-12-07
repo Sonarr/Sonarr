@@ -1,5 +1,4 @@
 ﻿using FluentValidation.Validators;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.RootFolders;
 

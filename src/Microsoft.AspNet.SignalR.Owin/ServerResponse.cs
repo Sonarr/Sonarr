@@ -6,7 +6,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hosting;
-using Microsoft.AspNet.SignalR.Owin.Infrastructure;
 
 namespace Microsoft.AspNet.SignalR.Owin
 {

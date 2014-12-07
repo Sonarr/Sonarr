@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using NzbDrone.Common.Disk;
 using NzbDrone.Core.Datastore;
 
 
