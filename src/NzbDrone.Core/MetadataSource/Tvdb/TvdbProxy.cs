@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MetadataSource.Tvdb
