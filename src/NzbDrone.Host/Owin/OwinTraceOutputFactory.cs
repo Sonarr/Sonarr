@@ -6,11 +6,11 @@ namespace NzbDrone.Host.Owin
 {
     public class OwinTraceOutputFactory : ITraceOutputFactory
     {
-        private readonly Logger logger = LogManager.GetLogger("Owin");
+        private readonly Logger _logger = LogManager.GetLogger("Owin");
 
         public TextWriter Create(string outputFile)
         {
-            return new NlogTextWriter(logger);
+            return new NlogTextWriter(_logger);
         }
     }
 }
