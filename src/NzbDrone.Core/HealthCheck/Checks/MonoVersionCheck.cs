@@ -21,7 +21,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            if (!OsInfo.IsMono)
+            if (OsInfo.IsWindows)
             {
                 return new HealthCheck(GetType());
             }

@@ -15,7 +15,7 @@ namespace NzbDrone.Host
 
         public static bool IsValidate(IUserAlert userAlert)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 return true;
             }

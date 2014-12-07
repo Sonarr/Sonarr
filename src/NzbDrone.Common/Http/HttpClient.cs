@@ -20,14 +20,10 @@ namespace NzbDrone.Common.Http
     public class HttpClient : IHttpClient
     {
         private readonly Logger _logger;
-        private readonly string _userAgent;
 
         public HttpClient(Logger logger)
         {
             _logger = logger;
-            _userAgent = String.Format("Sonarr/{0} ({1} {2})",
-                BuildInfo.Version,
-                OsInfo.Os, OsInfo.Version.ToString(2));
             ServicePointManager.DefaultConnectionLimit = 12;
         }
 
@@ -44,7 +40,7 @@ namespace NzbDrone.Common.Http
 
             webRequest.Credentials = request.NetworkCredential;
             webRequest.Method = request.Method.ToString();
-            webRequest.UserAgent = _userAgent;
+            webRequest.UserAgent = UserAgentBuilder.UserAgent;
             webRequest.KeepAlive = false;
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
 
@@ -132,7 +128,7 @@ namespace NzbDrone.Common.Http
 
                 var stopWatch = Stopwatch.StartNew();
                 var webClient = new GZipWebClient();
-                webClient.Headers.Add(HttpRequestHeader.UserAgent, _userAgent);
+                webClient.Headers.Add(HttpRequestHeader.UserAgent, UserAgentBuilder.UserAgent);
                 webClient.DownloadFile(url, fileName);
                 stopWatch.Stop();
                 _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);

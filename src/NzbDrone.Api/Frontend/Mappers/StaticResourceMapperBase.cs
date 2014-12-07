@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NLog;
 using Nancy;
@@ -11,7 +12,7 @@ namespace NzbDrone.Api.Frontend.Mappers
     {
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
-        private readonly bool _caseSensitive;
+        private readonly StringComparison _caseSensitive;
 
         private static readonly NotFoundResponse NotFoundResponse = new NotFoundResponse();
 
@@ -22,7 +23,7 @@ namespace NzbDrone.Api.Frontend.Mappers
 
             if (!RuntimeInfoBase.IsProduction)
             {
-                _caseSensitive = true;
+                _caseSensitive = StringComparison.OrdinalIgnoreCase;
             }
         }
 

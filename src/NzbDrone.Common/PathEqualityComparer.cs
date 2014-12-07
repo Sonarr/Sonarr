@@ -21,12 +21,12 @@ namespace NzbDrone.Common
 
         public int GetHashCode(string obj)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsWindows)
             {
-                return obj.CleanFilePath().GetHashCode();
+                return obj.CleanFilePath().ToLower().GetHashCode();
             }
 
-            return obj.CleanFilePath().ToLower().GetHashCode();
+            return obj.CleanFilePath().GetHashCode();
         }
     }
 }

@@ -24,10 +24,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
             _checkUpdateService = checkUpdateService;
             _configFileProvider = configFileProvider;
         }
-        
+
         public override HealthCheck Check()
         {
-            if (OsInfo.IsWindows || (OsInfo.IsMono && _configFileProvider.UpdateAutomatically))
+            if (OsInfo.IsWindows || _configFileProvider.UpdateAutomatically)
             {
                 try
                 {

@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Exceptron
 
         public static Exception ExceptronIgnoreOnMono(this Exception exception)
         {
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 exception.ExceptronIgnore();
             }

@@ -29,7 +29,7 @@ namespace NzbDrone.Common.Extensions
 
             var info = new FileInfo(path.Trim());
 
-            if (!OsInfo.IsMono && info.FullName.StartsWith(@"\\")) //UNC
+            if (OsInfo.IsWindows && info.FullName.StartsWith(@"\\")) //UNC
             {
                 return info.FullName.TrimEnd('/', '\\', ' ');
             }
@@ -96,7 +96,7 @@ namespace NzbDrone.Common.Extensions
                 return false;
             }
 
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 return path.StartsWith(Path.DirectorySeparatorChar.ToString());
             }
@@ -135,7 +135,7 @@ namespace NzbDrone.Common.Extensions
 
         public static string GetActualCasing(this string path)
         {
-            if (OsInfo.IsMono || path.StartsWith("\\"))
+            if (OsInfo.IsNotWindows || path.StartsWith("\\"))
             {
                 return path;
             }
