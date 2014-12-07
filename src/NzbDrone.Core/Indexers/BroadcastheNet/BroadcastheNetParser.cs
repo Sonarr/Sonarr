@@ -13,21 +13,20 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             var results = new List<ReleaseInfo>();
 
-            if (indexerResponse.HttpResponse.StatusCode == HttpStatusCode.Unauthorized)
+            switch (indexerResponse.HttpResponse.StatusCode)
             {
-                throw new ApiKeyException("API Key invalid or not authorized");
-            }
-            else if (indexerResponse.HttpResponse.StatusCode == HttpStatusCode.NotFound)
-            {
-                throw new IndexerException(indexerResponse, "Indexer API call returned NotFound, the Indexer API may have changed.");
-            }
-            else if (indexerResponse.HttpResponse.StatusCode == HttpStatusCode.ServiceUnavailable)
-            {
-                throw new RequestLimitReachedException("Cannot do more than 150 API requests per hour.");
-            }
-            else if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
-            {
-                throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+                case HttpStatusCode.Unauthorized:
+                    throw new ApiKeyException("API Key invalid or not authorized");
+                case HttpStatusCode.NotFound:
+                    throw new IndexerException(indexerResponse, "Indexer API call returned NotFound, the Indexer API may have changed.");
+                case HttpStatusCode.ServiceUnavailable:
+                    throw new RequestLimitReachedException("Cannot do more than 150 API requests per hour.");
+                default:
+                    if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+                    }
+                    break;
             }
 
             var jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerResponse.HttpResponse).Resource;
@@ -46,7 +45,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             {
                 var torrentInfo = new TorrentInfo();
 
-                torrentInfo.Guid = String.Format("BTN-{0}", torrent.TorrentID.ToString());
+                torrentInfo.Guid = String.Format("BTN-{0}", torrent.TorrentID);
                 torrentInfo.Title = torrent.ReleaseName;
                 torrentInfo.Size = torrent.Size;
                 torrentInfo.DownloadUrl = torrent.DownloadURL;

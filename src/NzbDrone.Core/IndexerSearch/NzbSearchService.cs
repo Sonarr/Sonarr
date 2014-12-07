@@ -106,10 +106,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         return v.SceneSeasonNumber.Value;
                     }
-                    else
-                    {
-                        return v.SeasonNumber;
-                    }
+                    return v.SeasonNumber;
                 }).Distinct();
 
                 foreach (var sceneSeasonEpisodes in sceneSeasonGroups)

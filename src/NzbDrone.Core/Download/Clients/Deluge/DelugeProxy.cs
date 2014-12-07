@@ -264,11 +264,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 _logger.Debug("Deluge authentication failed.");
                 throw new DownloadClientAuthenticationException("Failed to authenticate with Deluge.");
             }
-            else
-            {
-                _logger.Debug("Deluge authentication succeeded.");
-                _authCookieContainer = restClient.CookieContainer;
-            }
+            _logger.Debug("Deluge authentication succeeded.");
+            _authCookieContainer = restClient.CookieContainer;
 
             ConnectDaemon(restClient);
         }

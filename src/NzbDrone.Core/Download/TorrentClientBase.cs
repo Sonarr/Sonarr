@@ -108,10 +108,7 @@ namespace NzbDrone.Core.Download
                     {
                         return DownloadFromMagnetUrl(remoteEpisode, locationHeader);
                     }
-                    else
-                    {
-                        throw new WebException("Remote website tried to redirect without providing a location.");
-                    }
+                    throw new WebException("Remote website tried to redirect without providing a location.");
                 }
 
                 torrentFile = response.ResponseData;

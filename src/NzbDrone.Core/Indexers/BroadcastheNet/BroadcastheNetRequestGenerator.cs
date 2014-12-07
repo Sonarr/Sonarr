@@ -100,16 +100,13 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 parameters.Tvrage = String.Format("{0}", searchCriteria.Series.TvRageId);
                 return true;
             }
-            else if (searchCriteria.Series.TvdbId != 0)
+            if (searchCriteria.Series.TvdbId != 0)
             {
                 parameters.Tvdb = String.Format("{0}", searchCriteria.Series.TvdbId);
                 return true;
             }
-            else
-            {
-                // BTN is very neatly managed, so it's unlikely they map tvrage/tvdb wrongly.
-                return false;
-            }
+            // BTN is very neatly managed, so it's unlikely they map tvrage/tvdb wrongly.
+            return false;
         }
 
         private IEnumerable<IndexerRequest> GetPagedRequests(Int32 maxPages, BroadcastheNetTorrentQuery parameters)

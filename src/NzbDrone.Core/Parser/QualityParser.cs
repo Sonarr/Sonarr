@@ -143,20 +143,17 @@ namespace NzbDrone.Core.Parser
             if (sourceMatch.Groups["bdrip"].Success ||
                 sourceMatch.Groups["brrip"].Success)
             {
-                if (resolution == Resolution._720p)
+                switch (resolution)
                 {
-                    result.Quality = Quality.Bluray720p;
-                    return result;
-                }
-                else if (resolution == Resolution._1080p)
-                {
-                    result.Quality = Quality.Bluray1080p;
-                    return result;
-                }
-                else
-                {
-                    result.Quality = Quality.DVD;
-                    return result;
+                    case Resolution._720p:
+                        result.Quality = Quality.Bluray720p;
+                        return result;
+                    case Resolution._1080p:
+                        result.Quality = Quality.Bluray1080p;
+                        return result;
+                    default:
+                        result.Quality = Quality.DVD;
+                        return result;
                 }
             }
 

@@ -113,39 +113,36 @@ namespace NzbDrone.Core.Tv
                 // no series matched
                 return null;
             }
-            else if (list.Count == 1)
+            if (list.Count == 1)
             {
                 // return the first series if there is only one 
                 return list.Single();
             }
-            else 
-            {
-                // build ordered list of series by position in the search string
-                var query = 
-                        list.Select(series => new
-                            {
-                                position = cleanTitle.IndexOf(series.CleanTitle),
-                                length = series.CleanTitle.Length,
-                                series = series
-                            })
-                            .Where(s => (s.position>=0))
-                            .ToList()
-                            .OrderBy(s => s.position)
-                            .ThenByDescending(s => s.length)
-                            .ToList();
-
-                // get the leftmost series that is the longest
-                // series are usually the first thing in release title, so we select the leftmost and longest match
-                var match = query.First().series;
-
-                _logger.Debug("Multiple series matched {0} from title {1}", match.Title, title);
-                foreach (var entry in list)
+            // build ordered list of series by position in the search string
+            var query = 
+                list.Select(series => new
                 {
-                    _logger.Debug("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
-                }
+                    position = cleanTitle.IndexOf(series.CleanTitle),
+                    length = series.CleanTitle.Length,
+                    series = series
+                })
+                    .Where(s => (s.position>=0))
+                    .ToList()
+                    .OrderBy(s => s.position)
+                    .ThenByDescending(s => s.length)
+                    .ToList();
 
-                return match;
+            // get the leftmost series that is the longest
+            // series are usually the first thing in release title, so we select the leftmost and longest match
+            var match = query.First().series;
+
+            _logger.Debug("Multiple series matched {0} from title {1}", match.Title, title);
+            foreach (var entry in list)
+            {
+                _logger.Debug("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
             }
+
+            return match;
         }
 
         public Series FindByTitle(string title, int year)

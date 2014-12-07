@@ -17,10 +17,7 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return null;
             }
-            else
-            {
-                return torrentInfo.Seeds;
-            }
+            return torrentInfo.Seeds;
         }
     }
 }

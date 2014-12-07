@@ -47,7 +47,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                     return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Sabnzbd)", "Migrating-to-Completed-Download-Handling#sabnzbd-enable-completed-download-handling");
                 }
-                else if (downloadClients.All(v => v.downloadClient is Nzbget))
+                if (downloadClients.All(v => v.downloadClient is Nzbget))
                 {
                     // With Nzbget we can check if the category should be changed.
                     if (downloadClientOutputInDroneFactory)
@@ -57,10 +57,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                     return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible (Nzbget)", "Migrating-to-Completed-Download-Handling#nzbget-enable-completed-download-handling");
                 }
-                else
-                {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible", "Migrating-to-Completed-Download-Handling");
-                }
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling if possible", "Migrating-to-Completed-Download-Handling");
             }
 
             if (!_configService.EnableCompletedDownloadHandling && droneFactoryFolder.IsEmpty)

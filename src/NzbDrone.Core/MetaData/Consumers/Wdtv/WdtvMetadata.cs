@@ -112,11 +112,8 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                     return metadata;
                 }
 
-                else
-                {
-                    metadata.Type = MetadataType.SeriesImage;
-                    return metadata;
-                }
+                metadata.Type = MetadataType.SeriesImage;
+                return metadata;
             }
 
             var parseResult = Parser.Parser.ParseTitle(filename);

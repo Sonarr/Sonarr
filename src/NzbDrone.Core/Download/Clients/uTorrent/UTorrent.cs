@@ -223,10 +223,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         DetailedDescription = "Please verify the hostname and port."
                     };
                 }
-                else
-                {
-                    return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
-                }
+                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
             }
             catch (Exception ex)
             {

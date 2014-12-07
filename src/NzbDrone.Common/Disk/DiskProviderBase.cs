@@ -241,7 +241,7 @@ namespace NzbDrone.Common.Disk
                 {
                     return TransferMode.HardLink;
                 }
-                else if (!mode.HasFlag(TransferMode.Copy))
+                if (!mode.HasFlag(TransferMode.Copy))
                 {
                     throw new IOException("Hardlinking from '" + source + "' to '" + destination + "' failed.");
                 }

@@ -210,30 +210,25 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             catch (WebException ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                if (ex.Status == WebExceptionStatus.ConnectFailure)
+                switch (ex.Status)
                 {
-                    return new NzbDroneValidationFailure("Host", "Unable to connect")
-                    {
-                        DetailedDescription = "Please verify the hostname and port."
-                    };
-                }
-                else if (ex.Status == WebExceptionStatus.ConnectionClosed)
-                {
-                    return new NzbDroneValidationFailure("UseSsl", "Verify SSL settings")
-                    {
-                        DetailedDescription = "Please verify your SSL configuration on both Deluge and NzbDrone."
-                    };
-                }
-                else if (ex.Status == WebExceptionStatus.SecureChannelFailure)
-                {
-                    return new NzbDroneValidationFailure("UseSsl", "Unable to connect through SSL")
-                    {
-                        DetailedDescription = "Drone is unable to connect to Deluge using SSL. This problem could be computer related. Please try to configure both drone and Deluge to not use SSL."
-                    };
-                }
-                else
-                {
-                    return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                    case WebExceptionStatus.ConnectFailure:
+                        return new NzbDroneValidationFailure("Host", "Unable to connect")
+                        {
+                            DetailedDescription = "Please verify the hostname and port."
+                        };
+                    case WebExceptionStatus.ConnectionClosed:
+                        return new NzbDroneValidationFailure("UseSsl", "Verify SSL settings")
+                        {
+                            DetailedDescription = "Please verify your SSL configuration on both Deluge and NzbDrone."
+                        };
+                    case WebExceptionStatus.SecureChannelFailure:
+                        return new NzbDroneValidationFailure("UseSsl", "Unable to connect through SSL")
+                        {
+                            DetailedDescription = "Drone is unable to connect to Deluge using SSL. This problem could be computer related. Please try to configure both drone and Deluge to not use SSL."
+                        };
+                    default:
+                        return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
                 }
             }
             catch (Exception ex)

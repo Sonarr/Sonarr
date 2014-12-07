@@ -63,10 +63,7 @@ namespace NzbDrone.Common.Extensions
             {
                 return parentPath.Substring(0, index);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public static bool IsParentPath(this string parentPath, string childPath)

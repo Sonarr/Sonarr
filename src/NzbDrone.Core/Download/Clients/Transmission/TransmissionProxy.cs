@@ -183,20 +183,21 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
 
             // We expect the StatusCode = Conflict, coz that will provide us with a new session id.
-            if (restResponse.StatusCode == HttpStatusCode.Conflict)
+            switch (restResponse.StatusCode)
             {
-                var sessionId = restResponse.Headers.SingleOrDefault(o => o.Name == "X-Transmission-Session-Id");
-
-                if (sessionId == null)
+                case HttpStatusCode.Conflict:
                 {
-                    throw new DownloadClientException("Remote host did not return a Session Id.");
-                }
+                    var sessionId = restResponse.Headers.SingleOrDefault(o => o.Name == "X-Transmission-Session-Id");
 
-                return (String)sessionId.Value;
-            }
-            else if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new DownloadClientAuthenticationException("User authentication failed.");
+                    if (sessionId == null)
+                    {
+                        throw new DownloadClientException("Remote host did not return a Session Id.");
+                    }
+
+                    return (String)sessionId.Value;
+                }
+                case HttpStatusCode.Unauthorized:
+                    throw new DownloadClientAuthenticationException("User authentication failed.");
             }
 
             restResponse.ValidateResponse(client);

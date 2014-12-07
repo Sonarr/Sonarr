@@ -74,15 +74,9 @@ namespace NzbDrone.Core.MediaFiles
 
                     return _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(message.Path));
                 }
-                else
-                {
-                    return _completedDownloadService.Import(trackedDownload, message.Path);
-                }
+                return _completedDownloadService.Import(trackedDownload, message.Path);
             }
-            else
-            {
-                return _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(message.Path));
-            }
+            return _downloadedEpisodesImportService.ProcessFolder(new DirectoryInfo(message.Path));
         }
 
         public void Execute(DownloadedEpisodesScanCommand message)

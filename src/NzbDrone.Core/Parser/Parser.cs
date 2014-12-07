@@ -384,10 +384,7 @@ namespace NzbDrone.Core.Parser
                     {
                         return String.Empty;
                     }
-                    else
-                    {
-                        return m.Value;
-                    }
+                    return m.Value;
                 });
 
             return title;

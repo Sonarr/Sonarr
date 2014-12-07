@@ -115,11 +115,8 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
                     return metadata;
                 }
 
-                else
-                {
-                    metadata.Type = MetadataType.SeriesImage;
-                    return metadata;
-                }
+                metadata.Type = MetadataType.SeriesImage;
+                return metadata;
             }
 
             var parseResult = Parser.Parser.ParseTitle(filename);

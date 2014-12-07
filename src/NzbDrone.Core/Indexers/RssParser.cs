@@ -147,10 +147,7 @@ namespace NzbDrone.Core.Indexers
             {
                 return item.Element("enclosure").Attribute("url").Value;
             }
-            else
-            {
-                return item.Element("link").Value;
-            }
+            return item.Element("link").Value;
         }
 
         protected virtual string GetInfoUrl(XElement item)
@@ -174,7 +171,7 @@ namespace NzbDrone.Core.Indexers
             {
                 return GetEnclosureLength(item);
             }
-            else if (ParseSizeInDescription)
+            if (ParseSizeInDescription)
             {
                 return ParseSize(item.Element("description").Value, true);
             }

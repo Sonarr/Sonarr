@@ -73,29 +73,27 @@ namespace NzbDrone.Update
 
             if (OsInfo.IsMono)
             {
-                if (args.Count() == 1)
+                switch (args.Count())
                 {
-                    return startupContext;
-                }
-
-                else if (args.Count() == 3)
-                {
-                    startupContext.UpdateLocation = args[1];
-                    startupContext.ExecutingApplication = args[2];
-                }
-
-                else
-                {
-                    logger.Debug("Arguments:");
-
-                    foreach (var arg in args)
+                    case 1:
+                        return startupContext;
+                    case 3:
+                        startupContext.UpdateLocation = args[1];
+                        startupContext.ExecutingApplication = args[2];
+                        break;
+                    default:
                     {
-                        logger.Debug("  {0}", arg);
+                        logger.Debug("Arguments:");
+
+                        foreach (var arg in args)
+                        {
+                            logger.Debug("  {0}", arg);
+                        }
+
+                        var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
+
+                        throw new ArgumentOutOfRangeException("args", message);
                     }
-
-                    var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
-
-                    throw new ArgumentOutOfRangeException("args", message);
                 }
             }
 
