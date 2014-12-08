@@ -71,7 +71,7 @@ namespace NzbDrone.Update
                                      ProcessId = ParseProcessId(args[0])
                                  };
 
-            if (OsInfo.IsMono)
+            if (OsInfo.IsNotWindows)
             {
                 switch (args.Count())
                 {
