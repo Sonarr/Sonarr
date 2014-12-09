@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.Qualities
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.Insert(It.IsAny<QualityDefinition>()), Times.Exactly(Quality.All.Count));
+                .Verify(v => v.InsertMany(It.Is<List<QualityDefinition>>(d => d.Count == Quality.All.Count)), Times.Once());
         }
 
         [Test]
@@ -32,48 +32,39 @@ namespace NzbDrone.Core.Test.Qualities
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.Insert(It.IsAny<QualityDefinition>()), Times.Exactly(Quality.All.Count - 1));
+                .Verify(v => v.InsertMany(It.Is<List<QualityDefinition>>(d => d.Count == Quality.All.Count -1 )), Times.Once());
         }
 
         [Test]
-        public void init_should_insert_missing_definitions_preserving_weight()
+        public void init_should_update_existing_definitions()
         {
-            // User moved HDTV1080p to a higher weight.
-            var currentQualities = new List<QualityDefinition>
-            {
-                new QualityDefinition(Quality.SDTV)        { Id = 5, Title = "SDTV",         Weight = 1,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.WEBDL720p)   { Id = 2, Title = "720p WEB-DL",  Weight = 2,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.HDTV1080p)   { Id = 4, Title = "1080p HDTV",   Weight = 3,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.WEBDL1080p)  { Id = 8, Title = "1080p WEB-DL", Weight = 4,  MinSize=0, MaxSize=100 },
-            };
+            Mocker.GetMock<IQualityDefinitionRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<QualityDefinition>
+                      {
+                              new QualityDefinition(Quality.SDTV) { Weight = 1, MinSize = 0, MaxSize = 100, Id = 20 }
+                      });
 
-            // Expected to insert Bluray720p above HDTV1080p.
-            // Expected to insert Bluray1080p above WEBDL1080p.
-            var addBluray1080p = new List<QualityDefinition>
-            {
-                new QualityDefinition(Quality.SDTV)        { Title = "SDTV",         Weight = 1,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.HDTV1080p)   { Title = "1080p HDTV",   Weight = 2,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.WEBDL720p)   { Title = "720p WEB-DL",  Weight = 3,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.Bluray720p)  { Title = "720p BluRay",  Weight = 4,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.WEBDL1080p)  { Title = "1080p WEB-DL", Weight = 5,  MinSize=0, MaxSize=100 },
-                new QualityDefinition(Quality.Bluray1080p) { Title = "1080p BluRay", Weight = 6,  MinSize=0, MaxSize=100 }
-            };
+            Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Setup(v => v.All())
-                .Returns(currentQualities);
-                        
-            Subject.InsertMissingDefinitions(addBluray1080p);
+                .Verify(v => v.UpdateMany(It.Is<List<QualityDefinition>>(d => d.Count == 1)), Times.Once());
+        }
+
+        [Test]
+        public void init_should_remove_old_definitions()
+        {
+            Mocker.GetMock<IQualityDefinitionRepository>()
+                  .Setup(s => s.All())
+                  .Returns(new List<QualityDefinition>
+                      {
+                              new QualityDefinition(new Quality{ Id = 100, Name = "Test" }) { Weight = 1, MinSize = 0, MaxSize = 100, Id = 20 }
+                      });
+
+            Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.Insert(It.Is<QualityDefinition>(p => p.Quality == Quality.Bluray720p && p.Weight == 4)), Times.Once());
-
-            Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.Update(It.Is<QualityDefinition>(p => p.Quality == Quality.WEBDL1080p && p.Weight == 5)), Times.Once());
-            
-            Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.Insert(It.Is<QualityDefinition>(p => p.Quality == Quality.Bluray1080p && p.Weight == 6)), Times.Once());           
-            
+                .Verify(v => v.DeleteMany(It.Is<List<QualityDefinition>>(d => d.Count == 1)), Times.Once());
         }
     }
 }

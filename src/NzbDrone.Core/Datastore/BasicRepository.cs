@@ -10,7 +10,6 @@ using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
 
-
 namespace NzbDrone.Core.Datastore
 {
     public interface IBasicRepository<TModel> where TModel : ModelBase, new()
@@ -35,7 +34,6 @@ namespace NzbDrone.Core.Datastore
         TModel Single();
         PagingSpec<TModel> GetPaged(PagingSpec<TModel> pagingSpec);
     }
-
 
     public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : ModelBase, new()
     {
