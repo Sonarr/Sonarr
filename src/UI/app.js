@@ -221,7 +221,7 @@ require.config({
         },
         'backgrid.selectall'  : {
 
-            exports: 'Backgrid.Extension.SelectAll',
+            exports: 'Backgrid.Extension.SelectRowCell',
 
             deps:
                 [

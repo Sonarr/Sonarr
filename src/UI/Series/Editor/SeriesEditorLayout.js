@@ -10,6 +10,7 @@ define(
         'Cells/ProfileCell',
         'Cells/SeriesStatusCell',
         'Cells/SeasonFolderCell',
+        'Cells/SelectAllCell',
         'Shared/Toolbar/ToolbarLayout',
         'Series/Editor/SeriesEditorFooterView',
         'Mixins/backbone.signalr.mixin'
@@ -22,6 +23,7 @@ define(
                  ProfileCell,
                  SeriesStatusCell,
                  SeasonFolderCell,
+                 SelectAllCell,
                  ToolbarLayout,
                  FooterView) {
         return Marionette.Layout.extend({
@@ -48,7 +50,7 @@ define(
                 [
                     {
                         name       : '',
-                        cell       : 'select-row',
+                        cell       : SelectAllCell,
                         headerCell : 'select-all',
                         sortable   : false
                     },

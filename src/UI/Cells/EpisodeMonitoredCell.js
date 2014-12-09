@@ -27,7 +27,7 @@ define(
                     return;
                 }
 
-                if (e.shiftKey) {
+                if (e.shiftKey && this.model.episodeCollection.lastToggled) {
                     this._selectRange();
 
                     return;
@@ -40,10 +40,6 @@ define(
             _selectRange: function () {
                 var episodeCollection = this.model.episodeCollection;
                 var lastToggled = episodeCollection.lastToggled;
-
-                if (!lastToggled) {
-                    return;
-                }
 
                 var currentIndex = episodeCollection.indexOf(this.model);
                 var lastIndex = episodeCollection.indexOf(lastToggled);
