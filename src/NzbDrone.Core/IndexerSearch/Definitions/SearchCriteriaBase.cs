@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
@@ -37,6 +38,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
             //remove any repeating +s
             cleanTitle = Regex.Replace(cleanTitle, @"\+{2,}", "+");
+            cleanTitle = cleanTitle.RemoveAccent();
             return cleanTitle.Trim('+', ' ');
         }
     }
