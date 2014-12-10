@@ -45,7 +45,7 @@ namespace NzbDrone.Host.Owin
                 }
             }
 
-            _urlAclAdapter.ConfigureUrl();
+            _urlAclAdapter.ConfigureUrls();
 
             _logger.Info("Listening on the following URLs:");
             foreach (var url in _urlAclAdapter.Urls)

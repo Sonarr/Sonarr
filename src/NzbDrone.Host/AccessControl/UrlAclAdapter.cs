@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Host.AccessControl
 {
     public interface IUrlAclAdapter
     {
-        void ConfigureUrl();
+        void ConfigureUrls();
         List<String> Urls { get; }
     }
 
@@ -20,7 +23,18 @@ namespace NzbDrone.Host.AccessControl
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public List<String> Urls { get; private set; }
+        public List<String> Urls
+        {
+            get
+            {
+                return InternalUrls.Select(c => c.Url).ToList();
+            }
+        }
+
+        private List<UrlAcl> InternalUrls { get; set; }
+        private List<UrlAcl> RegisteredUrls { get; set; } 
+
+        private static readonly Regex UrlAclRegex = new Regex(@"(?<scheme>https?)\:\/\/(?<address>.+?)\:(?<port>\d+)/(?<urlbase>.+)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public UrlAclAdapter(INetshProvider netshProvider,
                              IConfigFileProvider configFileProvider,
@@ -32,35 +46,56 @@ namespace NzbDrone.Host.AccessControl
             _runtimeInfo = runtimeInfo;
             _logger = logger;
 
-            Urls = new List<String>();
+            InternalUrls = new List<UrlAcl>();
+            RegisteredUrls = GetRegisteredUrls();
         }
 
-        public void ConfigureUrl()
+        public void ConfigureUrls()
         {
-            var localHttpUrls = BuildUrls("http", "localhost", _configFileProvider.Port);
-            var wildcardHttpUrls = BuildUrls("http", "*", _configFileProvider.Port);
+            var localHostHttpUrls = BuildUrlAcls("http", "localhost", _configFileProvider.Port);
+            var interfaceHttpUrls = BuildUrlAcls("http", _configFileProvider.BindAddress, _configFileProvider.Port);
 
-            var localHttpsUrls = BuildUrls("https", "localhost", _configFileProvider.SslPort);
-            var wildcardHttpsUrls = BuildUrls("https", "*", _configFileProvider.SslPort);
+            var localHostHttpsUrls = BuildUrlAcls("https", "localhost", _configFileProvider.SslPort);
+            var interfaceHttpsUrls = BuildUrlAcls("https", _configFileProvider.BindAddress, _configFileProvider.SslPort);
 
             if (!_configFileProvider.EnableSsl)
             {
-                localHttpsUrls.Clear();
-                wildcardHttpsUrls.Clear();
+                localHostHttpsUrls.Clear();
+                interfaceHttpsUrls.Clear();
             }
 
             if (OsInfo.IsWindows && !_runtimeInfo.IsAdmin)
             {
-                var httpUrls = wildcardHttpUrls.All(IsRegistered) ? wildcardHttpUrls : localHttpUrls;
-                var httpsUrls = wildcardHttpsUrls.All(IsRegistered) ? wildcardHttpsUrls : localHttpsUrls;
+                var httpUrls = interfaceHttpUrls.All(IsRegistered) ? interfaceHttpUrls : localHostHttpUrls;
+                var httpsUrls = interfaceHttpsUrls.All(IsRegistered) ? interfaceHttpsUrls : localHostHttpsUrls;
 
-                Urls.AddRange(httpUrls);
-                Urls.AddRange(httpsUrls);
+                InternalUrls.AddRange(httpUrls);
+                InternalUrls.AddRange(httpsUrls);
+
+                if (_configFileProvider.BindAddress != "*")
+                {
+                    if (httpUrls.None(c => c.Address.Equals("localhost")))
+                    {
+                        InternalUrls.AddRange(localHostHttpUrls);
+                    }
+
+                    if (httpsUrls.None(c => c.Address.Equals("localhost")))
+                    {
+                        InternalUrls.AddRange(localHostHttpsUrls);
+                    }
+                }
             }
             else
             {
-                Urls.AddRange(wildcardHttpUrls);
-                Urls.AddRange(wildcardHttpsUrls);
+                InternalUrls.AddRange(interfaceHttpUrls);
+                InternalUrls.AddRange(interfaceHttpsUrls);
+
+                //Register localhost URLs so the IP Address doesn't need to be used from the local system
+                if (_configFileProvider.BindAddress != "*")
+                {
+                    InternalUrls.AddRange(localHostHttpUrls);
+                    InternalUrls.AddRange(localHostHttpsUrls);
+                }
 
                 if (OsInfo.IsWindows)
                 {
@@ -71,49 +106,104 @@ namespace NzbDrone.Host.AccessControl
 
         private void RefreshRegistration()
         {
-            if (OsInfo.Version.Major < 6)
-                return;
+            if (OsInfo.Version.Major < 6) return;
 
-            Urls.ForEach(RegisterUrl);
+            foreach (var urlAcl in InternalUrls)
+            {
+                if (IsRegistered(urlAcl) || urlAcl.Address.Equals("localhost")) continue;
+
+                RemoveSimilar(urlAcl);
+                RegisterUrl(urlAcl);
+            }
         }
         
-        private bool IsRegistered(string urlAcl)
+        private bool IsRegistered(UrlAcl urlAcl)
         {
-            var arguments = String.Format("http show urlacl {0}", urlAcl);
-            var output = _netshProvider.Run(arguments);
-
-            if (output == null || !output.Standard.Any()) return false;
-
-            return output.Standard.Any(line => line.Contains(urlAcl));
+            return RegisteredUrls.Any(c => c.Scheme == urlAcl.Scheme &&
+                                      c.Address == urlAcl.Address &&
+                                      c.Port == urlAcl.Port &&
+                                      c.UrlBase == urlAcl.UrlBase);
         }
 
-        private void RegisterUrl(string urlAcl)
+        private List<UrlAcl> GetRegisteredUrls()
         {
-            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl);
+            var arguments = String.Format("http show urlacl");
+            var output = _netshProvider.Run(arguments);
+
+            if (output == null || !output.Standard.Any()) return new List<UrlAcl>();
+
+            return output.Standard.Select(line =>
+            {
+                var match = UrlAclRegex.Match(line);
+
+                if (match.Success)
+                {
+                    return new UrlAcl
+                           {
+                               Scheme = match.Groups["scheme"].Value,
+                               Address = match.Groups["address"].Value,
+                               Port = Convert.ToInt32(match.Groups["port"].Value),
+                               UrlBase = match.Groups["urlbase"].Value.Trim()
+                           };
+                }
+
+                return null;
+
+            }).Where(r => r != null).ToList();
+        }
+
+        private void RegisterUrl(UrlAcl urlAcl)
+        {
+            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl.Url);
             _netshProvider.Run(arguments);
         }
 
-        private string BuildUrl(string protocol, string url, int port, string urlBase)
+        private void RemoveSimilar(UrlAcl urlAcl)
         {
-            var result = protocol + "://" + url + ":" + port;
-            result += String.IsNullOrEmpty(urlBase) ? "/" : urlBase + "/";
+            var similar = RegisteredUrls.Where(c => c.Scheme == urlAcl.Scheme &&
+                                                    InternalUrls.None(x => x.Address == c.Address) &&
+                                                    c.Port == urlAcl.Port &&
+                                                    c.UrlBase == urlAcl.UrlBase);
 
-            return result;
+            foreach (var s in similar)
+            {
+                UnregisterUrl(s);
+            }
         }
 
-        private List<String> BuildUrls(string protocol, string url, int port)
+        private void UnregisterUrl(UrlAcl urlAcl)
         {
-            var urls = new List<String>();
+            _logger.Trace("Removing URL ACL {0}", urlAcl.Url);
+
+            var arguments = String.Format("http delete urlacl {0}", urlAcl.Url);
+            _netshProvider.Run(arguments);
+        }
+
+        private List<UrlAcl> BuildUrlAcls(string scheme, string address, int port)
+        {
+            var urlAcls = new List<UrlAcl>();
             var urlBase = _configFileProvider.UrlBase;
 
-            if (!String.IsNullOrEmpty(urlBase))
+            if (urlBase.IsNotNullOrWhiteSpace())
             {
-                urls.Add(BuildUrl(protocol, url, port, urlBase));
+                urlAcls.Add(new UrlAcl
+                         {
+                             Scheme = scheme,
+                             Address = address,
+                             Port = port,
+                             UrlBase = urlBase.Trim('/') + "/"
+                         });
             }
 
-            urls.Add(BuildUrl(protocol, url, port, ""));
+            urlAcls.Add(new UrlAcl
+            {
+                Scheme = scheme,
+                Address = address,
+                Port = port,
+                UrlBase = String.Empty
+            });
 
-            return urls;
+            return urlAcls;
         }
     }
 }

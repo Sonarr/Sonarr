@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="AccessControl\FirewallAdapter.cs" />
     <Compile Include="AccessControl\NetshProvider.cs" />
+    <Compile Include="AccessControl\UrlAcl.cs" />
     <Compile Include="AccessControl\SslAdapter.cs" />
     <Compile Include="AccessControl\UrlAclAdapter.cs" />
     <Compile Include="ApplicationModes.cs" />
