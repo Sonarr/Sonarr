@@ -87,6 +87,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_not_import_if_folder_is_a_series_path()
         {
+            GivenValidSeries();
+
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.SeriesPathExists(It.IsAny<String>()))
                   .Returns(true);
@@ -97,8 +99,8 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
-            Mocker.GetMock<IParsingService>()
-                  .Verify(v => v.GetSeries(It.IsAny<String>()), Times.Never());
+            Mocker.GetMock<IDiskScanService>()
+                  .Verify(v => v.GetVideoFiles(It.IsAny<String>(), true), Times.Never());
 
             ExceptionVerification.ExpectedWarns(1);
         }

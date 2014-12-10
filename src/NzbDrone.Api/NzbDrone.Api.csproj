@@ -101,6 +101,7 @@
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />
+    <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
     <Compile Include="Config\UiConfigModule.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="ResourceChangeMessage.cs" />
     <Compile Include="Restrictions\RestrictionModule.cs" />
     <Compile Include="Restrictions\RestrictionResource.cs" />
+    <Compile Include="REST\NotFoundException.cs" />
     <Compile Include="REST\BadRequestException.cs" />
     <Compile Include="REST\MethodNotAllowedException.cs" />
     <Compile Include="REST\ResourceValidator.cs" />

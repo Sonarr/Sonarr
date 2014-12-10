@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             Mocker.GetMock<IProcessDownloadDecisions>()
                   .Setup(s => s.ProcessDecisions(It.IsAny<List<DownloadDecision>>()))
-                  .Returns(new ProcessedDecisions(new List<DownloadDecision>(), new List<DownloadDecision>()));
+                  .Returns(new ProcessedDecisions(new List<DownloadDecision>(), new List<DownloadDecision>(), new List<DownloadDecision>()));
 
             Subject.Handle(new EpisodeInfoRefreshedEvent(_series, _added, _updated));
 

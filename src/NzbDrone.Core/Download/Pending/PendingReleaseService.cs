@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -17,15 +18,19 @@ namespace NzbDrone.Core.Download.Pending
     public interface IPendingReleaseService
     {
         void Add(DownloadDecision decision);
-        void RemoveGrabbed(List<DownloadDecision> grabbed);
-        void RemoveRejected(List<DownloadDecision> rejected);
+        
         List<ReleaseInfo> GetPending();
         List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId);
         List<Queue.Queue> GetPendingQueue();
+        Queue.Queue FindPendingQueueItem(int queueId);
+        void RemovePendingQueueItem(int queueId);
         RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds);
     }
 
-    public class PendingReleaseService : IPendingReleaseService, IHandle<SeriesDeletedEvent>
+    public class PendingReleaseService : IPendingReleaseService,
+                                         IHandle<SeriesDeletedEvent>,
+                                         IHandle<EpisodeGrabbedEvent>,
+                                         IHandle<RssSyncCompleteEvent>
     {
         private readonly IPendingReleaseRepository _repository;
         private readonly ISeriesService _seriesService;
@@ -49,6 +54,7 @@ namespace NzbDrone.Core.Download.Pending
             _logger = logger;
         }
 
+        
         public void Add(DownloadDecision decision)
         {
             var alreadyPending = GetPendingReleases();
@@ -67,61 +73,6 @@ namespace NzbDrone.Core.Download.Pending
 
             _logger.Debug("Adding release to pending releases");
             Insert(decision);
-        }
-
-        public void RemoveGrabbed(List<DownloadDecision> grabbed)
-        {
-            _logger.Debug("Removing grabbed releases from pending");
-            var alreadyPending = GetPendingReleases();
-
-            foreach (var decision in grabbed)
-            {
-                var decisionLocal = decision;
-                var episodeIds = decisionLocal.RemoteEpisode.Episodes.Select(e => e.Id);
-
-                var existingReports = alreadyPending.Where(r => r.RemoteEpisode.Episodes.Select(e => e.Id)
-                                                                 .Intersect(episodeIds)
-                                                                 .Any())
-                                                                 .ToList();
-
-                if (existingReports.Empty())
-                {
-                    continue;
-                }
-
-                var profile = decisionLocal.RemoteEpisode.Series.Profile.Value;
-                
-                foreach (var existingReport in existingReports)
-                {
-                    var compare = new QualityModelComparer(profile).Compare(decision.RemoteEpisode.ParsedEpisodeInfo.Quality,
-                                                                            existingReport.RemoteEpisode.ParsedEpisodeInfo.Quality);
-
-                    //Only remove lower/equal quality pending releases
-                    //It is safer to retry these releases on the next round than remove it and try to re-add it (if its still in the feed)
-                    if (compare >= 0)
-                    {
-                        _logger.Debug("Removing previously pending release, as it was grabbed.");
-                        Delete(existingReport);
-                    }
-                }
-            }
-        }
-
-        public void RemoveRejected(List<DownloadDecision> rejected)
-        {
-            _logger.Debug("Removing failed releases from pending");
-            var pending = GetPendingReleases();
-
-            foreach (var rejectedRelease in rejected)
-            {
-                var matching = pending.SingleOrDefault(MatchingReleasePredicate(rejectedRelease));
-
-                if (matching != null)
-                {
-                    _logger.Debug("Removing previously pending release, as it has now been rejected.");
-                    Delete(matching);
-                }
-            }
         }
 
         public List<ReleaseInfo> GetPending()
@@ -163,6 +114,18 @@ namespace NzbDrone.Core.Download.Pending
             }
 
             return queued;
+        }
+
+        public Queue.Queue FindPendingQueueItem(int queueId)
+        {
+            return GetPendingQueue().SingleOrDefault(p => p.Id == queueId);
+        }
+
+        public void RemovePendingQueueItem(int queueId)
+        {
+            var id = FindPendingReleaseId(queueId);
+
+            _repository.Delete(id);
         }
 
         public RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds)
@@ -243,9 +206,73 @@ namespace NzbDrone.Core.Download.Pending
             return delayProfile.GetProtocolDelay(remoteEpisode.Release.DownloadProtocol);
         }
 
+        private void RemoveGrabbed(RemoteEpisode remoteEpisode)
+        {
+            var pendingReleases = GetPendingReleases();
+            var episodeIds = remoteEpisode.Episodes.Select(e => e.Id);
+
+            var existingReports = pendingReleases.Where(r => r.RemoteEpisode.Episodes.Select(e => e.Id)
+                                                             .Intersect(episodeIds)
+                                                             .Any())
+                                                             .ToList();
+
+            if (existingReports.Empty())
+            {
+                return;
+            }
+
+            var profile = remoteEpisode.Series.Profile.Value;
+
+            foreach (var existingReport in existingReports)
+            {
+                var compare = new QualityModelComparer(profile).Compare(remoteEpisode.ParsedEpisodeInfo.Quality,
+                                                                        existingReport.RemoteEpisode.ParsedEpisodeInfo.Quality);
+
+                //Only remove lower/equal quality pending releases
+                //It is safer to retry these releases on the next round than remove it and try to re-add it (if its still in the feed)
+                if (compare >= 0)
+                {
+                    _logger.Debug("Removing previously pending release, as it was grabbed.");
+                    Delete(existingReport);
+                }
+            }
+        }
+
+        private void RemoveRejected(List<DownloadDecision> rejected)
+        {
+            _logger.Debug("Removing failed releases from pending");
+            var pending = GetPendingReleases();
+
+            foreach (var rejectedRelease in rejected)
+            {
+                var matching = pending.SingleOrDefault(MatchingReleasePredicate(rejectedRelease));
+
+                if (matching != null)
+                {
+                    _logger.Debug("Removing previously pending release, as it has now been rejected.");
+                    Delete(matching);
+                }
+            }
+        }
+
+        private int FindPendingReleaseId(int queueId)
+        {
+            return GetPendingReleases().First(p => p.RemoteEpisode.Episodes.Any(e => queueId == (e.Id ^ (p.Id << 16)))).Id;
+        }
+
         public void Handle(SeriesDeletedEvent message)
         {
             _repository.DeleteBySeriesId(message.Series.Id);
+        }
+
+        public void Handle(EpisodeGrabbedEvent message)
+        {
+            RemoveGrabbed(message.Episode);
+        }
+
+        public void Handle(RssSyncCompleteEvent message)
+        {
+            RemoveRejected(message.ProcessedDecisions.Rejected);
         }
     }
 }

@@ -8,6 +8,10 @@ namespace NzbDrone.Core.Download
         public String Title { get; set; }
         public List<String> Messages { get; set; }
 
+        private TrackedDownloadStatusMessage()
+        {
+        }
+
         public TrackedDownloadStatusMessage(String title, List<String> messages)
         {
             Title = title;

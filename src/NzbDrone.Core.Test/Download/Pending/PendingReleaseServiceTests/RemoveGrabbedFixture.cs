@@ -5,7 +5,9 @@ using Marr.Data;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
@@ -102,7 +104,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(_parsedEpisodeInfo.Quality);
 
-            Subject.RemoveGrabbed(new List<DownloadDecision> { _temporarilyRejected });
+            Subject.Handle(new EpisodeGrabbedEvent(_remoteEpisode));
 
             VerifyDelete();
         }
@@ -112,7 +114,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(new QualityModel(Quality.SDTV));
 
-            Subject.RemoveGrabbed(new List<DownloadDecision> { _temporarilyRejected });
+            Subject.Handle(new EpisodeGrabbedEvent(_remoteEpisode));
 
             VerifyDelete();
         }
@@ -122,7 +124,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             GivenHeldRelease(new QualityModel(Quality.Bluray720p));
 
-            Subject.RemoveGrabbed(new List<DownloadDecision> { _temporarilyRejected });
+            Subject.Handle(new EpisodeGrabbedEvent(_remoteEpisode));
 
             VerifyNoDelete();
         }

@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.Download
                                                     .Build()
                                                     .ToList();
 
-            var remoteEpisode = new RemoteEpisode 
+            var remoteEpisode = new RemoteEpisode
                                 {
                                     Series = new Series(),
                                     Episodes = new List<Episode> {new Episode {Id = 1}}
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.Download
         private void GivenCompletedImport()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
+                .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                 .Returns(new List<ImportResult>
                     {
                         new ImportResult(new ImportDecision(new LocalEpisode() { Path = @"C:\TestPath\Droned.S01E01.mkv" }))
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.Download
         private void GivenFailedImport()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
+                .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                 .Returns(new List<ImportResult>() 
                     {
                         new ImportResult(new ImportDecision(new LocalEpisode() { Path = @"C:\TestPath\Droned.S01E01.mkv" }, "Test Failure")) 
@@ -135,13 +135,13 @@ namespace NzbDrone.Core.Test.Download
         private void VerifyNoImports()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                .Verify(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()), Times.Never());
+                .Verify(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()), Times.Never());
         }
 
         private void VerifyImports()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                .Verify(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()), Times.Once());
+                .Verify(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()), Times.Once());
         }
 
         [Test]
@@ -473,7 +473,7 @@ namespace NzbDrone.Core.Test.Download
             GivenNoImportedHistory();
 
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
+                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
                                new ImportResult(
@@ -505,7 +505,7 @@ namespace NzbDrone.Core.Test.Download
             GivenNoImportedHistory();
 
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
+                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
                                new ImportResult(
@@ -537,7 +537,7 @@ namespace NzbDrone.Core.Test.Download
             GivenNoImportedHistory();
 
             Mocker.GetMock<IDownloadedEpisodesImportService>()
-                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
+                  .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
                                new ImportResult(new ImportDecision(new LocalEpisode() {Path = @"C:\TestPath\Droned.S01E01.mkv"})),

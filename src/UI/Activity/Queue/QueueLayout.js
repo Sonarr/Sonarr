@@ -9,6 +9,7 @@ define(
         'Cells/EpisodeTitleCell',
         'Cells/QualityCell',
         'Activity/Queue/QueueStatusCell',
+        'Activity/Queue/QueueActionsCell',
         'Activity/Queue/TimeleftCell',
         'Activity/Queue/ProgressCell',
         'Shared/Grid/Pager'
@@ -20,6 +21,7 @@ define(
                  EpisodeTitleCell,
                  QualityCell,
                  QueueStatusCell,
+                 QueueActionsCell,
                  TimeleftCell,
                  ProgressCell,
                  GridPager) {
@@ -73,6 +75,12 @@ define(
                         name      : 'episode',
                         label     : 'Progress',
                         cell      : ProgressCell,
+                        cellValue : 'this'
+                    },
+                    {
+                        name      : 'status',
+                        label     : '',
+                        cell      : QueueActionsCell,
                         cellValue : 'this'
                     }
                 ],
