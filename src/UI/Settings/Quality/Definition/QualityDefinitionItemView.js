@@ -9,7 +9,7 @@ define(
     ], function (Marionette, AsModelBoundView, fileSize) {
 
         var view = Marionette.ItemView.extend({
-            template: 'Settings/Quality/Definition/QualityDefinitionViewTemplate',
+            template: 'Settings/Quality/Definition/QualityDefinitionItemViewTemplate',
             className: 'row',
 
             ui: {
@@ -24,12 +24,15 @@ define(
                 'slide .x-slider': '_updateSize'
             },
 
-            initialize: function (options) {
-                this.profileCollection = options.profiles;
+            initialize: function () {
                 this.filesize = fileSize;
             },
 
             onRender: function () {
+                if (this.model.get('quality').id === 0) {
+                    this.$el.addClass('row advanced-setting');
+                }
+
                 this.ui.sizeSlider.slider({
                     range       : true,
                     min         : 0,

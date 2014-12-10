@@ -230,6 +230,7 @@
     <Compile Include="Datastore\Migration\066_add_tags.cs" />
     <Compile Include="Datastore\Migration\067_add_added_to_series.cs" />
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
+    <Compile Include="Datastore\Migration\071_unknown_quality_in_profile.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />

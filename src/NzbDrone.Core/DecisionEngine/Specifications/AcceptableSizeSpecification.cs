@@ -36,12 +36,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
-            if (quality == Quality.Unknown)
-            {
-                _logger.Debug("Unknown quality. skipping size check.");
-                return Decision.Accept();
-            }
-
             var qualityDefinition = _qualityDefinitionService.Get(quality);
             var minSize = qualityDefinition.MinSize.Megabytes();
 

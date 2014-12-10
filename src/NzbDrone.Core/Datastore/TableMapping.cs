@@ -81,9 +81,12 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(e => e.HasFile)
                   .Relationship()
                   .HasOne(episode => episode.EpisodeFile, episode => episode.EpisodeFileId);
-            
+
+            Mapper.Entity<QualityDefinition>().RegisterModel("QualityDefinitions")
+                  .Ignore(d => d.Weight);
+
+
             Mapper.Entity<Profile>().RegisterModel("Profiles");
-            Mapper.Entity<QualityDefinition>().RegisterModel("QualityDefinitions");
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
             Mapper.Entity<SeriesStatistics>().MapResultSet();

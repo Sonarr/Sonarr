@@ -18,32 +18,32 @@ namespace NzbDrone.Core.Qualities
 
     public class QualityDefinitionService : IQualityDefinitionService, IHandle<ApplicationStartedEvent>
     {
-        private readonly IQualityDefinitionRepository _qualityDefinitionRepository;
+        private readonly IQualityDefinitionRepository _repo;
         private readonly ICached<Dictionary<Quality, QualityDefinition>> _cache;
         private readonly Logger _logger;
 
-        public QualityDefinitionService(IQualityDefinitionRepository qualityDefinitionRepository, ICacheManager cacheManager, Logger logger)
+        public QualityDefinitionService(IQualityDefinitionRepository repo, ICacheManager cacheManager, Logger logger)
         {
-            _qualityDefinitionRepository = qualityDefinitionRepository;
+            _repo = repo;
             _cache = cacheManager.GetCache<Dictionary<Quality, QualityDefinition>>(this.GetType());
             _logger = logger;
         }
 
         private Dictionary<Quality, QualityDefinition> GetAll()
         {
-            return _cache.Get("all", () => _qualityDefinitionRepository.All().ToDictionary(v => v.Quality), TimeSpan.FromSeconds(5.0));
+            return _cache.Get("all", () => _repo.All().Select(WithWeight).ToDictionary(v => v.Quality), TimeSpan.FromSeconds(5.0));
         }
 
         public void Update(QualityDefinition qualityDefinition)
         {
-            _qualityDefinitionRepository.Update(qualityDefinition);
+            _repo.Update(qualityDefinition);
 
             _cache.Clear();
         }
 
         public List<QualityDefinition> All()
         {
-            return GetAll().Values.ToList();
+            return GetAll().Values.OrderBy(d => d.Weight).ToList();
         }
 
         public QualityDefinition GetById(Int32 id)
@@ -53,67 +53,52 @@ namespace NzbDrone.Core.Qualities
         
         public QualityDefinition Get(Quality quality)
         {
-            if (quality == Quality.Unknown)
-                return new QualityDefinition(Quality.Unknown);
-
             return GetAll()[quality];
         }
         
-        public void InsertMissingDefinitions(List<QualityDefinition> allDefinitions)
+        private void InsertMissingDefinitions()
         {
-            allDefinitions.OrderBy(v => v.Weight).ToList();
-            var existingDefinitions = _qualityDefinitionRepository.All().OrderBy(v => v.Weight).ToList();
-
-            // Try insert each item intelligently to merge the lists preserving the Weight the user set.
-            for (int i = 0; i < allDefinitions.Count;i++)
-            {
-                // Skip if this definition isn't missing.
-                if (existingDefinitions.Any(v => v.Quality == allDefinitions[i].Quality))
-                    continue;
-
-                int targetIndexMinimum = 0;
-                for (int j = 0; j < i; j++)
-                    targetIndexMinimum = Math.Max(targetIndexMinimum, existingDefinitions.FindIndex(v => v.Quality == allDefinitions[j].Quality) + 1);
-
-                int targetIndexMaximum = existingDefinitions.Count;
-                for (int j = i + 1; j < allDefinitions.Count; j++)
-                {
-                    var index = existingDefinitions.FindIndex(v => v.Quality == allDefinitions[j].Quality);
-                    if (index != -1)
-                        targetIndexMaximum = Math.Min(targetIndexMaximum, index);
-                }
-
-                // Rounded down average sounds reasonable.
-                int targetIndex = (targetIndexMinimum + targetIndexMaximum) / 2;
-
-                existingDefinitions.Insert(targetIndex, allDefinitions[i]);
-            }
-            
-            // Update all Weights.
             List<QualityDefinition> insertList = new List<QualityDefinition>();
             List<QualityDefinition> updateList = new List<QualityDefinition>();
-            for (int i = 0; i < existingDefinitions.Count; i++)
+            
+            var allDefinitions = Quality.DefaultQualityDefinitions.OrderBy(d => d.Weight).ToList();
+            var existingDefinitions = _repo.All().ToList();
+
+            foreach (var definition in allDefinitions)
             {
-                if (existingDefinitions[i].Id == 0)
+                var existing = existingDefinitions.SingleOrDefault(d => d.Quality == definition.Quality);
+
+                if (existing == null)
                 {
-                    existingDefinitions[i].Weight = i + 1;
-                    _qualityDefinitionRepository.Insert(existingDefinitions[i]);
+                    insertList.Add(definition);
                 }
-                else if (existingDefinitions[i].Weight != i + 1)
+
+                else
                 {
-                    existingDefinitions[i].Weight = i + 1;
-                    _qualityDefinitionRepository.Update(existingDefinitions[i]);
+                    updateList.Add(existing);
+                    existingDefinitions.Remove(existing);
                 }
             }
 
+            _repo.InsertMany(insertList);
+            _repo.UpdateMany(updateList);
+            _repo.DeleteMany(existingDefinitions);
+            
             _cache.Clear();
+        }
+
+        private static QualityDefinition WithWeight(QualityDefinition definition)
+        {
+            definition.Weight = Quality.DefaultQualityDefinitions.Single(d => d.Quality == definition.Quality).Weight;
+
+            return definition;
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             _logger.Debug("Setting up default quality config");
 
-            InsertMissingDefinitions(Quality.DefaultQualityDefinitions.ToList());
+            InsertMissingDefinitions();
         }
     }
 }

@@ -116,6 +116,7 @@
     <Compile Include="Datastore\DatabaseRelationshipFixture.cs" />
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
+    <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
     <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />

@@ -53,16 +53,21 @@ define(
             onShow: function () {
                 this.fieldsView = new EditProfileView({ model: this.model });
                 this._showFieldsView();
+                var advancedShown = Config.getValueBoolean(Config.Keys.AdvancedSettings, false);
 
                 this.sortableListView = new QualitySortableCollectionView({
                     selectable      : true,
                     selectMultiple  : true,
                     clickToSelect   : true,
                     clickToToggle   : true,
-                    sortable        : Config.getValueBoolean(Config.Keys.AdvancedSettings, false),
+                    sortable        : advancedShown,
 
                     sortableOptions : {
                         handle: '.x-drag-handle'
+                    },
+
+                    visibleModelsFilter : function (model) {
+                        return model.get('quality').id !== 0 || advancedShown;
                     },
 
                     collection: this.itemsCollection,

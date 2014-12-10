@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 {
                     GrabDelay = 1,
                     Name = "OneHour",
-                    Cutoff = "{}",
-                    Items = "{}"
+                    Cutoff = 0,
+                    Items = "[]"
                 });
 
                 c.Insert.IntoTable("Profiles").Row(new
@@ -52,8 +52,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 {
                     GrabDelay = 1,
                     Name = "OneHour",
-                    Cutoff = "{}",
-                    Items = "{}"
+                    Cutoff = 0,
+                    Items = "[]"
                 })
             );
 
@@ -72,8 +72,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                    {
                                                        GrabDelay = 1,
                                                        Name = "OneHour",
-                                                       Cutoff = "{}",
-                                                       Items = "{}"
+                                                       Cutoff = 0,
+                                                       Items = "[]"
                                                    });
 
                 c.Insert.IntoTable("Series").Row(new
