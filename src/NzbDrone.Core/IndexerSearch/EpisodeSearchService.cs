@@ -6,6 +6,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -66,6 +67,36 @@ namespace NzbDrone.Core.IndexerSearch
             _logger.ProgressInfo("Completed search for {0} episodes. {1} reports downloaded.", missing.Count, downloadedCount);
         }
 
+        private void SearchForMissingEpisodes(List<Episode> episodes)
+        {
+            _logger.ProgressInfo("Performing missing search for {0} episodes", episodes.Count);
+            var downloadedCount = 0;
+
+            foreach (var series in episodes.GroupBy(e => e.SeriesId))
+            {
+                foreach (var season in series.Select(e => e).GroupBy(e => e.SeasonNumber))
+                {
+                    List<DownloadDecision> decisions;
+
+                    if (season.Count() > 1)
+                    {
+                        decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key);
+                    }
+
+                    else
+                    {
+                        decisions = _nzbSearchService.EpisodeSearch(season.First());
+                    }
+
+                    var processed = _processDownloadDecisions.ProcessDecisions(decisions);
+
+                    downloadedCount += processed.Grabbed.Count;
+                }
+            }
+
+            _logger.ProgressInfo("Completed missing search for {0} episodes. {1} reports downloaded.", episodes.Count, downloadedCount);
+        }
+        
         public void Execute(EpisodeSearchCommand message)
         {
             foreach (var episodeId in message.EpisodeIds)
@@ -79,36 +110,34 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void Execute(MissingEpisodeSearchCommand message)
         {
-            //TODO: Look at ways to make this more efficient (grouping by series/season)
+            List<Episode> episodes;
 
-            var episodes =
-                _episodeService.EpisodesWithoutFiles(new PagingSpec<Episode>
-                                                     {
-                                                         Page = 1,
-                                                         PageSize = 100000,
-                                                         SortDirection = SortDirection.Ascending,
-                                                         SortKey = "Id",
-                                                         FilterExpression = v => v.Monitored == true && v.Series.Monitored == true
-                                                     }).Records.ToList();
-
-            var missing = episodes.Where(e => !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id)).ToList();
-
-            _logger.ProgressInfo("Performing missing search for {0} episodes", missing.Count);
-            var downloadedCount = 0;
-
-            //Limit requests to indexers at 100 per minute
-            using (var rateGate = new RateGate(100, TimeSpan.FromSeconds(60)))
+            if (message.SeriesId > 0)
             {
-                foreach (var episode in missing)
-                {
-                    rateGate.WaitToProceed();
-                    var decisions = _nzbSearchService.EpisodeSearch(episode);
-                    var processed = _processDownloadDecisions.ProcessDecisions(decisions);
-                    downloadedCount += processed.Grabbed.Count;
-                }
+                episodes = _episodeService.GetEpisodeBySeries(message.SeriesId)
+                                          .Where(e => e.Monitored && !e.HasFile)
+                                          .ToList();
             }
 
-            _logger.ProgressInfo("Completed missing search for {0} episodes. {1} reports downloaded.", missing.Count, downloadedCount);
+            else
+            {
+                episodes = _episodeService.EpisodesWithoutFiles(new PagingSpec<Episode>
+                                                                    {
+                                                                        Page = 1,
+                                                                        PageSize = 100000,
+                                                                        SortDirection = SortDirection.Ascending,
+                                                                        SortKey = "Id",
+                                                                        FilterExpression =
+                                                                            v =>
+                                                                            v.Monitored == true &&
+                                                                            v.Series.Monitored == true
+                                                                    }).Records.ToList();
+            }
+
+            var queue = _queueService.GetQueue().Select(q => q.Episode.Id);
+            var missing = episodes.Where(e => !queue.Contains(e.Id)).ToList();
+
+            SearchForMissingEpisodes(missing);
         }
 
         public void Handle(EpisodeInfoRefreshedEvent message)

@@ -35,8 +35,15 @@
                     {{/unless}}
 
                     <div class="form-group col-md-2">
-                        <label>Starting Season</label>
-                        {{> StartingSeasonSelectionPartial seasons}}
+                        <label>Monitor <i class="icon-nd-form-info monitor-tooltip x-monitor-tooltip"></i></label>
+                        <select class="form-control col-md-2 x-monitor">
+                            <option value="all">All</option>
+                            <option value="future">Future</option>
+                            <option value="missing">Missing</option>
+                            <option value="existing">Existing</option>
+                            <!--<option value="latest">Latest Season</option>-->
+                            <option value="first">First Season</option>
+                        </select>
                     </div>
 
                     <div class="form-group col-md-2">
@@ -70,10 +77,16 @@
                     {{#if title}}
                     <div class="form-group col-md-2 col-md-offset-10">
                         <!--Uncomment if we need to add even more controls to add series-->
-                        <!--<label>&nbsp;</label>-->
-                        <button class="btn btn-success x-add"> Add
-                            <i class="icon-plus"></i>
-                        </button>
+                        <!--<label style="visibility: hidden">Add</label>-->
+                        <div class="btn-group">
+                            <button class="btn btn-success add x-add">
+                                <i class="icon-plus" title="Add"></i>
+                            </button>
+
+                            <button class="btn btn-success add x-add-search">
+                                <i class="icon-search" title="Add and Search for missing episodes"></i>
+                            </button>
+                        </div>
                     </div>
                     {{else}}
                         <div class="col-md-2 col-md-offset-10" title="Series requires an English title">
