@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.HDTV720p);
             _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddHours(-10);
 
-            _delayProfile.UsenetDelay = 1;
+            _delayProfile.UsenetDelay = 60;
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.SDTV);
             _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
 
-            _delayProfile.UsenetDelay = 12;
+            _delayProfile.UsenetDelay = 720;
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Setup(s => s.IsRevisionUpgrade(It.IsAny<QualityModel>(), It.IsAny<QualityModel>()))
                   .Returns(true);
 
-            _delayProfile.UsenetDelay = 12;
+            _delayProfile.UsenetDelay = 720;
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Setup(s => s.IsRevisionUpgrade(It.IsAny<QualityModel>(), It.IsAny<QualityModel>()))
                   .Returns(true);
 
-            _delayProfile.UsenetDelay = 12;
+            _delayProfile.UsenetDelay = 720;
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             GivenExistingFile(new QualityModel(Quality.SDTV));
 
-            _delayProfile.UsenetDelay = 12;
+            _delayProfile.UsenetDelay = 720;
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }

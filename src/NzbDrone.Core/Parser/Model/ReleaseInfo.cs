@@ -40,6 +40,18 @@ namespace NzbDrone.Core.Parser.Model
             private set { }
         }
 
+        public Double AgeMinutes
+        {
+            get
+            {
+                return DateTime.UtcNow.Subtract(PublishDate).TotalMinutes;
+            }
+
+            //This prevents manually downloading a release from blowing up in mono
+            //TODO: Is there a better way?
+            private set { }
+        }
+
         public override string ToString()
         {
             return String.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);
