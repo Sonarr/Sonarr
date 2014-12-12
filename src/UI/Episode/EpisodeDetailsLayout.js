@@ -10,7 +10,8 @@ define(
     ], function (Marionette, SummaryLayout, SearchLayout, EpisodeActivityLayout, SeriesCollection, Messenger) {
 
         return Marionette.Layout.extend({
-            template: 'Episode/EpisodeDetailsLayoutTemplate',
+            className : 'modal-lg',
+            template  : 'Episode/EpisodeDetailsLayoutTemplate',
 
             regions: {
                 summary : '#episode-summary',

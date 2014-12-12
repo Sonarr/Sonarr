@@ -12,7 +12,8 @@ define(
     ], function (_, vent, Marionette, RenamePreviewCollection, RenamePreviewCollectionView, EmptyCollectionView, LoadingView, CommandController) {
 
         return Marionette.Layout.extend({
-            template: 'Rename/RenamePreviewLayoutTemplate',
+            className : 'modal-lg',
+            template  : 'Rename/RenamePreviewLayoutTemplate',
 
             regions: {
                 renamePreviews : '#rename-previews'
