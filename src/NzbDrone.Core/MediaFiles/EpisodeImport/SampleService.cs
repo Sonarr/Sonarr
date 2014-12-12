@@ -36,7 +36,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public bool IsSample(Series series, QualityModel quality, string path, long size, int seasonNumber)
         {
-            if (seasonNumber == 0 && series.SeriesType == SeriesTypes.Standard)
+            if (seasonNumber == 0)
             {
                 _logger.Debug("Special, skipping sample check");
                 return false;

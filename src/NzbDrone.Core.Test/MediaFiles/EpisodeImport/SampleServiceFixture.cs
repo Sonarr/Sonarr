@@ -143,6 +143,15 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             ShouldBeFalse();
         }
 
+        [Test]
+        public void should_return_false_for_anime_speical()
+        {
+            _series.SeriesType = SeriesTypes.Anime;
+            _localEpisode.Episodes[0].SeasonNumber = 0;
+
+            ShouldBeFalse();
+        }
+
         private void ShouldBeTrue()
         {
             Subject.IsSample(_localEpisode.Series,
