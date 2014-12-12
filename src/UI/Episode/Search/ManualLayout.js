@@ -21,39 +21,41 @@ define(
             columns:
                 [
                     {
-                        name      : 'age',
-                        label     : 'Age',
-                        cell      : AgeCell
+                        name     : 'age',
+                        label    : 'Age',
+                        cell     : AgeCell
                     },
                     {
-                        name      : 'title',
-                        label     : 'Title',
-                        cell      : ReleaseTitleCell
+                        name     : 'title',
+                        label    : 'Title',
+                        cell     : ReleaseTitleCell
                     },
                     {
-                        name      : 'indexer',
-                        label     : 'Indexer',
-                        cell      : Backgrid.StringCell
+                        name     : 'indexer',
+                        label    : 'Indexer',
+                        cell     : Backgrid.StringCell
                     },
                     {
-                        name      : 'size',
-                        label     : 'Size',
-                        cell      : FileSizeCell
+                        name     : 'size',
+                        label    : 'Size',
+                        cell     : FileSizeCell
                     },
                     {
-                        name      : 'quality',
-                        label     : 'Quality',
-                        cell      : QualityCell
+                        name     : 'quality',
+                        label    : 'Quality',
+                        cell     : QualityCell
                     },
                     {
-                        name      : 'rejections',
-                        label     : '',
-                        cell      : ApprovalStatusCell
+                        name     : 'rejections',
+                        label    : '',
+                        cell     : ApprovalStatusCell,
+                        sortable : false
                     },
                     {
-                        name      : 'download',
-                        label     : '',
-                        cell      : DownloadReportCell
+                        name     : 'download',
+                        label    : '',
+                        cell     : DownloadReportCell,
+                        sortable : false
                     }
                 ],
 
