@@ -169,10 +169,9 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex WordDelimiterRegex = new Regex(@"(\s|\.|,|_|-|=|\|)+", RegexOptions.Compiled);
         private static readonly Regex PunctuationRegex = new Regex(@"[^\w\s]", RegexOptions.Compiled);
-        private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of)\b\s?",
-                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?",
-                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex CommonWordRegex = new Regex(@"\b(a|an|the|and|or|of)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex DuplicateSpacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
 
         private static readonly Regex RequestInfoRegex = new Regex(@"\[.+?\]", RegexOptions.Compiled);
 
@@ -347,6 +346,7 @@ namespace NzbDrone.Core.Parser
             title = WordDelimiterRegex.Replace(title, " ");
             title = PunctuationRegex.Replace(title, String.Empty);
             title = CommonWordRegex.Replace(title, String.Empty);
+            title = DuplicateSpacesRegex.Replace(title, " ");
 
             return title.Trim().ToLower();
         }

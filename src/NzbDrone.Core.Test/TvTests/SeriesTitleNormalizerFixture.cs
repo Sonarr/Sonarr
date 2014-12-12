@@ -8,10 +8,11 @@ namespace NzbDrone.Core.Test.TvTests
     [TestFixture]
     public class SeriesTitleNormalizerFixture
     {
-        [Test]
-        public void should_use_precomputed_title_for_a_to_z()
+        [TestCase("A to Z", 281588, "a to z")]
+        [TestCase("A. D. - The Trials & Triumph of the Early Church", 266757, "ad trials triumph early church")]
+        public void should_use_precomputed_title(string title, int tvdbId, string expected)
         {
-            SeriesTitleNormalizer.Normalize("A to Z", 281588).Should().Be("a to z");
+            SeriesTitleNormalizer.Normalize(title, tvdbId).Should().Be(expected);
         }
 
         [TestCase("2 Broke Girls", "2 broke girls")]

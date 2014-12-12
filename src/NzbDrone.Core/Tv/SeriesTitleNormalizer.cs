@@ -7,7 +7,8 @@ namespace NzbDrone.Core.Tv
     {
         private readonly static Dictionary<Int32, String> PreComputedTitles = new Dictionary<Int32, String>
                                                                      {
-                                                                         { 281588, "a to z" }
+                                                                         { 281588, "a to z" },
+                                                                         { 266757, "ad trials triumph early church" }
                                                                      };
 
         public static String Normalize(String title, Int32 tvdbId)
