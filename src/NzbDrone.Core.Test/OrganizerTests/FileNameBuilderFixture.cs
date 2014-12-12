@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
                             .With(e => e.AbsoluteEpisodeNumber = 102)
                             .Build();
 
-            _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "DRONE" };
+            _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "SonarrTest" };
             
             Mocker.GetMock<IQualityDefinitionService>()
                 .Setup(v => v.Get(Moq.It.IsAny<Quality>()))
@@ -646,7 +646,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.MultiEpisodeStyle = (int) MultiEpisodeStyle.Duplicate;
 
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
-                   .Should().Be("South Park - S15E06 - S15E07 - (HDTV-720p, , DRONE) - City Sushi");
+                   .Should().Be("South Park - S15E06 - S15E07 - (HDTV-720p, , SonarrTest) - City Sushi");
         }
 
         [Test]
@@ -836,7 +836,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.AnimeEpisodeFormat = "[{Release Group}]{Series.CleanTitle}.{absolute:000}";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("[DRONE]South.Park.100");
+                   .Should().Be("[SonarrTest]South.Park.100");
         }
 
         [Test]
@@ -863,6 +863,16 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30 Rock - S01E01 - Test");
+        }
+
+        [Test]
+        public void should_use_Sonarr_as_release_group_when_not_available()
+        {
+            _episodeFile.ReleaseGroup = null;
+            _namingConfig.StandardEpisodeFormat = "{Release Group}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("Sonarr");
         }
     }
 }
