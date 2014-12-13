@@ -17,9 +17,11 @@ define(
             tableName: 'series',
 
             state: {
-                sortKey: 'sortTitle',
-                order  : -1,
-                pageSize: 100000
+                sortKey            : 'sortTitle',
+                order              : -1,
+                pageSize           : 100000,
+                secondarySortKey   : 'sortTitle',
+                secondarySortOrder : -1
             },
 
             mode: 'client',
