@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                                  String.Format("ma_username={0}&ma_password={1}", settings.Username, settings.Password) :
                                  String.Format("apikey={0}", settings.ApiKey);
 
-            var url = string.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
+            var url = String.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
                                  protocol,
                                  settings.Host,
                                  settings.Port,

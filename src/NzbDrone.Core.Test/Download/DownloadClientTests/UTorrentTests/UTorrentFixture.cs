@@ -104,6 +104,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
                   .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new Byte[0], System.Net.HttpStatusCode.SeeOther));
         }
 
+        protected void GivenRedirectToTorrent()
+        {
+            var httpHeader = new HttpHeader();
+            httpHeader["Location"] = "http://test.sonarr.tv/not-a-real-torrent.torrent";
+
+            Mocker.GetMock<IHttpClient>()
+                  .Setup(s => s.Get(It.Is<HttpRequest>(h => h.Url.AbsoluteUri == _downloadUrl)))
+                  .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new Byte[0], System.Net.HttpStatusCode.Found));
+        }
+
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<IUTorrentProxy>()
@@ -322,6 +332,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         public void Download_should_handle_http_redirect_to_magnet()
         {
             GivenRedirectToMagnet();
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = Subject.Download(remoteEpisode);
+
+            id.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void Download_should_handle_http_redirect_to_torrent()
+        {
+            GivenRedirectToTorrent();
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();

@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Download
 
             String hash = null;
 
-            if (!magnetUrl.IsNullOrWhiteSpace())
+            if (magnetUrl.IsNotNullOrWhiteSpace())
             {
                 hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
             }
@@ -100,19 +100,26 @@ namespace NzbDrone.Core.Download
 
                 var response = _httpClient.Get(request);
 
-                if (response.StatusCode == HttpStatusCode.SeeOther)
+                if (response.StatusCode == HttpStatusCode.SeeOther || response.StatusCode == HttpStatusCode.Found)
                 {
                     var locationHeader = (string)response.Headers.GetValueOrDefault("Location", null);
 
-                    if (locationHeader != null && locationHeader.StartsWith("magnet:"))
+                    if (locationHeader != null)
                     {
-                        return DownloadFromMagnetUrl(remoteEpisode, locationHeader);
+                        if (locationHeader.StartsWith("magnet:"))
+                        {
+                            return DownloadFromMagnetUrl(remoteEpisode, locationHeader);
+                        }
+
+                        return DownloadFromWebUrl(remoteEpisode, locationHeader);
                     }
+
                     throw new WebException("Remote website tried to redirect without providing a location.");
                 }
 
                 torrentFile = response.ResponseData;
             }
+
             catch (WebException ex)
             {
                 _logger.ErrorException(String.Format("Downloading torrentfile for episode '{0}' failed ({1})",
@@ -121,11 +128,8 @@ namespace NzbDrone.Core.Download
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
             }
 
-
             var filename = String.Format("{0}.torrent", FileNameBuilder.CleanFileName(remoteEpisode.Release.Title));
-
             var hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
-
             var actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
 
             if (hash != actualHash)
