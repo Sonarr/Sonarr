@@ -10,6 +10,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using System;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 {
@@ -26,6 +27,10 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                           Id = 1,
                           Path = @"C:\series".AsOsAgnostic()
                       };
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.EnableMediaInfo)
+                  .Returns(true);
         }
 
         private void GivenFileExists()

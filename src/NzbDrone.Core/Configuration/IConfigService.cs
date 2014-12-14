@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Configuration
         FileDateType FileDate { get; set; }
         Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
         Boolean CopyUsingHardlinks { get; set; }
+        Boolean EnableMediaInfo { get; set; }
 
         //Permissions (Media Management)
         Boolean SetPermissionsLinux { get; set; }

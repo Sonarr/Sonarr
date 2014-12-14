@@ -219,6 +219,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("CopyUsingHardlinks", value); }
         }
 
+        public Boolean EnableMediaInfo
+        {
+            get { return GetValueBoolean("EnableMediaInfo", true); }
+
+            set { SetValue("EnableMediaInfo", value); }
+        }
+
         public Boolean SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }

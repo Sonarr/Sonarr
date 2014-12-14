@@ -6,6 +6,7 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -14,16 +15,19 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileService _mediaFileService;
         private readonly IVideoFileInfoReader _videoFileInfoReader;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public UpdateMediaInfoService(IDiskProvider diskProvider,
                                 IMediaFileService mediaFileService,
                                 IVideoFileInfoReader videoFileInfoReader,
+                                IConfigService configService,
                                 Logger logger)
         {
             _diskProvider = diskProvider;
             _mediaFileService = mediaFileService;
             _videoFileInfoReader = videoFileInfoReader;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -51,6 +55,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public void Handle(SeriesScannedEvent message)
         {
+            if (!_configService.EnableMediaInfo)
+            {
+                _logger.Debug("MediaInfo is disabled");
+                return;
+            }
+
             var mediaFiles = _mediaFileService.GetFilesBySeries(message.Series.Id)
                                               .Where(c => c.MediaInfo == null)
                                               .ToList();
