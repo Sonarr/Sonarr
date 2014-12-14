@@ -62,21 +62,19 @@ define(
             sortMappings: {
                 'title'      : { sortKey: 'sortTitle' },
                 'nextAiring' : {
-                    sortValue: function (model, attr) {
-                                    var nextAiring = model.get(attr);
-                                    
-                                    if (nextAiring) {
-                                        return moment(nextAiring).unix();
-                                    }
-                                    
-                                    var previousAiring = model.get(attr.replace('nextAiring', 'previousAiring'));
-                                    
-                                    if (previousAiring) {
-                                        return 10000000000 - moment(previousAiring).unix();
-                                    }
+                    sortValue: function (model, attr, order) {
+                        var nextAiring = model.get(attr);
 
-                                    return Number.MAX_VALUE;
-                                }
+                        if (nextAiring) {
+                            return moment(nextAiring).unix();
+                        }
+
+                        if (order === 1) {
+                            return 0;
+                        }
+
+                        return Number.MAX_VALUE;
+                    }
                 },
 
                 percentOfEpisodes: {

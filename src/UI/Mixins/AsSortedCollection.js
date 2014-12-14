@@ -81,8 +81,8 @@ define(
                 }
 
                 return function (left, right) {
-                    var l = sortValue(left, sortKey);
-                    var r = sortValue(right, sortKey);
+                    var l = sortValue(left, sortKey, order);
+                    var r = sortValue(right, sortKey, order);
                     var t;
 
                     if (order === 1) {
@@ -94,8 +94,8 @@ define(
                     if (l === r) {
 
                         if (secondarySorting) {
-                            var ls = secondarySorting.sortValue(left, secondarySorting.key);
-                            var rs = secondarySorting.sortValue(right, secondarySorting.key);
+                            var ls = secondarySorting.sortValue(left, secondarySorting.key, order);
+                            var rs = secondarySorting.sortValue(right, secondarySorting.key, order);
                             var ts;
 
                             if (secondarySorting.order === 1) {
