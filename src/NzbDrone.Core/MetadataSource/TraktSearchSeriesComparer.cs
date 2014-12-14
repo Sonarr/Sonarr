@@ -10,6 +10,7 @@ namespace NzbDrone.Core.MetadataSource
     {
         private static readonly Regex RegexCleanPunctuation = new Regex("[-._:]", RegexOptions.Compiled);
         private static readonly Regex RegexCleanCountryYearPostfix = new Regex(@"(?<=.+)( \([A-Z]{2}\)| \(\d{4}\)| \([A-Z]{2}\) \(\d{4}\))$", RegexOptions.Compiled);
+        private static readonly Regex ArticleRegex = new Regex(@"^(a|an|the)\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public String SearchQuery { get; private set; }
 
@@ -37,6 +38,14 @@ namespace NzbDrone.Core.MetadataSource
             int result = 0;
 
             // Prefer exact matches
+            result = Compare(x, y, s => CleanPunctuation(s.Title).Equals(CleanPunctuation(SearchQuery)));
+            if (result != 0) return -result;
+
+            // Remove Articles (a/an/the)
+            result = Compare(x, y, s => CleanArticles(s.Title).Equals(CleanArticles(SearchQuery)));
+            if (result != 0) return -result;
+
+            // Prefer close matches
             result = Compare(x, y, s => CleanPunctuation(s.Title).LevenshteinDistance(CleanPunctuation(SearchQuery)) <= 1);
             if (result != 0) return -result;
 
@@ -47,7 +56,7 @@ namespace NzbDrone.Core.MetadataSource
             // Compare prefix matches by year "(CSI: ..."
             result = CompareWithYear(x, y, s => s.Title.ToLowerInvariant().StartsWith(_searchQueryWithoutYear + ":"));
             if (result != 0) return -result;
-
+         
             return Compare(x, y, s => SearchQuery.LevenshteinDistanceClean(s.Title) - GetYearFactor(s));
         }
         
@@ -92,6 +101,13 @@ namespace NzbDrone.Core.MetadataSource
             title = RegexCleanCountryYearPostfix.Replace(title, "");
 
             return title.ToLowerInvariant();
+        }
+
+        private String CleanArticles(String title)
+        {
+            title = ArticleRegex.Replace(title, "");
+
+            return title.Trim().ToLowerInvariant();
         }
 
         private Int32 GetYearFactor(Series series)

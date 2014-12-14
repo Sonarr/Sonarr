@@ -167,6 +167,7 @@ define(
                 if (!this.isClosed) {
                     this.ui.searchBar.show();
                     this.searchResult.show(new ErrorView({term: this.collection.term}));
+                    this.collection.term = '';
                 }
             }
         });
