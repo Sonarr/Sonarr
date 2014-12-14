@@ -29,7 +29,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             get
             {
-                return Rejections.Any() && Rejections.All(r => r.Type == RejectionType.Permanent);
+                return Rejections.Any() && Rejections.Any(r => r.Type == RejectionType.Permanent);
             }
         }
 
