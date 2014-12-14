@@ -74,8 +74,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         localEpisode.Size = _diskProvider.GetFileSize(file);
                         _logger.Debug("Size: {0}", localEpisode.Size);
 
-                        localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
-
+                        //TODO: make it so media info doesn't ruin the import process of a new series
+                        if (sceneSource)
+                        {
+                            localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
+                        }
+                        
                         decision = GetDecision(localEpisode);
                     }
 
