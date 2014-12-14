@@ -35,13 +35,13 @@
                 </div>
             <div class="row">
                 <div class="col-md-10 col-xs-8">
-                    {{#if_eq status compare="continuing"}}
-                        {{#if nextAiring}}
-                            <span class="label label-default">{{RelativeDate nextAiring}}</span>
-                        {{/if}}
-                    {{else}}
+                    {{#if_eq status compare="ended"}}
                         <span class="label label-danger">Ended</span>
                     {{/if_eq}}
+
+                    {{#if nextAiring}}
+                        <span class="label label-default">{{RelativeDate nextAiring}}</span>
+                    {{/if}}
 
                     {{seasonCountHelper}}
 

@@ -22,11 +22,9 @@
         <div class="labels">
             {{> EpisodeProgressPartial }}
 
-            {{#if_eq status compare="continuing"}}
-                {{#if nextAiring}}
-                    <span class="label label-default">{{RelativeDate nextAiring}}</span>
-                {{/if}}
-            {{/if_eq}}
+            {{#if nextAiring}}
+                <span class="label label-default">{{RelativeDate nextAiring}}</span>
+            {{/if}}
         </div>
     </div>
 </div>
