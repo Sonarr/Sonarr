@@ -83,7 +83,9 @@ define(
 
             _add: function() {
                 var model = new Model({
-                    preferredProtocol : 1,
+                    enableUsenet      : true,
+                    enableTorrent     : true,
+                    preferredProtocol : 'usenet',
                     usenetDelay       : 0,
                     torrentDelay      : 0,
                     order             : this.collection.length,
