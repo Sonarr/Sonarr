@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NLog;
 using NzbDrone.Core.Download;
 
 namespace NzbDrone.Core.HealthCheck.Checks
@@ -7,10 +8,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
     public class DownloadClientCheck : HealthCheckBase
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly Logger _logger;
 
-        public DownloadClientCheck(IProvideDownloadClient downloadClientProvider)
+        public DownloadClientCheck(IProvideDownloadClient downloadClientProvider, Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
+            _logger = logger;
         }
 
         public override HealthCheck Check()
@@ -29,9 +32,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     downloadClient.GetItems();
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-               return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client " + e.Message);
+                _logger.Error("Unable to communicate with download client: ", ex);
+               return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client: " + ex.Message);
             }
 
             return new HealthCheck(GetType());
