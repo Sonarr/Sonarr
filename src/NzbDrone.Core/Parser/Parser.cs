@@ -132,7 +132,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^[A-Z]{11}\d{3}$", RegexOptions.Compiled),
 
                 //Backup filename (Unknown origins)
-                new Regex(@"^Backup_\d{5,}S\d{2}-\d{2}$", RegexOptions.Compiled)
+                new Regex(@"^Backup_\d{5,}S\d{2}-\d{2}$", RegexOptions.Compiled),
+
+                //123 - Started appearing December 2014
+                new Regex(@"^123$", RegexOptions.Compiled)
             };
 
         //Regex to detect whether the title was reversed.
