@@ -9,7 +9,7 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.TvTests.EpisodeProviderTests
+namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
 {
     [TestFixture]
     public class HandleEpisodeFileDeletedFixture : CoreTest<EpisodeService>

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodes(IEnumerable<Int32> ids);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
-        Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle);
+        Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string episodeTitle);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
         Episode GetEpisode(int seriesId, String date);
@@ -103,10 +103,10 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
         
-        public Episode FindEpisodeByName(int seriesId, int seasonNumber, string episodeTitle) 
+        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string episodeTitle) 
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
-            var search = Parser.Parser.NormalizeEpisodeTitle(episodeTitle);
+            var search = Parser.Parser.NormalizeEpisodeTitle(episodeTitle).Replace(".", " ");
 
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber)
                 .FirstOrDefault(e => 

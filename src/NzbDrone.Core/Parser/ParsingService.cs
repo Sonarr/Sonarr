@@ -312,7 +312,7 @@ namespace NzbDrone.Core.Parser
         private ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, Series series)
         {
             // find special episode in series season 0
-            var episode = _episodeService.FindEpisodeByName(series.Id, 0, title);
+            var episode = _episodeService.FindEpisodeByTitle(series.Id, 0, title);
 
             if (episode != null)
             {
@@ -326,6 +326,8 @@ namespace NzbDrone.Core.Parser
                 info.FullSeason = false;
                 info.Quality = QualityParser.ParseQuality(title);
                 info.ReleaseGroup = Parser.ParseReleaseGroup(title);
+                info.Language = Parser.ParseLanguage(title);
+                info.Special = true;
 
                 _logger.Info("Found special episode {0} for title '{1}'", info, title);
                 return info;

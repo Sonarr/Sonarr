@@ -187,5 +187,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
         }
+
+        [Test]
+        public void should_return_true_for_special()
+        {
+            parseResultSingle.ParsedEpisodeInfo.Special = true;
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
+        }
     }
 }

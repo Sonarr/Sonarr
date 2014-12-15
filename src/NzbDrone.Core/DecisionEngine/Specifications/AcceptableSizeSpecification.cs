@@ -36,6 +36,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
+            if (subject.ParsedEpisodeInfo.Special)
+            {
+                _logger.Debug("Special release found, skipping size check.");
+                return Decision.Accept();
+            }
+
             var qualityDefinition = _qualityDefinitionService.Get(quality);
             var minSize = qualityDefinition.MinSize.Megabytes();
 
