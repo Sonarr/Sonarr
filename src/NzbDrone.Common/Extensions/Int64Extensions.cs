@@ -8,11 +8,13 @@ namespace NzbDrone.Common.Extensions
 
         public static string SizeSuffix(this Int64 value)
         {
-            if (value < 0) { return "-" + SizeSuffix(-value); }
-            if (value == 0) { return "0.0 bytes"; }
+            const int bytesInKb = 1000;
 
-            var mag = (int)Math.Log(value, 1024);
-            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
+            if (value < 0) return "-" + SizeSuffix(-value);
+            if (value == 0) return "0 bytes";
+            
+            var mag = (int)Math.Log(value, bytesInKb);
+            var adjustedSize = value / (decimal)Math.Pow(bytesInKb, mag);
 
             return string.Format("{0:n1} {1}", adjustedSize, SizeSuffixes[mag]);
         }
