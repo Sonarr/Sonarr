@@ -147,6 +147,7 @@ namespace NzbDrone.Core.Indexers
             {
                 return item.Element("enclosure").Attribute("url").Value;
             }
+
             return item.Element("link").Value;
         }
 

@@ -81,6 +81,18 @@ namespace NzbDrone.Core.Indexers.Newznab
             return base.GetPublishDate(item);
         }
 
+        protected override string GetDownloadUrl(XElement item)
+        {
+            var url = base.GetDownloadUrl(item);
+
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                url = item.Element("enclosure").Attribute("url").Value;
+            }
+
+            return url;
+        }
+
         protected virtual Int32 GetTvRageId(XElement item)
         {
             var tvRageIdString = TryGetNewznabAttribute(item, "rageid");
