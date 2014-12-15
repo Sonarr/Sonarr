@@ -13,7 +13,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
     public class RetentionSpecificationFixture : CoreTest<RetentionSpecification>
     {
-
         private RemoteEpisode _remoteEpisode;
 
         [SetUp]
@@ -32,7 +31,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void WithAge(int days)
         {
-            _remoteEpisode.Release.PublishDate = DateTime.Now.AddDays(-days);
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow.AddDays(-days);
         }
 
         [Test]

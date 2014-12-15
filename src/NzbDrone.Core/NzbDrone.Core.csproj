@@ -268,6 +268,7 @@
     <Compile Include="DecisionEngine\Specifications\ReleaseRestrictionsSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\MinimumAgeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RetentionSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RetrySpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\RssSync\DelaySpecification.cs" />

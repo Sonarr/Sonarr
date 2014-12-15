@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Configuration
         //Indexers
         Int32 Retention { get; set; }
         Int32 RssSyncInterval { get; set; }
+        Int32 MinimumAge { get; set; }
 
         //UI
         Int32 FirstDayOfWeek { get; set; }

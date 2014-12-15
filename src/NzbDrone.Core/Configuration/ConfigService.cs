@@ -108,6 +108,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("RssSyncInterval", value); }
         }
 
+        public int MinimumAge
+        {
+            get { return GetValueInt("MinimumAge", 0); }
+
+            set { SetValue("MinimumAge", value); }
+        }
+
         public Boolean AutoDownloadPropers
         {
             get { return GetValueBoolean("AutoDownloadPropers", true); }

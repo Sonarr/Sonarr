@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
@@ -36,6 +37,7 @@ namespace NzbDrone.Core.Download.Pending
         private readonly ISeriesService _seriesService;
         private readonly IParsingService _parsingService;
         private readonly IDelayProfileService _delayProfileService;
+        private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -43,6 +45,7 @@ namespace NzbDrone.Core.Download.Pending
                                     ISeriesService seriesService,
                                     IParsingService parsingService,
                                     IDelayProfileService delayProfileService,
+                                    IConfigService configService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
@@ -50,6 +53,7 @@ namespace NzbDrone.Core.Download.Pending
             _seriesService = seriesService;
             _parsingService = parsingService;
             _delayProfileService = delayProfileService;
+            _configService = configService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -202,8 +206,10 @@ namespace NzbDrone.Core.Download.Pending
         private int GetDelay(RemoteEpisode remoteEpisode)
         {
             var delayProfile = _delayProfileService.AllForTags(remoteEpisode.Series.Tags).OrderBy(d => d.Order).First();
+            var delay = delayProfile.GetProtocolDelay(remoteEpisode.Release.DownloadProtocol);
+            var minimumAge = _configService.MinimumAge;
 
-            return delayProfile.GetProtocolDelay(remoteEpisode.Release.DownloadProtocol);
+            return new [] { delay, minimumAge }.Max();
         }
 
         private void RemoveGrabbed(RemoteEpisode remoteEpisode)
