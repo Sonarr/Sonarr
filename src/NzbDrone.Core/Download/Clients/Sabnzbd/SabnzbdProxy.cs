@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public SabnzbdAddResponse DownloadNzb(Byte[] nzbData, string title, string category, int priority, SabnzbdSettings settings)
         {
             var request = new RestRequest(Method.POST);
-            var action = String.Format("mode=addfile&cat={0}&priority={1}", category, priority);
+            var action = String.Format("mode=addfile&cat={0}&priority={1}", Uri.EscapeDataString(category), priority);
 
             request.AddFile("name", nzbData, title, "application/x-nzb");
 
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var protocol = settings.UseSsl ? "https" : "http";
 
             var authentication = settings.ApiKey.IsNullOrWhiteSpace() ?
-                                 String.Format("ma_username={0}&ma_password={1}", settings.Username, settings.Password) :
+                                 String.Format("ma_username={0}&ma_password={1}", settings.Username, Uri.EscapeDataString(settings.Password)) :
                                  String.Format("apikey={0}", settings.ApiKey);
 
             var url = String.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
