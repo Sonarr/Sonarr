@@ -168,8 +168,8 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                     details.Add(new XElement("title", String.Format("{0} - {1}x{2} - {3}", series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title)));
                     details.Add(new XElement("series_name", series.Title));
                     details.Add(new XElement("episode_name", episode.Title));
-                    details.Add(new XElement("season_number", episode.SeasonNumber));
-                    details.Add(new XElement("episode_number", episode.EpisodeNumber));
+                    details.Add(new XElement("season_number", episode.SeasonNumber.ToString("00")));
+                    details.Add(new XElement("episode_number", episode.EpisodeNumber.ToString("00")));
                     details.Add(new XElement("firstaired", episode.AirDate));
                     details.Add(new XElement("genre", String.Join(" / ", series.Genres)));
                     details.Add(new XElement("actor", String.Join(" / ", series.Actors.ConvertAll(c => c.Name + " - " + c.Character))));
