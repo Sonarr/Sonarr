@@ -17,19 +17,18 @@ define(
                 if (dateStr) {
                     var date = moment(dateStr);
                     var result = '<span title="{0}">{1}</span>';
+                    var tooltip = date.format(UiSettings.longDateTime());
+                    var text;
 
                     if (UiSettings.get('showRelativeDates')) {
-                        var tooltip = date.format(UiSettings.longDateTime());
-                        var text = date.fromNow();
-
-                        this.$el.html(result.format(tooltip, text));
+                        text = date.fromNow();
                     }
 
                     else {
-                        this.$el.html(date.format(UiSettings.longDateTime()));
+                        text = date.format(UiSettings.shortDateTime());
                     }
 
-
+                    this.$el.html(result.format(tooltip, text));
                 }
 
                 return this;
