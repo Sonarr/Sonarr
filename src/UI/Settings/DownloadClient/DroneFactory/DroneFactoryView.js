@@ -4,7 +4,7 @@ define(
         'marionette',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
-        'Mixins/AutoComplete'
+        'Mixins/FileBrowser'
     ], function (Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
@@ -15,7 +15,7 @@ define(
             },
 
             onShow: function () {
-                this.ui.droneFactory.autoComplete('/directories');
+                this.ui.droneFactory.fileBrowser();
             }
         });
 

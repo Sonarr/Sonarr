@@ -7,8 +7,8 @@ define(
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
         'Mixins/AsEditModalView',
-        'Mixins/AutoComplete',
-        'Mixins/TagInput'
+        'Mixins/TagInput',
+        'Mixins/FileBrowser'
     ], function (vent, Marionette, Profiles, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
         var view = Marionette.ItemView.extend({
@@ -28,6 +28,15 @@ define(
                 this.model.set('profiles', Profiles);
             },
 
+            onRender: function () {
+                this.ui.path.fileBrowser();
+
+                this.ui.tags.tagInput({
+                    model    : this.model,
+                    property : 'tags'
+                });
+            },
+
             _onBeforeSave: function () {
                 var profileId = this.ui.profile.val();
                 this.model.set({ profileId: profileId});
@@ -36,14 +45,6 @@ define(
             _onAfterSave: function () {
                 this.trigger('saved');
                 vent.trigger(vent.Commands.CloseModalCommand);
-            },
-
-            onRender: function () {
-                this.ui.path.autoComplete('/directories');
-                this.ui.tags.tagInput({
-                    model    : this.model,
-                    property : 'tags'
-                });
             },
 
             _removeSeries: function () {

@@ -2,8 +2,9 @@
     [
         'marionette',
         'Shared/Modal/ModalRegion',
+        'Shared/FileBrowser/FileBrowserModalRegion',
         'Shared/ControlPanel/ControlPanelRegion'
-    ], function (Marionette, ModalRegion, ControlPanelRegion) {
+    ], function (Marionette, ModalRegion, FileBrowserModalRegion, ControlPanelRegion) {
         'use strict';
 
         var Layout = Marionette.Layout.extend({
@@ -15,8 +16,9 @@
 
             initialize: function () {
                 this.addRegions({
-                    modalRegion       : ModalRegion,
-                    controlPanelRegion: ControlPanelRegion
+                    modalRegion            : ModalRegion,
+                    fileBrowserModalRegion : FileBrowserModalRegion,
+                    controlPanelRegion     : ControlPanelRegion
                 });
             }
         });

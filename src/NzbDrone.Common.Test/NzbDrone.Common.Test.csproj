@@ -68,9 +68,10 @@
     <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
-    <Compile Include="DiskProviderTests\DiskProviderFixtureBase.cs" />
-    <Compile Include="DiskProviderTests\FreeSpaceFixtureBase.cs" />
-    <Compile Include="DiskProviderTests\IsParentFixtureBase.cs" />
+    <Compile Include="DiskTests\DirectoryLookupServiceFixture.cs" />
+    <Compile Include="DiskTests\DiskProviderFixtureBase.cs" />
+    <Compile Include="DiskTests\FreeSpaceFixtureBase.cs" />
+    <Compile Include="DiskTests\IsParentFixtureBase.cs" />
     <Compile Include="EnsureTest\PathExtensionFixture.cs" />
     <Compile Include="EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />

@@ -11,7 +11,7 @@ define([
     'Mixins/AsValidatedView',
     'Mixins/AsEditModalView',
     'Form/FormBuilder',
-    'Mixins/AutoComplete',
+    'Mixins/FileBrowser',
     'bootstrap'
 ], function (_, vent, AppLayout, Marionette, DeleteView, CommandController, AsModelBoundView, AsValidatedView, AsEditModalView) {
 
@@ -39,7 +39,7 @@ define([
                 this.ui.modalBody.addClass('modal-overflow');
             }
 
-            this.ui.path.autoComplete('/directories');
+            this.ui.path.fileBrowser({ showFiles: true });
         },
 
         _onAfterSave: function () {

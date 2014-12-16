@@ -9,8 +9,18 @@ define(
         'Episode/EpisodeDetailsLayout',
         'Activity/History/Details/HistoryDetailsLayout',
         'System/Logs/Table/Details/LogDetailsView',
-        'Rename/RenamePreviewLayout'
-    ], function (vent, AppLayout, Marionette, EditSeriesView, DeleteSeriesView, EpisodeDetailsLayout, HistoryDetailsLayout, LogDetailsView, RenamePreviewLayout) {
+        'Rename/RenamePreviewLayout',
+        'Shared/FileBrowser/FileBrowserLayout'
+    ], function (vent,
+                 AppLayout,
+                 Marionette,
+                 EditSeriesView,
+                 DeleteSeriesView,
+                 EpisodeDetailsLayout,
+                 HistoryDetailsLayout,
+                 LogDetailsView,
+                 RenamePreviewLayout,
+                 FileBrowserLayout) {
 
         return Marionette.AppRouter.extend({
 
@@ -23,6 +33,8 @@ define(
                 vent.on(vent.Commands.ShowHistoryDetails, this._showHistory, this);
                 vent.on(vent.Commands.ShowLogDetails, this._showLogDetails, this);
                 vent.on(vent.Commands.ShowRenamePreview, this._showRenamePreview, this);
+                vent.on(vent.Commands.ShowFileBrowser, this._showFileBrowser, this);
+                vent.on(vent.Commands.CloseFileBrowser, this._closeFileBrowser, this);
             },
 
             _openModal: function (view) {
@@ -61,6 +73,15 @@ define(
             _showRenamePreview: function (options) {
                 var view = new RenamePreviewLayout(options);
                 AppLayout.modalRegion.show(view);
+            },
+
+            _showFileBrowser: function (options) {
+                var view = new FileBrowserLayout(options);
+                AppLayout.fileBrowserModalRegion.show(view);
+            },
+
+            _closeFileBrowser: function () {
+                AppLayout.fileBrowserModalRegion.closeModal();
             }
         });
     });

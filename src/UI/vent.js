@@ -26,6 +26,8 @@ define(
             SaveSettings              : 'saveSettings',
             ShowLogFile               : 'showLogFile',
             ShowRenamePreview         : 'showRenamePreview',
+            ShowFileBrowser           : 'showFileBrowser',
+            CloseFileBrowser          : 'closeFileBrowser',
             OpenControlPanelCommand   : 'OpenControlPanelCommand',
             CloseControlPanelCommand  : 'CloseControlPanelCommand'
         };
