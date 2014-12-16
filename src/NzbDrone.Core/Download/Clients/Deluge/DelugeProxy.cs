@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
             var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", requiredProperties, filter);
 
-            return response.Result.Torrents.Values.ToArray();
+            return GetTorrents(response.Result);
         }
 
         public DelugeTorrent[] GetTorrentsByLabel(String label, DelugeSettings settings)
@@ -74,11 +74,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             var filter = new Dictionary<String, Object>();
             filter.Add("label", label);
 
-
             //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
             var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", requiredProperties, filter);
 
-            return response.Result.Torrents.Values.ToArray();
+            return GetTorrents(response.Result);
         }
 
         public String AddTorrentFromMagnet(String magnetLink, DelugeSettings settings)
@@ -300,6 +299,16 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         private Int32 GetCallId()
         {
             return System.Threading.Interlocked.Increment(ref _callId);
+        }
+
+        private DelugeTorrent[] GetTorrents(DelugeUpdateUIResult result)
+        {
+            if (result.Torrents == null)
+            {
+                return new DelugeTorrent[0];
+            }
+
+            return result.Torrents.Values.ToArray();
         }
     }
 }
