@@ -29,13 +29,22 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var age = subject.Release.AgeMinutes;
             var minimumAge = _configService.MinimumAge;
 
+            if (minimumAge == 0)
+            {
+                _logger.Debug("Minimum age is not set.");
+                return Decision.Accept();
+            }
+
+
             _logger.Debug("Checking if report meets minimum age requirements. {0}", age);
 
-            if (minimumAge > 0 && age < minimumAge)
+            if (age < minimumAge)
             {
                 _logger.Debug("Only {0} minutes old, minimum age is {1} minutes", age, minimumAge);
                 return Decision.Reject("Only {0} minutes old, minimum age is {1} minutes", age, minimumAge);
             }
+
+            _logger.Debug("Release is {0} minutes old, greater than minimum age of {1} minutes", age, minimumAge);
 
             return Decision.Accept();
         }

@@ -10,7 +10,7 @@ namespace NzbDrone.Api.Config
             : base(configService)
         {
             SharedValidator.RuleFor(c => c.MinimumAge)
-                           .GreaterThan(0);
+                           .GreaterThanOrEqualTo(0);
 
             SharedValidator.RuleFor(c => c.Retention)
                            .GreaterThanOrEqualTo(0);
