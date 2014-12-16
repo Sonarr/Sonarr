@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
         String GetVersion(NzbgetSettings settings);
         Dictionary<String, String> GetConfig(NzbgetSettings settings);
-        void RemoveFromHistory(string id, NzbgetSettings settings);
+        void RemoveItem(string id, NzbgetSettings settings);
         void RetryDownload(string id, NzbgetSettings settings);
     }
 
@@ -97,20 +97,34 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         }
 
 
-        public void RemoveFromHistory(string id, NzbgetSettings settings)
+        public void RemoveItem(string id, NzbgetSettings settings)
         {
+            var queue = GetQueue(settings);
             var history = GetHistory(settings);
-            var item = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
 
-            if (item == null)
+            var queueItem = queue.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
+            var historyItem = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
+
+            if (queueItem != null)
             {
-                _logger.Warn("Unable to remove item from nzbget's history, Unknown ID: {0}", id);
-                return;
+                if (!EditQueue("GroupFinalDelete", 0, "", queueItem.NzbId, settings))
+                {
+                    _logger.Warn("Failed to remove item from nzbget queue, {0} [{1}]", queueItem.NzbName, queueItem.NzbId);
+                }
             }
 
-            if (!EditQueue("HistoryDelete", 0, "", item.Id, settings))
+            else if (historyItem != null)
             {
-                _logger.Warn("Failed to remove item from nzbget history, {0} [{1}]", item.Name, item.Id);
+                if (!EditQueue("HistoryDelete", 0, "", historyItem.Id, settings))
+                {
+                    _logger.Warn("Failed to remove item from nzbget history, {0} [{1}]", historyItem.Name, historyItem.Id);
+                }
+            }
+
+            else
+            {
+                _logger.Warn("Unable to remove item from nzbget, Unknown ID: {0}", id);
+                return;
             }
         }
 

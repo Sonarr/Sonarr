@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override void RemoveItem(String id)
         {
-            _proxy.RemoveFromHistory(id, Settings);
+            _proxy.RemoveItem(id, Settings);
         }
 
         public override String RetryDownload(String id)
