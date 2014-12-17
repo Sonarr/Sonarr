@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -29,8 +30,17 @@ namespace NzbDrone.Update.UpdateEngine
             var backupFolderAppData = _appFolderInfo.GetUpdateBackUpAppDataFolder();
 
             _diskProvider.CreateFolder(backupFolderAppData);
-            _diskProvider.CopyFile(_appFolderInfo.GetConfigPath(), _appFolderInfo.GetUpdateBackupConfigFile(), true);
-            _diskProvider.CopyFile(_appFolderInfo.GetNzbDroneDatabase(), _appFolderInfo.GetUpdateBackupDatabase(), true);
+
+            try
+            {
+                _diskProvider.CopyFile(_appFolderInfo.GetConfigPath(), _appFolderInfo.GetUpdateBackupConfigFile(), true);
+                _diskProvider.CopyFile(_appFolderInfo.GetNzbDroneDatabase(), _appFolderInfo.GetUpdateBackupDatabase(),
+                    true);
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("Couldn't create a data backup", e);
+            }
         }
     }
 }
