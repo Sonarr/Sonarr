@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Datastore
     {
         private readonly Func<IDataMapper> _datamapperFactory;
 
-        private Logger logger = NzbDroneLogger.GetLogger();
+        private readonly Logger _logger = NzbDroneLogger.GetLogger(typeof(Database));
 
         public Database(Func<IDataMapper> datamapperFactory)
         {
@@ -42,13 +42,13 @@ namespace NzbDrone.Core.Datastore
         {
             try
             {
-                logger.Info("Vacuuming database");
+                _logger.Info("Vacuuming database");
                 _datamapperFactory().ExecuteNonQuery("Vacuum;");
-                logger.Info("Database Compressed");
+                _logger.Info("Database Compressed");
             }
             catch (Exception e)
             {
-                logger.Error("An Error occurred while vacuuming database.", e);
+                _logger.Error("An Error occurred while vacuuming database.", e);
             }
         }
     }

@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Rest
 {
     public static class RestSharpExtensions
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(RestSharpExtensions));
 
         public static IRestResponse ValidateResponse(this IRestResponse response, IRestClient restClient)
         {

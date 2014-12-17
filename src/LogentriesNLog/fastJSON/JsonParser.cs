@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NzbDrone.Common.Exceptron.fastJSON
+namespace LogentriesNLog.fastJSON
 {
     /// <summary>
     /// This class encodes and decodes JSON strings.

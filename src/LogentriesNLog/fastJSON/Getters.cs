@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NzbDrone.Common.Exceptron.fastJSON
+namespace LogentriesNLog.fastJSON
 {
     internal class Getters
     {

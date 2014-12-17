@@ -18,7 +18,7 @@ namespace NzbDrone.Update
         private readonly IProcessProvider _processProvider;
         private static IContainer _container;
 
-        private static readonly Logger logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(UpdateApp));
 
         public UpdateApp(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
@@ -31,7 +31,7 @@ namespace NzbDrone.Update
             try
             {
                 var startupArgument = new StartupContext(args);
-                LogTargets.Register(startupArgument, true, true);
+                NzbDroneLogger.Register(startupArgument, true, true);
 
                 Console.WriteLine("Starting NzbDrone Update Client");
 
@@ -41,12 +41,12 @@ namespace NzbDrone.Update
 
                 _container = UpdateContainerBuilder.Build(startupArgument);
 
-                logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
+                Logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
             }
             catch (Exception e)
             {
-                logger.FatalException("An error has occurred while applying update package.", e);
+                Logger.FatalException("An error has occurred while applying update package.", e);
             }
         }
 
@@ -54,8 +54,8 @@ namespace NzbDrone.Update
         {
             var startupContext = ParseArgs(args);
             var targetFolder = GetInstallationDirectory(startupContext);
-            
-            logger.Info("Starting update process. Target Path:{0}", targetFolder);
+
+            Logger.Info("Starting update process. Target Path:{0}", targetFolder);
             _installUpdateService.Start(targetFolder, startupContext.ProcessId);
         }
 
@@ -82,18 +82,18 @@ namespace NzbDrone.Update
                         startupContext.ExecutingApplication = args[2];
                         break;
                     default:
-                    {
-                        logger.Debug("Arguments:");
-
-                        foreach (var arg in args)
                         {
-                            logger.Debug("  {0}", arg);
+                            Logger.Debug("Arguments:");
+
+                            foreach (var arg in args)
+                            {
+                                Logger.Debug("  {0}", arg);
+                            }
+
+                            var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
+
+                            throw new ArgumentOutOfRangeException("args", message);
                         }
-
-                        var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
-
-                        throw new ArgumentOutOfRangeException("args", message);
-                    }
                 }
             }
 
@@ -108,7 +108,7 @@ namespace NzbDrone.Update
                 throw new ArgumentOutOfRangeException("arg", "Invalid process ID");
             }
 
-            logger.Debug("NzbDrone process ID: {0}", id);
+            Logger.Debug("NzbDrone process ID: {0}", id);
             return id;
         }
 
@@ -116,18 +116,18 @@ namespace NzbDrone.Update
         {
             if (startupContext.ExecutingApplication.IsNullOrWhiteSpace())
             {
-                logger.Debug("Using process ID to find installation directory: {0}", startupContext.ProcessId);
+                Logger.Debug("Using process ID to find installation directory: {0}", startupContext.ProcessId);
                 var exeFileInfo = new FileInfo(_processProvider.GetProcessById(startupContext.ProcessId).StartPath);
-                logger.Debug("Executable location: {0}", exeFileInfo.FullName);
+                Logger.Debug("Executable location: {0}", exeFileInfo.FullName);
 
                 return exeFileInfo.DirectoryName;
             }
 
             else
             {
-                logger.Debug("Using executing application: {0}", startupContext.ExecutingApplication);
+                Logger.Debug("Using executing application: {0}", startupContext.ExecutingApplication);
                 var exeFileInfo = new FileInfo(startupContext.ExecutingApplication);
-                logger.Debug("Executable location: {0}", exeFileInfo.FullName);
+                Logger.Debug("Executable location: {0}", exeFileInfo.FullName);
 
                 return exeFileInfo.DirectoryName;
             }

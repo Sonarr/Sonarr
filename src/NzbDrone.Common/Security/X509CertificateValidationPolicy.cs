@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Security
 {
     public static class X509CertificateValidationPolicy
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(X509CertificateValidationPolicy));
 
         public static void Register()
         {

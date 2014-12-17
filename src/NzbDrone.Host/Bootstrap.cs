@@ -14,12 +14,10 @@ namespace NzbDrone.Host
     public static class Bootstrap
     {
         private static IContainer _container;
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(Bootstrap));
 
         public static void Start(StartupContext startupContext, IUserAlert userAlert, Action<IContainer> startCallback = null)
         {
-            LogTargets.Register(startupContext, false, true);
-
             try
             {
                 GlobalExceptionHandlers.Register();

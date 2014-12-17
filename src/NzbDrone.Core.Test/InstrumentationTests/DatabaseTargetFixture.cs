@@ -35,9 +35,9 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             LogManager.ReconfigExistingLoggers();
 
 
-            _logger = NzbDroneLogger.GetLogger();
+            _logger = NzbDroneLogger.GetLogger(this);
 
-            _uniqueMessage = "Unique message: " + Guid.NewGuid().ToString();
+            _uniqueMessage = "Unique message: " + Guid.NewGuid();
         }
 
         [Test]

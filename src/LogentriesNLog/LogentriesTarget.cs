@@ -1,8 +1,8 @@
 ﻿using System;
 using LogentriesCore;
+using LogentriesNLog.fastJSON;
 using NLog;
 using NLog.Targets;
-using NzbDrone.Common.Exceptron.fastJSON;
 
 namespace LogentriesNLog
 {

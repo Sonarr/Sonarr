@@ -36,7 +36,7 @@ namespace NzbDrone.Automation.Test
         {
             driver = new FirefoxDriver();
 
-            _runner = new NzbDroneRunner();
+            _runner = new NzbDroneRunner(LogManager.GetCurrentClassLogger());
             _runner.KillAll();
             _runner.Start();
 

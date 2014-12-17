@@ -15,17 +15,16 @@ namespace NzbDrone.Api
     public class NancyBootstrapper : TinyIoCNancyBootstrapper
     {
         private readonly TinyIoCContainer _tinyIoCContainer;
-        private readonly Logger _logger;
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(NancyBootstrapper));
 
         public NancyBootstrapper(TinyIoCContainer tinyIoCContainer)
         {
             _tinyIoCContainer = tinyIoCContainer;
-            _logger =  NzbDroneLogger.GetLogger();
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
-            _logger.Info("Starting NzbDrone API");
+            Logger.Info("Starting NzbDrone API");
 
             if (RuntimeInfoBase.IsProduction)
             {

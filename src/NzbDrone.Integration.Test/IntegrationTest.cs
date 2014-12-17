@@ -65,7 +65,7 @@ namespace NzbDrone.Integration.Test
         [TestFixtureSetUp]
         public void SmokeTestSetup()
         {
-            _runner = new NzbDroneRunner();
+            _runner = new NzbDroneRunner(LogManager.GetCurrentClassLogger());
             _runner.KillAll();
 
             _runner.Start();

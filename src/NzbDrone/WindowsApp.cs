@@ -10,7 +10,7 @@ namespace NzbDrone
 {
     public static class WindowsApp
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(WindowsApp));
 
         public static void Main(string[] args)
         {
@@ -18,7 +18,7 @@ namespace NzbDrone
             {
                 var startupArgs = new StartupContext(args);
 
-                LogTargets.Register(startupArgs, false, true);
+                NzbDroneLogger.Register(startupArgs, false, true);
 
                 Bootstrap.Start(startupArgs, new MessageBoxUserAlert(), container =>
                 {

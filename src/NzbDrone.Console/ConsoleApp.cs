@@ -9,14 +9,14 @@ namespace NzbDrone.Console
 {
     public static class ConsoleApp
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(ConsoleApp));
 
         public static void Main(string[] args)
         {
             try
             {
                 var startupArgs = new StartupContext(args);
-                LogTargets.Register(startupArgs, false, true);
+                NzbDroneLogger.Register(startupArgs, false, true);
                 Bootstrap.Start(startupArgs, new ConsoleAlerts());
             }
             catch (SocketException exception)

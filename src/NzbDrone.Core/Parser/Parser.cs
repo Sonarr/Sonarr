@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Parser
 {
     public static class Parser
     {
-        private static readonly Logger Logger =  NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(Parser));
 
         private static readonly Regex[] ReportTitleRegex = new[]
             {
@@ -665,7 +665,7 @@ namespace NzbDrone.Core.Parser
 
             if (hash.Success)
             {
-                var hashValue = hash.Value.Trim('[',']');
+                var hashValue = hash.Value.Trim('[', ']');
 
                 if (hashValue.Equals("1280x720"))
                 {
@@ -674,7 +674,7 @@ namespace NzbDrone.Core.Parser
 
                 return hashValue;
             }
-            
+
             return String.Empty;
         }
     }

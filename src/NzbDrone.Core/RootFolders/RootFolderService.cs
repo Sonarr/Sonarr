@@ -23,7 +23,6 @@ namespace NzbDrone.Core.RootFolders
 
     public class RootFolderService : IRootFolderService
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
         private readonly IRootFolderRepository _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
@@ -110,7 +109,7 @@ namespace NzbDrone.Core.RootFolders
 
         private List<UnmappedFolder> GetUnmappedFolders(string path)
         {
-            Logger.Debug("Generating list of unmapped folders");
+            _logger.Debug("Generating list of unmapped folders");
             if (String.IsNullOrEmpty(path))
                 throw new ArgumentException("Invalid path provided", "path");
 
@@ -119,7 +118,7 @@ namespace NzbDrone.Core.RootFolders
 
             if (!_diskProvider.FolderExists(path))
             {
-                Logger.Debug("Path supplied does not exist: {0}", path);
+                _logger.Debug("Path supplied does not exist: {0}", path);
                 return results;
             }
 
@@ -135,7 +134,7 @@ namespace NzbDrone.Core.RootFolders
             var setToRemove = SpecialFolders;
             results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
 
-            Logger.Debug("{0} unmapped folders detected.", results.Count);
+            _logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
         }
 

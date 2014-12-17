@@ -10,7 +10,7 @@ namespace NzbDrone.Windows
 {
     public class DiskProvider : DiskProviderBase
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProvider));
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]

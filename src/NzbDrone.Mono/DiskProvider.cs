@@ -13,7 +13,7 @@ namespace NzbDrone.Mono
 {
     public class DiskProvider : DiskProviderBase
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProvider));
 
         public override long? GetAvailableSpace(string path)
         {
