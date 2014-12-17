@@ -33,7 +33,7 @@ namespace NzbDrone.Update
                 var startupArgument = new StartupContext(args);
                 NzbDroneLogger.Register(startupArgument, true, true);
 
-                Console.WriteLine("Starting NzbDrone Update Client");
+                Logger.Info("Starting NzbDrone Update Client");
 
                 X509CertificateValidationPolicy.Register();
 
@@ -41,6 +41,8 @@ namespace NzbDrone.Update
 
                 Logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
+
+                Logger.Info("Update compleded successfully");
             }
             catch (Exception e)
             {

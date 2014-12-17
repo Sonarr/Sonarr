@@ -84,17 +84,18 @@ namespace NzbDrone.Update.UpdateEngine
                 _backupAndRestore.Backup(installationFolder);
                 _backupAppData.Backup();
 
-                _logger.Info("Moving update package to target");
-
                 try
                 {
+                    _logger.Info("Emptying installation folder");
                     _diskProvider.EmptyFolder(installationFolder);
+
+                    _logger.Info("Copying new files to target folder");
                     _diskProvider.CopyFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
                 }
                 catch (Exception e)
                 {
-                    _backupAndRestore.Restore(installationFolder);
                     _logger.FatalException("Failed to copy upgrade package to target folder.", e);
+                    _backupAndRestore.Restore(installationFolder);
                 }
             }
             finally
