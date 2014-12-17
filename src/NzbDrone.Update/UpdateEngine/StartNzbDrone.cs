@@ -17,12 +17,14 @@ namespace NzbDrone.Update.UpdateEngine
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IProcessProvider _processProvider;
+        private readonly IStartupContext _startupContext;
         private readonly Logger _logger;
 
-        public StartNzbDrone(IServiceProvider serviceProvider, IProcessProvider processProvider, Logger logger)
+        public StartNzbDrone(IServiceProvider serviceProvider, IProcessProvider processProvider, IStartupContext startupContext, Logger logger)
         {
             _serviceProvider = serviceProvider;
             _processProvider = processProvider;
+            _startupContext = startupContext;
             _logger = logger;
         }
 
@@ -73,7 +75,12 @@ namespace NzbDrone.Update.UpdateEngine
             _logger.Info("Starting {0}", fileName);
             var path = Path.Combine(installationFolder, fileName);
 
-            _processProvider.SpawnNewProcess(path, "--" + StartupContext.NO_BROWSER);
+            if (!_startupContext.Flags.Contains(StartupContext.NO_BROWSER))
+            {
+                _startupContext.Flags.Add(StartupContext.NO_BROWSER);
+            }
+
+            _processProvider.SpawnNewProcess(path, _startupContext.PreservedArguments);
         }
     }
 }

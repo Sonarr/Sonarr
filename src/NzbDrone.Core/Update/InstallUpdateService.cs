@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Update
         private readonly IArchiveService _archiveService;
         private readonly IProcessProvider _processProvider;
         private readonly IVerifyUpdates _updateVerifier;
+        private readonly IStartupContext _startupContext;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IBackupService _backupService;
@@ -36,6 +37,7 @@ namespace NzbDrone.Core.Update
                                     IDiskProvider diskProvider, IHttpClient httpClient,
                                     IArchiveService archiveService, IProcessProvider processProvider,
                                     IVerifyUpdates updateVerifier,
+                                    IStartupContext startupContext,
                                     IConfigFileProvider configFileProvider,
                                     IRuntimeInfo runtimeInfo,
                                     IBackupService backupService,
@@ -52,6 +54,7 @@ namespace NzbDrone.Core.Update
             _archiveService = archiveService;
             _processProvider = processProvider;
             _updateVerifier = updateVerifier;
+            _startupContext = startupContext;
             _configFileProvider = configFileProvider;
             _runtimeInfo = runtimeInfo;
             _backupService = backupService;
@@ -142,7 +145,7 @@ namespace NzbDrone.Core.Update
             var processId = _processProvider.GetCurrentProcess().Id.ToString();
             var executingApplication = _runtimeInfo.ExecutingApplication;
 
-            return String.Join(" ", processId, updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar).WrapInQuotes(), executingApplication.WrapInQuotes());
+            return String.Join(" ", processId, updateSandboxFolder.TrimEnd(Path.DirectorySeparatorChar).WrapInQuotes(), executingApplication.WrapInQuotes(), _startupContext.PreservedArguments);
         }
 
         private void EnsureAppDataSafety()
