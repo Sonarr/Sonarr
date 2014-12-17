@@ -200,7 +200,12 @@
     <None Include="Exceptron\fastJSON\license.txt" />
     <Content Include="Expansive\license.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj">
+      <Project>{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}</Project>
+      <Name>LogentriesNLog</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
