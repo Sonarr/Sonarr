@@ -37,8 +37,6 @@ namespace NzbDrone.Update
 
                 X509CertificateValidationPolicy.Register();
 
-                GlobalExceptionHandlers.Register();
-
                 _container = UpdateContainerBuilder.Build(startupArgument);
 
                 Logger.Info("Updating NzbDrone to version {0}", BuildInfo.Version);

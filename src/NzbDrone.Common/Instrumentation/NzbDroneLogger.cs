@@ -29,6 +29,8 @@ namespace NzbDrone.Common.Instrumentation
 
             _isConfigured = true;
 
+            GlobalExceptionHandlers.Register();
+
             var appFolderInfo = new AppFolderInfo(startupContext);
 
             if (Debugger.IsAttached)
