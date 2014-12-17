@@ -1,20 +1,23 @@
+using System.Linq;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Test.Common
 {
     public abstract class LoggingTest
     {
-        protected static readonly Logger TestLogger = LogManager.GetLogger("TestLogger");
+        protected static readonly Logger TestLogger = NzbDroneLogger.GetLogger("TestLogger");
 
         protected static void InitLogging()
         {
             new StartupContext();
 
-            if (LogManager.Configuration == null || LogManager.Configuration is XmlLoggingConfiguration)
+            if (LogManager.Configuration == null || LogManager.Configuration.AllTargets.None(c => c is ExceptionVerification))
             {
                 LogManager.Configuration = new LoggingConfiguration();
                 var consoleTarget = new ConsoleTarget { Layout = "${level}: ${message} ${exception}" };
@@ -22,6 +25,8 @@ namespace NzbDrone.Test.Common
                 LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, consoleTarget));
 
                 RegisterExceptionVerification();
+
+                LogManager.ReconfigExistingLoggers();
             }
         }
 
