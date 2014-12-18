@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             get
             {
-                return !Rejections.Any();
+                return Rejections.Empty();
             }
         }
 

@@ -1,19 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
-    public interface IRedownloadFailedDownloads
-    {
-        void Redownload(int seriesId, List<int> episodeIds);
-    }
-
-    public class RedownloadFailedDownloadService : IRedownloadFailedDownloads
+    public class RedownloadFailedDownloadService : IHandleAsync<DownloadFailedEvent>
     {
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
@@ -28,7 +23,7 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void Redownload(int seriesId, List<int> episodeIds)
+        public void HandleAsync(DownloadFailedEvent message)
         {
             if (!_configService.AutoRedownloadFailed)
             {
@@ -36,34 +31,34 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            if (episodeIds.Count == 1)
+            if (message.EpisodeIds.Count == 1)
             {
                 _logger.Debug("Failed download only contains one episode, searching again");
 
-                _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand(episodeIds));
+                _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand(message.EpisodeIds));
 
                 return;
             }
 
-            var seasonNumber = _episodeService.GetEpisode(episodeIds.First()).SeasonNumber;
-            var episodesInSeason = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
+            var seasonNumber = _episodeService.GetEpisode(message.EpisodeIds.First()).SeasonNumber;
+            var episodesInSeason = _episodeService.GetEpisodesBySeason(message.SeriesId, seasonNumber);
 
-            if (episodeIds.Count == episodesInSeason.Count)
+            if (message.EpisodeIds.Count == episodesInSeason.Count)
             {
                 _logger.Debug("Failed download was entire season, searching again");
 
                 _commandExecutor.PublishCommandAsync(new SeasonSearchCommand
-                                                     {
-                                                         SeriesId = seriesId,
-                                                         SeasonNumber = seasonNumber
-                                                     });
+                {
+                    SeriesId = message.SeriesId,
+                    SeasonNumber = seasonNumber
+                });
 
                 return;
             }
 
             _logger.Debug("Failed download contains multiple episodes, probably a double episode, searching again");
 
-            _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand(episodeIds));
+            _commandExecutor.PublishCommandAsync(new EpisodeSearchCommand(message.EpisodeIds));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Download
         public QualityModel Quality { get; set; }
         public String SourceTitle { get; set; }
         public String DownloadClient { get; set; }
-        public String DownloadClientId { get; set; }
+        public String DownloadId { get; set; }
         public String Message { get; set; }
         public Dictionary<string, string> Data { get; set; }
     }

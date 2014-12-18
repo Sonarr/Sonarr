@@ -16,9 +16,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         List<ImportResult> ProcessRootFolder(DirectoryInfo directoryInfo);
         List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem = null);
-        List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, Series series, DownloadClientItem downloadClientItem = null);
-        List<ImportResult> ProcessFile(FileInfo fileInfo, DownloadClientItem downloadClientItem = null);
-        List<ImportResult> ProcessFile(FileInfo fileInfo, Series series, DownloadClientItem downloadClientItem = null);
+        List<ImportResult> ProcessPath(string path, DownloadClientItem downloadClientItem = null);
     }
 
     public class DownloadedEpisodesImportService : IDownloadedEpisodesImportService
@@ -88,12 +86,12 @@ namespace NzbDrone.Core.MediaFiles
             return ProcessFolder(directoryInfo, series, downloadClientItem);
         }
 
-        public List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, Series series,
+        private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, Series series,
                                                 DownloadClientItem downloadClientItem = null)
         {
             if (_seriesService.SeriesPathExists(directoryInfo.FullName))
             {
-                _logger.Warn("Unable to process folder that contains sorted TV Shows");
+                _logger.Warn("Unable to process folder that is mapped to an existing show");
                 return new List<ImportResult>();
             }
 
@@ -147,7 +145,7 @@ namespace NzbDrone.Core.MediaFiles
             return ProcessFile(fileInfo, series, downloadClientItem);
         }
 
-        public List<ImportResult> ProcessFile(FileInfo fileInfo, Series series, DownloadClientItem downloadClientItem = null)
+        private List<ImportResult> ProcessFile(FileInfo fileInfo, Series series, DownloadClientItem downloadClientItem = null)
         {
             if (downloadClientItem == null)
             {
@@ -162,6 +160,16 @@ namespace NzbDrone.Core.MediaFiles
 
             var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, true);
             return _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
+        }
+
+        public List<ImportResult> ProcessPath(string path, DownloadClientItem downloadClientItem = null)
+        {
+            if (_diskProvider.FolderExists(path))
+            {
+                return ProcessFolder(new DirectoryInfo(path), downloadClientItem);
+            }
+        
+            return ProcessFile(new FileInfo(path), downloadClientItem);
         }
 
         private string GetCleanedUpFolderName(string folder)

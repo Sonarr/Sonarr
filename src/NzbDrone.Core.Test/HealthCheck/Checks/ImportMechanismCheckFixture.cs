@@ -1,13 +1,9 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using FizzWare.NBuilder;
-using NUnit.Framework;
-using NzbDrone.Test.Common;
+﻿using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Download;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
@@ -16,7 +12,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     {
         private const string DRONE_FACTORY_FOLDER = @"C:\Test\Unsorted";
 
-        private IList<TrackedDownload> _completed;
 
         private void GivenCompletedDownloadHandling(bool? enabled = null)
         {
@@ -30,18 +25,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                       .SetupGet(s => s.EnableCompletedDownloadHandling)
                       .Returns(enabled.Value);
             }
-
-            _completed = Builder<TrackedDownload>.CreateListOfSize(1)
-                .All()
-                .With(v => v.State == TrackedDownloadState.Downloading)
-                .With(v => v.DownloadItem = new DownloadClientItem())
-                .With(v => v.DownloadItem.Status = DownloadItemStatus.Completed)
-                .With(v => v.DownloadItem.OutputPath = new OsPath(@"C:\Test\DropFolder\myfile.mkv".AsOsAgnostic()))
-                .Build();
-
-            Mocker.GetMock<IDownloadTrackingService>()
-                .Setup(v => v.GetCompletedDownloads())
-                .Returns(_completed.ToArray());
         }
 
         private void GivenDroneFactoryFolder(bool exists = false)
@@ -66,17 +49,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             GivenCompletedDownloadHandling(false);
             
-            Subject.Check().ShouldBeWarning();
-        }
-
-        [Test]
-        public void should_return_warning_when_downloadclient_drops_in_dronefactory_folder()
-        {
-            GivenCompletedDownloadHandling(true);
-            GivenDroneFactoryFolder(true);
-
-            _completed.First().DownloadItem.OutputPath = new OsPath((DRONE_FACTORY_FOLDER + @"\myfile.mkv").AsOsAgnostic());
-
             Subject.Check().ShouldBeWarning();
         }
         

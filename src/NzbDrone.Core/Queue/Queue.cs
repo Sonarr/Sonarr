@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Queue
 {
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Queue
         public String Status { get; set; }
         public String TrackedDownloadStatus { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
-        public RemoteEpisode RemoteEpisode { get; set; }
         public String TrackingId { get; set; }
+        public RemoteEpisode RemoteEpisode { get; set; }
     }
 }

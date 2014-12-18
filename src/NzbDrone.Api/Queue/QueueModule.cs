@@ -9,7 +9,7 @@ using NzbDrone.SignalR;
 namespace NzbDrone.Api.Queue
 {
     public class QueueModule : NzbDroneRestModuleWithSignalR<QueueResource, Core.Queue.Queue>,
-                               IHandle<UpdateQueueEvent>, IHandle<PendingReleasesUpdatedEvent>
+                               IHandle<QueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
     {
         private readonly IQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
@@ -35,7 +35,7 @@ namespace NzbDrone.Api.Queue
             return queue.Concat(pending);
         }
 
-        public void Handle(UpdateQueueEvent message)
+        public void Handle(QueueUpdatedEvent message)
         {
             BroadcastResourceChange(ModelAction.Sync);
         }

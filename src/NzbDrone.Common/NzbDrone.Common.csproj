@@ -182,6 +182,7 @@
     <Compile Include="ServiceProvider.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="TinyIoC.cs" />
+    <Compile Include="TPL\Debouncer.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
     <Compile Include="Extensions\TryParseExtensions.cs" />

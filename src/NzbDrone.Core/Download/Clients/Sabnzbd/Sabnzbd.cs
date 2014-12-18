@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 var queueItem = new DownloadClientItem();
                 queueItem.DownloadClient = Definition.Name;
-                queueItem.DownloadClientId = sabQueueItem.Id;
+                queueItem.DownloadId = sabQueueItem.Id;
                 queueItem.Category = sabQueueItem.Category;
                 queueItem.Title = sabQueueItem.Title;
                 queueItem.TotalSize = (long)(sabQueueItem.Size * 1024 * 1024);
@@ -122,13 +122,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = sabHistoryItem.Id,
+                    DownloadId = sabHistoryItem.Id,
                     Category = sabHistoryItem.Category,
                     Title = sabHistoryItem.Title,
 
                     TotalSize = sabHistoryItem.Size,
                     RemainingSize = 0,
-                    DownloadTime = TimeSpan.FromSeconds(sabHistoryItem.DownloadTime),
                     RemainingTime = TimeSpan.Zero,
 
                     Message = sabHistoryItem.FailMessage
@@ -193,7 +192,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public override void RemoveItem(String id)
         {
-            if (GetQueue().Any(v => v.DownloadClientId == id))
+            if (GetQueue().Any(v => v.DownloadId == id))
             {
                 _proxy.RemoveFrom("queue", id, Settings);
             }
@@ -209,7 +208,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             // Check both the queue and history because sometimes SAB keeps item in history to retry post processing (depends on failure reason)
 
             var currentHistory = GetHistory().ToList();
-            var currentHistoryItems = currentHistory.Where(v => v.DownloadClientId == id).ToList();
+            var currentHistoryItems = currentHistory.Where(v => v.DownloadId == id).ToList();
 
             if (currentHistoryItems.Count != 1)
             {
@@ -219,7 +218,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             var currentHistoryItem = currentHistoryItems.First();
             var otherItemsWithSameTitle = currentHistory.Where(h => h.Title == currentHistoryItem.Title &&
-                                                               h.DownloadClientId != currentHistoryItem.DownloadClientId).ToList();
+                                                               h.DownloadId != currentHistoryItem.DownloadId).ToList();
 
             var newId = _proxy.RetryDownload(id, Settings);
 
@@ -235,17 +234,17 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 var history = GetHistory().Where(v => v.Category == currentHistoryItem.Category &&
                                                       v.Title == currentHistoryItem.Title &&
-                                                      !otherItemsWithSameTitle.Select(h => h.DownloadClientId)
-                                                                             .Contains(v.DownloadClientId)).ToList();
+                                                      !otherItemsWithSameTitle.Select(h => h.DownloadId)
+                                                                             .Contains(v.DownloadId)).ToList();
 
                 if (queue.Count == 1)
                 {
-                    return queue.First().DownloadClientId;
+                    return queue.First().DownloadId;
                 }
 
                 if (history.Count == 1)
                 {
-                    return history.First().DownloadClientId;
+                    return history.First().DownloadId;
                 }
 
                 if (queue.Count > 1 || history.Count > 1)

@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using Nancy;
+﻿using Nancy;
 using Nancy.Responses;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Api.Queue
@@ -12,21 +12,21 @@ namespace NzbDrone.Api.Queue
     public class QueueActionModule : NzbDroneRestModule<QueueResource>
     {
         private readonly IQueueService _queueService;
-        private readonly IDownloadTrackingService _downloadTrackingService;
+        private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly ICompletedDownloadService _completedDownloadService;
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IPendingReleaseService _pendingReleaseService;
         private readonly IDownloadService _downloadService;
 
         public QueueActionModule(IQueueService queueService,
-                                 IDownloadTrackingService downloadTrackingService,
+                                 ITrackedDownloadService trackedDownloadService,
                                  ICompletedDownloadService completedDownloadService,
                                  IProvideDownloadClient downloadClientProvider,
                                  IPendingReleaseService pendingReleaseService,
                                  IDownloadService downloadService)
         {
             _queueService = queueService;
-            _downloadTrackingService = downloadTrackingService;
+            _trackedDownloadService = trackedDownloadService;
             _completedDownloadService = completedDownloadService;
             _downloadClientProvider = downloadClientProvider;
             _pendingReleaseService = pendingReleaseService;
@@ -60,7 +60,7 @@ namespace NzbDrone.Api.Queue
                 throw new BadRequestException();
             }
 
-            downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadClientId);
+            downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId);
 
             return new object().AsResponse();
         }
@@ -70,7 +70,7 @@ namespace NzbDrone.Api.Queue
             var resource = Request.Body.FromJson<QueueResource>();
             var trackedDownload = GetTrackedDownload(resource.Id);
                 
-            _completedDownloadService.Import(trackedDownload);
+            _completedDownloadService.Process(trackedDownload);
 
             return resource.AsResponse();
         }
@@ -100,7 +100,7 @@ namespace NzbDrone.Api.Queue
                 throw new NotFoundException();
             }
 
-            var trackedDownload = _downloadTrackingService.Find(queueItem.TrackingId);
+            var trackedDownload = _trackedDownloadService.Find(queueItem.TrackingId);
 
             if (trackedDownload == null)
             {

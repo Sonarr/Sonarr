@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
+                    DownloadId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
                     Category = "nzbdrone",
                     Title = title,
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
+                    DownloadId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
                     Category = "nzbdrone",
                     Title = title,
 

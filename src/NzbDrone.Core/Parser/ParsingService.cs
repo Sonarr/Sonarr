@@ -15,8 +15,7 @@ namespace NzbDrone.Core.Parser
     {
         LocalEpisode GetLocalEpisode(string filename, Series series, bool sceneSource);
         Series GetSeries(string title);
-        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Int32 tvRageId, SearchCriteriaBase searchCriteria = null);
-        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Int32 seriesId, IEnumerable<Int32> episodeIds);
+        RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Int32 tvRageId = 0, SearchCriteriaBase searchCriteria = null);
         List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null);
         ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, int tvRageId, SearchCriteriaBase searchCriteria = null);
     }
@@ -115,18 +114,6 @@ namespace NzbDrone.Core.Parser
 
             remoteEpisode.Series = series;
             remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, true, searchCriteria);
-
-            return remoteEpisode;
-        }
-
-        public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Int32 seriesId, IEnumerable<Int32> episodeIds)
-        {
-            var remoteEpisode = new RemoteEpisode
-            {
-                ParsedEpisodeInfo = parsedEpisodeInfo,
-                Series = _seriesService.GetSeries(seriesId),
-                Episodes = _episodeService.GetEpisodes(episodeIds)
-            };
 
             return remoteEpisode;
         }

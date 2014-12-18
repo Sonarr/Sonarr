@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class NotInQueueSpecification : IDecisionEngineSpecification
     {
-        private readonly IDownloadTrackingService _downloadTrackingService;
+        private readonly IQueueService _queueService;
         private readonly Logger _logger;
 
-        public NotInQueueSpecification(IDownloadTrackingService downloadTrackingService, Logger logger)
+        public NotInQueueSpecification(IQueueService queueService, Logger logger)
         {
-            _downloadTrackingService = downloadTrackingService;
+            _queueService = queueService;
             _logger = logger;
         }
 
@@ -23,8 +23,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            var queue = _downloadTrackingService.GetQueuedDownloads()
-                            .Where(v => v.State == TrackedDownloadState.Downloading)
+            var queue = _queueService.GetQueue()
                             .Select(q => q.RemoteEpisode).ToList();
 
             if (IsInQueue(subject, queue))
@@ -36,9 +35,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             return Decision.Accept();
         }
 
-        private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> queue)
+        private bool IsInQueue(RemoteEpisode newEpisode, IEnumerable<RemoteEpisode> episodesInQueue)
         {
-            var matchingSeries = queue.Where(q => q.Series.Id == newEpisode.Series.Id);
+            var matchingSeries = episodesInQueue.Where(q => q.Series.Id == newEpisode.Series.Id);
             var matchingSeriesAndQuality = matchingSeries.Where(q => new QualityModelComparer(q.Series.Profile).Compare(q.ParsedEpisodeInfo.Quality, newEpisode.ParsedEpisodeInfo.Quality) >= 0);
 
             return matchingSeriesAndQuality.Any(q => q.Episodes.Select(e => e.Id).Intersect(newEpisode.Episodes.Select(e => e.Id)).Any());

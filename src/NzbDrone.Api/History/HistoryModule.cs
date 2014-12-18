@@ -12,15 +12,15 @@ namespace NzbDrone.Api.History
     {
         private readonly IHistoryService _historyService;
         private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
-        private readonly IDownloadTrackingService _downloadTrackingService;
+        private readonly IFailedDownloadService _failedDownloadService;
 
         public HistoryModule(IHistoryService historyService,
                              IQualityUpgradableSpecification qualityUpgradableSpecification,
-                             IDownloadTrackingService downloadTrackingService)
+                             IFailedDownloadService failedDownloadService)
         {
             _historyService = historyService;
             _qualityUpgradableSpecification = qualityUpgradableSpecification;
-            _downloadTrackingService = downloadTrackingService;
+            _failedDownloadService = failedDownloadService;
             GetResourcePaged = GetHistory;
 
             Post["/failed"] = x => MarkAsFailed();
@@ -28,9 +28,9 @@ namespace NzbDrone.Api.History
 
         protected override HistoryResource ToResource<TModel>(TModel model)
         {
-            var resource = base.ToResource<TModel>(model);
+            var resource = base.ToResource(model);
 
-            var history = model as NzbDrone.Core.History.History;
+            var history = model as Core.History.History;
 
             if (history != null && history.Series != null)
             {
@@ -70,7 +70,7 @@ namespace NzbDrone.Api.History
         private Response MarkAsFailed()
         {
             var id = (int)Request.Form.Id;
-            _downloadTrackingService.MarkAsFailed(id);
+            _failedDownloadService.MarkAsFailed(id);
             return new Object().AsResponse();
         }
     }

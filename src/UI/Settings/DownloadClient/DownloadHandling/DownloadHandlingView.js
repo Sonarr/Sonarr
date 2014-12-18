@@ -12,20 +12,20 @@ define(
             ui: {
                 completedDownloadHandlingCheckbox : '.x-completed-download-handling',
                 completedDownloadOptions          : '.x-completed-download-options',
-                failedDownloadHandlingCheckbox    : '.x-failed-download-handling',
+                failedAutoRedownladCheckbox       : '.x-failed-auto-redownload',
                 failedDownloadOptions             : '.x-failed-download-options'
             },
 
             events: {
                 'change .x-completed-download-handling' : '_setCompletedDownloadOptionsVisibility',                
-                'change .x-failed-download-handling'    : '_setFailedDownloadOptionsVisibility'
+                'change .x-failed-auto-redownload'    : '_setFailedDownloadOptionsVisibility'
             },
             
             onRender: function () {
                 if (!this.ui.completedDownloadHandlingCheckbox.prop('checked')) {
                   this.ui.completedDownloadOptions.hide();
                 }
-                if (!this.ui.failedDownloadHandlingCheckbox.prop('checked')) {
+                if (!this.ui.failedAutoRedownladCheckbox.prop('checked')) {
                   this.ui.failedDownloadOptions.hide();
                 }
             },
@@ -42,7 +42,7 @@ define(
             },
             
             _setFailedDownloadOptionsVisibility: function () {
-                var checked = this.ui.failedDownloadHandlingCheckbox.prop('checked');
+                var checked = this.ui.failedAutoRedownladCheckbox.prop('checked');
                 if (checked) {
                     this.ui.failedDownloadOptions.slideDown();
                 }

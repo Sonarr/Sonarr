@@ -99,7 +99,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (downloadClientItem != null)
                     {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadClientId));
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId));
                     }
                     else
                     {

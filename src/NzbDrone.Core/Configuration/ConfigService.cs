@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Configuration
 
         public Boolean EnableCompletedDownloadHandling
         {
-            get { return GetValueBoolean("EnableCompletedDownloadHandling", false); }
+            get { return GetValueBoolean("EnableCompletedDownloadHandling", true); }
 
             set { SetValue("EnableCompletedDownloadHandling", value); }
         }
@@ -134,13 +134,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("RemoveCompletedDownloads", false); }
 
             set { SetValue("RemoveCompletedDownloads", value); }
-        }
-
-        public Boolean EnableFailedDownloadHandling
-        {
-            get { return GetValueBoolean("EnableFailedDownloadHandling", true); }
-
-            set { SetValue("EnableFailedDownloadHandling", value); }
         }
 
         public Boolean AutoRedownloadFailed
@@ -155,27 +148,6 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("RemoveFailedDownloads", true); }
 
             set { SetValue("RemoveFailedDownloads", value); }
-        }
-
-        public Int32 BlacklistGracePeriod
-        {
-            get { return GetValueInt("BlacklistGracePeriod", 2); }
-
-            set { SetValue("BlacklistGracePeriod", value); }
-        }
-
-        public Int32 BlacklistRetryInterval
-        {
-            get { return GetValueInt("BlacklistRetryInterval", 60); }
-
-            set { SetValue("BlacklistRetryInterval", value); }
-        }
-
-        public Int32 BlacklistRetryLimit
-        {
-            get { return GetValueInt("BlacklistRetryLimit", 1); }
-
-            set { SetValue("BlacklistRetryLimit", value); }
         }
 
         public Boolean CreateEmptySeriesFolders

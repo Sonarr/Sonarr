@@ -108,10 +108,10 @@ namespace NzbDrone.Core.Download.Pending
                                     Title = pendingRelease.Title,
                                     Size = pendingRelease.RemoteEpisode.Release.Size,
                                     Sizeleft = pendingRelease.RemoteEpisode.Release.Size,
+                                    RemoteEpisode = pendingRelease.RemoteEpisode,
                                     Timeleft = ect.Subtract(DateTime.UtcNow),
                                     EstimatedCompletionTime = ect,
-                                    Status = "Pending",
-                                    RemoteEpisode = pendingRelease.RemoteEpisode
+                                    Status = "Pending"
                                 };
                     queued.Add(queue);
                 }
