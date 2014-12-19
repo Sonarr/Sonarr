@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace NzbDrone.Common.EnvironmentInfo
 {
@@ -8,6 +9,8 @@ namespace NzbDrone.Common.EnvironmentInfo
         Dictionary<string, string> Args { get; }
         bool InstallService { get; }
         bool UninstallService { get; }
+
+        string PreservedArguments { get; }
     }
 
     public class StartupContext : IStartupContext
@@ -58,6 +61,26 @@ namespace NzbDrone.Common.EnvironmentInfo
             get
             {
                 return Flags.Contains(UNINSTALL_SERVICE);
+            }
+        }
+
+        public string PreservedArguments
+        {
+            get
+            {
+                var args = "";
+
+                if (Args.ContainsKey(APPDATA))
+                {
+                    args = "/data=" + Args[APPDATA];
+                }
+
+                if (Flags.Contains(NO_BROWSER))
+                {
+                    args += " /" + NO_BROWSER;
+                }
+
+                return args.Trim();
             }
         }
     }
