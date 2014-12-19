@@ -29,7 +29,6 @@ namespace NzbDrone.Core.Download
         {
             return _downloadClientFactory.GetAvailableProviders();
         }
-
         public IDownloadClient Get(int id)
         {
             return _downloadClientFactory.GetAvailableProviders().Single(d => d.Definition.Id == id);

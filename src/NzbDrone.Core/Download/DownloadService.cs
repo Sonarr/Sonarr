@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Download
 
             if (!String.IsNullOrWhiteSpace(downloadClientId))
             {
-                episodeGrabbedEvent.DownloadClientId = downloadClientId;
+                episodeGrabbedEvent.DownloadId = downloadClientId;
             }
 
             _logger.ProgressInfo("Report sent to download client. {0}", downloadTitle);

@@ -20,6 +20,7 @@ namespace NzbDrone.Api.History
         public string Indexer { get; set; }
         public string NzbInfoUrl { get; set; }
         public string ReleaseGroup { get; set; }
+        public string DownloadId { get; set; }
 
         public HistoryEventType EventType { get; set; }
 

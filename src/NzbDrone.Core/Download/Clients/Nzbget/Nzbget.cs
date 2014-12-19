@@ -69,10 +69,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var droneParameter = item.Parameters.SingleOrDefault(p => p.Name == "drone");
 
                 var queueItem = new DownloadClientItem();
-                queueItem.DownloadClientId = droneParameter == null ? item.NzbId.ToString() : droneParameter.Value.ToString();
+                queueItem.DownloadId = droneParameter == null ? item.NzbId.ToString() : droneParameter.Value.ToString();
                 queueItem.Title = item.NzbName;
                 queueItem.TotalSize = totalSize;
                 queueItem.Category = item.Category;
+                queueItem.DownloadClient = Definition.Name;
 
                 if (globalStatus.DownloadPaused || remainingSize == pausedSize)
                 {
@@ -128,7 +129,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 var historyItem = new DownloadClientItem();
                 historyItem.DownloadClient = Definition.Name;
-                historyItem.DownloadClientId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
+                historyItem.DownloadId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
                 historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(item.DestDir));
@@ -181,13 +182,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             MigrateLocalCategoryPath();
 
-            foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
-            {
-                if (downloadClientItem.Category == Settings.TvCategory)
-                {
-                    yield return downloadClientItem;
-                }
-            }
+            return GetQueue().Concat(GetHistory()).Where(downloadClientItem => downloadClientItem.Category == Settings.TvCategory);
         }
 
         public override void RemoveItem(String id)

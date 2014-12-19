@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Blacklisting
 {
     public interface IBlacklistService
     {
-        bool Blacklisted(int seriesId,string sourceTitle, DateTime publishedDate);
+        bool Blacklisted(int seriesId, string sourceTitle, DateTime publishedDate);
         PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec);
         void Delete(int id);
     }
@@ -19,16 +19,13 @@ namespace NzbDrone.Core.Blacklisting
     public class BlacklistService : IBlacklistService,
                                     IExecute<ClearBlacklistCommand>,
                                     IHandle<DownloadFailedEvent>,
-                                    IHandle<SeriesDeletedEvent>
+                                    IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IBlacklistRepository _blacklistRepository;
-        private readonly IRedownloadFailedDownloads _redownloadFailedDownloadService;
 
-        public BlacklistService(IBlacklistRepository blacklistRepository,
-                                IRedownloadFailedDownloads redownloadFailedDownloadService)
+        public BlacklistService(IBlacklistRepository blacklistRepository)
         {
             _blacklistRepository = blacklistRepository;
-            _redownloadFailedDownloadService = redownloadFailedDownloadService;
         }
 
         public bool Blacklisted(int seriesId, string sourceTitle, DateTime publishedDate)
@@ -48,7 +45,7 @@ namespace NzbDrone.Core.Blacklisting
             _blacklistRepository.Delete(id);
         }
 
-        private bool HasSamePublishedDate(Blacklist item, DateTime publishedDate)
+        private static bool HasSamePublishedDate(Blacklist item, DateTime publishedDate)
         {
             if (!item.PublishedDate.HasValue) return true;
 
@@ -70,15 +67,13 @@ namespace NzbDrone.Core.Blacklisting
                                 SourceTitle = message.SourceTitle,
                                 Quality = message.Quality,
                                 Date = DateTime.UtcNow,
-                                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate", null))
+                                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate"))
                             };
 
             _blacklistRepository.Insert(blacklist);
-
-            _redownloadFailedDownloadService.Redownload(message.SeriesId, message.EpisodeIds);
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public void HandleAsync(SeriesDeletedEvent message)
         {
             var blacklisted = _blacklistRepository.BlacklistedBySeries(message.Series.Id);
 

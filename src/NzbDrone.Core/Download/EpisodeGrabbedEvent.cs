@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Download
     {
         public RemoteEpisode Episode { get; private set; }
         public String DownloadClient { get; set; }
-        public String DownloadClientId { get; set; }
+        public String DownloadId { get; set; }
 
         public EpisodeGrabbedEvent(RemoteEpisode episode)
         {

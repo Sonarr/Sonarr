@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         protected void VerifyIdentifiable(DownloadClientItem downloadClientItem)
         {
             downloadClientItem.DownloadClient.Should().Be(Subject.Definition.Name);
-            downloadClientItem.DownloadClientId.Should().NotBeNullOrEmpty();
+            downloadClientItem.DownloadId.Should().NotBeNullOrEmpty();
             downloadClientItem.Title.Should().NotBeNullOrEmpty();
         }
 

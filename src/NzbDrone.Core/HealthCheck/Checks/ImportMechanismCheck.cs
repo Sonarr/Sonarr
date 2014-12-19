@@ -2,8 +2,8 @@
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Download.Clients.Nzbget;
+using NzbDrone.Core.Download.Clients.Sabnzbd;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
@@ -11,13 +11,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IConfigService _configService;
         private readonly IProvideDownloadClient _provideDownloadClient;
-        private readonly IDownloadTrackingService _downloadTrackingService;
 
-        public ImportMechanismCheck(IConfigService configService, IProvideDownloadClient provideDownloadClient, IDownloadTrackingService downloadTrackingService)
+
+        public ImportMechanismCheck(IConfigService configService, IProvideDownloadClient provideDownloadClient)
         {
             _configService = configService;
             _provideDownloadClient = provideDownloadClient;
-            _downloadTrackingService = downloadTrackingService;
         }
 
         public override HealthCheck Check()
@@ -65,13 +64,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(), HealthCheckResult.Warning, "Enable Completed Download Handling or configure Drone factory");
             }
 
-            if (_configService.EnableCompletedDownloadHandling && !droneFactoryFolder.IsEmpty)
-            {
-                if (_downloadTrackingService.GetCompletedDownloads().Any(v => droneFactoryFolder.Contains(v.DownloadItem.OutputPath)))
-                {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "Completed Download Handling conflict with Drone Factory (Conflicting History Item)", "Migrating-to-Completed-Download-Handling#conflicting-download-client-category");
-                }
-            }
 
             return new HealthCheck(GetType());
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -15,14 +14,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             get
             {
-                //Approved and imported
-                if (Errors.Empty()) return ImportResultType.Imported;
+                if (Errors.Any())
+                {
+                    if (ImportDecision.Approved)
+                    {
+                        return ImportResultType.Skipped;
+                    }
 
-                //Decision was approved, but it was not imported
-                if (ImportDecision.Approved) return ImportResultType.Skipped;
+                    return ImportResultType.Rejected;
+                }
 
-                //Decision was rejected
-                return ImportResultType.Rejected;
+                return ImportResultType.Imported;
             }
         }
 

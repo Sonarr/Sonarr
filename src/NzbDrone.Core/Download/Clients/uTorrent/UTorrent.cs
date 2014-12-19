@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 }
 
                 var item = new DownloadClientItem();
-                item.DownloadClientId = torrent.Hash;
+                item.DownloadId = torrent.Hash;
                 item.Title = torrent.Name;
                 item.TotalSize = torrent.Size;
                 item.Category = torrent.Label;

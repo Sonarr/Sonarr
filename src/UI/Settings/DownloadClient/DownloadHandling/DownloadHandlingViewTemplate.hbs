@@ -14,15 +14,13 @@
 
                     <div class="btn btn-primary slide-button"/>
                 </label>
-
                 <span class="help-inline-checkbox">
-                    <i class="icon-nd-form-info" title="Import completed downloads in download client history"/>
-                    <i class="icon-nd-form-warning" title="Download client history items that are stored in the drone factory will be ignored. Configure the Drone Factory for a different path"/>
+                    <i class="icon-nd-form-info" title="Automatically import completed downloads from download client"/>
                 </span>
             </div>
-		</div>
+        </div>
     </div>
-    
+
     <div class="x-completed-download-options advanced-setting">
         <div class="form-group">
             <label class="col-sm-3 control-label">Remove</label>
@@ -44,20 +42,19 @@
                     </span>
                 </div>
             </div>
-	    </div>
+        </div>
     </div>
 </fieldset>
-    
-<fieldset class="advanced-setting">
+
+<fieldset>
     <legend>Failed Download Handling</legend>
-    
     <div class="form-group">
-        <label class="col-sm-3 control-label">Enable</label>
+        <label class="col-sm-3 control-label">Redownload</label>
 
         <div class="col-sm-8">
             <div class="input-group">
                 <label class="checkbox toggle well">
-                    <input type="checkbox" name="enableFailedDownloadHandling" class="x-failed-download-handling"/>
+                    <input type="checkbox" name="autoRedownloadFailed" class="x-failed-auto-redownload"/>
                     <p>
                         <span>Yes</span>
                         <span>No</span>
@@ -66,39 +63,15 @@
                     <div class="btn btn-primary slide-button"/>
                 </label>
 
-                <span class="help-inline-checkbox">
-                    <i class="icon-nd-form-info" title="Process failed downloads and blacklist the release"/>
-                </span>
+                    <span class="help-inline-checkbox">
+                    <i class="icon-nd-form-info" title="Automatically search for and attempt to download a different release"/>
+                    </span>
             </div>
         </div>
     </div>
-
-    <div class="x-failed-download-options">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Redownload</label>
-
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <label class="checkbox toggle well">
-                        <input type="checkbox" name="autoRedownloadFailed"/>
-                        <p>
-                            <span>Yes</span>
-                            <span>No</span>
-                        </p>
-
-                        <div class="btn btn-primary slide-button"/>
-                    </label>
-
-                    <span class="help-inline-checkbox">
-                    <i class="icon-nd-form-info" title="Automatically search for and attempt to download another release"/>
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
+    <div class="x-failed-download-options advanced-setting">
+        <div class="form-group ">
             <label class="col-sm-3 control-label">Remove</label>
-
             <div class="col-sm-8">
                 <div class="input-group">
                     <label class="checkbox toggle well">
@@ -110,47 +83,10 @@
 
                         <div class="btn btn-primary slide-button"/>
                     </label>
-
                     <span class="help-inline-checkbox">
                     <i class="icon-nd-form-info" title="Remove failed downloads from download client history"/>
                     </span>
                 </div>
-            </div>
-        </div>
-
-        <div class="form-group advanced-setting">
-            <label class="col-sm-3 control-label">Grace Period</label>
-
-            <div class="col-sm-1 col-sm-push-2 help-inline">
-                <i class="icon-nd-form-info" title="Age in hours (since posting) where a release can be retried instead of immediately blacklisted"/>
-            </div>
-
-            <div class="col-sm-2 col-sm-pull-1">
-                <input type="number" min="1" max="24" name="blacklistGracePeriod" class="form-control"/>
-            </div>
-        </div>
-
-        <div class="form-group advanced-setting">
-            <label class="col-sm-3 control-label">Retry Interval</label>
-
-            <div class="col-sm-1 col-sm-push-2 help-inline">
-                <i class="icon-nd-form-info" title="Time in minutes before a failed download for a recent release will be retried"/>
-            </div>
-
-            <div class="col-sm-2 col-sm-pull-1">
-                <input type="number" min="5" max="120" name="blacklistRetryInterval" class="form-control"/>
-            </div>
-        </div>
-
-        <div class="form-group advanced-setting">
-            <label class="col-sm-3 control-label">Retry Count</label>
-
-            <div class="col-sm-1 col-sm-push-2 help-inline">
-                <i class="icon-nd-form-info" title="Number of times to retry a release before it is blacklisted"/>
-            </div>
-
-            <div class="col-sm-2 col-sm-pull-1">
-                <input type="number" min="0" max="10" name="blacklistRetryLimit" class="form-control"/>
             </div>
         </div>
     </div>

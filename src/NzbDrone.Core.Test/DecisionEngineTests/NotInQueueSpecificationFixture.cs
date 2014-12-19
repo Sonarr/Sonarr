@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Queue;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 
@@ -47,33 +49,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                    .With(r => r.Series = _series)
                                                    .With(r => r.Episodes = new List<Episode> { _episode })
-                                                   .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD)})
+                                                   .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD) })
                                                    .Build();
         }
 
         private void GivenEmptyQueue()
         {
-            Mocker.GetMock<IDownloadTrackingService>()
-                .Setup(s => s.GetQueuedDownloads())
-                .Returns(new TrackedDownload[0]);
+            Mocker.GetMock<IQueueService>()
+                .Setup(s => s.GetQueue())
+                .Returns(new List<Queue.Queue>());
         }
 
-        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes, TrackedDownloadState state = TrackedDownloadState.Downloading)
+        private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes)
         {
-            var queue = new List<TrackedDownload>();
-
-            foreach (var remoteEpisode in remoteEpisodes)
+            var queue = remoteEpisodes.Select(remoteEpisode => new Queue.Queue
             {
-                queue.Add(new TrackedDownload
-                {
-                    State = state,
-                    RemoteEpisode = remoteEpisode
-                });
-            }
+                RemoteEpisode = remoteEpisode
+            });
 
-            Mocker.GetMock<IDownloadTrackingService>()
-                .Setup(s => s.GetQueuedDownloads())
-                .Returns(queue.ToArray());
+            Mocker.GetMock<IQueueService>()
+                .Setup(s => s.GetQueue())
+                .Returns(queue.ToList());
         }
 
         [Test]
@@ -95,22 +91,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
-        [Test]
-        public void should_return_true_when_download_is_failed()
-        {
-            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
-                                                      .With(r => r.Series = _series)
-                                                      .With(r => r.Episodes = new List<Episode> { _episode })
-                                                      .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
-                                                                                       {
-                                                                                           Quality = new QualityModel(Quality.DVD)
-                                                                                       })
-                                                      .Build();
-
-            GivenQueue(new List<RemoteEpisode> { remoteEpisode }, TrackedDownloadState.DownloadFailed);
-
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
-        }
 
         [Test]
         public void should_return_true_when_quality_in_queue_is_lower()
@@ -241,9 +221,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                                 Quality.HDTV720p)
                                                                                         })
                                                        .TheFirst(1)
-                                                       .With(r => r.Episodes = new List<Episode> {_episode})
+                                                       .With(r => r.Episodes = new List<Episode> { _episode })
                                                        .TheNext(1)
-                                                       .With(r => r.Episodes = new List<Episode> {_otherEpisode})
+                                                       .With(r => r.Episodes = new List<Episode> { _otherEpisode })
                                                        .Build();
 
             _remoteEpisode.Episodes.Add(_otherEpisode);

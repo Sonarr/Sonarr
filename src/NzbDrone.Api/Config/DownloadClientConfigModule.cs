@@ -17,14 +17,6 @@ namespace NzbDrone.Api.Config
                            .SetValidator(pathExistsValidator)
                            .When(c => !String.IsNullOrWhiteSpace(c.DownloadedEpisodesFolder));
 
-            SharedValidator.RuleFor(c => c.BlacklistGracePeriod)
-                           .InclusiveBetween(1, 24);
-
-            SharedValidator.RuleFor(c => c.BlacklistRetryInterval)
-                           .InclusiveBetween(5, 120);
-
-            SharedValidator.RuleFor(c => c.BlacklistRetryLimit)
-                           .InclusiveBetween(0, 10);
         }
     }
 }

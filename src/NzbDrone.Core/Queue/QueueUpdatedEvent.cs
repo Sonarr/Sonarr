@@ -2,7 +2,7 @@
 
 namespace NzbDrone.Core.Queue
 {
-    public class UpdateQueueEvent : IEvent
+    public class QueueUpdatedEvent : IEvent
     {
     }
 }

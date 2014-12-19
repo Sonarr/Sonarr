@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadClientId = GetDownloadClientId(file),
+                    DownloadId = GetDownloadClientId(file),
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(file),

@@ -103,12 +103,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             foreach (var torrent in torrents)
             {
                 var item = new DownloadClientItem();
-                item.DownloadClientId = torrent.Hash.ToUpper();
+                item.DownloadId = torrent.Hash.ToUpper();
                 item.Title = torrent.Name;
                 item.Category = Settings.TvCategory;
 
                 item.DownloadClient = Definition.Name;
-                item.DownloadTime = TimeSpan.FromSeconds(torrent.SecondsDownloading);
 
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadPath));
                 item.OutputPath = outputPath + torrent.Name;
