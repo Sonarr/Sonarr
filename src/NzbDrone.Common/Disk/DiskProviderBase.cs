@@ -431,6 +431,13 @@ namespace NzbDrone.Common.Disk
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 
+        public List<DriveInfo> GetDrives()
+        {
+            return DriveInfo.GetDrives()
+                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network)
+                            .ToList();
+        }
+
         public List<DirectoryInfo> GetDirectoryInfos(string path)
         {
             Ensure.That(path, () => path).IsValidPath();

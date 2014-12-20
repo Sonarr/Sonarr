@@ -24,11 +24,11 @@ define(
                 }
 
                 else if (type === 'folder') {
-                    icon = 'icon-folder-close';
+                    icon = 'icon-folder-close-alt';
                 }
 
                 else if (type === 'file') {
-                    icon = 'icon-file';
+                    icon = 'icon-file-alt';
                 }
 
                 this.$el.html('<i class="{0}"></i>'.format(icon));

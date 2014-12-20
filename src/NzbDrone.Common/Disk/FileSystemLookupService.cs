@@ -103,12 +103,12 @@ namespace NzbDrone.Common.Disk
 
         private List<FileSystemModel> GetDrives()
         {
-            return _diskProvider.GetFixedDrives()
+            return _diskProvider.GetDrives()
                                 .Select(d => new FileSystemModel
                                              {
                                                  Type = FileSystemEntityType.Drive,
-                                                 Name = d,
-                                                 Path = d,
+                                                 Name = GetVolumeName(d),
+                                                 Path = d.Name,
                                                  LastModified = null
                                              })
                                 .ToList();
@@ -117,6 +117,7 @@ namespace NzbDrone.Common.Disk
         private List<FileSystemModel> GetDirectories(string path)
         {
             var directories = _diskProvider.GetDirectoryInfos(path)
+                                           .OrderBy(d => d.Name)
                                            .Select(d => new FileSystemModel
                                                         {
                                                             Name = d.Name,
@@ -134,6 +135,7 @@ namespace NzbDrone.Common.Disk
         private List<FileSystemModel> GetFiles(string path)
         {
             return _diskProvider.GetFileInfos(path)
+                                .OrderBy(d => d.Name)
                                 .Select(d => new FileSystemModel
                                              {
                                                  Name = d.Name,
@@ -154,6 +156,16 @@ namespace NzbDrone.Common.Disk
             }
 
             return path;
+        }
+
+        private string GetVolumeName(DriveInfo driveInfo)
+        {
+            if (driveInfo.VolumeLabel.IsNullOrWhiteSpace())
+            {
+                return driveInfo.Name;
+            }
+
+            return String.Format("{0} ({1})", driveInfo.Name, driveInfo.VolumeLabel);
         }
         
         private string GetParent(string path)
