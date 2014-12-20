@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 torrentInfo.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToUniversalTime().AddSeconds(torrent.Time);
                 //torrentInfo.MagnetUrl = 
                 torrentInfo.InfoHash = torrent.InfoHash;
-                torrentInfo.Seeds = torrent.Seeders;
+                torrentInfo.Seeders = torrent.Seeders;
                 torrentInfo.Peers = torrent.Leechers;
 
                 results.Add(torrentInfo);

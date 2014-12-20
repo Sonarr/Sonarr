@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             torrentInfo.TvRageId.Should().Be(4055);
             torrentInfo.MagnetUrl.Should().BeNullOrEmpty();
             torrentInfo.Peers.Should().Be(9);
-            torrentInfo.Seeds.Should().Be(40);
+            torrentInfo.Seeders.Should().Be(40);
         }
 
         private void VerifyBackOff()

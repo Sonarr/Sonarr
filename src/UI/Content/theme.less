@@ -19,7 +19,7 @@
 @import "../Hotkeys/hotkeys";
 
 .main-region {
-  @media (min-width: @screen-lg-min) {
+  @media (min-width : @screen-lg-min) {
     padding-left  : 30px;
     padding-right : 30px;
   }
@@ -28,12 +28,12 @@
 .toolbar {
 
   &:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
+    visibility : hidden;
+    display    : block;
+    font-size  : 0;
+    content    : " ";
+    clear      : both;
+    height     : 0;
   }
 
   .page-toolbar {
@@ -41,13 +41,13 @@
     margin-bottom : 30px;
 
     .toolbar-group {
-      display: inline-block;
+      display : inline-block;
     }
 
     .sorting-buttons {
       .sorting-title {
-        display: inline-block;
-        width: 110px;
+        display : inline-block;
+        width   : 110px;
       }
     }
   }
@@ -86,7 +86,7 @@
 
 .control-panel-visible {
   #scroll-up {
-    bottom: 100px;
+    bottom : 100px;
   }
 }
 
@@ -101,7 +101,7 @@
 }
 
 .label-disabled {
-  opacity: 0.5;
+  opacity : 0.5;
 }
 
 th {
@@ -123,10 +123,9 @@ a, .btn {
 }
 
 body {
-  background:
-    url('../Content/Images/background/logo.png') 50px center no-repeat fixed,#272727;
+  background    : url('../Content/Images/background/logo.png') 50px center no-repeat fixed, #272727;
 
-  margin-bottom    : 100px;
+  margin-bottom : 100px;
   p {
     font-size : 0.9em;
   }
@@ -163,10 +162,10 @@ body {
   .card(#aaaaaa);
   /* width      : 1210px;
   min-width  : 1210px; */
-  max-width  : 1210px;
-  margin     : auto;
-//  margin-top : -70px;
-  padding    : 20px 0px;
+  max-width : 1210px;
+  margin    : auto;
+  //  margin-top : -70px;
+  padding   : 20px 0px;
 
   .header {
     padding-bottom : 10px;
@@ -203,15 +202,15 @@ body {
 }
 
 .error {
-  background: #FF0000;
+  background : #FF0000;
 }
 
-#errors{
+#errors {
   display : none;
 }
 
 .mono-space {
-  font-family: "ubuntu mono"
+  font-family : "ubuntu mono"
 }
 
 .file-path {
@@ -221,26 +220,26 @@ body {
 .control-panel {
   .card(#333333);
 
-  color: #f5f5f5;
-  background-color: #333333;
-  margin: 0px;
-  margin-bottom: -100px;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 80px;
-  opacity: 0;
+  color            : #f5f5f5;
+  background-color : #333333;
+  margin           : 0px;
+  margin-bottom    : -100px;
+  position         : fixed;
+  left             : 0;
+  bottom           : 0;
+  width            : 100%;
+  height           : 80px;
+  opacity          : 0;
 
-  @media (max-width: @screen-sm-max) {
-    height: initial;
-    position: static;
+  @media (max-width : @screen-sm-max) {
+    height   : initial;
+    position : static;
   }
 }
 
 .tab-content {
   .tab-pane {
-    padding-top: 10px;
+    padding-top : 10px;
   }
 }
 
@@ -248,6 +247,17 @@ body {
   h3 {
     margin-top    : 0px;
     margin-bottom : 0px;
+  }
+}
+
+.modal-body {
+  table {
+    font-size   : 12px;
+    font-weight : bold;
+
+    i {
+      font-size : 14px;
+    }
   }
 }
 
@@ -259,6 +269,16 @@ body {
 
 dl.info {
   dt, dd {
-    padding-bottom: 5px;
+    padding-bottom : 5px;
+  }
+}
+
+.label {
+  &.protocol-torrent {
+    background-color : #00853D;
+  }
+
+  &.protocol-usenet {
+    background-color : #17B1D9;
   }
 }

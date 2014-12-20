@@ -31,10 +31,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return Decision.Accept();
             }
 
-            if (torrentInfo.Seeds != null && torrentInfo.Seeds < 1)
+            if (torrentInfo.Seeders != null && torrentInfo.Seeders < 1)
             {
-                _logger.Debug("Not enough seeders. ({0})", torrentInfo.Seeds);
-                return Decision.Reject("Not enough seeders. ({0})", torrentInfo.Seeds);
+                _logger.Debug("Not enough seeders. ({0})", torrentInfo.Seeders);
+                return Decision.Reject("Not enough seeders. ({0})", torrentInfo.Seeders);
             }
 
             return Decision.Accept();

@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Parser.Model
     {
         public string MagnetUrl { get; set; }
         public string InfoHash { get; set; }
-        public Int32? Seeds { get; set; }
+        public Int32? Seeders { get; set; }
         public Int32? Peers { get; set; }
 
         public static Int32? GetSeeders(ReleaseInfo release)
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Parser.Model
             {
                 return null;
             }
-            return torrentInfo.Seeds;
+            return torrentInfo.Seeders;
         }
     }
 }

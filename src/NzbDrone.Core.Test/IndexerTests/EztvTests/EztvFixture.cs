@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.IndexerTests.EztvTests
             torrentInfo.InfoHash.Should().Be("20FC4FBFA88272274AC671F857CC15144E9AA83E");
             torrentInfo.MagnetUrl.Should().Be("magnet:?xt=urn:btih:ED6E7P5IQJZCOSWGOH4FPTAVCRHJVKB6&dn=S4C.I.Grombil.Cyfandir.Pell.American.Interior.PDTV.x264-MVGroup");
             torrentInfo.Peers.Should().NotHaveValue();
-            torrentInfo.Seeds.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
         }
     }
 }

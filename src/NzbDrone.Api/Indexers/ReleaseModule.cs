@@ -54,7 +54,7 @@ namespace NzbDrone.Api.Indexers
         private Response DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(release.Guid);
-            
+
             if (remoteEpisode == null)
             {
                 _logger.Debug("Couldn't find requested release in cache, cache timeout probably expired.");
@@ -141,6 +141,21 @@ namespace NzbDrone.Api.Indexers
 
                 release.QualityWeight += release.Quality.Revision.Real * 10;
                 release.QualityWeight += release.Quality.Revision.Version;
+
+
+                var torrentRelease = downloadDecision.RemoteEpisode.Release as TorrentInfo;
+
+                if (torrentRelease != null)
+                {
+                    release.Protocol = DownloadProtocol.Torrent;
+                    release.Seeders = torrentRelease.Seeders;
+                    //TODO: move this up the chains
+                    release.Leechers = torrentRelease.Peers - torrentRelease.Seeders;
+                }
+                else
+                {
+                    release.Protocol = DownloadProtocol.Usenet;
+                }
 
                 result.Add(release);
             }
