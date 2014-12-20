@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Api.Directories;
 using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Api.Test
+namespace NzbDrone.Common.Test.DiskTests
 {
     [TestFixture]
-    public class DirectoryLookupServiceFixture : TestBase<DirectoryLookupService>
+    public class DirectoryLookupServiceFixture : TestBase<FileSystemLookupService>
     {
         private const string RECYCLING_BIN = "$Recycle.Bin";
         private const string SYSTEM_VOLUME_INFORMATION = "System Volume Information";
-        private List<String> _folders;
+        private const string WINDOWS = "Windows";
+        private List<DirectoryInfo> _folders;
 
-        [SetUp]
-        public void Setup()
+        private void SetupFolders(string root)
         {
-            _folders = new List<String>
+            var folders = new List<String>
             {
                 RECYCLING_BIN,
                 "Chocolatey",
@@ -34,17 +34,10 @@ namespace NzbDrone.Api.Test
                 SYSTEM_VOLUME_INFORMATION,
                 "Test",
                 "Users",
-                "Windows"
+                WINDOWS
             };
 
-        }
-
-        private void SetupFolders(string root)
-        {
-            _folders.ForEach(e =>
-            {
-                e = Path.Combine(root, e);
-            });
+            _folders = folders.Select(f => new DirectoryInfo(Path.Combine(root, f))).ToList();
         }
 
         [Test]
@@ -54,10 +47,10 @@ namespace NzbDrone.Api.Test
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectories(It.IsAny<String>()))
-                .Returns(_folders.ToArray());
+                .Setup(s => s.GetDirectoryInfos(It.IsAny<String>()))
+                .Returns(_folders);
 
-            Subject.LookupSubDirectories(root).Should().NotContain(Path.Combine(root, RECYCLING_BIN));
+            Subject.LookupContents(root, false).Directories.Should().NotContain(Path.Combine(root, RECYCLING_BIN));
         }
 
         [Test]
@@ -67,27 +60,29 @@ namespace NzbDrone.Api.Test
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectories(It.IsAny<String>()))
-                .Returns(_folders.ToArray());
+                .Setup(s => s.GetDirectoryInfos(It.IsAny<String>()))
+                .Returns(_folders);
 
-            Subject.LookupSubDirectories(root).Should().NotContain(Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
+            Subject.LookupContents(root, false).Directories.Should().NotContain(Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
         }
 
         [Test]
         public void should_not_contain_recycling_bin_or_system_volume_information_for_root_of_drive()
         {
-            string root = @"C:\";
+            string root = @"C:\".AsOsAgnostic();
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectories(It.IsAny<String>()))
-                .Returns(_folders.ToArray());
+                .Setup(s => s.GetDirectoryInfos(It.IsAny<String>()))
+                .Returns(_folders);
 
-            var result = Subject.LookupSubDirectories(root);
+            var result = Subject.LookupContents(root, false);
+            
+            result.Directories.Should().HaveCount(_folders.Count - 3);
 
-            result.Should().HaveCount(_folders.Count - 2);
-            result.Should().NotContain(RECYCLING_BIN);
-            result.Should().NotContain(SYSTEM_VOLUME_INFORMATION);
+            result.Directories.Should().NotContain(f => f.Name == RECYCLING_BIN);
+            result.Directories.Should().NotContain(f => f.Name == SYSTEM_VOLUME_INFORMATION);
+            result.Directories.Should().NotContain(f => f.Name == WINDOWS);
         }
     }
 }

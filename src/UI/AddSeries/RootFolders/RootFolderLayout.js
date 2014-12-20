@@ -8,14 +8,14 @@ define(
         'AddSeries/RootFolders/RootFolderModel',
         'Shared/LoadingView',
         'Mixins/AsValidatedView',
-        'Mixins/AutoComplete'
+        'Mixins/FileBrowser'
     ], function (Marionette, RootFolderCollectionView, RootFolderCollection, RootFolderModel, LoadingView, AsValidatedView) {
 
         var layout = Marionette.Layout.extend({
             template: 'AddSeries/RootFolders/RootFolderLayoutTemplate',
 
             ui: {
-                pathInput: '.x-path input'
+                pathInput: '.x-path'
             },
 
             regions: {
@@ -42,7 +42,7 @@ define(
                     this._showCurrentDirs();
                 }
 
-                this.ui.pathInput.autoComplete('/directories');
+                this.ui.pathInput.fileBrowser({ showFiles: true, showLastModified: true });
             },
 
             _onFolderSelected: function (options) {

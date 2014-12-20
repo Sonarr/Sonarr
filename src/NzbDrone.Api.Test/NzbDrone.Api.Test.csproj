@@ -69,7 +69,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientSchemaTests\SchemaBuilderFixture.cs" />
-    <Compile Include="DirectoryLookupServiceFixture.cs" />
     <Compile Include="MappingTests\ResourceMappingFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using NzbDrone.Common.Test.DiskProviderTests;
+using NzbDrone.Common.Test.DiskTests;
 
 namespace NzbDrone.Mono.Test.DiskProviderTests
 {

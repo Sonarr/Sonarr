@@ -126,20 +126,28 @@ li.add-new:hover {
 }
 
 .root-folders-modal {
-  overflow: visible;
+  overflow : visible;
 
   .root-folders-list {
-    overflow: auto;
-    max-height: 300px;
+    overflow   : auto;
+    max-height : 300px;
+
+    i {
+      .clickable();
+    }
   }
 
   .validation-errors {
-    display: none;
+    display : none;
   }
 
   .input-group {
     .form-control {
-      background-color: white;
+      background-color : white;
     }
+  }
+
+  .root-folders {
+    margin-top : 20px;
   }
 }

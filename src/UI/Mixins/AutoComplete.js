@@ -5,7 +5,19 @@ define(
         'typeahead'
     ], function ($) {
 
-    $.fn.autoComplete = function (resource) {
+    $.fn.autoComplete = function (options) {
+        if (!options) {
+            throw 'options are required';
+        }
+
+        if (!options.resource) {
+            throw 'resource is required';
+        }
+
+        if (!options.query) {
+            throw 'query is required';
+        }
+
         $(this).typeahead({
                 hint      : true,
                 highlight : true,
@@ -13,25 +25,34 @@ define(
                 items     : 20
             },
             {
-                name: resource.replace('/'),
+                name: options.resource.replace('/'),
                 displayKey: '',
                 source   : function (filter, callback) {
+                    var data = {};
+                    data[options.query] = filter;
+
                     $.ajax({
-                        url     : window.NzbDrone.ApiRoot + resource,
+                        url     : window.NzbDrone.ApiRoot + options.resource,
                         dataType: 'json',
                         type    : 'GET',
-                        data    : { query: filter },
-                        success : function (data) {
+                        data    : data,
+                        success : function (response) {
 
-                            var matches = [];
+                            if (options.filter) {
+                                options.filter.call(this, filter, response, callback);
+                            }
 
-                            $.each(data, function(i, d) {
-                                if (d.startsWith(filter)) {
-                                    matches.push({ value: d });
-                                }
-                            });
+                            else {
+                                var matches = [];
 
-                            callback(matches);
+                                $.each(response, function(i, d) {
+                                    if (d[options.query] && d[options.property].startsWith(filter)) {
+                                        matches.push({ value: d[options.property] });
+                                    }
+                                });
+
+                                callback(matches);
+                            }
                         }
                     });
                 }

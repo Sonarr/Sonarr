@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -45,5 +46,7 @@ namespace NzbDrone.Common.Disk
         string[] GetFixedDrives();
         string GetVolumeLabel(string path);
         FileStream StreamFile(string path);
+        List<DirectoryInfo> GetDirectoryInfos(string path);
+        List<FileInfo> GetFileInfos(string path);
     }
 }

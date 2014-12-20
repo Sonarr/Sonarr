@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
@@ -20,7 +21,6 @@ namespace NzbDrone.Common.Disk
         public abstract void InheritFolderPermissions(string filename);
         public abstract void SetPermissions(string path, string mask, string user, string group);
         public abstract long? GetTotalSize(string path);
-
 
         public DateTime FolderGetCreationTime(string path)
         {
@@ -429,6 +429,24 @@ namespace NzbDrone.Common.Disk
             }
 
             return new FileStream(path, FileMode.Open, FileAccess.Read);
+        }
+
+        public List<DirectoryInfo> GetDirectoryInfos(string path)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            var di = new DirectoryInfo(path);
+
+            return di.GetDirectories().ToList();
+        }
+
+        public List<FileInfo> GetFileInfos(string path)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            var di = new DirectoryInfo(path);
+
+            return di.GetFiles().ToList();
         }
     }
 }

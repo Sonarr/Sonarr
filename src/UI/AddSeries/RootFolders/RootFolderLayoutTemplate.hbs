@@ -7,22 +7,28 @@
         <div class="validation-errors"></div>
         <div class="alert alert-info">Enter the path that contains some or all of your TV series, you will be able to choose which series you want to import<button type="button" class="close" data-dismiss="alert">×</button></div>
 
-        <div class="form-group">
-            <div class="input-group x-path">
-                <span class="input-group-addon">&nbsp;<i class="icon-folder-open"></i></span>
-                <input class="col-md-9 form-control" type="text" validation-name="path" placeholder="Enter path to folder that contains your shows">
-                <span class="input-group-btn ">
-                    <button class="btn btn-success x-add">
-                        <i class="icon-ok"/>
-                    </button>
-                </span>
+        <div class="row">
+            <div class="form-group">
+
+                <div class="col-md-12">
+
+                    <div class="input-group">
+                        <span class="input-group-addon">&nbsp;<i class="icon-folder-open"></i></span>
+                        <input class="form-control x-path" type="text" validation-name="path" placeholder="Enter path to folder that contains your shows">
+                        <span class="input-group-btn"><button class="btn btn-success x-add"><i class="icon-ok"/></button></span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {{#if items}}
-            <h4>Recent Folders</h4>
-        {{/if}}
-        <div id="current-dirs" class="root-folders-list"></div>
+        <div class="row root-folders">
+            <div class="col-md-12">
+                {{#if items}}
+                    <h4>Recent Folders</h4>
+                {{/if}}
+                <div id="current-dirs" class="root-folders-list"></div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal">close</button>

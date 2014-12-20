@@ -1,11 +1,13 @@
 ﻿'use strict';
 define(
     [
+        'vent',
         'marionette',
         'Mixins/AsModelBoundView',
         'Mixins/AsValidatedView',
-        'Mixins/AutoComplete'
-    ], function (Marionette, AsModelBoundView, AsValidatedView) {
+        'Mixins/DirectoryAutoComplete',
+        'Mixins/FileBrowser'
+    ], function (vent, Marionette, AsModelBoundView, AsValidatedView) {
 
         var view = Marionette.ItemView.extend({
             template: 'Settings/MediaManagement/FileManagement/FileManagementViewTemplate',
@@ -15,7 +17,7 @@ define(
             },
 
             onShow: function () {
-                this.ui.recyclingBin.autoComplete('/directories');
+                this.ui.recyclingBin.fileBrowser();
             }
         });
 

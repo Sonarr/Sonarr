@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             releases.Should().HaveCount(5);
             releases.First().Should().BeOfType<TorrentInfo>();
 
-            var torrentInfo = releases.First() as TorrentInfo;
+            var torrentInfo = (TorrentInfo) releases.First();
 
             torrentInfo.Title.Should().Be("Doctor Stranger.E03.140512.HDTV.H264.720p-iPOP.avi [CTRG]");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
         [Test]
         public void should_not_return_unverified_releases_if_not_configured()
         {
-            (Subject.Definition.Settings as KickassTorrentsSettings).VerifiedOnly = true;
+            ((KickassTorrentsSettings) Subject.Definition.Settings).VerifiedOnly = true;
 
             var recentFeed = ReadAllText(@"Files/RSS/KickassTorrents.xml");
 
@@ -84,5 +84,6 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
 
             releases.Should().HaveCount(4);
         }
+
     }
 }

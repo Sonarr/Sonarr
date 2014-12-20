@@ -114,8 +114,7 @@
     <Compile Include="Config\NamingConfigResource.cs" />
     <Compile Include="Config\NamingSampleResource.cs" />
     <Compile Include="Config\NzbDroneConfigModule.cs" />
-    <Compile Include="Directories\DirectoryLookupService.cs" />
-    <Compile Include="Directories\DirectoryModule.cs" />
+    <Compile Include="FileSystem\FileSystemModule.cs" />
     <Compile Include="DiskSpace\DiskSpaceModule.cs" />
     <Compile Include="DiskSpace\DiskSpaceResource.cs" />
     <Compile Include="DownloadClient\DownloadClientModule.cs" />
