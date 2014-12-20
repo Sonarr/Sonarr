@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Indexers
 
             result.InfoHash = GetInfoHash(item);
             result.MagnetUrl = GetMagnetUrl(item);
-            result.Seeds = GetSeeders(item);
+            result.Seeders = GetSeeders(item);
             result.Peers = GetPeers(item);
 
             return result;

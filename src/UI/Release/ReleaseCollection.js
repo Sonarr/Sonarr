@@ -1,4 +1,4 @@
-﻿﻿'use strict';
+﻿'use strict';
 define(
     [
         'backbone.pageable',
@@ -19,7 +19,7 @@ define(
             
             sortMappings: {
                 'quality'       : { sortKey: 'qualityWeight' },
-                'rejections'    : { sortValue: function (model, attr) {
+                'rejections'    : { sortValue: function (model) {
                                         var rejections = model.get('rejections');
                                         var releaseWeight = model.get('releaseWeight');
 

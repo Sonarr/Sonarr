@@ -8,8 +8,10 @@ define(
         'Cells/QualityCell',
         'Cells/ApprovalStatusCell',
         'Release/DownloadReportCell',
-        'Release/AgeCell'
-    ], function (Marionette, Backgrid, ReleaseTitleCell, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, AgeCell) {
+        'Release/AgeCell',
+        'Release/ProtocolCell',
+        'Release/PeersCell'
+    ], function (Marionette, Backgrid, ReleaseTitleCell, FileSizeCell, QualityCell, ApprovalStatusCell, DownloadReportCell, AgeCell, ProtocolCell, PeersCell) {
 
         return Marionette.Layout.extend({
             template: 'Episode/Search/ManualLayoutTemplate',
@@ -21,6 +23,10 @@ define(
             columns:
                 [
                     {
+                        name     : 'protocol',
+                        label    : 'Source',
+                        cell     : ProtocolCell
+                    },  {
                         name     : 'age',
                         label    : 'Age',
                         cell     : AgeCell
@@ -39,6 +45,11 @@ define(
                         name     : 'size',
                         label    : 'Size',
                         cell     : FileSizeCell
+                    },
+                    {
+                        name     : 'seeders',
+                        label    : 'Peers',
+                        cell     : PeersCell
                     },
                     {
                         name     : 'quality',

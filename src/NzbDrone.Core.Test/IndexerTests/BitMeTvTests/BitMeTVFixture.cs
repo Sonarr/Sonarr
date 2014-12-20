@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);
             torrentInfo.Peers.Should().Be(null);
-            torrentInfo.Seeds.Should().Be(null);
+            torrentInfo.Seeders.Should().Be(null);
         }
     }
 }

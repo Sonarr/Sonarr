@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             torrentInfo.InfoHash.Should().Be("208C4F7866612CC88BFEBC7C496FA72C2368D1C0");
             torrentInfo.MagnetUrl.Should().Be("magnet:?xt=urn:btih:208C4F7866612CC88BFEBC7C496FA72C2368D1C0&dn=doctor+stranger+e03+140512+hdtv+h264+720p+ipop+avi+ctrg&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce");
             torrentInfo.Peers.Should().Be(311);
-            torrentInfo.Seeds.Should().Be(206);
+            torrentInfo.Seeders.Should().Be(206);
         }
 
         [Test]
