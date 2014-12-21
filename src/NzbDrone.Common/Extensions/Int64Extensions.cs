@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace NzbDrone.Common.Extensions
 {
@@ -16,7 +17,7 @@ namespace NzbDrone.Common.Extensions
             var mag = (int)Math.Log(bytes, bytesInKb);
             var adjustedSize = bytes / (decimal)Math.Pow(bytesInKb, mag);
 
-            return string.Format("{0:n1} {1}", adjustedSize, SizeSuffixes[mag]);
+            return string.Format(CultureInfo.InvariantCulture, "{0:n1} {1}", adjustedSize, SizeSuffixes[mag]);
         }
     }
 }
