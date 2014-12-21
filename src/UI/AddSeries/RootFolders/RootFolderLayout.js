@@ -42,7 +42,7 @@ define(
                     this._showCurrentDirs();
                 }
 
-                this.ui.pathInput.fileBrowser({ showFiles: true, showLastModified: true });
+                this.ui.pathInput.fileBrowser();
             },
 
             _onFolderSelected: function (options) {

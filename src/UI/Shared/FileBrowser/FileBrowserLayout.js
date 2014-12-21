@@ -35,7 +35,8 @@ define(
             },
 
             ui: {
-                path: '.x-path'
+                path      : '.x-path',
+                indicator : '.x-indicator'
             },
 
             events: {
@@ -53,17 +54,15 @@ define(
                 this.input = options.input;
 
                 this._setColumns();
-                this._fetchCollection(this.input.val());
                 this.listenTo(this.collection, 'sync', this._showGrid);
                 this.listenTo(this.collection, 'filebrowser:folderselected', this._rowSelected);
             },
 
             onRender: function () {
                 this.browser.show(new LoadingView());
-            },
-
-            onShow: function () {
                 this.ui.path.directoryAutoComplete();
+
+                this._fetchCollection(this.input.val());
                 this._updatePath(this.input.val());
             },
 
@@ -103,6 +102,8 @@ define(
             },
 
             _fetchCollection: function (path) {
+                this.ui.indicator.show();
+
                 var data = {
                     includeFiles : this.collection.showFiles
                 };
@@ -117,6 +118,7 @@ define(
             },
 
             _showGrid: function () {
+                this.ui.indicator.hide();
 
                 if (this.collection.models.length === 0) {
                     this.browser.show(new EmptyView());

@@ -39,7 +39,7 @@ define([
                 this.ui.modalBody.addClass('modal-overflow');
             }
 
-            this.ui.path.fileBrowser({ showFiles: true });
+            this.ui.path.fileBrowser();
         },
 
         _onAfterSave: function () {
