@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 //torrentInfo.MagnetUrl = 
                 torrentInfo.InfoHash = torrent.InfoHash;
                 torrentInfo.Seeders = torrent.Seeders;
-                torrentInfo.Peers = torrent.Leechers;
+                torrentInfo.Peers = torrent.Leechers + torrent.Seeders;
 
                 results.Add(torrentInfo);
             }

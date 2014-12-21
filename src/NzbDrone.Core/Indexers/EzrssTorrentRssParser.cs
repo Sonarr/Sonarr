@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Indexers
                 return (Int32)seeds;
             }
 
-            return base.GetPeers(item);
+            return base.GetSeeders(item);
         }
 
         protected override Int32? GetPeers(XElement item)

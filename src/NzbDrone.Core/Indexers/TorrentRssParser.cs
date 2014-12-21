@@ -46,11 +46,19 @@ namespace NzbDrone.Core.Indexers
         {
             if (ParseSeedersInDescription)
             {
-                var match = ParseSeedersRegex.Match(item.Element("description").Value);
+                var matchSeeders = ParseSeedersRegex.Match(item.Element("description").Value);
 
-                if (match.Success)
+                if (matchSeeders.Success)
                 {
-                    return Int32.Parse(match.Groups["value"].Value);
+                    return Int32.Parse(matchSeeders.Groups["value"].Value);
+                }
+
+                var matchPeers = ParsePeersRegex.Match(item.Element("description").Value);
+                var matchLeechers = ParseLeechersRegex.Match(item.Element("description").Value);
+
+                if (matchPeers.Success && matchLeechers.Success)
+                {
+                    return Int32.Parse(matchPeers.Groups["value"].Value) - Int32.Parse(matchLeechers.Groups["value"].Value);
                 }
             }
 
@@ -61,11 +69,19 @@ namespace NzbDrone.Core.Indexers
         {
             if (ParseSeedersInDescription)
             {
-                var match = ParsePeersRegex.Match(item.Element("description").Value);
+                var matchPeers = ParsePeersRegex.Match(item.Element("description").Value);
 
-                if (match.Success)
+                if (matchPeers.Success)
                 {
-                    return Int32.Parse(match.Groups["value"].Value);
+                    return Int32.Parse(matchPeers.Groups["value"].Value);
+                }
+
+                var matchSeeders = ParseSeedersRegex.Match(item.Element("description").Value);
+                var matchLeechers = ParseLeechersRegex.Match(item.Element("description").Value);
+
+                if (matchSeeders.Success && matchLeechers.Success)
+                {
+                    return Int32.Parse(matchSeeders.Groups["value"].Value) + Int32.Parse(matchLeechers.Groups["value"].Value);
                 }
             }
 
@@ -73,6 +89,7 @@ namespace NzbDrone.Core.Indexers
         }
 
         private static readonly Regex ParseSeedersRegex = new Regex(@"(Seeder)s?:\s+(?<value>\d+)|(?<value>\d+)\s+(seeder)s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex ParsePeersRegex = new Regex(@"(Leecher|Peer)s?:\s+(?<value>\d+)|(?<value>\d+)\s+(leecher|peer)s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ParseLeechersRegex = new Regex(@"(Leecher)s?:\s+(?<value>\d+)|(?<value>\d+)\s+(leecher)s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ParsePeersRegex = new Regex(@"(Peer)s?:\s+(?<value>\d+)|(?<value>\d+)\s+(peer)s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     }
 }

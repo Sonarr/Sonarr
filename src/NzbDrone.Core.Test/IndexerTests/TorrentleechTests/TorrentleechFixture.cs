@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
             torrentInfo.Size.Should().Be(0);
             torrentInfo.InfoHash.Should().Be(null);
             torrentInfo.MagnetUrl.Should().Be(null);
-            torrentInfo.Peers.Should().Be(7);
+            torrentInfo.Peers.Should().Be(7+1);
             torrentInfo.Seeders.Should().Be(1);
         }
     }

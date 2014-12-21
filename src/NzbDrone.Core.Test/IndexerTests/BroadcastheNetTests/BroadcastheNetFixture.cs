@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             torrentInfo.InfoHash.Should().Be("123");
             torrentInfo.TvRageId.Should().Be(4055);
             torrentInfo.MagnetUrl.Should().BeNullOrEmpty();
-            torrentInfo.Peers.Should().Be(9);
+            torrentInfo.Peers.Should().Be(40+9);
             torrentInfo.Seeders.Should().Be(40);
         }
 
