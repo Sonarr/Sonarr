@@ -56,6 +56,9 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
         private static readonly Regex TrimSeparatorsRegex = new Regex(@"[- ._]$", RegexOptions.Compiled);
 
+        private static readonly Regex ScenifyRemoveChars = new Regex(@"[^a-z0-9+\/ ]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ScenifyReplaceChars = new Regex(@"[+\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
         public FileNameBuilder(INamingConfigService namingConfigService,
@@ -232,18 +235,12 @@ namespace NzbDrone.Core.Organizer
             return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers));
         }
 
-        public static string CleanTitle(string name)
+        public static string CleanTitle(string title)
         {
-            string[] dropCharacters = { ":", ".", "(", ")" };
+            title = ScenifyReplaceChars.Replace(title, " ");
+            title = ScenifyRemoveChars.Replace(title, String.Empty);
 
-            string result = name;
-
-            for (int i = 0; i < dropCharacters.Length; i++)
-            {
-                result = result.Replace(dropCharacters[i], "");
-            }
-
-            return result;
+            return title;
         }
 
         public static string CleanFileName(string name)
@@ -411,6 +408,7 @@ namespace NzbDrone.Core.Organizer
             }
 
             tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(episodes);
+            tokenHandlers["{Episode CleanTitle}"] = m => CleanTitle(GetEpisodeTitle(episodes));
         }
 
         private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
