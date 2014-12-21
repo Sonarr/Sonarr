@@ -77,10 +77,6 @@ namespace NzbDrone.Update
                 {
                     case 1:
                         return startupContext;
-                    case 3:
-                        startupContext.UpdateLocation = args[1];
-                        startupContext.ExecutingApplication = args[2];
-                        break;
                     default:
                         {
                             Logger.Debug("Arguments:");
@@ -90,9 +86,10 @@ namespace NzbDrone.Update
                                 Logger.Debug("  {0}", arg);
                             }
 
-                            var message = String.Format("Number of arguments are unexpected, expected: 3, found: {0}", args.Count());
+                            startupContext.UpdateLocation = args[1];
+                            startupContext.ExecutingApplication = args[2];
 
-                            throw new ArgumentOutOfRangeException("args", message);
+                            break;
                         }
                 }
             }
