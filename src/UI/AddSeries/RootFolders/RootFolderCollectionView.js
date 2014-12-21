@@ -7,10 +7,9 @@ define(
     ], function (Marionette, RootFolderItemView) {
 
 
-        return Marionette.CollectionView.extend({
-            itemView: RootFolderItemView,
-
-            tagName  : 'table',
-            className: 'table table-hover'
+        return Marionette.CompositeView.extend({
+            template          : 'AddSeries/RootFolders/RootFolderCollectionViewTemplate',
+            itemViewContainer : '.x-root-folders',
+            itemView          : RootFolderItemView
         });
     });
