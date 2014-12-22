@@ -893,7 +893,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _namingConfig.StandardEpisodeFormat = "{Episode.CleanTitle}";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("Rule.23.Never.Lie.to.the.Kids");
+                   .Should().Be("Rule.#23.Never.Lie.to.the.Kids");
         }
 
         [Test]
