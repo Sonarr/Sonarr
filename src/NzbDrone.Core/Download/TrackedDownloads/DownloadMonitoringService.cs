@@ -50,8 +50,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             foreach (var downloadClient in downloadClients)
             {
-                var clientTrackedDowmloads = ProcessClientDownloads(downloadClient);
-                trackedDownload.AddRange(clientTrackedDowmloads.Where(c => c.State == TrackedDownloadStage.Downloading));
+                var clientTrackedDownloads = ProcessClientDownloads(downloadClient);
+                trackedDownload.AddRange(clientTrackedDownloads.Where(c => c.State == TrackedDownloadStage.Downloading));
             }
 
             _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownload));
@@ -73,7 +73,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             foreach (var downloadItem in downloadClientHistory)
             {
-                trackedDownloads.AddRange(ProcessClientItems(downloadClient, downloadItem));
+                var newItems = ProcessClientItems(downloadClient, downloadItem);
+                trackedDownloads.AddRange(newItems);
             }
 
             if (_configService.RemoveCompletedDownloads)
@@ -87,9 +88,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         private void RemoveCompletedDownloads(List<TrackedDownload> trackedDownloads)
         {
-            foreach (var trakedDownload in trackedDownloads.Where(c => !c.DownloadItem.IsReadOnly && c.State == TrackedDownloadStage.Imported))
+            foreach (var trackedDownload in trackedDownloads.Where(c => !c.DownloadItem.IsReadOnly && c.State == TrackedDownloadStage.Imported))
             {
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trakedDownload));
+                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
             }
         }
 
@@ -108,8 +109,10 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         _completedDownloadService.Process(trackedDownload);
                     }
 
-                    trackedDownloads.Add(trackedDownload);
                 }
+
+                trackedDownloads.Add(trackedDownload);
+
             }
             catch (Exception e)
             {
