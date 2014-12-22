@@ -79,6 +79,13 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
+            if (importResults.Count(c => c.Result == ImportResultType.Imported) >= trackedDownload.RemoteEpisode.Episodes.Count)
+            {
+                trackedDownload.State = TrackedDownloadStage.Imported;
+                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
+                return;
+            }
+
             if (importResults.Any(c => c.Result != ImportResultType.Imported))
             {
                 var statusMessages = importResults
@@ -87,11 +94,7 @@ namespace NzbDrone.Core.Download
                     .ToArray();
 
                 trackedDownload.Warn(statusMessages);
-                return;
             }
-
-            trackedDownload.State = TrackedDownloadStage.Imported;
-            _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));
 
         }
     }
