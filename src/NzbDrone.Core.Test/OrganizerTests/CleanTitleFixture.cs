@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("Tamara Ecclestone: Billion $$ Girl", "Tamara Ecclestone Billion $$ Girl")]
         [TestCase("Marvel's Agents of S.H.I.E.L.D.", "Marvels Agents of S.H.I.E.L.D")]
         [TestCase("Castle (2009)", "Castle 2009")]
-//        [TestCase("", "")]
+        [TestCase("Law & Order (UK)", "Law and Order UK")]
 //        [TestCase("", "")]
         public void should_get_expected_title_back(string title, string expected)
         {
@@ -69,6 +69,23 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode }, _series, _episodeFile)
                    .Should().Be(expected);
+        }
+
+        [Test]
+        public void should_use_and_as_separator_for_multiple_episodes()
+        {
+            var episodes = Builder<Episode>.CreateListOfSize(2)
+                                           .TheFirst(1)
+                                           .With(e => e.Title = "Surrender Benson")
+                                           .TheNext(1)
+                                           .With(e => e.Title = "Imprisoned Lives")
+                                           .Build()
+                                           .ToList();
+
+            _namingConfig.StandardEpisodeFormat = "{Episode CleanTitle}";
+
+            Subject.BuildFileName(episodes, _series, _episodeFile)
+                   .Should().Be(episodes.First().Title + " and " + episodes.Last().Title);
         }
     }
 }

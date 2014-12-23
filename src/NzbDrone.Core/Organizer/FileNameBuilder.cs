@@ -56,7 +56,6 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
         private static readonly Regex TrimSeparatorsRegex = new Regex(@"[- ._]$", RegexOptions.Compiled);
 
-        //private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<!$1)[^\w+#\/. ](?!$1)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<=\s)(,|<|>|\/|\\|;|:|'|""|\||`|~|!|@|$|%|^|&|\*|-|_|=){1}(?=\s)|('|:)(?=s|\s)|(\(|\)|\[|\]|\{|\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ScenifyReplaceChars = new Regex(@"[\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -238,6 +237,7 @@ namespace NzbDrone.Core.Organizer
 
         public static string CleanTitle(string title)
         {
+            title = title.Replace("&", "and");
             title = ScenifyReplaceChars.Replace(title, " ");
             title = ScenifyRemoveChars.Replace(title, String.Empty);
 
@@ -408,8 +408,8 @@ namespace NzbDrone.Core.Organizer
                 tokenHandlers["{Air Date}"] = m => "Unknown";
             }
 
-            tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(episodes);
-            tokenHandlers["{Episode CleanTitle}"] = m => CleanTitle(GetEpisodeTitle(episodes));
+            tokenHandlers["{Episode Title}"] = m => GetEpisodeTitle(episodes, "+");
+            tokenHandlers["{Episode CleanTitle}"] = m => CleanTitle(GetEpisodeTitle(episodes, "and"));
         }
 
         private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
@@ -645,8 +645,10 @@ namespace NzbDrone.Core.Organizer
                 }).ToArray());
         }
 
-        private string GetEpisodeTitle(List<Episode> episodes)
+        private string GetEpisodeTitle(List<Episode> episodes, string separator)
         {
+            separator = String.Format(" {0} ", separator.Trim());
+
             if (episodes.Count == 1)
             {
                 return episodes.First().Title.TrimEnd(EpisodeTitleTrimCharacters);
@@ -657,7 +659,7 @@ namespace NzbDrone.Core.Organizer
                 .Select(Parser.Parser.CleanupEpisodeTitle)
                 .Distinct();
 
-            return String.Join(" + ", titles);
+            return String.Join(separator, titles);
         }
 
         private string GetQualityProper(Series series, QualityModel quality)
