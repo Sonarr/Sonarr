@@ -123,12 +123,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
             }
         }
 
-        public override void RemoveItem(string id)
-        {
-            throw new NotSupportedException();
-        }
-
-        public override String RetryDownload(string id)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
             throw new NotSupportedException();
         }

@@ -26,10 +26,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                             IHttpClient httpClient,
                             IConfigService configService,
                             IDiskProvider diskProvider,
-                            IParsingService parsingService,
                             IRemotePathMappingService remotePathMappingService,
                             Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -143,14 +142,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return items;
         }
 
-        public override void RemoveItem(String hash)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
-            _proxy.RemoveTorrent(hash.ToLower(), false, Settings);
-        }
-
-        public override String RetryDownload(String hash)
-        {
-            throw new NotSupportedException();
+            _proxy.RemoveTorrent(downloadId.ToLower(), deleteData, Settings);
         }
 
         public override DownloadClientStatus GetStatus()

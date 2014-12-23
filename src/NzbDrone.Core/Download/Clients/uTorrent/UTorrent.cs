@@ -6,7 +6,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Parser;
 using NLog;
 using NzbDrone.Core.Validation;
 using FluentValidation.Results;
@@ -25,10 +24,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         IHttpClient httpClient,
                         IConfigService configService,
                         IDiskProvider diskProvider,
-                        IParsingService parsingService,
                         IRemotePathMappingService remotePathMappingService,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -143,14 +141,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return queueItems;
         }
 
-        public override void RemoveItem(String id)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
-            _proxy.RemoveTorrent(id, false, Settings);
-        }
-
-        public override String RetryDownload(String id)
-        {
-            throw new NotSupportedException();
+            _proxy.RemoveTorrent(downloadId, deleteData, Settings);
         }
 
         public override DownloadClientStatus GetStatus()

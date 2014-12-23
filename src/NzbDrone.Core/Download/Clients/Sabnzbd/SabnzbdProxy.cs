@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     public interface ISabnzbdProxy
     {
         SabnzbdAddResponse DownloadNzb(Byte[] nzbData, string name, string category, int priority, SabnzbdSettings settings);
-        void RemoveFrom(string source, string id, SabnzbdSettings settings);
+        void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
@@ -48,10 +48,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response;
         }
 
-        public void RemoveFrom(string source, string id, SabnzbdSettings settings)
+        public void RemoveFrom(string source, string id, bool deleteData, SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = String.Format("mode={0}&name=delete&del_files=1&value={1}", source, id);
+
+            var action = String.Format("mode={0}&name=delete&del_files={1}&value={2}", source, deleteData ? 1 : 0, id);
 
             ProcessRequest(request, action, settings);
         }

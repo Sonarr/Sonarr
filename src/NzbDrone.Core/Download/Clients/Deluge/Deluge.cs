@@ -5,7 +5,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Validation;
@@ -25,10 +24,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                       IHttpClient httpClient,
                       IConfigService configService,
                       IDiskProvider diskProvider,
-                      IParsingService parsingService,
                       IRemotePathMappingService remotePathMappingService,
                       Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, parsingService, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }
@@ -153,14 +151,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return items;
         }
 
-        public override void RemoveItem(String hash)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
-            _proxy.RemoveTorrent(hash.ToLower(), false, Settings);
-        }
-
-        public override String RetryDownload(String hash)
-        {
-            throw new NotSupportedException();
+            _proxy.RemoveTorrent(downloadId.ToLower(), deleteData, Settings);
         }
 
         public override DownloadClientStatus GetStatus()
@@ -245,7 +238,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 return null;
             }
-            
+
             var enabledPlugins = _proxy.GetEnabledPlugins(Settings);
 
             if (!enabledPlugins.Contains("Label"))

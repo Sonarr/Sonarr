@@ -12,9 +12,7 @@ namespace NzbDrone.Core.Download
 
         String Download(RemoteEpisode remoteEpisode);
         IEnumerable<DownloadClientItem> GetItems();
-        void RemoveItem(String id);
-        String RetryDownload(String id);
-
+        void RemoveItem(string downloadId, bool deleteData);
         DownloadClientStatus GetStatus();
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.Events;
@@ -111,7 +112,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 }
 
-                trackedDownloads.Add(trackedDownload);
+                trackedDownloads.AddIfNotNull(trackedDownload);
 
             }
             catch (Exception e)

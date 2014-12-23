@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
@@ -23,7 +21,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                        IHttpClient httpClient,
                        IConfigService configService,
                        IDiskProvider diskProvider,
-                       IParsingService parsingService,
                        IRemotePathMappingService remotePathMappingService,
                        Logger logger)
             : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
@@ -190,74 +187,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
-        public override void RemoveItem(String id)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
-            if (GetQueue().Any(v => v.DownloadId == id))
+            if (GetQueue().Any(v => v.DownloadId == downloadId))
             {
-                _proxy.RemoveFrom("queue", id, Settings);
+                _proxy.RemoveFrom("queue", downloadId, deleteData, Settings);
             }
             else
             {
-                _proxy.RemoveFrom("history", id, Settings);
+                _proxy.RemoveFrom("history", downloadId, deleteData, Settings);
             }
-        }
-
-        public override String RetryDownload(String id)
-        {
-            // Sabnzbd changed the nzo_id for retried downloads without reporting it back to us. We need to try to determine the new ID.
-            // Check both the queue and history because sometimes SAB keeps item in history to retry post processing (depends on failure reason)
-
-            var currentHistory = GetHistory().ToList();
-            var currentHistoryItems = currentHistory.Where(v => v.DownloadId == id).ToList();
-
-            if (currentHistoryItems.Count != 1)
-            {
-                _logger.Warn("History item missing. Couldn't get the new nzoid.");
-                return id;
-            }
-
-            var currentHistoryItem = currentHistoryItems.First();
-            var otherItemsWithSameTitle = currentHistory.Where(h => h.Title == currentHistoryItem.Title &&
-                                                               h.DownloadId != currentHistoryItem.DownloadId).ToList();
-
-            var newId = _proxy.RetryDownload(id, Settings);
-
-            if (newId.IsNotNullOrWhiteSpace())
-            {
-                return newId;
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                var queue = GetQueue().Where(v => v.Category == currentHistoryItem.Category &&
-                                                  v.Title == currentHistoryItem.Title).ToList();
-
-                var history = GetHistory().Where(v => v.Category == currentHistoryItem.Category &&
-                                                      v.Title == currentHistoryItem.Title &&
-                                                      !otherItemsWithSameTitle.Select(h => h.DownloadId)
-                                                                             .Contains(v.DownloadId)).ToList();
-
-                if (queue.Count == 1)
-                {
-                    return queue.First().DownloadId;
-                }
-
-                if (history.Count == 1)
-                {
-                    return history.First().DownloadId;
-                }
-
-                if (queue.Count > 1 || history.Count > 1)
-                {
-                    _logger.Warn("Multiple items with the correct title. Couldn't get the new nzoid.");
-                    return id;
-                }
-
-                Thread.Sleep(500);
-            }
-
-            _logger.Warn("No items with the correct title. Couldn't get the new nzoid.");
-            return id;
         }
 
         protected IEnumerable<SabnzbdCategory> GetCategories(SabnzbdConfig config)

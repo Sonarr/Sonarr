@@ -1,9 +1,7 @@
 using System;
 using NLog;
 using NzbDrone.Common.Cache;
-using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Download.TrackedDownloads
@@ -14,8 +12,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         TrackedDownload TrackDownload(DownloadClientDefinition downloadClient, DownloadClientItem downloadItem);
     }
 
-    public class TrackedDownloadService : ITrackedDownloadService,
-                                          IHandle<SceneMappingsUpdatedEvent>
+    public class TrackedDownloadService : ITrackedDownloadService
     {
         private readonly IParsingService _parsingService;
         private readonly IHistoryService _historyService;
@@ -42,7 +39,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             var existingItem = Find(downloadItem.DownloadId);
 
-            if (existingItem != null)
+            if (existingItem != null && existingItem.State != TrackedDownloadStage.Downloading)
             {
                 existingItem.DownloadItem = downloadItem;
                 return existingItem;
@@ -55,12 +52,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 DownloadItem = downloadItem,
                 Protocol = downloadClient.Protocol
             };
-
-            var historyItem = _historyService.MostRecentForDownloadId(downloadItem.DownloadId);
-            if (historyItem != null)
-            {
-                trackedDownload.State = GetStateFromHistory(historyItem.EventType);
-            }
 
             try
             {
@@ -81,10 +72,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 return null;
             }
 
-            if (trackedDownload.State != TrackedDownloadStage.Downloading)
+            var historyItem = _historyService.MostRecentForDownloadId(downloadItem.DownloadId);
+            if (historyItem != null)
             {
-                _cache.Set(downloadItem.DownloadId, trackedDownload);
+                trackedDownload.State = GetStateFromHistory(historyItem.EventType);
             }
+
+            _cache.Set(downloadItem.DownloadId, trackedDownload);
 
             return trackedDownload;
         }
@@ -102,9 +96,5 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
         }
 
-        public void Handle(SceneMappingsUpdatedEvent message)
-        {
-            _cache.Clear();
-        }
     }
 }

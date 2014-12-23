@@ -185,16 +185,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return GetQueue().Concat(GetHistory()).Where(downloadClientItem => downloadClientItem.Category == Settings.TvCategory);
         }
 
-        public override void RemoveItem(String id)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
-            _proxy.RemoveItem(id, Settings);
-        }
-
-        public override String RetryDownload(String id)
-        {
-            _proxy.RetryDownload(id, Settings);
-
-            return id;
+            _proxy.RemoveItem(downloadId, Settings);
         }
 
         public override DownloadClientStatus GetStatus()

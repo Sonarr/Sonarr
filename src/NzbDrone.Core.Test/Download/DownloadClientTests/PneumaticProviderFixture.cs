@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         [Test]
         public void should_throw_item_is_removed()
         {
-            Assert.Throws<NotSupportedException>(() => Subject.RemoveItem(""));
+            Assert.Throws<NotSupportedException>(() => Subject.RemoveItem("", true));
         }
 
         [Test]

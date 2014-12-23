@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Download
         }
     }
 
-
     public class DownloadEventHub : IHandle<DownloadFailedEvent>,
                                     IHandle<DownloadCompletedEvent>
     {
@@ -52,7 +51,7 @@ namespace NzbDrone.Core.Download
             var trackedDownload = _trackedDownloadService.Find(message.DownloadId);
 
 
-            if (trackedDownload == null || trackedDownload.DownloadItem.IsReadOnly || !_configService.RemoveFailedDownloads)
+            if (trackedDownload == null || trackedDownload.DownloadItem.IsReadOnly || _configService.RemoveFailedDownloads == false)
             {
                 return;
             }
@@ -67,7 +66,7 @@ namespace NzbDrone.Core.Download
             try
             {
                 _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.DownloadClient);
-                downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId);
+                downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId, true);
                 trackedDownload.DownloadItem.Removed = true;
             }
             catch (NotSupportedException)

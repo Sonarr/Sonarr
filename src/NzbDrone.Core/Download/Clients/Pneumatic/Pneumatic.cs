@@ -105,12 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             }
         }
 
-        public override void RemoveItem(String id)
-        {
-            throw new NotSupportedException();
-        }
-
-        public override String RetryDownload(String id)
+        public override void RemoveItem(string downloadId, bool deleteData)
         {
             throw new NotSupportedException();
         }
