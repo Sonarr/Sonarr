@@ -874,37 +874,5 @@ namespace NzbDrone.Core.Test.OrganizerTests
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("Sonarr");
         }
-
-        [Test]
-        public void should_scenify_series_title_when_using_period_separator()
-        {
-            _series.Title = "Girlfriends' Guide to Divorce";
-            _namingConfig.StandardEpisodeFormat = "{Series.CleanTitle}";
-
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("Girlfriends.Guide.to.Divorce");
-        }
-
-        [Test]
-        public void should_scenify_episode_title_when_using_period_separator()
-        {
-            _episode1.Title = "Rule #23: Never Lie to the Kids";
-
-            _namingConfig.StandardEpisodeFormat = "{Episode.CleanTitle}";
-
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("Rule.#23.Never.Lie.to.the.Kids");
-        }
-
-        [Test]
-        public void should_replace_forward_slash_sign_when_scenifying_episode_title()
-        {
-            _episode1.Title = "Anne Hathaway/Florence + The Machine";
-
-            _namingConfig.StandardEpisodeFormat = "{Episode.CleanTitle}";
-
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("Anne.Hathaway.Florence.The.Machine");
-        }
     }
 }
