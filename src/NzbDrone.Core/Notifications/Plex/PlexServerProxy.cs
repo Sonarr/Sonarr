@@ -35,8 +35,9 @@ namespace NzbDrone.Core.Notifications.Plex
 
             var response = client.Execute(request);
 
+            _logger.Trace("Sections response: {0}", response.Content);
+
             CheckForError(response.Content);
-            _logger.Debug("Sections response: {0}", response.Content);
 
             return Json.Deserialize<PlexMediaContainer>(response.Content)
                        .Directories
