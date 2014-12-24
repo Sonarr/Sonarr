@@ -93,6 +93,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[ www.Torrenting.com ] - Revolution.2012.S02E17.720p.HDTV.X264-DIMENSION", "Revolution2012", 2, 17)]
         [TestCase("Revolution.2012.S02E18.720p.HDTV.X264-DIMENSION.mkv", "Revolution2012", 2, 18)]
         [TestCase("Series - Season 1 - Episode 01 (Resolution).avi", "Series", 1, 1)]
+        [TestCase("5x09 - 100 [720p WEB-DL].mkv", "", 5, 9)]
+        [TestCase("1x03 - 274 [1080p BluRay].mkv", "", 1, 3)]
+        [TestCase("1x03 - The 112th Congress [1080p BluRay].mkv", "", 1, 3)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
