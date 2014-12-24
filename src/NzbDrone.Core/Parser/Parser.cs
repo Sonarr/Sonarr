@@ -54,8 +54,6 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[.{8}\])(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                
-
                 //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
                 new Regex(@"^(?<title>.+?)(?:(\W|_)+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
