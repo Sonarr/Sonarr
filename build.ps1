@@ -152,6 +152,9 @@ Function PackageOsx()
     Write-Host "Adding MediaInfo dylib"
     Copy-Item "$sourceFolder\Libraries\MediaInfo\*.dylib" "$outputFolderOsx"
 
+    Write-Host "Adding Startup script"
+    Copy-Item  .\osx\Sonarr "$outputFolderOsx"
+
     Write-Host "##teamcity[progressFinish 'Creating OS X Package']"
 }
 
@@ -165,7 +168,7 @@ Function PackageOsxApp()
         Remove-Item -Recurse -Force $outputFolderOsxApp -ErrorAction Continue
     }
 
-    Copy-Item .\osx-app $outputFolderOsxApp\ -recurse
+    Copy-Item .\osx\Sonarr.app $outputFolderOsxApp\Sonarr.app -recurse
     Copy-Item $outputFolderOsx\* $outputFolderOsxApp\Sonarr.app\Contents\MacOS -recurse
 
     Write-Host "##teamcity[progressFinish 'Creating OS X App Package']"
