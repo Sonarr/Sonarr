@@ -8,7 +8,7 @@
         <h4>{{title}}</h4>
     </a>
     {{/with}}
-    <p>{{StartTime airDateUtc}} {{ShortDate airDateUtc}}</p>
+    <p>{{StartTime airDateUtc}} {{#unless_today airDateUtc}}{{ShortDate airDateUtc}}{{/unless_today}}</p>
     <p>
         <span class="episode-title x-episode-title">
             {{title}}

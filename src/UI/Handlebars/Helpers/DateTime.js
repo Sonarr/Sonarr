@@ -71,4 +71,28 @@ define(
 
             return moment(input).format('h:mm:ss A');
         });
+
+        Handlebars.registerHelper('if_today', function(context, options) {
+            var date = moment(context).startOf('day');
+            var today = moment().startOf('day');
+
+
+            if (date.isSame(today)) {
+                return options.fn(this);
+            }
+
+            return options.inverse(this);
+        });
+
+        Handlebars.registerHelper('unless_today', function(context, options) {
+            var date = moment(context).startOf('day');
+            var today = moment().startOf('day');
+
+
+            if (date.isSame(today)) {
+                return options.inverse(this);
+            }
+
+            return options.fn(this);
+        });
     });
