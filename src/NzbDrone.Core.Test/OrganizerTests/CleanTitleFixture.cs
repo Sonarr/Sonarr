@@ -61,7 +61,11 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("Marvel's Agents of S.H.I.E.L.D.", "Marvels Agents of S.H.I.E.L.D")]
         [TestCase("Castle (2009)", "Castle 2009")]
         [TestCase("Law & Order (UK)", "Law and Order UK")]
-//        [TestCase("", "")]
+        [TestCase("Is this okay?", "Is this okay")]
+        [TestCase("[a] title", "a title")]
+        [TestCase("backslash \\ backlash", "backslash backlash")]
+        //[TestCase("", "")]
+        //[TestCase("", "")]
         public void should_get_expected_title_back(string title, string expected)
         {
             _series.Title = title;
