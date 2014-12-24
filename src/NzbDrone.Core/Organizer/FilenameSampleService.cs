@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Organizer
 
             _singleEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p),
+                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
                 RelativePath = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
                 SceneName = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Organizer
 
             _multiEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p),
+                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
                 RelativePath = "Series.Title.S01E01-E03.720p.HDTV.x264-EVOLVE.mkv",
                 SceneName = "Series.Title.S01E01-E03.720p.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Organizer
 
             _dailyEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p),
+                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
                 RelativePath = "Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
                 SceneName = "Series.Title.2013.10.30.HDTV.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Organizer
 
             _animeEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p),
+                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
                 RelativePath = "[RlsGroup] Series Title - 001 [720p].mkv",
                 SceneName = "[RlsGroup] Series Title - 001 [720p]",
                 ReleaseGroup = "RlsGrp",
@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Organizer
 
             _animeMultiEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p),
+                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
                 RelativePath = "[RlsGroup] Series Title - 001 - 103 [720p].mkv",
                 SceneName = "[RlsGroup] Series Title - 001 - 103 [720p]",
                 ReleaseGroup = "RlsGrp",
