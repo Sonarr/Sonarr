@@ -30,7 +30,14 @@ define(
                                         return releaseWeight;
                                     }
                 },
-                'download'      : { sortKey: 'releaseWeight' }
+                'download'      : { sortKey: 'releaseWeight' },
+                'seeders'       : { sortValue: function(model) {
+                                        var seeders = model.get('seeders') || 0;
+                                        var leechers = model.get('leechers') || 0;
+                                        
+                                        return seeders * 1000000 + leechers;
+                                    }
+                }
             },
 
             fetchEpisodeReleases: function (episodeId) {

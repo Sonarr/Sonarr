@@ -26,7 +26,8 @@ define(
                         name     : 'protocol',
                         label    : 'Source',
                         cell     : ProtocolCell
-                    },  {
+                    },
+                    {
                         name     : 'age',
                         label    : 'Age',
                         cell     : AgeCell
@@ -66,7 +67,7 @@ define(
                         name     : 'download',
                         label    : '',
                         cell     : DownloadReportCell,
-                        sortable : false
+                        sortable : true // Is the default sort, which sorts by the internal prioritization logic.
                     }
                 ],
 
