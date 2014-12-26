@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Download.Pending
 
                     var queue = new Queue.Queue
                                 {
-                                    Id = episode.Id ^ (pendingRelease.Id << 16),
+                                    Id = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", pendingRelease.Id, episode.Id)),
                                     Series = pendingRelease.RemoteEpisode.Series,
                                     Episode = episode,
                                     Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,

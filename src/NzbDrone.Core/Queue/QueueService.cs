@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using NzbDrone.Common.Crypto;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Messaging.Events;
 
@@ -40,13 +41,13 @@ namespace NzbDrone.Core.Queue
             _eventAggregator.PublishEvent(new QueueUpdatedEvent());
         }
 
-        private static IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
+        private IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
         {
             foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
             {
                 var queue = new Queue
                 {
-                    Id = episode.Id ^ (trackedDownload.DownloadItem.DownloadId.GetHashCode() << 16),
+                    Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
                     Series = trackedDownload.RemoteEpisode.Series,
                     Episode = episode,
                     Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
