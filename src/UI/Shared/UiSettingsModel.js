@@ -8,15 +8,19 @@ define(
 
             url : window.NzbDrone.ApiRoot + '/config/ui',
 
-            shortDateTime : function () {
-                return this.get('shortDateFormat') + ' ' + this.time(true);
+            shortDateTime : function (includeSeconds) {
+                return this.get('shortDateFormat') + ' ' + this.time(true, includeSeconds);
             },
 
-            longDateTime : function () {
-                return this.get('longDateFormat') + ' ' + this.time(true);
+            longDateTime : function (includeSeconds) {
+                return this.get('longDateFormat') + ' ' + this.time(true, includeSeconds);
             },
 
-            time : function (includeMinuteZero) {
+            time : function (includeMinuteZero, includeSeconds) {
+                if (includeSeconds) {
+                    return this.get('timeFormat').replace(/\(?\:mm\)?/, ':mm:ss');
+                }
+
                 if (includeMinuteZero) {
                     return this.get('timeFormat').replace('(', '').replace(')', '');
                 }

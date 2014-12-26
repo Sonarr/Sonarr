@@ -13,7 +13,7 @@ define(
                 var age = this.model.get('age');
                 var ageHours = this.model.get('ageHours');
                 var published = moment(this.model.get('publishDate'));
-                var publishedFormatted = published.format('{0} h:mm:ss A'.format(UiSettings.get('shortDateFormat')));
+                var publishedFormatted = published.format('{0} {1}'.format(UiSettings.get('shortDateFormat'), UiSettings.time(true, true)));
                 var formatted = age;
                 var suffix = this.plural(age, 'day');
 

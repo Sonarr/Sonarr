@@ -61,7 +61,7 @@ define(
                 return '';
             }
 
-            return moment(input).format(UiSettings.time(false));
+            return moment(input).format(UiSettings.time(false, false));
         });
 
         Handlebars.registerHelper('LTS', function (input) {
@@ -69,7 +69,7 @@ define(
                 return '';
             }
 
-            return moment(input).format('h:mm:ss A');
+            return moment(input).format(UiSettings.time(true, true));
         });
 
         Handlebars.registerHelper('if_today', function(context, options) {
