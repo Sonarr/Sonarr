@@ -4,7 +4,7 @@ define(
         'backgrid',
         'Shared/UiSettingsModel',
         'Shared/FormatHelpers'
-    ], function (moment, Backgrid, UiSettings, FormatHelpers) {
+    ], function (moment, Backgrid, UiSettings) {
         return Backgrid.Cell.extend({
 
             className: 'age-cell',
