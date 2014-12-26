@@ -44,6 +44,8 @@ namespace NzbDrone.Api.Queue
             if (pendingRelease != null)
             {
                 _pendingReleaseService.RemovePendingQueueItem(id);
+
+                return new object().AsResponse();
             }
 
             var trackedDownload = GetTrackedDownload(id);
