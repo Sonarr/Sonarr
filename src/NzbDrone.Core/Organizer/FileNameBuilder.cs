@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<=\s)(,|<|>|\/|\\|;|:|'|""|\||`|~|!|\?|@|$|%|^|\*|-|_|=){1}(?=\s)|('|:|\?|,)(?=(?:(?:s|m)\s)|\s|$)|(\(|\)|\[|\]|\{|\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ScenifyReplaceChars = new Regex(@"[\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\(\d+\)|Part\s\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\(\d+\)|Part\s?\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
