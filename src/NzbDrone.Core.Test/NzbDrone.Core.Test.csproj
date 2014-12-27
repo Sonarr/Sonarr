@@ -228,7 +228,8 @@
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
     <Compile Include="MetadataSourceTests\TraktSearchSeriesComparerFixture.cs" />
-    <Compile Include="OrganizerTests\CleanTitleFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="ParserTests\MiniSeriesEpisodeParserFixture.cs" />
     <Compile Include="Qualities\RevisionComparableFixture.cs" />
     <Compile Include="RemotePathMappingsTests\RemotePathMappingServiceFixture.cs" />
@@ -259,7 +260,7 @@
     <Compile Include="NotificationTests\Xbmc\OnDownloadFixture.cs" />
     <Compile Include="OrganizerTests\BuildFilePathFixture.cs" />
     <Compile Include="OrganizerTests\GetSeasonFolderFixture.cs" />
-    <Compile Include="OrganizerTests\FileNameBuilderFixture.cs" />
+    <Compile Include="OrganizerTests\FileNameBuilderTests\FileNameBuilderFixture.cs" />
     <Compile Include="OrganizerTests\GetSeriesFolderFixture.cs" />
     <Compile Include="ParserTests\AbsoluteEpisodeNumberParserFixture.cs" />
     <Compile Include="ParserTests\AnimeMetadataParserFixture.cs" />
