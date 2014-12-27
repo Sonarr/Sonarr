@@ -162,8 +162,6 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ReleaseGroupRegex = new Regex(@"-(?<releasegroup>[a-z0-9]+)\b(?<!WEB-DL|480p|720p|1080p)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
-
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\bita\b|italian)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -329,12 +327,6 @@ namespace NzbDrone.Core.Parser
                 return title;
 
             return NormalizeRegex.Replace(title, String.Empty).ToLower().RemoveAccent();
-        }
-
-        public static string CleanupEpisodeTitle(string title)
-        {
-            //this will remove (1),(2) from the end of multi part episodes.
-            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
 
         public static string NormalizeEpisodeTitle(string title)

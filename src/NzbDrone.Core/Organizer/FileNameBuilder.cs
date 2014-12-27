@@ -56,8 +56,10 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
         private static readonly Regex TrimSeparatorsRegex = new Regex(@"[- ._]$", RegexOptions.Compiled);
 
-        private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<=\s)(,|<|>|\/|\\|;|:|'|""|\||`|~|!|\?|@|$|%|^|\*|-|_|=){1}(?=\s)|('|:|\?)(?=s|\s|$)|(\(|\)|\[|\]|\{|\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<=\s)(,|<|>|\/|\\|;|:|'|""|\||`|~|!|\?|@|$|%|^|\*|-|_|=){1}(?=\s)|('|:|\?|,)(?=(?:(?:s|m)\s)|\s|$)|(\(|\)|\[|\]|\{|\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ScenifyReplaceChars = new Regex(@"[\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\(\d+\)|Part\s\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
 
@@ -656,10 +658,16 @@ namespace NzbDrone.Core.Organizer
 
             var titles = episodes
                 .Select(c => c.Title.TrimEnd(EpisodeTitleTrimCharacters))
-                .Select(Parser.Parser.CleanupEpisodeTitle)
+                .Select(CleanupEpisodeTitle)
                 .Distinct();
 
             return String.Join(separator, titles);
+        }
+
+        private string CleanupEpisodeTitle(string title)
+        {
+            //this will remove (1),(2) from the end of multi part episodes.
+            return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
 
         private string GetQualityProper(Series series, QualityModel quality)

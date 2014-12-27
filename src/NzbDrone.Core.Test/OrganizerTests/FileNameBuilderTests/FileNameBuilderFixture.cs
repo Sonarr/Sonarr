@@ -8,10 +8,10 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.OrganizerTests
+namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
     [TestFixture]
 
@@ -262,42 +262,6 @@ namespace NzbDrone.Core.Test.OrganizerTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("30.Rock.S01E01.xvid-LOL");
-        }
-
-        [Test]
-        public void should_only_have_one_episodeTitle_when_episode_titles_are_the_same()
-        {
-            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
-            _namingConfig.MultiEpisodeStyle = 3;
-
-            var episode = Builder<Episode>.CreateNew()
-                            .With(e => e.Title = "Hey, Baby, What's Wrong? (1)")
-                            .With(e => e.SeasonNumber = 6)
-                            .With(e => e.EpisodeNumber = 6)
-                            .Build();
-
-            var episode2 = Builder<Episode>.CreateNew()
-                            .With(e => e.Title = "Hey, Baby, What's Wrong? (2)")
-                            .With(e => e.SeasonNumber = 6)
-                            .With(e => e.EpisodeNumber = 7)
-                            .Build();
-
-
-            Subject.BuildFileName(new List<Episode> {episode2, episode}, new Series {Title = "30 Rock"}, _episodeFile)
-                   .Should().Be("30 Rock - S06E06-E07 - Hey, Baby, What's Wrong!");
-        }
-
-        [Test]
-        public void should_have_two_episodeTitles_when_episode_titles_are_not_the_same()
-        {
-            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
-            _namingConfig.MultiEpisodeStyle = 3;
-
-            _episode1.Title = "Hello";
-            _episode2.Title = "World";
-
-            Subject.BuildFileName(new List<Episode> {_episode1, _episode2}, _series, _episodeFile)
-                   .Should().Be("South Park - S15E06-E07 - Hello + World");
         }
 
         [Test]
