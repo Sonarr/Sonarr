@@ -146,10 +146,7 @@ namespace NzbDrone.Core.MetadataSource
             series.Certification = show.certification;
             series.Actors = GetActors(show.people);
             series.Seasons = GetSeasons(show);
-
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.images.fanart });
+            series.Images = GetImages(show.images);
 
             return series;
         }
@@ -178,7 +175,7 @@ namespace NzbDrone.Core.MetadataSource
             episode.Ratings = GetRatings(traktEpisode.ratings);
 
             //Don't include series fanart images as episode screenshot
-            if (!traktEpisode.images.screen.Contains("-940."))
+            if (traktEpisode.images != null && traktEpisode.images.screen != null && !traktEpisode.images.screen.Contains("-940."))
             {
                 episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
             }
@@ -188,11 +185,12 @@ namespace NzbDrone.Core.MetadataSource
 
         private static string GetPosterThumbnailUrl(string posterUrl)
         {
-            if (posterUrl.Contains("poster-small.jpg") || posterUrl.Contains("poster-dark.jpg")) return posterUrl;
+            if (posterUrl.Contains("poster-small.jpg") || posterUrl.Contains("poster-dark.jpg"))
+            {
+                return posterUrl;
+            }
 
-            var extension = Path.GetExtension(posterUrl);
-            var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
-            return withoutExtension + "-300" + extension;
+            return posterUrl.Replace("/original/", "/thumb/");
         }
 
         private static SeriesStatusType GetSeriesStatus(string status, bool? ended)
@@ -260,6 +258,11 @@ namespace NzbDrone.Core.MetadataSource
 
         private static Tv.Ratings GetRatings(Trakt.Ratings ratings)
         {
+            if (ratings == null)
+            {
+                return new Tv.Ratings();
+            }
+
             return new Tv.Ratings
                    {
                        Percentage = ratings.percentage,
@@ -279,9 +282,14 @@ namespace NzbDrone.Core.MetadataSource
             return GetActors(people.actors).ToList();
         }
 
-        private static IEnumerable<Tv.Actor> GetActors(IEnumerable<Trakt.Actor> trakcActors)
+        private static IEnumerable<Tv.Actor> GetActors(IEnumerable<Trakt.Actor> traktActors)
         {
-            foreach (var traktActor in trakcActors)
+            if (traktActors == null)
+            {
+                yield break;
+            }
+
+            foreach (var traktActor in traktActors)
             {
                 var actor = new Tv.Actor
                             {
@@ -315,6 +323,33 @@ namespace NzbDrone.Core.MetadataSource
             }
 
             return seasons;
+        }
+
+        private static List<MediaCover.MediaCover> GetImages(Images traktImages)
+        {
+            var images = new List<MediaCover.MediaCover>();
+
+            if (traktImages == null)
+            {
+                return images;
+            }
+
+            if (traktImages.banner != null)
+            {
+                images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = traktImages.banner });
+            }
+
+            if (traktImages.poster != null)
+            {
+                images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(traktImages.poster) });                
+            }
+
+            if (traktImages.fanart != null)
+            {
+                images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = traktImages.fanart });                
+            }
+
+            return images;
         }
     }
 }
