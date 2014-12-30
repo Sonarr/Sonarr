@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Tv;
-using Episode = NzbDrone.Core.Tv.Episode;
+using TVDBSharp.Models.Enums;
 
 namespace NzbDrone.Core.MetadataSource
 {
-    public class TraktProxy //: ISearchForNewSeries, IProvideSeriesInfo
+    public class TvDbProxy : ISearchForNewSeries, IProvideSeriesInfo
     {
         private readonly Logger _logger;
         private readonly IHttpClient _httpClient;
@@ -22,27 +23,31 @@ namespace NzbDrone.Core.MetadataSource
         private static readonly Regex ExpandCamelCaseRegEx = new Regex(@"(?<!^|[A-Z]\.?|[^\w.])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<!^|\d\.?|[^\w.])(?=\d)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         private readonly HttpRequestBuilder _requestBuilder;
+        private TVDBSharp.TVDB tvdb;
 
-        public TraktProxy(Logger logger, IHttpClient httpClient)
+        public TvDbProxy(Logger logger, IHttpClient httpClient)
         {
             _requestBuilder = new HttpRequestBuilder("http://api.trakt.tv/{path}/{resource}.json/bc3c2c460f22cbb01c264022b540e191");
             _logger = logger;
             _httpClient = httpClient;
+
+
+            tvdb = new TVDBSharp.TVDB("5D2D188E86E07F4F");
         }
 
-        private IEnumerable<Show> SearchTrakt(string title)
+        private IEnumerable<TVDBSharp.Models.Show> SearchTrakt(string title)
         {
-            HttpRequest request;
+/*            Common.Http.HttpRequest request;
 
             var lowerTitle = title.ToLowerInvariant();
 
-            if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:") || lowerTitle.StartsWith("slug:"))
+            if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:") /*|| lowerTitle.StartsWith("slug:")#1#)
             {
                 var slug = lowerTitle.Split(':')[1].Trim();
 
                 if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace))
                 {
-                    return Enumerable.Empty<Show>();
+                    return Enumerable.Empty<TVDBSharp.Models.Show>();
                 }
 
                 request = _requestBuilder.Build("/{slug}/extended");
@@ -64,29 +69,26 @@ namespace NzbDrone.Core.MetadataSource
                 }
 
                 title = "tt" + slug;
-            }
+            }*/
 
-            request = _requestBuilder.Build("");
 
-            request.AddSegment("path", "search");
-            request.AddSegment("resource", "shows");
-            request.UriBuilder.SetQueryParam("query", GetSearchTerm(title));
-            request.UriBuilder.SetQueryParam("seasons", true);
+            return tvdb.Search(GetSearchTerm(title));
 
-            return _httpClient.Get<List<Show>>(request).Resource;
         }
 
         public List<Series> SearchForNewSeries(string title)
         {
             try
             {
-                var series = SearchTrakt(title.Trim()).Select(MapSeries).ToList();
+                var tvdbSeries = SearchTrakt(title.Trim());
+
+                var series = tvdbSeries.Select(MapSeries).ToList();
 
                 series.Sort(new TraktSearchSeriesComparer(title));
 
                 return series;
             }
-            catch (HttpException)
+            catch (Common.Http.HttpException)
             {
                 throw new TraktException("Search for '{0}' failed. Unable to communicate with Trakt.", title);
             }
@@ -97,7 +99,7 @@ namespace NzbDrone.Core.MetadataSource
             }
         }
 
-        public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
+        public Tuple<Series, List<Tv.Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
 
             var request = _requestBuilder.Build("/{tvdbId}/extended");
@@ -106,83 +108,88 @@ namespace NzbDrone.Core.MetadataSource
             request.AddSegment("resource", "summary");
             request.AddSegment("tvdbId", tvdbSeriesId.ToString());
 
-            var response = _httpClient.Get<Show>(request).Resource;
+            var tvdbSeries = tvdb.GetShow(tvdbSeriesId);
 
-            var episodes = response.seasons.SelectMany(c => c.episodes).Select(MapEpisode);
+            var episodes = tvdbSeries.Episodes.Select(MapEpisode);
 
             episodes = RemoveDuplicates(episodes);
-               
-            var series = MapSeries(response);
 
-            return new Tuple<Series, List<Episode>>(series, episodes.ToList());
+            var series = MapSeries(tvdbSeries);
+
+            return new Tuple<Series, List<Tv.Episode>>(series, episodes.ToList());
         }
 
-        private static IEnumerable<Episode> RemoveDuplicates(IEnumerable<Episode> episodes)
+        private static IEnumerable<Tv.Episode> RemoveDuplicates(IEnumerable<Tv.Episode> episodes)
         {
             //http://support.trakt.tv/forums/188762-general/suggestions/4430690-anger-management-duplicate-episode
             var episodeGroup = episodes.GroupBy(e => e.SeasonNumber.ToString("0000") + e.EpisodeNumber.ToString("0000"));
             return episodeGroup.Select(g => g.First());
         }
 
-        private static Series MapSeries(Show show)
+        private static Series MapSeries(TVDBSharp.Models.Show show)
         {
             var series = new Series();
-            series.TvdbId = show.tvdb_id;
-            series.TvRageId = show.tvrage_id;
-            series.ImdbId = show.imdb_id;
-            series.Title = show.title;
-            series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.title);
-            series.SortTitle = SeriesTitleNormalizer.Normalize(show.title, show.tvdb_id);
-            series.Year = GetYear(show.year, show.first_aired);
-            series.FirstAired = FromIso(show.first_aired_iso);
-            series.Overview = show.overview;
-            series.Runtime = show.runtime;
-            series.Network = show.network;
-            series.AirTime = show.air_time;
-            series.TitleSlug = GetTitleSlug(show.url);
-            series.Status = GetSeriesStatus(show.status, show.ended);
-            series.Ratings = GetRatings(show.ratings);
-            series.Genres = show.genres;
-            series.Certification = show.certification;
-            series.Actors = GetActors(show.people);
+            series.TvdbId = show.Id;
+            //series.TvRageId = show.tvrage_id;
+            series.ImdbId = show.ImdbId;
+            series.Title = show.Name;
+            series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.Name);
+            series.SortTitle = SeriesTitleNormalizer.Normalize(show.Name, show.Id);
+
+            if (show.FirstAired != null)
+            {
+                series.Year = show.FirstAired.Value.Year;
+                series.FirstAired = show.FirstAired.Value.ToUniversalTime();
+            }
+
+            series.Overview = show.Description;
+
+            if (show.Runtime != null)
+            {
+                series.Runtime = show.Runtime.Value;
+            }
+
+            series.Network = show.Network;
+
+            if (show.AirTime != null)
+            {
+                series.AirTime = show.AirTime.Value.ToString();
+            }
+
+            series.TitleSlug = GenerateSlug(show.Name);
+            series.Status = GetSeriesStatus(show.Status);
+            series.Ratings = GetRatings(show.RatingCount, show.Rating);
+            series.Genres = show.Genres;
+            series.Certification = show.ContentRating.ToString().ToUpper();
+            series.Actors = new List<Tv.Actor>();
             series.Seasons = GetSeasons(show);
 
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.images.banner });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(show.images.poster) });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.images.fanart });
+            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.Banner.ToString() });
+            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = show.Poster.ToString() });
+            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.Fanart.ToString() });
 
             return series;
         }
 
-        private static String GetTitleSlug(String url)
+        private static Tv.Episode MapEpisode(TVDBSharp.Models.Episode traktEpisode)
         {
-            var slug = url.ToLower().Replace("http://trakt.tv/show/", "");
+            var episode = new Tv.Episode();
+            episode.Overview = traktEpisode.Description;
+            episode.SeasonNumber = traktEpisode.SeasonNumber;
+            episode.EpisodeNumber = traktEpisode.EpisodeNumber;
+            episode.Title = traktEpisode.Title;
 
-            if (slug.StartsWith("."))
+            if (traktEpisode.FirstAired != null)
             {
-                slug = "dot" + slug.Substring(1);
+                episode.AirDate = traktEpisode.FirstAired.Value.ToString("yyyy-MM-dd");
+                episode.AirDateUtc = traktEpisode.FirstAired.Value.ToUniversalTime();
             }
 
-            return slug;
-        }
-
-        private static Episode MapEpisode(Trakt.Episode traktEpisode)
-        {
-            var episode = new Episode();
-            episode.Overview = traktEpisode.overview;
-            episode.SeasonNumber = traktEpisode.season;
-            episode.EpisodeNumber = traktEpisode.number;
-            episode.Title = traktEpisode.title;
-            episode.AirDate = FromIsoToString(traktEpisode.first_aired_iso);
-            episode.AirDateUtc = FromIso(traktEpisode.first_aired_iso);
-            episode.Ratings = GetRatings(traktEpisode.ratings);
+            episode.Ratings = GetRatings(traktEpisode.RatingCount, traktEpisode.Rating);
 
             //Don't include series fanart images as episode screenshot
-            if (!traktEpisode.images.screen.Contains("-940."))
-            {
-                episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.images.screen));
-            }
-            
+            episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.EpisodeImage.ToString()));
+
             return episode;
         }
 
@@ -195,18 +202,13 @@ namespace NzbDrone.Core.MetadataSource
             return withoutExtension + "-300" + extension;
         }
 
-        private static SeriesStatusType GetSeriesStatus(string status, bool? ended)
+        private static SeriesStatusType GetSeriesStatus(Status status)
         {
-            if (string.IsNullOrWhiteSpace(status))
+            if (status == Status.Ended)
             {
-                if (ended.HasValue && ended.Value)
-                {
-                    return SeriesStatusType.Ended;
-                }
-
-                return SeriesStatusType.Continuing;
+                return SeriesStatusType.Ended;
             }
-            if (status.Equals("Ended", StringComparison.InvariantCultureIgnoreCase)) return SeriesStatusType.Ended;
+
             return SeriesStatusType.Continuing;
         }
 
@@ -236,15 +238,15 @@ namespace NzbDrone.Core.MetadataSource
             phrase = phrase.RemoveAccent();
             phrase = InvalidSearchCharRegex.Replace(phrase, "");
 
-//            if (!phrase.Any(char.IsWhiteSpace) && phrase.Any(char.IsUpper) && phrase.Any(char.IsLower) && phrase.Length > 4)
-//            {
-//                phrase = ExpandCamelCaseRegEx.Replace(phrase, " ");
-//            }
+            //            if (!phrase.Any(char.IsWhiteSpace) && phrase.Any(char.IsUpper) && phrase.Any(char.IsLower) && phrase.Length > 4)
+            //            {
+            //                phrase = ExpandCamelCaseRegEx.Replace(phrase, " ");
+            //            }
 
             phrase = CollapseSpaceRegex.Replace(phrase, " ").Trim();
             phrase = phrase.Trim('-');
 
-            phrase = System.Web.HttpUtility.UrlEncode(phrase.ToLower());
+            phrase = HttpUtility.UrlEncode(phrase.ToLower());
 
             return phrase;
         }
@@ -258,15 +260,17 @@ namespace NzbDrone.Core.MetadataSource
             return year;
         }
 
-        private static Tv.Ratings GetRatings(Trakt.Ratings ratings)
+        private static Tv.Ratings GetRatings(int ratingCount, double? rating)
         {
-            return new Tv.Ratings
-                   {
-                       Percentage = ratings.percentage,
-                       Votes = ratings.votes,
-                       Loved = ratings.loved,
-                       Hated = ratings.hated
-                   };
+
+            var result = new Tv.Ratings { Votes = ratingCount };
+
+            if (rating != null)
+            {
+                result.Percentage = (int)(rating.Value * 100);
+            }
+
+            return result;
         }
 
         private static List<Tv.Actor> GetActors(People people)
@@ -295,26 +299,44 @@ namespace NzbDrone.Core.MetadataSource
             }
         }
 
-        private static List<Tv.Season> GetSeasons(Show show)
+        private static List<Tv.Season> GetSeasons(TVDBSharp.Models.Show show)
         {
             var seasons = new List<Tv.Season>();
 
-            foreach (var traktSeason in show.seasons.OrderByDescending(s => s.season))
+            foreach (var seasonNumber in show.Episodes.Select(c => c.SeasonNumber).Distinct().OrderByDescending(c => c))
             {
                 var season = new Tv.Season
                 {
-                    SeasonNumber = traktSeason.season
+                    SeasonNumber = seasonNumber
                 };
 
-                if (traktSeason.images != null)
-                {
-                    season.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Poster, traktSeason.images.poster));
-                }
+                /*           if (season.images != null)
+                           {
+                               season.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Poster, season.images.poster));
+                           }*/
 
                 seasons.Add(season);
             }
 
             return seasons;
+        }
+
+
+        private static readonly Regex RemoveRegex = new Regex(@"[^\w-]", RegexOptions.Compiled);
+
+        public static string GenerateSlug(string showTitle)
+        {
+            if (showTitle.StartsWith("."))
+            {
+                showTitle = "dot" + showTitle.Substring(1);
+            }
+            showTitle = showTitle.Replace(" ", "-");
+            showTitle = showTitle.Replace("&", "and");
+            showTitle = RemoveRegex.Replace(showTitle, String.Empty);
+            showTitle = showTitle.RemoveAccent();
+            showTitle = showTitle.ToLowerInvariant();
+
+            return showTitle;
         }
     }
 }
