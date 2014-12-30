@@ -27,9 +27,9 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [TestCase("South Park", "South Park")]
         [TestCase("Franklin & Bash", "Franklin & Bash")]
         [TestCase("Mr. D", "Mr. D")]
-        [TestCase("Rob & Big", "Rob & Big")]
-        //[TestCase("M*A*S*H", "M*A*S*H")]
-        //[TestCase("imdb:tt0436992", "Doctor Who (2005)")]
+        [TestCase("Rob & Big", "Rob and Big")]
+        [TestCase("M*A*S*H", "M*A*S*H")]
+        [TestCase("imdb:tt0436992", "Doctor Who (2005)")]
         [TestCase("tvdb:78804", "Doctor Who (2005)")]
         public void successful_search(string title, string expected)
         {
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         }
 
         [TestCase(75978, "Family Guy")]
-        [TestCase(83462, "Castle")]
+        [TestCase(83462, "Castle (2009)")]
         [TestCase(266189, "The Blacklist")]
         public void should_be_able_to_get_series_detail(Int32 tvdbId, String title)
         {
@@ -68,13 +68,13 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             ExceptionVerification.ExpectedWarns(1);
         }
 
-//        [Test]
-//        public void should_not_have_period_at_start_of_title_slug()
-//        {
-//            var details = Subject.GetSeriesInfo(79099);
-//
-//            details.Item1.TitleSlug.Should().Be("dothack");
-//        }
+        [Test]
+        public void should_not_have_period_at_start_of_title_slug()
+        {
+            var details = Subject.GetSeriesInfo(79099);
+
+            details.Item1.TitleSlug.Should().Be("dothack");
+        }
 
         private void ValidateSeries(Series series)
         {
