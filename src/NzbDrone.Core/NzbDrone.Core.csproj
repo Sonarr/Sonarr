@@ -595,6 +595,7 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="MetadataSource\TvDbProxy.cs" />
     <Compile Include="MetadataSource\TraktSearchSeriesComparer.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
@@ -898,6 +899,10 @@
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TVDBSharp\TVDBSharp.csproj">
+      <Project>{0cc493d7-0a9f-4199-9615-0a977945d716}</Project>
+      <Name>TVDBSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

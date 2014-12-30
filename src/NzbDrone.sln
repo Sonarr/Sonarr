@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{57A04B72-8088-4F75-A582-1158CF8291F7}"
 EndProject
@@ -81,6 +81,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogentriesCore", "LogentriesCore\LogentriesCore.csproj", "{90D6E9FC-7B88-4E1B-B018-8FA742274558}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogentriesNLog", "LogentriesNLog\LogentriesNLog.csproj", "{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVDBSharp", "TVDBSharp\TVDBSharp.csproj", "{0CC493D7-0A9F-4199-9615-0A977945D716}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -262,6 +264,12 @@ Global
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}.Mono|x86.Build.0 = Release|x86
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}.Release|x86.ActiveCfg = Release|x86
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}.Release|x86.Build.0 = Release|x86
+		{0CC493D7-0A9F-4199-9615-0A977945D716}.Debug|x86.ActiveCfg = Debug|x86
+		{0CC493D7-0A9F-4199-9615-0A977945D716}.Debug|x86.Build.0 = Debug|x86
+		{0CC493D7-0A9F-4199-9615-0A977945D716}.Mono|x86.ActiveCfg = Release|x86
+		{0CC493D7-0A9F-4199-9615-0A977945D716}.Mono|x86.Build.0 = Release|x86
+		{0CC493D7-0A9F-4199-9615-0A977945D716}.Release|x86.ActiveCfg = Release|x86
+		{0CC493D7-0A9F-4199-9615-0A977945D716}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -294,6 +302,7 @@ Global
 		{411A9E0E-FDC6-4E25-828A-0C2CD1CD96F8} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 		{90D6E9FC-7B88-4E1B-B018-8FA742274558} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
+		{0CC493D7-0A9F-4199-9615-0A977945D716} = {F6E3A728-AE77-4D02-BAC8-82FBC1402DDA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;packages\Unity.2.1.505.2\lib\NET35
