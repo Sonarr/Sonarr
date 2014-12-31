@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Trakt;
 using NzbDrone.Core.Tv;
+using TVDBSharp;
 using TVDBSharp.Models.Enums;
 
 namespace NzbDrone.Core.MetadataSource
@@ -17,63 +16,36 @@ namespace NzbDrone.Core.MetadataSource
     public class TvDbProxy : ISearchForNewSeries, IProvideSeriesInfo
     {
         private readonly Logger _logger;
-        private readonly IHttpClient _httpClient;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
-        private static readonly Regex ExpandCamelCaseRegEx = new Regex(@"(?<!^|[A-Z]\.?|[^\w.])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<!^|\d\.?|[^\w.])(?=\d)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-        private readonly HttpRequestBuilder _requestBuilder;
-        private TVDBSharp.TVDB tvdb;
+        private readonly TVDB _tvdb;
 
-        public TvDbProxy(Logger logger, IHttpClient httpClient)
+        public TvDbProxy(Logger logger)
         {
-            _requestBuilder = new HttpRequestBuilder("http://api.trakt.tv/{path}/{resource}.json/bc3c2c460f22cbb01c264022b540e191");
             _logger = logger;
-            _httpClient = httpClient;
-
-
-            tvdb = new TVDBSharp.TVDB("5D2D188E86E07F4F");
+            _tvdb = new TVDB("5D2D188E86E07F4F");
         }
 
         private IEnumerable<TVDBSharp.Models.Show> SearchTrakt(string title)
         {
-/*            Common.Http.HttpRequest request;
-
             var lowerTitle = title.ToLowerInvariant();
 
-            if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:") /*|| lowerTitle.StartsWith("slug:")#1#)
+            if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:"))
             {
                 var slug = lowerTitle.Split(':')[1].Trim();
 
-                if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace))
+                int tvdbId;
+
+                if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !Int32.TryParse(slug, out tvdbId))
                 {
                     return Enumerable.Empty<TVDBSharp.Models.Show>();
                 }
 
-                request = _requestBuilder.Build("/{slug}/extended");
-
-                request.AddSegment("path", "show");
-                request.AddSegment("resource", "summary");
-                request.AddSegment("slug", GetSearchTerm(slug));
-
-                return new List<Show> { _httpClient.Get<Show>(request).Resource };
+                return new[] { _tvdb.GetShow(tvdbId) };
             }
 
-            if (lowerTitle.StartsWith("imdb:") || lowerTitle.StartsWith("imdbid:"))
-            {
-                var slug = lowerTitle.Split(':')[1].TrimStart('t').Trim();
-
-                if (slug.IsNullOrWhiteSpace() || !slug.All(char.IsDigit) || slug.Length < 7)
-                {
-                    return Enumerable.Empty<Show>();
-                }
-
-                title = "tt" + slug;
-            }*/
-
-
-            return tvdb.Search(GetSearchTerm(title));
-
+            return _tvdb.Search(GetSearchTerm(lowerTitle));
         }
 
         public List<Series> SearchForNewSeries(string title)
@@ -101,14 +73,7 @@ namespace NzbDrone.Core.MetadataSource
 
         public Tuple<Series, List<Tv.Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
-
-            var request = _requestBuilder.Build("/{tvdbId}/extended");
-
-            request.AddSegment("path", "show");
-            request.AddSegment("resource", "summary");
-            request.AddSegment("tvdbId", tvdbSeriesId.ToString());
-
-            var tvdbSeries = tvdb.GetShow(tvdbSeriesId);
+            var tvdbSeries = _tvdb.GetShow(tvdbSeriesId);
 
             var episodes = tvdbSeries.Episodes.Select(MapEpisode);
 
@@ -193,14 +158,6 @@ namespace NzbDrone.Core.MetadataSource
             return episode;
         }
 
-        private static string GetPosterThumbnailUrl(string posterUrl)
-        {
-            if (posterUrl.Contains("poster-small.jpg") || posterUrl.Contains("poster-dark.jpg")) return posterUrl;
-
-            var extension = Path.GetExtension(posterUrl);
-            var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
-            return withoutExtension + "-300" + extension;
-        }
 
         private static SeriesStatusType GetSeriesStatus(Status status)
         {
@@ -210,27 +167,6 @@ namespace NzbDrone.Core.MetadataSource
             }
 
             return SeriesStatusType.Continuing;
-        }
-
-        private static DateTime? FromIso(string iso)
-        {
-            DateTime result;
-
-            if (!DateTime.TryParse(iso, out result))
-                return null;
-
-            return result.ToUniversalTime();
-        }
-
-        private static string FromIsoToString(string iso)
-        {
-            if (String.IsNullOrWhiteSpace(iso)) return null;
-
-            var match = Regex.Match(iso, @"^\d{4}\W\d{2}\W\d{2}");
-
-            if (!match.Success) return null;
-
-            return match.Captures[0].Value;
         }
 
         private static string GetSearchTerm(string phrase)
@@ -251,15 +187,6 @@ namespace NzbDrone.Core.MetadataSource
             return phrase;
         }
 
-        private static int GetYear(int year, int firstAired)
-        {
-            if (year > 1969) return year;
-
-            if (firstAired == 0) return DateTime.Today.Year;
-
-            return year;
-        }
-
         private static Tv.Ratings GetRatings(int ratingCount, double? rating)
         {
 
@@ -273,31 +200,6 @@ namespace NzbDrone.Core.MetadataSource
             return result;
         }
 
-        private static List<Tv.Actor> GetActors(People people)
-        {
-            if (people == null)
-            {
-                return new List<Tv.Actor>();
-            }
-
-            return GetActors(people.actors).ToList();
-        }
-
-        private static IEnumerable<Tv.Actor> GetActors(IEnumerable<Trakt.Actor> trakcActors)
-        {
-            foreach (var traktActor in trakcActors)
-            {
-                var actor = new Tv.Actor
-                            {
-                                Name = traktActor.name,
-                                Character = traktActor.character,
-                            };
-
-                actor.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Headshot, traktActor.images.headshot));
-
-                yield return actor;
-            }
-        }
 
         private static List<Tv.Season> GetSeasons(TVDBSharp.Models.Show show)
         {
