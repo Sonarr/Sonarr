@@ -176,6 +176,11 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
+            if (series.TvRageId == 0)
+            {
+                series.TvRageId = storedSeries.TvRageId;
+            }
+
             var updatedSeries = _seriesRepository.Update(series);
             _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));
 

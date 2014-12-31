@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             UseRealHttp();
 
-            _gameOfThrones = Mocker.Resolve<TraktProxy>().GetSeriesInfo(121361);//Game of thrones
+            _gameOfThrones = Mocker.Resolve<TvDbProxy>().GetSeriesInfo(121361);//Game of thrones
 
             // Remove specials.
             _gameOfThrones.Item2.RemoveAll(v => v.SeasonNumber == 0);
