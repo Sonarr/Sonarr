@@ -44,10 +44,14 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             result[0].Title.Should().Be(expected);
         }
 
-        [Test]
-        public void no_search_result()
+        [TestCase("tvdbid:")]
+        [TestCase("tvdbid: 99999999999999999999")]
+        [TestCase("tvdbid: 0")]
+        [TestCase("tvdbid: -12")]
+        [TestCase("adjalkwdjkalwdjklawjdlKAJD;EF")]
+        public void no_search_result(string term)
         {
-            var result = Subject.SearchForNewSeries(Guid.NewGuid().ToString());
+            var result = Subject.SearchForNewSeries(term);
             result.Should().BeEmpty();
         }
 

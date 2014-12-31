@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using NLog;
@@ -37,12 +38,26 @@ namespace NzbDrone.Core.MetadataSource
 
                 int tvdbId;
 
-                if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !Int32.TryParse(slug, out tvdbId))
+                if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !Int32.TryParse(slug, out tvdbId) || tvdbId <= 0)
                 {
                     return Enumerable.Empty<TVDBSharp.Models.Show>();
                 }
 
-                return new[] { _tvdb.GetShow(tvdbId) };
+                try
+                {
+                    return new[] { _tvdb.GetShow(tvdbId) };
+                }
+                catch (WebException ex)
+                {
+                    var resp = ex.Response as HttpWebResponse;
+
+                    if (resp != null && resp.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return Enumerable.Empty<TVDBSharp.Models.Show>();
+                    }
+
+                    throw;
+                }
             }
 
             return _tvdb.Search(GetSearchTerm(lowerTitle), 10);
