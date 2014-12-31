@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         }
 
         [Test]
-        public void should_convert_trakts_urls_to_local()
+        public void should_convert_cover_urls_to_local()
         {
             var covers = new List<MediaCover.MediaCover>
                 {
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         }
 
         [Test]
-        public void should_convert_trakts_urls_to_local_without_time_if_file_doesnt_exist()
+        public void should_convert_media_urls_to_local_without_time_if_file_doesnt_exist()
         {
             var covers = new List<MediaCover.MediaCover>
                 {

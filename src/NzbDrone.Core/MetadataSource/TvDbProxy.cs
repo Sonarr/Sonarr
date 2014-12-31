@@ -7,7 +7,7 @@ using System.Web;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MetadataSource.Trakt;
+using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.Tv;
 using TVDBSharp;
 using TVDBSharp.Models.Enums;
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.MetadataSource
             _tvdb = new TVDB("5D2D188E86E07F4F");
         }
 
-        private IEnumerable<TVDBSharp.Models.Show> SearchTrakt(string title)
+        private IEnumerable<TVDBSharp.Models.Show> SearchTvdb(string title)
         {
             var lowerTitle = title.ToLowerInvariant();
 
@@ -47,11 +47,9 @@ namespace NzbDrone.Core.MetadataSource
                 {
                     return new[] { _tvdb.GetShow(tvdbId) };
                 }
-                catch (WebException ex)
+                catch (Common.Http.HttpException ex)
                 {
-                    var resp = ex.Response as HttpWebResponse;
-
-                    if (resp != null && resp.StatusCode == HttpStatusCode.NotFound)
+                    if (ex.Response.StatusCode == HttpStatusCode.NotFound)
                     {
                         return Enumerable.Empty<TVDBSharp.Models.Show>();
                     }
@@ -67,22 +65,22 @@ namespace NzbDrone.Core.MetadataSource
         {
             try
             {
-                var tvdbSeries = SearchTrakt(title.Trim());
+                var tvdbSeries = SearchTvdb(title.Trim());
 
                 var series = tvdbSeries.Select(MapSeries).ToList();
 
-                series.Sort(new TraktSearchSeriesComparer(title));
+                series.Sort(new SearchSeriesComparer(title));
 
                 return series;
             }
             catch (Common.Http.HttpException)
             {
-                throw new TraktException("Search for '{0}' failed. Unable to communicate with Trakt.", title);
+                throw new TvdbException("Search for '{0}' failed. Unable to communicate with TVDB.", title);
             }
             catch (Exception ex)
             {
                 _logger.WarnException(ex.Message, ex);
-                throw new TraktException("Search for '{0}' failed. Invalid response received from Trakt.", title);
+                throw new TvdbException("Search for '{0}' failed. Invalid response received from TVDB.", title);
             }
         }
 

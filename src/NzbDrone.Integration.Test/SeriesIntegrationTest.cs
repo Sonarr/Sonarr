@@ -11,7 +11,7 @@ namespace NzbDrone.Integration.Test
     public class SeriesIntegrationTest : IntegrationTest
     {
         [Test]
-        public void series_lookup_on_trakt()
+        public void series_lookup_on_tvdb()
         {
             var series = Series.Lookup("archer");
 

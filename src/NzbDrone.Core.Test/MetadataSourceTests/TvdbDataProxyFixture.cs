@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
@@ -42,17 +41,22 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             result.Should().NotBeEmpty();
 
             result[0].Title.Should().Be(expected);
+
+            ExceptionVerification.IgnoreWarns();
         }
 
         [TestCase("tvdbid:")]
         [TestCase("tvdbid: 99999999999999999999")]
         [TestCase("tvdbid: 0")]
         [TestCase("tvdbid: -12")]
+        [TestCase("tvdbid:289578")]
         [TestCase("adjalkwdjkalwdjklawjdlKAJD;EF")]
         public void no_search_result(string term)
         {
             var result = Subject.SearchForNewSeries(term);
             result.Should().BeEmpty();
+            
+            ExceptionVerification.IgnoreWarns();
         }
 
         [TestCase(75978, "Family Guy")]
@@ -71,9 +75,9 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
         [Test]
         public void getting_details_of_invalid_series()
         {
-            Assert.Throws<WebException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
+            Assert.Throws<Common.Http.HttpException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
 
-            //ExceptionVerification.ExpectedWarns(1);
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

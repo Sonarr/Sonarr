@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_delete_all_when_all_existing_episodes_are_gone_from_trakt()
+        public void should_delete_all_when_all_existing_episodes_are_gone_from_datasource()
         {
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
                 .Returns(GetEpisodes());

@@ -9,7 +9,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.MetadataSourceTests
 {
     [TestFixture]
-    public class TraktSearchSeriesComparerFixture : CoreTest
+    public class SearchSeriesComparerFixture : CoreTest
     {
         private List<Series> _series;
 
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             WithSeries("Talking Dead");
             WithSeries("The Walking Dead");
 
-            _series.Sort(new TraktSearchSeriesComparer("the walking dead"));
+            _series.Sort(new SearchSeriesComparer("the walking dead"));
 
             _series.First().Title.Should().Be("The Walking Dead");
         }
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             WithSeries("Talking Dead");
             WithSeries("The Walking Dead");
 
-            _series.Sort(new TraktSearchSeriesComparer("walking dead"));
+            _series.Sort(new SearchSeriesComparer("walking dead"));
 
             _series.First().Title.Should().Be("The Walking Dead");
         }
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             WithSeries("The Blacklist");
             WithSeries("Blacklist");
 
-            _series.Sort(new TraktSearchSeriesComparer("blacklist"));
+            _series.Sort(new SearchSeriesComparer("blacklist"));
 
             _series.First().Title.Should().Be("Blacklist");
         }
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.MetadataSourceTests
             WithSeries("Blacklist");
             WithSeries("The Blacklist");
 
-            _series.Sort(new TraktSearchSeriesComparer("the blacklist"));
+            _series.Sort(new SearchSeriesComparer("the blacklist"));
 
             _series.First().Title.Should().Be("The Blacklist");
         }

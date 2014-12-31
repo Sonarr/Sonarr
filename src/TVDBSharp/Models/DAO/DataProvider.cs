@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Net;
 using System.Xml.Linq;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Instrumentation;
 using TVDBSharp.Models.Enums;
 
 namespace TVDBSharp.Models.DAO
@@ -12,6 +14,9 @@ namespace TVDBSharp.Models.DAO
     {
         public string ApiKey { get; set; }
         private const string BaseUrl = "http://thetvdb.com";
+
+
+        private static HttpClient httpClient = new HttpClient(NzbDroneLogger.GetLogger(typeof(DataProvider)));
 
         public XDocument GetShow(int showID)
         {
@@ -35,9 +40,15 @@ namespace TVDBSharp.Models.DAO
 
         private static XDocument GetXDocumentFromUrl(string url)
         {
-            using (var web = new WebClient())
-                using (var memoryStream = new MemoryStream(web.DownloadData(url)))
-                    return XDocument.Load(memoryStream);
+
+            var request = new HttpRequest(url, new HttpAccept("application/xml"));
+
+
+
+            var response = httpClient.Get(request);
+
+            return XDocument.Parse(response.Content);
+
         }
     }
 }

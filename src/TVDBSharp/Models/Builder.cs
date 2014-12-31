@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
+using NzbDrone.Common.Http;
 using TVDBSharp.Models.DAO;
 using TVDBSharp.Models.Enums;
 using TVDBSharp.Utilities;
@@ -69,7 +70,7 @@ namespace TVDBSharp.Models
                     var response = _dataProvider.GetShow(id);
                     shows.Add(new ShowBuilder(response).GetResult());
                 }
-                catch (WebException ex)
+                catch (HttpException ex)
                 {
                     
                 }
