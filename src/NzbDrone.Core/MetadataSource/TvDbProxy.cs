@@ -142,9 +142,20 @@ namespace NzbDrone.Core.MetadataSource
             series.Actors = new List<Tv.Actor>();
             series.Seasons = GetSeasons(show);
 
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.Banner.ToString() });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = show.Poster.ToString() });
-            series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.Fanart.ToString() });
+            if (show.Banner != null)
+            {
+                series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = show.Banner.ToString() });                
+            }
+
+            if (show.Poster != null)
+            {
+                series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = show.Poster.ToString() });
+            }
+
+            if (show.Fanart != null)
+            {
+                series.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = show.Fanart.ToString() });
+            }
 
             return series;
         }
@@ -166,8 +177,11 @@ namespace NzbDrone.Core.MetadataSource
             episode.Ratings = GetRatings(traktEpisode.RatingCount, traktEpisode.Rating);
 
             //Don't include series fanart images as episode screenshot
-            episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.EpisodeImage.ToString()));
-
+            if (traktEpisode.EpisodeImage != null)
+            {
+                episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, traktEpisode.EpisodeImage.ToString()));                
+            }
+            
             return episode;
         }
 

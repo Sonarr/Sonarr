@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using TVDBSharp.Models.DAO;
 using TVDBSharp.Models.Enums;
@@ -82,6 +83,11 @@ namespace TVDBSharp.Models
 
         private static Uri GetBannerUri(string uriSuffix)
         {
+            if (uriSuffix.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             return new Uri(UriPrefix + uriSuffix, UriKind.Absolute);
         }
 
