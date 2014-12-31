@@ -340,7 +340,7 @@ namespace NzbDrone.Core.Parser
                 return searchCriteria.Series;
             }
 
-            if (tvRageId == searchCriteria.Series.TvRageId)
+            if (tvRageId > 0 && tvRageId == searchCriteria.Series.TvRageId)
             {
                 //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
                 return searchCriteria.Series;
