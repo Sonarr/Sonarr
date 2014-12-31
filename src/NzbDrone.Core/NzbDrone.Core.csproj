@@ -631,7 +631,6 @@
     <Compile Include="MetadataSource\Trakt\Ratings.cs" />
     <Compile Include="MetadataSource\Trakt\Season.cs" />
     <Compile Include="MetadataSource\Trakt\TraktException.cs" />
-    <Compile Include="MetadataSource\TraktProxy.cs" />
     <Compile Include="MetadataSource\Tvdb\TvdbProxy.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />

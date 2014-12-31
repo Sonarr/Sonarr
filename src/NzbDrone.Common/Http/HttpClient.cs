@@ -100,7 +100,8 @@ namespace NzbDrone.Common.Http
 
             if (!RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
-                response.StatusCode == HttpStatusCode.MovedPermanently))
+                response.StatusCode == HttpStatusCode.MovedPermanently ||
+                response.StatusCode == HttpStatusCode.Found))
             {
                 throw new Exception("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
             }

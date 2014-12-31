@@ -45,7 +45,7 @@ namespace NzbDrone.Core.MetadataSource
                 return new[] { _tvdb.GetShow(tvdbId) };
             }
 
-            return _tvdb.Search(GetSearchTerm(lowerTitle));
+            return _tvdb.Search(GetSearchTerm(lowerTitle), 10);
         }
 
         public List<Series> SearchForNewSeries(string title)
