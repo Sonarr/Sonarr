@@ -69,6 +69,10 @@ define(
                 return this.title;
             }
 
+            if (!this.year) {
+                return this.title;
+            }
+
             return new Handlebars.SafeString('{0} <span class="year">({1})</span>'.format(this.title, this.year));
         });
     });
