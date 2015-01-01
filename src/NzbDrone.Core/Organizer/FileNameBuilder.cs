@@ -301,11 +301,12 @@ namespace NzbDrone.Core.Organizer
 
                     case MultiEpisodeStyle.Range:
                         formatPattern = "-" + episodeFormat.EpisodePattern;
-                        var eps = new List<Episode> { episodes.First() };
+                        seasonEpisodePattern = FormatRangeNumberTokens(seasonEpisodePattern, formatPattern, episodes);
+                        break;
 
-                        if (episodes.Count > 1) eps.Add(episodes.Last());
-
-                        seasonEpisodePattern = FormatNumberTokens(seasonEpisodePattern, formatPattern, eps);
+                    case MultiEpisodeStyle.PrefixedRange:
+                        formatPattern = "-" + episodeFormat.EpisodeSeparator + episodeFormat.EpisodePattern;
+                        seasonEpisodePattern = FormatRangeNumberTokens(seasonEpisodePattern, formatPattern, episodes);
                         break;
 
                     //MultiEpisodeStyle.Extend
@@ -371,6 +372,7 @@ namespace NzbDrone.Core.Organizer
                         break;
 
                     case MultiEpisodeStyle.Range:
+                    case MultiEpisodeStyle.PrefixedRange:
                         formatPattern = "-" + absoluteEpisodeFormat.AbsoluteEpisodePattern;
                         var eps = new List<Episode> {episodes.First()};
 
@@ -612,6 +614,15 @@ namespace NzbDrone.Core.Organizer
             return ReplaceSeasonTokens(pattern, episodes.First().SeasonNumber);
         }
 
+        private string FormatRangeNumberTokens(string seasonEpisodePattern, string formatPattern, List<Episode> episodes)
+        {
+            var eps = new List<Episode> { episodes.First() };
+
+            if (episodes.Count > 1) eps.Add(episodes.Last());
+
+            return FormatNumberTokens(seasonEpisodePattern, formatPattern, eps);
+        }
+
         private string ReplaceSeasonTokens(string pattern, int seasonNumber)
         {
             return SeasonRegex.Replace(pattern, match => ReplaceNumberToken(match.Groups["season"].Value, seasonNumber));
@@ -722,6 +733,7 @@ namespace NzbDrone.Core.Organizer
         Duplicate = 1,
         Repeat = 2,
         Scene = 3,
-        Range = 4
+        Range = 4,
+        PrefixedRange = 5
     }
 }
