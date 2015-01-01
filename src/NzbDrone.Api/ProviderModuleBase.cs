@@ -88,11 +88,6 @@ namespace NzbDrone.Api
         {
             var providerDefinition = GetDefinition(providerResource);
 
-            if (providerDefinition.Enable)
-            {
-                Test(providerDefinition);
-            }
-
             _providerFactory.Update(providerDefinition);
         }
 
