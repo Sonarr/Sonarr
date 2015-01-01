@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
@@ -95,6 +96,20 @@ namespace NzbDrone.Common.Test.Http
             var response = Subject.Get<HttpBinResource>(request);
 
             response.Resource.Headers[header].ToString().Should().Be(value);
+        }
+
+
+        [Test]
+        public void should_not_download_file_with_error()
+        {
+            var file = GetTempFilePath();
+
+            Assert.Throws<WebException>(() => Subject.DownloadFile("http://download.sonarr.tv/wrongpath", file));
+
+            File.Exists(file).Should().BeFalse();
+
+            ExceptionVerification.ExpectedWarns(1);
+
         }
     }
 

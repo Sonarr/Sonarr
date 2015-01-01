@@ -6,18 +6,14 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
     public class CleanupOrphanedEpisodes : IHousekeepingTask
     {
         private readonly IDatabase _database;
-        private readonly Logger _logger;
 
-        public CleanupOrphanedEpisodes(IDatabase database, Logger logger)
+        public CleanupOrphanedEpisodes(IDatabase database)
         {
             _database = database;
-            _logger = logger;
         }
 
         public void Clean()
         {
-            _logger.Debug("Running orphaned episodes cleanup");
-
             var mapper = _database.GetDataMapper();
 
             mapper.ExecuteNonQuery(@"DELETE FROM Episodes

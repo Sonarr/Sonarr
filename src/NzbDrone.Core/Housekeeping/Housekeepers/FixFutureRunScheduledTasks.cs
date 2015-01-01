@@ -23,8 +23,6 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                 _logger.Debug("Not running scheduled task last execution cleanup during debug");
             }
 
-            _logger.Debug("Running scheduled task last execution cleanup");
-
             var mapper = _database.GetDataMapper();
             mapper.AddParameter("time", DateTime.UtcNow);
 
