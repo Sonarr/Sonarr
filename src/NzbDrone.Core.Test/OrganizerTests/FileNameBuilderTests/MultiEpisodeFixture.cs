@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _namingConfig.MultiEpisodeStyle = 5;
 
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
-                .Should().Be("South Park - 15E06-x08 - City Sushi");
+                .Should().Be("South Park - 15x06-x08 - City Sushi");
         }
     }
 }
