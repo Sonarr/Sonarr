@@ -1,22 +1,18 @@
-﻿using NLog;
-using NzbDrone.Core.Datastore;
+﻿using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class CleanupOrphanedHistoryItems : IHousekeepingTask
     {
         private readonly IDatabase _database;
-        private readonly Logger _logger;
 
-        public CleanupOrphanedHistoryItems(IDatabase database, Logger logger)
+        public CleanupOrphanedHistoryItems(IDatabase database)
         {
             _database = database;
-            _logger = logger;
         }
 
         public void Clean()
         {
-            _logger.Debug("Running orphaned history cleanup");
             CleanupOrphanedBySeries();
             CleanupOrphanedByEpisode();
         }

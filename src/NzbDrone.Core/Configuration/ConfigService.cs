@@ -282,6 +282,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("ShowRelativeDates", value); }
         }
 
+        public bool CleanupMetadataImages
+        {
+            get { return GetValueBoolean("CleanupMetadataImages", true); }
+
+            set { SetValue("CleanupMetadataImages", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);
