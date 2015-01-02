@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 
@@ -29,28 +28,20 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            //if (!_configService.CleanupMetadataImages) return;
+            if (!_configService.CleanupMetadataImages) return;
 
             var series = _seriesService.GetAllSeries();
-
-            _logger.Debug("Processing image files for {0} series", series.Count);
 
             foreach (var show in series)
             {
                 var images = _metadataFileService.GetFilesBySeries(show.Id)
-                    .Where(c => c.LastUpdated > new DateTime(2014, 12, 27) &&
-                        (c.Type == MetadataType.EpisodeImage || c.Type == MetadataType.SeasonImage || c.Type == MetadataType.SeriesImage)).ToList();
+                    .Where(c => c.LastUpdated > new DateTime(2014, 12, 27) && c.RelativePath.EndsWith(".jpg", StringComparison.InvariantCultureIgnoreCase));
 
-
-
-                _logger.Debug("Processing {0} images for {1}", images.Count, show.Title);
                 foreach (var image in images)
                 {
                     try
                     {
                         var path = Path.Combine(show.Path, image.RelativePath);
-
-
                         if (!IsValid(path))
                         {
                             _logger.Debug("Deleting invalid image file " + path);
@@ -76,9 +67,6 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         private bool IsValid(string path)
         {
-            _logger.Trace("Checking {0}", path);
-
-
             var buffer = new byte[10];
 
             using (var imageStream = _diskProvider.StreamFile(path))

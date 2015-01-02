@@ -73,7 +73,6 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
 
         [Test]
-        [Ignore]
         public void should_not_run_if_flag_is_false()
         {
             Mocker.GetMock<IConfigService>().SetupGet(c => c.CleanupMetadataImages).Returns(false);
