@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Housekeeping.Housekeepers;
+using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -51,7 +52,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_not_process_non_image_files()
         {
             _metaData[0].RelativePath = "season\\file.xml".AsOsAgnostic();
-
+            _metaData[0].Type =  MetadataType.EpisodeMetadata;
 
             Subject.Clean();
 
@@ -103,6 +104,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             var imagePath = "C:\\TV\\Season\\image.jpg".AsOsAgnostic();
             _metaData[0].LastUpdated = new DateTime(2014, 12, 29);
             _metaData[0].RelativePath = "Season\\image.jpg".AsOsAgnostic();
+            _metaData[0].Type = MetadataType.SeriesImage;
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.StreamFile(imagePath))
@@ -123,6 +125,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             var imagePath = "C:\\TV\\Season\\image.jpg".AsOsAgnostic();
             _metaData[0].LastUpdated = new DateTime(2014, 12, 29);
+            _metaData[0].Type = MetadataType.SeasonImage;
             _metaData[0].RelativePath = "Season\\image.jpg".AsOsAgnostic();
 
             Mocker.GetMock<IDiskProvider>()
