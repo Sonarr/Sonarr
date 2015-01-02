@@ -7,7 +7,7 @@ define(
         'System/StatusModel'
     ], function ($, Handlebars, StatusModel) {
 
-        var placeholder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.jpg';
+        var placeholder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.png';
 
         window.NzbDrone.imageError = function (img) {
             if (!img.src.contains(placeholder)) {
