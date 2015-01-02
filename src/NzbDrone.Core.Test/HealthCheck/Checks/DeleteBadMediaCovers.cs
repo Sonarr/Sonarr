@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.StreamFile(imagePath))
-                              .Returns(new FileStream("Files\\queue.txt".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
+                              .Returns(new FileStream("Files\\Queue.txt".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
 
 
             Subject.Clean();
