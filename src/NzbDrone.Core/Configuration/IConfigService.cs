@@ -55,5 +55,10 @@ namespace NzbDrone.Core.Configuration
         String LongDateFormat { get; set; }
         String TimeFormat { get; set; }
         Boolean ShowRelativeDates { get; set; }
+
+
+
+        //Internal
+        Boolean CleanupMetadataImages { get; set; }
     }
 }

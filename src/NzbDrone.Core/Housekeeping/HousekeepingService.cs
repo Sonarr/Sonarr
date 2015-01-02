@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -30,21 +29,20 @@ namespace NzbDrone.Core.Housekeeping
             {
                 try
                 {
+                    _logger.Debug("Starting {0}", housekeeper.GetType().Name);
                     housekeeper.Clean();
+                    _logger.Debug("Completed {0}", housekeeper.GetType().Name);
+
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Error running housekeeping task: " + housekeeper.GetType().FullName, ex);
+                    _logger.ErrorException("Error running housekeeping task: " + housekeeper.GetType().Name, ex);
                 }
             }
 
-            //Only Vaccuum the DB in production
-            if (RuntimeInfoBase.IsProduction)
-            {
-                // Vacuuming the log db isn't needed since that's done hourly at the TrimLogCommand.
-                _logger.Debug("Compressing main database after housekeeping");
-                _mainDb.Vacuum();
-            }
+            // Vacuuming the log db isn't needed since that's done hourly at the TrimLogCommand.
+            _logger.Debug("Compressing main database after housekeeping");
+            _mainDb.Vacuum();
         }
 
         public void Execute(HousekeepingCommand message)
