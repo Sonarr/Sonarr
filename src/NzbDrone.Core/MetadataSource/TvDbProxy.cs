@@ -160,12 +160,13 @@ namespace NzbDrone.Core.MetadataSource
             return series;
         }
 
-        private static Tv.Episode MapEpisode(TVDBSharp.Models.Episode traktEpisode)
+        private static Episode MapEpisode(TVDBSharp.Models.Episode traktEpisode)
         {
-            var episode = new Tv.Episode();
+            var episode = new Episode();
             episode.Overview = traktEpisode.Description;
             episode.SeasonNumber = traktEpisode.SeasonNumber;
             episode.EpisodeNumber = traktEpisode.EpisodeNumber;
+            episode.AbsoluteEpisodeNumber = traktEpisode.AbsoluteEpisodeNumber;
             episode.Title = traktEpisode.Title;
 
             if (traktEpisode.FirstAired != null)

@@ -6,7 +6,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -71,13 +70,6 @@ namespace NzbDrone.Core.Test.TvTests
 
             Mocker.GetMock<IEpisodeService>().Setup(c => c.DeleteMany(It.IsAny<List<Episode>>()))
                 .Callback<List<Episode>>(e => _deletedEpisodes = e);
-        }
-
-        private void GivenAnimeEpisodes(List<Episode> episodes)
-        {
-            Mocker.GetMock<ITvdbProxy>()
-                  .Setup(s => s.GetEpisodeInfo(It.IsAny<Int32>()))
-                  .Returns(episodes);
         }
 
         [Test]
@@ -176,21 +168,9 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_not_set_absolute_episode_number_for_non_anime()
-        {
-            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
-                  .Returns(new List<Episode>());
-
-            Subject.RefreshEpisodeInfo(GetSeries(), GetEpisodes());
-
-            _insertedEpisodes.All(e => !e.AbsoluteEpisodeNumber.HasValue).Should().BeTrue();
-        }
-
-        [Test]
         public void should_set_absolute_episode_number_for_anime()
         {
             var episodes = Builder<Episode>.CreateListOfSize(3).Build().ToList();
-            GivenAnimeEpisodes(episodes);
 
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
                 .Returns(new List<Episode>());
@@ -206,7 +186,6 @@ namespace NzbDrone.Core.Test.TvTests
         public void should_set_absolute_episode_number_even_if_not_previously_set_for_anime()
         {
             var episodes = Builder<Episode>.CreateListOfSize(3).Build().ToList();
-            GivenAnimeEpisodes(episodes);
 
             var existingEpisodes = episodes.JsonClone();
             existingEpisodes.ForEach(e => e.AbsoluteEpisodeNumber = null);
@@ -233,8 +212,6 @@ namespace NzbDrone.Core.Test.TvTests
                                           .With(e => e.EpisodeNumber = expectedEpisodeNumber)
                                           .With(e => e.AbsoluteEpisodeNumber = expectedAbsoluteNumber)
                                           .Build();
-
-            GivenAnimeEpisodes(new List<Episode> { episode });
 
             var existingEpisode = episode.JsonClone();
             existingEpisode.SeasonNumber = 1;
@@ -265,8 +242,6 @@ namespace NzbDrone.Core.Test.TvTests
             episodes[0].SeasonNumber.Should().NotBe(episodes[1].SeasonNumber);
             episodes[0].EpisodeNumber.Should().NotBe(episodes[1].EpisodeNumber);
 
-            GivenAnimeEpisodes(episodes);
-
             var existingEpisode = new Episode
                                   {
                                       SeasonNumber = episodes[0].SeasonNumber,
@@ -296,8 +271,6 @@ namespace NzbDrone.Core.Test.TvTests
             episodes[2].AbsoluteEpisodeNumber = null;
             episodes[3].AbsoluteEpisodeNumber = null;
             episodes[4].AbsoluteEpisodeNumber = null;
-
-            GivenAnimeEpisodes(episodes);
 
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
                 .Returns(new List<Episode>());

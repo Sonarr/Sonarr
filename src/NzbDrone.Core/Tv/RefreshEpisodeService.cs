@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
@@ -17,14 +16,12 @@ namespace NzbDrone.Core.Tv
     public class RefreshEpisodeService : IRefreshEpisodeService
     {
         private readonly IEpisodeService _episodeService;
-        private readonly ITvdbProxy _tvdbProxy;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RefreshEpisodeService(IEpisodeService episodeService, ITvdbProxy tvdbProxy, IEventAggregator eventAggregator, Logger logger)
+        public RefreshEpisodeService(IEpisodeService episodeService, IEventAggregator eventAggregator, Logger logger)
         {
             _episodeService = episodeService;
-            _tvdbProxy = tvdbProxy;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -153,23 +150,6 @@ namespace NzbDrone.Core.Tv
 
         private List<Episode> MapAbsoluteEpisodeNumbers(Series series, List<Episode> traktEpisodes)
         {
-            var tvdbEpisodes = _tvdbProxy.GetEpisodeInfo(series.TvdbId);
-
-            foreach (var episode in traktEpisodes)
-            {
-                //I'd use single, but then I'd have to trust the tvdb data... and I don't
-                var tvdbEpisode = tvdbEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber &&
-                                                                    e.EpisodeNumber == episode.EpisodeNumber);
-
-                if (tvdbEpisode == null)
-                {
-                    _logger.Debug("Cannot find matching episode from the tvdb: {0}x{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
-                    continue;
-                }
-
-                episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteEpisodeNumber;
-            }
-
             //Return all episodes with no abs number, but distinct for those with abs number
             return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
                                 .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)

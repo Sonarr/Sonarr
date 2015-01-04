@@ -249,7 +249,6 @@
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
-    <Compile Include="MetadataSourceTests\TvdbProxyFixture.cs" />
     <Compile Include="NotificationTests\PlexProviderTest.cs" />
     <Compile Include="NotificationTests\ProwlProviderTest.cs" />
     <Compile Include="NotificationTests\Xbmc\Http\ActivePlayersFixture.cs" />

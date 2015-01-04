@@ -160,6 +160,10 @@ namespace TVDBSharp.Models
                     Id = int.Parse(episodeNode.GetXmlData("id")),
                     Title = episodeNode.GetXmlData("EpisodeName"),
                     Description = episodeNode.GetXmlData("Overview"),
+                    AbsoluteEpisodeNumber =
+                        string.IsNullOrWhiteSpace(episodeNode.GetXmlData("absolute_number")) 
+                            ? (int?)null
+                            : int.Parse(episodeNode.GetXmlData("absolute_number")),
                     EpisodeNumber = int.Parse(episodeNode.GetXmlData("EpisodeNumber")),
                     Director = episodeNode.GetXmlData("Director"),
                     EpisodeImage = GetBannerUri(episodeNode.GetXmlData("filename")),

@@ -24,6 +24,11 @@ namespace TVDBSharp.Models
         public string Title { get; set; }
 
         /// <summary>
+        ///     This episode's absolute number
+        /// </summary>
+        public int? AbsoluteEpisodeNumber { get; set; }
+
+        /// <summary>
         ///     This episode's number in the appropriate season.
         /// </summary>
         public int EpisodeNumber { get; set; }
