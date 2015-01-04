@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_not_scan_extras_folder()
+        public void should_not_scan_extras_subfolder()
         {
             GivenParentFolderExists();
 
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_not_scan_AppleDouble_folder()
+        public void should_not_scan_AppleDouble_subfolder()
         {
             GivenParentFolderExists();
 
@@ -97,6 +97,28 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
 
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<String>>(l => l.Count == 1), _series, false, (QualityModel)null), Times.Once());
+        }
+
+        [Test]
+        public void should_scan_extras_series_and_subfolders()
+        {
+            GivenParentFolderExists();
+            _series.Path = @"C:\Test\TV\Extras".AsOsAgnostic();
+
+            GivenFiles(new List<String>
+                       {
+                           Path.Combine(_series.Path, "Extras", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, ".AppleDouble", "file2.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e02.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 2", "s02e01.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 2", "s02e02.mkv").AsOsAgnostic(),
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<String>>(l => l.Count == 4), _series, false, (QualityModel)null), Times.Once());
         }
     }
 }
