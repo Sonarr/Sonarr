@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.Path = @"C:\Test\TV\Series")
+                                     .With(s => s.Path = @"C:\Test\TV\Series".AsOsAgnostic())
                                      .Build();
 
             Mocker.GetMock<IDiskProvider>()
