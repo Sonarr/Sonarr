@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Notifications.Plex
@@ -110,15 +111,17 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             try
             {
-                if (!GetSectionKeys(new PlexServerSettings
+                var sections = GetSectionKeys(new PlexServerSettings
+                                              {
+                                                  Host = settings.Host,
+                                                  Port = settings.Port,
+                                                  Username = settings.Username,
+                                                  Password = settings.Password
+                                              });
+
+                if (sections.Empty())
                 {
-                    Host = settings.Host,
-                    Port = settings.Port,
-                    Username = settings.Username,
-                    Password = settings.Password
-                }).Any())
-                {
-                    throw new Exception("Unable to connect to Plex Server");
+                    return new ValidationFailure("Host", "At least one TV library is required");
                 }
             }
             catch (Exception ex)
