@@ -96,6 +96,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("5x09 - 100 [720p WEB-DL].mkv", "", 5, 9)]
         [TestCase("1x03 - 274 [1080p BluRay].mkv", "", 1, 3)]
         [TestCase("1x03 - The 112th Congress [1080p BluRay].mkv", "", 1, 3)]
+        [TestCase("Revolution.2012.S02E14.720p.HDTV.X264-DIMENSION [PublicHD].mkv", "Revolution.2012", 2, 14)]
+        //[TestCase("Sex And The City S6E15 - Catch-38 [RavyDavy].avi", "Sex And The City", 6, 15)] // -38 is getting treated as abs number
+        [TestCase("Castle.2009.S06E03.720p.HDTV.X264-DIMENSION [PublicHD].mkv", "Castle.2009", 6, 3)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
