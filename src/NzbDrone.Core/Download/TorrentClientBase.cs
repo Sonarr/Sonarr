@@ -102,6 +102,8 @@ namespace NzbDrone.Core.Download
                 {
                     var locationHeader = (string)response.Headers.GetValueOrDefault("Location", null);
 
+                    _logger.Trace("Torrent request is being redirected to: {0}", locationHeader);
+
                     if (locationHeader != null)
                     {
                         if (locationHeader.StartsWith("magnet:"))
