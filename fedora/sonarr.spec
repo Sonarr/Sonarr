@@ -1,4 +1,4 @@
-%define sonarr_url_service  http://services.nzbdrone.com/v1/update/master
+%define sonarr_url_service  http://services.sonarr.tv/v1/update/master
 # default mock chroots do not provide python
 #%define sonarr_url_package  %( python -c 'import requests; print(requests.get("%{sonarr_url_service}").json()["updatePackage"]["url"].replace("windows","mono").replace("zip","tar.gz"))' )
 #%define sonarr_version      %( python -c 'import requests; print(requests.get("%{sonarr_url_service}").json()["updatePackage"]["version"])' )

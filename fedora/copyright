@@ -3,7 +3,7 @@ Upstream-Name: sonarr
 Source: https://github.com/Sonarr/Sonarr
 
 Files: *
-Copyright: 2010-2014 Sonarr <hello@sonarr.tv>
+Copyright: 2010-2015 Sonarr <hello@sonarr.tv>
 
 License: GPL-3.0+
 
