@@ -4,17 +4,17 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MetadataSource.Oracle;
+using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 
-namespace NzbDrone.Core.Test.MetadataSource.Oracle
+namespace NzbDrone.Core.Test.MetadataSource.SkyHook
 {
     [TestFixture]
     [IntegrationTest]
-    public class OracleProxyFixture : CoreTest<OracleProxy>
+    public class SkyHookProxyFixture : CoreTest<SkyHookProxy>
     {
         [SetUp]
         public void Setup()

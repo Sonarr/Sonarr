@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Series;
@@ -15,12 +16,12 @@ namespace NzbDrone.Integration.Test
         [SetUp]
         public void Setup()
         {
-           series = GivenSeriesWithEpisodes();
+            series = GivenSeriesWithEpisodes();
         }
-        
+
         private SeriesResource GivenSeriesWithEpisodes()
         {
-            var newSeries = Series.Lookup("archer").First();
+            var newSeries = Series.Lookup("archer").Single(c => c.TvdbId == 110381);
 
             newSeries.ProfileId = 1;
             newSeries.Path = @"C:\Test\Archer".AsOsAgnostic();
@@ -34,6 +35,7 @@ namespace NzbDrone.Integration.Test
                     return newSeries;
                 }
 
+                Console.WriteLine("Waiting for episodes to load.");
                 Thread.Sleep(1000);
             }
         }

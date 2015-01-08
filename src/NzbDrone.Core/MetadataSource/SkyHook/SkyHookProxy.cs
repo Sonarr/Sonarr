@@ -4,25 +4,23 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MetadataSource.Oracle.Resource;
+using NzbDrone.Core.MetadataSource.SkyHook.Resource;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.MetadataSource.Oracle
+namespace NzbDrone.Core.MetadataSource.SkyHook
 {
-    public class OracleProxy : IProvideSeriesInfo
+    public class SkyHookProxy : IProvideSeriesInfo
     {
         private readonly Logger _logger;
         private readonly IHttpClient _httpClient;
         private readonly HttpRequestBuilder _requestBuilder;
 
-
-
-        public OracleProxy(Logger logger, IHttpClient httpClient)
+        public SkyHookProxy(Logger logger, IHttpClient httpClient)
         {
             _logger = logger;
             _httpClient = httpClient;
 
-            _requestBuilder = new HttpRequestBuilder("http://oracle.sonarr.tv/v1/tvdb/shows/en/");
+            _requestBuilder = new HttpRequestBuilder("http://skyhook.sonarr.tv/v1/tvdb/shows/en/");
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)

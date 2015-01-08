@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.MetadataSource.Oracle.Resource
+﻿namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
 {
     public class RatingResource
     {
