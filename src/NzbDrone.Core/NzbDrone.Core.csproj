@@ -596,6 +596,14 @@
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
     <Compile Include="Messaging\IProcessMessage.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\ActorResource.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\EpisodeResource.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\ImageResource.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\RatingResource.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\SeasonResource.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\ShowResource.cs" />
+    <Compile Include="MetadataSource\Oracle\Resource\TimeOfDayResource.cs" />
+    <Compile Include="MetadataSource\Oracle\OracleProxy.cs" />
     <Compile Include="MetadataSource\TvDbProxy.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparer.cs" />
     <Compile Include="MetadataSource\Tvdb\TvdbException.cs" />

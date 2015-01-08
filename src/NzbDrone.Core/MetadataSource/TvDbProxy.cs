@@ -14,7 +14,7 @@ using TVDBSharp.Models.Enums;
 
 namespace NzbDrone.Core.MetadataSource
 {
-    public class TvDbProxy : ISearchForNewSeries, IProvideSeriesInfo
+    public class TvDbProxy : ISearchForNewSeries
     {
         private readonly Logger _logger;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
