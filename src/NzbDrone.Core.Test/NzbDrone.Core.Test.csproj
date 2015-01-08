@@ -230,6 +230,7 @@
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
     <Compile Include="MetadataSourceTests\TvdbDataProxyFixture.cs" />
     <Compile Include="MetadataSourceTests\SearchSeriesComparerFixture.cs" />
+    <Compile Include="MetadataSource\Oracle\OracleProxyFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
