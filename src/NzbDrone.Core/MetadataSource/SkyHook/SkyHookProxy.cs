@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook.Resource;
@@ -25,15 +26,9 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
-
             var httpRequest = _requestBuilder.Build(tvdbSeriesId.ToString());
-
             var httpResponse = _httpClient.Get<ShowResource>(httpRequest);
-
-
             var episodes = httpResponse.Resource.Episodes.Select(MapEpisode);
-
-
             var series = MapSeries(httpResponse.Resource);
 
             return new Tuple<Series, List<Episode>>(series, episodes.ToList());
@@ -78,7 +73,12 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             series.Status = MapSeriesStatus(show.Status);
             series.Ratings = MapRatings(show.Rating);
             series.Genres = show.Genres;
-            series.Certification = show.ContentRating.ToUpper();
+
+            if (show.ContentRating.IsNotNullOrWhiteSpace())
+            {
+                series.Certification = show.ContentRating.ToUpper();
+            }
+            
             series.Actors = show.Actors.Select(MapActors).ToList();
             series.Seasons = show.Seasons.Select(MapSeason).ToList();
             series.Images = show.Images.Select(MapImage).ToList();

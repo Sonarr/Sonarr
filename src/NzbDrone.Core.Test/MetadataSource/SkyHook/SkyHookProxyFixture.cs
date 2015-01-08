@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [TestCase(75978, "Family Guy")]
         [TestCase(83462, "Castle (2009)")]
         [TestCase(266189, "The Blacklist")]
-        public void should_be_able_to_get_series_detail(Int32 tvdbId, String title)
+        public void should_be_able_to_get_series_detail(int tvdbId, string title)
         {
             var details = Subject.GetSeriesInfo(tvdbId);
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         {
             var details = Subject.GetSeriesInfo(79099);
 
-            details.Item1.TitleSlug.Should().Be("hack");
+            details.Item1.TitleSlug.Should().Be("dothack");
         }
 
         private void ValidateSeries(Series series)
@@ -78,14 +78,14 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             episodeGroup.Should().OnlyContain(c => c.Count() == 1);
 
             episodes.Should().Contain(c => c.SeasonNumber > 0);
-            episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
+            episodes.Should().Contain(c => !String.IsNullOrWhiteSpace(c.Overview));
 
             foreach (var episode in episodes)
             {
                 ValidateEpisode(episode);
 
                 //if atleast one episdoe has title it means parse it working.
-                episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Title));
+                episodes.Should().Contain(c => !String.IsNullOrWhiteSpace(c.Title));
             }
         }
 
