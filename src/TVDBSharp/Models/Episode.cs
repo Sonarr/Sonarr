@@ -66,7 +66,7 @@ namespace TVDBSharp.Models
         /// <summary>
         ///     Average rating as shown on IMDb.
         /// </summary>
-        public double? Rating { get; set; }
+        public decimal? Rating { get; set; }
 
         /// <summary>
         ///     Amount of votes cast.

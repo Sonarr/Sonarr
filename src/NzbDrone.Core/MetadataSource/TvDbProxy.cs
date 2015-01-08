@@ -215,14 +215,14 @@ namespace NzbDrone.Core.MetadataSource
             return phrase;
         }
 
-        private static Tv.Ratings GetRatings(int ratingCount, double? rating)
+        private static Tv.Ratings GetRatings(int ratingCount, decimal? rating)
         {
 
             var result = new Tv.Ratings { Votes = ratingCount };
 
             if (rating != null)
             {
-                result.Percentage = (int)(rating.Value * 100);
+                result.Value = rating.Value;
             }
 
             return result;

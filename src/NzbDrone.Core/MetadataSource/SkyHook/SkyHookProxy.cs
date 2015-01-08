@@ -153,10 +153,15 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
         private static Ratings MapRatings(RatingResource rating)
         {
+            if (rating == null)
+            {
+                return new Ratings();
+            }
+
             return new Ratings
             {
                 Votes = rating.Count,
-                Percentage = (int)(rating.Value * 100)
+                Value = rating.Value
             };
         }
 

@@ -105,8 +105,8 @@ namespace TVDBSharp.Models
                 _show.Network = doc.GetSeriesData("Network");
                 _show.Description = doc.GetSeriesData("Overview");
                 _show.Rating = string.IsNullOrWhiteSpace(doc.GetSeriesData("Rating"))
-                    ? (double?) null
-                    : Convert.ToDouble(doc.GetSeriesData("Rating"),
+                    ? (decimal?) null
+                    : Convert.ToDecimal(doc.GetSeriesData("Rating"),
                         System.Globalization.CultureInfo.InvariantCulture);
                 _show.RatingCount = string.IsNullOrWhiteSpace(doc.GetSeriesData("RatingCount"))
                     ? 0
@@ -182,8 +182,8 @@ namespace TVDBSharp.Models
                             : Convert.ToInt64(episodeNode.GetXmlData("lastupdated")),
                     Rating =
                         string.IsNullOrWhiteSpace(episodeNode.GetXmlData("Rating"))
-                            ? (double?) null
-                            : Convert.ToDouble(episodeNode.GetXmlData("Rating"),
+                            ? (Decimal?) null
+                            : Convert.ToDecimal(episodeNode.GetXmlData("Rating"),
                                 System.Globalization.CultureInfo.InvariantCulture),
                     RatingCount =
                         string.IsNullOrWhiteSpace(episodeNode.GetXmlData("RatingCount"))

@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
                     tvShow.Add(new XElement("PremiereDate", series.FirstAired.Value.ToString("yyyy-MM-dd")));
                 }
                 //tvShow.Add(new XElement("EndDate", series.EndDate.ToString("yyyy-MM-dd")));
-                tvShow.Add(new XElement("Rating", (decimal)series.Ratings.Percentage / 10));
+                tvShow.Add(new XElement("Rating", series.Ratings.Value));
                 //tvShow.Add(new XElement("VoteCount", 
                 tvShow.Add(new XElement("ProductionYear", series.Year));
                 //tvShow.Add(new XElement("Website", 
