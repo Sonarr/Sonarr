@@ -171,7 +171,12 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                 var tvShow = new XElement("tvshow");
 
                 tvShow.Add(new XElement("title", series.Title));
-                tvShow.Add(new XElement("rating", series.Ratings.Value));
+
+                if (series.Ratings != null && series.Ratings.Votes > 0)
+                {
+                    tvShow.Add(new XElement("rating", series.Ratings.Value));
+                }
+
                 tvShow.Add(new XElement("plot", series.Overview));
                 tvShow.Add(new XElement("episodeguide", new XElement("url", episodeGuideUrl)));
                 tvShow.Add(new XElement("episodeguideurl", episodeGuideUrl));
@@ -257,7 +262,11 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     }
 
                     details.Add(new XElement("watched", "false"));
-                    details.Add(new XElement("rating", episode.Ratings.Value));
+
+                    if (episode.Ratings != null && episode.Ratings.Votes > 0)
+                    {
+                        details.Add(new XElement("rating", episode.Ratings.Value));
+                    }
 
                     //Todo: get guest stars, writer and director
                     //details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));

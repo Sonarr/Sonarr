@@ -118,10 +118,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             episode.AirDate = oracleEpisode.AirDate;
             episode.AirDateUtc = oracleEpisode.AirDateUtc;
 
-            if (oracleEpisode.Rating != null)
-            {
-                episode.Ratings = MapRatings(oracleEpisode.Rating);
-            }
+            episode.Ratings = MapRatings(oracleEpisode.Rating);
 
             //Don't include series fanart images as episode screenshot
             if (oracleEpisode.Image != null)
