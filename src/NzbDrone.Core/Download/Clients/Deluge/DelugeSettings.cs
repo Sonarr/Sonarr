@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             Host = "localhost";
             Port = 8112;
             Password = "deluge";
-            TvCategory = "tv-sonnar";
+            TvCategory = "tv-sonarr";
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
