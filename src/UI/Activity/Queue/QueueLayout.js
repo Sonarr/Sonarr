@@ -77,12 +77,12 @@ define(
                         cell      : ProgressCell,
                         cellValue : 'this'
                     },
-                    {
-                        name      : 'status',
-                        label     : '',
-                        cell      : QueueActionsCell,
-                        cellValue : 'this'
-                    }
+                    //{
+                    //    name      : 'status',
+                    //    label     : '',
+                    //    cell      : QueueActionsCell,
+                    //    cellValue : 'this'
+                    //}
                 ],
 
             initialize: function () {
