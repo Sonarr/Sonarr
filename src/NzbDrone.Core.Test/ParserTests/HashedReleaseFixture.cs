@@ -59,6 +59,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "grimm",
                 Quality.WEBDL720p,
                 "ECI"
+            },
+            new object[]
+            {
+                @"C:\Test\Grimm S04E08 Chupacabra 720p WEB-DL DD5 1 H 264-ECI\abc.mkv".AsOsAgnostic(),
+                "grimm",
+                Quality.WEBDL720p,
+                "ECI"
             }
         };
 
