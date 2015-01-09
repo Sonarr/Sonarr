@@ -15,6 +15,8 @@ namespace NzbDrone.Common.Http
         HttpResponse Get(HttpRequest request);
         HttpResponse<T> Get<T>(HttpRequest request) where T : new();
         HttpResponse Head(HttpRequest request);
+        HttpResponse Post(HttpRequest request);
+        HttpResponse<T> Post<T>(HttpRequest request) where T : new();
     }
 
     public class HttpClient : IHttpClient
@@ -43,6 +45,7 @@ namespace NzbDrone.Common.Http
             webRequest.UserAgent = UserAgentBuilder.UserAgent;
             webRequest.KeepAlive = false;
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
+            webRequest.ContentLength = 0;
 
             if (!RuntimeInfoBase.IsProduction)
             {
@@ -162,6 +165,18 @@ namespace NzbDrone.Common.Http
         {
             request.Method = HttpMethod.HEAD;
             return Execute(request);
+        }
+
+        public HttpResponse Post(HttpRequest request)
+        {
+            request.Method = HttpMethod.POST;
+            return Execute(request);
+        }
+
+        public HttpResponse<T> Post<T>(HttpRequest request) where T : new()
+        {
+            var response = Post(request);
+            return new HttpResponse<T>(response);
         }
 
         protected virtual void AddRequestHeaders(HttpWebRequest webRequest, HttpHeader headers)

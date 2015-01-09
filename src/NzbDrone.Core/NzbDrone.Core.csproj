@@ -657,6 +657,10 @@
     </Compile>
     <Compile Include="Notifications\Growl\GrowlSettings.cs" />
     <Compile Include="Notifications\INotification.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowser.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowserProxy.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowserService.cs" />
+    <Compile Include="Notifications\MediaBrowser\MediaBrowserSettings.cs" />
     <Compile Include="Notifications\NotificationBase.cs">
       <SubType>Code</SubType>
     </Compile>
