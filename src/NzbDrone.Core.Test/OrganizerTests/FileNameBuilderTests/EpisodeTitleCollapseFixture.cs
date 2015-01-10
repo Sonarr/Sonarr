@@ -72,6 +72,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("Meet the Guys and Girls of Cycle 20 Part01", "Meet the Guys and Girls of Cycle 20 Part02", "Meet the Guys and Girls of Cycle 20")]
         [TestCase("Meet the Guys and Girls of Cycle 20 Part 01", "Meet the Guys and Girls of Cycle 20 Part 02", "Meet the Guys and Girls of Cycle 20")]
         [TestCase("Meet the Guys and Girls of Cycle 20 part 1", "Meet the Guys and Girls of Cycle 20 part 2", "Meet the Guys and Girls of Cycle 20")]
+        [TestCase("Meet the Guys and Girls of Cycle 20 pt 1", "Meet the Guys and Girls of Cycle 20 pt 2", "Meet the Guys and Girls of Cycle 20")]
+        [TestCase("Meet the Guys and Girls of Cycle 20 pt. 1", "Meet the Guys and Girls of Cycle 20 pt. 2", "Meet the Guys and Girls of Cycle 20")]
         public void should_collapse_episode_titles_when_episode_titles_are_the_same(string title1, string title2, string expected)
         {
             _namingConfig.StandardEpisodeFormat = "{Episode Title}";
