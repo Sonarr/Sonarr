@@ -138,6 +138,9 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^123$", RegexOptions.Compiled),
 
                 //abc - Started appearing January 2015
+                new Regex(@"^abc$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+
+                //b00bs - Started appearing January 2015
                 new Regex(@"^abc$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
