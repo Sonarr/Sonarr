@@ -7,13 +7,14 @@ define(
     ], function (Handlebars, StatusModel, _) {
         Handlebars.registerHelper('poster', function () {
 
+            var placeholder = StatusModel.get('urlBase') + '/Content/Images/poster-dark.png';
             var poster = _.where(this.images, {coverType: 'poster'});
 
             if (poster[0]) {
-                return poster[0].url;
+                return new Handlebars.SafeString('<img class="series-poster" src="{0}" {1}>'.format(poster[0].url, Handlebars.helpers.defaultImg.call()));
             }
 
-            return undefined;
+            return new Handlebars.SafeString('<img class="series-poster placeholder-image" src="{0}">'.format(placeholder));
         });
 
         Handlebars.registerHelper('traktUrl', function () {
