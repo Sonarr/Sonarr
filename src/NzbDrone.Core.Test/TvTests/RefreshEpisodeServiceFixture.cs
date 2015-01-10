@@ -75,7 +75,6 @@ namespace NzbDrone.Core.Test.TvTests
         [Test]
         public void should_create_all_when_no_existing_episodes()
         {
-
             Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
                 .Returns(new List<Episode>());
 
@@ -304,6 +303,23 @@ namespace NzbDrone.Core.Test.TvTests
             updateEpisodes.Should().NotBeNull();
             updateEpisodes.Should().NotBeEmpty();
             updateEpisodes.All(v => v.AirDateUtc.HasValue).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_use_tba_for_episode_title_when_null()
+        {
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
+                .Returns(new List<Episode>());
+
+            var episodes = Builder<Episode>.CreateListOfSize(1)
+                                           .All()
+                                           .With(e => e.Title = null)
+                                           .Build()
+                                           .ToList();
+
+            Subject.RefreshEpisodeInfo(GetSeries(), episodes);
+
+            _insertedEpisodes.First().Title.Should().Be("TBA");
         }
     }
 }
