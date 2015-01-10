@@ -340,8 +340,8 @@ namespace NzbDrone.Core.Test.TvTests
 
             Subject.RefreshEpisodeInfo(series, episodes);
 
-            _insertedEpisodes.First().AirDateUtc.Should().Be(episodes.First().AirDateUtc);
-            _insertedEpisodes.Last().AirDateUtc.Should().Be(episodes.First().AirDateUtc.Value.AddMinutes(series.Runtime));
+            _insertedEpisodes.First().AirDateUtc.Value.ToString("s").Should().Be(episodes.First().AirDateUtc.Value.ToString("s"));
+            _insertedEpisodes.Last().AirDateUtc.Value.ToString("s").Should().Be(episodes.First().AirDateUtc.Value.AddMinutes(series.Runtime).ToString("s"));
         }
 
         [Test]
@@ -363,7 +363,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             Subject.RefreshEpisodeInfo(series, episodes);
 
-            _insertedEpisodes.Should().OnlyContain(e => e.AirDateUtc == episodes.First().AirDateUtc);
+            _insertedEpisodes.Should().OnlyContain(e => e.AirDateUtc.Value.ToString("s") == episodes.First().AirDateUtc.Value.ToString("s"));
         }
     }
 }
