@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private static bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons)
+        private bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons)
         {
             if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
             {
@@ -117,17 +117,23 @@ namespace NzbDrone.Core.Tv
             return season == null || season.Monitored;
         }
 
-        private static void AdjustMultiEpisodeAirTime(Series series, IEnumerable<Episode> allEpisodes)
+        private void AdjustMultiEpisodeAirTime(Series series, IEnumerable<Episode> allEpisodes)
         {
-            var groups =
-                allEpisodes.Where(c => c.AirDateUtc.HasValue)
-                    .GroupBy(e => new { e.SeasonNumber, e.AirDate })
-                    .Where(g => g.Count() > 1)
-                    .ToList();
+            if (series.Network == "Netflix")
+            {
+                _logger.Debug("Not adjusting episode air times for Netflix series {0}", series.Title);
+                return;
+            }
+
+            var groups = allEpisodes.Where(c => c.AirDateUtc.HasValue)
+                                    .GroupBy(e => new {e.SeasonNumber, e.AirDate})
+                                    .Where(g => g.Count() > 1)
+                                    .ToList();
 
             foreach (var group in groups)
             {
                 var episodeCount = 0;
+
                 foreach (var episode in group.OrderBy(e => e.SeasonNumber).ThenBy(e => e.EpisodeNumber))
                 {
                     episode.AirDateUtc = episode.AirDateUtc.Value.AddMinutes(series.Runtime * episodeCount);
@@ -136,7 +142,7 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private static void AdjustDirectToDvdAirDate(Series series, IEnumerable<Episode> allEpisodes)
+        private void AdjustDirectToDvdAirDate(Series series, IEnumerable<Episode> allEpisodes)
         {
             if (series.Status == SeriesStatusType.Ended && allEpisodes.All(v => !v.AirDateUtc.HasValue) && series.FirstAired.HasValue)
             {

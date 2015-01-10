@@ -321,5 +321,49 @@ namespace NzbDrone.Core.Test.TvTests
 
             _insertedEpisodes.First().Title.Should().Be("TBA");
         }
+
+        [Test]
+        public void should_update_air_date_when_multiple_episodes_air_on_the_same_day()
+        {
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
+                .Returns(new List<Episode>());
+
+            var series = GetSeries();
+
+            var episodes = Builder<Episode>.CreateListOfSize(2)
+                                           .All()
+                                           .With(e => e.SeasonNumber = 1)
+                                           .With(e => e.AirDate = DateTime.Now.ToShortDateString())
+                                           .With(e => e.AirDateUtc = DateTime.UtcNow)
+                                           .Build()
+                                           .ToList();
+
+            Subject.RefreshEpisodeInfo(series, episodes);
+
+            _insertedEpisodes.First().AirDateUtc.Should().Be(episodes.First().AirDateUtc);
+            _insertedEpisodes.Last().AirDateUtc.Should().Be(episodes.First().AirDateUtc.Value.AddMinutes(series.Runtime));
+        }
+
+        [Test]
+        public void should_not_update_air_date_when_multiple_episodes_air_on_the_same_day_for_netflix()
+        {
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<Int32>()))
+                .Returns(new List<Episode>());
+
+            var series = GetSeries();
+            series.Network = "Netflix";
+
+            var episodes = Builder<Episode>.CreateListOfSize(2)
+                                           .All()
+                                           .With(e => e.SeasonNumber = 1)
+                                           .With(e => e.AirDate = DateTime.Now.ToShortDateString())
+                                           .With(e => e.AirDateUtc = DateTime.UtcNow)
+                                           .Build()
+                                           .ToList();
+
+            Subject.RefreshEpisodeInfo(series, episodes);
+
+            _insertedEpisodes.Should().OnlyContain(e => e.AirDateUtc == episodes.First().AirDateUtc);
+        }
     }
 }
