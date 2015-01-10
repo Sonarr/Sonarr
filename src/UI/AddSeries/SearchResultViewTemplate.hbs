@@ -7,20 +7,21 @@
         </div>
         <div class="col-md-10">
             <div class="row">
-                <h2 class="series-title">
-                    {{titleWithYear}}
+                <div class="col-md-12">
+                    <h2 class="series-title">
+                        {{titleWithYear}}
 
-                    <span class="labels">
-                        <span class="label label-default">{{network}}</span>
-                        {{#unless_eq status compare="continuing"}}
-                            <span class="label label-danger">Ended</span>
-                        {{/unless_eq}}
-                    </span>
-
-                </h2>
+                        <span class="labels">
+                            <span class="label label-default">{{network}}</span>
+                            {{#unless_eq status compare="continuing"}}
+                                <span class="label label-danger">Ended</span>
+                            {{/unless_eq}}
+                        </span>
+                    </h2>
+                </div>
             </div>
             <div class="row new-series-overview x-overview">
-                <div class="overview-internal">
+                <div class="col-md-12 overview-internal">
                     {{overview}}
                 </div>
             </div>
