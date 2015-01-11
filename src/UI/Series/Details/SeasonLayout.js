@@ -136,7 +136,7 @@ define(
                 this.listenTo(this.model, 'sync', this._afterSeasonMonitored);
                 this.listenTo(this.episodeCollection, 'sync', this.render);
 
-                this.listenTo(this.fullEpisodeCollection, 'sync', this._updateEpisodeCollection);
+                this.listenTo(this.fullEpisodeCollection, 'sync', this._refreshEpsiodes);
             },
 
             onRender: function () {
@@ -300,6 +300,11 @@ define(
                 this.episodeCollection.each(function (model) {
                     model.episodeCollection = self.episodeCollection;
                 });
+            },
+
+            _refreshEpsiodes: function () {
+                this._updateEpisodeCollection();
+                this.render();
             }
         });
     });
