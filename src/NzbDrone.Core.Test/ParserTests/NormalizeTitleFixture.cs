@@ -113,5 +113,11 @@ namespace NzbDrone.Core.Test.ParserTests
                 dirty.CleanSeriesTitle().Should().Be(word + "wordword");
             }
         }
+
+        [Test]
+        public void should_not_clean_trailing_a()
+        {
+            "Tokyo Ghoul A".CleanSeriesTitle().Should().Be("tokyoghoula");
+        }
     }
 }
