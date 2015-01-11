@@ -8,17 +8,18 @@
         Specials
         {{/if}}
 
+
         {{#if_eq episodeCount compare=0}}
             {{#if monitored}}
-                <i class="icon-nd-status season-status status-primary" title="No aired episodes"/>
+                <span class="badge badge-primary season-status" title="No aired episodes">&nbsp;</span>
             {{else}}
-                <i class="icon-nd-status season-status status-warning" title="Season is not monitored"/>
+                <span class="badge badge-warning season-status" title="Season is not monitored">&nbsp;</span>
             {{/if}}
         {{else}}
             {{#if_eq percentOfEpisodes compare=100}}
-                <i class="icon-nd-status season-status status-success" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded"/>
+                <span class="badge badge-success season-status" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded">{{episodeFileCount}} / {{episodeCount}}</span>
             {{else}}
-                <i class="icon-nd-status season-status status-danger" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded"/>
+                <span class="badge badge-danger season-status" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded">{{episodeFileCount}} / {{episodeCount}}</span>
             {{/if_eq}}
         {{/if_eq}}
 
