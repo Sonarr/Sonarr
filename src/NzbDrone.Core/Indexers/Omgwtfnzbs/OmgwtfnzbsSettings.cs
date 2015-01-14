@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -12,6 +11,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
         {
             RuleFor(c => c.Username).NotEmpty();
             RuleFor(c => c.ApiKey).NotEmpty();
+            RuleFor(c => c.Delay).GreaterThanOrEqualTo(0);
         }
     }
 
@@ -19,11 +19,19 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
     {
         private static readonly OmgwtfnzbsSettingsValidator Validator = new OmgwtfnzbsSettingsValidator();
 
+        public OmgwtfnzbsSettings()
+        {
+            Delay = 30;
+        }
+
         [FieldDefinition(0, Label = "Username")]
-        public String Username { get; set; }
+        public string Username { get; set; }
 
         [FieldDefinition(1, Label = "API Key")]
-        public String ApiKey { get; set; }
+        public string ApiKey { get; set; }
+
+        [FieldDefinition(2, Label = "Delay", HelpText = "Time in minutes to delay new nzbs before they appear on the RSS feed", Advanced = true)]
+        public int Delay { get; set; }
 
         public ValidationResult Validate()
         {
