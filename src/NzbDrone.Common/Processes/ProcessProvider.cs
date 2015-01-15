@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Model;
 
 namespace NzbDrone.Common.Processes
@@ -218,7 +217,7 @@ namespace NzbDrone.Common.Processes
 
             process.Refresh();
 
-            if (process.HasExited)
+            if (process.Id != Process.GetCurrentProcess().Id && process.HasExited)
             {
                 _logger.Debug("Process has already exited");
                 return;
@@ -261,7 +260,7 @@ namespace NzbDrone.Common.Processes
                 processInfo.Name = process.ProcessName;
                 processInfo.StartPath = GetExeFileName(process);
 
-                if (process.HasExited)
+                if (process.Id != Process.GetCurrentProcess().Id && process.HasExited)
                 {
                     processInfo = null;
                 }
