@@ -127,6 +127,11 @@ namespace NzbDrone.Host.AccessControl
 
         private List<UrlAcl> GetRegisteredUrls()
         {
+            if (OsInfo.IsNotWindows)
+            {
+                return new List<UrlAcl>();
+            }
+
             var arguments = String.Format("http show urlacl");
             var output = _netshProvider.Run(arguments);
 
