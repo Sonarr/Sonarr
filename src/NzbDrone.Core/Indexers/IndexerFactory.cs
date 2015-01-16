@@ -15,6 +15,8 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
+        private readonly IIndexerRepository _providerRepository;
+
         public IndexerFactory(IIndexerRepository providerRepository,
                               IEnumerable<IIndexer> providers,
                               IContainer container, 
@@ -22,11 +24,12 @@ namespace NzbDrone.Core.Indexers
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
+            _providerRepository = providerRepository;
         }
 
         protected override void InitializeProviders()
         {
-
+            //_providerRepository.DeleteImplementations("Animezb");
         }
 
         protected override List<IndexerDefinition> Active()

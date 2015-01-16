@@ -26,6 +26,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The_Voice_US_04.28.2014_hdtv.x264.Poke.mp4", "The Voice US", 2014, 4, 28)]
         [TestCase("At.Midnight.140722.720p.HDTV.x264-YesTV", "At Midnight", 2014, 07, 22)]
         [TestCase("At_Midnight_140722_720p_HDTV_x264-YesTV", "At Midnight", 2014, 07, 22)]
+        //[TestCase("Corrie.07.01.15", "Corrie", 2015, 1, 7)]
+        //[TestCase("", "", 0, 0, 0)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

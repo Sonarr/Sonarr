@@ -192,7 +192,6 @@
     <Compile Include="IndexerSearchTests\SeriesSearchServiceFixture.cs" />
     <Compile Include="IndexerSearchTests\NzbSearchServiceFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
-    <Compile Include="IndexerTests\AnimezbTests\AnimezbFixture.cs" />
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\BitMeTvTests\BitMeTvFixture.cs" />
     <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
