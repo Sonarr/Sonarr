@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         {
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.Added = DateTime.UtcNow.AddDays(-7))
+                                     .With(s => s.Monitored = true)
                                      .Build();
 
             _added = new List<Episode>();
@@ -97,11 +98,35 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public void should_not_search_if_series_is_not_monitored()
+        {
+            GivenUpdated();
+
+            _series.Monitored = false;
+
+            Subject.Handle(new EpisodeInfoRefreshedEvent(_series, _added, _updated));
+
+            VerifyNoSearch();
+        }
+
+        [Test]
+        public void should_not_search_if_episode_is_not_monitored()
+        {
+            GivenUpdated();
+
+            _added.Add(new Episode { AirDateUtc = DateTime.UtcNow, Monitored = false });
+
+            Subject.Handle(new EpisodeInfoRefreshedEvent(_series, _added, _updated));
+
+            VerifyNoSearch();
+        }
+
+        [Test]
         public void should_search_for_a_newly_added_episode()
         {
             GivenUpdated();
 
-            _added.Add(new Episode { AirDateUtc = DateTime.UtcNow });
+            _added.Add(new Episode { AirDateUtc = DateTime.UtcNow, Monitored = true });
 
             Mocker.GetMock<IProcessDownloadDecisions>()
                   .Setup(s => s.ProcessDecisions(It.IsAny<List<DownloadDecision>>()))

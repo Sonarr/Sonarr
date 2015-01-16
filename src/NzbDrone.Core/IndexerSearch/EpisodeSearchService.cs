@@ -113,6 +113,12 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void Handle(EpisodeInfoRefreshedEvent message)
         {
+            if (!message.Series.Monitored)
+            {
+                _logger.Debug("Series is not monitored");
+                return;
+            }
+
             if (message.Updated.Empty() || message.Series.Added.InLastDays(1))
             {
                 _logger.Debug("Appears to be a new series, skipping search.");
@@ -141,6 +147,12 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var episode in previouslyAired)
             {
+                if (!episode.Monitored)
+                {
+                    _logger.Debug("Episode is not monitored");
+                    continue;
+                }
+
                 var decisions = _nzbSearchService.EpisodeSearch(episode);
                 var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
