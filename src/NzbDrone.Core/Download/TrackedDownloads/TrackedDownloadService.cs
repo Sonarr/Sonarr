@@ -30,9 +30,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             _logger = logger;
         }
 
-        public TrackedDownload Find(string downloadId)
+        public TrackedDownload Find(string trackingId)
         {
-            return _cache.Find(downloadId);
+            return _cache.Find(trackingId);
         }
 
         public TrackedDownload TrackDownload(DownloadClientDefinition downloadClient, DownloadClientItem downloadItem)
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 trackedDownload.State = GetStateFromHistory(historyItem.EventType);
             }
 
-            _cache.Set(downloadItem.DownloadId, trackedDownload);
+            _cache.Set(trackedDownload.TrackingId, trackedDownload);
 
             return trackedDownload;
         }
