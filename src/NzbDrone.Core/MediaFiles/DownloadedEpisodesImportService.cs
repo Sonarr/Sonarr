@@ -183,6 +183,7 @@ namespace NzbDrone.Core.MediaFiles
         private bool ShouldDeleteFolder(DirectoryInfo directoryInfo, Series series)
         {
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
+            var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, SearchOption.AllDirectories).Where(f => Path.GetExtension(f) == ".rar");
 
             foreach (var videoFile in videoFiles)
             {
@@ -203,6 +204,12 @@ namespace NzbDrone.Core.MediaFiles
                     _logger.Warn("Non-sample file detected: [{0}]", videoFile);
                     return false;
                 }
+            }
+
+            if (rarFiles.Any(f => _diskProvider.GetFileSize(f) > 10.Megabytes()))
+            {
+                _logger.Warn("RAR file detected, will require manual cleanup");
+                return false;
             }
 
             return true;

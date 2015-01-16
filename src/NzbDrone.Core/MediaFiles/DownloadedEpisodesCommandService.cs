@@ -48,8 +48,6 @@ namespace NzbDrone.Core.MediaFiles
             return _downloadedEpisodesImportService.ProcessRootFolder(new DirectoryInfo(downloadedEpisodesFolder));
         }
 
-
-
         public void Execute(DownloadedEpisodesScanCommand message)
         {
             var importResults = ProcessDroneFactoryFolder();

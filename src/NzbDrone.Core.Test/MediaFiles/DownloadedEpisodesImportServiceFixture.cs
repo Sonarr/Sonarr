@@ -210,6 +210,48 @@ namespace NzbDrone.Core.Test.MediaFiles
             result.First().Result.Should().Be(ImportResultType.Rejected);
         }
 
+        [Test]
+        public void should_not_delete_if_there_is_large_rar_file()
+        {
+            GivenValidSeries();
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), true, null))
+                  .Returns(imported);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                  .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
+                  .Returns(imported.Select(i => new ImportResult(i)).ToList());
+
+            Mocker.GetMock<ISampleService>()
+                  .Setup(s => s.IsSample(It.IsAny<Series>(),
+                      It.IsAny<QualityModel>(),
+                      It.IsAny<String>(),
+                      It.IsAny<Int64>(),
+                      It.IsAny<Int32>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetFiles(It.IsAny<string>(), SearchOption.AllDirectories))
+                  .Returns(new []{ _videoFiles.First().Replace(".ext", ".rar") });
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetFileSize(It.IsAny<string>()))
+                  .Returns(15.Megabytes());
+
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
         private void VerifyNoImport()
         {
             Mocker.GetMock<IImportApprovedEpisodes>().Verify(c => c.Import(It.IsAny<List<ImportDecision>>(), true, null),

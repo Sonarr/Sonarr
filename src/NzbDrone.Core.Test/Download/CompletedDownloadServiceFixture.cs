@@ -77,7 +77,6 @@ namespace NzbDrone.Core.Test.Download
                     });
         }
 
-
         [TestCase(DownloadItemStatus.Downloading)]
         [TestCase(DownloadItemStatus.Failed)]
         [TestCase(DownloadItemStatus.Queued)]
@@ -91,7 +90,6 @@ namespace NzbDrone.Core.Test.Download
 
             AssertNoAttemptedImport();
         }
-
 
         [Test]
         public void should_not_process_if_matching_history_is_not_found_and_no_category_specified()
@@ -116,8 +114,6 @@ namespace NzbDrone.Core.Test.Download
             AssertCompletedDownload();
         }
 
-
-
         [Test]
         public void should_not_process_if_storage_directory_in_drone_factory()
         {
@@ -132,7 +128,6 @@ namespace NzbDrone.Core.Test.Download
             AssertNoAttemptedImport();
         }
 
-
         [Test]
         public void should_not_process_if_output_path_is_empty()
         {
@@ -142,7 +137,6 @@ namespace NzbDrone.Core.Test.Download
 
             AssertNoAttemptedImport();
         }
-
 
         [Test]
         public void should_not_mark_as_imported_if_all_files_were_rejected()
