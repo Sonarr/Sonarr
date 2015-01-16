@@ -112,9 +112,9 @@ namespace NzbDrone.Core.IndexerSearch
         {
             List<Episode> episodes;
 
-            if (message.SeriesId > 0)
+            if (message.SeriesId.HasValue)
             {
-                episodes = _episodeService.GetEpisodeBySeries(message.SeriesId)
+                episodes = _episodeService.GetEpisodeBySeries(message.SeriesId.Value)
                                           .Where(e => e.Monitored &&
                                                  !e.HasFile &&
                                                  e.AirDateUtc.HasValue &&

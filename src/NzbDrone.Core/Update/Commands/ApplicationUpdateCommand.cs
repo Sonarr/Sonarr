@@ -11,5 +11,13 @@ namespace NzbDrone.Core.Update.Commands
                 return true;
             }
         }
+
+        public override string CompletionMessage
+        {
+            get
+            {
+                return "Restarting Sonarr to apply updates";
+            }
+        }
     }
 }

@@ -74,7 +74,7 @@ var singleton = function() {
                 return;
             }
 
-            model.bind('change:state', function(model) {
+            model.bind('change:status', function(model) {
                 if (!model.isActive()) {
                     options.element.stopSpin();
 

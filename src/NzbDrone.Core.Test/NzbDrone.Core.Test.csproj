@@ -257,7 +257,6 @@
     <Compile Include="MediaFiles\UpgradeMediaFileServiceFixture.cs" />
     <Compile Include="Messaging\Commands\CommandEqualityComparerFixture.cs" />
     <Compile Include="Messaging\Commands\CommandExecutorFixture.cs" />
-    <Compile Include="Messaging\Commands\CommandFixture.cs" />
     <Compile Include="Messaging\Events\EventAggregatorFixture.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\FindMetadataFileFixture.cs" />
     <Compile Include="Metadata\Consumers\Wdtv\FindMetadataFileFixture.cs" />
