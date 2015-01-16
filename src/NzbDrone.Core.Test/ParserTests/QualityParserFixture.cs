@@ -78,6 +78,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("Heidi Girl of the Alps (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
         [TestCase("[Doki] Clannad - 02 (848x480 XviD BD MP3) [95360783]", false)]
+        [TestCase("The.Simpsons.S25E21.Pay.Pal.1080p.WEB-DL.DD5.1.H.264-NTb-RP", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);
