@@ -32,27 +32,27 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
-        private readonly ICommandExecutor _commandExecutor;
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
+        private readonly IMediaFileTableCleanupService _mediaFileTableCleanupService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
                                IMakeImportDecision importDecisionMaker,
                                IImportApprovedEpisodes importApprovedEpisodes,
-                               ICommandExecutor commandExecutor,
                                IConfigService configService,
                                ISeriesService seriesService,
+                               IMediaFileTableCleanupService mediaFileTableCleanupService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
-            _commandExecutor = commandExecutor;
             _configService = configService;
             _seriesService = seriesService;
+            _mediaFileTableCleanupService = mediaFileTableCleanupService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
-            _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
+            _mediaFileTableCleanupService.Clean(series);
 
             if (!_diskProvider.FolderExists(series.Path))
             {

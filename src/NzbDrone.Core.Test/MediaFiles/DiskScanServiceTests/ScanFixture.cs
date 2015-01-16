@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
 
             ExceptionVerification.ExpectedWarns(1);
 
-            Mocker.GetMock<ICommandExecutor>()
-                .Verify(v => v.PublishCommand(It.IsAny<CleanMediaFileDb>()), Times.Never());
+            Mocker.GetMock<IMediaFileTableCleanupService>()
+                .Verify(v => v.Clean(It.IsAny<Series>()), Times.Never());
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
 
             ExceptionVerification.ExpectedWarns(1);
 
-            Mocker.GetMock<ICommandExecutor>()
-                .Verify(v => v.PublishCommand(It.IsAny<CleanMediaFileDb>()), Times.Never());
+            Mocker.GetMock<IMediaFileTableCleanupService>()
+                  .Verify(v => v.Clean(It.IsAny<Series>()), Times.Never());
         }
 
         [Test]
