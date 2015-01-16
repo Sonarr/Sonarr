@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi", null)]
         [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "DIMENSION")]
         [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "2HD")]
+        [TestCase("7s-atlantis-s02e01-720p.mkv", null)]
         //[TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
