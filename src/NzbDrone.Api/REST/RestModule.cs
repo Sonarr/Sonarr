@@ -12,7 +12,7 @@ namespace NzbDrone.Api.REST
         where TResource : RestResource, new()
     {
         private const string ROOT_ROUTE = "/";
-        private const string ID_ROUTE = @"/(?<id>[\d]{1,7})";
+        private const string ID_ROUTE = @"/(?<id>[\d]{1,10})";
 
         private Action<int> _deleteResource;
         private Func<int, TResource> _getResourceById;
