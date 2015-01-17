@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.EztvTests
             Subject.Definition = new IndexerDefinition()
                 {
                     Name = "Eztv",
-                    Settings = new EztvSettings()
+                    Settings = new EztvSettings { BaseUrl = "https://www.ezrss.it/" }
                 };
         }
 

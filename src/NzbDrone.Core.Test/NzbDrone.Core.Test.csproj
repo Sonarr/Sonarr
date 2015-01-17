@@ -117,6 +117,7 @@
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
+    <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\072_history_grabIdFixture.cs" />
     <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />

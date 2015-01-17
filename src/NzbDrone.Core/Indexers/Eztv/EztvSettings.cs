@@ -21,10 +21,10 @@ namespace NzbDrone.Core.Indexers.Eztv
 
         public EztvSettings()
         {
-            BaseUrl = "https://www.ezrss.it/";
+            BaseUrl = "";
         }
 
-        [FieldDefinition(0, Label = "Website URL")]
+        [FieldDefinition(0, Label = "Website URL", HelpText = "Enter to URL to an EZTV compatible RSS feed")]
         public String BaseUrl { get; set; }
 
         public ValidationResult Validate()
