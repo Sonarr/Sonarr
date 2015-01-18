@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Blue.Bloods.S05E11.720p.HDTV.X264-DIMENSION-NZBgeek", "DIMENSION")]
         [TestCase("Lost.S04E04.720p.BluRay.x264-xHD-1", "xHD")]
         [TestCase("Blue.Bloods.S05E11.720p.HDTV.X264-DIMENSION-1", "DIMENSION")]
+        [TestCase("saturday.night.live.s40e11.kevin.hart_sia.720p.hdtv.x264-w4f-sample.mkv", "w4f")]
         public void should_not_include_repost_in_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
