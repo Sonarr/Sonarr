@@ -122,6 +122,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        [Ignore]
         public void should_search_for_a_newly_added_episode()
         {
             GivenUpdated();
