@@ -113,6 +113,9 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void Handle(EpisodeInfoRefreshedEvent message)
         {
+            //TODO: This should be triggered off of a disk scan, that follows after the refresh so existing files on disk are counted
+            return;
+
             if (!message.Series.Monitored)
             {
                 _logger.Debug("Series is not monitored");
