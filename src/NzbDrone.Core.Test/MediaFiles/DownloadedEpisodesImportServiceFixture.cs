@@ -199,9 +199,12 @@ namespace NzbDrone.Core.Test.MediaFiles
         [Test]
         public void should_return_importresult_on_unknown_series()
         {
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>()))
+                  .Returns(false);
+
             var fileName = @"C:\folder\file.mkv".AsOsAgnostic();
 
-            var result = Subject.ProcessFile(new FileInfo(fileName));
+            var result = Subject.ProcessPath(fileName);
 
             result.Should().HaveCount(1);
             result.First().ImportDecision.Should().NotBeNull();

@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 trackedDownloads.AddRange(newItems);
             }
 
-            if (_configService.RemoveCompletedDownloads)
+            if (_configService.EnableCompletedDownloadHandling && _configService.RemoveCompletedDownloads)
             {
                 RemoveCompletedDownloads(trackedDownloads);
             }
