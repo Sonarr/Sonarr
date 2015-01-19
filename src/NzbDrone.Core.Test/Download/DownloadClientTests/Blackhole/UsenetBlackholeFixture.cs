@@ -1,3 +1,5 @@
+
+using System;
 using System.IO;
 using System.Net;
 using System.Linq;
@@ -116,6 +118,58 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var result = Subject.GetItems().Single();
 
             result.Status.Should().Be(DownloadItemStatus.Downloading);
+        }
+
+        [Test]
+        public void RemoveItem_should_delete_file()
+        {
+            GivenCompletedItem();
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.FileExists(It.IsAny<string>()))
+                .Returns(true);
+
+            Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", true);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFile(It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public void RemoveItem_should_delete_directory()
+        {
+            GivenCompletedItem();
+
+            Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", true);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFolder(It.IsAny<string>(), true), Times.Once());
+        }
+
+        [Test]
+        public void RemoveItem_should_throw_if_unknown_item()
+        {
+            Assert.Throws<ArgumentException>(() => Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", true));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFile(It.IsAny<string>()), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFolder(It.IsAny<string>(), true), Times.Never());
+        }
+
+        [Test]
+        public void RemoveItem_should_throw_if_deleteData_is_false()
+        {
+            GivenCompletedItem();
+
+            Assert.Throws<NotSupportedException>(() => Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", false));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFile(It.IsAny<string>()), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(c => c.DeleteFolder(It.IsAny<string>(), true), Times.Never());
         }
 
         [Test]

@@ -125,7 +125,28 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            throw new NotSupportedException();
+            var downloadItem = GetItems().FirstOrDefault(v => v.DownloadId == downloadId);
+
+            if (downloadItem == null)
+            {
+                throw new ArgumentException(string.Format("Cannot remove DownloadItem {0} because it was not found.", downloadId));
+            }
+
+            if (!deleteData)
+            {
+                throw new NotSupportedException("Blackhole cannot remove DownloadItem without deleting the data as well, ignoring.");
+            }
+
+            var outputPath = downloadItem.OutputPath.FullPath;
+
+            if (_diskProvider.FileExists(outputPath))
+            {
+                _diskProvider.DeleteFile(outputPath);
+            }
+            else
+            {
+                _diskProvider.DeleteFolder(outputPath, true);
+            }
         }
 
         public override DownloadClientStatus GetStatus()
