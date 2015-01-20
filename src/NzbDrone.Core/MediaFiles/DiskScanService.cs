@@ -69,6 +69,12 @@ namespace NzbDrone.Core.MediaFiles
                 return;
             }
 
+            if (_diskProvider.GetDirectories(rootFolder).Empty())
+            {
+                _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                return; 
+            }
+
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
             _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
 

@@ -30,8 +30,8 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                                      .Build();
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetParentFolder(It.IsAny<String>()))
-                  .Returns((String path) => Directory.GetParent(path).FullName);
+                  .Setup(s => s.GetParentFolder(It.IsAny<string>()))
+                  .Returns((string path) => Directory.GetParent(path).FullName);
 
             
         }
@@ -39,14 +39,18 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         private void GivenParentFolderExists()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FolderExists(It.IsAny<String>()))
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
                   .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetDirectories(It.IsAny<string>()))
+                  .Returns(new string[] { @"C:\Test\TV\Series2".AsOsAgnostic() });
         }
 
-        private void GivenFiles(IEnumerable<String> files)
+        private void GivenFiles(IEnumerable<string> files)
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetFiles(It.IsAny<String>(), SearchOption.AllDirectories))
+                  .Setup(s => s.GetFiles(It.IsAny<string>(), SearchOption.AllDirectories))
                   .Returns(files.ToArray());
         }
 
@@ -62,11 +66,30 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
+        public void should_not_scan_if_series_root_folder_is_empty()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetDirectories(It.IsAny<string>()))
+                  .Returns(new string[0]);
+
+            Subject.Scan(_series);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<ICommandExecutor>()
+                .Verify(v => v.PublishCommand(It.IsAny<CleanMediaFileDb>()), Times.Never());
+        }
+
+        [Test]
         public void should_not_scan_extras_subfolder()
         {
             GivenParentFolderExists();
 
-            GivenFiles(new List<String>
+            GivenFiles(new List<string>
                        {
                            Path.Combine(_series.Path, "EXTRAS", "file1.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Extras", "file2.mkv").AsOsAgnostic(),
@@ -78,7 +101,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Subject.Scan(_series);
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Verify(v => v.GetImportDecisions(It.Is<List<String>>(l => l.Count == 1), _series, false, (QualityModel)null), Times.Once());
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series, false, (QualityModel)null), Times.Once());
         }
 
         [Test]
@@ -86,7 +109,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         {
             GivenParentFolderExists();
 
-            GivenFiles(new List<String>
+            GivenFiles(new List<string>
                        {
                            Path.Combine(_series.Path, ".AppleDouble", "file1.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, ".appledouble", "file2.mkv").AsOsAgnostic(),
@@ -96,7 +119,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Subject.Scan(_series);
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Verify(v => v.GetImportDecisions(It.Is<List<String>>(l => l.Count == 1), _series, false, (QualityModel)null), Times.Once());
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series, false, (QualityModel)null), Times.Once());
         }
 
         [Test]
@@ -105,7 +128,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             GivenParentFolderExists();
             _series.Path = @"C:\Test\TV\Extras".AsOsAgnostic();
 
-            GivenFiles(new List<String>
+            GivenFiles(new List<string>
                        {
                            Path.Combine(_series.Path, "Extras", "file1.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, ".AppleDouble", "file2.mkv").AsOsAgnostic(),
@@ -118,7 +141,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Subject.Scan(_series);
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Verify(v => v.GetImportDecisions(It.Is<List<String>>(l => l.Count == 4), _series, false, (QualityModel)null), Times.Once());
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 4), _series, false, (QualityModel)null), Times.Once());
         }
     }
 }
