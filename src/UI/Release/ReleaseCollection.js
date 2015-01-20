@@ -37,7 +37,8 @@ define(
                                         
                                         return seeders * 1000000 + leechers;
                                     }
-                }
+                },
+                'age'           : { sortKey: 'ageMinutes' }
             },
 
             fetchEpisodeReleases: function (episodeId) {
