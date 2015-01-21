@@ -104,15 +104,9 @@ namespace NzbDrone.Core.Download
 
             if (mustBeWritable)
             {
-                try
+                if (!_diskProvider.FolderWritable(folder))
                 {
-                    var testPath = Path.Combine(folder, "drone_test.txt");
-                    _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                    _diskProvider.DeleteFile(testPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.ErrorException(ex.Message, ex);
+                    _logger.Error("Folder '{0}' is not writable.", folder);
                     return new NzbDroneValidationFailure(propertyName, "Unable to write to folder")
                     {
                         DetailedDescription = "The folder you specified is not writable. Please verify the folder permissions for the user account that is used to execute NzbDrone."

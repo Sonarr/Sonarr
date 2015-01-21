@@ -29,13 +29,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             if (OsInfo.IsWindows || _configFileProvider.UpdateAutomatically)
             {
-                try
-                {
-                    var testPath = Path.Combine(_appFolderInfo.StartUpFolder, "drone_test.txt");
-                    _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                    _diskProvider.DeleteFile(testPath);
-                }
-                catch (Exception)
+                if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to update, running from write-protected folder");
                 }

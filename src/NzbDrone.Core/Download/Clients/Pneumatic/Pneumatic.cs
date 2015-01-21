@@ -122,30 +122,8 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         protected override void Test(List<ValidationFailure> failures)
         {
-            failures.AddIfNotNull(TestWrite(Settings.NzbFolder, "NzbFolder"));
-            failures.AddIfNotNull(TestWrite(Settings.StrmFolder, "StrmFolder"));
-        }
-
-        private ValidationFailure TestWrite(String folder, String propertyName)
-        {
-            if (!_diskProvider.FolderExists(folder))
-            {
-                return new ValidationFailure(propertyName, "Folder does not exist");
-            }
-
-            try
-            {
-                var testPath = Path.Combine(folder, "drone_test.txt");
-                _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                _diskProvider.DeleteFile(testPath);
-            }
-            catch (Exception ex)
-            {
-                _logger.ErrorException(ex.Message, ex);
-                return new ValidationFailure(propertyName, "Unable to write to folder");
-            }
-
-            return null;
+            failures.AddIfNotNull(TestFolder(Settings.NzbFolder, "NzbFolder"));
+            failures.AddIfNotNull(TestFolder(Settings.StrmFolder, "StrmFolder"));
         }
 
         private String WriteStrmFile(String title, String nzbFile)
