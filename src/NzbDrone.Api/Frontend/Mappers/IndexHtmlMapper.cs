@@ -93,8 +93,8 @@ namespace NzbDrone.Api.Frontend.Mappers
             text = text.Replace("API_KEY", API_KEY);
             text = text.Replace("APP_VERSION", BuildInfo.Version.ToString());
             text = text.Replace("APP_BRANCH", _configFileProvider.Branch.ToLower());
-
             text = text.Replace("APP_ANALYTICS", _analyticsService.IsEnabled.ToString().ToLowerInvariant());
+            text = text.Replace("URL_BASE", _configFileProvider.UrlBase);
 
             _generatedContent = text;
 

@@ -46,7 +46,17 @@ define(
                     messenger.show({
                         message   : 'Sonarr has been updated',
                         hideAfter : 0,
-                        id        : 'droneUpdated'
+                        id        : 'droneUpdated',
+                        actions : {
+                            viewChanges: {
+                                label: 'View Changes',
+                                action: function() {
+                                    //TODO: UrlBase
+                                    window.location = window.NzbDrone.UrlBase + 'system/updates';
+                                    //Backbone.history.navigate('/system/updates', { trigger: true });
+                                }
+                            }
+                        }
                     });
 
                     vent.trigger(vent.Events.ServerUpdated);
