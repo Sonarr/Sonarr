@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex SeasonFolderRegex = new Regex(@"(\{season(\:\d+)?\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        internal static readonly Regex OriginalTitleRegex = new Regex(@"(\{original[- ._]title\})",
+        internal static readonly Regex OriginalTokenRegex = new Regex(@"(\{original[- ._](?:title|filename)\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static IRuleBuilderOptions<T, string> ValidEpisodeFormat<T>(this IRuleBuilder<T, string> ruleBuilder)
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Organizer
             var value = context.PropertyValue as String;
 
             if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameValidation.OriginalTitleRegex.IsMatch(value))
+                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
             {
                 return false;
             }
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Organizer
 
             if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
                 !FileNameBuilder.AirDateRegex.IsMatch(value) &&
-                !FileNameValidation.OriginalTitleRegex.IsMatch(value))
+                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
             {
                 return false;
             }
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Organizer
 
             if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
                 !FileNameBuilder.AbsoluteEpisodePatternRegex.IsMatch(value) &&
-                !FileNameValidation.OriginalTitleRegex.IsMatch(value))
+                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
             {
                 return false;
             }
