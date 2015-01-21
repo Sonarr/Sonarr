@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^abc$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
                 //b00bs - Started appearing January 2015
-                new Regex(@"^abc$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                new Regex(@"^b00bs$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
         //Regex to detect whether the title was reversed.
