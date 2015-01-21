@@ -10,6 +10,7 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Backup;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Update.Commands;
 
@@ -61,11 +62,19 @@ namespace NzbDrone.Core.Update
             _logger = logger;
         }
 
-        private void InstallUpdate(UpdatePackage updatePackage)
+        private bool InstallUpdate(UpdatePackage updatePackage)
         {
             try
             {
                 EnsureAppDataSafety();
+
+                if (OsInfo.IsWindows || _configFileProvider.UpdateMechanism != UpdateMechanism.Script)
+                {
+                    if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
+                    {
+                        throw new ApplicationException(string.Format("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", _appFolderInfo.StartUpFolder, Environment.UserName));
+                    }
+                }
 
                 var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
@@ -100,7 +109,7 @@ namespace NzbDrone.Core.Update
                 if (OsInfo.IsNotWindows && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
                 {
                     InstallUpdateWithScript(updateSandboxFolder);
-                    return;
+                    return true;
                 }
 
                 _logger.Info("Preparing client");
@@ -111,10 +120,13 @@ namespace NzbDrone.Core.Update
                 _logger.ProgressInfo("NzbDrone will restart shortly.");
 
                 _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), GetUpdaterArgs(updateSandboxFolder));
+
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.ErrorException("Update process failed", ex);
+                return false;
             }
         }
 
@@ -170,7 +182,12 @@ namespace NzbDrone.Core.Update
 
         public void Execute(InstallUpdateCommand message)
         {
-            InstallUpdate(message.UpdatePackage);
+            var success = InstallUpdate(message.UpdatePackage);
+
+            if (!success)
+            {
+                throw new NzbDroneClientException(System.Net.HttpStatusCode.Conflict, "Failed to install update");
+            }
         }
     }
 }
