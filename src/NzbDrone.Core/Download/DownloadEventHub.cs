@@ -22,17 +22,14 @@ namespace NzbDrone.Core.Download
     {
         private readonly IConfigService _configService;
         private readonly IProvideDownloadClient _downloadClientProvider;
-        private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly Logger _logger;
 
         public DownloadEventHub(IConfigService configService,
             IProvideDownloadClient downloadClientProvider,
-            ITrackedDownloadService trackedDownloadService,
             Logger logger)
         {
             _configService = configService;
             _downloadClientProvider = downloadClientProvider;
-            _trackedDownloadService = trackedDownloadService;
             _logger = logger;
         }
 
@@ -48,8 +45,7 @@ namespace NzbDrone.Core.Download
 
         public void Handle(DownloadFailedEvent message)
         {
-            var trackedDownload = _trackedDownloadService.Find(message.DownloadId);
-
+            var trackedDownload = message.TrackedDownload;
 
             if (trackedDownload == null || trackedDownload.DownloadItem.IsReadOnly || _configService.RemoveFailedDownloads == false)
             {

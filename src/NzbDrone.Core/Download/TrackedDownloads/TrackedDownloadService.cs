@@ -95,6 +95,5 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     return TrackedDownloadStage.Downloading;
             }
         }
-
     }
 }

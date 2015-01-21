@@ -68,7 +68,6 @@ namespace NzbDrone.Core.Test.Download
             AssertDownloadNotFailed();
         }
 
-
         [Test]
         public void should_mark_failed_if_encrypted()
         {
@@ -78,7 +77,6 @@ namespace NzbDrone.Core.Test.Download
 
             AssertDownloadFailed();
         }
-
 
         [Test]
         public void should_mark_failed_if_download_item_is_failed()
@@ -90,6 +88,18 @@ namespace NzbDrone.Core.Test.Download
             AssertDownloadFailed();
         }
 
+        [Test]
+        public void should_include_tracked_download_in_message()
+        {
+            _trackedDownload.DownloadItem.Status = DownloadItemStatus.Failed;
+
+            Subject.Process(_trackedDownload);
+
+            Mocker.GetMock<IEventAggregator>()
+                  .Verify(v => v.PublishEvent(It.Is<DownloadFailedEvent>(c => c.TrackedDownload != null)), Times.Once());
+
+            AssertDownloadFailed();
+        }
 
         private void AssertDownloadNotFailed()
         {

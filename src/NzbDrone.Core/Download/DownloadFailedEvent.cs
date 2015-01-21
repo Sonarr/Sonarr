@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Download
@@ -20,5 +21,6 @@ namespace NzbDrone.Core.Download
         public String DownloadId { get; set; }
         public String Message { get; set; }
         public Dictionary<string, string> Data { get; set; }
+        public TrackedDownload TrackedDownload { get; set; }
     }
 }

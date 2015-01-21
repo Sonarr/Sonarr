@@ -55,16 +55,16 @@ namespace NzbDrone.Core.Download
             if (trackedDownload.DownloadItem.IsEncrypted)
             {
                 trackedDownload.State = TrackedDownloadStage.DownloadFailed;
-                PublishDownloadFailedEvent(grabbedItems, "Encrypted download detected");
+                PublishDownloadFailedEvent(grabbedItems, "Encrypted download detected", trackedDownload);
             }
             else if (trackedDownload.DownloadItem.Status == DownloadItemStatus.Failed)
             {
                 trackedDownload.State = TrackedDownloadStage.DownloadFailed;
-                PublishDownloadFailedEvent(grabbedItems, trackedDownload.DownloadItem.Message);
+                PublishDownloadFailedEvent(grabbedItems, trackedDownload.DownloadItem.Message, trackedDownload);
             }
         }
 
-        private void PublishDownloadFailedEvent(List<History.History> historyItems, string message)
+        private void PublishDownloadFailedEvent(List<History.History> historyItems, string message, TrackedDownload trackedDownload = null)
         {
             var historyItem = historyItems.First();
 
@@ -77,12 +77,11 @@ namespace NzbDrone.Core.Download
                 DownloadClient = historyItem.Data.GetValueOrDefault(History.History.DOWNLOAD_CLIENT),
                 DownloadId = historyItem.DownloadId,
                 Message = message,
-                Data = historyItem.Data
+                Data = historyItem.Data,
+                TrackedDownload = trackedDownload
             };
 
             _eventAggregator.PublishEvent(downloadFailedEvent);
         }
-
-
     }
 }
