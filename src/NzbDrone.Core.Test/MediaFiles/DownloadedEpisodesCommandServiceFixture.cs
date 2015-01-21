@@ -19,7 +19,6 @@ namespace NzbDrone.Core.Test.MediaFiles
     {
         private string _droneFactory = "c:\\drop\\".AsOsAgnostic();
 
-
         [SetUp]
         public void Setup()
         {
@@ -32,11 +31,6 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Setup(v => v.ProcessRootFolder(It.IsAny<DirectoryInfo>()))
                 .Returns(new List<ImportResult>());
-
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
-                .Setup(v => v.ProcessFolder(It.IsAny<DirectoryInfo>(), It.IsAny<DownloadClientItem>()))
-                .Returns(new List<ImportResult>());
-         
         }
 
         [Test]
@@ -48,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void should_skip_import_if_dropfolder_doesnt_exist()
+        public void should_skip_import_if_dronefactory_doesnt_exist()
         {
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>())).Returns(false);
 
@@ -57,7 +51,6 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IDownloadedEpisodesImportService>().Verify(c => c.ProcessRootFolder(It.IsAny<DirectoryInfo>()), Times.Never());
 
             ExceptionVerification.ExpectedWarns(1);
-        }
-       
+        }       
     }
 }

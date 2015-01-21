@@ -9,12 +9,13 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Download
 {
     public interface ICompletedDownloadService
     {
-        void Process(TrackedDownload trackedDownload);
+        void Process(TrackedDownload trackedDownload, bool ignoreWarnings = false);
     }
 
     public class CompletedDownloadService : ICompletedDownloadService
@@ -23,46 +24,64 @@ namespace NzbDrone.Core.Download
         private readonly IEventAggregator _eventAggregator;
         private readonly IHistoryService _historyService;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
+        private readonly IParsingService _parsingService;
+        private readonly Logger _logger;
 
         public CompletedDownloadService(IConfigService configService,
                                         IEventAggregator eventAggregator,
                                         IHistoryService historyService,
-                                        IDownloadedEpisodesImportService downloadedEpisodesImportService)
+                                        IDownloadedEpisodesImportService downloadedEpisodesImportService,
+                                        IParsingService parsingService,
+                                        Logger logger)
         {
             _configService = configService;
             _eventAggregator = eventAggregator;
             _historyService = historyService;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
+            _parsingService = parsingService;
+            _logger = logger;
         }
 
-        public void Process(TrackedDownload trackedDownload)
+        public void Process(TrackedDownload trackedDownload, bool ignoreWarnings = false)
         {
             if (trackedDownload.DownloadItem.Status != DownloadItemStatus.Completed)
             {
                 return;
             }
 
-            var historyItem = _historyService.MostRecentForDownloadId(trackedDownload.DownloadItem.DownloadId);
-
-            if (historyItem == null && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
+            if (!ignoreWarnings)
             {
-                trackedDownload.Warn("Download wasn't grabbed by Sonarr and not in a category, Skipping.");
-                return;
-            }
+                var historyItem = _historyService.MostRecentForDownloadId(trackedDownload.DownloadItem.DownloadId);
 
-            var downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
+                if (historyItem == null && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
+                {
+                    trackedDownload.Warn("Download wasn't grabbed by Sonarr and not in a category, Skipping.");
+                    return;
+                }
 
-            if (downloadItemOutputPath.IsEmpty)
-            {
-                trackedDownload.Warn("Download doesn't contain intermediate path, Skipping.");
-                return;
-            }
+                var downloadItemOutputPath = trackedDownload.DownloadItem.OutputPath;
 
-            var downloadedEpisodesFolder = new OsPath(_configService.DownloadedEpisodesFolder);
-            if (downloadedEpisodesFolder.Contains(downloadItemOutputPath))
-            {
-                trackedDownload.Warn("Intermediate Download path inside drone factory, Skipping.");
-                return;
+                if (downloadItemOutputPath.IsEmpty)
+                {
+                    trackedDownload.Warn("Download doesn't contain intermediate path, Skipping.");
+                    return;
+                }
+
+                var downloadedEpisodesFolder = new OsPath(_configService.DownloadedEpisodesFolder);
+
+                if (downloadedEpisodesFolder.Contains(downloadItemOutputPath))
+                {
+                    trackedDownload.Warn("Intermediate Download path inside drone factory, Skipping.");
+                    return;
+                }
+
+                var series = _parsingService.GetSeries(trackedDownload.DownloadItem.Title);
+
+                if (series == null)
+                {
+                    trackedDownload.Warn("Series title mismatch, automatic import is not possible.");
+                    return;
+                }
             }
 
             Import(trackedDownload);
@@ -71,7 +90,7 @@ namespace NzbDrone.Core.Download
         private void Import(TrackedDownload trackedDownload)
         {
             var outputPath = trackedDownload.DownloadItem.OutputPath.FullPath;
-            var importResults = _downloadedEpisodesImportService.ProcessPath(outputPath, trackedDownload.DownloadItem);
+            var importResults = _downloadedEpisodesImportService.ProcessPath(outputPath, trackedDownload.RemoteEpisode.Series, trackedDownload.DownloadItem);
 
             if (importResults.Empty())
             {

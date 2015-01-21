@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Parser;
 
@@ -59,9 +61,17 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 if (parsedEpisodeInfo == null) return null;
 
                 var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
+
                 if (remoteEpisode.Series == null)
                 {
-                    return null;
+                    var historyItems = _historyService.FindByDownloadId(downloadItem.DownloadId);
+
+                    if (historyItems.Empty())
+                    {
+                        return null;
+                    }
+
+                    remoteEpisode = _parsingService.Map(parsedEpisodeInfo, historyItems.First().SeriesId, historyItems.Select(h => h.EpisodeId));
                 }
 
                 trackedDownload.RemoteEpisode = remoteEpisode;
@@ -73,6 +83,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
 
             var historyItem = _historyService.MostRecentForDownloadId(downloadItem.DownloadId);
+
             if (historyItem != null)
             {
                 trackedDownload.State = GetStateFromHistory(historyItem.EventType);

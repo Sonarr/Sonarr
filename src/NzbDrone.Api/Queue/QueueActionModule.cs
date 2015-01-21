@@ -72,7 +72,7 @@ namespace NzbDrone.Api.Queue
             var resource = Request.Body.FromJson<QueueResource>();
             var trackedDownload = GetTrackedDownload(resource.Id);
                 
-            _completedDownloadService.Process(trackedDownload);
+            _completedDownloadService.Process(trackedDownload, true);
 
             return resource.AsResponse();
         }
