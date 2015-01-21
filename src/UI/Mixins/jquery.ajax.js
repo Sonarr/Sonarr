@@ -51,9 +51,7 @@ define(
                             viewChanges: {
                                 label: 'View Changes',
                                 action: function() {
-                                    //TODO: UrlBase
-                                    window.location = window.NzbDrone.UrlBase + 'system/updates';
-                                    //Backbone.history.navigate('/system/updates', { trigger: true });
+                                    window.location = window.NzbDrone.UrlBase + '/system/updates';
                                 }
                             }
                         }
