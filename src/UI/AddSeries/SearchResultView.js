@@ -188,7 +188,7 @@ define(
                         message: 'Added: ' + self.model.get('title'),
                         actions : {
                             goToSeries: {
-                                label: 'Go to Series Page',
+                                label: 'Go to Series',
                                 action: function() {
                                     Backbone.history.navigate('/series/' + self.model.get('titleSlug'), { trigger: true });
                                 }
