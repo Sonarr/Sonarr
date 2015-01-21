@@ -11,5 +11,10 @@ namespace NzbDrone.Core.ThingiProvider
             : base(database, eventAggregator)
         {
         }
+
+//        public void DeleteImplementations(string implementation)
+//        {
+//            DataMapper.Delete<TProviderDefinition>(c => c.Implementation == implementation);
+//        }
     }
 }

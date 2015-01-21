@@ -423,8 +423,6 @@
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
-    <Compile Include="Indexers\Animezb\Animezb.cs" />
-    <Compile Include="Indexers\Animezb\AnimezbRequestGenerator.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvRequestGenerator.cs" />
