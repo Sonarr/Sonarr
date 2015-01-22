@@ -72,6 +72,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="ImageResizer, Version=3.4.3.103, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ImageResizer.3.4.3\lib\ImageResizer.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -522,6 +526,7 @@
     <Compile Include="Lifecycle\LifecycleService.cs" />
     <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
+    <Compile Include="MediaCover\ImageResizer.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />
     <Compile Include="MediaCover\MediaCoversUpdatedEvent.cs" />
     <Compile Include="MediaFiles\Commands\BackendCommandAttribute.cs" />

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Update
 
         public Boolean Verify(UpdatePackage updatePackage, String packagePath)
         {
-            using (var fileStream = _diskProvider.StreamFile(packagePath))
+            using (var fileStream = _diskProvider.OpenReadStream(packagePath))
             {
                 var hash = fileStream.SHA256Hash();
 

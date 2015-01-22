@@ -74,6 +74,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
@@ -215,6 +216,7 @@
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
+    <Compile Include="MediaCoverTests\ImageResizerFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
     <Compile Include="MediaFiles\DiskScanServiceTests\ScanFixture.cs" />
     <Compile Include="MediaFiles\DownloadedEpisodesCommandServiceFixture.cs" />
@@ -348,6 +350,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\Logo\1024.png">
+      <Link>Files\1024.png</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\Libraries\Sqlite\sqlite3.dll">
       <Link>sqlite3.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

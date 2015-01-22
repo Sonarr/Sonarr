@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             var buffer = new byte[10];
 
-            using (var imageStream = _diskProvider.StreamFile(path))
+            using (var imageStream = _diskProvider.OpenReadStream(path))
             {
                 if (imageStream.Length < buffer.Length) return false;
                 imageStream.Read(buffer, 0, buffer.Length);

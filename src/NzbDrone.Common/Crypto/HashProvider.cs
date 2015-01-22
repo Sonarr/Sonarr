@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Crypto
         {
             using (var md5 = MD5.Create())
             {
-                using (var stream = _diskProvider.StreamFile(path))
+                using (var stream = _diskProvider.OpenReadStream(path))
                 {
                     return md5.ComputeHash(stream);
                 }

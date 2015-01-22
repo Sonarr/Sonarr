@@ -17,7 +17,7 @@ namespace NzbDrone.Core.MediaCover
     public interface IMapCoversToLocal
     {
         void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
-        string GetCoverPath(int seriesId, MediaCoverTypes mediaCoverTypes);
+        string GetCoverPath(int seriesId, MediaCoverTypes mediaCoverTypes, int? height = null);
     }
 
     public class MediaCoverService :
@@ -25,6 +25,7 @@ namespace NzbDrone.Core.MediaCover
         IHandleAsync<SeriesDeletedEvent>,
         IMapCoversToLocal
     {
+        private readonly IImageResizer _resizer;
         private readonly IHttpClient _httpClient;
         private readonly IDiskProvider _diskProvider;
         private readonly ICoverExistsSpecification _coverExistsSpecification;
@@ -34,7 +35,8 @@ namespace NzbDrone.Core.MediaCover
 
         private readonly string _coverRootFolder;
 
-        public MediaCoverService(IHttpClient httpClient,
+        public MediaCoverService(IImageResizer resizer,
+                                 IHttpClient httpClient,
                                  IDiskProvider diskProvider,
                                  IAppFolderInfo appFolderInfo,
                                  ICoverExistsSpecification coverExistsSpecification,
@@ -42,6 +44,7 @@ namespace NzbDrone.Core.MediaCover
                                  IEventAggregator eventAggregator,
                                  Logger logger)
         {
+            _resizer = resizer;
             _httpClient = httpClient;
             _diskProvider = diskProvider;
             _coverExistsSpecification = coverExistsSpecification;
@@ -52,9 +55,11 @@ namespace NzbDrone.Core.MediaCover
             _coverRootFolder = appFolderInfo.GetMediaCoverPath();
         }
 
-        public string GetCoverPath(int seriesId, MediaCoverTypes coverTypes)
+        public string GetCoverPath(int seriesId, MediaCoverTypes coverTypes, int? height = null)
         {
-            return Path.Combine(GetSeriesCoverPath(seriesId), coverTypes.ToString().ToLower() + ".jpg");
+            var heightSuffix = height.HasValue ? "-" + height.ToString() : "";
+
+            return Path.Combine(GetSeriesCoverPath(seriesId), coverTypes.ToString().ToLower() + heightSuffix + ".jpg");
         }
 
         public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
@@ -88,6 +93,11 @@ namespace NzbDrone.Core.MediaCover
                     if (!_coverExistsSpecification.AlreadyExists(cover.Url, fileName))
                     {
                         DownloadCover(series, cover);
+                        EnsureResizedCovers(series, cover, true);
+                    }
+                    else
+                    {
+                        EnsureResizedCovers(series, cover, false);
                     }
                 }
                 catch (WebException e)
@@ -107,6 +117,44 @@ namespace NzbDrone.Core.MediaCover
 
             _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.Url);
             _httpClient.DownloadFile(cover.Url, fileName);
+        }
+
+        private void EnsureResizedCovers(Series series, MediaCover cover, bool forceResize)
+        {
+            int[] heights;
+
+            switch (cover.CoverType)
+            {
+                default:
+                    return;
+
+                case MediaCoverTypes.Poster:
+                case MediaCoverTypes.Headshot:
+                    heights = new[] { 500, 250 };
+                    break;
+
+                case MediaCoverTypes.Banner:
+                    heights = new[] { 70, 35 };
+                    break;
+
+                case MediaCoverTypes.Fanart:
+                case MediaCoverTypes.Screenshot:
+                    heights = new[] { 360, 180 };
+                    break;
+            }
+
+            foreach (var height in heights)
+            {
+                var mainFileName = GetCoverPath(series.Id, cover.CoverType);
+                var resizeFileName = GetCoverPath(series.Id, cover.CoverType, height);
+
+                if (forceResize || !_diskProvider.FileExists(resizeFileName))
+                {
+                    _logger.Debug("Resizing {0}-{1} for {2}", cover.CoverType, height, series);
+
+                    _resizer.Resize(mainFileName, resizeFileName, height);
+                }
+            }
         }
 
         public void HandleAsync(SeriesUpdatedEvent message)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -7,17 +9,25 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
-using System.Linq;
+using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {
     [TestFixture]
     public class MediaCoverServiceFixture : CoreTest<MediaCoverService>
     {
+        Series _series;
+
         [SetUp]
         public void Setup()
         {
             Mocker.SetConstant<IAppFolderInfo>(new AppFolderInfo(Mocker.Resolve<IStartupContext>()));
+
+            _series = Builder<Series>.CreateNew()
+                .With(v => v.Id = 2)
+                .With(v => v.Images = new List<MediaCover.MediaCover> { new MediaCover.MediaCover(MediaCoverTypes.Poster, "") })
+                .Build();
         }
 
         [Test]
@@ -55,5 +65,55 @@ namespace NzbDrone.Core.Test.MediaCoverTests
             covers.Single().Url.Should().Be("/MediaCover/12/banner.jpg");
         }
 
+        [Test]
+        public void should_resize_covers_if_main_downloaded()
+        {
+            Mocker.GetMock<ICoverExistsSpecification>()
+                  .Setup(v => v.AlreadyExists(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Subject.HandleAsync(new SeriesUpdatedEvent(_series));
+
+            Mocker.GetMock<IImageResizer>()
+                  .Verify(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_resize_covers_if_missing()
+        {
+            Mocker.GetMock<ICoverExistsSpecification>()
+                  .Setup(v => v.AlreadyExists(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(false);
+
+            Subject.HandleAsync(new SeriesUpdatedEvent(_series));
+
+            Mocker.GetMock<IImageResizer>()
+                  .Verify(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_not_resize_covers_if_exists()
+        {
+            Mocker.GetMock<ICoverExistsSpecification>()
+                  .Setup(v => v.AlreadyExists(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Subject.HandleAsync(new SeriesUpdatedEvent(_series));
+
+            Mocker.GetMock<IImageResizer>()
+                  .Verify(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+        }
     }
 }

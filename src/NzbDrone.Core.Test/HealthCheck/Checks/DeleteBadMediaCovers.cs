@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Subject.Clean();
 
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.StreamFile(It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenReadStream(It.IsAny<string>()), Times.Never());
 
         }
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Subject.Clean();
 
-            Mocker.GetMock<IDiskProvider>().Verify(c => c.StreamFile(It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenReadStream(It.IsAny<string>()), Times.Never());
         }
 
 
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             _metaData.First().Type = MetadataType.SeriesImage;
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.StreamFile(imagePath))
+                .Setup(c => c.OpenReadStream(imagePath))
                 .Returns(new FileStream("Files\\html_image.jpg".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
 
 
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             _metaData.First().RelativePath = "Season\\image.jpg".AsOsAgnostic();
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.StreamFile(imagePath))
+                .Setup(c => c.OpenReadStream(imagePath))
                               .Returns(new FileStream("Files\\emptyfile.txt".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
 
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             _metaData.First().RelativePath = "Season\\image.jpg".AsOsAgnostic();
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.StreamFile(imagePath))
+                .Setup(c => c.OpenReadStream(imagePath))
                               .Returns(new FileStream("Files\\Queue.txt".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
 
 

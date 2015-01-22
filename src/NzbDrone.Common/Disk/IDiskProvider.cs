@@ -45,7 +45,8 @@ namespace NzbDrone.Common.Disk
         void EmptyFolder(string path);
         string[] GetFixedDrives();
         string GetVolumeLabel(string path);
-        FileStream StreamFile(string path);
+        FileStream OpenReadStream(string path);
+        FileStream OpenWriteStream(string path);
         List<DriveInfo> GetDrives();
         List<DirectoryInfo> GetDirectoryInfos(string path);
         List<FileInfo> GetFileInfos(string path);

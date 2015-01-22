@@ -421,7 +421,7 @@ namespace NzbDrone.Common.Disk
             return driveInfo.VolumeLabel;
         }
 
-        public FileStream StreamFile(string path)
+        public FileStream OpenReadStream(string path)
         {
             if (!FileExists(path))
             {
@@ -429,6 +429,11 @@ namespace NzbDrone.Common.Disk
             }
 
             return new FileStream(path, FileMode.Open, FileAccess.Read);
+        }
+
+        public FileStream OpenWriteStream(string path)
+        {
+            return new FileStream(path, FileMode.Create);
         }
 
         public List<DriveInfo> GetDrives()
