@@ -14,11 +14,12 @@ define(
 
         $.fn.tagsinput.Constructor.prototype.add = function (item, dontPushVal) {
             var self = this;
-            var tagLimitations = new RegExp('[^-_a-z0-9]', 'i');
 
             if (typeof item === 'string' && this.options.tag) {
 
-                if (item === null || item === '' || tagLimitations.test(item)) {
+                var test = testTag(item);
+
+                if (item === null || item === '' || !testTag(item)) {
                     return;
                 }
 
@@ -133,10 +134,10 @@ define(
         var substringMatcher = function() {
             return function findMatches(q, cb) {
                 // regex used to determine if a string contains the substring `q`
-                var substrRegex = new RegExp(q, 'i');
+                //var substrRegex = new RegExp(q, 'i');
 
                 var matches = _.select(TagCollection.toJSON(), function (tag) {
-                    return substrRegex.test(tag.label);
+                    return tag.label.toLowerCase().indexOf(q.toLowerCase()) > -1;
                 });
 
                 cb(matches);
@@ -147,5 +148,16 @@ define(
             return _.select(TagCollection.toJSON(), function (tag) {
                 return _.contains(tagValues, tag.id);
             });
+        };
+
+        var testTag = function(item) {
+            var tagLimitations = new RegExp('[^-_a-z0-9]', 'i');
+
+            try {
+                return !tagLimitations.test(item);
+            }
+            catch (e) {
+                return false;
+            }
         };
     });
