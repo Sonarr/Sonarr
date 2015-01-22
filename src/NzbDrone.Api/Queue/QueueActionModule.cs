@@ -102,7 +102,7 @@ namespace NzbDrone.Api.Queue
                 throw new NotFoundException();
             }
 
-            var trackedDownload = _trackedDownloadService.Find(queueItem.TrackingId);
+            var trackedDownload = _trackedDownloadService.Find(queueItem.DownloadId);
 
             if (trackedDownload == null)
             {

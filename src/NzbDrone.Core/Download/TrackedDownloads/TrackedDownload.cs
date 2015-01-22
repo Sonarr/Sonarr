@@ -6,7 +6,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 {
     public class TrackedDownload
     {
-        public String TrackingId { get; set; }
         public Int32 DownloadClient { get; set; }
         public DownloadClientItem DownloadItem { get; set; }
         public TrackedDownloadStage State { get; set; }

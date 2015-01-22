@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Queue
                     TrackedDownloadStatus = trackedDownload.Status.ToString(),
                     StatusMessages = trackedDownload.StatusMessages.ToList(),
                     RemoteEpisode = trackedDownload.RemoteEpisode,
-                    TrackingId = trackedDownload.TrackingId
+                    DownloadId = trackedDownload.DownloadItem.DownloadId
                 };
 
                 if (queue.Timeleft.HasValue)

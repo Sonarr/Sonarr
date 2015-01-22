@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             _logger = logger;
         }
 
-        public TrackedDownload Find(string trackingId)
+        public TrackedDownload Find(string downloadId)
         {
-            return _cache.Find(trackingId);
+            return _cache.Find(downloadId);
         }
 
         public TrackedDownload TrackDownload(DownloadClientDefinition downloadClient, DownloadClientItem downloadItem)
@@ -49,7 +49,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             var trackedDownload = new TrackedDownload
             {
-                TrackingId = downloadClient.Id + "-" + downloadItem.DownloadId,
                 DownloadClient = downloadClient.Id,
                 DownloadItem = downloadItem,
                 Protocol = downloadClient.Protocol
@@ -89,7 +88,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 trackedDownload.State = GetStateFromHistory(historyItem.EventType);
             }
 
-            _cache.Set(trackedDownload.TrackingId, trackedDownload);
+            _cache.Set(trackedDownload.DownloadItem.DownloadId, trackedDownload);
 
             return trackedDownload;
         }
