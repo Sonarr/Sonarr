@@ -339,7 +339,7 @@ namespace NzbDrone.Core.Configuration
                 {
                     if (_diskProvider.FileExists(_configFile))
                     {
-                        return XDocument.Load(_configFile);
+                        return XDocument.Parse(_diskProvider.ReadAllText(_configFile));
                     }
 
                     var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
