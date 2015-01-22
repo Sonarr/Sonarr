@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
         public OmgwtfnzbsRequestGenerator()
         {
-            BaseUrl = "https://rss.omgwtfnzbs.org/rss-search.php";
+            BaseUrl = "https://rss.omgwtfnzbs.org/rss-download.php";
         }
 
         public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
@@ -96,6 +96,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             if (query.IsNotNullOrWhiteSpace())
             {
+                url = url.Replace("rss-download.php", "rss-search.php");
                 url.AppendFormat("&search={0}", query);
             }
 
