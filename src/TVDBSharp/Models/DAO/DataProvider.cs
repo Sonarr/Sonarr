@@ -20,7 +20,7 @@ namespace TVDBSharp.Models.DAO
 
         public XDocument GetShow(int showID)
         {
-            return GetXDocumentFromUrl(string.Format("{0}/api/{1}/series/{2}/all/", BaseUrl, ApiKey, showID));
+            return GetXDocumentFromUrl(string.Format("{0}/api/{1}/series/{2}/all/en.xml", BaseUrl, ApiKey, showID));
         }
 
         public XDocument GetEpisode(int episodeId, string lang)
