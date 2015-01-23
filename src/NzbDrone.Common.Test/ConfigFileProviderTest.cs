@@ -29,9 +29,7 @@ namespace NzbDrone.Common.Test
             const string key = "Port";
             const string value = "8989";
 
-
             var result = Subject.GetValue(key, value);
-
 
             result.Should().Be(value);
         }
