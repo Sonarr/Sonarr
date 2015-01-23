@@ -10,7 +10,7 @@ define(
 
             state: {
                 sortKey: 'episodeNumber',
-                order  : -1
+                order  : 1
             },
 
             originalFetch: Backbone.Collection.prototype.fetch,
