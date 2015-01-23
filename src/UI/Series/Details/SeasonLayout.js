@@ -62,7 +62,7 @@ define(
                         sortable  : false
                     },
                     {
-                        name : 'this',
+                        name : 'episodeNumber',
                         label: '#',
                         cell : EpisodeNumberCell
                     },
