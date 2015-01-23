@@ -56,8 +56,8 @@ namespace NzbDrone.Core.MediaFiles
             var files = _mediaFileService.GetFilesBySeries(seriesId);
 
             return GetPreviews(series, episodes, files)
-                .OrderBy(e => e.SeasonNumber)
-                .ThenBy(e => e.EpisodeNumbers.First())
+                .OrderByDescending(e => e.SeasonNumber)
+                .ThenByDescending(e => e.EpisodeNumbers.First())
                 .ToList();
         }
 
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.MediaFiles
             var files = _mediaFileService.GetFilesBySeason(seriesId, seasonNumber);
 
             return GetPreviews(series, episodes, files)
-                .OrderBy(e => e.EpisodeNumbers.First()).ToList();
+                .OrderByDescending(e => e.EpisodeNumbers.First()).ToList();
         }
 
         private IEnumerable<RenameEpisodeFilePreview> GetPreviews(Series series, List<Episode> episodes, List<EpisodeFile> files)
