@@ -7,22 +7,32 @@ define(
         'Rename/RenamePreviewCollection',
         'Rename/RenamePreviewCollectionView',
         'Rename/RenamePreviewEmptyCollectionView',
+        'Rename/RenamePreviewFormatView',
         'Shared/LoadingView',
         'Commands/CommandController'
-    ], function (_, vent, Marionette, RenamePreviewCollection, RenamePreviewCollectionView, EmptyCollectionView, LoadingView, CommandController) {
+    ], function (_,
+                 vent,
+                 Marionette,
+                 RenamePreviewCollection,
+                 RenamePreviewCollectionView,
+                 EmptyCollectionView,
+                 RenamePreviewFormatView,
+                 LoadingView,
+                 CommandController) {
 
         return Marionette.Layout.extend({
             className : 'modal-lg',
             template  : 'Rename/RenamePreviewLayoutTemplate',
 
             regions: {
-                renamePreviews : '#rename-previews'
+                renamePreviews : '#rename-previews',
+                formatRegion   : '.x-format-region'
             },
 
             ui: {
                 pathInfo     : '.x-path-info',
                 renameAll    : '.x-rename-all',
-                checkboxIcon: '.x-rename-all-button i'
+                checkboxIcon : '.x-rename-all-button i'
             },
 
             events: {
@@ -47,6 +57,7 @@ define(
 
             onRender: function() {
                 this.renamePreviews.show(new LoadingView());
+                this.formatRegion.show(new RenamePreviewFormatView({ model: this.model }));
             },
 
             _showPreviews: function () {
