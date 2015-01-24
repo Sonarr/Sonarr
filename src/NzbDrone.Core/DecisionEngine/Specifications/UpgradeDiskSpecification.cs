@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
-                    return Decision.Reject("Existing file on disk is of equal or higher quality: {0}", file.Quality);
+                    return Decision.Reject("Quality for existing file on disk is of equal or higher preference: {0}", file.Quality);
                 }
             }
 
