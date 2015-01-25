@@ -4,7 +4,7 @@
 
 if (window.NzbDrone.Production) {
     require.config({
-        waitSeconds: 30
+        waitSeconds: 45
     });
 }
 
