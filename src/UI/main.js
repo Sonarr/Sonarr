@@ -2,7 +2,7 @@
     urlArgs: 'v=' + window.NzbDrone.Version
 });
 
-if (window.location.hostname.toLowerCase() !== 'localhost') {
+if (window.NzbDrone.Production) {
     require.config({
         waitSeconds: 30
     });
