@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         }
 
         [Test]
-        public void should_throw_when_install_cannot_be_started()
+        public void should_log_when_install_cannot_be_started()
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(c => c.FolderWritable(It.IsAny<string>()))
@@ -288,7 +288,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
-            Assert.Throws<NzbDroneClientException>(() => Subject.Execute(new InstallUpdateCommand() {  UpdatePackage = _updatePackage }));
+            Subject.Execute(new InstallUpdateCommand() { UpdatePackage = _updatePackage });
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
             ExceptionVerification.ExpectedErrors(1);

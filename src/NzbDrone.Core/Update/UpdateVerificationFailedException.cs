@@ -2,13 +2,15 @@
 
 namespace NzbDrone.Core.Update
 {
-    public class UpdateVerificationFailedException : NzbDroneException
+    public class UpdateVerificationFailedException : UpdateFailedException
     {
-        public UpdateVerificationFailedException(string message, params object[] args) : base(message, args)
+        public UpdateVerificationFailedException(string message, params object[] args)
+            : base(message, args)
         {
         }
 
-        public UpdateVerificationFailedException(string message) : base(message)
+        public UpdateVerificationFailedException(string message)
+            : base(message)
         {
         }
     }
