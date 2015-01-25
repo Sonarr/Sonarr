@@ -102,6 +102,8 @@ namespace NzbDrone.Core.Update
             _archiveService.Extract(packageDestination, updateSandboxFolder);
             _logger.Info("Update package extracted successfully");
 
+            EnsureValidBranch(updatePackage);
+
             _backupService.Backup(BackupType.Update);
 
             if (OsInfo.IsNotWindows && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
@@ -118,6 +120,25 @@ namespace NzbDrone.Core.Update
             _logger.ProgressInfo("Sonarr will restart shortly.");
 
             _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), GetUpdaterArgs(updateSandboxFolder));
+        }
+
+        private void EnsureValidBranch(UpdatePackage package)
+        {
+            var currentBranch = _configFileProvider.Branch;
+            if (package.Branch != currentBranch)
+            {
+                try
+                {
+                    _logger.Info("Branch [{0}] is being redirected to [{1}]]", currentBranch, package.Branch);
+                    var config = new Dictionary<string, object>();
+                    config["Branch"] = package.Branch;
+                    _configFileProvider.SaveConfigDictionary(config);
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException(string.Format("Couldn't change the branch from [{0}] to [{1}].", currentBranch, package.Branch), e);
+                }
+            }
         }
 
         private void InstallUpdateWithScript(String updateSandboxFolder)

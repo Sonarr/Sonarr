@@ -42,21 +42,6 @@ namespace NzbDrone.Core.Update
             {
                 _logger.ProgressDebug("No update available.");
             }
-            else if (latestAvailable.Branch != _configFileProvider.Branch)
-            {
-                try
-                {
-                    _logger.Info("Branch [{0}] is being redirected to [{1}]]", _configFileProvider.Branch, latestAvailable.Branch);
-                    var config = new Dictionary<string, object>();
-                    config["Branch"] = latestAvailable.Branch;
-                    _configFileProvider.SaveConfigDictionary(config);
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("Couldn't save the branch redirect.", e);
-                }
-
-            }
 
             return latestAvailable;
         }

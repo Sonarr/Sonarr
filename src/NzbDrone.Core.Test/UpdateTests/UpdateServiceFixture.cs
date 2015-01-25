@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Moq;
@@ -292,6 +293,17 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_switch_to_branch_specified_in_updatepackage()
+        {
+            _updatePackage.Branch = "fake";
+
+            Subject.Execute(new InstallUpdateCommand() { UpdatePackage = _updatePackage });
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .Verify(v => v.SaveConfigDictionary(It.Is<Dictionary<string, object>>(d => d.ContainsKey("Branch") && (string)d["Branch"] == "fake")), Times.Once());
         }
 
         [TearDown]
