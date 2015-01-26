@@ -2,6 +2,8 @@
 using System.Reflection;
 using FluentValidation;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
@@ -13,11 +15,13 @@ namespace NzbDrone.Api.Config
     public class HostConfigModule : NzbDroneRestModule<HostConfigResource>
     {
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IUserService _userService;
 
-        public HostConfigModule(IConfigFileProvider configFileProvider)
+        public HostConfigModule(IConfigFileProvider configFileProvider, IUserService userService)
             : base("/config/host")
         {
             _configFileProvider = configFileProvider;
+            _userService = userService;
 
             GetResourceSingle = GetHostConfig;
             GetResourceById = GetHostConfig;
@@ -26,8 +30,8 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");        
             SharedValidator.RuleFor(c => c.Port).ValidPort();
 
-            SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationEnabled);
-            SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationEnabled);
+            SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod != AuthenticationType.None);
+            SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod != AuthenticationType.None);
 
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslCertHash).NotEmpty().When(c => c.EnableSsl && OsInfo.IsWindows);
@@ -46,6 +50,14 @@ namespace NzbDrone.Api.Config
             resource.InjectFrom(_configFileProvider);
             resource.Id = 1;
 
+            var user = _userService.FindUser();
+
+            if (user != null)
+            {
+                resource.Username = user.Username;
+                resource.Password = user.Password;
+            }
+
             return resource;
         }
 
@@ -61,6 +73,11 @@ namespace NzbDrone.Api.Config
                                      .ToDictionary(prop => prop.Name, prop => prop.GetValue(resource, null));
 
             _configFileProvider.SaveConfigDictionary(dictionary);
+
+            if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
+            {
+                _userService.Upsert(resource.Username, resource.Password);
+            }
         }
     }
 }

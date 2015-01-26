@@ -296,13 +296,14 @@ define(
 
         app.addInitializer(function () {
 
-            var footerText = serverStatusModel.get('version');
+            var version = serverStatusModel.get('version');
+            var branch = serverStatusModel.get('branch');
 
-            if (serverStatusModel.get('branch') !== 'master') {
-                footerText += '</br>' + serverStatusModel.get('branch');
+            $('#footer-region .version').html(version);
+
+            if (branch !== 'master') {
+                $('#footer-region .branch').html(branch);
             }
-
-            $('#footer-region .version').html(footerText);
         });
 
         return app;

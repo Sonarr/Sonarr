@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Test.Common;
 
@@ -126,9 +127,9 @@ namespace NzbDrone.Common.Test
         [Test]
         public void GetAuthenticationType_No_Existing_Value()
         {
-            var result = Subject.AuthenticationEnabled;
+            var result = Subject.AuthenticationMethod;
 
-            result.Should().Be(false);
+            result.Should().Be(AuthenticationType.None);
         }
 
         [Test]

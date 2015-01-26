@@ -57,7 +57,7 @@ namespace NzbDrone.Api.System
                     IsOsx = OsInfo.IsOsx,
                     IsWindows = OsInfo.IsWindows,
                     Branch = _configFileProvider.Branch,
-                    Authentication = _configFileProvider.AuthenticationEnabled,
+                    Authentication = _configFileProvider.AuthenticationMethod,
                     SqliteVersion = _database.Version,
                     UrlBase = _configFileProvider.UrlBase,
                     RuntimeVersion = _runtimeInfo.RuntimeVersion

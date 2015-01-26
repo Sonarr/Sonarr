@@ -52,6 +52,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Nancy.Authentication.Basic.0.23.2\lib\net40\Nancy.Authentication.Basic.dll</HintPath>
     </Reference>
+    <Reference Include="Nancy.Authentication.Forms">
+      <HintPath>..\packages\Nancy.Authentication.Forms.0.23.2\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -80,6 +83,8 @@
     </Compile>
     <Compile Include="Authentication\AuthenticationService.cs" />
     <Compile Include="Authentication\EnableAuthInNancy.cs" />
+    <Compile Include="Authentication\LoginModule.cs" />
+    <Compile Include="Authentication\LoginResource.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="Blacklist\BlacklistModule.cs" />
     <Compile Include="Blacklist\BlacklistResource.cs" />
@@ -94,6 +99,7 @@
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Extensions\AccessControlHeaders.cs" />
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
+    <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />

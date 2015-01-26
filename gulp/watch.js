@@ -10,11 +10,11 @@ require('./less.js');
 require('./copy.js');
 
 
-gulp.task('watch', ['jshint', 'handlebars', 'less', 'copyJs','copyIndex', 'copyContent'], function () {
+gulp.task('watch', ['jshint', 'handlebars', 'less', 'copyJs', 'copyHtml', 'copyContent'], function () {
     gulp.watch([paths.src.scripts, paths.src.exclude.libs], ['jshint', 'copyJs']);
     gulp.watch(paths.src.templates, ['handlebars']);
     gulp.watch([paths.src.less, paths.src.exclude.libs], ['less']);
-    gulp.watch([paths.src.index], ['copyIndex']);
+    gulp.watch([paths.src.html], ['copyHtml']);
     gulp.watch([paths.src.content + '**/*.*', '!**/*.less'], ['copyContent']);
 });
 
@@ -23,7 +23,8 @@ gulp.task('liveReload', ['jshint', 'handlebars', 'less', 'copyJs'], function () 
     gulp.watch([
         'app/**/*.js',
         'app/**/*.css',
-        'app/index.html'
+        'app/index.html',
+        'app/login.html'
     ]).on('change', function (file) {
         server.changed(file.path);
     });

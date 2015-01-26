@@ -35,7 +35,7 @@ define(
             },
 
             onRender: function(){
-                if(!this.ui.authToggle.prop('checked')){
+                if(this.ui.authToggle.val() === 'none'){
                     this.ui.authOptions.hide();
                 }
 
@@ -61,7 +61,7 @@ define(
 
             _setAuthOptionsVisibility: function () {
 
-                var showAuthOptions = this.ui.authToggle.prop('checked');
+                var showAuthOptions = this.ui.authToggle.val() !== 'none';
 
                 if (showAuthOptions) {
                     this.ui.authOptions.slideDown();

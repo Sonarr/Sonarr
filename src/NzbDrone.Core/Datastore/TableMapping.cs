@@ -30,6 +30,7 @@ using NzbDrone.Core.Tags;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Authentication;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -101,6 +102,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Restriction>().RegisterModel("Restrictions");
 
             Mapper.Entity<DelayProfile>().RegisterModel("DelayProfiles");
+            Mapper.Entity<User>().RegisterModel("Users");
         }
 
         private static void RegisterMappers()
@@ -122,6 +124,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(ReleaseInfo), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(HashSet<Int32>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(OsPath), new OsPathConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Guid), new GuidConverter());
         }
 
         private static void RegisterProviderSettingConverter()
