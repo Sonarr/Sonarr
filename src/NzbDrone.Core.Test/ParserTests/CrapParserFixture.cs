@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("08bbc153931ce3ca5fcafe1b92d3297285feb061.mkv")]
         [TestCase("185d86a343e39f3341e35c4dad3ff159")]
         [TestCase("ah63jka93jf0jh26ahjas961.mkv")]
+        [TestCase("qrdSD3rYzWb7cPdVIGSn4E7")]
         public void should_not_parse_crap(string title)
         {
             Parser.Parser.ParseTitle(title).Should().BeNull();
@@ -81,6 +82,12 @@ namespace NzbDrone.Core.Test.ParserTests
             }
 
             success.Should().Be(repetitions);
+        }
+
+        [TestCase("thebiggestloser1618finale")]
+        public void should_not_parse_file_name_without_proper_spacing(string fileName)
+        {
+            Parser.Parser.ParseTitle(fileName).Should().BeNull();
         }
     }
 }

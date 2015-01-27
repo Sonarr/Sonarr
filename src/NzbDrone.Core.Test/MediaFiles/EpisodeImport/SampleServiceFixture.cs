@@ -14,7 +14,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
     [TestFixture]
-    public class SampleServiceFixture : CoreTest<SampleService>
+    public class SampleServiceFixture : CoreTest<DetectSample>
     {
         private Series _series;
         private LocalEpisode _localEpisode;

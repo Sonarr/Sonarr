@@ -13,7 +13,8 @@ namespace NzbDrone.Core.Parser
 {
     public interface IParsingService
     {
-        LocalEpisode GetLocalEpisode(string filename, Series series, bool sceneSource);
+        LocalEpisode GetLocalEpisode(string filename, Series series);
+        LocalEpisode GetLocalEpisode(string filename, Series series, ParsedEpisodeInfo folderInfo, bool sceneSource);
         Series GetSeries(string title);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Int32 tvRageId = 0, SearchCriteriaBase searchCriteria = null);
         RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, Int32 seriesId, IEnumerable<Int32> episodeIds);
@@ -39,9 +40,25 @@ namespace NzbDrone.Core.Parser
             _logger = logger;
         }
 
-        public LocalEpisode GetLocalEpisode(string filename, Series series, bool sceneSource)
+        public LocalEpisode GetLocalEpisode(string filename, Series series)
         {
-            var parsedEpisodeInfo = Parser.ParsePath(filename);
+            return GetLocalEpisode(filename, series, null, false);
+        }
+
+        public LocalEpisode GetLocalEpisode(string filename, Series series, ParsedEpisodeInfo folderInfo, bool sceneSource)
+        {
+            ParsedEpisodeInfo parsedEpisodeInfo;
+
+            if (folderInfo != null)
+            {
+                parsedEpisodeInfo = folderInfo.JsonClone();
+                parsedEpisodeInfo.Quality = QualityParser.ParseQuality(Path.GetFileName(filename));
+            }
+
+            else
+            {
+                parsedEpisodeInfo = Parser.ParsePath(filename);                
+            }
 
             if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
             {

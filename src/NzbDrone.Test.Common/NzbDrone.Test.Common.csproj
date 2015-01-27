@@ -91,7 +91,6 @@
     <Compile Include="LoggingTest.cs" />
     <Compile Include="MockerExtensions.cs" />
     <Compile Include="NzbDroneRunner.cs" />
-    <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="StringExtensions.cs" />

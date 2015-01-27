@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IParsingService _parsingService;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
-        private readonly ISampleService _sampleService;
+        private readonly IDetectSample _detectSample;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.MediaFiles
                                                IParsingService parsingService,
                                                IMakeImportDecision importDecisionMaker,
                                                IImportApprovedEpisodes importApprovedEpisodes,
-                                               ISampleService sampleService,
+                                               IDetectSample detectSample,
                                                Logger logger)
         {
             _diskProvider = diskProvider;
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles
             _parsingService = parsingService;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
-            _sampleService = sampleService;
+            _detectSample = detectSample;
             _logger = logger;
         }
 
@@ -115,9 +116,12 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var cleanedUpName = GetCleanedUpFolderName(directoryInfo.Name);
-            var quality = QualityParser.ParseQuality(cleanedUpName);
+            var folderInfo = Parser.Parser.ParseTitle(directoryInfo.Name);
 
-            _logger.Debug("{0} folder quality: {1}", cleanedUpName, quality);
+            if (folderInfo != null)
+            {
+                _logger.Debug("{0} folder quality: {1}", cleanedUpName, folderInfo.Quality);                
+            }
 
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
 
@@ -135,7 +139,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, true, quality);
+            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, folderInfo, true);
             var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
 
             if ((downloadClientItem == null || !downloadClientItem.IsReadOnly) && importResults.Any() && ShouldDeleteFolder(directoryInfo, series))
@@ -177,7 +181,9 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, true);
+            var folderInfo = Parser.Parser.ParseTitle(fileInfo.DirectoryName);
+            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, folderInfo, true);
+
             return _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
         }
 
@@ -207,7 +213,7 @@ namespace NzbDrone.Core.MediaFiles
                 var size = _diskProvider.GetFileSize(videoFile);
                 var quality = QualityParser.ParseQuality(videoFile);
 
-                if (!_sampleService.IsSample(series, quality, videoFile, size,
+                if (!_detectSample.IsSample(series, quality, videoFile, size,
                     episodeParseResult.SeasonNumber))
                 {
                     _logger.Warn("Non-sample file detected: [{0}]", videoFile);
@@ -227,14 +233,14 @@ namespace NzbDrone.Core.MediaFiles
         private ImportResult FileIsLockedResult(string videoFile)
         {
             _logger.Debug("[{0}] is currently locked by another process, skipping", videoFile);
-            return new ImportResult(new ImportDecision(new LocalEpisode { Path = videoFile }, "Locked file, try again later"), "Locked file, try again later");
+            return new ImportResult(new ImportDecision(new LocalEpisode { Path = videoFile }, new Rejection("Locked file, try again later")), "Locked file, try again later");
         }
 
         private ImportResult UnknownSeriesResult(string message, string videoFile = null)
         {
             var localEpisode = videoFile == null ? null : new LocalEpisode { Path = videoFile };
 
-            return new ImportResult(new ImportDecision(localEpisode, "Unknown Series"), message);
+            return new ImportResult(new ImportDecision(localEpisode, new Rejection("Unknown Series")), message);
         }
     }
 }
