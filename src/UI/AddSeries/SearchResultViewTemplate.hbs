@@ -67,6 +67,7 @@
             </div>
             <div class="row">
                 {{#unless existing}}
+                    {{#if title}}
                     <div class="form-group col-md-2 col-md-offset-10">
                         <!--Uncomment if we need to add even more controls to add series-->
                         <!--<label>&nbsp;</label>-->
@@ -74,6 +75,13 @@
                             <i class="icon-plus"></i>
                         </button>
                     </div>
+                    {{else}}
+                        <div class="col-md-2 col-md-offset-10" title="Series requires an English title">
+                            <button class="btn add-series disabled">
+                                Add
+                            </button>
+                        </div>
+                    {{/if}}
                 {{else}}
                     <div class="col-md-2 col-md-offset-10">
                         <button class="btn add-series disabled">
