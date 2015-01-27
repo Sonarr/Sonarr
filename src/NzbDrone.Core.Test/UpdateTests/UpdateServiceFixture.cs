@@ -61,6 +61,10 @@ namespace NzbDrone.Core.Test.UpdateTests
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
             Mocker.GetMock<IRuntimeInfo>().Setup(c => c.ExecutingApplication).Returns(@"C:\Test\NzbDrone.exe");
 
+            Mocker.GetMock<IConfigFileProvider>()
+                  .SetupGet(s => s.UpdateAutomatically)
+                  .Returns(true);
+
             Mocker.GetMock<IDiskProvider>()
                   .Setup(c => c.FolderWritable(It.IsAny<string>()))
                   .Returns(true);
@@ -289,7 +293,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
-            Subject.Execute(new InstallUpdateCommand() { UpdatePackage = _updatePackage });
+            Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
             ExceptionVerification.ExpectedErrors(1);
@@ -300,7 +304,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             _updatePackage.Branch = "fake";
 
-            Subject.Execute(new InstallUpdateCommand() { UpdatePackage = _updatePackage });
+            Subject.Execute(new ApplicationUpdateCommand());
 
             Mocker.GetMock<IConfigFileProvider>()
                   .Verify(v => v.SaveConfigDictionary(It.Is<Dictionary<string, object>>(d => d.ContainsKey("Branch") && (string)d["Branch"] == "fake")), Times.Once());

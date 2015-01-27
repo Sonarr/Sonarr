@@ -13,7 +13,7 @@ module.exports = Marionette.ItemView.extend({
         }
         this.updating = true;
         var self = this;
-        var promise = CommandController.Execute('installUpdate', {updatePackage : this.model.toJSON()});
+        var promise = CommandController.Execute('applicationUpdate');
         promise.done(function(){
             window.setTimeout(function(){
                 self.updating = false;

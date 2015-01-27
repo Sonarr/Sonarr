@@ -852,7 +852,6 @@
     <Compile Include="Tv\SeriesTypes.cs" />
     <Compile Include="Tv\ShouldRefreshSeries.cs" />
     <Compile Include="Update\Commands\ApplicationUpdateCommand.cs" />
-    <Compile Include="Update\Commands\InstallUpdateCommand.cs" />
     <Compile Include="Update\InstallUpdateService.cs" />
     <Compile Include="Update\RecentUpdateProvider.cs" />
     <Compile Include="Update\UpdateAbortedException.cs" />

@@ -17,7 +17,7 @@ using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
 {
-    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>, IExecute<InstallUpdateCommand>
+    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
@@ -176,15 +176,31 @@ namespace NzbDrone.Core.Update
             if (_appFolderInfo.StartUpFolder.IsParentPath(_appFolderInfo.AppDataFolder) ||
                 _appFolderInfo.StartUpFolder.PathEquals(_appFolderInfo.AppDataFolder))
             {
-                throw new UpdateFailedException("You Sonarr configuration ('{0}') is being stored in application folder ('{1}') which will cause data lost during the upgrade. Please remove any symlinks or redirects before trying again.", _appFolderInfo.AppDataFolder, _appFolderInfo.StartUpFolder);
+                throw new UpdateFailedException("Your Sonarr configuration '{0}' is being stored in application folder '{1}' which will cause data lost during the upgrade. Please remove any symlinks or redirects before trying again.", _appFolderInfo.AppDataFolder, _appFolderInfo.StartUpFolder);
             }
         }
 
-        private void ExecuteInstallUpdate(Command message, UpdatePackage package)
+        public void Execute(ApplicationUpdateCommand message)
         {
+            _logger.ProgressDebug("Checking for updates");
+
+            var latestAvailable = _checkUpdateService.AvailableUpdate();
+
+            if (latestAvailable == null)
+            {
+                _logger.ProgressDebug("No update available.");
+                return;
+            }
+
+            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically && !message.Manual)
+            {
+                _logger.ProgressDebug("Auto-update not enabled, not installing available update.");
+                return;
+            }
+
             try
             {
-                InstallUpdate(package);
+                InstallUpdate(latestAvailable);
 
                 message.Completed("Restarting Sonarr to apply updates");
             }
@@ -203,29 +219,6 @@ namespace NzbDrone.Core.Update
                 _logger.ErrorException("Update process failed", ex);
                 message.Failed(ex);
             }
-        }
-
-        public void Execute(ApplicationUpdateCommand message)
-        {
-            _logger.ProgressDebug("Checking for updates");
-            var latestAvailable = _checkUpdateService.AvailableUpdate();
-
-            if (latestAvailable != null)
-            {
-                ExecuteInstallUpdate(message, latestAvailable);
-            }
-        }
-
-        public void Execute(InstallUpdateCommand message)
-        {
-            var latestAvailable = _checkUpdateService.AvailableUpdate();
-
-            if (latestAvailable == null || latestAvailable.Hash != message.UpdatePackage.Hash)
-            {
-                throw new ApplicationException("Unknown or invalid update specified");
-            }
-
-            ExecuteInstallUpdate(message, latestAvailable);
         }
     }
 }

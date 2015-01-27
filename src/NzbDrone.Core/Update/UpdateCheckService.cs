@@ -31,19 +31,7 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
-            var latestAvailable = _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
-
-            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically)
-            {
-                return null;
-            }
-
-            if (latestAvailable == null)
-            {
-                _logger.ProgressDebug("No update available.");
-            }
-
-            return latestAvailable;
+            return _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
         }
     }
 }
