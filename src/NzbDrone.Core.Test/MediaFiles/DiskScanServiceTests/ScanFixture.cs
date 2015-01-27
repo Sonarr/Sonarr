@@ -143,5 +143,24 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 4), _series, false, (QualityModel)null), Times.Once());
         }
+
+        [Test]
+        public void should_not_scan_subfolders_that_start_with_period()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, ".@__thumb", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, ".@__THUMB", "file2.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, ".hidden", "file2.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series, false, (QualityModel)null), Times.Once());
+        }
     }
 }
