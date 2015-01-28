@@ -16,7 +16,7 @@ namespace NzbDrone.Api.Frontend
         private readonly Logger _logger;
 
 
-        public StaticResourceModule(IEnumerable<IMapHttpRequestsToDisk> requestMappers, IConfigFileProvider  configFileProvider, Logger logger)
+        public StaticResourceModule(IEnumerable<IMapHttpRequestsToDisk> requestMappers, IConfigFileProvider configFileProvider, Logger logger)
         {
             _requestMappers = requestMappers;
             _configFileProvider = configFileProvider;
