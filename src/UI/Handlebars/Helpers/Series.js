@@ -11,7 +11,7 @@ define(
             var poster = _.where(this.images, {coverType: 'poster'});
 
             if (poster[0]) {
-                return new Handlebars.SafeString('<img class="series-poster" src="{0}" {1}>'.format(poster[0].url, Handlebars.helpers.defaultImg.call()));
+                return new Handlebars.SafeString('<img class="series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url, 250)));
             }
 
             return new Handlebars.SafeString('<img class="series-poster placeholder-image" src="{0}">'.format(placeholder));

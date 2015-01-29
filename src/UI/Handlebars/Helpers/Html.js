@@ -17,8 +17,16 @@ define(
             img.onerror = null;
         };
 
-        Handlebars.registerHelper('defaultImg', function () {
-            return new Handlebars.SafeString('onerror=window.NzbDrone.imageError(this)');
+        Handlebars.registerHelper('defaultImg', function (src, size) {
+            if (!src) {
+                return new Handlebars.SafeString('onerror="window.NzbDrone.imageError(this);"');
+            }
+
+            if (size) {
+                src = src.replace(/\.jpg($|\?)/g, '-' + size + '.jpg$1');
+            }
+
+            return new Handlebars.SafeString('src="{0}" onerror="window.NzbDrone.imageError(this);"'.format(src));
         });
 
         Handlebars.registerHelper('UrlBase', function () {
