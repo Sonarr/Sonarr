@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             var config = _proxy.GetConfig(Settings);
             var destDir = (String)config.GetValueOrDefault("download-dir");
 
-            return String.Format("{0}/.{1}", destDir, Settings.TvCategory);
+            return string.Format("{0}/.{1}", destDir.TrimEnd('/'), Settings.TvCategory);
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
