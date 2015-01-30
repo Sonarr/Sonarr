@@ -5,7 +5,7 @@ var gulpPrint = require('gulp-print');
 
 
 var stripBom = function (dest) {
-    gulp.src([paths.src.root, paths.src.exclude.libs])
+    gulp.src([paths.src.scripts, paths.src.exclude.libs])
         .pipe(bom())
         .pipe(gulpPrint(function (filepath) {
             return "booming: " + filepath;

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 define(['backbone',
         'System/Info/DiskSpace/DiskSpaceModel'],

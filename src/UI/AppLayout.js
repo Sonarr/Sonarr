@@ -1,4 +1,4 @@
-﻿define(
+define(
     [
         'marionette',
         'Shared/Modal/ModalRegion',

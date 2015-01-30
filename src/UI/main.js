@@ -1,4 +1,4 @@
-﻿require.config({
+require.config({
     urlArgs: 'v=' + window.NzbDrone.Version
 });
 

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 if(window.NzbDrone.Analytics) {
     var d = document;
     var g = d.createElement('script');
