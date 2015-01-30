@@ -11,8 +11,8 @@ gulp.task('jshint', function () {
         .pipe(jshint({
             '-W030': false,
             '-W064': false,
-            '-W097': false,
-            '-W100': false,
+            '-W097': false, //Use the function form of “use strict”
+            '-W100': false, //Silently deleted characters (in locales)
             'undef': true,
             'globals': {
                 'require': true,
