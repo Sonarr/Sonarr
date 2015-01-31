@@ -112,7 +112,8 @@ namespace NzbDrone.Core.Download.Pending
                                     RemoteEpisode = pendingRelease.RemoteEpisode,
                                     Timeleft = ect.Subtract(DateTime.UtcNow),
                                     EstimatedCompletionTime = ect,
-                                    Status = "Pending"
+                                    Status = "Pending",
+                                    Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol
                                 };
                     queued.Add(queue);
                 }

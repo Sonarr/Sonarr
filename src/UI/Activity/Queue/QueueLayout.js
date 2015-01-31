@@ -12,6 +12,7 @@ define(
         'Activity/Queue/QueueActionsCell',
         'Activity/Queue/TimeleftCell',
         'Activity/Queue/ProgressCell',
+        'Release/ProtocolCell',
         'Shared/Grid/Pager'
     ], function (Marionette,
                  Backgrid,
@@ -24,6 +25,7 @@ define(
                  QueueActionsCell,
                  TimeleftCell,
                  ProgressCell,
+                 ProtocolCell,
                  GridPager) {
         return Marionette.Layout.extend({
             template: 'Activity/Queue/QueueLayoutTemplate',
@@ -64,6 +66,11 @@ define(
                         label     : 'Quality',
                         cell      : QualityCell,
                         sortable  : false
+                    },
+                    {
+                        name      : 'protocol',
+                        label     : 'Protocol',
+                        cell      : ProtocolCell
                     },
                     {
                         name      : 'timeleft',

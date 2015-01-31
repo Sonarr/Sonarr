@@ -141,8 +141,7 @@ namespace NzbDrone.Api.Indexers
 
                 release.QualityWeight += release.Quality.Revision.Real * 10;
                 release.QualityWeight += release.Quality.Revision.Version;
-
-
+                
                 var torrentRelease = downloadDecision.RemoteEpisode.Release as TorrentInfo;
 
                 if (torrentRelease != null)

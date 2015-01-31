@@ -39,7 +39,6 @@ namespace NzbDrone.Api.Indexers
         public String DownloadUrl { get; set; }
         public String InfoUrl { get; set; }
         public Boolean DownloadAllowed { get; set; }
-        public DownloadProtocol DownloadProtocol { get; set; }
         public Int32 ReleaseWeight { get; set; }
 
 

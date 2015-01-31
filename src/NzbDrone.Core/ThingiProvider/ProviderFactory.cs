@@ -111,7 +111,7 @@ namespace NzbDrone.Core.ThingiProvider
         {
             var type = GetImplementation(definition);
             var instance = (TProvider)_container.Resolve(type);
-            instance.Definition = definition;
+            instance.Definition = GetProviderCharacteristics(instance, definition);
             return instance;
         }
 

@@ -27,11 +27,18 @@ namespace NzbDrone.Core.Download
 
         public IEnumerable<IDownloadClient> GetDownloadClients()
         {
-            return _downloadClientFactory.GetAvailableProviders();
+            return _downloadClientFactory.GetAvailableProviders();//.Select(MapDownloadClient);
         }
+
         public IDownloadClient Get(int id)
         {
             return _downloadClientFactory.GetAvailableProviders().Single(d => d.Definition.Id == id);
+        }
+
+        public IDownloadClient MapDownloadClient(IDownloadClient downloadClient)
+        {
+            downloadClient.Definition = _downloadClientFactory.GetProviderCharacteristics(downloadClient, (DownloadClientDefinition)downloadClient.Definition);
+            return downloadClient;
         }
     }
 }
