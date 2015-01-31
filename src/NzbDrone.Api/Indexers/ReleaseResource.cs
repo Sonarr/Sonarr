@@ -46,6 +46,9 @@ namespace NzbDrone.Api.Indexers
         public int? Leechers { get; set; }
         public DownloadProtocol Protocol { get; set; }
 
+        //TODO: besides a test I don't think this is used...
+        public DownloadProtocol DownloadProtocol { get; set; }
+
         public Boolean IsDaily { get; set; }
         public Boolean IsAbsoluteNumbering { get; set; }
         public Boolean IsPossibleSpecialEpisode { get; set; }

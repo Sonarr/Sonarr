@@ -17,7 +17,8 @@ define(
             },
 
             ui: {
-                'import' : '.x-import'
+                import : '.x-import',
+                grab   : '.x-grab'
             },
 
             render: function () {
@@ -89,6 +90,8 @@ define(
                     type: 'POST',
                     data: JSON.stringify(this.model.toJSON())
                 });
+
+                $(this.ui.grab).spinForPromise(promise);
 
                 promise.success(function () {
                     //find models that have the same series id and episode ids and remove them
