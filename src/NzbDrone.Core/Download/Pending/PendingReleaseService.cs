@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Download.Pending
 
                     var queue = new Queue.Queue
                                 {
-                                    Id = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", pendingRelease.Id, episode.Id)),
+                                    Id = GetQueueId(pendingRelease, episode),
                                     Series = pendingRelease.RemoteEpisode.Series,
                                     Episode = episode,
                                     Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,
@@ -265,7 +265,12 @@ namespace NzbDrone.Core.Download.Pending
 
         private int FindPendingReleaseId(int queueId)
         {
-            return GetPendingReleases().First(p => p.RemoteEpisode.Episodes.Any(e => queueId == (e.Id ^ (p.Id << 16)))).Id;
+            return GetPendingReleases().First(p => p.RemoteEpisode.Episodes.Any(e => queueId == GetQueueId(p, e))).Id;
+        }
+
+        private int GetQueueId(PendingRelease pendingRelease, Episode episode)
+        {
+            return HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", pendingRelease.Id, episode.Id));
         }
 
         public void Handle(SeriesDeletedEvent message)
