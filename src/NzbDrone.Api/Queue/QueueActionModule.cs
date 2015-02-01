@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using System;
+using Nancy;
 using Nancy.Responses;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.REST;
@@ -14,6 +15,7 @@ namespace NzbDrone.Api.Queue
         private readonly IQueueService _queueService;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly ICompletedDownloadService _completedDownloadService;
+        private readonly IFailedDownloadService _failedDownloadService;
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IPendingReleaseService _pendingReleaseService;
         private readonly IDownloadService _downloadService;
@@ -21,6 +23,7 @@ namespace NzbDrone.Api.Queue
         public QueueActionModule(IQueueService queueService,
                                  ITrackedDownloadService trackedDownloadService,
                                  ICompletedDownloadService completedDownloadService,
+                                 IFailedDownloadService failedDownloadService,
                                  IProvideDownloadClient downloadClientProvider,
                                  IPendingReleaseService pendingReleaseService,
                                  IDownloadService downloadService)
@@ -28,6 +31,7 @@ namespace NzbDrone.Api.Queue
             _queueService = queueService;
             _trackedDownloadService = trackedDownloadService;
             _completedDownloadService = completedDownloadService;
+            _failedDownloadService = failedDownloadService;
             _downloadClientProvider = downloadClientProvider;
             _pendingReleaseService = pendingReleaseService;
             _downloadService = downloadService;
@@ -39,6 +43,14 @@ namespace NzbDrone.Api.Queue
 
         private Response Remove(int id)
         {
+            var blacklist = false;
+            var blacklistQuery = Request.Query.blacklist;
+
+            if (blacklistQuery.HasValue)
+            {
+                blacklist = Convert.ToBoolean(blacklistQuery.Value);
+            }
+
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
             if (pendingRelease != null)
@@ -63,6 +75,11 @@ namespace NzbDrone.Api.Queue
             }
 
             downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId, true);
+
+            if (blacklist)
+            {
+                _failedDownloadService.MarkAsFailed(trackedDownload.DownloadItem.DownloadId);
+            }
 
             return new object().AsResponse();
         }

@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Download
     public interface IFailedDownloadService
     {
         void MarkAsFailed(int historyId);
+        void MarkAsFailed(string downloadId);
         void Process(TrackedDownload trackedDownload);
     }
 
@@ -38,6 +39,16 @@ namespace NzbDrone.Core.Download
             {
                 var grabbedHistory = _historyService.Find(downloadId, HistoryEventType.Grabbed).ToList();
                 PublishDownloadFailedEvent(grabbedHistory, "Manually marked as failed");
+            }
+        }
+
+        public void MarkAsFailed(string downloadId)
+        {
+            var history = _historyService.Find(downloadId, HistoryEventType.Grabbed);
+
+            if (history.Any())
+            {
+                PublishDownloadFailedEvent(history, "Manually marked as failed");
             }
         }
 
