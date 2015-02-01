@@ -11,7 +11,11 @@ define(
             var poster = _.where(this.images, {coverType: 'poster'});
 
             if (poster[0]) {
-                return new Handlebars.SafeString('<img class="series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url, 250)));
+                if (!poster[0].url.match(/^https?:\/\//)) {
+                    return new Handlebars.SafeString('<img class="series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url, 250)));
+                } else {
+                    return new Handlebars.SafeString('<img class="series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url)));
+                }
             }
 
             return new Handlebars.SafeString('<img class="series-poster placeholder-image" src="{0}">'.format(placeholder));
