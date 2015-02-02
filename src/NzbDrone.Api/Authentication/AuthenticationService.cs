@@ -21,18 +21,21 @@ namespace NzbDrone.Api.Authentication
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IUserService _userService;
         private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
+        
         private static String API_KEY;
+        private static AuthenticationType AUTH_METHOD;
 
         public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
             _configFileProvider = configFileProvider;
             _userService = userService;
             API_KEY = configFileProvider.ApiKey;
+            AUTH_METHOD = configFileProvider.AuthenticationMethod;
         }
 
         public IUserIdentity Validate(string username, string password)
         {
-            if (_configFileProvider.AuthenticationMethod == AuthenticationType.None)
+            if (AUTH_METHOD == AuthenticationType.None)
             {
                 return AnonymousUser;
             }
@@ -49,7 +52,7 @@ namespace NzbDrone.Api.Authentication
 
         public IUserIdentity GetUserFromIdentifier(Guid identifier, NancyContext context)
         {
-            if (_configFileProvider.AuthenticationMethod == AuthenticationType.None)
+            if (AUTH_METHOD == AuthenticationType.None)
             {
                 return AnonymousUser;
             }
@@ -73,7 +76,7 @@ namespace NzbDrone.Api.Authentication
                 return ValidApiKey(apiKey);
             }
 
-            if (_configFileProvider.AuthenticationMethod == AuthenticationType.None)
+            if (AUTH_METHOD == AuthenticationType.None)
             {
                 return true;
             }
