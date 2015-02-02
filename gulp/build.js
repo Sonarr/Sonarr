@@ -9,5 +9,5 @@ require('./copy');
 
 gulp.task('build', function () {
     return  runSequence('clean',
-        ['requireJs', 'less', 'handlebars', 'copyIndex', 'copyContent']);
+        ['requireJs', 'less', 'handlebars', 'copyHtml', 'copyContent']);
 });

@@ -289,6 +289,26 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("CleanupMetadataImages", value); }
         }
 
+        public String RijndaelPassphrase
+        {
+            get { return GetValue("RijndaelPassphrase", Guid.NewGuid().ToString(), true); }
+        }
+
+        public String HmacPassphrase
+        {
+            get { return GetValue("HmacPassphrase", Guid.NewGuid().ToString(), true); }
+        }
+
+        public String RijndaelSalt
+        {
+            get { return GetValue("RijndaelSalt", Guid.NewGuid().ToString(), true); }
+        }
+
+        public String HmacSalt
+        {
+            get { return GetValue("HmacSalt", Guid.NewGuid().ToString(), true); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, String.Empty);

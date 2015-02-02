@@ -112,21 +112,17 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">Authentication</label>
 
-            <div class="col-sm-8">
-                <div class="input-group">
-                    <label class="checkbox toggle well">
-                        <input type="checkbox" class="x-auth" name="authenticationEnabled"/>
-                        <p>
-                            <span>On</span>
-                            <span>Off</span>
-                        </p>
-                        <div class="btn btn-primary slide-button"/>
-                    </label>
+            <div class="col-sm-1 col-sm-push-4 help-inline">
+                <i class="icon-nd-form-warning" title="Requires restart to take effect"/>
+                <i class="icon-nd-form-info" title="Require Username and Password to access Sonarr"/>
+            </div>
 
-                    <span class="help-inline-checkbox">
-                        <i class="icon-nd-form-info" title="Require Username and Password to access Sonarr"/>
-                    </span>
-                </div>
+            <div class="col-sm-4 col-sm-pull-1">
+                <select name="authenticationMethod" class="form-control x-auth">
+                    <option value="none">None</option>
+                    <option value="basic">Basic (Browser popup)</option>
+                    <option value="forms">Forms (Login page)</option>
+                </select>
             </div>
         </div>
 

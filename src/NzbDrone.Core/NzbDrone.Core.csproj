@@ -115,6 +115,10 @@
     </Compile>
     <Compile Include="Analytics\AnalyticsService.cs" />
     <Compile Include="Annotations\FieldDefinitionAttribute.cs" />
+    <Compile Include="Authentication\AuthenticationType.cs" />
+    <Compile Include="Authentication\User.cs" />
+    <Compile Include="Authentication\UserRepository.cs" />
+    <Compile Include="Authentication\UserService.cs" />
     <Compile Include="Backup\Backup.cs" />
     <Compile Include="Backup\BackupCommand.cs" />
     <Compile Include="Backup\BackupService.cs" />
@@ -153,6 +157,7 @@
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
+    <Compile Include="Datastore\Converters\GuidConverter.cs" />
     <Compile Include="Datastore\Converters\OsPathConverter.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
@@ -236,6 +241,7 @@
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profile.cs" />
     <Compile Include="Datastore\Migration\072_history_grabid.cs" />
+    <Compile Include="Datastore\Migration\076_add_users_table.cs" />
     <Compile Include="Datastore\Migration\075_force_lib_update.cs" />
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />

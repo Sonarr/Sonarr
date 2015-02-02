@@ -9,6 +9,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
@@ -29,14 +30,11 @@ namespace NzbDrone.Core.Configuration
         int SslPort { get; }
         bool EnableSsl { get; }
         bool LaunchBrowser { get; }
-        bool AuthenticationEnabled { get; }
+        AuthenticationType AuthenticationMethod { get; }
         bool AnalyticsEnabled { get; }
-        string Username { get; }
-        string Password { get; }
         string LogLevel { get; }
         string Branch { get; }
         string ApiKey { get; }
-        bool Torrent { get; }
         string SslCertHash { get; }
         string UrlBase { get; }
         Boolean UpdateAutomatically { get; }
@@ -163,14 +161,20 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public bool Torrent
+        public AuthenticationType AuthenticationMethod
         {
-            get { return GetValueBoolean("Torrent", false, persist: false); }
-        }
+            get
+            {
+                var enabled = GetValueBoolean("AuthenticationEnabled", false, false);
 
-        public bool AuthenticationEnabled
-        {
-            get { return GetValueBoolean("AuthenticationEnabled", false); }
+                if (enabled)
+                {
+                    SetValue("AuthenticationMethod", AuthenticationType.Basic);
+                    return AuthenticationType.Basic;
+                }
+                
+                return GetValueEnum("AuthenticationMethod", AuthenticationType.None);
+            }
         }
 
         public bool AnalyticsEnabled
@@ -184,16 +188,6 @@ namespace NzbDrone.Core.Configuration
         public string Branch
         {
             get { return GetValue("Branch", "master").ToLowerInvariant(); }
-        }
-
-        public string Username
-        {
-            get { return GetValue("Username", ""); }
-        }
-
-        public string Password
-        {
-            get { return GetValue("Password", ""); }
         }
 
         public string LogLevel
