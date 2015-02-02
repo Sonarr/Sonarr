@@ -10,10 +10,11 @@ define(
 
             Keys  : {
                 DefaultProfileId    : 'DefaultProfileId',
-                DefaultRootFolderId     : 'DefaultRootFolderId',
-                UseSeasonFolder         : 'UseSeasonFolder',
-                DefaultSeriesType       : 'DefaultSeriesType',
-                AdvancedSettings        : 'advancedSettings'
+                DefaultRootFolderId : 'DefaultRootFolderId',
+                UseSeasonFolder     : 'UseSeasonFolder',
+                DefaultSeriesType   : 'DefaultSeriesType',
+                MonitorEpisodes     : 'MonitorEpisodes',
+                AdvancedSettings    : 'advancedSettings'
             },
 
             getValueBoolean: function (key, defaultValue) {

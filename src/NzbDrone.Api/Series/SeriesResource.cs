@@ -67,6 +67,7 @@ namespace NzbDrone.Api.Series
         public List<String> Genres { get; set; }
         public HashSet<Int32> Tags { get; set; }
         public DateTime Added { get; set; }
+        public AddSeriesOptions AddOptions { get; set; }
 
         //Used to support legacy consumers
         public Int32 QualityProfileId

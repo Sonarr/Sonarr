@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using NzbDrone.Core.Messaging.Commands;
+﻿using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.IndexerSearch
 {
     public class MissingEpisodeSearchCommand : Command
     {
-        public List<int> EpisodeIds { get; set; }
+        public int SeriesId { get; private set; }
 
         public override bool SendUpdatesToClient
         {
@@ -19,9 +18,9 @@ namespace NzbDrone.Core.IndexerSearch
         {
         }
 
-        public MissingEpisodeSearchCommand(List<int> episodeIds)
+        public MissingEpisodeSearchCommand(int seriesId)
         {
-            EpisodeIds = episodeIds;
+            SeriesId = seriesId;
         }
     }
 }

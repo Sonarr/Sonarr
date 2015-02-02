@@ -16,6 +16,7 @@ using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.SignalR;
+using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Series
 {
@@ -109,7 +110,9 @@ namespace NzbDrone.Api.Series
 
         private int AddSeries(SeriesResource seriesResource)
         {
-            return GetNewId<Core.Tv.Series>(_seriesService.AddSeries, seriesResource);
+            var series = _seriesService.AddSeries(seriesResource.InjectTo<Core.Tv.Series>());
+
+            return series.Id;
         }
 
         private void UpdateSeries(SeriesResource seriesResource)

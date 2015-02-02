@@ -36,17 +36,20 @@ define(
                 rootFolder     : '.x-root-folder',
                 seasonFolder   : '.x-season-folder',
                 seriesType     : '.x-series-type',
-                startingSeason : '.x-starting-season',
+                monitor        : '.x-monitor',
+                monitorTooltip : '.x-monitor-tooltip',
                 addButton      : '.x-add',
                 overview       : '.x-overview'
             },
 
             events: {
-                'click .x-add'            : '_addSeries',
+                'click .x-add'            : '_addWithoutSearch',
+                'click .x-add-search'     : '_addAndSearch',
                 'change .x-profile'       : '_profileChanged',
                 'change .x-root-folder'   : '_rootFolderChanged',
                 'change .x-season-folder' : '_seasonFolderChanged',
-                'change .x-series-type'   : '_seriesTypeChanged'
+                'change .x-series-type'   : '_seriesTypeChanged',
+                'change .x-monitor'       : '_monitorChanged'
             },
 
             initialize: function () {
@@ -69,6 +72,7 @@ define(
                 var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
                 var useSeasonFolder = Config.getValueBoolean(Config.Keys.UseSeasonFolder, true);
                 var defaultSeriesType = Config.getValue(Config.Keys.DefaultSeriesType, 'standard');
+                var defaultMonitorEpisodes = Config.getValue(Config.Keys.MonitorEpisodes, 'missing');
 
                 if (Profiles.get(defaultProfile)) {
                     this.ui.profile.val(defaultProfile);
@@ -80,17 +84,24 @@ define(
 
                 this.ui.seasonFolder.prop('checked', useSeasonFolder);
                 this.ui.seriesType.val(defaultSeriesType);
-
-                var minSeasonNotZero = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
-
-                if (minSeasonNotZero) {
-                    this.ui.startingSeason.val(minSeasonNotZero.seasonNumber);
-                }
+                this.ui.monitor.val(defaultMonitorEpisodes);
 
                 //TODO: make this work via onRender, FM?
                 //works with onShow, but stops working after the first render
                 this.ui.overview.dotdotdot({
                     height: 120
+                });
+
+                this.templateFunction = Marionette.TemplateCache.get('AddSeries/MonitoringTooltipTemplate');
+                var content = this.templateFunction();
+
+                this.ui.monitorTooltip.popover({
+                    content  : content,
+                    html     : true,
+                    trigger  : 'hover',
+                    title    : 'Episode Monitoring Options',
+                    placement: 'right',
+                    container: this.$el
                 });
             },
 
@@ -124,6 +135,10 @@ define(
                 else if (options.key === Config.Keys.DefaultSeriesType) {
                     this.ui.seriesType.val(options.value);
                 }
+
+                else if (options.key === Config.Keys.MonitorEpisodes) {
+                    this.ui.monitor.val(options.value);
+                }
             },
 
             _profileChanged: function () {
@@ -150,30 +165,43 @@ define(
                 Config.setValue(Config.Keys.DefaultSeriesType, this.ui.seriesType.val());
             },
 
+            _monitorChanged: function () {
+                Config.setValue(Config.Keys.MonitorEpisodes, this.ui.monitor.val());
+            },
+
             _setRootFolder: function (options) {
                 vent.trigger(vent.Commands.CloseModalCommand);
                 this.ui.rootFolder.val(options.model.id);
                 this._rootFolderChanged();
             },
 
-            _addSeries: function () {
+            _addWithoutSearch: function () {
+                this._addSeries(false);
+            },
+
+            _addAndSearch: function() {
+                this._addSeries(true);
+            },
+
+            _addSeries: function (searchForMissingEpisodes) {
                 var icon = this.ui.addButton.find('icon');
                 icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
 
                 var profile = this.ui.profile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
-                var startingSeason = this.ui.startingSeason.val();
                 var seriesType = this.ui.seriesType.val();
                 var seasonFolder = this.ui.seasonFolder.prop('checked');
 
-                this.model.set({
-                    profileId: profile,
-                    rootFolderPath: rootFolderPath,
-                    seasonFolder: seasonFolder,
-                    seriesType: seriesType
-                }, { silent: true });
+                var options = this._getAddSeriesOptions();
+                options.searchForMissingEpisodes = searchForMissingEpisodes;
 
-                this.model.setSeasonPass(startingSeason);
+                this.model.set({
+                    profileId      : profile,
+                    rootFolderPath : rootFolderPath,
+                    seasonFolder   : seasonFolder,
+                    seriesType     : seriesType,
+                    addOptions     : options
+                }, { silent: true });
 
                 var self = this;
                 var promise = this.model.save();
@@ -209,6 +237,48 @@ define(
             _rootFoldersUpdated: function () {
                 this._configureTemplateHelpers();
                 this.render();
+            },
+
+            _getAddSeriesOptions: function () {
+                var monitor = this.ui.monitor.val();
+                var lastSeason = _.max(this.model.get('seasons'), 'seasonNumber');
+                var firstSeason = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
+
+                this.model.setSeasonPass(firstSeason.seasonNumber);
+
+                var options = {
+                    ignoreEpisodesWithFiles: false,
+                    ignoreEpisodesWithoutFiles: false
+                };
+
+                if (monitor === 'all') {
+                    return options;
+                }
+
+                else if (monitor === 'future') {
+                    options.ignoreEpisodesWithFiles = true;
+                    options.ignoreEpisodesWithoutFiles = true;
+                }
+
+                else if (monitor === 'latest') {
+                    this.model.setSeasonPass(lastSeason.seasonNumber);
+                }
+
+                else if (monitor === 'first') {
+                    this.model.setSeasonPass(lastSeason + 1);
+                    
+                    firstSeason.monitor = true;
+                }
+
+                else if (monitor === 'missing') {
+                    options.ignoreEpisodesWithFiles = true;
+                }
+
+                else if (monitor === 'existing') {
+                    options.ignoreEpisodesWithoutFiles = true;
+                }
+
+                return options;
             }
         });
 

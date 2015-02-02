@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Season> Seasons { get; set; }
         public HashSet<Int32> Tags { get; set; }
+        public AddSeriesOptions AddOptions { get; set; }
 
         public override string ToString()
         {

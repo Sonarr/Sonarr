@@ -84,17 +84,23 @@
     }
 
     select {
-      font-size : 16px;
+      font-size : 14px;
     }
 
     .checkbox {
       margin-top : 0px;
     }
 
-    i {
-      &:before {
-        color : #ffffff;
+    .add {
+      i {
+        &:before {
+          color : #ffffff;
+        }
       }
+    }
+
+    .monitor-tooltip {
+      margin-left : 5px;
     }
   }
 
@@ -106,6 +112,14 @@
   .hint {
     color      : #999999;
     font-style : italic;
+  }
+
+  .monitor-tooltip-contents {
+    padding-bottom : 0px;
+
+    dd {
+      padding-bottom : 8px;
+    }
   }
 }
 

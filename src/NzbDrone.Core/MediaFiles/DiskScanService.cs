@@ -66,6 +66,7 @@ namespace NzbDrone.Core.MediaFiles
             if (!_diskProvider.FolderExists(rootFolder))
             {
                 _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderDoesNotExist));
                 return;
             }
 
@@ -92,6 +93,7 @@ namespace NzbDrone.Core.MediaFiles
                     _logger.Debug("Series folder doesn't exist: {0}", series.Path);
                 }
 
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.SeriesFolderDoesNotExist));
                 return;
             }
 

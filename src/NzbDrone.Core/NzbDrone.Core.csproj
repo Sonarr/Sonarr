@@ -245,6 +245,7 @@
     <Compile Include="Datastore\Migration\075_force_lib_update.cs" />
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
+    <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -571,6 +572,7 @@
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
+    <Compile Include="MediaFiles\Events\SeriesScanSkippedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesScannedEvent.cs" />
     <Compile Include="MediaFiles\FileDateType.cs" />
     <Compile Include="MediaFiles\MediaFileAttributeService.cs" />
@@ -817,6 +819,7 @@
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
     <Compile Include="Tv\Actor.cs" />
+    <Compile Include="Tv\AddSeriesOptions.cs" />
     <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
@@ -838,6 +841,7 @@
     <Compile Include="Tv\RefreshSeriesService.cs" />
     <Compile Include="Tv\Season.cs" />
     <Compile Include="Tv\Series.cs" />
+    <Compile Include="Tv\SeriesScannedHandler.cs" />
     <Compile Include="Tv\SeriesEditedService.cs" />
     <Compile Include="Tv\SeriesRepository.cs" />
     <Compile Include="Tv\SeriesService.cs">

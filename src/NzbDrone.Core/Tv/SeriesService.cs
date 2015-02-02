@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Tv
         Series UpdateSeries(Series series);
         List<Series> UpdateSeries(List<Series> series);
         bool SeriesPathExists(string folder);
+        void RemoveAddOptions(Series series);
     }
 
     public class SeriesService : ISeriesService
@@ -215,6 +217,11 @@ namespace NzbDrone.Core.Tv
         public bool SeriesPathExists(string folder)
         {
             return _seriesRepository.SeriesPathExists(folder);
+        }
+
+        public void RemoveAddOptions(Series series)
+        {
+            _seriesRepository.SetFields(series, s => s.AddOptions);
         }
     }
 }
