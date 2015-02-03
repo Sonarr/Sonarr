@@ -1,9 +1,9 @@
-var Backgrid = require('backgrid');
-
-module.exports = (function(){
-    Backgrid.NzbDroneHeaderCell = Backgrid.HeaderCell.extend({
-        events                  : {"click" : 'onClick'},
-        _originalInit           : Backgrid.HeaderCell.prototype.initialize,
+module.exports.register = function(backgrid) {
+    backgrid.SonarrHeaderCell = backgrid.HeaderCell.extend({
+        events                  : {
+            'click' : 'onClick'
+        },
+        _originalInit           : backgrid.HeaderCell.prototype.initialize,
         initialize              : function(options){
             this._originalInit.call(this, options);
             this.listenTo(this.collection, 'drone:sort', this.render);
@@ -12,7 +12,7 @@ module.exports = (function(){
             this.$el.empty();
             this.$el.append(this.column.get('label'));
             var column = this.column;
-            var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
+            var sortable = backgrid.callByNeed(column.sortable(), column, this.collection);
             if(sortable) {
                 this.$el.addClass('sortable');
                 this.$el.append(' <i class="pull-right"></i>');
@@ -68,7 +68,7 @@ module.exports = (function(){
             var collection = this.collection;
             var event = 'backgrid:sort';
             var column = this.column;
-            var sortable = Backgrid.callByNeed(column.sortable(), column, collection);
+            var sortable = backgrid.callByNeed(column.sortable(), column, collection);
             if(sortable) {
                 var direction = collection.state.order;
                 if(direction === 'ascending' || direction === -1) {
@@ -109,5 +109,4 @@ module.exports = (function(){
             this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
         }
     });
-    return Backgrid.NzbDroneHeaderCell;
-}).call(this);
+};

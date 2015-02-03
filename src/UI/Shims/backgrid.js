@@ -2,7 +2,12 @@ require('../JsLibraries/backbone.backgrid');
 require('backbone');
 
 require('backbone');
+
 var backgrid = require('../JsLibraries/backbone.backgrid');
+var header = require('../Shared/Grid/HeaderCell');
+
+header.register(backgrid);
+
 backgrid.Column.prototype.defaults = {
     name       : undefined,
     label      : undefined,
@@ -11,6 +16,7 @@ backgrid.Column.prototype.defaults = {
     renderable : true,
     formatter  : undefined,
     cell       : undefined,
+    headerCell : 'Sonarr',
     sortType   : 'toggle'
 };
 module.exports = backgrid;
