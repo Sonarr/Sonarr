@@ -1,12 +1,9 @@
-require('../JsLibraries/backbone.backgrid');
-require('backbone');
-
 require('backbone');
 
 var backgrid = require('../JsLibraries/backbone.backgrid');
 var header = require('../Shared/Grid/HeaderCell');
 
-header.register(backgrid);
+header.call(backgrid);
 
 backgrid.Column.prototype.defaults = {
     name       : undefined,

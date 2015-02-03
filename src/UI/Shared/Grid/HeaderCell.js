@@ -1,4 +1,6 @@
-module.exports.register = function(backgrid) {
+module.exports = function() {
+    var backgrid = this;
+
     backgrid.SonarrHeaderCell = backgrid.HeaderCell.extend({
         events                  : {
             'click' : 'onClick'
@@ -109,4 +111,6 @@ module.exports.register = function(backgrid) {
             this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
         }
     });
+
+    return backgrid.SonarrHeaderCell;
 };
