@@ -1,7 +1,9 @@
+var path = require('path');
+
 module.exports = {
   entry     : 'main.js',
   resolve : {
-  root : 'src/UI',
+  root : path.join(__dirname, "src", "ui"),
   alias : {
       'templates'               : '/templates',
       'backbone'                : 'Shims/backbone',
