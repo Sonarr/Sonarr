@@ -4,17 +4,21 @@ using Nancy.Authentication.Forms;
 using Nancy.Extensions;
 using Nancy.ModelBinding;
 using NzbDrone.Core.Authentication;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Authentication
 {
-    public class LoginModule : NancyModule
+    public class AuthenticationModule : NancyModule
     {
         private readonly IUserService _userService;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public LoginModule(IUserService userService)
+        public AuthenticationModule(IUserService userService, IConfigFileProvider configFileProvider)
         {
             _userService = userService;
+            _configFileProvider = configFileProvider;
             Post["/login"] = x => Login(this.Bind<LoginResource>());
+            Get["/logout"] = x => Logout();
         }
 
         private Response Login(LoginResource resource)
@@ -34,6 +38,11 @@ namespace NzbDrone.Api.Authentication
             }
 
             return this.LoginAndRedirect(user.Identifier, expiry);
+        }
+
+        private Response Logout()
+        {
+            return this.LogoutAndRedirect(_configFileProvider.UrlBase + "/");
         }
     }
 }

@@ -83,7 +83,7 @@
     </Compile>
     <Compile Include="Authentication\AuthenticationService.cs" />
     <Compile Include="Authentication\EnableAuthInNancy.cs" />
-    <Compile Include="Authentication\LoginModule.cs" />
+    <Compile Include="Authentication\AuthenticationModule.cs" />
     <Compile Include="Authentication\LoginResource.cs" />
     <Compile Include="Authentication\NzbDroneUser.cs" />
     <Compile Include="Blacklist\BlacklistModule.cs" />

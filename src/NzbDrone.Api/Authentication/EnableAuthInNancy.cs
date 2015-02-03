@@ -64,7 +64,7 @@ namespace NzbDrone.Api.Authentication
 
             FormsAuthentication.Enable(pipelines, new FormsAuthenticationConfiguration
             {
-                RedirectUrl = "~/login",
+                RedirectUrl = _configFileProvider.UrlBase + "/login",
                 UserMapper = _authenticationService,
                 CryptographyConfiguration = cryptographyConfiguration
             });

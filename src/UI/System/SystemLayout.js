@@ -1,4 +1,4 @@
-var $ = require('jquery');
+﻿var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
 var SystemInfoLayout = require('./Info/SystemInfoLayout');
@@ -7,6 +7,7 @@ var UpdateLayout = require('./Update/UpdateLayout');
 var BackupLayout = require('./Backup/BackupLayout');
 var TaskLayout = require('./Task/TaskLayout');
 var Messenger = require('../Shared/Messenger');
+var StatusModel = require('./StatusModel');
 
 module.exports = Marionette.Layout.extend({
     template     : 'System/SystemLayoutTemplate',
@@ -25,18 +26,22 @@ module.exports = Marionette.Layout.extend({
         tasksTab   : '.x-tasks-tab'
     },
     events       : {
-        "click .x-info-tab"    : '_showInfo',
-        "click .x-logs-tab"    : '_showLogs',
-        "click .x-updates-tab" : '_showUpdates',
-        "click .x-backup-tab"  : '_showBackup',
-        "click .x-tasks-tab"   : '_showTasks',
-        "click .x-shutdown"    : '_shutdown',
-        "click .x-restart"     : '_restart'
+        'click .x-info-tab'    : '_showInfo',
+        'click .x-logs-tab'    : '_showLogs',
+        'click .x-updates-tab' : '_showUpdates',
+        'click .x-backup-tab'  : '_showBackup',
+        'click .x-tasks-tab'   : '_showTasks',
+        'click .x-shutdown'    : '_shutdown',
+        'click .x-restart'     : '_restart'
     },
     initialize   : function(options){
         if(options.action) {
             this.action = options.action.toLowerCase();
         }
+
+        this.templateHelpers = {
+            authentication : StatusModel.get('authentication')
+        };
     },
     onShow       : function(){
         switch (this.action) {

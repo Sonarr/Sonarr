@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs">
+﻿<ul class="nav nav-tabs">
     <li><a href="#info" class="x-info-tab no-router">Info</a></li>
     <li><a href="#logs" class="x-logs-tab no-router">Logs</a></li>
     <li><a href="#updates" class="x-updates-tab no-router">Updates</a></li>
@@ -12,6 +12,12 @@
             <button class="btn btn-default btn-icon-only x-restart" title="Restart" data-container="body">
                 <i class="icon-nd-restart"></i>
             </button>
+
+            {{#if_eq authentication compare="forms"}}
+            <a href="{{UrlBase}}/logout" class="btn btn-default btn-icon-only" title="Logout" data-container="body">
+                <i class="icon-lock"></i>
+            </a>
+            {{/if_eq}}
         </div>
     </li>
 </ul>
