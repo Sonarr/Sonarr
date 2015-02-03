@@ -7,6 +7,9 @@ var templateMixin = require('../Handlebars/backbone.marionette.templates');
 var asNamedView = require('../Mixins/AsNamedView');
 
 templateMixin.call(window.Marionette.TemplateCache);
-asNamedView.call(window.Marionette.ItemView.prototype);
+
+if(!window.NzbDrone.Production) {
+    asNamedView.call(window.Marionette.ItemView.prototype);
+}
 
 module.exports = window.Marionette;

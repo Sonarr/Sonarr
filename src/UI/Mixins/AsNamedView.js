@@ -1,19 +1,24 @@
 module.exports = function(){
-    this.viewName = function(){
-        if(this.template) {
-            var regex = new RegExp('/', 'g');
-            return this.template.toLocaleLowerCase().replace('template', '').replace(regex, '-');
+
+    var regex = new RegExp('/', 'g');
+
+    var _getViewName = function(template){
+        if(template) {
+            return template.toLocaleLowerCase().replace('template', '').replace(regex, '-');
         }
         return undefined;
     };
+
     var originalOnRender = this.onRender;
     this.onRender = function(){
-        this.$el.removeClass('iv-' + this.viewName());
-        this.$el.addClass('iv-' + this.viewName());
+        this.$el.addClass('iv-' + _getViewName(this.template));
+
         if(originalOnRender) {
             return originalOnRender.call(this);
         }
+
         return undefined;
     };
+
     return this;
 };

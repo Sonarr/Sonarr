@@ -31,11 +31,11 @@ module.exports = Marionette.Layout.extend({
         search    : '.x-search'
     },
     events             : {
-        "click .x-monitored" : '_toggleMonitored',
-        "click .x-edit"      : '_editSeries',
-        "click .x-refresh"   : '_refreshSeries',
-        "click .x-rename"    : '_renameSeries',
-        "click .x-search"    : '_seriesSearch'
+        'click .x-monitored' : '_toggleMonitored',
+        'click .x-edit'      : '_editSeries',
+        'click .x-refresh'   : '_refreshSeries',
+        'click .x-rename'    : '_renameSeries',
+        'click .x-search'    : '_seriesSearch'
     },
     initialize         : function(){
         this.seriesCollection = SeriesCollection.clone();
