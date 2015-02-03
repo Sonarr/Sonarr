@@ -32,14 +32,15 @@ define(
             template: 'AddSeries/SearchResultViewTemplate',
 
             ui: {
-                profile        : '.x-profile',
-                rootFolder     : '.x-root-folder',
-                seasonFolder   : '.x-season-folder',
-                seriesType     : '.x-series-type',
-                monitor        : '.x-monitor',
-                monitorTooltip : '.x-monitor-tooltip',
-                addButton      : '.x-add',
-                overview       : '.x-overview'
+                profile         : '.x-profile',
+                rootFolder      : '.x-root-folder',
+                seasonFolder    : '.x-season-folder',
+                seriesType      : '.x-series-type',
+                monitor         : '.x-monitor',
+                monitorTooltip  : '.x-monitor-tooltip',
+                addButton       : '.x-add',
+                addSearchButton : '.x-add-search',
+                overview        : '.x-overview'
             },
 
             events: {
@@ -184,8 +185,8 @@ define(
             },
 
             _addSeries: function (searchForMissingEpisodes) {
-                var icon = this.ui.addButton.find('icon');
-                icon.removeClass('icon-plus').addClass('icon-spin icon-spinner disabled');
+                this.ui.addButton.addClass('disabled');
+                this.ui.addSearchButton.addClass('disabled');
 
                 var profile = this.ui.profile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
@@ -206,12 +207,24 @@ define(
                 var self = this;
                 var promise = this.model.save();
 
+                if (searchForMissingEpisodes) {
+                    this.ui.addSearchButton.spinForPromise(promise);
+                }
+
+                else {
+                    this.ui.addButton.spinForPromise(promise);
+                }
+
+                promise.always(function () {
+                    self.ui.addButton.removeClass('disabled');
+                    self.ui.addSearchButton.removeClass('disabled');
+                });
+
                 promise.done(function () {
                     SeriesCollection.add(self.model);
 
                     self.close();
-                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-
+                    
                     Messenger.show({
                         message: 'Added: ' + self.model.get('title'),
                         actions : {
