@@ -22,17 +22,28 @@ namespace NzbDrone.Core.MediaCover
 
         public void Resize(string source, string destination, int height)
         {
-            using (var sourceStream = _diskProvider.OpenReadStream(source))
+            try
             {
-                using (var outputStream = _diskProvider.OpenWriteStream(destination))
+                using (var sourceStream = _diskProvider.OpenReadStream(source))
                 {
-                    var settings = new Instructions();
-                    settings.Height = height;
+                    using (var outputStream = _diskProvider.OpenWriteStream(destination))
+                    {
+                        var settings = new Instructions();
+                        settings.Height = height;
 
-                    var job = new ImageJob(sourceStream, outputStream, settings);
+                        var job = new ImageJob(sourceStream, outputStream, settings);
 
-                    ImageBuilder.Current.Build(job);
+                        ImageBuilder.Current.Build(job);
+                    }
                 }
+            }
+            catch
+            {
+                if (_diskProvider.FileExists(destination))
+                {
+                    _diskProvider.DeleteFile(destination);
+                }
+                throw;
             }
         }
     }
