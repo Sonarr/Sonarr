@@ -24,7 +24,7 @@ define(
             },
 
             removeItem: function () {
-                var blacklist = this.ui.blacklist.prop('checked');
+                var blacklist = this.ui.blacklist.prop('checked') || false;
 
                 this.ui.indicator.show();
 
