@@ -224,7 +224,7 @@ define(
                     SeriesCollection.add(self.model);
 
                     self.close();
-                    
+
                     Messenger.show({
                         message: 'Added: ' + self.model.get('title'),
                         actions : {

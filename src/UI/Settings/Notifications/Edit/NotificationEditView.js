@@ -1,15 +1,11 @@
-var _ = require('underscore');
-var vent = require('../../../vent');
-var AppLayout = require('../../../AppLayout');
+﻿var vent = require('../../../vent');
 var Marionette = require('marionette');
 var DeleteView = require('../Delete/NotificationDeleteView');
-var CommandController = require('../../../Commands/CommandController');
 var AsModelBoundView = require('../../../Mixins/AsModelBoundView');
 var AsValidatedView = require('../../../Mixins/AsValidatedView');
 var AsEditModalView = require('../../../Mixins/AsEditModalView');
 require('../../../Form/FormBuilder');
 require('../../../Mixins/TagInput');
-require('../Add/NotificationSchemaModal');
 
 module.exports = (function(){
     var view = Marionette.ItemView.extend({
@@ -20,8 +16,8 @@ module.exports = (function(){
             tags             : '.x-tags'
         },
         events             : {
-            "click .x-back"         : '_back',
-            "change .x-on-download" : '_onDownloadChanged'
+            'click .x-back'         : '_back',
+            'change .x-on-download' : '_onDownloadChanged'
         },
         _deleteView        : DeleteView,
         initialize         : function(options){

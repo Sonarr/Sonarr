@@ -1,4 +1,4 @@
-var _ = require('underscore');
+﻿var _ = require('underscore');
 var $ = require('jquery');
 var AppLayout = require('../../../AppLayout');
 var Marionette = require('marionette');
@@ -8,9 +8,10 @@ module.exports = Marionette.ItemView.extend({
     template   : 'Settings/Indexers/Add/IndexerAddItemViewTemplate',
     tagName    : 'li',
     className  : 'add-thingy-item',
+
     events     : {
-        "click .x-preset" : '_addPreset',
-        "click"           : '_add'
+        'click .x-preset' : '_addPreset',
+        'click'           : '_add'
     },
     initialize : function(options){
         this.targetCollection = options.targetCollection;
@@ -33,6 +34,7 @@ module.exports = Marionette.ItemView.extend({
             enableRss    : this.model.get('supportsRss'),
             enableSearch : this.model.get('supportsSearch')
         });
+
         var editView = new EditView({
             model            : this.model,
             targetCollection : this.targetCollection
