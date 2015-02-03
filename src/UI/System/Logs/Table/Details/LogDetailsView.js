@@ -1,11 +1,4 @@
-'use strict';
-define(
-    [
-        'vent',
-        'marionette'
-    ], function (vent, Marionette) {
+var vent = require('../../../../vent');
+var Marionette = require('marionette');
 
-        return Marionette.ItemView.extend({
-            template: 'System/Logs/Table/Details/LogDetailsViewTemplate'
-        });
-    });
+module.exports = Marionette.ItemView.extend({template : 'System/Logs/Table/Details/LogDetailsViewTemplate'});

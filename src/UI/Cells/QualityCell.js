@@ -1,13 +1,8 @@
-'use strict';
-define(
-    [
-        'Cells/TemplatedCell',
-        'Cells/Edit/QualityCellEditor'
-    ], function (TemplatedCell, QualityCellEditor) {
-        return TemplatedCell.extend({
+var TemplatedCell = require('./TemplatedCell');
+var QualityCellEditor = require('./Edit/QualityCellEditor');
 
-            className: 'quality-cell',
-            template : 'Cells/QualityCellTemplate',
-            editor   : QualityCellEditor
-        });
-    });
+module.exports = TemplatedCell.extend({
+    className : 'quality-cell',
+    template  : 'Cells/QualityCellTemplate',
+    editor    : QualityCellEditor
+});

@@ -1,10 +1,3 @@
-'use strict';
+var Backbone = require('backbone');
 
-define(
-    [
-        'backbone'
-    ], function (Backbone) {
-        return Backbone.Model.extend({
-
-        });
-    });
+module.exports = Backbone.Model.extend({});

@@ -1,12 +1,3 @@
+var Marionette = require('marionette');
 
-'use strict';
-
-define(
-    [
-        'marionette'
-    ], function (Marionette) {
-
-        return Marionette.CompositeView.extend({
-            template: 'Series/Index/EmptyTemplate'
-        });
-    });
+module.exports = Marionette.CompositeView.extend({template : 'Series/Index/EmptyTemplate'});

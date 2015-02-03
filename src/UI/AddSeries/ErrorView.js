@@ -1,20 +1,11 @@
-'use strict';
+var Marionette = require('marionette');
 
-define(
-    [
-        'marionette'
-    ], function (Marionette) {
-
-        return Marionette.CompositeView.extend({
-            template: 'AddSeries/ErrorViewTemplate',
-
-            initialize: function (options) {
-                this.options = options;
-            },
-
-            templateHelpers: function () {
-                return  this.options;
-            }
-
-        });
-    });
+module.exports = Marionette.CompositeView.extend({
+    template        : 'AddSeries/ErrorViewTemplate',
+    initialize      : function(options){
+        this.options = options;
+    },
+    templateHelpers : function(){
+        return this.options;
+    }
+});

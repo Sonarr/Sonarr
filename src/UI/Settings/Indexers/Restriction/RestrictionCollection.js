@@ -1,11 +1,7 @@
-'use strict';
-define([
-    'backbone',
-    'Settings/Indexers/Restriction/RestrictionModel'
-], function (Backbone, RestrictionModel) {
+var Backbone = require('backbone');
+var RestrictionModel = require('./RestrictionModel');
 
-    return Backbone.Collection.extend({
-        model : RestrictionModel,
-        url   : window.NzbDrone.ApiRoot + '/Restriction'
-    });
+module.exports = Backbone.Collection.extend({
+    model : RestrictionModel,
+    url   : window.NzbDrone.ApiRoot + '/Restriction'
 });

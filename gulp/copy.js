@@ -5,7 +5,12 @@ var cache = require('gulp-cached');
 var paths = require('./paths.js');
 
 gulp.task('copyJs', function () {
-    return gulp.src(paths.src.scripts)
+    return gulp.src(
+      [
+        paths.src.root + "piwikCheck.js",
+        paths.src.root + "polyfills.js",
+        paths.src.root + "JsLibraries\\handlebars.runtime.js",
+      ])
         .pipe(cache('copyJs'))
         .pipe(print())
         .pipe(gulp.dest(paths.dest.root));

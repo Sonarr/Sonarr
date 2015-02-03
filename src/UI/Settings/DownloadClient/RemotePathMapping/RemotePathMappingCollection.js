@@ -1,11 +1,7 @@
-'use strict';
-define([
-    'backbone',
-    'Settings/DownloadClient/RemotePathMapping/RemotePathMappingModel'
-], function (Backbone, RemotePathMappingModel) {
+var Backbone = require('backbone');
+var RemotePathMappingModel = require('./RemotePathMappingModel');
 
-    return Backbone.Collection.extend({
-        model : RemotePathMappingModel,
-        url   : window.NzbDrone.ApiRoot + '/remotePathMapping'
-    });
+module.exports = Backbone.Collection.extend({
+    model : RemotePathMappingModel,
+    url   : window.NzbDrone.ApiRoot + '/remotePathMapping'
 });

@@ -1,13 +1,8 @@
-'use strict';
+var ThingyAddCollectionView = require('../../ThingyAddCollectionView');
+var AddItemView = require('./NotificationAddItemView');
 
-define([
-    'Settings/ThingyAddCollectionView',
-    'Settings/Notifications/Add/NotificationAddItemView'
-], function (ThingyAddCollectionView, AddItemView) {
-
-    return ThingyAddCollectionView.extend({
-        itemView         : AddItemView,
-        itemViewContainer: '.add-notifications .items',
-        template         : 'Settings/Notifications/Add/NotificationAddCollectionViewTemplate'
-    });
+module.exports = ThingyAddCollectionView.extend({
+    itemView          : AddItemView,
+    itemViewContainer : '.add-notifications .items',
+    template          : 'Settings/Notifications/Add/NotificationAddCollectionViewTemplate'
 });

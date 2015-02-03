@@ -122,3 +122,4 @@ setup/Output/
 #VS outout folders
 bin
 obj
+output/*

@@ -1,34 +1,24 @@
-'use strict';
+var Marionette = require('marionette');
+var ProfileCollection = require('../../Profile/ProfileCollection');
+var ProfileCollectionView = require('./ProfileCollectionView');
+var DelayProfileLayout = require('./Delay/DelayProfileLayout');
+var DelayProfileCollection = require('./Delay/DelayProfileCollection');
+var LanguageCollection = require('./Language/LanguageCollection');
 
-define(
-    [
-        'marionette',
-        'Profile/ProfileCollection',
-        'Settings/Profile/ProfileCollectionView',
-        'Settings/Profile/Delay/DelayProfileLayout',
-        'Settings/Profile/Delay/DelayProfileCollection',
-        'Settings/Profile/Language/LanguageCollection'
-    ], function (Marionette, ProfileCollection, ProfileCollectionView, DelayProfileLayout, DelayProfileCollection, LanguageCollection) {
-        return Marionette.Layout.extend({
-            template: 'Settings/Profile/ProfileLayoutTemplate',
-
-            regions: {
-                profile     : '#profile',
-                delayProfile : '#delay-profile'
-            },
-
-            initialize: function (options) {
-                this.settings = options.settings;
-                ProfileCollection.fetch();
-
-                this.delayProfileCollection = new DelayProfileCollection();
-                this.delayProfileCollection.fetch();
-            },
-
-            onShow: function () {
-                this.profile.show(new ProfileCollectionView({collection: ProfileCollection}));
-                this.delayProfile.show(new DelayProfileLayout({collection: this.delayProfileCollection}));
-            }
-        });
-    });
-
+module.exports = Marionette.Layout.extend({
+    template   : 'Settings/Profile/ProfileLayoutTemplate',
+    regions    : {
+        profile      : '#profile',
+        delayProfile : '#delay-profile'
+    },
+    initialize : function(options){
+        this.settings = options.settings;
+        ProfileCollection.fetch();
+        this.delayProfileCollection = new DelayProfileCollection();
+        this.delayProfileCollection.fetch();
+    },
+    onShow     : function(){
+        this.profile.show(new ProfileCollectionView({collection : ProfileCollection}));
+        this.delayProfile.show(new DelayProfileLayout({collection : this.delayProfileCollection}));
+    }
+});

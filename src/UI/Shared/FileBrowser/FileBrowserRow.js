@@ -1,31 +1,19 @@
-'use strict';
-define(
-    [
-        'underscore',
-        'backgrid'
-    ], function (_, Backgrid) {
+var _ = require('underscore');
+var Backgrid = require('backgrid');
 
-        return Backgrid.Row.extend({
-            className: 'file-browser-row',
-
-            events: {
-                'click': '_selectRow'
-            },
-
-            _originalInit: Backgrid.Row.prototype.initialize,
-
-            initialize: function () {
-                this._originalInit.apply(this, arguments);
-            },
-
-            _selectRow: function () {
-                if (this.model.get('type') === 'file') {
-                    this.model.collection.trigger('filebrowser:fileselected', this.model);
-                }
-
-                else {
-                    this.model.collection.trigger('filebrowser:folderselected', this.model);
-                }
-            }
-        });
-    });
+module.exports = Backgrid.Row.extend({
+    className     : 'file-browser-row',
+    events        : {"click" : '_selectRow'},
+    _originalInit : Backgrid.Row.prototype.initialize,
+    initialize    : function(){
+        this._originalInit.apply(this, arguments);
+    },
+    _selectRow    : function(){
+        if(this.model.get('type') === 'file') {
+            this.model.collection.trigger('filebrowser:fileselected', this.model);
+        }
+        else {
+            this.model.collection.trigger('filebrowser:folderselected', this.model);
+        }
+    }
+});

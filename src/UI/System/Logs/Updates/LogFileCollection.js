@@ -1,17 +1,11 @@
-'use strict';
+var Backbone = require('backbone');
+var LogFileModel = require('./LogFileModel');
 
-define(
-    [
-        'backbone',
-        'System/Logs/Updates/LogFileModel'
-    ], function (Backbone, LogFileModel) {
-        return Backbone.Collection.extend({
-            url  : window.NzbDrone.ApiRoot + '/log/file/update',
-            model: LogFileModel,
-
-            state: {
-                sortKey: 'lastWriteTime',
-                order  : 1
-            }
-        });
-    });
+module.exports = Backbone.Collection.extend({
+    url   : window.NzbDrone.ApiRoot + '/log/file/update',
+    model : LogFileModel,
+    state : {
+        sortKey : 'lastWriteTime',
+        order   : 1
+    }
+});

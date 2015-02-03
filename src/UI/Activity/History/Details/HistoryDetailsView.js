@@ -1,11 +1,4 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'Activity/History/Details/HistoryDetailsAge'
-    ], function (Marionette) {
+var Marionette = require('marionette');
+require('./HistoryDetailsAge');
 
-        return Marionette.ItemView.extend({
-            template: 'Activity/History/Details/HistoryDetailsViewTemplate'
-        });
-    });
+module.exports = Marionette.ItemView.extend({template : 'Activity/History/Details/HistoryDetailsViewTemplate'});

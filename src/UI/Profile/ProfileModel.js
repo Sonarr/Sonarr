@@ -1,14 +1,9 @@
-'use strict';
-define(
-    [
-        'backbone.deepmodel'
-    ], function (DeepModel) {
-        return  DeepModel.DeepModel.extend({
-            defaults: {
-                id    : null,
-                name  : '',
-                cutoff: null
-            }
-        });
-    });
+var DeepModel = require('backbone.deepmodel');
 
+module.exports = DeepModel.DeepModel.extend({
+    defaults : {
+        id     : null,
+        name   : '',
+        cutoff : null
+    }
+});

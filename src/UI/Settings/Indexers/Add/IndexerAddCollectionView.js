@@ -1,14 +1,9 @@
-'use strict';
+var ThingyAddCollectionView = require('../../ThingyAddCollectionView');
+var ThingyHeaderGroupView = require('../../ThingyHeaderGroupView');
+var AddItemView = require('./IndexerAddItemView');
 
-define([
-    'Settings/ThingyAddCollectionView',
-    'Settings/ThingyHeaderGroupView',
-    'Settings/Indexers/Add/IndexerAddItemView'
-], function (ThingyAddCollectionView, ThingyHeaderGroupView, AddItemView) {
-
-    return ThingyAddCollectionView.extend({
-        itemView         : ThingyHeaderGroupView.extend({ itemView: AddItemView }),
-        itemViewContainer: '.add-indexer .items',
-        template         : 'Settings/Indexers/Add/IndexerAddCollectionViewTemplate'
-    });
+module.exports = ThingyAddCollectionView.extend({
+    itemView          : ThingyHeaderGroupView.extend({itemView : AddItemView}),
+    itemViewContainer : '.add-indexer .items',
+    template          : 'Settings/Indexers/Add/IndexerAddCollectionViewTemplate'
 });

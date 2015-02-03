@@ -1,6 +1,5 @@
-'use strict';
-define(function () {
-    window.onbeforeunload = function () {
+module.exports = (function(){
+    window.onbeforeunload = function(){
         window.NzbDrone.unloading = true;
     };
-});
+}).call(this);

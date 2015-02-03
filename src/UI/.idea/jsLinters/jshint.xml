@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JSHintConfiguration" version="2.1.10" use-config-file="false">
+  <component name="JSHintConfiguration" version="2.6.0" use-config-file="false">
     <option bitwise="true" />
     <option camelcase="true" />
     <option curly="true" />
@@ -14,7 +14,7 @@
     <option nonew="true" />
     <option plusplus="false" />
     <option undef="true" />
-    <option strict="true" />
+    <option strict="false" />
     <option trailing="false" />
     <option latedef="true" />
     <option unused="true" />
@@ -27,40 +27,46 @@
     <option esnext="false" />
     <option evil="false" />
     <option expr="false" />
-    <option funcscope="false" />
     <option globalstrict="true" />
-    <option iterator="false" />
     <option lastsemic="false" />
     <option laxbreak="false" />
     <option laxcomma="false" />
-    <option loopfunc="false" />
     <option multistr="false" />
+    <option notypeof="false" />
     <option proto="false" />
     <option scripturl="false" />
-    <option smarttabs="false" />
-    <option shadow="false" />
     <option sub="false" />
-    <option supernew="false" />
-    <option validthis="false" />
     <option browser="true" />
     <option couch="false" />
     <option devel="true" />
     <option dojo="false" />
+    <option freeze="false" />
+    <option funcscope="false" />
+    <option gcl="false" />
+    <option iterator="false" />
+    <option loopfunc="false" />
+    <option shadow="false" />
     <option jquery="false" />
-    <option mootools="false" />
-    <option node="false" />
     <option nonstandard="false" />
+    <option nomen="false" />
+    <option maxerr="50" />
+    <option moz="false" />
+    <option noyield="false" />
+    <option phantom="false" />
+    <option smarttabs="false" />
+    <option supernew="false" />
+    <option validthis="false" />
+    <option mootools="false" />
+    <option node="true" />
+    <option nonbsp="false" />
     <option prototypejs="false" />
     <option rhino="false" />
     <option worker="false" />
     <option wsh="false" />
     <option yui="false" />
-    <option nomen="false" />
     <option onevar="false" />
     <option passfail="false" />
     <option white="false" />
-    <option maxerr="50" />
-    <option predef="window, define, require" />
+    <option predef="window, define, require, module" />
   </component>
 </project>
-

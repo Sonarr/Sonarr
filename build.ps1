@@ -221,14 +221,11 @@ Function PackageTests()
 Function RunGulp()
 {
    Write-Host "##teamcity[progressStart 'Running Gulp']"
-   $gulpPath = '.\node_modules\gulp\bin\gulp'
    Invoke-Expression  'npm install'
    CheckExitCode
 
-   Invoke-Expression  ('node ' + $gulpPath + ' build') -ErrorAction Continue -Verbose
+   Invoke-Expression 'gulp build' -ErrorAction Continue -Verbose
    CheckExitCode
-
-   Remove-Item $outputFolder\UI\build.txt -ErrorAction Continue
 
    Write-Host "##teamcity[progressFinish 'Running Gulp']"
 }

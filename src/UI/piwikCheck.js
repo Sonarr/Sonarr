@@ -9,9 +9,3 @@ if(window.NzbDrone.Analytics) {
     g.src = 'http://piwik.nzbdrone.com/piwik.js';
     s.parentNode.insertBefore(g, s);
 }
-
-// piwik is used to send anonymous information about your browser and which parts of the web interface you use to Sonarr servers.
-// We use this information to prioritize features and browser support.
-// We will NEVER include any personal information or any information that could identify you.
-//
-// You can opt out of this in general settings

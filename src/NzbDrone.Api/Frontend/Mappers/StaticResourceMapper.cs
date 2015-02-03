@@ -27,6 +27,7 @@ namespace NzbDrone.Api.Frontend.Mappers
         {
             return resourceUrl.StartsWith("/Content") ||
                    resourceUrl.EndsWith(".js") ||
+                   resourceUrl.EndsWith(".map") ||
                    resourceUrl.EndsWith(".css") ||
                    (resourceUrl.EndsWith(".ico") && !resourceUrl.Equals("/favicon.ico")) ||
                    resourceUrl.EndsWith(".swf");

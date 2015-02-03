@@ -1,15 +1,9 @@
-define(
-    [
-        'marionette',
-        'backbone'
-    ], function (Marionette, Backbone) {
-        'use strict';
-        var reqres = new Backbone.Wreqr.RequestResponse();
+var Wreqr = require('./JsLibraries/backbone.wreqr');
 
-        reqres.Requests = {
-            GetEpisodeFileById             : 'GetEpisodeFileById',
-            GetAlternateNameBySeasonNumber : 'GetAlternateNameBySeasonNumber'
-        };
+var reqres = new Wreqr.RequestResponse();
+reqres.Requests = {
+    GetEpisodeFileById             : 'GetEpisodeFileById',
+    GetAlternateNameBySeasonNumber : 'GetAlternateNameBySeasonNumber'
+};
 
-        return reqres;
-    });
+module.exports = reqres;

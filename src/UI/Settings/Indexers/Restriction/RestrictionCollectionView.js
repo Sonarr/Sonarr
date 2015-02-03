@@ -1,27 +1,21 @@
-'use strict';
-define([
-    'AppLayout',
-    'marionette',
-    'Settings/Indexers/Restriction/RestrictionItemView',
-    'Settings/Indexers/Restriction/RestrictionEditView',
-    'Tags/TagHelpers',
-    'bootstrap'
-], function (AppLayout, Marionette, RestrictionItemView, EditView) {
+var AppLayout = require('../../../AppLayout');
+var Marionette = require('marionette');
+var RestrictionItemView = require('./RestrictionItemView');
+var EditView = require('./RestrictionEditView');
+require('../../../Tags/TagHelpers');
+require('bootstrap');
 
-    return Marionette.CompositeView.extend({
-        template : 'Settings/Indexers/Restriction/RestrictionCollectionViewTemplate',
-        itemViewContainer : '.x-rows',
-        itemView : RestrictionItemView,
-
-        events: {
-            'click .x-add'    : '_addMapping'
-        },
-
-        _addMapping: function() {
-            var model = this.collection.create({ tags: [] });
-
-            var view = new EditView({ model: model, targetCollection: this.collection});
-            AppLayout.modalRegion.show(view);
-        }
-    });
+module.exports = Marionette.CompositeView.extend({
+    template          : 'Settings/Indexers/Restriction/RestrictionCollectionViewTemplate',
+    itemViewContainer : '.x-rows',
+    itemView          : RestrictionItemView,
+    events            : {"click .x-add" : '_addMapping'},
+    _addMapping       : function(){
+        var model = this.collection.create({tags : []});
+        var view = new EditView({
+            model            : model,
+            targetCollection : this.collection
+        });
+        AppLayout.modalRegion.show(view);
+    }
 });

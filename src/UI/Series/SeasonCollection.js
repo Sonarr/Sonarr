@@ -1,14 +1,9 @@
-'use strict';
-define(
-    [
-        'backbone',
-        'Series/SeasonModel'
-    ], function (Backbone, SeasonModel) {
-        return Backbone.Collection.extend({
-            model: SeasonModel,
+var Backbone = require('backbone');
+var SeasonModel = require('./SeasonModel');
 
-            comparator: function (season) {
-                return -season.get('seasonNumber');
-            }
-        });
-    });
+module.exports = Backbone.Collection.extend({
+    model      : SeasonModel,
+    comparator : function(season){
+        return -season.get('seasonNumber');
+    }
+});

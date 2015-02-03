@@ -1,10 +1,4 @@
-'use strict';
-define(
-    [
-        'marionette',
-        'SeasonPass/SeriesLayout'
-    ], function (Marionette, SeriesLayout) {
-        return Marionette.CollectionView.extend({
-            itemView: SeriesLayout
-        });
-    });
+var Marionette = require('marionette');
+var SeriesLayout = require('./SeriesLayout');
+
+module.exports = Marionette.CollectionView.extend({itemView : SeriesLayout});

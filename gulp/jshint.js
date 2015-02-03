@@ -15,6 +15,7 @@ gulp.task('jshint', function () {
             '-W100': false, //Silently deleted characters (in locales)
             'undef': true,
             'globals': {
+                'module': true,
                 'require': true,
                 'define': true,
                 'window': true,

@@ -1,30 +1,19 @@
-'use strict';
+var $ = require('jquery');
+var StatusModel = require('../System/StatusModel');
+var ZeroClipboard = require('zero.clipboard');
+var Messenger = require('../Shared/Messenger');
 
-define([
-    'jquery',
-    'System/StatusModel',
-    'zero.clipboard',
-    'Shared/Messenger'
-],
-    function ($, StatusModel, ZeroClipboard, Messenger) {
-
-    $.fn.copyToClipboard = function (input) {
+module.exports = (function(){
+    $.fn.copyToClipboard = function(input){
         var moviePath = StatusModel.get('urlBase') + '/Content/zero.clipboard.swf';
-
-        var client = new ZeroClipboard(this, {
-            moviePath: moviePath
-        });
-
-        client.on('load', function(client) {
-            client.on('dataRequested', function (client) {
+        var client = new ZeroClipboard(this, {moviePath : moviePath});
+        client.on('load', function(client){
+            client.on('dataRequested', function(client){
                 client.setText(input.val());
             });
-
-            client.on('complete', function() {
-                Messenger.show({
-                    message: 'Copied text to clipboard'
-                });
-            } );
-        } );
+            client.on('complete', function(){
+                Messenger.show({message : 'Copied text to clipboard'});
+            });
+        });
     };
-});
+}).call(this);

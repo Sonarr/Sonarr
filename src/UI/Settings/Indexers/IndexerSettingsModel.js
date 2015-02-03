@@ -1,11 +1,7 @@
-'use strict';
+var SettingsModelBase = require('../SettingsModelBase');
 
-define([
-    'Settings/SettingsModelBase'
-], function (SettingsModelBase) {
-    return SettingsModelBase.extend({
-        url           : window.NzbDrone.ApiRoot + '/config/indexer',
-        successMessage: 'Indexer settings saved',
-        errorMessage  : 'Failed to save indexer settings'
-    });
+module.exports = SettingsModelBase.extend({
+    url            : window.NzbDrone.ApiRoot + '/config/indexer',
+    successMessage : 'Indexer settings saved',
+    errorMessage   : 'Failed to save indexer settings'
 });

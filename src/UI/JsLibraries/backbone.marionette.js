@@ -2324,6 +2324,6 @@ _.extend(Marionette.Module, {
 });
 
 
-
+  window.Marionette = Marionette;
   return Marionette;
 })(this, Backbone, _);

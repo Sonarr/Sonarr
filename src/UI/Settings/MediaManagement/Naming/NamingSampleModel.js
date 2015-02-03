@@ -1,9 +1,3 @@
-'use strict';
-define(
-    [
-        'backbone'
-    ], function (Backbone) {
-        return  Backbone.Model.extend({
-            url: window.NzbDrone.ApiRoot + '/config/naming/samples'
-        });
-    });
+var Backbone = require('backbone');
+
+module.exports = Backbone.Model.extend({url : window.NzbDrone.ApiRoot + '/config/naming/samples'});

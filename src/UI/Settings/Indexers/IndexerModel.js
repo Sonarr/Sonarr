@@ -1,9 +1,3 @@
-'use strict';
+var ProviderSettingsModelBase = require('../ProviderSettingsModelBase');
 
-define([
-    'Settings/ProviderSettingsModelBase'
-], function (ProviderSettingsModelBase) {
-    return ProviderSettingsModelBase.extend({
-
-    });
-});
+module.exports = ProviderSettingsModelBase.extend({});

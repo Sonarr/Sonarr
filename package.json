@@ -1,8 +1,8 @@
 {
   "name": "Sonarr",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Sonarr",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "preinstall": ""
   },
@@ -15,10 +15,10 @@
   "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
   "readmeFilename": "readme.md",
   "dependencies": {
+    "del": "0.1.3",
     "fs-extra": "0.12.0",
     "gulp": "3.8.10",
     "gulp-cached": "1.0.1",
-    "del": "0.1.3",
     "gulp-concat": "2.4.2",
     "gulp-declare": "0.3.0",
     "gulp-handlebars": "2.2.0",
@@ -26,10 +26,11 @@
     "gulp-less": "1.3.6",
     "gulp-print": "1.1.0",
     "gulp-replace": "0.5.0",
+    "gulp-run": "1.6.6",
+    "webpack": "1.4.15",
+    "gulp-webpack": "1.2.0",
     "gulp-wrap": "0.5.0",
-    "gulp-wrap-amd": "0.3.1",
     "jshint-stylish": "1.0.0",
-    "requirejs": "2.1.15",
     "run-sequence": "1.0.2",
     "streamqueue": "0.1.1"
   }

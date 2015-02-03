@@ -1,13 +1,7 @@
-'use strict';
+var Backbone = require('backbone');
+var NotificationModel = require('./NotificationModel');
 
-define([
-    'backbone',
-    'Settings/Notifications/NotificationModel'
-], function (Backbone, NotificationModel) {
-
-    return Backbone.Collection.extend({
-        model: NotificationModel,
-        url  : window.NzbDrone.ApiRoot + '/notification'
-
-    });
+module.exports = Backbone.Collection.extend({
+    model : NotificationModel,
+    url   : window.NzbDrone.ApiRoot + '/notification'
 });

@@ -1,23 +1,13 @@
-'use strict';
-define(
-    [
-        'marionette'
-    ], function (Marionette) {
+var Marionette = require('marionette');
 
-        return  Marionette.ItemView.extend({
-            template: 'Series/Details/InfoViewTemplate',
-
-            initialize: function (options) {
-                this.episodeFileCollection = options.episodeFileCollection;
-
-                this.listenTo(this.model, 'change', this.render);
-                this.listenTo(this.episodeFileCollection, 'sync', this.render);
-            },
-
-            templateHelpers: function() {
-                return {
-                    fileCount: this.episodeFileCollection.length
-                };
-            }
-        });
-    });
+module.exports = Marionette.ItemView.extend({
+    template        : 'Series/Details/InfoViewTemplate',
+    initialize      : function(options){
+        this.episodeFileCollection = options.episodeFileCollection;
+        this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.episodeFileCollection, 'sync', this.render);
+    },
+    templateHelpers : function(){
+        return {fileCount : this.episodeFileCollection.length};
+    }
+});

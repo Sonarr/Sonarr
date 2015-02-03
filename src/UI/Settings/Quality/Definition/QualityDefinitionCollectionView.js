@@ -1,16 +1,8 @@
-'use strict';
+var Marionette = require('marionette');
+var QualityDefinitionItemView = require('./QualityDefinitionItemView');
 
-define(
-    [
-        'marionette',
-        'Settings/Quality/Definition/QualityDefinitionItemView'
-    ], function (Marionette, QualityDefinitionItemView) {
-    
-        return Marionette.CompositeView.extend({
-            template: 'Settings/Quality/Definition/QualityDefinitionCollectionTemplate',
-            
-            itemViewContainer: '.x-rows',
-            
-            itemView: QualityDefinitionItemView
-        });
-    });
+module.exports = Marionette.CompositeView.extend({
+    template          : 'Settings/Quality/Definition/QualityDefinitionCollectionTemplate',
+    itemViewContainer : '.x-rows',
+    itemView          : QualityDefinitionItemView
+});

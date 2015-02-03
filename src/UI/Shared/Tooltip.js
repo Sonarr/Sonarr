@@ -1,18 +1,9 @@
-'use strict';
-define(
-    [
-        'jquery'
-    ], function ($) {
-        return {
+var $ = require('jquery');
 
-            appInitializer: function () {
-                console.log('starting signalR');
-
-                $('body').tooltip({
-                    selector: '[title]'
-                });
-
-                return this;
-            }
-        };
-    });
+module.exports = {
+    appInitializer : function(){
+        console.log('starting signalR');
+        $('body').tooltip({selector : '[title]'});
+        return this;
+    }
+};

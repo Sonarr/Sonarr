@@ -1,12 +1,7 @@
-'use strict';
-define(
-    [
-        'backbone',
-        'Settings/Profile/Delay/DelayProfileModel'
-    ], function (Backbone, DelayProfileModel) {
+var Backbone = require('backbone');
+var DelayProfileModel = require('./DelayProfileModel');
 
-        return Backbone.Collection.extend({
-            model: DelayProfileModel,
-            url  : window.NzbDrone.ApiRoot + '/delayprofile'
-        });
-    });
+module.exports = Backbone.Collection.extend({
+    model : DelayProfileModel,
+    url   : window.NzbDrone.ApiRoot + '/delayprofile'
+});

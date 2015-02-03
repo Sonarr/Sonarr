@@ -19,6 +19,8 @@
         <JSCodeStyleSettings>
           <option name="SPACE_BEFORE_PROPERTY_COLON" value="true" />
           <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
+          <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
+          <option name="OBJECT_LITERAL_WRAP" value="2" />
         </JSCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
@@ -29,14 +31,18 @@
           </indentOptions>
         </codeStyleSettings>
         <codeStyleSettings language="JavaScript">
+          <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="true" />
           <option name="KEEP_LINE_BREAKS" value="false" />
           <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
           <option name="ELSE_ON_NEW_LINE" value="true" />
           <option name="CATCH_ON_NEW_LINE" value="true" />
           <option name="FINALLY_ON_NEW_LINE" value="true" />
+          <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
           <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
-          <option name="METHOD_PARAMETERS_WRAP" value="5" />
-          <option name="ARRAY_INITIALIZER_WRAP" value="2" />
+          <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_METHOD_LBRACE" value="false" />
+          <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="1" />
           <option name="IF_BRACE_FORCE" value="3" />
           <option name="DOWHILE_BRACE_FORCE" value="3" />
           <option name="WHILE_BRACE_FORCE" value="3" />
@@ -47,4 +53,3 @@
     <option name="USE_PER_PROJECT_SETTINGS" value="true" />
   </component>
 </project>
-

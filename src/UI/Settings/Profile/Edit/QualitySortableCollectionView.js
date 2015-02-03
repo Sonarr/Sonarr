@@ -1,22 +1,13 @@
-'use strict';
-define(
-    [
-        'backbone.collectionview',
-        'Settings/Profile/Edit/EditProfileItemView'
-    ], function (BackboneSortableCollectionView, EditProfileItemView) {
-        return BackboneSortableCollectionView.extend({
+var BackboneSortableCollectionView = require('backbone.collectionview');
+var EditProfileItemView = require('./EditProfileItemView');
 
-            className: 'qualities',
-            modelView: EditProfileItemView,
-
-            attributes: {
-                'validation-name': 'items'
-            },
-
-            events: {
-                'click li, td'    : '_listItem_onMousedown',
-                'dblclick li, td' : '_listItem_onDoubleClick',
-                'keydown'         : '_onKeydown'
-            }
-        });
-    });
+module.exports = BackboneSortableCollectionView.extend({
+    className  : 'qualities',
+    modelView  : EditProfileItemView,
+    attributes : {"validation-name" : 'items'},
+    events     : {
+        "click li, td"    : '_listItem_onMousedown',
+        "dblclick li, td" : '_listItem_onDoubleClick',
+        "keydown"         : '_onKeydown'
+    }
+});

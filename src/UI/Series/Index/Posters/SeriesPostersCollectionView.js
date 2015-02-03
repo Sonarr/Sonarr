@@ -1,14 +1,8 @@
-'use strict';
+var Marionette = require('marionette');
+var PosterItemView = require('./SeriesPostersItemView');
 
-define(
-    [
-        'marionette',
-        'Series/Index/Posters/SeriesPostersItemView'
-    ], function (Marionette, PosterItemView) {
-
-        return Marionette.CompositeView.extend({
-            itemView         : PosterItemView,
-            itemViewContainer: '#x-series-posters',
-            template         : 'Series/Index/Posters/SeriesPostersCollectionViewTemplate'
-        });
-    });
+module.exports = Marionette.CompositeView.extend({
+    itemView          : PosterItemView,
+    itemViewContainer : '#x-series-posters',
+    template          : 'Series/Index/Posters/SeriesPostersCollectionViewTemplate'
+});

@@ -1,11 +1,7 @@
-'use strict';
+var Backbone = require('backbone');
+var DiskSpaceModel = require('./DiskSpaceModel');
 
-define(['backbone',
-        'System/Info/DiskSpace/DiskSpaceModel'],
-function(Backbone, DiskSpaceModel) {
-    return Backbone.Collection.extend({
-
-        url   : window.NzbDrone.ApiRoot +'/diskspace',
-        model : DiskSpaceModel
-    });
+module.exports = Backbone.Collection.extend({
+    url   : window.NzbDrone.ApiRoot + '/diskspace',
+    model : DiskSpaceModel
 });

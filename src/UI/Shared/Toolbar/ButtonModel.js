@@ -1,15 +1,11 @@
-'use strict';
-define(
-    [
-        'underscore',
-        'backbone'
-    ], function (_, Backbone) {
-        return Backbone.Model.extend({
-            defaults: {
-                'target' : '/nzbdrone/route',
-                'title'  : '',
-                'active' : false,
-                'tooltip': undefined
-            }
-        });
-    });
+var _ = require('underscore');
+var Backbone = require('backbone');
+
+module.exports = Backbone.Model.extend({
+    defaults : {
+        "target"  : '/nzbdrone/route',
+        "title"   : '',
+        "active"  : false,
+        "tooltip" : undefined
+    }
+});

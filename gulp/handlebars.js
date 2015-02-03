@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var handlebars = require('gulp-handlebars');
 var declare = require('gulp-declare');
 var concat = require('gulp-concat');
-var wrapAmd = require('gulp-wrap-amd');
 var wrap = require("gulp-wrap");
 var path = require('path');
 var streamqueue = require('streamqueue');
@@ -48,10 +47,6 @@ gulp.task('handlebars', function () {
         partialStream,
         coreStream
     ).pipe(concat('templates.js'))
-        .pipe(wrapAmd({
-            deps: ['handlebars'],
-            params: ['Handlebars'],
-            exports: 'this["T"]'
-        }))
+
         .pipe(gulp.dest(paths.dest.root));
 });

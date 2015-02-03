@@ -1,13 +1,7 @@
-'use strict';
+var Backbone = require('backbone');
+var ProfileModel = require('../../Profile/ProfileModel');
 
-define(
-    [
-        'backbone',
-        'Profile/ProfileModel'
-    ], function (Backbone, ProfileModel) {
-
-        return Backbone.Collection.extend({
-            model: ProfileModel,
-            url  : window.NzbDrone.ApiRoot + '/profile/schema'
-        });
-    });
+module.exports = Backbone.Collection.extend({
+    model : ProfileModel,
+    url   : window.NzbDrone.ApiRoot + '/profile/schema'
+});

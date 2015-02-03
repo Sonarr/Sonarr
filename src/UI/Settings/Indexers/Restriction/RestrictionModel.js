@@ -1,10 +1,4 @@
-'use strict';
+var $ = require('jquery');
+var DeepModel = require('backbone.deepmodel');
 
-define([
-    'jquery',
-    'backbone.deepmodel'
-], function ($, DeepModel) {
-    return DeepModel.DeepModel.extend({
-
-    });
-});
+module.exports = DeepModel.DeepModel.extend({});

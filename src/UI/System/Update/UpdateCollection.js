@@ -1,11 +1,7 @@
-'use strict';
-define(
-    [
-        'backbone',
-        'System/Update/UpdateModel'
-    ], function (Backbone, UpdateModel) {
-        return  Backbone.Collection.extend({
-            url  : window.NzbDrone.ApiRoot + '/update',
-            model: UpdateModel
-        });
-    });
+var Backbone = require('backbone');
+var UpdateModel = require('./UpdateModel');
+
+module.exports = Backbone.Collection.extend({
+    url   : window.NzbDrone.ApiRoot + '/update',
+    model : UpdateModel
+});
