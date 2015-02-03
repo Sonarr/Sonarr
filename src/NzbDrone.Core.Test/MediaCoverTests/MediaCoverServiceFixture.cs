@@ -11,6 +11,7 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {
@@ -110,10 +111,55 @@ namespace NzbDrone.Core.Test.MediaCoverTests
                   .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(true);
 
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.GetFileSize(It.IsAny<string>()))
+                  .Returns(1000);
+
             Subject.HandleAsync(new SeriesUpdatedEvent(_series));
 
             Mocker.GetMock<IImageResizer>()
                   .Verify(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+        }
+
+        [Test]
+        public void should_resize_covers_if_existing_is_empty()
+        {
+            Mocker.GetMock<ICoverExistsSpecification>()
+                  .Setup(v => v.AlreadyExists(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.GetFileSize(It.IsAny<string>()))
+                  .Returns(0);
+
+            Subject.HandleAsync(new SeriesUpdatedEvent(_series));
+
+            Mocker.GetMock<IImageResizer>()
+                  .Verify(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_log_error_if_resize_failed()
+        {
+            Mocker.GetMock<ICoverExistsSpecification>()
+                  .Setup(v => v.AlreadyExists(It.IsAny<string>(), It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
+                  .Returns(false);
+
+            Mocker.GetMock<IImageResizer>()
+                  .Setup(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                  .Throws<ApplicationException>();
+
+            Subject.HandleAsync(new SeriesUpdatedEvent(_series));
+
+            ExceptionVerification.ExpectedErrors(1);
         }
     }
 }

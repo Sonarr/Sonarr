@@ -88,16 +88,13 @@ namespace NzbDrone.Core.MediaCover
             foreach (var cover in series.Images)
             {
                 var fileName = GetCoverPath(series.Id, cover.CoverType);
+                var alreadyExists = false;
                 try
                 {
-                    if (!_coverExistsSpecification.AlreadyExists(cover.Url, fileName))
+                    alreadyExists = _coverExistsSpecification.AlreadyExists(cover.Url, fileName);
+                    if (!alreadyExists)
                     {
                         DownloadCover(series, cover);
-                        EnsureResizedCovers(series, cover, true);
-                    }
-                    else
-                    {
-                        EnsureResizedCovers(series, cover, false);
                     }
                 }
                 catch (WebException e)
@@ -107,6 +104,15 @@ namespace NzbDrone.Core.MediaCover
                 catch (Exception e)
                 {
                     _logger.ErrorException("Couldn't download media cover for " + series, e);
+                }
+
+                try
+                {
+                    EnsureResizedCovers(series, cover, !alreadyExists);
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("Couldn't resize media cover for " + series + " using full size image instead.", e);
                 }
             }
         }
@@ -148,7 +154,7 @@ namespace NzbDrone.Core.MediaCover
                 var mainFileName = GetCoverPath(series.Id, cover.CoverType);
                 var resizeFileName = GetCoverPath(series.Id, cover.CoverType, height);
 
-                if (forceResize || !_diskProvider.FileExists(resizeFileName))
+                if (forceResize || !_diskProvider.FileExists(resizeFileName) || _diskProvider.GetFileSize(resizeFileName) == 0)
                 {
                     _logger.Debug("Resizing {0}-{1} for {2}", cover.CoverType, height, series);
 
