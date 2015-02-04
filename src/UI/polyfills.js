@@ -1,16 +1,11 @@
 window.console = window.console || {};
-window.console.log = window.console.log || function(){
-};
-window.console.group = window.console.group || function(){
-};
-window.console.groupEnd = window.console.groupEnd || function(){
-};
-window.console.debug = window.console.debug || function(){
-};
-window.console.warn = window.console.warn || function(){
-};
-window.console.assert = window.console.assert || function(){
-};
+window.console.log = window.console.log || function(){};
+window.console.group = window.console.group || function(){};
+window.console.groupEnd = window.console.groupEnd || function(){};
+window.console.debug = window.console.debug || function(){};
+window.console.warn = window.console.warn || function(){};
+window.console.assert = window.console.assert || function(){};
+
 if(!String.prototype.startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
         enumerable   : false,
@@ -22,6 +17,7 @@ if(!String.prototype.startsWith) {
         }
     });
 }
+
 if(!String.prototype.endsWith) {
     Object.defineProperty(String.prototype, 'endsWith', {
         enumerable   : false,
@@ -35,6 +31,7 @@ if(!String.prototype.endsWith) {
         }
     });
 }
+
 if(!('contains' in String.prototype)) {
     String.prototype.contains = function(str, startIndex){
         return -1 !== String.prototype.indexOf.call(this, str, startIndex);
