@@ -45,12 +45,13 @@ module.exports = {
   },
   module: {
        //this doesn't work yet. wainting for https://github.com/spenceralger/rcloader/issues/5
-       preLoaders: [
+       /*preLoaders: [
            {
                test: /\.js$/, // include .js files
                loader: "jshint-loader",
                exclude: [/JsLibraries/,/node_modules/]
            }
        ]
+       */
    }
 };
