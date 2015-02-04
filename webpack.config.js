@@ -10,7 +10,7 @@ module.exports = {
       'backbone'                : 'Shims/backbone',
       'moment'                  : 'JsLibraries/moment',
       'filesize'                : 'JsLibraries/filesize',
-      'handlebars'              : 'Shared/Shims/handlebars',
+      'handlebars'              : 'Shims/handlebars',
       'handlebars.helpers'      : 'JsLibraries/handlebars.helpers',
       'bootstrap'               : 'JsLibraries/bootstrap',
       'backbone.deepmodel'      : 'JsLibraries/backbone.deep.model',
