@@ -185,8 +185,11 @@ define(
             },
 
             _addSeries: function (searchForMissingEpisodes) {
-                this.ui.addButton.addClass('disabled');
-                this.ui.addSearchButton.addClass('disabled');
+                var addButton = this.ui.addButton;
+                var addSearchButton = this.ui.addSearchButton;
+
+                addButton.addClass('disabled');
+                addSearchButton.addClass('disabled');
 
                 var profile = this.ui.profile.val();
                 var rootFolderPath = this.ui.rootFolder.children(':selected').text();
@@ -216,8 +219,8 @@ define(
                 }
 
                 promise.always(function () {
-                    self.ui.addButton.removeClass('disabled');
-                    self.ui.addSearchButton.removeClass('disabled');
+                    addButton.removeClass('disabled');
+                    addSearchButton.removeClass('disabled');
                 });
 
                 promise.done(function () {
