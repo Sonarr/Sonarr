@@ -1,4 +1,5 @@
 var path = require('path');
+var stylish = require('jshint-stylish');
 
 module.exports = {
   entry     : 'main.js',
@@ -37,8 +38,19 @@ module.exports = {
       'bootstrap.tagsinput'     : 'JsLibraries/bootstrap.tagsinput',
       'libs'                    : 'JsLibraries/'
     }
-  }, output : {
+  },
+  output : {
     filename : '_output/UI/main.js',
     sourceMapFilename : '_output/UI/main.map'
-  }
+  },
+  module: {
+       //this doesn't work yet. wainting for https://github.com/spenceralger/rcloader/issues/5
+       preLoaders: [
+           {
+               test: /\.js$/, // include .js files
+               loader: "jshint-loader",
+               exclude: [/JsLibraries/,/node_modules/]
+           }
+       ]
+   }
 };

@@ -32,6 +32,7 @@
     "gulp-wrap": "0.5.0",
     "jshint-stylish": "1.0.0",
     "run-sequence": "1.0.2",
-    "streamqueue": "0.1.1"
+    "streamqueue": "0.1.1",
+    "jshint-loader" : "0.8.1"
   }
 }

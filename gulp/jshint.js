@@ -8,20 +8,6 @@ var paths = require('./paths.js');
 gulp.task('jshint', function () {
     return gulp.src([paths.src.scripts, paths.src.exclude.libs])
         .pipe(cache('jshint'))
-        .pipe(jshint({
-            '-W030': false,
-            '-W064': false,
-            '-W097': false, //Use the function form of “use strict”
-            '-W100': false, //Silently deleted characters (in locales)
-            'undef': true,
-            'globals': {
-                'module': true,
-                'require': true,
-                'define': true,
-                'window': true,
-                'document': true,
-                'console': true
-            }
-        }))
+        .pipe(jshint())
         .pipe(jshint.reporter(stylish));
 });

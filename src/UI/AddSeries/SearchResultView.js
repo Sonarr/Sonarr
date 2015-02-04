@@ -241,10 +241,6 @@ define(
 
                     vent.trigger(vent.Events.SeriesAdded, { series: self.model });
                 });
-
-                promise.fail(function () {
-                    icon.removeClass('icon-spin icon-spinner disabled').addClass('icon-search');
-                });
             },
 
             _rootFoldersUpdated: function () {
