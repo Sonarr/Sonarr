@@ -75,6 +75,11 @@ namespace NzbDrone.Core.Authentication
         {
             var user = _repo.FindUser(username.ToLowerInvariant());
 
+            if (user == null)
+            {
+                return null;
+            }
+
             if (user.Password == password.SHA256Hash())
             {
                 return user;
