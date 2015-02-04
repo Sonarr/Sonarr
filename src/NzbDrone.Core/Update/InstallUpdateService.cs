@@ -147,13 +147,12 @@ namespace NzbDrone.Core.Update
 
             if (scriptPath.IsNullOrWhiteSpace())
             {
-                throw new ArgumentException("Update Script has not been defined");
+                throw new UpdateFailedException("Update Script has not been defined");
             }
 
             if (!_diskProvider.FileExists(scriptPath, StringComparison.Ordinal))
             {
-                var message = String.Format("Update Script: '{0}' does not exist", scriptPath);
-                throw new FileNotFoundException(message, scriptPath);
+                throw new UpdateFailedException("Update Script: '{0}' does not exist", scriptPath);
             }
 
             _logger.Info("Removing NzbDrone.Update");
