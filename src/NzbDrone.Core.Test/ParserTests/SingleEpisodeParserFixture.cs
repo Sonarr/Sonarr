@@ -103,8 +103,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Community - S01E09 - Debate 109", "Community", 1, 9)]
         [TestCase("Entourage - S02E02 - My Maserati Does 185", "Entourage", 2, 2)]
         [TestCase("6x13 - The Family Guy 100th Episode Special", "", 6, 13)]
-//        [TestCase("Heroes - S01E01 - Genesis 101 [HDTV-720p]", "Heroes", 1, 1)]
-        [TestCase("The 100 S02E01 HDTV x264-KILLERS [eztv]", "The 100", 2, 1)]
+        //[TestCase("Heroes - S01E01 - Genesis 101 [HDTV-720p]", "Heroes", 1, 1)]
+        //[TestCase("The 100 S02E01 HDTV x264-KILLERS [eztv]", "The 100", 2, 1)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
