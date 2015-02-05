@@ -159,7 +159,8 @@ namespace NzbDrone.Core.Test.MediaCoverTests
 
             Subject.HandleAsync(new SeriesUpdatedEvent(_series));
 
-            ExceptionVerification.ExpectedErrors(1);
+            Mocker.GetMock<IImageResizer>()
+                  .Verify(v => v.Resize(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(2));
         }
     }
 }
