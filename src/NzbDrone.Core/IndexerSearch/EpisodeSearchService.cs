@@ -115,7 +115,10 @@ namespace NzbDrone.Core.IndexerSearch
             if (message.SeriesId > 0)
             {
                 episodes = _episodeService.GetEpisodeBySeries(message.SeriesId)
-                                          .Where(e => e.Monitored && !e.HasFile)
+                                          .Where(e => e.Monitored &&
+                                                 !e.HasFile &&
+                                                 e.AirDateUtc.HasValue &&
+                                                 e.AirDateUtc.Value.Before(DateTime.UtcNow))
                                           .ToList();
             }
 
