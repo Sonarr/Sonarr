@@ -106,14 +106,7 @@ namespace NzbDrone.Core.MediaCover
                     _logger.ErrorException("Couldn't download media cover for " + series, e);
                 }
 
-                try
-                {
-                    EnsureResizedCovers(series, cover, !alreadyExists);
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("Couldn't resize media cover for " + series + " using full size image instead.", e);
-                }
+                EnsureResizedCovers(series, cover, !alreadyExists);
             }
         }
 
@@ -158,7 +151,14 @@ namespace NzbDrone.Core.MediaCover
                 {
                     _logger.Debug("Resizing {0}-{1} for {2}", cover.CoverType, height, series);
 
-                    _resizer.Resize(mainFileName, resizeFileName, height);
+                    try
+                    {
+                        _resizer.Resize(mainFileName, resizeFileName, height);
+                    }
+                    catch
+                    {
+                        _logger.Debug("Couldn't resize media cover {0}-{1} for {2}, using full size image instead.", cover.CoverType, height, series);
+                    }
                 }
             }
         }

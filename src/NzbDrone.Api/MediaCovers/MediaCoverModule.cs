@@ -29,7 +29,7 @@ namespace NzbDrone.Api.MediaCovers
         {
             var filePath = Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover", seriesId.ToString(), filename);
 
-            if (!_diskProvider.FileExists(filePath))
+            if (!_diskProvider.FileExists(filePath) || _diskProvider.GetFileSize(filePath) == 0)
             {
                 // Return the full sized image if someone requests a non-existing resized one.
                 // TODO: This code can be removed later once everyone had the update for a while.
