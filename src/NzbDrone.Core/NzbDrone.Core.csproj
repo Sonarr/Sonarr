@@ -457,6 +457,9 @@
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\ImmortalSeed\ImmortalSeed.cs" />
+    <Compile Include="Indexers\ImmortalSeed\ImmortalSeedRequestGenerator.cs" />
+    <Compile Include="Indexers\ImmortalSeed\ImmortalSeedSettings.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerFactory.cs" />
