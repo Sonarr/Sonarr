@@ -39,9 +39,12 @@
           <option name="CATCH_ON_NEW_LINE" value="true" />
           <option name="FINALLY_ON_NEW_LINE" value="true" />
           <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+          <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
           <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
+          <option name="CALL_PARAMETERS_WRAP" value="1" />
+          <option name="BINARY_OPERATION_WRAP" value="1" />
           <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
-          <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="2" />
           <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
           <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
           <option name="IF_BRACE_FORCE" value="3" />

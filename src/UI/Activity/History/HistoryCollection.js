@@ -27,11 +27,26 @@ var Collection = PageableCollection.extend({
     },
 
     filterModes : {
-        'all'      : [null, null],
-        'grabbed'  : ['eventType', '1'],
-        'imported' : ['eventType', '3'],
-        'failed'   : ['eventType', '4'],
-        'deleted'  : ['eventType', '5']
+        'all'      : [
+            null,
+            null
+        ],
+        'grabbed'  : [
+            'eventType',
+            '1'
+        ],
+        'imported' : [
+            'eventType',
+            '3'
+        ],
+        'failed'   : [
+            'eventType',
+            '4'
+        ],
+        'deleted'  : [
+            'eventType',
+            '5'
+        ]
     },
 
     sortMappings : {

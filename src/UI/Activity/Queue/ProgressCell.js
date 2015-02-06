@@ -14,7 +14,7 @@ module.exports = NzbDroneCell.extend({
                 var progress = 100 - (this.model.get('sizeleft') / this.model.get('size') * 100);
 
                 this.$el.html('<div class="progress" title="{0}%">'.format(progress.toFixed(1)) +
-                '<div class="progress-bar progress-bar-purple" style="width: {0}%;"></div></div>'.format(progress));
+                              '<div class="progress-bar progress-bar-purple" style="width: {0}%;"></div></div>'.format(progress));
             }
         }
 
