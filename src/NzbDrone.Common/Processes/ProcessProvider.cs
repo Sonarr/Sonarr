@@ -102,7 +102,7 @@ namespace NzbDrone.Common.Processes
         {
             if (OsInfo.IsMonoRuntime && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
             {
-                args = path + " " + args;
+                args = GetMonoArgs(path, args);
                 path = "mono";
             }
 
@@ -161,7 +161,7 @@ namespace NzbDrone.Common.Processes
         {
             if (OsInfo.IsMonoRuntime && path.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
             {
-                args = path + " " + args;
+                args = GetMonoArgs(path, args);
                 path = "mono";
             }
 
@@ -301,6 +301,11 @@ namespace NzbDrone.Common.Processes
             _logger.Debug("Found {0} processes with the name: {1}", processes.Count, name);
 
             return processes;
+        }
+
+        private string GetMonoArgs(string path, string args)
+        {
+            return String.Format("--debug {0} {1}", path, args);
         }
     }
 }
