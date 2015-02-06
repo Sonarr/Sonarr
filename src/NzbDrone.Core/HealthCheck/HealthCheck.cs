@@ -34,10 +34,17 @@ namespace NzbDrone.Core.HealthCheck
 
         private static Uri MakeWikiUrl(String fragment)
         {
-            var rootUri = new Uri("https://github.com/NzbDrone/NzbDrone/wiki/Health-checks");
-            var fragmentUri = new Uri(fragment, UriKind.Relative);
+            var rootUri = new Uri("https://github.com/Sonarr/Sonarr/wiki/Health-checks");
+            if (fragment.StartsWith("#"))
+            { // Mono doesn't understand # and generates a different url than windows.
+                return new Uri(rootUri + fragment);
+            }
+            else
+            {
+                var fragmentUri = new Uri(fragment, UriKind.Relative);
 
-            return new Uri(rootUri, fragmentUri);
+                return new Uri(rootUri, fragmentUri);
+            }
         }
     }
 
