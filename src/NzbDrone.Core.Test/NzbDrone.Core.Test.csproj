@@ -198,6 +198,7 @@
     <Compile Include="IndexerTests\BitMeTvTests\BitMeTvFixture.cs" />
     <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
     <Compile Include="IndexerTests\EztvTests\EztvFixture.cs" />
+    <Compile Include="IndexerTests\ImmortalSeedTests\ImmortalSeedFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabFixture.cs" />
@@ -402,6 +403,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\QueueUnknownPriority.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\RSS\ImmortalSeed.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\RSS\Nyaa.xml">
