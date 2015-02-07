@@ -1,7 +1,8 @@
-var $ = require('jquery');
-
-module.exports = (function(){
+module.exports = function(){
     'use strict';
+
+    var $ = this;
+
     $.fn.spinForPromise = function(promise){
         var self = this;
         if(!promise || promise.state() !== 'pending') {
@@ -43,4 +44,4 @@ module.exports = (function(){
         }
         return this;
     };
-}).call(this);
+};

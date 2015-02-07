@@ -1,5 +1,4 @@
 var $ = require('jquery');
-require('../Mixins/jquery.ajax');
 
 module.exports = {
     get : function(resource){

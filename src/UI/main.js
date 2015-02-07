@@ -16,7 +16,7 @@ require('./jQuery/ToTheTop');
 require('./Instrumentation/StringFormat');
 require('./LifeCycle');
 require('./Hotkeys/Hotkeys');
-require('./Mixins/jquery.ajax');
+require('./Shared/piwikCheck');
 
 new SeriesController();
 new ModalController();
