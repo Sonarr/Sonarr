@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Jobs
 
                     new ScheduledTask
                     { 
-                        Interval = new [] { _configService.RssSyncInterval, 10 }.Max(),
+                        Interval = GetRssSyncInterval(),
                         TypeName = typeof(RssSyncCommand).FullName
                     },
 
@@ -104,6 +104,18 @@ namespace NzbDrone.Core.Jobs
 
                 _scheduledTaskRepository.Upsert(currentDefinition);
             }
+        }
+
+        private int GetRssSyncInterval()
+        {
+            var interval = _configService.RssSyncInterval;
+
+            if (interval > 0 && interval < 10)
+            {
+                return 10;
+            }
+
+            return interval;
         }
 
         public void Handle(CommandExecutedEvent message)
