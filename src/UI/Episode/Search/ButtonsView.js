@@ -1,3 +1,5 @@
 var Marionette = require('marionette');
 
-module.exports = Marionette.ItemView.extend({template : 'Episode/Search/ButtonsViewTemplate'});
+module.exports = Marionette.ItemView.extend({
+    template : 'Episode/Search/ButtonsViewTemplate'
+});
