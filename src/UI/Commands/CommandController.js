@@ -1,4 +1,4 @@
-var vent = require('../vent');
+var vent = require('vent');
 var CommandModel = require('./CommandModel');
 var CommandCollection = require('./CommandCollection');
 var CommandMessengerCollectionView = require('./CommandMessengerCollectionView');

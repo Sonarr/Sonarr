@@ -1,4 +1,4 @@
-var vent = require('../vent');
+var vent = require('vent');
 var _ = require('underscore');
 var Backbone = require('backbone');
 

@@ -1,4 +1,4 @@
-var vent = require('../vent');
+var vent = require('vent');
 var DeepModel = require('backbone.deepmodel');
 var AsChangeTrackingModel = require('../Mixins/AsChangeTrackingModel');
 var Messenger = require('../Shared/Messenger');

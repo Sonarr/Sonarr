@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var _ = require('underscore');
-var vent = require('../vent');
+var vent = require('vent');
 var Marionette = require('marionette');
 var Backbone = require('backbone');
 var GeneralSettingsModel = require('./General/GeneralSettingsModel');

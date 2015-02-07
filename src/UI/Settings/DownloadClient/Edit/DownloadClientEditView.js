@@ -1,4 +1,4 @@
-﻿var vent = require('../../../vent');
+﻿var vent = require('vent');
 var Marionette = require('marionette');
 var DeleteView = require('../Delete/DownloadClientDeleteView');
 var AsModelBoundView = require('../../../Mixins/AsModelBoundView');

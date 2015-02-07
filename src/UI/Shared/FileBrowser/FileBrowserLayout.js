@@ -1,5 +1,5 @@
-var _ = require('underscore');
-var vent = require('../../vent');
+﻿var _ = require('underscore');
+var vent = require('vent');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var FileBrowserCollection = require('./FileBrowserCollection');

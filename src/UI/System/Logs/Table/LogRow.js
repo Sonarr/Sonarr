@@ -1,4 +1,4 @@
-var vent = require('../../../vent');
+var vent = require('vent');
 var Backgrid = require('backgrid');
 
 module.exports = Backgrid.Row.extend({

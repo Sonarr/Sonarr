@@ -1,5 +1,5 @@
 var $ = require('jquery');
-var vent = require('../../../vent');
+var vent = require('vent');
 var Marionette = require('marionette');
 var HistoryDetailsView = require('./HistoryDetailsView');
 

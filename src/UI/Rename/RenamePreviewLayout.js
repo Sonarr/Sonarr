@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var vent = require('../vent');
+var vent = require('vent');
 var Marionette = require('marionette');
 var RenamePreviewCollection = require('./RenamePreviewCollection');
 var RenamePreviewCollectionView = require('./RenamePreviewCollectionView');

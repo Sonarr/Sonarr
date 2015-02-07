@@ -1,5 +1,5 @@
-var $ = require('jquery');
-var vent = require('../vent');
+﻿var $ = require('jquery');
+var vent = require('vent');
 require('../Shared/FileBrowser/FileBrowserLayout');
 require('./DirectoryAutoComplete');
 

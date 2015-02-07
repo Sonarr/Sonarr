@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var vent = require('../../../vent');
+var vent = require('vent');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
 var CommandController = require('../../../Commands/CommandController');

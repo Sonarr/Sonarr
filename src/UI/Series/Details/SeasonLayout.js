@@ -1,4 +1,4 @@
-var vent = require('../../vent');
+﻿var vent = require('vent');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var ToggleCell = require('../../Cells/EpisodeMonitoredCell');

@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var vent = require('../../../vent');
+var vent = require('vent');
 var AppLayout = require('../../../AppLayout');
 var Marionette = require('marionette');
 var DeleteView = require('./RemotePathMappingDeleteView');

@@ -1,4 +1,4 @@
-var vent = require('../vent');
+var vent = require('vent');
 var $ = require('jquery');
 var Messenger = require('./Messenger');
 var StatusModel = require('../System/StatusModel');

@@ -1,4 +1,4 @@
-var vent = require('../vent');
+var vent = require('vent');
 var AppLayout = require('../AppLayout');
 var Marionette = require('marionette');
 var RootFolderLayout = require('./RootFolders/RootFolderLayout');

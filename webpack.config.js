@@ -6,7 +6,7 @@ module.exports = {
   resolve : {
   root : path.join(__dirname, "src", "ui"),
   alias : {
-      'templates'               : '/templates',
+      'vent'                    : 'vent',
       'backbone'                : 'Shims/backbone',
       'moment'                  : 'JsLibraries/moment',
       'filesize'                : 'JsLibraries/filesize',
