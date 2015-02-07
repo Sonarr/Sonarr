@@ -32,7 +32,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             var pathToFile = mapper.Map(resourceUrl);
             var hash = _hashProvider.ComputeMd5(pathToFile).ToBase64();
 
-            return resourceUrl + "?h=" + hash;
+            return resourceUrl + "?h=" + hash.Trim('=');
         }
 
         private static bool ShouldBreakCache(string path)
