@@ -34,6 +34,7 @@ module.exports = (function(){
         }
         return false;
     };
+
     $(document).ajaxError(function(event, xmlHttpRequest, ajaxOptions){
         if(xmlHttpRequest.status >= 200 && xmlHttpRequest.status <= 300) {
             return undefined;

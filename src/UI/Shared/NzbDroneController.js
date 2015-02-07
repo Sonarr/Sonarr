@@ -1,7 +1,9 @@
-var vent = require('../vent');
+﻿var vent = require('../vent');
 var AppLayout = require('../AppLayout');
 var Marionette = require('marionette');
 var NotFoundView = require('./NotFoundView');
+var Messenger = require('messenger');
+
 
 module.exports = Marionette.AppRouter.extend({
     initialize       : function(){
@@ -34,6 +36,20 @@ module.exports = Marionette.AppRouter.extend({
         }
     },
     _onServerUpdated : function(){
+        Messenger.show({
+            message   : 'Sonarr has been updated',
+            hideAfter : 0,
+            id        : 'droneUpdated',
+            actions   : {
+                viewChanges : {
+                    label  : 'View Changes',
+                    action : function(){
+                        window.location = window.NzbDrone.UrlBase + '/system/updates';
+                    }
+                }
+            }
+        });
+
         this.pendingUpdate = true;
     },
     showMainRegion   : function(view){

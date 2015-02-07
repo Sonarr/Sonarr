@@ -17,6 +17,7 @@ require('./Instrumentation/StringFormat');
 require('./LifeCycle');
 require('./Hotkeys/Hotkeys');
 require('./Shared/piwikCheck');
+require('./Shared/VersionChangeMonitor');
 
 new SeriesController();
 new ModalController();
