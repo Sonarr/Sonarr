@@ -122,7 +122,7 @@ namespace Microsoft.AspNet.SignalR
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                return false;
             }
 
             if (!user.Identity.IsAuthenticated)

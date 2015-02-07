@@ -20,7 +20,7 @@ namespace Microsoft.AspNet.SignalR.Transports
         private readonly Action<TextWriter> _writeCursor;
 
         public PersistentResponse()
-            : this(message => true, writer => { })
+            : this(message => false, writer => { })
         {
 
         }
@@ -61,9 +61,10 @@ namespace Microsoft.AspNet.SignalR.Transports
         public bool Aborted { get; set; }
 
         /// <summary>
-        /// True if the connection timed out.
+        /// True if the client should try reconnecting.
         /// </summary>
-        public bool TimedOut { get; set; }
+        // This is set when the host is shutting down.
+        public bool Reconnect { get; set; }
 
         /// <summary>
         /// Signed token representing the list of groups. Updates on change.
@@ -106,7 +107,7 @@ namespace Microsoft.AspNet.SignalR.Transports
                 jsonWriter.WriteValue(1);
             }
 
-            if (TimedOut)
+            if (Reconnect)
             {
                 jsonWriter.WritePropertyName("T");
                 jsonWriter.WriteValue(1);

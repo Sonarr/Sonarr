@@ -18,6 +18,11 @@ namespace Microsoft.AspNet.SignalR.Hosting
         CancellationToken CancellationToken { get; }
 
         /// <summary>
+        /// Gets or sets the status code of the response.
+        /// </summary>
+        int StatusCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the content type of the response.
         /// </summary>
         string ContentType { get; set; }

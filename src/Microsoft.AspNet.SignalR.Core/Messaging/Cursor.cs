@@ -33,8 +33,10 @@ namespace Microsoft.AspNet.SignalR.Messaging
             _escapedKey = minifiedKey;
         }
 
-        public static void WriteCursors(TextWriter textWriter, IList<Cursor> cursors)
+        public static void WriteCursors(TextWriter textWriter, IList<Cursor> cursors, string prefix)
         {
+            textWriter.Write(prefix);
+
             for (int i = 0; i < cursors.Count; i++)
             {
                 if (i > 0)
@@ -48,7 +50,7 @@ namespace Microsoft.AspNet.SignalR.Messaging
             }
         }
 
-        private static void WriteUlongAsHexToBuffer(ulong value, TextWriter textWriter)
+        internal static void WriteUlongAsHexToBuffer(ulong value, TextWriter textWriter)
         {
             // This tracks the length of the output and serves as the index for the next character to be written into the pBuffer.
             // The length could reach up to 16 characters, so at least that much space should remain in the pBuffer.
@@ -114,22 +116,30 @@ namespace Microsoft.AspNet.SignalR.Messaging
             return sb.ToString();
         }
 
-        public static List<Cursor> GetCursors(string cursor)
+        public static List<Cursor> GetCursors(string cursor, string prefix)
         {
-            return GetCursors(cursor, s => s);
+            return GetCursors(cursor, prefix, s => s);
         }
 
-        public static List<Cursor> GetCursors(string cursor, Func<string, string> keyMaximizer)
+        public static List<Cursor> GetCursors(string cursor, string prefix, Func<string, string> keyMaximizer)
         {
-            return GetCursors(cursor, (key, state) => ((Func<string, string>)state).Invoke(key), keyMaximizer);
+            return GetCursors(cursor, prefix, (key, state) => ((Func<string, string>)state).Invoke(key), keyMaximizer);
         }
 
-        public static List<Cursor> GetCursors(string cursor, Func<string, object, string> keyMaximizer, object state)
+        public static List<Cursor> GetCursors(string cursor, string prefix, Func<string, object, string> keyMaximizer, object state)
         {
             // Technically GetCursors should never be called with a null value, so this is extra cautious
             if (String.IsNullOrEmpty(cursor))
             {
                 throw new FormatException(Resources.Error_InvalidCursorFormat);
+            }
+
+            // If the cursor does not begin with the prefix stream, it isn't necessarily a formatting problem.
+            // The cursor with a different prefix might have had different, but also valid, formatting.
+            // Null should be returned so new cursors will be generated
+            if (!cursor.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                return null;
             }
 
             var signals = new HashSet<string>();
@@ -143,8 +153,10 @@ namespace Microsoft.AspNet.SignalR.Messaging
             var sbEscaped = new StringBuilder();
             Cursor parsedCursor;
 
-            foreach (var ch in cursor)
+            for (int i = prefix.Length; i < cursor.Length; i++)
             {
+                var ch = cursor[i];
+
                 // escape can only be true if we are consuming the key
                 if (escape)
                 {

@@ -27,6 +27,18 @@ namespace Microsoft.AspNet.SignalR.Owin
             get { return _callCancelled; }
         }
 
+        public int StatusCode 
+        {
+            get
+            {
+                return _environment.Get<int>(OwinConstants.ResponseStatusCode);
+            }
+            set
+            {
+                _environment[OwinConstants.ResponseStatusCode] = value;
+            }
+        }
+
         public string ContentType
         {
             get { return ResponseHeaders.GetHeader("Content-Type"); }

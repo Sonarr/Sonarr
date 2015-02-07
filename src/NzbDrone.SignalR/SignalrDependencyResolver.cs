@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Infrastructure;
 using NzbDrone.Common.Composition;
 
 namespace NzbDrone.SignalR
@@ -16,7 +15,6 @@ namespace NzbDrone.SignalR
 
         private SignalrDependencyResolver(IContainer container)
         {
-            container.RegisterSingleton(typeof(IPerformanceCounterManager), typeof(NoOpPerformanceCounterManager));
             _container = container;
         }
 

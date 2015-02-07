@@ -71,9 +71,11 @@
     <Compile Include="Infrastructure\AckHandler.cs" />
     <Compile Include="Configuration\DefaultConfigurationManager.cs" />
     <Compile Include="Infrastructure\ArraySegmentTextReader.cs" />
+    <Compile Include="Infrastructure\BinaryTextWriter.cs" />
     <Compile Include="Infrastructure\ConnectionManager.cs" />
     <Compile Include="ConnectionMessage.cs" />
     <Compile Include="Infrastructure\DefaultProtectedData.cs" />
+    <Compile Include="Infrastructure\MonoUtility.cs" />
     <Compile Include="Infrastructure\DiffPair.cs" />
     <Compile Include="Infrastructure\DiffSet.cs" />
     <Compile Include="GlobalHost.cs" />
