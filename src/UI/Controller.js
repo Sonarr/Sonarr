@@ -1,4 +1,4 @@
-var NzbDroneController = require('./Shared/NzbDroneController');
+﻿var NzbDroneController = require('./Shared/NzbDroneController');
 var AppLayout = require('./AppLayout');
 var Marionette = require('marionette');
 var ActivityLayout = require('./Activity/ActivityLayout');
@@ -12,39 +12,47 @@ var SeasonPassLayout = require('./SeasonPass/SeasonPassLayout');
 var SeriesEditorLayout = require('./Series/Editor/SeriesEditorLayout');
 
 module.exports = NzbDroneController.extend({
-    addSeries    : function(action){
+    addSeries : function(action) {
         this.setTitle('Add Series');
-        this.showMainRegion(new AddSeriesLayout({action : action}));
+        this.showMainRegion(new AddSeriesLayout({ action : action }));
     },
-    calendar     : function(){
+
+    calendar : function() {
         this.setTitle('Calendar');
         this.showMainRegion(new CalendarLayout());
     },
-    settings     : function(action){
+
+    settings : function(action) {
         this.setTitle('Settings');
-        this.showMainRegion(new SettingsLayout({action : action}));
+        this.showMainRegion(new SettingsLayout({ action : action }));
     },
-    wanted       : function(action){
+
+    wanted : function(action) {
         this.setTitle('Wanted');
-        this.showMainRegion(new WantedLayout({action : action}));
+        this.showMainRegion(new WantedLayout({ action : action }));
     },
-    activity     : function(action){
+
+    activity : function(action) {
         this.setTitle('Activity');
-        this.showMainRegion(new ActivityLayout({action : action}));
+        this.showMainRegion(new ActivityLayout({ action : action }));
     },
-    rss          : function(){
+
+    rss : function() {
         this.setTitle('RSS');
         this.showMainRegion(new ReleaseLayout());
     },
-    system       : function(action){
+
+    system : function(action) {
         this.setTitle('System');
-        this.showMainRegion(new SystemLayout({action : action}));
+        this.showMainRegion(new SystemLayout({ action : action }));
     },
-    seasonPass   : function(){
+
+    seasonPass : function() {
         this.setTitle('Season Pass');
         this.showMainRegion(new SeasonPassLayout());
     },
-    seriesEditor : function(){
+
+    seriesEditor : function() {
         this.setTitle('Series Editor');
         this.showMainRegion(new SeriesEditorLayout());
     }

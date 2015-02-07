@@ -2,11 +2,14 @@ var NzbDroneCell = require('./NzbDroneCell');
 
 module.exports = NzbDroneCell.extend({
     className : 'history-event-type-cell',
-    render    : function(){
+
+    render : function() {
         this.$el.empty();
-        if(this.cellValue) {
+
+        if (this.cellValue) {
             var icon;
             var toolTip;
+
             switch (this.cellValue.get('eventType')) {
                 case 'grabbed':
                     icon = 'icon-nd-downloading';
@@ -32,8 +35,10 @@ module.exports = NzbDroneCell.extend({
                     icon = 'icon-question';
                     toolTip = 'unknown event';
             }
+
             this.$el.html('<i class="{0}" title="{1}" data-placement="right"/>'.format(icon, toolTip));
         }
+
         return this;
     }
 });

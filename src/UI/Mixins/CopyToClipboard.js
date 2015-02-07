@@ -3,17 +3,20 @@ var StatusModel = require('../System/StatusModel');
 var ZeroClipboard = require('zero.clipboard');
 var Messenger = require('../Shared/Messenger');
 
-module.exports = (function(){
-    $.fn.copyToClipboard = function(input){
-        var moviePath = StatusModel.get('urlBase') + '/Content/zero.clipboard.swf';
-        var client = new ZeroClipboard(this, {moviePath : moviePath});
-        client.on('load', function(client){
-            client.on('dataRequested', function(client){
-                client.setText(input.val());
-            });
-            client.on('complete', function(){
-                Messenger.show({message : 'Copied text to clipboard'});
-            });
+$.fn.copyToClipboard = function(input) {
+
+    ZeroClipboard.config({
+        swfPath: StatusModel.get('urlBase') + '/Content/zero.clipboard.swf'
+    });
+
+    var client = new ZeroClipboard(this);
+
+    client.on('ready', function(e) {
+        client.on('copy', function(e) {
+            e.clipboardData.setData("text/plain", input.val());
         });
-    };
-}).call(this);
+        client.on('aftercopy', function() {
+            Messenger.show({message : 'Copied text to clipboard'});
+        });
+    });
+};
