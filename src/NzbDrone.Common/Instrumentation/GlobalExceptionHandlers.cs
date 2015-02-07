@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Instrumentation
 {
@@ -9,18 +10,22 @@ namespace NzbDrone.Common.Instrumentation
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(GlobalExceptionHandlers));
         public static void Register()
         {
-            AppDomain.CurrentDomain.UnhandledException += ((s, e) => AppDomainException(e.ExceptionObject as Exception));
-            TaskScheduler.UnobservedTaskException += ((s, e) => TaskException(e.Exception));
+            AppDomain.CurrentDomain.UnhandledException += HandleAppDomainException;
+            TaskScheduler.UnobservedTaskException += HandleTaskException;
         }
 
-        private static void TaskException(Exception exception)
+        private static void HandleTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
+            var exception = e.Exception;
+
             Console.WriteLine("Task Error: {0}", exception);
             Logger.Error("Task Error: " + exception.Message, exception);
         }
 
-        private static void AppDomainException(Exception exception)
+        private static void HandleAppDomainException(object sender, UnhandledExceptionEventArgs e)
         {
+            var exception = e.ExceptionObject as Exception;
+
             if (exception == null) return;
 
             if (exception is NullReferenceException &&
@@ -30,13 +35,18 @@ namespace NzbDrone.Common.Instrumentation
                 return;
             }
 
+            if (OsInfo.IsMonoRuntime)
+            {
+                if (exception is TypeInitializationException && exception.InnerException is DllNotFoundException ||
+                    exception is DllNotFoundException)
+                {
+                    Logger.DebugException("Minor Fail: " + exception.Message, exception);
+                    return;
+                }
+            }
+
             Console.WriteLine("EPIC FAIL: {0}", exception);
             Logger.FatalException("EPIC FAIL: " + exception.Message, exception);
-
-            if (exception.InnerException != null)
-            {
-                AppDomainException(exception.InnerException);
-            }
         }
     }
 }
