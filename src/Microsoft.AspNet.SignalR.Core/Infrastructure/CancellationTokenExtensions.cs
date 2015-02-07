@@ -19,7 +19,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
             var callbackWrapper = new CancellationCallbackWrapper(callback, state);
 
             // Ensure delegate continues to use the C# Compiler static delegate caching optimization.
-            CancellationTokenRegistration registration = _tokenRegister(ref cancellationToken, s => InvokeCallback(s), callbackWrapper);
+            CancellationTokenRegistration registration = _tokenRegister(ref cancellationToken, InvokeCallback, callbackWrapper);
 
             var disposeCancellationState = new DiposeCancellationState(callbackWrapper, registration);
 
