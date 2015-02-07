@@ -1,7 +1,6 @@
-var $ = require('jquery');
-
-module.exports = (function(){
+module.exports = function(){
     'use strict';
+    var $ = this;
     $.fn.processServerError = function(error){
         var validationName = error.propertyName.toLowerCase();
         var errorMessage = this.formatErrorMessage(error);
@@ -72,4 +71,4 @@ module.exports = (function(){
         }
         return errorMessage;
     };
-}).call(this);
+};

@@ -1,6 +1,5 @@
 var Validation = require('backbone.validation');
 var _ = require('underscore');
-require('../jQuery/jquery.validation');
 
 module.exports = (function(){
     'use strict';

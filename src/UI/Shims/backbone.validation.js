@@ -1,8 +1,7 @@
 require('backbone');
-require('../jQuery/jquery.validation');
 require('../JsLibraries/backbone.validation');
+var $ = require('jquery');
+var jqueryValidation = require('../jQuery/jquery.validation');
+jqueryValidation.call($);
 
-require('backbone');
-require('../jQuery/jquery.validation');
-require('../JsLibraries/backbone.validation');
 module.exports = window.Backbone.Validation;
