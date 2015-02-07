@@ -19,7 +19,7 @@ namespace Microsoft.AspNet.SignalR.Transports
         private bool _isAlive = true;
 
         private readonly Action<string> _message;
-        private readonly Action<bool> _closed;
+        private readonly Action _closed;
         private readonly Action<Exception> _error;
 
         public WebSocketTransport(HostContext context,
@@ -74,28 +74,39 @@ namespace Microsoft.AspNet.SignalR.Transports
 
         public override Task ProcessRequest(ITransportConnection connection)
         {
-            var webSocketRequest = _context.Request as IWebSocketRequest;
-
-            // Throw if the server implementation doesn't support websockets
-            if (webSocketRequest == null)
+            if (IsAbortRequest)
             {
-                throw new InvalidOperationException(Resources.Error_WebSocketsNotSupported);
+                return connection.Abort(ConnectionId);
             }
-
-            return webSocketRequest.AcceptWebSocketRequest(socket =>
+            else
             {
-                _socket = socket;
-                socket.OnClose = _closed;
-                socket.OnMessage = _message;
-                socket.OnError = _error;
+                var webSocketRequest = _context.Request as IWebSocketRequest;
 
-                return ProcessRequestCore(connection);
-            });
+                // Throw if the server implementation doesn't support websockets
+                if (webSocketRequest == null)
+                {
+                    throw new InvalidOperationException(Resources.Error_WebSocketsNotSupported);
+                }
+
+                Connection = connection;
+                InitializePersistentState();
+
+                return webSocketRequest.AcceptWebSocketRequest(socket =>
+                {
+                    _socket = socket;
+                    socket.OnClose = _closed;
+                    socket.OnMessage = _message;
+                    socket.OnError = _error;
+
+                    return ProcessReceiveRequest(connection);
+                },
+                InitializeTcs.Task);
+            }
         }
 
         protected override TextWriter CreateResponseWriter()
         {
-            return new BufferTextWriter(_socket);
+            return new BinaryTextWriter(_socket);
         }
 
         public override Task Send(object value)
@@ -111,6 +122,11 @@ namespace Microsoft.AspNet.SignalR.Transports
             OnSendingResponse(response);
 
             return Send((object)response);
+        }
+
+        protected internal override Task InitializeResponse(ITransportConnection connection)
+        {
+            return _socket.Send("{}");
         }
 
         private static Task PerformSend(object state)
@@ -131,18 +147,11 @@ namespace Microsoft.AspNet.SignalR.Transports
             }
         }
 
-        private void OnClosed(bool clean)
+        private void OnClosed()
         {
-            Trace.TraceInformation("CloseSocket({0}, {1})", clean, ConnectionId);
+            Trace.TraceInformation("CloseSocket({0})", ConnectionId);
 
-            // If we performed a clean disconnect then we go through the normal disconnect routine.  However,
-            // If we performed an unclean disconnect we want to mark the connection as "not alive" and let the
-            // HeartBeat clean it up.  This is to maintain consistency across the transports.
-            if (clean)
-            {
-                Abort();
-            }
-
+            // Require a request to /abort to stop tracking the connection. #2195
             _isAlive = false;
         }
 

@@ -35,7 +35,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
             _maxSize = maxSize;
         }
 
-#if !CLIENT_NET45
+#if !CLIENT_NET45 && !CLIENT_NET4 && !NETFX_CORE && !SILVERLIGHT
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "This is shared code.")]
         public IPerformanceCounter QueueSizeCounter { get; set; }
 #endif
@@ -62,19 +62,16 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
 
                 if (_maxSize != null)
                 {
-                    if (Interlocked.Read(ref _size) == _maxSize)
+                    // Increment the size if the queue
+                    if (Interlocked.Increment(ref _size) > _maxSize)
                     {
-                        // REVIEW: Do we need to make the contract more clear between the
-                        // queue full case and the queue drained case? Should we throw an exeception instead?
-                        
+                        Interlocked.Decrement(ref _size);
+
                         // We failed to enqueue because the size limit was reached
                         return null;
                     }
 
-                    // Increment the size if the queue
-                    Interlocked.Increment(ref _size);
-                    
-#if !CLIENT_NET45
+#if !CLIENT_NET45 && !CLIENT_NET4 && !NETFX_CORE && !SILVERLIGHT
                     var counter = QueueSizeCounter;
                     if (counter != null)
                     {
@@ -93,7 +90,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
                             // Decrement the number of items left in the queue
                             Interlocked.Decrement(ref queue._size);
 
-#if !CLIENT_NET45
+#if !CLIENT_NET45 && !CLIENT_NET4 && !NETFX_CORE && !SILVERLIGHT
                             var counter = QueueSizeCounter;
                             if (counter != null)
                             {

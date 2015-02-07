@@ -15,6 +15,9 @@ namespace Microsoft.AspNet.SignalR.Messaging
         private static readonly List<ArraySegment<Message>> _emptyList = new List<ArraySegment<Message>>();
         public readonly static MessageResult TerminalMessage = new MessageResult(terminal: true);
 
+        /// <summary>
+        /// Gets an <see cref="T:IList{Message}"/> associated with the result.
+        /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "This is an optimization to avoid allocations.")]
         public IList<ArraySegment<Message>> Messages { get; private set; }
 

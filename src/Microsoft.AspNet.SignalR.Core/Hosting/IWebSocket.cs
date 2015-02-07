@@ -16,9 +16,9 @@ namespace Microsoft.AspNet.SignalR.Hosting
         Action<string> OnMessage { get; set; }
 
         /// <summary>
-        /// Invoked when the websocket gracefully closes
+        /// Invoked when the websocket closes
         /// </summary>
-        Action<bool> OnClose { get; set; }
+        Action OnClose { get; set; }
 
         /// <summary>
         /// Invoked when there is an error

@@ -130,6 +130,14 @@ namespace Microsoft.AspNet.SignalR.Transports
             }
         }
 
+        protected CancellationToken HostShutdownToken
+        {
+            get
+            {
+                return _hostShutdownToken;
+            }
+        }
+
         public bool IsTimedOut
         {
             get
@@ -186,7 +194,7 @@ namespace Microsoft.AspNet.SignalR.Transports
 
         protected virtual TextWriter CreateResponseWriter()
         {
-            return new BufferTextWriter(Context.Response);
+            return new BinaryTextWriter(Context.Response);
         }
 
         protected void IncrementErrors()

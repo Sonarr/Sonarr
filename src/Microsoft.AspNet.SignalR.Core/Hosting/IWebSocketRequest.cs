@@ -11,6 +11,7 @@ namespace Microsoft.AspNet.SignalR.Hosting
         /// Accepts an websocket request using the specified user function.
         /// </summary>
         /// <param name="callback">The callback that fires when the websocket is ready.</param>
-        Task AcceptWebSocketRequest(Func<IWebSocket, Task> callback);
+        /// <param name="initTask">The task that completes when the websocket transport is ready.</param>
+        Task AcceptWebSocketRequest(Func<IWebSocket, Task> callback, Task initTask);
     }
 }

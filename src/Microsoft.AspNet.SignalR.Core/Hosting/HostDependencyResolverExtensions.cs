@@ -20,8 +20,12 @@ namespace Microsoft.AspNet.SignalR.Hosting
                 throw new ArgumentNullException("instanceName");
             }
 
-            // Initialize the performance counters
-            resolver.InitializePerformanceCounters(instanceName, hostShutdownToken);
+            // Performance counters are broken on mono so just skip this step
+            if (!MonoUtility.IsRunningMono)
+            {
+                // Initialize the performance counters
+                resolver.InitializePerformanceCounters(instanceName, hostShutdownToken);
+            }
 
             // Dispose the dependency resolver on host shut down (cleanly)
             resolver.InitializeResolverDispose(hostShutdownToken);
@@ -41,12 +45,11 @@ namespace Microsoft.AspNet.SignalR.Hosting
             // TODO: Guard against multiple calls to this
 
             // When the host triggers the shutdown token, dispose the resolver
-            hostShutdownToken.Register(state =>
+            hostShutdownToken.SafeRegister(state =>
             {
                 ((IDependencyResolver)state).Dispose();
             },
-            resolver,
-            useSynchronizationContext: false);
+            resolver);
         }
     }
 }

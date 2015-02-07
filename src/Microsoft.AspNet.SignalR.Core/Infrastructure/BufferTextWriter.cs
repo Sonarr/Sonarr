@@ -13,7 +13,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
     /// we don't need to write to a long lived buffer. This saves massive amounts of memory
     /// as the number of connections grows.
     /// </summary>
-    internal unsafe class BufferTextWriter : TextWriter, IBinaryWriter
+    internal abstract unsafe class BufferTextWriter : TextWriter
     {
         private readonly Encoding _encoding;
 
@@ -31,13 +31,13 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
         }
 
         public BufferTextWriter(IWebSocket socket) :
-            this((data, state) => ((IWebSocket)state).SendChunk(data), socket, reuseBuffers: false, bufferSize: 128)
+            this((data, state) => ((IWebSocket)state).SendChunk(data), socket, reuseBuffers: false, bufferSize: 1024 * 4)
         {
 
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.IO.TextWriter.#ctor", Justification = "It won't be used")]
-        public BufferTextWriter(Action<ArraySegment<byte>, object> write, object state, bool reuseBuffers, int bufferSize)
+        protected BufferTextWriter(Action<ArraySegment<byte>, object> write, object state, bool reuseBuffers, int bufferSize)
         {
             _write = write;
             _writeState = state;
@@ -46,7 +46,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
             _bufferSize = bufferSize;
         }
 
-        private ChunkedWriter Writer
+        protected internal ChunkedWriter Writer
         {
             get
             {
@@ -79,17 +79,12 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
             Writer.Write(value);
         }
 
-        public void Write(ArraySegment<byte> data)
-        {
-            Writer.Write(data);
-        }
-
         public override void Flush()
         {
             Writer.Flush();
         }
 
-        private class ChunkedWriter
+        internal class ChunkedWriter
         {
             private int _charPos;
             private int _charLen;
