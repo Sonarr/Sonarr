@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -17,7 +18,14 @@ namespace NzbDrone.Api.Frontend.Mappers
 
         public override string Map(string resourceUrl)
         {
-            var path = Path.Combine("Content", "Images", "favicon.ico");
+            var fileName = "favicon.ico";
+
+            if (BuildInfo.IsDebug)
+            {
+                fileName = "favicon-debug.ico";
+            }
+
+            var path = Path.Combine("Content", "Images", fileName);
 
             return Path.Combine(_appFolderInfo.StartUpFolder, "UI", path);
         }
