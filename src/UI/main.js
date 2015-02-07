@@ -1,4 +1,4 @@
-var $ = require('jquery');
+﻿var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
 var RouteBinder = require('./jQuery/RouteBinder');
@@ -11,6 +11,8 @@ var ModalController = require('./Shared/Modal/ModalController');
 var ControlPanelController = require('./Shared/ControlPanel/ControlPanelController');
 var serverStatusModel = require('./System/StatusModel');
 var Tooltip = require('./Shared/Tooltip');
+
+require('./jQuery/ToTheTop');
 require('./Instrumentation/StringFormat');
 require('./LifeCycle');
 require('./Hotkeys/Hotkeys');
