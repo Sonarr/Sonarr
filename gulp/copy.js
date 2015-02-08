@@ -7,7 +7,6 @@ var paths = require('./paths.js');
 gulp.task('copyJs', function () {
     return gulp.src(
       [
-        paths.src.root + "piwikCheck.js",
         paths.src.root + "polyfills.js",
         paths.src.root + "JsLibraries\\handlebars.runtime.js",
       ])

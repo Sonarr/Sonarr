@@ -1,10 +1,16 @@
 var path = require('path');
 var stylish = require('jshint-stylish');
+var webpack = require('webpack');
+
+var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
 
 module.exports = {
-  entry     : 'main.js',
+  entry: {
+    vendor: 'vendor.js',
+    main: 'main.js'
+  },
   resolve : {
-  root : path.join(__dirname, "src", "ui"),
+  root : path.join(__dirname, 'src', 'UI'),
   alias : {
       'vent'                    : 'vent',
       'backbone'                : 'Shims/backbone',
@@ -40,10 +46,14 @@ module.exports = {
     }
   },
   output : {
-    filename : '_output/UI/main.js',
-    sourceMapFilename : '_output/UI/main.map'
+    filename : '_output/UI/[name].js',
+    sourceMapFilename : '_output/UI/[name].map'
   },
+  plugins : [
+        new webpack.optimize.CommonsChunkPlugin({name: 'vendor'})
+    ],
   module: {
+    
        //this doesn't work yet. wainting for https://github.com/spenceralger/rcloader/issues/5
        /*preLoaders: [
            {
