@@ -21,9 +21,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.StartUpFolder)
                   .Returns(@"C:\NzbDrone");
 
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.WriteAllText(It.IsAny<String>(), It.IsAny<String>()))
-                  .Throws<Exception>();
+            Mocker.GetMock<NzbDrone.Common.Disk.IDiskProvider>()
+                  .Setup(c => c.FolderWritable(Moq.It.IsAny<string>()))
+                  .Returns(false);
 
             Subject.Check().ShouldBeError();
         }
@@ -41,9 +41,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.StartUpFolder)
                   .Returns(@"/opt/nzbdrone");
 
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.WriteAllText(It.IsAny<String>(), It.IsAny<String>()))
-                  .Throws<Exception>();
+            Mocker.GetMock<NzbDrone.Common.Disk.IDiskProvider>()
+                  .Setup(c => c.FolderWritable(Moq.It.IsAny<string>()))
+                  .Returns(false);
 
             Subject.Check().ShouldBeError();
         }

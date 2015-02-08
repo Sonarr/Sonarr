@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
@@ -15,8 +17,7 @@ using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
 {
-
-    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>, IExecute<InstallUpdateCommand>
+    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
@@ -63,58 +64,80 @@ namespace NzbDrone.Core.Update
 
         private void InstallUpdate(UpdatePackage updatePackage)
         {
-            try
+            EnsureAppDataSafety();
+
+            if (OsInfo.IsWindows || _configFileProvider.UpdateMechanism != UpdateMechanism.Script)
             {
-                EnsureAppDataSafety();
-
-                var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
-
-                var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
-
-                if (_diskProvider.FolderExists(updateSandboxFolder))
+                if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
                 {
-                    _logger.Info("Deleting old update files");
-                    _diskProvider.DeleteFolder(updateSandboxFolder, true);
+                    throw new UpdateFolderNotWritableException("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", _appFolderInfo.StartUpFolder, Environment.UserName);
                 }
-
-                _logger.ProgressInfo("Downloading update {0}", updatePackage.Version);
-                _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
-                _httpClient.DownloadFile(updatePackage.Url, packageDestination);
-
-                _logger.ProgressInfo("Verifying update package");
-
-                if (!_updateVerifier.Verify(updatePackage, packageDestination))
-                {
-                    _logger.Error("Update package is invalid");
-                    throw new UpdateVerificationFailedException("Update file '{0}' is invalid", packageDestination);
-                }
-
-                _logger.Info("Update package verified successfully");
-
-                _logger.ProgressInfo("Extracting Update package");
-                _archiveService.Extract(packageDestination, updateSandboxFolder);
-                _logger.Info("Update package extracted successfully");
-
-                _backupService.Backup(BackupType.Update);
-
-                if (OsInfo.IsNotWindows && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
-                {
-                    InstallUpdateWithScript(updateSandboxFolder);
-                    return;
-                }
-
-                _logger.Info("Preparing client");
-                _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
-                                            updateSandboxFolder);
-
-                _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
-                _logger.ProgressInfo("NzbDrone will restart shortly.");
-
-                _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), GetUpdaterArgs(updateSandboxFolder));
             }
-            catch (Exception ex)
+
+            var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
+
+            var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
+
+            if (_diskProvider.FolderExists(updateSandboxFolder))
             {
-                _logger.ErrorException("Update process failed", ex);
+                _logger.Info("Deleting old update files");
+                _diskProvider.DeleteFolder(updateSandboxFolder, true);
+            }
+
+            _logger.ProgressInfo("Downloading update {0}", updatePackage.Version);
+            _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
+            _httpClient.DownloadFile(updatePackage.Url, packageDestination);
+
+            _logger.ProgressInfo("Verifying update package");
+
+            if (!_updateVerifier.Verify(updatePackage, packageDestination))
+            {
+                _logger.Error("Update package is invalid");
+                throw new UpdateVerificationFailedException("Update file '{0}' is invalid", packageDestination);
+            }
+
+            _logger.Info("Update package verified successfully");
+
+            _logger.ProgressInfo("Extracting Update package");
+            _archiveService.Extract(packageDestination, updateSandboxFolder);
+            _logger.Info("Update package extracted successfully");
+
+            EnsureValidBranch(updatePackage);
+
+            _backupService.Backup(BackupType.Update);
+
+            if (OsInfo.IsNotWindows && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
+            {
+                InstallUpdateWithScript(updateSandboxFolder);
+                return;
+            }
+
+            _logger.Info("Preparing client");
+            _diskProvider.MoveFolder(_appFolderInfo.GetUpdateClientFolder(),
+                                        updateSandboxFolder);
+
+            _logger.Info("Starting update client {0}", _appFolderInfo.GetUpdateClientExePath());
+            _logger.ProgressInfo("Sonarr will restart shortly.");
+
+            _processProvider.Start(_appFolderInfo.GetUpdateClientExePath(), GetUpdaterArgs(updateSandboxFolder));
+        }
+
+        private void EnsureValidBranch(UpdatePackage package)
+        {
+            var currentBranch = _configFileProvider.Branch;
+            if (package.Branch != currentBranch)
+            {
+                try
+                {
+                    _logger.Info("Branch [{0}] is being redirected to [{1}]]", currentBranch, package.Branch);
+                    var config = new Dictionary<string, object>();
+                    config["Branch"] = package.Branch;
+                    _configFileProvider.SaveConfigDictionary(config);
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException(string.Format("Couldn't change the branch from [{0}] to [{1}].", currentBranch, package.Branch), e);
+                }
             }
         }
 
@@ -124,13 +147,12 @@ namespace NzbDrone.Core.Update
 
             if (scriptPath.IsNullOrWhiteSpace())
             {
-                throw new ArgumentException("Update Script has not been defined");
+                throw new UpdateFailedException("Update Script has not been defined");
             }
 
             if (!_diskProvider.FileExists(scriptPath, StringComparison.Ordinal))
             {
-                var message = String.Format("Update Script: '{0}' does not exist", scriptPath);
-                throw new FileNotFoundException(message, scriptPath);
+                throw new UpdateFailedException("Update Script: '{0}' does not exist", scriptPath);
             }
 
             _logger.Info("Removing NzbDrone.Update");
@@ -153,24 +175,49 @@ namespace NzbDrone.Core.Update
             if (_appFolderInfo.StartUpFolder.IsParentPath(_appFolderInfo.AppDataFolder) ||
                 _appFolderInfo.StartUpFolder.PathEquals(_appFolderInfo.AppDataFolder))
             {
-                throw new NotSupportedException("Update will cause AppData to be deleted, correct you configuration before proceeding");
+                throw new UpdateFailedException("Your Sonarr configuration '{0}' is being stored in application folder '{1}' which will cause data lost during the upgrade. Please remove any symlinks or redirects before trying again.", _appFolderInfo.AppDataFolder, _appFolderInfo.StartUpFolder);
             }
         }
 
         public void Execute(ApplicationUpdateCommand message)
         {
             _logger.ProgressDebug("Checking for updates");
+
             var latestAvailable = _checkUpdateService.AvailableUpdate();
 
-            if (latestAvailable != null)
+            if (latestAvailable == null)
+            {
+                _logger.ProgressDebug("No update available.");
+                return;
+            }
+
+            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically && !message.Manual)
+            {
+                _logger.ProgressDebug("Auto-update not enabled, not installing available update.");
+                return;
+            }
+
+            try
             {
                 InstallUpdate(latestAvailable);
-            }
-        }
 
-        public void Execute(InstallUpdateCommand message)
-        {
-            InstallUpdate(message.UpdatePackage);
+                message.Completed("Restarting Sonarr to apply updates");
+            }
+            catch (UpdateFolderNotWritableException ex)
+            {
+                _logger.ErrorException("Update process failed", ex);
+                message.Failed(ex, string.Format("Startup folder not writable by user '{0}'", Environment.UserName));
+            }
+            catch (UpdateVerificationFailedException ex)
+            {
+                _logger.ErrorException("Update process failed", ex);
+                message.Failed(ex, "Downloaded update package is corrupt");
+            }
+            catch (UpdateFailedException ex)
+            {
+                _logger.ErrorException("Update process failed", ex);
+                message.Failed(ex);
+            }
         }
     }
 }

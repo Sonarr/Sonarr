@@ -98,26 +98,17 @@ namespace NzbDrone.Core.Download
             {
                 return new NzbDroneValidationFailure(propertyName, "Folder does not exist")
                 {
-                    DetailedDescription = "The folder you specified does not exist or is inaccessible. Please verify the folder permissions for the user account that is used to execute NzbDrone."
+                    DetailedDescription = string.Format("The folder you specified does not exist or is inaccessible. Please verify the folder permissions for the user account '{0}', which is used to execute Sonarr.", Environment.UserName)
                 };
             }
 
-            if (mustBeWritable)
+            if (mustBeWritable && !_diskProvider.FolderWritable(folder))
             {
-                try
+                _logger.Error("Folder '{0}' is not writable.", folder);
+                return new NzbDroneValidationFailure(propertyName, "Unable to write to folder")
                 {
-                    var testPath = Path.Combine(folder, "drone_test.txt");
-                    _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                    _diskProvider.DeleteFile(testPath);
-                }
-                catch (Exception ex)
-                {
-                    _logger.ErrorException(ex.Message, ex);
-                    return new NzbDroneValidationFailure(propertyName, "Unable to write to folder")
-                    {
-                        DetailedDescription = "The folder you specified is not writable. Please verify the folder permissions for the user account that is used to execute NzbDrone."
-                    };
-                }
+                    DetailedDescription = string.Format("The folder you specified is not writable. Please verify the folder permissions for the user account '{0}', which is used to execute Sonarr.", Environment.UserName)
+                };
             }
 
             return null;

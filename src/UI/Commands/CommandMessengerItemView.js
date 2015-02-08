@@ -15,12 +15,15 @@ module.exports = Marionette.ItemView.extend({
             id        : this.model.id,
             hideAfter : 0
         };
+
+        var isManual = this.model.get('manual');
+
         switch (this.model.get('state')) {
             case 'completed':
                 message.hideAfter = 4;
                 break;
             case 'failed':
-                message.hideAfter = 4;
+                message.hideAfter = isManual ? 10 : 4;
                 message.type = 'error';
                 break;
             default:

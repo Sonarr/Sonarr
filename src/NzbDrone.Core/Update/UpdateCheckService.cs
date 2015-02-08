@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation.Extensions;
@@ -30,34 +31,7 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
-            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically)
-            {
-                return null;
-            }
-
-            var latestAvailable = _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
-
-            if (latestAvailable == null)
-            {
-                _logger.ProgressDebug("No update available.");
-            }
-            else if (latestAvailable.Branch != _configFileProvider.Branch)
-            {
-                try
-                {
-                    _logger.Info("Branch [{0}] is being redirected to [{1}]]", _configFileProvider.Branch, latestAvailable.Branch);
-                    var config = _configFileProvider.GetConfigDictionary();
-                    config["Branch"] = latestAvailable.Branch;
-                    _configFileProvider.SaveConfigDictionary(config);
-                }
-                catch (Exception e)
-                {
-                    _logger.ErrorException("Couldn't save the branch redirect.", e);
-                }
-
-            }
-
-            return latestAvailable;
+            return _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
         }
     }
 }

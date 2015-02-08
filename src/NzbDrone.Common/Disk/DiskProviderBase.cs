@@ -109,6 +109,25 @@ namespace NzbDrone.Common.Disk
             }
         }
 
+        public bool FolderWritable(string path)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            try
+            {
+                var testPath = Path.Combine(path, "sonarr_write_test.txt");
+                var testContent = string.Format("This file was created to verify if '{0}' is writable. It should've been automatically deleted. Feel free to delete it.", path);
+                File.WriteAllText(testPath, testContent);
+                File.Delete(testPath);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.Trace("Directory '{0}' isn't writable. {1}", path, e.Message);
+                return false;
+            }
+        }
+
         public string[] GetDirectories(string path)
         {
             Ensure.That(path, () => path).IsValidPath();

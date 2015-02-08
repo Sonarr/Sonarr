@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
@@ -13,6 +16,8 @@ namespace NzbDrone.Common.Test
 
     public class ConfigFileProviderTest : TestBase<ConfigFileProvider>
     {
+        private string _configFileContents;
+
         [SetUp]
         public void SetUp()
         {
@@ -20,8 +25,24 @@ namespace NzbDrone.Common.Test
 
             var configFile = Mocker.Resolve<IAppFolderInfo>().GetConfigPath();
 
-            if (File.Exists(configFile))
-                File.Delete(configFile);
+            _configFileContents = null;
+
+            WithMockConfigFile(configFile);
+        }
+
+        protected void WithMockConfigFile(string configFile)
+        {
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.FileExists(configFile))
+                .Returns<string>(p => _configFileContents != null);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.ReadAllText(configFile))
+                .Returns<string>(p => _configFileContents);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.WriteAllText(configFile, It.IsAny<string>()))
+                .Callback<string, string>((p, t) => _configFileContents = t);
         }
 
         [Test]
@@ -142,8 +163,28 @@ namespace NzbDrone.Common.Test
 
             Subject.SaveConfigDictionary(dic);
 
+            Subject.Port.Should().Be(port);
+        }
+
+        [Test]
+        public void SaveDictionary_should_only_save_specified_values()
+        {
+            int port = 20555;
+            int origSslPort = 20551;
+            int sslPort = 20552;
+
+            var dic = Subject.GetConfigDictionary();
+            dic["Port"] = port;
+            dic["SslPort"] = origSslPort;
+            Subject.SaveConfigDictionary(dic);
+
+
+            dic = new Dictionary<string, object>();
+            dic["SslPort"] = sslPort;
+            Subject.SaveConfigDictionary(dic);
 
             Subject.Port.Should().Be(port);
+            Subject.SslPort.Should().Be(sslPort);
         }
 
     }
