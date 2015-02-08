@@ -3,19 +3,18 @@ var $ = require('jquery');
 //var messenger = require('../Shared/Messenger');
 
 var original = $.ajax;
-$.ajax = function(xhr){
+$.ajax = function(xhr) {
     'use strict';
-    if(xhr && xhr.data && xhr.type === 'DELETE') {
-        if(xhr.url.contains('?')) {
+    if (xhr && xhr.data && xhr.type === 'DELETE') {
+        if (xhr.url.contains('?')) {
             xhr.url += '&';
-        }
-        else {
+        } else {
             xhr.url += '?';
         }
         xhr.url += $.param(xhr.data);
         delete xhr.data;
     }
-    if(xhr) {
+    if (xhr) {
         xhr.headers = xhr.headers || {};
         xhr.headers['X-Api-Key'] = window.NzbDrone.ApiKey;
     }
