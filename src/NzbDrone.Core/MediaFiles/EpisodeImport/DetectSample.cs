@@ -8,19 +8,19 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
-    public interface ISampleService
+    public interface IDetectSample
     {
         bool IsSample(Series series, QualityModel quality, string path, long size, int seasonNumber);
     }
 
-    public class SampleService : ISampleService
+    public class DetectSample : IDetectSample
     {
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly Logger _logger;
 
         private static List<Quality> _largeSampleSizeQualities = new List<Quality> { Quality.HDTV1080p, Quality.WEBDL1080p, Quality.Bluray1080p };
 
-        public SampleService(IVideoFileInfoReader videoFileInfoReader, Logger logger)
+        public DetectSample(IVideoFileInfoReader videoFileInfoReader, Logger logger)
         {
             _videoFileInfoReader = videoFileInfoReader;
             _logger = logger;

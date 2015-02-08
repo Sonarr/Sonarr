@@ -4,11 +4,11 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Commands;
-using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests
 {

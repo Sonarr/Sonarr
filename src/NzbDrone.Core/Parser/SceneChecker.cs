@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Core.Parser
+﻿using System;
+
+namespace NzbDrone.Core.Parser
 {
     public static class SceneChecker
     {
@@ -10,10 +12,14 @@
             if (title.Contains(" ")) return false;
 
             var parsedTitle = Parser.ParseTitle(title);
-            if (parsedTitle == null
-                || parsedTitle.ReleaseGroup == null
-                || parsedTitle.Quality.Quality == Qualities.Quality.Unknown
-                || string.IsNullOrWhiteSpace(parsedTitle.SeriesTitle)) return false;
+
+            if (parsedTitle == null ||
+                parsedTitle.ReleaseGroup == null ||
+                parsedTitle.Quality.Quality == Qualities.Quality.Unknown ||
+                String.IsNullOrWhiteSpace(parsedTitle.SeriesTitle))
+            {
+                return false;
+            }
 
             return true;
         }

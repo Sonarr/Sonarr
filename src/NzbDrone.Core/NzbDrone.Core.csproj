@@ -561,8 +561,9 @@
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportResultType.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ManualImportService.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\SampleService.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\DetectSample.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\MatchesFolderSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecification.cs" />

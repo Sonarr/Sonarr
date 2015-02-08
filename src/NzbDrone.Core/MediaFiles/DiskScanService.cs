@@ -103,7 +103,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
             var decisionsStopwatch = Stopwatch.StartNew();
-            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series, false);
+            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
             decisionsStopwatch.Stop();
             _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
 

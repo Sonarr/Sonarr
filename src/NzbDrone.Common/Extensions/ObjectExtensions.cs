@@ -1,6 +1,6 @@
 ﻿using NzbDrone.Common.Serializer;
 
-namespace NzbDrone.Test.Common
+namespace NzbDrone.Common.Extensions
 {
     public static class ObjectExtensions
     {

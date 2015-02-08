@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 
             Mocker.GetMock<IMakeImportDecision>()
-                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<QualityModel>()),
+                .Verify(c => c.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>()),
                     Times.Never());
 
             VerifyNoImport();
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             imported.Add(new ImportDecision(localEpisode));
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), true, null))
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), null, true))
                   .Returns(imported);
 
             Mocker.GetMock<IImportApprovedEpisodes>()
@@ -155,14 +155,14 @@ namespace NzbDrone.Core.Test.MediaFiles
             imported.Add(new ImportDecision(localEpisode));
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), true, null))
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), null, true))
                   .Returns(imported);
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
                   .Returns(imported.Select(i => new ImportResult(i)).ToList());
 
-            Mocker.GetMock<ISampleService>()
+            Mocker.GetMock<IDetectSample>()
                   .Setup(s => s.IsSample(It.IsAny<Series>(),
                       It.IsAny<QualityModel>(),
                       It.IsAny<String>(),
@@ -224,14 +224,14 @@ namespace NzbDrone.Core.Test.MediaFiles
             imported.Add(new ImportDecision(localEpisode));
 
             Mocker.GetMock<IMakeImportDecision>()
-                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), true, null))
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), null, true))
                   .Returns(imported);
 
             Mocker.GetMock<IImportApprovedEpisodes>()
                   .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
                   .Returns(imported.Select(i => new ImportResult(i)).ToList());
 
-            Mocker.GetMock<ISampleService>()
+            Mocker.GetMock<IDetectSample>()
                   .Setup(s => s.IsSample(It.IsAny<Series>(),
                       It.IsAny<QualityModel>(),
                       It.IsAny<String>(),

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.EnsureThat;
 
@@ -8,7 +7,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public class ImportResult
     {
         public ImportDecision ImportDecision { get; private set; }
-        public List<String> Errors { get; private set; }
+        public List<string> Errors { get; private set; }
 
         public ImportResultType Result
         {
@@ -28,7 +27,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
         }
 
-        public ImportResult(ImportDecision importDecision, params String[] errors)
+        public ImportResult(ImportDecision importDecision, params string[] errors)
         {
             Ensure.That(importDecision, () => importDecision).IsNotNull();
 

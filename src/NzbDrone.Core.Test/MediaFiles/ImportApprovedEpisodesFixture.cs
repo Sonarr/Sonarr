@@ -6,6 +6,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -44,9 +45,9 @@ namespace NzbDrone.Core.Test.MediaFiles
 
 
 
-            _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), "Rejected!"));
-            _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), "Rejected!"));
-            _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), "Rejected!"));
+            _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), new Rejection("Rejected!")));
+            _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), new Rejection("Rejected!")));
+            _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), new Rejection("Rejected!")));
 
             foreach (var episode in episodes)
             {

@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Metadata
                     {
                         try
                         {
-                            var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series, false);
+                            var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series);
 
                             if (localEpisode == null)
                             {
