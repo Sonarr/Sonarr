@@ -23,21 +23,18 @@ module.exports = Marionette.Layout.extend({
             label    : 'Path',
             cell     : 'string',
             sortable : false
-        },
-        {
+        }, {
             name     : 'size',
             label    : 'Size',
             cell     : FileSizeCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'quality',
             label    : 'Quality',
             cell     : QualityCell,
             sortable : false,
             editable : true
-        },
-        {
+        }, {
             name     : 'this',
             label    : '',
             cell     : DeleteEpisodeFileCell,

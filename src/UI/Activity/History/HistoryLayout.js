@@ -27,36 +27,30 @@ module.exports = Marionette.Layout.extend({
             label     : '',
             cell      : EventTypeCell,
             cellValue : 'this'
-        },
-        {
+        }, {
             name  : 'series',
             label : 'Series',
             cell  : SeriesTitleCell
-        },
-        {
+        }, {
             name     : 'episode',
             label    : 'Episode',
             cell     : EpisodeNumberCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'episode',
             label    : 'Episode Title',
             cell     : EpisodeTitleCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'this',
             label    : 'Quality',
             cell     : HistoryQualityCell,
             sortable : false
-        },
-        {
+        }, {
             name  : 'date',
             label : 'Date',
             cell  : RelativeDateCell
-        },
-        {
+        }, {
             name     : 'this',
             label    : '',
             cell     : HistoryDetailsCell,
@@ -101,29 +95,25 @@ module.exports = Marionette.Layout.extend({
                     tooltip  : 'All',
                     icon     : 'icon-circle-blank',
                     callback : this._setFilter
-                },
-                {
+                }, {
                     key      : 'grabbed',
                     title    : '',
                     tooltip  : 'Grabbed',
                     icon     : 'icon-nd-downloading',
                     callback : this._setFilter
-                },
-                {
+                }, {
                     key      : 'imported',
                     title    : '',
                     tooltip  : 'Imported',
                     icon     : 'icon-nd-imported',
                     callback : this._setFilter
-                },
-                {
+                }, {
                     key      : 'failed',
                     title    : '',
                     tooltip  : 'Failed',
                     icon     : 'icon-nd-download-failed',
                     callback : this._setFilter
-                },
-                {
+                }, {
                     key      : 'deleted',
                     title    : '',
                     tooltip  : 'Deleted',

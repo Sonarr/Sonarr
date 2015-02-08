@@ -26,49 +26,41 @@ module.exports = Marionette.Layout.extend({
             label     : '',
             cell      : QueueStatusCell,
             cellValue : 'this'
-        },
-        {
+        }, {
             name     : 'series',
             label    : 'Series',
             cell     : SeriesTitleCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'episode',
             label    : 'Episode',
             cell     : EpisodeNumberCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'episode',
             label    : 'Episode Title',
             cell     : EpisodeTitleCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'quality',
             label    : 'Quality',
             cell     : QualityCell,
             sortable : false
-        },
-        {
+        }, {
             name  : 'protocol',
             label : 'Protocol',
             cell  : ProtocolCell
-        },
-        {
+        }, {
             name      : 'timeleft',
             label     : 'Timeleft',
             cell      : TimeleftCell,
             cellValue : 'this'
-        },
-        {
+        }, {
             name      : 'episode',
             label     : 'Progress',
             cell      : ProgressCell,
             cellValue : 'this'
-        },
-        {
+        }, {
             name      : 'status',
             label     : '',
             cell      : QueueActionsCell,

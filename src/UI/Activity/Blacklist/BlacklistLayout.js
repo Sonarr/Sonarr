@@ -24,24 +24,20 @@ module.exports = Marionette.Layout.extend({
             name  : 'series',
             label : 'Series',
             cell  : SeriesTitleCell
-        },
-        {
+        }, {
             name  : 'sourceTitle',
             label : 'Source Title',
             cell  : 'string'
-        },
-        {
+        }, {
             name     : 'quality',
             label    : 'Quality',
             cell     : QualityCell,
             sortable : false
-        },
-        {
+        }, {
             name  : 'date',
             label : 'Date',
             cell  : RelativeDateCell
-        },
-        {
+        }, {
             name     : 'this',
             label    : '',
             cell     : BlacklistActionsCell,

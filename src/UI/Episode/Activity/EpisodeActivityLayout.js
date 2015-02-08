@@ -22,29 +22,24 @@ module.exports = Marionette.Layout.extend({
             label     : '',
             cell      : EventTypeCell,
             cellValue : 'this'
-        },
-        {
+        }, {
             name  : 'sourceTitle',
             label : 'Source Title',
             cell  : 'string'
-        },
-        {
+        }, {
             name  : 'quality',
             label : 'Quality',
             cell  : QualityCell
-        },
-        {
+        }, {
             name  : 'date',
             label : 'Date',
             cell  : RelativeDateCell
-        },
-        {
+        }, {
             name     : 'this',
             label    : '',
             cell     : EpisodeActivityDetailsCell,
             sortable : false
-        },
-        {
+        }, {
             name     : 'this',
             label    : '',
             cell     : EpisodeActivityActionsCell,

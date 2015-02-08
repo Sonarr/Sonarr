@@ -52,11 +52,7 @@ $.fn.tagsinput.Constructor.prototype.build = function(options) {
     var self = this;
     var defaults = {
         confirmKeys : [
-            9,
-            13,
-            32,
-            44,
-            59
+            9, 13, 32, 44, 59
         ] //tab, enter, space, comma, semi-colon
     };
 
