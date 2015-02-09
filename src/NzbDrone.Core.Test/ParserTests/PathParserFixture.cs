@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"C:\Test\Series\Season 1\2 Honor Thy Father (1080p HD).m4v", 1, 2)]
         public void should_parse_from_path(string path, int season, int episode)
         {
-            var result = Parser.Parser.ParsePath(path);
+            var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);
