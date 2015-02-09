@@ -277,9 +277,8 @@ define(
                 }
 
                 else if (monitor === 'first') {
-                    this.model.setSeasonPass(lastSeason + 1);
-                    
-                    firstSeason.monitor = true;
+                    this.model.setSeasonPass(lastSeason.seasonNumber + 1);
+                    this.model.setSeasonMonitored(firstSeason.seasonNumber);
                 }
 
                 else if (monitor === 'missing') {
