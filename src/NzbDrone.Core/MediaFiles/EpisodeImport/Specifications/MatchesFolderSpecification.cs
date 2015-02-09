@@ -22,7 +22,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            var folderInfo = Parser.Parser.ParseTitle(new FileInfo(localEpisode.Path).DirectoryName);
+            var dirInfo = new FileInfo(localEpisode.Path).Directory;
+
+            if (dirInfo == null)
+            {
+                return Decision.Accept();
+            }
+
+            var folderInfo = Parser.Parser.ParseTitle(dirInfo.Name);
 
             if (folderInfo == null)
             {
@@ -38,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (unexpected.Any())
             {
-                _logger.Debug("Unexpected episode number(s) in file: {0}", unexpected);
+                _logger.Debug("Unexpected episode number(s) in file: {0}", String.Join(", ", unexpected));
 
                 if (unexpected.Count == 1)
                 {
