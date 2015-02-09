@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
         public KickassTorrentsSettings()
         {
-            BaseUrl = "http://kickass.so";
+            BaseUrl = "http://kickass.to";
             VerifiedOnly = true;
         }
 
