@@ -78,6 +78,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hannibal.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("Heidi Girl of the Alps (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
         [TestCase("[Doki] Clannad - 02 (848x480 XviD BD MP3) [95360783]", false)]
+        [TestCase("The.Simpsons.S25E21.Pay.Pal.1080p.WEB-DL.DD5.1.H.264-NTb-RP", false)]
         public void should_parse_dvd_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.DVD, proper);
@@ -152,6 +153,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", false)]
         [TestCase("The.Big.Bang.Theory.S06E11.The.Santa.Simulation.1080p.WEB-DL.DD5.1.H.264", false)]
         [TestCase("Rosemary's.Baby.S01E02.Night.2.[WEBDL-1080p].mkv", false)]
+        [TestCase("Episodes.S021080P.WEB-DL.DD5.1.H.264-BS", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -183,6 +185,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Zurako] Log Horizon - 01 - The Apocalypse (BD 1080p AAC) [7AE12174].mkv", false)]
         [TestCase("WEEDS.S03E01-06.DUAL.1080p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
         [TestCase("[Coalgirls]_Durarara!!_01_(1920x1080_Blu-ray_FLAC)_[8370CB8F].mkv", false)]
+        [TestCase("Sons.Of.Anarchy.S02E13.call.pal.1080p.BluRay.x264-AVCDVD.mkv", false)]
         public void should_parse_bluray1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080p, proper);

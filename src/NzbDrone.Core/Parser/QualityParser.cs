@@ -18,11 +18,11 @@ namespace NzbDrone.Core.Parser
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRiP)|
                                                                 (?<brrip>BRRip)|
-                                                                (?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)|
+                                                                (?<dvd>DVD|DVDRip|NTSC|\bPAL\b|xvidvd)|
                                                                 (?<dsr>WS[-_. ]DSR|DSR)|
                                                                 (?<pdtv>PDTV)|
                                                                 (?<sdtv>SDTV)
-                                                                )\b",
+                                                                )",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
         private static readonly Regex RawHDRegex = new Regex(@"\b(?<rawhd>TrollHD|RawHD|1080i[-_. ]HDTV|Raw[-_. ]HD|MPEG[-_. ]?2)\b",
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RealRegex = new Regex(@"\b(?<real>)real\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480|848x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"(?:(?<_480p>480p|640x480|848x480|bdrip)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",
@@ -288,12 +288,14 @@ namespace NzbDrone.Core.Parser
         {
             var match = ResolutionRegex.Match(name);
 
-            if (!match.Success) return Resolution.Unknown;
-            if (match.Groups["_480p"].Success) return Resolution._480p;
-            if (match.Groups["_576p"].Success) return Resolution._576p;
-            if (match.Groups["_720p"].Success) return Resolution._720p;
-            if (match.Groups["_1080p"].Success) return Resolution._1080p;
-
+            if (match.Success)
+            {
+                if (match.Groups["_480p"].Success) return Resolution._480p;
+                if (match.Groups["_576p"].Success) return Resolution._576p;
+                if (match.Groups["_720p"].Success) return Resolution._720p;
+                if (match.Groups["_1080p"].Success) return Resolution._1080p;
+            }
+ 
             return Resolution.Unknown;
         }
 
