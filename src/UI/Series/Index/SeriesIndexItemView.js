@@ -5,8 +5,8 @@ var CommandController = require('../../Commands/CommandController');
 module.exports = Marionette.ItemView.extend({
     ui             : {refresh : '.x-refresh'},
     events         : {
-        "click .x-edit"    : '_editSeries',
-        "click .x-refresh" : '_refreshSeries'
+        'click .x-edit'    : '_editSeries',
+        'click .x-refresh' : '_refreshSeries'
     },
     onRender       : function(){
         CommandController.bindToCommand({
