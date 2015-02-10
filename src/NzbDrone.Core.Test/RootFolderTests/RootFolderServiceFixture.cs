@@ -4,6 +4,7 @@ using System.IO;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -19,6 +20,10 @@ namespace NzbDrone.Core.Test.RootFolderTests
         {
             Mocker.GetMock<IDiskProvider>()
                   .Setup(m => m.FolderExists(It.IsAny<string>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(m => m.FolderWritable(It.IsAny<string>()))
                   .Returns(true);
 
             Mocker.GetMock<IRootFolderRepository>()
@@ -77,6 +82,26 @@ namespace NzbDrone.Core.Test.RootFolderTests
             Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
         }
 
-        
+        [Test]
+        public void should_throw_when_adding_not_writable_folder()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(m => m.FolderWritable(It.IsAny<string>()))
+                  .Returns(false);
+
+            Assert.Throws<UnauthorizedAccessException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
+        }
+
+        [Test]
+        public void should_throw_when_same_path_as_drone_factory()
+        {
+            var path = @"C:\TV".AsOsAgnostic();
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.DownloadedEpisodesFolder)
+                  .Returns(path);
+
+            Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = path }));
+        }
     }
 }

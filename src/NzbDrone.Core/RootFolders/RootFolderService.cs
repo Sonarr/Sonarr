@@ -6,7 +6,6 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 
@@ -68,10 +67,20 @@ namespace NzbDrone.Core.RootFolders
 
             rootFolders.ForEach(folder =>
             {
-                if (folder.Path.IsPathValid() && _diskProvider.FolderExists(folder.Path))
+                try
                 {
-                    folder.FreeSpace = _diskProvider.GetAvailableSpace(folder.Path);
-                    folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
+                    if (folder.Path.IsPathValid() && _diskProvider.FolderExists(folder.Path))
+                    {
+                        folder.FreeSpace = _diskProvider.GetAvailableSpace(folder.Path);
+                        folder.UnmappedFolders = GetUnmappedFolders(folder.Path);
+                    }
+                }
+                //We don't want an exception to prevent the root folders from loading in the UI, so they can still be deleted
+                catch (Exception ex)
+                {
+                    _logger.ErrorException("Unable to get free space and unmapped folders for root folder: " + folder.Path, ex);
+                    folder.FreeSpace = 0;
+                    folder.UnmappedFolders = new List<UnmappedFolder>();
                 }
             });
 
@@ -83,17 +92,29 @@ namespace NzbDrone.Core.RootFolders
             var all = All();
 
             if (String.IsNullOrWhiteSpace(rootFolder.Path) || !Path.IsPathRooted(rootFolder.Path))
+            {
                 throw new ArgumentException("Invalid path");
+            }
 
             if (!_diskProvider.FolderExists(rootFolder.Path))
+            {
                 throw new DirectoryNotFoundException("Can't add root directory that doesn't exist.");
+            }
 
             if (all.Exists(r => r.Path.PathEquals(rootFolder.Path)))
+            {
                 throw new InvalidOperationException("Recent directory already exists.");
+            }
 
-            if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder) &&
-                _configService.DownloadedEpisodesFolder.PathEquals(rootFolder.Path))
+            if (_configService.DownloadedEpisodesFolder.IsNotNullOrWhiteSpace() && _configService.DownloadedEpisodesFolder.PathEquals(rootFolder.Path))
+            {
                 throw new InvalidOperationException("Drone Factory folder cannot be used.");
+            }
+
+            if (!_diskProvider.FolderWritable(rootFolder.Path))
+            {
+                throw new UnauthorizedAccessException(String.Format("Root folder path '{0}' is not writable by user '{1}'", rootFolder.Path, Environment.UserName));
+            }
 
             _rootFolderRepository.Insert(rootFolder);
 
