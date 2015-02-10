@@ -80,7 +80,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                         if (remoteEpisode.Series != null)
                         {
-                            remoteEpisode.DownloadAllowed = true;
+                            remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();
                             decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
                         else
