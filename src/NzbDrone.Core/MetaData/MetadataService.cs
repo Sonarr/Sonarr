@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Metadata
 
             var hash = seriesMetadata.Contents.SHA256Hash();
 
-            var metadata = existingMetadataFiles.SingleOrDefault(e => e.Type == MetadataType.SeriesMetadata) ??
+            var metadata = GetMetadataFile(series, existingMetadataFiles, e => e.Type == MetadataType.SeriesMetadata) ??
                                new MetadataFile
                                {
                                    SeriesId = series.Id,
@@ -180,8 +180,8 @@ namespace NzbDrone.Core.Metadata
 
             var fullPath = Path.Combine(series.Path, episodeMetadata.RelativePath);
 
-            var existingMetadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.EpisodeMetadata &&
-                                                                              c.EpisodeFileId == episodeFile.Id);
+            var existingMetadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.EpisodeMetadata &&
+                                                                                  c.EpisodeFileId == episodeFile.Id);
 
             if (existingMetadata != null)
             {
@@ -230,8 +230,8 @@ namespace NzbDrone.Core.Metadata
                     continue;
                 }
 
-                var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeriesImage &&
-                                                                          c.RelativePath == image.RelativePath) ??
+                var metadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.SeriesImage &&
+                                                                              c.RelativePath == image.RelativePath) ??
                                new MetadataFile
                                {
                                    SeriesId = series.Id,
@@ -252,19 +252,23 @@ namespace NzbDrone.Core.Metadata
         {
             var result = new List<MetadataFile>();
 
-            foreach (var season in series.Seasons)
+            foreach (var seasonItem in series.Seasons)
             {
-                foreach (var image in consumer.SeasonImages(series, season))
+                var season = seasonItem;
+
+                foreach (var imageItem in consumer.SeasonImages(series, season))
                 {
+                    var image = imageItem;
+
                     if (_diskProvider.FileExists(image.RelativePath))
                     {
                         _logger.Debug("Season image already exists: {0}", image.RelativePath);
                         continue;
                     }
 
-                    var metadata = existingMetadataFiles.SingleOrDefault(c => c.Type == MetadataType.SeasonImage &&
-                                                                            c.SeasonNumber == season.SeasonNumber &&
-                                                                            c.RelativePath == image.RelativePath) ??
+                    var metadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.SeasonImage &&
+                                                                                  c.SeasonNumber == season.SeasonNumber &&
+                                                                                  c.RelativePath == image.RelativePath) ??
                                 new MetadataFile
                                 {
                                     SeriesId = series.Id,
@@ -297,8 +301,8 @@ namespace NzbDrone.Core.Metadata
                     continue;
                 }
 
-                var existingMetadata = existingMetadataFiles.FirstOrDefault(c => c.Type == MetadataType.EpisodeImage &&
-                                                                                  c.EpisodeFileId == episodeFile.Id);
+                var existingMetadata = GetMetadataFile(series, existingMetadataFiles, c => c.Type == MetadataType.EpisodeImage &&
+                                                                                      c.EpisodeFileId == episodeFile.Id);
 
                 if (existingMetadata != null)
                 {
@@ -351,6 +355,30 @@ namespace NzbDrone.Core.Metadata
         {
             _diskProvider.WriteAllText(path, contents);
             _mediaFileAttributeService.SetFilePermissions(path);
+        }
+
+        private MetadataFile GetMetadataFile(Series series, List<MetadataFile> existingMetadataFiles, Func<MetadataFile, bool> predicate)
+        {
+            var matchingMetadataFiles = existingMetadataFiles.Where(predicate).ToList();
+
+            if (matchingMetadataFiles.Empty())
+            {
+                return null;
+            }
+
+            //Remove duplicate metadata files from DB and disk
+            foreach (var file in matchingMetadataFiles.Skip(1))
+            {
+                var path = Path.Combine(series.Path, file.RelativePath);
+
+                _logger.Debug("Removing duplicate Metadata file: {0}", path);
+
+                _diskProvider.DeleteFile(path);
+                _metadataFileService.Delete(file.Id);
+            }
+
+            
+            return matchingMetadataFiles.First();
         }
     }
 }
