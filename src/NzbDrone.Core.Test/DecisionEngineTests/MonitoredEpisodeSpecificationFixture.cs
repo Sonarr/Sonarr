@@ -105,10 +105,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_true_if_it_is_a_search()
+        public void should_return_true_for_single_episode_search()
         {
             _fakeSeries.Monitored = false;
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Accepted.Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria()).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_episode_is_monitored_for_season_search()
+        {
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria()).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_episode_is_not_monitored_for_season_search()
+        {
+            WithFirstEpisodeUnmonitored();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria()).Accepted.Should().BeFalse();
         }
     }
 }
