@@ -289,6 +289,10 @@ define(
                     options.ignoreEpisodesWithoutFiles = true;
                 }
 
+                else if (monitor === 'none') {
+                    this.model.setSeasonPass(lastSeason.seasonNumber + 1);
+                }
+
                 return options;
             }
         });
