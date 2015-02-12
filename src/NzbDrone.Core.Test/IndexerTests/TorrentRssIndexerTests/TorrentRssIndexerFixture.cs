@@ -25,13 +25,13 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             };
         }
 
-        [TestCase("https://www.ezrss.it/", @"Files/RSS/Eztv.xml")]
-        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", @"Files/RSS/ImmortalSeed.xml")]
+        [TestCase("https://www.ezrss.it/", @"Eztv.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", @"ImmortalSeed.xml")]
         public void should_detect_and_parse_recent_feed(string baseUrl, string rssXmlFile)
         {
             Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = baseUrl };
 
-            var recentFeed = ReadAllText(rssXmlFile);
+            var recentFeed = ReadAllText(@"Files/RSS/" + rssXmlFile);
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

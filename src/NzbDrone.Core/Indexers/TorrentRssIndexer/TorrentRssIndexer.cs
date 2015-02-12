@@ -104,7 +104,12 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
                 }
             }
 
-            parser = new TorrentRssParser { ParseSeedersInDescription = true, ParseSizeInDescription = true };
+            parser = new TorrentRssParser
+            {
+                ParseSeedersInDescription = true, 
+                ParseSizeInDescription = true
+            };
+
             if (TestTorrentParser(response, parser))
             {
                 _logger.Debug("Feed is a normal RSS Feed with Seeders and Size in Description");
@@ -114,7 +119,12 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
                 return settings;
             }
 
-            parser = new TorrentRssParser { ParseSeedersInDescription = true, SizeElementName = "Size" };
+            parser = new TorrentRssParser
+            {
+                ParseSeedersInDescription = true, 
+                SizeElementName = "Size"
+            };
+
             if (TestTorrentParser(response, parser))
             {
                 _logger.Debug("Feed is an RSS Feed with Seeders in Description and Size field is \"Size\"");

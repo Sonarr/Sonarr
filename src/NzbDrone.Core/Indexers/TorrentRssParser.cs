@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Indexers
         protected override long GetSize(XElement item)
         {
             var size = base.GetSize(item);
-            if (size == 0 && (!string.IsNullOrEmpty(SizeElementName)))
+            if (size == 0 && (SizeElementName.IsNotNullOrWhiteSpace()))
             {
                 if (item.Element(SizeElementName) != null)
                 {

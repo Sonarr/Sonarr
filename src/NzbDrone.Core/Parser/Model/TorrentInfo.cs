@@ -1,9 +1,8 @@
 using System;
+using System.Text;
 
 namespace NzbDrone.Core.Parser.Model
 {
-    using System.Text;
-
     public class TorrentInfo : ReleaseInfo
     {
         public string MagnetUrl { get; set; }
