@@ -16,7 +16,6 @@ using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.SignalR;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Series
 {
