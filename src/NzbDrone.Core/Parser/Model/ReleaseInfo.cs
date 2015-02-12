@@ -3,6 +3,8 @@ using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Parser.Model
 {
+    using System.Text;
+
     public class ReleaseInfo
     {
         public String Guid { get; set; }
@@ -55,6 +57,28 @@ namespace NzbDrone.Core.Parser.Model
         public override string ToString()
         {
             return String.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);
+        }
+
+        public virtual string ToString(string format)
+        {
+            switch (format.ToUpperInvariant())
+            {
+                case "L": // Long format
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.AppendLine("Guid: " + Guid ?? "Empty");
+                    stringBuilder.AppendLine("Title: " + Title ?? "Empty");
+                    stringBuilder.AppendLine("Size: " + Size ?? "Empty");
+                    stringBuilder.AppendLine("InfoUrl: " + InfoUrl ?? "Empty");
+                    stringBuilder.AppendLine("DownloadUrl: " + DownloadUrl ?? "Empty");
+                    stringBuilder.AppendLine("Indexer: " + Indexer ?? "Empty");
+                    stringBuilder.AppendLine("CommentUrl: " + CommentUrl ?? "Empty");
+                    stringBuilder.AppendLine("DownloadProtocol: " + DownloadProtocol ?? "Empty");
+                    stringBuilder.AppendLine("TvRageId: " + TvRageId ?? "Empty");
+                    stringBuilder.AppendLine("PublishDate: " + PublishDate ?? "Empty");
+                    return stringBuilder.ToString();
+                default:
+                    return ToString();
+            }
         }
     }
 }

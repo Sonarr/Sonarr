@@ -212,6 +212,8 @@
     <Compile Include="IndexerTests\KickassTorrentsTests\KickassTorrentsFixture.cs" />
     <Compile Include="IndexerTests\NyaaTests\NyaaFixture.cs" />
     <Compile Include="IndexerTests\TorrentleechTests\TorrentleechFixture.cs" />
+    <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssIndexerFixture.cs" />
+    <Compile Include="IndexerTests\TorrentRssIndexerTests\TestTorrentRssIndexer.cs" />
     <Compile Include="IndexerTests\XElementExtensionsFixture.cs" />
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
@@ -375,6 +377,7 @@
     </Content>
     <Content Include="Files\RSS\Eztv.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="..\NzbDrone.Test.Common\App.config">
       <Link>App.config</Link>
@@ -452,6 +455,7 @@
     </Content>
     <Content Include="Files\RSS\KickassTorrents.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Files\RSS\Torrentleech.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
