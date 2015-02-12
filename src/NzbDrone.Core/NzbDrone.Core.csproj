@@ -497,6 +497,10 @@
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexer.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerParserSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerSettings.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />
     <Compile Include="Indexers\Wombles\WomblesRssParser.cs" />
