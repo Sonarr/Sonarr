@@ -88,11 +88,6 @@ namespace NzbDrone.Common.Instrumentation
         {
             var level = LogLevel.Trace;
 
-            if (RuntimeInfoBase.IsProduction)
-            {
-                level = LogLevel.Info;
-            }
-
             var coloredConsoleTarget = new ColoredConsoleTarget();
 
             coloredConsoleTarget.Name = "consoleLogger";
