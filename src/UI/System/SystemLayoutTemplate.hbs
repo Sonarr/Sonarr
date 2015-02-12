@@ -6,15 +6,15 @@
     <li><a href="#logs" class="x-logs-tab no-router">Logs</a></li>
     <li class="lifecycle-controls pull-right">
         <div class="btn-group">
-            <button class="btn btn-default btn-icon-only x-shutdown" title="Shutdown" data-container="body">
+            <button class="btn btn-default btn-icon-only x-shutdown" title="Shutdown">
                 <i class="icon-nd-shutdown"></i>
             </button>
-            <button class="btn btn-default btn-icon-only x-restart" title="Restart" data-container="body">
+            <button class="btn btn-default btn-icon-only x-restart" title="Restart">
                 <i class="icon-nd-restart"></i>
             </button>
 
             {{#if_eq authentication compare="forms"}}
-            <a href="{{UrlBase}}/logout" class="btn btn-default btn-icon-only" title="Logout" data-container="body">
+            <a href="{{UrlBase}}/logout" class="btn btn-default btn-icon-only" title="Logout">
                 <i class="icon-lock"></i>
             </a>
             {{/if_eq}}

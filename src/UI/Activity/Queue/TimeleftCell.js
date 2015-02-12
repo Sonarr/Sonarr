@@ -14,7 +14,6 @@ module.exports = NzbDroneCell.extend({
                 var time = '{0} at {1}'.format(FormatHelpers.relativeDate(ect), moment(ect).format(UiSettingsModel.time(true, false)));
                 this.$el.html('-');
                 this.$el.attr('title', 'Will be processed during the first RSS Sync after {0}'.format(time));
-                this.$el.attr('data-container', 'body');
                 return this;
             }
             var timeleft = this.cellValue.get('timeleft');

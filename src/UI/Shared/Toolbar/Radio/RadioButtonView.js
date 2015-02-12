@@ -19,7 +19,6 @@ module.exports = Marionette.ItemView.extend({
         }
         if(this.model.get('tooltip')) {
             this.$el.attr('title', this.model.get('tooltip'));
-            this.$el.attr('data-container', 'body');
         }
     },
     onClick        : function(){
