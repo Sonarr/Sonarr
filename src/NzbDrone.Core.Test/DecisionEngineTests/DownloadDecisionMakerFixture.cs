@@ -48,7 +48,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail3"));
 
             _reports = new List<ReleaseInfo> { new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
-            _remoteEpisode = new RemoteEpisode { Series = new Series() };
+            _remoteEpisode = new RemoteEpisode {
+                Series = new Series(),
+                Episodes = new List<Episode> { new Episode() }
+            };
 
             Mocker.GetMock<IParsingService>()
                   .Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
@@ -238,6 +241,34 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var approvedDecisions = decisions.Where(v => v.Approved).ToList();
 
             approvedDecisions.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void should_not_allow_download_if_series_is_unknown()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Series = null;
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(1);
+
+            result.First().RemoteEpisode.DownloadAllowed.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_allow_download_if_no_episodes_found()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Episodes = new List<Episode>();
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(1);
+
+            result.First().RemoteEpisode.DownloadAllowed.Should().BeFalse();
         }
     }
 }

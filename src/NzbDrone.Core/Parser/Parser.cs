@@ -54,6 +54,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}(?!\d+)))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[\w{8}\])(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Episodes with airdate AND season/episode number
+                new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9]).+?(?:s?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+)))(?:[ex](?<episode>(?<!\d+)(?:\d{1,2})(?!\d+)))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Multi-episode Repeated (S01E05 - S01E06, 1x05 - 1x06, etc)
                 new Regex(@"^(?<title>.+?)(?:(\W|_)+S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -105,6 +109,10 @@ namespace NzbDrone.Core.Parser
 
                 //Episodes with single digit episode number (S01E1, S01E5E6, etc)
                 new Regex(@"^(?<title>.*?)(?:(?:_|-|\s|\.)S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]){1,2}(?<episode>\d{1}))+)+(\W+|_|$)(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //iTunes Season 1\05 Title (Quality).ext
+                new Regex(@"^(?:Season(?:_|-|\s|\.)(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:_|-|\s|\.)(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Anime - Title Absolute Episode Number (e66)
@@ -196,14 +204,14 @@ namespace NzbDrone.Core.Parser
 
             if (result == null)
             {
-                Logger.Debug("Attempting to parse episode info using directory path. {0}", fileInfo.Directory.Name);
-                result = ParseTitle(fileInfo.Directory.Name + fileInfo.Extension);
+                Logger.Debug("Attempting to parse episode info using directory and file names. {0}", fileInfo.Directory.Name);
+                result = ParseTitle(fileInfo.Directory.Name + " " + fileInfo.Name + fileInfo.Extension);
             }
 
             if (result == null)
             {
-                Logger.Debug("Attempting to parse episode info using full path. {0}", fileInfo.FullName);
-                result = ParseTitle(fileInfo.FullName);
+                Logger.Debug("Attempting to parse episode info using directory name. {0}", fileInfo.Directory.Name);
+                result = ParseTitle(fileInfo.Directory.Name + fileInfo.Extension);
             }
 
             if (result == null)

@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     {
         private const string DRONE_FACTORY_FOLDER = @"C:\Test\Unsorted";
 
-        private void GivenDroneFactoryFolder(bool exists = false)
+        private void GivenDroneFactoryFolder(bool exists = false, bool writable = true)
         {
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.DownloadedEpisodesFolder)
@@ -22,6 +22,10 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(DRONE_FACTORY_FOLDER))
                   .Returns(exists);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderWritable(It.IsAny<String>()))
+                  .Returns(exists && writable);
         }
         
         [Test]
@@ -35,11 +39,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_error_when_unable_to_write_to_drone_factory_folder()
         {
-            GivenDroneFactoryFolder(true);
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.WriteAllText(It.IsAny<String>(), It.IsAny<String>()))
-                  .Throws<Exception>();
+            GivenDroneFactoryFolder(true, false);
 
             Subject.Check().ShouldBeError();
         }

@@ -129,7 +129,11 @@ namespace NzbDrone.Core.Messaging.Commands
                 }
 
                 handler.Execute((TCommand)command);
-                _trackCommands.Completed(command);
+
+                if (command.State == CommandStatus.Running)
+                {
+                    _trackCommands.Completed(command);
+                }
             }
             catch (Exception e)
             {

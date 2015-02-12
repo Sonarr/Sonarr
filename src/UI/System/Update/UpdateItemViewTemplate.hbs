@@ -5,14 +5,17 @@
                 - {{ShortDate releaseDate}}
             </span>
             <span class="status">
+                {{#unless_eq branch compare="master"}}
+                    <span class="label label-default">{{branch}}</span>
+                {{/unless_eq}}
                 {{#if installed}}
                     <span class="label label-success">Installed</span>
                 {{else}}
                     {{#if latest}}
                         {{#if installable}}
-                            <span class="label label-default install-update x-install-update">Install</span>
+                            <span class="label label-info install-update x-install-update">Install Latest</span>
                         {{else}}
-                            <span class="label label-default label-disabled" title="Cannot install an older version">Install</span>
+                            <span class="label label-info label-disabled" title="Cannot install an older version">Install Latest</span>
                         {{/if}}
                     {{/if}}
                 {{/if}}

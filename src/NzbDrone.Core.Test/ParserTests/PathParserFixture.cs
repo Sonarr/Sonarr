@@ -26,11 +26,13 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"C:\Test\Unsorted\The.Big.Bang.Theory.S01E01.720p.HDTV\tbbt101.avi", 1, 1)]
         [TestCase(@"C:\Test\Unsorted\Terminator.The.Sarah.Connor.Chronicles.S02E19.720p.BluRay.x264-SiNNERS-RP\ba27283b17c00d01193eacc02a8ba98eeb523a76.mkv", 2, 19)]
         [TestCase(@"C:\Test\Unsorted\Terminator.The.Sarah.Connor.Chronicles.S02E18.720p.BluRay.x264-SiNNERS-RP\45a55debe3856da318cc35882ad07e43cd32fd15.mkv", 2, 18)]
-        [TestCase(@"C:\Test\The.Blacklist.S01E16.720p.HDTV.X264-DIMENSION\XRmZciqkBopq4851Ddbipe\Vh1FvU3bJXw6zs8EEUX4bMo5vbbMdHghxHirc.mkv", 1, 16)]
-        [TestCase(@"C:\Test\Deadwood.S02E12.1080p.BluRay.x264-SONARR\Backup_72023S02-12\Backup_72023S02-12.mkv", 2, 12)]
+        [TestCase(@"C:\Test\Series\Season 01\01 Pilot (1080p HD).mkv", 1, 1)]
+        [TestCase(@"C:\Test\Series\Season 01\1 Pilot (1080p HD).mkv", 1, 1)]
+        [TestCase(@"C:\Test\Series\Season 1\02 Honor Thy Father (1080p HD).m4v", 1, 2)]
+        [TestCase(@"C:\Test\Series\Season 1\2 Honor Thy Father (1080p HD).m4v", 1, 2)]
         public void should_parse_from_path(string path, int season, int episode)
         {
-            var result = Parser.Parser.ParsePath(path);
+            var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers[0].Should().Be(episode);

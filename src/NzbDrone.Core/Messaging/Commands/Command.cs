@@ -60,21 +60,21 @@ namespace NzbDrone.Core.Messaging.Commands
             SetMessage("Starting");
         }
 
-        public void Failed(Exception exception)
+        public void Failed(Exception exception, string message = "Failed")
         {
             _stopWatch.Stop();
             StateChangeTime = DateTime.UtcNow;
             State = CommandStatus.Failed;
             Exception = exception;
-            SetMessage("Failed");
+            SetMessage(message);
         }
 
-        public void Completed()
+        public void Completed(string message = "Completed")
         {
             _stopWatch.Stop();
             StateChangeTime = DateTime.UtcNow;
             State = CommandStatus.Completed;
-            SetMessage("Completed");
+            SetMessage(message);
         }
 
         public void SetMessage(string message)

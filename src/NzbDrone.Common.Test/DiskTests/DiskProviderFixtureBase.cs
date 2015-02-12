@@ -8,7 +8,7 @@ using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test.DiskTests
 {
-    public class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
+    public abstract class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
         public DirectoryInfo GetFilledTempFolder()
         {
@@ -44,6 +44,38 @@ namespace NzbDrone.Common.Test.DiskTests
         public void directory_exist_should_not_be_able_to_find_none_existing_folder()
         {
             Subject.FolderExists(@"C:\ThisBetterNotExist\".AsOsAgnostic()).Should().BeFalse();
+        }
+
+        protected abstract void SetWritePermissions(string path, bool writable);
+
+        [Test]
+        public void FolderWritable_should_return_true_for_writable_directory()
+        {
+            var tempFolder = GetTempFilePath();
+            Directory.CreateDirectory(tempFolder);
+
+            var result = Subject.FolderWritable(tempFolder);
+
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void FolderWritable_should_return_false_for_unwritable_directory()
+        {
+            var tempFolder = GetTempFilePath();
+            Directory.CreateDirectory(tempFolder);
+
+            SetWritePermissions(tempFolder, false);
+            try
+            {
+                var result = Subject.FolderWritable(tempFolder);
+
+                result.Should().BeFalse();
+            }
+            finally
+            {
+                SetWritePermissions(tempFolder, true);
+            }
         }
 
         [Test]

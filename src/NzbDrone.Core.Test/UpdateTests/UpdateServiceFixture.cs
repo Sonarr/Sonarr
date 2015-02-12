@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Moq;
@@ -11,6 +12,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Common.Model;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.Commands;
@@ -58,6 +60,14 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetCurrentProcess()).Returns(new ProcessInfo { Id = 12 });
             Mocker.GetMock<IRuntimeInfo>().Setup(c => c.ExecutingApplication).Returns(@"C:\Test\NzbDrone.exe");
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .SetupGet(s => s.UpdateAutomatically)
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(It.IsAny<string>()))
+                  .Returns(true);
 
             _sandboxFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder();
         }
@@ -257,6 +267,47 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             Subject.Execute(new ApplicationUpdateCommand());
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_log_error_when_startup_folder_is_not_writable()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(It.IsAny<string>()))
+                  .Returns(false);
+
+            var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_log_when_install_cannot_be_started()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(It.IsAny<string>()))
+                  .Returns(false);
+
+            var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_switch_to_branch_specified_in_updatepackage()
+        {
+            _updatePackage.Branch = "fake";
+
+            Subject.Execute(new ApplicationUpdateCommand());
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .Verify(v => v.SaveConfigDictionary(It.Is<Dictionary<string, object>>(d => d.ContainsKey("Branch") && (string)d["Branch"] == "fake")), Times.Once());
         }
 
         [TearDown]

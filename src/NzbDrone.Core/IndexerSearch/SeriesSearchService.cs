@@ -35,7 +35,7 @@ namespace NzbDrone.Core.IndexerSearch
             {
                 if (!season.Monitored)
                 {
-                    _logger.Debug("Season {0} of {1} is not monitored, skipping seaarch", season.SeasonNumber, series.Title);
+                    _logger.Debug("Season {0} of {1} is not monitored, skipping search", season.SeasonNumber, series.Title);
                     continue;
                 }
 

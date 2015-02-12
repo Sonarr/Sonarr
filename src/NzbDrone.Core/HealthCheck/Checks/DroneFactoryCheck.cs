@@ -31,13 +31,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "Drone factory folder does not exist");
             }
             
-            try
-            {
-                var testPath = Path.Combine(droneFactoryFolder, "drone_test.txt");
-                _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                _diskProvider.DeleteFile(testPath);
-            }
-            catch (Exception)
+            if (!_diskProvider.FolderWritable(droneFactoryFolder))
             {
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to write to drone factory folder");
             }

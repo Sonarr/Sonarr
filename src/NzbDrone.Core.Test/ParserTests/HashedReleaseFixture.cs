@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ParserTests
                 @"C:\Test\Deadwood.S02E12.1080p.BluRay.x264-SONARR\Backup_72023S02-12.mkv".AsOsAgnostic(),
                 "deadwood",
                 Quality.Bluray1080p,
-                "SONARR"
+                null
             },
             new object[]
             {

@@ -29,15 +29,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             if (OsInfo.IsWindows || _configFileProvider.UpdateAutomatically)
             {
-                try
+                if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
                 {
-                    var testPath = Path.Combine(_appFolderInfo.StartUpFolder, "drone_test.txt");
-                    _diskProvider.WriteAllText(testPath, DateTime.Now.ToString());
-                    _diskProvider.DeleteFile(testPath);
-                }
-                catch (Exception)
-                {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to update, running from write-protected folder");
+                    return new HealthCheck(GetType(), HealthCheckResult.Error,
+                        string.Format("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", _appFolderInfo.StartUpFolder, Environment.UserName),
+                        "Cannot install update because startup folder is not writable by the user");
                 }
             }
 
