@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Indexers
     public abstract class HttpIndexerBase<TSettings> : IndexerBase<TSettings>
         where TSettings : IProviderConfig, new()
     {
-        private const Int32 MaxNumResultsPerQuery = 1000;
+        protected const Int32 MaxNumResultsPerQuery = 1000;
 
         private readonly IHttpClient _httpClient;
 
@@ -190,11 +190,16 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual IList<ReleaseInfo> FetchPage(IndexerRequest request, IParseIndexerResponse parser)
         {
-            _logger.Debug("Downloading Feed " + request.Url);
-
-            var response = new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
+            var response = FetchIndexerResponse(request);
 
             return parser.ParseResponse(response).ToList();
+        }
+
+        protected virtual IndexerResponse FetchIndexerResponse(IndexerRequest request)
+        {
+            _logger.Debug("Downloading Feed " + request.Url);
+
+            return new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
         }
 
         protected override void Test(List<ValidationFailure> failures)

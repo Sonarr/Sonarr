@@ -523,6 +523,14 @@
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\ITorrentRssParserFactory.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\ITorrentRssSettingsDetector.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexer.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerParserSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssParserFactory.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssSettingsDetector.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
     <Compile Include="Indexers\Torznab\Torznab.cs" />
     <Compile Include="Indexers\Torznab\TorznabException.cs" />
