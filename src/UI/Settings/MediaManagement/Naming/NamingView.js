@@ -5,7 +5,7 @@ var BasicNamingView = require('./Basic/BasicNamingView');
 var AsModelBoundView = require('../../../Mixins/AsModelBoundView');
 var AsValidatedView = require('../../../Mixins/AsValidatedView');
 
-module.exports = (function(){
+module.exports = (function() {
     var view = Marionette.Layout.extend({
         template                            : 'Settings/MediaManagement/Naming/NamingViewTemplate',
         ui                                  : {
@@ -27,31 +27,30 @@ module.exports = (function(){
             "click .x-naming-token-helper a" : '_addToken',
             "change .x-multi-episode-style"  : '_multiEpisodeFomatChanged'
         },
-        regions                             : {basicNamingRegion : '.x-basic-naming'},
-        onRender                            : function(){
-            if(!this.model.get('renameEpisodes')) {
+        regions                             : { basicNamingRegion : '.x-basic-naming' },
+        onRender                            : function() {
+            if (!this.model.get('renameEpisodes')) {
                 this.ui.namingOptions.hide();
             }
-            var basicNamingView = new BasicNamingView({model : this.model});
+            var basicNamingView = new BasicNamingView({ model : this.model });
             this.basicNamingRegion.show(basicNamingView);
             this.namingSampleModel = new NamingSampleModel();
             this.listenTo(this.model, 'change', this._updateSamples);
             this.listenTo(this.namingSampleModel, 'sync', this._showSamples);
             this._updateSamples();
         },
-        _setFailedDownloadOptionsVisibility : function(){
+        _setFailedDownloadOptionsVisibility : function() {
             var checked = this.ui.renameEpisodesCheckbox.prop('checked');
-            if(checked) {
+            if (checked) {
                 this.ui.namingOptions.slideDown();
-            }
-            else {
+            } else {
                 this.ui.namingOptions.slideUp();
             }
         },
-        _updateSamples                      : function(){
-            this.namingSampleModel.fetch({data : this.model.toJSON()});
+        _updateSamples                      : function() {
+            this.namingSampleModel.fetch({ data : this.model.toJSON() });
         },
-        _showSamples                        : function(){
+        _showSamples                        : function() {
             this.ui.singleEpisodeExample.html(this.namingSampleModel.get('singleEpisodeExample'));
             this.ui.multiEpisodeExample.html(this.namingSampleModel.get('multiEpisodeExample'));
             this.ui.dailyEpisodeExample.html(this.namingSampleModel.get('dailyEpisodeExample'));
@@ -60,16 +59,15 @@ module.exports = (function(){
             this.ui.seriesFolderExample.html(this.namingSampleModel.get('seriesFolderExample'));
             this.ui.seasonFolderExample.html(this.namingSampleModel.get('seasonFolderExample'));
         },
-        _addToken                           : function(e){
+        _addToken                           : function(e) {
             e.preventDefault();
             e.stopPropagation();
             var target = e.target;
             var token = '';
             var input = this.$(target).closest('.x-helper-input').children('input');
-            if(this.$(target).attr('data-token')) {
+            if (this.$(target).attr('data-token')) {
                 token = '{{0}}'.format(this.$(target).attr('data-token'));
-            }
-            else {
+            } else {
                 token = this.$(target).attr('data-separator');
             }
             input.val(input.val() + token);
@@ -77,7 +75,7 @@ module.exports = (function(){
             this.ui.namingTokenHelper.removeClass('open');
             input.focus();
         },
-        multiEpisodeFormatChanged           : function(){
+        multiEpisodeFormatChanged           : function() {
             this.model.set('multiEpisodeStyle', this.ui.multiEpisodeStyle.val());
         }
     });

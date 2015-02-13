@@ -7,23 +7,26 @@ var RemotePathMappingCollection = require('./RemotePathMapping/RemotePathMapping
 var RemotePathMappingCollectionView = require('./RemotePathMapping/RemotePathMappingCollectionView');
 
 module.exports = Marionette.Layout.extend({
-    template   : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
-    regions    : {
+    template : 'Settings/DownloadClient/DownloadClientLayoutTemplate',
+
+    regions : {
         downloadClients    : '#x-download-clients-region',
         downloadHandling   : '#x-download-handling-region',
         droneFactory       : '#x-dronefactory-region',
         remotePathMappings : '#x-remotepath-mapping-region'
     },
-    initialize : function(){
+
+    initialize : function() {
         this.downloadClientsCollection = new DownloadClientCollection();
         this.downloadClientsCollection.fetch();
         this.remotePathMappingCollection = new RemotePathMappingCollection();
         this.remotePathMappingCollection.fetch();
     },
-    onShow     : function(){
-        this.downloadClients.show(new DownloadClientCollectionView({collection : this.downloadClientsCollection}));
-        this.downloadHandling.show(new DownloadHandlingView({model : this.model}));
-        this.droneFactory.show(new DroneFactoryView({model : this.model}));
-        this.remotePathMappings.show(new RemotePathMappingCollectionView({collection : this.remotePathMappingCollection}));
+
+    onShow : function() {
+        this.downloadClients.show(new DownloadClientCollectionView({ collection : this.downloadClientsCollection }));
+        this.downloadHandling.show(new DownloadHandlingView({ model : this.model }));
+        this.droneFactory.show(new DroneFactoryView({ model : this.model }));
+        this.remotePathMappings.show(new RemotePathMappingCollectionView({ collection : this.remotePathMappingCollection }));
     }
 });

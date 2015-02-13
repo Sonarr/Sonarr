@@ -9,16 +9,24 @@ module.exports = Marionette.CompositeView.extend({
     itemView          : ProfileView,
     itemViewContainer : '.profiles',
     template          : 'Settings/Profile/ProfileCollectionTemplate',
-    ui                : {"addCard" : '.x-add-card'},
-    events            : {"click .x-add-card" : '_addProfile'},
-    appendHtml        : function(collectionView, itemView, index){
+
+    ui : {
+        'addCard' : '.x-add-card'
+    },
+
+    events : {
+        'click .x-add-card' : '_addProfile'
+    },
+
+    appendHtml : function(collectionView, itemView, index) {
         collectionView.ui.addCard.parent('li').before(itemView.el);
     },
-    _addProfile       : function(){
+
+    _addProfile : function() {
         var self = this;
         var schemaCollection = new ProfileCollection();
         schemaCollection.fetch({
-            success : function(collection){
+            success : function(collection) {
                 var model = _.first(collection.models);
                 model.set('id', undefined);
                 model.set('name', '');
@@ -27,6 +35,7 @@ module.exports = Marionette.CompositeView.extend({
                     model             : model,
                     profileCollection : self.collection
                 });
+
                 AppLayout.modalRegion.show(view);
             }
         });
