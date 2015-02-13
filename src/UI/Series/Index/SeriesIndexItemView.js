@@ -1,14 +1,18 @@
-﻿var vent = require('vent');
+var vent = require('vent');
 var Marionette = require('marionette');
 var CommandController = require('../../Commands/CommandController');
 
 module.exports = Marionette.ItemView.extend({
-    ui             : {refresh : '.x-refresh'},
-    events         : {
+    ui : {
+        refresh : '.x-refresh'
+    },
+
+    events : {
         'click .x-edit'    : '_editSeries',
         'click .x-refresh' : '_refreshSeries'
     },
-    onRender       : function(){
+
+    onRender : function() {
         CommandController.bindToCommand({
             element : this.ui.refresh,
             command : {
@@ -17,10 +21,12 @@ module.exports = Marionette.ItemView.extend({
             }
         });
     },
-    _editSeries    : function(){
-        vent.trigger(vent.Commands.EditSeriesCommand, {series : this.model});
+
+    _editSeries : function() {
+        vent.trigger(vent.Commands.EditSeriesCommand, { series : this.model });
     },
-    _refreshSeries : function(){
+
+    _refreshSeries : function() {
         CommandController.Execute('refreshSeries', {
             name     : 'refreshSeries',
             seriesId : this.model.id
