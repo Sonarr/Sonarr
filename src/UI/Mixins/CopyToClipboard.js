@@ -6,7 +6,7 @@ var Messenger = require('../Shared/Messenger');
 $.fn.copyToClipboard = function(input) {
 
     ZeroClipboard.config({
-        swfPath: StatusModel.get('urlBase') + '/Content/zero.clipboard.swf'
+        swfPath : StatusModel.get('urlBase') + '/Content/zero.clipboard.swf'
     });
 
     var client = new ZeroClipboard(this);
@@ -16,7 +16,7 @@ $.fn.copyToClipboard = function(input) {
             e.clipboardData.setData("text/plain", input.val());
         });
         client.on('aftercopy', function() {
-            Messenger.show({message : 'Copied text to clipboard'});
+            Messenger.show({ message : 'Copied text to clipboard' });
         });
     });
 };
