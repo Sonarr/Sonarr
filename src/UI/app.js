@@ -34,18 +34,16 @@ require.config({
     },
 
     shim : {
-
-        api : {
+        api                       : {
             deps : ['jquery']
         },
-
         jquery                    : {
             exports : '$'
         },
         messenger                 : {
             deps    : ['jquery'],
             exports : 'Messenger',
-            init    : function(){
+            init    : function() {
                 window.Messenger.options = {
                     theme : 'flat'
                 };
@@ -58,7 +56,10 @@ require.config({
             deps : ['jquery']
         },
         'bootstrap.tagsinput'     : {
-            deps : ['bootstrap', 'typeahead']
+            deps : [
+                'bootstrap',
+                'typeahead'
+            ]
         },
         backstrech                : {
             deps : ['jquery']
@@ -68,18 +69,25 @@ require.config({
             exports : '_'
         },
         backbone                  : {
-            deps : ['jquery', 'Instrumentation/ErrorHandler', 'underscore', 'Mixins/jquery.ajax', 'jQuery/ToTheTop'],
-
+            deps    : [
+                'jquery',
+                'Instrumentation/ErrorHandler',
+                'underscore',
+                'Mixins/jquery.ajax',
+                'jQuery/ToTheTop'
+            ],
             exports : 'Backbone'
         },
         marionette                : {
-            deps : ['backbone', 'Handlebars/backbone.marionette.templates', 'Mixins/AsNamedView'],
-
+            deps    : [
+                'backbone',
+                'Handlebars/backbone.marionette.templates',
+                'Mixins/AsNamedView'
+            ],
             exports : 'Marionette',
-            init    : function(Backbone, TemplateMixin, AsNamedView){
+            init    : function(Backbone, TemplateMixin, AsNamedView) {
                 TemplateMixin.call(window.Marionette.TemplateCache);
                 AsNamedView.call(window.Marionette.ItemView.prototype);
-
             }
         },
         'typeahead'               : {
@@ -101,7 +109,10 @@ require.config({
             deps : ['backbone']
         },
         'backbone.deepmodel'      : {
-            deps : ['backbone', 'underscore']
+            deps : [
+                'backbone',
+                'underscore'
+            ]
         },
         'backbone.validation'     : {
             deps    : ['backbone'],
@@ -111,17 +122,17 @@ require.config({
             deps : ['backbone']
         },
         'backbone.collectionview' : {
-            deps    : ['backbone', 'jquery-ui'],
+            deps    : [
+                'backbone',
+                'jquery-ui'
+            ],
             exports : 'Backbone.CollectionView'
         },
         backgrid                  : {
-            deps : ['backbone'],
-
+            deps    : ['backbone'],
             exports : 'Backgrid',
-
-            init : function(){
-                require(['Shared/Grid/HeaderCell'], function(){
-
+            init    : function() {
+                require(['Shared/Grid/HeaderCell'], function() {
                     window.Backgrid.Column.prototype.defaults = {
                         name       : undefined,
                         label      : undefined,
@@ -137,16 +148,12 @@ require.config({
             }
         },
         'backgrid.paginator'      : {
-
-            exports : 'Backgrid.Extension.Paginator',
-
-            deps : ['backgrid']
+            deps    : ['backgrid'],
+            exports : 'Backgrid.Extension.Paginator'
         },
         'backgrid.selectall'      : {
-
-            exports : 'Backgrid.Extension.SelectRowCell',
-
-            deps : ['backgrid']
+            deps    : ['backgrid'],
+            exports : 'Backgrid.Extension.SelectRowCell'
         }
     }
 });

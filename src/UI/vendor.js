@@ -17,7 +17,6 @@ require('zero.clipboard');
 require('bootstrap');
 require('bootstrap.tagsinput');
 
-
 /*Backbone*/
 require('backbone');
 require('backbone.deepmodel');

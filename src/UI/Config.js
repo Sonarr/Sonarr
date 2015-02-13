@@ -1,53 +1,52 @@
-'use strict';
-define(
-    [
-        'vent'
-    ], function (vent) {
-        return {
-            Events: {
-                ConfigUpdatedEvent: 'ConfigUpdatedEvent'
-            },
+var vent = require('./vent');
 
-            Keys  : {
-                DefaultProfileId    : 'DefaultProfileId',
-                DefaultRootFolderId : 'DefaultRootFolderId',
-                UseSeasonFolder     : 'UseSeasonFolder',
-                DefaultSeriesType   : 'DefaultSeriesType',
-                MonitorEpisodes     : 'MonitorEpisodes',
-                AdvancedSettings    : 'advancedSettings'
-            },
+module.exports = {
+    Events : {
+        ConfigUpdatedEvent : 'ConfigUpdatedEvent'
+    },
 
-            getValueBoolean: function (key, defaultValue) {
-                defaultValue = defaultValue || false;
+    Keys : {
+        DefaultProfileId    : 'DefaultProfileId',
+        DefaultRootFolderId : 'DefaultRootFolderId',
+        UseSeasonFolder     : 'UseSeasonFolder',
+        DefaultSeriesType   : 'DefaultSeriesType',
+        MonitorEpisodes     : 'MonitorEpisodes',
+        AdvancedSettings    : 'advancedSettings'
+    },
 
-                return this.getValue(key, defaultValue.toString()) === 'true';
-            },
+    getValueBoolean : function(key, defaultValue) {
+        defaultValue = defaultValue || false;
 
-            getValue: function (key, defaultValue) {
-                var storeValue = window.localStorage.getItem(key);
+        return this.getValue(key, defaultValue.toString()) === 'true';
+    },
 
-                if (!storeValue) {
-                    return defaultValue;
-                }
+    getValue : function(key, defaultValue) {
+        var storeValue = window.localStorage.getItem(key);
 
-                return storeValue.toString();
-            },
+        if (!storeValue) {
+            return defaultValue;
+        }
 
-            setValue: function (key, value) {
+        return storeValue.toString();
+    },
 
-                console.log('Config: [{0}] => [{1}]'.format(key, value));
+    setValue : function(key, value) {
 
-                if (this.getValue(key) === value.toString()) {
-                    return;
-                }
+        console.log('Config: [{0}] => [{1}]'.format(key, value));
 
-                try {
-                    window.localStorage.setItem(key, value);
-                    vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
-                }
-                catch (error) {
-                    console.error('Unable to save config: [{0}] => [{1}]'.format(key, value));
-                }
-            }
-        };
-    });
+        if (this.getValue(key) === value.toString()) {
+            return;
+        }
+
+        try {
+            window.localStorage.setItem(key, value);
+            vent.trigger(this.Events.ConfigUpdatedEvent, {
+                key   : key,
+                value : value
+            });
+        }
+        catch (error) {
+            console.error('Unable to save config: [{0}] => [{1}]'.format(key, value));
+        }
+    }
+};
