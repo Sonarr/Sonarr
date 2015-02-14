@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Organizer
 
             AddSeriesTokens(tokenHandlers, series);
             AddEpisodeTokens(tokenHandlers, episodes);
-            AddEpisodeFileTokens(tokenHandlers, series, episodeFile);
+            AddEpisodeFileTokens(tokenHandlers, episodeFile);
             AddQualityTokens(tokenHandlers, series, episodeFile);
             AddMediaInfoTokens(tokenHandlers, episodeFile);
             
@@ -417,7 +417,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Episode CleanTitle}"] = m => CleanTitle(GetEpisodeTitle(episodes, "and"));
         }
 
-        private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, Series series, EpisodeFile episodeFile)
+        private void AddEpisodeFileTokens(Dictionary<String, Func<TokenMatch, String>> tokenHandlers, EpisodeFile episodeFile)
         {
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile);
             tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile);
