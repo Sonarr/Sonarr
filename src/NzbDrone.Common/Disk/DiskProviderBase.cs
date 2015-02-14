@@ -355,7 +355,7 @@ namespace NzbDrone.Common.Disk
         {
             Ensure.That(path, () => path).IsValidPath();
 
-            var parent = Directory.GetParent(path);
+            var parent = Directory.GetParent(path.TrimEnd(Path.DirectorySeparatorChar));
 
             if (parent == null)
             {
