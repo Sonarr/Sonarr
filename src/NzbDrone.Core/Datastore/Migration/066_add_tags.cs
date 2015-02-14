@@ -16,6 +16,9 @@ namespace NzbDrone.Core.Datastore.Migration
 
             Alter.Table("Notifications")
                  .AddColumn("Tags").AsString().Nullable();
+
+            Execute.Sql("UPDATE Series SET Tags = '[]'");
+            Execute.Sql("UPDATE Notifications SET Tags = '[]'");
         }
     }
 }

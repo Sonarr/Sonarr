@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tags;
+using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Tags
 {
-    public class TagModule : NzbDroneRestModule<TagResource>
+    public class TagModule : NzbDroneRestModuleWithSignalR<TagResource, Tag>, IHandle<TagsUpdatedEvent>
     {
         private readonly ITagService _tagService;
 
-        public TagModule(ITagService tagService)
+        public TagModule(IBroadcastSignalRMessage signalRBroadcaster,
+                         ITagService tagService)
+            : base(signalRBroadcaster)
         {
             _tagService = tagService;
 
@@ -43,6 +48,11 @@ namespace NzbDrone.Api.Tags
         private void Delete(Int32 id)
         {
             _tagService.Delete(id);
+        }
+
+        public void Handle(TagsUpdatedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Sync);
         }
     }
 }
