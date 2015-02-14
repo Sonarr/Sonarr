@@ -1,27 +1,28 @@
-﻿var vent = require('vent');
+var vent = require('vent');
 var AppLayout = require('../AppLayout');
 var Marionette = require('marionette');
 var NotFoundView = require('./NotFoundView');
 var Messenger = require('messenger');
 
-
 module.exports = Marionette.AppRouter.extend({
-    initialize       : function(){
+    initialize : function() {
         this.listenTo(vent, vent.Events.ServerUpdated, this._onServerUpdated);
     },
-    showNotFound     : function(){
+
+    showNotFound : function() {
         this.setTitle('Not Found');
         this.showMainRegion(new NotFoundView(this));
     },
-    setTitle         : function(title){
+
+    setTitle : function(title) {
         title = title;
-        if(title === 'Sonarr') {
+        if (title === 'Sonarr') {
             document.title = 'Sonarr';
-        }
-        else {
+        } else {
             document.title = title + ' - Sonarr';
         }
-        if(window.NzbDrone.Analytics && window.Piwik) {
+
+        if (window.NzbDrone.Analytics && window.Piwik) {
             try {
                 var piwik = window.Piwik.getTracker('http://piwik.nzbdrone.com/piwik.php', 1);
                 piwik.setReferrerUrl('');
@@ -35,7 +36,8 @@ module.exports = Marionette.AppRouter.extend({
             }
         }
     },
-    _onServerUpdated : function(){
+
+    _onServerUpdated : function() {
         Messenger.show({
             message   : 'Sonarr has been updated',
             hideAfter : 0,
@@ -43,7 +45,7 @@ module.exports = Marionette.AppRouter.extend({
             actions   : {
                 viewChanges : {
                     label  : 'View Changes',
-                    action : function(){
+                    action : function() {
                         window.location = window.NzbDrone.UrlBase + '/system/updates';
                     }
                 }
@@ -52,11 +54,11 @@ module.exports = Marionette.AppRouter.extend({
 
         this.pendingUpdate = true;
     },
-    showMainRegion   : function(view){
-        if(this.pendingUpdate) {
+
+    showMainRegion : function(view) {
+        if (this.pendingUpdate) {
             window.location.reload();
-        }
-        else {
+        } else {
             AppLayout.mainRegion.show(view);
         }
     }

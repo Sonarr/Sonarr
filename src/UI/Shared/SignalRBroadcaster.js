@@ -5,9 +5,10 @@ var StatusModel = require('../System/StatusModel');
 require('signalR');
 
 module.exports = {
-    appInitializer : function(){
+    appInitializer : function() {
         console.log('starting signalR');
-        var getStatus = function(status){
+
+        var getStatus = function(status) {
             switch (status) {
                 case 0:
                     return 'connecting';
@@ -21,27 +22,36 @@ module.exports = {
                     throw 'invalid status ' + status;
             }
         };
+
         var tryingToReconnect = false;
         var messengerId = 'signalR';
+
         this.signalRconnection = $.connection(StatusModel.get('urlBase') + '/signalr');
-        this.signalRconnection.stateChanged(function(change){
+
+        this.signalRconnection.stateChanged(function(change) {
             console.debug('SignalR: [{0}]'.format(getStatus(change.newState)));
         });
-        this.signalRconnection.received(function(message){
+
+        this.signalRconnection.received(function(message) {
             vent.trigger('server:' + message.name, message.body);
         });
-        this.signalRconnection.reconnecting(function(){
-            if(window.NzbDrone.unloading) {
+
+        this.signalRconnection.reconnecting(function() {
+            if (window.NzbDrone.unloading) {
                 return;
             }
+
             tryingToReconnect = true;
         });
-        this.signalRconnection.reconnected(function(){
+
+        this.signalRconnection.reconnected(function() {
             tryingToReconnect = false;
         });
-        this.signalRconnection.disconnected(function(){
-            if(tryingToReconnect) {
+
+        this.signalRconnection.disconnected(function() {
+            if (tryingToReconnect) {
                 $('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
+
                 Messenger.show({
                     id        : messengerId,
                     type      : 'error',
@@ -50,7 +60,7 @@ module.exports = {
                     actions   : {
                         cancel : {
                             label  : 'Reload',
-                            action : function(){
+                            action : function() {
                                 window.location.reload();
                             }
                         }
@@ -58,7 +68,9 @@ module.exports = {
                 });
             }
         });
-        this.signalRconnection.start({transport : ['longPolling']});
+
+        this.signalRconnection.start({ transport : ['longPolling'] });
+
         return this;
     }
 };
