@@ -7,13 +7,15 @@ var MoreInfoView = require('./MoreInfo/MoreInfoView');
 
 module.exports = Marionette.Layout.extend({
     template : 'System/Info/SystemInfoLayoutTemplate',
-    regions  : {
+
+    regions : {
         about     : '#about',
         diskSpace : '#diskspace',
         health    : '#health',
         moreInfo  : '#more-info'
     },
-    onRender : function(){
+
+    onRender : function() {
         this.health.show(new HealthLayout());
         this.diskSpace.show(new DiskSpaceLayout());
         this.about.show(new AboutView());
