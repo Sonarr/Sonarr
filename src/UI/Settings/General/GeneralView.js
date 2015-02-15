@@ -1,4 +1,3 @@
-﻿
 var vent = require('../../vent');
 var Marionette = require('marionette');
 var CommandController = require('../../Commands/CommandController');
@@ -8,16 +7,16 @@ var AsValidatedView = require('../../Mixins/AsValidatedView');
 require('../../Mixins/CopyToClipboard');
 
 var view = Marionette.ItemView.extend({
-    template: 'Settings/General/GeneralViewTemplate',
+    template : 'Settings/General/GeneralViewTemplate',
 
-    events: {
+    events : {
         'change .x-auth'             : '_setAuthOptionsVisibility',
         'change .x-ssl'              : '_setSslOptionsVisibility',
         'click .x-reset-api-key'     : '_resetApiKey',
         'change .x-update-mechanism' : '_setScriptGroupVisibility'
     },
 
-    ui: {
+    ui : {
         authToggle      : '.x-auth',
         authOptions     : '.x-auth-options',
         sslToggle       : '.x-ssl',
@@ -29,16 +28,16 @@ var view = Marionette.ItemView.extend({
         scriptGroup     : '.x-script-group'
     },
 
-    initialize: function () {
+    initialize : function() {
         this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
     },
 
-    onRender: function(){
-        if(this.ui.authToggle.val() === 'none'){
+    onRender : function() {
+        if (this.ui.authToggle.val() === 'none') {
             this.ui.authOptions.hide();
         }
 
-        if(!this.ui.sslToggle.prop('checked')){
+        if (!this.ui.sslToggle.prop('checked')) {
             this.ui.sslOptions.hide();
         }
 
@@ -47,18 +46,18 @@ var view = Marionette.ItemView.extend({
         }
 
         CommandController.bindToCommand({
-            element: this.ui.resetApiKey,
-            command: {
-                name: 'resetApiKey'
+            element : this.ui.resetApiKey,
+            command : {
+                name : 'resetApiKey'
             }
         });
     },
 
-    onShow: function () {
+    onShow : function() {
         this.ui.copyApiKey.copyToClipboard(this.ui.apiKeyInput);
     },
 
-    _setAuthOptionsVisibility: function () {
+    _setAuthOptionsVisibility : function() {
 
         var showAuthOptions = this.ui.authToggle.val() !== 'none';
 
@@ -71,7 +70,7 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-    _setSslOptionsVisibility: function () {
+    _setSslOptionsVisibility : function() {
 
         var showSslOptions = this.ui.sslToggle.prop('checked');
 
@@ -84,7 +83,7 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-    _resetApiKey: function () {
+    _resetApiKey : function() {
         if (window.confirm('Reset API Key?')) {
             CommandController.Execute('resetApiKey', {
                 name : 'resetApiKey'
@@ -92,13 +91,13 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-    _commandComplete: function (options) {
+    _commandComplete : function(options) {
         if (options.command.get('name') === 'resetapikey') {
             this.model.fetch();
         }
     },
 
-    _setScriptGroupVisibility: function () {
+    _setScriptGroupVisibility : function() {
 
         if (this._showScriptGroup()) {
             this.ui.scriptGroup.slideDown();
@@ -109,7 +108,7 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-    _showScriptGroup: function () {
+    _showScriptGroup : function() {
         return this.ui.updateMechanism.val() === 'script';
     }
 });

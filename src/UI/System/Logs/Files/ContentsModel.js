@@ -1,10 +1,11 @@
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
-    url   : function(){
+    url : function() {
         return this.get('contentsUrl');
     },
-    parse : function(contents){
+
+    parse : function(contents) {
         var response = {};
         response.contents = contents;
         return response;

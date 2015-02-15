@@ -6,33 +6,46 @@ module.exports = Marionette.CompositeView.extend({
     itemView          : AddSeriesView,
     itemViewContainer : '.x-loading-folders',
     template          : 'AddSeries/Existing/AddExistingSeriesCollectionViewTemplate',
-    ui                : {loadingFolders : '.x-loading-folders'},
-    initialize        : function(){
+
+    ui : {
+        loadingFolders : '.x-loading-folders'
+    },
+
+    initialize : function() {
         this.collection = new UnmappedFolderCollection();
         this.collection.importItems(this.model);
     },
-    showCollection    : function(){
+
+    showCollection : function() {
         this._showAndSearch(0);
     },
-    appendHtml        : function(collectionView, itemView, index){
+
+    appendHtml : function(collectionView, itemView, index) {
         collectionView.ui.loadingFolders.before(itemView.el);
     },
-    _showAndSearch    : function(index){
+
+    _showAndSearch : function(index) {
         var self = this;
         var model = this.collection.at(index);
-        if(model) {
+
+        if (model) {
             var currentIndex = index;
             var folderName = model.get('folder').name;
             this.addItemView(model, this.getItemView(), index);
-            this.children.findByModel(model).search({term : folderName}).always(function(){
-                if(!self.isClosed) {
+            this.children.findByModel(model).search({ term : folderName }).always(function() {
+                if (!self.isClosed) {
                     self._showAndSearch(currentIndex + 1);
                 }
             });
         }
+
         else {
             this.ui.loadingFolders.hide();
         }
     },
-    itemViewOptions   : {isExisting : true}
+
+    itemViewOptions : {
+        isExisting : true
+    }
+
 });

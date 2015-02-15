@@ -346,6 +346,15 @@ namespace NzbDrone.Common.Test.DiskTests
             Console.WriteLine(GetFilledTempFolder().LastWriteTimeUtc);
         }
 
+        [Test]
+        public void GetParentFolder_should_remove_trailing_slash_before_getting_parent_folder()
+        {
+            var path = @"C:\Test\TV\".AsOsAgnostic();
+            var parent = @"C:\Test".AsOsAgnostic();
+
+            Subject.GetParentFolder(path).Should().Be(parent);
+        }
+
         private void VerifyCopy(string source, string destination)
         {
             var sourceFiles = Directory.GetFileSystemEntries(source, "*", SearchOption.AllDirectories).Select(v => v.Substring(source.Length + 1)).ToArray();

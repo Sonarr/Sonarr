@@ -25,6 +25,7 @@
     "gulp-less": "2.0.1",
     "gulp-print": "1.1.0",
     "gulp-replace": "0.5.2",
+    "gulp-stripbom": "1.0.4",
     "gulp-run": "1.6.6",
     "gulp-webpack": "1.2.0",
     "gulp-wrap": "0.10.1",

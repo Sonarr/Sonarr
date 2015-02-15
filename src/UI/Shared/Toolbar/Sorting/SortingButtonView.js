@@ -3,53 +3,68 @@ var Marionette = require('marionette');
 var _ = require('underscore');
 
 module.exports = Marionette.ItemView.extend({
-    template                : 'Shared/Toolbar/Sorting/SortingButtonViewTemplate',
-    tagName                 : 'li',
-    ui                      : {icon : 'i'},
-    events                  : {"click" : 'onClick'},
-    initialize              : function(options){
+    template : 'Shared/Toolbar/Sorting/SortingButtonViewTemplate',
+    tagName  : 'li',
+
+    ui : {
+        icon : 'i'
+    },
+
+    events : {
+        'click' : 'onClick'
+    },
+
+    initialize : function(options) {
         this.viewCollection = options.viewCollection;
         this.listenTo(this.viewCollection, 'drone:sort', this.render);
         this.listenTo(this.viewCollection, 'backgrid:sort', this.render);
     },
-    onRender                : function(){
-        if(this.viewCollection.state) {
+
+    onRender : function() {
+        if (this.viewCollection.state) {
             var sortKey = this.viewCollection.state.sortKey;
             var name = this.viewCollection._getSortMapping(sortKey).name;
             var order = this.viewCollection.state.order;
-            if(name === this.model.get('name')) {
+
+            if (name === this.model.get('name')) {
                 this._setSortIcon(order);
-            }
-            else {
+            } else {
                 this._removeSortIcon();
             }
         }
     },
-    onClick                 : function(e){
+
+    onClick : function(e) {
         e.preventDefault();
+
         var collection = this.viewCollection;
         var event = 'drone:sort';
+
         var direction = collection.state.order;
-        if(direction === 'ascending' || direction === -1) {
+        if (direction === 'ascending' || direction === -1) {
             direction = 'descending';
-        }
-        else {
+        } else {
             direction = 'ascending';
         }
+
         collection.setSorting(this.model.get('name'), direction);
         collection.trigger(event, this.model, direction);
     },
-    _convertDirectionToIcon : function(dir){
-        if(dir === 'ascending' || dir === -1) {
+
+    _convertDirectionToIcon : function(dir) {
+        if (dir === 'ascending' || dir === -1) {
             return 'icon-sort-up';
         }
+
         return 'icon-sort-down';
     },
-    _setSortIcon            : function(dir){
+
+    _setSortIcon : function(dir) {
         this._removeSortIcon();
         this.ui.icon.addClass(this._convertDirectionToIcon(dir));
     },
-    _removeSortIcon         : function(){
+
+    _removeSortIcon : function() {
         this.ui.icon.removeClass('icon-sort-up icon-sort-down');
     }
 });

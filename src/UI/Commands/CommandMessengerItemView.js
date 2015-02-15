@@ -2,13 +2,15 @@ var Marionette = require('marionette');
 var Messenger = require('../Shared/Messenger');
 
 module.exports = Marionette.ItemView.extend({
-    initialize : function(){
+    initialize : function() {
         this.listenTo(this.model, 'change', this.render);
     },
-    render     : function(){
-        if(!this.model.get('message') || !this.model.get('sendUpdatesToClient')) {
+
+    render : function() {
+        if (!this.model.get('message') || !this.model.get('sendUpdatesToClient')) {
             return;
         }
+
         var message = {
             type      : 'info',
             message   : '[{0}] {1}'.format(this.model.get('name'), this.model.get('message')),
@@ -26,15 +28,18 @@ module.exports = Marionette.ItemView.extend({
                 message.hideAfter = isManual ? 10 : 4;
                 message.type = 'error';
                 break;
-            default:
+            default :
                 message.hideAfter = 0;
         }
-        if(this.messenger) {
+
+        if (this.messenger) {
             this.messenger.update(message);
         }
+
         else {
             this.messenger = Messenger.show(message);
         }
+
         console.log(message.message);
     }
 });

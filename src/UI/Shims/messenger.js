@@ -1,7 +1,6 @@
-require('../JsLibraries/messenger');
-require('jquery');
-
 require('jquery');
 var m = require('../JsLibraries/messenger');
-window.Messenger.options = {theme : 'flat'};
+
+window.Messenger.options = { theme : 'flat' };
+
 module.exports = window.Messenger;

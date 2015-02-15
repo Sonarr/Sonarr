@@ -246,6 +246,7 @@
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
+    <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -816,6 +817,7 @@
     <Compile Include="Tags\Tag.cs" />
     <Compile Include="Tags\TagRepository.cs" />
     <Compile Include="Tags\TagService.cs" />
+    <Compile Include="Tags\TagsUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\ConfigContractNotFoundException.cs" />
     <Compile Include="ThingiProvider\Events\ProviderUpdatedEvent.cs" />
     <Compile Include="ThingiProvider\IProvider.cs" />

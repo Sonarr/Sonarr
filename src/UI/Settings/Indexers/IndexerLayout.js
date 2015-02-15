@@ -6,21 +6,25 @@ var RestrictionCollection = require('./Restriction/RestrictionCollection');
 var RestrictionCollectionView = require('./Restriction/RestrictionCollectionView');
 
 module.exports = Marionette.Layout.extend({
-    template   : 'Settings/Indexers/IndexerLayoutTemplate',
-    regions    : {
+    template : 'Settings/Indexers/IndexerLayoutTemplate',
+
+    regions : {
         indexers       : '#x-indexers-region',
         indexerOptions : '#x-indexer-options-region',
         restriction    : '#x-restriction-region'
     },
-    initialize : function(){
+
+    initialize : function() {
         this.indexersCollection = new IndexerCollection();
         this.indexersCollection.fetch();
+
         this.restrictionCollection = new RestrictionCollection();
         this.restrictionCollection.fetch();
     },
-    onShow     : function(){
-        this.indexers.show(new CollectionView({collection : this.indexersCollection}));
-        this.indexerOptions.show(new OptionsView({model : this.model}));
-        this.restriction.show(new RestrictionCollectionView({collection : this.restrictionCollection}));
+
+    onShow : function() {
+        this.indexers.show(new CollectionView({ collection : this.indexersCollection }));
+        this.indexerOptions.show(new OptionsView({ model : this.model }));
+        this.restriction.show(new RestrictionCollectionView({ collection : this.restrictionCollection }));
     }
 });

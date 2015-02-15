@@ -2,30 +2,40 @@ var Backgrid = require('backgrid');
 
 module.exports = Backgrid.Cell.extend({
     className : 'download-report-cell',
-    events    : {click : '_onClick'},
-    _onClick  : function(){
-        if(!this.model.get('downloadAllowed')) {
+
+    events : {
+        'click' : '_onClick'
+    },
+
+    _onClick : function() {
+        if (!this.model.get('downloadAllowed')) {
             return;
         }
+
         var self = this;
+
         this.$el.html('<i class="icon-spinner icon-spin" />');
+
+        //Using success callback instead of promise so it
+        //gets called before the sync event is triggered
         this.model.save(null, {
-            success : function(){
+            success : function() {
                 self.model.set('queued', true);
             }
         });
     },
-    render    : function(){
+
+    render : function() {
         this.$el.empty();
-        if(this.model.get('queued')) {
+
+        if (this.model.get('queued')) {
             this.$el.html('<i class="icon-nd-downloading" title="Added to downloaded queue" />');
-        }
-        else if(this.model.get('downloadAllowed')) {
+        } else if (this.model.get('downloadAllowed')) {
             this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
-        }
-        else {
+        } else {
             this.className = 'no-download-report-cell';
         }
+
         return this;
     }
 });
