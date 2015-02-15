@@ -21,7 +21,9 @@ namespace NzbDrone.Core.Tv
         Series AddSeries(Series newSeries);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
+        Series FindByLocaleTitle(string title);
         Series FindByTitle(string title, int year);
+        Series FindByLocaleTitle(string title, int year);
         Series FindByTitleInexact(string title);
         void DeleteSeries(int seriesId, bool deleteFiles);
         List<Series> GetAllSeries();
@@ -80,6 +82,7 @@ namespace NzbDrone.Core.Tv
             newSeries.Monitored = true;
             newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
             newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
+            newSeries.LocaleCleanTitle = newSeries.CleanTitle;
             newSeries.Added = DateTime.UtcNow;
 
             _seriesRepository.Insert(newSeries);
@@ -93,6 +96,18 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.FindByTvRageId(tvRageId);
         }
 
+        public Series FindByLocaleTitle(string title)
+        {
+            var tvdbId = _sceneMappingService.FindTvDbId(title);
+
+            if (tvdbId.HasValue)
+            {
+                return _seriesRepository.FindByTvdbId(tvdbId.Value);
+            }
+
+            return _seriesRepository.FindByLocaleTitle(title.CleanSeriesTitle());
+        }
+        
         public Series FindByTitle(string title)
         {
             var tvdbId = _sceneMappingService.FindTvDbId(title);
@@ -152,6 +167,11 @@ namespace NzbDrone.Core.Tv
             return _seriesRepository.FindByTitle(title, year);
         }
 
+        public Series FindByLocaleTitle(string title, int year)
+        {
+            return _seriesRepository.FindByLocaleTitle(title, year);
+        }
+
         public void DeleteSeries(int seriesId, bool deleteFiles)
         {
             var series = _seriesRepository.Get(seriesId);
@@ -182,6 +202,8 @@ namespace NzbDrone.Core.Tv
             {
                 series.TvRageId = storedSeries.TvRageId;
             }
+
+            series.LocaleCleanTitle = storedSeries.LocaleCleanTitle;
 
             var updatedSeries = _seriesRepository.Update(series);
             _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));
