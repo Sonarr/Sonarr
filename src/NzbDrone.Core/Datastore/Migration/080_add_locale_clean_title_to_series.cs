@@ -4,7 +4,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(78)]
+    [Migration(80)]
     public class add_locale_clean_title_to_series : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
