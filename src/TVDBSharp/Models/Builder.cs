@@ -32,10 +32,11 @@ namespace TVDBSharp.Models
         ///     Builds a show object from the given show ID.
         /// </summary>
         /// <param name="showID">ID of the show to serialize into a <see cref="Show" /> object.</param>
+        /// <param name="showID">ISO 639-1 language code of the show</param>
         /// <returns>Returns the Show object.</returns>
-        public Show BuildShow(int showID)
+        public Show BuildShow(int showID, string lang)
         {
-            var builder = new ShowBuilder(_dataProvider.GetShow(showID));
+            var builder = new ShowBuilder(_dataProvider.GetShow(showID, lang));
             return builder.GetResult();
         }
 
@@ -56,20 +57,24 @@ namespace TVDBSharp.Models
         /// </summary>
         /// <param name="query">Query the search is performed with.</param>
         /// <param name="results">Maximal amount of shows the resultset should return.</param>
+        /// <param name="lang">ISO 639-1 language code of the search.</param>
         /// <returns>Returns a list of show objects.</returns>
-        public List<Show> Search(string query, int results)
+        public List<Show> Search(string query, int results, string lang)
         {
             var shows = new List<Show>();
-            var doc = _dataProvider.Search(query);
+            var doc = _dataProvider.Search(query, lang);
 
             foreach (var element in doc.Descendants("Series").Take(results))
             {
+                if (!element.GetXmlData("language").Equals(lang, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
                 var id = int.Parse(element.GetXmlData("seriesid"));
 
                 try
                 {
-                    var response = _dataProvider.GetShow(id);
-                    shows.Add(new ShowBuilder(response).GetResult());
+                    var response = _dataProvider.GetShow(id, lang);
+                    if (!shows.Any(p => p.Id == id))
+                        shows.Add(new ShowBuilder(response).GetResult());
                 }
                 catch (HttpException ex)
                 {

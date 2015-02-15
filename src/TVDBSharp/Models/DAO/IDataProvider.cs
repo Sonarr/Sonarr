@@ -17,8 +17,9 @@ namespace TVDBSharp.Models.DAO
         ///     Retrieves the show with the given id and returns the corresponding XML tree.
         /// </summary>
         /// <param name="showID">ID of the show you wish to lookup.</param>
+        /// <param name="lang">ISO 639-1 language code of the show</param>
         /// <returns>Returns an XML tree of the show object.</returns>
-        XDocument GetShow(int showID);
+        XDocument GetShow(int showID, string lang = "en");
 
         /// <summary>
         ///     Retrieves the episode with the given id and returns the corresponding XML tree.
@@ -39,7 +40,8 @@ namespace TVDBSharp.Models.DAO
         ///     Returns an XML tree representing a search query for the given parameter.
         /// </summary>
         /// <param name="query">Query to perform the search with.</param>
+        /// <param name="lang">ISO 639-1 language code of the search</param>
         /// <returns>Returns an XML tree of a search result.</returns>
-        XDocument Search(string query);
+        XDocument Search(string query, string lang);
     }
 }

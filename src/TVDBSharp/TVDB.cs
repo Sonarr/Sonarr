@@ -37,20 +37,22 @@ namespace TVDBSharp
         /// </summary>
         /// <param name="query">Query that identifies the show.</param>
         /// <param name="results">Maximal amount of results in the returning set. Default is 5.</param>
+        /// <param name="lang">ISO 639-1 language code of the search</param>
         /// <returns>Returns a list of shows.</returns>
-        public List<Show> Search(string query, int results = 5)
+        public List<Show> Search(string query, int results = 5, string lang = "en")
         {
-            return new Builder(_dataProvider).Search(query, results);
+            return new Builder(_dataProvider).Search(query, results, lang);
         }
 
         /// <summary>
         ///     Get a specific show based on its ID.
         /// </summary>
         /// <param name="showId">ID of the show.</param>
+        /// <param name="lang">ISO 639-1 language code of the show</param>
         /// <returns>Returns the corresponding show.</returns>
-        public Show GetShow(int showId)
+        public Show GetShow(int showId, string lang = "en")
         {
-            return new Builder(_dataProvider).BuildShow(showId);
+            return new Builder(_dataProvider).BuildShow(showId, lang);
         }
 
         /// <summary>
