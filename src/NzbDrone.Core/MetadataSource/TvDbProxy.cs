@@ -58,7 +58,25 @@ namespace NzbDrone.Core.MetadataSource
                 }
             }
 
-            return _tvdb.Search(GetSearchTerm(lowerTitle), 10);
+
+            List<TVDBSharp.Models.Show> responseDefault = _tvdb.Search(GetSearchTerm(lowerTitle), 10);
+
+            List<TVDBSharp.Models.Show> responseLocale = new List<TVDBSharp.Models.Show>();
+            string locale = System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
+            if (!locale.Equals("en", StringComparison.InvariantCultureIgnoreCase))
+            {
+                responseLocale = _tvdb.Search(GetSearchTerm(lowerTitle), 10, locale);
+            }
+
+            foreach (var show in responseDefault)
+            {
+                if (!responseLocale.Any(p => p.Id == show.Id))
+                {
+                    responseLocale.Add(show);
+                }
+            }
+
+            return responseLocale;
         }
 
         public List<Series> SearchForNewSeries(string title)
