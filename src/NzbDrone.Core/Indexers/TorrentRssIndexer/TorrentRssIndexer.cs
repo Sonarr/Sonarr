@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
             }
             else
             {
-                return new TorrentRssParser() { UseGuidInfoUrl = false, ParseSeedersInDescription = ParserSettings.ParseSeedersInDescription, ParseSizeInDescription = ParserSettings.ParseSizeInDescription, SizeElementName = ParserSettings.SizeElementName };
+                return new TorrentRssParser { UseGuidInfoUrl = false, ParseSeedersInDescription = ParserSettings.ParseSeedersInDescription, ParseSizeInDescription = ParserSettings.ParseSizeInDescription, SizeElementName = ParserSettings.SizeElementName };
             }
         }
 
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 
             if (ParserSettings == null)
             {
-                failures.Add(new ValidationFailure("", "Feed cannot be parsed"));
+                failures.Add(new ValidationFailure("", "Feed cannot be parsed or is invalid. See log for details."));
             }
 
             base.Test(failures);
@@ -248,7 +248,7 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
                 () =>
                 {
                     var releases = parser.ParseResponse(response).ToList();
-
+                    
                     if (releases.Empty())
                     {
                         _logger.Trace("Empty releases");
@@ -270,8 +270,33 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
                         return false;
                     }
 
+                    if (!ValidateTorrents(releases, r => Parser.Parser.ParseTitle(r.Title) != null, Settings.ValidEntryPercentage))
+                    {
+                        _logger.Trace("Percentage of Titles that could parsed is lower than threshold of {0}",  Settings.ValidEntryPercentage);
+                        return false;
+                    }
+
+                    if (!ValidateTorrents(releases, r => r.Size > Settings.ValidSizeThresholdMegabytes * 1024 * 1024, Settings.ValidEntryPercentage))
+                    {
+                        _logger.Trace("Percentage of entries that have a size bigger than ValidSizeThresholdMegabytes ({0} MB) is  lower than threshold of {1}", Settings.ValidSizeThresholdMegabytes, Settings.ValidEntryPercentage);
+                        return false;
+                    }
+
+                    if (!ValidateTorrents(releases, r => Uri.IsWellFormedUriString(r.DownloadUrl, UriKind.Absolute), Settings.ValidEntryPercentage))
+                    {
+                        _logger.Trace("Percentage of entries that have a valid download url is smaller than threshold of {0}", Settings.ValidEntryPercentage);
+                        return false;
+                    }
+
                     return true;
                 });
+        }
+
+        private Boolean ValidateTorrents(IEnumerable<ReleaseInfo> releases, Func<ReleaseInfo, Boolean> entryValidationFunction, int threshold)
+        {
+            var validEntries = releases.Count(entryValidationFunction);
+            var validEntriesPercentage = validEntries * 1.0 / releases.Count() * 100.0;
+            return validEntriesPercentage >= threshold;
         }
 
         private Boolean ExecuteWithExceptionHandling(Func<Boolean> functionToExecute)

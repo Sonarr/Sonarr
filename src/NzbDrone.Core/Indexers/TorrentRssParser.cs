@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Indexers
         protected override long GetSize(XElement item)
         {
             var size = base.GetSize(item);
-            if (size == 0 && (SizeElementName.IsNotNullOrWhiteSpace()))
+            if (size == 0 && SizeElementName.IsNotNullOrWhiteSpace())
             {
                 if (item.Element(SizeElementName) != null)
                 {

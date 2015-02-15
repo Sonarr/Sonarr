@@ -25,8 +25,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             };
         }
 
-        [TestCase("https://www.ezrss.it/", @"Eztv.xml")]
-        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", @"ImmortalSeed.xml")]
+        [TestCase("https://www.ezrss.it/", "Eztv.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed.xml")]
         public void should_detect_and_parse_recent_feed(string baseUrl, string rssXmlFile)
         {
             Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = baseUrl };
@@ -36,8 +36,28 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
-
+            
             Subject.TestPublic().Should().BeEmpty();
+        }
+
+        [TestCase("https://www.ezrss.it/", "Eztv_InvalidSize.xml")]
+        [TestCase("https://www.ezrss.it/", "Eztv_InvalidTitles.xml")]
+        [TestCase("https://www.ezrss.it/", "Eztv_InvalidDownloadUrl.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed_InvalidSize.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed_InvalidTitles.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed_InvalidDownloadUrl.xml")]
+        public void should_reject_recent_feed(string baseUrl, string rssXmlFile)
+        {
+            Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = baseUrl };
+
+            var recentFeed = ReadAllText(@"Files/RSS/" + rssXmlFile);
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            Subject.TestPublic().Should().HaveCount(2);
+            ExceptionVerification.IgnoreWarns();
         }
 
         [Test]
@@ -76,7 +96,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         [Test]
         public void should_parse_recent_feed_from_Eztv()
         {
-            Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = "https://www.ezrss.it/" };
+            Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = "https://www.ezrss.it/", ValidEntryPercentage = 20 };
             Subject.ParserSettingsTest = new TorrentRssIndexerParserSettings { UseEZTVFormat = true };
 
             var recentFeed = ReadAllText(@"Files/RSS/Eztv.xml");
@@ -104,20 +124,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.MagnetUrl.Should().Be("magnet:?xt=urn:btih:ED6E7P5IQJZCOSWGOH4FPTAVCRHJVKB6&dn=S4C.I.Grombil.Cyfandir.Pell.American.Interior.PDTV.x264-MVGroup");
             torrentInfo.Peers.Should().NotHaveValue();
             torrentInfo.Seeders.Should().NotHaveValue();
-        }
-
-        [Test]
-        public void should_return_empty_list_on_404()
-        {
-            Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
-                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0], System.Net.HttpStatusCode.NotFound));
-
-            var releases = Subject.FetchRecent();
-
-            releases.Should().HaveCount(0);
-
-            ExceptionVerification.IgnoreWarns();
         }
     }
 }
