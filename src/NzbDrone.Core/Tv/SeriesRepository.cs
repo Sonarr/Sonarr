@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Tv
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
-            return Query.Where(s => s.LocaleCleanTitle == cleanTitle)
+            return Query.Where(s => s.AditionalLanguageCleanTitle == cleanTitle)
                         .SingleOrDefault();
         }
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Tv
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
-            return Query.Where(s => s.LocaleCleanTitle == cleanTitle)
+            return Query.Where(s => s.AditionalLanguageCleanTitle == cleanTitle)
                         .AndWhere(s => s.Year == year)
                         .SingleOrDefault();
         }

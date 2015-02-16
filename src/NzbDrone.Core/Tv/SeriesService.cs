@@ -82,7 +82,8 @@ namespace NzbDrone.Core.Tv
             newSeries.Monitored = true;
             newSeries.CleanTitle = newSeries.Title.CleanSeriesTitle();
             newSeries.SortTitle = SeriesTitleNormalizer.Normalize(newSeries.Title, newSeries.TvdbId);
-            newSeries.LocaleCleanTitle = newSeries.CleanTitle;
+            newSeries.AditionalLanguageCleanTitle = newSeries.CleanTitle;
+            newSeries.AditionalLanguageTitle = newSeries.Title;
             newSeries.Added = DateTime.UtcNow;
 
             _seriesRepository.Insert(newSeries);
@@ -203,7 +204,8 @@ namespace NzbDrone.Core.Tv
                 series.TvRageId = storedSeries.TvRageId;
             }
 
-            series.LocaleCleanTitle = storedSeries.LocaleCleanTitle;
+            series.AditionalLanguageTitle = storedSeries.AditionalLanguageTitle;
+            series.AditionalLanguageCleanTitle = storedSeries.AditionalLanguageCleanTitle;
 
             var updatedSeries = _seriesRepository.Update(series);
             _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries));

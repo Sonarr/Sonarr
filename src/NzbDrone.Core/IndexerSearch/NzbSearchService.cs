@@ -229,6 +229,7 @@ namespace NzbDrone.Core.IndexerSearch
             spec.Episodes = episodes;
 
             spec.SceneTitles.Add(series.Title);
+            spec.SceneTitles.Add(series.AditionalLanguageTitle);
 
             return spec;
         }

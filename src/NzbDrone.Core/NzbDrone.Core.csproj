@@ -246,7 +246,7 @@
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
-    <Compile Include="Datastore\Migration\080_add_locale_clean_title_to_series.cs" />
+    <Compile Include="Datastore\Migration\080_add_aditional_language_titles_to_series.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
