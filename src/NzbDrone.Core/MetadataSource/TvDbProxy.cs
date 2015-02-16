@@ -8,6 +8,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.Tvdb;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
 using TVDBSharp;
 using TVDBSharp.Models.Enums;
@@ -17,14 +18,16 @@ namespace NzbDrone.Core.MetadataSource
     public class TvDbProxy : ISearchForNewSeries
     {
         private readonly Logger _logger;
+        private readonly IConfigService _configService;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!|@|\+)", RegexOptions.Compiled);
 
         private readonly TVDB _tvdb;
 
-        public TvDbProxy(Logger logger)
+        public TvDbProxy(Logger logger, IConfigService configService)
         {
             _logger = logger;
+            _configService = configService;
             _tvdb = new TVDB("5D2D188E86E07F4F");
         }
 
@@ -62,10 +65,9 @@ namespace NzbDrone.Core.MetadataSource
             List<TVDBSharp.Models.Show> responseDefault = _tvdb.Search(GetSearchTerm(lowerTitle), 10);
 
             List<TVDBSharp.Models.Show> responseLocale = new List<TVDBSharp.Models.Show>();
-            string locale = System.Threading.Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
-            if (!locale.Equals("en", StringComparison.InvariantCultureIgnoreCase))
+             if (!_configService.SeriesLanguage.Equals("en", StringComparison.InvariantCultureIgnoreCase))
             {
-                responseLocale = _tvdb.Search(GetSearchTerm(lowerTitle), 10, locale);
+                responseLocale = _tvdb.Search(GetSearchTerm(lowerTitle), 10, _configService.SeriesLanguage);
             }
 
             foreach (var show in responseDefault)
