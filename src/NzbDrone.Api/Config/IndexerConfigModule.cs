@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Api.Config
 {
@@ -18,6 +19,8 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.RssSyncInterval)
                 .InclusiveBetween(10, 120)
                 .When(c => c.RssSyncInterval > 0);
+
+            SharedValidator.RuleFor(c => c.SeriesLanguage).ValidISO639();
         }
     }
 }

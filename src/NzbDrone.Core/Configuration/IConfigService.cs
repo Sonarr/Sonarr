@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -46,6 +47,7 @@ namespace NzbDrone.Core.Configuration
         Int32 Retention { get; set; }
         Int32 RssSyncInterval { get; set; }
         Int32 MinimumAge { get; set; }
+        String SeriesLanguage { get; set; }
 
         //UI
         Int32 FirstDayOfWeek { get; set; }

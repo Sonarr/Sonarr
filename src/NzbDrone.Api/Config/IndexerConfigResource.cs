@@ -8,5 +8,6 @@ namespace NzbDrone.Api.Config
         public Int32 MinimumAge { get; set; }
         public Int32 Retention { get; set; }
         public Int32 RssSyncInterval { get; set; }
+        public String SeriesLanguage { get; set; }
     }
 }
