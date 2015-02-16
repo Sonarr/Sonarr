@@ -26,6 +26,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [TestCase("https://www.ezrss.it/", "Eztv.xml")]
+        [TestCase("https://www.speed.cd/", "speed.cd.xml")]
+        //[TestCase("https://www.showrss.info/", "showrss.info.xml")]
         [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed.xml")]
         public void should_detect_and_parse_recent_feed(string baseUrl, string rssXmlFile)
         {
