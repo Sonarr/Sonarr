@@ -41,7 +41,7 @@ module.exports = Marionette.ItemView.extend({
     },
 
     _add : function(e) {
-        if ($(e.target).closest('.btn,.btn-group').length !== 0) {
+        if ($(e.target).closest('.btn,.btn-group').length !== 0 && $(e.target).closest('.x-custom').length === 0) {
             return;
         }
 
