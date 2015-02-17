@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -24,6 +25,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             RuleFor(c => c.Password).NotEmpty()
                                     .WithMessage("Password is required when API key is not configured")
                                     .When(c => String.IsNullOrWhiteSpace(c.ApiKey));
+
+            RuleFor(c => c.TvCategory).NotEmpty()
+                                      .WithMessage("A category is recommended")
+                                      .AsWarning();
         }
     }
 
@@ -55,7 +60,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         [FieldDefinition(4, Label = "Password", Type = FieldType.Password)]
         public String Password { get; set; }
 
-        [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox)]
+        [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
         public String TvCategory { get; set; }
 
         // TODO: Remove around January 2015, this setting was superceded by the RemotePathMappingService, but has to remain for a while to properly migrate.

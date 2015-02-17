@@ -2,9 +2,9 @@
 
 namespace NzbDrone.Core.Validation
 {
-    public class LangaugeValidator : PropertyValidator
+    public class LanguageValidator : PropertyValidator
     {
-        public LangaugeValidator()
+        public LanguageValidator()
             : base("Unknown Language")
         {
         }

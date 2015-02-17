@@ -35,7 +35,12 @@ namespace NzbDrone.Core.Validation
 
         public static IRuleBuilderOptions<T, Language> ValidLanguage<T>(this IRuleBuilder<T, Language> ruleBuilder)
         {
-            return ruleBuilder.SetValidator(new LangaugeValidator());
+            return ruleBuilder.SetValidator(new LanguageValidator());
+        }
+
+        public static IRuleBuilderOptions<T, TProp> AsWarning<T, TProp>(this IRuleBuilderOptions<T, TProp> ruleBuilder)
+        {
+            return ruleBuilder.WithState(v => NzbDroneValidationState.Warning);
         }
     }
 }

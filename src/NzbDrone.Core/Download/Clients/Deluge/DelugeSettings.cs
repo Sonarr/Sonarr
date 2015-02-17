@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldDefinition(2, Label = "Password", Type = FieldType.Password)]
         public String Password { get; set; }
 
-        [FieldDefinition(3, Label = "Category", Type = FieldType.Textbox)]
+        [FieldDefinition(3, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
         public String TvCategory { get; set; }
 
         [FieldDefinition(4, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(DelugePriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]

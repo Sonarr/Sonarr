@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
-                if (downloadClientItem.Category == Settings.TvCategory)
+                if (downloadClientItem.Category == Settings.TvCategory || downloadClientItem.Category == "*" && Settings.TvCategory.IsNullOrWhiteSpace())
                 {
                     yield return downloadClientItem;
                 }
