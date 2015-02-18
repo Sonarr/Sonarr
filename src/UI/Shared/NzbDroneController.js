@@ -2,7 +2,7 @@ var vent = require('vent');
 var AppLayout = require('../AppLayout');
 var Marionette = require('marionette');
 var NotFoundView = require('./NotFoundView');
-var Messenger = require('messenger');
+var Messenger = require('./Messenger');
 
 module.exports = Marionette.AppRouter.extend({
     initialize : function() {
@@ -41,7 +41,7 @@ module.exports = Marionette.AppRouter.extend({
         Messenger.show({
             message   : 'Sonarr has been updated',
             hideAfter : 0,
-            id        : 'droneUpdated',
+            id        : 'sonarrUpdated',
             actions   : {
                 viewChanges : {
                     label  : 'View Changes',
