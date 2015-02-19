@@ -28,11 +28,14 @@ namespace NzbDrone.Core.Instrumentation
             var rules = LogManager.Configuration.LoggingRules;
 
             //Console
-            var consoleLoggerRule = rules.Single(s => s.Targets.Any(t => t is ColoredConsoleTarget));
-            consoleLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
+            var consoleLoggerRule = rules.SingleOrDefault(s => s.Targets.Any(t => t is ColoredConsoleTarget));
 
-            SetMinimumLogLevel(consoleLoggerRule, minimumLogLevel);
-
+            if (consoleLoggerRule != null)
+            {
+                consoleLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
+                SetMinimumLogLevel(consoleLoggerRule, minimumLogLevel);
+            }
+            
             //Log Files
             var rollingFileLoggerRule = rules.Single(s => s.Targets.Any(t => t is NzbDroneFileTarget));
             rollingFileLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
