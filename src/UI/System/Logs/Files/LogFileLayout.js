@@ -69,7 +69,7 @@ module.exports = Marionette.Layout.extend({
                     callback     : this._refreshTable
                 },
                 {
-                    title          : 'Delete Log Files',
+                    title          : 'Clear Log Files',
                     icon           : 'icon-trash',
                     command        : this.deleteFilesCommand,
                     successMessage : 'Log files have been deleted',
