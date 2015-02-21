@@ -9,6 +9,7 @@ var EpisodeActionsCell = require('../../Cells/EpisodeActionsCell');
 var EpisodeNumberCell = require('./EpisodeNumberCell');
 var EpisodeWarningCell = require('./EpisodeWarningCell');
 var CommandController = require('../../Commands/CommandController');
+var EpisodeFileEditorLayout = require('../../EpisodeFile/Editor/EpisodeFileEditorLayout');
 var moment = require('moment');
 var _ = require('underscore');
 var Messenger = require('../../Shared/Messenger');
@@ -23,11 +24,12 @@ module.exports = Marionette.Layout.extend({
     },
 
     events : {
-        'click .x-season-monitored'   : '_seasonMonitored',
-        'click .x-season-search'      : '_seasonSearch',
-        'click .x-season-rename'      : '_seasonRename',
-        'click .x-show-hide-episodes' : '_showHideEpisodes',
-        'dblclick .series-season h2'  : '_showHideEpisodes'
+        'click .x-season-episode-file-editor' : '_openEpisodeFileEditor',
+        'click .x-season-monitored'           : '_seasonMonitored',
+        'click .x-season-search'              : '_seasonSearch',
+        'click .x-season-rename'              : '_seasonRename',
+        'click .x-show-hide-episodes'         : '_showHideEpisodes',
+        'dblclick .series-season h2'          : '_showHideEpisodes'
     },
 
     regions : {
@@ -104,7 +106,7 @@ module.exports = Marionette.Layout.extend({
 
     initialize : function(options) {
         if (!options.episodeCollection) {
-            throw 'episodeCollection is needed';
+            throw 'episodeCollection is required';
         }
 
         this.series = options.series;
@@ -117,7 +119,7 @@ module.exports = Marionette.Layout.extend({
         this.listenTo(this.model, 'sync', this._afterSeasonMonitored);
         this.listenTo(this.episodeCollection, 'sync', this.render);
 
-        this.listenTo(this.fullEpisodeCollection, 'sync', this._refreshEpsiodes);
+        this.listenTo(this.fullEpisodeCollection, 'sync', this._refreshEpisodes);
     },
 
     onRender : function() {
@@ -281,8 +283,18 @@ module.exports = Marionette.Layout.extend({
         });
     },
 
-    _refreshEpsiodes : function() {
+    _refreshEpisodes : function() {
         this._updateEpisodeCollection();
         this.render();
+    },
+
+    _openEpisodeFileEditor : function() {
+        var view = new EpisodeFileEditorLayout({
+            model             : this.model,
+            series            : this.series,
+            episodeCollection : this.episodeCollection
+        });
+
+        vent.trigger(vent.Commands.OpenModalCommand, view);
     }
 });
