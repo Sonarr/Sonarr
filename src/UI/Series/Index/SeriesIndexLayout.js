@@ -81,28 +81,28 @@ module.exports = Marionette.Layout.extend({
         items      : [
             {
                 title : 'Add Series',
-                icon  : 'icon-plus',
+                icon  : 'icon-sonarr-add',
                 route : 'addseries'
             },
             {
                 title : 'Season Pass',
-                icon  : 'icon-bookmark',
+                icon  : 'icon-sonarr-monitored',
                 route : 'seasonpass'
             },
             {
                 title : 'Series Editor',
-                icon  : 'icon-nd-edit',
+                icon  : 'icon-sonarr-edit',
                 route : 'serieseditor'
             },
             {
                 title        : 'RSS Sync',
-                icon         : 'icon-rss',
+                icon         : 'icon-sonarr-rss',
                 command      : 'rsssync',
                 errorMessage : 'RSS Sync Failed!'
             },
             {
                 title          : 'Update Library',
-                icon           : 'icon-refresh',
+                icon           : 'icon-sonarr-refresh',
                 command        : 'refreshseries',
                 successMessage : 'Library was updated!',
                 errorMessage   : 'Library update failed!'
@@ -171,28 +171,28 @@ module.exports = Marionette.Layout.extend({
                     key      : 'all',
                     title    : '',
                     tooltip  : 'All',
-                    icon     : 'icon-circle-blank',
+                    icon     : 'icon-sonarr-all',
                     callback : this._setFilter
                 },
                 {
                     key      : 'monitored',
                     title    : '',
                     tooltip  : 'Monitored Only',
-                    icon     : 'icon-nd-monitored',
+                    icon     : 'icon-sonarr-monitored',
                     callback : this._setFilter
                 },
                 {
                     key      : 'continuing',
                     title    : '',
                     tooltip  : 'Continuing Only',
-                    icon     : 'icon-play',
+                    icon     : 'icon-sonarr-series-continuing',
                     callback : this._setFilter
                 },
                 {
                     key      : 'ended',
                     title    : '',
                     tooltip  : 'Ended Only',
-                    icon     : 'icon-stop',
+                    icon     : 'icon-sonarr-series-ended',
                     callback : this._setFilter
                 }
             ]
@@ -208,21 +208,21 @@ module.exports = Marionette.Layout.extend({
                     key      : 'posterView',
                     title    : '',
                     tooltip  : 'Posters',
-                    icon     : 'icon-th-large',
+                    icon     : 'icon-sonarr-view-poster',
                     callback : this._showPosters
                 },
                 {
                     key      : 'listView',
                     title    : '',
                     tooltip  : 'Overview List',
-                    icon     : 'icon-th-list',
+                    icon     : 'icon-sonarr-view-list',
                     callback : this._showList
                 },
                 {
                     key      : 'tableView',
                     title    : '',
                     tooltip  : 'Table',
-                    icon     : 'icon-table',
+                    icon     : 'icon-sonarr-view-table',
                     callback : this._showTable
                 }
             ]

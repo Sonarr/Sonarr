@@ -14,7 +14,7 @@ module.exports = NzbDroneCell.extend({
         var name = this.model.get('name');
         var task = this.model.get('taskName');
 
-        this.$el.html('<i class="icon-refresh icon-can-spin x-execute" title="Execute {0}"></i>'.format(name));
+        this.$el.html('<i class="icon-sonarr-refresh icon-can-spin x-execute" title="Execute {0}"></i>'.format(name));
 
         CommandController.bindToCommand({
             element : this.$el.find('.x-execute'),

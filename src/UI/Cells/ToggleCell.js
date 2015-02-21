@@ -16,7 +16,7 @@ module.exports = Backgrid.Cell.extend({
         var name = this.column.get('name');
         this.model.set(name, !this.model.get(name));
 
-        this.$('i').addClass('icon-spinner icon-spin');
+        this.$('i').addClass('icon-sonarr-spinner fa-spin');
 
         this.model.save().always(function() {
             self.render();

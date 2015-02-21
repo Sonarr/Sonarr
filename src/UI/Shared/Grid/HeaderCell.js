@@ -51,7 +51,7 @@ module.exports = function() {
         },
 
         direction : function(dir) {
-            this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
+            this.$el.children('i').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
 
             if (arguments.length) {
                 if (dir) {
@@ -124,10 +124,10 @@ module.exports = function() {
 
         _convertDirectionToIcon : function(dir) {
             if (dir === 'ascending' || dir === -1) {
-                return 'icon-sort-up';
+                return 'icon-sonarr-sort-asc';
             }
 
-            return 'icon-sort-down';
+            return 'icon-sonarr-sort-desc';
         },
 
         _setSortIcon : function(dir) {
@@ -136,7 +136,7 @@ module.exports = function() {
         },
 
         _removeSortIcon : function() {
-            this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
+            this.$el.children('i').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
         }
     });
 

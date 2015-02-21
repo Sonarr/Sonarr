@@ -53,10 +53,10 @@ module.exports = Marionette.ItemView.extend({
 
     _convertDirectionToIcon : function(dir) {
         if (dir === 'ascending' || dir === -1) {
-            return 'icon-sort-up';
+            return 'icon-sonarr-sort-asc';
         }
 
-        return 'icon-sort-down';
+        return 'icon-sonarr-sort-desc';
     },
 
     _setSortIcon : function(dir) {
@@ -65,6 +65,6 @@ module.exports = Marionette.ItemView.extend({
     },
 
     _removeSortIcon : function() {
-        this.ui.icon.removeClass('icon-sort-up icon-sort-down');
+        this.ui.icon.removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
     }
 });

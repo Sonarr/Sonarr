@@ -3,7 +3,7 @@
 @import "variables";
 
 /* Icon rotations and mirroring */
-.icon-rotate-90() {
+.fa-rotate-90() {
   -webkit-transform : rotate(90deg);
   -moz-transform    : rotate(90deg);
   -ms-transform     : rotate(90deg);
@@ -12,7 +12,7 @@
   filter            : progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
 
-.icon-rotate-180() {
+.fa-rotate-180() {
   -webkit-transform : rotate(180deg);
   -moz-transform    : rotate(180deg);
   -ms-transform     : rotate(180deg);
@@ -21,7 +21,7 @@
   filter            : progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
 }
 
-.icon-rotate-270() {
+.fa-rotate-270() {
   -webkit-transform : rotate(270deg);
   -moz-transform    : rotate(270deg);
   -ms-transform     : rotate(270deg);
@@ -30,7 +30,7 @@
   filter            : progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
-.icon-flip-horizontal() {
+.fa-flip-horizontal() {
   -webkit-transform : scale(-1, 1);
   -moz-transform    : scale(-1, 1);
   -ms-transform     : scale(-1, 1);
@@ -38,7 +38,7 @@
   transform         : scale(-1, 1);
 }
 
-.icon-flip-vertical() {
+.fa-flip-vertical() {
   -webkit-transform : scale(1, -1);
   -moz-transform    : scale(1, -1);
   -ms-transform     : scale(1, -1);
@@ -46,170 +46,424 @@
   transform         : scale(1, -1);
 }
 
-.icon-nd-warning:before {
-  .icon(@warning-sign);
+.fa-icon-content(@fa-icon) {
+  .fa-icon();
+  &:before { content: @fa-icon; }
+}
+
+.icon-sonarr-warning {
+  .fa-icon-content(@fa-var-exclamation-triangle);
   color : orange;
 }
 
-.icon-nd-edit:before {
-  .icon(@wrench);
+.icon-sonarr-edit {
+  .fa-icon-content(@fa-var-wrench);
 }
 
-.icon-nd-delete:before {
-  .icon(@remove);
+.icon-sonarr-blacklist {
+  .fa-icon-content(@fa-var-ban);
   color : @brand-danger;
 }
 
-.icon-nd-blacklist:before {
-  .icon(@ban-circle);
-  color : @brand-danger;
+.icon-sonarr-spinner {
+  .fa-icon-content(@fa-var-spinner);
+  //TODO: Fix icon spin
+  //.fa-spin
 }
 
-.icon-nd-spinner:before {
-  .icon(@spinner);
-  .icon-spin;
+.icon-sonarr-rename {
+  .fa-icon-content(@fa-var-sitemap)
 }
 
-.icon-nd-rename:before {
-  .icon(@sitemap)
+.icon-sonarr-add {
+  .fa-icon-content(@fa-var-plus);
 }
 
-.icon-nd-add:before {
-  .icon(@plus);
+.icon-sonarr-form-info {
+  .fa-icon-content(@fa-var-question-circle);
 }
 
-.icon-nd-form-info:before {
-  .icon(@question-sign);
-}
-
-.icon-nd-form-warning:before {
-  .icon(@warning-sign);
+.icon-sonarr-form-warning {
+  .fa-icon-content(@fa-var-exclamation-triangle);
   color: orange;
 }
 
-.icon-nd-form-danger:before {
-  .icon(@exclamation-sign);
+.icon-sonarr-form-danger {
+  .fa-icon-content(@fa-var-exclamation-circle);
   color: #b94a48;
 }
 
-.icon-nd-form-info-link:before {
+.icon-sonarr-form-info-link {
   .clickable;
-  .icon(@info-sign);
+  .fa-icon-content(@fa-var-info-circle);
 }
 
-.icon-nd-donate:before {
-  .icon(@heart);
-  color: @nzbdroneRed;
+.icon-sonarr-form-external-link {
+  .fa-icon-content(@fa-var-external-link);
 }
 
-.icon-nd-update:before {
-  .icon(@download-alt);
+.icon-sonarr-update {
+  .fa-icon-content(@fa-var-download);
 }
 
-.icon-nd-downloading:before {
-  .icon(@cloud-download);
+.icon-sonarr-download {
+  .fa-icon-content(@fa-var-download);
 }
 
-.icon-nd-tba:before {
-  .icon(@question-sign);
+.icon-sonarr-downloading {
+  .fa-icon-content(@fa-var-cloud-download);
 }
 
-.icon-nd-missing:before {
-  .icon(@warning-sign);
+.icon-sonarr-downloaded {
+  .fa-icon-content(@fa-var-inbox);
 }
 
-.icon-nd-not-aired:before {
-  .icon(@time);
+.icon-sonarr-pending {
+  .fa-icon-content(@fa-var-clock-o);
 }
 
-.icon-nd-imported:before {
-  .icon(@download-alt);
+.icon-sonarr-queued {
+  .fa-icon-content(@fa-var-cloud);
 }
 
-.icon-nd-status:before {
-  .icon(@circle);
+.icon-sonarr-paused {
+  .fa-icon-content(@fa-var-pause);
 }
 
-.icon-nd-monitored:before {
-  .icon(@bookmark);
+.icon-sonarr-active {
+  .fa-icon-content(@fa-var-play);
 }
 
-.icon-nd-unmonitored:before {
-  .icon(@bookmark-empty);
+.icon-sonarr-tba {
+  .fa-icon-content(@fa-var-question-circle);
 }
 
-.icon-info:before {
-  .icon(@info-sign);
+.icon-sonarr-missing {
+  .fa-icon-content(@fa-var-exclamation-triangle);
+}
+
+.icon-sonarr-not-aired {
+  .fa-icon-content(@fa-var-clock-o);
+}
+
+.icon-sonarr-import {
+  .fa-icon-content(@fa-var-inbox);
+}
+
+.icon-sonarr-imported {
+  .fa-icon-content(@fa-var-download);
+}
+
+.icon-sonarr-status {
+  .fa-icon-content(@fa-var-circle);
+}
+
+.icon-sonarr-monitored {
+  .fa-icon-content(@fa-var-bookmark);
+}
+
+.icon-sonarr-unmonitored {
+  .fa-icon-content(@fa-var-bookmark-o);
+}
+
+.icon-sonarr-log-info {
+  .fa-icon-content(@fa-var-info-circle);
   color : dodgerblue;
 }
 
-.icon-debug:before {
-  .icon(@info-sign);
+.icon-sonarr-log-debug {
+  .fa-icon-content(@fa-var-info-circle);
   color : gray;
 }
 
-.icon-trace:before {
-  .icon(@info-sign);
+.icon-sonarr-log-trace {
+  .fa-icon-content(@fa-var-info-circle);
   color : lightgrey;
 }
 
-.icon-warn:before {
-  .icon(@exclamation-sign);
+.icon-sonarr-log-warn {
+  .fa-icon-content(@fa-var-exclamation-circle);
   color : orange;
 }
 
-.icon-error:before {
-  .icon(@bug);
+.icon-sonarr-log-error {
+  .fa-icon-content(@fa-var-bug);
   color : red;
 }
 
-.icon-fatal:before {
-  .icon(@remove-sign);
+.icon-sonarr-log-fatal {
+  .fa-icon-content(@fa-var-times-circle);
   color : purple;
 }
 
-.icon-nd-import-failed:before {
-  .icon(@download-alt);
+.icon-sonarr-import-failed {
+  .fa-icon-content(@fa-var-download);
   color: @brand-danger;
 }
 
-.icon-nd-download-failed:before {
-  .icon(@cloud-download);
+.icon-sonarr-download-failed {
+  .fa-icon-content(@fa-var-cloud-download);
   color: @brand-danger;
 }
 
-.icon-nd-download-warning:before {
-  .icon(@cloud-download);
+.icon-sonarr-download-warning {
+  .fa-icon-content(@fa-var-cloud-download);
   color: @brand-warning;
 }
 
-.icon-nd-shutdown:before {
-  .icon(@off);
+.icon-sonarr-shutdown {
+  .fa-icon-content(@fa-var-power-off);
   color: @brand-danger;
 }
 
-.icon-nd-restart:before {
-  .icon(@repeat);
+.icon-sonarr-restart {
+  .fa-icon-content(@fa-var-repeat);
 }
 
-.icon-nd-health-warning:before {
-  .icon(@exclamation-sign);
+.icon-sonarr-health-warning {
+  .fa-icon-content(@fa-var-exclamation-circle);
   color : orange
 }
 
-.icon-nd-health-error:before {
-  .icon(@exclamation-sign);
+.icon-sonarr-health-error {
+  .fa-icon-content(@fa-var-exclamation-circle);
   color : @brand-danger;
 }
 
-.icon-nd-manual-search:before {
-  .icon(@user);
+.icon-sonarr-search {
+  .fa-icon-content(@fa-var-user);
 }
 
-.icon-nd-deleted:before {
-  .icon(@trash);
+.icon-sonarr-manual-search {
+  .fa-icon-content(@fa-var-user);
 }
 
-.icon-nd-warning:before {
+.icon-sonarr-search-automatic {
+  .fa-icon-content(@fa-var-rocket);
+}
+
+.icon-sonarr-delete {
+  .fa-icon-content(@fa-var-remove);
+  color : @brand-danger;
+}
+
+.icon-sonarr-deleted {
+  .fa-icon-content(@fa-var-trash);
+}
+
+.icon-sonarr-clear {
+  .fa-icon-content(@fa-var-trash);
+}
+
+.icon-sonarr-warning {
   color: @brand-warning;
+}
+
+.icon-sonarr-existing {
+  .fa-icon-content(@fa-var-minus);
+  color : @brand-danger;
+}
+
+.icon-sonarr-suggested {
+  .fa-icon-content(@fa-var-plus);
+  color : @brand-success;
+}
+
+.icon-sonarr-info {
+  .fa-icon-content(@fa-var-info-circle);
+}
+
+.icon-sonarr-all {
+  .fa-icon-content(@fa-var-circle-o);
+}
+
+//Navbar
+.icon-sonarr-navbar-collapsed {
+  .fa-icon-content(@fa-var-bars);
+  background-color: #ffffff;
+}
+
+.icon-sonarr-navbar-series {
+  .fa-icon-content(@fa-var-play);
+}
+
+.icon-sonarr-navbar-calendar {
+  .fa-icon-content(@fa-var-calendar);
+}
+
+.icon-sonarr-navbar-activity {
+  .fa-icon-content(@fa-var-clock-o);
+}
+
+.icon-sonarr-navbar-wanted {
+  .fa-icon-content(@fa-var-exclamation-triangle);
+}
+
+.icon-sonarr-navbar-settings {
+  .fa-icon-content(@fa-var-cogs);
+}
+
+.icon-sonarr-navbar-system {
+  .fa-icon-content(@fa-var-laptop);
+}
+
+.icon-sonarr-navbar-donate {
+  .fa-icon-content(@fa-var-heart);
+  color : @nzbdroneRed;
+}
+
+.icon-sonarr-back-to-top {
+  .fa-icon-content(@fa-var-arrow-circle-up);
+}
+
+.icon-sonarr-hdd {
+  .fa-icon-content(@fa-var-hdd-o);
+}
+
+.icon-sonarr-copy {
+  .fa-icon-content(@fa-var-clipboard);
+}
+
+.icon-sonarr-unknown {
+  .fa-icon-content(@fa-var-question);
+}
+
+.icon-sonarr-load-more {
+  .fa-icon-content(@fa-var-angle-down);
+}
+
+.icon-sonarr-ok {
+  .fa-icon-content(@fa-var-check);
+}
+
+.icon-sonarr-calendar-o {
+  .fa-icon-content(@fa-var-calendar-o);
+}
+
+.icon-sonarr-folder-open {
+  .fa-icon-content(@fa-var-folder-open);
+}
+
+.icon-sonarr-refresh {
+  .fa-icon-content(@fa-var-refresh);
+}
+
+.icon-sonarr-series-ended {
+  .fa-icon-content(@fa-var-stop);
+}
+
+.icon-sonarr-series-continuing {
+  .fa-icon-content(@fa-var-play);
+}
+
+.icon-sonarr-series-unmonitored {
+  .fa-icon-content(@fa-var-pause);
+}
+
+.icon-sonarr-checked {
+  .fa-icon-content(@fa-var-check-square);
+}
+
+.icon-sonarr-unchecked {
+  .fa-icon-content(@fa-var-square-o);
+}
+
+.icon-sonarr-expand {
+  .fa-icon-content(@fa-var-chevron-right);
+}
+
+.icon-sonarr-expanded {
+  .fa-icon-content(@fa-var-chevron-down);
+}
+
+.icon-sonarr-panel-show {
+  .fa-icon-content(@fa-var-chevron-circle-down);
+}
+
+.icon-sonarr-panel-hide {
+  .fa-icon-content(@fa-var-chevron-circle-up);
+}
+
+.icon-sonarr-comment {
+  .fa-icon-content(@fa-var-comment)
+}
+
+.icon-sonarr-rss {
+  .fa-icon-content(@fa-var-rss)
+}
+
+.icon-sonarr-view-poster {
+  .fa-icon-content(@fa-var-th-large)
+}
+
+.icon-sonarr-view-list {
+  .fa-icon-content(@fa-var-th-list)
+}
+
+.icon-sonarr-view-table {
+  .fa-icon-content(@fa-var-table)
+}
+
+.icon-sonarr-reorder {
+  .fa-icon-content(@fa-var-bars);
+}
+
+.icon-sonarr-browser-computer {
+  .fa-icon-content(@fa-var-desktop);
+}
+
+.icon-sonarr-browser-up {
+  .fa-icon-content(@fa-var-level-up);
+}
+
+.icon-sonarr-browser-folder {
+  .fa-icon-content(@fa-var-folder-o);
+}
+
+.icon-sonarr-browser-file {
+  .fa-icon-content(@fa-var-file-o);
+}
+
+.icon-sonarr-sort-asc {
+  .fa-icon-content(@fa-var-sort-asc);
+}
+
+.icon-sonarr-sort-desc {
+  .fa-icon-content(@fa-var-sort-desc);
+}
+
+.icon-sonarr-pager-first {
+  .fa-icon-content(@fa-var-fast-backward);
+}
+
+.icon-sonarr-pager-previous {
+  .fa-icon-content(@fa-var-backward);
+}
+
+.icon-sonarr-pager-next {
+  .fa-icon-content(@fa-var-forward);
+}
+
+.icon-sonarr-pager-last {
+  .fa-icon-content(@fa-var-fast-forward);
+}
+
+.icon-sonarr-logout {
+  .fa-icon-content(@fa-var-sign-out);
+}
+
+.icon-sonarr-file-text {
+  .fa-icon-content(@fa-var-file-text);
+}
+
+.icon-sonarr-backup-scheduled {
+  .fa-icon-content(@fa-var-clock-o);
+}
+
+.icon-sonarr-backup-manual {
+  .fa-icon-content(@fa-var-book);
+}
+
+.icon-sonarr-backup-update {
+  .fa-icon-content(@fa-var-retweet);
 }

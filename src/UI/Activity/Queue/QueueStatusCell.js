@@ -11,43 +11,43 @@ module.exports = NzbDroneCell.extend({
         if (this.cellValue) {
             var status = this.cellValue.get('status').toLowerCase();
             var trackedDownloadStatus = this.cellValue.has('trackedDownloadStatus') ? this.cellValue.get('trackedDownloadStatus').toLowerCase() : 'ok';
-            var icon = 'icon-nd-downloading';
+            var icon = 'icon-sonarr-downloading';
             var title = 'Downloading';
             var itemTitle = this.cellValue.get('title');
             var content = itemTitle;
 
             if (status === 'paused') {
-                icon = 'icon-pause';
+                icon = 'icon-sonarr-paused';
                 title = 'Paused';
             }
 
             if (status === 'queued') {
-                icon = 'icon-cloud';
+                icon = 'icon-sonarr-queued';
                 title = 'Queued';
             }
 
             if (status === 'completed') {
-                icon = 'icon-inbox';
+                icon = 'icon-sonarr-downloaded';
                 title = 'Downloaded';
             }
 
             if (status === 'pending') {
-                icon = 'icon-time';
+                icon = 'icon-sonarr-pending';
                 title = 'Pending';
             }
 
             if (status === 'failed') {
-                icon = 'icon-nd-download-failed';
+                icon = 'icon-sonarr-download-failed';
                 title = 'Download failed';
             }
 
             if (status === 'warning') {
-                icon = 'icon-nd-download-warning';
+                icon = 'icon-sonarr-download-warning';
                 title = 'Download warning: check download client for more details';
             }
 
             if (trackedDownloadStatus === 'warning') {
-                icon += ' icon-nd-warning';
+                icon += ' icon-sonarr-warning';
 
                 this.templateFunction = Marionette.TemplateCache.get(this.template);
                 content = this.templateFunction(this.cellValue.toJSON());
@@ -55,10 +55,10 @@ module.exports = NzbDroneCell.extend({
 
             if (trackedDownloadStatus === 'error') {
                 if (status === 'completed') {
-                    icon = 'icon-nd-import-failed';
+                    icon = 'icon-sonarr-import-failed';
                     title = 'Import failed: ' + itemTitle;
                 } else {
-                    icon = 'icon-nd-download-failed';
+                    icon = 'icon-sonarr-download-failed';
                     title = 'Download failed';
                 }
 

@@ -25,7 +25,7 @@ module.exports = Marionette.Layout.extend({
     },
 
     ui : {
-        searchSelectedButton : '.btn i.icon-search'
+        searchSelectedButton : '.btn i.icon-sonarr-search'
     },
 
     columns : [
@@ -100,14 +100,14 @@ module.exports = Marionette.Layout.extend({
             items      : [
                 {
                     title        : 'Search Selected',
-                    icon         : 'icon-search',
+                    icon         : 'icon-sonarr-search',
                     callback     : this._searchSelected,
                     ownerContext : this,
                     className    : 'x-search-selected'
                 },
                 {
                     title : 'Season Pass',
-                    icon  : 'icon-bookmark',
+                    icon  : 'icon-sonarr-monitored',
                     route : 'seasonpass'
                 }
             ]
@@ -123,14 +123,14 @@ module.exports = Marionette.Layout.extend({
                     key      : 'monitored',
                     title    : '',
                     tooltip  : 'Monitored Only',
-                    icon     : 'icon-nd-monitored',
+                    icon     : 'icon-sonarr-monitored',
                     callback : this._setFilter
                 },
                 {
                     key      : 'unmonitored',
                     title    : '',
                     tooltip  : 'Unmonitored Only',
-                    icon     : 'icon-nd-unmonitored',
+                    icon     : 'icon-sonarr-unmonitored',
                     callback : this._setFilter
                 }
             ]
