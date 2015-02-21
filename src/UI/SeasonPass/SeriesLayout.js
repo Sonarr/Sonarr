@@ -67,13 +67,13 @@ module.exports = Marionette.Layout.extend({
 
     _setExpanderIcon : function() {
         if (this.expanded) {
-            this.ui.expander.removeClass('icon-chevron-right');
-            this.ui.expander.addClass('icon-chevron-down');
+            this.ui.expander.removeClass('icon-sonarr-expand');
+            this.ui.expander.addClass('icon-sonarr-expanded');
         }
 
         else {
-            this.ui.expander.removeClass('icon-chevron-down');
-            this.ui.expander.addClass('icon-chevron-right');
+            this.ui.expander.removeClass('icon-sonarr-expanded');
+            this.ui.expander.addClass('icon-sonarr-expand');
         }
     },
 
@@ -134,11 +134,11 @@ module.exports = Marionette.Layout.extend({
         this.ui.seriesMonitored.removeAttr('data-idle-icon');
 
         if (monitored) {
-            this.ui.seriesMonitored.addClass('icon-nd-monitored');
-            this.ui.seriesMonitored.removeClass('icon-nd-unmonitored');
+            this.ui.seriesMonitored.addClass('icon-sonarr-monitored');
+            this.ui.seriesMonitored.removeClass('icon-sonarr-unmonitored');
         } else {
-            this.ui.seriesMonitored.addClass('icon-nd-unmonitored');
-            this.ui.seriesMonitored.removeClass('icon-nd-monitored');
+            this.ui.seriesMonitored.addClass('icon-sonarr-unmonitored');
+            this.ui.seriesMonitored.removeClass('icon-sonarr-monitored');
         }
     },
 

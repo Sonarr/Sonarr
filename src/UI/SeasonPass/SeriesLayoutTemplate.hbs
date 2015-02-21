@@ -1,7 +1,7 @@
 <div class="seasonpass-series">
     <div class="row">
         <div class="col-md-12">
-            <i class="icon-chevron-right x-expander expander pull-left"/>
+            <i class="icon-sonarr-expand x-expander expander pull-left"/>
             <i class="x-series-monitored series-monitor-toggle pull-left" title="Toggle monitored state for entire series"/>
             <div class="title col-md-5">
                 <a href="{{route}}">
@@ -24,7 +24,7 @@
 
             <div class="col-md-1">
                 <span class="help-inline">
-                    <i class="icon-nd-form-info" title="Selecting a season will unmonitor all previous seasons"/>
+                    <i class="icon-sonarr-form-info" title="Selecting a season will unmonitor all previous seasons"/>
                 </span>
             </div>
 
@@ -53,9 +53,9 @@
                             <tr>
                                 <td class="toggle-cell x-monitored" data-season-number="{{seasonNumber}}">
                                     {{#if monitored}}
-                                        <i class="icon-nd-monitored"></i>
+                                        <i class="icon-sonarr-monitored"></i>
                                     {{else}}
-                                        <i class="icon-nd-unmonitored"></i>
+                                        <i class="icon-sonarr-unmonitored"></i>
                                     {{/if}}
                                 </td>
                                 <td>

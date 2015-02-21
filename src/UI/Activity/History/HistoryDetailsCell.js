@@ -10,7 +10,7 @@ module.exports = NzbDroneCell.extend({
 
     render : function() {
         this.$el.empty();
-        this.$el.html('<i class="icon-info-sign"></i>');
+        this.$el.html('<i class="icon-sonarr-info"></i>');
 
         return this;
     },

@@ -9,17 +9,17 @@ module.exports = NzbDroneCell.extend({
         var status = this.model.get('status');
 
         if (status === 'ended') {
-            this.$el.html('<i class="icon-stop grid-icon" title="Ended"></i>');
+            this.$el.html('<i class="icon-sonarr-series-ended grid-icon" title="Ended"></i>');
             this._setStatusWeight(3);
         }
 
         else if (!monitored) {
-            this.$el.html('<i class="icon-pause grid-icon" title="Not Monitored"></i>');
+            this.$el.html('<i class="icon-sonarr-series-unmonitored grid-icon" title="Not Monitored"></i>');
             this._setStatusWeight(2);
         }
 
         else {
-            this.$el.html('<i class="icon-play grid-icon" title="Continuing"></i>');
+            this.$el.html('<i class="icon-sonarr-series-continuing grid-icon" title="Continuing"></i>');
             this._setStatusWeight(1);
         }
 

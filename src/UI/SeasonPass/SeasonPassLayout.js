@@ -30,28 +30,28 @@ module.exports = Marionette.Layout.extend({
                     key      : 'all',
                     title    : '',
                     tooltip  : 'All',
-                    icon     : 'icon-circle-blank',
+                    icon     : 'icon-sonarr-all',
                     callback : this._setFilter
                 },
                 {
                     key      : 'monitored',
                     title    : '',
                     tooltip  : 'Monitored Only',
-                    icon     : 'icon-nd-monitored',
+                    icon     : 'icon-sonarr-monitored',
                     callback : this._setFilter
                 },
                 {
                     key      : 'continuing',
                     title    : '',
                     tooltip  : 'Continuing Only',
-                    icon     : 'icon-play',
+                    icon     : 'icon-sonarr-series-continuing',
                     callback : this._setFilter
                 },
                 {
                     key      : 'ended',
                     title    : '',
                     tooltip  : 'Ended Only',
-                    icon     : 'icon-stop',
+                    icon     : 'icon-sonarr-series-ended',
                     callback : this._setFilter
                 }
             ]

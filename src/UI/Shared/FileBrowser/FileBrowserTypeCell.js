@@ -8,16 +8,16 @@ module.exports = NzbDroneCell.extend({
         this.$el.empty();
 
         var type = this.model.get(this.column.get('name'));
-        var icon = 'icon-hdd';
+        var icon = 'icon-sonarr-hdd';
 
         if (type === 'computer') {
-            icon = 'icon-desktop';
+            icon = 'icon-sonarr-browser-computer';
         } else if (type === 'parent') {
-            icon = 'icon-level-up';
+            icon = 'icon-sonarr-browser-up';
         } else if (type === 'folder') {
-            icon = 'icon-folder-close-alt';
+            icon = 'icon-sonarr-browser-folder';
         } else if (type === 'file') {
-            icon = 'icon-file-alt';
+            icon = 'icon-sonarr-browser-file';
         }
 
         this.$el.html('<i class="{0}"></i>'.format(icon));

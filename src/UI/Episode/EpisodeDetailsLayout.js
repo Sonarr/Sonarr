@@ -112,19 +112,19 @@ module.exports = Marionette.Layout.extend({
         var name = 'monitored';
         this.model.set(name, !this.model.get(name), { silent : true });
 
-        this.ui.monitored.addClass('icon-spinner icon-spin');
+        this.ui.monitored.addClass('icon-sonarr-spinner fa-spin');
         this.model.save();
     },
 
     _setMonitoredState : function() {
-        this.ui.monitored.removeClass('icon-spin icon-spinner');
+        this.ui.monitored.removeClass('fa-spin icon-sonarr-spinner');
 
         if (this.model.get('monitored')) {
-            this.ui.monitored.addClass('icon-bookmark');
-            this.ui.monitored.removeClass('icon-bookmark-empty');
+            this.ui.monitored.addClass('icon-sonarr-monitored');
+            this.ui.monitored.removeClass('icon-sonarr-unmonitored');
         } else {
-            this.ui.monitored.addClass('icon-bookmark-empty');
-            this.ui.monitored.removeClass('icon-bookmark');
+            this.ui.monitored.addClass('icon-sonarr-unmonitored');
+            this.ui.monitored.removeClass('icon-sonarr-monitored');
         }
     }
 });

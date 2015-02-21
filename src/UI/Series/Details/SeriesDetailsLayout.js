@@ -127,12 +127,12 @@ module.exports = Marionette.Layout.extend({
         this.ui.monitored.removeAttr('data-idle-icon');
 
         if (monitored) {
-            this.ui.monitored.addClass('icon-nd-monitored');
-            this.ui.monitored.removeClass('icon-nd-unmonitored');
+            this.ui.monitored.addClass('icon-sonarr-monitored');
+            this.ui.monitored.removeClass('icon-sonarr-unmonitored');
             this.$el.removeClass('series-not-monitored');
         } else {
-            this.ui.monitored.addClass('icon-nd-unmonitored');
-            this.ui.monitored.removeClass('icon-nd-monitored');
+            this.ui.monitored.addClass('icon-sonarr-unmonitored');
+            this.ui.monitored.removeClass('icon-sonarr-monitored');
             this.$el.addClass('series-not-monitored');
         }
     },

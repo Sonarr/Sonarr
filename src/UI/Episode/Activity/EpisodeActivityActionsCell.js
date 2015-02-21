@@ -14,7 +14,7 @@ module.exports = NzbDroneCell.extend({
         this.$el.empty();
 
         if (this.model.get('eventType') === 'grabbed') {
-            this.$el.html('<i class="icon-nd-delete x-failed" title="Mark download as failed"></i>');
+            this.$el.html('<i class="icon-sonarr-delete x-failed" title="Mark download as failed"></i>');
         }
 
         return this;

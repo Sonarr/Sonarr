@@ -1,5 +1,5 @@
 @import "../../Content/Bootstrap/mixins";
-@import "../../Content/FontAwesome/font-awesome";
+@import "../../Content/icons";
 @import "../../Shared/Styles/clickable.less";
 
 ul.qualities {
@@ -32,8 +32,8 @@ ul.qualities {
         color: #444444;
       }
 
-      .select-handle:before {
-        .icon(@check);
+      .select-handle {
+        .fa-icon-content(@fa-var-check-square-o);
       }
     }
 
@@ -57,11 +57,14 @@ ul.qualities {
       cursor: pointer;
     }
 
-    .select-handle:before {
-      .icon(@check-empty);
-      display: inline-block;
-      width: 16px;
-      margin-top: 1px;
+    .select-handle {
+      .fa-icon-content(@fa-var-square-o);
+
+      &:before {
+        display    : inline-block;
+        width      : 14px;
+        margin-top : 3px;
+      }
     }
   }
 }
