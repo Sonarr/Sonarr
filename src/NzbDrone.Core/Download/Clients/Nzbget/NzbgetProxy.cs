@@ -102,9 +102,22 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var queue = GetQueue(settings);
             var history = GetHistory(settings);
 
-            var queueItem = queue.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
-            var historyItem = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
+            int nzbId;
+            NzbgetQueueItem queueItem;
+            NzbgetHistoryItem historyItem;
 
+            if (id.Length < 10 && int.TryParse(id, out nzbId))
+            {
+                // Download wasn't grabbed by Sonarr, so the id is the NzbId reported by nzbget.
+                queueItem = queue.SingleOrDefault(h => h.NzbId == nzbId);
+                historyItem = history.SingleOrDefault(h => h.Id == nzbId);
+            }
+            else
+            {
+                queueItem = queue.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
+                historyItem = history.SingleOrDefault(h => h.Parameters.Any(p => p.Name == "drone" && id == (p.Value as string)));
+            }
+           
             if (queueItem != null)
             {
                 if (!EditQueue("GroupFinalDelete", 0, "", queueItem.NzbId, settings))
