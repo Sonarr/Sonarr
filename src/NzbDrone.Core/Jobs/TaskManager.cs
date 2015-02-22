@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Jobs
     {
         IList<ScheduledTask> GetPending();
         List<ScheduledTask> GetAll();
+        DateTime GetNextExecution(Type type);
     }
 
     public class TaskManager : ITaskManager, IHandle<ApplicationStartedEvent>, IHandle<CommandExecutedEvent>, IHandleAsync<ConfigSavedEvent>
@@ -49,6 +50,12 @@ namespace NzbDrone.Core.Jobs
         public List<ScheduledTask> GetAll()
         {
             return _scheduledTaskRepository.All().ToList();
+        }
+
+        public DateTime GetNextExecution(Type type)
+        {
+            var scheduledTask = _scheduledTaskRepository.All().Single(v => v.TypeName == type.FullName);
+            return scheduledTask.LastExecution.AddMinutes(scheduledTask.Interval);
         }
 
         public void Handle(ApplicationStartedEvent message)

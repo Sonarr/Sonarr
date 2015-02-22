@@ -7,6 +7,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -38,6 +39,7 @@ namespace NzbDrone.Core.Download.Pending
         private readonly ISeriesService _seriesService;
         private readonly IParsingService _parsingService;
         private readonly IDelayProfileService _delayProfileService;
+        private readonly ITaskManager _taskManager;
         private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
@@ -46,6 +48,7 @@ namespace NzbDrone.Core.Download.Pending
                                     ISeriesService seriesService,
                                     IParsingService parsingService,
                                     IDelayProfileService delayProfileService,
+                                    ITaskManager taskManager,
                                     IConfigService configService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
@@ -54,6 +57,7 @@ namespace NzbDrone.Core.Download.Pending
             _seriesService = seriesService;
             _parsingService = parsingService;
             _delayProfileService = delayProfileService;
+            _taskManager = taskManager;
             _configService = configService;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -94,11 +98,22 @@ namespace NzbDrone.Core.Download.Pending
         {
             var queued = new List<Queue.Queue>();
 
+            var nextRssSync = new Lazy<DateTime>(() => _taskManager.GetNextExecution(typeof(RssSyncCommand)));
+
             foreach (var pendingRelease in GetPendingReleases())
             {
                 foreach (var episode in pendingRelease.RemoteEpisode.Episodes)
                 {
                     var ect = pendingRelease.Release.PublishDate.AddMinutes(GetDelay(pendingRelease.RemoteEpisode));
+
+                    if (ect < nextRssSync.Value)
+                    {
+                        ect = nextRssSync.Value;
+                    }
+                    else
+                    {
+                        ect = ect.AddMinutes(_configService.RssSyncInterval);
+                    }
 
                     var queue = new Queue.Queue
                                 {
