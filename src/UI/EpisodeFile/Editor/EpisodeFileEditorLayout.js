@@ -2,6 +2,7 @@ var _ = require('underscore');
 var reqres = require('../../reqres');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
+var FormatHelpers = require('../../Shared/FormatHelpers');
 var SelectAllCell = require('../../Cells/SelectAllCell');
 var EpisodeNumberCell = require('../../Series/Details/EpisodeNumberCell');
 var SeasonEpisodeNumberCell = require('../../Cells/EpisodeNumberCell');
@@ -63,15 +64,17 @@ module.exports = Marionette.Layout.extend({
         var episodeCell = {};
 
         if (this.model) {
-            episodeCell.name = 'episodeNumber';
+            episodeCell.name = 'episodeNumber';s
             episodeCell.label = '#';
             episodeCell.cell = EpisodeNumberCell;
         }
 
         else {
-            episodeCell.name = 'this';
+            episodeCell.name = 'seasonEpisode';
+            episodeCell.cellValue = 'this';
             episodeCell.label = 'Episode';
             episodeCell.cell = SeasonEpisodeNumberCell;
+            episodeCell.sortValue = this._seasonEpisodeSorter;
         }
 
         this.columns = [
@@ -83,9 +86,10 @@ module.exports = Marionette.Layout.extend({
             },
             episodeCell,
             {
-                name  : 'episodeNumber',
-                label : 'Relative Path',
-                cell  : EpisodeFilePathCell
+                name     : 'episodeNumber',
+                label    : 'Relative Path',
+                cell     : EpisodeFilePathCell,
+                sortable : false
             },
             {
                 name  : 'airDateUtc',
@@ -99,11 +103,6 @@ module.exports = Marionette.Layout.extend({
                 sortable : false
             }
         ];
-
-        if (!this.model) {
-            this.columns[1].name = 'this';
-            this.columns[1].cell = SeasonEpisodeNumberCell;
-        }
     },
 
     _showEpisodes : function() {
@@ -112,6 +111,8 @@ module.exports = Marionette.Layout.extend({
             return;
         }
 
+        this._setInitialSort();
+
         this.episodeGridView = new Backgrid.Grid({
             columns    : this.columns,
             collection : this.filteredEpisodes,
@@ -119,6 +120,13 @@ module.exports = Marionette.Layout.extend({
         });
 
         this.episodeGrid.show(this.episodeGridView);
+    },
+
+    _setInitialSort : function () {
+        if (!this.model) {
+            this.filteredEpisodes.setSorting('seasonEpisode', 1, { sortValue: this._seasonEpisodeSorter });
+            this.filteredEpisodes.fullCollection.sort();
+        }
     },
 
     _getQualities : function() {
@@ -181,5 +189,12 @@ module.exports = Marionette.Layout.extend({
         return _.uniq(_.map(this.episodeGridView.getSelectedModels(), function (episode) {
             return episode.get('episodeFileId');
         }));
+    },
+
+    _seasonEpisodeSorter : function (model, attr) {
+        var seasonNumber = FormatHelpers.pad(model.get('seasonNumber'), 4, 0);
+        var episodeNumber = FormatHelpers.pad(model.get('episodeNumber'), 4, 0);
+
+        return seasonNumber + episodeNumber;
     }
 });
