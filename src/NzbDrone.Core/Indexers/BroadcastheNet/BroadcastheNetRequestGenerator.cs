@@ -34,10 +34,15 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
-                parameters.Category = "Episode";
-                parameters.Name = String.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
+                foreach (var episode in searchCriteria.Episodes)
+                {
+                    parameters = parameters.Clone();
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    parameters.Category = "Episode";
+                    parameters.Name = String.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
             }
 
             return pageableRequest;
@@ -50,17 +55,20 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
-                parameters.Category = "Episode";
-                parameters.Name = String.Format("S{0:00}E%", searchCriteria.SeasonNumber);
+                foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
+                {
+                    parameters.Category = "Episode";
+                    parameters.Name = String.Format("S{0:00}E%", seasonNumber);
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
 
-                parameters = parameters.Clone();
+                    parameters = parameters.Clone();
 
-                parameters.Category = "Season";
-                parameters.Name = String.Format("Season {0}", searchCriteria.SeasonNumber);
+                    parameters.Category = "Season";
+                    parameters.Name = String.Format("Season {0}", seasonNumber);
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
             }
 
 
