@@ -64,7 +64,7 @@ module.exports = Marionette.Layout.extend({
         var episodeCell = {};
 
         if (this.model) {
-            episodeCell.name = 'episodeNumber';s
+            episodeCell.name = 'episodeNumber';
             episodeCell.label = '#';
             episodeCell.cell = EpisodeNumberCell;
         }
