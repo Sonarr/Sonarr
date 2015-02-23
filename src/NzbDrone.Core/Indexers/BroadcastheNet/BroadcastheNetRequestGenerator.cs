@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -71,7 +72,6 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 }
             }
 
-
             return pageableRequest;
         }
 
@@ -93,7 +93,23 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            var pageableRequest = new List<IEnumerable<IndexerRequest>>();
+
+            var parameters = new BroadcastheNetTorrentQuery();
+            if (AddSeriesSearchParameters(parameters, searchCriteria))
+            {
+                foreach (var episode in searchCriteria.Episodes)
+                {
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = String.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
+            }
+
+            return pageableRequest;
         }
 
         public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
