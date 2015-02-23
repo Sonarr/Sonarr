@@ -39,8 +39,8 @@ namespace NzbDrone.Api.Authentication
                 pipelines.EnableBasicAuthentication(new BasicAuthenticationConfiguration(_authenticationService, "Sonarr"));                
             }
 
-            pipelines.BeforeRequest.AddItemToEndOfPipeline(RequiresAuthentication);
-            pipelines.AfterRequest.AddItemToEndOfPipeline(RemoveLoginHooksForApiCalls);
+            pipelines.BeforeRequest.AddItemToEndOfPipeline(c => RequiresAuthentication(c));
+            pipelines.AfterRequest.AddItemToEndOfPipeline(c => RemoveLoginHooksForApiCalls(c));
         }
 
         private Response RequiresAuthentication(NancyContext context)

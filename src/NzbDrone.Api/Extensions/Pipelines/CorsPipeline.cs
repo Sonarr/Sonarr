@@ -9,7 +9,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
     {
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToEndOfPipeline(Handle);
+            pipelines.AfterRequest.AddItemToEndOfPipeline(c => Handle(c));
         }
 
         private void Handle(NancyContext context)
