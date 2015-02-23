@@ -95,14 +95,14 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)
         {
-            if (searchCriteria.Series.TvRageId != 0)
-            {
-                parameters.Tvrage = String.Format("{0}", searchCriteria.Series.TvRageId);
-                return true;
-            }
             if (searchCriteria.Series.TvdbId != 0)
             {
                 parameters.Tvdb = String.Format("{0}", searchCriteria.Series.TvdbId);
+                return true;
+            }
+            if (searchCriteria.Series.TvRageId != 0)
+            {
+                parameters.Tvrage = String.Format("{0}", searchCriteria.Series.TvRageId);
                 return true;
             }
             // BTN is very neatly managed, so it's unlikely they map tvrage/tvdb wrongly.
