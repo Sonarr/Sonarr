@@ -35,6 +35,7 @@ namespace NzbDrone.Core.DecisionEngine
                                         .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(series.Profile))
                                         .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
                                         .ThenBy(c => PrioritizeDownloadProtocol(series, c.RemoteEpisode.Release.DownloadProtocol))
+                                        .ThenByDescending(c => c.RemoteEpisode.Episodes.Count)
                                         .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / Math.Max(1, c.RemoteEpisode.Episodes.Count))
                                         .ThenByDescending(c => TorrentInfo.GetSeeders(c.RemoteEpisode.Release))
                                         .ThenBy(c => c.RemoteEpisode.Release.Age);
