@@ -15,7 +15,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToStartOfPipeline(Handle);
+            pipelines.AfterRequest.AddItemToStartOfPipeline(Handle, false);
         }
 
         private void Handle(NancyContext context)
