@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             var config = _proxy.GetConfig(Settings);
             var destDir = (String)config.GetValueOrDefault("download-dir");
 
-            return string.Format("{0}/.{1}", destDir.TrimEnd('/'), Settings.TvCategory);
+            return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(String.Format(".{0}", Settings.TvCategory))) continue;
+                    if (!directories.Contains(String.Format("{0}", Settings.TvCategory))) continue;
                 }
 
                 var item = new DownloadClientItem();
