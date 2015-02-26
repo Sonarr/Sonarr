@@ -280,7 +280,7 @@
     <Compile Include="DecisionEngine\Specifications\CutoffSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ProtocolSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\LanguageSpecification.cs" />
-    <Compile Include="DecisionEngine\Specifications\NotInQueueSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\QueueSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\ReleaseRestrictionsSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\NotSampleSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\QualityAllowedByProfileSpecification.cs" />

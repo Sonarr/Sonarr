@@ -3,6 +3,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Parser.Model;
@@ -15,7 +16,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
-    public class NotInQueueSpecificationFixture : CoreTest<NotInQueueSpecification>
+    public class QueueSpecificationFixture : CoreTest<QueueSpecification>
     {
         private Series _series;
         private Episode _episode;
@@ -27,6 +28,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
+            Mocker.Resolve<QualityUpgradableSpecification>();
+
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
                                      .Build();
@@ -91,10 +94,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
-
         [Test]
         public void should_return_true_when_quality_in_queue_is_lower()
         {
+            _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
@@ -143,6 +147,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_false_when_quality_in_queue_is_better()
         {
+            _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
@@ -228,6 +234,25 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _remoteEpisode.Episodes.Add(_otherEpisode);
             GivenQueue(remoteEpisodes);
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_quality_in_queue_meets_cutoff()
+        {
+            _series.Profile.Value.Cutoff = _remoteEpisode.ParsedEpisodeInfo.Quality.Quality;
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(r => r.Series = _series)
+                                                      .With(r => r.Episodes = new List<Episode> { _episode })
+                                                      .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
+                                                      {
+                                                          Quality = new QualityModel(Quality.HDTV720p)
+                                                      })
+                                                      .Build();
+
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
     }
