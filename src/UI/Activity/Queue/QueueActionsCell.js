@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var vent = require('../../vent');
-var Marionette = require('marionette');
 var TemplatedCell = require('../../Cells/TemplatedCell');
 var RemoveFromQueueView = require('./RemoveFromQueueView');
 
@@ -40,7 +39,7 @@ module.exports = TemplatedCell.extend({
             data : JSON.stringify(this.model.toJSON())
         });
 
-        $(this.ui.import).spinForPromise(promise);
+        this.$(this.ui.import).spinForPromise(promise);
 
         promise.success(function() {
             //find models that have the same series id and episode ids and remove them
@@ -57,7 +56,7 @@ module.exports = TemplatedCell.extend({
             data : JSON.stringify(this.model.toJSON())
         });
 
-        $(this.ui.grab).spinForPromise(promise);
+        this.$(this.ui.grab).spinForPromise(promise);
 
         promise.success(function() {
             //find models that have the same series id and episode ids and remove them

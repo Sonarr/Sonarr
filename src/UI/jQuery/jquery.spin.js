@@ -38,7 +38,7 @@ module.exports = function() {
         } else {
             icon.attr('data-idle-icon', iconClass);
             icon.removeClass(iconClass);
-            icon.addClass('icon-sonarr-spinner');
+            icon.addClass('fa-spin icon-sonarr-spinner');
         }
 
         return this;
