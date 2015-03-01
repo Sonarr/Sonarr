@@ -344,7 +344,7 @@ namespace NzbDrone.Core.Parser
                 info.Language = Parser.ParseLanguage(title);
                 info.Special = true;
 
-                _logger.Info("Found special episode {0} for title '{1}'", info, title);
+                _logger.Debug("Found special episode {0} for title '{1}'", info, title);
                 return info;
             }
 
