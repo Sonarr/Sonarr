@@ -36,6 +36,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
+            if (!folderInfo.EpisodeNumbers.Any())
+            {
+                return Decision.Accept();
+            }
+
             if (folderInfo.FullSeason)
             {
                 return Decision.Accept();
