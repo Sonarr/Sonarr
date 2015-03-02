@@ -9,7 +9,9 @@ namespace NzbDrone.Core.Tv
     {
         bool SeriesPathExists(string path);
         Series FindByTitle(string cleanTitle);
+        Series FindByLocaleTitle(string cleanTitle);
         Series FindByTitle(string cleanTitle, int year);
+        Series FindByLocaleTitle(string cleanTitle, int year);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
     }
@@ -34,11 +36,28 @@ namespace NzbDrone.Core.Tv
                         .SingleOrDefault();
         }
 
+        public Series FindByLocaleTitle(string cleanTitle)
+        {
+            cleanTitle = cleanTitle.ToLowerInvariant();
+
+            return Query.Where(s => s.AditionalLanguageCleanTitle == cleanTitle)
+                        .SingleOrDefault();
+        }
+
         public Series FindByTitle(string cleanTitle, int year)
         {
             cleanTitle = cleanTitle.ToLowerInvariant();
 
             return Query.Where(s => s.CleanTitle == cleanTitle)
+                        .AndWhere(s => s.Year == year)
+                        .SingleOrDefault();
+        }
+
+        public Series FindByLocaleTitle(string cleanTitle, int year)
+        {
+            cleanTitle = cleanTitle.ToLowerInvariant();
+
+            return Query.Where(s => s.AditionalLanguageCleanTitle == cleanTitle)
                         .AndWhere(s => s.Year == year)
                         .SingleOrDefault();
         }

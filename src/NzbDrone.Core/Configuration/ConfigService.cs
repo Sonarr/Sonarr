@@ -7,6 +7,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -113,6 +114,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueInt("MinimumAge", 0); }
 
             set { SetValue("MinimumAge", value); }
+        }
+
+        public string SeriesLanguage
+        {
+            get { return GetValue("SeriesLanguage", "en"); }
+
+            set { SetValue("SeriesLanguage", value);  }
         }
 
         public Boolean AutoDownloadPropers

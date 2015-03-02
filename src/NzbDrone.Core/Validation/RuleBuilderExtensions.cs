@@ -37,5 +37,10 @@ namespace NzbDrone.Core.Validation
         {
             return ruleBuilder.SetValidator(new LangaugeValidator());
         }
+
+        public static IRuleBuilderOptions<T, string> ValidISO639<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new ISO639Validator());
+        }
     }
 }

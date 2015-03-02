@@ -108,8 +108,20 @@ namespace NzbDrone.Core.Parser
 
             if (series == null)
             {
+                series = _seriesService.FindByLocaleTitle(parsedEpisodeInfo.SeriesTitle);
+            }
+
+            if (series == null)
+            {
                 series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
                                                     parsedEpisodeInfo.SeriesTitleInfo.Year);
+            }
+
+            if (series == null)
+            {
+                series = _seriesService.FindByLocaleTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
+                                                    parsedEpisodeInfo.SeriesTitleInfo.Year);
+
             }
 
             return series;
@@ -308,7 +320,7 @@ namespace NzbDrone.Core.Parser
                     return ParseSpecialEpisodeTitle(title, searchCriteria.Series);
                 }
             }
-
+            //TODO: Search inexact title with locale language also
             var series = _seriesService.FindByTitleInexact(title);
             if (series == null && tvRageId > 0)
             {
@@ -385,6 +397,11 @@ namespace NzbDrone.Core.Parser
             {
                 //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
                 series = _seriesService.FindByTvRageId(tvRageId);
+            }
+
+            if (series == null)
+            {
+                series = _seriesService.FindByLocaleTitle(parsedEpisodeInfo.SeriesTitle);
             }
 
             if (series == null)

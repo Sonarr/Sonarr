@@ -22,6 +22,10 @@ namespace NzbDrone.Core.Parser
 //                new Regex(@"^(?:(?<absoluteepisode>\d{2,3})(?:_|-|\s|\.)+)+(?<title>.+?)(?:\W|_)+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+)",
 //                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Serie with Title - Some text and season as number, Single ([Cap.105]) AND Multi ([Caps.105_107])
+                new Regex(@"^(?<title>.+?)(\s*\-\s*)(\w+)(\s*|.)?(\s*|.)?(?<!\d)(?<season>\d+)?(.+?)(\[Cap(\w*?)(.))(?<!\d)(\k<season>(?<episode>\d+))((_\k<season>(?<episode>\d+)\])|(.*))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Multi-Part episodes without a title (S01E05.S01E06)
                 new Regex(@"^(?:\W*S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[ex]){1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -182,7 +186,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex AnimeReleaseGroupRegex = new Regex(@"^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<spanish>\bSPA\b|castellano|español)|(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
@@ -472,6 +476,9 @@ namespace NzbDrone.Core.Parser
             if (lowerTitle.Contains("portuguese"))
                 return Language.Portuguese;
 
+            if (lowerTitle.Contains("español"))
+                return Language.Spanish;
+
             var match = LanguageRegex.Match(title);
 
             if (match.Groups["italian"].Captures.Cast<Capture>().Any())
@@ -494,6 +501,9 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["dutch"].Success)
                 return Language.Dutch;
+
+            if (match.Groups["español"].Success)
+                return Language.Spanish;
 
             return Language.English;
         }
