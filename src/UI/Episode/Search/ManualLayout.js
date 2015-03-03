@@ -53,16 +53,22 @@ module.exports = Marionette.Layout.extend({
             cell  : QualityCell
         },
         {
-            name     : 'rejections',
-            label    : '',
-            cell     : ApprovalStatusCell,
-            sortable : false
+            name      : 'rejections',
+            label     : '<i class="icon-sonarr-header-rejections" />',
+            tooltip   : 'Rejections',
+            cell      : ApprovalStatusCell,
+            sortable  : true,
+            sortType  : 'fixed',
+            direction : 'ascending'
         },
         {
-            name     : 'download',
-            label    : '',
-            cell     : DownloadReportCell,
-            sortable : true
+            name      : 'download',
+            label     : '<i class="icon-sonarr-download" />',
+            tooltip   : 'Auto-Search Prioritization',
+            cell      : DownloadReportCell,
+            sortable  : true,
+            sortType  : 'fixed',
+            direction : 'ascending'
         }
     ],
 

@@ -17,13 +17,19 @@ module.exports = function() {
         render : function() {
             this.$el.empty();
             this.$el.append(this.column.get('label'));
+            if (this.column.get('tooltip')) {
+                this.$el.attr({
+                    'title'          : this.column.get('tooltip'),
+                    'data-container' : '.table'
+                });
+            }
 
             var column = this.column;
             var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
 
             if (sortable) {
                 this.$el.addClass('sortable');
-                this.$el.append(' <i class="pull-right"></i>');
+                this.$el.prepend(' <i class="sort-direction-icon"></i>');
             }
 
             //Do we need this?
@@ -51,7 +57,7 @@ module.exports = function() {
         },
 
         direction : function(dir) {
-            this.$el.children('i').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
+            this.$el.children('i.sort-direction-icon').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
 
             if (arguments.length) {
                 if (dir) {
@@ -137,11 +143,11 @@ module.exports = function() {
 
         _setSortIcon : function(dir) {
             this._removeSortIcon();
-            this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
+            this.$el.children('i.sort-direction-icon').addClass(this._convertDirectionToIcon(dir));
         },
 
         _removeSortIcon : function() {
-            this.$el.children('i').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
+            this.$el.children('i.sort-direction-icon').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
         }
     });
 
