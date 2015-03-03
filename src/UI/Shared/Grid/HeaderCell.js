@@ -97,11 +97,16 @@ module.exports = function() {
             var column = this.column;
             var sortable = Backgrid.callByNeed(column.sortable(), column, collection);
             if (sortable) {
+                var isSorted = this.$el.children('.icon-sonarr-sort-asc,.icon-sonarr-sort-desc').length !== 0;
                 var direction = collection.state.order;
-                if (direction === 'ascending' || direction === -1) {
-                    direction = 'descending';
+                if (column.get('sortType') === 'fixed' || !isSorted) {
+                    direction = column.get('direction') || 'ascending';
                 } else {
-                    direction = 'ascending';
+                    if (direction === 'ascending' || direction === -1) {
+                        direction = 'descending';
+                    } else {
+                        direction = 'ascending';
+                    }
                 }
 
                 if (collection.setSorting) {
