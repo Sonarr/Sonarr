@@ -309,7 +309,11 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
-            var series = _seriesService.FindByTitleInexact(title);
+            var series = GetSeries(title);
+            if (series == null)
+            {
+                series = _seriesService.FindByTitleInexact(title);
+            }
             if (series == null && tvRageId > 0)
             {
                 series = _seriesService.FindByTvRageId(tvRageId);
