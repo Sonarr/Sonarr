@@ -8,6 +8,7 @@ module.exports = function() {
 
         this.state.filterKey = filter[0];
         this.state.filterValue = filter[1];
+        this.state.filterType = filter[2] || 'equal';
 
         if (options.reset) {
             if (this.mode !== 'server') {
@@ -32,7 +33,11 @@ module.exports = function() {
         var filterModel = function(model) {
             if (!self.state.filterKey || !self.state.filterValue) {
                 return true;
-            } else {
+            }
+            else if (self.state.filterType === 'contains') {
+                return model.get(self.state.filterKey).toLowerCase().indexOf(self.state.filterValue.toLowerCase()) > -1;
+            }
+            else {
                 return model.get(self.state.filterKey) === self.state.filterValue;
             }
         };

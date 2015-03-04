@@ -11,9 +11,9 @@ module.exports = TemplatedCell.extend({
     className : 'queue-actions-cell',
 
     events : {
-        'click .x-remove' : '_remove',
-        'click .x-import' : '_import',
-        'click .x-grab'   : '_grab'
+        'click .x-remove'        : '_remove',
+        'click .x-manual-import' : '_manualImport',
+        'click .x-grab'          : '_grab'
     },
 
     ui : {
@@ -30,21 +30,12 @@ module.exports = TemplatedCell.extend({
         }));
     },
 
-    _import : function() {
-        var self = this;
-
-        var promise = $.ajax({
-            url  : window.NzbDrone.ApiRoot + '/queue/import',
-            type : 'POST',
-            data : JSON.stringify(this.model.toJSON())
-        });
-
-        this.$(this.ui.import).spinForPromise(promise);
-
-        promise.success(function() {
-            //find models that have the same series id and episode ids and remove them
-            self.model.trigger('destroy', self.model);
-        });
+    _manualImport : function () {
+        vent.trigger(vent.Commands.ShowManualImport,
+            {
+                downloadId: this.model.get('downloadId'),
+                title: this.model.get('title')
+            });
     },
 
     _grab : function() {

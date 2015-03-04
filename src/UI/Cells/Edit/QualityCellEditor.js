@@ -1,6 +1,6 @@
+var _ = require('underscore');
 var Backgrid = require('backgrid');
 var Marionette = require('marionette');
-var _ = require('underscore');
 var ProfileSchemaCollection = require('../../Settings/Profile/ProfileSchemaCollection');
 
 module.exports = Backgrid.CellEditor.extend({
@@ -59,7 +59,11 @@ module.exports = Backgrid.CellEditor.extend({
         };
 
         model.set(column.get('name'), newQuality);
-        model.save();
+
+        if (this.column.get('saveAfterEdit')) {
+            model.save();
+        }
+
         model.trigger('backgrid:edited', model, column, new Backgrid.Command(e));
     },
 

@@ -72,6 +72,7 @@
     <Compile Include="ConvertBase32.cs" />
     <Compile Include="Crypto\HashProvider.cs" />
     <Compile Include="Disk\FileSystemLookupService.cs" />
+    <Compile Include="Disk\RelativeFileSystemModel.cs" />
     <Compile Include="Disk\FileSystemModel.cs" />
     <Compile Include="Disk\FileSystemResult.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
