@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[DeadFish] Onee-chan ga Kita - 09v2 [720p][AAC]", "Onee-chan ga Kita", 9, 0, 0)]
         [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0]", "No Game No Life", 1, 0, 0)]
         [TestCase("[S-T-D] Soul Eater Not! - 06 (1280x720 10bit AAC) [59B3F2EA].mkv", "Soul Eater Not!", 6, 0, 0)]
-        [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0].mkv", "No Game No Life", 1, 0, 0)]
         [TestCase("No Game No Life - 010 (720p) [27AAA0A0].mkv", "No Game No Life", 10, 0, 0)]
         [TestCase("Initial D Fifth Stage - 01 DVD - Central Anime", "Initial D Fifth Stage", 1, 0, 0)]
         [TestCase("Initial_D_Fifth_Stage_-_01(DVD)_-_(Central_Anime)[5AF6F1E4].mkv", "Initial D Fifth Stage", 1, 0, 0)]
