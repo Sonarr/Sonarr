@@ -17,9 +17,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             RuleFor(c => c.Username).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Password));
             RuleFor(c => c.Password).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Username));
 
-            RuleFor(c => c.TvCategory).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.TvCategoryLocalPath));
-            RuleFor(c => c.TvCategoryLocalPath).IsValidPath().When(c => !String.IsNullOrWhiteSpace(c.TvCategoryLocalPath));
-
             RuleFor(c => c.TvCategory).NotEmpty().WithMessage("A category is recommended").AsWarning();
         }
     }
@@ -51,9 +48,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         [FieldDefinition(4, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
         public String TvCategory { get; set; }
-
-        // TODO: Remove around January 2015, this setting was superceded by the RemotePathMappingService, but has to remain for a while to properly migrate.
-        public String TvCategoryLocalPath { get; set; }
 
         [FieldDefinition(5, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
         public Int32 RecentTvPriority { get; set; }

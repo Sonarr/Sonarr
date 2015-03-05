@@ -21,15 +21,10 @@ namespace NzbDrone.Core.RemotePathMappings
 
         OsPath RemapRemoteToLocal(String host, OsPath remotePath);
         OsPath RemapLocalToRemote(String host, OsPath localPath);
-
-        // TODO: Remove around January 2015. Used to migrate legacy Local Category Path settings.
-        void MigrateLocalCategoryPath(Int32 downloadClientId, IProviderConfig newSettings, String host, OsPath remotePath, OsPath localPath);
     }
 
     public class RemotePathMappingService : IRemotePathMappingService
     {
-        // TODO: Remove DownloadClientRepository reference around January 2015. Used to migrate legacy Local Category Path settings.
-        private readonly IDownloadClientRepository _downloadClientRepository;
         private readonly IRemotePathMappingRepository _remotePathMappingRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
@@ -42,7 +37,6 @@ namespace NzbDrone.Core.RemotePathMappings
                                         ICacheManager cacheManager,
                                         Logger logger)
         {
-            _downloadClientRepository = downloadClientRepository;
             _remotePathMappingRepository = remotePathMappingRepository;
             _diskProvider = diskProvider;
             _logger = logger;
@@ -165,23 +159,6 @@ namespace NzbDrone.Core.RemotePathMappings
             }
 
             return localPath;
-        }
-
-        // TODO: Remove around January 2015. Used to migrate legacy Local Category Path settings.
-        public void MigrateLocalCategoryPath(Int32 downloadClientId, IProviderConfig newSettings, String host, OsPath remotePath, OsPath localPath)
-        {
-            _logger.Debug("Migrating local category path for Host {0}/{1} to {2}", host, remotePath, localPath);
-
-            var existingMappings = All().Where(v => v.Host == host).ToList();
-
-            if (!existingMappings.Any(v => new OsPath(v.LocalPath) == localPath && new OsPath(v.RemotePath) == remotePath))
-            {
-                Add(new RemotePathMapping { Host = host, RemotePath = remotePath.FullPath, LocalPath = localPath.FullPath });
-            }
-
-            var downloadClient = _downloadClientRepository.Get(downloadClientId);
-            downloadClient.Settings = newSettings;
-            _downloadClientRepository.Update(downloadClient);
         }
     }
 }

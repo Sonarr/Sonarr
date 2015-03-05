@@ -177,8 +177,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            MigrateLocalCategoryPath();
-
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
                 if (downloadClientItem.Category == Settings.TvCategory || downloadClientItem.Category == "*" && Settings.TvCategory.IsNullOrWhiteSpace())
@@ -350,36 +348,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
 
             return null;
-        }
-
-        private void MigrateLocalCategoryPath()
-        {
-            // TODO: Remove around January 2015, this code moves the settings to the RemotePathMappingService.
-            if (!Settings.TvCategoryLocalPath.IsNullOrWhiteSpace())
-            {
-                try
-                {
-                    _logger.Debug("Has legacy TvCategoryLocalPath, trying to migrate to RemotePathMapping list.");
-
-                    var config = _proxy.GetConfig(Settings);
-                    var category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
-
-                    if (category != null)
-                    {
-                        var localPath = new OsPath(Settings.TvCategoryLocalPath);
-                        Settings.TvCategoryLocalPath = null;
-
-                        _remotePathMappingService.MigrateLocalCategoryPath(Definition.Id, Settings, Settings.Host, category.FullPath, localPath);
-
-                        _logger.Info("Discovered Local Category Path for {0}, the setting was automatically moved to the Remote Path Mapping table.", Definition.Name);
-                    }
-                }
-                catch (DownloadClientException ex)
-                {
-                    _logger.ErrorException("Unable to migrate local category path", ex);
-                    throw;
-                }
-            }
         }
     }
 }

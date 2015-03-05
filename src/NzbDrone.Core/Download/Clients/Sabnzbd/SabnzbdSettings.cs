@@ -63,9 +63,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
         public String TvCategory { get; set; }
 
-        // TODO: Remove around January 2015, this setting was superceded by the RemotePathMappingService, but has to remain for a while to properly migrate.
-        public String TvCategoryLocalPath { get; set; }
-
         [FieldDefinition(6, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
         public Int32 RecentTvPriority { get; set; }
 
