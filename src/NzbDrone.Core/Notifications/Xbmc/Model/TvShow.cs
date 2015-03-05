@@ -4,7 +4,7 @@
     {
         public int TvShowId { get; set; }
         public string Label { get; set; }
-        public int ImdbNumber { get; set; }
+        public string ImdbNumber { get; set; }
         public string File { get; set; }
     }
 }
