@@ -2,9 +2,7 @@ module.exports = function() {
 
     var $ = this;
 
-    var original = $.ajax;
-    $.ajax = function(xhr) {
-        'use strict';
+    function modifyLocalRequest(xhr) {
         if (xhr && xhr.data && xhr.type === 'DELETE') {
             if (xhr.url.contains('?')) {
                 xhr.url += '&';
@@ -18,6 +16,15 @@ module.exports = function() {
             xhr.headers = xhr.headers || {};
             xhr.headers['X-Api-Key'] = window.NzbDrone.ApiKey;
         }
+    }
+
+    var original = $.ajax;
+    $.ajax = function(xhr) {
+        'use strict';
+        if (xhr.url.indexOf('/') === 0 || xhr.url.indexOf(window.location.origin) === 0) {
+            modifyLocalRequest(xhr);
+        }
+
         return original.apply(this, arguments);
     };
 };
