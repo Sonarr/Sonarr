@@ -1,10 +1,8 @@
 var _ = require('underscore');
 var Marionette = require('marionette');
-var Backgrid = require('backgrid');
 var vent = require('vent');
 var Profiles = require('../../Profile/ProfileCollection');
 var RootFolders = require('../../AddSeries/RootFolders/RootFolderCollection');
-var ToolbarLayout = require('../../Shared/Toolbar/ToolbarLayout');
 var RootFolderLayout = require('../../AddSeries/RootFolders/RootFolderLayout');
 var UpdateFilesSeriesView = require('./Organize/OrganizeFilesView');
 var Config = require('../../Config');
@@ -18,9 +16,8 @@ module.exports = Marionette.ItemView.extend({
         seasonFolder        : '.x-season-folder',
         rootFolder          : '.x-root-folder',
         selectedCount       : '.x-selected-count',
-        saveButton          : '.x-save',
-        organizeFilesButton : '.x-organize-files',
-        container           : '.series-editor-footer'
+        container           : '.series-editor-footer',
+        actions             : '.x-action'
     },
 
     events : {
@@ -96,19 +93,9 @@ module.exports = Marionette.ItemView.extend({
         this.ui.selectedCount.html('{0} series selected'.format(selectedCount));
 
         if (selectedCount === 0) {
-            this.ui.monitored.attr('disabled', '');
-            this.ui.profile.attr('disabled', '');
-            this.ui.seasonFolder.attr('disabled', '');
-            this.ui.rootFolder.attr('disabled', '');
-            this.ui.saveButton.attr('disabled', '');
-            this.ui.organizeFilesButton.attr('disabled', '');
+            this.ui.actions.attr('disabled', 'disabled');
         } else {
-            this.ui.monitored.removeAttr('disabled', '');
-            this.ui.profile.removeAttr('disabled', '');
-            this.ui.seasonFolder.removeAttr('disabled', '');
-            this.ui.rootFolder.removeAttr('disabled', '');
-            this.ui.saveButton.removeAttr('disabled', '');
-            this.ui.organizeFilesButton.removeAttr('disabled', '');
+            this.ui.actions.removeAttr('disabled');
         }
     },
 

@@ -5,6 +5,14 @@ var _ = require('underscore');
 module.exports = Backgrid.Cell.extend({
     className : 'profile-cell',
 
+    _originalInit : Backgrid.Cell.prototype.initialize,
+
+    initialize : function () {
+        this._originalInit.apply(this, arguments);
+
+        this.listenTo(ProfileCollection, 'sync', this.render);
+    },
+
     render : function() {
 
         this.$el.empty();
