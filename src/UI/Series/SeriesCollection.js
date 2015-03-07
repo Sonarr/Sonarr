@@ -66,10 +66,11 @@ var Collection = PageableCollection.extend({
     },
 
     sortMappings : {
-        'title'      : {
+        title : {
             sortKey : 'sortTitle'
         },
-        'nextAiring' : {
+
+        nextAiring : {
             sortValue : function(model, attr, order) {
                 var nextAiring = model.get(attr);
 
@@ -91,6 +92,14 @@ var Collection = PageableCollection.extend({
                 var episodeCount = model.get('episodeCount');
 
                 return percentOfEpisodes + episodeCount / 1000000;
+            }
+        },
+
+        path : {
+            sortValue : function(model) {
+                var path = model.get('path');
+
+                return path.toLowerCase();
             }
         }
     }
