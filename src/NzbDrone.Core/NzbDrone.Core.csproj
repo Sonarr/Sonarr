@@ -249,6 +249,7 @@
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -456,6 +457,7 @@
     <Compile Include="Indexers\Eztv\EztvRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
+    <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
