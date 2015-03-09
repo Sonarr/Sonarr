@@ -145,6 +145,8 @@ module.exports = Marionette.Layout.extend({
             return;
         }
 
+        this.columns[0].sortedCollection = this.seriesCollection;
+
         this.editorGrid = new Backgrid.Grid({
             collection : this.seriesCollection,
             columns    : this.columns,
