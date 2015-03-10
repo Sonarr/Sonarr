@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.Port).GreaterThan(0);
 
-            RuleFor(c => c.TvCategory).Matches("^[-a-z]*$").WithMessage("Allowed characters a-z and -");
+            RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$").WithMessage("Allowed characters a-z and -");
         }
     }
 
