@@ -255,6 +255,53 @@ namespace NzbDrone.Core.Test.MediaFiles
             ExceptionVerification.ExpectedWarns(1);
         }
 
+        [Test]
+        public void should_use_folder_if_folder_import()
+        {
+            GivenValidSeries();
+
+            var folderName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\[HorribleSubs] Maria the Virgin Witch - 09 [720p]".AsOsAgnostic();
+            var fileName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\[HorribleSubs] Maria the Virgin Witch - 09 [720p]\[HorribleSubs] Maria the Virgin Witch - 09 [720p].mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(folderName))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFiles(folderName, SearchOption.TopDirectoryOnly))
+                  .Returns(new[] { fileName });
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+
+            var result = Subject.ProcessPath(fileName);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(v => v.AbsoluteEpisodeNumbers.First() == 9), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_use_folder_if_file_import()
+        {
+            GivenValidSeries();
+
+            var fileName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\Torrents\[HorribleSubs] Maria the Virgin Witch - 09 [720p].mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(fileName))
+                  .Returns(false);
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+            var result = Subject.ProcessPath(fileName);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), null, true), Times.Once());
+        }
+
         private void VerifyNoImport()
         {
             Mocker.GetMock<IImportApprovedEpisodes>().Verify(c => c.Import(It.IsAny<List<ImportDecision>>(), true, null),
