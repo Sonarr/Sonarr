@@ -20,10 +20,10 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
     {
         private static readonly TorrentBlackholeSettingsValidator validator = new TorrentBlackholeSettingsValidator();
 
-        [FieldDefinition(0, Label = "Torrent Folder", Type = FieldType.Path)]
+        [FieldDefinition(0, Label = "Torrent Folder", Type = FieldType.Path, HelpText = "Folder in which Sonarr will store the .torrent file")]
         public String TorrentFolder { get; set; }
 
-        [FieldDefinition(1, Label = "Watch Folder", Type = FieldType.Path)]
+        [FieldDefinition(1, Label = "Watch Folder", Type = FieldType.Path, HelpText = "Folder from which Sonarr should import completed downloads")]
         public String WatchFolder { get; set; }
 
         public ValidationResult Validate()
