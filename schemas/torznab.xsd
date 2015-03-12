@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://torznab.local/schemas/feed.xsd"
+           xmlns:torznab="http://torznab.local/schemas/feed.xsd">
+  <xs:simpleType name="attrNames">
+    <xs:restriction base="xs:string">
+      <!-- http://newznab.readthedocs.org/en/latest/misc/api/ -->
+      <!-- All -->
+      <xs:enumeration value="size" />
+      <xs:enumeration value="category" />
+      <xs:enumeration value="guid" />
+      <xs:enumeration value="poster" />
+      <xs:enumeration value="team" />
+      <xs:enumeration value="grabs" />
+      <xs:enumeration value="comments" />
+      <xs:enumeration value="year" />
+      <!-- TV -->
+      <xs:enumeration value="season" />
+      <xs:enumeration value="episode" />
+      <xs:enumeration value="rageid" />
+      <xs:enumeration value="tvtitle" />
+      <xs:enumeration value="tvairdate" />
+      <!-- TV, Movies, Audio -->
+      <xs:enumeration value="video" />
+      <xs:enumeration value="audio" />
+      <xs:enumeration value="resolution" />
+      <xs:enumeration value="framerate" />
+      <xs:enumeration value="language" />
+      <xs:enumeration value="subs" />
+      <!-- Movies -->
+      <xs:enumeration value="imdb" />
+      <xs:enumeration value="imdbscore" />
+      <xs:enumeration value="imdbtitle" />
+      <xs:enumeration value="imdbtagline" />
+      <xs:enumeration value="imdbscore" />
+      <xs:enumeration value="imdbtitle" />
+      <xs:enumeration value="imdbtagline" />
+      <xs:enumeration value="imdbplot" />
+      <xs:enumeration value="imdbyear" />
+      <xs:enumeration value="imdbdirector" />
+      <xs:enumeration value="imdbactors" />
+      <!-- TV, Movies -->
+      <xs:enumeration value="genre" />
+      <!-- Music -->
+      <xs:enumeration value="artist" />
+      <xs:enumeration value="album" />
+      <xs:enumeration value="publisher" />
+      <xs:enumeration value="tracks" />
+      <!-- Mixed -->
+      <xs:enumeration value="coverurl" />
+      <xs:enumeration value="backdropcoverurl" />
+      <xs:enumeration value="review" />
+      <!-- Book -->
+      <xs:enumeration value="booktitle" />
+      <xs:enumeration value="publishdate" />
+      <xs:enumeration value="author" />
+      <xs:enumeration value="pages" />
+
+      <!-- Newznab extensions -->
+      <xs:enumeration value="nzbhash" />
+
+      <!-- Torznab extensions -->
+      <xs:enumeration value="type" /> <!-- episode|season|series -->
+      <xs:enumeration value="infohash" />
+      <xs:enumeration value="magnet" />
+      <xs:enumeration value="seeders" />
+      <xs:enumeration value="peers" /> <!-- seeders + leechers -->
+      <xs:enumeration value="seedtype" /> <!-- ratio|seedtime|ratio,seedtime -->
+      <xs:enumeration value="minimumratio" />
+      <xs:enumeration value="minimumseedtime" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="attr">
+    <xs:attribute name="name" type="torznab:attrNames" />
+    <xs:attribute name="value" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="attr" type="torznab:attr">
+
+  </xs:element>
+</xs:schema>
