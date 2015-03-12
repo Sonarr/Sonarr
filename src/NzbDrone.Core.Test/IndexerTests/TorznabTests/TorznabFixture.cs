@@ -39,25 +39,23 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             
             var releases = Subject.FetchRecent();
 
-            releases.Should().HaveCount(100);
+            releases.Should().HaveCount(5);
 
             releases.First().Should().BeOfType<TorrentInfo>();
             var releaseInfo = releases.First() as TorrentInfo;
 
-
-
-            releaseInfo.Title.Should().Be("X Company S01E04 720p HDTV x264-CROOKS");
+            releaseInfo.Title.Should().Be("The 100 S02 720p HDTV x264-Scene");
             releaseInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
-            releaseInfo.DownloadUrl.Should().Be("https://hdaccess.net/download.php?torrent=11338&apikey=123456&hit=1");
-            releaseInfo.InfoUrl.Should().Be("https://hdaccess.net/details.php?torrent=11338");
-            releaseInfo.CommentUrl.Should().Be("https://hdaccess.net/details.php?torrent=11338#comments");
+            releaseInfo.DownloadUrl.Should().Be("https://hdaccess.net/download.php?torrent=11379&passkey=123456");
+            releaseInfo.InfoUrl.Should().Be("https://hdaccess.net/details.php?id=11379&hit=1");
+            releaseInfo.CommentUrl.Should().Be("https://hdaccess.net/details.php?id=11379&hit=1#comments");
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
-            releaseInfo.PublishDate.Should().Be(DateTime.Parse("2015/03/12 3:42:52"));
-            releaseInfo.Size.Should().Be(1171198934);
-            releaseInfo.TvRageId.Should().Be(43192);
-            releaseInfo.InfoHash.Should().Be("123456789abcdef123456789cdefacef78945648");
+            releaseInfo.PublishDate.Should().Be(DateTime.Parse("2015/03/12 20:53:34"));
+            releaseInfo.Size.Should().Be(25993658561);
+            releaseInfo.TvRageId.Should().Be(0);
+            releaseInfo.InfoHash.Should().Be("df068e3b4245c0bb754eaa1e3891ca1f63635e80");
             releaseInfo.Seeders.Should().Be(1);
-            releaseInfo.Peers.Should().Be(2);
+            releaseInfo.Peers.Should().Be(1);
         }
     }
 }

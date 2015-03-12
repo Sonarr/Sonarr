@@ -64,6 +64,7 @@
       <xs:enumeration value="infohash" />
       <xs:enumeration value="magneturl" />
       <xs:enumeration value="seeders" />
+      <xs:enumeration value="leechers" />
       <xs:enumeration value="peers" /> <!-- seeders + leechers -->
       <xs:enumeration value="seedtype" /> <!-- ratio|seedtime|ratio,seedtime -->
       <xs:enumeration value="minimumratio" />

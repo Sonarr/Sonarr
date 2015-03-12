@@ -142,6 +142,14 @@ namespace NzbDrone.Core.Indexers.Torznab
                 return Int32.Parse(peers);
             }
 
+            var seeders = TryGetTorznabAttribute(item, "seeders");
+            var leechers = TryGetTorznabAttribute(item, "leechers");
+
+            if (seeders.IsNotNullOrWhiteSpace() && leechers.IsNotNullOrWhiteSpace())
+            {
+                return Int32.Parse(seeders) + Int32.Parse(leechers);
+            }
+
             return base.GetPeers(item);
         }
 
