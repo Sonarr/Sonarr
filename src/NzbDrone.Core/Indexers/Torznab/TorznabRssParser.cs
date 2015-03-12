@@ -7,7 +7,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Torznab
 {
-    public class TorznabRssParser : RssParser
+    public class TorznabRssParser : TorrentRssParser
     {
         public const String ns = "{http://torznab.local/schemas/feed.xsd}";
 
@@ -36,20 +36,11 @@ namespace NzbDrone.Core.Indexers.Torznab
             throw new TorznabException("Torznab error detected: {0}", errorMessage);
         }
 
-        protected override ReleaseInfo CreateNewReleaseInfo()
-        {
-            return new TorrentInfo();
-        }
-
         protected override ReleaseInfo ProcessItem(XElement item, ReleaseInfo releaseInfo)
         {
             var torrentInfo = base.ProcessItem(item, releaseInfo) as TorrentInfo;
 
             torrentInfo.TvRageId = GetTvRageId(item);
-            torrentInfo.InfoHash = GetInfoHash(item);
-            torrentInfo.MagnetUrl = GetMagnetUrl(item);
-            torrentInfo.Seeders = GetSeeders(item);
-            torrentInfo.Peers = GetPeers(item);
 
             return torrentInfo;
         }
@@ -120,17 +111,17 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             return 0;
         }
-        protected virtual String GetInfoHash(XElement item)
+        protected override String GetInfoHash(XElement item)
         {
             return TryGetTorznabAttribute(item, "infohash");
         }
 
-        protected virtual String GetMagnetUrl(XElement item)
+        protected override String GetMagnetUrl(XElement item)
         {
-            return TryGetTorznabAttribute(item, "magnet");
+            return TryGetTorznabAttribute(item, "magneturl");
         }
 
-        protected virtual Int32? GetSeeders(XElement item)
+        protected override Int32? GetSeeders(XElement item)
         {
             var seeders = TryGetTorznabAttribute(item, "seeders");
 
@@ -139,10 +130,10 @@ namespace NzbDrone.Core.Indexers.Torznab
                 return Int32.Parse(seeders);
             }
 
-            return null;
+            return base.GetSeeders(item);
         }
 
-        protected virtual Int32? GetPeers(XElement item)
+        protected override Int32? GetPeers(XElement item)
         {
             var peers = TryGetTorznabAttribute(item, "peers");
 
@@ -151,7 +142,7 @@ namespace NzbDrone.Core.Indexers.Torznab
                 return Int32.Parse(peers);
             }
 
-            return null;
+            return base.GetPeers(item);
         }
 
         protected String TryGetTorznabAttribute(XElement item, String key, String defaultValue = "")

@@ -62,7 +62,7 @@
       <!-- Torznab extensions -->
       <xs:enumeration value="type" /> <!-- episode|season|series -->
       <xs:enumeration value="infohash" />
-      <xs:enumeration value="magnet" />
+      <xs:enumeration value="magneturl" />
       <xs:enumeration value="seeders" />
       <xs:enumeration value="peers" /> <!-- seeders + leechers -->
       <xs:enumeration value="seedtype" /> <!-- ratio|seedtime|ratio,seedtime -->
