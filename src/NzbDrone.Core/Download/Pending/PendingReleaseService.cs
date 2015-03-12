@@ -134,7 +134,17 @@ namespace NzbDrone.Core.Download.Pending
                 }
             }
 
-            return queued;
+            //Return best quality release for each episode
+            var deduped = queued.GroupBy(q => q.Episode.Id).Select(g =>
+            {
+                var series = g.First().Series;
+
+                return g.OrderByDescending(e => e.Quality, new QualityModelComparer(series.Profile))
+                        .ThenBy(q => PrioritizeDownloadProtocol(q.Series, q.Protocol))
+                        .First();
+            });
+
+            return deduped.ToList();
         }
 
         public Queue.Queue FindPendingQueueItem(int queueId)
@@ -286,6 +296,18 @@ namespace NzbDrone.Core.Download.Pending
         private int GetQueueId(PendingRelease pendingRelease, Episode episode)
         {
             return HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", pendingRelease.Id, episode.Id));
+        }
+
+        private int PrioritizeDownloadProtocol(Series series, DownloadProtocol downloadProtocol)
+        {
+            var delayProfile = _delayProfileService.BestForTags(series.Tags);
+
+            if (downloadProtocol == delayProfile.PreferredProtocol)
+            {
+                return 0;
+            }
+
+            return 1;
         }
 
         public void Handle(SeriesDeletedEvent message)
