@@ -6,6 +6,7 @@
         Low = -50,
         Normal = 0,
         High = 50,
-        VeryHigh = 100
+        VeryHigh = 100,
+        Force = 900
     }
 }
