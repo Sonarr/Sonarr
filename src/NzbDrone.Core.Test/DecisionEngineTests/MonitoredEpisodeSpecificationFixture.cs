@@ -91,17 +91,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void only_first_episode_not_monitored_should_return_monitored()
+        public void only_first_episode_not_monitored_should_return_false()
         {
             WithFirstEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
-        public void only_second_episode_not_monitored_should_return_monitored()
+        public void only_second_episode_not_monitored_should_return_false()
         {
             WithSecondEpisodeUnmonitored();
-            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]

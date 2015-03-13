@@ -33,13 +33,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return Decision.Reject("Series is not monitored");
             }
 
-            //return monitored if any of the episodes are monitored
-            if (subject.Episodes.Any(episode => episode.Monitored))
+            var monitoredCount = subject.Episodes.Count(episode => episode.Monitored);
+            if (monitoredCount == subject.Episodes.Count)
             {
                 return Decision.Accept();
             }
 
-            _logger.Debug("No episodes are monitored. skipping.");
+            _logger.Debug("Only {0}/{1} episodes are monitored. skipping.", monitoredCount, subject.Episodes);
             return Decision.Reject("Episode is not monitored");
         }
     }
