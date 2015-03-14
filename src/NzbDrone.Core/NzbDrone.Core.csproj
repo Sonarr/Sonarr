@@ -665,6 +665,10 @@
     <Compile Include="Metadata\MetadataType.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
+    <Compile Include="Notifications\Synology\SynologyException.cs" />
+    <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
+    <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
+    <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
