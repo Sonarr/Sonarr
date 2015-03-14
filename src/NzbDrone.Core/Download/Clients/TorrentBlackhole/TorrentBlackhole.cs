@@ -1,62 +1,58 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.MediaFiles;
-using NLog;
-using FluentValidation.Results;
+using NzbDrone.Core.MediaFiles.TorrentInfo;
+using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 {
-    public class TorrentBlackhole : DownloadClientBase<TorrentBlackholeSettings>
+    public class TorrentBlackhole : TorrentClientBase<TorrentBlackholeSettings>
     {
         private readonly IDiskScanService _diskScanService;
-        private readonly IHttpClient _httpClient;
 
         public TorrentBlackhole(IDiskScanService diskScanService,
+                                ITorrentFileInfoReader torrentFileInfoReader,
                                 IHttpClient httpClient,
                                 IConfigService configService,
                                 IDiskProvider diskProvider,
-                                IParsingService parsingService,
                                 IRemotePathMappingService remotePathMappingService,
                                 Logger logger)
-            : base(configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
-            _httpClient = httpClient;
         }
 
-        public override DownloadProtocol Protocol
+        protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            get
-            {
-                return DownloadProtocol.Torrent;
-            }
+            throw new NotSupportedException("Blackhole does not support magnet links.");
         }
 
-        public override string Download(RemoteEpisode remoteEpisode)
+        protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filename = Path.Combine(Settings.TorrentFolder, String.Format("{0}.torrent", title));
+            var filepath = Path.Combine(Settings.TorrentFolder, String.Format("{0}.torrent", title));
 
-            _logger.Debug("Downloading torrent from: {0} to: {1}", url, filename);
-            _httpClient.DownloadFile(url, filename);
-            _logger.Debug("Torrent Download succeeded, saved to: {0}", filename);
+            using (var stream = _diskProvider.OpenWriteStream(filepath))
+            {
+                stream.Write(fileContent, 0, fileContent.Length);
+            }
 
-            return null;
+            _logger.Debug("Torrent Download succeeded, saved to: {0}", filepath);
+
+            return hash;
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
