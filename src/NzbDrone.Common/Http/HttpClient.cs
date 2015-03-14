@@ -59,6 +59,15 @@ namespace NzbDrone.Common.Http
                 AddRequestHeaders(webRequest, request.Headers);
             }
 
+            if (request.Cookies.Count != 0)
+            {
+                webRequest.CookieContainer = new CookieContainer();
+                foreach (var pair in request.Cookies)
+                {
+                    webRequest.CookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host));
+                }
+            }
+
             if (!request.Body.IsNullOrWhiteSpace())
             {
                 var bytes = request.Headers.GetEncodingFromContentType().GetBytes(request.Body.ToCharArray());
