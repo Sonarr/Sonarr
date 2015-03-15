@@ -70,7 +70,9 @@ namespace NzbDrone.Common.Test.Http
         {
             var request = new HttpRequest("http://eu.httpbin.org/status/" + (int)statusCode);
 
-            Assert.Throws<Exception>(() => Subject.Get<HttpBinResource>(request));
+            Subject.Get<HttpBinResource>(request);
+
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]

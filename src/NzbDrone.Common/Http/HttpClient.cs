@@ -110,7 +110,7 @@ namespace NzbDrone.Common.Http
             var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
 
-            if (!RuntimeInfoBase.IsProduction &&
+            if (request.AllowAutoRedirect && !RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
                 response.StatusCode == HttpStatusCode.MovedPermanently ||
                 response.StatusCode == HttpStatusCode.Found))
