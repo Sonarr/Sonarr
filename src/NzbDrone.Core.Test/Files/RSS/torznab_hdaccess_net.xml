@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.local/schemas/feed.xsd">
+  <channel>
+    <atom:link href="https://hdaccess.net/api" rel="self" type="application/rss+xml" />
+    <title>HDAccess</title>
+    <description>HDAccess RSS!</description>
+    <link>https://hdaccess.net</link>
+    <language>en-us</language>
+    <webMaster>$email (HDA Invites)</webMaster>
+    <category>TV HD</category>
+    <image>
+      <url>https://hdaccess.net/favicon.png</url>
+      <title>HDAccess</title>
+      <link> https://hdaccess.net</link>
+      <description>HDAccess RSS!</description>
+    </image>
+    <item>
+      <title>The 100 S02 720p HDTV x264-Scene</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11379</guid>
+      <link>https://hdaccess.net/download.php?torrent=11379&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11379&amp;hit=1#comments</comments>
+      <pubDate>Thu, 12 Mar 2015 16:53:34 -0400</pubDate>
+      <category>HDTV 720p</category>
+      <size>25993658561</size>
+      <description>The 100 S02 720p HDTV x264-Scene</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11379&amp;passkey=123456" length="25993658561" type="application/x-bittorrent" />
+      <torznab:attr name="type" value="season" />
+      <torznab:attr name="seeders" value="1" />
+      <torznab:attr name="leechers" value="0" />
+      <torznab:attr name="infohash" value="df068e3b4245c0bb754eaa1e3891ca1f63635e80" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>Reign S02E16 720p HDTV x264-2HD</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11377</guid>
+      <link>https://hdaccess.net/download.php?torrent=11377&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11377&amp;hit=1#comments</comments>
+      <pubDate>Thu, 12 Mar 2015 16:24:38 -0400</pubDate>
+      <category>HDTV 720p</category>
+      <size>985853470</size>
+      <description>Reign S02E16 720p HDTV x264-2HD</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11377&amp;passkey=123456" length="985853470" type="application/x-bittorrent" />
+      <torznab:attr name="type" value="episode" />
+      <torznab:attr name="seeders" value="2" />
+      <torznab:attr name="leechers" value="1" />
+      <torznab:attr name="infohash" value="8baa6974606deaadfc53b99a97a770cbf4d6f885" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>X Company S01E04 Sixes And Sevens 720p WEB-DL DD5.1 h264-QUEENS</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11372</guid>
+      <link>https://hdaccess.net/download.php?torrent=11372&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11372&amp;hit=1#comments</comments>
+      <pubDate>Thu, 12 Mar 2015 14:32:45 -0400</pubDate>
+      <category>TV 720p WEB-DL</category>
+      <size>1463581443</size>
+      <description>X Company S01E04 Sixes And Sevens 720p WEB-DL DD5.1 h264-QUEENS</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11372&amp;passkey=123456" length="1463581443" type="application/x-bittorrent" />
+      <torznab:attr name="type" value="episode" />
+      <torznab:attr name="seeders" value="2" />
+      <torznab:attr name="leechers" value="0" />
+      <torznab:attr name="infohash" value="e4ef5d0101418d345ae6792076472dc7342b4c25" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>X Company S01E04 Sixes And Sevens 1080p WEB-DL DD5.1 H.264-NTb</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11370</guid>
+      <link>https://hdaccess.net/download.php?torrent=11370&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11370&amp;hit=1#comments</comments>
+      <pubDate>Thu, 12 Mar 2015 13:49:19 -0400</pubDate>
+      <category>TV 1080p WEB-DL</category>
+      <size>1808104774</size>
+      <description>X Company S01E04 Sixes And Sevens 1080p WEB-DL DD5.1 H.264-NTb</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11370&amp;passkey=123456" length="1808104774" type="application/x-bittorrent" />
+      <torznab:attr name="type" value="episode" />
+      <torznab:attr name="seeders" value="4" />
+      <torznab:attr name="leechers" value="0" />
+      <torznab:attr name="infohash" value="9acc2bf991f334b1311e006e41bb0412c9c3277a" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+    <item>
+      <title>WWE Afterburn 2015 03 06 720p HDTV x264-CBFM</title>
+      <guid isPermaLink="true">https://hdaccess.net/details.php?id=11366</guid>
+      <link>https://hdaccess.net/download.php?torrent=11366&amp;passkey=123456</link>
+      <comments>https://hdaccess.net/details.php?id=11366&amp;hit=1#comments</comments>
+      <pubDate>Thu, 12 Mar 2015 12:26:36 -0400</pubDate>
+      <category>HDTV 720p</category>
+      <size>1475643568</size>
+      <description>WWE Afterburn 2015 03 06 720p HDTV x264-CBFM</description>
+      <enclosure url="https://hdaccess.net/download.php?torrent=11366&amp;passkey=123456" length="1475643568" type="application/x-bittorrent" />
+      <torznab:attr name="type" value="episode" />
+      <torznab:attr name="seeders" value="3" />
+      <torznab:attr name="leechers" value="0" />
+      <torznab:attr name="infohash" value="19c9a567918a5e0c03615ceede67bcdd04d0d161" />
+      <torznab:attr name="minimumratio" value="1.0" />
+      <torznab:attr name="minimumseedtime" value="172800" />
+    </item>
+  </channel>
+</rss>
