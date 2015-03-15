@@ -70,7 +70,14 @@ namespace NzbDrone.Core.Download
 
             if (magnetUrl.IsNotNullOrWhiteSpace())
             {
-                hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                try
+                {
+                    hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                }
+                catch (NotSupportedException ex)
+                {
+                    _logger.Debug("Magnet not supported by download client, trying torrent. ({0})", ex.Message);
+                }
             }
 
             if (hash == null && !torrentUrl.IsNullOrWhiteSpace())

@@ -115,7 +115,7 @@ namespace NzbDrone.Common.Http
                 response.StatusCode == HttpStatusCode.MovedPermanently ||
                 response.StatusCode == HttpStatusCode.Found))
             {
-                throw new Exception("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
+                _logger.Error("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
             }
 
             if (!request.SuppressHttpError && response.HasHttpError)
