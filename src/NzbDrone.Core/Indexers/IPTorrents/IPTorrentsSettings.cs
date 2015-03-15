@@ -1,6 +1,8 @@
 using System;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Results;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -12,7 +14,12 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         public IPTorrentsSettingsValidator()
         {
             RuleFor(c => c.Url).ValidRootUrl();
-            RuleFor(c => c.Url).Matches(@"/rss\?.+;download$");
+
+            RuleFor(c => c.Url).Matches(@"/rss\?.+$");
+
+            RuleFor(c => c.Url).Matches(@"/rss\?.+;download$")
+                .WithMessage("Use Direct Download Url")
+                .When(v => v.Url.IsNotNullOrWhiteSpace() && Regex.IsMatch(v.Url, @"/rss\?.+$"));
         }
     }
 
