@@ -141,7 +141,9 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^[a-z0-9]{24}$", RegexOptions.Compiled),
 
                 // Format seen on some NZBGeek releases
+                // Be very strict with these coz they are very close to the valid 101 ep numbering.
                 new Regex(@"^[A-Z]{11}\d{3}$", RegexOptions.Compiled),
+                new Regex(@"^[a-z]{12}\d{3}$", RegexOptions.Compiled),
 
                 //Backup filename (Unknown origins)
                 new Regex(@"^Backup_\d{5,}S\d{2}-\d{2}$", RegexOptions.Compiled),
