@@ -12,7 +12,6 @@ namespace NzbDrone.Core.Jobs
         void SetLastExecutionTime(int id, DateTime executionTime);
     }
 
-
     public class ScheduledTaskRepository : BasicRepository<ScheduledTask>, IScheduledTaskRepository
     {
 

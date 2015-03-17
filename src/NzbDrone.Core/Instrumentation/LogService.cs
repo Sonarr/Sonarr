@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Instrumentation
         PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec);
     }
 
-    public class LogService : ILogService, IExecute<TrimLogCommand>, IExecute<ClearLogCommand>
+    public class LogService : ILogService, IExecute<ClearLogCommand>
     {
         private readonly ILogRepository _logRepository;
 
@@ -21,11 +21,6 @@ namespace NzbDrone.Core.Instrumentation
         public PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec)
         {
             return _logRepository.GetPaged(pagingSpec);
-        }
-
-        public void Execute(TrimLogCommand message)
-        {
-            _logRepository.Trim();
         }
 
         public void Execute(ClearLogCommand message)

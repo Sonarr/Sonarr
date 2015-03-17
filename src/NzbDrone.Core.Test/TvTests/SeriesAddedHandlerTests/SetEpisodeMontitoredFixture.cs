@@ -8,7 +8,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
 {

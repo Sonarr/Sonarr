@@ -5,11 +5,11 @@ namespace NzbDrone.Core.Messaging.Events
 {
     public class CommandExecutedEvent : IEvent
     {
-        public Command Command { get; private set; }
+        public CommandModel Command { get; private set; }
 
-        public CommandExecutedEvent(Command trackedCommand)
+        public CommandExecutedEvent(CommandModel command)
         {
-            Command = trackedCommand;
+            Command = command;
         }
     }
 }
