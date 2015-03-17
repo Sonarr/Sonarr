@@ -9,6 +9,9 @@ namespace NzbDrone.Core.Validation
     {
         public NzbDroneValidationResult()
         {
+            Failures = new List<NzbDroneValidationFailure>();
+            Errors = new List<NzbDroneValidationFailure>();
+            Warnings = new List<NzbDroneValidationFailure>();
         }
 
         public NzbDroneValidationResult(ValidationResult validationResult)
@@ -45,9 +48,7 @@ namespace NzbDrone.Core.Validation
         }
 
         public IList<NzbDroneValidationFailure> Failures { get; private set; }
-
         public new IList<NzbDroneValidationFailure> Errors { get; private set; }
-
         public IList<NzbDroneValidationFailure> Warnings { get; private set; }
 
         public virtual bool HasWarnings
