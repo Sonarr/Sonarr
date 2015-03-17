@@ -1,9 +1,9 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.MediaBrowser
 {
@@ -51,14 +51,9 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             }
         }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return Validator.Validate(this);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

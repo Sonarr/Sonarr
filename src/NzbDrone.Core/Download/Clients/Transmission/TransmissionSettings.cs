@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
     public class TransmissionSettings : IProviderConfig
     {
-        private static readonly TransmissionSettingsValidator validator = new TransmissionSettingsValidator();
+        private static readonly TransmissionSettingsValidator Validator = new TransmissionSettingsValidator();
 
         public TransmissionSettings()
         {
@@ -54,9 +54,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(8, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

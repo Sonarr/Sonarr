@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using FluentValidation;
 using FluentValidation.Results;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Validation
 {
     public class NzbDroneValidationResult : ValidationResult
     {
         public NzbDroneValidationResult()
+        {
+        }
+
+        public NzbDroneValidationResult(ValidationResult validationResult)
+            : this(validationResult.Errors)
         {
         }
 
@@ -50,6 +53,14 @@ namespace NzbDrone.Core.Validation
         public virtual bool HasWarnings
         {
             get { return Warnings.Any(); }
+        }
+
+        public override bool IsValid
+        {
+            get
+            {
+                return Errors.Empty();
+            }
         }
     }
 }

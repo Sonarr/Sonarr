@@ -1,7 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -27,7 +26,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 
     public class BitMeTvSettings : IProviderConfig
     {
-        private static readonly BitMeTvSettingsValidator validator = new BitMeTvSettingsValidator();
+        private static readonly BitMeTvSettingsValidator Validator = new BitMeTvSettingsValidator();
 
         public BitMeTvSettings()
         {
@@ -46,9 +45,9 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         [FieldDefinition(3, Label = "Cookie", HelpText = "BitMeTv uses a login cookie needed to access the rss, you'll have to retrieve it via a browser.")]
         public String Cookie { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

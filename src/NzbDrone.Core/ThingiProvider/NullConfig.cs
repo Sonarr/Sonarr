@@ -1,4 +1,4 @@
-﻿using FluentValidation.Results;
+﻿using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -6,9 +6,9 @@ namespace NzbDrone.Core.ThingiProvider
     {
         public static readonly NullConfig Instance = new NullConfig();
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return new ValidationResult();
+            return new NzbDroneValidationResult();
         }
     }
 }
