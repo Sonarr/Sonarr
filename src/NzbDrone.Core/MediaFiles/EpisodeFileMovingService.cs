@@ -73,12 +73,13 @@ namespace NzbDrone.Core.MediaFiles
             var newFileName = _buildFileNames.BuildFileName(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(localEpisode.Path));
 
-            _logger.Debug("Copying episode file: {0} to {1}", episodeFile, filePath);
-
             if (_configService.CopyUsingHardlinks)
             {
+                _logger.Debug("Hardlinking episode file: {0} to {1}", episodeFile, filePath);
                 return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.HardLinkOrCopy);
             }
+
+            _logger.Debug("Copying episode file: {0} to {1}", episodeFile, filePath);
             return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Copy);
         }
         
