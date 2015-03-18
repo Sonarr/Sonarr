@@ -12,6 +12,8 @@ src/**/[Oo]bj/
 *.sln.docstates
 
 # Build results
+*.csproj
+.gitignore
 *_i.c
 *_p.c
 *.ilk
@@ -30,6 +32,7 @@ src/**/[Oo]bj/
 *.log
 *.vspscc
 *.vssscc
+*.csproj
 .builds
 
 # Visual Studio profiler
