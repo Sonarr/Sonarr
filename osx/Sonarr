@@ -4,7 +4,7 @@
 DIR=$(cd "$(dirname "$0")"; pwd)
  
 #change these values to match your app
-EXE_PATH="$DIR/nzbdrone.exe"
+EXE_PATH="$DIR/NzbDrone.exe"
 APPNAME="Sonarr"
  
 #set up environment
