@@ -6,6 +6,7 @@ namespace NzbDrone.Common.Cache
     public interface ICached
     {
         void Clear();
+        void ClearExpired();
         void Remove(string key);
         int Count { get; }
     }

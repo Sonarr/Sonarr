@@ -73,6 +73,13 @@ namespace NzbDrone.Core.Test.ParserTests
                 "grimm",
                 Quality.WEBDL720p,
                 "ECI"
+            },
+            new object[]
+            {
+                @"C:\Test\The.Good.Wife.S02E23.720p.HDTV.x264-NZBgeek/cgajsofuejsa501.mkv".AsOsAgnostic(),
+                "thegoodwife",
+                Quality.HDTV720p,
+                "NZBgeek"
             }
         };
 

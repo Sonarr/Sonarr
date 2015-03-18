@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            pageableRequests.AddIfNotNull(GetRssRequests(null));
+            pageableRequests.AddIfNotNull(GetRssRequests());
 
             return pageableRequests;
         }
@@ -44,9 +44,13 @@ namespace NzbDrone.Core.Indexers.BitMeTv
             return new List<IEnumerable<IndexerRequest>>();
         }
 
-        private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
+        private IEnumerable<IndexerRequest> GetRssRequests()
         {
-            yield return new IndexerRequest(String.Format("{0}/rss.php?uid={1}&passkey={2}{3}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey, searchParameters), HttpAccept.Html);
+            var request = new IndexerRequest(String.Format("{0}/rss.php?uid={1}&passkey={2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey), HttpAccept.Html);
+
+            request.HttpRequest.AddCookie(Settings.Cookie);
+
+            yield return request;
         }
     }
 }

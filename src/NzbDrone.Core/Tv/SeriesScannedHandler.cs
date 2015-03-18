@@ -15,18 +15,18 @@ namespace NzbDrone.Core.Tv
     {
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
-        private readonly ICommandExecutor _commandExecutor;
+        private readonly IManageCommandQueue _commandQueueManager;
        
         private readonly Logger _logger;
 
         public SeriesScannedHandler(ISeriesService seriesService,
                                   IEpisodeService episodeService,
-                                  ICommandExecutor commandExecutor,
+                                  IManageCommandQueue commandQueueManager,
                                   Logger logger)
         {
             _seriesService = seriesService;
             _episodeService = episodeService;
-            _commandExecutor = commandExecutor;
+            _commandQueueManager = commandQueueManager;
             _logger = logger;
         }
 
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Tv
 
             if (series.AddOptions.SearchForMissingEpisodes)
             {
-                _commandExecutor.PublishCommand(new MissingEpisodeSearchCommand(series.Id));
+                _commandQueueManager.Push(new MissingEpisodeSearchCommand(series.Id));
             }
 
             series.AddOptions = null;

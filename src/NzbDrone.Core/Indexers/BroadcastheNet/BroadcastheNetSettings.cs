@@ -1,6 +1,5 @@
 using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -18,7 +17,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
     public class BroadcastheNetSettings : IProviderConfig
     {
-        private static readonly BroadcastheNetSettingsValidator validator = new BroadcastheNetSettingsValidator();
+        private static readonly BroadcastheNetSettingsValidator Validator = new BroadcastheNetSettingsValidator();
 
         public BroadcastheNetSettings()
         {
@@ -31,9 +30,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         [FieldDefinition(1, Label = "API Key")]
         public String ApiKey { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
             Subject.Definition = new IndexerDefinition()
                                      {
                                          Name = "BitMeTV",
-                                         Settings = new BitMeTvSettings()
+                                         Settings = new BitMeTvSettings() { Cookie = "uid=123" }
                                      };
         }
 

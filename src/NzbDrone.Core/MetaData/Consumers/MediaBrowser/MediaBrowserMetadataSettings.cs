@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
 {
@@ -33,9 +33,9 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
             }
         }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return Validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

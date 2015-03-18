@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using System;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
     public class TorrentBlackholeSettings : IProviderConfig
     {
-        private static readonly TorrentBlackholeSettingsValidator validator = new TorrentBlackholeSettingsValidator();
+        private static readonly TorrentBlackholeSettingsValidator Validator = new TorrentBlackholeSettingsValidator();
 
         [FieldDefinition(0, Label = "Torrent Folder", Type = FieldType.Path, HelpText = "Folder in which Sonarr will store the .torrent file")]
         public String TorrentFolder { get; set; }
@@ -26,9 +26,9 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
         [FieldDefinition(1, Label = "Watch Folder", Type = FieldType.Path, HelpText = "Folder from which Sonarr should import completed downloads")]
         public String WatchFolder { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

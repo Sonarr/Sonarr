@@ -59,6 +59,15 @@ namespace NzbDrone.Common.Http
                 AddRequestHeaders(webRequest, request.Headers);
             }
 
+            if (request.Cookies.Count != 0)
+            {
+                webRequest.CookieContainer = new CookieContainer();
+                foreach (var pair in request.Cookies)
+                {
+                    webRequest.CookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host));
+                }
+            }
+
             if (!request.Body.IsNullOrWhiteSpace())
             {
                 var bytes = request.Headers.GetEncodingFromContentType().GetBytes(request.Body.ToCharArray());
@@ -101,12 +110,12 @@ namespace NzbDrone.Common.Http
             var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
 
-            if (!RuntimeInfoBase.IsProduction &&
+            if (request.AllowAutoRedirect && !RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
                 response.StatusCode == HttpStatusCode.MovedPermanently ||
                 response.StatusCode == HttpStatusCode.Found))
             {
-                throw new Exception("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
+                _logger.Error("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
             }
 
             if (!request.SuppressHttpError && response.HasHttpError)

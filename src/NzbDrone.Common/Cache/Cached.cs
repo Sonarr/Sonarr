@@ -100,6 +100,14 @@ namespace NzbDrone.Common.Cache
             _store.Clear();
         }
 
+        public void ClearExpired()
+        {
+            foreach (var cached in _store.Where(c => c.Value.IsExpired()))
+            {
+                Remove(cached.Key);
+            }
+        }
+
         public ICollection<T> Values
         {
             get

@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using FluentValidation;
 using FluentValidation.Results;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Validation
 {
     public class NzbDroneValidationResult : ValidationResult
     {
         public NzbDroneValidationResult()
+        {
+            Failures = new List<NzbDroneValidationFailure>();
+            Errors = new List<NzbDroneValidationFailure>();
+            Warnings = new List<NzbDroneValidationFailure>();
+        }
+
+        public NzbDroneValidationResult(ValidationResult validationResult)
+            : this(validationResult.Errors)
         {
         }
 
@@ -42,14 +48,20 @@ namespace NzbDrone.Core.Validation
         }
 
         public IList<NzbDroneValidationFailure> Failures { get; private set; }
-
         public new IList<NzbDroneValidationFailure> Errors { get; private set; }
-
         public IList<NzbDroneValidationFailure> Warnings { get; private set; }
 
         public virtual bool HasWarnings
         {
             get { return Warnings.Any(); }
+        }
+
+        public override bool IsValid
+        {
+            get
+            {
+                return Errors.Empty();
+            }
         }
     }
 }

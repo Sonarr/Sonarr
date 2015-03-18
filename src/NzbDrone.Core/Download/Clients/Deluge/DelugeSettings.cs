@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
     public class DelugeSettings : IProviderConfig
     {
-        private static readonly DelugeSettingsValidator validator = new DelugeSettingsValidator();
+        private static readonly DelugeSettingsValidator Validator = new DelugeSettingsValidator();
 
         public DelugeSettings()
         {
@@ -53,9 +53,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

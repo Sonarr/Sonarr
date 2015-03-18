@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Email
 {
@@ -47,17 +47,9 @@ namespace NzbDrone.Core.Notifications.Email
         [FieldDefinition(6, Label = "Recipient Address")]
         public String To { get; set; }
 
-        public bool IsValid
+        public NzbDroneValidationResult Validate()
         {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Server) && Port > 0 && !string.IsNullOrWhiteSpace(From) && !string.IsNullOrWhiteSpace(To);
-            }
-        }
-
-        public ValidationResult Validate()
-        {
-            return Validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

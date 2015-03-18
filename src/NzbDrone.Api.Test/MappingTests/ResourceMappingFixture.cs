@@ -116,14 +116,12 @@ namespace NzbDrone.Api.Test.MappingTests
             profileResource.InjectTo<Profile>();
 
         }
-
-
-
+        
         [Test]
         public void should_map_tracked_command()
         {
-            var profileResource = new ApplicationUpdateCommand();
-            profileResource.InjectTo<CommandResource>();
+            var commandResource = new CommandModel { Body = new ApplicationUpdateCommand() };
+            commandResource.InjectTo<CommandResource>();
         }
     }
 

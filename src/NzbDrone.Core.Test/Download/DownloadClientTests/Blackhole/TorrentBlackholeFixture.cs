@@ -1,15 +1,16 @@
+using System;
 using System.IO;
-using System.Net;
 using System.Linq;
+using System.Net;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using FluentAssertions;
-using NzbDrone.Test.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.TorrentBlackhole;
-using System;
+using NzbDrone.Core.MediaFiles.TorrentInfo;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 {
@@ -33,6 +34,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
                 TorrentFolder = _blackholeFolder,
                 WatchFolder = _completedDownloadFolder
             };
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.OpenWriteStream(It.IsAny<string>()))
+                .Returns(() => new FileStream(GetTempFilePath(), FileMode.Create));
+
+            Mocker.GetMock<ITorrentFileInfoReader>()
+                .Setup(c => c.GetHashFromTorrentFile(It.IsAny<byte[]>()))
+                .Returns("myhash");
         }
 
         protected void GivenFailedDownload()
@@ -86,7 +95,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             Subject.Download(remoteEpisode);
 
-            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_downloadUrl, _filePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.ToString() == _downloadUrl)), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -100,7 +111,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             Subject.Download(remoteEpisode);
 
-            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.ToString() == _downloadUrl)), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(expectedFilename), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
         [Test]

@@ -3,19 +3,20 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
+    public interface IMediaFileTableCleanupService
+    {
+        void Clean(Series series);
+    }
 
-    public class MediaFileTableCleanupService : IExecute<CleanMediaFileDb>
+    public class MediaFileTableCleanupService : IMediaFileTableCleanupService
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly IDiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
-        private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
         public MediaFileTableCleanupService(IMediaFileService mediaFileService,
@@ -27,15 +28,13 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileService = mediaFileService;
             _diskProvider = diskProvider;
             _episodeService = episodeService;
-            _seriesService = seriesService;
             _logger = logger;
         }
 
-        public void Execute(CleanMediaFileDb message)
+        public void Clean(Series series)
         {
-            var seriesFile = _mediaFileService.GetFilesBySeries(message.SeriesId);
-            var series = _seriesService.GetSeries(message.SeriesId);
-            var episodes = _episodeService.GetEpisodeBySeries(message.SeriesId);
+            var seriesFile = _mediaFileService.GetFilesBySeries(series.Id);
+            var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
             foreach (var episodeFile in seriesFile)
             {
