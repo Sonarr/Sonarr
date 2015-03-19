@@ -30,7 +30,21 @@ namespace NzbDrone.Core.Validation
 
         public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
         {
-            return ruleBuilder.SetValidator(new InclusiveBetweenValidator(1, 65535));
+            return ruleBuilder.SetValidator(new InclusiveBetweenValidator(1, 65535))
+                              .Must(x =>
+                              {
+                                  if (x <= 1024)
+                                  {
+                                      if (x == 80 || x == 443)
+                                      {
+                                          return true;
+                                      }
+
+                                      return false;
+                                  }
+
+                                  return true;
+                              });
         }
 
         public static IRuleBuilderOptions<T, Language> ValidLanguage<T>(this IRuleBuilder<T, Language> ruleBuilder)
