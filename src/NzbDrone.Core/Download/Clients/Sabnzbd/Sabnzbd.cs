@@ -31,11 +31,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            var title = remoteEpisode.Release.Title;
             var category = Settings.TvCategory;
             var priority = remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority;
 
-            var response = _proxy.DownloadNzb(fileContent, title, category, priority, Settings);
+            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
 
             if (response != null && response.Ids.Any())
             {
