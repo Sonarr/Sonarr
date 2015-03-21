@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var request = BuildRequest(new JsonRequest("version"));
 
-            return Json.Deserialize<NzbgetResponse<String>>(ProcessRequest(request, settings)).Version;
+            return Json.Deserialize<NzbgetResponse<String>>(ProcessRequest(request, settings)).Result;
         }
 
         public Dictionary<String, String> GetConfig(NzbgetSettings settings)
