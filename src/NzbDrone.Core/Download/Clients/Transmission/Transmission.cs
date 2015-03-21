@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 _logger.ErrorException(ex.Message, ex);
                 return new NzbDroneValidationFailure("Username", "Authentication failure")
                 {
-                    DetailedDescription = "Please verify your username and password. Also verify if the host running NzbDrone isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
+                    DetailedDescription = "Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
                 };
             }
             catch (WebException ex)

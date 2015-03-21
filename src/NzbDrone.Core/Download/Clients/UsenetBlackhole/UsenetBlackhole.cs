@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
-                    Category = "nzbdrone",
+                    Category = "sonarr",
                     Title = title,
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
-                    Category = "nzbdrone",
+                    Category = "sonarr",
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),

@@ -297,7 +297,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 return new NzbDroneValidationFailure("", "Disable 'Check before download' option in Sabnbzd")
                 {
                     InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/switches/", Settings.Host, Settings.Port),
-                    DetailedDescription = "Using Check before download affects NzbDrone ability to track new downloads. Also Sabnzbd recommends 'Abort jobs that cannot be completed' instead since it's more effective."
+                    DetailedDescription = "Using Check before download affects Sonarr ability to track new downloads. Also Sabnzbd recommends 'Abort jobs that cannot be completed' instead since it's more effective."
                 };
             }
 
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     return new NzbDroneValidationFailure("TvCategory", "Enable Job folders")
                     {
                         InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/categories/", Settings.Host, Settings.Port),
-                        DetailedDescription = "NzbDrone prefers each download to have a separate folder. With * appended to the Folder/Path Sabnzbd will not create these job folders. Go to Sabnzbd to fix it."
+                        DetailedDescription = "Sonarr prefers each download to have a separate folder. With * appended to the Folder/Path Sabnzbd will not create these job folders. Go to Sabnzbd to fix it."
                     };
                 }
             }
@@ -341,7 +341,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
                     {
                         InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/sorting/", Settings.Host, Settings.Port),
-                        DetailedDescription = "You must disable Sabnzbd TV Sorting for the category NzbDrone uses to prevent import issues. Go to Sabnzbd to fix it."
+                        DetailedDescription = "You must disable Sabnzbd TV Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
                     };
                 }
             }

@@ -22,7 +22,7 @@ namespace NzbDrone.Host
             {
                 X509CertificateValidationPolicy.Register();
 
-                Logger.Info("Starting NzbDrone - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
+                Logger.Info("Starting Sonarr - {0} - Version {1}", Assembly.GetCallingAssembly().Location, Assembly.GetExecutingAssembly().GetName().Version);
 
                 if (!PlatformValidation.IsValidate(userAlert))
                 {
