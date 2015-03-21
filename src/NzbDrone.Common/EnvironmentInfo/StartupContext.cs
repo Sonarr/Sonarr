@@ -22,6 +22,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public const string HELP = "?";
         public const string TERMINATE = "terminateexisting";
         public const string RESTART = "restart";
+        public const string PID_FILE = "pidfile";
 
         public StartupContext(params string[] args)
         {
