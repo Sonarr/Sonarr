@@ -214,6 +214,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void should_report_deletestatus_dupe_as_warning()
+        {
+            _completed.DeleteStatus = "DUPE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
         public void should_report_unpackstatus_freespace_as_warning()
         {
             _completed.UnpackStatus = "SPACE";
