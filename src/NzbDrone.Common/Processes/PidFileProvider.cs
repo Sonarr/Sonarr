@@ -12,16 +12,16 @@ namespace NzbDrone.Common.Processes
 
     public class PidFileProvider : IProvidePidFile
     {
-        private readonly IStartupContext _startupContext;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IProcessProvider _processProvider;
+        private readonly IStartupContext _startupContext;
         private readonly Logger _logger;
 
-        public PidFileProvider(IStartupContext startupContext, IAppFolderInfo appFolderInfo, IProcessProvider processProvider, Logger logger)
+        public PidFileProvider(IAppFolderInfo appFolderInfo, IProcessProvider processProvider, IStartupContext startupContext, Logger logger)
         {
-            _startupContext = startupContext;
             _appFolderInfo = appFolderInfo;
             _processProvider = processProvider;
+            _startupContext = startupContext;
             _logger = logger;
         }
 

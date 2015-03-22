@@ -73,7 +73,12 @@ namespace NzbDrone.Common.EnvironmentInfo
 
                 if (Args.ContainsKey(APPDATA))
                 {
-                    args = "/data=" + Args[APPDATA];
+                    args = "/" + APPDATA + "=" + Args[APPDATA];
+                }
+
+                if (Args.ContainsKey(PID_FILE))
+                {
+                    args += " /" + PID_FILE + "=" + Args[PID_FILE];
                 }
 
                 if (Flags.Contains(NO_BROWSER))
