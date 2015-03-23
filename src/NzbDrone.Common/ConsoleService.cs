@@ -27,6 +27,10 @@ namespace NzbDrone.Common
             Console.WriteLine("                 /{0} Install the application as a Windows Service ({1}).", StartupContext.INSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
             Console.WriteLine("                 /{0} Uninstall already installed Windows Service ({1}).", StartupContext.UNINSTALL_SERVICE, ServiceProvider.NZBDRONE_SERVICE_NAME);
             Console.WriteLine("                 /{0} Don't open NzbDrone in a browser", StartupContext.NO_BROWSER);
+            if (!OsInfo.IsWindows)
+            {
+                Console.WriteLine("                 /{0}=PATH Path of file to write process identifier to", StartupContext.PID_FILE);
+            }
             Console.WriteLine("                 <No Arguments>  Run application in console mode.");
         }
 

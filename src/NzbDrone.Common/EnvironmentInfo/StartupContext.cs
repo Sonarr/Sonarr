@@ -22,6 +22,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public const string HELP = "?";
         public const string TERMINATE = "terminateexisting";
         public const string RESTART = "restart";
+        public const string PID_FILE = "pidfile";
 
         public StartupContext(params string[] args)
         {
@@ -72,7 +73,12 @@ namespace NzbDrone.Common.EnvironmentInfo
 
                 if (Args.ContainsKey(APPDATA))
                 {
-                    args = "/data=" + Args[APPDATA];
+                    args = "/" + APPDATA + "=" + Args[APPDATA];
+                }
+
+                if (Args.ContainsKey(PID_FILE))
+                {
+                    args += " /" + PID_FILE + "=" + Args[PID_FILE];
                 }
 
                 if (Flags.Contains(NO_BROWSER))
