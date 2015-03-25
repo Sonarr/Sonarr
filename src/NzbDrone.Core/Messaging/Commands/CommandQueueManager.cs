@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Messaging.Commands
             _logger.Trace("Publishing {0}", command.Name);
             _logger.Trace("Checking if command is queued or started: {0}", command.Name);
 
-            var existingCommands = _repo.FindQueuedOrStarted(command.Name);
+            var existingCommands = QueuedOrStarted(command.Name);
             var existing = existingCommands.SingleOrDefault(c => CommandEqualityComparer.Instance.Equals(c.Body, command));
 
             if (existing != null)
@@ -123,8 +123,8 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Status = CommandStatus.Started;
 
             _logger.Trace("Marking command as started: {0}", command.Name);
+            _commandCache.Set(command.Id.ToString(), command);         
             _repo.Update(command);
-            _commandCache.Set(command.Id.ToString(), command);
         }
 
         public void Complete(CommandModel command, string message)
@@ -191,8 +191,15 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Status = status;
 
             _logger.Trace("Updating command status");
-            _repo.Update(command);
             _commandCache.Set(command.Id.ToString(), command);
+            _repo.Update(command);
+        }
+
+        private List<CommandModel> QueuedOrStarted(string name)
+        {
+            return _commandCache.Values.Where(q => q.Name == name &&
+                                                   (q.Status == CommandStatus.Queued ||
+                                                    q.Status == CommandStatus.Started)).ToList();
         }
 
         public void Handle(ApplicationStartedEvent message)

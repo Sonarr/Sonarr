@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Messaging.Commands
                 {
                     try
                     {
-                        ExecuteCommand((dynamic)command.Body, command);
+                        ExecuteCommand((dynamic) command.Body, command);
                     }
                     catch (Exception ex)
                     {
@@ -50,6 +50,10 @@ namespace NzbDrone.Core.Messaging.Commands
             {
                 _logger.ErrorException(ex.Message, ex);
                 Thread.ResetAbort();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message, ex);
             }
         }
 
