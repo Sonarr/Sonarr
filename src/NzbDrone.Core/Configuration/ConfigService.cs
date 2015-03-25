@@ -341,7 +341,7 @@ namespace NzbDrone.Core.Configuration
             if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
                 return dbValue;
 
-            _logger.Trace("Unable to find config key '{0}' defaultValue:'{1}'", key, defaultValue);
+            _logger.Trace("Using default config value for '{0}' defaultValue:'{1}'", key, defaultValue);
 
             if (persist)
             {
