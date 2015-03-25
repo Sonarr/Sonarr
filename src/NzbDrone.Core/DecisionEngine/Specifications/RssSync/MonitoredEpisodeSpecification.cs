@@ -20,7 +20,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         {
             if (searchCriteria != null)
             {
-                if ((searchCriteria as SeasonSearchCriteria) == null)
+                if (!searchCriteria.MonitoredEpisodesOnly)
                 {
                     _logger.Debug("Skipping monitored check during search");
                     return Decision.Accept();

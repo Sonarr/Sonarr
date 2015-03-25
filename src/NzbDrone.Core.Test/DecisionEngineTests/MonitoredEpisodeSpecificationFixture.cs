@@ -123,5 +123,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithFirstEpisodeUnmonitored();
             _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria()).Accepted.Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_true_if_episode_is_not_monitored_and_monitoredEpisodesOnly_flag_is_false()
+        {
+            WithFirstEpisodeUnmonitored();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria { MonitoredEpisodesOnly = false }).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_episode_is_not_monitored_and_monitoredEpisodesOnly_flag_is_true()
+        {
+            WithFirstEpisodeUnmonitored();
+            _monitoredEpisodeSpecification.IsSatisfiedBy(_parseResultSingle, new SingleEpisodeSearchCriteria{ MonitoredEpisodesOnly = true}).Accepted.Should().BeFalse();
+        }
     }
 }

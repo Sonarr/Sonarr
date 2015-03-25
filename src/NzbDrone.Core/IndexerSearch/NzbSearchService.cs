@@ -115,11 +115,18 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         var episode = sceneSeasonEpisodes.First();
                         var searchSpec = Get<SingleEpisodeSearchCriteria>(series, sceneSeasonEpisodes.ToList());
+                        
                         searchSpec.SeasonNumber = sceneSeasonEpisodes.Key;
+                        searchSpec.MonitoredEpisodesOnly = true;
+
                         if (episode.SceneSeasonNumber.HasValue && episode.SceneEpisodeNumber.HasValue)
+                        {
                             searchSpec.EpisodeNumber = episode.SceneEpisodeNumber.Value;
+                        }
                         else
+                        {
                             searchSpec.EpisodeNumber = episode.EpisodeNumber;
+                        }
 
                         var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
                         downloadDecisions.AddRange(decisions);
