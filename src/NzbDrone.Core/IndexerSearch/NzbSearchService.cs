@@ -217,7 +217,10 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var episode in episodes)
             {
-                downloadDecisions.AddRange(SearchAnime(series, episode));
+                if (episode.Monitored)
+                {
+                    downloadDecisions.AddRange(SearchAnime(series, episode));
+                }
             }
 
             return downloadDecisions;

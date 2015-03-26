@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             _xemSeries = Builder<Series>.CreateNew()
                 .With(v => v.UseSceneNumbering = true)
+                .With(v => v.Monitored = true)
                 .Build();
 
             _xemEpisodes = new List<Episode>();
@@ -63,6 +64,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .With(v => v.EpisodeNumber, episodeNumber)
                 .With(v => v.SceneSeasonNumber, sceneSeasonNumber)
                 .With(v => v.SceneEpisodeNumber, sceneEpisodeNumber)
+                .With(v => v.Monitored = true)
                 .Build();
 
             _xemEpisodes.Add(episode);
@@ -196,12 +198,12 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
-        public void season_search_for_anime_should_search_for_each_episode()
+        public void season_search_for_anime_should_search_for_each_monitored_episode()
         {
             WithEpisodes();
             _xemSeries.SeriesType = SeriesTypes.Anime;
-            var seasonNumber = 1;
 
+            var seasonNumber = 1;
             var allCriteria = WatchForSearchCriteria();
 
             Subject.SeasonSearch(_xemSeries.Id, seasonNumber);
@@ -209,6 +211,23 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
             criteria.Count.Should().Be(_xemEpisodes.Count(e => e.SeasonNumber == seasonNumber));
+        }
+
+        [Test]
+        public void season_search_for_anime_should_not_search_for_unmonitored_episodes()
+        {
+            WithEpisodes();
+            _xemSeries.SeriesType = SeriesTypes.Anime;
+            _xemEpisodes.ForEach(e => e.Monitored = false);
+
+            var seasonNumber = 1;
+            var allCriteria = WatchForSearchCriteria();
+
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber);
+
+            var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
         }
     }
 }
