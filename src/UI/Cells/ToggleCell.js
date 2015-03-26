@@ -16,9 +16,11 @@ module.exports = Backgrid.Cell.extend({
         var name = this.column.get('name');
         this.model.set(name, !this.model.get(name));
 
-        this.$('i').addClass('icon-sonarr-spinner fa-spin');
+        var promise = this.model.save();
 
-        this.model.save().always(function() {
+        this.$('i').spinForPromise(promise);
+
+        promise.always(function() {
             self.render();
         });
     },
