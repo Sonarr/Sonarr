@@ -256,7 +256,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 var version = _proxy.GetVersion(Settings);
 
-                if (Version.Parse(version) < Version.Parse("12.0"))
+                if (!version.Contains('-') && Version.Parse(version) < Version.Parse("12.0"))
                 {
                     return new ValidationFailure(string.Empty, "Nzbget version too low, need 12.0 or higher");
                 }

@@ -332,5 +332,41 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             result.OutputPath.Should().Be(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
         }
+
+        [Test]
+        public void should_pass_test_if_version_high_enough()
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns("12.0");
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_fail_test_if_version_too_low()
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns("11.0");
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_ignore_version_test_if_development_version()
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns("12.0-dev");
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().BeTrue();
+        }
     }
 }
