@@ -24,6 +24,10 @@ module.exports = Marionette.Layout.extend({
             throw 'context needs to be passed';
         }
 
+        this.templateHelpers = {
+            floatOnMobile : options.floatOnMobile || false
+        };
+
         this.left = options.left;
         this.right = options.right;
         this.toolbarContext = options.context;
@@ -51,7 +55,7 @@ module.exports = Marionette.Layout.extend({
 
         _.each(buttonGroup.items, function(button) {
             if (buttonGroup.storeState && !button.key) {
-                throw 'must provide key for all buttons when storSstate is enabled';
+                throw 'must provide key for all buttons when storeState is enabled';
             }
 
             var model = new ButtonModel(button);

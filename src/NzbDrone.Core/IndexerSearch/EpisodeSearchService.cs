@@ -47,7 +47,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed)
         {
-            var missing = _episodeService.EpisodesBetweenDates(dateTime, DateTime.UtcNow)
+            var missing = _episodeService.EpisodesBetweenDates(dateTime, DateTime.UtcNow, false)
                                          .Where(e => !e.HasFile &&
                                                 !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id) &&
                                                 !grabbed.Contains(e.Id))

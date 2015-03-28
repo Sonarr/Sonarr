@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
         void UpdateEpisode(Episode episode);
         void SetEpisodeMonitored(int episodeId, bool monitored);
         void UpdateEpisodes(List<Episode> episodes);
-        List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
+        List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored);
         void InsertMany(List<Episode> episodes);
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
@@ -169,9 +169,9 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.UpdateMany(episodes);
         }
 
-        public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end)
+        public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored)
         {
-            var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
+            var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime(), includeUnmonitored);
 
             return episodes;
         }

@@ -31,7 +31,7 @@ namespace NzbDrone.Api.Calendar
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
             if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
 
-            var episodes = _episodeService.EpisodesBetweenDates(start, end);
+            var episodes = _episodeService.EpisodesBetweenDates(start, end, false);
             var icalCalendar = new iCalendar();
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
