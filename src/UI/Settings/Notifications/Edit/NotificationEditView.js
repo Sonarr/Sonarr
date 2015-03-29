@@ -14,7 +14,7 @@ var view = Marionette.ItemView.extend({
         onDownloadToggle             : '.x-on-download',
         onUpgradeSection             : '.x-on-upgrade',
         tags                         : '.x-tags',
-        indicator 					 : '.x-indicator',
+        indicator                    : '.x-indicator',
         authorizedNotificationButton : '.AuthorizeNotification'
     },
 

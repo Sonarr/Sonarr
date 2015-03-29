@@ -3,23 +3,23 @@ var DeepModel = require('backbone.deepmodel');
 var Messenger = require('../Shared/Messenger');
 
 module.exports = DeepModel.DeepModel.extend({
-	connectData : function() {
-		var self = this;
-		
-		this.trigger('connect:sync');
+    connectData : function() {
+        var self = this;
+        
+        this.trigger('connect:sync');
 
-		var params = {};
+        var params = {};
 
-		params.url = this.collection.url + '/connectData/step1';
-		params.contentType = 'application/json';
+        params.url = this.collection.url + '/connectData/step1';
+        params.contentType = 'application/json';
         params.data = JSON.stringify(this.toJSON());
         params.type = 'POST';
         params.isValidatedCall = true;
 
         var promise = $.Deferred();
-		$.ajax(params).fail(promise.reject).success(function(response) {
+        $.ajax(params).fail(promise.reject).success(function(response) {
             if (response.redirectURL) {
-				var connectResponseWindow = window.open(response.redirectURL);
+                var connectResponseWindow = window.open(response.redirectURL);
                 var selfWindow = window;
                 selfWindow.onCompleteOauth = function(query, callback) {
                     delete selfWindow.onCompleteOauth;
@@ -33,7 +33,7 @@ module.exports = DeepModel.DeepModel.extend({
 
                 };
             }
-		});
+        });
 
         Messenger.monitor({
             promise        : promise,
@@ -46,7 +46,7 @@ module.exports = DeepModel.DeepModel.extend({
         });
 
         return promise;
-	},
+    },
     test : function() {
         var self = this;
 
