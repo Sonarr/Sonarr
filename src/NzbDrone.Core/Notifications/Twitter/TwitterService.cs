@@ -1,6 +1,4 @@
 ﻿using FluentValidation.Results;
-//using Tweetinvi;
-//using TinyTwitter;
 using NzbDrone.Common.Extensions;
 using NLog;
 using System;

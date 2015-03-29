@@ -3,7 +3,6 @@ using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 using System;
-using TinyTwitter;
 using OAuth;
 using System.Net;
 using System.IO;
@@ -43,7 +42,11 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
             if (stage == "step1")
             {
-                return new { redirectURL = _TwitterService.GetOAuthRedirect(Settings.ConsumerKey, Settings.ConsumerSecret, "http://localhost:8989/Content/oauthLand.html") };
+                return new { redirectURL = _TwitterService.GetOAuthRedirect(
+                    Settings.ConsumerKey, 
+                    Settings.ConsumerSecret,
+                    "http://localhost:8989/Content/oauthLand.html" /* FIXME - how do I get http host and such */
+                ) };
             }
             else if (stage == "step2")
             {

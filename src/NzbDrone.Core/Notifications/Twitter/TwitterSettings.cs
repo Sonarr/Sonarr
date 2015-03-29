@@ -25,8 +25,6 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
             ConsumerKey = "3POVsO3KW90LKZXyzPOjQ"; /* FIXME - Key from Couchpotato so needs to be replaced */
             ConsumerSecret = "Qprb94hx9ucXvD4Wvg2Ctsk4PDK7CcQAKgCELXoyIjE"; /* FIXME - Key from Couchpotato so needs to be replaced */
-            AuthorizeNotification = "/twitter/step1";
-
         }
 
         [FieldDefinition(0, Label = "Access Token", Advanced = true)]
