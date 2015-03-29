@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Notifications
             return GetType().Name;
         }
 
-        public virtual object ConnectData(string stage) { return null; }
+        public virtual object ConnectData(string stage, IDictionary<string, object> query) { return null; }
 
     }
 }

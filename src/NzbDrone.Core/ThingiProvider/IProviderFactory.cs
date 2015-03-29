@@ -19,6 +19,6 @@ namespace NzbDrone.Core.ThingiProvider
         TProviderDefinition GetProviderCharacteristics(TProvider provider, TProviderDefinition definition);
         TProvider GetInstance(TProviderDefinition definition);
         ValidationResult Test(TProviderDefinition definition);
-        object ConnectData(TProviderDefinition definition, string stage);
+        object ConnectData(TProviderDefinition definition, string stage, IDictionary<string, object> query );
     }
 }

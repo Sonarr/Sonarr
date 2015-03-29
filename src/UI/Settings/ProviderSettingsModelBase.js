@@ -8,7 +8,7 @@ module.exports = DeepModel.DeepModel.extend({
 		
 		this.trigger('connect:sync');
 
-		var params = {}
+		var params = {};
 
 		params.url = this.collection.url + '/connectData/step1';
 		params.contentType = 'application/json';
@@ -18,18 +18,27 @@ module.exports = DeepModel.DeepModel.extend({
 
         var promise = $.Deferred();
 		$.ajax(params).fail(promise.reject).success(function(response) {
-			debugger;
-			$.get(window.NzbDrone.ApiRoot + "/notifications" + this.ui.authorizedNotificationButton.data('value'), function (data) {
-				window.open(data); 
-			});
+            if (response.redirectURL) {
+				var connectResponseWindow = window.open(response.redirectURL);
+                var selfWindow = window;
+                selfWindow.onCompleteOauth = function(query, callback) {
+                    delete selfWindow.onCompleteOauth;
+                    params.url = self.collection.url + '/connectData/step2' + query;
 
-			promise.resolve(response);
+                    $.ajax(params).fail(promise.reject).success(function(response) {
+                        promise.resolve(response);
+                    });
+
+                    callback();
+
+                };
+            }
 		});
 
         Messenger.monitor({
             promise        : promise,
-            successMessage : 'Testing \'{0}\' completed'.format(this.get('name')),
-            errorMessage   : 'Testing \'{0}\' failed'.format(this.get('name'))
+            successMessage : 'Connecting for \'{0}\' completed'.format(this.get('name')),
+            errorMessage   : 'Connecting for \'{0}\' failed'.format(this.get('name'))
         });
 
         promise.fail(function(response) {

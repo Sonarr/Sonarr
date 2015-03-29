@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Notifications.Twitter
 
         public TwitterSettings()
         {
-            ConsumerKey = "vHHtcB6WzpWDG6KYlBMr8g"; /* FIXME - Key from Sickbeard */
-            ConsumerSecret = "zMqq5CB3f8cWKiRO2KzWPTlBanYmV0VYxSXZ0Pxds0E"; /* FIXME - Key from Sickbeard */
+            ConsumerKey = "3POVsO3KW90LKZXyzPOjQ"; /* FIXME - Key from Couchpotato so needs to be replaced */
+            ConsumerSecret = "Qprb94hx9ucXvD4Wvg2Ctsk4PDK7CcQAKgCELXoyIjE"; /* FIXME - Key from Couchpotato so needs to be replaced */
             AuthorizeNotification = "/twitter/step1";
 
         }
@@ -35,10 +35,7 @@ namespace NzbDrone.Core.Notifications.Twitter
         [FieldDefinition(1, Label = "Access Token Secret", Advanced = true)]
         public String AccessTokenSecret { get; set; }
 
-        [FieldDefinition(2, Label = "Consumer Key", Advanced = true)]
         public String ConsumerKey { get; set; }
-
-        [FieldDefinition(3, Label = "Consumer Key Secret", Advanced = true)]
         public String ConsumerSecret { get; set; }
 
         [FieldDefinition(4, Label = "Connect to twitter", Type = FieldType.Action)]

@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Download
 
         public ProviderDefinition Definition { get; set; }
 
-        public object ConnectData(string stage) { return null; }
+        public object ConnectData(string stage, IDictionary<string, object> query) { return null; }
 
         protected TSettings Settings
         {

@@ -71,16 +71,18 @@ var view = Marionette.ItemView.extend({
 		var self = this;
 	    self.ui.indicator.show();
 
-        this.model.connectData().always(function() {
-			console.log('connectDataArgs', arguments);
-			debugger;
+        this.model.connectData().always(function(newValues) {
+            Object.keys(newValues).forEach(function(field) {
+                self.model.set(field, newValues[field]);
+                self.model.attributes.fields.forEach(function(fieldDef) {
+                    console.log(fieldDef.Name, field, fieldDef.name === field);
+                    if (fieldDef.name === field) {
+                        fieldDef.value = newValues[field];
+                    }
+                });
+            });
             self.ui.indicator.hide();
         });
-		//debugger;
-//		$.get(window.NzbDrone.ApiRoot + "/notifications" + this.ui.authorizedNotificationButton.data('value'), function (data) {window.open(data); })
-//            .done(function () { $("#testTwitter-result").html("<b>Step1:</b> Confirm Authorization"); });
-		console.log('arguments', arguments);
-		console.log('this',this);
 	}
 });
 

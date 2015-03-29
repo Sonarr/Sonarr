@@ -94,7 +94,7 @@ namespace NzbDrone.Api
             _providerFactory.Update(providerDefinition);
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false, bool validate = true)
         {
             var definition = new TProviderDefinition();
 
@@ -107,8 +107,10 @@ namespace NzbDrone.Api
 
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
             definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(providerResource.Fields, configContract, preset);
-
-            Validate(definition, includeWarnings);
+            if (validate)
+            {
+                Validate(definition, includeWarnings);
+            }
 
             return definition;
         }
@@ -162,12 +164,14 @@ namespace NzbDrone.Api
 
         private Response ConnectData(string stage, TProviderResource providerResource)
         {
-            TProviderDefinition providerDefinition = GetDefinition(providerResource, true);
+            TProviderDefinition providerDefinition = GetDefinition(providerResource, true, false);
 
             if (!providerDefinition.Enable) return "{}";
 
-            object data = _providerFactory.ConnectData(providerDefinition, stage);
-            return Response.AsJson(data);
+            object data = _providerFactory.ConnectData(providerDefinition, stage, (IDictionary<string, object>) Request.Query.ToDictionary());
+            Response resp = JsonConvert.SerializeObject(data);
+            resp.ContentType = "application/json";
+            return resp;
         }
 
         protected virtual void Validate(TProviderDefinition definition, bool includeWarnings)

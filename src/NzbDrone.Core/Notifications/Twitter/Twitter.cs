@@ -4,6 +4,9 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 using System;
 using TinyTwitter;
+using OAuth;
+using System.Net;
+using System.IO;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
@@ -36,33 +39,19 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
         }
 
-        public override object ConnectData(string stage)
+        public override object ConnectData(string stage, IDictionary<string, object> query)
         {
             if (stage == "step1")
             {
-                var oauth = new TinyTwitter.OAuthInfo
-                {
-                    AccessToken = "",
-                    AccessSecret = "",
-                    ConsumerKey = Settings.ConsumerKey,
-                    ConsumerSecret = Settings.ConsumerSecret
-                };
-                var builder = new TinyTwitter.TinyTwitter.RequestBuilder(oauth, "GET", "https://api.twitter.com/oauth/request_token");
-                using (var response = builder.Execute())
-			    using (var stream = response.GetResponseStream())
-			    using (var reader = new System.IO.StreamReader(stream))
-			    {
-				    var content = reader.ReadToEnd();
-				    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-
-				    var tweets = (object[])serializer.DeserializeObject(content);
-                    return tweets;
-			    }
-
-                return new
-                {
-                    redirectURL = "https://api.twitter.com/oauth/request_token"
-                };
+                return new { redirectURL = _TwitterService.GetOAuthRedirect(Settings.ConsumerKey, Settings.ConsumerSecret, "http://localhost:8989/Content/oauthLand.html") };
+            }
+            else if (stage == "step2")
+            {
+                return _TwitterService.GetOAuthToken(
+                    Settings.ConsumerKey, Settings.ConsumerSecret,
+                    query["oauth_token"].ToString(),
+                    query["oauth_verifier"].ToString()
+                );
             }
             return new {};
         }
