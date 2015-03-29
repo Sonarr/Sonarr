@@ -13,8 +13,11 @@ var view = Marionette.ItemView.extend({
     template : 'Settings/Notifications/Edit/NotificationEditViewTemplate',
 
     ui : {
-        onDownloadToggle : '.x-on-download',
-        onUpgradeSection : '.x-on-upgrade',
+        onDownloadToggle             : '.x-on-download',
+        onUpgradeSection             : '.x-on-upgrade',
+        tags                         : '.x-tags',
+        indicator                    : '.x-indicator',
+        authorizedNotificationButton : '.AuthorizeNotification'
         tags             : '.x-tags',
         modalBody        : '.modal-body',
         formTag          : '.x-form-tag',
@@ -23,7 +26,8 @@ var view = Marionette.ItemView.extend({
 
     events : {
         'click .x-back'         : '_back',
-        'change .x-on-download' : '_onDownloadChanged'
+        'change .x-on-download' : '_onDownloadChanged',
+        'click .AuthorizeNotification' : '_onAuthorizeNotification'
     },
 
     _deleteView : DeleteView,
@@ -81,7 +85,15 @@ var view = Marionette.ItemView.extend({
         } else {
             this.ui.onUpgradeSection.hide();
         }
-    }
+    },
+
+    _onAuthorizeNotification : function(e) {
+      var self = this;
+      self.ui.indicator.show();
+      this.model.connectData(this.ui.authorizedNotificationButton.data('value')).always(function(newValues) {
+        self.ui.indicator.hide();
+    });
+  }
 });
 
 AsModelBoundView.call(view);

@@ -182,7 +182,7 @@ namespace NzbDrone.Api.REST
             }
         }
 
-        protected TResource ReadResourceFromRequest()
+        protected TResource ReadResourceFromRequest(bool skipValidate = false)
         {
             //TODO: handle when request is null
             var resource = Request.Body.FromJson<TResource>();
@@ -194,7 +194,7 @@ namespace NzbDrone.Api.REST
 
             var errors = SharedValidator.Validate(resource).Errors.ToList();
 
-            if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase) && !Request.Url.Path.EndsWith("/test", StringComparison.InvariantCultureIgnoreCase))
+            if (Request.Method.Equals("POST", StringComparison.InvariantCultureIgnoreCase) && !skipValidate && !Request.Url.Path.EndsWith("/test", StringComparison.InvariantCultureIgnoreCase))
             {
                 errors.AddRange(PostValidator.Validate(resource).Errors);
             }

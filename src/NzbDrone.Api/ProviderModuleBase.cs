@@ -11,6 +11,7 @@ using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using Omu.ValueInjecter;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Api
 {
@@ -27,7 +28,8 @@ namespace NzbDrone.Api
             _providerFactory = providerFactory;
 
             Get["schema"] = x => GetTemplates();
-            Post["test"] = x => Test(ReadResourceFromRequest());
+            Post["test"] = x => Test(ReadResourceFromRequest(true));
+            Post["connectData/{stage}"] = x => ConnectData(x.stage, ReadResourceFromRequest(true));
 
             GetResourceAll = GetAll;
             GetResourceById = GetProviderById;
@@ -98,7 +100,7 @@ namespace NzbDrone.Api
             _providerFactory.Update(providerDefinition);
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false, bool validate = true)
         {
             var definition = new TProviderDefinition();
 
@@ -111,8 +113,10 @@ namespace NzbDrone.Api
 
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
             definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(providerResource.Fields, configContract, preset);
-
-            Validate(definition, includeWarnings);
+            if (validate)
+            {
+                Validate(definition, includeWarnings);
+            }
 
             return definition;
         }
@@ -161,6 +165,19 @@ namespace NzbDrone.Api
             Test(providerDefinition, true);
 
             return "{}";
+        }
+
+
+        private Response ConnectData(string stage, TProviderResource providerResource)
+        {
+            TProviderDefinition providerDefinition = GetDefinition(providerResource, true, false);
+
+            if (!providerDefinition.Enable) return "{}";
+
+            object data = _providerFactory.ConnectData(providerDefinition, stage, (IDictionary<string, object>) Request.Query.ToDictionary());
+            Response resp = JsonConvert.SerializeObject(data);
+            resp.ContentType = "application/json";
+            return resp;
         }
 
         protected virtual void Validate(TProviderDefinition definition, bool includeWarnings)
