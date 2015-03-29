@@ -14,14 +14,14 @@ var view = Marionette.ItemView.extend({
         onDownloadToggle             : '.x-on-download',
         onUpgradeSection             : '.x-on-upgrade',
         tags                         : '.x-tags',
-		indicator 					 : '.x-indicator',
-		authorizedNotificationButton : '.AuthorizeNotification'
+        indicator 					 : '.x-indicator',
+        authorizedNotificationButton : '.AuthorizeNotification'
     },
 
     events : {
         'click .x-back'         : '_back',
         'change .x-on-download' : '_onDownloadChanged',
-		'click .AuthorizeNotification' : '_onAuthorizeNotification'
+        'click .AuthorizeNotification' : '_onAuthorizeNotification'
     },
 
     _deleteView : DeleteView,
@@ -67,23 +67,23 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-	_onAuthorizeNotification : function(e) {
-		var self = this;
-	    self.ui.indicator.show();
+    _onAuthorizeNotification : function(e) {
+      var self = this;
+      self.ui.indicator.show();
 
-        this.model.connectData().always(function(newValues) {
-            Object.keys(newValues).forEach(function(field) {
-                self.model.set(field, newValues[field]);
-                self.model.attributes.fields.forEach(function(fieldDef) {
-                    console.log(fieldDef.Name, field, fieldDef.name === field);
-                    if (fieldDef.name === field) {
-                        fieldDef.value = newValues[field];
-                    }
-                });
+      this.model.connectData().always(function(newValues) {
+        Object.keys(newValues).forEach(function(field) {
+            self.model.set(field, newValues[field]);
+            self.model.attributes.fields.forEach(function(fieldDef) {
+                console.log(fieldDef.Name, field, fieldDef.name === field);
+                if (fieldDef.name === field) {
+                    fieldDef.value = newValues[field];
+                }
             });
-            self.ui.indicator.hide();
         });
-	}
+        self.ui.indicator.hide();
+    });
+  }
 });
 
 AsModelBoundView.call(view);

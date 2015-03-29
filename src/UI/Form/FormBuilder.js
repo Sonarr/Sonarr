@@ -24,7 +24,7 @@ var _fieldBuilder = function(field) {
         return _templateRenderer.call(field, 'Form/SelectTemplate');
     }
 
-	if (field.type === 'hidden') {
+    if (field.type === 'hidden') {
         return _templateRenderer.call(field, 'Form/HiddenTemplate');
     }
 
