@@ -89,6 +89,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -253,6 +254,7 @@
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
+    <Compile Include="Datastore\Migration\083_add_twitter_notification.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -669,6 +671,9 @@
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
+    <Compile Include="Notifications\Twitter\Twitter.cs" />
+    <Compile Include="Notifications\Twitter\TwitterService.cs" />
+    <Compile Include="Notifications\Twitter\TwitterSettings.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
@@ -843,6 +848,7 @@
     <Compile Include="ThingiProvider\ProviderDefinition.cs" />
     <Compile Include="ThingiProvider\ProviderFactory.cs" />
     <Compile Include="ThingiProvider\ProviderRepository.cs" />
+    <Compile Include="TinyTwitter.cs" />
     <Compile Include="Tv\Actor.cs" />
     <Compile Include="Tv\AddSeriesOptions.cs" />
     <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />

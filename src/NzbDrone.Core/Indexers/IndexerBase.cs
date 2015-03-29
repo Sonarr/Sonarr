@@ -54,6 +54,7 @@ namespace NzbDrone.Core.Indexers
         }
 
         public virtual ProviderDefinition Definition { get; set; }
+        public object ConnectData(string stage) { return null; }
 
         protected TSettings Settings
         {

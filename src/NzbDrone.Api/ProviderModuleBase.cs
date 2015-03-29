@@ -11,6 +11,7 @@ using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using Omu.ValueInjecter;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Api
 {
@@ -27,7 +28,8 @@ namespace NzbDrone.Api
             _providerFactory = providerFactory;
 
             Get["schema"] = x => GetTemplates();
-            Post["test"] = x => Test(ReadResourceFromRequest());
+            Post["test"] = x => Test(ReadResourceFromRequest(true));
+            Post["connectData/{stage}"] = x => ConnectData(x.stage, ReadResourceFromRequest(true));
 
             GetResourceAll = GetAll;
             GetResourceById = GetProviderById;
@@ -155,6 +157,17 @@ namespace NzbDrone.Api
             Test(providerDefinition, true);
 
             return "{}";
+        }
+
+
+        private Response ConnectData(string stage, TProviderResource providerResource)
+        {
+            TProviderDefinition providerDefinition = GetDefinition(providerResource, true);
+
+            if (!providerDefinition.Enable) return "{}";
+
+            object data = _providerFactory.ConnectData(providerDefinition, stage);
+            return Response.AsJson(data);
         }
 
         protected virtual void Validate(TProviderDefinition definition, bool includeWarnings)

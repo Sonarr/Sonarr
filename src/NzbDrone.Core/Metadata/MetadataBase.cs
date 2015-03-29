@@ -42,6 +42,8 @@ namespace NzbDrone.Core.Metadata
         public abstract List<ImageFileResult> SeasonImages(Series series, Season season);
         public abstract List<ImageFileResult> EpisodeImages(Series series, EpisodeFile episodeFile);
 
+        public object ConnectData(string stage) { return null; }
+
         protected TSettings Settings
         {
             get

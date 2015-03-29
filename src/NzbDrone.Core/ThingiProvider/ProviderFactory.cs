@@ -81,6 +81,11 @@ namespace NzbDrone.Core.ThingiProvider
             return GetInstance(definition).Test();
         }
 
+        public object ConnectData(TProviderDefinition definition, string stage)
+        {
+            return GetInstance(definition).ConnectData(stage);
+        }
+
         public List<TProvider> GetAvailableProviders()
         {
             return Active().Select(GetInstance).ToList();
