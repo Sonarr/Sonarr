@@ -257,7 +257,6 @@
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
-    <Compile Include="Datastore\Migration\083_add_twitter_notification.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
