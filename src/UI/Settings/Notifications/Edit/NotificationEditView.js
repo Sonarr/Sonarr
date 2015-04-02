@@ -70,17 +70,7 @@ var view = Marionette.ItemView.extend({
     _onAuthorizeNotification : function(e) {
       var self = this;
       self.ui.indicator.show();
-
-      this.model.connectData().always(function(newValues) {
-        Object.keys(newValues).forEach(function(field) {
-            self.model.set(field, newValues[field]);
-            self.model.attributes.fields.forEach(function(fieldDef) {
-                console.log(fieldDef.Name, field, fieldDef.name === field);
-                if (fieldDef.name === field) {
-                    fieldDef.value = newValues[field];
-                }
-            });
-        });
+      this.model.connectData(this.ui.authorizedNotificationButton.data('value')).always(function(newValues) {
         self.ui.indicator.hide();
     });
   }

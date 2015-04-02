@@ -30,6 +30,23 @@ namespace NzbDrone.Core.Notifications.Twitter
             var logo = typeof(TwitterService).Assembly.GetManifestResourceBytes("NzbDrone.Core.Resources.Logo.64.png");
         }
 
+        private NameValueCollection oauthQuery(OAuthRequest client)
+        {
+            // Using HTTP header authorization
+            string auth = client.GetAuthorizationHeader();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(client.RequestUrl);
+
+            request.Headers.Add("Authorization", auth);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            System.Collections.Specialized.NameValueCollection qscoll;
+            using (var reader = new System.IO.StreamReader(response.GetResponseStream(), System.Text.Encoding.GetEncoding("utf-8")))
+            {
+                string responseText = reader.ReadToEnd();
+                return System.Web.HttpUtility.ParseQueryString(responseText);
+            }
+            return null;
+        }
+
         public object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier)
         {
             // Creating a new instance with a helper method
@@ -41,19 +58,8 @@ namespace NzbDrone.Core.Notifications.Twitter
                 oauthVerifier
             );
             client.RequestUrl = "https://api.twitter.com/oauth/access_token";
-            // Using HTTP header authorization
-            string auth = client.GetAuthorizationHeader();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(client.RequestUrl);
-
-            request.Headers.Add("Authorization", auth);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            System.Collections.Specialized.NameValueCollection qscoll;
-            using (var reader = new System.IO.StreamReader(response.GetResponseStream(), System.Text.Encoding.GetEncoding("utf-8")))
-            {
-                string responseText = reader.ReadToEnd();
-                qscoll = System.Web.HttpUtility.ParseQueryString(responseText);
-            }
-
+            NameValueCollection qscoll = oauthQuery(client);
+            
             return new
             {
                 AccessToken = qscoll["oauth_token"],
@@ -66,18 +72,8 @@ namespace NzbDrone.Core.Notifications.Twitter
             // Creating a new instance with a helper method
             OAuthRequest client = OAuthRequest.ForRequestToken(consumerKey, consumerSecret, callback);
             client.RequestUrl = "https://api.twitter.com/oauth/request_token";
-            // Using HTTP header authorization
-            string auth = client.GetAuthorizationHeader();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(client.RequestUrl);
+            NameValueCollection qscoll = oauthQuery(client);
 
-            request.Headers.Add("Authorization", auth);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            System.Collections.Specialized.NameValueCollection qscoll;
-            using (var reader = new System.IO.StreamReader(response.GetResponseStream(), System.Text.Encoding.GetEncoding("utf-8")))
-            {
-                string responseText = reader.ReadToEnd();
-                qscoll = System.Web.HttpUtility.ParseQueryString(responseText);
-            }
             return "https://api.twitter.com/oauth/authorize?oauth_token=" + qscoll["oauth_token"];
         }
 

@@ -3,37 +3,53 @@ var DeepModel = require('backbone.deepmodel');
 var Messenger = require('../Shared/Messenger');
 
 module.exports = DeepModel.DeepModel.extend({
-    connectData : function() {
+    connectData : function(action) {
         var self = this;
         
         this.trigger('connect:sync');
 
-        var params = {};
-
-        params.url = this.collection.url + '/connectData/step1';
-        params.contentType = 'application/json';
-        params.data = JSON.stringify(this.toJSON());
-        params.type = 'POST';
-        params.isValidatedCall = true;
-
         var promise = $.Deferred();
-        $.ajax(params).fail(promise.reject).success(function(response) {
-            if (response.redirectURL) {
-                var connectResponseWindow = window.open(response.redirectURL);
-                var selfWindow = window;
-                selfWindow.onCompleteOauth = function(query, callback) {
-                    delete selfWindow.onCompleteOauth;
-                    params.url = self.collection.url + '/connectData/step2' + query;
 
-                    $.ajax(params).fail(promise.reject).success(function(response) {
-                        promise.resolve(response);
-                    });
+        var callAction = function(action) {
+            var params = {};
+            params.url = self.collection.url + '/connectData/' + action;
+            params.contentType = 'application/json';
+            params.data = JSON.stringify(self.toJSON());
+            params.type = 'POST';
+            params.isValidatedCall = true;
 
-                    callback();
+            $.ajax(params).fail(promise.reject).success(function(response) {
+                if (response.action) 
+                {
 
-                };
-            }
-        });
+                    if (response.action === "openwindow") 
+                    {
+                        var connectResponseWindow = window.open(response.url);
+                        var selfWindow = window;
+                        selfWindow.onCompleteOauth = function(query, callback) {
+                            delete selfWindow.onCompleteOauth;
+                            if (response.nextStep) { callAction(response.nextStep + query); }
+                            else { promise.resolve(response); }
+                            callback();
+                        };
+                        return;
+                    } 
+                    else if (response.action === "updatefields")
+                    {
+                        Object.keys(response.fields).forEach(function(field) {
+                            self.set(field, response.fields[field]);
+                            self.attributes.fields.forEach(function(fieldDef) {
+                                if (fieldDef.name === field) { fieldDef.value = response.fields[field]; }
+                            });
+                        });
+                    }
+                }
+                if (response.nextStep) { callAction(response.nextStep); }
+                else { promise.resolve(response); }
+            });
+        };
+
+        callAction(action);
 
         Messenger.monitor({
             promise        : promise,

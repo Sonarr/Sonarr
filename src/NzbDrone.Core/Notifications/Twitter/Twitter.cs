@@ -42,19 +42,28 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
             if (stage == "step1")
             {
-                return new { redirectURL = _TwitterService.GetOAuthRedirect(
-                    Settings.ConsumerKey, 
-                    Settings.ConsumerSecret,
-                    "http://localhost:8989/Content/oauthLand.html" /* FIXME - how do I get http host and such */
-                ) };
+                return new 
+                {
+                    nextStep = "step2",
+                    action = "openwindow",
+                    url = _TwitterService.GetOAuthRedirect(
+                        Settings.ConsumerKey, 
+                        Settings.ConsumerSecret,
+                        "http://localhost:8989/Content/oauthLand.html" /* FIXME - how do I get http host and such */
+                    )
+                };
             }
             else if (stage == "step2")
             {
-                return _TwitterService.GetOAuthToken(
-                    Settings.ConsumerKey, Settings.ConsumerSecret,
-                    query["oauth_token"].ToString(),
-                    query["oauth_verifier"].ToString()
-                );
+                return new
+                {
+                    action = "updatefields",
+                    fields = _TwitterService.GetOAuthToken(
+                        Settings.ConsumerKey, Settings.ConsumerSecret,
+                        query["oauth_token"].ToString(),
+                        query["oauth_verifier"].ToString()
+                    )
+                };
             }
             return new {};
         }
