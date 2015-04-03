@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
     {
         public TitansOfTvSettingsValidator()
         {
-            RuleFor(c => c.ApiKey).ValidRootUrl();
+          //  RuleFor(c => c.ApiKey).ValidRootUrl();
         }
     }
 
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
             ApiKey = "";
         }
 
-        [FieldDefinition(0, Label = "API key", HelpText = "Enter your ToTV API key. (Profile->API->Site API Key)")]
+        [FieldDefinition(0, Label = "API key", HelpText = "Enter your ToTV API key. (My Account->API->Site API Key)")]
         public String ApiKey { get; set; }
 
         public NzbDroneValidationResult Validate()

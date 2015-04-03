@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Indexers.TitansOfTv
 {
@@ -9,9 +10,16 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
     {
         public TitansOfTvSettings Settings { get; set; }
 
+        private const string BASE_RSS_URL = "https://titansof.tv/rss/feed/?apikey={0}";
+
         public IList<IEnumerable<IndexerRequest>> GetRecentRequests()
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var url = string.Format(BASE_RSS_URL, Settings.ApiKey);
+            var innerList = new List<IndexerRequest>();
+
+            innerList.Add(new IndexerRequest(url, HttpAccept.Rss));
+            pageableRequests.Add(innerList);
 
             return pageableRequests;
         }
