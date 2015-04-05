@@ -79,18 +79,18 @@ namespace NzbDrone.Integration.Test.Client
             Delete(request);
         }
 
-        public List<dynamic> InvalidPost(TResource body)
+        public List<string> InvalidPost(TResource body)
         {
             var request = BuildRequest();
             request.AddBody(body);
-            return Post<List<dynamic>>(request, HttpStatusCode.BadRequest);
+            return Post<List<string>>(request, HttpStatusCode.BadRequest);
         }
 
-        public List<dynamic> InvalidPut(TResource body)
+        public List<string> InvalidPut(TResource body)
         {
             var request = BuildRequest();
             request.AddBody(body);
-            return Put<List<dynamic>>(request, HttpStatusCode.BadRequest);
+            return Put<List<string>>(request, HttpStatusCode.BadRequest);
         }
 
         public RestRequest BuildRequest(string command = "")
