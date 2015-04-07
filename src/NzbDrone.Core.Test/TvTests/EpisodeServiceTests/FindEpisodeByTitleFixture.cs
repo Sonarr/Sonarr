@@ -14,32 +14,50 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
     [TestFixture]
     public class FindEpisodeByTitleFixture : CoreTest<EpisodeService>
     {
-        private Episode _episode;
+        private List<Episode> _episodes;
 
         [SetUp]
         public void Setup()
         {
-            _episode = Builder<Episode>.CreateNew().Build();
+            _episodes = Builder<Episode>.CreateListOfSize(5)
+                                        .Build()
+                                        .ToList();
         }
 
-        private void GivenEpisodeTitle(string title)
+        private void GivenEpisodesWithTitles(params string[] titles)
         {
-            _episode.Title = title;
+            for (int i = 0; i < titles.Count(); i++)
+            {
+                _episodes[i].Title = titles[i];
+            }
 
             Mocker.GetMock<IEpisodeRepository>()
                   .Setup(s => s.GetEpisodes(It.IsAny<int>(), It.IsAny<int>()))
-                  .Returns(new List<Episode> { _episode });
+                  .Returns(_episodes);
         }
 
         [Test]
         public void should_find_episode_by_title()
         {
-            GivenEpisodeTitle("A Journey to the Highlands");
+            const string expectedTitle = "A Journey to the Highlands";
+            GivenEpisodesWithTitles(expectedTitle);
 
             Subject.FindEpisodeByTitle(1, 1, "Downton.Abbey.A.Journey.To.The.Highlands.720p.BluRay.x264-aAF")
                    .Title
                    .Should()
-                   .Be(_episode.Title);
+                   .Be(expectedTitle);
+        }
+
+        [Test]
+        public void should_prefer_longer_match()
+        {
+            const string expectedTitle = "Inside The Walking Dead: Walker University";
+            GivenEpisodesWithTitles("Inside The Walking Dead", expectedTitle);
+
+            Subject.FindEpisodeByTitle(1, 1, "The.Walking.Dead.S04.Special.Inside.The.Walking.Dead.Walker.University.720p.HDTV.x264-W4F")
+                   .Title
+                   .Should()
+                   .Be(expectedTitle);
         }
     }
 }
