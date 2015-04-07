@@ -25,7 +25,7 @@ module.exports = Backbone.Collection.extend({
         options.data = {};
         options.data.seriesId = this.seriesId;
 
-        if (this.seasonNumber) {
+        if (this.seasonNumber !== undefined) {
             options.data.seasonNumber = this.seasonNumber;
         }
 
