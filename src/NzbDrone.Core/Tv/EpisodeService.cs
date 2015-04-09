@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Tv
             var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle).Replace(".", " ");
             var episodes = _episodeRepository.GetEpisodes(seriesId, seasonNumber);
 
-            var query = episodes.Select(
+            var matches = episodes.Select(
                 episode => new
                            {
                                Position = normalizedReleaseTitle.IndexOf(Parser.Parser.NormalizeEpisodeTitle(episode.Title), StringComparison.CurrentCultureIgnoreCase),
@@ -121,7 +121,12 @@ namespace NzbDrone.Core.Tv
                                 .ThenByDescending(e => e.Length)
                                 .ToList();
 
-            return query.First().Episode;
+            if (matches.Any())
+            {
+                return matches.First().Episode;
+            }
+
+            return null;
         }
 
         public List<Episode> EpisodesWithFiles(int seriesId)

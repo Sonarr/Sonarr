@@ -59,5 +59,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                    .Should()
                    .Be(expectedTitle);
         }
+
+        [Test]
+        public void should_return_null_when_no_match_is_found()
+        {
+            GivenEpisodesWithTitles();
+
+            Subject.FindEpisodeByTitle(1, 1, "The.Walking.Dead.S04.Special.Inside.The.Walking.Dead.Walker.University.720p.HDTV.x264-W4F")
+                   .Should()
+                   .BeNull();
+        }
     }
 }
