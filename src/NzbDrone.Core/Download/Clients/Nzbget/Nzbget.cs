@@ -36,6 +36,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
 
+            if (response == null)
+            {
+                throw new DownloadClientException("Failed to add nzb {0}", filename);
+            }
+
             return response;
         }
 
@@ -43,7 +48,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             NzbgetGlobalStatus globalStatus;
             List<NzbgetQueueItem> queue;
-            Dictionary<Int32, NzbgetPostQueueItem> postQueue;
 
             try
             {

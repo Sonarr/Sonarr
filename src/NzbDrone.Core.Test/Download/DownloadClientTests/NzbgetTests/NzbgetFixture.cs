@@ -9,6 +9,7 @@ using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Download.Clients;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -268,7 +269,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             items.First().Status.Should().Be(DownloadItemStatus.Failed);
         }
 
-
         [Test]
         public void Download_should_return_unique_id()
         {
@@ -279,6 +279,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var id = Subject.Download(remoteEpisode);
 
             id.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void Download_should_throw_if_failed()
+        {
+            GivenFailedDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            Assert.Throws<DownloadClientException>(() => Subject.Download(remoteEpisode));
         }
 
         [Test]
