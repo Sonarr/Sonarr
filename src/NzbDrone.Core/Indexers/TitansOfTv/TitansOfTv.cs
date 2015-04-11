@@ -35,6 +35,6 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
             return new TorrentRssParser() { ParseSizeInDescription = false };
         }
 
-        public override Boolean SupportsSearch { get { return false; } }
+        public override Boolean SupportsSearch { get { return true; } }
     }
 }
