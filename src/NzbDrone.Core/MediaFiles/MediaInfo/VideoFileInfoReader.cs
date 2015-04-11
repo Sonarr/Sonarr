@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Text;
 using MediaInfoLib;
 using NLog;
 using NzbDrone.Common.Disk;
-using System.Globalization;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -39,7 +41,19 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 _logger.Debug("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
-                int open = mediaInfo.Open(filename);
+
+                int open;
+                if (OsInfo.IsWindows)
+                {
+                    open = mediaInfo.Open(filename);
+                }
+                else
+                {
+                    // On non-Windows the wrapper uses the ansi library methods, which libmediainfo converts internally to unicode from multibyte (utf8).
+                    // To avoid building MediaInfoDotNet ourselves we simply trick the wrapper to send utf8 strings instead of ansi.
+                    var utf8filename = Encoding.Default.GetString(Encoding.UTF8.GetBytes(filename));
+                    open = mediaInfo.Open(utf8filename);
+                }
 
                 if (open != 0)
                 {
@@ -107,6 +121,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                                 };
 
                     return mediaInfoModel;
+                }
+                else
+                {
+                    _logger.Warn("Unable to open media info from file: " + filename);
                 }
             }
             catch (DllNotFoundException ex)
