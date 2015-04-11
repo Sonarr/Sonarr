@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -100,7 +100,7 @@
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+      <HintPath>..\packages\ValueInjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
@@ -172,7 +172,7 @@
     <Compile Include="Datastore\Extensions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
-    <Compile Include="Datastore\Migration\001_initialSetup.cs" />
+    <Compile Include="Datastore\Migration\001_initial_setup.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
@@ -963,6 +963,10 @@
       <Link>MediaInfo.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\MediaInfoDotNet.dll.config">
+      <Link>MediaInfoDotNet.dll.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -970,7 +974,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
