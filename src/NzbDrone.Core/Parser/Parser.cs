@@ -357,9 +357,12 @@ namespace NzbDrone.Core.Parser
 
         public static string NormalizeEpisodeTitle(string title)
         {
-            return SpecialEpisodeWordRegex.Replace(title, String.Empty)
-                                          .Trim()
-                                          .ToLower();
+            title = SpecialEpisodeWordRegex.Replace(title, String.Empty);
+            title = PunctuationRegex.Replace(title, " ");
+            title = DuplicateSpacesRegex.Replace(title, " ");
+
+            return title.Trim()
+                        .ToLower();
         }
 
         public static string NormalizeTitle(string title)

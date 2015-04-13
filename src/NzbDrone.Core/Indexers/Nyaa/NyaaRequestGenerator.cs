@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         private IEnumerable<IndexerRequest> GetPagedRequests(Int32 maxPages, String searchParameters)
         {
-            var baseUrl = String.Format("{0}/?page=rss&cats=1_37&filter=1", Settings.BaseUrl.TrimEnd('/'));
+            var baseUrl = String.Format("{0}/?page=rss{1}", Settings.BaseUrl.TrimEnd('/'), Settings.AdditionalParameters);
 
             if (PageSize == 0)
             {

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
@@ -23,10 +24,14 @@ namespace NzbDrone.Common.Http
     {
         private readonly Logger _logger;
 
-        public HttpClient(Logger logger)
+        private readonly ICached<CookieContainer> _cookieContainerCache;
+
+        public HttpClient(ICacheManager cacheManager, Logger logger)
         {
             _logger = logger;
             ServicePointManager.DefaultConnectionLimit = 12;
+
+            _cookieContainerCache = cacheManager.GetCache<CookieContainer>(typeof(HttpClient));
         }
 
         public HttpResponse Execute(HttpRequest request)
@@ -47,6 +52,8 @@ namespace NzbDrone.Common.Http
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
             webRequest.ContentLength = 0;
 
+            webRequest.CookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
+
             if (!RuntimeInfoBase.IsProduction)
             {
                 webRequest.AllowAutoRedirect = false;
@@ -61,10 +68,12 @@ namespace NzbDrone.Common.Http
 
             if (request.Cookies.Count != 0)
             {
-                webRequest.CookieContainer = new CookieContainer();
                 foreach (var pair in request.Cookies)
                 {
-                    webRequest.CookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host));
+                    webRequest.CookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
+                    {
+                        Expires = DateTime.UtcNow.AddHours(1)
+                    });
                 }
             }
 

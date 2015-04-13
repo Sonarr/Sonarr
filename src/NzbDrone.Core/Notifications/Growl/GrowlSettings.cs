@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Growl
     {
         public GrowlSettingsValidator()
         {
-            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).GreaterThan(0);
         }
     }

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.IndexerSearch
     {
         List<DownloadDecision> EpisodeSearch(int episodeId);
         List<DownloadDecision> EpisodeSearch(Episode episode);
-        List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber);
+        List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly);
     }
 
     public class NzbSearchService : ISearchForNzb
@@ -80,10 +80,15 @@ namespace NzbDrone.Core.IndexerSearch
             return SearchSingle(series, episode);
         }
 
-        public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
+        public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly)
         {
             var series = _seriesService.GetSeries(seriesId);
             var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
+
+            if (missingOnly)
+            {
+                episodes = episodes.Where(e => e.Monitored && !e.HasFile).ToList();
+            }
 
             if (series.SeriesType == SeriesTypes.Anime)
             {
@@ -217,10 +222,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var episode in episodes)
             {
-                if (episode.Monitored)
-                {
-                    downloadDecisions.AddRange(SearchAnime(series, episode));
-                }
+                downloadDecisions.AddRange(SearchAnime(series, episode));
             }
 
             return downloadDecisions;
