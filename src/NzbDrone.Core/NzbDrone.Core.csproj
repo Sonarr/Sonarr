@@ -502,6 +502,8 @@
     <Compile Include="Indexers\RssSyncCompleteEvent.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
     <Compile Include="Indexers\TitansOfTv\TitansOfTv.cs" />
+    <Compile Include="Indexers\TitansOfTv\TitansOfTvApiResult.cs" />
+    <Compile Include="Indexers\TitansOfTv\TitansOfTvParser.cs" />
     <Compile Include="Indexers\TitansOfTv\TitansOfTvRequestGenerator.cs" />
     <Compile Include="Indexers\TitansOfTv\TitansOfTvSettings.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />

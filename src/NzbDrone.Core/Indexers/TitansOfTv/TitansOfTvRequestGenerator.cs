@@ -14,16 +14,18 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
         public TitansOfTvSettings Settings { get; set; }
 
         private const string BASE_RSS_URL = "https://titansof.tv/rss/feed/?apikey={0}";
-        private const string BASE_API_URL = "https://titansof.tv/api/torrents?";
+        private const string BASE_API_URL = "https://titansof.tv/api/torrents";
 
 
         public IList<IEnumerable<IndexerRequest>> GetRecentRequests()
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
-            var url = string.Format(BASE_RSS_URL, Settings.ApiKey);
+
             var innerList = new List<IndexerRequest>();
 
-            innerList.Add(new IndexerRequest(url, HttpAccept.Rss));
+            var httpRequest = BuildHttpRequest(BASE_API_URL);
+
+            innerList.Add(new IndexerRequest(httpRequest));
             pageableRequests.Add(innerList);
 
             return pageableRequests;
@@ -42,8 +44,8 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
 
         public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.SingleEpisodeSearchCriteria searchCriteria)
         {
-            var json = JsonConvert.SerializeObject(searchCriteria, Formatting.Indented, new StringEnumConverter());
-            const string url = BASE_API_URL + "series_id={series}&episode={episode}";
+            
+            const string url = BASE_API_URL + "?series_id={series}&episode={episode}";
 
             var requests = new List<IEnumerable<IndexerRequest>>();
             var innerList = new List<IndexerRequest>();
@@ -63,7 +65,30 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
 
         public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.SeasonSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            const string url = BASE_API_URL + "?series_id={series}&season={episode}";
+
+            var requests = new List<IEnumerable<IndexerRequest>>();
+            var innerList = new List<IndexerRequest>();
+            requests.Add(innerList);
+
+            var httpRequest = BuildHttpRequest(url);
+            var episodeString = String.Format("Season {0:00}", searchCriteria.SeasonNumber);
+            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
+            httpRequest.AddSegment("episode", episodeString);
+
+            var request = new IndexerRequest(httpRequest);
+            innerList.Add(request);
+
+            httpRequest = BuildHttpRequest(url);
+            episodeString = String.Format("Season {0}", searchCriteria.SeasonNumber);
+            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
+            httpRequest.AddSegment("episode", episodeString);
+
+            request = new IndexerRequest(httpRequest);
+            innerList.Add(request);
+
+
+            return requests;
         }
 
         public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.DailyEpisodeSearchCriteria searchCriteria)
