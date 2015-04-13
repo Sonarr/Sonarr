@@ -176,6 +176,45 @@ namespace NzbDrone.Common.Test.Http
 
             response.Resource.Headers.Should().NotContainKey("Cookie");
         }
+
+        [Test]
+        public void should_not_store_response_cookie()
+        {
+            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            requestSet.AllowAutoRedirect = false;
+
+            var responseSet = Subject.Get(requestSet);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().NotContainKey("Cookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_store_response_cookie()
+        {
+            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            requestSet.AllowAutoRedirect = false;
+            requestSet.StoreResponseCookie = true;
+
+            var responseSet = Subject.Get(requestSet);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("Cookie");
+
+            var cookie = response.Resource.Headers["Cookie"].ToString();
+
+            cookie.Should().Contain("my=cookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
     }
 
     public class HttpBinResource

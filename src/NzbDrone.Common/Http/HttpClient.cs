@@ -52,8 +52,6 @@ namespace NzbDrone.Common.Http
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
             webRequest.ContentLength = 0;
 
-            webRequest.CookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
-
             if (!RuntimeInfoBase.IsProduction)
             {
                 webRequest.AllowAutoRedirect = false;
@@ -66,15 +64,27 @@ namespace NzbDrone.Common.Http
                 AddRequestHeaders(webRequest, request.Headers);
             }
 
+            var cookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
+
             if (request.Cookies.Count != 0)
             {
                 foreach (var pair in request.Cookies)
                 {
-                    webRequest.CookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
+                    cookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
                     {
                         Expires = DateTime.UtcNow.AddHours(1)
                     });
                 }
+            }
+
+            if (request.StoreResponseCookie)
+            {
+                webRequest.CookieContainer = cookieContainer;
+            }
+            else
+            {
+                webRequest.CookieContainer = new CookieContainer();
+                webRequest.CookieContainer.Add(cookieContainer.GetCookies(request.Url));
             }
 
             if (!request.Body.IsNullOrWhiteSpace())
