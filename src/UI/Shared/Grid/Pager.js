@@ -30,7 +30,12 @@ module.exports = Paginator.extend({
             return;
         }
 
-        target.closest('li i').addClass('icon-sonarr-spinner fa-spin');
+        var icon = target.closest('li i');
+        var iconClasses = icon.attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/);
+        var iconClass = $.trim(iconClasses[0]);
+
+        icon.removeClass(iconClass);
+        icon.addClass('icon-sonarr-spinner fa-spin');
 
         var label = target.attr('data-action');
         var ffLabels = this.fastForwardHandleLabels;
