@@ -82,14 +82,20 @@ namespace NzbDrone.Core.MediaFiles
                 return ProcessFolder(directoryInfo, series, downloadClientItem);
             }
 
-            var fileInfo = new FileInfo(path);
-
-            if (series == null)
+            if (_diskProvider.FileExists(path))
             {
-                return ProcessFile(fileInfo, downloadClientItem);
+                var fileInfo = new FileInfo(path);
+
+                if (series == null)
+                {
+                    return ProcessFile(fileInfo, downloadClientItem);
+                }
+
+                return ProcessFile(fileInfo, series, downloadClientItem);
             }
 
-            return ProcessFile(fileInfo, series, downloadClientItem);
+            _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}", path);
+            return new List<ImportResult>();
         }
 
         private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem = null)
