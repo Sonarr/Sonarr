@@ -36,7 +36,7 @@
   }
 
   .fc-state-highlight {
-    background : #f1f1f1;
+    background : #dbdbdb;
   }
 
   .past {
@@ -119,17 +119,21 @@
     border-color : @droneTeal;
   }
 
+  .unmonitored {
+    border-color     : grey;
+  }
+
   .episode-title {
     .btn-link;
     .text-overflow;
     color      : @link-color;
     margin-top : 1px;
     display    : inline-block;
-    
+
     @media (max-width: @screen-xs-min) {
       width      : 140px;
     }
-    
+
     @media (min-width: @screen-md-min) {
       width      : 135px;
     }
@@ -138,7 +142,7 @@
 
 .calendar {
 
-  background-position : -160px -128px;
+//  background-position : -160px -128px;
 
   .primary {
     border-color     : @btn-primary-bg;
@@ -185,9 +189,27 @@
     background-color : @droneTeal;
   }
 
+  .unmonitored {
+    border-color     : grey;
+    background-color : grey;
+  }
+
   .chart {
     margin-top  : 2px;
     margin-right: 2px;
+  }
+
+  .legend-labels {
+    width : 500px;
+
+    @media (max-width: @screen-xs-min) {
+      width : 400px;
+    }
+  }
+
+  .legend-label {
+    display : inline-block;
+    width   : 150px;
   }
 }
 
@@ -209,5 +231,11 @@
   h2 {
     margin-top    : 0px;
     margin-bottom : 5px;
+  }
+}
+
+.calendar-toolbar {
+  .page-toolbar {
+    margin-bottom : 10px;
   }
 }
