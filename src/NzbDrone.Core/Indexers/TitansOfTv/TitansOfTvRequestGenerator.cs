@@ -72,17 +72,17 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
             requests.Add(innerList);
 
             var httpRequest = BuildHttpRequest(url);
-            var episodeString = String.Format("Season {0:00}", searchCriteria.SeasonNumber);
+            var seasonString = String.Format("Season {0:00}", searchCriteria.SeasonNumber);
             httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
-            httpRequest.AddSegment("episode", episodeString);
+            httpRequest.AddSegment("season", seasonString);
 
             var request = new IndexerRequest(httpRequest);
             innerList.Add(request);
 
             httpRequest = BuildHttpRequest(url);
-            episodeString = String.Format("Season {0}", searchCriteria.SeasonNumber);
+            seasonString = String.Format("Season {0}", searchCriteria.SeasonNumber);
             httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
-            httpRequest.AddSegment("episode", episodeString);
+            httpRequest.AddSegment("season", seasonString);
 
             request = new IndexerRequest(httpRequest);
             innerList.Add(request);
@@ -93,7 +93,22 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
 
         public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.DailyEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            const string url = BASE_API_URL + "?series_id={series}&air_date={air_date}";
+
+            var requests = new List<IEnumerable<IndexerRequest>>();
+            var innerList = new List<IndexerRequest>();
+            requests.Add(innerList);
+
+            var httpRequest = BuildHttpRequest(url);
+            var airDate = searchCriteria.AirDate.ToString("yyyy-MM-dd");
+            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
+            httpRequest.AddSegment("air_date", airDate);
+
+            var request = new IndexerRequest(httpRequest);
+            innerList.Add(request);
+
+
+            return requests;
         }
 
         public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.AnimeEpisodeSearchCriteria searchCriteria)
