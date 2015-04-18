@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var _ = require('underscore');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
@@ -115,14 +114,6 @@ module.exports = Marionette.Layout.extend({
                     className    : 'x-search-missing'
                 },
                 {
-                    title        : 'Toggle Selected',
-                    icon         : 'icon-sonarr-monitored',
-                    tooltip      : 'Toggle monitored status of selected',
-                    callback     : this._toggleMonitoredOfSelected,
-                    ownerContext : this,
-                    className    : 'x-unmonitor-selected'
-                },
-                {
                     title : 'Season Pass',
                     icon  : 'icon-sonarr-monitored',
                     route : 'seasonpass'
@@ -200,28 +191,5 @@ module.exports = Marionette.Layout.extend({
                            'One API request to each indexer will be used for each episode. ' + 'This cannot be stopped once started.')) {
             CommandController.Execute('missingEpisodeSearch', { name : 'missingEpisodeSearch' });
         }
-    },
-    _toggleMonitoredOfSelected : function() {
-        var selected = this.missingGrid.getSelectedModels();
-
-        if (selected.length === 0) {
-            Messenger.show({
-                type    : 'error',
-                message : 'No episodes selected'
-            });
-            return;
-        }
-
-        var promises = [];
-        var self = this;
-
-        _.each(selected, function (episode) {
-            episode.set('monitored', !episode.get('monitored'));
-            promises.push(episode.save());
-        });
-
-        $.when(promises).done(function () {
-            self.collection.fetch();
-        });
     }
 });

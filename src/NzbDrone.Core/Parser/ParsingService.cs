@@ -188,10 +188,7 @@ namespace NzbDrone.Core.Parser
 
                     else if (sceneSource)
                     {
-                        // Is there a reason why we excluded season 1 from this handling before?
-                        // Might have something to do with the scene name to season number check
-                        // If this needs to be reverted tests will need to be added
-                        if (sceneSeasonNumber.HasValue)
+                        if (sceneSeasonNumber.HasValue && (sceneSeasonNumber == 0 || sceneSeasonNumber > 1))
                         {
                             var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
 

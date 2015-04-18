@@ -80,7 +80,7 @@ namespace NzbDrone.Core.IndexerSearch
 
                     if (season.Count() > 1)
                     {
-                        decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true);
+                        decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key);
                     }
 
                     else

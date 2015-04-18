@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     {
         public TransmissionSettingsValidator()
         {
-            RuleFor(c => c.Host).ValidHost();
+            RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.Port).GreaterThan(0);
 
             RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$").WithMessage("Allowed characters a-z and -");

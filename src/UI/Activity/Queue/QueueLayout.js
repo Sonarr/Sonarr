@@ -30,18 +30,20 @@ module.exports = Marionette.Layout.extend({
         {
             name     : 'series',
             label    : 'Series',
-            cell     : SeriesTitleCell
+            cell     : SeriesTitleCell,
+            sortable : false
         },
         {
             name     : 'episode',
             label    : 'Episode',
-            cell     : EpisodeNumberCell
+            cell     : EpisodeNumberCell,
+            sortable : false
         },
         {
-            name      : 'episodeTitle',
-            label     : 'Episode Title',
-            cell      : EpisodeTitleCell,
-            cellValue : 'episode'
+            name     : 'episode',
+            label    : 'Episode Title',
+            cell     : EpisodeTitleCell,
+            sortable : false
         },
         {
             name     : 'quality',

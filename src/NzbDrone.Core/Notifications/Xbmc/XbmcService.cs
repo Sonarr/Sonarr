@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 if (version == new XbmcVersion(0))
                 {
-                    throw new InvalidXbmcVersionException("Version received from XBMC is invalid, please correct your settings.");
+                    throw new InvalidXbmcVersionException("Verion received from XBMC is invalid, please correct your settings.");
                 }
 
                 Notify(settings, "Test Notification", "Success! XBMC has been successfully configured!");

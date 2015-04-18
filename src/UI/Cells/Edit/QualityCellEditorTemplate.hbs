@@ -1,4 +1,4 @@
-{{#eachReverse items}}
+{{#each items}}
     {{#with quality}}
         {{#if selected}}
             <option value="{{id}}" selected="selected">{{name}}</option>
@@ -6,4 +6,4 @@
             <option value="{{id}}">{{name}}</option>
         {{/if}}
     {{/with}}
-{{/eachReverse}}
+{{/each}}

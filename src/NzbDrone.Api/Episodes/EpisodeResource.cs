@@ -24,6 +24,7 @@ namespace NzbDrone.Api.Episodes
         public Nullable<Int32> SceneAbsoluteEpisodeNumber { get; set; }
         public Nullable<Int32> SceneEpisodeNumber { get; set; }
         public Nullable<Int32> SceneSeasonNumber { get; set; }
+        public Int32 TvDbEpisodeId { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? GrabDate { get; set; }
         public String SeriesTitle { get; set; }

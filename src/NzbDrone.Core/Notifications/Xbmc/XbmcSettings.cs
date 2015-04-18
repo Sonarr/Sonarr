@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
     {
         public XbmcSettingsValidator()
         {
-            RuleFor(c => c.Host).ValidHost();
+            RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.DisplayTime).GreaterThanOrEqualTo(2);
         }
     }

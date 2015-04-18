@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         public SabnzbdSettingsValidator()
         {
-            RuleFor(c => c.Host).ValidHost();
+            RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.Port).GreaterThan(0);
 
             RuleFor(c => c.ApiKey).NotEmpty()

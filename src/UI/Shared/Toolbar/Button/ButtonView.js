@@ -33,10 +33,6 @@ module.exports = Marionette.ItemView.extend({
             this.$el.addClass(this.model.get('className'));
         }
 
-        if (this.model.get('tooltip')) {
-            this.$el.attr('title', this.model.get('tooltip'));
-        }
-
         var command = this.model.get('command');
         if (command) {
             var properties = _.extend({ name : command }, this.model.get('properties'));

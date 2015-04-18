@@ -36,11 +36,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
 
-            if (response == null)
-            {
-                throw new DownloadClientException("Failed to add nzb {0}", filename);
-            }
-
             return response;
         }
 
@@ -48,6 +43,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             NzbgetGlobalStatus globalStatus;
             List<NzbgetQueueItem> queue;
+            Dictionary<Int32, NzbgetPostQueueItem> postQueue;
 
             try
             {
@@ -258,9 +254,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             try
             {
-                var version = _proxy.GetVersion(Settings).Split('-')[0];
+                var version = _proxy.GetVersion(Settings);
 
-                if (Version.Parse(version) < Version.Parse("12.0"))
+                if (!version.Contains('-') && Version.Parse(version) < Version.Parse("12.0"))
                 {
                     return new ValidationFailure(string.Empty, "Nzbget version too low, need 12.0 or higher");
                 }

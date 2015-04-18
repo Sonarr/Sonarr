@@ -9,7 +9,6 @@ using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.Download.Clients;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -269,6 +268,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             items.First().Status.Should().Be(DownloadItemStatus.Failed);
         }
 
+
         [Test]
         public void Download_should_return_unique_id()
         {
@@ -279,16 +279,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var id = Subject.Download(remoteEpisode);
 
             id.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public void Download_should_throw_if_failed()
-        {
-            GivenFailedDownload();
-
-            var remoteEpisode = CreateRemoteEpisode();
-
-            Assert.Throws<DownloadClientException>(() => Subject.Download(remoteEpisode));
         }
 
         [Test]
@@ -343,19 +333,40 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             result.OutputPath.Should().Be(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
         }
 
-        [TestCase("11.0", false)]
-        [TestCase("12.0", true)]
-        [TestCase("11.0-b30ef0134", false)]
-        [TestCase("13.0-b30ef0134", true)]
-        public void should_test_version(string version, bool expected)
+        [Test]
+        public void should_pass_test_if_version_high_enough()
         {
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
-                .Returns(version);
+                .Returns("12.0");
 
             var error = Subject.Test();
 
-            error.IsValid.Should().Be(expected);
+            error.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_fail_test_if_version_too_low()
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns("11.0");
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_ignore_version_test_if_development_version()
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns("12.0-dev");
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().BeTrue();
         }
     }
 }

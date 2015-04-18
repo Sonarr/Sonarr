@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Notifications
         {
             get
             {
-                return OnGrab || OnDownload || (OnDownload && OnUpgrade);
+                return OnGrab || (OnDownload && OnUpgrade);
             }
         }
     }

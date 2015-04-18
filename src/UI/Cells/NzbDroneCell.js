@@ -33,10 +33,6 @@ module.exports = Backgrid.Cell.extend({
             if (cellValue === 'this') {
                 return this.model;
             }
-
-            else {
-                return this.model.get(cellValue);
-            }
         }
 
         var name = this.column.get('name');

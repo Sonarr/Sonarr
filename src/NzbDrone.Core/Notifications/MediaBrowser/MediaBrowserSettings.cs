@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
     {
         public MediaBrowserSettingsValidator()
         {
-            RuleFor(c => c.Host).ValidHost();
+            RuleFor(c => c.Host).NotEmpty();
             RuleFor(c => c.ApiKey).NotEmpty();
         }
     }
