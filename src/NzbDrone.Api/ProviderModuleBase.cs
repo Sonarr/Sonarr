@@ -76,7 +76,10 @@ namespace NzbDrone.Api
         {
             var providerDefinition = GetDefinition(providerResource, false);
 
-            Test(providerDefinition, false);
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition, false);
+            }
 
             providerDefinition = _providerFactory.Create(providerDefinition);
 
@@ -87,7 +90,10 @@ namespace NzbDrone.Api
         {
             var providerDefinition = GetDefinition(providerResource, false);
 
-            Test(providerDefinition, false);
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition, false);
+            }
 
             _providerFactory.Update(providerDefinition);
         }
@@ -166,8 +172,6 @@ namespace NzbDrone.Api
 
         protected virtual void Test(TProviderDefinition definition, bool includeWarnings)
         {
-            if (!definition.Enable) return;
-
             var validationResult = _providerFactory.Test(definition);
 
             VerifyValidationResult(validationResult, includeWarnings);
