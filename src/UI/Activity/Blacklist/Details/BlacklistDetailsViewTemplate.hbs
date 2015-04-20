@@ -1,0 +1,23 @@
+<dl class="dl-horizontal info">
+
+    <dt>Name:</dt>
+    <dd>{{sourceTitle}}</dd>
+
+    {{#if protocol}}
+    {{#unless_eq protocol compare="unknown"}}
+    <dt>Protocol:</dt>
+    <dd>{{protocol}}</dd>
+    {{/unless_eq}}
+    {{/if}}
+
+    {{#if indexer}}
+    <dt>Indexer:</dt>
+    <dd>{{indexer}}</dd>
+    {{/if}}
+
+
+    {{#if message}}
+    <dt>Message:</dt>
+    <dd>{{message}}</dd>
+    {{/if}}
+</dl>
