@@ -282,6 +282,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("ShowRelativeDates", value); }
         }
 
+        public Boolean EnableColorImpairedMode
+        {
+            get { return GetValueBoolean("EnableColorImpairedMode", false); }
+
+            set { SetValue("EnableColorImpairedMode", value); }
+        }
+
         public bool CleanupMetadataImages
         {
             get { return GetValueBoolean("CleanupMetadataImages", true); }

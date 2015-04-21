@@ -3,6 +3,7 @@
 @import "../Content/Bootstrap/buttons";
 @import "../Shared/Styles/clickable";
 @import "../Content/variables";
+@import "../Content/mixins";
 @import "../Content/Overrides/bootstrap";
 
 .calendar {
@@ -147,6 +148,8 @@
   .primary {
     border-color     : @btn-primary-bg;
     background-color : @btn-primary-bg;
+
+    .color-impaired-background-gradient(90deg, @btn-primary-bg);
   }
 
   .info {
@@ -162,11 +165,15 @@
   .warning {
     border-color     : @btn-warning-bg;
     background-color : @btn-warning-bg;
+
+    .color-impaired-background-gradient(90deg, @btn-warning-bg);
   }
 
   .danger {
     border-color     : @btn-danger-bg;
     background-color : @btn-danger-bg;
+
+    .color-impaired-background-gradient(90deg, @btn-danger-bg);
   }
 
   .success {
@@ -187,11 +194,15 @@
   .premiere {
     border-color     : @droneTeal;
     background-color : @droneTeal;
+
+    .color-impaired-background-gradient(90deg, @droneTeal);
   }
 
   .unmonitored {
     border-color     : grey;
     background-color : grey;
+
+    .color-impaired-background-gradient(45deg, grey);
   }
 
   .chart {
