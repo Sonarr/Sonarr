@@ -114,6 +114,12 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
                         foreach (var sceneMapping in mappings)
                         {
+                            if (sceneMapping.ParseTerm.IsNullOrWhiteSpace() ||
+                                sceneMapping.SearchTerm.IsNullOrWhiteSpace())
+                            {
+                                _logger.Warn("Invalid scene mapping found for: {0}, skipping", sceneMapping.TvdbId);
+                            }
+
                             sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
                             sceneMapping.Type = sceneMappingProvider.GetType().Name;
                         }

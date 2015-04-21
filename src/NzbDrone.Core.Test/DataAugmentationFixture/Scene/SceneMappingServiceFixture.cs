@@ -10,6 +10,7 @@ using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using FluentAssertions;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 {
@@ -132,6 +133,48 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
+        }
+
+        [Test]
+        public void should_not_add_mapping_with_blank_parse_title()
+        {
+            GivenProviders(new[] { _provider1 });
+
+            var fakeMappings = Builder<SceneMapping>.CreateListOfSize(2)
+                                                    .TheLast(1)
+                                                    .With(m => m.ParseTerm = null)
+                                                    .Build()
+                                                    .ToList();
+
+            _provider1.Setup(s => s.GetSceneMappings()).Returns(fakeMappings);
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+
+            Subject.Execute(new UpdateSceneMappingCommand());
+
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.ParseTerm.IsNullOrWhiteSpace()))), Times.Once());
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_not_add_mapping_with_blank_search_title()
+        {
+            GivenProviders(new[] { _provider1 });
+
+            var fakeMappings = Builder<SceneMapping>.CreateListOfSize(2)
+                                                    .TheLast(1)
+                                                    .With(m => m.SearchTerm = null)
+                                                    .Build()
+                                                    .ToList();
+
+            _provider1.Setup(s => s.GetSceneMappings()).Returns(fakeMappings);
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+
+            Subject.Execute(new UpdateSceneMappingCommand());
+
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s. SearchTerm.IsNullOrWhiteSpace()))), Times.Once());
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         private void AssertNoUpdate()
