@@ -112,14 +112,20 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                     {
                         _repository.Clear(sceneMappingProvider.GetType().Name);
 
-                        foreach (var sceneMapping in mappings)
+                        mappings.RemoveAll(sceneMapping =>
                         {
                             if (sceneMapping.ParseTerm.IsNullOrWhiteSpace() ||
                                 sceneMapping.SearchTerm.IsNullOrWhiteSpace())
                             {
                                 _logger.Warn("Invalid scene mapping found for: {0}, skipping", sceneMapping.TvdbId);
+                                return true;
                             }
 
+                            return false;
+                        });
+
+                        foreach (var sceneMapping in mappings)
+                        {
                             sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
                             sceneMapping.Type = sceneMappingProvider.GetType().Name;
                         }
