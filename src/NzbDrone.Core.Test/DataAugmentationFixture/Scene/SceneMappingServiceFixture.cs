@@ -136,13 +136,13 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
         }
 
         [Test]
-        public void should_not_add_mapping_with_blank_parse_title()
+        public void should_not_add_mapping_with_blank_title()
         {
             GivenProviders(new[] { _provider1 });
 
             var fakeMappings = Builder<SceneMapping>.CreateListOfSize(2)
                                                     .TheLast(1)
-                                                    .With(m => m.ParseTerm = null)
+                                                    .With(m => m.Title = null)
                                                     .Build()
                                                     .ToList();
 
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.ParseTerm.IsNullOrWhiteSpace()))), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.Title.IsNullOrWhiteSpace()))), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }
 

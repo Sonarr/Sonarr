@@ -114,7 +114,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
                         mappings.RemoveAll(sceneMapping =>
                         {
-                            if (sceneMapping.ParseTerm.IsNullOrWhiteSpace() ||
+                            if (sceneMapping.Title.IsNullOrWhiteSpace() ||
                                 sceneMapping.SearchTerm.IsNullOrWhiteSpace())
                             {
                                 _logger.Warn("Invalid scene mapping found for: {0}, skipping", sceneMapping.TvdbId);
