@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Indexers.HDBits
         private IEnumerable<IndexerRequest> GetRequest(TorrentQuery query)
         {
             var builder = new HttpRequestBuilder(Settings.BaseUrl);
-            var request = builder.Build("/torrents");
+            var request = builder.Build("/api/torrents");
 
             request.Method = HttpMethod.POST;
             const string appJson = "application/json";

@@ -12,11 +12,11 @@ namespace NzbDrone.Core.Indexers.HDBits
 {
     public class HdBitsParser : IParseIndexerResponse
     {
-        private readonly string _apiKey;
+        private readonly HdBitsSettings _settings;
 
-        public HdBitsParser(string apiKey)
+        public HdBitsParser(HdBitsSettings settings)
         {
-            _apiKey = apiKey;
+            _settings = settings;
         }
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Indexers.HDBits
                 var id = result.Id;
                 torrentInfos.Add(new TorrentInfo()
                 {
-                    Guid = string.Format("HDB-{0}", id),
+                    Guid = string.Format("HDBits-{0}", id),
                     Title = result.Name,
                     Size = result.Size,
                     DownloadUrl = GetDownloadUrl(id),
@@ -75,9 +75,9 @@ namespace NzbDrone.Core.Indexers.HDBits
         {
             var args = new NameValueCollection(2);
             args["id"] = torrentId.ToString();
-            args["passkey"] = _apiKey;
+            args["passkey"] = _settings.ApiKey;
 
-            return BuildUrl("https://hdbits.org/download.php", args);
+            return BuildUrl("/download.php", args);
         }
 
         private string GetInfoUrl(long torrentId)
@@ -85,13 +85,14 @@ namespace NzbDrone.Core.Indexers.HDBits
             var args = new NameValueCollection(1);
             args["id"] = torrentId.ToString();
 
-            return BuildUrl("https://hdbits.org/details.php", args);
+            return BuildUrl("/details.php", args);
 
         }
         
-        private string BuildUrl(string urlBase, NameValueCollection args)
+        private string BuildUrl(string path, NameValueCollection args)
         {
-            var builder = new UriBuilder(urlBase);
+            var builder = new UriBuilder(_settings.BaseUrl);
+            builder.Path = path;
             var queryString = HttpUtility.ParseQueryString("");
 
             queryString.Add(args);

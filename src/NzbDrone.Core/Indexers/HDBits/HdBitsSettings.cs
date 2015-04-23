@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         public HdBitsSettings()
         {
-            BaseUrl = "https://hdbits.org/api";
+            BaseUrl = "https://hdbits.org";
         }
 
         [FieldDefinition(0, Label = "Username")]

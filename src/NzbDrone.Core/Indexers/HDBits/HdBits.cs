@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         public override IParseIndexerResponse GetParser()
         {
-            return new HdBitsParser(Settings.ApiKey);
+            return new HdBitsParser(Settings);
         }
     }
 }

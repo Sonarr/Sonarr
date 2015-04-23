@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Indexers.HDBits
         public string FileName { get; set; }
 
         [JsonProperty(PropertyName = "freeleech")]
-        public string FreeLeach { get; set; }
+        public string FreeLeech { get; set; }
 
         [JsonProperty(PropertyName = "type_category")]
         public int TypeCategory { get; set; }

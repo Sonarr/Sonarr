@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.IndexerTests.HdBitsTests
 
             var first = torrents.First() as TorrentInfo;
 
-            first.Guid.Should().Be("HDB-257142");
+            first.Guid.Should().Be("HDBits-257142");
             first.Title.Should().Be("Supernatural S10E17 1080p WEB-DL DD5.1 H.264-ECI");
             first.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             first.DownloadUrl.Should().Be("https://hdbits.org/download.php?id=257142&passkey=fakekey");
