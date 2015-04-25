@@ -7,7 +7,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
@@ -172,6 +171,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
 
             return historyItems;
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "SABnzb";
+            }
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()

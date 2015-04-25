@@ -55,6 +55,14 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
             return hash;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Torrent Blackhole";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             foreach (var folder in _diskProvider.GetDirectories(Settings.WatchFolder))

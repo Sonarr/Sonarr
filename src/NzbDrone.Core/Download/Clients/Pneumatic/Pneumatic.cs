@@ -28,6 +28,14 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             _httpClient = httpClient;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Pneumatic";
+            }
+        }
+
         public override DownloadProtocol Protocol
         {
             get

@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Configuration;
 using NLog;
 using FluentValidation.Results;
@@ -72,6 +71,14 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             var destDir = (String)config.GetValueOrDefault("download-dir");
 
             return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "Transmission";
+            }
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()

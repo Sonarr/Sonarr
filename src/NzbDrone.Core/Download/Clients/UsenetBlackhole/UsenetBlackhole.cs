@@ -48,6 +48,14 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
             return null;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Usenet Blackhole";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             foreach (var folder in _diskProvider.GetDirectories(Settings.WatchFolder))

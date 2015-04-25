@@ -20,13 +20,7 @@ namespace NzbDrone.Core.Download
         protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
 
-        public string Name
-        {
-            get
-            {
-                return GetType().Name;
-            }
-        }
+        public abstract string Name { get; }
 
         public Type ConfigContract
         {

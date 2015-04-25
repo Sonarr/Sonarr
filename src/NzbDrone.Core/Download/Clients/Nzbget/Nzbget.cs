@@ -187,6 +187,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return historyItems;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "nzbget";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             return GetQueue().Concat(GetHistory()).Where(downloadClientItem => downloadClientItem.Category == Settings.TvCategory);

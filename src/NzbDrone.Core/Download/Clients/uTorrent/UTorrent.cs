@@ -63,6 +63,14 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return hash;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "uTorrent";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {            
             List<UTorrentTorrent> torrents;

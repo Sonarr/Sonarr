@@ -75,6 +75,14 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return actualHash.ToUpper();
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Deluge";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             IEnumerable<DelugeTorrent> torrents;
