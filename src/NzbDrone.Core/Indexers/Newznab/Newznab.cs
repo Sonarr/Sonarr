@@ -11,6 +11,14 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : HttpIndexerBase<NewznabSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "Newznab";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
         public override Int32 PageSize { get { return 100; } }
 

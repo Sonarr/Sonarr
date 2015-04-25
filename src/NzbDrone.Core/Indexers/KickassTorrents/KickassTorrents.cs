@@ -8,6 +8,14 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 {
     public class KickassTorrents : HttpIndexerBase<KickassTorrentsSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "Kickass Torrents";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Int32 PageSize { get { return 25; } }
 
