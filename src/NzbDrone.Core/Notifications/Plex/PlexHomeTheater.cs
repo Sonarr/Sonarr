@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Notifications.Xbmc
+namespace NzbDrone.Core.Notifications.Plex
 {
-    public class Xbmc : NotificationBase<XbmcSettings>
+    public class PlexHomeTheater : NotificationBase<PlexHomeTheaterSettings>
     {
         private readonly IXbmcService _xbmcService;
         private readonly Logger _logger;
 
-        public Xbmc(IXbmcService xbmcService, Logger logger)
+        public PlexHomeTheater(IXbmcService xbmcService, Logger logger)
         {
             _xbmcService = xbmcService;
             _logger = logger;
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public override string Link
         {
-            get { return "http://xbmc.org/"; }
+            get { return "https://plex.tv/"; }
         }
 
         public override void OnGrab(string message)
@@ -37,19 +37,18 @@ namespace NzbDrone.Core.Notifications.Xbmc
             const string header = "Sonarr - Downloaded";
 
             Notify(Settings, header, message.Message);
-            UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
         public override void AfterRename(Series series)
         {
-            UpdateAndClean(series);
+            
         }
 
         public override string Name
         {
             get
             {
-                return "Kodi (XBMC)";
+                return "Plex Home Theater";
             }
         }
 
@@ -57,7 +56,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(_xbmcService.Test(Settings, "Success! XBMC has been successfully configured!"));
+            failures.AddIfNotNull(_xbmcService.Test(Settings, "Success! PHT has been successfully configured!"));
 
             return new ValidationResult(failures);
         }
@@ -73,28 +72,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
             catch (SocketException ex)
             {
-                var logMessage = String.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
-                _logger.DebugException(logMessage, ex);
-            }
-        }
-
-        private void UpdateAndClean(Series series, bool clean = true)
-        {
-            try
-            {
-                if (Settings.UpdateLibrary)
-                {
-                    _xbmcService.Update(Settings, series);
-                }
-
-                if (clean && Settings.CleanLibrary)
-                {
-                    _xbmcService.Clean(Settings);
-                }
-            }
-            catch (SocketException ex)
-            {
-                var logMessage = String.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
+                var logMessage = String.Format("Unable to connect to PHT Host: {0}:{1}", Settings.Host, Settings.Port);
                 _logger.DebugException(logMessage, ex);
             }
         }

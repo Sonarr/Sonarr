@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Indexers;
@@ -20,6 +19,14 @@ namespace NzbDrone.Core.Download
         protected readonly IDiskProvider _diskProvider;
         protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
+
+        public string Name
+        {
+            get
+            {
+                return GetType().Name;
+            }
+        }
 
         public Type ConfigContract
         {

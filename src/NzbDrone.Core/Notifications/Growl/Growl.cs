@@ -37,6 +37,14 @@ namespace NzbDrone.Core.Notifications.Growl
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Growl";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

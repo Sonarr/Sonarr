@@ -6,6 +6,7 @@ namespace NzbDrone.Core.ThingiProvider
 {
     public interface IProvider
     {
+        string Name { get; }
         Type ConfigContract { get; }
 
         IEnumerable<ProviderDefinition> DefaultDefinitions { get; }

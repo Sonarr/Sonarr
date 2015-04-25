@@ -53,6 +53,14 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Synology Indexer";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

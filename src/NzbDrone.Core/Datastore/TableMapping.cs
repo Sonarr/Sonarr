@@ -45,18 +45,18 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<Config>().RegisterModel("Config");
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
+            Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
 
-            Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers")
+            Mapper.Entity<IndexerDefinition>().RegisterDefinition("Indexers")
                   .Ignore(i => i.Enable)
                   .Ignore(i => i.Protocol)
                   .Ignore(i => i.SupportsRss)
                   .Ignore(i => i.SupportsSearch);
 
-            Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
-            Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
-            Mapper.Entity<MetadataDefinition>().RegisterModel("Metadata");
+            Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications");
+            Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
 
-            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients")
+            Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
                   .Ignore(d => d.Protocol);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");

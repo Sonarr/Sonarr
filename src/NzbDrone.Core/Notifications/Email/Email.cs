@@ -40,6 +40,14 @@ namespace NzbDrone.Core.Notifications.Email
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Email";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

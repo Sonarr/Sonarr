@@ -38,6 +38,14 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Notify My Android";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -55,9 +55,9 @@ namespace NzbDrone.Api
 
         private List<TProviderResource> GetAll()
         {
-            var providerDefinitions = _providerFactory.All();
+            var providerDefinitions = _providerFactory.All().OrderBy(p => p.ImplementationName);
 
-            var result = new List<TProviderResource>(providerDefinitions.Count);
+            var result = new List<TProviderResource>(providerDefinitions.Count());
 
             foreach (var definition in providerDefinitions)
             {
@@ -124,7 +124,7 @@ namespace NzbDrone.Api
 
         private Response GetTemplates()
         {
-            var defaultDefinitions = _providerFactory.GetDefaultDefinitions().ToList();
+            var defaultDefinitions = _providerFactory.GetDefaultDefinitions().OrderBy(p => p.ImplementationName).ToList();
 
             var result = new List<TProviderResource>(defaultDefinitions.Count());
 

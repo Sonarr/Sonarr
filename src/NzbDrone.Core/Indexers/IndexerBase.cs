@@ -19,6 +19,14 @@ namespace NzbDrone.Core.Indexers
         protected readonly IParsingService _parsingService;
         protected readonly Logger _logger;
 
+        public string Name
+        {
+            get
+            {
+                return GetType().Name;
+            }
+        }
+
         public abstract DownloadProtocol Protocol { get; }
 
         public abstract Boolean SupportsRss { get; }
