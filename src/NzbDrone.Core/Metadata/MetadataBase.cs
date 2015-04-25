@@ -10,13 +10,7 @@ namespace NzbDrone.Core.Metadata
 {
     public abstract class MetadataBase<TSettings> : IMetadata where TSettings : IProviderConfig, new()
     {
-        public string Name
-        {
-            get
-            {
-                return GetType().Name;
-            }
-        }
+        public abstract string Name { get; }
 
         public Type ConfigContract
         {

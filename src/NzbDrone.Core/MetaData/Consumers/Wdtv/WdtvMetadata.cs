@@ -33,6 +33,14 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
 
         private static readonly Regex SeasonImagesRegex = new Regex(@"^(season (?<season>\d+))|(?<specials>specials)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        public override string Name
+        {
+            get
+            {
+                return "WDTV";
+            }
+        }
+
         public override List<MetadataFile> AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles)
         {
             var episodeFilesMetadata = existingMetadataFiles.Where(c => c.EpisodeFileId > 0).ToList();
