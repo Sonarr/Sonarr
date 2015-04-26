@@ -1,6 +1,5 @@
 using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -35,9 +34,9 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
         [FieldDefinition(2, Advanced = true, Label = "Valid Size Threshold (MB)", HelpText = "Threshold of Parsed Torrent Size to consider it valid")]
         public int ValidSizeThresholdMegabytes { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(validator.Validate(this));
         }
     }
 }

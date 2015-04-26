@@ -1,4 +1,5 @@
 ﻿using Moq;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
@@ -15,6 +16,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
     [TestFixture]
     public class TorrentRssIndexerFixture : CoreTest<TestTorrentRssIndexer>
     {
+        private readonly Logger _logger  = LogManager.GetCurrentClassLogger();
+
         [SetUp]
         public void Setup()
         {
@@ -38,16 +41,16 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
-            
+
             Subject.TestPublic().Should().BeEmpty();
         }
 
-        [TestCase("https://www.ezrss.it/", "Eztv_InvalidSize.xml")]
-        [TestCase("https://www.ezrss.it/", "Eztv_InvalidTitles.xml")]
-        [TestCase("https://www.ezrss.it/", "Eztv_InvalidDownloadUrl.xml")]
+        [TestCase("https://www.ezrss.it/1", "Eztv_InvalidSize.xml")]
+        [TestCase("https://www.ezrss.it/2", "Eztv_InvalidTitles.xml")]
+        [TestCase("https://www.ezrss.it/3", "Eztv_InvalidDownloadUrl.xml")]
         [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed_InvalidSize.xml")]
-        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed_InvalidTitles.xml")]
-        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8", "ImmortalSeed_InvalidDownloadUrl.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=9", "ImmortalSeed_InvalidTitles.xml")]
+        [TestCase("https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=10", "ImmortalSeed_InvalidDownloadUrl.xml")]
         public void should_reject_recent_feed(string baseUrl, string rssXmlFile)
         {
             Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = baseUrl };
@@ -66,14 +69,16 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         public void should_parse_recent_feed_from_ImmortalSeed()
         {
             Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = "https://immortalseed.me/rss.php?secret_key=12345678910&feedtype=download&timezone=-12&showrows=50&categories=8" };
-            Subject.ParserSettingsTest = new TorrentRssIndexerParserSettings { UseEZTVFormat = false, ParseSeedersInDescription = true, ParseSizeInDescription = true };
-
+            
             var recentFeed = ReadAllText(@"Files/RSS/ImmortalSeed.xml");
+
+            _logger.Debug("Feed: [{0}]", recentFeed);
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
+            _logger.Trace("Test");
             var releases = Subject.FetchRecent();
 
             releases.Should().HaveCount(50);
@@ -99,7 +104,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         public void should_parse_recent_feed_from_Eztv()
         {
             Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = "https://www.ezrss.it/", ValidEntryPercentage = 20 };
-            Subject.ParserSettingsTest = new TorrentRssIndexerParserSettings { UseEZTVFormat = true };
 
             var recentFeed = ReadAllText(@"Files/RSS/Eztv.xml");
 
