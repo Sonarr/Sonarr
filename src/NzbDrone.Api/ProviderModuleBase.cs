@@ -69,7 +69,7 @@ namespace NzbDrone.Api
                 result.Add(providerResource);
             }
 
-            return result;
+            return result.OrderBy(p => p.Name).ToList();
         }
 
         private int CreateProvider(TProviderResource providerResource)
