@@ -1,15 +1,19 @@
 var Backbone = require('backbone');
+var PageableCollection = require('backbone.pageable');
 var EpisodeModel = require('./EpisodeModel');
 require('./EpisodeCollection');
 
-module.exports = Backbone.Collection.extend({
+module.exports = PageableCollection.extend({
     url   : window.NzbDrone.ApiRoot + '/episode',
     model : EpisodeModel,
 
     state : {
-        sortKey : 'episodeNumber',
-        order   : 1
+        sortKey  : 'episodeNumber',
+        order    : 1,
+        pageSize : 100000
     },
+
+    mode : 'client',
 
     originalFetch : Backbone.Collection.prototype.fetch,
 

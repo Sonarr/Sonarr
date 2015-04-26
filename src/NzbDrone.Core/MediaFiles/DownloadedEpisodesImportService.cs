@@ -72,20 +72,30 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (_diskProvider.FolderExists(path))
             {
+                var directoryInfo = new DirectoryInfo(path);
+
                 if (series == null)
                 {
-                    return ProcessFolder(new DirectoryInfo(path), downloadClientItem);
+                    return ProcessFolder(directoryInfo, downloadClientItem);
                 }
 
-                return ProcessFolder(new DirectoryInfo(path), series, downloadClientItem);
+                return ProcessFolder(directoryInfo, series, downloadClientItem);
             }
 
-            if (series == null)
+            if (_diskProvider.FileExists(path))
             {
-                return ProcessFile(new FileInfo(path), downloadClientItem);
+                var fileInfo = new FileInfo(path);
+
+                if (series == null)
+                {
+                    return ProcessFile(fileInfo, downloadClientItem);
+                }
+
+                return ProcessFile(fileInfo, series, downloadClientItem);
             }
 
-            return ProcessFile(new FileInfo(path), series, downloadClientItem);
+            _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}", path);
+            return new List<ImportResult>();
         }
 
         private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem = null)
@@ -120,7 +130,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (folderInfo != null)
             {
-                _logger.Debug("{0} folder quality: {1}", cleanedUpName, folderInfo.Quality);                
+                _logger.Debug("{0} folder quality: {1}", cleanedUpName, folderInfo.Quality);
             }
 
             var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
@@ -181,8 +191,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var folderInfo = Parser.Parser.ParseTitle(fileInfo.DirectoryName);
-            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, folderInfo, true);
+            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, null, true);
 
             return _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
         }

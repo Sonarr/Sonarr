@@ -14,7 +14,7 @@ module.exports = Backgrid.Cell.extend({
 
         var self = this;
 
-        this.$el.html('<i class="icon-spinner icon-spin" />');
+        this.$el.html('<i class="icon-sonarr-spinner fa-spin" />');
 
         //Using success callback instead of promise so it
         //gets called before the sync event is triggered
@@ -29,9 +29,9 @@ module.exports = Backgrid.Cell.extend({
         this.$el.empty();
 
         if (this.model.get('queued')) {
-            this.$el.html('<i class="icon-nd-downloading" title="Added to downloaded queue" />');
+            this.$el.html('<i class="icon-sonarr-downloading" title="Added to downloaded queue" />');
         } else if (this.model.get('downloadAllowed')) {
-            this.$el.html('<i class="icon-download-alt" title="Add to download queue" />');
+            this.$el.html('<i class="icon-sonarr-download" title="Add to download queue" />');
         } else {
             this.className = 'no-download-report-cell';
         }

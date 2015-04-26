@@ -45,7 +45,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[DeadFish] Onee-chan ga Kita - 09v2 [720p][AAC]", "Onee-chan ga Kita", 9, 0, 0)]
         [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0]", "No Game No Life", 1, 0, 0)]
         [TestCase("[S-T-D] Soul Eater Not! - 06 (1280x720 10bit AAC) [59B3F2EA].mkv", "Soul Eater Not!", 6, 0, 0)]
-        [TestCase("[Underwater-FFF] No Game No Life - 01 (720p) [27AAA0A0].mkv", "No Game No Life", 1, 0, 0)]
         [TestCase("No Game No Life - 010 (720p) [27AAA0A0].mkv", "No Game No Life", 10, 0, 0)]
         [TestCase("Initial D Fifth Stage - 01 DVD - Central Anime", "Initial D Fifth Stage", 1, 0, 0)]
         [TestCase("Initial_D_Fifth_Stage_-_01(DVD)_-_(Central_Anime)[5AF6F1E4].mkv", "Initial D Fifth Stage", 1, 0, 0)]
@@ -74,7 +73,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Dragon Ball Kai - 130 - Found You, Gohan! Harsh Training in the Kaioshin Realm! [Baaro][720p][5A1AD35B].mkv", "Dragon Ball Kai", 130, 0, 0)]
         [TestCase("Dragon Ball Kai - 131 - A Merged Super-Warrior Is Born, His Name Is Gotenks!! [Baaro][720p][32E03F96].mkv", "Dragon Ball Kai", 131, 0, 0)]
         [TestCase("[HorribleSubs] Magic Kaito 1412 - 01 [1080p]", "Magic Kaito 1412", 1, 0, 0)]
+        [TestCase("[Jumonji-Giri]_[F-B]_Kagihime_Monogatari_Eikyuu_Alice_Rondo_Ep04_(0b0e2c10).mkv", "Kagihime Monogatari Eikyuu Alice Rondo", 4, 0, 0)]
+        [TestCase("[Jumonji-Giri]_[F-B]_Kagihime_Monogatari_Eikyuu_Alice_Rondo_Ep08_(8246e542).mkv", "Kagihime Monogatari Eikyuu Alice Rondo", 8, 0, 0)]
+        [TestCase("Knights of Sidonia - 01 [1080p 10b DTSHD-MA eng sub].mkv", "Knights of Sidonia", 1, 0, 0)]
         [TestCase("Series Title (2010) {01} Episode Title (1).hdtv-720p", "Series Title (2010)", 1, 0, 0)]
+        [TestCase("[Hatsuyuki] Dragon Ball Kai (2014) - 017 (115) [1280x720][B2CFBC0F]", "Dragon Ball Kai 2014", 17, 0, 0)]
+        [TestCase("[Hatsuyuki] Dragon Ball Kai (2014) - 018 (116) [1280x720][C4A3B16E]", "Dragon Ball Kai 2014", 18, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
@@ -105,7 +109,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[ANBU-AonE]_Naruto_26-27_[F224EF26].avi", "Naruto", new[] { 26, 27 })]
         [TestCase("[Doutei] Recently, My Sister is Unusual - 01-12 [BD][720p-AAC]", "Recently, My Sister is Unusual", new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 })]
         [TestCase("Series Title (2010) - 01-02-03 - Episode Title (1) HDTV-720p", "Series Title (2010)", new [] { 1, 2, 3 })]
-        [TestCase("Angel.Beats.Clean.Closings.01-09.Bd.Avc.1080p.Flac.[8E381239]", "Angel Beats Clean Closings", new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 })]
+        [TestCase("[RlsGrp] Series Title (2010) - S01E01-02-03 - 001-002-003 - Episode Title HDTV-720p v2", "Series Title (2010)", new[] { 1, 2, 3 })]
+        [TestCase("[RlsGrp] Series Title (2010) - S01E01-02 - 001-002 - Episode Title HDTV-720p v2", "Series Title (2010)", new[] { 1, 2 })]
         public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

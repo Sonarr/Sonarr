@@ -12,7 +12,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Common.Model;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.Commands;
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             Mocker.GetMock<IVerifyUpdates>().Setup(c => c.Verify(It.IsAny<UpdatePackage>(), It.IsAny<String>())).Returns(false);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             Mocker.GetMock<IArchiveService>().Verify(v => v.Extract(It.IsAny<String>(), It.IsAny<String>()), Times.Never());
         }
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             GivenInstallScript("");
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             ExceptionVerification.ExpectedErrors(1);
             Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Never());
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             GivenInstallScript(null);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             ExceptionVerification.ExpectedErrors(1);
             Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Never());
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.UpdateTests
                   .Setup(s => s.FileExists(scriptPath, StringComparison.Ordinal))
                   .Returns(false);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             ExceptionVerification.ExpectedErrors(1);
             Mocker.GetMock<IProcessProvider>().Verify(v => v.Start(scriptPath, It.IsAny<String>(), null, null), Times.Never());
@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.StartUpFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone\AppData".AsOsAgnostic);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
             ExceptionVerification.ExpectedErrors(1);
         }
 
@@ -265,7 +265,7 @@ namespace NzbDrone.Core.Test.UpdateTests
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.StartUpFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
             Mocker.GetMock<IAppFolderInfo>().SetupGet(c => c.AppDataFolder).Returns(@"C:\NzbDrone".AsOsAgnostic);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
             ExceptionVerification.ExpectedErrors(1);
         }
 
@@ -278,7 +278,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
             ExceptionVerification.ExpectedErrors(1);
@@ -293,7 +293,7 @@ namespace NzbDrone.Core.Test.UpdateTests
 
             var updateArchive = Path.Combine(_sandboxFolder, _updatePackage.FileName);
 
-            Subject.Execute(new ApplicationUpdateCommand());
+            Assert.Throws<CommandFailedException>(() => Subject.Execute(new ApplicationUpdateCommand()));
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_updatePackage.Url, updateArchive), Times.Never());
             ExceptionVerification.ExpectedErrors(1);

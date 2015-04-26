@@ -69,7 +69,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 if (runTime.TotalSeconds < minimumRuntime)
                 {
-                    _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {1} seconds", path, runTime, minimumRuntime);
+                    _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, runTime, minimumRuntime);
                     return true;
                 }
             }

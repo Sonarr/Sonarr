@@ -17,7 +17,7 @@ module.exports = Backgrid.Cell.extend({
         this.templateFunction = Marionette.TemplateCache.get(this.template);
 
         var html = this.templateFunction(rejections);
-        this.$el.html('<i class="icon-exclamation-sign"/>');
+        this.$el.html('<i class="icon-sonarr-form-danger"/>');
 
         this.$el.popover({
             content   : html,

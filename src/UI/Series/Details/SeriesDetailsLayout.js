@@ -12,6 +12,7 @@ var SeasonCollectionView = require('./SeasonCollectionView');
 var InfoView = require('./InfoView');
 var CommandController = require('../../Commands/CommandController');
 var LoadingView = require('../../Shared/LoadingView');
+var EpisodeFileEditorLayout = require('../../EpisodeFile/Editor/EpisodeFileEditorLayout');
 require('backstrech');
 require('../../Mixins/backbone.signalr.mixin');
 
@@ -34,11 +35,12 @@ module.exports = Marionette.Layout.extend({
     },
 
     events : {
-        'click .x-monitored' : '_toggleMonitored',
-        'click .x-edit'      : '_editSeries',
-        'click .x-refresh'   : '_refreshSeries',
-        'click .x-rename'    : '_renameSeries',
-        'click .x-search'    : '_seriesSearch'
+        'click .x-episode-file-editor' : '_openEpisodeFileEditor',
+        'click .x-monitored'           : '_toggleMonitored',
+        'click .x-edit'                : '_editSeries',
+        'click .x-refresh'             : '_refreshSeries',
+        'click .x-rename'              : '_renameSeries',
+        'click .x-search'              : '_seriesSearch'
     },
 
     initialize : function() {
@@ -127,12 +129,12 @@ module.exports = Marionette.Layout.extend({
         this.ui.monitored.removeAttr('data-idle-icon');
 
         if (monitored) {
-            this.ui.monitored.addClass('icon-nd-monitored');
-            this.ui.monitored.removeClass('icon-nd-unmonitored');
+            this.ui.monitored.addClass('icon-sonarr-monitored');
+            this.ui.monitored.removeClass('icon-sonarr-unmonitored');
             this.$el.removeClass('series-not-monitored');
         } else {
-            this.ui.monitored.addClass('icon-nd-unmonitored');
-            this.ui.monitored.removeClass('icon-nd-monitored');
+            this.ui.monitored.addClass('icon-sonarr-unmonitored');
+            this.ui.monitored.removeClass('icon-sonarr-monitored');
             this.$el.addClass('series-not-monitored');
         }
     },
@@ -219,5 +221,14 @@ module.exports = Marionette.Layout.extend({
 
         this._setMonitoredState();
         this._showInfo();
+    },
+
+    _openEpisodeFileEditor : function() {
+        var view = new EpisodeFileEditorLayout({
+            series            : this.model,
+            episodeCollection : this.episodeCollection
+        });
+
+        vent.trigger(vent.Commands.OpenModalCommand, view);
     }
 });

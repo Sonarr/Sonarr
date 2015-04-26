@@ -116,8 +116,9 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (IDbCommand updateCmd = conn.CreateCommand())
                 {
                     updateCmd.Transaction = tran;
-                    updateCmd.CommandText = String.Format(@"UPDATE {0} SET Tags = ?", table);
+                    updateCmd.CommandText = String.Format(@"UPDATE {0} SET Tags = ? WHERE Id = ?", table);
                     updateCmd.AddParameter(model.Tags.ToJson());
+                    updateCmd.AddParameter(model.Id);
 
                     updateCmd.ExecuteNonQuery();
                 }

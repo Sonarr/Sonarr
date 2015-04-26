@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Core.Datastore;
+﻿using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.ThingiProvider
 {
@@ -7,10 +6,11 @@ namespace NzbDrone.Core.ThingiProvider
     {
         private IProviderConfig _settings;
 
-        public String Name { get; set; }
-        public String Implementation { get; set; }
-        public String ConfigContract { get; set; }
-        public virtual Boolean Enable { get; set; }
+        public string Name { get; set; }
+        public string ImplementationName { get; set; }
+        public string Implementation { get; set; }
+        public string ConfigContract { get; set; }
+        public virtual bool Enable { get; set; }
 
         public IProviderConfig Settings
         {

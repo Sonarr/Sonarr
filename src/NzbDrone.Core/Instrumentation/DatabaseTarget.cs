@@ -5,6 +5,7 @@ using NLog.Common;
 using NLog.Config;
 using NLog;
 using NLog.Targets;
+using NLog.Targets.Wrappers;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
@@ -12,7 +13,6 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation
 {
-
     public class DatabaseTarget : TargetWithLayout, IHandle<ApplicationShutdownRequested>
     {
         private readonly SQLiteConnection _connection;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Instrumentation
         {
             Rule = new LoggingRule("*", LogLevel.Info, this);
 
-            LogManager.Configuration.AddTarget("DbLogger", this);
+            LogManager.Configuration.AddTarget("DbLogger", new AsyncTargetWrapper(this));
             LogManager.Configuration.LoggingRules.Add(Rule);
             LogManager.ConfigurationReloaded += OnLogManagerOnConfigurationReloaded;
             LogManager.ReconfigExistingLoggers();

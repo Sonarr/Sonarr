@@ -32,6 +32,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
                 return Decision.Reject("Wrong season");
             }
 
+            if (!remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers.Any())
+            {
+                _logger.Debug("Full season result during single episode search, skipping.");
+                return Decision.Reject("Full season pack");
+            }
+
             if (!remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers.Contains(singleEpisodeSpec.EpisodeNumber))
             {
                 _logger.Debug("Episode number does not match searched episode number, skipping.");

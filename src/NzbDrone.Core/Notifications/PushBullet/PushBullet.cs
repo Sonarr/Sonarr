@@ -37,6 +37,14 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Pushbullet";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

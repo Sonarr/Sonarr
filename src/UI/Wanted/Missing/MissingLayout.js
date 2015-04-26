@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var _ = require('underscore');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
@@ -25,7 +26,7 @@ module.exports = Marionette.Layout.extend({
     },
 
     ui : {
-        searchSelectedButton : '.btn i.icon-search'
+        searchSelectedButton : '.btn i.icon-sonarr-search'
     },
 
     columns : [
@@ -101,26 +102,34 @@ module.exports = Marionette.Layout.extend({
             items      : [
                 {
                     title        : 'Search Selected',
-                    icon         : 'icon-search',
+                    icon         : 'icon-sonarr-search',
                     callback     : this._searchSelected,
                     ownerContext : this,
                     className    : 'x-search-selected'
                 },
                 {
                     title        : 'Search All Missing',
-                    icon         : 'icon-search',
+                    icon         : 'icon-sonarr-search',
                     callback     : this._searchMissing,
                     ownerContext : this,
                     className    : 'x-search-missing'
                 },
                 {
+                    title        : 'Toggle Selected',
+                    icon         : 'icon-sonarr-monitored',
+                    tooltip      : 'Toggle monitored status of selected',
+                    callback     : this._toggleMonitoredOfSelected,
+                    ownerContext : this,
+                    className    : 'x-unmonitor-selected'
+                },
+                {
                     title : 'Season Pass',
-                    icon  : 'icon-bookmark',
+                    icon  : 'icon-sonarr-monitored',
                     route : 'seasonpass'
                 },
                 {
                     title   : 'Rescan Drone Factory Folder',
-                    icon    : 'icon-refresh',
+                    icon    : 'icon-sonarr-refresh',
                     command : 'downloadedepisodesscan',
 
                     properties : { sendUpdates : true }
@@ -137,14 +146,14 @@ module.exports = Marionette.Layout.extend({
                     key      : 'monitored',
                     title    : '',
                     tooltip  : 'Monitored Only',
-                    icon     : 'icon-nd-monitored',
+                    icon     : 'icon-sonarr-monitored',
                     callback : this._setFilter
                 },
                 {
                     key      : 'unmonitored',
                     title    : '',
                     tooltip  : 'Unmonitored Only',
-                    icon     : 'icon-nd-unmonitored',
+                    icon     : 'icon-sonarr-unmonitored',
                     callback : this._setFilter
                 }
             ]
@@ -191,5 +200,28 @@ module.exports = Marionette.Layout.extend({
                            'One API request to each indexer will be used for each episode. ' + 'This cannot be stopped once started.')) {
             CommandController.Execute('missingEpisodeSearch', { name : 'missingEpisodeSearch' });
         }
+    },
+    _toggleMonitoredOfSelected : function() {
+        var selected = this.missingGrid.getSelectedModels();
+
+        if (selected.length === 0) {
+            Messenger.show({
+                type    : 'error',
+                message : 'No episodes selected'
+            });
+            return;
+        }
+
+        var promises = [];
+        var self = this;
+
+        _.each(selected, function (episode) {
+            episode.set('monitored', !episode.get('monitored'));
+            promises.push(episode.save());
+        });
+
+        $.when(promises).done(function () {
+            self.collection.fetch();
+        });
     }
 });

@@ -129,6 +129,8 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
         [Test]
         public void eztv_fetch_recent()
         {
+            Assert.Inconclusive("Eztv Down");
+
             var indexer = Mocker.Resolve<Eztv>();
 
             indexer.Definition = new IndexerDefinition

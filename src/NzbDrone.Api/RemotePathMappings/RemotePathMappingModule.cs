@@ -11,7 +11,9 @@ namespace NzbDrone.Api.RemotePathMappings
     {
         private readonly IRemotePathMappingService _remotePathMappingService;
 
-        public RemotePathMappingModule(IRemotePathMappingService remotePathMappingService, PathExistsValidator pathExistsValidator)
+        public RemotePathMappingModule(IRemotePathMappingService remotePathMappingService,
+                                       PathExistsValidator pathExistsValidator,
+                                       MappedNetworkDriveValidator mappedNetworkDriveValidator)
         {
             _remotePathMappingService = remotePathMappingService;
 
@@ -31,6 +33,7 @@ namespace NzbDrone.Api.RemotePathMappings
             SharedValidator.RuleFor(c => c.LocalPath)
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
+                           .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator);
         }
 

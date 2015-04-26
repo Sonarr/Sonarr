@@ -30,6 +30,14 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
             _logger = logger;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Emby (Media Browser)";
+            }
+        }
+
         public override List<MetadataFile> AfterRename(Series series, List<MetadataFile> existingMetadataFiles, List<EpisodeFile> episodeFiles)
         {
             var updatedMetadataFiles = new List<MetadataFile>();

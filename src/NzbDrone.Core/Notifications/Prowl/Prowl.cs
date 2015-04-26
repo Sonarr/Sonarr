@@ -38,6 +38,14 @@ namespace NzbDrone.Core.Notifications.Prowl
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Prowl";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

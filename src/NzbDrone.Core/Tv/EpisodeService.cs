@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodes(IEnumerable<Int32> ids);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
-        Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string episodeTitle);
+        Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
         Episode GetEpisode(int seriesId, String date);
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
         void UpdateEpisode(Episode episode);
         void SetEpisodeMonitored(int episodeId, bool monitored);
         void UpdateEpisodes(List<Episode> episodes);
-        List<Episode> EpisodesBetweenDates(DateTime start, DateTime end);
+        List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored);
         void InsertMany(List<Episode> episodes);
         void UpdateMany(List<Episode> episodes);
         void DeleteMany(List<Episode> episodes);
@@ -103,19 +103,30 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
         }
         
-        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string episodeTitle) 
+        public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle) 
         {
             // TODO: can replace this search mechanism with something smarter/faster/better
-            var search = Parser.Parser.NormalizeEpisodeTitle(episodeTitle).Replace(".", " ");
+            var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle).Replace(".", " ");
+            var episodes = _episodeRepository.GetEpisodes(seriesId, seasonNumber);
 
-            return _episodeRepository.GetEpisodes(seriesId, seasonNumber)
-                .FirstOrDefault(e => 
-                {
-                    // normalize episode title
-                    var title = Parser.Parser.NormalizeEpisodeTitle(e.Title);
-                    // find episode title within search string
-                    return (title.Length > 0) && search.Contains(title); 
-                });
+            var matches = episodes.Select(
+                episode => new
+                           {
+                               Position = normalizedReleaseTitle.IndexOf(Parser.Parser.NormalizeEpisodeTitle(episode.Title), StringComparison.CurrentCultureIgnoreCase),
+                               Length = Parser.Parser.NormalizeEpisodeTitle(episode.Title).Length,
+                               Episode = episode
+                           })
+                                .Where(e => e.Episode.Title.Length > 0 && e.Position >= 0)
+                                .OrderBy(e => e.Position)
+                                .ThenByDescending(e => e.Length)
+                                .ToList();
+
+            if (matches.Any())
+            {
+                return matches.First().Episode;
+            }
+
+            return null;
         }
 
         public List<Episode> EpisodesWithFiles(int seriesId)
@@ -158,9 +169,9 @@ namespace NzbDrone.Core.Tv
             _episodeRepository.UpdateMany(episodes);
         }
 
-        public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end)
+        public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored)
         {
-            var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime());
+            var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime(), includeUnmonitored);
 
             return episodes;
         }

@@ -54,5 +54,13 @@ module.exports = {
         }
 
         return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+
+    plural : function(input, unit) {
+        if (input === 1) {
+            return unit;
+        }
+
+        return unit + 's';
     }
 };

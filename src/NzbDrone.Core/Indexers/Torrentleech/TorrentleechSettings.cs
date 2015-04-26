@@ -1,6 +1,5 @@
 using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -18,7 +17,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
     public class TorrentleechSettings : IProviderConfig
     {
-        private static readonly TorrentleechSettingsValidator validator = new TorrentleechSettingsValidator();
+        private static readonly TorrentleechSettingsValidator Validator = new TorrentleechSettingsValidator();
 
         public TorrentleechSettings()
         {
@@ -31,9 +30,9 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         [FieldDefinition(1, Label = "API Key")]
         public String ApiKey { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

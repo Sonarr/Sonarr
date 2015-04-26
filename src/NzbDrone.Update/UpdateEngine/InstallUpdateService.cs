@@ -91,6 +91,12 @@ namespace NzbDrone.Update.UpdateEngine
 
                     _logger.Info("Copying new files to target folder");
                     _diskProvider.CopyFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
+
+                    // Set executable flag on SOnarr app
+                    if (OsInfo.IsOsx)
+                    {
+                        _diskProvider.SetPermissions(Path.Combine(installationFolder, "Sonarr"), "0755", null, null);                        
+                    }
                 }
                 catch (Exception e)
                 {

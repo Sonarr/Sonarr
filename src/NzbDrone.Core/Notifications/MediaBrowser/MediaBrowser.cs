@@ -53,6 +53,14 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             }
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Emby (Media Browser)";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

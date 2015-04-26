@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
@@ -23,10 +24,14 @@ namespace NzbDrone.Common.Http
     {
         private readonly Logger _logger;
 
-        public HttpClient(Logger logger)
+        private readonly ICached<CookieContainer> _cookieContainerCache;
+
+        public HttpClient(ICacheManager cacheManager, Logger logger)
         {
             _logger = logger;
             ServicePointManager.DefaultConnectionLimit = 12;
+
+            _cookieContainerCache = cacheManager.GetCache<CookieContainer>(typeof(HttpClient));
         }
 
         public HttpResponse Execute(HttpRequest request)
@@ -57,6 +62,29 @@ namespace NzbDrone.Common.Http
             if (request.Headers != null)
             {
                 AddRequestHeaders(webRequest, request.Headers);
+            }
+
+            var cookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
+
+            if (request.Cookies.Count != 0)
+            {
+                foreach (var pair in request.Cookies)
+                {
+                    cookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
+                    {
+                        Expires = DateTime.UtcNow.AddHours(1)
+                    });
+                }
+            }
+
+            if (request.StoreResponseCookie)
+            {
+                webRequest.CookieContainer = cookieContainer;
+            }
+            else
+            {
+                webRequest.CookieContainer = new CookieContainer();
+                webRequest.CookieContainer.Add(cookieContainer.GetCookies(request.Url));
             }
 
             if (!request.Body.IsNullOrWhiteSpace())
@@ -101,12 +129,12 @@ namespace NzbDrone.Common.Http
             var response = new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
 
-            if (!RuntimeInfoBase.IsProduction &&
+            if (request.AllowAutoRedirect && !RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
                 response.StatusCode == HttpStatusCode.MovedPermanently ||
                 response.StatusCode == HttpStatusCode.Found))
             {
-                throw new Exception("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
+                _logger.Error("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
             }
 
             if (!request.SuppressHttpError && response.HasHttpError)

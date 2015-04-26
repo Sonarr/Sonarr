@@ -35,6 +35,14 @@ namespace NzbDrone.Core.Notifications.Plex
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Plex Media Center";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -9,6 +9,7 @@ using NzbDrone.Core.Download.Clients.Nzbget;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Download.Clients;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -214,6 +215,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void should_report_deletestatus_dupe_as_warning()
+        {
+            _completed.DeleteStatus = "DUPE";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var result = Subject.GetItems().Single();
+
+            result.Status.Should().Be(DownloadItemStatus.Warning);
+        }
+
+        [Test]
         public void should_report_unpackstatus_freespace_as_warning()
         {
             _completed.UnpackStatus = "SPACE";
@@ -255,7 +269,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             items.First().Status.Should().Be(DownloadItemStatus.Failed);
         }
 
-
         [Test]
         public void Download_should_return_unique_id()
         {
@@ -266,6 +279,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var id = Subject.Download(remoteEpisode);
 
             id.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void Download_should_throw_if_failed()
+        {
+            GivenFailedDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            Assert.Throws<DownloadClientException>(() => Subject.Download(remoteEpisode));
         }
 
         [Test]
@@ -318,6 +341,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var result = Subject.GetItems().Single();
 
             result.OutputPath.Should().Be(@"O:\mymount\Droned.S01E01.Pilot.1080p.WEB-DL-DRONE".AsOsAgnostic());
+        }
+
+        [TestCase("11.0", false)]
+        [TestCase("12.0", true)]
+        [TestCase("11.0-b30ef0134", false)]
+        [TestCase("13.0-b30ef0134", true)]
+        public void should_test_version(string version, bool expected)
+        {
+            Mocker.GetMock<INzbgetProxy>()
+                .Setup(v => v.GetVersion(It.IsAny<NzbgetSettings>()))
+                .Returns(version);
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().Be(expected);
         }
     }
 }

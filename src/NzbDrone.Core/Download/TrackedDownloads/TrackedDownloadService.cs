@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
 
-                if (remoteEpisode.Series == null)
+                if (remoteEpisode.Series == null || !remoteEpisode.Episodes.Any())
                 {
                     var historyItems = _historyService.FindByDownloadId(downloadItem.DownloadId);
 

@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Notifications
 {
     public abstract class NotificationBase<TSettings> : INotification where TSettings : IProviderConfig, new()
     {
+        public abstract string Name { get; }
+
         public Type ConfigContract
         {
             get

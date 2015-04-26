@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         void Notify(XbmcSettings settings, string title, string message);
         void Update(XbmcSettings settings, Series series);
         void Clean(XbmcSettings settings);
-        ValidationFailure Test(XbmcSettings settings);
+        ValidationFailure Test(XbmcSettings settings, string message);
     }
 
     public class XbmcService : IXbmcService
@@ -101,22 +101,22 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return apiProvider;
         }
 
-        public ValidationFailure Test(XbmcSettings settings)
+        public ValidationFailure Test(XbmcSettings settings, string message)
         {
             _xbmcVersionCache.Clear();
 
             try
             {
-                _logger.Debug("Determining version of XBMC Host: {0}", settings.Address);
+                _logger.Debug("Determining version of Host: {0}", settings.Address);
                 var version = GetJsonVersion(settings);
                 _logger.Debug("Version is: {0}", version);
 
                 if (version == new XbmcVersion(0))
                 {
-                    throw new InvalidXbmcVersionException("Verion received from XBMC is invalid, please correct your settings.");
+                    throw new InvalidXbmcVersionException("Version received from XBMC is invalid, please correct your settings.");
                 }
 
-                Notify(settings, "Test Notification", "Success! XBMC has been successfully configured!");
+                Notify(settings, "Test Notification", message);
             }
             catch (Exception ex)
             {

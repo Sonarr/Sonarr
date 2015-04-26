@@ -38,6 +38,14 @@ namespace NzbDrone.Core.Notifications.Pushalot
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Pushalot";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -31,6 +31,7 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Authentication;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -44,18 +45,18 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<Config>().RegisterModel("Config");
             Mapper.Entity<RootFolder>().RegisterModel("RootFolders").Ignore(r => r.FreeSpace);
+            Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
 
-            Mapper.Entity<IndexerDefinition>().RegisterModel("Indexers")
+            Mapper.Entity<IndexerDefinition>().RegisterDefinition("Indexers")
                   .Ignore(i => i.Enable)
                   .Ignore(i => i.Protocol)
                   .Ignore(i => i.SupportsRss)
                   .Ignore(i => i.SupportsSearch);
 
-            Mapper.Entity<ScheduledTask>().RegisterModel("ScheduledTasks");
-            Mapper.Entity<NotificationDefinition>().RegisterModel("Notifications");
-            Mapper.Entity<MetadataDefinition>().RegisterModel("Metadata");
+            Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications");
+            Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
 
-            Mapper.Entity<DownloadClientDefinition>().RegisterModel("DownloadClients")
+            Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
                   .Ignore(d => d.Protocol);
 
             Mapper.Entity<SceneMapping>().RegisterModel("SceneMappings");
@@ -103,6 +104,8 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<DelayProfile>().RegisterModel("DelayProfiles");
             Mapper.Entity<User>().RegisterModel("Users");
+            Mapper.Entity<CommandModel>().RegisterModel("Commands")
+                .Ignore(c => c.Message);
         }
 
         private static void RegisterMappers()
@@ -125,6 +128,9 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(HashSet<Int32>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(OsPath), new OsPathConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Guid), new GuidConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Command), new CommandConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(TimeSpan), new TimeSpanConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(TimeSpan?), new TimeSpanConverter());
         }
 
         private static void RegisterProviderSettingConverter()

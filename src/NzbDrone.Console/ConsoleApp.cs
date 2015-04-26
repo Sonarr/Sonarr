@@ -23,7 +23,7 @@ namespace NzbDrone.Console
             {
                 System.Console.WriteLine("");
                 System.Console.WriteLine("");
-                Logger.Fatal(exception.Message + ". This can happen if another instance of NzbDrone is already running or another application is using the port assinged to NzbDrone (default: 8989)");
+                Logger.Fatal(exception.Message + ". This can happen if another instance of Sonarr is already running or another application is using the port assinged to NzbDrone (default: 8989)");
                 System.Console.WriteLine("Press any key to exit...");
                 System.Console.ReadLine();
                 Environment.Exit(1);

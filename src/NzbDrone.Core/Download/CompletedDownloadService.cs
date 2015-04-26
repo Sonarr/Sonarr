@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -98,7 +99,7 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            if (importResults.Count(c => c.Result == ImportResultType.Imported) >= trackedDownload.RemoteEpisode.Episodes.Count)
+            if (importResults.Count(c => c.Result == ImportResultType.Imported) >= Math.Max(1, trackedDownload.RemoteEpisode.Episodes.Count))
             {
                 trackedDownload.State = TrackedDownloadStage.Imported;
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload));

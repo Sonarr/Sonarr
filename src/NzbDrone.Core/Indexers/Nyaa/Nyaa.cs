@@ -8,6 +8,14 @@ namespace NzbDrone.Core.Indexers.Nyaa
 {
     public class Nyaa : HttpIndexerBase<NyaaSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "Nyaa";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Int32 PageSize { get { return 100; } }
 

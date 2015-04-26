@@ -12,7 +12,7 @@ $.fn.fileBrowser = function(options) {
         var inputGroup = $('<div class="input-group"></div>');
         var inputGroupButton = $('<span class="input-group-btn "></span>');
 
-        var button = $('<button class="btn btn-primary x-file-browser" title="Browse"><i class="icon-folder-open"/></button>');
+        var button = $('<button class="btn btn-primary x-file-browser" title="Browse"><i class="icon-sonarr-folder-open"/></button>');
 
         if (input.parent('.input-group').length > 0) {
             input.parent('.input-group').find('.input-group-btn').prepend(button);

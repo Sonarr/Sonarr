@@ -202,6 +202,9 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(It.IsAny<string>()))
                   .Returns(false);
 
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(It.IsAny<string>()))
+                  .Returns(true);
+
             var fileName = @"C:\folder\file.mkv".AsOsAgnostic();
 
             var result = Subject.ProcessPath(fileName);
@@ -253,6 +256,75 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Never());
 
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_use_folder_if_folder_import()
+        {
+            GivenValidSeries();
+
+            var folderName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\[HorribleSubs] Maria the Virgin Witch - 09 [720p]".AsOsAgnostic();
+            var fileName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\[HorribleSubs] Maria the Virgin Witch - 09 [720p]\[HorribleSubs] Maria the Virgin Witch - 09 [720p].mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(folderName))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.GetFiles(folderName, SearchOption.TopDirectoryOnly))
+                  .Returns(new[] { fileName });
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+
+            Subject.ProcessPath(fileName);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(v => v.AbsoluteEpisodeNumbers.First() == 9), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_use_folder_if_file_import()
+        {
+            GivenValidSeries();
+
+            var fileName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\Torrents\[HorribleSubs] Maria the Virgin Witch - 09 [720p].mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(fileName))
+                  .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(fileName))
+                  .Returns(true);
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+            var result = Subject.ProcessPath(fileName);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), null, true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_process_if_file_and_folder_do_not_exist()
+        {
+            var folderName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\[HorribleSubs] Maria the Virgin Witch - 09 [720p]".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(folderName))
+                  .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(folderName))
+                  .Returns(false);
+
+            Subject.ProcessPath(folderName).Should().BeEmpty();
+
+            Mocker.GetMock<IParsingService>()
+                .Verify(v => v.GetSeries(It.IsAny<string>()), Times.Never());
+
+            ExceptionVerification.ExpectedErrors(1);
         }
 
         private void VerifyNoImport()

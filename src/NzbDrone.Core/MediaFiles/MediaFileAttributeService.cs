@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -39,15 +40,15 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    if (ex is UnauthorizedAccessException || ex is InvalidOperationException)
+                    if (ex is UnauthorizedAccessException || ex is InvalidOperationException || ex is FileNotFoundException)
                     {
                         _logger.Debug("Unable to apply folder permissions to: ", path);
                         _logger.DebugException(ex.Message, ex);
                     }
-
                     else
                     {
-                        throw;
+                        _logger.Warn("Unable to apply folder permissions to: ", path);
+                        _logger.WarnException(ex.Message, ex);
                     }
                 }
             }

@@ -59,6 +59,10 @@ namespace NzbDrone.Core.Test.Download
                   .Setup(s => s.MostRecentForDownloadId(_trackedDownload.DownloadItem.DownloadId))
                   .Returns(new History.History());
 
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
+                  .Returns(remoteEpisode.Series);
+
         }
 
         private void GivenNoGrabbedHistory()
@@ -148,6 +152,27 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
+        public void should_mark_as_imported_if_all_episodes_were_imported()
+        {
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                  .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                  .Returns(new List<ImportResult>
+                           {
+                               new ImportResult(
+                                   new ImportDecision(
+                                       new LocalEpisode {Path = @"C:\TestPath\Droned.S01E01.mkv"})),
+                               
+                                new ImportResult(
+                                   new ImportDecision(
+                                       new LocalEpisode {Path = @"C:\TestPath\Droned.S01E02.mkv"}))
+                           });
+
+            Subject.Process(_trackedDownload);
+
+            AssertCompletedDownload();
+        }
+
+        [Test]
         public void should_not_mark_as_imported_if_all_files_were_rejected()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
@@ -165,8 +190,31 @@ namespace NzbDrone.Core.Test.Download
 
             Subject.Process(_trackedDownload);
 
+            Mocker.GetMock<IEventAggregator>()
+                .Verify(v => v.PublishEvent<DownloadCompletedEvent>(It.IsAny<DownloadCompletedEvent>()), Times.Never());
 
-            _trackedDownload.State.Should().NotBe(TrackedDownloadStage.Imported);
+            AssertNoCompletedDownload();
+        }
+
+        [Test]
+        public void should_not_mark_as_imported_if_no_episodes_were_parsed()
+        {
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                  .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                  .Returns(new List<ImportResult>
+                           {
+                               new ImportResult(
+                                   new ImportDecision(
+                                       new LocalEpisode {Path = @"C:\TestPath\Droned.S01E01.mkv"}, new Rejection("Rejected!")), "Test Failure"),
+                               
+                                new ImportResult(
+                                   new ImportDecision(
+                                       new LocalEpisode {Path = @"C:\TestPath\Droned.S01E02.mkv"},new Rejection("Rejected!")), "Test Failure")
+                           });
+
+            _trackedDownload.RemoteEpisode.Episodes.Clear();
+
+            Subject.Process(_trackedDownload);
 
             AssertNoCompletedDownload();
         }
@@ -239,6 +287,10 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_import_when_there_is_a_title_mismatch()
         {
+            Mocker.GetMock<IParsingService>()
+                  .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
+                  .Returns((Series)null);
+
             Subject.Process(_trackedDownload);
 
             AssertNoCompletedDownload();
@@ -284,6 +336,9 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()
                 .Verify(v => v.ProcessPath(_trackedDownload.DownloadItem.OutputPath.FullPath, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem), Times.Once());
+
+            Mocker.GetMock<IEventAggregator>()
+                  .Verify(v => v.PublishEvent(It.IsAny<DownloadCompletedEvent>()), Times.Once());
 
             _trackedDownload.State.Should().Be(TrackedDownloadStage.Imported);
         }

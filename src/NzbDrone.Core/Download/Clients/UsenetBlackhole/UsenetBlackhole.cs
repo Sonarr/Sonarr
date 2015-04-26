@@ -1,25 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.MediaFiles;
-using NLog;
-using FluentValidation.Results;
 using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
-    public class UsenetBlackhole : DownloadClientBase<UsenetBlackholeSettings>
+    public class UsenetBlackhole : UsenetClientBase<UsenetBlackholeSettings>
     {
         private readonly IDiskScanService _diskScanService;
-        private readonly IHttpClient _httpClient;
 
         public UsenetBlackhole(IDiskScanService diskScanService,
                                IHttpClient httpClient,
@@ -27,34 +25,35 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                                IDiskProvider diskProvider,
                                IRemotePathMappingService remotePathMappingService,
                                Logger logger)
-            : base(configService, diskProvider, remotePathMappingService, logger)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
-            _httpClient = httpClient;
         }
 
-        public override DownloadProtocol Protocol
+        protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
-
-        public override string Download(RemoteEpisode remoteEpisode)
-        {
-            var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filename = Path.Combine(Settings.NzbFolder, title + ".nzb");
+            var filepath = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
-            _logger.Debug("Downloading NZB from: {0} to: {1}", url, filename);
-            _httpClient.DownloadFile(url, filename);
-            _logger.Debug("NZB Download succeeded, saved to: {0}", filename);
+            using (var stream = _diskProvider.OpenWriteStream(filepath))
+            {
+                stream.Write(fileContent, 0, fileContent.Length);
+            }
+
+            _logger.Debug("NZB Download succeeded, saved to: {0}", filepath);
 
             return null;
+        }
+
+        public override string Name
+        {
+            get
+            {
+                return "Usenet Blackhole";
+            }
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
-                    Category = "nzbdrone",
+                    Category = "sonarr",
                     Title = title,
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
@@ -99,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
-                    Category = "nzbdrone",
+                    Category = "sonarr",
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),

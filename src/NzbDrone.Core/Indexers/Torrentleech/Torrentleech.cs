@@ -8,6 +8,14 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 {
     public class Torrentleech : HttpIndexerBase<TorrentleechSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "TorrentLeech";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Boolean SupportsSearch { get { return false; } }
         public override Int32 PageSize { get { return 0; } }

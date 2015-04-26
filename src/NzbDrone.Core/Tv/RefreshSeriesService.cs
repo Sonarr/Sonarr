@@ -15,7 +15,7 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
 {
-    public class RefreshSeriesService : IExecute<RefreshSeriesCommand>, IHandleAsync<SeriesAddedEvent>
+    public class RefreshSeriesService : IExecute<RefreshSeriesCommand>
     {
         private readonly IProvideSeriesInfo _seriesInfo;
         private readonly ISeriesService _seriesService;
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Tv
 
                 foreach (var series in allSeries)
                 {
-                    if (message.Manual || _checkIfSeriesShouldBeRefreshed.ShouldRefresh(series))
+                    if (message.Trigger == CommandTrigger.Manual || _checkIfSeriesShouldBeRefreshed.ShouldRefresh(series))
                     {
                         try
                         {
@@ -164,11 +164,6 @@ namespace NzbDrone.Core.Tv
                     }
                 }
             }
-        }
-
-        public void HandleAsync(SeriesAddedEvent message)
-        {
-            RefreshSeriesInfo(message.Series);
         }
     }
 }

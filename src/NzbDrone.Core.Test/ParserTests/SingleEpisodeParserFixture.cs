@@ -105,6 +105,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("6x13 - The Family Guy 100th Episode Special", "", 6, 13)]
         //[TestCase("Heroes - S01E01 - Genesis 101 [HDTV-720p]", "Heroes", 1, 1)]
         //[TestCase("The 100 S02E01 HDTV x264-KILLERS [eztv]", "The 100", 2, 1)]
+        [TestCase("The Young And The Restless - S41 E10478 - 2014-08-15", "The Young and The Restless", 41, 10478)]
+        [TestCase("The Young And The Restless - S42 E10591 - 2015-01-27", "The Young and The Restless", 42, 10591)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {

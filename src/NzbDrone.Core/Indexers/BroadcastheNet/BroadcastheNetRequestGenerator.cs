@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -34,10 +35,25 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
-                parameters.Category = "Episode";
-                parameters.Name = String.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
+                foreach (var episode in searchCriteria.Episodes)
+                {
+                    parameters = parameters.Clone();
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    parameters.Category = "Episode";
+                    parameters.Name = String.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
+
+                foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
+                {
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Season";
+                    parameters.Name = String.Format("Season {0}", seasonNumber);
+
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
             }
 
             return pageableRequest;
@@ -50,19 +66,21 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
-                parameters.Category = "Episode";
-                parameters.Name = String.Format("S{0:00}E%", searchCriteria.SeasonNumber);
+                foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
+                {
+                    parameters.Category = "Episode";
+                    parameters.Name = String.Format("S{0:00}E%", seasonNumber);
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
 
-                parameters = parameters.Clone();
+                    parameters = parameters.Clone();
 
-                parameters.Category = "Season";
-                parameters.Name = String.Format("Season {0}", searchCriteria.SeasonNumber);
+                    parameters.Category = "Season";
+                    parameters.Name = String.Format("Season {0}", seasonNumber);
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
             }
-
 
             return pageableRequest;
         }
@@ -85,7 +103,23 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            var pageableRequest = new List<IEnumerable<IndexerRequest>>();
+
+            var parameters = new BroadcastheNetTorrentQuery();
+            if (AddSeriesSearchParameters(parameters, searchCriteria))
+            {
+                foreach (var episode in searchCriteria.Episodes)
+                {
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = String.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+
+                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                }
+            }
+
+            return pageableRequest;
         }
 
         public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
@@ -95,14 +129,14 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)
         {
-            if (searchCriteria.Series.TvRageId != 0)
-            {
-                parameters.Tvrage = String.Format("{0}", searchCriteria.Series.TvRageId);
-                return true;
-            }
             if (searchCriteria.Series.TvdbId != 0)
             {
                 parameters.Tvdb = String.Format("{0}", searchCriteria.Series.TvdbId);
+                return true;
+            }
+            if (searchCriteria.Series.TvRageId != 0)
+            {
+                parameters.Tvrage = String.Format("{0}", searchCriteria.Series.TvRageId);
                 return true;
             }
             // BTN is very neatly managed, so it's unlikely they map tvrage/tvdb wrongly.

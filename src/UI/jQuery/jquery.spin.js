@@ -34,11 +34,11 @@ module.exports = function() {
         this.addClass('disabled');
 
         if (icon.hasClass('icon-can-spin')) {
-            icon.addClass('icon-spin');
+            icon.addClass('fa-spin');
         } else {
             icon.attr('data-idle-icon', iconClass);
             icon.removeClass(iconClass);
-            icon.addClass('icon-nd-spinner');
+            icon.addClass('fa-spin icon-sonarr-spinner');
         }
 
         return this;
@@ -48,7 +48,7 @@ module.exports = function() {
         var icon = this.find('i').andSelf('i');
 
         this.removeClass('disabled');
-        icon.removeClass('icon-spin icon-nd-spinner');
+        icon.removeClass('fa-spin icon-sonarr-spinner');
         var idleIcon = icon.attr('data-idle-icon');
 
         if (idleIcon) {

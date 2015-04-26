@@ -15,10 +15,10 @@ module.exports = Paginator.extend({
     windowSize : 1,
 
     fastForwardHandleLabels : {
-        first : 'icon-fast-backward',
-        prev  : 'icon-backward',
-        next  : 'icon-forward',
-        last  : 'icon-fast-forward'
+        first : 'icon-sonarr-pager-first',
+        prev  : 'icon-sonarr-pager-previous',
+        next  : 'icon-sonarr-pager-next',
+        last  : 'icon-sonarr-pager-last'
     },
 
     changePage : function(e) {
@@ -30,7 +30,12 @@ module.exports = Paginator.extend({
             return;
         }
 
-        target.closest('li i').addClass('icon-spinner icon-spin');
+        var icon = target.closest('li i');
+        var iconClasses = icon.attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/);
+        var iconClass = $.trim(iconClasses[0]);
+
+        icon.removeClass(iconClass);
+        icon.addClass('icon-sonarr-spinner fa-spin');
 
         var label = target.attr('data-action');
         var ffLabels = this.fastForwardHandleLabels;
@@ -177,7 +182,7 @@ module.exports = Paginator.extend({
 
         var selectedPage = parseInt(target.val(), 10);
 
-        this.$el.find('.x-page-number').html('<i class="icon-spinner icon-spin"></i>');
+        this.$el.find('.x-page-number').html('<i class="icon-sonarr-spinner fa-spin"></i>');
         this.collection.getPage(selectedPage);
     }
 });

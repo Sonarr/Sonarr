@@ -33,7 +33,7 @@
                         </label>
 
                         <span class="help-inline-checkbox">
-                            <i class="icon-nd-form-info" title="Do you want to get notifications when episodes are grabbed?"/>
+                            <i class="icon-sonarr-form-info" title="Be notified when episodes are available for download and has been sent to a download client"/>
                         </span>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                         </label>
 
                         <span class="help-inline-checkbox">
-                            <i class="icon-nd-form-info" title="Do you want to get notifications when episodes are downloaded?"/>
+                            <i class="icon-sonarr-form-info" title="Be notified when episodes are successfully downloaded"/>
                         </span>
                     </div>
                 </div>
@@ -77,23 +77,25 @@
                         </label>
 
                         <span class="help-inline-checkbox">
-                            <i class="icon-nd-form-info" title="Do you want to get notifications when episodes are upgraded to a better quality?"/>
+                            <i class="icon-sonarr-form-info" title="Be notified when episodes are upgraded to a better quality"/>
                         </span>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label">Tags</label>
+                <label class="col-sm-3 control-label">Filter Series Tags</label>
 
                 <div class="col-sm-5">
                     <input type="text" class="form-control x-tags">
                 </div>
 
                 <div class="col-sm-1 help-inline">
-                    <i class="icon-nd-form-info" title="Using tags will only send notifications for series with matching tags"/>
+                    <i class="icon-sonarr-form-info" title="Only send notifications for series with matching tags"/>
                 </div>
             </div>
+
+            <hr>
 
             {{formBuilder}}
         </div>
@@ -105,8 +107,8 @@
             <button class="btn pull-left x-back">back</button>
         {{/if}}
 
-        <span class="indicator x-indicator"><i class="icon-spinner icon-spin"></i></span>
-        <button class="btn x-test">test <i class="x-test-icon icon-nd-test"/></button>
+        <span class="indicator x-indicator"><i class="icon-sonarr-spinner fa-spin"></i></span>
+        <button class="btn x-test">test <i class="x-test-icon icon-sonarr-test"/></button>
         <button class="btn" data-dismiss="modal">cancel</button>
 
         <div class="btn-group">

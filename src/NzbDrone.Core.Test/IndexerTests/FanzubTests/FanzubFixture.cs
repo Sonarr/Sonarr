@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
             Subject.Definition = new IndexerDefinition()
                 {
                     Name = "Fanzub",
-                    Settings = new NullConfig()
+                    Settings = new FanzubSettings()
                 };
         }
 

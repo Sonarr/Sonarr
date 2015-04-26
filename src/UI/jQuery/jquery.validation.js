@@ -6,7 +6,7 @@ module.exports = function() {
 
         var errorMessage = this.formatErrorMessage(error);
 
-        this.find('.validation-errors').addClass('alert alert-danger').append('<div><i class="icon-exclamation-sign"></i>' + errorMessage + '</div>');
+        this.find('.validation-errors').addClass('alert alert-danger').append('<div><i class="icon-sonarr-form-danger"></i>' + errorMessage + '</div>');
 
         if (!validationName || validationName === '') {
             this.addFormError(error);
@@ -37,16 +37,21 @@ module.exports = function() {
         } else {
             var inputGroup = formGroup.find('.input-group');
 
-            if (inputGroup.length === 0) {
-                formGroup.append('<span class="help-inline validation-error">' + errorMessage + '</span>');
-            }
+            var validationClass = error.isWarning ? 'validation-warning' : 'validation-error';
 
+            if (inputGroup.length === 0) {
+                formGroup.append('<span class="help-inline {0}">{1}</span>'.format(validationClass, errorMessage));
+            }
             else {
-                inputGroup.parent().append('<span class="help-block validation-error">' + errorMessage + '</span>');
+                inputGroup.parent().append('<span class="help-block {0}">{1}</span>'.format(validationClass, errorMessage));
             }
         }
 
-        formGroup.addClass('has-error');
+        if (error.isWarning) {
+            formGroup.addClass('has-warning');
+        } else {
+            formGroup.addClass('has-error');
+        }
 
         return formGroup.find('.help-inline').text();
     };
@@ -59,20 +64,23 @@ module.exports = function() {
 
         var errorMessage = this.formatErrorMessage(error);
 
-        if (this.find('.modal-body')) {
-            this.find('.modal-body').prepend('<div class="alert alert-danger validation-error">' + errorMessage + '</div>');
+        var target = this.find('.modal-body');
+        if (!target.length) {
+            target = this;
         }
 
-        else {
-            this.prepend('<div class="alert alert-danger validation-error">' + errorMessage + '</div>');
-        }
+        var validationClass = error.isWarning ? 'alert alert-warning validation-warning' : 'alert alert-danger validation-error';
+
+        target.prepend('<div class="{0}">{1}</div>'.format(validationClass, errorMessage));
     };
 
     $.fn.removeAllErrors = function() {
         this.find('.has-error').removeClass('has-error');
+        this.find('.has-warning').removeClass('has-warning');
         this.find('.error').removeClass('error');
-        this.find('.validation-errors').removeClass('alert').removeClass('alert-danger').html('');
+        this.find('.validation-errors').removeClass('alert').removeClass('alert-danger').removeClass('alert-warning').html('');
         this.find('.validation-error').remove();
+        this.find('.validation-warning').remove();
         return this.find('.help-inline.error-message').remove();
     };
 
@@ -82,12 +90,12 @@ module.exports = function() {
 
         if (error.infoLink) {
             if (error.detailedDescription) {
-                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-external-link" title="' + error.detailedDescription + '"></i></a>';
+                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-sonarr-external-link" title="' + error.detailedDescription + '"></i></a>';
             } else {
-                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-external-link"></i></a>';
+                errorMessage += ' <a class="no-router" target="_blank" href="' + error.infoLink + '"><i class="icon-sonarr-external-link"></i></a>';
             }
         } else if (error.detailedDescription) {
-            errorMessage += ' <i class="icon-nd-form-info" title="' + error.detailedDescription + '"></i>';
+            errorMessage += ' <i class="icon-sonarr-form-info" title="' + error.detailedDescription + '"></i>';
         }
 
         return errorMessage;

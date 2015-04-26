@@ -7,6 +7,14 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
     public class Omgwtfnzbs : HttpIndexerBase<OmgwtfnzbsSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "omgwtfnzbs";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
         public Omgwtfnzbs(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)

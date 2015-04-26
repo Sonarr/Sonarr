@@ -188,7 +188,10 @@ namespace NzbDrone.Core.Parser
 
                     else if (sceneSource)
                     {
-                        if (sceneSeasonNumber.HasValue && (sceneSeasonNumber == 0 || sceneSeasonNumber > 1))
+                        // Is there a reason why we excluded season 1 from this handling before?
+                        // Might have something to do with the scene name to season number check
+                        // If this needs to be reverted tests will need to be added
+                        if (sceneSeasonNumber.HasValue)
                         {
                             var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
 
@@ -309,7 +312,11 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
-            var series = _seriesService.FindByTitleInexact(title);
+            var series = GetSeries(title);
+            if (series == null)
+            {
+                series = _seriesService.FindByTitleInexact(title);
+            }
             if (series == null && tvRageId > 0)
             {
                 series = _seriesService.FindByTvRageId(tvRageId);
@@ -344,7 +351,7 @@ namespace NzbDrone.Core.Parser
                 info.Language = Parser.ParseLanguage(title);
                 info.Special = true;
 
-                _logger.Info("Found special episode {0} for title '{1}'", info, title);
+                _logger.Debug("Found special episode {0} for title '{1}'", info, title);
                 return info;
             }
 

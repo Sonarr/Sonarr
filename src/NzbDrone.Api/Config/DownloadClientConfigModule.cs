@@ -7,16 +7,19 @@ namespace NzbDrone.Api.Config
 {
     public class DownloadClientConfigModule : NzbDroneConfigModule<DownloadClientConfigResource>
     {
-        public DownloadClientConfigModule(IConfigService configService, RootFolderValidator rootFolderValidator, PathExistsValidator pathExistsValidator)
+        public DownloadClientConfigModule(IConfigService configService,
+                                          RootFolderValidator rootFolderValidator,
+                                          PathExistsValidator pathExistsValidator,
+                                          MappedNetworkDriveValidator mappedNetworkDriveValidator)
             : base(configService)
         {
             SharedValidator.RuleFor(c => c.DownloadedEpisodesFolder)
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
+                           .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator)
                            .When(c => !String.IsNullOrWhiteSpace(c.DownloadedEpisodesFolder));
-
         }
     }
 }

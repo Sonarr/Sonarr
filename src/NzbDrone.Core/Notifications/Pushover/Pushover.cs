@@ -37,6 +37,14 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Pushover";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -13,7 +13,7 @@ module.exports = NzbDroneCell.extend({
     render : function() {
         this.$el.empty();
 
-        this.$el.html('<i class="icon-search x-automatic-search" title="Automatic Search"></i>' + '<i class="icon-nd-manual-search x-manual-search" title="Manual Search"></i>');
+        this.$el.html('<i class="icon-sonarr-search x-automatic-search" title="Automatic Search"></i>' + '<i class="icon-sonarr-search-manual x-manual-search" title="Manual Search"></i>');
 
         CommandController.bindToCommand({
             element : this.$el.find('.x-automatic-search'),

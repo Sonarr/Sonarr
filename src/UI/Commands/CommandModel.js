@@ -6,6 +6,14 @@ module.exports = Backbone.Model.extend({
 
     parse : function(response) {
         response.name = response.name.toLocaleLowerCase();
+        response.body.name = response.body.name.toLocaleLowerCase();
+
+        for (var key in response.body) {
+            response[key] = response.body[key];
+        }
+
+        delete response.body;
+
         return response;
     },
 
@@ -33,10 +41,10 @@ module.exports = Backbone.Model.extend({
     },
 
     isActive : function() {
-        return this.get('state') !== 'completed' && this.get('state') !== 'failed';
+        return this.get('status') !== 'completed' && this.get('status') !== 'failed';
     },
 
     isComplete : function() {
-        return this.get('state') === 'completed';
+        return this.get('status') === 'completed';
     }
 });

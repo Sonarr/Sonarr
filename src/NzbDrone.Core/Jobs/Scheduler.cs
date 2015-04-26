@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
@@ -15,15 +16,15 @@ namespace NzbDrone.Core.Jobs
         IHandle<ApplicationShutdownRequested>
     {
         private readonly ITaskManager _taskManager;
-        private readonly ICommandExecutor _commandExecutor;
+        private readonly IManageCommandQueue _commandQueueManager;
         private readonly Logger _logger;
         private static readonly Timer Timer = new Timer();
         private static CancellationTokenSource _cancellationTokenSource;
 
-        public Scheduler(ITaskManager taskManager, ICommandExecutor commandExecutor, Logger logger)
+        public Scheduler(ITaskManager taskManager, IManageCommandQueue commandQueueManager, Logger logger)
         {
             _taskManager = taskManager;
-            _commandExecutor = commandExecutor;
+            _commandQueueManager = commandQueueManager;
             _logger = logger;
         }
 
@@ -33,24 +34,16 @@ namespace NzbDrone.Core.Jobs
             {
                 Timer.Enabled = false;
 
-                var tasks = _taskManager.GetPending();
+                var tasks = _taskManager.GetPending().ToList();
 
                 _logger.Trace("Pending Tasks: {0}", tasks.Count);
 
                 foreach (var task in tasks)
                 {
-                    _cancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                    try
-                    {
-                        _commandExecutor.PublishCommand(task.TypeName, task.LastExecution);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.ErrorException("Error occurred while executing task " + task.TypeName, e);
-                    }
+                    _commandQueueManager.Push(task.TypeName, task.LastExecution, CommandPriority.Low, CommandTrigger.Scheduled);
                 }
             }
+
             finally
             {
                 if (!_cancellationTokenSource.IsCancellationRequested)

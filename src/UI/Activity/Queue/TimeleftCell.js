@@ -14,9 +14,7 @@ module.exports = NzbDroneCell.extend({
             if (this.cellValue.get('status').toLowerCase() === 'pending') {
                 var ect = this.cellValue.get('estimatedCompletionTime');
                 var time = '{0} at {1}'.format(FormatHelpers.relativeDate(ect), moment(ect).format(UiSettingsModel.time(true, false)));
-                this.$el.html('-');
-                this.$el.attr('title', 'Will be processed during the first RSS Sync after {0}'.format(time));
-
+                this.$el.html('<div title="Delaying download till {0}">-</div>'.format(time));
                 return this;
             }
 

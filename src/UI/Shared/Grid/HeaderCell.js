@@ -17,13 +17,19 @@ module.exports = function() {
         render : function() {
             this.$el.empty();
             this.$el.append(this.column.get('label'));
+            if (this.column.get('tooltip')) {
+                this.$el.attr({
+                    'title'          : this.column.get('tooltip'),
+                    'data-container' : '.table'
+                });
+            }
 
             var column = this.column;
             var sortable = Backgrid.callByNeed(column.sortable(), column, this.collection);
 
             if (sortable) {
                 this.$el.addClass('sortable');
-                this.$el.append(' <i class="pull-right"></i>');
+                this.$el.prepend(' <i class="sort-direction-icon"></i>');
             }
 
             //Do we need this?
@@ -51,7 +57,7 @@ module.exports = function() {
         },
 
         direction : function(dir) {
-            this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
+            this.$el.children('i.sort-direction-icon').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
 
             if (arguments.length) {
                 if (dir) {
@@ -97,11 +103,16 @@ module.exports = function() {
             var column = this.column;
             var sortable = Backgrid.callByNeed(column.sortable(), column, collection);
             if (sortable) {
+                var isSorted = this.$el.children('.icon-sonarr-sort-asc,.icon-sonarr-sort-desc').length !== 0;
                 var direction = collection.state.order;
-                if (direction === 'ascending' || direction === -1) {
-                    direction = 'descending';
+                if (column.get('sortType') === 'fixed' || !isSorted) {
+                    direction = column.get('direction') || 'ascending';
                 } else {
-                    direction = 'ascending';
+                    if (direction === 'ascending' || direction === -1) {
+                        direction = 'descending';
+                    } else {
+                        direction = 'ascending';
+                    }
                 }
 
                 if (collection.setSorting) {
@@ -124,19 +135,19 @@ module.exports = function() {
 
         _convertDirectionToIcon : function(dir) {
             if (dir === 'ascending' || dir === -1) {
-                return 'icon-sort-up';
+                return 'icon-sonarr-sort-asc';
             }
 
-            return 'icon-sort-down';
+            return 'icon-sonarr-sort-desc';
         },
 
         _setSortIcon : function(dir) {
             this._removeSortIcon();
-            this.$el.children('i').addClass(this._convertDirectionToIcon(dir));
+            this.$el.children('i.sort-direction-icon').addClass(this._convertDirectionToIcon(dir));
         },
 
         _removeSortIcon : function() {
-            this.$el.children('i').removeClass('icon-sort-up icon-sort-down');
+            this.$el.children('i.sort-direction-icon').removeClass('icon-sonarr-sort-asc icon-sonarr-sort-desc');
         }
     });
 
