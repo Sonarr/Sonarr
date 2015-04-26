@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             get
             {
-                return "nzbget";
+                return "NZBGet";
             }
         }
 

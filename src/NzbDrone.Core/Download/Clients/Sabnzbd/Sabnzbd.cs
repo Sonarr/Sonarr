@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             get
             {
-                return "SABnzb";
+                return "SABnzbd";
             }
         }
 
