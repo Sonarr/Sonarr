@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public int GetHashCode(Command obj)
         {
-            return obj.Id.GetHashCode();
+            return obj.GetHashCode();
         }
     }
 }

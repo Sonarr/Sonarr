@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using FluentValidation;
-using FluentValidation.Results;
 using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
     {
         public XbmcSettingsValidator()
         {
-            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.DisplayTime).GreaterThanOrEqualTo(2);
         }
     }
@@ -57,23 +57,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         [JsonIgnore]
         public String Address { get { return String.Format("{0}:{1}", Host, Port); } }
-        
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host) && Port > 0;
-            }
-        }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return Validator.Validate(this);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

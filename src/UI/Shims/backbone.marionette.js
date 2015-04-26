@@ -7,5 +7,4 @@ var asNamedView = require('../Mixins/AsNamedView');
 templateMixin.call(window.Marionette.TemplateCache);
 asNamedView.call(window.Marionette.ItemView.prototype);
 
-
 module.exports = window.Marionette;

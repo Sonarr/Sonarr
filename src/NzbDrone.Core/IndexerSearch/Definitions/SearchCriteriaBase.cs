@@ -17,6 +17,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         public Series Series { get; set; }
         public List<String> SceneTitles { get; set; }
         public List<Episode> Episodes { get; set; }
+        public virtual bool MonitoredEpisodesOnly { get; set; }
 
         public List<String> QueryTitles
         {

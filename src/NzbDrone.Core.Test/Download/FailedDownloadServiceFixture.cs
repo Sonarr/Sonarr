@@ -69,6 +69,28 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
+        public void should_warn_if_matching_history_is_not_found()
+        {
+            _trackedDownload.DownloadItem.Status = DownloadItemStatus.Failed;
+            GivenNoGrabbedHistory();
+
+            Subject.Process(_trackedDownload);
+
+            _trackedDownload.StatusMessages.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_not_warn_if_matching_history_is_not_found_and_not_failed()
+        {
+            _trackedDownload.DownloadItem.Status = DownloadItemStatus.Failed;
+            GivenNoGrabbedHistory();
+
+            Subject.Process(_trackedDownload);
+
+            _trackedDownload.StatusMessages.Should().NotBeEmpty();
+        }
+
+        [Test]
         public void should_mark_failed_if_encrypted()
         {
             _trackedDownload.DownloadItem.IsEncrypted = true;

@@ -5,13 +5,29 @@ namespace NzbDrone.Core.Validation
 {
     public class NzbDroneValidationFailure : ValidationFailure
     {
-        public String DetailedDescription { get; set; }
-        public String InfoLink { get; set; }
+        public bool IsWarning { get; set; }
+        public string DetailedDescription { get; set; }
+        public string InfoLink { get; set; }
 
-        public NzbDroneValidationFailure(String propertyName, String error)
+        public NzbDroneValidationFailure(string propertyName, string error)
             : base(propertyName, error)
         {
 
+        }
+
+        public NzbDroneValidationFailure(string propertyName, string error, object attemptedValue)
+            : base(propertyName, error, attemptedValue)
+        {
+
+        }
+
+        public NzbDroneValidationFailure(ValidationFailure validationFailure)
+            : base(validationFailure.PropertyName, validationFailure.ErrorMessage, validationFailure.AttemptedValue)
+        {
+            CustomState = validationFailure.CustomState;
+            var state = validationFailure.CustomState as NzbDroneValidationState;
+
+            IsWarning = state != null && state.IsWarning;
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
+using System.Text.RegularExpressions;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -14,16 +14,23 @@ namespace NzbDrone.Core.Indexers.BitMeTv
             RuleFor(c => c.BaseUrl).ValidRootUrl();
             RuleFor(c => c.UserId).NotEmpty();
             RuleFor(c => c.RssPasskey).NotEmpty();
+
+            RuleFor(c => c.Cookie).NotEmpty();
+
+            RuleFor(c => c.Cookie)
+                .Matches(@"pass=[0-9a-f]{32}", RegexOptions.IgnoreCase)
+                .WithMessage("Wrong pattern")
+                .AsWarning();
         }
     }
 
     public class BitMeTvSettings : IProviderConfig
     {
-        private static readonly BitMeTvSettingsValidator validator = new BitMeTvSettingsValidator();
+        private static readonly BitMeTvSettingsValidator Validator = new BitMeTvSettingsValidator();
 
         public BitMeTvSettings()
         {
-            BaseUrl = "http://www.bitmetv.org";
+            BaseUrl = "https://www.bitmetv.org";
         }
 
         [FieldDefinition(0, Label = "Website URL")]
@@ -35,9 +42,12 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         [FieldDefinition(2, Label = "RSS Passkey")]
         public String RssPasskey { get; set; }
 
-        public ValidationResult Validate()
+        [FieldDefinition(3, Label = "Cookie", HelpText = "BitMeTv uses a login cookie needed to access the rss, you'll have to retrieve it via a browser.")]
+        public String Cookie { get; set; }
+
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

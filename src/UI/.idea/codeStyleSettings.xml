@@ -21,6 +21,7 @@
           <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
           <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
           <option name="OBJECT_LITERAL_WRAP" value="2" />
+          <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
         </JSCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
@@ -34,15 +35,18 @@
           <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="true" />
           <option name="KEEP_LINE_BREAKS" value="false" />
           <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
-          <option name="ELSE_ON_NEW_LINE" value="true" />
+          <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
           <option name="CATCH_ON_NEW_LINE" value="true" />
           <option name="FINALLY_ON_NEW_LINE" value="true" />
           <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+          <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
           <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
-          <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
-          <option name="SPACE_BEFORE_METHOD_LBRACE" value="false" />
+          <option name="CALL_PARAMETERS_WRAP" value="1" />
+          <option name="BINARY_OPERATION_WRAP" value="1" />
           <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
-          <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="2" />
+          <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
+          <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
           <option name="IF_BRACE_FORCE" value="3" />
           <option name="DOWHILE_BRACE_FORCE" value="3" />
           <option name="WHILE_BRACE_FORCE" value="3" />

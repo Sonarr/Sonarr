@@ -260,7 +260,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 {
                     return new NzbDroneValidationFailure("TvCategory", "Configuration of label failed")
                     {
-                        DetailedDescription = "NzbDrone as unable to add the label to Deluge."
+                        DetailedDescription = "Sonarr as unable to add the label to Deluge."
                     };
                 }
             }

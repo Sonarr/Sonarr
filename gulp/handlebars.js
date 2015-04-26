@@ -5,14 +5,14 @@ var concat = require('gulp-concat');
 var wrap = require("gulp-wrap");
 var path = require('path');
 var streamqueue = require('streamqueue');
+var stripbom = require('gulp-stripbom');
 
 var paths = require('./paths.js');
-var bom = require('./pipelines/gulp-bom.js');
 
 gulp.task('handlebars', function () {
 
     var coreStream = gulp.src([paths.src.templates, '!*/**/*Partial.*'])
-        .pipe(bom())
+        .pipe(stripbom({ showLog: false }))
         .pipe(handlebars())
         .pipe(declare({
             namespace: 'T',
@@ -29,7 +29,7 @@ gulp.task('handlebars', function () {
         }));
 
     var partialStream = gulp.src([paths.src.partials])
-        .pipe(bom())
+        .pipe(stripbom({ showLog: false }))
         .pipe(handlebars())
         .pipe(wrap('Handlebars.template(<%= contents %>)'))
         .pipe(wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= contents %>)', {}, {

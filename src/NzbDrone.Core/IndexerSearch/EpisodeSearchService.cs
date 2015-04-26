@@ -47,7 +47,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         public void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed)
         {
-            var missing = _episodeService.EpisodesBetweenDates(dateTime, DateTime.UtcNow)
+            var missing = _episodeService.EpisodesBetweenDates(dateTime, DateTime.UtcNow, false)
                                          .Where(e => !e.HasFile &&
                                                 !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id) &&
                                                 !grabbed.Contains(e.Id))
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.IndexerSearch
 
                     if (season.Count() > 1)
                     {
-                        decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key);
+                        decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true);
                     }
 
                     else
@@ -112,9 +112,9 @@ namespace NzbDrone.Core.IndexerSearch
         {
             List<Episode> episodes;
 
-            if (message.SeriesId > 0)
+            if (message.SeriesId.HasValue)
             {
-                episodes = _episodeService.GetEpisodeBySeries(message.SeriesId)
+                episodes = _episodeService.GetEpisodeBySeries(message.SeriesId.Value)
                                           .Where(e => e.Monitored &&
                                                  !e.HasFile &&
                                                  e.AirDateUtc.HasValue &&

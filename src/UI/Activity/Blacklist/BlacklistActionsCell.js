@@ -2,15 +2,19 @@ var NzbDroneCell = require('../../Cells/NzbDroneCell');
 
 module.exports = NzbDroneCell.extend({
     className : 'blacklist-controls-cell',
-    events    : {
+
+    events : {
         'click' : '_delete'
     },
-    render    : function(){
+
+    render : function() {
         this.$el.empty();
-        this.$el.html('<i class="icon-nd-delete"></i>');
+        this.$el.html('<i class="icon-sonarr-delete"></i>');
+
         return this;
     },
-    _delete   : function(){
+
+    _delete : function() {
         this.model.destroy();
     }
 });

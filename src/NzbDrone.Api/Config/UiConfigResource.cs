@@ -14,5 +14,7 @@ namespace NzbDrone.Api.Config
         public String LongDateFormat { get; set; }
         public String TimeFormat { get; set; }
         public Boolean ShowRelativeDates { get; set; }
+
+        public Boolean EnableColorImpairedMode { get; set; }
     }
 }

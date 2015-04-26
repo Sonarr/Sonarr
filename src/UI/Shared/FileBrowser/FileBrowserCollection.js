@@ -5,12 +5,13 @@ var FileBrowserModel = require('./FileBrowserModel');
 module.exports = Backbone.Collection.extend({
     model : FileBrowserModel,
     url   : window.NzbDrone.ApiRoot + '/filesystem',
-    parse : function(response){
+
+    parse : function(response) {
         var contents = [];
-        if(response.parent || response.parent === '') {
+        if (response.parent || response.parent === '') {
             var type = 'parent';
             var name = '...';
-            if(response.parent === '') {
+            if (response.parent === '') {
                 type = 'computer';
                 name = 'My Computer';
             }

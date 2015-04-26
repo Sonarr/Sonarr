@@ -15,9 +15,9 @@ require('jquery.dotdotdot');
 
 var view = Marionette.ItemView.extend({
 
-    template: 'AddSeries/SearchResultViewTemplate',
+    template : 'AddSeries/SearchResultViewTemplate',
 
-    ui: {
+    ui : {
         profile         : '.x-profile',
         rootFolder      : '.x-root-folder',
         seasonFolder    : '.x-season-folder',
@@ -29,7 +29,7 @@ var view = Marionette.ItemView.extend({
         overview        : '.x-overview'
     },
 
-    events: {
+    events : {
         'click .x-add'            : '_addWithoutSearch',
         'click .x-add-search'     : '_addAndSearch',
         'change .x-profile'       : '_profileChanged',
@@ -39,7 +39,7 @@ var view = Marionette.ItemView.extend({
         'change .x-monitor'       : '_monitorChanged'
     },
 
-    initialize: function () {
+    initialize : function() {
 
         if (!this.model) {
             throw 'model is required';
@@ -53,7 +53,7 @@ var view = Marionette.ItemView.extend({
         this.listenTo(RootFolders, 'all', this._rootFoldersUpdated);
     },
 
-    onRender: function () {
+    onRender : function() {
 
         var defaultProfile = Config.getValue(Config.Keys.DefaultProfileId);
         var defaultRoot = Config.getValue(Config.Keys.DefaultRootFolderId);
@@ -76,24 +76,24 @@ var view = Marionette.ItemView.extend({
         //TODO: make this work via onRender, FM?
         //works with onShow, but stops working after the first render
         this.ui.overview.dotdotdot({
-            height: 120
+            height : 120
         });
 
         this.templateFunction = Marionette.TemplateCache.get('AddSeries/MonitoringTooltipTemplate');
         var content = this.templateFunction();
 
         this.ui.monitorTooltip.popover({
-            content  : content,
-            html     : true,
-            trigger  : 'hover',
-            title    : 'Episode Monitoring Options',
-            placement: 'right',
-            container: this.$el
+            content   : content,
+            html      : true,
+            trigger   : 'hover',
+            title     : 'Episode Monitoring Options',
+            placement : 'right',
+            container : this.$el
         });
     },
 
-    _configureTemplateHelpers: function () {
-        var existingSeries = SeriesCollection.where({tvdbId: this.model.get('tvdbId')});
+    _configureTemplateHelpers : function() {
+        var existingSeries = SeriesCollection.where({ tvdbId : this.model.get('tvdbId') });
 
         if (existingSeries.length > 0) {
             this.templateHelpers.existing = existingSeries[0].toJSON();
@@ -106,7 +106,7 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-    _onConfigUpdated: function (options) {
+    _onConfigUpdated : function(options) {
         if (options.key === Config.Keys.DefaultProfileId) {
             this.ui.profile.val(options.value);
         }
@@ -128,49 +128,48 @@ var view = Marionette.ItemView.extend({
         }
     },
 
-    _profileChanged: function () {
+    _profileChanged : function() {
         Config.setValue(Config.Keys.DefaultProfileId, this.ui.profile.val());
     },
 
-    _seasonFolderChanged: function () {
+    _seasonFolderChanged : function() {
         Config.setValue(Config.Keys.UseSeasonFolder, this.ui.seasonFolder.prop('checked'));
     },
 
-    _rootFolderChanged: function () {
+    _rootFolderChanged : function() {
         var rootFolderValue = this.ui.rootFolder.val();
         if (rootFolderValue === 'addNew') {
             var rootFolderLayout = new RootFolderLayout();
             this.listenToOnce(rootFolderLayout, 'folderSelected', this._setRootFolder);
             AppLayout.modalRegion.show(rootFolderLayout);
-        }
-        else {
+        } else {
             Config.setValue(Config.Keys.DefaultRootFolderId, rootFolderValue);
         }
     },
 
-    _seriesTypeChanged: function () {
+    _seriesTypeChanged : function() {
         Config.setValue(Config.Keys.DefaultSeriesType, this.ui.seriesType.val());
     },
 
-    _monitorChanged: function () {
+    _monitorChanged : function() {
         Config.setValue(Config.Keys.MonitorEpisodes, this.ui.monitor.val());
     },
 
-    _setRootFolder: function (options) {
+    _setRootFolder : function(options) {
         vent.trigger(vent.Commands.CloseModalCommand);
         this.ui.rootFolder.val(options.model.id);
         this._rootFolderChanged();
     },
 
-    _addWithoutSearch: function () {
+    _addWithoutSearch : function() {
         this._addSeries(false);
     },
 
-    _addAndSearch: function() {
+    _addAndSearch : function() {
         this._addSeries(true);
     },
 
-    _addSeries: function (searchForMissingEpisodes) {
+    _addSeries : function(searchForMissingEpisodes) {
         var addButton = this.ui.addButton;
         var addSearchButton = this.ui.addSearchButton;
 
@@ -191,7 +190,7 @@ var view = Marionette.ItemView.extend({
             seasonFolder   : seasonFolder,
             seriesType     : seriesType,
             addOptions     : options
-        }, { silent: true });
+        }, { silent : true });
 
         var self = this;
         var promise = this.model.save();
@@ -204,49 +203,49 @@ var view = Marionette.ItemView.extend({
             this.ui.addButton.spinForPromise(promise);
         }
 
-        promise.always(function () {
+        promise.always(function() {
             addButton.removeClass('disabled');
             addSearchButton.removeClass('disabled');
         });
 
-        promise.done(function () {
+        promise.done(function() {
             SeriesCollection.add(self.model);
 
             self.close();
 
             Messenger.show({
-                message: 'Added: ' + self.model.get('title'),
-                actions : {
-                    goToSeries: {
-                        label: 'Go to Series',
-                        action: function() {
-                            Backbone.history.navigate('/series/' + self.model.get('titleSlug'), { trigger: true });
+                message        : 'Added: ' + self.model.get('title'),
+                actions        : {
+                    goToSeries : {
+                        label  : 'Go to Series',
+                        action : function() {
+                            Backbone.history.navigate('/series/' + self.model.get('titleSlug'), { trigger : true });
                         }
                     }
                 },
-                hideAfter: 8,
-                hideOnNavigate: true
+                hideAfter      : 8,
+                hideOnNavigate : true
             });
 
-            vent.trigger(vent.Events.SeriesAdded, { series: self.model });
+            vent.trigger(vent.Events.SeriesAdded, { series : self.model });
         });
     },
 
-    _rootFoldersUpdated: function () {
+    _rootFoldersUpdated : function() {
         this._configureTemplateHelpers();
         this.render();
     },
 
-    _getAddSeriesOptions: function () {
+    _getAddSeriesOptions : function() {
         var monitor = this.ui.monitor.val();
         var lastSeason = _.max(this.model.get('seasons'), 'seasonNumber');
-        var firstSeason = _.min(_.reject(this.model.get('seasons'), { seasonNumber: 0 }), 'seasonNumber');
+        var firstSeason = _.min(_.reject(this.model.get('seasons'), { seasonNumber : 0 }), 'seasonNumber');
 
         this.model.setSeasonPass(firstSeason.seasonNumber);
 
         var options = {
-            ignoreEpisodesWithFiles: false,
-            ignoreEpisodesWithoutFiles: false
+            ignoreEpisodesWithFiles    : false,
+            ignoreEpisodesWithoutFiles : false
         };
 
         if (monitor === 'all') {

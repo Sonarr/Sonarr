@@ -11,14 +11,17 @@ require('./Helpers/EachReverse');
 require('./Helpers/String');
 require('./Handlebars.Debug');
 
-module.exports = function(){
-    this.get = function(templateId){
+module.exports = function() {
+    this.get = function(templateId) {
         var templateKey = templateId.toLowerCase().replace('template', '');
+
         var templateFunction = window.T[templateKey];
-        if(!templateFunction) {
+
+        if (!templateFunction) {
             throw 'couldn\'t find pre-compiled template ' + templateKey;
         }
-        return function(data){
+
+        return function(data) {
             try {
                 var wrappedTemplate = Handlebars.template.call(Handlebars, templateFunction);
                 return wrappedTemplate(data);

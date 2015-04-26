@@ -11,80 +11,103 @@ var LoadingView = require('../../Shared/LoadingView');
 var ToolbarLayout = require('../../Shared/Toolbar/ToolbarLayout');
 
 module.exports = Marionette.Layout.extend({
-    template         : 'Activity/Blacklist/BlacklistLayoutTemplate',
-    regions          : {
+    template : 'Activity/Blacklist/BlacklistLayoutTemplate',
+
+    regions : {
         blacklist : '#x-blacklist',
         toolbar   : '#x-toolbar',
         pager     : '#x-pager'
     },
-    columns          : [{
-        name  : 'series',
-        label : 'Series',
-        cell  : SeriesTitleCell
-    }, {
-        name  : 'sourceTitle',
-        label : 'Source Title',
-        cell  : 'string'
-    }, {
-        name     : 'quality',
-        label    : 'Quality',
-        cell     : QualityCell,
-        sortable : false
-    }, {
-        name  : 'date',
-        label : 'Date',
-        cell  : RelativeDateCell
-    }, {
-        name     : 'this',
-        label    : '',
-        cell     : BlacklistActionsCell,
-        sortable : false
-    }],
-    initialize       : function(){
-        this.collection = new BlacklistCollection({tableName : 'blacklist'});
+
+    columns : [
+        {
+            name  : 'series',
+            label : 'Series',
+            cell  : SeriesTitleCell
+        },
+        {
+            name  : 'sourceTitle',
+            label : 'Source Title',
+            cell  : 'string'
+        },
+        {
+            name     : 'quality',
+            label    : 'Quality',
+            cell     : QualityCell,
+            sortable : false
+        },
+        {
+            name  : 'date',
+            label : 'Date',
+            cell  : RelativeDateCell
+        },
+        {
+            name     : 'this',
+            label    : '',
+            cell     : BlacklistActionsCell,
+            sortable : false
+        }
+    ],
+
+    initialize : function() {
+        this.collection = new BlacklistCollection({ tableName : 'blacklist' });
+
         this.listenTo(this.collection, 'sync', this._showTable);
         this.listenTo(vent, vent.Events.CommandComplete, this._commandComplete);
     },
-    onShow           : function(){
+
+    onShow : function() {
         this.blacklist.show(new LoadingView());
         this._showToolbar();
         this.collection.fetch();
     },
-    _showTable       : function(collection){
+
+    _showTable : function(collection) {
+
         this.blacklist.show(new Backgrid.Grid({
             columns    : this.columns,
             collection : collection,
             className  : 'table table-hover'
         }));
+
         this.pager.show(new GridPager({
             columns    : this.columns,
             collection : collection
         }));
     },
-    _showToolbar     : function(){
+
+    _showToolbar : function() {
         var leftSideButtons = {
             type       : 'default',
             storeState : false,
-            items      : [{
-                title   : 'Clear Blacklist',
-                icon    : 'icon-trash',
-                command : 'clearBlacklist'
-            }]
+            items      : [
+                {
+                    title   : 'Clear Blacklist',
+                    icon    : 'icon-sonarr-clear',
+                    command : 'clearBlacklist'
+                }
+            ]
         };
+
         this.toolbar.show(new ToolbarLayout({
-            left    : [leftSideButtons],
+            left    : [
+                leftSideButtons
+            ],
             context : this
         }));
     },
-    _refreshTable    : function(buttonContext){
+
+    _refreshTable : function(buttonContext) {
         this.collection.state.currentPage = 1;
-        var promise = this.collection.fetch({reset : true});
-        if(buttonContext) {
+        var promise = this.collection.fetch({ reset : true });
+
+        if (buttonContext) {
             buttonContext.ui.icon.spinForPromise(promise);
         }
     },
-    _commandComplete : function(options){
-        if(options.command.get('name') === 'clearblacklist') {
+
+    _commandComplete : function(options) {
+        if (options.command.get('name') === 'clearblacklist') {
             this._refreshTable();
         }
     }

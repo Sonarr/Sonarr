@@ -1,7 +1,7 @@
 var jquery = require('jquery');
+var Backbone = require('../JsLibraries/backbone');
 
-var backbone = require('../JsLibraries/backbone');
-window.Backbone = backbone;
-backbone.$ = jquery;
+window.Backbone = Backbone;
+Backbone.$ = jquery;
 
-module.exports = backbone;
+module.exports = Backbone;

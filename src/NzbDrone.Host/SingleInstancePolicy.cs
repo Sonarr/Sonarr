@@ -31,7 +31,7 @@ namespace NzbDrone.Host
         {
             if (IsAlreadyRunning())
             {
-                _logger.Warn("Another instance of NzbDrone is already running.");
+                _logger.Warn("Another instance of Sonarr is already running.");
                 _browserService.LaunchWebUI();
                 throw new TerminateApplicationException("Another instance is already running");
             }
@@ -64,14 +64,14 @@ namespace NzbDrone.Host
 
                 if (otherProcesses.Any())
                 {
-                    _logger.Info("{0} instance(s) of NzbDrone are running", otherProcesses.Count);
+                    _logger.Info("{0} instance(s) of Sonarr are running", otherProcesses.Count);
                 }
 
                 return otherProcesses;
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to check for multiple instances of NzbDrone.", ex);
+                _logger.WarnException("Failed to check for multiple instances of Sonarr.", ex);
                 return new List<int>();
             }
         }

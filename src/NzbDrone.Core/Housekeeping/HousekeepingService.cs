@@ -8,7 +8,8 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Housekeeping
 {
-    public class HousekeepingService : IExecute<HousekeepingCommand>, IHandleAsync<ApplicationStartedEvent>
+    public class HousekeepingService : IExecute<HousekeepingCommand>,
+                                       IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IEnumerable<IHousekeepingTask> _housekeepers;
         private readonly Logger _logger;
@@ -40,7 +41,7 @@ namespace NzbDrone.Core.Housekeeping
                 }
             }
 
-            // Vacuuming the log db isn't needed since that's done hourly at the TrimLogCommand.
+            // Vacuuming the log db isn't needed since that's done in a separate housekeeping task
             _logger.Debug("Compressing main database after housekeeping");
             _mainDb.Vacuum();
         }

@@ -1,4 +1,4 @@
-﻿var $ = require('jquery');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
 var SystemInfoLayout = require('./Info/SystemInfoLayout');
@@ -10,22 +10,25 @@ var Messenger = require('../Shared/Messenger');
 var StatusModel = require('./StatusModel');
 
 module.exports = Marionette.Layout.extend({
-    template     : 'System/SystemLayoutTemplate',
-    regions      : {
+    template : 'System/SystemLayoutTemplate',
+
+    regions : {
         status  : '#status',
         logs    : '#logs',
         updates : '#updates',
         backup  : '#backup',
         tasks   : '#tasks'
     },
-    ui           : {
+
+    ui : {
         statusTab  : '.x-status-tab',
         logsTab    : '.x-logs-tab',
         updatesTab : '.x-updates-tab',
         backupTab  : '.x-backup-tab',
         tasksTab   : '.x-tasks-tab'
     },
-    events       : {
+
+    events : {
         'click .x-status-tab'  : '_showStatus',
         'click .x-logs-tab'    : '_showLogs',
         'click .x-updates-tab' : '_showUpdates',
@@ -34,8 +37,9 @@ module.exports = Marionette.Layout.extend({
         'click .x-shutdown'    : '_shutdown',
         'click .x-restart'     : '_restart'
     },
-    initialize   : function(options){
-        if(options.action) {
+
+    initialize : function(options) {
+        if (options.action) {
             this.action = options.action.toLowerCase();
         }
 
@@ -43,7 +47,8 @@ module.exports = Marionette.Layout.extend({
             authentication : StatusModel.get('authentication')
         };
     },
-    onShow       : function(){
+
+    onShow : function() {
         switch (this.action) {
             case 'logs':
                 this._showLogs();
@@ -61,13 +66,15 @@ module.exports = Marionette.Layout.extend({
                 this._showStatus();
         }
     },
-    _navigate    : function(route){
+
+    _navigate : function(route) {
         Backbone.history.navigate(route, {
             trigger : true,
             replace : true
         });
     },
-    _showStatus  : function (e) {
+
+    _showStatus : function(e) {
         if (e) {
             e.preventDefault();
         }
@@ -76,53 +83,65 @@ module.exports = Marionette.Layout.extend({
         this.ui.statusTab.tab('show');
         this._navigate('system/status');
     },
-    _showLogs    : function(e){
-        if(e) {
+
+    _showLogs : function(e) {
+        if (e) {
             e.preventDefault();
         }
+
         this.logs.show(new LogsLayout());
         this.ui.logsTab.tab('show');
         this._navigate('system/logs');
     },
-    _showUpdates : function(e){
-        if(e) {
+
+    _showUpdates : function(e) {
+        if (e) {
             e.preventDefault();
         }
+
         this.updates.show(new UpdateLayout());
         this.ui.updatesTab.tab('show');
         this._navigate('system/updates');
     },
-    _showBackup  : function(e){
-        if(e) {
+
+    _showBackup : function(e) {
+        if (e) {
             e.preventDefault();
         }
+
         this.backup.show(new BackupLayout());
         this.ui.backupTab.tab('show');
         this._navigate('system/backup');
     },
-    _showTasks   : function(e){
-        if(e) {
+
+    _showTasks : function(e) {
+        if (e) {
             e.preventDefault();
         }
+
         this.tasks.show(new TaskLayout());
         this.ui.tasksTab.tab('show');
         this._navigate('system/tasks');
     },
-    _shutdown    : function(){
+
+    _shutdown : function() {
         $.ajax({
             url  : window.NzbDrone.ApiRoot + '/system/shutdown',
             type : 'POST'
         });
+
         Messenger.show({
             message : 'Sonarr will shutdown shortly',
             type    : 'info'
         });
     },
-    _restart     : function(){
+
+    _restart : function() {
         $.ajax({
             url  : window.NzbDrone.ApiRoot + '/system/restart',
             type : 'POST'
         });
+
         Messenger.show({
             message : 'Sonarr will restart shortly',
             type    : 'info'

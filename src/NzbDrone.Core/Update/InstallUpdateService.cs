@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Update
                 return;
             }
 
-            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically && !message.Manual)
+            if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically && message.Trigger != CommandTrigger.Manual)
             {
                 _logger.ProgressDebug("Auto-update not enabled, not installing available update.");
                 return;
@@ -200,23 +200,21 @@ namespace NzbDrone.Core.Update
             try
             {
                 InstallUpdate(latestAvailable);
-
-                message.Completed("Restarting Sonarr to apply updates");
             }
             catch (UpdateFolderNotWritableException ex)
             {
                 _logger.ErrorException("Update process failed", ex);
-                message.Failed(ex, string.Format("Startup folder not writable by user '{0}'", Environment.UserName));
+                throw new CommandFailedException("Startup folder not writable by user '{0}'", ex, Environment.UserName);
             }
             catch (UpdateVerificationFailedException ex)
             {
                 _logger.ErrorException("Update process failed", ex);
-                message.Failed(ex, "Downloaded update package is corrupt");
+                throw new CommandFailedException("Downloaded update package is corrupt", ex);
             }
             catch (UpdateFailedException ex)
             {
                 _logger.ErrorException("Update process failed", ex);
-                message.Failed(ex);
+                throw new CommandFailedException(ex);
             }
         }
     }

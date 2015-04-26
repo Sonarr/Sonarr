@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
             Subject.Definition = new IndexerDefinition()
                                      {
                                          Name = "BitMeTV",
-                                         Settings = new BitMeTvSettings()
+                                         Settings = new BitMeTvSettings() { Cookie = "uid=123" }
                                      };
         }
 
@@ -28,8 +28,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
         public void should_parse_recent_feed_from_BitMeTv()
         {
             var recentFeed = ReadAllText(@"Files/RSS/BitMeTv.xml");
-            
-               
+
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));

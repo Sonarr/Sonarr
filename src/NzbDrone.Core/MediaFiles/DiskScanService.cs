@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -32,32 +33,33 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
-        private readonly ICommandExecutor _commandExecutor;
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
+        private readonly IMediaFileTableCleanupService _mediaFileTableCleanupService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
                                IMakeImportDecision importDecisionMaker,
                                IImportApprovedEpisodes importApprovedEpisodes,
-                               ICommandExecutor commandExecutor,
                                IConfigService configService,
                                ISeriesService seriesService,
+                               IMediaFileTableCleanupService mediaFileTableCleanupService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
             _importApprovedEpisodes = importApprovedEpisodes;
-            _commandExecutor = commandExecutor;
             _configService = configService;
             _seriesService = seriesService;
+            _mediaFileTableCleanupService = mediaFileTableCleanupService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
-        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(extras|^\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(extras)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedFoldersRegex = new Regex(@"(?:\\|\/)(\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
         {
@@ -77,7 +79,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
-            _commandExecutor.PublishCommand(new CleanMediaFileDb(series.Id));
+            _mediaFileTableCleanupService.Clean(series);
 
             if (!_diskProvider.FolderExists(series.Path))
             {
@@ -98,7 +100,8 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = GetVideoFiles(series.Path).Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file))).ToList();
+            var mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
+
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
@@ -126,6 +129,12 @@ namespace NzbDrone.Core.MediaFiles
             return mediaFileList.ToArray();
         }
 
+        private IEnumerable<string> FilterFiles(Series series, IEnumerable<string> videoFiles)
+        {
+            return videoFiles.Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file)))
+                             .Where(file => !ExcludedFoldersRegex.IsMatch(file));
+        }
+
         private void SetPermissions(String path)
         {
             if (!_configService.SetPermissionsLinux)
@@ -145,7 +154,7 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.WarnException("Unable to apply permissions to: " + path, ex);
                 _logger.DebugException(ex.Message, ex);
             }
-        }
+        }       
 
         public void Handle(SeriesUpdatedEvent message)
         {

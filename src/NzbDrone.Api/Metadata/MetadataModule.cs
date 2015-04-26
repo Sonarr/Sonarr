@@ -9,10 +9,10 @@ namespace NzbDrone.Api.Metadata
         {
         }
 
-        protected override void Validate(MetadataDefinition definition)
+        protected override void Validate(MetadataDefinition definition, bool includeWarnings)
         {
             if (!definition.Enable) return;
-            base.Validate(definition);
+            base.Validate(definition, includeWarnings);
         }
     }
 }

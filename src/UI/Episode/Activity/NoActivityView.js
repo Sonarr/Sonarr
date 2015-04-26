@@ -1,3 +1,5 @@
 var Marionette = require('marionette');
 
-module.exports = Marionette.ItemView.extend({template : 'Episode/Activity/NoActivityViewTemplate'});
+module.exports = Marionette.ItemView.extend({
+    template : 'Episode/Activity/NoActivityViewTemplate'
+});

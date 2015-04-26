@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             var config = _proxy.GetConfig(Settings);
             var destDir = (String)config.GetValueOrDefault("download-dir");
 
-            return string.Format("{0}/.{1}", destDir.TrimEnd('/'), Settings.TvCategory);
+            return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(String.Format(".{0}", Settings.TvCategory))) continue;
+                    if (!directories.Contains(String.Format("{0}", Settings.TvCategory))) continue;
                 }
 
                 var item = new DownloadClientItem();
@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 _logger.ErrorException(ex.Message, ex);
                 return new NzbDroneValidationFailure("Username", "Authentication failure")
                 {
-                    DetailedDescription = "Please verify your username and password. Also verify if the host running NzbDrone isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
+                    DetailedDescription = "Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
                 };
             }
             catch (WebException ex)

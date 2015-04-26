@@ -2,6 +2,7 @@
 using System.Linq;
 using NLog;
 using NLog.Config;
+using NLog.Targets;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
@@ -25,6 +26,17 @@ namespace NzbDrone.Core.Instrumentation
             var minimumLogLevel = LogLevel.FromString(_configFileProvider.LogLevel);
 
             var rules = LogManager.Configuration.LoggingRules;
+
+            //Console
+            var consoleLoggerRule = rules.SingleOrDefault(s => s.Targets.Any(t => t is ColoredConsoleTarget));
+
+            if (consoleLoggerRule != null)
+            {
+                consoleLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
+                SetMinimumLogLevel(consoleLoggerRule, minimumLogLevel);
+            }
+            
+            //Log Files
             var rollingFileLoggerRule = rules.Single(s => s.Targets.Any(t => t is NzbDroneFileTarget));
             rollingFileLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
             

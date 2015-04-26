@@ -94,7 +94,7 @@ namespace NzbDrone.Core.HealthCheck
 
         public void Execute(CheckHealthCommand message)
         {
-            PerformHealthCheck(c => message.Manual || c.CheckOnSchedule);
+            PerformHealthCheck(c => message.Trigger == CommandTrigger.Manual || c.CheckOnSchedule);
         }
     }
 }

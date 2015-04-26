@@ -21,7 +21,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.WEBDL720p, 1, Quality.HDTV720p, 2, Quality.Bluray720p, false },
             new object[] { Quality.WEBDL720p, 1, Quality.HDTV720p, 2, Quality.WEBDL720p, false },
             new object[] { Quality.WEBDL720p, 1, Quality.WEBDL720p, 1, Quality.WEBDL720p, false },
-            new object[] { Quality.SDTV, 1, Quality.SDTV, 2, Quality.SDTV, true },
             new object[] { Quality.WEBDL1080p, 1, Quality.WEBDL1080p, 1, Quality.WEBDL1080p, false }
         };
         

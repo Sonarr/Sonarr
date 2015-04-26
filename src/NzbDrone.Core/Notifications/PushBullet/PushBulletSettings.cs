@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.pushbullet.com/")]
         public String ApiKey { get; set; }
 
-        [FieldDefinition(1, Label = "Device ID", HelpText = "device_iden in the device's URL on pubshbullet.com (leave blank to send to all devices)")]
+        [FieldDefinition(1, Label = "Device ID", HelpText = "device_iden in the device's URL on pushbullet.com (leave blank to send to all devices)")]
         public String DeviceId { get; set; }
 
         public bool IsValid
@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Notifications.PushBullet
             }
         }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return Validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

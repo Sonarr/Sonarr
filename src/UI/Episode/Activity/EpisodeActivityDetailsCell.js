@@ -7,10 +7,13 @@ require('bootstrap');
 
 module.exports = NzbDroneCell.extend({
     className : 'episode-activity-details-cell',
-    render    : function(){
+
+    render : function() {
         this.$el.empty();
-        this.$el.html('<i class="icon-info-sign"></i>');
-        var html = new HistoryDetailsView({model : this.model}).render().$el;
+        this.$el.html('<i class="icon-sonarr-form-info"></i>');
+
+        var html = new HistoryDetailsView({ model : this.model }).render().$el;
+
         this.$el.popover({
             content   : html,
             html      : true,
@@ -19,6 +22,7 @@ module.exports = NzbDroneCell.extend({
             placement : 'left',
             container : this.$el
         });
+
         return this;
     }
 });

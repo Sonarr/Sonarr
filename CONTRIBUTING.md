@@ -33,8 +33,13 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 - Use 4 spaces instead of tabs, this is the default for VS 2012 and WebStorm (to my knowledge)
 
 ### Pull Requesting ###
+- Only make pull requests to develop, never master, if you make a PR to master we'll comment on it and close it
 - You're probably going to get some comments or questions from us, they will be to ensure consistency and maintainability
 - We'll try to respond to pull requests as soon as possible, if its been a day or two, please reach out to us, we may have missed it
-- Each PR comes from its own [feature branch](http://martinfowler.com/bliki/FeatureBranch.html) not develop in your fork
+- Each PR should come from its own [feature branch](http://martinfowler.com/bliki/FeatureBranch.html) not develop in your fork, it should have a meaningful branch name (what is being added/fixed)
+  - new-feature (Good)
+  - fix-bug (Good)
+  - patch (Bad)
+  - develop (Bad)
 
 If you have any questions about any of this, please let us know.

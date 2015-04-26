@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Net;
-using System.Linq;
 using System.Collections.Generic;
-using NzbDrone.Core.Rest;
-using NLog;
-using RestSharp;
+using System.Linq;
+using System.Net;
 using Newtonsoft.Json.Linq;
+using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Rest;
+using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {
@@ -231,10 +232,15 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var protocol = settings.UseSsl ? "https" : "http";
 
-            var url = String.Format(@"{0}://{1}:{2}",
-                                 protocol,
-                                 settings.Host,
-                                 settings.Port);
+            String url;
+            if (!settings.UrlBase.IsNullOrWhiteSpace())
+            {
+                url = String.Format(@"{0}://{1}:{2}/{3}", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
+            }
+            else
+            {
+                url = String.Format(@"{0}://{1}:{2}", protocol, settings.Host, settings.Port);
+            }
 
             var restClient = RestClientFactory.BuildClient(url);
             restClient.Timeout = 4000;

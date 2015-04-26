@@ -35,14 +35,14 @@
                     {{/unless}}
 
                     <div class="form-group col-md-2">
-                        <label>Monitor <i class="icon-nd-form-info monitor-tooltip x-monitor-tooltip"></i></label>
+                        <label>Monitor <i class="icon-sonarr-form-info monitor-tooltip x-monitor-tooltip"></i></label>
                         <select class="form-control col-md-2 x-monitor">
                             <option value="all">All</option>
                             <option value="future">Future</option>
                             <option value="missing">Missing</option>
                             <option value="existing">Existing</option>
-                            <!--<option value="latest">Latest Season</option>-->
                             <option value="first">First Season</option>
+                            <option value="latest">Latest Season</option>
                             <option value="none">None</option>
                         </select>
                     </div>
@@ -80,12 +80,12 @@
                         <!--Uncomment if we need to add even more controls to add series-->
                         <!--<label style="visibility: hidden">Add</label>-->
                         <div class="btn-group">
-                            <button class="btn btn-success add x-add">
-                                <i class="icon-plus" title="Add"></i>
+                            <button class="btn btn-success add x-add" title="Add">
+                                <i class="icon-sonarr-add"></i>
                             </button>
 
-                            <button class="btn btn-success add x-add-search">
-                                <i class="icon-search" title="Add and Search for missing episodes"></i>
+                            <button class="btn btn-success add x-add-search" title="Add and Search for missing episodes">
+                                <i class="icon-sonarr-search"></i>
                             </button>
                         </div>
                     </div>

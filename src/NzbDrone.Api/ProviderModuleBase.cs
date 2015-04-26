@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using FluentValidation.Results;
 using Nancy;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 using Omu.ValueInjecter;
 
 namespace NzbDrone.Api
@@ -72,11 +74,11 @@ namespace NzbDrone.Api
 
         private int CreateProvider(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource);
+            var providerDefinition = GetDefinition(providerResource, false);
 
             if (providerDefinition.Enable)
             {
-                Test(providerDefinition);
+                Test(providerDefinition, false);
             }
 
             providerDefinition = _providerFactory.Create(providerDefinition);
@@ -86,12 +88,17 @@ namespace NzbDrone.Api
 
         private void UpdateProvider(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource);
+            var providerDefinition = GetDefinition(providerResource, false);
+
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition, false);
+            }
 
             _providerFactory.Update(providerDefinition);
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool includeWarnings = false)
         {
             var definition = new TProviderDefinition();
 
@@ -105,7 +112,7 @@ namespace NzbDrone.Api
             var configContract = ReflectionExtensions.CoreAssembly.FindTypeByName(definition.ConfigContract);
             definition.Settings = (IProviderConfig)SchemaBuilder.ReadFormSchema(providerResource.Fields, configContract, preset);
 
-            Validate(definition);
+            Validate(definition, includeWarnings);
 
             return definition;
         }
@@ -149,30 +156,39 @@ namespace NzbDrone.Api
 
         private Response Test(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource);
+            var providerDefinition = GetDefinition(providerResource, true);
 
-            Test(providerDefinition);
+            Test(providerDefinition, true);
 
             return "{}";
         }
 
-        private void Test(TProviderDefinition providerDefinition)
+        protected virtual void Validate(TProviderDefinition definition, bool includeWarnings)
         {
-            var result = _providerFactory.Test(providerDefinition);
+            var validationResult = definition.Settings.Validate();
+
+            VerifyValidationResult(validationResult, includeWarnings);
+        }
+
+        protected virtual void Test(TProviderDefinition definition, bool includeWarnings)
+        {
+            var validationResult = _providerFactory.Test(definition);
+
+            VerifyValidationResult(validationResult, includeWarnings);
+        }
+
+        protected void VerifyValidationResult(ValidationResult validationResult, bool includeWarnings)
+        {
+            var result = new NzbDroneValidationResult(validationResult.Errors);
+
+            if (includeWarnings && (!result.IsValid || result.HasWarnings))
+            {
+                throw new ValidationException(result.Failures);
+            }
 
             if (!result.IsValid)
             {
                 throw new ValidationException(result.Errors);
-            }
-        }
-
-        protected virtual void Validate(TProviderDefinition definition)
-        {
-            var validationResult = definition.Settings.Validate();
-
-            if (!validationResult.IsValid)
-            {
-                throw new ValidationException(validationResult.Errors);
             }
         }
     }

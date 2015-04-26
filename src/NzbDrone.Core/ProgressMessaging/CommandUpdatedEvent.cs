@@ -5,9 +5,9 @@ namespace NzbDrone.Core.ProgressMessaging
 {
     public class CommandUpdatedEvent : IEvent
     {
-        public Command Command { get; set; }
+        public CommandModel Command { get; set; }
 
-        public CommandUpdatedEvent(Command command)
+        public CommandUpdatedEvent(CommandModel command)
         {
             Command = command;
         }

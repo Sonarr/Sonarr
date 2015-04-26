@@ -70,7 +70,14 @@ namespace NzbDrone.Core.Download
 
             if (magnetUrl.IsNotNullOrWhiteSpace())
             {
-                hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                try
+                {
+                    hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                }
+                catch (NotSupportedException ex)
+                {
+                    _logger.Debug("Magnet not supported by download client, trying torrent. ({0})", ex.Message);
+                }
             }
 
             if (hash == null && !torrentUrl.IsNullOrWhiteSpace())
@@ -135,7 +142,7 @@ namespace NzbDrone.Core.Download
             if (hash != actualHash)
             {
                 _logger.Warn(
-                    "{0} did not return the expected InfoHash for '{1}', NzbDrone could potential lose track of the download in progress.",
+                    "{0} did not return the expected InfoHash for '{1}', Sonarr could potentially lose track of the download in progress.",
                     Definition.Implementation, remoteEpisode.Release.DownloadUrl);
             }
 
@@ -167,7 +174,7 @@ namespace NzbDrone.Core.Download
             if (hash != actualHash)
             {
                 _logger.Warn(
-                    "{0} did not return the expected InfoHash for '{1}', NzbDrone could potential lose track of the download in progress.",
+                    "{0} did not return the expected InfoHash for '{1}', Sonarr could potentially lose track of the download in progress.",
                     Definition.Implementation, remoteEpisode.Release.DownloadUrl);
             }
 

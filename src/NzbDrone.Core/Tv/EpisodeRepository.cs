@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Tv
         PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
-        List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate);
+        List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored);
         void SetMonitoredFlat(Episode episode, bool monitored);
         void SetMonitoredBySeason(int seriesId, int seasonNumber, bool monitored);
         void SetFileId(int episodeId, int fileId);
@@ -151,14 +151,20 @@ namespace NzbDrone.Core.Tv
             return episodes.Single();
         }
 
-        public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate)
+        public List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored)
         {
-            return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
-                        .Where<Episode>(e => e.AirDateUtc >= startDate)
-                        .AndWhere(e => e.AirDateUtc <= endDate)
-                        .AndWhere(e => e.Monitored)
-                        .AndWhere(e => e.Series.Monitored)
-                        .ToList();
+            var query = Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
+                             .Where<Episode>(e => e.AirDateUtc >= startDate)
+                             .AndWhere(e => e.AirDateUtc <= endDate);
+
+
+            if (!includeUnmonitored)
+            {
+                query.AndWhere(e => e.Monitored)
+                     .AndWhere(e => e.Series.Monitored);
+            }
+
+            return query.ToList();
         }
 
         public void SetMonitoredFlat(Episode episode, bool monitored)

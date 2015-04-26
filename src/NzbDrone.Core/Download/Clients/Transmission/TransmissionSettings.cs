@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -10,16 +10,16 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     {
         public TransmissionSettingsValidator()
         {
-            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).GreaterThan(0);
 
-            RuleFor(c => c.TvCategory).Matches("^[-a-z]*$").WithMessage("Allowed characters a-z and -");
+            RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$").WithMessage("Allowed characters a-z and -");
         }
     }
 
     public class TransmissionSettings : IProviderConfig
     {
-        private static readonly TransmissionSettingsValidator validator = new TransmissionSettingsValidator();
+        private static readonly TransmissionSettingsValidator Validator = new TransmissionSettingsValidator();
 
         public TransmissionSettings()
         {
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(4, Label = "Password", Type = FieldType.Password)]
         public String Password { get; set; }
 
-        [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox)]
+        [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional. Creates a .[category] subdirectory in the output directory.")]
         public String TvCategory { get; set; }
 
         [FieldDefinition(6, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(TransmissionPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
@@ -54,9 +54,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(8, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

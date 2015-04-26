@@ -6,7 +6,7 @@ using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Fanzub
 {
-    public class Fanzub : HttpIndexerBase<NullConfig>
+    public class Fanzub : HttpIndexerBase<FanzubSettings>
     {
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new FanzubRequestGenerator();
+            return new FanzubRequestGenerator() { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()

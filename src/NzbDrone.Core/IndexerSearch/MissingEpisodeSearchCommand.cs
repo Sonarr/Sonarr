@@ -4,7 +4,7 @@ namespace NzbDrone.Core.IndexerSearch
 {
     public class MissingEpisodeSearchCommand : Command
     {
-        public int SeriesId { get; private set; }
+        public int? SeriesId { get; private set; }
 
         public override bool SendUpdatesToClient
         {

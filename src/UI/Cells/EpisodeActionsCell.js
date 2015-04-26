@@ -3,14 +3,18 @@ var NzbDroneCell = require('./NzbDroneCell');
 var CommandController = require('../Commands/CommandController');
 
 module.exports = NzbDroneCell.extend({
-    className        : 'episode-actions-cell',
-    events           : {
-        "click .x-automatic-search" : '_automaticSearch',
-        "click .x-manual-search"    : '_manualSearch'
+    className : 'episode-actions-cell',
+
+    events : {
+        'click .x-automatic-search' : '_automaticSearch',
+        'click .x-manual-search'    : '_manualSearch'
     },
-    render           : function(){
+
+    render : function() {
         this.$el.empty();
-        this.$el.html('<i class="icon-search x-automatic-search" title="Automatic Search"></i>' + '<i class="icon-nd-manual-search x-manual-search" title="Manual Search"></i>');
+
+        this.$el.html('<i class="icon-sonarr-search x-automatic-search" title="Automatic Search"></i>' + '<i class="icon-sonarr-search-manual x-manual-search" title="Manual Search"></i>');
+
         CommandController.bindToCommand({
             element : this.$el.find('.x-automatic-search'),
             command : {
@@ -18,16 +22,19 @@ module.exports = NzbDroneCell.extend({
                 episodeIds : [this.model.get('id')]
             }
         });
+
         this.delegateEvents();
         return this;
     },
-    _automaticSearch : function(){
+
+    _automaticSearch : function() {
         CommandController.Execute('episodeSearch', {
             name       : 'episodeSearch',
             episodeIds : [this.model.get('id')]
         });
     },
-    _manualSearch    : function(){
+
+    _manualSearch : function() {
         vent.trigger(vent.Commands.ShowEpisodeDetails, {
             episode        : this.cellValue,
             hideSeriesLink : true,

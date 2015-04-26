@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
     {
         public UTorrentSettingsValidator()
         {
-            RuleFor(c => c.Host).NotEmpty();
+            RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(0, 65535);
             RuleFor(c => c.TvCategory).NotEmpty();
         }
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
     public class UTorrentSettings : IProviderConfig
     {
-        private static readonly UTorrentSettingsValidator validator = new UTorrentSettingsValidator();
+        private static readonly UTorrentSettingsValidator Validator = new UTorrentSettingsValidator();
 
         public UTorrentSettings()
         {
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
         public String Password { get; set; }
 
-        [FieldDefinition(4, Label = "Category", Type = FieldType.Textbox)]
+        [FieldDefinition(4, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
         public String TvCategory { get; set; }
 
         [FieldDefinition(5, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
@@ -48,9 +48,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         [FieldDefinition(6, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
         public Int32 OlderTvPriority { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

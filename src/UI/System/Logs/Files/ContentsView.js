@@ -1,3 +1,5 @@
 var Marionette = require('marionette');
 
-module.exports = Marionette.ItemView.extend({template : 'System/Logs/Files/ContentsViewTemplate'});
+module.exports = Marionette.ItemView.extend({
+    template : 'System/Logs/Files/ContentsViewTemplate'
+});

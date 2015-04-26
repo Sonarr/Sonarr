@@ -54,24 +54,30 @@ namespace NzbDrone.Core.Download
 
         public void Process(TrackedDownload trackedDownload)
         {
-            var grabbedItems = _historyService.Find(trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed)
-                .ToList();
-
-            if (grabbedItems.Empty())
-            {
-                trackedDownload.Warn("Download wasn't grabbed by sonarr, skipping");
-                return;
-            }
+            string failure = null;
 
             if (trackedDownload.DownloadItem.IsEncrypted)
             {
-                trackedDownload.State = TrackedDownloadStage.DownloadFailed;
-                PublishDownloadFailedEvent(grabbedItems, "Encrypted download detected", trackedDownload);
+                failure = "Encrypted download detected";
             }
             else if (trackedDownload.DownloadItem.Status == DownloadItemStatus.Failed)
             {
+                failure = trackedDownload.DownloadItem.Message ?? "Failed download detected";
+            }
+
+            if (failure != null)
+            {
+                var grabbedItems = _historyService.Find(trackedDownload.DownloadItem.DownloadId, HistoryEventType.Grabbed)
+                    .ToList();
+
+                if (grabbedItems.Empty())
+                {
+                    trackedDownload.Warn("Download wasn't grabbed by sonarr, skipping");
+                    return;
+                }
+            
                 trackedDownload.State = TrackedDownloadStage.DownloadFailed;
-                PublishDownloadFailedEvent(grabbedItems, trackedDownload.DownloadItem.Message, trackedDownload);
+                PublishDownloadFailedEvent(grabbedItems, failure, trackedDownload);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿var $ = require('jquery');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
 var RouteBinder = require('./jQuery/RouteBinder');
@@ -11,6 +11,7 @@ var ModalController = require('./Shared/Modal/ModalController');
 var ControlPanelController = require('./Shared/ControlPanel/ControlPanelController');
 var serverStatusModel = require('./System/StatusModel');
 var Tooltip = require('./Shared/Tooltip');
+var UiSettingsController = require('./Shared/UiSettingsController');
 
 require('./jQuery/ToTheTop');
 require('./Instrumentation/StringFormat');
@@ -23,13 +24,18 @@ new SeriesController();
 new ModalController();
 new ControlPanelController();
 new Router();
+
 var app = new Marionette.Application();
-app.addInitializer(function(){
+
+app.addInitializer(function() {
     console.log('starting application');
 });
-app.addInitializer(SignalRBroadcaster.appInitializer, {app : app});
-app.addInitializer(Tooltip.appInitializer, {app : app});
-app.addInitializer(function(){
+
+app.addInitializer(SignalRBroadcaster.appInitializer, { app : app });
+
+app.addInitializer(Tooltip.appInitializer, { app : app });
+
+app.addInitializer(function() {
     Backbone.history.start({
         pushState : true,
         root      : serverStatusModel.get('urlBase')
@@ -38,13 +44,17 @@ app.addInitializer(function(){
     AppLayout.navbarRegion.show(new NavbarLayout());
     $('body').addClass('started');
 });
-app.addInitializer(function(){
+
+app.addInitializer(UiSettingsController.appInitializer);
+
+app.addInitializer(function() {
     var footerText = serverStatusModel.get('version');
-    if(serverStatusModel.get('branch') !== 'master') {
+    if (serverStatusModel.get('branch') !== 'master') {
         footerText += '</br>' + serverStatusModel.get('branch');
     }
     $('#footer-region .version').html(footerText);
 });
+
 app.start();
 
 module.exports = app;

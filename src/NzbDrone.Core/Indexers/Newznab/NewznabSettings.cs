@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -54,7 +53,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public NewznabSettings()
         {
-            Categories = new[] { 5030, 5040 };
+            Categories = new[] {5030, 5040};
             AnimeCategories = Enumerable.Empty<Int32>();
         }
 
@@ -64,18 +63,21 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(1, Label = "API Key")]
         public String ApiKey { get; set; }
 
-        [FieldDefinition(2, Label = "Categories", HelpText = "Comma Separated list, leave blank to disable standard/daily shows", Advanced = true)]
+        [FieldDefinition(2, Label = "Categories",
+            HelpText = "Comma Separated list, leave blank to disable standard/daily shows", Advanced = true)]
         public IEnumerable<Int32> Categories { get; set; }
 
-        [FieldDefinition(3, Label = "Anime Categories", HelpText = "Comma Separated list, leave blank to disable anime", Advanced = true)]
+        [FieldDefinition(3, Label = "Anime Categories", HelpText = "Comma Separated list, leave blank to disable anime",
+            Advanced = true)]
         public IEnumerable<Int32> AnimeCategories { get; set; }
 
-        [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional newznab parameters", Advanced = true)]
+        [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional newznab parameters", Advanced = true
+            )]
         public String AdditionalParameters { get; set; }
 
-        public ValidationResult Validate()
+        public NzbDroneValidationResult Validate()
         {
-            return Validator.Validate(this);
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

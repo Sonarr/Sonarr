@@ -1,9 +1,10 @@
-﻿using NLog.Config;
+﻿using System;
+using NLog.Config;
 using NLog;
 using NLog.Targets;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Commands.Tracking;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.ProgressMessaging
@@ -11,47 +12,66 @@ namespace NzbDrone.Core.ProgressMessaging
     public class ProgressMessageTarget : Target, IHandle<ApplicationStartedEvent>
     {
         private readonly IEventAggregator _eventAggregator;
-        private readonly ITrackCommands _trackCommands;
+        private readonly IManageCommandQueue _commandQueueManager;
         private static LoggingRule _rule;
 
-        public ProgressMessageTarget(IEventAggregator eventAggregator, ITrackCommands trackCommands)
+        private const string REENTRY_LOCK = "ProgressMessagingLock";
+
+        public ProgressMessageTarget(IEventAggregator eventAggregator, IManageCommandQueue commandQueueManager)
         {
             _eventAggregator = eventAggregator;
-            _trackCommands = trackCommands;
+            _commandQueueManager = commandQueueManager;
         }
 
         protected override void Write(LogEventInfo logEvent)
         {
+            if (!ReentryPreventionCheck()) return;
+
             var command = GetCurrentCommand();
 
             if (IsClientMessage(logEvent, command))
             {
-                command.SetMessage(logEvent.FormattedMessage);
+                _commandQueueManager.SetMessage(command, logEvent.FormattedMessage);
                 _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
             }
+
+            MappedDiagnosticsContext.Remove(REENTRY_LOCK);
         }
 
-
-        private Command GetCurrentCommand()
+        private CommandModel GetCurrentCommand()
         {
             var commandId = MappedDiagnosticsContext.Get("CommandId");
 
-            if (string.IsNullOrWhiteSpace(commandId))
+            if (String.IsNullOrWhiteSpace(commandId))
             {
                 return null;
             }
 
-            return _trackCommands.GetById(commandId);
+            return _commandQueueManager.Get(Convert.ToInt32(commandId));
         }
 
-        private bool IsClientMessage(LogEventInfo logEvent, Command command)
+        private bool IsClientMessage(LogEventInfo logEvent, CommandModel command)
         {
-            if (command == null || !command.SendUpdatesToClient)
+            if (command == null || !command.Body.SendUpdatesToClient)
             {
                 return false;
             }
 
             return logEvent.Properties.ContainsKey("Status");
+        }
+
+        private bool ReentryPreventionCheck()
+        {
+            var reentryLock = MappedDiagnosticsContext.Get(REENTRY_LOCK);
+            var commandId = MappedDiagnosticsContext.Get("CommandId");
+
+            if (reentryLock.IsNullOrWhiteSpace() || reentryLock != commandId)
+            {
+                MappedDiagnosticsContext.Set(REENTRY_LOCK, MappedDiagnosticsContext.Get("CommandId"));
+                return true;
+            }
+
+            return false;
         }
 
         public void Handle(ApplicationStartedEvent message)

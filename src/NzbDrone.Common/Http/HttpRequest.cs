@@ -14,6 +14,7 @@ namespace NzbDrone.Common.Http
             Headers = new HttpHeader();
             _segments = new Dictionary<string, string>();
             AllowAutoRedirect = true;
+            Cookies = new Dictionary<string, string>();
 
             if (httpAccept != null)
             {
@@ -44,6 +45,8 @@ namespace NzbDrone.Common.Http
         public NetworkCredential NetworkCredential { get; set; }
         public bool SuppressHttpError { get; set; }
         public bool AllowAutoRedirect { get; set; }
+        public Dictionary<string, string> Cookies { get; private set; }
+        public bool StoreResponseCookie { get; set; }
 
         public override string ToString()
         {
@@ -65,6 +68,21 @@ namespace NzbDrone.Common.Http
             }
 
             _segments.Add(key, value);
+        }
+
+        public void AddCookie(string key, string value)
+        {
+            Cookies[key] = value;
+        }
+
+        public void AddCookie(string cookies)
+        {
+            foreach (var pair in cookies.Split(';'))
+            {
+                var split = pair.Split('=');
+
+                Cookies[split[0].Trim()] = split[1].Trim();
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
     [TestFixture]
     public class UpdateFixture : CoreTest<JsonApiProvider>
     {
+        private const int TVDB_ID = 5;
         private XbmcSettings _settings;
         private Series _series;
         private List<TvShow> _xbmcSeries;
@@ -25,8 +26,10 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
                                              .Build();
 
             _xbmcSeries = Builder<TvShow>.CreateListOfSize(3)
-                                            .Build()
-                                            .ToList();
+                                         .TheFirst(1)
+                                         .With(s => s.ImdbNumber = TVDB_ID.ToString())
+                                         .Build()
+                                         .ToList();
 
             Mocker.GetMock<IXbmcJsonApiProxy>()
                   .Setup(s => s.GetSeries(_settings))
@@ -41,7 +44,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         public void should_update_using_series_path()
         {
             var series = Builder<Series>.CreateNew()
-                                        .With(s => s.TvdbId = _xbmcSeries.First().ImdbNumber)
+                                        .With(s => s.TvdbId = TVDB_ID)
                                         .Build();
 
             Subject.Update(_settings, series);

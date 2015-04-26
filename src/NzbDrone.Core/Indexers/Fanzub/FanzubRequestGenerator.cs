@@ -13,12 +13,11 @@ namespace NzbDrone.Core.Indexers.Fanzub
     {
         private static readonly Regex RemoveCharactersRegex = new Regex(@"[!?`]", RegexOptions.Compiled);
 
-        public String BaseUrl { get; set; }
+        public FanzubSettings Settings { get; set; }
         public Int32 PageSize { get; set; }
 
         public FanzubRequestGenerator()
         {
-            BaseUrl = "http://fanzub.com/rss/?cat=anime";
             PageSize = 100;
         }
 
@@ -65,7 +64,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         private IEnumerable<IndexerRequest> GetPagedRequests(String query)
         {
             var url = new StringBuilder();
-            url.AppendFormat("{0}&max={1}", BaseUrl, PageSize);
+            url.AppendFormat("{0}?cat=anime&max={1}", Settings.BaseUrl, PageSize);
 
             if (query.IsNotNullOrWhiteSpace())
             {

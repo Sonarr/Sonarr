@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download
             var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
             try
             {
-                _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.DownloadClient);
+                _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClient);
                 downloadClient.RemoveItem(trackedDownload.DownloadItem.DownloadId, true);
                 trackedDownload.DownloadItem.Removed = true;
             }

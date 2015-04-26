@@ -10,7 +10,7 @@ var RenamePreviewLayout = require('../../Rename/RenamePreviewLayout');
 var FileBrowserLayout = require('../FileBrowser/FileBrowserLayout');
 
 module.exports = Marionette.AppRouter.extend({
-    initialize         : function(){
+    initialize : function() {
         vent.on(vent.Commands.OpenModalCommand, this._openModal, this);
         vent.on(vent.Commands.CloseModalCommand, this._closeModal, this);
         vent.on(vent.Commands.EditSeriesCommand, this._editSeries, this);
@@ -22,21 +22,26 @@ module.exports = Marionette.AppRouter.extend({
         vent.on(vent.Commands.ShowFileBrowser, this._showFileBrowser, this);
         vent.on(vent.Commands.CloseFileBrowser, this._closeFileBrowser, this);
     },
-    _openModal         : function(view){
+
+    _openModal : function(view) {
         AppLayout.modalRegion.show(view);
     },
-    _closeModal        : function(){
+
+    _closeModal : function() {
         AppLayout.modalRegion.closeModal();
     },
-    _editSeries        : function(options){
-        var view = new EditSeriesView({model : options.series});
+
+    _editSeries : function(options) {
+        var view = new EditSeriesView({ model : options.series });
         AppLayout.modalRegion.show(view);
     },
-    _deleteSeries      : function(options){
-        var view = new DeleteSeriesView({model : options.series});
+
+    _deleteSeries : function(options) {
+        var view = new DeleteSeriesView({ model : options.series });
         AppLayout.modalRegion.show(view);
     },
-    _showEpisode       : function(options){
+
+    _showEpisode : function(options) {
         var view = new EpisodeDetailsLayout({
             model          : options.episode,
             hideSeriesLink : options.hideSeriesLink,
@@ -44,23 +49,28 @@ module.exports = Marionette.AppRouter.extend({
         });
         AppLayout.modalRegion.show(view);
     },
-    _showHistory       : function(options){
-        var view = new HistoryDetailsLayout({model : options.model});
+
+    _showHistory : function(options) {
+        var view = new HistoryDetailsLayout({ model : options.model });
         AppLayout.modalRegion.show(view);
     },
-    _showLogDetails    : function(options){
-        var view = new LogDetailsView({model : options.model});
+
+    _showLogDetails : function(options) {
+        var view = new LogDetailsView({ model : options.model });
         AppLayout.modalRegion.show(view);
     },
-    _showRenamePreview : function(options){
+
+    _showRenamePreview : function(options) {
         var view = new RenamePreviewLayout(options);
         AppLayout.modalRegion.show(view);
     },
-    _showFileBrowser   : function(options){
+
+    _showFileBrowser : function(options) {
         var view = new FileBrowserLayout(options);
         AppLayout.fileBrowserModalRegion.show(view);
     },
-    _closeFileBrowser  : function(){
+
+    _closeFileBrowser : function(options) {
         AppLayout.fileBrowserModalRegion.closeModal();
     }
 });

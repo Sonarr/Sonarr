@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
         protected void GivenTvCategory()
         {
-            _settings.TvCategory = "nzbdrone";
+            _settings.TvCategory = "sonarr";
         }
 
         protected void GivenFailedDownload()
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/.nzbdrone", It.IsAny<TransmissionSettings>()), Times.Once());
+                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [Test]
@@ -246,7 +246,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/.nzbdrone", It.IsAny<TransmissionSettings>()), Times.Once());
+                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
@@ -327,7 +327,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         {
             GivenTvCategory();
 
-            _downloading.DownloadDir = @"C:/Downloads/Finished/transmission/.nzbdrone";
+            _downloading.DownloadDir = @"C:/Downloads/Finished/transmission/sonarr";
 
             GivenTorrents(new List<TransmissionTorrent> 
                 {
