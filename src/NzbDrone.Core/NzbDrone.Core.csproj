@@ -467,6 +467,9 @@
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\ImmortalSeed\ImmortalSeed.cs" />
+    <Compile Include="Indexers\ImmortalSeed\ImmortalSeedRequestGenerator.cs" />
+    <Compile Include="Indexers\ImmortalSeed\ImmortalSeedSettings.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerFactory.cs" />
@@ -504,6 +507,10 @@
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexer.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerParserSettings.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\TorrentRssIndexer\TorrentRssIndexerSettings.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
     <Compile Include="Indexers\Torznab\Torznab.cs" />
     <Compile Include="Indexers\Torznab\TorznabException.cs" />
