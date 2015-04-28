@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             Subject.Definition = new IndexerDefinition()
             {
                 Name = "TorrentRssIndexer",
-                Settings = new TorrentRssIndexerSettings() { }
+                Settings = new TorrentRssIndexerSettings() { },
             };
         }
 
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            Subject.TestPublic().Should().HaveCount(2);
+            Subject.TestPublic().Should().HaveCount(1);
             ExceptionVerification.IgnoreWarns();
         }
 

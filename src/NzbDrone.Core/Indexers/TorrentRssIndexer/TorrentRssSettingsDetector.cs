@@ -11,7 +11,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 {
-    public class TorrentRssSettingsDetector
+    public class TorrentRssSettingsDetector : ITorrentRssSettingsDetector
     {
         protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -44,13 +44,14 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 
             IndexerResponse response;
             var settings = new TorrentRssIndexerParserSettings();
+
             try
             {
                 response = _fetchIndexerResponseFunc(request);
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+                _logger.WarnException(string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message), ex);
 
                 return null;
             }
