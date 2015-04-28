@@ -32,19 +32,39 @@ namespace NzbDrone.Host.Owin
 
         public override void Write(string value)
         {
-            if (value.ToLower().Contains("error") && !(value.ToLower().Contains("sqlite") || value.ToLower().Contains("\"errors\":null")))
-            {
-                _logger.Error(value);
-            }
-            else
-            {
-                _logger.Trace(value);
-            }
+            _logger.Log(GetLogLevel(value), value);
         }
 
         public override void Write(char value)
         {
             _logger.Trace(value);
+        }
+
+        private LogLevel GetLogLevel(string value)
+        {
+            var lower = value;
+
+            if (!lower.Contains("error"))
+            {
+                return LogLevel.Trace;
+            }
+
+            if (lower.Contains("sqlite"))
+            {
+                return LogLevel.Trace;
+            }
+
+            if (lower.Contains("\"errors\":null"))
+            {
+                return LogLevel.Trace;
+            }
+
+            if (lower.Contains("signalr") && lower.Contains("an operation was attempted on a nonexistent network connection"))
+            {
+                return LogLevel.Trace;
+            }
+
+            return LogLevel.Error;
         }
     }
 }
