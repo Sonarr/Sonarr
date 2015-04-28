@@ -75,6 +75,7 @@ namespace NzbDrone.Core.MediaFiles
             if (_diskProvider.GetDirectories(rootFolder).Empty())
             {
                 _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
+                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
                 return; 
             }
 

@@ -18,6 +18,7 @@ namespace NzbDrone.Core.MediaFiles.Events
     public enum SeriesScanSkippedReason
     {
         RootFolderDoesNotExist,
+        RootFolderIsEmpty,
         SeriesFolderDoesNotExist
     }
 }
