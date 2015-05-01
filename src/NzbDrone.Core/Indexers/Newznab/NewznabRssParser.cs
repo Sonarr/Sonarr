@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
-            var xdoc = XDocument.Parse(indexerResponse.Content);
+            var xdoc = LoadXmlDocument(indexerResponse);
             var error = xdoc.Descendants("error").FirstOrDefault();
 
             if (error == null) return true;
