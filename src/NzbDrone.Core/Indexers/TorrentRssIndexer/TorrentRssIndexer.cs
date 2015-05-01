@@ -14,18 +14,15 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 
         private readonly ITorrentRssParserFactory _torrentRssParserFactory;
 
-        private readonly IIndexerRequestGenerator _indexerRequestGenerator;
-
-        public TorrentRssIndexer(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, ITorrentRssParserFactory torrentRssParserFactory, IIndexerRequestGenerator indexerRequestGenerator, Logger logger)
+        public TorrentRssIndexer(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, ITorrentRssParserFactory torrentRssParserFactory, Logger logger)
             : base(httpClient, configService, parsingService, logger)
         {
             _torrentRssParserFactory = torrentRssParserFactory;
-            _indexerRequestGenerator = indexerRequestGenerator;
         }
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return _indexerRequestGenerator;
+            return new TorrentRssIndexerRequestGenerator() { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()

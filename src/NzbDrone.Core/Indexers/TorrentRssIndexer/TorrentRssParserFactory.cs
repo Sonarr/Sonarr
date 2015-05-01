@@ -1,22 +1,22 @@
 ﻿using System;
 using NLog;
+using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 {
-    using NzbDrone.Common.Cache;
-
     public class TorrentRssParserFactory : ITorrentRssParserFactory
     {
-        protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        protected readonly Logger _logger;
         
         private readonly ICached<TorrentRssIndexerParserSettings> _settingsCache;
 
         private readonly ITorrentRssSettingsDetector _torrentRssSettingsDetector;
 
-        public TorrentRssParserFactory(ICacheManager cacheManager, ITorrentRssSettingsDetector torrentRssSettingsDetector)
+        public TorrentRssParserFactory(ICacheManager cacheManager, ITorrentRssSettingsDetector torrentRssSettingsDetector, Logger logger)
         {
             _settingsCache = cacheManager.GetCache<TorrentRssIndexerParserSettings>(GetType());
             _torrentRssSettingsDetector = torrentRssSettingsDetector;
+            _logger = logger;
         }
 
         /// <summary>
