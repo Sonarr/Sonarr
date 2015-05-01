@@ -141,6 +141,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         }
 
         [Test]
+        public void RemoveItem_should_delete_folder()
+        {
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.FolderExists(It.IsAny<string>()))
+                .Returns(true);
+
+            Subject.RemoveItem("id", true);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFolder(It.IsAny<string>(), true), Times.Once());
+        }
+
+        [Test]
         public void queued_item_should_have_required_properties()
         {
             _queued.ActiveDownloads = 0;

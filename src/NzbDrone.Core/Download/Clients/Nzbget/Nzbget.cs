@@ -202,6 +202,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
+            if (deleteData)
+            {
+                DeleteItemData(downloadId);
+            }
+
             _proxy.RemoveItem(downloadId, Settings);
         }
 
