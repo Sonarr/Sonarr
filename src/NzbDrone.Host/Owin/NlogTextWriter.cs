@@ -42,7 +42,7 @@ namespace NzbDrone.Host.Owin
 
         private LogLevel GetLogLevel(string value)
         {
-            var lower = value;
+            var lower = value.ToLowerInvariant();
 
             if (!lower.Contains("error"))
             {
