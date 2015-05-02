@@ -621,7 +621,6 @@
     <Compile Include="Messaging\Commands\CommandQueueManager.cs" />
     <Compile Include="Messaging\Commands\CommandTrigger.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />
-    <Compile Include="Messaging\Commands\RequeueQueuedCommands.cs" />
     <Compile Include="Messaging\Commands\TestCommand.cs" />
     <Compile Include="Messaging\Commands\TestCommandExecutor.cs" />
     <Compile Include="Messaging\Events\CommandExecutedEvent.cs" />

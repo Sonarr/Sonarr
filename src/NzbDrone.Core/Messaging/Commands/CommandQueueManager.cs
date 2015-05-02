@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public CommandModel Get(int id)
         {
-            return _commandCache.Get(id.ToString(), () => FindMessage(_repo.Get(id)));
+            return _commandCache.Get(id.ToString(), () => FindCommand(_repo.Get(id)));
         }
 
         public List<CommandModel> GetStarted()
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             _logger.Trace("Marking command as started: {0}", command.Name);
             _commandCache.Set(command.Id.ToString(), command);         
-            _repo.Update(command);
+            _repo.Start(command);
         }
 
         public void Complete(CommandModel command, string message)
@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Messaging.Commands
             return Json.Deserialize("{}", commandType);
         }
 
-        private CommandModel FindMessage(CommandModel command)
+        private CommandModel FindCommand(CommandModel command)
         {
             var cachedCommand = _commandCache.Find(command.Id.ToString());
 
@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             _logger.Trace("Updating command status");
             _commandCache.Set(command.Id.ToString(), command);
-            _repo.Update(command);
+            _repo.End(command);
         }
 
         private List<CommandModel> QueuedOrStarted(string name)
@@ -206,6 +206,7 @@ namespace NzbDrone.Core.Messaging.Commands
         {
             _logger.Trace("Orphaning incomplete commands");
             _repo.OrphanStarted();
+            Requeue();
         }
     }
 }
