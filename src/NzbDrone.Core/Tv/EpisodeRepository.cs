@@ -34,10 +34,10 @@ namespace NzbDrone.Core.Tv
 
     public class EpisodeRepository : BasicRepository<Episode>, IEpisodeRepository
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
         private readonly Logger _logger;
 
-        public EpisodeRepository(IDatabase database, IEventAggregator eventAggregator, Logger logger)
+        public EpisodeRepository(IMainDatabase database, IEventAggregator eventAggregator, Logger logger)
             : base(database, eventAggregator)
         {
             _database = database;

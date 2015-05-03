@@ -15,14 +15,14 @@ namespace NzbDrone.Api.System
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IRouteCacheProvider _routeCacheProvider;
         private readonly IConfigFileProvider _configFileProvider;
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
         private readonly ILifecycleService _lifecycleService;
 
         public SystemModule(IAppFolderInfo appFolderInfo,
                             IRuntimeInfo runtimeInfo,
                             IRouteCacheProvider routeCacheProvider,
                             IConfigFileProvider configFileProvider,
-                            IDatabase database,
+                            IMainDatabase database,
                             ILifecycleService lifecycleService)
             : base("system")
         {

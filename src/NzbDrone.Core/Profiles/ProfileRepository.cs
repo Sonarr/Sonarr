@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Profiles
 
     public class ProfileRepository : BasicRepository<Profile>, IProfileRepository
     {
-        public ProfileRepository(IDatabase database, IEventAggregator eventAggregator)
+        public ProfileRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

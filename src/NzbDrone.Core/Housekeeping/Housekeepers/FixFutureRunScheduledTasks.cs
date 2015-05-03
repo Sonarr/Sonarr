@@ -7,10 +7,10 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class FixFutureRunScheduledTasks : IHousekeepingTask
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
         private readonly Logger _logger;
 
-        public FixFutureRunScheduledTasks(IDatabase database, Logger logger)
+        public FixFutureRunScheduledTasks(IMainDatabase database, Logger logger)
         {
             _database = database;
             _logger = logger;

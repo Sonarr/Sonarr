@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications
 
     public class NotificationRepository : ProviderRepository<NotificationDefinition>, INotificationRepository
     {
-        public NotificationRepository(IDatabase database, IEventAggregator eventAggregator)
+        public NotificationRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

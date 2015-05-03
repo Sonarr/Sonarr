@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Qualities
 
     public class QualityDefinitionRepository : BasicRepository<QualityDefinition>, IQualityDefinitionRepository
     {
-        public QualityDefinitionRepository(IDatabase database, IEventAggregator eventAggregator)
+        public QualityDefinitionRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

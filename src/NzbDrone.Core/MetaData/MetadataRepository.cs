@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Metadata
 
     public class MetadataRepository : ProviderRepository<MetadataDefinition>, IMetadataRepository
     {
-        public MetadataRepository(IDatabase database, IEventAggregator eventAggregator)
+        public MetadataRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

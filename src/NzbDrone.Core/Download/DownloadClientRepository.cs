@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download
 
     public class DownloadClientRepository : ProviderRepository<DownloadClientDefinition>, IDownloadClientRepository
     {
-        public DownloadClientRepository(IDatabase database, IEventAggregator eventAggregator)
+        public DownloadClientRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Profiles.Delay
 
     public class DelayProfileRepository : BasicRepository<DelayProfile>, IDelayProfileRepository
     {
-        public DelayProfileRepository(IDatabase database, IEventAggregator eventAggregator)
+        public DelayProfileRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

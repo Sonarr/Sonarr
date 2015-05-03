@@ -4,9 +4,9 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class CleanupAdditionalNamingSpecs : IHousekeepingTask
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public CleanupAdditionalNamingSpecs(IDatabase database)
+        public CleanupAdditionalNamingSpecs(IMainDatabase database)
         {
             _database = database;
         }

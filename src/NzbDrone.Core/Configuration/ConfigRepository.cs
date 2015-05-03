@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Configuration
 
     public class ConfigRepository : BasicRepository<Config>, IConfigRepository
     {
-        public ConfigRepository(IDatabase database, IEventAggregator eventAggregator)
+        public ConfigRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

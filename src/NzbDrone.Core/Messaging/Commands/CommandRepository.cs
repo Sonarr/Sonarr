@@ -20,9 +20,9 @@ namespace NzbDrone.Core.Messaging.Commands
 
     public class CommandRepository : BasicRepository<CommandModel>, ICommandRepository
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public CommandRepository(IDatabase database, IEventAggregator eventAggregator)
+        public CommandRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
             _database = database;

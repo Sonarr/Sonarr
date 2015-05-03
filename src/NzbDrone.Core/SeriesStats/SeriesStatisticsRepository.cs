@@ -13,9 +13,9 @@ namespace NzbDrone.Core.SeriesStats
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public SeriesStatisticsRepository(IDatabase database)
+        public SeriesStatisticsRepository(IMainDatabase database)
         {
             _database = database;
         }

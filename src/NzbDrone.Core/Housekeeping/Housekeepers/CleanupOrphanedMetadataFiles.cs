@@ -4,9 +4,9 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class CleanupOrphanedMetadataFiles : IHousekeepingTask
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public CleanupOrphanedMetadataFiles(IDatabase database)
+        public CleanupOrphanedMetadataFiles(IMainDatabase database)
         {
             _database = database;
         }

@@ -172,6 +172,8 @@
     <Compile Include="Datastore\Extensions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
+    <Compile Include="Datastore\MainDatabase.cs" />
+    <Compile Include="Datastore\LogDatabase.cs" />
     <Compile Include="Datastore\Migration\001_initialSetup.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
@@ -670,6 +672,7 @@
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
+    <Compile Include="Organizer\NamingConfigRepository.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />

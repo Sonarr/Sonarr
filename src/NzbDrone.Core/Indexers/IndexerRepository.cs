@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerRepository : ProviderRepository<IndexerDefinition>, IIndexerRepository
     {
-        public IndexerRepository(IDatabase database, IEventAggregator eventAggregator)
+        public IndexerRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

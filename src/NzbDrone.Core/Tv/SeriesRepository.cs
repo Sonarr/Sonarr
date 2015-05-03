@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Tv
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
     {
-        public SeriesRepository(IDatabase database, IEventAggregator eventAggregator)
+        public SeriesRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

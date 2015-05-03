@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download.Pending
 
     public class PendingReleaseRepository : BasicRepository<PendingRelease>, IPendingReleaseRepository
     {
-        public PendingReleaseRepository(IDatabase database, IEventAggregator eventAggregator)
+        public PendingReleaseRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

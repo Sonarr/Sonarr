@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Jobs
     public class ScheduledTaskRepository : BasicRepository<ScheduledTask>, IScheduledTaskRepository
     {
 
-        public ScheduledTaskRepository(IDatabase database, IEventAggregator eventAggregator)
+        public ScheduledTaskRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

@@ -13,9 +13,9 @@ namespace NzbDrone.Core.Housekeeping
     {
         private readonly IEnumerable<IHousekeepingTask> _housekeepers;
         private readonly Logger _logger;
-        private readonly IDatabase _mainDb;
+        private readonly IMainDatabase _mainDb;
 
-        public HousekeepingService(IEnumerable<IHousekeepingTask> housekeepers, IDatabase mainDb, Logger logger)
+        public HousekeepingService(IEnumerable<IHousekeepingTask> housekeepers, IMainDatabase mainDb, Logger logger)
         {
             _housekeepers = housekeepers;
             _logger = logger;
