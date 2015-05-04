@@ -22,12 +22,12 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new TorrentRssIndexerRequestGenerator() { Settings = Settings };
+            return new TorrentRssIndexerRequestGenerator { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()
         {
-            return _torrentRssParserFactory.GetParser(Settings, FetchIndexerResponse);
+            return _torrentRssParserFactory.GetParser(Settings);
         }
     }
 }

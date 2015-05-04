@@ -13,6 +13,8 @@ using FluentAssertions;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
+    using NzbDrone.Common.Cache;
+
     [TestFixture]
     public class TorrentRssIndexerFixture : CoreTest<TestTorrentRssIndexer>
     {
@@ -26,6 +28,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
                 Name = "TorrentRssIndexer",
                 Settings = new TorrentRssIndexerSettings() { },
             };
+
+            Mocker.SetConstant<ITorrentRssParserFactory>(new TorrentRssParserFactory(Mocker.Resolve<CacheManager>(), new TorrentRssSettingsDetector(new HttpClient(new CacheManager(), TestLogger), TestLogger), TestLogger));
         }
 
         [TestCase("https://www.ezrss.it/", "Eztv.xml")]
@@ -103,7 +107,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         [Test]
         public void should_parse_recent_feed_from_Eztv()
         {
-            Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = "https://www.ezrss.it/", ValidEntryPercentage = 20 };
+            Subject.Definition.Settings = new TorrentRssIndexerSettings { BaseUrl = "https://www.ezrss.it/" };
 
             var recentFeed = ReadAllText(@"Files/RSS/Eztv.xml");
 

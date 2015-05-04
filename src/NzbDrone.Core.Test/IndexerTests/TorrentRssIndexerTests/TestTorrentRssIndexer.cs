@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         public List<ValidationFailure> TestPublic()
         {
             var result = new List<ValidationFailure>();
-            // this.SetupNLog(); // Enable this to enable trace logging with nlog for debugging purposes
+            this.SetupNLog(); // Enable this to enable trace logging with nlog for debugging purposes
             Test(result);
             return result;
         }

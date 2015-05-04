@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
@@ -13,48 +14,56 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 {
     public class TorrentRssSettingsDetector : ITorrentRssSettingsDetector
     {
-        protected readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        protected readonly Logger _logger;
 
         protected TorrentRssIndexerSettings _settings;
 
-        protected Func<IndexerRequest, IndexerResponse> _fetchIndexerResponseFunc;
+        private readonly IHttpClient _httpClient;
+
+        private const int ValidEntryPercentage = 100;
+
+        private const int ValidSizeThresholdMegabytes = 2;
+
+        public TorrentRssSettingsDetector(IHttpClient httpClient, Logger logger)
+        {
+            _httpClient = httpClient;
+            _logger = logger;
+        }
 
         /// <summary>
         /// Detect settings for Parser, based on URL
         /// </summary>
         /// <param name="settings">Indexer Settings to use for Parser</param>
-        /// <param name="fetchIndexerResponseFunc">Func to retrieve Feed</param>
         /// <returns>Parsed Settings or <c>null</c></returns>
-        public TorrentRssIndexerParserSettings Detect(TorrentRssIndexerSettings settings, Func<IndexerRequest, IndexerResponse> fetchIndexerResponseFunc)
+        public TorrentRssIndexerParserSettings Detect(TorrentRssIndexerSettings settings)
         {
             _settings = settings;
-            _fetchIndexerResponseFunc = fetchIndexerResponseFunc;
-
+            
             var requestGenerator = new TorrentRssIndexerRequestGenerator { Settings = _settings };
             var request = requestGenerator.GetRecentRequests().First().First();
-            return GetParserSettings(request);
-        }
-
-        private TorrentRssIndexerParserSettings GetParserSettings(IndexerRequest request)
-        {
             if (request == null)
             {
                 throw new NullReferenceException("request cannot be null.");
             }
 
-            IndexerResponse response;
-            var settings = new TorrentRssIndexerParserSettings();
-
+            HttpResponse httpResponse = null;
             try
             {
-                response = _fetchIndexerResponseFunc(request);
+                httpResponse = _httpClient.Execute(request.HttpRequest);
             }
             catch (Exception ex)
             {
                 _logger.WarnException(string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message), ex);
-
                 return null;
             }
+
+            var indexerResponse = new IndexerResponse(request, httpResponse);
+            return GetParserSettings(indexerResponse);
+        }
+
+        private TorrentRssIndexerParserSettings GetParserSettings(IndexerResponse response)
+        {
+            var settings = new TorrentRssIndexerParserSettings();
 
             var isEZTVFeed = IsEZTVFeed(response);
             _logger.Debug("Feed is EZTV Compatible: {0}", isEZTVFeed);
@@ -166,21 +175,21 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
                         return false;
                     }
 
-                    if (!ValidateTorrents(releases, r => Parser.Parser.ParseTitle(r.Title) != null, _settings.ValidEntryPercentage))
+                    if (!ValidateTorrents(releases, r => Parser.Parser.ParseTitle(r.Title) != null, ValidEntryPercentage))
                     {
-                        _logger.Trace("Percentage of Titles that could parsed is lower than threshold of {0}", _settings.ValidEntryPercentage);
+                        _logger.Trace("Percentage of Titles that could parsed is lower than threshold of {0}", ValidEntryPercentage);
                         return false;
                     }
 
-                    if (!ValidateTorrents(releases, r => r.Size > _settings.ValidSizeThresholdMegabytes * 1024 * 1024, _settings.ValidEntryPercentage))
+                    if (!ValidateTorrents(releases, r => r.Size > ValidSizeThresholdMegabytes * 1024 * 1024, ValidEntryPercentage))
                     {
-                        _logger.Trace("Percentage of entries that have a size bigger than ValidSizeThresholdMegabytes ({0} MB) is  lower than threshold of {1}", _settings.ValidSizeThresholdMegabytes, _settings.ValidEntryPercentage);
+                        _logger.Trace("Percentage of entries that have a size bigger than ValidSizeThresholdMegabytes ({0} MB) is  lower than threshold of {1}", ValidSizeThresholdMegabytes, ValidEntryPercentage);
                         return false;
                     }
 
-                    if (!ValidateTorrents(releases, r => Uri.IsWellFormedUriString(r.DownloadUrl, UriKind.Absolute), _settings.ValidEntryPercentage))
+                    if (!ValidateTorrents(releases, r => Uri.IsWellFormedUriString(r.DownloadUrl, UriKind.Absolute), ValidEntryPercentage))
                     {
-                        _logger.Trace("Percentage of entries that have a valid download url is smaller than threshold of {0}", _settings.ValidEntryPercentage);
+                        _logger.Trace("Percentage of entries that have a valid download url is smaller than threshold of {0}", ValidEntryPercentage);
                         return false;
                     }
 

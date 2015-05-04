@@ -23,23 +23,22 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
         /// Get configured Parser based on <paramref name="settings"/>
         /// </summary>
         /// <param name="settings">Indexer Settings to use for Parser</param>
-        /// <param name="fetchIndexerResponseFunc">Func to retrieve Feed</param>
         /// <returns>Configured Parser</returns>
-        public TorrentRssParser GetParser(TorrentRssIndexerSettings settings, Func<IndexerRequest, IndexerResponse> fetchIndexerResponseFunc)
+        public TorrentRssParser GetParser(TorrentRssIndexerSettings settings)
         {
             TorrentRssIndexerParserSettings parserSettings = _settingsCache.Get(settings.BaseUrl,
                 () =>
+                {
+                    _logger.Debug("Parser Settings not in cache. Trying to parse feed {0}", settings.BaseUrl);
+                    var parserSettingsToStore = _torrentRssSettingsDetector.Detect(settings);
+
+                    if (parserSettingsToStore == null)
                     {
-                        _logger.Debug("Parser Settings not in cache. Trying to parse feed {0}", settings.BaseUrl);
-                        var parserSettingsToStore = _torrentRssSettingsDetector.Detect(settings, fetchIndexerResponseFunc);
+                        throw new Exception(string.Format("Could not parse feed from {0}", settings.BaseUrl));
+                    }
 
-                        if (parserSettingsToStore == null)
-                        {
-                            throw new Exception(string.Format("Could not parse feed from {0}", settings.BaseUrl));
-                        }
-
-                        return parserSettingsToStore;
-                    }, 
+                    return parserSettingsToStore;
+                },
                     new TimeSpan(7, 0, 0, 0));
 
             if (parserSettings.UseEZTVFormat)
