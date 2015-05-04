@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             get
             {
                 yield return GetDefinition("HDAccess.net", GetSettings("http://hdaccess.net"));
+                yield return GetDefinition("HD4Free.xyz", GetSettings("http://hd4free.xyz"));
             }
         }
 

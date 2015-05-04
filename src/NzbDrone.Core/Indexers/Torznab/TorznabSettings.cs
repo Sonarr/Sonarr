@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         private static readonly string[] ApiKeyWhiteList =
         {
             "hdaccess.net",
+            "hd4free.xyz",
         };
 
         private static bool ShouldHaveApiKey(TorznabSettings settings)
