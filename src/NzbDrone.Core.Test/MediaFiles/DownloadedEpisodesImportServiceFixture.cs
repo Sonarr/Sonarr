@@ -327,6 +327,42 @@ namespace NzbDrone.Core.Test.MediaFiles
             ExceptionVerification.ExpectedErrors(1);
         }
 
+        [Test]
+        public void should_not_delete_if_no_files_were_imported()
+        {
+            GivenValidSeries();
+
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode));
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Setup(s => s.GetImportDecisions(It.IsAny<List<String>>(), It.IsAny<Series>(), null, true))
+                  .Returns(imported);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                  .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), true, null))
+                  .Returns(new List<ImportResult>());
+
+            Mocker.GetMock<IDetectSample>()
+                  .Setup(s => s.IsSample(It.IsAny<Series>(),
+                      It.IsAny<QualityModel>(),
+                      It.IsAny<String>(),
+                      It.IsAny<Int64>(),
+                      It.IsAny<Int32>()))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.GetFileSize(It.IsAny<string>()))
+                  .Returns(15.Megabytes());
+
+            Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(v => v.DeleteFolder(It.IsAny<String>(), true), Times.Never());
+        }
+
         private void VerifyNoImport()
         {
             Mocker.GetMock<IImportApprovedEpisodes>().Verify(c => c.Import(It.IsAny<List<ImportDecision>>(), true, null),

@@ -152,7 +152,9 @@ namespace NzbDrone.Core.MediaFiles
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, folderInfo, true);
             var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem);
 
-            if ((downloadClientItem == null || !downloadClientItem.IsReadOnly) && importResults.Any() && ShouldDeleteFolder(directoryInfo, series))
+            if ((downloadClientItem == null || !downloadClientItem.IsReadOnly) &&
+                importResults.Any(i => i.Result == ImportResultType.Imported) &&
+                ShouldDeleteFolder(directoryInfo, series))
             {
                 _logger.Debug("Deleting folder after importing valid files");
                 _diskProvider.DeleteFolder(directoryInfo.FullName, true);
