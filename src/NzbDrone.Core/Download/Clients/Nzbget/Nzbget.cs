@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.Category = item.Category;
                 queueItem.DownloadClient = Definition.Name;
 
-                if (globalStatus.DownloadPaused || remainingSize == pausedSize)
+                if (globalStatus.DownloadPaused || remainingSize == pausedSize && remainingSize != 0)
                 {
                     queueItem.Status = DownloadItemStatus.Paused;
                     queueItem.RemainingSize = remainingSize;

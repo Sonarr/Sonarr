@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            if (item.OutputPath == null)
+            if (item.OutputPath.IsEmpty)
             {
                 _logger.Trace("[{0}] Doesn't have an outputPath, skipping delete data.", item.Title);
                 return;
