@@ -93,10 +93,6 @@ module.exports = Marionette.Layout.extend({
         this.downloadId = options.downloadId;
         this.title = options.title;
 
-        //TODO: remove (just for testing)
-        this.folder = 'C:\\Test';
-//        this.folder = 'E:\\X-Server';
-
         this.templateHelpers = {
             title : this.title || this.folder
         };
