@@ -18,7 +18,6 @@ namespace NzbDrone.Api.History
         public Boolean QualityCutoffNotMet { get; set; }
         public DateTime Date { get; set; }
         public string Indexer { get; set; }
-        public string NzbInfoUrl { get; set; }
         public string ReleaseGroup { get; set; }
         public string DownloadId { get; set; }
 

@@ -254,6 +254,7 @@
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\083_additonal_blacklist_columns.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />

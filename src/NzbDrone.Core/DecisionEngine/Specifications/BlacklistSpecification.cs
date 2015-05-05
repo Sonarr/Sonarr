@@ -20,14 +20,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
-        {
-            if (subject.Release.DownloadProtocol == DownloadProtocol.Torrent)
-            {
-                return Decision.Accept();
-            }
-
-
-            if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release.Title, subject.Release.PublishDate))
+        {          
+            if (_blacklistService.Blacklisted(subject.Series.Id, subject.Release))
             {
                 _logger.Debug("{0} is blacklisted, rejecting.", subject.Release.Title);
                 return Decision.Reject("Release is blacklisted");
