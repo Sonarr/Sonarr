@@ -3,7 +3,6 @@ var Marionette = require('marionette');
 var ButtonsView = require('./ButtonsView');
 var ManualSearchLayout = require('./ManualLayout');
 var ReleaseCollection = require('../../Release/ReleaseCollection');
-var SeriesCollection = require('../../Series/SeriesCollection');
 var CommandController = require('../../Commands/CommandController');
 var LoadingView = require('../../Shared/LoadingView');
 var NoResultsView = require('./NoResultsView');

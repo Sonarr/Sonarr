@@ -102,6 +102,8 @@
     <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
     <Compile Include="Parse\ParseModule.cs" />
     <Compile Include="Parse\ParseResource.cs" />
+    <Compile Include="ManualImport\ManualImportModule.cs" />
+    <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />

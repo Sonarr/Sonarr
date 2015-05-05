@@ -4,7 +4,7 @@ var Marionette = require('marionette');
 require('bootstrap');
 
 var region = Marionette.Region.extend({
-    el : '#file-browser-modal-region',
+    el : '#modal-region2',
 
     constructor : function() {
         Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);

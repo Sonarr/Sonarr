@@ -15,6 +15,7 @@ gulp.task('less', function () {
             paths.src.root + 'AddSeries/addSeries.less',
             paths.src.root + 'Calendar/calendar.less',
             paths.src.root + 'Cells/cells.less',
+            paths.src.root + 'ManualImport/manualimport.less',
             paths.src.root + 'Settings/settings.less',
             paths.src.root + 'System/Logs/logs.less',
             paths.src.root + 'System/Update/update.less',

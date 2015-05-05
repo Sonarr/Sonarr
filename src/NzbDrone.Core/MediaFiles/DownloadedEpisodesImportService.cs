@@ -17,6 +17,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         List<ImportResult> ProcessRootFolder(DirectoryInfo directoryInfo);
         List<ImportResult> ProcessPath(string path, Series series = null, DownloadClientItem downloadClientItem = null);
+        bool ShouldDeleteFolder(DirectoryInfo directoryInfo, Series series);
     }
 
     public class DownloadedEpisodesImportService : IDownloadedEpisodesImportService
@@ -96,6 +97,41 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Error("Import failed, path does not exist or is not accessible by Sonarr: {0}", path);
             return new List<ImportResult>();
+        }
+
+        public bool ShouldDeleteFolder(DirectoryInfo directoryInfo, Series series)
+        {
+            var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
+            var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, SearchOption.AllDirectories).Where(f => Path.GetExtension(f) == ".rar");
+
+            foreach (var videoFile in videoFiles)
+            {
+                var episodeParseResult = Parser.Parser.ParseTitle(Path.GetFileName(videoFile));
+
+                if (episodeParseResult == null)
+                {
+                    _logger.Warn("Unable to parse file on import: [{0}]", videoFile);
+                    return false;
+                }
+
+                var size = _diskProvider.GetFileSize(videoFile);
+                var quality = QualityParser.ParseQuality(videoFile);
+
+                if (!_detectSample.IsSample(series, quality, videoFile, size,
+                    episodeParseResult.SeasonNumber))
+                {
+                    _logger.Warn("Non-sample file detected: [{0}]", videoFile);
+                    return false;
+                }
+            }
+
+            if (rarFiles.Any(f => _diskProvider.GetFileSize(f) > 10.Megabytes()))
+            {
+                _logger.Warn("RAR file detected, will require manual cleanup");
+                return false;
+            }
+
+            return true;
         }
 
         private List<ImportResult> ProcessFolder(DirectoryInfo directoryInfo, DownloadClientItem downloadClientItem = null)
@@ -204,41 +240,6 @@ namespace NzbDrone.Core.MediaFiles
                            .Replace("_FAILED_", "");
 
             return folder;
-        }
-
-        private bool ShouldDeleteFolder(DirectoryInfo directoryInfo, Series series)
-        {
-            var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
-            var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, SearchOption.AllDirectories).Where(f => Path.GetExtension(f) == ".rar");
-
-            foreach (var videoFile in videoFiles)
-            {
-                var episodeParseResult = Parser.Parser.ParseTitle(Path.GetFileName(videoFile));
-
-                if (episodeParseResult == null)
-                {
-                    _logger.Warn("Unable to parse file on import: [{0}]", videoFile);
-                    return false;
-                }
-
-                var size = _diskProvider.GetFileSize(videoFile);
-                var quality = QualityParser.ParseQuality(videoFile);
-
-                if (!_detectSample.IsSample(series, quality, videoFile, size,
-                    episodeParseResult.SeasonNumber))
-                {
-                    _logger.Warn("Non-sample file detected: [{0}]", videoFile);
-                    return false;
-                }
-            }
-
-            if (rarFiles.Any(f => _diskProvider.GetFileSize(f) > 10.Megabytes()))
-            {
-                _logger.Warn("RAR file detected, will require manual cleanup");
-                return false;
-            }
-
-            return true;
         }
 
         private ImportResult FileIsLockedResult(string videoFile)

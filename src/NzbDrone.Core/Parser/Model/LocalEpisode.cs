@@ -9,6 +9,11 @@ namespace NzbDrone.Core.Parser.Model
 {
     public class LocalEpisode
     {
+        public LocalEpisode()
+        {
+            Episodes = new List<Episode>();
+        }
+
         public String Path { get; set; }
         public Int64 Size { get; set; }
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
