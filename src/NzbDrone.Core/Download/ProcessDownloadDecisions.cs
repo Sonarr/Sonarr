@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {
@@ -37,50 +39,55 @@ namespace NzbDrone.Core.Download
             var grabbed = new List<DownloadDecision>();
             var pending = new List<DownloadDecision>();
 
-            foreach (var report in prioritizedDecisions)
+            //Limits to 1 grab every 1 second to reduce rapid API hits
+            using (var rateGate = new RateGate(1, TimeSpan.FromSeconds(1)))
             {
-                var remoteEpisode = report.RemoteEpisode;
-
-                var episodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList();
-
-                //Skip if already grabbed
-                if (grabbed.SelectMany(r => r.RemoteEpisode.Episodes)
-                               .Select(e => e.Id)
-                               .ToList()
-                               .Intersect(episodeIds)
-                               .Any())
+                foreach (var report in prioritizedDecisions)
                 {
-                    continue;
-                }
+                    var remoteEpisode = report.RemoteEpisode;
 
-                if (report.TemporarilyRejected)
-                {
-                    _pendingReleaseService.Add(report);
-                    pending.Add(report);
-                    continue;
-                }
+                    var episodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList();
 
-                if (pending.SelectMany(r => r.RemoteEpisode.Episodes)
-                       .Select(e => e.Id)
-                       .ToList()
-                       .Intersect(episodeIds)
-                       .Any())
-                {
-                    continue;
-                }
+                    //Skip if already grabbed
+                    if (grabbed.SelectMany(r => r.RemoteEpisode.Episodes)
+                                   .Select(e => e.Id)
+                                   .ToList()
+                                   .Intersect(episodeIds)
+                                   .Any())
+                    {
+                        continue;
+                    }
 
-                try
-                {
-                    _downloadService.DownloadReport(remoteEpisode);
-                    grabbed.Add(report);
+                    if (report.TemporarilyRejected)
+                    {
+                        _pendingReleaseService.Add(report);
+                        pending.Add(report);
+                        continue;
+                    }
+
+                    if (pending.SelectMany(r => r.RemoteEpisode.Episodes)
+                           .Select(e => e.Id)
+                           .ToList()
+                           .Intersect(episodeIds)
+                           .Any())
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        rateGate.WaitToProceed();
+                        _downloadService.DownloadReport(remoteEpisode);
+                        grabbed.Add(report);
+                    }
+                    catch (Exception e)
+                    {
+                        //TODO: support for store & forward
+                        //We'll need to differentiate between a download client error and an indexer error
+                        _logger.WarnException("Couldn't add report to download queue. " + remoteEpisode, e);
+                    }
                 }
-                catch (Exception e)
-                {
-                    //TODO: support for store & forward
-                    //We'll need to differentiate between a download client error and an indexer error
-                    _logger.WarnException("Couldn't add report to download queue. " + remoteEpisode, e);
-                }
-            }
+            }           
 
             return new ProcessedDecisions(grabbed, pending, decisions.Where(d => d.Rejected).ToList());
         }
