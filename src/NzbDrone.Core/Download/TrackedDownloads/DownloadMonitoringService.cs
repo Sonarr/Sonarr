@@ -12,11 +12,12 @@ using NzbDrone.Core.Messaging.Events;
 namespace NzbDrone.Core.Download.TrackedDownloads
 {
     public class DownloadMonitoringService : IExecute<CheckForFinishedDownloadCommand>,
-                                             IHandleAsync<EpisodeGrabbedEvent>,
-                                             IHandleAsync<EpisodeImportedEvent>
+                                             IHandle<EpisodeGrabbedEvent>,
+                                             IHandle<EpisodeImportedEvent>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IManageCommandQueue _manageCommandQueue;
         private readonly IConfigService _configService;
         private readonly IFailedDownloadService _failedDownloadService;
         private readonly ICompletedDownloadService _completedDownloadService;
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         public DownloadMonitoringService(IProvideDownloadClient downloadClientProvider,
                                      IEventAggregator eventAggregator,
+                                     IManageCommandQueue manageCommandQueue,
                                      IConfigService configService,
                                      IFailedDownloadService failedDownloadService,
                                      ICompletedDownloadService completedDownloadService,
@@ -34,28 +36,42 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             _downloadClientProvider = downloadClientProvider;
             _eventAggregator = eventAggregator;
+            _manageCommandQueue = manageCommandQueue;
             _configService = configService;
             _failedDownloadService = failedDownloadService;
             _completedDownloadService = completedDownloadService;
             _trackedDownloadService = trackedDownloadService;
             _logger = logger;
 
-            _refreshDebounce = new Debouncer(Refresh, TimeSpan.FromSeconds(5));
+            _refreshDebounce = new Debouncer(QueueRefresh, TimeSpan.FromSeconds(5));
+        }
+
+        private void QueueRefresh()
+        {
+            _manageCommandQueue.Push(new CheckForFinishedDownloadCommand());
         }
 
         private void Refresh()
         {
-            var downloadClients = _downloadClientProvider.GetDownloadClients();
-
-            var trackedDownload = new List<TrackedDownload>();
-
-            foreach (var downloadClient in downloadClients)
+            _refreshDebounce.Pause();
+            try
             {
-                var clientTrackedDownloads = ProcessClientDownloads(downloadClient);
-                trackedDownload.AddRange(clientTrackedDownloads.Where(c => c.State == TrackedDownloadStage.Downloading));
-            }
+                var downloadClients = _downloadClientProvider.GetDownloadClients();
 
-            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownload));
+                var trackedDownload = new List<TrackedDownload>();
+
+                foreach (var downloadClient in downloadClients)
+                {
+                    var clientTrackedDownloads = ProcessClientDownloads(downloadClient);
+                    trackedDownload.AddRange(clientTrackedDownloads.Where(c => c.State == TrackedDownloadStage.Downloading));
+                }
+
+                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownload));
+            }
+            finally
+            {
+                _refreshDebounce.Resume();
+            }
         }
 
         private List<TrackedDownload> ProcessClientDownloads(IDownloadClient downloadClient)
@@ -128,12 +144,12 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             Refresh();
         }
 
-        public void HandleAsync(EpisodeGrabbedEvent message)
+        public void Handle(EpisodeGrabbedEvent message)
         {
             _refreshDebounce.Execute();
         }
 
-        public void HandleAsync(EpisodeImportedEvent message)
+        public void Handle(EpisodeImportedEvent message)
         {
             _refreshDebounce.Execute();
         }
