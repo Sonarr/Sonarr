@@ -13,7 +13,7 @@ namespace NzbDrone.Api.Series
         private readonly ISearchForNewSeries _searchProxy;
 
         public SeriesLookupModule(ISearchForNewSeries searchProxy)
-            : base("/Series/lookup")
+            : base("/series/lookup")
         {
             _searchProxy = searchProxy;
             Get["/"] = x => Search();
