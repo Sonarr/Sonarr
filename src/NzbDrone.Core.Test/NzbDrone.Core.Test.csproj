@@ -239,8 +239,8 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
-    <Compile Include="MetadataSourceTests\TvdbDataProxyFixture.cs" />
-    <Compile Include="MetadataSourceTests\SearchSeriesComparerFixture.cs" />
+    <Compile Include="MetadataSource\SkyHook\SkyHookProxySearchFixture.cs" />
+    <Compile Include="MetadataSource\SearchSeriesComparerFixture.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
     <Compile Include="NotificationTests\SynologyIndexerFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />

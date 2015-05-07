@@ -6,7 +6,7 @@ using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.MetadataSourceTests
+namespace NzbDrone.Core.Test.MetadataSource
 {
     [TestFixture]
     public class SearchSeriesComparerFixture : CoreTest

@@ -646,9 +646,8 @@
     <Compile Include="MetadataSource\SkyHook\Resource\ShowResource.cs" />
     <Compile Include="MetadataSource\SkyHook\Resource\TimeOfDayResource.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxy.cs" />
-    <Compile Include="MetadataSource\TvDbProxy.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparer.cs" />
-    <Compile Include="MetadataSource\Tvdb\TvdbException.cs" />
+    <Compile Include="MetadataSource\SkyHook\SkyHookException.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
@@ -960,10 +959,6 @@
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TVDBSharp\TVDBSharp.csproj">
-      <Project>{0cc493d7-0a9f-4199-9615-0a977945d716}</Project>
-      <Name>TVDBSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
