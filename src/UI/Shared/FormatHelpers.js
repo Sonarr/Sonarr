@@ -32,7 +32,7 @@ module.exports = {
         }
 
         if (date.isAfter(moment())) {
-            return date.fromNow(true);
+            return 'in ' + date.fromNow(true);
         }
 
         if (date.isBefore(moment().add('years', -1))) {
