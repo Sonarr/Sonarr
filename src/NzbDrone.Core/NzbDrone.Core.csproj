@@ -84,6 +84,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
+      <Reference Include="CookComputing.XmlRpc, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -357,6 +361,11 @@
     <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackhole.cs" />
     <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackholeSettings.cs" />
     <Compile Include="Download\Clients\TorrentSeedConfiguration.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrent.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentPriority.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentProxy.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentSettings.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentTorrent.cs" />
     <Compile Include="Download\Clients\Transmission\Transmission.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionException.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionProxy.cs" />
