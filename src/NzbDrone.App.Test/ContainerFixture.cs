@@ -14,6 +14,7 @@ using FluentAssertions;
 using System.Linq;
 using NzbDrone.Common.Composition;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Download.TrackedDownloads;
 
 namespace NzbDrone.App.Test
 {
@@ -64,11 +65,28 @@ namespace NzbDrone.App.Test
         }
 
         [Test]
-        [Ignore("need to fix this at some point")]
         public void should_return_same_instance_of_singletons()
         {
             var first = _container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
             var second = _container.ResolveAll<IHandle<ApplicationShutdownRequested>>().OfType<Scheduler>().Single();
+
+            first.Should().BeSameAs(second);
+        }
+
+        [Test]
+        public void should_return_same_instance_of_singletons_by_different_same_interface()
+        {
+            var first = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+
+            first.Should().BeSameAs(second);
+        }
+
+        [Test]
+        public void should_return_same_instance_of_singletons_by_different_interfaces()
+        {
+            var first = _container.ResolveAll<IHandle<EpisodeGrabbedEvent>>().OfType<DownloadMonitoringService>().Single();
+            var second = (DownloadMonitoringService)_container.Resolve<IExecute<CheckForFinishedDownloadCommand>>();
 
             first.Should().BeSameAs(second);
         }
