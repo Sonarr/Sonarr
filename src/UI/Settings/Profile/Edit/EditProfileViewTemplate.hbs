@@ -25,21 +25,3 @@
         <i class="icon-sonarr-form-info" title="Series assigned this profile will be look for episodes with the selected language"/>
     </div>
 </div>
-
-<div class="form-group">
-    <label class="col-sm-3 control-label">Cutoff</label>
-
-    <div class="col-sm-5">
-        <select class="form-control x-cutoff" name="cutoff.id" validation-name="cutoff">
-            {{#eachReverse items}}
-            {{#if allowed}}
-            <option value="{{quality.id}}">{{quality.name}}</option>
-            {{/if}}
-            {{/eachReverse}}
-        </select>
-    </div>
-
-    <div class="col-sm-1 help-inline">
-        <i class="icon-sonarr-form-info" title="Once this quality is reached Sonarr will no longer download episodes"/>
-    </div>
-</div>
