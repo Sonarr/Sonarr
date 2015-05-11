@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Web;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -10,28 +13,82 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MetadataSource.SkyHook
 {
-    public class SkyHookProxy : IProvideSeriesInfo
+    public class SkyHookProxy : IProvideSeriesInfo, ISearchForNewSeries
     {
-        private readonly Logger _logger;
         private readonly IHttpClient _httpClient;
+        private readonly Logger _logger;
         private readonly HttpRequestBuilder _requestBuilder;
 
-        public SkyHookProxy(Logger logger, IHttpClient httpClient)
+        public SkyHookProxy(IHttpClient httpClient, Logger logger)
         {
-            _logger = logger;
             _httpClient = httpClient;
+            _logger = logger;
 
-            _requestBuilder = new HttpRequestBuilder("http://skyhook.sonarr.tv/v1/tvdb/shows/en/");
+            _requestBuilder = new HttpRequestBuilder("http://skyhook.sonarr.tv/v1/tvdb/{route}/en/");
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
             var httpRequest = _requestBuilder.Build(tvdbSeriesId.ToString());
+            httpRequest.AddSegment("route", "shows");
+
             var httpResponse = _httpClient.Get<ShowResource>(httpRequest);
             var episodes = httpResponse.Resource.Episodes.Select(MapEpisode);
             var series = MapSeries(httpResponse.Resource);
 
             return new Tuple<Series, List<Episode>>(series, episodes.ToList());
+        }
+
+        public List<Series> SearchForNewSeries(string title)
+        {
+            try
+            {
+                var lowerTitle = title.ToLowerInvariant();
+
+                if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:"))
+                {
+                    var slug = lowerTitle.Split(':')[1].Trim();
+
+                    int tvdbId;
+
+                    if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !Int32.TryParse(slug, out tvdbId) || tvdbId <= 0)
+                    {
+                        return new List<Series>();
+                    }
+
+                    try
+                    {
+                        return new List<Series> { GetSeriesInfo(tvdbId).Item1 };
+                    }
+                    catch (Common.Http.HttpException ex)
+                    {
+                        if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                        {
+                            return new List<Series>();
+                        }
+
+                        throw;
+                    }
+                }
+
+                var term = HttpUtility.UrlEncode((title.ToLower().Trim()));
+                var httpRequest = _requestBuilder.Build("?term={term}");
+                httpRequest.AddSegment("route", "search");
+                httpRequest.AddSegment("term", term);
+
+                var httpResponse = _httpClient.Get<List<ShowResource>>(httpRequest);
+
+                return httpResponse.Resource.SelectList(MapSeries);
+            }
+            catch (Common.Http.HttpException)
+            {
+                throw new SkyHookException("Search for '{0}' failed. Unable to communicate with SkyHook.", title);
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException(ex.Message, ex);
+                throw new SkyHookException("Search for '{0}' failed. Invalid response received from SkyHook.", title);
+            }
         }
 
         private static Series MapSeries(ShowResource show)
@@ -91,8 +148,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             var newActor = new Actor
             {
                 Name = arg.Name,
-                Character = arg.Character,
-
+                Character = arg.Character
             };
 
             if (arg.Image != null)
@@ -185,6 +241,5 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                     return MediaCoverTypes.Unknown;
             }
         }
-
     }
 }
