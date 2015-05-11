@@ -54,5 +54,35 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.Width.Should().Be(480);
 
         }
+
+        [Test]
+        public void get_info_unicode()
+        {
+            var srcPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Media", "H264_sample.mp4");
+
+            var tempPath = GetTempFilePath();
+            Directory.CreateDirectory(tempPath);
+
+            var path = Path.Combine(tempPath, "H264_Pokémon.mkv");
+
+            File.Copy(srcPath, path);
+
+            var info = Subject.GetMediaInfo(path);
+
+            info.AudioBitrate.Should().Be(128000);
+            info.AudioChannels.Should().Be(2);
+            info.AudioFormat.Should().Be("AAC");
+            info.AudioLanguages.Should().Be("English");
+            info.AudioProfile.Should().Be("LC");
+            info.Height.Should().Be(320);
+            info.RunTime.Seconds.Should().Be(10);
+            info.ScanType.Should().Be("Progressive");
+            info.Subtitles.Should().Be("");
+            info.VideoBitrate.Should().Be(193329);
+            info.VideoCodec.Should().Be("AVC");
+            info.VideoFps.Should().Be(24);
+            info.Width.Should().Be(480);
+
+        }
     }
 }

@@ -49,6 +49,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 }
                 else
                 {
+                    mediaInfo.Option("CharSet", "UTF-8");
+
                     // On non-Windows the wrapper uses the ansi library methods, which libmediainfo converts internally to unicode from multibyte (utf8).
                     // To avoid building MediaInfoDotNet ourselves we simply trick the wrapper to send utf8 strings instead of ansi.
                     var utf8filename = Encoding.Default.GetString(Encoding.UTF8.GetBytes(filename));
