@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Parser
 
             else
             {
-                parsedEpisodeInfo = Parser.ParsePath(filename);                
+                parsedEpisodeInfo = Parser.ParsePath(filename);
             }
 
             if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
@@ -77,12 +77,6 @@ namespace NzbDrone.Core.Parser
             }
 
             var episodes = GetEpisodes(parsedEpisodeInfo, series, sceneSource);
-
-            if (episodes.Empty())
-            {
-                _logger.Debug("No matching episodes found for: {0}", parsedEpisodeInfo);
-                throw new EpisodeNotFoundException("Unable to find episodes for file: {0}", parsedEpisodeInfo);
-            }
 
             return new LocalEpisode
             {

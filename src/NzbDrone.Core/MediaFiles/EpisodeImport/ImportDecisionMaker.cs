@@ -91,7 +91,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         localEpisode.MediaInfo = _videoFileInfoReader.GetMediaInfo(file);
                     }
 
-                    decision = GetDecision(localEpisode);
+                    if (localEpisode.Episodes.Empty())
+                    {
+                        decision = new ImportDecision(localEpisode, new Rejection("Unable to find episodes"));
+                    }
+                    else
+                    {
+                        decision = GetDecision(localEpisode);
+                    }
                 }
 
                 else
@@ -101,13 +108,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     decision = new ImportDecision(localEpisode, new Rejection("Unable to parse file"));
                 }
-            }
-            catch (EpisodeNotFoundException e)
-            {
-                var localEpisode = new LocalEpisode();
-                localEpisode.Path = file;
-
-                decision = new ImportDecision(localEpisode, new Rejection(e.Message));
             }
             catch (Exception e)
             {
