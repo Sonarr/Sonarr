@@ -60,6 +60,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(extras|@eadir)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ExcludedFoldersRegex = new Regex(@"(?:\\|\/)(\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
         {
@@ -124,7 +125,9 @@ namespace NzbDrone.Core.MediaFiles
             var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
 
-            var mediaFileList = filesOnDisk.Where(c => MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower())).ToList();
+            var mediaFileList = filesOnDisk.Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file).ToLower()))
+                                           .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)))
+                                           .ToList();
 
             _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
             return mediaFileList.ToArray();
@@ -133,7 +136,8 @@ namespace NzbDrone.Core.MediaFiles
         private IEnumerable<string> FilterFiles(Series series, IEnumerable<string> videoFiles)
         {
             return videoFiles.Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file)))
-                             .Where(file => !ExcludedFoldersRegex.IsMatch(file));
+                             .Where(file => !ExcludedFoldersRegex.IsMatch(file))
+                             .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)));
         }
 
         private void SetPermissions(String path)
