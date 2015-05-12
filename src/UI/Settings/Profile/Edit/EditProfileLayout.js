@@ -68,11 +68,6 @@ var view = Marionette.Layout.extend({
         this.listenTo(this.sortableListView, 'sortStop', this._updateModel);
     },
 
-    _onBeforeSave : function() {
-        var cutoff = this.fieldsView.getCutoff();
-        this.model.set('cutoff', cutoff);
-    },
-
     _onAfterSave : function() {
         this.profileCollection.add(this.model, { merge : true });
         vent.trigger(vent.Commands.CloseModalCommand);

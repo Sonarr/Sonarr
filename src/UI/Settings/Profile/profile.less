@@ -30,6 +30,33 @@
   }
 }
 
+ul.qualities {
+  width: 100%;
+
+  .cutoff > span,input {
+    display: none;
+  }
+
+  .selected {
+    .cutoff {
+      display: inline-block;
+      margin-top: 2px;
+      margin-right: 5px;
+      width: 90px;
+
+      .x-cutoff {
+        &:not(:checked)~.not-selected {
+          display: block;
+        }
+
+        &:checked~.selected {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
 .delay-profile-region {
   margin-top : 30px;
 }
