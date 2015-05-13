@@ -53,10 +53,8 @@ namespace NzbDrone.Api.ClientSchema
                 }
             }
 
-            return result;
-
+            return result.OrderBy(r => r.Order).ToList();
         }
-
 
         public static object ReadFormSchema(List<Field> fields, Type targetType, object defaults = null)
         {

@@ -23,7 +23,6 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public XbmcSettings()
         {
-            DisplayTime = 5;
             Port = 8080;
         }
 
