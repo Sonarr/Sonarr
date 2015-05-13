@@ -4,7 +4,7 @@ var NzbDroneCell = require('../../Cells/NzbDroneCell');
 var SelectEpisodeLayout = require('../Episode/SelectEpisodeLayout');
 
 module.exports = NzbDroneCell.extend({
-    className : 'episodes-cell editable',
+    className : 'episodes-cell',
 
     events : {
         'click' : '_onClick'

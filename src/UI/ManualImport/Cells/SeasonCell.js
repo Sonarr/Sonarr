@@ -3,7 +3,7 @@ var NzbDroneCell = require('../../Cells/NzbDroneCell');
 var SelectSeasonLayout = require('../Season/SelectSeasonLayout');
 
 module.exports = NzbDroneCell.extend({
-    className : 'season-cell editable',
+    className : 'season-cell',
 
     events : {
         'click' : '_onClick'

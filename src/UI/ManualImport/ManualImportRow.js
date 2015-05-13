@@ -10,11 +10,13 @@ module.exports = Backgrid.Row.extend({
         this._originalInit.apply(this, arguments);
 
         this.listenTo(this.model, 'change', this._setError);
+        this.listenTo(this.model, 'change', this._setClasses);
     },
 
     render : function () {
         this._originalRender.apply(this, arguments);
         this._setError();
+        this._setClasses();
 
         return this;
     },
@@ -30,5 +32,10 @@ module.exports = Backgrid.Row.extend({
         else {
             this.$el.addClass('manual-import-error');
         }
+    },
+
+    _setClasses : function () {
+        this.$el.toggleClass('has-series', this.model.has('series'));
+        this.$el.toggleClass('has-season', this.model.has('seasonNumber'));
     }
 });
