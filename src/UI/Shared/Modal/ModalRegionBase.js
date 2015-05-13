@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var Marionette = require('marionette');
@@ -33,7 +34,10 @@ var region = Marionette.Region.extend({
 
         this.currentView.$el.addClass('modal-dialog');
 
-        this.trigger('modal:afterShow');
+        this.$el.on('shown.bs.modal', _.bind(function() {
+            this.trigger('modal:afterShow');
+            this.currentView.trigger('modal:afterShow');
+        }, this));
     },
 
     closeModal : function() {
@@ -44,6 +48,7 @@ var region = Marionette.Region.extend({
     _closing : function() {
         if (this.$el) {
             this.$el.off('hide.bs.modal');
+            this.$el.off('shown.bs.modal');
         }
 
         this.reset();
