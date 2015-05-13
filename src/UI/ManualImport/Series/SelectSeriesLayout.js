@@ -35,6 +35,7 @@ module.exports = Marionette.Layout.extend({
         });
 
         this.listenTo(this.seriesCollection, 'row:selected', this._onSelected);
+        this.listenTo(this, 'modal:afterShow', this._setFocus);
     },
 
     onRender : function() {
@@ -88,5 +89,9 @@ module.exports = Marionette.Layout.extend({
         this.trigger('manualimport:selected:series', { model: e.model });
 
         vent.trigger(vent.Commands.CloseModal2Command);
+    },
+
+    _setFocus : function () {
+        this.ui.filter.focus();
     }
 });
