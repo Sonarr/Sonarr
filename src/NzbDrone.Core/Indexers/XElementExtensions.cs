@@ -41,10 +41,10 @@ namespace NzbDrone.Core.Indexers
             try
             {
                 DateTime result;
-                if (!DateTime.TryParse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal, out result))
+                if (!DateTime.TryParse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal, out result))
                 {
                     dateString = RemoveTimeZoneRegex.Replace(dateString, "");
-                    result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AdjustToUniversal);
+                    result = DateTime.Parse(dateString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal);
                 }
                 return result.ToUniversalTime();
             }

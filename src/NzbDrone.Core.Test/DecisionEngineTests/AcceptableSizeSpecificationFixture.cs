@@ -142,6 +142,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_return_true_if_size_is_zero()
+        {
+            GivenLastEpisode();
+
+            series.Runtime = 30;
+            parseResultSingle.Series = series;
+            parseResultSingle.Release.Size = 0;
+            qualityType.MinSize = 10;
+            qualityType.MaxSize = 20;
+
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_return_true_if_unlimited_30_minute()
         {
             GivenLastEpisode();

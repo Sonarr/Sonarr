@@ -38,11 +38,30 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual String GetInfoHash(XElement item)
         {
+            var magnetUrl = GetMagnetUrl(item);
+            if (magnetUrl.IsNotNullOrWhiteSpace())
+            {
+                try
+                {
+                    var magnetLink = new MonoTorrent.MagnetLink(magnetUrl);
+                    return magnetLink.InfoHash.ToHex();
+                }
+                catch
+                {
+                }
+            }
+
             return null;
         }
 
         protected virtual String GetMagnetUrl(XElement item)
         {
+            var downloadUrl = GetDownloadUrl(item);
+            if (downloadUrl.StartsWith("magnet:"))
+            {
+                return downloadUrl;
+            }
+
             return null;
         }
 

@@ -36,6 +36,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Accept();
             }
 
+            if (subject.Release.Size == 0)
+            {
+                _logger.Debug("Release has unknown size, skipping size check.");
+                return Decision.Accept();
+            }
+
             var qualityDefinition = _qualityDefinitionService.Get(quality);
             if (qualityDefinition.MinSize.HasValue)
             {

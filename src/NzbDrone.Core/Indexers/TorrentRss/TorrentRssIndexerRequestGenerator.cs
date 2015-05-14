@@ -4,7 +4,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 
-namespace NzbDrone.Core.Indexers.TorrentRssIndexer
+namespace NzbDrone.Core.Indexers.TorrentRss
 {
     public class TorrentRssIndexerRequestGenerator : IIndexerRequestGenerator
     {
@@ -46,7 +46,14 @@ namespace NzbDrone.Core.Indexers.TorrentRssIndexer
 
         private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
         {
-            yield return new IndexerRequest(Settings.BaseUrl.Trim().TrimEnd('/'), HttpAccept.Rss);
+            var request = new IndexerRequest(Settings.BaseUrl.Trim().TrimEnd('/'), HttpAccept.Rss);
+
+            if (Settings.Cookie.IsNotNullOrWhiteSpace())
+            {
+                request.HttpRequest.AddCookie(Settings.Cookie);
+            }
+
+            yield return request;
         }
     }
 }

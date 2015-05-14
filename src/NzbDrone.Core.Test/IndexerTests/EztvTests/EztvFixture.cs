@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.EztvTests
         [Test]
         public void should_parse_recent_feed_from_Eztv()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/Eztv.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Eztv/Eztv.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

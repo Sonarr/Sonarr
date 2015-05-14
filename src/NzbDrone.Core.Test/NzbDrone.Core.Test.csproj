@@ -207,6 +207,8 @@
     <Compile Include="IndexerTests\HDBitsTests\HDBitsFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
+    <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />
+    <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssSettingsDetectorFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabRequestGeneratorFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabSettingFixture.cs" />
@@ -385,22 +387,18 @@
     <Content Include="Files\emptyfile.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\Eztv_InvalidDownloadUrl.xml">
+    <Content Include="Files\Indexers\TorrentRss\invalid\Eztv_InvalidSize.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\Eztv_InvalidSize.xml">
+    <Content Include="Files\Indexers\TorrentRss\invalid\Eztv_InvalidDownloadUrl.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\Eztv_InvalidTitles.xml">
-      <SubType>Designer</SubType>
+    <Content Include="Files\Indexers\Fanzub\fanzub.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\fanzub.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\Eztv.xml">
+    <Content Include="Files\Indexers\Eztv\Eztv.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
@@ -408,6 +406,15 @@
       <Link>App.config</Link>
     </None>
     <Content Include="Files\Indexers\Newznab\unauthorized.xml" />
+    <Content Include="Files\Indexers\TorrentRss\invalid\TorrentDay_NoPubDate.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Indexers\TorrentRss\AwesomeHD.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Indexers\TorrentRss\TransmitTheNet.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\LongOverview.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -432,83 +439,51 @@
     <Content Include="Files\QueueUnknownPriority.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\torznab_hdaccess_net.xml">
-    <Content Include="Files\RSS\ImmortalSeed_InvalidDownloadUrl.xml">
+    <Content Include="Files\Indexers\Torznab\torznab_hdaccess_net.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\ImmortalSeed_InvalidTitles.xml">
+    <Content Include="Files\Indexers\TorrentRss\invalid\ImmortalSeed_InvalidDownloadUrl.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\ImmortalSeed_InvalidSize.xml">
+    <Content Include="Files\Indexers\TorrentRss\invalid\ImmortalSeed_InvalidSize.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\ImmortalSeed.xml">
+    <Content Include="Files\Indexers\TorrentRss\ImmortalSeed.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\torznab_hdaccess_net.xml">
+    <Content Include="Files\Indexers\Nyaa\Nyaa.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\Nyaa.xml">
+    <Content Include="Files\Indexers\Newznab\newznab_nzb_su.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\filesharingtalk.xml">
+    <Content Include="Files\Indexers\Omgwtfnzbs\Omgwtfnzbs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\newznab_nzb_su.xml">
+    <Content Include="Files\Indexers\TorrentRss\ShowRSS.info.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\nzbclub.xml">
+    <Content Include="Files\Indexers\TorrentRss\speed.cd.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\nzbindex.xml">
+    <Content Include="Files\Indexers\Torznab\torznab_tpb.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\nzbsrus.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\omgwtfnzbs.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\ShowRSS.info.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\SizeParsing\newznab.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\SizeParsing\nzbclub.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\SizeParsing\nzbindex.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\SizeParsing\nzbsrus.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\SizeParsing\omgwtfnzbs.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\speed.cd.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\torznab_tpb.xml">
-    <Content Include="Files\RSS\speed.cd.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Files\RSS\wombles.xml">
+    <Content Include="Files\Indexers\Wombles\wombles.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Files\RSS\BitMeTv.xml">
+    <Content Include="Files\Indexers\BitMeTv\BitMeTv.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\IPTorrents.xml">
+    <Content Include="Files\Indexers\IPTorrents\IPTorrents.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\RSS\KickassTorrents.xml">
+    <Content Include="Files\Indexers\KickassTorrents\KickassTorrents.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Files\RSS\Torrentleech.xml">
+    <Content Include="Files\Indexers\Torrentleech\Torrentleech.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

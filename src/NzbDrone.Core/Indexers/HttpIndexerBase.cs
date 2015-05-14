@@ -217,7 +217,7 @@ namespace NzbDrone.Core.Indexers
 
                 if (releases.Empty())
                 {
-                    return new ValidationFailure("Url", "No results were returned from your indexer, please check your settings.");
+                    return new ValidationFailure(string.Empty, "No results were returned from your indexer, please check your settings.");
                 }
             }
             catch (ApiKeyException)
@@ -230,11 +230,17 @@ namespace NzbDrone.Core.Indexers
             {
                 _logger.Warn("Request limit reached");
             }
+            catch (UnsupportedFeedException ex)
+            {
+                _logger.WarnException("Indexer feed is not supported: " + ex.Message, ex);
+
+                return new ValidationFailure(string.Empty, "Indexer feed is not supported: " + ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
 
-                return new ValidationFailure("Url", "Unable to connect to indexer, check the log for more details");
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }
 
             return null;
