@@ -58,8 +58,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(extras|@eadir)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex ExcludedFoldersRegex = new Regex(@"(?:\\|\/)(\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(extras|@eadir|\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
@@ -136,7 +135,6 @@ namespace NzbDrone.Core.MediaFiles
         private IEnumerable<string> FilterFiles(Series series, IEnumerable<string> videoFiles)
         {
             return videoFiles.Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file)))
-                             .Where(file => !ExcludedFoldersRegex.IsMatch(file))
                              .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)));
         }
 

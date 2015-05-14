@@ -28,8 +28,6 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetParentFolder(It.IsAny<string>()))
                   .Returns((string path) => Directory.GetParent(path).FullName);
-
-            
         }
 
         private void GivenParentFolderExists()
@@ -180,7 +178,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         }
 
         [Test]
-        public void should_not_scan_Ssynology_eaDir()
+        public void should_not_scan_Synology_eaDir()
         {
             GivenParentFolderExists();
 
@@ -194,6 +192,41 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
 
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_not_scan_thumb_folder()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, ".@__thumb", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_scan_dotHack_folder()
+        {
+            GivenParentFolderExists();
+            _series.Path = @"C:\Test\TV\.hack".AsOsAgnostic();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "Season 1", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 2), _series), Times.Once());
         }
     }
 }
