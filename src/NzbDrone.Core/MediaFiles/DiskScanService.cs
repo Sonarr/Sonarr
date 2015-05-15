@@ -125,7 +125,6 @@ namespace NzbDrone.Core.MediaFiles
             var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
 
             var mediaFileList = filesOnDisk.Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file).ToLower()))
-                                           .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)))
                                            .ToList();
 
             _logger.Debug("{0} video files were found in {1}", mediaFileList.Count, path);
