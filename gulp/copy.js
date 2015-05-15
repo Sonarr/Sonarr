@@ -8,7 +8,7 @@ gulp.task('copyJs', function () {
     return gulp.src(
       [
         paths.src.root + "polyfills.js",
-        paths.src.root + "JsLibraries\\handlebars.runtime.js",
+        paths.src.root + "JsLibraries/handlebars.runtime.js",
       ])
         .pipe(cache('copyJs'))
         .pipe(print())
