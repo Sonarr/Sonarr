@@ -233,7 +233,6 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         public void should_find_files_at_root_of_series_folder()
         {
             GivenParentFolderExists();
-            _series.Path = @"C:\Test\TV\.hack".AsOsAgnostic();
 
             GivenFiles(new List<string>
                        {
@@ -245,6 +244,23 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
 
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 2), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_exclude_osx_metadata_files()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "._24 The Status Quo Combustion.mp4").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "24 The Status Quo Combustion.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
         }
     }
 }

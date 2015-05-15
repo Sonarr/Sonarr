@@ -77,17 +77,5 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 
             Subject.GetVideoFiles(path).Should().HaveCount(4);
         }
-
-        [Test]
-        public void should_exclude_osx_metadata_files()
-        {
-            var path = @"C:\Test\";
-
-            _files = new [] { "._24 The Status Quo Combustion.mp4", "24 The Status Quo Combustion.mp4" };
-            
-            GivenFiles();
-            
-            Subject.GetVideoFiles(path).Should().HaveCount(1);
-        }
     }
 }
