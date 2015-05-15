@@ -228,5 +228,23 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 2), _series), Times.Once());
         }
+
+        [Test]
+        public void should_find_files_at_root_of_series_folder()
+        {
+            GivenParentFolderExists();
+            _series.Path = @"C:\Test\TV\.hack".AsOsAgnostic();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 2), _series), Times.Once());
+        }
     }
 }
