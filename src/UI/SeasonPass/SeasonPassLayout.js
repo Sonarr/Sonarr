@@ -1,9 +1,15 @@
+var _ = require('underscore');
+var vent = require('vent');
+var Backgrid = require('backgrid');
 var Marionette = require('marionette');
+var EmptyView = require('../Series/Index/EmptyView');
 var SeriesCollection = require('../Series/SeriesCollection');
-var SeasonCollection = require('../Series/SeasonCollection');
-var SeriesCollectionView = require('./SeriesCollectionView');
-var LoadingView = require('../Shared/LoadingView');
 var ToolbarLayout = require('../Shared/Toolbar/ToolbarLayout');
+var FooterView = require('./SeasonPassFooterView');
+var SelectAllCell = require('../Cells/SelectAllCell');
+var SeriesStatusCell = require('../Cells/SeriesStatusCell');
+var SeriesTitleCell = require('../Cells/SeriesTitleCell');
+var SeasonsCell = require('./SeasonsCell');
 require('../Mixins/backbone.signalr.mixin');
 
 module.exports = Marionette.Layout.extend({
@@ -14,11 +20,38 @@ module.exports = Marionette.Layout.extend({
         series  : '#x-series'
     },
 
+    columns : [
+        {
+            name       : '',
+            cell       : SelectAllCell,
+            headerCell : 'select-all',
+            sortable   : false
+        },
+        {
+            name  : 'statusWeight',
+            label : '',
+            cell  : SeriesStatusCell
+        },
+        {
+            name      : 'title',
+            label     : 'Title',
+            cell      : SeriesTitleCell,
+            cellValue : 'this'
+        },
+        {
+            name      : 'seasons',
+            label     : 'Seasons',
+            cell      : SeasonsCell,
+            cellValue : 'this'
+        }
+    ],
+
     initialize : function() {
         this.seriesCollection = SeriesCollection.clone();
         this.seriesCollection.shadowCollection.bindSignalR();
 
-        this.listenTo(this.seriesCollection, 'sync', this.render);
+//        this.listenTo(this.seriesCollection, 'sync', this.render);
+        this.listenTo(this.seriesCollection, 'seasonpass:saved', this.render);
 
         this.filteringOptions = {
             type          : 'radio',
@@ -59,17 +92,45 @@ module.exports = Marionette.Layout.extend({
     },
 
     onRender : function() {
-        this.series.show(new SeriesCollectionView({
-            collection : this.seriesCollection
-        }));
-
+        this._showTable();
         this._showToolbar();
+        this._showFooter();
+    },
+
+    onClose : function() {
+        vent.trigger(vent.Commands.CloseControlPanelCommand);
     },
 
     _showToolbar : function() {
         this.toolbar.show(new ToolbarLayout({
             right   : [this.filteringOptions],
             context : this
+        }));
+    },
+
+    _showTable : function() {
+        if (this.seriesCollection.shadowCollection.length === 0) {
+            this.series.show(new EmptyView());
+            this.toolbar.close();
+            return;
+        }
+
+        this.columns[0].sortedCollection = this.seriesCollection;
+
+        this.editorGrid = new Backgrid.Grid({
+            collection : this.seriesCollection,
+            columns    : this.columns,
+            className  : 'table table-hover'
+        });
+
+        this.series.show(this.editorGrid);
+        this._showFooter();
+    },
+
+    _showFooter : function() {
+        vent.trigger(vent.Commands.OpenControlPanelCommand, new FooterView({
+            editorGrid : this.editorGrid,
+            collection : this.seriesCollection
         }));
     },
 

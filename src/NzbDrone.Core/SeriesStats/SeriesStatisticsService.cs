@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NzbDrone.Core.SeriesStats
 {
@@ -19,7 +21,9 @@ namespace NzbDrone.Core.SeriesStats
 
         public List<SeriesStatistics> SeriesStatistics()
         {
-            return _seriesStatisticsRepository.SeriesStatistics();
+            var seasonStatistics = _seriesStatisticsRepository.SeriesStatistics();
+
+            return seasonStatistics.GroupBy(s => s.SeriesId).Select(s => MapSeriesStatistics(s.ToList())).ToList();
         }
 
         public SeriesStatistics SeriesStatistics(int seriesId)
@@ -28,7 +32,36 @@ namespace NzbDrone.Core.SeriesStats
 
             if (stats == null) return new SeriesStatistics();
 
-            return stats;
+            return MapSeriesStatistics(new List<SeasonStatistics> { stats });
+        }
+
+        private SeriesStatistics MapSeriesStatistics(List<SeasonStatistics> seasonStatistics)
+        {
+            return new SeriesStatistics
+                   {
+                       SeasonStatistics = seasonStatistics,
+                       SeriesId = seasonStatistics.First().SeriesId,
+                       EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
+                       EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
+                       SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
+                       NextAiringString = seasonStatistics.OrderBy(s =>
+                       {
+                           DateTime nextAiring;
+
+                           if (!DateTime.TryParse(s.NextAiringString, out nextAiring)) return DateTime.MinValue;
+
+                           return nextAiring;
+                       }).First().NextAiringString,
+
+                       PreviousAiringString = seasonStatistics.OrderBy(s =>
+                       {
+                           DateTime nextAiring;
+
+                           if (!DateTime.TryParse(s.PreviousAiringString, out nextAiring)) return DateTime.MinValue;
+
+                           return nextAiring;
+                       }).Last().PreviousAiringString
+                   };
         }
     }
 }

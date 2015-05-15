@@ -69,6 +69,8 @@ namespace NzbDrone.Api.Series
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
 
+        //TODO: Add series statistics as a property of the series (instead of individual properties)
+
         //Used to support legacy consumers
         public Int32 QualityProfileId
         {

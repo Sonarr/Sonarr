@@ -1,0 +1,30 @@
+{{#each seasons}}
+    <span class="season label label-default">
+        <span>
+            <span class="x-season-monitored season-monitored" title="Toggle season monitored status" data-season-number="{{seasonNumber}}">
+                <i class="x-season-monitored-icon {{#if monitored}}icon-sonarr-monitored{{else}}icon-sonarr-unmonitored{{/if}}"/>
+            </span>
+        </span>
+        {{#if_eq seasonNumber compare="0"}}
+            <span class="season-number">Specials</span>
+        {{else}}
+            <span class="season-number">S{{Pad2 seasonNumber}}</span>
+        {{/if_eq}}
+
+        <!--{{#if_eq statistics.episodeCount compare=0}}-->
+            <!--{{#if monitored}}-->
+                <!--<span class="badge badge-primary season-status" title="No aired episodes">&nbsp;</span>-->
+            <!--{{else}}-->
+                <!--<span class="badge badge-warning season-status" title="Season is not monitored">&nbsp;</span>-->
+            <!--{{/if}}-->
+        <!--{{else}}-->
+            <!--{{#with statistics}}-->
+            <!--{{#if_eq percentOfEpisodes compare=100}}-->
+                <!--<span class="badge badge-success season-status" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded">{{episodeFileCount}} / {{episodeCount}}</span>-->
+            <!--{{else}}-->
+                <!--<span class="badge badge-danger season-status" title="{{episodeFileCount}}/{{episodeCount}} episodes downloaded">{{episodeFileCount}} / {{episodeCount}}</span>-->
+            <!--{{/if_eq}}-->
+            <!--{{/with}}-->
+        <!--{{/if_eq}}-->
+    </span>
+{{/each}}
