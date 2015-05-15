@@ -114,8 +114,8 @@ Function PackageMono()
     get-childitem $outputFolderMono -File -Filter sqlite3.* -Recurse | foreach ($_) {remove-item $_.fullname}
     get-childitem $outputFolderMono -File -Filter MediaInfo.* -Recurse | foreach ($_) {remove-item $_.fullname}
 
-    Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
-    Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" $outputFolderMono
+    Write-Host "Adding NzbDrone.Core.dll.config (for dllmap)"
+    Copy-Item "$sourceFolder\NzbDrone.Core\NzbDrone.Core.dll.config" $outputFolderMono
 
     Write-Host Renaming NzbDrone.Console.exe to NzbDrone.exe
     Get-ChildItem $outputFolderMono -File -Filter "NzbDrone.exe*" -Recurse | foreach ($_) {remove-item $_.fullname}
@@ -212,8 +212,8 @@ Function PackageTests()
 
     CleanFolder $testPackageFolder $true
 
-    Write-Host "Adding MediaInfoDotNet.dll.config (for dllmap)"
-    Copy-Item "$sourceFolder\MediaInfoDotNet.dll.config" -Destination $testPackageFolder -Force
+    Write-Host "Adding NzbDrone.Core.dll.config (for dllmap)"
+    Copy-Item "$sourceFolder\NzbDrone.Core\NzbDrone.Core.dll.config" -Destination $testPackageFolder -Force
 
     Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }

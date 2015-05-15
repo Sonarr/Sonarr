@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using MediaInfoLib;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -33,29 +32,16 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (!_diskProvider.FileExists(filename))
                 throw new FileNotFoundException("Media file does not exist: " + filename);
 
-            MediaInfoLib.MediaInfo mediaInfo = null;
+            MediaInfo mediaInfo = null;
 
             try
             {
-                mediaInfo = new MediaInfoLib.MediaInfo();
+                mediaInfo = new MediaInfo();
                 _logger.Debug("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
 
-                int open;
-                if (OsInfo.IsWindows)
-                {
-                    open = mediaInfo.Open(filename);
-                }
-                else
-                {
-                    mediaInfo.Option("CharSet", "UTF-8");
-
-                    // On non-Windows the wrapper uses the ansi library methods, which libmediainfo converts internally to unicode from multibyte (utf8).
-                    // To avoid building MediaInfoDotNet ourselves we simply trick the wrapper to send utf8 strings instead of ansi.
-                    var utf8filename = Encoding.Default.GetString(Encoding.UTF8.GetBytes(filename));
-                    open = mediaInfo.Open(utf8filename);
-                }
+                int open = mediaInfo.Open(_diskProvider.OpenReadStream(filename));
 
                 if (open != 0)
                 {

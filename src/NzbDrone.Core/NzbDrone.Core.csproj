@@ -93,9 +93,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MediaInfoDotNet">
-      <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -606,6 +603,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoLib.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
     <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoService.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
@@ -940,6 +938,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="NzbDrone.Core.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
   </ItemGroup>
