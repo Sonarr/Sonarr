@@ -88,5 +88,17 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.Width.Should().Be(480);
 
         }
+
+        [Test]
+        public void should_dispose_file_after_scanning_mediainfo()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Media", "H264_sample.mp4");
+
+            var info = Subject.GetMediaInfo(path);
+
+            var stream = new FileStream(path, FileMode.Open, FileAccess.Write);
+
+            stream.Close();
+        }
     }
 }

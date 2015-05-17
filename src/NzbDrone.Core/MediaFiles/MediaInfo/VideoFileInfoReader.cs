@@ -41,7 +41,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                 mediaInfo.Option("ParseSpeed", "0.2");
 
-                int open = mediaInfo.Open(_diskProvider.OpenReadStream(filename));
+                int open;
+
+                using (var stream = _diskProvider.OpenReadStream(filename))
+                {
+                    open = mediaInfo.Open(stream);
+                }
 
                 if (open != 0)
                 {
