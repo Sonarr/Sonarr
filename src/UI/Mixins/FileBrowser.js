@@ -10,7 +10,7 @@ $.fn.fileBrowser = function(options) {
         var input = $(this);
         var inputOptions = $.extend({ input : input }, options);
         var inputGroup = $('<div class="input-group"></div>');
-        var inputGroupButton = $('<span class="input-group-btn "></span>');
+        var inputGroupButton = $('<span class="input-group-btn"></span>');
 
         var button = $('<button class="btn btn-primary x-file-browser" title="Browse"><i class="icon-sonarr-folder-open"/></button>');
 

@@ -184,14 +184,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
         public void Execute(ManualImportCommand message)
         {
-            _logger.ProgressInfo("Manually importing {0} files", message.Files.Count);
+            _logger.ProgressTrace("Manually importing {0} files", message.Files.Count);
 
             var imported = new List<ImportResult>();
             var importedTrackedDownload = new List<ManuallyImportedFile>();
 
             for (int i = 0; i < message.Files.Count; i++)
             {
-                _logger.ProgressInfo("Processing file {0} of {1}", i + 1, message.Files.Count);
+                _logger.ProgressTrace("Processing file {0} of {1}", i + 1, message.Files.Count);
                 
                 var file = message.Files[i];
                 var series = _seriesService.GetSeries(file.SeriesId);
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 }
             }
 
-            _logger.ProgressInfo("Manually imported {0}", imported.Count);
+            _logger.ProgressTrace("Manually imported {0} files", imported.Count);
 
             foreach (var groupedTrackedDownload in importedTrackedDownload.GroupBy(i => i.TrackedDownload.DownloadItem.DownloadId).ToList())
             {
