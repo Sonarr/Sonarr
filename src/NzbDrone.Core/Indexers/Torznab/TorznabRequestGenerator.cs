@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            if (searchCriteria.Series.TvRageId > 0)
+            if (searchCriteria.Series.TvRageId > 0 && Settings.EnableRageIDLookup)
             {
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
                     String.Format("&rid={0}&season={1}&ep={2}",
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            if (searchCriteria.Series.TvRageId > 0)
+            if (searchCriteria.Series.TvRageId > 0 && Settings.EnableRageIDLookup)
             {
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
                     String.Format("&rid={0}&season={1}",
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            if (searchCriteria.Series.TvRageId > 0)
+            if (searchCriteria.Series.TvRageId > 0 && Settings.EnableRageIDLookup)
             {
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
                     String.Format("&rid={0}&season={1:yyyy}&ep={1:MM}/{1:dd}",

@@ -49,23 +49,27 @@ namespace NzbDrone.Core.Indexers.Torznab
         public TorznabSettings()
         {
             Categories = new[] { 5030, 5040 };
-            AnimeCategories = Enumerable.Empty<Int32>();
+            AnimeCategories = Enumerable.Empty<int>();
+            EnableRageIDLookup = true;
         }
 
         [FieldDefinition(0, Label = "URL")]
-        public String Url { get; set; }
+        public string Url { get; set; }
 
         [FieldDefinition(1, Label = "API Key")]
-        public String ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         [FieldDefinition(2, Label = "Categories", HelpText = "Comma Separated list, leave blank to disable standard/daily shows", Advanced = true)]
-        public IEnumerable<Int32> Categories { get; set; }
+        public IEnumerable<int> Categories { get; set; }
 
         [FieldDefinition(3, Label = "Anime Categories", HelpText = "Comma Separated list, leave blank to disable anime", Advanced = true)]
-        public IEnumerable<Int32> AnimeCategories { get; set; }
+        public IEnumerable<int> AnimeCategories { get; set; }
 
         [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional Torznab parameters", Advanced = true)]
-        public String AdditionalParameters { get; set; }
+        public string AdditionalParameters { get; set; }
+
+        [FieldDefinition(5, Label = "Enable RageID Lookup", HelpText = "Disable this if your tracker doesn't have tvrage ids, Sonarr will then use (more expensive) title queries.", Advanced = true)]
+        public bool EnableRageIDLookup { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
