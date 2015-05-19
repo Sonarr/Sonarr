@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -6,8 +7,8 @@ using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -51,6 +52,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                         Episodes = new List<Episode> { new Episode() { Id = 2 } }
 
                                     };
+
+            Mocker.GetMock<IQualityDefinitionService>()
+                .Setup(v => v.Get(It.IsAny<Quality>()))
+                .Returns<Quality>(v => Quality.DefaultQualityDefinitions.First(c => c.Quality == v));
 
             qualityType = Builder<QualityDefinition>.CreateNew()
                 .With(q => q.MinSize = 2)
@@ -144,7 +149,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             series.Runtime = 30;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 18457280000;
-            qualityType.MaxSize = 0;
+            qualityType.MaxSize = null;
 
             Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
         }
@@ -157,9 +162,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             series.Runtime = 60;
             parseResultSingle.Series = series;
             parseResultSingle.Release.Size = 36857280000;
-            qualityType.MaxSize = 0;
+            qualityType.MaxSize = null;
 
-            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue(); ;
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -180,12 +185,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_RAWHD()
         {
-            var parseResult = new RemoteEpisode
-                {
-                    ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.RAWHD) },
-                };
+            parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.RAWHD);
+            
+            series.Runtime = 45;
+            parseResultSingle.Series = series;
+            parseResultSingle.Series.SeriesType = SeriesTypes.Daily;
+            parseResultSingle.Release.Size = 8000.Megabytes();
 
-            Subject.IsSatisfiedBy(parseResult, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
