@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Notifications.Growl
             _growlService.SendNotification(title, message.Message, "DOWNLOAD", Settings.Host, Settings.Port, Settings.Password);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -42,6 +42,14 @@ namespace NzbDrone.Core.Notifications.Growl
             get
             {
                 return "Growl";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

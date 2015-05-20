@@ -40,8 +40,13 @@ namespace NzbDrone.Core.Notifications
         public abstract string Link { get; }
 
         public abstract void OnGrab(string message);
-        public abstract void OnDownload(DownloadMessage message);
-        public abstract void AfterRename(Series series);
+        public abstract void OnDownload(DownloadMessage message); 
+        public abstract void OnRename(Series series);
+
+        public virtual bool SupportsOnGrab { get { return true; } }
+        public virtual bool SupportsOnDownload { get { return true; } }
+        public virtual bool SupportsOnUpgrade { get { return true; } }
+        public virtual bool SupportsOnRename { get { return true; } }
 
         protected TSettings Settings
         {

@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
             if (Settings.UpdateLibrary)
             {
@@ -58,6 +58,14 @@ namespace NzbDrone.Core.Notifications.Synology
             get
             {
                 return "Synology Indexer";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

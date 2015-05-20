@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Annotations
 {
@@ -10,10 +11,10 @@ namespace NzbDrone.Core.Annotations
             Order = order;
         }
 
-        public Int32 Order { get; private set; }
-        public String Label { get; set; }
-        public String HelpText { get; set; }
-        public String HelpLink { get; set; }
+        public int Order { get; private set; }
+        public string Label { get; set; }
+        public string HelpText { get; set; }
+        public string HelpLink { get; set; }
         public FieldType Type { get; set; }
         public Boolean Advanced { get; set; }
         public Type SelectOptions { get; set; }

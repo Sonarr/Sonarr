@@ -11,12 +11,17 @@ namespace NzbDrone.Core.Notifications
             Tags = new HashSet<Int32>();
         }
 
-        public Boolean OnGrab { get; set; }
-        public Boolean OnDownload { get; set; }
-        public Boolean OnUpgrade { get; set; }
-        public HashSet<Int32> Tags { get; set; }
+        public bool OnGrab { get; set; }
+        public bool OnDownload { get; set; }
+        public bool OnUpgrade { get; set; }
+        public bool OnRename { get; set; }
+        public bool SupportsOnGrab { get; set; }
+        public bool SupportsOnDownload { get; set; }
+        public bool SupportsOnUpgrade { get; set; }
+        public bool SupportsOnRename { get; set; }
+        public HashSet<int> Tags { get; set; }
 
-        public override Boolean Enable
+        public override bool Enable
         {
             get
             {

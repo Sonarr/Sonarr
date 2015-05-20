@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             _proxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -42,6 +42,14 @@ namespace NzbDrone.Core.Notifications.Pushover
             get
             {
                 return "Pushover";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

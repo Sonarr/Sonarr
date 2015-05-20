@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             _proxy.SendNotification(title, message.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -43,6 +43,14 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             get
             {
                 return "Notify My Android";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

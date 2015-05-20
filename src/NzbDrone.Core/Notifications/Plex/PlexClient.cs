@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Notifications.Plex
             _plexClientService.Notify(Settings, header, message.Message);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -40,6 +40,14 @@ namespace NzbDrone.Core.Notifications.Plex
             get
             {
                 return "Plex Media Center";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

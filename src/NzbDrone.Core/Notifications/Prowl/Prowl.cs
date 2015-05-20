@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlService.SendNotification(title, message.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -43,6 +43,14 @@ namespace NzbDrone.Core.Notifications.Prowl
             get
             {
                 return "Prowl";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

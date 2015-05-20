@@ -1,17 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NzbDrone.Common.Processes
 {
     public class ProcessOutput
     {
-        public List<String> Standard { get; private set; }
-        public List<String> Error { get; private set; }
+        public int ExitCode { get; set; }
+        public List<ProcessOutputLine> Lines { get; set; }
 
         public ProcessOutput()
         {
-            Standard = new List<string>();
-            Error = new List<string>();
+            Lines = new List<ProcessOutputLine>();
+        }
+
+        public List<ProcessOutputLine> Standard
+        {
+            get
+            {
+                return Lines.Where(c => c.Level == ProcessOutputLevel.Standard).ToList();
+            }
+        }
+
+        public List<ProcessOutputLine> Error
+        {
+            get
+            {
+                return Lines.Where(c => c.Level == ProcessOutputLevel.Error).ToList();
+            }
         }
     }
 }

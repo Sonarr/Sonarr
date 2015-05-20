@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Email
             _emailService.SendEmail(Settings, subject, body);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -45,6 +45,14 @@ namespace NzbDrone.Core.Notifications.Email
             get
             {
                 return "Email";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

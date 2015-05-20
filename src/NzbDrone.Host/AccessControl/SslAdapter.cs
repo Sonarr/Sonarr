@@ -56,11 +56,11 @@ namespace NzbDrone.Host.AccessControl
 
             if (output == null || !output.Standard.Any()) return false;
 
-            var hashLine = output.Standard.SingleOrDefault(line => CertificateHashRegex.IsMatch(line));
+            var hashLine = output.Standard.SingleOrDefault(line => CertificateHashRegex.IsMatch(line.Content));
 
             if (hashLine != null)
             {
-                var match = CertificateHashRegex.Match(hashLine);
+                var match = CertificateHashRegex.Match(hashLine.Content);
 
                 if (match.Success)
                 {
@@ -73,7 +73,7 @@ namespace NzbDrone.Host.AccessControl
                 }
             }
 
-            return output.Standard.Any(line => line.Contains(ipPort));
+            return output.Standard.Any(line => line.Content.Contains(ipPort));
         }
 
         private void Unregister()

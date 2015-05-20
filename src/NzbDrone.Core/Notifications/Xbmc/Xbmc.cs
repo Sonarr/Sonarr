@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
             UpdateAndClean(series);
         }

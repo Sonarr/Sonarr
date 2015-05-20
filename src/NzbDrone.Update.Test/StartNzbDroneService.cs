@@ -32,7 +32,7 @@ namespace NzbDrone.Update.Test
 
             Subject.Start(AppType.Service, targetFolder);
 
-            Mocker.GetMock<IProcessProvider>().Verify(c => c.SpawnNewProcess("c:\\NzbDrone\\NzbDrone.Console.exe", "/" + StartupContext.NO_BROWSER), Times.Once());
+            Mocker.GetMock<IProcessProvider>().Verify(c => c.SpawnNewProcess("c:\\NzbDrone\\NzbDrone.Console.exe", "/" + StartupContext.NO_BROWSER, null), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
         }

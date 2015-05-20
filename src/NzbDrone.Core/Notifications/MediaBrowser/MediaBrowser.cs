@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             }
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
             if (Settings.UpdateLibrary)
             {

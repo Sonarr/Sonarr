@@ -9,6 +9,10 @@ namespace NzbDrone.Core.Notifications
 
         void OnGrab(string message);
         void OnDownload(DownloadMessage message);
-        void AfterRename(Series series);
+        void OnRename(Series series);
+        bool SupportsOnGrab { get; }
+        bool SupportsOnDownload { get; }
+        bool SupportsOnUpgrade { get; }
+        bool SupportsOnRename { get; }
     }
 }

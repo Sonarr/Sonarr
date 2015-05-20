@@ -254,6 +254,7 @@
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
+    <Compile Include="Datastore\Migration\089_add_on_rename_to_notifcations.cs" />
     <Compile Include="Datastore\Migration\085_expand_transmission_urlbase.cs" />
     <Compile Include="Datastore\Migration\086_pushbullet_device_ids.cs" />
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
@@ -710,6 +711,9 @@
     <Compile Include="Notifications\Plex\Models\PlexSectionItem.cs" />
     <Compile Include="Notifications\Plex\Models\PlexSection.cs" />
     <Compile Include="Notifications\Plex\PlexAuthenticationException.cs" />
+    <Compile Include="Notifications\CustomScript\CustomScript.cs" />
+    <Compile Include="Notifications\CustomScript\CustomScriptService.cs" />
+    <Compile Include="Notifications\CustomScript\CustomScriptSettings.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
     <Compile Include="Notifications\Plex\PlexClientService.cs" />

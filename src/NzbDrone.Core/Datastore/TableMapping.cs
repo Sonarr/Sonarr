@@ -53,7 +53,12 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.SupportsRss)
                   .Ignore(i => i.SupportsSearch);
 
-            Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications");
+            Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications")
+                  .Ignore(i => i.SupportsOnGrab)
+                  .Ignore(i => i.SupportsOnDownload)
+                  .Ignore(i => i.SupportsOnUpgrade)
+                  .Ignore(i => i.SupportsOnRename);
+            
             Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
 
             Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")

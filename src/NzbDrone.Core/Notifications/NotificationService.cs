@@ -137,19 +137,19 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(SeriesRenamedEvent message)
         {
-            foreach (var notification in _notificationFactory.OnDownloadEnabled())
+            foreach (var notification in _notificationFactory.OnRenameEnabled())
             {
                 try
                 {
                     if (ShouldHandleSeries(notification.Definition, message.Series))
                     {
-                        notification.AfterRename(message.Series);
+                        notification.OnRename(message.Series);
                     }
                 }
 
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Unable to send AfterRename notification to: " + notification.Definition.Name, ex);
+                    _logger.WarnException("Unable to send OnRename notification to: " + notification.Definition.Name, ex);
                 }
             }
         }

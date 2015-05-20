@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Notifications.Plex
+namespace NzbDrone.Core.Notifications.CustomScript
 {
-    public class PlexServer : NotificationBase<PlexServerSettings>
+    public class CustomScript : NotificationBase<CustomScriptSettings>
     {
-        private readonly IPlexServerService _plexServerService;
+        private readonly ICustomScriptService _customScriptService;
 
-        public PlexServer(IPlexServerService plexServerService)
+        public CustomScript(ICustomScriptService customScriptService)
         {
-            _plexServerService = plexServerService;
+            _customScriptService = customScriptService;
         }
 
         public override string Link
         {
-            get { return "http://www.plexapp.com/"; }
+            get { return "https://github.com/Sonarr/Sonarr/wiki/Custom-Post-Processing-Scripts"; }
         }
 
         public override void OnGrab(string message)
@@ -25,27 +24,19 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public override void OnDownload(DownloadMessage message)
         {
-            UpdateIfEnabled(message.Series);
+            _customScriptService.OnDownload(message.Series, message.EpisodeFile, Settings);
         }
 
         public override void OnRename(Series series)
         {
-            UpdateIfEnabled(series);
-        }
-
-        private void UpdateIfEnabled(Series series)
-        {
-            if (Settings.UpdateLibrary)
-            {
-                _plexServerService.UpdateLibrary(series, Settings);
-            }
+            _customScriptService.OnRename(series, Settings);
         }
 
         public override string Name
         {
             get
             {
-                return "Plex Media Server";
+                return "Custom Script";
             }
         }
 
@@ -60,8 +51,6 @@ namespace NzbDrone.Core.Notifications.Plex
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
-
-            failures.AddIfNotNull(_plexServerService.Test(Settings));
 
             return new ValidationResult(failures);
         }

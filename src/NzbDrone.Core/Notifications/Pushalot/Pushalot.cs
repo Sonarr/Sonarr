@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
             _proxy.SendNotification(title, message.Message, Settings);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
         }
 
@@ -43,6 +43,14 @@ namespace NzbDrone.Core.Notifications.Pushalot
             get
             {
                 return "Pushalot";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

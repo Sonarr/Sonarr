@@ -6,6 +6,7 @@ var AsValidatedView = require('../../../Mixins/AsValidatedView');
 var AsEditModalView = require('../../../Mixins/AsEditModalView');
 require('../../../Form/FormBuilder');
 require('../../../Mixins/TagInput');
+require('../../../Mixins/FileBrowser');
 require('bootstrap.tagsinput');
 
 var view = Marionette.ItemView.extend({
@@ -15,7 +16,9 @@ var view = Marionette.ItemView.extend({
         onDownloadToggle : '.x-on-download',
         onUpgradeSection : '.x-on-upgrade',
         tags             : '.x-tags',
-        formTag          : '.x-form-tag'
+        modalBody        : '.modal-body',
+        formTag          : '.x-form-tag',
+        path             : '.x-path'
     },
 
     events : {
@@ -41,6 +44,14 @@ var view = Marionette.ItemView.extend({
             trimValue : true,
             tagClass  : 'label label-default'
         });
+    },
+
+    onShow : function() {
+        if (this.ui.path.length > 0) {
+            this.ui.modalBody.addClass('modal-overflow');
+        }
+
+        this.ui.path.fileBrowser();
     },
 
     _onAfterSave : function() {

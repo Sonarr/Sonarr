@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Plex
             Notify(Settings, header, message.Message);
         }
 
-        public override void AfterRename(Series series)
+        public override void OnRename(Series series)
         {
             
         }
@@ -49,6 +49,14 @@ namespace NzbDrone.Core.Notifications.Plex
             get
             {
                 return "Plex Home Theater";
+            }
+        }
+
+        public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
             }
         }
 

@@ -27,9 +27,10 @@ module.exports = Marionette.ItemView.extend({
 
         this.model.set({
             id         : undefined,
-            onGrab     : true,
-            onDownload : true,
-            onUpgrade  : true
+            onGrab     : this.model.get('supportsOnGrab'),
+            onDownload : this.model.get('supportsOnDownload'),
+            onUpgrade  : this.model.get('supportsOnUpgrade'),
+            onRename   : this.model.get('supportsOnRename')
         });
 
         var editView = new EditView({
@@ -47,9 +48,10 @@ module.exports = Marionette.ItemView.extend({
 
         this.model.set({
             id         : undefined,
-            onGrab     : true,
-            onDownload : true,
-            onUpgrade  : true
+            onGrab     : this.model.get('supportsOnGrab'),
+            onDownload : this.model.get('supportsOnDownload'),
+            onUpgrade  : this.model.get('supportsOnUpgrade'),
+            onRename   : this.model.get('supportsOnRename')
         });
 
         var editView = new EditView({

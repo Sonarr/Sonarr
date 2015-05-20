@@ -139,7 +139,7 @@ namespace NzbDrone.Host.AccessControl
 
             return output.Standard.Select(line =>
             {
-                var match = UrlAclRegex.Match(line);
+                var match = UrlAclRegex.Match(line.Content);
 
                 if (match.Success)
                 {
