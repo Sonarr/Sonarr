@@ -30,12 +30,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var quality = subject.ParsedEpisodeInfo.Quality.Quality;
 
-            if (quality == Quality.RAWHD)
-            {
-                _logger.Debug("Raw-HD release found, skipping size check.");
-                return Decision.Accept();
-            }
-
             if (subject.ParsedEpisodeInfo.Special)
             {
                 _logger.Debug("Special release found, skipping size check.");
@@ -43,24 +37,27 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
 
             var qualityDefinition = _qualityDefinitionService.Get(quality);
-            var minSize = qualityDefinition.MinSize.Megabytes();
-
-            //Multiply maxSize by Series.Runtime
-            minSize = minSize * subject.Series.Runtime * subject.Episodes.Count;
-
-            //If the parsed size is smaller than minSize we don't want it
-            if (subject.Release.Size < minSize)
+            if (qualityDefinition.MinSize.HasValue)
             {
-                _logger.Debug("Item: {0}, Size: {1:0n} is smaller than minimum allowed size ({2:0}), rejecting.", subject, subject.Release.Size, minSize);
-                return Decision.Reject("{0} is smaller than minimum allowed: {1}", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix());
+                var minSize = qualityDefinition.MinSize.Value.Megabytes();
+
+                //Multiply maxSize by Series.Runtime
+                minSize = minSize * subject.Series.Runtime * subject.Episodes.Count;
+
+                //If the parsed size is smaller than minSize we don't want it
+                if (subject.Release.Size < minSize)
+                {
+                    _logger.Debug("Item: {0}, Size: {1:0n} is smaller than minimum allowed size ({2:0}), rejecting.", subject, subject.Release.Size, minSize);
+                    return Decision.Reject("{0} is smaller than minimum allowed: {1}", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix());
+                }
             }
-            if (qualityDefinition.MaxSize == 0)
+            if (!qualityDefinition.MaxSize.HasValue)
             {
-                _logger.Debug("Max size is 0 (unlimited) - skipping check.");
+                _logger.Debug("Max size is unlimited - skipping check.");
             }
             else
             {
-                var maxSize = qualityDefinition.MaxSize.Megabytes();
+                var maxSize = qualityDefinition.MaxSize.Value.Megabytes();
 
                 //Multiply maxSize by Series.Runtime
                 maxSize = maxSize * subject.Series.Runtime * subject.Episodes.Count;

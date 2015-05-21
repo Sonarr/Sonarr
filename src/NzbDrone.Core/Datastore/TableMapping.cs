@@ -114,6 +114,7 @@ namespace NzbDrone.Core.Datastore
             RegisterProviderSettingConverter();
 
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Double), new DoubleConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(DateTime), new UtcConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
