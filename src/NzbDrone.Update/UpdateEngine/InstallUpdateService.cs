@@ -79,7 +79,10 @@ namespace NzbDrone.Update.UpdateEngine
 
             try
             {
-                _terminateNzbDrone.Terminate(processId);
+                if (OsInfo.IsWindows)
+                {
+                    _terminateNzbDrone.Terminate(processId);
+                }
 
                 _backupAndRestore.Backup(installationFolder);
                 _backupAppData.Backup();
@@ -92,10 +95,10 @@ namespace NzbDrone.Update.UpdateEngine
                     _logger.Info("Copying new files to target folder");
                     _diskProvider.CopyFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
 
-                    // Set executable flag on SOnarr app
+                    // Set executable flag on Sonarr app
                     if (OsInfo.IsOsx)
                     {
-                        _diskProvider.SetPermissions(Path.Combine(installationFolder, "Sonarr"), "0755", null, null);                        
+                        _diskProvider.SetPermissions(Path.Combine(installationFolder, "Sonarr"), "0755", null, null);
                     }
                 }
                 catch (Exception e)
@@ -106,7 +109,31 @@ namespace NzbDrone.Update.UpdateEngine
             }
             finally
             {
-                _startNzbDrone.Start(appType, installationFolder);
+                if (OsInfo.IsWindows)
+                {
+                    _startNzbDrone.Start(appType, installationFolder);
+                }
+                else
+                {
+                    _terminateNzbDrone.Terminate(processId);
+
+                    _logger.Info("Waiting for external auto-restart.");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        System.Threading.Thread.Sleep(1000);
+
+                        if (_processProvider.Exists(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                        {
+                            _logger.Info("Sonarr was restarted by external process.");
+                            break;
+                        }
+                    }
+
+                    if (!_processProvider.Exists(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                    {
+                        _startNzbDrone.Start(appType, installationFolder);
+                    }
+                }
             }
 
         }
