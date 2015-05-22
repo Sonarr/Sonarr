@@ -2,10 +2,11 @@ var $ = require('jquery');
 var vent = require('vent');
 var Marionette = require('marionette');
 var moment = require('moment');
-var CalendarCollection = require('./Collection');
+var CalendarCollection = require('./CalendarCollection');
 var UiSettings = require('../Shared/UiSettingsModel');
 var QueueCollection = require('../Activity/Queue/QueueCollection');
 var Config = require('../Config');
+
 require('../Mixins/backbone.signalr.mixin');
 require('fullcalendar');
 require('jquery.easypiechart');
@@ -14,6 +15,7 @@ module.exports = Marionette.ItemView.extend({
     storageKey : 'calendar.view',
 
     initialize : function() {
+        this.showUnmonitored = Config.getValue('calendar.show', 'monitored') === 'all';
         this.collection = new CalendarCollection().bindSignalR({ updateOnly : true });
         this.listenTo(this.collection, 'change', this._reloadCalendarEvents);
         this.listenTo(QueueCollection, 'sync', this._reloadCalendarEvents);
@@ -25,6 +27,13 @@ module.exports = Marionette.ItemView.extend({
 
     onShow : function() {
         this.$('.fc-button-today').click();
+    },
+
+    setShowUnmonitored : function (showUnmonitored) {
+        if (this.showUnmonitored !== showUnmonitored) {
+            this.showUnmonitored = showUnmonitored;
+            this._getEvents(this.$el.fullCalendar('getView'));
+        }
     },
 
     _viewRender : function(view) {
@@ -105,8 +114,9 @@ module.exports = Marionette.ItemView.extend({
 
         this.collection.fetch({
             data    : {
-                start : start,
-                end   : end
+                start       : start,
+                end         : end,
+                unmonitored : this.showUnmonitored
             },
             success : this._setEventData.bind(this)
         });
@@ -145,6 +155,7 @@ module.exports = Marionette.ItemView.extend({
         var currentTime = moment();
         var start = moment(element.get('airDateUtc'));
         var end = moment(endTime);
+        var monitored = element.get('series').monitored && element.get('monitored');
 
         var statusLevel = 'primary';
 
@@ -154,6 +165,10 @@ module.exports = Marionette.ItemView.extend({
 
         else if (downloading) {
             statusLevel = 'purple';
+        }
+
+        else if (!monitored) {
+            statusLevel = 'unmonitored';
         }
 
         else if (currentTime.isAfter(start) && currentTime.isBefore(end)) {
@@ -231,6 +246,7 @@ module.exports = Marionette.ItemView.extend({
 
         return options;
     },
+
     _addStatusIcon : function(element, icon, tooltip) {
         this.$(element).find('.fc-event-time').after('<span class="status pull-right"><i class="{0}"></i></span>'.format(icon));
         this.$(element).find('.status').tooltip({

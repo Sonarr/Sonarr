@@ -42,28 +42,46 @@ namespace NzbDrone.Core.Indexers
                 return releases;
             }
 
-            using (var xmlTextReader = XmlReader.Create(new StringReader(indexerResponse.Content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
+            var document = LoadXmlDocument(indexerResponse);
+            var items = GetItems(document);
+
+            foreach (var item in items)
             {
-                var document = XDocument.Load(xmlTextReader);
-                var items = GetItems(document);
-
-                foreach (var item in items)
+                try
                 {
-                    try
-                    {
-                        var reportInfo = ProcessItem(item);
+                    var reportInfo = ProcessItem(item);
 
-                        releases.AddIfNotNull(reportInfo);
-                    }
-                    catch (Exception itemEx)
-                    {
-                        itemEx.Data.Add("Item", item.Title());
-                        _logger.ErrorException("An error occurred while processing feed item from " + indexerResponse.Request.Url, itemEx);
-                    }
+                    releases.AddIfNotNull(reportInfo);
+                }
+                catch (Exception itemEx)
+                {
+                    itemEx.Data.Add("Item", item.Title());
+                    _logger.ErrorException("An error occurred while processing feed item from " + indexerResponse.Request.Url, itemEx);
                 }
             }
 
             return releases;
+        }
+
+        protected virtual XDocument LoadXmlDocument(IndexerResponse indexerResponse)
+        {
+            try
+            {
+                using (var xmlTextReader = XmlReader.Create(new StringReader(indexerResponse.Content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
+                {
+                    return XDocument.Load(xmlTextReader);
+                }
+            }
+            catch (XmlException ex)
+            {
+                var contentSample = indexerResponse.Content.Substring(0, Math.Min(indexerResponse.Content.Length, 512));
+                _logger.Debug("Truncated response content (originally {0} characters): {1}", indexerResponse.Content.Length, contentSample);
+
+                ex.Data.Add("ContentLength", indexerResponse.Content.Length);
+                ex.Data.Add("ContentSample", contentSample);
+
+                throw;
+            }
         }
 
         protected virtual ReleaseInfo CreateNewReleaseInfo()

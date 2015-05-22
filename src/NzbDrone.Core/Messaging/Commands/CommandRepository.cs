@@ -14,13 +14,15 @@ namespace NzbDrone.Core.Messaging.Commands
         List<CommandModel> FindQueuedOrStarted(string name);
         List<CommandModel> Queued();
         List<CommandModel> Started();
+        void Start(CommandModel command);
+        void End(CommandModel command);
     }
 
     public class CommandRepository : BasicRepository<CommandModel>, ICommandRepository
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public CommandRepository(IDatabase database, IEventAggregator eventAggregator)
+        public CommandRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
             _database = database;
@@ -66,6 +68,16 @@ namespace NzbDrone.Core.Messaging.Commands
         public List<CommandModel> Started()
         {
             return Query.Where(c => c.Status == CommandStatus.Started);
+        }
+
+        public void Start(CommandModel command)
+        {
+            SetFields(command, c => c.StartedAt, c => c.Status);
+        }
+
+        public void End(CommandModel command)
+        {
+            SetFields(command, c => c.EndedAt, c => c.Status, c => c.Duration);
         }
     }
 }

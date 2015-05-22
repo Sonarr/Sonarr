@@ -123,7 +123,11 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode>\d{2,3}))+.*?(?<hash>\[\w{8}\])?(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Anime - Title Absolute Episode Number 
+                //Anime - Title Absolute Episode Number
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2,3}(?!\d+)))+(?:_|-|\s|\.)*?(?<hash>\[.{8}\])?(?:$|\.)?",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Anime - Title {Absolute Episode Number}
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:\W)+(?<absoluteepisode>(?<!\d+)\d{2,3}(?!\d+)))+(?:_|-|\s|\.)*?(?<hash>\[.{8}\])?(?:$|\.)?",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
@@ -357,9 +361,12 @@ namespace NzbDrone.Core.Parser
 
         public static string NormalizeEpisodeTitle(string title)
         {
-            return SpecialEpisodeWordRegex.Replace(title, String.Empty)
-                                          .Trim()
-                                          .ToLower();
+            title = SpecialEpisodeWordRegex.Replace(title, String.Empty);
+            title = PunctuationRegex.Replace(title, " ");
+            title = DuplicateSpacesRegex.Replace(title, " ");
+
+            return title.Trim()
+                        .ToLower();
         }
 
         public static string NormalizeTitle(string title)

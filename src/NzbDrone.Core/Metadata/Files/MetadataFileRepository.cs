@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Metadata.Files
 
     public class MetadataFileRepository : BasicRepository<MetadataFile>, IMetadataFileRepository
     {
-        public MetadataFileRepository(IDatabase database, IEventAggregator eventAggregator)
+        public MetadataFileRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

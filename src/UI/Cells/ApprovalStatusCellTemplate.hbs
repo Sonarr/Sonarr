@@ -1,5 +1,11 @@
 <ul>
     {{#each this}}
-    <li>{{this}}</li>
+    <li>
+        {{#if reason}}
+            {{reason}}
+        {{else}}
+            {{this}}
+        {{/if}}
+    </li>
     {{/each}}
 </ul>

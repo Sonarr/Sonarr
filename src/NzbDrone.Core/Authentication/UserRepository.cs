@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Authentication
 
     public class UserRepository : BasicRepository<User>, IUserRepository
     {
-        public UserRepository(IDatabase database, IEventAggregator eventAggregator)
+        public UserRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

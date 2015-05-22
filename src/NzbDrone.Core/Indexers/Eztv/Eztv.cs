@@ -7,6 +7,14 @@ namespace NzbDrone.Core.Indexers.Eztv
 {
     public class Eztv : HttpIndexerBase<EztvSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "EZTV";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
 
         public Eztv(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)

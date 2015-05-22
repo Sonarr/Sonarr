@@ -35,7 +35,10 @@ namespace NzbDrone.Core.Download
 
         public void Handle(DownloadCompletedEvent message)
         {
-            if (message.TrackedDownload.DownloadItem.Removed || message.TrackedDownload.DownloadItem.IsReadOnly || !_configService.RemoveCompletedDownloads)
+            if (!_configService.RemoveCompletedDownloads ||
+                message.TrackedDownload.DownloadItem.Removed ||
+                message.TrackedDownload.DownloadItem.IsReadOnly ||
+                message.TrackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
             {
                 return;
             }

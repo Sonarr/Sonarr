@@ -55,6 +55,14 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
             return hash;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Torrent Blackhole";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             foreach (var folder in _diskProvider.GetDirectories(Settings.WatchFolder))
@@ -67,7 +75,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
-                    Category = "nzbdrone",
+                    Category = "sonarr",
                     Title = title,
 
                     TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
@@ -97,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                 {
                     DownloadClient = Definition.Name,
                     DownloadId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
-                    Category = "nzbdrone",
+                    Category = "sonarr",
                     Title = title,
 
                     TotalSize = _diskProvider.GetFileSize(videoFile),
@@ -121,28 +129,12 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            var downloadItem = GetItems().FirstOrDefault(v => v.DownloadId == downloadId);
-
-            if (downloadItem == null)
-            {
-                throw new ArgumentException(string.Format("Cannot remove DownloadItem {0} because it was not found.", downloadId));
-            }
-
             if (!deleteData)
             {
                 throw new NotSupportedException("Blackhole cannot remove DownloadItem without deleting the data as well, ignoring.");
             }
 
-            var outputPath = downloadItem.OutputPath.FullPath;
-
-            if (_diskProvider.FileExists(outputPath))
-            {
-                _diskProvider.DeleteFile(outputPath);
-            }
-            else
-            {
-                _diskProvider.DeleteFolder(outputPath, true);
-            }
+            DeleteItemData(downloadId);
         }
 
         public override DownloadClientStatus GetStatus()

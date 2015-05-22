@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Tags
 
     public class TagRepository : BasicRepository<Tag>, ITagRepository
     {
-        public TagRepository(IDatabase database, IEventAggregator eventAggregator)
+        public TagRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

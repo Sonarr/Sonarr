@@ -109,6 +109,10 @@
     <Compile Include="Extensions\AccessControlHeaders.cs" />
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
     <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
+    <Compile Include="Parse\ParseModule.cs" />
+    <Compile Include="Parse\ParseResource.cs" />
+    <Compile Include="ManualImport\ManualImportModule.cs" />
+    <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />
@@ -269,7 +273,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

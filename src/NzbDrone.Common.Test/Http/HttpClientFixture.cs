@@ -4,9 +4,11 @@ using System.IO;
 using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
+using NLog;
 
 namespace NzbDrone.Common.Test.Http
 {
@@ -14,6 +16,12 @@ namespace NzbDrone.Common.Test.Http
     [IntegrationTest]
     public class HttpClientFixture : TestBase<HttpClient>
     {
+        [SetUp]
+        public void SetUp()
+        {
+            Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
+        }
+
         [Test]
         public void should_execute_simple_get()
         {
@@ -100,7 +108,6 @@ namespace NzbDrone.Common.Test.Http
             response.Resource.Headers[header].ToString().Should().Be(value);
         }
 
-
         [Test]
         public void should_not_download_file_with_error()
         {
@@ -111,7 +118,102 @@ namespace NzbDrone.Common.Test.Http
             File.Exists(file).Should().BeFalse();
 
             ExceptionVerification.ExpectedWarns(1);
+        }
 
+        [Test]
+        public void should_send_cookie()
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+            request.AddCookie("my", "cookie");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("Cookie");
+
+            var cookie = response.Resource.Headers["Cookie"].ToString();
+
+            cookie.Should().Contain("my=cookie");
+        }
+
+        public void GivenOldCookie()
+        {
+            var oldRequest = new HttpRequest("http://eu.httpbin.org/get");
+            oldRequest.AddCookie("my", "cookie");
+
+            var oldClient = new HttpClient(Mocker.Resolve<ICacheManager>(), Mocker.Resolve<Logger>());
+
+            oldClient.Should().NotBeSameAs(Subject);
+
+            var oldResponse = oldClient.Get<HttpBinResource>(oldRequest);
+
+            oldResponse.Resource.Headers.Should().ContainKey("Cookie");
+        }
+
+        [Test]
+        public void should_preserve_cookie_during_session()
+        {
+            GivenOldCookie();
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("Cookie");
+
+            var cookie = response.Resource.Headers["Cookie"].ToString();
+
+            cookie.Should().Contain("my=cookie");
+        }
+
+        [Test]
+        public void should_not_send_cookie_to_other_host()
+        {
+            GivenOldCookie();
+
+            var request = new HttpRequest("http://httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().NotContainKey("Cookie");
+        }
+
+        [Test]
+        public void should_not_store_response_cookie()
+        {
+            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            requestSet.AllowAutoRedirect = false;
+
+            var responseSet = Subject.Get(requestSet);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().NotContainKey("Cookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
+
+        [Test]
+        public void should_store_response_cookie()
+        {
+            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            requestSet.AllowAutoRedirect = false;
+            requestSet.StoreResponseCookie = true;
+
+            var responseSet = Subject.Get(requestSet);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("Cookie");
+
+            var cookie = response.Resource.Headers["Cookie"].ToString();
+
+            cookie.Should().Contain("my=cookie");
+
+            ExceptionVerification.IgnoreErrors();
         }
     }
 

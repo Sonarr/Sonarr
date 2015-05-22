@@ -231,6 +231,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             VerifyFailed(result);
         }
 
+        [TestCase("[ TOWN ]-[ http://www.town.ag ]-[ ANIME ]-[Usenet Provider >> http://www.ssl- <<] - [Commie] Aldnoah Zero 18 [234C8FC7]", "[ TOWN ]-[ http-++www.town.ag ]-[ ANIME ]-[Usenet Provider  http-++www.ssl- ] - [Commie] Aldnoah Zero 18 [234C8FC7].nzb")]
+        public void Download_should_use_clean_title(string title, string filename)
+        {
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.Title = title;
+
+            var id = Subject.Download(remoteEpisode);
+
+            Mocker.GetMock<ISabnzbdProxy>()
+                .Verify(v => v.DownloadNzb(It.IsAny<byte[]>(), filename, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()), Times.Once());
+        }
+
         [Test]
         public void Download_should_return_unique_id()
         {

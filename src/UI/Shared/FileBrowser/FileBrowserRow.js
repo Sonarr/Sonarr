@@ -16,9 +16,9 @@ module.exports = Backgrid.Row.extend({
 
     _selectRow : function() {
         if (this.model.get('type') === 'file') {
-            this.model.collection.trigger('filebrowser:fileselected', this.model);
+            this.model.collection.trigger('filebrowser:row:fileselected', this.model);
         } else {
-            this.model.collection.trigger('filebrowser:folderselected', this.model);
+            this.model.collection.trigger('filebrowser:row:folderselected', this.model);
         }
     }
 });

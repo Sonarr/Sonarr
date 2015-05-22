@@ -4,9 +4,9 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 {
     public class CleanupDuplicateMetadataFiles : IHousekeepingTask
     {
-        private readonly IDatabase _database;
+        private readonly IMainDatabase _database;
 
-        public CleanupDuplicateMetadataFiles(IDatabase database)
+        public CleanupDuplicateMetadataFiles(IMainDatabase database)
         {
             _database = database;
         }

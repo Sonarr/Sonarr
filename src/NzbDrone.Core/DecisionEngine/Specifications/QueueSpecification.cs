@@ -39,7 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, remoteEpisode.ParsedEpisodeInfo.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
-                    return Decision.Reject("Quality for release in queue alerady meets cutoff: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                    return Decision.Reject("Quality for release in queue already meets cutoff: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
                 }
 
                 _logger.Debug("Checking if release is higher quality than queued release. Queued quality is: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);

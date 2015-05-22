@@ -27,6 +27,11 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
                             @"C:\Test\movie"
                         };
 
+            GivenFiles();
+        }
+
+        private void GivenFiles()
+        {
             Mocker.GetMock<IDiskProvider>()
                 .Setup(s => s.GetFiles(It.IsAny<String>(), SearchOption.AllDirectories))
                 .Returns(_files);
@@ -69,7 +74,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         public void should_return_video_files_only()
         {
             var path = @"C:\Test\";
-            var test = Subject.GetVideoFiles(path);
+
             Subject.GetVideoFiles(path).Should().HaveCount(4);
         }
     }

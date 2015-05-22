@@ -37,5 +37,10 @@ namespace NzbDrone.Common.Extensions
         {
             return !source.All(predicate);
         }
+
+        public static List<TResult> SelectList<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> predicate)
+        {
+            return source.Select(predicate).ToList();
+        }
     }
 }

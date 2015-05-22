@@ -15,7 +15,7 @@ namespace NzbDrone.Core.MediaFiles
 
     public class MediaFileRepository : BasicRepository<EpisodeFile>, IMediaFileRepository
     {
-        public MediaFileRepository(IDatabase database, IEventAggregator eventAggregator)
+        public MediaFileRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

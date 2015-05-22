@@ -45,11 +45,19 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "Kodi (XBMC)";
+            }
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(_xbmcService.Test(Settings));
+            failures.AddIfNotNull(_xbmcService.Test(Settings, "Success! XBMC has been successfully configured!"));
 
             return new ValidationResult(failures);
         }

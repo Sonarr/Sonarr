@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Instrumentation
 
     public class LogRepository : BasicRepository<Log>, ILogRepository
     {
-        public LogRepository(IDatabase database, IEventAggregator eventAggregator)
+        public LogRepository(ILogDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

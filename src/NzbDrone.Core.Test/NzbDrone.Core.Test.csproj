@@ -156,6 +156,7 @@
     <Compile Include="DecisionEngineTests\RssSync\DelaySpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
+    <Compile Include="DecisionEngineTests\SameEpisodesSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\UpgradeDiskSpecificationFixture.cs" />
     <Compile Include="Download\CompletedDownloadServiceFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
@@ -247,9 +248,10 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />
     <Compile Include="MediaFiles\MediaFileRepositoryFixture.cs" />
-    <Compile Include="MetadataSourceTests\TvdbDataProxyFixture.cs" />
-    <Compile Include="MetadataSourceTests\SearchSeriesComparerFixture.cs" />
+    <Compile Include="MetadataSource\SkyHook\SkyHookProxySearchFixture.cs" />
+    <Compile Include="MetadataSource\SearchSeriesComparerFixture.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxyFixture.cs" />
+    <Compile Include="NotificationTests\SynologyIndexerFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\CleanTitleFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\EpisodeTitleCollapseFixture.cs" />
     <Compile Include="OrganizerTests\FileNameBuilderTests\MultiEpisodeFixture.cs" />
@@ -456,6 +458,9 @@
     <Content Include="Files\RSS\SizeParsing\omgwtfnzbs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\RSS\torznab_tpb.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\RSS\wombles.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -509,7 +514,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

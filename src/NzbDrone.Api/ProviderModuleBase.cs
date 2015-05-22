@@ -55,9 +55,9 @@ namespace NzbDrone.Api
 
         private List<TProviderResource> GetAll()
         {
-            var providerDefinitions = _providerFactory.All();
+            var providerDefinitions = _providerFactory.All().OrderBy(p => p.ImplementationName);
 
-            var result = new List<TProviderResource>(providerDefinitions.Count);
+            var result = new List<TProviderResource>(providerDefinitions.Count());
 
             foreach (var definition in providerDefinitions)
             {
@@ -69,14 +69,17 @@ namespace NzbDrone.Api
                 result.Add(providerResource);
             }
 
-            return result;
+            return result.OrderBy(p => p.Name).ToList();
         }
 
         private int CreateProvider(TProviderResource providerResource)
         {
             var providerDefinition = GetDefinition(providerResource, false);
 
-            Test(providerDefinition, false);
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition, false);
+            }
 
             providerDefinition = _providerFactory.Create(providerDefinition);
 
@@ -87,7 +90,10 @@ namespace NzbDrone.Api
         {
             var providerDefinition = GetDefinition(providerResource, false);
 
-            Test(providerDefinition, false);
+            if (providerDefinition.Enable)
+            {
+                Test(providerDefinition, false);
+            }
 
             _providerFactory.Update(providerDefinition);
         }
@@ -118,7 +124,7 @@ namespace NzbDrone.Api
 
         private Response GetTemplates()
         {
-            var defaultDefinitions = _providerFactory.GetDefaultDefinitions().ToList();
+            var defaultDefinitions = _providerFactory.GetDefaultDefinitions().OrderBy(p => p.ImplementationName).ToList();
 
             var result = new List<TProviderResource>(defaultDefinitions.Count());
 
@@ -166,8 +172,6 @@ namespace NzbDrone.Api
 
         protected virtual void Test(TProviderDefinition definition, bool includeWarnings)
         {
-            if (!definition.Enable) return;
-
             var validationResult = _providerFactory.Test(definition);
 
             VerifyValidationResult(validationResult, includeWarnings);

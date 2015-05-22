@@ -39,7 +39,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (!ContainsAny(split, title))
                 {
                     _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, r.Required);
-                    return Decision.Reject("Does not contain one of the required terms: {0}", r.Required);
+                    return Decision.Reject("Does not contain one of the required terms: {0}", r.Required.Replace(",", ", "));
                 }
             }
 
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (ContainsAny(split, title))
                 {
                     _logger.Debug("[{0}] contains one or more ignored terms: {1}", title, r.Ignored);
-                    return Decision.Reject("Contains one or more ignored terms: {0}", r.Ignored);
+                    return Decision.Reject("Contains one or more ignored terms: {0}", r.Ignored.Replace(",", ", "));
                 }
             }
 

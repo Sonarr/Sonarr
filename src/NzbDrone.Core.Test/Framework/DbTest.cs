@@ -88,8 +88,30 @@ namespace NzbDrone.Core.Test.Framework
         protected virtual TestDatabase WithTestDb(Action<MigrationBase> beforeMigration)
         {
             var factory = Mocker.Resolve<DbFactory>();
-            var database = factory.Create(MigrationType);
+            var database = factory.Create(MigrationType, beforeMigration);
             Mocker.SetConstant(database);
+
+            switch (MigrationType)
+            {
+                case MigrationType.Main:
+                    {
+                        var mainDb = new MainDatabase(database);
+
+                        Mocker.SetConstant<IMainDatabase>(mainDb);
+                        break;
+                    }
+                case MigrationType.Log:
+                    {
+                        var logDb = new LogDatabase(database);
+
+                        Mocker.SetConstant<ILogDatabase>(logDb);
+                        break;
+                    }
+                default:
+                    {
+                        throw new ArgumentException("Invalid MigrationType");
+                    }
+            }
 
             var testDb = new TestDatabase(database);
 

@@ -1,4 +1,6 @@
+var $ = require('jquery');
 var _ = require('underscore');
+var vent = require('../../vent');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var MissingCollection = require('./MissingCollection');
@@ -12,6 +14,7 @@ var ToolbarLayout = require('../../Shared/Toolbar/ToolbarLayout');
 var LoadingView = require('../../Shared/LoadingView');
 var Messenger = require('../../Shared/Messenger');
 var CommandController = require('../../Commands/CommandController');
+
 require('backgrid.selectall');
 require('../../Mixins/backbone.signalr.mixin');
 
@@ -114,16 +117,29 @@ module.exports = Marionette.Layout.extend({
                     className    : 'x-search-missing'
                 },
                 {
+                    title        : 'Toggle Selected',
+                    icon         : 'icon-sonarr-monitored',
+                    tooltip      : 'Toggle monitored status of selected',
+                    callback     : this._toggleMonitoredOfSelected,
+                    ownerContext : this,
+                    className    : 'x-unmonitor-selected'
+                },
+                {
                     title : 'Season Pass',
                     icon  : 'icon-sonarr-monitored',
                     route : 'seasonpass'
                 },
                 {
-                    title   : 'Rescan Drone Factory Folder',
-                    icon    : 'icon-sonarr-refresh',
-                    command : 'downloadedepisodesscan',
-
+                    title      : 'Rescan Drone Factory Folder',
+                    icon       : 'icon-sonarr-refresh',
+                    command    : 'downloadedepisodesscan',
                     properties : { sendUpdates : true }
+                },
+                {
+                    title        : 'Manual Import',
+                    icon         : 'icon-sonarr-search-manual',
+                    callback     : this._manualImport,
+                    ownerContext : this
                 }
             ]
         };
@@ -163,6 +179,7 @@ module.exports = Marionette.Layout.extend({
             command : { name : 'missingEpisodeSearch' }
         });
     },
+
     _setFilter      : function(buttonContext) {
         var mode = buttonContext.model.get('key');
         this.collection.state.currentPage = 1;
@@ -171,6 +188,7 @@ module.exports = Marionette.Layout.extend({
             buttonContext.ui.icon.spinForPromise(promise);
         }
     },
+
     _searchSelected : function() {
         var selected = this.missingGrid.getSelectedModels();
         if (selected.length === 0) {
@@ -191,5 +209,31 @@ module.exports = Marionette.Layout.extend({
                            'One API request to each indexer will be used for each episode. ' + 'This cannot be stopped once started.')) {
             CommandController.Execute('missingEpisodeSearch', { name : 'missingEpisodeSearch' });
         }
+    },
+    _toggleMonitoredOfSelected : function() {
+        var selected = this.missingGrid.getSelectedModels();
+
+        if (selected.length === 0) {
+            Messenger.show({
+                type    : 'error',
+                message : 'No episodes selected'
+            });
+            return;
+        }
+
+        var promises = [];
+        var self = this;
+
+        _.each(selected, function (episode) {
+            episode.set('monitored', !episode.get('monitored'));
+            promises.push(episode.save());
+        });
+
+        $.when(promises).done(function () {
+            self.collection.fetch();
+        });
+    },
+    _manualImport : function () {
+        vent.trigger(vent.Commands.ShowManualImport);
     }
 });

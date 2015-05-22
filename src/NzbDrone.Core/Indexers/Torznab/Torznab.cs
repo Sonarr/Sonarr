@@ -11,6 +11,14 @@ namespace NzbDrone.Core.Indexers.Torznab
 {
     public class Torznab : HttpIndexerBase<TorznabSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "Torznab";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Int32 PageSize { get { return 100; } }
 
@@ -33,6 +41,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             get
             {
                 yield return GetDefinition("HDAccess.net", GetSettings("http://hdaccess.net"));
+                yield return GetDefinition("HD4Free.xyz", GetSettings("http://hd4free.xyz"));
             }
         }
 

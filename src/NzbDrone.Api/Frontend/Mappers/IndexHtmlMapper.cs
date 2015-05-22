@@ -17,7 +17,7 @@ namespace NzbDrone.Api.Frontend.Mappers
         private readonly IAnalyticsService _analyticsService;
         private readonly Func<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private readonly string _indexPath;
-        private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src)=\").*?(css|js)(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src)=\").*?(css|js|png|ico|ics)(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static String API_KEY;
         private static String URL_BASE;

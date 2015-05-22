@@ -63,6 +63,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             { 
                 Series = _series,
                 Quality = _quality,
+                Episodes = new List<Episode> { new Episode() },
                 Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi"
             };
 
@@ -207,7 +208,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             Mocker.GetMock<IParsingService>()
                   .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
-                  .Throws(new EpisodeNotFoundException("Episode not found"));
+                  .Returns(new LocalEpisode() { Path = "test" });
 
             _videoFiles = new List<String>
                 {
@@ -218,10 +219,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             GivenVideoFiles(_videoFiles);
 
-            Subject.GetImportDecisions(_videoFiles, _series);
+            var decisions = Subject.GetImportDecisions(_videoFiles, _series);
 
             Mocker.GetMock<IParsingService>()
                   .Verify(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
+
+            decisions.Should().HaveCount(3);
+            decisions.First().Rejections.Should().NotBeEmpty();
         }
 
         [Test]

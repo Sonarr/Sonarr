@@ -43,10 +43,12 @@ namespace NzbDrone.Api.Indexers
             _prioritizeDownloadDecision = prioritizeDownloadDecision;
             _downloadService = downloadService;
             _logger = logger;
+
             GetResourceAll = GetReleases;
             Post["/"] = x => DownloadRelease(this.Bind<ReleaseResource>());
 
             PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
+            PostValidator.RuleFor(s => s.Guid).NotEmpty();
 
             _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
         }

@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Restrictions
 
     public class RestrictionRepository : BasicRepository<Restriction>, IRestrictionRepository
     {
-        public RestrictionRepository(IDatabase database, IEventAggregator eventAggregator)
+        public RestrictionRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

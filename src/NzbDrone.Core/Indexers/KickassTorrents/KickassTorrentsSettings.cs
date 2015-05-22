@@ -20,14 +20,14 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
 
         public KickassTorrentsSettings()
         {
-            BaseUrl = "http://kickass.to";
+            BaseUrl = "http://kat.cr";
             VerifiedOnly = true;
         }
 
         [FieldDefinition(0, Label = "Website URL")]
         public String BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Verified Only", Type = FieldType.Checkbox, Advanced = true, HelpText = "By setting this to No you will likely get more junk and unconfirmed releases, so use it with caution.")]
+        [FieldDefinition(1, Label = "Verified Only", Type = FieldType.Checkbox, HelpText = "By setting this to No you will likely get more junk and unconfirmed releases, so use it with caution.")]
         public Boolean VerifiedOnly { get; set; }
 
         public NzbDroneValidationResult Validate()

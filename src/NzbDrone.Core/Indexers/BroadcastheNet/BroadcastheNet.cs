@@ -7,6 +7,14 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 {
     public class BroadcastheNet : HttpIndexerBase<BroadcastheNetSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "BroadcasttheNet";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override bool SupportsRss { get { return true; } }
         public override bool SupportsSearch { get { return true; } }

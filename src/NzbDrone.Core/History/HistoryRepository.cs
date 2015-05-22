@@ -20,7 +20,7 @@ namespace NzbDrone.Core.History
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
     {
 
-        public HistoryRepository(IDatabase database, IEventAggregator eventAggregator)
+        public HistoryRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

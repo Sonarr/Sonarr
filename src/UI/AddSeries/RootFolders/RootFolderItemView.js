@@ -1,8 +1,9 @@
 var Marionette = require('marionette');
 
 module.exports = Marionette.ItemView.extend({
-    template : 'AddSeries/RootFolders/RootFolderItemViewTemplate',
-    tagName  : 'tr',
+    template  : 'AddSeries/RootFolders/RootFolderItemViewTemplate',
+    className : 'recent-folder',
+    tagName   : 'tr',
 
     initialize : function() {
         this.listenTo(this.model, 'change', this.render);

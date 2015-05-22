@@ -32,7 +32,7 @@ module.exports = {
         }
 
         if (date.isAfter(moment())) {
-            return date.fromNow(true);
+            return 'in ' + date.fromNow(true);
         }
 
         if (date.isBefore(moment().add('years', -1))) {
@@ -54,5 +54,13 @@ module.exports = {
         }
 
         return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+
+    plural : function(input, unit) {
+        if (input === 1) {
+            return unit;
+        }
+
+        return unit + 's';
     }
 };

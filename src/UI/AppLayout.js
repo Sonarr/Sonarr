@@ -1,6 +1,6 @@
 var Marionette = require('marionette');
 var ModalRegion = require('./Shared/Modal/ModalRegion');
-var FileBrowserModalRegion = require('./Shared/FileBrowser/FileBrowserModalRegion');
+var ModalRegion2 = require('./Shared/Modal/ModalRegion2');
 var ControlPanelRegion = require('./Shared/ControlPanel/ControlPanelRegion');
 
 var Layout = Marionette.Layout.extend({
@@ -11,9 +11,9 @@ var Layout = Marionette.Layout.extend({
 
     initialize : function() {
         this.addRegions({
-            modalRegion            : ModalRegion,
-            fileBrowserModalRegion : FileBrowserModalRegion,
-            controlPanelRegion     : ControlPanelRegion
+            modalRegion        : ModalRegion,
+            modalRegion2       : ModalRegion2,
+            controlPanelRegion : ControlPanelRegion
         });
     }
 });

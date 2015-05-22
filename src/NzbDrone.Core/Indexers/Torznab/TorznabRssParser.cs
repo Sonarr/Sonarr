@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         protected override ReleaseInfo PostProcess(XElement item, ReleaseInfo releaseInfo)
         {
             var enclosureType = item.Element("enclosure").Attribute("type").Value;
-            if (enclosureType != "application/x-bittorrent")
+            if (!enclosureType.Contains("application/x-bittorrent"))
             {
                 throw new UnsupportedFeedException("Feed contains {0} instead of application/x-bittorrent", enclosureType);
             }

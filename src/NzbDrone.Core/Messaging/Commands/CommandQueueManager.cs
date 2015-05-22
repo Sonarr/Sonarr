@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Messaging.Commands
             _logger.Trace("Publishing {0}", command.Name);
             _logger.Trace("Checking if command is queued or started: {0}", command.Name);
 
-            var existingCommands = _repo.FindQueuedOrStarted(command.Name);
+            var existingCommands = QueuedOrStarted(command.Name);
             var existing = existingCommands.SingleOrDefault(c => CommandEqualityComparer.Instance.Equals(c.Body, command));
 
             if (existing != null)
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public CommandModel Get(int id)
         {
-            return _commandCache.Get(id.ToString(), () => FindMessage(_repo.Get(id)));
+            return _commandCache.Get(id.ToString(), () => FindCommand(_repo.Get(id)));
         }
 
         public List<CommandModel> GetStarted()
@@ -123,8 +123,8 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Status = CommandStatus.Started;
 
             _logger.Trace("Marking command as started: {0}", command.Name);
-            _repo.Update(command);
-            _commandCache.Set(command.Id.ToString(), command);
+            _commandCache.Set(command.Id.ToString(), command);         
+            _repo.Start(command);
         }
 
         public void Complete(CommandModel command, string message)
@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Messaging.Commands
             return Json.Deserialize("{}", commandType);
         }
 
-        private CommandModel FindMessage(CommandModel command)
+        private CommandModel FindCommand(CommandModel command)
         {
             var cachedCommand = _commandCache.Find(command.Id.ToString());
 
@@ -191,14 +191,22 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Status = status;
 
             _logger.Trace("Updating command status");
-            _repo.Update(command);
             _commandCache.Set(command.Id.ToString(), command);
+            _repo.End(command);
+        }
+
+        private List<CommandModel> QueuedOrStarted(string name)
+        {
+            return _commandCache.Values.Where(q => q.Name == name &&
+                                                   (q.Status == CommandStatus.Queued ||
+                                                    q.Status == CommandStatus.Started)).ToList();
         }
 
         public void Handle(ApplicationStartedEvent message)
         {
             _logger.Trace("Orphaning incomplete commands");
             _repo.OrphanStarted();
+            Requeue();
         }
     }
 }

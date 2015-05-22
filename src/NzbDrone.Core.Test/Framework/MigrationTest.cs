@@ -11,20 +11,13 @@ namespace NzbDrone.Core.Test.Framework
     {
         protected override TestDatabase WithTestDb(Action<MigrationBase> beforeMigration)
         {
-            var factory = Mocker.Resolve<DbFactory>();
-
-            var database = factory.Create(MigrationType, m =>
+            return base.WithTestDb(m =>
             {
                 if (m.GetType() == typeof(TMigration))
                 {
                     beforeMigration(m);
                 }
             });
-
-            var testDb = new TestDatabase(database);
-            Mocker.SetConstant(database);
-
-            return testDb;
         }
 
         [SetUp]

@@ -12,6 +12,10 @@ var _fieldBuilder = function(field) {
         return _templateRenderer.call(field, 'Form/TextboxTemplate');
     }
 
+    if (field.type === 'hidden') {
+        return _templateRenderer.call(field, 'Form/HiddenTemplate');
+    }
+
     if (field.type === 'password') {
         return _templateRenderer.call(field, 'Form/PasswordTemplate');
     }

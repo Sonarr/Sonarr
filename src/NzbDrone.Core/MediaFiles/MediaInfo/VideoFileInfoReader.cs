@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
-using MediaInfoLib;
+using System.Text;
 using NLog;
 using NzbDrone.Common.Disk;
-using System.Globalization;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -31,15 +32,21 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (!_diskProvider.FileExists(filename))
                 throw new FileNotFoundException("Media file does not exist: " + filename);
 
-            MediaInfoLib.MediaInfo mediaInfo = null;
+            MediaInfo mediaInfo = null;
 
             try
             {
-                mediaInfo = new MediaInfoLib.MediaInfo();
+                mediaInfo = new MediaInfo();
                 _logger.Debug("Getting media info from {0}", filename);
 
                 mediaInfo.Option("ParseSpeed", "0.2");
-                int open = mediaInfo.Open(filename);
+
+                int open;
+
+                using (var stream = _diskProvider.OpenReadStream(filename))
+                {
+                    open = mediaInfo.Open(stream);
+                }
 
                 if (open != 0)
                 {
@@ -107,6 +114,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                                 };
 
                     return mediaInfoModel;
+                }
+                else
+                {
+                    _logger.Warn("Unable to open media info from file: " + filename);
                 }
             }
             catch (DllNotFoundException ex)

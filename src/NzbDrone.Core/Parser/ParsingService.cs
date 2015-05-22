@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Parser
 
             else
             {
-                parsedEpisodeInfo = Parser.ParsePath(filename);                
+                parsedEpisodeInfo = Parser.ParsePath(filename);
             }
 
             if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
@@ -77,12 +77,6 @@ namespace NzbDrone.Core.Parser
             }
 
             var episodes = GetEpisodes(parsedEpisodeInfo, series, sceneSource);
-
-            if (episodes.Empty())
-            {
-                _logger.Debug("No matching episodes found for: {0}", parsedEpisodeInfo);
-                throw new EpisodeNotFoundException("Unable to find episodes for file: {0}", parsedEpisodeInfo);
-            }
 
             return new LocalEpisode
             {
@@ -188,7 +182,10 @@ namespace NzbDrone.Core.Parser
 
                     else if (sceneSource)
                     {
-                        if (sceneSeasonNumber.HasValue && (sceneSeasonNumber == 0 || sceneSeasonNumber > 1))
+                        // Is there a reason why we excluded season 1 from this handling before?
+                        // Might have something to do with the scene name to season number check
+                        // If this needs to be reverted tests will need to be added
+                        if (sceneSeasonNumber.HasValue)
                         {
                             var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
 

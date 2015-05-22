@@ -8,6 +8,14 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 {
     public class BitMeTv : HttpIndexerBase<BitMeTvSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "BitMeTV";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
         public override Boolean SupportsSearch { get { return false; } }
         public override Int32 PageSize { get { return 0; } }

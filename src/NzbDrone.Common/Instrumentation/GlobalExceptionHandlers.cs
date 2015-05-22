@@ -31,7 +31,7 @@ namespace NzbDrone.Common.Instrumentation
             if (exception is NullReferenceException &&
                 exception.ToString().Contains("Microsoft.AspNet.SignalR.Transports.TransportHeartbeat.ProcessServerCommand"))
             {
-                Logger.Warn("SignalR Heartbeat error.");
+                Logger.Warn("SignalR Heartbeat interupted");
                 return;
             }
 

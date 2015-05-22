@@ -36,6 +36,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
 
+            if (response == null)
+            {
+                throw new DownloadClientException("Failed to add nzb {0}", filename);
+            }
+
             return response;
         }
 
@@ -43,7 +48,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             NzbgetGlobalStatus globalStatus;
             List<NzbgetQueueItem> queue;
-            Dictionary<Int32, NzbgetPostQueueItem> postQueue;
 
             try
             {
@@ -75,7 +79,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.Category = item.Category;
                 queueItem.DownloadClient = Definition.Name;
 
-                if (globalStatus.DownloadPaused || remainingSize == pausedSize)
+                if (globalStatus.DownloadPaused || remainingSize == pausedSize && remainingSize != 0)
                 {
                     queueItem.Status = DownloadItemStatus.Paused;
                     queueItem.RemainingSize = remainingSize;
@@ -167,7 +171,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
 
-                if (!successStatus.Contains(item.DeleteStatus))
+                if (!successStatus.Contains(item.DeleteStatus) && item.DeleteStatus.IsNotNullOrWhiteSpace())
+                {
+                    historyItem.Status = DownloadItemStatus.Warning;
+                }
+
+                if (item.DeleteStatus == "HEALTH")
                 {
                     historyItem.Status = DownloadItemStatus.Failed;
                 }
@@ -178,6 +187,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return historyItems;
         }
 
+        public override string Name
+        {
+            get
+            {
+                return "NZBGet";
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             return GetQueue().Concat(GetHistory()).Where(downloadClientItem => downloadClientItem.Category == Settings.TvCategory);
@@ -185,6 +202,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
+            if (deleteData)
+            {
+                DeleteItemData(downloadId);
+            }
+
             _proxy.RemoveItem(downloadId, Settings);
         }
 
@@ -249,7 +271,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             try
             {
-                _proxy.GetVersion(Settings);
+                var version = _proxy.GetVersion(Settings).Split('-')[0];
+
+                if (Version.Parse(version) < Version.Parse("12.0"))
+                {
+                    return new ValidationFailure(string.Empty, "Nzbget version too low, need 12.0 or higher");
+                }
             }
             catch (Exception ex)
             {

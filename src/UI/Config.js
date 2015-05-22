@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var vent = require('./vent');
 
 module.exports = {
@@ -14,6 +15,18 @@ module.exports = {
         AdvancedSettings    : 'advancedSettings'
     },
 
+    getValueJson : function (key, defaultValue) {
+        defaultValue = defaultValue || {};
+
+        var storeValue = window.localStorage.getItem(key);
+
+        if (!storeValue) {
+            return defaultValue;
+        }
+
+        return $.parseJSON(storeValue);
+    },
+
     getValueBoolean : function(key, defaultValue) {
         defaultValue = defaultValue || false;
 
@@ -28,6 +41,10 @@ module.exports = {
         }
 
         return storeValue.toString();
+    },
+
+    setValueJson : function(key, value) {
+        return this.setValue(key, JSON.stringify(value));
     },
 
     setValue : function(key, value) {

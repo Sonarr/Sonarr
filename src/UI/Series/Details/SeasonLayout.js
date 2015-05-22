@@ -285,6 +285,7 @@ module.exports = Marionette.Layout.extend({
 
     _refreshEpisodes : function() {
         this._updateEpisodeCollection();
+        this.episodeCollection.fullCollection.sort();
         this.render();
     },
 

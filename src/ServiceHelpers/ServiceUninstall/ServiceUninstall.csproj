@@ -84,9 +84,9 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)Libraries\Manifest Tool\mt.exe" -manifest "$(ProjectDir)app.manifest"  –outputresource:"$(TargetDir)$(TargetFileName)";#1</PostBuildEvent>
+    <PostBuildEvent Condition="('$(OS)' == 'Windows_NT')">"$(SolutionDir)Libraries\Manifest Tool\mt.exe" -manifest "$(ProjectDir)app.manifest"  –outputresource:"$(TargetDir)$(TargetFileName)";#1</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

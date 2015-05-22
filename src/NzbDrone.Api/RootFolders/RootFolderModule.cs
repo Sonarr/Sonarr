@@ -15,7 +15,8 @@ namespace NzbDrone.Api.RootFolders
                                 IBroadcastSignalRMessage signalRBroadcaster,
                                 RootFolderValidator rootFolderValidator,
                                 PathExistsValidator pathExistsValidator,
-                                DroneFactoryValidator droneFactoryValidator)
+                                DroneFactoryValidator droneFactoryValidator,
+                                MappedNetworkDriveValidator mappedNetworkDriveValidator)
             : base(signalRBroadcaster)
         {
             _rootFolderService = rootFolderService;
@@ -29,8 +30,9 @@ namespace NzbDrone.Api.RootFolders
                            .Cascade(CascadeMode.StopOnFirstFailure)
                            .IsValidPath()
                            .SetValidator(rootFolderValidator)
-                           .SetValidator(pathExistsValidator)
-                           .SetValidator(droneFactoryValidator);
+                           .SetValidator(droneFactoryValidator)
+                           .SetValidator(mappedNetworkDriveValidator)
+                           .SetValidator(pathExistsValidator);
         }
 
         private RootFolderResource GetRootFolder(int id)

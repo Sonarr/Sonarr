@@ -20,6 +20,7 @@ Handlebars.registerHelper('StatusLevel', function() {
     var currentTime = moment();
     var start = moment(this.airDateUtc);
     var end = moment(this.end);
+    var monitored = this.series.monitored && this.monitored;
 
     if (hasFile) {
         return 'success';
@@ -27,6 +28,10 @@ Handlebars.registerHelper('StatusLevel', function() {
 
     if (downloading) {
         return 'purple';
+    }
+
+    else if (!monitored) {
+        return 'unmonitored';
     }
 
     if (this.episodeNumber === 1) {

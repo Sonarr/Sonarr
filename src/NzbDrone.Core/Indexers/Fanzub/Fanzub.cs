@@ -2,12 +2,19 @@
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers.Fanzub
 {
     public class Fanzub : HttpIndexerBase<FanzubSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "Fanzub";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
         public Fanzub(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)

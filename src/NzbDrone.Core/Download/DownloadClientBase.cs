@@ -1,15 +1,16 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using System.Collections.Generic;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.ThingiProvider;
-using NzbDrone.Core.Configuration;
-using NLog;
-using FluentValidation.Results;
-using NzbDrone.Core.Validation;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download
 {
@@ -20,6 +21,8 @@ namespace NzbDrone.Core.Download
         protected readonly IDiskProvider _diskProvider;
         protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
+
+        public abstract string Name { get; }
 
         public Type ConfigContract
         {
@@ -72,6 +75,51 @@ namespace NzbDrone.Core.Download
         public abstract IEnumerable<DownloadClientItem> GetItems();
         public abstract void RemoveItem(string downloadId, bool deleteData);
         public abstract DownloadClientStatus GetStatus();
+
+        protected virtual void DeleteItemData(string downloadId)
+        {
+            if (downloadId.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            var item = GetItems().FirstOrDefault(v => v.DownloadId == downloadId);
+            if (item == null)
+            {
+                _logger.Trace("DownloadItem {0} in {1} history not found, skipping delete data.", downloadId, Name);
+                return;
+            }
+
+            if (item.OutputPath.IsEmpty)
+            {
+                _logger.Trace("[{0}] Doesn't have an outputPath, skipping delete data.", item.Title);
+                return;
+            }
+
+            try
+            {
+                if (_diskProvider.FolderExists(item.OutputPath.FullPath))
+                {
+                    _logger.Debug("[{0}] Deleting folder '{1}'.", item.Title, item.OutputPath);
+
+                    _diskProvider.DeleteFolder(item.OutputPath.FullPath, true);
+                }
+                else if (_diskProvider.FileExists(item.OutputPath.FullPath))
+                {
+                    _logger.Debug("[{0}] Deleting file '{1}'.", item.Title, item.OutputPath);
+
+                    _diskProvider.DeleteFile(item.OutputPath.FullPath);
+                }
+                else
+                {
+                    _logger.Trace("[{0}] File or folder '{1}' doesn't exist, skipping cleanup.", item.Title, item.OutputPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException(string.Format("[{0}] Error occurred while trying to delete data from '{1}'.", item.Title, item.OutputPath), ex);
+            }
+        }
 
         public ValidationResult Test()
         {

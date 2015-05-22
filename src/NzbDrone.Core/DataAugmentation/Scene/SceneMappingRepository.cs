@@ -13,7 +13,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
     public class SceneMappingRepository : BasicRepository<SceneMapping>, ISceneMappingRepository
     {
-        public SceneMappingRepository(IDatabase database, IEventAggregator eventAggregator)
+        public SceneMappingRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

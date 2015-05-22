@@ -11,7 +11,7 @@ namespace NzbDrone.Core.RemotePathMappings
     public class RemotePathMappingRepository : BasicRepository<RemotePathMapping>, IRemotePathMappingRepository
     {
 
-        public RemotePathMappingRepository(IDatabase database, IEventAggregator eventAggregator)
+        public RemotePathMappingRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

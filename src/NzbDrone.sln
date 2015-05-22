@@ -32,9 +32,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceUninstall", "ServiceHelpers\ServiceUninstall\ServiceUninstall.csproj", "{700D0B95-95CD-43F3-B6C9-FAA0FC1358D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Core", "NzbDrone.Core\NzbDrone.Core.csproj", "{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0CC493D7-0A9F-4199-9615-0A977945D716} = {0CC493D7-0A9F-4199-9615-0A977945D716}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NzbDrone.Update", "NzbDrone.Update\NzbDrone.Update.csproj", "{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}"
 EndProject
@@ -88,8 +85,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogentriesNLog", "Logentrie
 	ProjectSection(ProjectDependencies) = postProject
 		{90D6E9FC-7B88-4E1B-B018-8FA742274558} = {90D6E9FC-7B88-4E1B-B018-8FA742274558}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVDBSharp", "TVDBSharp\TVDBSharp.csproj", "{0CC493D7-0A9F-4199-9615-0A977945D716}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -271,12 +266,6 @@ Global
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}.Mono|x86.Build.0 = Release|x86
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}.Release|x86.ActiveCfg = Release|x86
 		{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}.Release|x86.Build.0 = Release|x86
-		{0CC493D7-0A9F-4199-9615-0A977945D716}.Debug|x86.ActiveCfg = Debug|x86
-		{0CC493D7-0A9F-4199-9615-0A977945D716}.Debug|x86.Build.0 = Debug|x86
-		{0CC493D7-0A9F-4199-9615-0A977945D716}.Mono|x86.ActiveCfg = Release|x86
-		{0CC493D7-0A9F-4199-9615-0A977945D716}.Mono|x86.Build.0 = Release|x86
-		{0CC493D7-0A9F-4199-9615-0A977945D716}.Release|x86.ActiveCfg = Release|x86
-		{0CC493D7-0A9F-4199-9615-0A977945D716}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

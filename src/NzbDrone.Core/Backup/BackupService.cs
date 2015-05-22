@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Backup
 
     public class BackupService : IBackupService, IExecute<BackupCommand>
     {
-        private readonly IDatabase _maindDb;
+        private readonly IMainDatabase _maindDb;
         private readonly IDiskProvider _diskProvider;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IArchiveService _archiveService;
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Backup
 
         private static readonly Regex BackupFileRegex = new Regex(@"nzbdrone_backup_[._0-9]+\.zip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public BackupService(IDatabase maindDb,
+        public BackupService(IMainDatabase maindDb,
                              IDiskProvider diskProvider, 
                              IAppFolderInfo appFolderInfo, 
                              IArchiveService archiveService, 

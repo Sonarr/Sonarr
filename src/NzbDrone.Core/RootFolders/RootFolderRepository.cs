@@ -11,7 +11,7 @@ namespace NzbDrone.Core.RootFolders
     public class RootFolderRepository : BasicRepository<RootFolder>, IRootFolderRepository
     {
 
-        public RootFolderRepository(IDatabase database, IEventAggregator eventAggregator)
+        public RootFolderRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

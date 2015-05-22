@@ -11,6 +11,7 @@ var ModalController = require('./Shared/Modal/ModalController');
 var ControlPanelController = require('./Shared/ControlPanel/ControlPanelController');
 var serverStatusModel = require('./System/StatusModel');
 var Tooltip = require('./Shared/Tooltip');
+var UiSettingsController = require('./Shared/UiSettingsController');
 
 require('./jQuery/ToTheTop');
 require('./Instrumentation/StringFormat');
@@ -43,6 +44,8 @@ app.addInitializer(function() {
     AppLayout.navbarRegion.show(new NavbarLayout());
     $('body').addClass('started');
 });
+
+app.addInitializer(UiSettingsController.appInitializer);
 
 app.addInitializer(function() {
     var footerText = serverStatusModel.get('version');

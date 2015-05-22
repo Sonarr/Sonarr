@@ -7,7 +7,7 @@ namespace NzbDrone.Core.ThingiProvider
         where TProviderDefinition : ModelBase,
             new()
     {
-        protected ProviderRepository(IDatabase database, IEventAggregator eventAggregator)
+        protected ProviderRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
         }

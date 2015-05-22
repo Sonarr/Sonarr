@@ -9,6 +9,14 @@ namespace NzbDrone.Core.Test.IndexerTests
 {
     public class TestIndexer : HttpIndexerBase<TestIndexerSettings>
     {
+        public override string Name
+        {
+            get
+            {
+                return "Test Indexer";
+            }
+        }
+
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
         public Int32 _supportedPageSize;

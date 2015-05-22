@@ -151,6 +151,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         {
             GivenCompletedItem();
 
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.FolderExists(It.IsAny<string>()))
+                .Returns(true);
+
             Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", true);
 
             Mocker.GetMock<IDiskProvider>()
@@ -158,9 +162,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         }
 
         [Test]
-        public void RemoveItem_should_throw_if_unknown_item()
+        public void RemoveItem_should_ignore_if_unknown_item()
         {
-            Assert.Throws<ArgumentException>(() => Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", true));
+            Subject.RemoveItem("_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0", true);
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(c => c.DeleteFile(It.IsAny<string>()), Times.Never());

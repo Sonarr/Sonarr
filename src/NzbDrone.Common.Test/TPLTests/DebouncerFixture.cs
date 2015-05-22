@@ -40,7 +40,7 @@ namespace NzbDrone.Common.Test.TPLTests
         }
 
         [Test]
-        public void should_throttle_cals()
+        public void should_throttle_calls()
         {
             var counter = new Counter();
             var debounceFunction = new Debouncer(counter.Hit, TimeSpan.FromMilliseconds(50));
@@ -64,6 +64,62 @@ namespace NzbDrone.Common.Test.TPLTests
 
         }
 
+        [Test]
+        public void should_hold_the_call_while_paused()
+        {
+            var counter = new Counter();
+            var debounceFunction = new Debouncer(counter.Hit, TimeSpan.FromMilliseconds(50));
 
+            debounceFunction.Pause();
+
+            debounceFunction.Execute();
+            debounceFunction.Execute();
+
+            Thread.Sleep(100);
+
+            counter.Count.Should().Be(0);
+
+            debounceFunction.Execute();
+            debounceFunction.Execute();
+
+            Thread.Sleep(100);
+
+            counter.Count.Should().Be(0);
+
+            debounceFunction.Resume();
+
+            Thread.Sleep(20);
+
+            counter.Count.Should().Be(0);
+
+            Thread.Sleep(100);
+
+            counter.Count.Should().Be(1);
+        }
+
+        [Test]
+        public void should_handle_pause_reentrancy()
+        {
+            var counter = new Counter();
+            var debounceFunction = new Debouncer(counter.Hit, TimeSpan.FromMilliseconds(50));
+
+            debounceFunction.Pause();
+            debounceFunction.Pause();
+
+            debounceFunction.Execute();
+            debounceFunction.Execute();
+
+            debounceFunction.Resume();
+
+            Thread.Sleep(100);
+
+            counter.Count.Should().Be(0);
+
+            debounceFunction.Resume();
+
+            Thread.Sleep(100);
+
+            counter.Count.Should().Be(1);
+        }
     }
 }

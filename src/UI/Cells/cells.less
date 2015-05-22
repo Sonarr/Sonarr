@@ -156,11 +156,12 @@ td.episode-status-cell, td.quality-cell, td.history-quality-cell, td.progress-ce
 }
 
 .queue-actions-cell {
-  min-width  : 55px;
-  width      : 55px;
+  min-width  : 65px;
+  width      : 65px;
   text-align : right !important;
 
   i {
+    .clickable();
     margin-left  : 1px;
     margin-right : 1px;
   }
@@ -235,4 +236,16 @@ td.delete-episode-file-cell {
 
 .age-cell {
   cursor : default;
+}
+
+.blacklist-actions-cell {
+  min-width  : 55px;
+  width      : 55px;
+  text-align : right !important;
+
+  i {
+    .clickable();
+    margin-left  : 2px;
+    margin-right : 2px;
+  }
 }

@@ -10,9 +10,9 @@ namespace NzbDrone.Core.Organizer
 
     public class NamingConfigService : INamingConfigService
     {
-        private readonly IBasicRepository<NamingConfig> _repository;
+        private readonly INamingConfigRepository _repository;
 
-        public NamingConfigService(IBasicRepository<NamingConfig> repository)
+        public NamingConfigService(INamingConfigRepository repository)
         {
             _repository = repository;
         }

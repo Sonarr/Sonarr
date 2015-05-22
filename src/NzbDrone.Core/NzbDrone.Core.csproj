@@ -102,14 +102,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MediaInfoDotNet">
-      <HintPath>..\packages\MediaInfoNet.0.3\lib\MediaInfoDotNet.dll</HintPath>
-    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+      <HintPath>..\packages\ValueInjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
     </Reference>
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
@@ -181,7 +178,9 @@
     <Compile Include="Datastore\Extensions\RelationshipExtensions.cs" />
     <Compile Include="Datastore\IEmbeddedDocument.cs" />
     <Compile Include="Datastore\LazyList.cs" />
-    <Compile Include="Datastore\Migration\001_initialSetup.cs" />
+    <Compile Include="Datastore\MainDatabase.cs" />
+    <Compile Include="Datastore\LogDatabase.cs" />
+    <Compile Include="Datastore\Migration\001_initial_setup.cs" />
     <Compile Include="Datastore\Migration\002_remove_tvrage_imdb_unique_constraint.cs" />
     <Compile Include="Datastore\Migration\003_remove_clean_title_from_scene_mapping.cs" />
     <Compile Include="Datastore\Migration\004_updated_history.cs" />
@@ -261,6 +260,7 @@
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\083_additonal_blacklist_columns.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -288,6 +288,7 @@
     <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Rejection.cs" />
     <Compile Include="DecisionEngine\RejectionType.cs" />
+    <Compile Include="DecisionEngine\SameEpisodesSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\BlacklistSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AnimeVersionUpgradeSpecification.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\TorrentSeedingSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\SameEpisodesGrabSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
@@ -582,13 +584,18 @@
     <Compile Include="MediaFiles\EpisodeImport\ImportDecision.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportDecisionMaker.cs" />
     <Compile Include="MediaFiles\EpisodeImport\ImportResultType.cs" />
-    <Compile Include="MediaFiles\EpisodeImport\ManualImportService.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Manual\ManualImportFile.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Manual\ManualImportCommand.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Manual\ManualImportItem.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Manual\ManualImportService.cs" />
     <Compile Include="MediaFiles\EpisodeImport\DetectSample.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Manual\ManuallyImportedFile.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FreeSpaceSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\MatchesFolderSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\SameEpisodesImportSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
@@ -605,6 +612,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
+    <Compile Include="MediaFiles\MediaInfo\MediaInfoLib.cs" />
     <Compile Include="MediaFiles\MediaInfo\MediaInfoModel.cs" />
     <Compile Include="MediaFiles\MediaInfo\UpdateMediaInfoService.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
@@ -630,7 +638,6 @@
     <Compile Include="Messaging\Commands\CommandQueueManager.cs" />
     <Compile Include="Messaging\Commands\CommandTrigger.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />
-    <Compile Include="Messaging\Commands\RequeueQueuedCommands.cs" />
     <Compile Include="Messaging\Commands\TestCommand.cs" />
     <Compile Include="Messaging\Commands\TestCommandExecutor.cs" />
     <Compile Include="Messaging\Events\CommandExecutedEvent.cs" />
@@ -646,9 +653,8 @@
     <Compile Include="MetadataSource\SkyHook\Resource\ShowResource.cs" />
     <Compile Include="MetadataSource\SkyHook\Resource\TimeOfDayResource.cs" />
     <Compile Include="MetadataSource\SkyHook\SkyHookProxy.cs" />
-    <Compile Include="MetadataSource\TvDbProxy.cs" />
     <Compile Include="MetadataSource\SearchSeriesComparer.cs" />
-    <Compile Include="MetadataSource\Tvdb\TvdbException.cs" />
+    <Compile Include="MetadataSource\SkyHook\SkyHookException.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadata.cs" />
     <Compile Include="Metadata\Consumers\MediaBrowser\MediaBrowserMetadataSettings.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
@@ -674,6 +680,13 @@
     <Compile Include="Metadata\MetadataType.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
+    <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
+    <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
+    <Compile Include="Notifications\Synology\SynologyException.cs" />
+    <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
+    <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
+    <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
+    <Compile Include="Organizer\NamingConfigRepository.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
@@ -784,7 +797,6 @@
     <Compile Include="Organizer\NamingConfig.cs" />
     <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />
-    <Compile Include="Parser\EpisodeNotFoundException.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
     <Compile Include="Parser\Language.cs" />
     <Compile Include="Parser\Model\LocalEpisode.cs" />
@@ -901,6 +913,7 @@
     <Compile Include="Validation\NzbDroneValidationFailure.cs" />
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
     <Compile Include="Validation\NzbDroneValidationState.cs" />
+    <Compile Include="Validation\Paths\MappedNetworkDriveValidator.cs" />
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
     <Compile Include="Validation\Paths\PathExistsValidator.cs" />
     <Compile Include="Validation\Paths\PathValidator.cs" />
@@ -934,6 +947,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="NzbDrone.Core.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\AnalysisRules.ruleset" />
   </ItemGroup>
@@ -953,10 +969,6 @@
       <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TVDBSharp\TVDBSharp.csproj">
-      <Project>{0cc493d7-0a9f-4199-9615-0a977945d716}</Project>
-      <Name>TVDBSharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\Logo\64.png">
@@ -975,7 +987,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

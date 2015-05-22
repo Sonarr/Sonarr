@@ -41,8 +41,6 @@ namespace NzbDrone.Host
         {
             AutoRegisterImplementations<NzbDronePersistentConnection>();
 
-            Container.Register(typeof(IBasicRepository<NamingConfig>), typeof(BasicRepository<NamingConfig>));
-
             Container.Register<INancyBootstrapper, NancyBootstrapper>();
         }
     }

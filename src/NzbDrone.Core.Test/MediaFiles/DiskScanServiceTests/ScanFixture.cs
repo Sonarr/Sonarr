@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -7,10 +6,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -32,8 +28,6 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetParentFolder(It.IsAny<string>()))
                   .Returns((string path) => Directory.GetParent(path).FullName);
-
-            
         }
 
         private void GivenParentFolderExists()
@@ -175,6 +169,92 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                            Path.Combine(_series.Path, "Season 1", ".hidden", "file2.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Season 1", ".AppleDouble", "s01e01.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_not_scan_Synology_eaDir()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "@eaDir", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_not_scan_thumb_folder()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, ".@__thumb", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_scan_dotHack_folder()
+        {
+            GivenParentFolderExists();
+            _series.Path = @"C:\Test\TV\.hack".AsOsAgnostic();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "Season 1", "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Season 1", "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 2), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_find_files_at_root_of_series_folder()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "file1.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "s01e01.mkv").AsOsAgnostic()
+                       });
+
+            Subject.Scan(_series);
+
+            Mocker.GetMock<IMakeImportDecision>()
+                  .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 2), _series), Times.Once());
+        }
+
+        [Test]
+        public void should_exclude_osx_metadata_files()
+        {
+            GivenParentFolderExists();
+
+            GivenFiles(new List<string>
+                       {
+                           Path.Combine(_series.Path, "._24 The Status Quo Combustion.mp4").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "24 The Status Quo Combustion.mkv").AsOsAgnostic()
                        });
 
             Subject.Scan(_series);
