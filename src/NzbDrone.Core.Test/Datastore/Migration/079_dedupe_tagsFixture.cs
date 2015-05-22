@@ -10,7 +10,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class dedupe_tags : MigrationTest<Core.Datastore.Migration.dedupe_tags>
+    public class dedupe_tagsFixture : MigrationTest<Core.Datastore.Migration.dedupe_tags>
     {
         [Test]
         public void should_not_fail_if_series_tags_are_null()

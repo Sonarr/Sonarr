@@ -260,15 +260,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var protocol = settings.UseSsl ? "https" : "http";
             
-            String url;
-            if (!settings.UrlBase.IsNullOrWhiteSpace())
-            {
-                url = String.Format(@"{0}://{1}:{2}/{3}/transmission/rpc", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
-            }
-            else
-            {
-                url = String.Format(@"{0}://{1}:{2}/transmission/rpc", protocol, settings.Host, settings.Port);
-            }
+            var url = String.Format(@"{0}://{1}:{2}/{3}/rpc", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
 
             var restClient = RestClientFactory.BuildClient(url);
             restClient.FollowRedirects = false;

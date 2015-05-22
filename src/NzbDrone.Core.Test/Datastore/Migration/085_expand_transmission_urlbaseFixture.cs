@@ -4,14 +4,15 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.Clients.Deluge;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Download.Clients.Transmission;
 using NzbDrone.Core.Test.Framework;
-
+using System.Drawing;
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class move_dot_prefix_to_transmission_categoryFixture : MigrationTest<Core.Datastore.Migration.move_dot_prefix_to_transmission_category>
+    public class expand_transmission_urlbaseFixture : MigrationTest<Core.Datastore.Migration.expand_transmission_urlbase>
     {
         [Test]
         public void should_not_fail_if_no_transmission()
@@ -21,14 +22,15 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 c.Insert.IntoTable("DownloadClients").Row(new 
                 {
                     Enable = 1,
-                    Name = "Sab",
-                    Implementation = "Sabnzbd",
-                    Settings = new SabnzbdSettings
+                    Name = "Deluge",
+                    Implementation = "Deluge",
+                    Settings = new DelugeSettings
                     {
                         Host = "127.0.0.1",
-                        TvCategory = "abc"
+                        TvCategory = "abc",
+                        UrlBase = "/my/"
                     }.ToJson(),
-                    ConfigContract = "SabnzbdSettings"
+                    ConfigContract = "DelugeSettings"
                 });
             });
 
@@ -36,7 +38,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             items.Should().HaveCount(1);
 
-            items.First().Settings.As<SabnzbdSettings>().TvCategory.Should().Be("abc");
+            items.First().Settings.As<DelugeSettings>().UrlBase.Should().Be("/my/");
         }
 
         [Test]
@@ -52,7 +54,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Settings = new TransmissionSettings
                     {
                         Host = "127.0.0.1",
-                        TvCategory = "abc"
+                        TvCategory = "abc",
+                        UrlBase = null
                     }.ToJson(),
                     ConfigContract = "TransmissionSettings"
                 });
@@ -62,11 +65,11 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             items.Should().HaveCount(1);
 
-            items.First().Settings.As<TransmissionSettings>().TvCategory.Should().Be(".abc");
+            items.First().Settings.As<TransmissionSettings>().UrlBase.Should().Be("/transmission/");
         }
 
         [Test]
-        public void should_leave_empty_category_untouched()
+        public void should_be_append_to_existing_urlbase()
         {
             WithTestDb(c =>
             {
@@ -78,7 +81,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Settings = new TransmissionSettings
                     {
                         Host = "127.0.0.1",
-                        TvCategory = ""
+                        TvCategory = "abc",
+                        UrlBase = "/my/url/"
                     }.ToJson(),
                     ConfigContract = "TransmissionSettings"
                 });
@@ -88,7 +92,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             items.Should().HaveCount(1);
 
-            items.First().Settings.As<TransmissionSettings>().TvCategory.Should().Be("");
+            items.First().Settings.As<TransmissionSettings>().UrlBase.Should().Be("/my/url/transmission/");
         }
     }
 }

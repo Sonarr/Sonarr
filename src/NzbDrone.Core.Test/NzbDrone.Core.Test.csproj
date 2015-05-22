@@ -118,9 +118,10 @@
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
-    <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
+    <Compile Include="Datastore\Migration\074_disable_eztvFixture.cs" />
     <Compile Include="Datastore\Migration\072_history_grabIdFixture.cs" />
     <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
+    <Compile Include="Datastore\Migration\085_expand_transmission_urlbaseFixture.cs" />
     <Compile Include="Datastore\Migration\084_update_quality_minmax_sizeFixture.cs" />
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_categoryFixture.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tagsFixture.cs" />

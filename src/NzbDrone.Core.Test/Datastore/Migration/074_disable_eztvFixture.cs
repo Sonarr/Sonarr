@@ -9,7 +9,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class disable_eztv : MigrationTest<Core.Datastore.Migration.disable_eztv>
+    public class disable_eztvFixture : MigrationTest<Core.Datastore.Migration.disable_eztv>
     {
         [Test]
         public void should_disable_rss_for_eztv()

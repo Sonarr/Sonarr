@@ -8,7 +8,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class update_quality_minmax_size : MigrationTest<Core.Datastore.Migration.update_quality_minmax_size>
+    public class update_quality_minmax_sizeFixture : MigrationTest<Core.Datastore.Migration.update_quality_minmax_size>
     {
         [Test]
         public void should_not_fail_if_empty()

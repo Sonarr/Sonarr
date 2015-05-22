@@ -34,6 +34,11 @@ namespace NzbDrone.Core.Validation
             return ruleBuilder.SetValidator(new RegularExpressionValidator("^https?://[-a-z0-9.]+", RegexOptions.IgnoreCase)).WithMessage("must be valid URL that starts with http(s)://");
         }
 
+        public static IRuleBuilderOptions<T, string> ValidUrlBase<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new RegularExpressionValidator(@"^(?!\/?https?://[-a-z0-9.]+)", RegexOptions.IgnoreCase)).WithMessage("Must be a valid URL path (ie: '/sonarr')");
+        }
+
         public static IRuleBuilderOptions<T, int> ValidPort<T>(this IRuleBuilder<T, int> ruleBuilder)
         {
             return ruleBuilder.SetValidator(new InclusiveBetweenValidator(1, 65535))
@@ -61,11 +66,6 @@ namespace NzbDrone.Core.Validation
         public static IRuleBuilderOptions<T, TProp> AsWarning<T, TProp>(this IRuleBuilderOptions<T, TProp> ruleBuilder)
         {
             return ruleBuilder.WithState(v => NzbDroneValidationState.Warning);
-        }
-
-        public static IRuleBuilderOptions<T, string> ValidUrlBase<T>(this IRuleBuilder<T, string> ruleBuilder)
-        {
-            return ruleBuilder.SetValidator(new RegularExpressionValidator(@"^(?!\/?https?://[-a-z0-9.]+)", RegexOptions.IgnoreCase)).WithMessage("Must be a valid URL path (ie: '/sonarr')");
         }
     }
 }
