@@ -42,6 +42,9 @@ namespace NzbDrone.Api.Config
                            .ValidIp4Address()
                            .NotListenAllIp4Address()
                            .When(c => c.BindAddress != "*");
+
+            SharedValidator.RuleFor(c => c.UrlBase)
+                           .ValidUrlBase();
         }
 
         private HostConfigResource GetHostConfig()

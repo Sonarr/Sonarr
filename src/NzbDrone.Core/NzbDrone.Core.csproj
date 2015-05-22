@@ -84,7 +84,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
-      <Reference Include="CookComputing.XmlRpc, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CookComputing.XmlRpc, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>

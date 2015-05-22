@@ -62,5 +62,10 @@ namespace NzbDrone.Core.Validation
         {
             return ruleBuilder.WithState(v => NzbDroneValidationState.Warning);
         }
+
+        public static IRuleBuilderOptions<T, string> ValidUrlBase<T>(this IRuleBuilder<T, string> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new RegularExpressionValidator(@"^(?!\/?https?://[-a-z0-9.]+)", RegexOptions.IgnoreCase)).WithMessage("Must be a valid URL path (ie: '/sonarr')");
+        }
     }
 }
