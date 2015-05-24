@@ -479,11 +479,11 @@
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
-    <Compile Include="Indexers\HDBits\HdBits.cs" />
-    <Compile Include="Indexers\HDBits\HdBitsApi.cs" />
-    <Compile Include="Indexers\HDBits\HdBitsParser.cs" />
-    <Compile Include="Indexers\HDBits\HdBitsRequestGenerator.cs" />
-    <Compile Include="Indexers\HDBits\HdBitsSettings.cs" />
+    <Compile Include="Indexers\HDBits\HDBits.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsApi.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsParser.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsRequestGenerator.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsSettings.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />

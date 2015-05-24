@@ -204,7 +204,7 @@
     <Compile Include="IndexerTests\BitMeTvTests\BitMeTvFixture.cs" />
     <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
     <Compile Include="IndexerTests\EztvTests\EztvFixture.cs" />
-    <Compile Include="IndexerTests\HdBitsTests\HdBitsFixture.cs" />
+    <Compile Include="IndexerTests\HDBitsTests\HDBitsFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabFixture.cs" />

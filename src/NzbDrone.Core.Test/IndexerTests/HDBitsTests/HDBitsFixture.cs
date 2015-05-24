@@ -1,20 +1,21 @@
-﻿using Moq;
+﻿using System;
+using System.Linq;
+using System.Text;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.HDBits;
-using NzbDrone.Core.Test.Framework;
-using FluentAssertions;
-using System.Linq;
 using NzbDrone.Core.Parser.Model;
-using System;
-using System.Text;
+using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.IndexerTests.HdBitsTests
+namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
 {
     [TestFixture]
-    public class HdBitsFixture : CoreTest<HdBits>
+    public class HDBitsFixture : CoreTest<HDBits>
     {
         [SetUp]
         public void Setup()
@@ -22,12 +23,12 @@ namespace NzbDrone.Core.Test.IndexerTests.HdBitsTests
             Subject.Definition = new IndexerDefinition()
             {
                 Name = "HdBits",
-                Settings = new HdBitsSettings() { ApiKey = "fakekey" }
+                Settings = new HDBitsSettings() { ApiKey = "fakekey" }
             };
         }
 
         [Test]
-        public void TestSimpleResponse()
+        public void should_parse_recent_feed_from_HDBits()
         {
             var responseJson = ReadAllText(@"Files/Indexers/HdBits/RecentFeed.json");
 
@@ -49,19 +50,17 @@ namespace NzbDrone.Core.Test.IndexerTests.HdBitsTests
             first.InfoUrl.Should().Be("https://hdbits.org/details.php?id=257142");
             first.PublishDate.Should().Be(DateTime.Parse("2015-04-04T20:30:46+0000"));
             first.Size.Should().Be(1718009717);
+            first.InfoHash.Should().Be("EABC50AEF9F53CEDED84ADF14144D3368E586F3A");
             first.MagnetUrl.Should().BeNullOrEmpty();
             first.Peers.Should().Be(47);
             first.Seeders.Should().Be(46);
         }
 
         [Test]
-        public void TestBadPasskey()
+        public void should_warn_on_wrong_passkey()
         {
-            var responseJson = @"
-{
-    ""status"": 5,
-    ""message"": ""Invalid authentication credentials""
-}";
+            var responseJson = new { status = 5, message = "Invalid authentication credentials" }.ToJson();
+
             Mocker.GetMock<IHttpClient>()
                 .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(),

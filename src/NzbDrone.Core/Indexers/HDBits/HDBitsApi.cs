@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Indexers.HDBits
 {
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Indexers.HDBits
         }
     }
 
-    public class HdBitsResponse
+    public class HDBitsResponse
     {
         [JsonProperty(Required = Required.Always)]
         public StatusCode Status { get; set; }

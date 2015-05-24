@@ -1,25 +1,25 @@
 ﻿using System;
 using FluentValidation;
+using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.Indexers.HDBits
 {
-    public class HdBitsSettingsValidator : AbstractValidator<HdBitsSettings>
+    public class HDBitsSettingsValidator : AbstractValidator<HDBitsSettings>
     {
-        public HdBitsSettingsValidator()
+        public HDBitsSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
             RuleFor(c => c.ApiKey).NotEmpty();
         }
     }
 
-    public class HdBitsSettings : IProviderConfig
+    public class HDBitsSettings : IProviderConfig
     {
-        private static readonly HdBitsSettingsValidator Validator = new HdBitsSettingsValidator();
+        private static readonly HDBitsSettingsValidator Validator = new HDBitsSettingsValidator();
 
-        public HdBitsSettings()
+        public HDBitsSettings()
         {
             BaseUrl = "https://hdbits.org";
         }

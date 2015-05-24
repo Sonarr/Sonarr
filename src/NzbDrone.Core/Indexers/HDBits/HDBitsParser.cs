@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Parser.Model;
+using System.Collections.Specialized;
 using System.Net;
-using NzbDrone.Core.Indexers.Exceptions;
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Web;
-using System.Collections.Specialized;
+using NzbDrone.Core.Indexers.Exceptions;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.HDBits
 {
-    public class HdBitsParser : IParseIndexerResponse
+    public class HDBitsParser : IParseIndexerResponse
     {
-        private readonly HdBitsSettings _settings;
+        private readonly HDBitsSettings _settings;
 
-        public HdBitsParser(HdBitsSettings settings)
+        public HDBitsParser(HDBitsSettings settings)
         {
             _settings = settings;
         }
@@ -25,28 +25,25 @@ namespace NzbDrone.Core.Indexers.HDBits
 
             if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
             {
-                throw new IndexerException(
-                    indexerResponse,
+                throw new IndexerException(indexerResponse,
                     "Unexpected response status {0} code from API request",
                     indexerResponse.HttpResponse.StatusCode);
             }
 
-            var jsonResponse = JsonConvert.DeserializeObject<HdBitsResponse>(indexerResponse.Content);
+            var jsonResponse = JsonConvert.DeserializeObject<HDBitsResponse>(indexerResponse.Content);
 
             if (jsonResponse.Status != StatusCode.Success)
             {
-                throw new IndexerException(
-                    indexerResponse,
-                    @"HDBits API request returned status code {0} with message ""{1}""",
+                throw new IndexerException(indexerResponse,
+                    "HDBits API request returned status code {0}: {1}",
                     jsonResponse.Status,
-                    jsonResponse.Message ?? "");
+                    jsonResponse.Message ?? string.Empty);
             }
 
             var responseData = jsonResponse.Data as JArray;
             if (responseData == null)
             {
-                throw new IndexerException(
-                    indexerResponse,
+                throw new IndexerException(indexerResponse,
                     "Indexer API call response missing result data");
             }
 
@@ -60,6 +57,7 @@ namespace NzbDrone.Core.Indexers.HDBits
                     Guid = string.Format("HDBits-{0}", id),
                     Title = result.Name,
                     Size = result.Size,
+                    InfoHash = result.Hash,
                     DownloadUrl = GetDownloadUrl(id),
                     InfoUrl = GetInfoUrl(id),
                     Seeders = result.Seeders,
@@ -88,7 +86,7 @@ namespace NzbDrone.Core.Indexers.HDBits
             return BuildUrl("/details.php", args);
 
         }
-        
+
         private string BuildUrl(string path, NameValueCollection args)
         {
             var builder = new UriBuilder(_settings.BaseUrl);

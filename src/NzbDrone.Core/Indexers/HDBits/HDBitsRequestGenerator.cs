@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Common.Extensions;
+using System.Linq;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using System.Linq;
+using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.HDBits
 {
-    public class HdBitsRequestGenerator : IIndexerRequestGenerator
+    public class HDBitsRequestGenerator : IIndexerRequestGenerator
     {
-        public HdBitsSettings Settings { get; set; }
+        public HDBitsSettings Settings { get; set; }
 
         public IList<IEnumerable<IndexerRequest>> GetRecentRequests()
         {
