@@ -70,6 +70,11 @@ namespace NzbDrone.Common.Http
             _segments.Add(key, value);
         }
 
+        public void AddQueryParam(string segment, string value)
+        {
+            UriBuilder.SetQueryParam(segment, value);
+        }
+
         public void AddCookie(string key, string value)
         {
             Cookies[key] = value;

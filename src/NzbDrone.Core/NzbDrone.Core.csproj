@@ -515,6 +515,12 @@
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\HttpIndexerBase.cs" />
+    <Compile Include="Indexers\Rarbg\Rarbg.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgRequestGenerator.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgTorrent.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgSettings.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgParser.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgTokenProvider.cs" />
     <Compile Include="Indexers\RssIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\RssParser.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
