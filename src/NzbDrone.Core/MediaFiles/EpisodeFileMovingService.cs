@@ -7,6 +7,8 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -27,6 +29,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileAttributeService _mediaFileAttributeService;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
@@ -35,6 +38,7 @@ namespace NzbDrone.Core.MediaFiles
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
                                 IMediaFileAttributeService mediaFileAttributeService,
+                                IEventAggregator eventAggregator,
                                 IConfigService configService,
                                 Logger logger)
         {
@@ -43,6 +47,7 @@ namespace NzbDrone.Core.MediaFiles
             _buildFileNames = buildFileNames;
             _diskProvider = diskProvider;
             _mediaFileAttributeService = mediaFileAttributeService;
+            _eventAggregator = eventAggregator;
             _configService = configService;
             _logger = logger;
         }
@@ -52,6 +57,8 @@ namespace NzbDrone.Core.MediaFiles
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
             var newFileName = _buildFileNames.BuildFileName(episodes, series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.RelativePath));
+
+            EnsureEpisodeFolder(episodeFile, series, episodes.Select(v => v.SeasonNumber).First(), filePath);
 
             _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
             
@@ -63,6 +70,8 @@ namespace NzbDrone.Core.MediaFiles
             var newFileName = _buildFileNames.BuildFileName(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(localEpisode.Path));
 
+            EnsureEpisodeFolder(episodeFile, localEpisode, filePath);
+
             _logger.Debug("Moving episode file: {0} to {1}", episodeFile.Path, filePath);
             
             return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Move);
@@ -72,6 +81,8 @@ namespace NzbDrone.Core.MediaFiles
         {
             var newFileName = _buildFileNames.BuildFileName(localEpisode.Episodes, localEpisode.Series, episodeFile);
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(localEpisode.Path));
+
+            EnsureEpisodeFolder(episodeFile, localEpisode, filePath);
 
             if (_configService.CopyUsingHardlinks)
             {
@@ -101,27 +112,6 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            var directoryName = new FileInfo(destinationFilename).DirectoryName;
-
-            if (!_diskProvider.FolderExists(directoryName))
-            {
-                try
-                {
-                    _diskProvider.CreateFolder(directoryName);
-                }
-                catch (IOException ex)
-                {
-                    _logger.ErrorException("Unable to create directory: " + directoryName, ex);
-                }
-                
-                _mediaFileAttributeService.SetFolderPermissions(directoryName);
-
-                if (!directoryName.PathEquals(series.Path))
-                {
-                    _mediaFileAttributeService.SetFolderPermissions(series.Path);
-                }
-            }
-
             _logger.Debug("{0} [{1}] > [{2}]", mode, episodeFilePath, destinationFilename);
             _diskProvider.TransferFile(episodeFilePath, destinationFilename, mode);
 
@@ -149,6 +139,75 @@ namespace NzbDrone.Core.MediaFiles
             _mediaFileAttributeService.SetFilePermissions(destinationFilename);
 
             return episodeFile;
+        }
+
+        private void EnsureEpisodeFolder(EpisodeFile episodeFile, LocalEpisode localEpisode, string filePath)
+        {
+            EnsureEpisodeFolder(episodeFile, localEpisode.Series, localEpisode.SeasonNumber, filePath);
+        }
+
+        private void EnsureEpisodeFolder(EpisodeFile episodeFile, Series series, int seasonNumber, string filePath)
+        {
+            var episodeFolder = Path.GetDirectoryName(filePath);
+            var seasonFolder = _buildFileNames.BuildSeasonPath(series, seasonNumber);
+            var seriesFolder = series.Path;
+            var rootFolder = Path.GetDirectoryName(seriesFolder);
+
+            if (!_diskProvider.FolderExists(rootFolder))
+            {
+                throw new DirectoryNotFoundException(string.Format("Root folder '{0}' was not found.", rootFolder));
+            }
+
+            var changed = false;
+            var newEvent = new EpisodeFolderCreatedEvent(series, episodeFile);
+
+            if (!_diskProvider.FolderExists(seriesFolder))
+            {
+                CreateFolder(seriesFolder);
+                newEvent.SeriesFolder = seriesFolder;
+                changed = true;
+            }
+
+            if (seriesFolder != seasonFolder && !_diskProvider.FolderExists(seasonFolder))
+            {
+                CreateFolder(seasonFolder);
+                newEvent.SeasonFolder = seasonFolder;
+                changed = true;
+            }
+
+            if (seasonFolder != episodeFolder && !_diskProvider.FolderExists(episodeFolder))
+            {
+                CreateFolder(episodeFolder);
+                newEvent.EpisodeFolder = episodeFolder;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                _eventAggregator.PublishEvent(newEvent);
+            }
+        }
+
+        private void CreateFolder(string directoryName)
+        {
+            Ensure.That(directoryName, () => directoryName).IsNotNullOrWhiteSpace();
+
+            var parentFolder = Path.GetDirectoryName(directoryName);
+            if (!_diskProvider.FolderExists(parentFolder))
+            {
+                CreateFolder(parentFolder);
+            }
+
+            try
+            {
+                _diskProvider.CreateFolder(directoryName);
+            }
+            catch (IOException ex)
+            {
+                _logger.ErrorException("Unable to create directory: " + directoryName, ex);
+            }
+
+            _mediaFileAttributeService.SetFolderPermissions(directoryName);
         }
     }
 }

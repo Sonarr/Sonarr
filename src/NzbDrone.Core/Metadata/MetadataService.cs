@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Metadata
 {
     public class MetadataService : IHandle<MediaCoversUpdatedEvent>,
                                    IHandle<EpisodeImportedEvent>,
+                                   IHandle<EpisodeFolderCreatedEvent>,
                                    IHandle<SeriesRenamedEvent>
     {
         private readonly IMetadataFactory _metadataFactory;
@@ -95,6 +96,35 @@ namespace NzbDrone.Core.Metadata
 
                 files.AddIfNotNull(ProcessEpisodeMetadata(consumer, message.EpisodeInfo.Series, message.ImportedEpisode, new List<MetadataFile>()));
                 files.AddRange(ProcessEpisodeImages(consumer, message.EpisodeInfo.Series, message.ImportedEpisode, new List<MetadataFile>()));
+
+                _eventAggregator.PublishEvent(new MetadataFilesUpdated(files));
+            }
+        }
+
+        public void Handle(EpisodeFolderCreatedEvent message)
+        {
+            if (message.SeriesFolder.IsNullOrWhiteSpace() && message.SeasonFolder.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            var seriesMetadataFiles = _metadataFileService.GetFilesBySeries(message.Series.Id);
+
+            foreach (var consumer in _metadataFactory.Enabled())
+            {
+                var files = new List<MetadataFile>();
+                var consumerFiles = GetMetadataFilesForConsumer(consumer, seriesMetadataFiles);
+
+                if (message.SeriesFolder.IsNotNullOrWhiteSpace())
+                {
+                    files.AddIfNotNull(ProcessSeriesMetadata(consumer, message.Series, consumerFiles));
+                    files.AddRange(ProcessSeriesImages(consumer, message.Series, consumerFiles));
+                }
+
+                if (message.SeasonFolder.IsNotNullOrWhiteSpace())
+                {
+                    files.AddRange(ProcessSeasonImages(consumer, message.Series, consumerFiles));
+                }
 
                 _eventAggregator.PublishEvent(new MetadataFilesUpdated(files));
             }
