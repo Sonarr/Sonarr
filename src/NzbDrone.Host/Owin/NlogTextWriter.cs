@@ -64,6 +64,11 @@ namespace NzbDrone.Host.Owin
                 return LogLevel.Trace;
             }
 
+            if (lower.Contains("signalr") && lower.Contains("the network connection was aborted by the local system"))
+            {
+                return LogLevel.Trace;
+            }
+
             return LogLevel.Error;
         }
     }
