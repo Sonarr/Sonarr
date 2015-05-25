@@ -345,5 +345,23 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Mocker.GetMock<IParsingService>()
                   .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
         }
+
+        [Test]
+        public void should_not_use_folder_quality_when_it_is_unknown()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _series.Profile = new Profile
+                              {
+                                  Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.Unknown)
+                              };
+
+
+            var folderQuality = new QualityModel(Quality.Unknown);
+
+            var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo { Quality = folderQuality}, true);
+
+            result.Single().LocalEpisode.Quality.Should().Be(_quality);
+        }
     }
 }
