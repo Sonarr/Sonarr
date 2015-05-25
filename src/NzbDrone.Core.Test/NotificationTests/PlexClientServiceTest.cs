@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Test.NotificationTests
 {
     [TestFixture]
     
-    public class PlexProviderTest : CoreTest
+    public class PlexClientServiceTest : CoreTest
     {
         private PlexClientSettings _clientSettings;
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.NotificationTests
                     .Returns("ok");
 
             
-            Mocker.Resolve<PlexService>().Notify(_clientSettings, header, message);
+            Mocker.Resolve<PlexClientService>().Notify(_clientSettings, header, message);
 
             
             fakeHttp.Verify(v => v.DownloadString(expectedUrl), Times.Once());
@@ -63,8 +63,8 @@ namespace NzbDrone.Core.Test.NotificationTests
             fakeHttp.Setup(s => s.DownloadString(expectedUrl, "plex", "plex"))
                     .Returns("ok");
 
-            
-            Mocker.Resolve<PlexService>().Notify(_clientSettings, header, message);
+
+            Mocker.Resolve<PlexClientService>().Notify(_clientSettings, header, message);
 
             
             fakeHttp.Verify(v => v.DownloadString(expectedUrl, "plex", "plex"), Times.Once());

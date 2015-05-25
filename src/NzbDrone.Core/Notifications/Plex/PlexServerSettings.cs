@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(1, Label = "Port")]
         public Int32 Port { get; set; }
 
+        //TODO: Change username and password to token and get a plex.tv OAuth token properly
         [FieldDefinition(2, Label = "Username")]
         public String Username { get; set; }
 

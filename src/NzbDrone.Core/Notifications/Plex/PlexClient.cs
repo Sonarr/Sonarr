@@ -7,11 +7,11 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexClient : NotificationBase<PlexClientSettings>
     {
-        private readonly IPlexService _plexService;
+        private readonly IPlexClientService _plexClientService;
 
-        public PlexClient(IPlexService plexService)
+        public PlexClient(IPlexClientService plexClientService)
         {
-            _plexService = plexService;
+            _plexClientService = plexClientService;
         }
 
         public override string Link
@@ -22,13 +22,13 @@ namespace NzbDrone.Core.Notifications.Plex
         public override void OnGrab(string message)
         {
             const string header = "Sonarr [TV] - Grabbed";
-            _plexService.Notify(Settings, header, message);
+            _plexClientService.Notify(Settings, header, message);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string header = "Sonarr [TV] - Downloaded";
-            _plexService.Notify(Settings, header, message.Message);
+            _plexClientService.Notify(Settings, header, message.Message);
         }
 
         public override void AfterRename(Series series)
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(_plexService.Test(Settings));
+            failures.AddIfNotNull(_plexClientService.Test(Settings));
 
             return new ValidationResult(failures);
         }
