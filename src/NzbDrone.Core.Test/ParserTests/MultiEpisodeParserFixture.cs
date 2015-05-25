@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("E.010910.HDTVx264REPACKLOL.mp4", "E", 1, new[] { 9, 10 })]
         [TestCase("World Series of Poker - 2013x15 - 2013x16 - HD TV.mkv", "World Series of Poker", 2013, new[] { 15, 16 })]
         [TestCase("The Librarians US S01E01-E02 720p HDTV x264", "The Librarians US", 1, new [] { 1, 2 })]
+        [TestCase("Series Title Season 01 Episode 05-06 720p", "Series Title", 1,new [] { 5, 6 })]
         //[TestCase("", "", ,new [] {  })]
         //[TestCase("My Name Is Earl - S03E01-E02 - My Name Is Inmate 28301-016 [SDTV]", "My Name Is Earl", 3, new[] { 1, 2 })]
         //[TestCase("Adventure Time - 5x01 - x02 - Finn the Human (2) & Jake the Dog (3)", "Adventure Time", 5, new [] { 1, 2 })]
