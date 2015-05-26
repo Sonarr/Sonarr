@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
@@ -9,6 +10,9 @@ namespace NzbDrone.Core.Indexers
     {
         // Parse various seeder/leecher/peers formats in the description element to determine number of seeders.
         public Boolean ParseSeedersInDescription { get; set; }
+
+        // Use the specified element name to determine the size
+        public String SizeElementName { get; set; }
 
         public TorrentRssParser()
         {
@@ -86,6 +90,20 @@ namespace NzbDrone.Core.Indexers
             }
 
             return null;
+        }
+
+        protected override long GetSize(XElement item)
+        {
+            var size = base.GetSize(item);
+            if (size == 0 && SizeElementName.IsNotNullOrWhiteSpace())
+            {
+                if (item.Element(SizeElementName) != null)
+                {
+                    size = ParseSize(item.Element(SizeElementName).Value, true);
+                }
+            }
+
+            return size;
         }
 
         private static readonly Regex ParseSeedersRegex = new Regex(@"(Seeder)s?:\s+(?<value>\d+)|(?<value>\d+)\s+(seeder)s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);

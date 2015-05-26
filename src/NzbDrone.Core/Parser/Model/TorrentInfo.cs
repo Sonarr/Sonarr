@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace NzbDrone.Core.Parser.Model
 {
@@ -18,6 +19,22 @@ namespace NzbDrone.Core.Parser.Model
                 return null;
             }
             return torrentInfo.Seeders;
+        }
+
+        public override string ToString(string format)
+        {
+            var stringBuilder = new StringBuilder(base.ToString(format));
+            switch (format.ToUpperInvariant())
+            {
+                case "L": // Long format
+                    stringBuilder.AppendLine("MagnetUrl: " + MagnetUrl ?? "Empty");
+                    stringBuilder.AppendLine("InfoHash: " + InfoHash ?? "Empty");
+                    stringBuilder.AppendLine("Seeders: " + Seeders ?? "Empty");
+                    stringBuilder.AppendLine("Peers: " + Peers ?? "Empty");
+                    break;
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }
