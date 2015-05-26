@@ -23,25 +23,25 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
     public interface IRTorrent : IXmlRpcProxy
     {
-        [XmlRpcMethod("d.multicall")]
-        object[] TorrentMulticall(params string[] parameters);
+        [XmlRpcMethod("d.multicall2")]
+        object[] TorrentMulticall(params string[] parameters);
 
-        [XmlRpcMethod("load_start")]
+        [XmlRpcMethod("load.start")]
         int LoadURL(string data);
 
-        [XmlRpcMethod("load_raw_start")]
+        [XmlRpcMethod("load.raw_start")]
         int LoadBinary(byte[] data);
 
         [XmlRpcMethod("d.erase")]
         int Remove(string hash);
 
-        [XmlRpcMethod("d.set_custom1")]
+        [XmlRpcMethod("d.custom1.set")]
         string SetLabel(string hash, string label);
 
-        [XmlRpcMethod("d.set_priority")]
+        [XmlRpcMethod("d.priority.set")]
         int SetPriority(string hash, long priority);
 
-        [XmlRpcMethod("d.get_name")]
+        [XmlRpcMethod("d.name")]
         string GetName(string hash);
 
         [XmlRpcMethod("system.client_version")]
@@ -70,21 +70,21 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public List<RTorrentTorrent> GetTorrents(RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: d.multicall");
+            _logger.Debug("Executing remote method: d.multicall2");
 
             var client = BuildClient(settings);
-            var ret = client.TorrentMulticall("main",
-                "d.get_name=", // string
-                "d.get_hash=", // string
-                "d.get_base_path=", // string
-                "d.get_custom1=", // string (label)
-                "d.get_size_bytes=", // long
-                "d.get_left_bytes=", // long
-                "d.get_down_rate=", // long (in bytes / s)
-                "d.get_ratio=", // long
+            var ret = client.TorrentMulticall("", "",
+                "d.name=", // string
+                "d.hash=", // string
+                "d.base_path=", // string
+                "d.custom1=", // string (label)
+                "d.size_bytes=", // long
+                "d.left_bytes=", // long
+                "d.down.rate=", // long (in bytes / s)
+                "d.ratio=", // long
                 "d.is_open=", // long
                 "d.is_active=", // long
-                "d.get_complete="); //long
+                "d.complete="); //long
 
             var items = new List<RTorrentTorrent>();
             foreach (object[] torrent in ret)
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public bool HasHashTorrent(string hash, RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: d.get_name");
+            _logger.Debug("Executing remote method: d.name");
 
             var client = BuildClient(settings);
 
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public void AddTorrentFromUrl(string torrentUrl, RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: load_start");
+            _logger.Debug("Executing remote method: load.start");
 
             var client = BuildClient(settings);
 
@@ -142,7 +142,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public void AddTorrentFromFile(string fileName, Byte[] fileContent, RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: load_raw_start");
+            _logger.Debug("Executing remote method: load.raw_start");
 
             var client = BuildClient(settings);
 
@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public void SetTorrentPriority(string hash, RTorrentSettings settings, RTorrentPriority priority)
         {
-            _logger.Debug("Executing remote method: d.set_priority");
+            _logger.Debug("Executing remote method: d.priority.set");
 
             var client = BuildClient(settings);
 
@@ -202,6 +202,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             var client = XmlRpcProxyGen.Create<IRTorrent>();
             client.Url = url;
+
+            client.EnableCompression = true;
 
             if (!settings.Username.IsNullOrWhiteSpace())
             {
