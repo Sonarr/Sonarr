@@ -1,21 +1,49 @@
+@import "../Content/badges.less";
 @import "../Shared/Styles/clickable.less";
 
 .season {
-  display   : inline-block;
-  font-size : 14px;
+  display       : inline-block;
   margin-bottom : 4px;
-  background-color: #eee;
-  border: 1px solid #999;
-  color: #999;
+
+  .label {
+    .badge-inverse();
+
+    display   : inline-block;
+    padding   : 4px;
+
+    font-size : 14px;
+  }
+
+  .label:first-child {
+    border-right               : 0px;
+    border-top-right-radius    : 0.0em;
+    border-bottom-right-radius : 0.0em;
+    color                      : #777;
+    background-color           : #eee;
+  }
+
+  .label:last-child {
+    border-left               : 0px;
+    border-top-left-radius    : 0.0em;
+    border-bottom-left-radius : 0.0em;
+    color                     : #999;
+    background-color          : #f7f7f7;
+  }
 
   .season-monitored {
-    display : inline-block;
-    width   : 16px;
+    width : 16px;
 
-    .clickable();
+    i {
+      .clickable();
+    }
   }
 
   .season-number {
     font-size : 12px;
+  }
+
+  .season-status {
+    display        : inline-block;
+    vertical-align : baseline !important;
   }
 }

@@ -30,9 +30,9 @@ namespace NzbDrone.Core.SeriesStats
         {
             var stats = _seriesStatisticsRepository.SeriesStatistics(seriesId);
 
-            if (stats == null) return new SeriesStatistics();
+            if (stats == null || stats.Count == 0) return new SeriesStatistics();
 
-            return MapSeriesStatistics(new List<SeasonStatistics> { stats });
+            return MapSeriesStatistics(stats);
         }
 
         private SeriesStatistics MapSeriesStatistics(List<SeasonStatistics> seasonStatistics)
@@ -43,6 +43,7 @@ namespace NzbDrone.Core.SeriesStats
                        SeriesId = seasonStatistics.First().SeriesId,
                        EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
                        EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
+                       TotalEpisodeCount = seasonStatistics.Sum(s => s.TotalEpisodeCount),
                        SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
                        NextAiringString = seasonStatistics.OrderBy(s =>
                        {

@@ -160,6 +160,7 @@ namespace NzbDrone.Api.Series
 
         private void LinkSeriesStatistics(SeriesResource resource, SeriesStatistics seriesStatistics)
         {
+            resource.TotalEpisodeCount = seriesStatistics.TotalEpisodeCount;
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
             resource.NextAiring = seriesStatistics.NextAiring;

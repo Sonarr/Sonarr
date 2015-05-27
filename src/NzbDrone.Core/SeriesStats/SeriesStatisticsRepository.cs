@@ -8,7 +8,7 @@ namespace NzbDrone.Core.SeriesStats
     public interface ISeriesStatisticsRepository
     {
         List<SeasonStatistics> SeriesStatistics();
-        SeasonStatistics SeriesStatistics(Int32 seriesId);
+        List<SeasonStatistics> SeriesStatistics(Int32 seriesId);
     }
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.SeriesStats
             return mapper.Query<SeasonStatistics>(queryText);
         }
 
-        public SeasonStatistics SeriesStatistics(Int32 seriesId)
+        public List<SeasonStatistics> SeriesStatistics(Int32 seriesId)
         {
             var mapper = _database.GetDataMapper();
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.SeriesStats
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
-            return mapper.Find<SeasonStatistics>(queryText);
+            return mapper.Query<SeasonStatistics>(queryText);
         }
 
         private String GetSelectClause()
@@ -58,6 +58,7 @@ namespace NzbDrone.Core.SeriesStats
                      (SELECT
                      Episodes.SeriesId,
                      Episodes.SeasonNumber,
+                     SUM(CASE WHEN AirdateUtc <= @currentDate OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS TotalEpisodeCount,
                      SUM(CASE WHEN (Monitored = 1 AND AirdateUtc <= @currentDate) OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
                      SUM(CASE WHEN EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
                      MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 OR Monitored = 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString,

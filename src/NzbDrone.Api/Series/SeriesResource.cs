@@ -28,6 +28,7 @@ namespace NzbDrone.Api.Series
             }
         }
 
+        public Int32? TotalEpisodeCount { get; set; }
         public Int32? EpisodeCount { get; set; }
         public Int32? EpisodeFileCount { get; set; }
         public Int64? SizeOnDisk { get; set; }
