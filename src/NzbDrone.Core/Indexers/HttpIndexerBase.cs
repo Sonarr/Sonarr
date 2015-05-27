@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Indexers
         public bool SupportsPaging { get { return PageSize > 0; } }
 
         public virtual Int32 PageSize { get { return 0; } }
+        public virtual TimeSpan RateLimit { get { return TimeSpan.FromSeconds(2); } }
 
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();
@@ -198,6 +200,11 @@ namespace NzbDrone.Core.Indexers
         protected virtual IndexerResponse FetchIndexerResponse(IndexerRequest request)
         {
             _logger.Debug("Downloading Feed " + request.Url);
+
+            if (request.HttpRequest.RateLimit < RateLimit)
+            {
+                request.HttpRequest.RateLimit = RateLimit;
+            }
 
             return new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
         }

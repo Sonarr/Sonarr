@@ -178,7 +178,6 @@
     <Compile Include="Processes\ProcessProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
-    <Compile Include="RateGate.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="Extensions\ResourceExtensions.cs" />
     <Compile Include="Security\X509CertificateValidationPolicy.cs" />
@@ -190,6 +189,7 @@
     <Compile Include="TinyIoC.cs" />
     <Compile Include="TPL\Debouncer.cs" />
     <Compile Include="TPL\LimitedConcurrencyLevelTaskScheduler.cs" />
+    <Compile Include="TPL\RateLimitService.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
     <Compile Include="Extensions\TryParseExtensions.cs" />
   </ItemGroup>
