@@ -27,10 +27,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         object[] TorrentMulticall(params string[] parameters);
 
         [XmlRpcMethod("load.start")]
-        int LoadURL(string data);
+        int LoadURL(string target, string data);
 
         [XmlRpcMethod("load.raw_start")]
-        int LoadBinary(byte[] data);
+        int LoadBinary(string target, byte[] data);
 
         [XmlRpcMethod("d.erase")]
         int Remove(string hash);
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             var client = BuildClient(settings);
 
-            var response = client.LoadURL(torrentUrl);
+            var response = client.LoadURL("", torrentUrl);
             if (response != 0)
             {
                 throw new DownloadClientException("Could not add torrent: {0}.", torrentUrl);
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             var client = BuildClient(settings);
 
-            var response = client.LoadBinary(fileContent);
+            var response = client.LoadBinary("", fileContent);
             if (response != 0)
             {
                 throw new DownloadClientException("Could not add torrent: {0}.", fileName);
@@ -194,14 +194,13 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         private IRTorrent BuildClient(RTorrentSettings settings)
         {
-            var url = string.Format(@"{0}://{1}:{2}/{3}",
+            var client = XmlRpcProxyGen.Create<IRTorrent>();
+
+            client.Url = string.Format(@"{0}://{1}:{2}/{3}",
                                     settings.UseSsl ? "https" : "http",
                                     settings.Host,
                                     settings.Port,
                                     settings.UrlBase);
-
-            var client = XmlRpcProxyGen.Create<IRTorrent>();
-            client.Url = url;
 
             client.EnableCompression = true;
 
