@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         [Test]
         public void should_parse_recent_feed_from_newznab_nzb_su()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/newznab_nzb_su.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Newznab/newznab_nzb_su.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

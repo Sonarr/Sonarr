@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.IndexerTests.OmgwtfnzbsTests
         [Test]
         public void should_parse_recent_feed_from_omgwtfnzbs()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/omgwtfnzbs.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Omgwtfnzbs/Omgwtfnzbs.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

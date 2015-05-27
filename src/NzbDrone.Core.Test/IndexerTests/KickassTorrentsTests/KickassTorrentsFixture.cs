@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
         [Test]
         public void should_parse_recent_feed_from_KickassTorrents()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/KickassTorrents.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
         {
             ((KickassTorrentsSettings) Subject.Definition.Settings).VerifiedOnly = true;
 
-            var recentFeed = ReadAllText(@"Files/RSS/KickassTorrents.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

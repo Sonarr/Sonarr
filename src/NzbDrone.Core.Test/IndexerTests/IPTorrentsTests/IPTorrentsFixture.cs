@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.IPTorrentsTests
         [Test]
         public void should_parse_recent_feed_from_IPTorrents()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/IPTorrents.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/IPTorrents/IPTorrents.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

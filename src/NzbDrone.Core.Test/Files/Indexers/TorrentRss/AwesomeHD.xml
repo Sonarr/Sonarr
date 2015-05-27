@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <xhtml:meta xmlns:xhtml="http://www.w3.org/1999/xhtml" name="robots" content="noindex" />
+    <meta xmlns="http://pipes.yahoo.com" name="pipes" content="noprocess" />
+    <title>TV Show Torrents :: Awesome-HD</title>
+    <link>https://awesome-hd.net/</link>
+    <description>RSS feed for all new tv show uploads.</description>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 May 2015 07:06:12 +0000</lastBuildDate>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <generator>Gazelle Feed Class</generator>
+
+    <item>
+      <title><![CDATA[TV-SHOW: Utopia [2013] - HiFi / Blu-Ray / 1080p / mkv / x264 / FLAC / AHD Gold / DXVA / 75% Freeleech]]></title>
+      <description>
+        <![CDATA[Runtime: 50<br />
+Tagline: <br />
+Plot:<br />
+After a group of people, who meet online, discover a bizarre graphic novel which seems to hold mysterious answers, they find themselves being tracked down by a merciless organization known merely as &#39;The Network&#39;.<br />
+]]>
+      </description>
+      <pubDate>Tue, 19 May 2015 22:03:37 +0000</pubDate>
+      <link>https://awesome-hd.net/torrents.php?action=download&amp;authkey=redacted&amp;torrent_pass=redacted&amp;id=30689</link>
+      <guid>https://awesome-hd.net/torrents.php?action=download&amp;authkey=redacted&amp;torrent_pass=redacted&amp;id=30689</guid>
+      <comments>https://awesome-hd.net/torrents.php?id=15436</comments>
+      <dc:creator>tehlarsie</dc:creator>
+    </item>
+    <item>
+      <title><![CDATA[TV-SHOW: The Following [2013] - NTb / Blu-Ray / 720p / mkv / x264 / AC-3 / AHD Gold / DXVA]]></title>
+      <description>
+        <![CDATA[Runtime: 43<br />
+Tagline: Joe Caroll Was Just The Beggining.<br />
+Plot:<br />
+A brilliant and charismatic, yet psychotic serial killer communicates with other active serial killers and activates a cult of believers following his every command.<br />
+]]>
+      </description>
+      <pubDate>Sun, 17 May 2015 18:21:15 +0000</pubDate>
+      <link>https://awesome-hd.net/torrents.php?action=download&amp;authkey=redacted&amp;torrent_pass=redacted&amp;id=30655</link>
+      <guid>https://awesome-hd.net/torrents.php?action=download&amp;authkey=redacted&amp;torrent_pass=redacted&amp;id=30655</guid>
+      <comments>https://awesome-hd.net/torrents.php?id=15428</comments>
+      <dc:creator>Charlesvain</dc:creator>
+    </item>
+  </channel>
+</rss>

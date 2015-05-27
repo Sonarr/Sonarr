@@ -156,6 +156,11 @@ namespace NzbDrone.Core.Indexers
         {
             var dateString = item.TryGetValue("pubDate");
 
+            if (dateString.IsNullOrWhiteSpace())
+            {
+                throw new UnsupportedFeedException("Rss feed must have a pubDate element with a valid publish date.");
+            }
+
             return XElementExtensions.ParseDate(dateString);
         }
 
