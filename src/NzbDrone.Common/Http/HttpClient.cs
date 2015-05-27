@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Common.Http
 {
@@ -23,12 +24,13 @@ namespace NzbDrone.Common.Http
     public class HttpClient : IHttpClient
     {
         private readonly Logger _logger;
-
+        private readonly IRateLimitService _rateLimitService;
         private readonly ICached<CookieContainer> _cookieContainerCache;
 
-        public HttpClient(ICacheManager cacheManager, Logger logger)
+        public HttpClient(ICacheManager cacheManager, IRateLimitService rateLimitService, Logger logger)
         {
             _logger = logger;
+            _rateLimitService = rateLimitService;
             ServicePointManager.DefaultConnectionLimit = 12;
 
             _cookieContainerCache = cacheManager.GetCache<CookieContainer>(typeof(HttpClient));
@@ -36,6 +38,11 @@ namespace NzbDrone.Common.Http
 
         public HttpResponse Execute(HttpRequest request)
         {
+            if (request.RateLimit != TimeSpan.Zero)
+            {
+                _rateLimitService.WaitAndPulse(request.Url.Host, request.RateLimit);
+            }
+
             _logger.Trace(request);
 
             var webRequest = (HttpWebRequest)WebRequest.Create(request.Url);

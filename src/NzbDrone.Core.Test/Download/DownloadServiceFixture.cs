@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.Download
 
             var releaseInfo = Builder<ReleaseInfo>.CreateNew()
                 .With(v => v.DownloadProtocol = Indexers.DownloadProtocol.Usenet)
+                .With(v => v.DownloadUrl = "http://test.site/download1.ext")
                 .Build();
 
             _parseResult = Builder<RemoteEpisode>.CreateNew()

@@ -9,6 +9,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 using NLog;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Common.Test.Http
 {
@@ -20,6 +21,7 @@ namespace NzbDrone.Common.Test.Http
         public void SetUp()
         {
             Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
+            Mocker.SetConstant<IRateLimitService>(Mocker.Resolve<RateLimitService>());
         }
 
         [Test]
@@ -140,7 +142,7 @@ namespace NzbDrone.Common.Test.Http
             var oldRequest = new HttpRequest("http://eu.httpbin.org/get");
             oldRequest.AddCookie("my", "cookie");
 
-            var oldClient = new HttpClient(Mocker.Resolve<ICacheManager>(), Mocker.Resolve<Logger>());
+            var oldClient = new HttpClient(Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<Logger>());
 
             oldClient.Should().NotBeSameAs(Subject);
 

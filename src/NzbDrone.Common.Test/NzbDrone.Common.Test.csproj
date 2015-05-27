@@ -90,6 +90,7 @@
     <Compile Include="ServiceFactoryFixture.cs" />
     <Compile Include="ServiceProviderTests.cs" />
     <Compile Include="TPLTests\DebouncerFixture.cs" />
+    <Compile Include="TPLTests\RateLimitServiceFixture.cs" />
     <Compile Include="WebClientTests.cs" />
   </ItemGroup>
   <ItemGroup>
