@@ -168,6 +168,9 @@
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveGrabbedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\AddFixture.cs" />
+    <None Include="Files\Indexers\Rarbg\RecentFeed.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
@@ -207,6 +210,7 @@
     <Compile Include="IndexerTests\HDBitsTests\HDBitsFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
+    <Compile Include="IndexerTests\RarbgTests\RarbgFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabRequestGeneratorFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabSettingFixture.cs" />

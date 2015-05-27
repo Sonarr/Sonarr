@@ -14,9 +14,7 @@ namespace NzbDrone.Common.Http
                 query += "&";
             }
 
-            uriBuilder.Query = query.Trim('?') + (key + "=" + value);
+            uriBuilder.Query = query.Trim('?') + key + "=" + Uri.EscapeDataString(value.ToString());
         }
-
-
     }
 }
