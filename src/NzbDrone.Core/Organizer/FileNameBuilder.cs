@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Organizer
     {
         string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig namingConfig = null);
         string BuildFilePath(Series series, Int32 seasonNumber, String fileName, String extension);
+        string BuildSeasonPath(Series series, Int32 seasonNumber);
         BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
         string GetSeasonFolder(Series series, Int32 seasonNumber, NamingConfig namingConfig = null);
@@ -138,29 +139,32 @@ namespace NzbDrone.Core.Organizer
         {
             Ensure.That(extension, () => extension).IsNotNullOrWhiteSpace();
 
-            string path = series.Path;
+            var path = BuildSeasonPath(series, seasonNumber);
+
+            return Path.Combine(path, fileName + extension);
+        }
+
+        public string BuildSeasonPath(Series series, int seasonNumber)
+        {
+            var path = series.Path;
 
             if (series.SeasonFolder)
             {
-                string seasonFolder;
-
                 if (seasonNumber == 0)
                 {
-                    seasonFolder = "Specials";
+                    path = Path.Combine(path, "Specials");
                 }
-
                 else
                 {
-                    var nameSpec = _namingConfigService.GetConfig();
-                    seasonFolder = GetSeasonFolder(series, seasonNumber, nameSpec);
+                    var seasonFolder = GetSeasonFolder(series, seasonNumber);
+
+                    seasonFolder = CleanFileName(seasonFolder);
+
+                    path = Path.Combine(path, seasonFolder);
                 }
-
-                seasonFolder = CleanFileName(seasonFolder);
-
-                path = Path.Combine(path, seasonFolder);
             }
 
-            return Path.Combine(path, fileName + extension);
+            return path;
         }
 
         public BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec)
