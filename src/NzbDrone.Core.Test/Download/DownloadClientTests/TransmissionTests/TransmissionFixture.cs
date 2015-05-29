@@ -371,5 +371,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
             Subject.Test();
         }
+
+        [TestCase(-1)] // Infinite/Unknown
+        [TestCase(-2)] // Magnet Downloading
+        public void should_ignore_negative_eta(int eta)
+        {
+            _completed.Eta = eta;
+
+            PrepareClientToReturnCompletedItem();
+            var item = Subject.GetItems().Single();
+            item.RemainingTime.Should().NotHaveValue();
+        }
     }
 }
