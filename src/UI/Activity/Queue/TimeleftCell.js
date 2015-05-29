@@ -24,6 +24,8 @@ module.exports = NzbDroneCell.extend({
 
             if (timeleft === undefined) {
                 this.$el.html('-');
+            } else if (timeleft.indexOf('-') === 0) {
+                this.$el.html('<span title="{0} / {1}">∞</span>'.format(remainingSize, totalSize));
             } else {
                 this.$el.html('<span title="{1} / {2}">{0}</span>'.format(timeleft, remainingSize, totalSize));
             }
