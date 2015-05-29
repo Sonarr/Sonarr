@@ -117,7 +117,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 item.OutputPath = outputPath + torrent.Name;
                 item.TotalSize = torrent.TotalSize;
                 item.RemainingSize = torrent.LeftUntilDone;
-                item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 if (torrent.Eta != -1)
                 {
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
