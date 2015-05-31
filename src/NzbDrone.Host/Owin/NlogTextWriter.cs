@@ -58,15 +58,23 @@ namespace NzbDrone.Host.Owin
             {
                 return LogLevel.Trace;
             }
-
-            if (lower.Contains("signalr") && lower.Contains("an operation was attempted on a nonexistent network connection"))
+            
+            if (lower.Contains("signalr"))
             {
-                return LogLevel.Trace;
-            }
+                if (lower.Contains("an operation was attempted on a nonexistent network connection"))
+                {
+                    return LogLevel.Trace;
+                }
 
-            if (lower.Contains("signalr") && lower.Contains("the network connection was aborted by the local system"))
-            {
-                return LogLevel.Trace;
+                if (lower.Contains("the network connection was aborted by the local system"))
+                {
+                    return LogLevel.Trace;
+                }
+
+                if (lower.Contains("the socket has been shut down"))
+                {
+                    return LogLevel.Trace;
+                }
             }
 
             return LogLevel.Error;
