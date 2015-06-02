@@ -446,14 +446,24 @@ namespace NzbDrone.Core.Organizer
             switch (episodeFile.MediaInfo.VideoCodec)
             {
                 case "AVC":
-                    // TODO: What to do if the original SceneName is hashed?
-                    if (!episodeFile.SceneName.IsNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(episodeFile.SceneName).Contains("h264"))
+                    if (episodeFile.SceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(episodeFile.SceneName).Contains("h264"))
                     {
                         mediaInfoVideo = "h264";
                     }
                     else
                     {
                         mediaInfoVideo = "x264";
+                    }
+                    break;
+
+                case "V_MPEGH/ISO/HEVC":
+                    if (episodeFile.SceneName.IsNotNullOrWhiteSpace() && Path.GetFileNameWithoutExtension(episodeFile.SceneName).Contains("h265"))
+                    {
+                        mediaInfoVideo = "h265";
+                    }
+                    else
+                    {
+                        mediaInfoVideo = "x265";
                     }
                     break;
 
