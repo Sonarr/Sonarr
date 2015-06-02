@@ -48,12 +48,12 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             catch (ThreadAbortException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.ErrorException("Thread aborted: " + ex.Message, ex);
                 Thread.ResetAbort();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message, ex);
+                _logger.Error("Unknown error in thread: " + ex.Message, ex);
             }
         }
 
@@ -80,6 +80,7 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             catch (CommandFailedException ex)
             {
+                _commandQueueManager.SetMessage(commandModel, "Failed");
                 _commandQueueManager.Fail(commandModel, ex.Message, ex);
                 throw;
             }
