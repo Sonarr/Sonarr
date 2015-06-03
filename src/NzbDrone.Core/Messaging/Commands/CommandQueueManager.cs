@@ -78,10 +78,10 @@ namespace NzbDrone.Core.Messaging.Commands
             };
 
             _logger.Trace("Inserting new command: {0}", commandModel.Name);
-            
+
             _repo.Insert(commandModel);
-            _commandQueue.Add(commandModel);
             _commandCache.Set(commandModel.Id.ToString(), commandModel);
+            _commandQueue.Add(commandModel);
 
             return commandModel;
         }
