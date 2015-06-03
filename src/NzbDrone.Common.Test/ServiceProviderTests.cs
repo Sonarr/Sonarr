@@ -77,6 +77,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
+        [Explicit]
         public void Should_be_able_to_start_and_stop_service()
         {
             Subject.GetService(ALWAYS_INSTALLED_SERVICE).Status
