@@ -62,7 +62,7 @@ namespace NzbDrone.Api.Commands
         {
             if (message.Command.Body.SendUpdatesToClient)
             {
-                BroadcastResourceChange(ModelAction.Updated, message.Command.Id);
+                BroadcastResourceChange(ModelAction.Updated, message.Command.InjectTo<CommandResource>());
             }
         }
     }

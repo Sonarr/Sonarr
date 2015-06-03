@@ -717,6 +717,7 @@
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
     <Compile Include="Profiles\ProfileRepository.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />

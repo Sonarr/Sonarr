@@ -69,9 +69,9 @@ namespace NzbDrone.Core.Messaging.Commands
                 _commandQueueManager.Start(commandModel);
                 BroadcastCommandUpdate(commandModel);
 
-                if (!MappedDiagnosticsContext.Contains("CommandId"))
+                if (ProgressMessageContext.CommandModel == null)
                 {
-                    MappedDiagnosticsContext.Set("CommandId", commandModel.Id.ToString());
+                    ProgressMessageContext.CommandModel = commandModel;
                 }
 
                 handler.Execute(command);
@@ -96,9 +96,9 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 _eventAggregator.PublishEvent(new CommandExecutedEvent(commandModel));
 
-                if (MappedDiagnosticsContext.Get("CommandId") == commandModel.Id.ToString())
+                if (ProgressMessageContext.CommandModel == commandModel)
                 {
-                    MappedDiagnosticsContext.Remove("CommandId");
+                    ProgressMessageContext.CommandModel = null;
                 }
             }
 
