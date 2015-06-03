@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Messaging.Commands
             _logger.Trace("Cleaning up old commands");
             _repo.Trim();
 
-            var old = _commandCache.Values.Where(c => c.EndedAt < DateTime.UtcNow.AddMinutes(5));
+            var old = _commandCache.Values.Where(c => c.EndedAt < DateTime.UtcNow.AddMinutes(-5));
 
             foreach (var command in old)
             {
