@@ -135,6 +135,22 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             }
 
             parser.UseEnclosureLength = settings.UseEnclosureLength = false;
+
+            foreach (var sizeElementName in new[] { "size", "Size" })
+            {
+                parser.SizeElementName = settings.SizeElementName = sizeElementName;
+
+                releases = ParseResponse(parser, response);
+                ValidateReleases(releases, indexerSettings);
+
+                if (!releases.Any(r => r.Size < ValidSizeThreshold))
+                {
+                    _logger.Trace("Feed has valid size in Size element.");
+                    return settings;
+                }
+            }
+
+            parser.SizeElementName = settings.SizeElementName = null;
             parser.ParseSizeInDescription = settings.ParseSizeInDescription = true;
 
             releases = ParseResponse(parser, response);
@@ -145,22 +161,10 @@ namespace NzbDrone.Core.Indexers.TorrentRss
                 _logger.Trace("Feed has valid size in description.");
                 return settings;
             }
-           
+
             parser.ParseSizeInDescription = settings.ParseSizeInDescription = false;
-            parser.SizeElementName = settings.SizeElementName = "Size";
-
-            releases = ParseResponse(parser, response);
-            ValidateReleases(releases, indexerSettings);
-
-            if (!releases.Any(r => r.Size < ValidSizeThreshold))
-            {
-                _logger.Trace("Feed has valid size in Size element.");
-                return settings;
-            }
 
             _logger.Debug("Feed doesn't have release size.");
-
-            parser.SizeElementName = settings.SizeElementName = null;
 
             releases = ParseResponse(parser, response);
             ValidateReleases(releases, indexerSettings);

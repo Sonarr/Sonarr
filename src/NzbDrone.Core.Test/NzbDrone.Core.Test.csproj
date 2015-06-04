@@ -417,6 +417,9 @@
     <Content Include="Files\Indexers\TorrentRss\AwesomeHD.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\TorrentRss\BitHdtv.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\Indexers\TorrentRss\TransmitTheNet.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
