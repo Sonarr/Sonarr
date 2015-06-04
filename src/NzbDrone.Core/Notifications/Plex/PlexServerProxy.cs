@@ -160,7 +160,9 @@ namespace NzbDrone.Core.Notifications.Plex
 
         private RestClient GetPlexServerClient(PlexServerSettings settings)
         {
-            return RestClientFactory.BuildClient(String.Format("http://{0}:{1}", settings.Host, settings.Port));
+            var protocol = settings.UseSsl ? "https" : "http";
+
+            return RestClientFactory.BuildClient(String.Format("{0}://{1}:{2}", protocol, settings.Host, settings.Port));
         }
 
         private RestRequest GetPlexServerRequest(string resource, Method method, PlexServerSettings settings)

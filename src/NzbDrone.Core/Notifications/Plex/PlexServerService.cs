@@ -144,13 +144,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             try
             {
-                var sections = GetSections(new PlexServerSettings
-                                              {
-                                                  Host = settings.Host,
-                                                  Port = settings.Port,
-                                                  Username = settings.Username,
-                                                  Password = settings.Password
-                                              });
+                var sections = GetSections(settings);
 
                 if (sections.Empty())
                 {

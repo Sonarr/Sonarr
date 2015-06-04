@@ -40,6 +40,9 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(4, Label = "Update Library", Type = FieldType.Checkbox)]
         public Boolean UpdateLibrary { get; set; }
 
+        [FieldDefinition(5, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
+        public Boolean UseSsl { get; set; }
+
         public bool IsValid
         {
             get
