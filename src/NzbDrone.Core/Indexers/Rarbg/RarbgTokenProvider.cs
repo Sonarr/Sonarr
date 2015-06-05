@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
         {
             return _tokenCache.Get(settings.BaseUrl, () =>
                 {
-                    var url = settings.BaseUrl.Trim('/') + "/pubapi.php?get_token=get_token&format=json&response_type=json";
+                    var url = settings.BaseUrl.Trim('/') + "/pubapi_v2.php?get_token=get_token";
 
                     var response = _httpClient.Get<JObject>(new HttpRequest(url, HttpAccept.Json));
 

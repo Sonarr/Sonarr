@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
         [FieldDefinition(0, Label = "API URL", HelpText = "URL to Rarbg api, not the website.")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Ranked Only", HelpText = "Only include ranked results.")]
+        [FieldDefinition(1, Type = FieldType.Checkbox, Label = "Ranked Only", HelpText = "Only include ranked results.")]
         public bool RankedOnly { get; set; }
 
         public NzbDroneValidationResult Validate()

@@ -517,7 +517,7 @@
     <Compile Include="Indexers\HttpIndexerBase.cs" />
     <Compile Include="Indexers\Rarbg\Rarbg.cs" />
     <Compile Include="Indexers\Rarbg\RarbgRequestGenerator.cs" />
-    <Compile Include="Indexers\Rarbg\RarbgTorrent.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgResponse.cs" />
     <Compile Include="Indexers\Rarbg\RarbgSettings.cs" />
     <Compile Include="Indexers\Rarbg\RarbgParser.cs" />
     <Compile Include="Indexers\Rarbg\RarbgTokenProvider.cs" />

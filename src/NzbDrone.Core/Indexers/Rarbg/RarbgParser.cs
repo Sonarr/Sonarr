@@ -27,33 +27,41 @@ namespace NzbDrone.Core.Indexers.Rarbg
                     break;
             }
 
-            var jsonResponse = new HttpResponse<object>(indexerResponse.HttpResponse).Resource as JContainer;
+            var jsonResponse = new HttpResponse<RarbgResponse>(indexerResponse.HttpResponse);
 
-            var errorResponse = jsonResponse as JObject;
-            if (errorResponse != null && errorResponse["error"] != null)
+            if (jsonResponse.Resource.error_code.HasValue)
             {
-                var error = errorResponse["error"].ToString();
-                if (error == "No results found")
+                if (jsonResponse.Resource.error_code == 20)
                 {
+                    // No results found
                     return results;
                 }
 
-                throw new IndexerException(indexerResponse, "Indexer API call returned an error [{0}]", errorResponse["error"]);
+                throw new IndexerException(indexerResponse, "Indexer API call returned error {0}: {1}", jsonResponse.Resource.error_code, jsonResponse.Resource.error);
             }
 
-            var torrentResponse = jsonResponse.ToObject<List<RarbgTorrent>>();
+            if (jsonResponse.Resource.torrent_results == null)
+            {
+                return results;
+            }
 
-            foreach (var torrent in torrentResponse)
+            foreach (var torrent in jsonResponse.Resource.torrent_results)
             {
                 var torrentInfo = new TorrentInfo();
 
                 torrentInfo.Guid = GetGuid(torrent);
-                torrentInfo.Title = torrent.Title;
-                torrentInfo.Size = torrent.Size;
-                torrentInfo.DownloadUrl = torrent.DownloadUrl;
-                torrentInfo.PublishDate = torrent.PublishDate;
-                torrentInfo.Seeders = torrent.Seeders;
-                torrentInfo.Peers = torrent.Leechers + torrent.Seeders;
+                torrentInfo.Title = torrent.title;
+                torrentInfo.Size = torrent.size;
+                torrentInfo.DownloadUrl = torrent.download;
+                torrentInfo.InfoUrl = torrent.info_page;
+                torrentInfo.PublishDate = torrent.pubdate;
+                torrentInfo.Seeders = torrent.seeders;
+                torrentInfo.Peers = torrent.leechers + torrent.seeders;
+                
+                if (torrent.episode_info != null && torrent.episode_info.tvrage != null)
+                {
+                    torrentInfo.TvRageId = torrent.episode_info.tvrage.Value;
+                }
 
                 results.Add(torrentInfo);
             }
@@ -63,7 +71,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
         private string GetGuid(RarbgTorrent torrent)
         {
-            var match = RegexGuid.Match(torrent.DownloadUrl);
+            var match = RegexGuid.Match(torrent.download);
 
             if (match.Success)
             {
@@ -71,7 +79,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
             }
             else
             {
-                return string.Format("rarbg-{0}", torrent.DownloadUrl);
+                return string.Format("rarbg-{0}", torrent.download);
             }
         }
 

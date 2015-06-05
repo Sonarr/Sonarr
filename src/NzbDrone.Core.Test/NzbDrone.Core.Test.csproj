@@ -168,7 +168,10 @@
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveGrabbedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\AddFixture.cs" />
-    <None Include="Files\Indexers\Rarbg\RecentFeed.json">
+    <None Include="Files\Indexers\Rarbg\RecentFeed_v1.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Indexers\Rarbg\RecentFeed_v2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="FluentTest.cs" />

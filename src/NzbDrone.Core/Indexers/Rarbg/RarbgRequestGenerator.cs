@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
         private IEnumerable<IndexerRequest> GetPagedRequests(string mode, int? tvdbId, string query, params object[] args)
         {
-            var httpRequest = new HttpRequest(Settings.BaseUrl + "/pubapi.php", HttpAccept.Json);
+            var httpRequest = new HttpRequest(Settings.BaseUrl + "/pubapi_v2.php", HttpAccept.Json);
 
             httpRequest.AddQueryParam("mode", mode);
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
             httpRequest.AddQueryParam("limit", "100");
             httpRequest.AddQueryParam("token", _tokenProvider.GetToken(Settings));
             httpRequest.AddQueryParam("format", "json_extended");
-            httpRequest.AddQueryParam("response_type", "json");
+            httpRequest.AddQueryParam("app_id", "Sonarr");
 
             yield return new IndexerRequest(httpRequest);
         }
