@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using NLog;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Disk
@@ -33,6 +34,13 @@ namespace NzbDrone.Common.Disk
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
+
+            if (OsInfo.IsWindows)
+            {
+                // TODO: Atm we haven't seen partial transfers on windows so we disable verified transfer.
+                // (If enabled in the future, be sure to check specifically for ReFS, which doesn't support hardlinks.)
+                verified = false;
+            }
 
             if (!_diskProvider.FolderExists(targetPath))
             {
@@ -65,6 +73,13 @@ namespace NzbDrone.Common.Disk
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
+
+            if (OsInfo.IsWindows)
+            {
+                // TODO: Atm we haven't seen partial transfers on windows so we disable verified transfer.
+                // (If enabled in the future, be sure to check specifically for ReFS, which doesn't support hardlinks.)
+                verified = false;
+            }
 
             _logger.Debug("{0} [{1}] > [{2}]", mode, sourcePath, targetPath);
 

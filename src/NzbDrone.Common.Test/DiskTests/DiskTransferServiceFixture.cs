@@ -48,9 +48,23 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        public void should_not_use_verified_transfer_on_windows()
+        {
+            WindowsOnly();
+
+            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
+        }
+
+        [Test]
         public void should_retry_if_partial_copy()
         {
-            WithSuccessfulHardlink(_sourcePath, _backupPath);
+            MonoOnly();
 
             var retry = 0;
             Mocker.GetMock<IDiskProvider>()
@@ -69,6 +83,8 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void should_retry_twice_if_partial_copy()
         {
+            MonoOnly();
+
             var retry = 0;
             Mocker.GetMock<IDiskProvider>()
                 .Setup(v => v.CopyFile(_sourcePath, _tempTargetPath, false))
@@ -87,6 +103,8 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void should_hardlink_before_move()
         {
+            MonoOnly();
+
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
             var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
@@ -98,6 +116,8 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void should_remove_source_after_move()
         {
+            MonoOnly();
+
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
             Mocker.GetMock<IDiskProvider>()
@@ -112,6 +132,8 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void should_remove_backup_if_move_throws()
         {
+            MonoOnly();
+
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
             Mocker.GetMock<IDiskProvider>()
@@ -126,6 +148,8 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void should_remove_partial_if_move_fails()
         {
+            MonoOnly();
+
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
             Mocker.GetMock<IDiskProvider>()
@@ -144,6 +168,8 @@ namespace NzbDrone.Common.Test.DiskTests
         [Test]
         public void should_fallback_to_copy_if_hardlink_failed()
         {
+            MonoOnly();
+
             WithFailedHardlink();
 
             var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
