@@ -107,8 +107,8 @@ module.exports = Marionette.ItemView.extend({
     },
 
     _getEvents : function(view) {
-        var start = view.start.toISOString();
-        var end = view.end.toISOString();
+        var start = moment(view.start.toISOString()).toISOString();
+        var end = moment(view.end.toISOString()).toISOString();
 
         this.$el.fullCalendar('removeEvents');
 
