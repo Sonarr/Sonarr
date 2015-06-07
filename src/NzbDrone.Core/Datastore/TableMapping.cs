@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Profile>().RegisterModel("Profiles");
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
-            Mapper.Entity<SeriesStatistics>().MapResultSet();
+            Mapper.Entity<SeasonStatistics>().MapResultSet();
             Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");
 

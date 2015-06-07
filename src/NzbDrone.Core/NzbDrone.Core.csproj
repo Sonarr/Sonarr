@@ -869,6 +869,7 @@
     </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
     <Compile Include="Security.cs" />
+    <Compile Include="SeriesStats\SeasonStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
@@ -892,6 +893,7 @@
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
     <Compile Include="Tv\EpisodeCutoffService.cs" />
+    <Compile Include="Tv\EpisodeMonitoredService.cs" />
     <Compile Include="Tv\EpisodeRepository.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -903,6 +905,7 @@
     <Compile Include="Tv\Events\SeriesMovedEvent.cs" />
     <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />
     <Compile Include="Tv\Events\SeriesUpdatedEvent.cs" />
+    <Compile Include="Tv\MonitoringOptions.cs" />
     <Compile Include="Tv\MoveSeriesService.cs" />
     <Compile Include="Tv\Ratings.cs" />
     <Compile Include="Tv\RefreshEpisodeService.cs" />

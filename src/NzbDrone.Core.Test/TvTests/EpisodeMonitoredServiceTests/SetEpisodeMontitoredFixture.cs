@@ -9,10 +9,10 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
+namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
 {
     [TestFixture]
-    public class SetEpisodeMontitoredFixture : CoreTest<SeriesScannedHandler>
+    public class SetEpisodeMontitoredFixture : CoreTest<EpisodeMonitoredService>
     {
         private Series _series;
         private List<Episode> _episodes;
@@ -56,16 +56,6 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
                   .Returns(_episodes);
         }
 
-        private void WithSeriesAddedEvent(AddSeriesOptions options)
-        {
-            _series.AddOptions = options;
-        }
-
-        private void TriggerSeriesScannedEvent()
-        {
-            Subject.Handle(new SeriesScannedEvent(_series));
-        }
-
         private void GivenSpecials()
         {
             foreach (var episode in _episodes)
@@ -79,8 +69,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
         [Test]
         public void should_be_able_to_monitor_all_episodes()
         {
-            WithSeriesAddedEvent(new AddSeriesOptions());
-            TriggerSeriesScannedEvent();
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions());
 
             Mocker.GetMock<IEpisodeService>()
                   .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => e.Monitored))));
@@ -89,13 +78,13 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
         [Test]
         public void should_be_able_to_monitor_missing_episodes_only()
         {
-            WithSeriesAddedEvent(new AddSeriesOptions
-                                 {
-                                     IgnoreEpisodesWithFiles = true,
-                                     IgnoreEpisodesWithoutFiles = false
-                                 });
+            var monitoringOptions = new MonitoringOptions
+                                    {
+                                        IgnoreEpisodesWithFiles = true,
+                                        IgnoreEpisodesWithoutFiles = false
+                                    };
 
-            TriggerSeriesScannedEvent();
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
             VerifyMonitored(e => !e.HasFile);
             VerifyNotMonitored(e => e.HasFile);
@@ -104,13 +93,13 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
         [Test]
         public void should_be_able_to_monitor_new_episodes_only()
         {
-            WithSeriesAddedEvent(new AddSeriesOptions
+            var monitoringOptions = new MonitoringOptions
             {
                 IgnoreEpisodesWithFiles = true,
                 IgnoreEpisodesWithoutFiles = true
-            });
+            };
 
-            TriggerSeriesScannedEvent();
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
             VerifyMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow));
             VerifyMonitored(e => !e.AirDateUtc.HasValue);
@@ -122,13 +111,13 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
         {
             GivenSpecials();
 
-            WithSeriesAddedEvent(new AddSeriesOptions
+            var monitoringOptions = new MonitoringOptions
             {
                 IgnoreEpisodesWithFiles = true,
                 IgnoreEpisodesWithoutFiles = false
-            });
+            };
 
-            TriggerSeriesScannedEvent();
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
             VerifyMonitored(e => !e.HasFile);
             VerifyNotMonitored(e => e.HasFile);
@@ -139,13 +128,14 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
         {
             GivenSpecials();
 
-            WithSeriesAddedEvent(new AddSeriesOptions
+            var monitoringOptions = new MonitoringOptions
             {
                 IgnoreEpisodesWithFiles = true,
                 IgnoreEpisodesWithoutFiles = true
-            });
+            };
 
-            TriggerSeriesScannedEvent();
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
             VerifyMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow));
             VerifyMonitored(e => !e.AirDateUtc.HasValue);
             VerifyNotMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow));
@@ -174,15 +164,26 @@ namespace NzbDrone.Core.Test.TvTests.SeriesAddedHandlerTests
                   .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
                   .Returns(_episodes);
 
-            WithSeriesAddedEvent(new AddSeriesOptions
+            var monitoringOptions = new MonitoringOptions
             {
                 IgnoreEpisodesWithoutFiles = true
-            });
-            
-            TriggerSeriesScannedEvent();
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
             VerifySeasonMonitored(n => n.SeasonNumber == 2);
             VerifySeasonNotMonitored(n => n.SeasonNumber == 1);
+        }
+
+        [Test]
+        public void should_ignore_episodes_when_season_is_not_monitored()
+        {
+            _series.Seasons.ForEach(s => s.Monitored = false);
+
+            Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions());
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
         }
 
         private void VerifyMonitored(Func<Episode, bool> predicate)

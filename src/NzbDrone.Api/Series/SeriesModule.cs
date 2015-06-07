@@ -160,11 +160,17 @@ namespace NzbDrone.Api.Series
 
         private void LinkSeriesStatistics(SeriesResource resource, SeriesStatistics seriesStatistics)
         {
+            resource.TotalEpisodeCount = seriesStatistics.TotalEpisodeCount;
             resource.EpisodeCount = seriesStatistics.EpisodeCount;
             resource.EpisodeFileCount = seriesStatistics.EpisodeFileCount;
             resource.NextAiring = seriesStatistics.NextAiring;
             resource.PreviousAiring = seriesStatistics.PreviousAiring;
             resource.SizeOnDisk = seriesStatistics.SizeOnDisk;
+
+            foreach (var season in resource.Seasons)
+            {
+                season.Statistics = seriesStatistics.SeasonStatistics.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber).InjectTo<SeasonStatisticsResource>();
+            }
         }
 
         private void PopulateAlternateTitles(List<SeriesResource> resources)

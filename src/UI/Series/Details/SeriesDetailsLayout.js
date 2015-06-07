@@ -127,6 +127,7 @@ module.exports = Marionette.Layout.extend({
         var monitored = this.model.get('monitored');
 
         this.ui.monitored.removeAttr('data-idle-icon');
+        this.ui.monitored.removeClass('fa-spin icon-sonarr-spinner');
 
         if (monitored) {
             this.ui.monitored.addClass('icon-sonarr-monitored');
