@@ -59,7 +59,8 @@ module.exports = Marionette.Layout.extend({
             cell      : ApprovalStatusCell,
             sortable  : true,
             sortType  : 'fixed',
-            direction : 'ascending'
+            direction : 'ascending',
+            title     : 'Release Rejected'
         },
         {
             name      : 'download',

@@ -93,7 +93,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (localEpisode.Episodes.Empty())
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Unable to find episodes"));
+                        decision = new ImportDecision(localEpisode, new Rejection("Unable to parse episode(s) from filename"));
                     }
                     else
                     {
