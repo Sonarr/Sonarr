@@ -892,6 +892,7 @@
     <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
+    <Compile Include="Tv\EpisodeAddedService.cs" />
     <Compile Include="Tv\EpisodeCutoffService.cs" />
     <Compile Include="Tv\EpisodeMonitoredService.cs" />
     <Compile Include="Tv\EpisodeRepository.cs">
