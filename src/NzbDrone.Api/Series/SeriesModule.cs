@@ -167,9 +167,12 @@ namespace NzbDrone.Api.Series
             resource.PreviousAiring = seriesStatistics.PreviousAiring;
             resource.SizeOnDisk = seriesStatistics.SizeOnDisk;
 
-            foreach (var season in resource.Seasons)
+            if (seriesStatistics.SeasonStatistics != null)
             {
-                season.Statistics = seriesStatistics.SeasonStatistics.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber).InjectTo<SeasonStatisticsResource>();
+               foreach (var season in resource.Seasons)
+                {
+                    season.Statistics = seriesStatistics.SeasonStatistics.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber).InjectTo<SeasonStatisticsResource>();
+                }
             }
         }
 
