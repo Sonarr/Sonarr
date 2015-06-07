@@ -25,7 +25,8 @@ namespace NzbDrone.Api.Series
                                 IHandle<SeriesUpdatedEvent>,       
                                 IHandle<SeriesEditedEvent>,  
                                 IHandle<SeriesDeletedEvent>,
-                                IHandle<SeriesRenamedEvent>
+                                IHandle<SeriesRenamedEvent>,
+                                IHandle<MediaCoversUpdatedEvent>
 
     {
         private readonly ISeriesService _seriesService;
@@ -221,6 +222,11 @@ namespace NzbDrone.Api.Series
         }
 
         public void Handle(SeriesRenamedEvent message)
+        {
+            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+        }
+
+        public void Handle(MediaCoversUpdatedEvent message)
         {
             BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
         }
