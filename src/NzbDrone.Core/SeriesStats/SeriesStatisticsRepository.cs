@@ -75,7 +75,8 @@ namespace NzbDrone.Core.SeriesStats
         private String GetEpisodeFilesJoin()
         {
             return @"LEFT OUTER JOIN EpisodeFiles
-                     ON EpisodeFiles.SeriesId = Episodes.SeriesId";
+                     ON EpisodeFiles.SeriesId = Episodes.SeriesId
+                     AND EpisodeFiles.SeasonNumber = Episodes.SeasonNumber";
         }
     }
 }
