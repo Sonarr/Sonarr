@@ -11,7 +11,8 @@ Handlebars.registerHelper('poster', function() {
         if (!poster[0].url.match(/^https?:\/\//)) {
             return new Handlebars.SafeString('<img class="series-poster x-series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url, 250)));
         } else {
-            return new Handlebars.SafeString('<img class="series-poster x-series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, poster[0].url)));
+            var url = poster[0].url.replace(/^https?\:/, '');
+            return new Handlebars.SafeString('<img class="series-poster x-series-poster" {0}>'.format(Handlebars.helpers.defaultImg.call(null, url)));
         }
     }
 
