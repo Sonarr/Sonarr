@@ -181,7 +181,7 @@ module.exports = Marionette.Layout.extend({
         }
 
         if (_.any(selected, function (model) {
-                return !model.has('season');
+                return !model.has('seasonNumber');
             })) {
 
             this._showErrorMessage('Season must be chosen for each selected file');
