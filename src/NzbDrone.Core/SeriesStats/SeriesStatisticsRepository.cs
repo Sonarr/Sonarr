@@ -7,8 +7,8 @@ namespace NzbDrone.Core.SeriesStats
 {
     public interface ISeriesStatisticsRepository
     {
-        List<SeriesStatistics> SeriesStatistics();
-        SeriesStatistics SeriesStatistics(Int32 seriesId);
+        List<SeasonStatistics> SeriesStatistics();
+        List<SeasonStatistics> SeriesStatistics(Int32 seriesId);
     }
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.SeriesStats
             _database = database;
         }
 
-        public List<SeriesStatistics> SeriesStatistics()
+        public List<SeasonStatistics> SeriesStatistics()
         {
             var mapper = _database.GetDataMapper();
 
@@ -32,10 +32,10 @@ namespace NzbDrone.Core.SeriesStats
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
-            return mapper.Query<SeriesStatistics>(queryText);
+            return mapper.Query<SeasonStatistics>(queryText);
         }
 
-        public SeriesStatistics SeriesStatistics(Int32 seriesId)
+        public List<SeasonStatistics> SeriesStatistics(Int32 seriesId)
         {
             var mapper = _database.GetDataMapper();
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.SeriesStats
             sb.AppendLine(GetGroupByClause());
             var queryText = sb.ToString();
 
-            return mapper.Find<SeriesStatistics>(queryText);
+            return mapper.Query<SeasonStatistics>(queryText);
         }
 
         private String GetSelectClause()
@@ -57,23 +57,26 @@ namespace NzbDrone.Core.SeriesStats
             return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk FROM
                      (SELECT
                      Episodes.SeriesId,
+                     Episodes.SeasonNumber,
+                     SUM(CASE WHEN AirdateUtc <= @currentDate OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS TotalEpisodeCount,
                      SUM(CASE WHEN (Monitored = 1 AND AirdateUtc <= @currentDate) OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeCount,
                      SUM(CASE WHEN EpisodeFileId > 0 THEN 1 ELSE 0 END) AS EpisodeFileCount,
                      MIN(CASE WHEN AirDateUtc < @currentDate OR EpisodeFileId > 0 OR Monitored = 0 THEN NULL ELSE AirDateUtc END) AS NextAiringString,
                      MAX(CASE WHEN AirDateUtc >= @currentDate OR EpisodeFileId = 0 AND Monitored = 0 THEN NULL ELSE AirDateUtc END) AS PreviousAiringString
                      FROM Episodes
-                     GROUP BY Episodes.SeriesId) as Episodes";
+                     GROUP BY Episodes.SeriesId, Episodes.SeasonNumber) as Episodes";
         }
 
         private String GetGroupByClause()
         {
-            return "GROUP BY Episodes.SeriesId";
+            return "GROUP BY Episodes.SeriesId, Episodes.SeasonNumber";
         }
 
         private String GetEpisodeFilesJoin()
         {
             return @"LEFT OUTER JOIN EpisodeFiles
-                     ON EpisodeFiles.SeriesId = Episodes.SeriesId";
+                     ON EpisodeFiles.SeriesId = Episodes.SeriesId
+                     AND EpisodeFiles.SeasonNumber = Episodes.SeasonNumber";
         }
     }
 }

@@ -30,6 +30,16 @@ namespace NzbDrone.Core
             return Convert.ToInt64(gigabytes * 1024L * 1024L * 1024L);
         }
 
+        public static Int64 Megabytes(this double megabytes)
+        {
+            return Convert.ToInt64(megabytes * 1024L * 1024L);
+        }
+
+        public static Int64 Gigabytes(this double gigabytes)
+        {
+            return Convert.ToInt64(gigabytes * 1024L * 1024L * 1024L);
+        }
+
 
         public static Int64 Round(this long number, long level)
         {

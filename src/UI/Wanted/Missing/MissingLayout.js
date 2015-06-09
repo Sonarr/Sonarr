@@ -4,6 +4,7 @@ var vent = require('../../vent');
 var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var MissingCollection = require('./MissingCollection');
+var SelectAllCell = require('../../Cells/SelectAllCell');
 var SeriesTitleCell = require('../../Cells/SeriesTitleCell');
 var EpisodeNumberCell = require('../../Cells/EpisodeNumberCell');
 var EpisodeTitleCell = require('../../Cells/EpisodeTitleCell');
@@ -34,7 +35,7 @@ module.exports = Marionette.Layout.extend({
     columns : [
         {
             name       : '',
-            cell       : 'select-row',
+            cell       : SelectAllCell,
             headerCell : 'select-all',
             sortable   : false
         },

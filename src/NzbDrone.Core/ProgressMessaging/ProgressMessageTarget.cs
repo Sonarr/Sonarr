@@ -15,8 +15,6 @@ namespace NzbDrone.Core.ProgressMessaging
         private readonly IManageCommandQueue _commandQueueManager;
         private static LoggingRule _rule;
 
-        private const string REENTRY_LOCK = "ProgressMessagingLock";
-
         public ProgressMessageTarget(IEventAggregator eventAggregator, IManageCommandQueue commandQueueManager)
         {
             _eventAggregator = eventAggregator;
@@ -25,29 +23,20 @@ namespace NzbDrone.Core.ProgressMessaging
 
         protected override void Write(LogEventInfo logEvent)
         {
-            if (!ReentryPreventionCheck()) return;
+            var command = ProgressMessageContext.CommandModel;
 
-            var command = GetCurrentCommand();
-
-            if (IsClientMessage(logEvent, command))
+            if (!IsClientMessage(logEvent, command)) return;
+            
+            if (!ProgressMessageContext.LockReentrancy()) return;
+            try
             {
                 _commandQueueManager.SetMessage(command, logEvent.FormattedMessage);
                 _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
             }
-
-            MappedDiagnosticsContext.Remove(REENTRY_LOCK);
-        }
-
-        private CommandModel GetCurrentCommand()
-        {
-            var commandId = MappedDiagnosticsContext.Get("CommandId");
-
-            if (String.IsNullOrWhiteSpace(commandId))
+            finally
             {
-                return null;
+                ProgressMessageContext.UnlockReentrancy();
             }
-
-            return _commandQueueManager.Get(Convert.ToInt32(commandId));
         }
 
         private bool IsClientMessage(LogEventInfo logEvent, CommandModel command)
@@ -58,20 +47,6 @@ namespace NzbDrone.Core.ProgressMessaging
             }
 
             return logEvent.Properties.ContainsKey("Status");
-        }
-
-        private bool ReentryPreventionCheck()
-        {
-            var reentryLock = MappedDiagnosticsContext.Get(REENTRY_LOCK);
-            var commandId = MappedDiagnosticsContext.Get("CommandId");
-
-            if (reentryLock.IsNullOrWhiteSpace() || reentryLock != commandId)
-            {
-                MappedDiagnosticsContext.Set(REENTRY_LOCK, MappedDiagnosticsContext.Get("CommandId"));
-                return true;
-            }
-
-            return false;
         }
 
         public void Handle(ApplicationStartedEvent message)

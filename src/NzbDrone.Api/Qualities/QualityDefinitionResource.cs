@@ -8,11 +8,11 @@ namespace NzbDrone.Api.Qualities
     {
         public Quality Quality { get; set; }
 
-        public String Title { get; set; }
+        public string Title { get; set; }
 
-        public Int32 Weight { get; set; }
+        public int Weight { get; set; }
 
-        public Int32 MinSize { get; set; }
-        public Int32 MaxSize { get; set; }
+        public double? MinSize { get; set; }
+        public double? MaxSize { get; set; }
     }
 }

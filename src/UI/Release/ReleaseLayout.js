@@ -50,7 +50,8 @@ module.exports = Marionette.Layout.extend({
         {
             name  : 'rejections',
             label : '',
-            cell  : ApprovalStatusCell
+            cell  : ApprovalStatusCell,
+            title : 'Release Rejected'
         }
     ],
 

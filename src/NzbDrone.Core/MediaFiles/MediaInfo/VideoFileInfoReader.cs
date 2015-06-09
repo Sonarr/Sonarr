@@ -39,13 +39,35 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfo = new MediaInfo();
                 _logger.Debug("Getting media info from {0}", filename);
 
-                mediaInfo.Option("ParseSpeed", "0.2");
+                mediaInfo.Option("ParseSpeed", "0.0");
 
                 int open;
 
                 using (var stream = _diskProvider.OpenReadStream(filename))
                 {
                     open = mediaInfo.Open(stream);
+                }
+
+                if (open != 0)
+                {
+                    int audioRuntime;
+                    int videoRuntime;
+                    int generalRuntime;
+
+                    //Runtime
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
+                    Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
+
+                    if (audioRuntime == 0 && videoRuntime == 0 && generalRuntime == 0)
+                    {
+                        mediaInfo.Option("ParseSpeed", "1.0");
+
+                        using (var stream = _diskProvider.OpenReadStream(filename))
+                        {
+                            open = mediaInfo.Open(stream);
+                        }
+                    }
                 }
 
                 if (open != 0)

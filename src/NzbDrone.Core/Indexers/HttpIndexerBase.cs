@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Indexers
     public abstract class HttpIndexerBase<TSettings> : IndexerBase<TSettings>
         where TSettings : IProviderConfig, new()
     {
-        private const Int32 MaxNumResultsPerQuery = 1000;
+        protected const Int32 MaxNumResultsPerQuery = 1000;
 
         private readonly IHttpClient _httpClient;
 
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Indexers
         public bool SupportsPaging { get { return PageSize > 0; } }
 
         public virtual Int32 PageSize { get { return 0; } }
+        public virtual TimeSpan RateLimit { get { return TimeSpan.FromSeconds(2); } }
 
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();
@@ -190,11 +192,21 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual IList<ReleaseInfo> FetchPage(IndexerRequest request, IParseIndexerResponse parser)
         {
-            _logger.Debug("Downloading Feed " + request.Url);
-
-            var response = new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
+            var response = FetchIndexerResponse(request);
 
             return parser.ParseResponse(response).ToList();
+        }
+
+        protected virtual IndexerResponse FetchIndexerResponse(IndexerRequest request)
+        {
+            _logger.Debug("Downloading Feed " + request.Url);
+
+            if (request.HttpRequest.RateLimit < RateLimit)
+            {
+                request.HttpRequest.RateLimit = RateLimit;
+            }
+
+            return new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
         }
 
         protected override void Test(List<ValidationFailure> failures)
@@ -212,7 +224,7 @@ namespace NzbDrone.Core.Indexers
 
                 if (releases.Empty())
                 {
-                    return new ValidationFailure("Url", "No results were returned from your indexer, please check your settings.");
+                    return new ValidationFailure(string.Empty, "No results were returned from your indexer, please check your settings.");
                 }
             }
             catch (ApiKeyException)
@@ -225,11 +237,17 @@ namespace NzbDrone.Core.Indexers
             {
                 _logger.Warn("Request limit reached");
             }
+            catch (UnsupportedFeedException ex)
+            {
+                _logger.WarnException("Indexer feed is not supported: " + ex.Message, ex);
+
+                return new ValidationFailure(string.Empty, "Indexer feed is not supported: " + ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
 
-                return new ValidationFailure("Url", "Unable to connect to indexer, check the log for more details");
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }
 
             return null;

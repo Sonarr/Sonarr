@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Validation
                 }
 
                 return parsedAddress.AddressFamily == AddressFamily.InterNetwork;
-            }).WithMessage("Must be a valid IPv4 Address");
+            }).WithMessage("Must contain wildcard (*) or a valid IPv4 Address");
         }
 
         public static IRuleBuilderOptions<T, string> NotListenAllIp4Address<T>(this IRuleBuilder<T, string> ruleBuilder)

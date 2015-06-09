@@ -93,6 +93,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="CookComputing.XmlRpc, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -160,6 +164,7 @@
     <Compile Include="Datastore\BasicRepository.cs" />
     <Compile Include="Datastore\ConnectionStringFactory.cs" />
     <Compile Include="Datastore\Converters\BooleanIntConverter.cs" />
+    <Compile Include="Datastore\Converters\DoubleConverter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
     <Compile Include="Datastore\Converters\TimeSpanConverter.cs" />
@@ -257,9 +262,11 @@
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
+    <Compile Include="Datastore\Migration\085_expand_transmission_urlbase.cs" />
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
+    <Compile Include="Datastore\Migration\084_update_quality_minmax_size.cs" />
     <Compile Include="Datastore\Migration\083_additonal_blacklist_columns.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
@@ -366,6 +373,11 @@
     <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackhole.cs" />
     <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackholeSettings.cs" />
     <Compile Include="Download\Clients\TorrentSeedConfiguration.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrent.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentPriority.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentProxy.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentSettings.cs" />
+    <Compile Include="Download\Clients\rTorrent\RTorrentTorrent.cs" />
     <Compile Include="Download\Clients\Transmission\Transmission.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionException.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionProxy.cs" />
@@ -476,6 +488,11 @@
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
+    <Compile Include="Indexers\HDBits\HDBits.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsApi.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsParser.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsRequestGenerator.cs" />
+    <Compile Include="Indexers\HDBits\HDBitsSettings.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\IndexerBase.cs" />
@@ -507,6 +524,12 @@
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\HttpIndexerBase.cs" />
+    <Compile Include="Indexers\Rarbg\Rarbg.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgRequestGenerator.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgTorrent.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgSettings.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgParser.cs" />
+    <Compile Include="Indexers\Rarbg\RarbgTokenProvider.cs" />
     <Compile Include="Indexers\RssIndexerRequestGenerator.cs" />
     <Compile Include="Indexers\RssParser.cs" />
     <Compile Include="Indexers\RssSyncCommand.cs" />
@@ -515,6 +538,12 @@
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />
+    <Compile Include="Indexers\TorrentRss\TorrentRssIndexer.cs" />
+    <Compile Include="Indexers\TorrentRss\TorrentRssIndexerParserSettings.cs" />
+    <Compile Include="Indexers\TorrentRss\TorrentRssIndexerRequestGenerator.cs" />
+    <Compile Include="Indexers\TorrentRss\TorrentRssIndexerSettings.cs" />
+    <Compile Include="Indexers\TorrentRss\TorrentRssParserFactory.cs" />
+    <Compile Include="Indexers\TorrentRss\TorrentRssSettingsDetector.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
     <Compile Include="Indexers\Torznab\Torznab.cs" />
     <Compile Include="Indexers\Torznab\TorznabException.cs" />
@@ -600,6 +629,7 @@
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
+    <Compile Include="MediaFiles\Events\EpisodeFolderCreatedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeImportedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesRenamedEvent.cs" />
     <Compile Include="MediaFiles\Events\SeriesScanSkippedEvent.cs" />
@@ -680,8 +710,13 @@
     <Compile Include="Metadata\MetadataType.cs" />
     <Compile Include="MetadataSource\IProvideSeriesInfo.cs" />
     <Compile Include="MetadataSource\ISearchForNewSeries.cs" />
+    <Compile Include="Notifications\Plex\Models\PlexIdentity.cs" />
+    <Compile Include="Notifications\Plex\Models\PlexPreferences.cs" />
+    <Compile Include="Notifications\Plex\Models\PlexSectionItem.cs" />
+    <Compile Include="Notifications\Plex\Models\PlexSection.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
+    <Compile Include="Notifications\Plex\PlexClientService.cs" />
     <Compile Include="Notifications\Synology\SynologyException.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
@@ -691,6 +726,7 @@
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
     <Compile Include="Profiles\ProfileRepository.cs" />
+    <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
@@ -733,11 +769,10 @@
     <Compile Include="Notifications\Plex\PlexClientSettings.cs" />
     <Compile Include="Notifications\Plex\PlexError.cs" />
     <Compile Include="Notifications\Plex\PlexException.cs" />
-    <Compile Include="Notifications\Plex\PlexSection.cs" />
     <Compile Include="Notifications\Plex\PlexServer.cs" />
     <Compile Include="Notifications\Plex\PlexServerProxy.cs" />
     <Compile Include="Notifications\Plex\PlexServerSettings.cs" />
-    <Compile Include="Notifications\Plex\PlexService.cs" />
+    <Compile Include="Notifications\Plex\PlexServerService.cs" />
     <Compile Include="Notifications\Plex\PlexUser.cs" />
     <Compile Include="Notifications\Prowl\InvalidApiKeyException.cs" />
     <Compile Include="Notifications\Prowl\Prowl.cs">
@@ -843,6 +878,7 @@
     </Compile>
     <Compile Include="RootFolders\UnmappedFolder.cs" />
     <Compile Include="Security.cs" />
+    <Compile Include="SeriesStats\SeasonStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
@@ -865,7 +901,9 @@
     <Compile Include="Tv\Commands\MoveSeriesCommand.cs" />
     <Compile Include="Tv\Commands\RefreshSeriesCommand.cs" />
     <Compile Include="Tv\Episode.cs" />
+    <Compile Include="Tv\EpisodeAddedService.cs" />
     <Compile Include="Tv\EpisodeCutoffService.cs" />
+    <Compile Include="Tv\EpisodeMonitoredService.cs" />
     <Compile Include="Tv\EpisodeRepository.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -877,6 +915,7 @@
     <Compile Include="Tv\Events\SeriesMovedEvent.cs" />
     <Compile Include="Tv\Events\SeriesRefreshStartingEvent.cs" />
     <Compile Include="Tv\Events\SeriesUpdatedEvent.cs" />
+    <Compile Include="Tv\MonitoringOptions.cs" />
     <Compile Include="Tv\MoveSeriesService.cs" />
     <Compile Include="Tv\Ratings.cs" />
     <Compile Include="Tv\RefreshEpisodeService.cs" />

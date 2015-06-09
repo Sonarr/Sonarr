@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
 using NzbDrone.Host;
@@ -86,7 +87,8 @@ namespace NzbDrone.SysTray
 
         private void OnExit(object sender, EventArgs e)
         {
-            Application.Exit();
+            LogManager.Configuration = null;
+            Environment.Exit(0);
         }
 
         private void LaunchBrowser(object sender, EventArgs e)

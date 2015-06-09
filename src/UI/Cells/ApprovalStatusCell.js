@@ -23,7 +23,7 @@ module.exports = Backgrid.Cell.extend({
             content   : html,
             html      : true,
             trigger   : 'hover',
-            title     : 'Release Rejected',
+            title     : this.column.get('title'),
             placement : 'left',
             container : this.$el
         });

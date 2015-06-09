@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
         [Test]
         public void should_parse_recent_feed_from_fanzub()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/fanzub.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Fanzub/fanzub.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

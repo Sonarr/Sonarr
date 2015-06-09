@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Profile>().RegisterModel("Profiles");
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
-            Mapper.Entity<SeriesStatistics>().MapResultSet();
+            Mapper.Entity<SeasonStatistics>().MapResultSet();
             Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");
 
@@ -114,6 +114,7 @@ namespace NzbDrone.Core.Datastore
             RegisterProviderSettingConverter();
 
             MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Double), new DoubleConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(DateTime), new UtcConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());

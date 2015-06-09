@@ -27,8 +27,14 @@ namespace NzbDrone.Api.Config
             GetResourceById = GetHostConfig;
             UpdateResource = SaveHostConfig;
 
-            SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");        
+            SharedValidator.RuleFor(c => c.BindAddress)
+                           .ValidIp4Address()
+                           .NotListenAllIp4Address()
+                           .When(c => c.BindAddress != "*");
+
             SharedValidator.RuleFor(c => c.Port).ValidPort();
+
+            SharedValidator.RuleFor(c => c.UrlBase).ValidUrlBase();
 
             SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod != AuthenticationType.None);
             SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod != AuthenticationType.None);
@@ -36,12 +42,8 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslCertHash).NotEmpty().When(c => c.EnableSsl && OsInfo.IsWindows);
 
+            SharedValidator.RuleFor(c => c.Branch).NotEmpty().WithMessage("Branch name is required, 'master' is the default");
             SharedValidator.RuleFor(c => c.UpdateScriptPath).IsValidPath().When(c => c.UpdateMechanism == UpdateMechanism.Script);
-
-            SharedValidator.RuleFor(c => c.BindAddress)
-                           .ValidIp4Address()
-                           .NotListenAllIp4Address()
-                           .When(c => c.BindAddress != "*");
         }
 
         private HostConfigResource GetHostConfig()

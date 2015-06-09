@@ -47,6 +47,7 @@ namespace NzbDrone.Common.Http
         public bool AllowAutoRedirect { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
         public bool StoreResponseCookie { get; set; }
+        public TimeSpan RateLimit { get; set; }
 
         public override string ToString()
         {
@@ -68,6 +69,11 @@ namespace NzbDrone.Common.Http
             }
 
             _segments.Add(key, value);
+        }
+
+        public void AddQueryParam(string segment, string value)
+        {
+            UriBuilder.SetQueryParam(segment, value);
         }
 
         public void AddCookie(string key, string value)

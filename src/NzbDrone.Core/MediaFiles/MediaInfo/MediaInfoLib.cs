@@ -2,10 +2,20 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Instrumentation;
+using NLog;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
+    [Flags]
+    public enum BufferStatus
+    {
+        Accepted = 1,
+        Filled = 2,
+        Updated = 4,
+        Finalized = 8
+    }
+
     public enum StreamKind
     {
         General,
@@ -14,7 +24,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         Text,
         Other,
         Image,
-        Menu,
+        Menu
     }
 
     public enum InfoKind
@@ -48,6 +58,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
     public class MediaInfo : IDisposable
     {
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(MediaInfo));
         private IntPtr _handle;
 
         public bool MustUseAnsi { get; set; }
@@ -172,31 +183,40 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public int Open(Stream stream)
         {
-            var buffer = new byte[64 * 1024];
-
             var isValid = (int)MediaInfo_Open_Buffer_Init(_handle, stream.Length, 0);
             if (isValid == 1)
             {
+                var buffer = new byte[16 * 1024];
+                long seekStart = 0;
+                long totalRead = 0;
                 int bufferRead;
 
                 do
                 {
                     bufferRead = stream.Read(buffer, 0, buffer.Length);
+                    totalRead += bufferRead;
 
-                    if (MediaInfo_Open_Buffer_Continue(_handle, buffer, (IntPtr)bufferRead) == (IntPtr)0)
+                    var status = (BufferStatus)MediaInfo_Open_Buffer_Continue(_handle, buffer, (IntPtr)bufferRead);
+                    
+                    if (status.HasFlag(BufferStatus.Finalized) || status <= 0 || bufferRead == 0)
                     {
+                        Logger.Trace("Read file offset {0}-{1} ({2} bytes)", seekStart, stream.Position, stream.Position - seekStart);
                         break;
                     }
 
                     var seekPos = MediaInfo_Open_Buffer_Continue_GoTo_Get(_handle);
                     if (seekPos != -1)
                     {
+                        Logger.Trace("Read file offset {0}-{1} ({2} bytes)", seekStart, stream.Position, stream.Position - seekStart);
                         seekPos = stream.Seek(seekPos, SeekOrigin.Begin);
+                        seekStart = seekPos;
                         MediaInfo_Open_Buffer_Init(_handle, stream.Length, seekPos);
                     }
                 } while (bufferRead > 0);
 
                 MediaInfo_Open_Buffer_Finalize(_handle);
+
+                Logger.Trace("Read a total of {0} bytes ({1:0.0}%)", totalRead, totalRead * 100.0 / stream.Length);
             }
 
             return isValid;

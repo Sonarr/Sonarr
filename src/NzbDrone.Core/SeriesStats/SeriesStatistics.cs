@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.SeriesStats
 {
     public class SeriesStatistics : ResultSet
     {
-        public Int32 SeriesId { get; set; }
-        public String NextAiringString { get; set; }
-        public String PreviousAiringString { get; set; }
-        public Int32 EpisodeFileCount { get; set; }
-        public Int32 EpisodeCount { get; set; }
-        public Int64 SizeOnDisk { get; set; }
+        public int SeriesId { get; set; }
+        public string NextAiringString { get; set; }
+        public string PreviousAiringString { get; set; }
+        public int EpisodeFileCount { get; set; }
+        public int EpisodeCount { get; set; }
+        public int TotalEpisodeCount { get; set; }
+        public long SizeOnDisk { get; set; }
+        public List<SeasonStatistics> SeasonStatistics { get; set; }
 
         public DateTime? NextAiring
         {

@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).GreaterThan(0);
 
+            RuleFor(c => c.UrlBase).ValidUrlBase();
+
             RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$").WithMessage("Allowed characters a-z and -");
         }
     }
@@ -25,6 +27,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             Host = "localhost";
             Port = 9091;
+            UrlBase = "/transmission/";
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -33,7 +36,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox)]
         public Int32 Port { get; set; }
 
-        [FieldDefinition(2, Label = "Url Base", Type = FieldType.Textbox, Advanced = true, HelpText = "Adds a prefix to the transmission rpc url, see http://[host]:[port]/[urlBase]/transmission/rpc")]
+        [FieldDefinition(2, Label = "Url Base", Type = FieldType.Textbox, Advanced = true, HelpText = "Adds a prefix to the transmission rpc url, eg http://[host]:[port]/[urlBase]/rpc, defaults to '/transmission/'")]
         public String UrlBase { get; set; }
 
         [FieldDefinition(3, Label = "Username", Type = FieldType.Textbox)]

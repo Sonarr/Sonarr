@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
         [Test]
         public void should_parse_recent_feed_from_Torrentleech()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/Torrentleech.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Torrentleech/Torrentleech.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

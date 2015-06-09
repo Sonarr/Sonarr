@@ -16,6 +16,7 @@ var QualityCell = require('./Cells/QualityCell');
 var FileSizeCell = require('../Cells/FileSizeCell');
 var ApprovalStatusCell = require('../Cells/ApprovalStatusCell');
 var ManualImportCollection = require('./ManualImportCollection');
+var Messenger = require('../Shared/Messenger');
 
 module.exports = Marionette.Layout.extend({
     className : 'modal-lg',
@@ -84,7 +85,8 @@ module.exports = Marionette.Layout.extend({
             cell       : ApprovalStatusCell,
             sortable   : false,
             sortType   : 'fixed',
-            direction  : 'ascending'
+            direction  : 'ascending',
+            title      : 'Import Rejected'
         }
     ],
 
@@ -170,6 +172,30 @@ module.exports = Marionette.Layout.extend({
             return;
         }
 
+        if (_.any(selected, function (model) {
+                return !model.has('series');
+            })) {
+
+            this._showErrorMessage('Series must be chosen for each selected file');
+            return;
+        }
+
+        if (_.any(selected, function (model) {
+                return !model.has('seasonNumber');
+            })) {
+
+            this._showErrorMessage('Season must be chosen for each selected file');
+            return;
+        }
+
+        if (_.any(selected, function (model) {
+                return !model.has('episodes') || model.get('episodes').length === 0;
+            })) {
+
+            this._showErrorMessage('One or more episodes must be chosen for each selected file');
+            return;
+        }
+
         CommandController.Execute('manualImport', {
             name  : 'manualImport',
             files : _.map(selected, function (file) {
@@ -214,5 +240,13 @@ module.exports = Marionette.Layout.extend({
         else {
             this.ui.importButton.removeAttr('disabled');
         }
+    },
+
+    _showErrorMessage : function (message) {
+        Messenger.show({
+            message   : message,
+            type      : 'error',
+            hideAfter : 5
+        });
     }
 });

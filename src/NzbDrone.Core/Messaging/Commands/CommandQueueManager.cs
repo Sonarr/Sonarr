@@ -78,10 +78,10 @@ namespace NzbDrone.Core.Messaging.Commands
             };
 
             _logger.Trace("Inserting new command: {0}", commandModel.Name);
-            
+
             _repo.Insert(commandModel);
-            _commandQueue.Add(commandModel);
             _commandCache.Set(commandModel.Id.ToString(), commandModel);
+            _commandQueue.Add(commandModel);
 
             return commandModel;
         }
@@ -150,14 +150,15 @@ namespace NzbDrone.Core.Messaging.Commands
         public void CleanCommands()
         {
             _logger.Trace("Cleaning up old commands");
-            _repo.Trim();
-
-            var old = _commandCache.Values.Where(c => c.EndedAt < DateTime.UtcNow.AddMinutes(5));
+            
+            var old = _commandCache.Values.Where(c => c.EndedAt < DateTime.UtcNow.AddMinutes(-5));
 
             foreach (var command in old)
             {
                 _commandCache.Remove(command.Id.ToString());
             }
+
+            _repo.Trim();
         }
 
         private dynamic GetCommand(string commandName)

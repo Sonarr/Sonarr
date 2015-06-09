@@ -28,6 +28,7 @@ namespace NzbDrone.Api.Series
             }
         }
 
+        public Int32? TotalEpisodeCount { get; set; }
         public Int32? EpisodeCount { get; set; }
         public Int32? EpisodeFileCount { get; set; }
         public Int64? SizeOnDisk { get; set; }
@@ -68,6 +69,8 @@ namespace NzbDrone.Api.Series
         public HashSet<Int32> Tags { get; set; }
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
+
+        //TODO: Add series statistics as a property of the series (instead of individual properties)
 
         //Used to support legacy consumers
         public Int32 QualityProfileId

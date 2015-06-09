@@ -48,12 +48,12 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             catch (ThreadAbortException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.ErrorException("Thread aborted: " + ex.Message, ex);
                 Thread.ResetAbort();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.Message, ex);
+                _logger.Error("Unknown error in thread: " + ex.Message, ex);
             }
         }
 
@@ -69,9 +69,9 @@ namespace NzbDrone.Core.Messaging.Commands
                 _commandQueueManager.Start(commandModel);
                 BroadcastCommandUpdate(commandModel);
 
-                if (!MappedDiagnosticsContext.Contains("CommandId"))
+                if (ProgressMessageContext.CommandModel == null)
                 {
-                    MappedDiagnosticsContext.Set("CommandId", commandModel.Id.ToString());
+                    ProgressMessageContext.CommandModel = commandModel;
                 }
 
                 handler.Execute(command);
@@ -80,6 +80,7 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             catch (CommandFailedException ex)
             {
+                _commandQueueManager.SetMessage(commandModel, "Failed");
                 _commandQueueManager.Fail(commandModel, ex.Message, ex);
                 throw;
             }
@@ -95,9 +96,9 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 _eventAggregator.PublishEvent(new CommandExecutedEvent(commandModel));
 
-                if (MappedDiagnosticsContext.Get("CommandId") == commandModel.Id.ToString())
+                if (ProgressMessageContext.CommandModel == commandModel)
                 {
-                    MappedDiagnosticsContext.Remove("CommandId");
+                    ProgressMessageContext.CommandModel = null;
                 }
             }
 

@@ -7,11 +7,11 @@ namespace NzbDrone.Core.Notifications.Plex
 {
     public class PlexServer : NotificationBase<PlexServerSettings>
     {
-        private readonly IPlexService _plexService;
+        private readonly IPlexServerService _plexServerService;
 
-        public PlexServer(IPlexService plexService)
+        public PlexServer(IPlexServerService plexServerService)
         {
-            _plexService = plexService;
+            _plexServerService = plexServerService;
         }
 
         public override string Link
@@ -25,19 +25,19 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public override void OnDownload(DownloadMessage message)
         {
-            UpdateIfEnabled();
+            UpdateIfEnabled(message.Series);
         }
 
         public override void AfterRename(Series series)
         {
-            UpdateIfEnabled();
+            UpdateIfEnabled(series);
         }
 
-        private void UpdateIfEnabled()
+        private void UpdateIfEnabled(Series series)
         {
             if (Settings.UpdateLibrary)
             {
-                _plexService.UpdateLibrary(Settings);
+                _plexServerService.UpdateLibrary(series, Settings);
             }
         }
 
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             var failures = new List<ValidationFailure>();
 
-            failures.AddIfNotNull(_plexService.Test(Settings));
+            failures.AddIfNotNull(_plexServerService.Test(Settings));
 
             return new ValidationResult(failures);
         }

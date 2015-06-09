@@ -12,6 +12,7 @@ namespace NzbDrone.Common.Processes
 {
     public interface IProcessProvider
     {
+        int GetCurrentProcessId();
         ProcessInfo GetCurrentProcess();
         ProcessInfo GetProcessById(int id);
         List<ProcessInfo> FindProcessByName(string name);
@@ -38,6 +39,11 @@ namespace NzbDrone.Common.Processes
         public ProcessProvider(Logger logger)
         {
             _logger = logger;
+        }
+
+        public int GetCurrentProcessId()
+        {
+            return Process.GetCurrentProcess().Id;
         }
 
         public ProcessInfo GetCurrentProcess()

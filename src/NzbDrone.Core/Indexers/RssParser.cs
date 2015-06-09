@@ -156,6 +156,11 @@ namespace NzbDrone.Core.Indexers
         {
             var dateString = item.TryGetValue("pubDate");
 
+            if (dateString.IsNullOrWhiteSpace())
+            {
+                throw new UnsupportedFeedException("Rss feed must have a pubDate element with a valid publish date.");
+            }
+
             return XElementExtensions.ParseDate(dateString);
         }
 
@@ -229,11 +234,16 @@ namespace NzbDrone.Core.Indexers
             return channel.Elements("item");
         }
 
-        private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>\d+\.\d{1,2}|\d+\,\d+\.\d{1,2}|\d+)\W?(?<unit>[KMG]i?B)",
+        private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>(?:\d+,)*\d+(?:\.\d{1,2})?)\W?(?<unit>[KMG]i?B)(?![\w/])",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static Int64 ParseSize(String sizeString, Boolean defaultToBinaryPrefix)
         {
+            if (sizeString.All(char.IsDigit))
+            {
+                return Int64.Parse(sizeString);
+            }
+
             var match = ParseSizeRegex.Matches(sizeString);
 
             if (match.Count != 0)

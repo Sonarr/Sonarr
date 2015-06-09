@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
         [Test]
         public void should_parse_recent_feed_from_Nyaa()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/Nyaa.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Nyaa/Nyaa.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

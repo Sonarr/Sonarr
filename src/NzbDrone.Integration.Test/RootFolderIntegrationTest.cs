@@ -15,6 +15,7 @@ namespace NzbDrone.Integration.Test
         }
 
         [Test]
+        [Ignore("SignalR on CI seems unstable")]
         public void should_add_and_delete_root_folders()
         {
             ConnectSignalR();

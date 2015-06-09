@@ -31,7 +31,8 @@ module.exports = Marionette.Layout.extend({
         edit      : '.x-edit',
         refresh   : '.x-refresh',
         rename    : '.x-rename',
-        search    : '.x-search'
+        search    : '.x-search',
+        poster    : '.x-series-poster'
     },
 
     events : {
@@ -56,18 +57,12 @@ module.exports = Marionette.Layout.extend({
                 this._refresh();
             }
         });
+
+        this.listenTo(this.model,  'change:images', this._updateImages);
     },
 
     onShow : function() {
-        $('body').addClass('backdrop');
-        var fanArt = this._getFanArt();
-
-        if (fanArt) {
-            this._backstrech = $.backstretch(fanArt);
-        } else {
-            $('body').removeClass('backdrop');
-        }
-
+        this._showBackdrop();
         this._showSeasons();
         this._setMonitoredState();
         this._showInfo();
@@ -107,11 +102,11 @@ module.exports = Marionette.Layout.extend({
         reqres.removeHandler(reqres.Requests.GetEpisodeFileById);
     },
 
-    _getFanArt : function() {
-        var fanArt = _.where(this.model.get('images'), { coverType : 'fanart' });
+    _getImage : function(type) {
+        var image = _.where(this.model.get('images'), { coverType : type });
 
-        if (fanArt && fanArt[0]) {
-            return fanArt[0].url;
+        if (image && image[0]) {
+            return image[0].url;
         }
 
         return undefined;
@@ -127,6 +122,7 @@ module.exports = Marionette.Layout.extend({
         var monitored = this.model.get('monitored');
 
         this.ui.monitored.removeAttr('data-idle-icon');
+        this.ui.monitored.removeClass('fa-spin icon-sonarr-spinner');
 
         if (monitored) {
             this.ui.monitored.addClass('icon-sonarr-monitored');
@@ -230,5 +226,26 @@ module.exports = Marionette.Layout.extend({
         });
 
         vent.trigger(vent.Commands.OpenModalCommand, view);
+    },
+
+    _updateImages : function () {
+        var poster = this._getImage('poster');
+
+        if (poster) {
+            this.ui.poster.attr('src', poster);
+        }
+
+        this._showBackdrop();
+    },
+
+    _showBackdrop : function () {
+        $('body').addClass('backdrop');
+        var fanArt = this._getImage('fanart');
+
+        if (fanArt) {
+            this._backstrech = $.backstretch(fanArt);
+        } else {
+            $('body').removeClass('backdrop');
+        }
     }
 });

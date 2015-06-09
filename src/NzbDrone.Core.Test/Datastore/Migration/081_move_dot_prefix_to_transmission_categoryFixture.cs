@@ -11,7 +11,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class move_dot_prefix_to_transmission_category : MigrationTest<Core.Datastore.Migration.move_dot_prefix_to_transmission_category>
+    public class move_dot_prefix_to_transmission_categoryFixture : MigrationTest<Core.Datastore.Migration.move_dot_prefix_to_transmission_category>
     {
         [Test]
         public void should_not_fail_if_no_transmission()

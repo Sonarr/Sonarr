@@ -10,6 +10,8 @@ namespace NzbDrone.Api.Mapping
     {
         public static TTarget InjectTo<TTarget>(this object source) where TTarget : new()
         {
+            if (source == null) return default(TTarget);
+
             var targetType = typeof(TTarget);
 
             if (targetType.IsGenericType &&

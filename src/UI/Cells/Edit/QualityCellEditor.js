@@ -59,10 +59,7 @@ module.exports = Backgrid.CellEditor.extend({
         };
 
         model.set(column.get('name'), newQuality);
-
-        if (this.column.get('saveAfterEdit')) {
-            model.save();
-        }
+        model.save();
 
         model.trigger('backgrid:edited', model, column, new Backgrid.Command(e));
     },

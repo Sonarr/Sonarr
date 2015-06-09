@@ -58,10 +58,10 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<DiskSpace> GetFixedDisksFreeSpace()
         {
-            return GetDiskSpace(_diskProvider.GetFixedDrives());
+            return GetDiskSpace(_diskProvider.GetFixedDrives(), true);
         }
 
-        private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<String> paths)
+        private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<String> paths, bool suppressWarnings = false)
         {
             foreach (var path in paths)
             {
@@ -88,7 +88,10 @@ namespace NzbDrone.Core.DiskSpace
                 }
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Unable to get free space for: " + path, ex);
+                    if (!suppressWarnings)
+                    {
+                        _logger.WarnException("Unable to get free space for: " + path, ex);
+                    }
                 }
 
                 if (diskSpace != null)

@@ -33,7 +33,7 @@ namespace NzbDrone.Common.Processes
             var filename = Path.Combine(_appFolderInfo.AppDataFolder, "nzbdrone.pid");
             try
             {
-                File.WriteAllText(filename, _processProvider.GetCurrentProcess().Id.ToString());
+                File.WriteAllText(filename, _processProvider.GetCurrentProcessId().ToString());
             }
             catch (Exception ex)
             {

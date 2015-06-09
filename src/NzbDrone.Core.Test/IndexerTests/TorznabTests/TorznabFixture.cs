@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
         [Test]
         public void should_parse_recent_feed_from_torznab_hdaccess_net()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/torznab_hdaccess_net.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_hdaccess_net.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
         [Test]
         public void should_parse_recent_feed_from_torznab_tpb()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/torznab_tpb.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/Torznab/torznab_tpb.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))

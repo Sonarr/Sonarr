@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BitMeTvTests
         [Test]
         public void should_parse_recent_feed_from_BitMeTv()
         {
-            var recentFeed = ReadAllText(@"Files/RSS/BitMeTv.xml");
+            var recentFeed = ReadAllText(@"Files/Indexers/BitMeTv/BitMeTv.xml");
 
             Mocker.GetMock<IHttpClient>()
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
