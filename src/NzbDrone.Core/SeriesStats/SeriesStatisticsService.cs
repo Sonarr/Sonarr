@@ -37,32 +37,28 @@ namespace NzbDrone.Core.SeriesStats
 
         private SeriesStatistics MapSeriesStatistics(List<SeasonStatistics> seasonStatistics)
         {
-            return new SeriesStatistics
-                   {
-                       SeasonStatistics = seasonStatistics,
-                       SeriesId = seasonStatistics.First().SeriesId,
-                       EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
-                       EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
-                       TotalEpisodeCount = seasonStatistics.Sum(s => s.TotalEpisodeCount),
-                       SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
-                       NextAiringString = seasonStatistics.OrderBy(s =>
-                       {
-                           DateTime nextAiring;
+            var seriesStatistics = new SeriesStatistics
+                                   {
+                                       SeasonStatistics = seasonStatistics,
+                                       SeriesId = seasonStatistics.First().SeriesId,
+                                       EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
+                                       EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
+                                       TotalEpisodeCount = seasonStatistics.Sum(s => s.TotalEpisodeCount),
+                                       SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk)
+                                   };
 
-                           if (!DateTime.TryParse(s.NextAiringString, out nextAiring)) return DateTime.MinValue;
+            var nextAiring = seasonStatistics.Where(s => s.NextAiring != null)
+                                             .OrderBy(s => s.NextAiring)
+                                             .FirstOrDefault();
 
-                           return nextAiring;
-                       }).First().NextAiringString,
+            var previousAiring = seasonStatistics.Where(s => s.PreviousAiring != null)
+                                                 .OrderBy(s => s.PreviousAiring)
+                                                 .LastOrDefault();
 
-                       PreviousAiringString = seasonStatistics.OrderBy(s =>
-                       {
-                           DateTime nextAiring;
+            seriesStatistics.NextAiringString = nextAiring != null ? nextAiring.NextAiringString : null;
+            seriesStatistics.PreviousAiringString = previousAiring != null ? previousAiring.PreviousAiringString : null;
 
-                           if (!DateTime.TryParse(s.PreviousAiringString, out nextAiring)) return DateTime.MinValue;
-
-                           return nextAiring;
-                       }).Last().PreviousAiringString
-                   };
+            return seriesStatistics;
         }
     }
 }
