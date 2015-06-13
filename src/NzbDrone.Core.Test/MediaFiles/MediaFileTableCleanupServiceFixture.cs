@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -25,6 +26,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .ToList();
 
             _series = Builder<Series>.CreateNew()
+                                     .With(s => s.Path = @"C:\Test\TV\Series")
                                      .Build();
 
             Mocker.GetMock<IDiskProvider>()
@@ -52,6 +54,11 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(_episodes);
         }
 
+        private List<string> FilesOnDisk(IEnumerable<EpisodeFile> episodeFiles)
+        {
+            return episodeFiles.Select(e => Path.Combine(_series.Path, e.RelativePath)).ToList();
+        }
+
         [Test]
         public void should_skip_files_that_exist_in_disk()
         {
@@ -60,7 +67,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             GivenEpisodeFiles(episodeFiles);
 
-            Subject.Clean(_series);
+            Subject.Clean(_series, FilesOnDisk(episodeFiles));
 
             Mocker.GetMock<IEpisodeService>().Verify(c => c.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
         }
@@ -75,7 +82,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             GivenEpisodeFiles(episodeFiles);
 
-            Subject.Clean(_series);
+            Subject.Clean(_series, FilesOnDisk(episodeFiles.Where(e => e.RelativePath != DELETED_PATH)));
 
             Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.RelativePath == DELETED_PATH), DeleteMediaFileReason.MissingFromDisk), Times.Exactly(2));
         }
@@ -91,7 +98,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             GivenEpisodeFiles(episodeFiles);
             GivenFilesAreNotAttachedToEpisode();
 
-            Subject.Clean(_series);
+            Subject.Clean(_series, FilesOnDisk(episodeFiles));
 
             Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.IsAny<EpisodeFile>(), DeleteMediaFileReason.NoLinkedEpisodes), Times.Exactly(10));
         }
@@ -101,7 +108,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenEpisodeFiles(new List<EpisodeFile>());
 
-            Subject.Clean(_series);
+            Subject.Clean(_series, new List<string>());
 
             Mocker.GetMock<IEpisodeService>().Verify(c => c.UpdateEpisode(It.Is<Episode>(e => e.EpisodeFileId == 0)), Times.Exactly(10));
         }
@@ -116,7 +123,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             GivenEpisodeFiles(episodeFiles);
 
-            Subject.Clean(_series);
+            Subject.Clean(_series, FilesOnDisk(episodeFiles));
 
             Mocker.GetMock<IEpisodeService>().Verify(c => c.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
         }

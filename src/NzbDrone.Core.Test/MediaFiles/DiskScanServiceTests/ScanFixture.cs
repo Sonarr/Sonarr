@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             ExceptionVerification.ExpectedWarns(1);
 
             Mocker.GetMock<IMediaFileTableCleanupService>()
-                .Verify(v => v.Clean(It.IsAny<Series>()), Times.Never());
+                .Verify(v => v.Clean(It.IsAny<Series>(), It.IsAny<List<string>>()), Times.Never());
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             ExceptionVerification.ExpectedWarns(1);
 
             Mocker.GetMock<IMediaFileTableCleanupService>()
-                  .Verify(v => v.Clean(It.IsAny<Series>()), Times.Never());
+                  .Verify(v => v.Clean(It.IsAny<Series>(), new List<string>()), Times.Never());
         }
 
         [Test]

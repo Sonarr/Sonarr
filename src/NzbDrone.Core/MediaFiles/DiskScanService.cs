@@ -80,8 +80,7 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             _logger.ProgressInfo("Scanning disk for {0}", series.Title);
-            _mediaFileTableCleanupService.Clean(series);
-
+            
             if (!_diskProvider.FolderExists(series.Path))
             {
                 if (_configService.CreateEmptySeriesFolders &&
@@ -106,6 +105,9 @@ namespace NzbDrone.Core.MediaFiles
             videoFilesStopwatch.Stop();
             _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
 
+            _logger.Debug("{0} Cleaning up media files in DB", series);
+            _mediaFileTableCleanupService.Clean(series, mediaFileList);
+            
             var decisionsStopwatch = Stopwatch.StartNew();
             var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
             decisionsStopwatch.Stop();

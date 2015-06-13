@@ -686,5 +686,17 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("Sonarr");
         }
+
+        [TestCase("0SEC")]
+        [TestCase("2HD")]
+        [TestCase("IMMERSE")]
+        public void should_use_existing_casing_for_release_group(string releaseGroup)
+        {
+            _episodeFile.ReleaseGroup = releaseGroup;
+            _namingConfig.StandardEpisodeFormat = "{Release Group}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(releaseGroup);
+        }
     }
 }

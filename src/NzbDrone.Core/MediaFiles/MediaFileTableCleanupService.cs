@@ -1,55 +1,55 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using NLog;
-using NzbDrone.Common.Disk;
+using NzbDrone.Common;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
     public interface IMediaFileTableCleanupService
     {
-        void Clean(Series series);
+        void Clean(Series series, List<string> filesOnDisk);
     }
 
     public class MediaFileTableCleanupService : IMediaFileTableCleanupService
     {
         private readonly IMediaFileService _mediaFileService;
-        private readonly IDiskProvider _diskProvider;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
         public MediaFileTableCleanupService(IMediaFileService mediaFileService,
-                                            IDiskProvider diskProvider,
                                             IEpisodeService episodeService,
-                                            ISeriesService seriesService,
                                             Logger logger)
         {
             _mediaFileService = mediaFileService;
-            _diskProvider = diskProvider;
             _episodeService = episodeService;
             _logger = logger;
         }
 
-        public void Clean(Series series)
+        public void Clean(Series series, List<string> filesOnDisk)
         {
-            var seriesFile = _mediaFileService.GetFilesBySeries(series.Id);
+            var seriesFiles = _mediaFileService.GetFilesBySeries(series.Id);
             var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
-            foreach (var episodeFile in seriesFile)
+            var filesOnDiskKeys = new HashSet<String>(filesOnDisk, PathEqualityComparer.Instance);
+            
+            foreach (var seriesFile in seriesFiles)
             {
+                var episodeFile = seriesFile;
                 var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
 
                 try
                 {
-                    if (!_diskProvider.FileExists(episodeFilePath))
+                    if (!filesOnDiskKeys.Contains(episodeFilePath))
                     {
                         _logger.Debug("File [{0}] no longer exists on disk, removing from db", episodeFilePath);
-                        _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.MissingFromDisk);
+                        _mediaFileService.Delete(seriesFile, DeleteMediaFileReason.MissingFromDisk);
                         continue;
                     }
 
-                    if (!episodes.Any(e => e.EpisodeFileId == episodeFile.Id))
+                    if (episodes.None(e => e.EpisodeFileId == episodeFile.Id))
                     {
                         _logger.Debug("File [{0}] is not assigned to any episodes, removing from db", episodeFilePath);
                         _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.NoLinkedEpisodes);
@@ -73,9 +73,11 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            foreach (var episode in episodes)
+            foreach (var e in episodes)
             {
-                if (episode.EpisodeFileId > 0 && !seriesFile.Any(f => f.Id == episode.EpisodeFileId))
+                var episode = e;
+
+                if (episode.EpisodeFileId > 0 && seriesFiles.None(f => f.Id == episode.EpisodeFileId))
                 {
                     episode.EpisodeFileId = 0;
                     _episodeService.UpdateEpisode(episode);
