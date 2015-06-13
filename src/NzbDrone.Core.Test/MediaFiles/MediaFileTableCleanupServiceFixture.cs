@@ -9,6 +9,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .ToList();
 
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.Path = @"C:\Test\TV\Series")
+                                     .With(s => s.Path = @"C:\Test\TV\Series".AsOsAgnostic())
                                      .Build();
 
             Mocker.GetMock<IDiskProvider>()
