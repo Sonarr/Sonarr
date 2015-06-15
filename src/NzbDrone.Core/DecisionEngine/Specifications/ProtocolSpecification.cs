@@ -1,5 +1,4 @@
 using NLog;
-using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -9,8 +8,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class ProtocolSpecification : IDecisionEngineSpecification
     {
-        private readonly IPendingReleaseService _pendingReleaseService;
-        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly IDelayProfileService _delayProfileService;
         private readonly Logger _logger;
 

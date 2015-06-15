@@ -65,9 +65,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 
             var strmFile = WriteStrmFile(title, nzbFile);
-            return GetDownloadClientId(strmFile);
 
-            return null;
+
+            return GetDownloadClientId(strmFile);
         }
 
         public bool IsConfigured

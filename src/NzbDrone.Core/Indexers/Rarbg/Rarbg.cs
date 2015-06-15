@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Rarbg
 {
