@@ -14,13 +14,18 @@ namespace NzbDrone.Update.UpdateEngine
     public class BackupAppData : IBackupAppData
     {
         private readonly IAppFolderInfo _appFolderInfo;
+        private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public BackupAppData(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+        public BackupAppData(IAppFolderInfo appFolderInfo,
+                             IDiskProvider diskProvider,
+                             IDiskTransferService diskTransferService,
+                             Logger logger)
         {
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
+            _diskTransferService = diskTransferService;
             _logger = logger;
         }
 
@@ -33,9 +38,8 @@ namespace NzbDrone.Update.UpdateEngine
 
             try
             {
-                _diskProvider.CopyFile(_appFolderInfo.GetConfigPath(), _appFolderInfo.GetUpdateBackupConfigFile(), true);
-                _diskProvider.CopyFile(_appFolderInfo.GetNzbDroneDatabase(), _appFolderInfo.GetUpdateBackupDatabase(),
-                    true);
+                _diskTransferService.TransferFile(_appFolderInfo.GetConfigPath(), _appFolderInfo.GetUpdateBackupConfigFile(), TransferMode.Copy);
+                _diskTransferService.TransferFile(_appFolderInfo.GetNzbDroneDatabase(), _appFolderInfo.GetUpdateBackupDatabase(), TransferMode.Copy);
             }
             catch (Exception e)
             {

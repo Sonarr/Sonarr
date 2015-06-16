@@ -10,22 +10,6 @@ namespace NzbDrone.Common.Test.DiskTests
 {
     public abstract class DiskProviderFixtureBase<TSubject> : TestBase<TSubject> where TSubject : class, IDiskProvider
     {
-        public DirectoryInfo GetFilledTempFolder()
-        {
-            var tempFolder = GetTempFilePath();
-            Directory.CreateDirectory(tempFolder);
-
-            File.WriteAllText(Path.Combine(tempFolder, Path.GetRandomFileName()), "RootFile");
-
-            var subDir = Path.Combine(tempFolder, Path.GetRandomFileName());
-            Directory.CreateDirectory(subDir);
-
-            File.WriteAllText(Path.Combine(subDir, Path.GetRandomFileName()), "SubFile1");
-            File.WriteAllText(Path.Combine(subDir, Path.GetRandomFileName()), "SubFile2");
-
-            return new DirectoryInfo(tempFolder);
-        }
-
         [Test]
         public void directory_exist_should_be_able_to_find_existing_folder()
         {
@@ -101,65 +85,9 @@ namespace NzbDrone.Common.Test.DiskTests
 
             File.WriteAllText(source, "SourceFile1");
 
-            Subject.MoveFile(source, source, true);
+            Assert.Throws<IOException>(() => Subject.MoveFile(source, source, true));
 
             File.Exists(source).Should().BeTrue();
-            ExceptionVerification.ExpectedWarns(1);
-        }
-
-        [Test]
-        public void CopyFolder_should_copy_folder()
-        {
-            var source = GetFilledTempFolder();
-            var destination = new DirectoryInfo(GetTempFilePath());
-
-            Subject.CopyFolder(source.FullName, destination.FullName);
-
-            VerifyCopy(source.FullName, destination.FullName);
-        }
-
-        [Test]
-        public void CopyFolder_should_overwrite_existing_folder()
-        {
-            var source = GetFilledTempFolder();
-            var destination = new DirectoryInfo(GetTempFilePath());
-            Subject.CopyFolder(source.FullName, destination.FullName);
-
-            //Delete Random File
-            destination.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
-
-            Subject.CopyFolder(source.FullName, destination.FullName);
-
-            VerifyCopy(source.FullName, destination.FullName);
-        }
-
-        [Test]
-        public void MoveFolder_should_move_folder()
-        {
-            var original = GetFilledTempFolder();
-            var source = new DirectoryInfo(GetTempFilePath());
-            var destination = new DirectoryInfo(GetTempFilePath());
-
-            Subject.CopyFolder(original.FullName, source.FullName);
-
-            Subject.MoveFolder(source.FullName, destination.FullName);
-
-            VerifyMove(original.FullName, source.FullName, destination.FullName);
-        }
-
-        [Test]
-        public void MoveFolder_should_overwrite_existing_folder()
-        {
-            var original = GetFilledTempFolder();
-            var source = new DirectoryInfo(GetTempFilePath());
-            var destination = new DirectoryInfo(GetTempFilePath());
-
-            Subject.CopyFolder(original.FullName, source.FullName);
-            Subject.CopyFolder(original.FullName, destination.FullName);
-
-            Subject.MoveFolder(source.FullName, destination.FullName);
-
-            VerifyMove(original.FullName, source.FullName, destination.FullName);
         }
 
         [Test]
@@ -192,72 +120,6 @@ namespace NzbDrone.Common.Test.DiskTests
             Subject.DeleteFolder(sourceDir, true);
 
             Directory.Exists(sourceDir).Should().BeFalse();
-        }
-
-        [Test]
-        public void should_be_able_to_hardlink_file()
-        {
-            var sourceDir = GetTempFilePath();
-            var source = Path.Combine(sourceDir, "test.txt");
-            var destination = Path.Combine(sourceDir, "destination.txt");
-
-            Directory.CreateDirectory(sourceDir);
-
-            Subject.WriteAllText(source, "SourceFile");
-
-            var result = Subject.TransferFile(source, destination, TransferMode.HardLink);
-
-            result.Should().Be(TransferMode.HardLink);
-
-            File.AppendAllText(source, "Test");
-            File.ReadAllText(destination).Should().Be("SourceFileTest");
-        }
-
-        private void DoHardLinkRename(FileShare fileShare)
-        {
-            var sourceDir = GetTempFilePath();
-            var source = Path.Combine(sourceDir, "test.txt");
-            var destination = Path.Combine(sourceDir, "destination.txt");
-            var rename = Path.Combine(sourceDir, "rename.txt");
-
-            Directory.CreateDirectory(sourceDir);
-
-            Subject.WriteAllText(source, "SourceFile");
-
-            Subject.TransferFile(source, destination, TransferMode.HardLink);
-
-            using (var stream = new FileStream(source, FileMode.Open, FileAccess.Read, fileShare))
-            {
-                stream.ReadByte();
-
-                Subject.MoveFile(destination, rename);
-
-                stream.ReadByte();
-            }
-
-            File.Exists(rename).Should().BeTrue();
-            File.Exists(destination).Should().BeFalse();
-
-            File.AppendAllText(source, "Test");
-            File.ReadAllText(rename).Should().Be("SourceFileTest");
-        }
-
-        [Test]
-        public void should_be_able_to_rename_open_hardlinks_with_fileshare_delete()
-        {
-            DoHardLinkRename(FileShare.Delete);
-        }
-
-        [Test]
-        public void should_not_be_able_to_rename_open_hardlinks_with_fileshare_none()
-        {
-            Assert.Throws<IOException>(() => DoHardLinkRename(FileShare.None));
-        }
-
-        [Test]
-        public void should_not_be_able_to_rename_open_hardlinks_with_fileshare_write()
-        {
-            Assert.Throws<IOException>(() => DoHardLinkRename(FileShare.Read));
         }
 
         [Test]
@@ -339,14 +201,6 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        [Explicit]
-        public void check_last_write()
-        {
-            Console.WriteLine(Subject.FolderGetLastWrite(GetFilledTempFolder().FullName));
-            Console.WriteLine(GetFilledTempFolder().LastWriteTimeUtc);
-        }
-
-        [Test]
         public void GetParentFolder_should_remove_trailing_slash_before_getting_parent_folder()
         {
             var path = @"C:\Test\TV\".AsOsAgnostic();
@@ -355,22 +209,51 @@ namespace NzbDrone.Common.Test.DiskTests
             Subject.GetParentFolder(path).Should().Be(parent);
         }
 
-        private void VerifyCopy(string source, string destination)
+        private void DoHardLinkRename(FileShare fileShare)
         {
-            var sourceFiles = Directory.GetFileSystemEntries(source, "*", SearchOption.AllDirectories).Select(v => v.Substring(source.Length + 1)).ToArray();
-            var destFiles = Directory.GetFileSystemEntries(destination, "*", SearchOption.AllDirectories).Select(v => v.Substring(destination.Length + 1)).ToArray();
+            var sourceDir = GetTempFilePath();
+            var source = Path.Combine(sourceDir, "test.txt");
+            var destination = Path.Combine(sourceDir, "destination.txt");
+            var rename = Path.Combine(sourceDir, "rename.txt");
 
-            CollectionAssert.AreEquivalent(sourceFiles, destFiles);
+            Directory.CreateDirectory(sourceDir);
+
+            File.WriteAllText(source, "SourceFile");
+
+            Subject.TryCreateHardLink(source, destination).Should().BeTrue();
+
+            using (var stream = new FileStream(source, FileMode.Open, FileAccess.Read, fileShare))
+            {
+                stream.ReadByte();
+
+                Subject.MoveFile(destination, rename);
+
+                stream.ReadByte();
+            }
+
+            File.Exists(rename).Should().BeTrue();
+            File.Exists(destination).Should().BeFalse();
+
+            File.AppendAllText(source, "Test");
+            File.ReadAllText(rename).Should().Be("SourceFileTest");
         }
 
-        private void VerifyMove(string source, string from, string destination)
+        [Test]
+        public void should_be_able_to_rename_open_hardlinks_with_fileshare_delete()
         {
-            Directory.Exists(from).Should().BeFalse();
+            DoHardLinkRename(FileShare.Delete);
+        }
 
-            var sourceFiles = Directory.GetFileSystemEntries(source, "*", SearchOption.AllDirectories).Select(v => v.Substring(source.Length + 1)).ToArray();
-            var destFiles = Directory.GetFileSystemEntries(destination, "*", SearchOption.AllDirectories).Select(v => v.Substring(destination.Length + 1)).ToArray();
+        [Test]
+        public void should_not_be_able_to_rename_open_hardlinks_with_fileshare_none()
+        {
+            Assert.Throws<IOException>(() => DoHardLinkRename(FileShare.None));
+        }
 
-            CollectionAssert.AreEquivalent(sourceFiles, destFiles);
+        [Test]
+        public void should_not_be_able_to_rename_open_hardlinks_with_fileshare_write()
+        {
+            Assert.Throws<IOException>(() => DoHardLinkRename(FileShare.Read));
         }
     }
 }

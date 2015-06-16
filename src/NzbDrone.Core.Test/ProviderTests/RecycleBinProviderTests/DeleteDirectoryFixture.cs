@@ -45,7 +45,8 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
-            Mocker.GetMock<IDiskProvider>().Verify(v => v.MoveFolder(path, @"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic()), Times.Once());
+            Mocker.GetMock<IDiskTransferService>()
+                  .Verify(v => v.TransferFolder(path, @"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), TransferMode.Move, true), Times.Once());
         }
 
         [Test]
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             var path = @"C:\Test\TV\30 Rock".AsOsAgnostic();
 
             Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), SearchOption.AllDirectories))
-                                            .Returns(new[] { "File1", "File2", "File3" });
+                                           .Returns(new[] { "File1", "File2", "File3" });
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
