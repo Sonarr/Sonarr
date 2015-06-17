@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
@@ -9,6 +10,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 {
     public class BroadcastheNetParser : IParseIndexerResponse
     {
+        private static readonly Regex RegexProtocol = new Regex("^https?:", RegexOptions.Compiled);
+
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
             var results = new List<ReleaseInfo>();
@@ -41,15 +44,17 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 return results;
             }
 
+            var protocol = indexerResponse.HttpRequest.Url.Scheme + ":";
+
             foreach (var torrent in jsonResponse.Result.Torrents.Values)
             {
                 var torrentInfo = new TorrentInfo();
 
-                torrentInfo.Guid = String.Format("BTN-{0}", torrent.TorrentID);
+                torrentInfo.Guid = string.Format("BTN-{0}", torrent.TorrentID);
                 torrentInfo.Title = torrent.ReleaseName;
                 torrentInfo.Size = torrent.Size;
-                torrentInfo.DownloadUrl = torrent.DownloadURL;
-                torrentInfo.InfoUrl = String.Format("https://broadcasthe.net/torrents.php?id={0}&torrentid={1}", torrent.GroupID, torrent.TorrentID);
+                torrentInfo.DownloadUrl = RegexProtocol.Replace(torrent.DownloadURL, protocol);
+                torrentInfo.InfoUrl = string.Format("{0}//broadcasthe.net/torrents.php?id={1}&torrentid={2}", protocol, torrent.GroupID, torrent.TorrentID);
                 //torrentInfo.CommentUrl =
                 if (torrent.TvrageID.HasValue)
                 {
