@@ -36,12 +36,13 @@ module.exports = Marionette.ItemView.extend({
         }
     },
 
-    _viewRender : function(view) {
+    _viewRender : function(view, element) {
         if (Config.getValue(this.storageKey) !== view.name) {
             Config.setValue(this.storageKey, view.name);
         }
 
         this._getEvents(view);
+        element.find('.fc-day-grid-container').css('height', '');
     },
 
     _eventAfterAllRender :  function () {
@@ -55,6 +56,9 @@ module.exports = Marionette.ItemView.extend({
             this.$('.fc-toolbar').before(titleDiv);
             this.$('.fc-center').hide();
         }
+
+        // Remove height from calendar so we don't have another scroll bar
+        this.$('.fc-day-grid-container').css('height', '');
     },
 
     _eventRender : function(event, element) {
