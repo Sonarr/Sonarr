@@ -26,7 +26,7 @@ module.exports = Marionette.ItemView.extend({
     },
 
     onShow : function() {
-        this.$('.fc-button-today').click();
+        this.$('.fc-today-button').click();
     },
 
     setShowUnmonitored : function (showUnmonitored) {
@@ -37,17 +37,6 @@ module.exports = Marionette.ItemView.extend({
     },
 
     _viewRender : function(view) {
-        if ($(window).width() < 768) {
-            this.$('.fc-header-title').show();
-            this.$('.calendar-title').remove();
-
-            var title = this.$('.fc-header-title').text();
-            var titleDiv = '<div class="calendar-title"><h2>{0}</h2></div>'.format(title);
-
-            this.$('.fc-header').before(titleDiv);
-            this.$('.fc-header-title').hide();
-        }
-
         if (Config.getValue(this.storageKey) !== view.name) {
             Config.setValue(this.storageKey, view.name);
         }
@@ -55,9 +44,22 @@ module.exports = Marionette.ItemView.extend({
         this._getEvents(view);
     },
 
+    _eventAfterAllRender :  function () {
+        if ($(window).width() < 768) {
+            this.$('.fc-center').show();
+            this.$('.calendar-title').remove();
+
+            var title = this.$('.fc-center').html();
+            var titleDiv = '<div class="calendar-title">{0}</div>'.format(title);
+
+            this.$('.fc-toolbar').before(titleDiv);
+            this.$('.fc-center').hide();
+        }
+    },
+
     _eventRender : function(event, element) {
-        this.$(element).addClass(event.statusLevel);
-        this.$(element).children('.fc-event-inner').addClass(event.statusLevel);
+        element.addClass(event.statusLevel);
+        element.children('.fc-content').addClass(event.statusLevel);
 
         if (event.downloading) {
             var progress = 100 - event.downloading.get('sizeleft') / event.downloading.get('size') * 100;
@@ -87,9 +89,9 @@ module.exports = Marionette.ItemView.extend({
             }
 
             else {
-                this.$(element).find('.fc-event-time').after('<span class="chart pull-right" data-percent="{0}"></span>'.format(progress));
+                element.find('.fc-time').after('<span class="chart pull-right" data-percent="{0}"></span>'.format(progress));
 
-                this.$(element).find('.chart').easyPieChart({
+                element.find('.chart').easyPieChart({
                     barColor   : '#ffffff',
                     trackColor : false,
                     scaleColor : false,
@@ -98,9 +100,9 @@ module.exports = Marionette.ItemView.extend({
                     animate    : false
                 });
 
-                this.$(element).find('.chart').tooltip({
+                element.find('.chart').tooltip({
                     title     : 'Episode is downloading - {0}% {1}'.format(progress.toFixed(1), releaseTitle),
-                    container : '.fc-content'
+                    container : '.fc-content-skeleton'
                 });
             }
         }
@@ -123,8 +125,11 @@ module.exports = Marionette.ItemView.extend({
     },
 
     _setEventData : function(collection) {
-        var events = [];
+        if (collection.length === 0) {
+            return;
+        }
 
+        var events = [];
         var self = this;
 
         collection.each(function(model) {
@@ -197,13 +202,14 @@ module.exports = Marionette.ItemView.extend({
 
     _getOptions    : function() {
         var options = {
-            allDayDefault : false,
-            weekMode      : 'variable',
-            firstDay      : UiSettings.get('firstDayOfWeek'),
-            timeFormat    : 'h(:mm)a',
-            viewRender    : this._viewRender.bind(this),
-            eventRender   : this._eventRender.bind(this),
-            eventClick    : function(event) {
+            allDayDefault       : false,
+            weekMode            : 'variable',
+            firstDay            : UiSettings.get('firstDayOfWeek'),
+            timeFormat          : 'h(:mm)t',
+            viewRender          : this._viewRender.bind(this),
+            eventRender         : this._eventRender.bind(this),
+            eventAfterAllRender : this._eventAfterAllRender.bind(this),
+            eventClick          : function(event) {
                 vent.trigger(vent.Commands.ShowEpisodeDetails, { episode : event.model });
             }
         };
@@ -240,18 +246,16 @@ module.exports = Marionette.ItemView.extend({
             day   : 'dddd'
         };
 
-        options.timeFormat = {
-            'default' : UiSettings.get('timeFormat')
-        };
+        options.timeFormat = UiSettings.get('timeFormat');
 
         return options;
     },
 
     _addStatusIcon : function(element, icon, tooltip) {
-        this.$(element).find('.fc-event-time').after('<span class="status pull-right"><i class="{0}"></i></span>'.format(icon));
-        this.$(element).find('.status').tooltip({
+        element.find('.fc-time').after('<span class="status pull-right"><i class="{0}"></i></span>'.format(icon));
+        element.find('.status').tooltip({
             title     : tooltip,
-            container : '.fc-content'
+            container : '.fc-content-skeleton'
         });
     }
 });
