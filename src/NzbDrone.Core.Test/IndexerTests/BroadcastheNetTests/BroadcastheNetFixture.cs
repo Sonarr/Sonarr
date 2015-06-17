@@ -127,5 +127,27 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
 
             ExceptionVerification.ExpectedWarns(1);
         }
+
+        [Test]
+        public void should_replace_https_http_as_needed()
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/BroadcastheNet/RecentFeed.json");
+
+            recentFeed = recentFeed.Replace("http:", "https:");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.POST)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(2);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.DownloadUrl.Should().Be("http://broadcasthe.net/torrents.php?action=download&id=123&authkey=123&torrent_pass=123");
+            torrentInfo.InfoUrl.Should().Be("http://broadcasthe.net/torrents.php?id=237457&torrentid=123");
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             get
             {
-                return "BroadcasttheNet";
+                return "BroadcastheNet";
             }
         }
 
