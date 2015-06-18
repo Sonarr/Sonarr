@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             Subject.Definition = new IndexerDefinition()
                 {
                     Name = "BroadcastheNet",
-                    Settings = new BroadcastheNetSettings() {  ApiKey = "abc" }
+                    Settings = new BroadcastheNetSettings() { ApiKey = "abc", BaseUrl = "https://api.btnapps.net/" }
                 };
         }
 
@@ -132,6 +132,8 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
         public void should_replace_https_http_as_needed()
         {
             var recentFeed = ReadAllText(@"Files/Indexers/BroadcastheNet/RecentFeed.json");
+
+            (Subject.Definition.Settings as BroadcastheNetSettings).BaseUrl = "http://api.btnapps.net/";
 
             recentFeed = recentFeed.Replace("http:", "https:");
 
