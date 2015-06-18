@@ -123,3 +123,7 @@ setup/Output/
 bin
 obj
 output/*
+
+
+#OS X metadata files
+._*
