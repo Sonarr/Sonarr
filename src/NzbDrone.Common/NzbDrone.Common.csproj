@@ -140,6 +140,7 @@
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\XmlExtentions.cs" />
     <Compile Include="HashUtil.cs" />
+    <Compile Include="Http\CurlHttpClient.cs" />
     <Compile Include="Http\GZipWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -196,6 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="CurlSharp.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -208,6 +212,10 @@
     <Content Include="Expansive\license.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExternalModules\CurlSharp\CurlSharp\CurlSharp.csproj">
+      <Project>{74420a79-cc16-442c-8b1e-7c1b913844f0}</Project>
+      <Name>CurlSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogentriesNLog\LogentriesNLog.csproj">
       <Project>{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}</Project>
       <Name>LogentriesNLog</Name>

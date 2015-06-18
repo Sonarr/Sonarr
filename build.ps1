@@ -116,6 +116,9 @@ Function PackageMono()
 
     Write-Host "Adding NzbDrone.Core.dll.config (for dllmap)"
     Copy-Item "$sourceFolder\NzbDrone.Core\NzbDrone.Core.dll.config" $outputFolderMono
+    
+    Write-Host "Adding CurlSharp.dll.config (for dllmap)"
+    Copy-Item "$sourceFolder\NzbDrone.Common\CurlSharp.dll.config" $outputFolderMono
 
     Write-Host Renaming NzbDrone.Console.exe to NzbDrone.exe
     Get-ChildItem $outputFolderMono -File -Filter "NzbDrone.exe*" -Recurse | foreach ($_) {remove-item $_.fullname}

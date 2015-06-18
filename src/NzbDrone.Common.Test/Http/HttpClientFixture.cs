@@ -44,6 +44,17 @@ namespace NzbDrone.Common.Test.Http
             response.Resource.Url.Should().Be(request.Url.ToString());
         }
 
+        [Test]
+        public void should_execute_simple_post()
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/post");
+            request.Body = "{ my: 1 }";
+
+            var response = Subject.Post<HttpBinResource>(request);
+
+            response.Resource.Data.Should().Be(request.Body);
+        }
+
         [TestCase("gzip")]
         public void should_execute_get_using_gzip(string compression)
         {
@@ -224,5 +235,6 @@ namespace NzbDrone.Common.Test.Http
         public Dictionary<string, object> Headers { get; set; }
         public string Origin { get; set; }
         public string Url { get; set; }
+        public string Data { get; set; }
     }
 }
