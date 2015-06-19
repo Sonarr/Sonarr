@@ -5,8 +5,8 @@ module.exports = SeriesIndexItemView.extend({
     template : 'Series/Index/Posters/SeriesPostersItemViewTemplate',
 
     initialize : function() {
-        this.events['mouseenter .x-series-poster'] = 'posterHoverAction';
-        this.events['mouseleave .x-series-poster'] = 'posterHoverAction';
+        this.events['mouseenter .x-series-poster-container'] = 'posterHoverAction';
+        this.events['mouseleave .x-series-poster-container'] = 'posterHoverAction';
 
         this.ui.controls = '.x-series-controls';
         this.ui.title = '.x-title';
