@@ -34,23 +34,25 @@ namespace NzbDrone.Api.Indexers
             PostValidator.RuleFor(s => s.Title).NotEmpty();
             PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
             PostValidator.RuleFor(s => s.DownloadProtocol).NotEmpty();
+            PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
         }
 
         private Response ProcessRelease(ReleaseResource release)
         {
-            _logger.Info("Release pushed: '" + release.Title.ToString() + "'");
+            _logger.Info("Release pushed: {0}", release.Title);
 
             ReleaseInfo info = release.InjectTo<ReleaseInfo>();
             info.Guid = "PUSH-" + info.DownloadUrl;
-            if (info.PublishDate == default(DateTime)) info.PublishDate = DateTime.UtcNow;
 
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
             var processed = _downloadDecisionProcessor.ProcessDecisions(decisions);
 
-            _logger.Info("Release " + (processed.Grabbed.Any() ? "grabbed" : 
-                                       processed.Rejected.Any() ? "rejected" : 
-                                       processed.Pending.Any() ? "pending" :
-                                       "error") + ": '" + info.Title.ToString() + "'");
+            string status = processed.Grabbed.Any()  ? "grabbed"  :
+                            processed.Rejected.Any() ? "rejected" :
+                            processed.Pending.Any()  ? "pending"  :
+                                                       "error"    ;
+
+            _logger.Info("Release {0}: {1}", status, info.Title);
 
             return processed.AsResponse();
         }
