@@ -50,7 +50,7 @@ namespace NzbDrone.Integration.Test
             };
 
             var postResponse = RootFolders.InvalidPost(rootFolder);
-            postResponse.Should().NotBeEmpty();
+			postResponse.Should<dynamic>().NotBeEmpty();
         }
     }
 }
