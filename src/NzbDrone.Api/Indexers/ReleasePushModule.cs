@@ -42,7 +42,7 @@ namespace NzbDrone.Api.Indexers
 
             ReleaseInfo info = release.InjectTo<ReleaseInfo>();
             info.Guid = "PUSH-" + info.DownloadUrl;
-            if (info.PublishDate == default(DateTime)) info.PublishDate = DateTime.Now;
+            if (info.PublishDate == default(DateTime)) info.PublishDate = DateTime.UtcNow;
 
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
             var processed = _downloadDecisionProcessor.ProcessDecisions(decisions);
