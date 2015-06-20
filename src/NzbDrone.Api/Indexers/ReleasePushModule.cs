@@ -47,7 +47,10 @@ namespace NzbDrone.Api.Indexers
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
             var processed = _downloadDecisionProcessor.ProcessDecisions(decisions);
 
-            _logger.Info("Release " + (processed.Grabbed.Any() ? "grabbed" : processed.Rejected.Any() ? "rejected" : "pending") + ": '" + info.Title.ToString() + "'");
+            _logger.Info("Release " + (processed.Grabbed.Any() ? "grabbed" : 
+                                       processed.Rejected.Any() ? "rejected" : 
+                                       processed.Pending.Any() ? "pending" :
+                                       "error") + ": '" + info.Title.ToString() + "'");
 
             return processed.AsResponse();
         }
