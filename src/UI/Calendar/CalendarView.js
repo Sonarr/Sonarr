@@ -45,23 +45,6 @@ module.exports = Marionette.ItemView.extend({
         element.find('.fc-day-grid-container').css('height', '');
     },
 
-    _eventAfterAllRender :  function () {
-        if ($(window).width() < 768) {
-            this.$('.fc-center').show();
-            this.$('.calendar-title').remove();
-
-            var title = this.$('.fc-center').html();
-            var titleDiv = '<div class="calendar-title">{0}</div>'.format(title);
-
-            this.$('.fc-toolbar').before(titleDiv);
-            this.$('.fc-center').hide();
-        }
-
-        // Remove height from calendar so we don't have another scroll bar
-        this.$('.fc-day-grid-container').css('height', '');
-        this.$('.fc-row.fc-widget-header').attr('style', '');
-    },
-
     _eventRender : function(event, element) {
         element.addClass(event.statusLevel);
         element.children('.fc-content').addClass(event.statusLevel);
@@ -111,6 +94,25 @@ module.exports = Marionette.ItemView.extend({
                 });
             }
         }
+    },
+
+    _eventAfterAllRender :  function () {
+        if ($(window).width() < 768) {
+            this.$('.fc-center').show();
+            this.$('.calendar-title').remove();
+
+            var title = this.$('.fc-center').html();
+            var titleDiv = '<div class="calendar-title">{0}</div>'.format(title);
+
+            this.$('.fc-toolbar').before(titleDiv);
+            this.$('.fc-center').hide();
+        }
+
+        this._clearScrollBar();
+    },
+
+    _windowResize :  function () {
+        this._clearScrollBar();
     },
 
     _getEvents : function(view) {
@@ -214,6 +216,7 @@ module.exports = Marionette.ItemView.extend({
             viewRender          : this._viewRender.bind(this),
             eventRender         : this._eventRender.bind(this),
             eventAfterAllRender : this._eventAfterAllRender.bind(this),
+            windowResize        : this._windowResize.bind(this),
             eventClick          : function(event) {
                 vent.trigger(vent.Commands.ShowEpisodeDetails, { episode : event.model });
             }
@@ -262,5 +265,11 @@ module.exports = Marionette.ItemView.extend({
             title     : tooltip,
             container : '.fc-content-skeleton'
         });
+    },
+
+    _clearScrollBar : function () {
+        // Remove height from calendar so we don't have another scroll bar
+        this.$('.fc-day-grid-container').css('height', '');
+        this.$('.fc-row.fc-widget-header').attr('style', '');
     }
 });
