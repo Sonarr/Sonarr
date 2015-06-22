@@ -56,7 +56,7 @@ namespace Microsoft.AspNet.SignalR.Infrastructure
             }
             catch(NotImplementedException)
             {
-            	// This happens on mono
+                // This happens on mono
             }
         }
 

@@ -23,7 +23,7 @@ namespace NzbDrone.Integration.Test
         public void add_series_without_required_fields_should_return_badrequest()
         {
             var errors = Series.InvalidPost(new SeriesResource());
-			errors.Should<dynamic>().NotBeEmpty();
+            errors.Should<dynamic>().NotBeEmpty();
         }
 
         [Test]
