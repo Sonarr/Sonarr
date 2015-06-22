@@ -59,6 +59,7 @@ module.exports = Marionette.ItemView.extend({
 
         // Remove height from calendar so we don't have another scroll bar
         this.$('.fc-day-grid-container').css('height', '');
+        this.$('.fc-row.fc-widget-header').attr('style', '');
     },
 
     _eventRender : function(event, element) {
