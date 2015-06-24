@@ -145,13 +145,17 @@ namespace NzbDrone.Api.Indexers
                 release.QualityWeight += release.Quality.Revision.Version;
                 
                 var torrentRelease = downloadDecision.RemoteEpisode.Release as TorrentInfo;
-
+                var filehosterRelease = downloadDecision.RemoteEpisode.Release as FilehosterInfo;
                 if (torrentRelease != null)
                 {
                     release.Protocol = DownloadProtocol.Torrent;
                     release.Seeders = torrentRelease.Seeders;
                     //TODO: move this up the chains
                     release.Leechers = torrentRelease.Peers - torrentRelease.Seeders;
+                }
+                else if (filehosterRelease != null)
+                {
+                    release.Protocol = DownloadProtocol.Filehoster;
                 }
                 else
                 {
