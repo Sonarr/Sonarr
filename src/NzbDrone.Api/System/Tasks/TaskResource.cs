@@ -7,7 +7,7 @@ namespace NzbDrone.Api.System.Tasks
     {
         public String Name { get; set; }
         public String TaskName { get; set; }
-        public Int32 Interval { get; set; }
+        public double Interval { get; set; }
         public DateTime LastExecution { get; set; }
         public DateTime NextExecution { get; set; }
     }

@@ -253,6 +253,8 @@
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
+    <Compile Include="Datastore\Migration\088_tasks_with_double_interval.cs" />
+    <Compile Include="Datastore\Migration\087_additonal_delayedprofiles_columns.cs" />
     <Compile Include="Datastore\Migration\086_additonal_blacklist_column_DownloadUrl.cs" />
     <Compile Include="Datastore\Migration\085_expand_transmission_urlbase.cs" />
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
