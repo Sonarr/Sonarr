@@ -1,11 +1,19 @@
     <div class="col-sm-2">
         {{#if enableUsenet}}
             {{#if enableTorrent}}
-                {{#if_eq preferredProtocol compare="usenet"}}
-                    Prefer Usenet
+                {{#if enableFilehoster}}
+                    {{#if_eq preferredProtocol compare="usenet"}}
+                        Prefer Usenet
+                    {{else}}
+                        {{#if_eq preferredProtocol compare="torrent"}}
+                            Prefer Torrent
+                        {{else}}
+                            Prefer Filehoster
+                        {{/if_eq}}
+                    {{/if_eq}}
                 {{else}}
-                    Prefer Torrent
-                {{/if_eq}}
+                    Only Filehoster
+                {{/if}}
             {{else}}
                 Only Usenet
             {{/if}}
@@ -43,7 +51,22 @@
             -
         {{/if}}
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-2">
+        {{#if enableFilehoster}}
+            {{#if_eq filehosterDelay compare="0"}}
+                No delay
+            {{else}}
+                {{#if_eq filehosterDelay compare="1"}}
+                    1 minute
+                {{else}}
+                    {{filehosterDelay}} minutes
+                {{/if_eq}}
+            {{/if_eq}}
+        {{else}}
+            -
+        {{/if}}
+    </div>
+    <div class="col-sm-3">
         {{tagDisplay tags}}
     </div>
     <div class="col-sm-1">
