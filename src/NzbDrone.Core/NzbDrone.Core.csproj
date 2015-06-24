@@ -498,6 +498,7 @@
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
+    <Compile Include="Indexers\FilehosterIndexerBase.cs" />
     <Compile Include="Indexers\HDBits\HDBits.cs" />
     <Compile Include="Indexers\HDBits\HDBitsApi.cs" />
     <Compile Include="Indexers\HDBits\HDBitsParser.cs" />
@@ -534,6 +535,10 @@
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\HttpIndexerBase.cs" />
+    <Compile Include="Indexers\Primewire\Primewire.cs" />
+    <Compile Include="Indexers\Primewire\PrimewirePageParser.cs" />
+    <Compile Include="Indexers\Primewire\PrimewireRequestGenerator.cs" />
+    <Compile Include="Indexers\Primewire\PrimewireSettings.cs" />
     <Compile Include="Indexers\Rarbg\Rarbg.cs" />
     <Compile Include="Indexers\Rarbg\RarbgRequestGenerator.cs" />
     <Compile Include="Indexers\Rarbg\RarbgResponse.cs" />
