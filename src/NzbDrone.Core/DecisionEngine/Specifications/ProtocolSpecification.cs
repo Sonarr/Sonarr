@@ -36,6 +36,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Reject("Torrent is not enabled for this series");
             }
 
+            if (subject.Release.DownloadProtocol == DownloadProtocol.Filehoster && !delayProfile.EnableFilehoster)
+            {
+                _logger.Debug("[{0}] Filehoster is not enabled for this series", subject.Release.Title);
+                return Decision.Reject("Filehoster is not enabled for this series");
+            }
+
             return Decision.Accept();
         }
     }

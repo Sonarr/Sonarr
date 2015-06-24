@@ -73,9 +73,11 @@ module.exports = Marionette.Layout.extend({
         var model = new Model({
             enableUsenet      : true,
             enableTorrent     : true,
+            enableFilehoster  : true,
             preferredProtocol : 'usenet',
             usenetDelay       : 0,
             torrentDelay      : 0,
+            filehosterDelay   : 0,
             order             : this.collection.length,
             tags              : []
         });

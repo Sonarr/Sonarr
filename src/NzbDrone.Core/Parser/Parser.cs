@@ -142,7 +142,12 @@ namespace NzbDrone.Core.Parser
 
                 //Extant, terrible multi-episode naming (extant.10708.hdtv-lol.mp4)
                 new Regex(@"^(?<title>.+?)[-_. ](?<season>[0]?\d?)(?:(?<episode>\d{2}){2}(?!\d+))[-_. ]",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //Series with only title and airyear (Sense8 (2015))
+                new Regex(@"^(?<title>.+?)?\W*\((?<airyear>\d{4})\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
             };
 
         private static readonly Regex[] RejectHashedReleasesRegex = new Regex[]
@@ -632,34 +637,48 @@ namespace NzbDrone.Core.Parser
 
             else
             {
+
+                int airmonth;
                 //Try to Parse as a daily show
-                var airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
-                var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
-
-                //Swap day and month if month is bigger than 12 (scene fail)
-                if (airmonth > 12)
+                if (Int32.TryParse(matchCollection[0].Groups["airmonth"].Value, out airmonth))
                 {
-                    var tempDay = airday;
-                    airday = airmonth;
-                    airmonth = tempDay;
+                    var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
+
+                    //Swap day and month if month is bigger than 12 (scene fail)
+                    if (airmonth > 12)
+                    {
+                        var tempDay = airday;
+                        airday = airmonth;
+                        airmonth = tempDay;
+                    }
+
+                    var airDate = new DateTime(airYear, airmonth, airday);
+
+                    //Check if episode is in the future (most likely a parse error)
+                    if (airDate > DateTime.Now.AddDays(1).Date || airDate < new DateTime(1970, 1, 1))
+                    {
+                        throw new InvalidDateException("Invalid date found: {0}", airDate);
+                    }
+
+                    result = new ParsedEpisodeInfo
+                    {
+                        AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
+                    };
                 }
-
-                var airDate = new DateTime(airYear, airmonth, airday);
-
-                //Check if episode is in the future (most likely a parse error)
-                if (airDate > DateTime.Now.AddDays(1).Date || airDate < new DateTime(1970, 1, 1))
+                else
                 {
-                    throw new InvalidDateException("Invalid date found: {0}", airDate);
+                    //Only airyear is given
+                    result = new ParsedEpisodeInfo();
+                    result.SeriesTitle = CleanSeriesTitle(seriesName);
+                    result.SeriesTitleInfo = new SeriesTitleInfo() { Title = result.SeriesTitle, TitleWithoutYear= result.SeriesTitle, Year = airYear };
                 }
-
-                result = new ParsedEpisodeInfo
-                {
-                    AirDate = airDate.ToString(Episode.AIR_DATE_FORMAT),
-                };
             }
 
-            result.SeriesTitle = CleanSeriesTitle(seriesName);
-            result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
+            if (result.SeriesTitle == null)
+            {
+                result.SeriesTitle = CleanSeriesTitle(seriesName);
+                result.SeriesTitleInfo = GetSeriesTitleInfo(result.SeriesTitle);
+            }
 
             Logger.Debug("Episode Parsed. {0}", result);
 

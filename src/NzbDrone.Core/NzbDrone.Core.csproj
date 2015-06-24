@@ -253,6 +253,9 @@
     <Compile Include="Datastore\Migration\074_disable_eztv.cs" />
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
+    <Compile Include="Datastore\Migration\088_tasks_with_double_interval.cs" />
+    <Compile Include="Datastore\Migration\087_additonal_delayedprofiles_columns.cs" />
+    <Compile Include="Datastore\Migration\086_additonal_blacklist_column_DownloadUrl.cs" />
     <Compile Include="Datastore\Migration\085_expand_transmission_urlbase.cs" />
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
@@ -326,6 +329,21 @@
     <Compile Include="Download\Clients\Deluge\DelugeUpdateUIResult.cs" />
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderError.cs" />
+    <Compile Include="Download\FilehosterClientBase.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderDownloadSpeedResponse.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderEvent.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderQueryPackageItem.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderState.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderEventData.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderGetDownloadStateResponse.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderGetStateResponse.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderLinkCheckResponse.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloader.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderProxy.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderSettings.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderQueryPackageResponse.cs" />
+    <Compile Include="Download\Clients\JDownloader\JDownloaderSubscribeResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonRequest.cs" />
@@ -388,6 +406,7 @@
     <Compile Include="Download\Clients\uTorrent\UTorrentTorrentStatus.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />
     <Compile Include="Download\DownloadEventHub.cs" />
+    <Compile Include="Download\ILinkChecker.cs" />
     <Compile Include="Download\TrackedDownloads\DownloadMonitoringService.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownload.cs" />
     <Compile Include="Download\TrackedDownloads\TrackedDownloadService.cs" />
@@ -479,6 +498,7 @@
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
+    <Compile Include="Indexers\FilehosterIndexerBase.cs" />
     <Compile Include="Indexers\HDBits\HDBits.cs" />
     <Compile Include="Indexers\HDBits\HDBitsApi.cs" />
     <Compile Include="Indexers\HDBits\HDBitsParser.cs" />
@@ -515,6 +535,10 @@
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsRssParser.cs" />
     <Compile Include="Indexers\Omgwtfnzbs\OmgwtfnzbsSettings.cs" />
     <Compile Include="Indexers\HttpIndexerBase.cs" />
+    <Compile Include="Indexers\Primewire\Primewire.cs" />
+    <Compile Include="Indexers\Primewire\PrimewirePageParser.cs" />
+    <Compile Include="Indexers\Primewire\PrimewireRequestGenerator.cs" />
+    <Compile Include="Indexers\Primewire\PrimewireSettings.cs" />
     <Compile Include="Indexers\Rarbg\Rarbg.cs" />
     <Compile Include="Indexers\Rarbg\RarbgRequestGenerator.cs" />
     <Compile Include="Indexers\Rarbg\RarbgResponse.cs" />
@@ -713,6 +737,7 @@
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
     <Compile Include="Organizer\NamingConfigRepository.cs" />
+    <Compile Include="Parser\Model\FilehosterInfo.cs" />
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />

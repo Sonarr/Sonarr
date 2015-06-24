@@ -12,6 +12,8 @@ module.exports = Backgrid.Cell.extend({
                 label = 'torrent';
             } else if (protocol === 'usenet') {
                 label = 'nzb';
+            } else if (protocol === 'filehoster') {
+                label = 'filehoster';
             }
 
             this.$el.html('<div class="label label-default protocol-{0}" title="{0}">{1}</div>'.format(protocol, label));

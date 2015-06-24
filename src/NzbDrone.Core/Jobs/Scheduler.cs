@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Jobs
         public void Handle(ApplicationStartedEvent message)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            Timer.Interval = 1000 * 30;
+            Timer.Interval = 1000 * 1;
             Timer.Elapsed += (o, args) => Task.Factory.StartNew(ExecuteCommands, _cancellationTokenSource.Token)
                 .LogExceptions();
 
