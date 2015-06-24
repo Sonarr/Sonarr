@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Alter.Table("Blacklist").AddColumn("DownloadUrl").AsInt64().Nullable();
+            Alter.Table("Blacklist").AddColumn("DownloadUrl").AsString().Nullable();
         }
     }
 }
