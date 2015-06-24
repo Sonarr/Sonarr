@@ -50,10 +50,18 @@ namespace NzbDrone.Core.Blacklisting
 
                 return blacklistedByTorrentInfohash.Any(b => SameTorrent(b, torrentInfo));
             }
+            else if (release.DownloadProtocol == DownloadProtocol.Filehoster)
+            {
+                var filehosterInfo = release as FilehosterInfo;
+                if (filehosterInfo == null) return false;
+                return blacklistedByTitle.Where(a => a.Protocol == DownloadProtocol.Filehoster).Any(a => SameFilehosterFile(a, filehosterInfo));
+
+            }
 
             return blacklistedByTitle.Where(b => b.Protocol == DownloadProtocol.Usenet)
                                      .Any(b => SameNzb(b, release));
         }
+
 
         public PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec)
         {
@@ -90,6 +98,11 @@ namespace NzbDrone.Core.Blacklisting
             }
 
             return item.Indexer.Equals(release.Indexer, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private bool SameFilehosterFile(Blacklist item, FilehosterInfo release)
+        {
+            return release.DownloadUrl == item.DownloadUrl;
         }
 
         private bool HasSameIndexer(Blacklist item, string indexer)
@@ -138,7 +151,8 @@ namespace NzbDrone.Core.Blacklisting
                                 Indexer = message.Data.GetValueOrDefault("indexer"),
                                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                                 Message = message.Message,
-                                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash")
+                                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
+                                DownloadUrl = message.Data.GetValueOrDefault("downloadUrl")
                             };
 
             _blacklistRepository.Insert(blacklist);

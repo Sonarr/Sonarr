@@ -21,5 +21,6 @@ namespace NzbDrone.Core.Blacklisting
         public string Indexer { get; set; }
         public string Message { get; set; }
         public string TorrentInfoHash { get; set; }
+        public string DownloadUrl { get; set; }
     }
 }
