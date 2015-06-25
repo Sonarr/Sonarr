@@ -1,55 +1,73 @@
 var $ = require('jquery');
+var _ = require('underscore');
 var DeepModel = require('backbone.deepmodel');
 var Messenger = require('../Shared/Messenger');
 
 module.exports = DeepModel.extend({
-    connectData : function(action) {
+    connectData : function(action, initialQueryString) {
         var self = this;
-        
+
         this.trigger('connect:sync');
 
         var promise = $.Deferred();
 
         var callAction = function(action) {
-            var params = {};
-            params.url = self.collection.url + '/connectData/' + action;
-            params.contentType = 'application/json';
-            params.data = JSON.stringify(self.toJSON());
-            params.type = 'POST';
-            params.isValidatedCall = true;
+            var params = {
+                url             : self.collection.url + '/connectData/' + action,
+                contentType     : 'application/json',
+                data            : JSON.stringify(self.toJSON()),
+                type            : 'POST',
+                isValidatedCall : true
+            };
 
-            $.ajax(params).fail(promise.reject).success(function(response) {
-                if (response.action) 
+            var ajaxPromise = $.ajax(params);
+            ajaxPromise.fail(promise.reject);
+
+            ajaxPromise.success(function(response) {
+                if (response.action)
                 {
-
-                    if (response.action === "openwindow") 
+                    if (response.action === 'openWindow')
                     {
-                        var connectResponseWindow = window.open(response.url);
+                        window.open(response.url);
                         var selfWindow = window;
                         selfWindow.onCompleteOauth = function(query, callback) {
                             delete selfWindow.onCompleteOauth;
-                            if (response.nextStep) { callAction(response.nextStep + query); }
-                            else { promise.resolve(response); }
+
+                            if (response.nextStep) {
+                                callAction(response.nextStep + query);
+                            }
+                            else {
+                                promise.resolve(response);
+                            }
+
                             callback();
                         };
+
                         return;
-                    } 
-                    else if (response.action === "updatefields")
+                    }
+                    else if (response.action === 'updateFields')
                     {
-                        Object.keys(response.fields).forEach(function(field) {
-                            self.set(field, response.fields[field]);
-                            self.attributes.fields.forEach(function(fieldDef) {
-                                if (fieldDef.name === field) { fieldDef.value = response.fields[field]; }
+                        _.each(self.get('fields'), function (value, index) {
+                            var fieldValue = _.find(response.fields, function (field, key) {
+                                return key === value.name;
                             });
+
+                            if (fieldValue) {
+                                self.set('fields.' + index + '.value', fieldValue);
+                            }
                         });
                     }
                 }
-                if (response.nextStep) { callAction(response.nextStep); }
-                else { promise.resolve(response); }
+                if (response.nextStep) {
+                    callAction(response.nextStep);
+                }
+                else {
+                    promise.resolve(response);
+                }
             });
         };
 
-        callAction(action);
+        callAction(action, initialQueryString);
 
         Messenger.monitor({
             promise        : promise,
@@ -63,6 +81,7 @@ module.exports = DeepModel.extend({
 
         return promise;
     },
+
     test : function() {
         var self = this;
 

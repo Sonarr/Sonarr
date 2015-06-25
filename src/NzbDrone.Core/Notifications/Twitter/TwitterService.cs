@@ -1,64 +1,54 @@
 ﻿using FluentValidation.Results;
-using NzbDrone.Common.Extensions;
 using NLog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using OAuth;
 using System.Net;
 using System.Collections.Specialized;
+using System.IO;
+using System.Web;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
     public interface ITwitterService
     {
-        void SendNotification(string message, String accessToken, String accessTokenSecret, String consumerKey, String consumerSecret);
+        void SendNotification(string message, TwitterSettings settings);
         ValidationFailure Test(TwitterSettings settings);
-        string GetOAuthRedirect(string consumerKey, string consumerSecret, string callback);
-        object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier);
+        string GetOAuthRedirect(string callbackUrl);
+        object GetOAuthToken(string oauthToken, string oauthVerifier);
     }
 
     public class TwitterService : ITwitterService
     {
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public TwitterService(Logger logger)
+        private static string _consumerKey = "5jSR8a3cp0ToOqSMLMv5GtMQD";
+        private static string _consumerSecret = "dxoZjyMq4BLsC8KxyhSOrIndhCzJ0Dik2hrLzqyJcqoGk4Pfsp";
+
+        public TwitterService(IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
-
-            var logo = typeof(TwitterService).Assembly.GetManifestResourceBytes("NzbDrone.Core.Resources.Logo.64.png");
         }
 
-        private NameValueCollection oauthQuery(OAuthRequest client)
+        private NameValueCollection OAuthQuery(OAuthRequest oAuthRequest)
         {
-            // Using HTTP header authorization
-            string auth = client.GetAuthorizationHeader();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(client.RequestUrl);
-
+            var auth = oAuthRequest.GetAuthorizationHeader();
+            var request = new Common.Http.HttpRequest(oAuthRequest.RequestUrl);
             request.Headers.Add("Authorization", auth);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            System.Collections.Specialized.NameValueCollection qscoll;
-            using (var reader = new System.IO.StreamReader(response.GetResponseStream(), System.Text.Encoding.GetEncoding("utf-8")))
-            {
-                string responseText = reader.ReadToEnd();
-                return System.Web.HttpUtility.ParseQueryString(responseText);
-            }
-            return null;
+            var response = _httpClient.Get(request);
+
+            return HttpUtility.ParseQueryString(response.Content);
         }
 
-        public object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier)
+        public object GetOAuthToken(string oauthToken, string oauthVerifier)
         {
             // Creating a new instance with a helper method
-            OAuthRequest client = OAuthRequest.ForAccessToken(
-                consumerKey, 
-                consumerSecret,
-                oauthToken,
-                "",
-                oauthVerifier
-            );
-            client.RequestUrl = "https://api.twitter.com/oauth/access_token";
-            NameValueCollection qscoll = oauthQuery(client);
+            var oAuthRequest = OAuthRequest.ForAccessToken(_consumerKey, _consumerSecret, oauthToken, "", oauthVerifier);
+            oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/access_token";
+            var qscoll = OAuthQuery(oAuthRequest);
             
             return new
             {
@@ -67,54 +57,77 @@ namespace NzbDrone.Core.Notifications.Twitter
             };
         }
 
-        public string GetOAuthRedirect(string consumerKey, string consumerSecret, string callback)
+        public string GetOAuthRedirect(string callbackUrl)
         {
             // Creating a new instance with a helper method
-            OAuthRequest client = OAuthRequest.ForRequestToken(consumerKey, consumerSecret, callback);
-            client.RequestUrl = "https://api.twitter.com/oauth/request_token";
-            NameValueCollection qscoll = oauthQuery(client);
+            var oAuthRequest = OAuthRequest.ForRequestToken(_consumerKey, _consumerSecret, callbackUrl);
+            oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/request_token";
+            var qscoll = OAuthQuery(oAuthRequest);
 
-            return "https://api.twitter.com/oauth/authorize?oauth_token=" + qscoll["oauth_token"];
+            return String.Format("https://api.twitter.com/oauth/authorize?oauth_token={0}", qscoll["oauth_token"]);
         }
 
-        public void SendNotification(string message, String accessToken, String accessTokenSecret, String consumerKey, String consumerSecret)
+        public void SendNotification(string message, TwitterSettings settings)
         {
             try
             {
-                var oauth = new TinyTwitter.OAuthInfo
+                var oAuth = new TinyTwitter.OAuthInfo
                 {
-                    AccessToken = accessToken,
-                    AccessSecret = accessTokenSecret,
-                    ConsumerKey = consumerKey,
-                    ConsumerSecret = consumerSecret
+                    AccessToken = settings.AccessToken,
+                    AccessSecret = settings.AccessTokenSecret,
+                    ConsumerKey = _consumerKey,
+                    ConsumerSecret = _consumerSecret
                 };
-                var twitter = new TinyTwitter.TinyTwitter(oauth);
-                twitter.UpdateStatus(message);
+
+                var twitter = new TinyTwitter.TinyTwitter(oAuth);
+
+                if (settings.DirectMessage)
+                {
+                    twitter.DirectMessage(message, settings.Mention);
+                }
+
+                else
+                {
+                    if (settings.Mention.IsNotNullOrWhiteSpace())
+                    {
+                        message += String.Format(" @{0}", settings.Mention);
+                    }
+
+                    twitter.UpdateStatus(message);                    
+                }
             }
             catch (WebException e)
             {
-                using (WebResponse response = e.Response)
+                using (var response = e.Response)
                 {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-                    Console.WriteLine("Error code: {0}", httpResponse.StatusCode);
-                    using (System.IO.Stream data = response.GetResponseStream())
-                    using (var reader = new System.IO.StreamReader(data))
+                    var httpResponse = (HttpWebResponse)response;
+
+                    using (var responseStream = response.GetResponseStream())
                     {
-                        string text = reader.ReadToEnd();
-                        Console.WriteLine(text);
+                        if (responseStream == null)
+                        {
+                            _logger.Trace("Status Code: {0}", httpResponse.StatusCode);
+                            throw new TwitterException("Error received from Twitter: " + httpResponse.StatusCode, _logger , e);
+                        }
+
+                        using (var reader = new StreamReader(responseStream))
+                        {
+                            var responseBody = reader.ReadToEnd();
+                            _logger.Trace("Reponse: {0} Status Code: {1}", responseBody, httpResponse.StatusCode);
+                            throw new TwitterException("Error received from Twitter: " + responseBody, _logger, e);
+                        }
                     }
                 }
-                throw e;
             }
-            return;
         }
 
         public ValidationFailure Test(TwitterSettings settings)
         {
             try
             {
-                string body = "This is a test message from Sonarr @ " + DateTime.Now.ToString();
-                SendNotification(body, settings.AccessToken, settings.AccessTokenSecret, settings.ConsumerKey, settings.ConsumerSecret);
+                var body = "Sonarr: Test Message @ " + DateTime.Now;
+
+                SendNotification(body, settings);
             }
             catch (Exception ex)
             {

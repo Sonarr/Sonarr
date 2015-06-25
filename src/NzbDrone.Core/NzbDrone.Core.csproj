@@ -743,6 +743,7 @@
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
+    <Compile Include="Notifications\Twitter\TwitterException.cs" />
     <Compile Include="Organizer\NamingConfigRepository.cs" />
     <Compile Include="Notifications\Twitter\Twitter.cs" />
     <Compile Include="Notifications\Twitter\TwitterService.cs" />

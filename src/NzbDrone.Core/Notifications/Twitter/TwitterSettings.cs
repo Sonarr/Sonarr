@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation;
+﻿using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -12,8 +11,12 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
             RuleFor(c => c.AccessToken).NotEmpty();
             RuleFor(c => c.AccessTokenSecret).NotEmpty();
-            RuleFor(c => c.ConsumerKey).NotEmpty();
-            RuleFor(c => c.ConsumerSecret).NotEmpty();
+            //TODO: Validate that it is a valid username (numbers, letters and underscores - I think)
+            RuleFor(c => c.Mention).NotEmpty().When(c => c.DirectMessage);
+
+            RuleFor(c => c.DirectMessage).Equal(true)
+                                         .WithMessage("Using Direct Messaging is recommended, or use a private account.")
+                                         .AsWarning();
         }
     }
 
@@ -23,31 +26,24 @@ namespace NzbDrone.Core.Notifications.Twitter
 
         public TwitterSettings()
         {
-            ConsumerKey = "3POVsO3KW90LKZXyzPOjQ"; /* FIXME - Key from Couchpotato so needs to be replaced */
-            ConsumerSecret = "Qprb94hx9ucXvD4Wvg2Ctsk4PDK7CcQAKgCELXoyIjE"; /* FIXME - Key from Couchpotato so needs to be replaced */
+            DirectMessage = true;
             AuthorizeNotification = "step1";
         }
 
         [FieldDefinition(0, Label = "Access Token", Advanced = true)]
-        public String AccessToken { get; set; }
+        public string AccessToken { get; set; }
 
         [FieldDefinition(1, Label = "Access Token Secret", Advanced = true)]
-        public String AccessTokenSecret { get; set; }
+        public string AccessTokenSecret { get; set; }
 
-        public String ConsumerKey { get; set; }
-        public String ConsumerSecret { get; set; }
+        [FieldDefinition(2, Label = "Mention", HelpText = "Mention this user in sent tweets")]
+        public string Mention { get; set; }
+
+        [FieldDefinition(3, Label = "Direct Message", Type = FieldType.Checkbox, HelpText = "Send a direct message instead of a public message")]
+        public bool DirectMessage { get; set; }
 
         [FieldDefinition(4, Label = "Connect to twitter", Type = FieldType.Action)]
-        public String AuthorizeNotification { get; set; }
-
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(AccessToken) && !string.IsNullOrWhiteSpace(AccessTokenSecret) &&
-                    !string.IsNullOrWhiteSpace(ConsumerKey) && !string.IsNullOrWhiteSpace(ConsumerSecret);
-            }
-        }
+        public string AuthorizeNotification { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

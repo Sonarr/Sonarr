@@ -33,7 +33,8 @@ namespace NzbDrone.Api.Frontend.Mappers
                    resourceUrl.EndsWith(".map") ||
                    resourceUrl.EndsWith(".css") ||
                    (resourceUrl.EndsWith(".ico") && !resourceUrl.Equals("/favicon.ico")) ||
-                   resourceUrl.EndsWith(".swf");
+                   resourceUrl.EndsWith(".swf") ||
+                   resourceUrl.EndsWith("oauth.html");
         }
     }
 }
