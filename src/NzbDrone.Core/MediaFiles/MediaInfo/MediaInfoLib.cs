@@ -73,12 +73,18 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         ~MediaInfo()
         {
-            MediaInfo_Delete(_handle);
+            if (_handle != IntPtr.Zero)
+            {
+                MediaInfo_Delete(_handle);
+            }
         }
 
         public void Dispose()
         {
-            MediaInfo_Delete(_handle);
+            if (_handle != IntPtr.Zero)
+            {
+                MediaInfo_Delete(_handle);
+            }
             GC.SuppressFinalize(this);
         }
 
