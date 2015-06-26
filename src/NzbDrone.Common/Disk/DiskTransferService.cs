@@ -83,9 +83,33 @@ namespace NzbDrone.Common.Disk
 
             _logger.Debug("{0} [{1}] > [{2}]", mode, sourcePath, targetPath);
 
-            if (sourcePath.PathEquals(targetPath))
+            if (sourcePath == targetPath)
             {
                 throw new IOException(string.Format("Source and destination can't be the same {0}", sourcePath));
+            }
+
+            if (sourcePath.PathEquals(targetPath, StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (mode.HasFlag(TransferMode.HardLink) || mode.HasFlag(TransferMode.Copy))
+                {
+                    throw new IOException(string.Format("Source and destination can't be the same {0}", sourcePath));
+                }
+
+                if (mode.HasFlag(TransferMode.Move))
+                {
+                    var tempPath = sourcePath + ".backup~";
+                    _diskProvider.MoveFile(sourcePath, tempPath);
+
+                    if (_diskProvider.FileExists(targetPath))
+                    {
+                        _diskProvider.MoveFile(tempPath, sourcePath);
+                    }
+
+                    _diskProvider.MoveFile(tempPath, targetPath);
+                    return TransferMode.Move;
+                }
+
+                return TransferMode.None;
             }
 
             if (sourcePath.IsParentPath(targetPath))
@@ -220,6 +244,10 @@ namespace NzbDrone.Common.Disk
                         if (targetSize == originalSize)
                         {
                             _diskProvider.MoveFile(tempTargetPath, targetPath);
+                            if (_diskProvider.FileExists(tempTargetPath))
+                            {
+                                throw new IOException(String.Format("Temporary file '{0}' still exists, aborting.", tempTargetPath));
+                            }
                             _logger.Trace("Hardlink move succeeded, deleting source.");
                             _diskProvider.DeleteFile(sourcePath);
                             return true;

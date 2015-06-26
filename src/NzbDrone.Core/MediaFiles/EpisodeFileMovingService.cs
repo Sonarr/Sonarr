@@ -97,11 +97,11 @@ namespace NzbDrone.Core.MediaFiles
             return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Copy);
         }
         
-        private EpisodeFile TransferFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename, TransferMode mode)
+        private EpisodeFile TransferFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilePath, TransferMode mode)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series,() => series).IsNotNull();
-            Ensure.That(destinationFilename, () => destinationFilename).IsValidPath();
+            Ensure.That(destinationFilePath, () => destinationFilePath).IsValidPath();
 
             var episodeFilePath = episodeFile.Path ?? Path.Combine(series.Path, episodeFile.RelativePath);
 
@@ -110,14 +110,14 @@ namespace NzbDrone.Core.MediaFiles
                 throw new FileNotFoundException("Episode file path does not exist", episodeFilePath);
             }
 
-            if (episodeFilePath.PathEquals(destinationFilename))
+            if (episodeFilePath == destinationFilePath)
             {
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            _diskTransferService.TransferFile(episodeFilePath, destinationFilename, mode);
+            _diskTransferService.TransferFile(episodeFilePath, destinationFilePath, mode);
 
-            episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilename);
+            episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 
             _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
 
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 if (series.SeasonFolder)
                 {
-                    var seasonFolder = Path.GetDirectoryName(destinationFilename);
+                    var seasonFolder = Path.GetDirectoryName(destinationFilePath);
 
                     _mediaFileAttributeService.SetFolderLastWriteTime(seasonFolder, episodeFile.DateAdded);
                 }
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.WarnException("Unable to set last write time", ex);
             }
 
-            _mediaFileAttributeService.SetFilePermissions(destinationFilename);
+            _mediaFileAttributeService.SetFilePermissions(destinationFilePath);
 
             return episodeFile;
         }

@@ -130,6 +130,59 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        public void should_not_remove_source_if_partial_still_exists()
+        {
+            MonoOnly();
+
+            var targetPath = Path.Combine(Path.GetDirectoryName(_targetPath), Path.GetFileName(_targetPath).ToUpper());
+            var tempTargetPath = targetPath + ".partial~";
+
+            WithSuccessfulHardlink(_sourcePath, _backupPath);
+
+            WithExistingFile(_targetPath);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_backupPath, tempTargetPath, false))
+                .Callback(() => WithExistingFile(tempTargetPath, true));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(tempTargetPath, targetPath, false))
+                .Callback(() => { });
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_sourcePath), Times.Never());
+        }
+
+        [Test]
+        public void should_rename_via_temp()
+        {
+            var targetPath = Path.Combine(Path.GetDirectoryName(_sourcePath), Path.GetFileName(_sourcePath).ToUpper());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _backupPath, false))
+                .Callback(() =>
+                    {
+                        WithExistingFile(_backupPath, true);
+                        WithExistingFile(_sourcePath, false);
+                    });
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_backupPath, targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(targetPath, true);
+                    WithExistingFile(_backupPath, false);
+                });
+
+            var result = Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move);
+            
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_backupPath, targetPath, false), Times.Once());
+        }
+
+        [Test]
         public void should_remove_backup_if_move_throws()
         {
             MonoOnly();
