@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.TPL;
-
+using System.Collections;
+using System;
 namespace NzbDrone.Core.Indexers
 {
     public interface IFetchAndParseRss
@@ -15,11 +16,13 @@ namespace NzbDrone.Core.Indexers
     public class FetchAndParseRssService : IFetchAndParseRss
     {
         private readonly IIndexerFactory _indexerFactory;
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly Logger _logger;
 
-        public FetchAndParseRssService(IIndexerFactory indexerFactory, Logger logger)
+        public FetchAndParseRssService(IIndexerFactory indexerFactory, IIndexerStatusService indexerStatusService, Logger logger)
         {
             _indexerFactory = indexerFactory;
+            _indexerStatusService = indexerStatusService;
             _logger = logger;
         }
 
@@ -42,6 +45,13 @@ namespace NzbDrone.Core.Indexers
 
             foreach (var indexer in indexers)
             {
+                var backOff = _indexerStatusService.GetBackOffDate(indexer.Definition.Id);
+                if (backOff > DateTime.UtcNow)
+                {
+                    _logger.Debug("Temporarily backing off on {0} till {1}.", indexer.Definition.Name, backOff);
+                    continue;
+                }
+
                 var indexerLocal = indexer;
 
                 var task = taskFactory.StartNew(() =>

@@ -50,8 +50,8 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public Newznab(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(httpClient, configService, parsingService, logger)
+        public Newznab(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
 
         }

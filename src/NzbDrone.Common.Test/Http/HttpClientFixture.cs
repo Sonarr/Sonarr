@@ -228,6 +228,16 @@ namespace NzbDrone.Common.Test.Http
 
             ExceptionVerification.IgnoreErrors();
         }
+
+        [Test]
+        public void should_throw_on_http429_too_many_requests()
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/status/429");
+
+            Assert.Throws<TooManyRequestsException>(() => Subject.Get(request));
+
+            ExceptionVerification.IgnoreWarns();
+        }
     }
 
     public class HttpBinResource

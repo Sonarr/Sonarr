@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
 
-        public Omgwtfnzbs(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(httpClient, configService, parsingService, logger)
+        public Omgwtfnzbs(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
 
         }

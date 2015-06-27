@@ -2,8 +2,11 @@
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.TPL;
+using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 
@@ -18,16 +21,19 @@ namespace NzbDrone.Core.Download
     public class DownloadService : IDownloadService
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly IRateLimitService _rateLimitService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
+            IIndexerStatusService indexerStatusService,
             IRateLimitService rateLimitService,
             IEventAggregator eventAggregator,
             Logger logger)
         {
             _downloadClientProvider = downloadClientProvider;
+            _indexerStatusService = indexerStatusService;
             _rateLimitService = rateLimitService;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -54,7 +60,26 @@ namespace NzbDrone.Core.Download
                 _rateLimitService.WaitAndPulse(uri.Host, TimeSpan.FromSeconds(2));
             }
 
-            var downloadClientId = downloadClient.Download(remoteEpisode);
+            string downloadClientId;
+            try
+            {
+                downloadClientId = downloadClient.Download(remoteEpisode);
+                _indexerStatusService.ReportSuccess(remoteEpisode.Release.IndexerId);
+            }
+            catch (ReleaseDownloadException ex)
+            {
+                var http429 = ex.InnerException as TooManyRequestsException;
+                if (http429 != null)
+                {
+                    _indexerStatusService.ReportFailure(remoteEpisode.Release.IndexerId, http429.RetryAfter);
+                }
+                else
+                {
+                    _indexerStatusService.ReportFailure(remoteEpisode.Release.IndexerId);
+                }
+                throw;
+            }
+
             var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
             episodeGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
 

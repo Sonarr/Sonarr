@@ -262,6 +262,7 @@
     <Compile Include="Datastore\Migration\084_update_quality_minmax_size.cs" />
     <Compile Include="Datastore\Migration\083_additonal_blacklist_columns.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
+    <Compile Include="Datastore\Migration\091_added_indexerstatus.cs" />
     <Compile Include="Datastore\Migration\088_pushbullet_devices_channels_list.cs" />
     <Compile Include="Datastore\Migration\090_update_kickass_url.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
@@ -490,10 +491,13 @@
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerFactory.cs" />
+    <Compile Include="Indexers\IndexerStatusRepository.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\IndexerRequest.cs" />
     <Compile Include="Indexers\IndexerResponse.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
+    <Compile Include="Indexers\IndexerStatus.cs" />
+    <Compile Include="Indexers\IndexerStatusService.cs" />
     <Compile Include="Indexers\IProcessIndexerResponse.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrentsRequestGenerator.cs" />
     <Compile Include="Indexers\IPTorrents\IPTorrents.cs" />

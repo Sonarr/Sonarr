@@ -13,8 +13,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
     public class TestTorrentRssIndexer : TorrentRssIndexer
     {
-        public TestTorrentRssIndexer(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, ITorrentRssParserFactory torrentRssParserFactory, Logger logger)
-            : base(httpClient, configService, parsingService, torrentRssParserFactory, logger)
+        public TestTorrentRssIndexer(ITorrentRssParserFactory torrentRssParserFactory, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(torrentRssParserFactory, httpClient, indexerStatusService, configService, parsingService, logger)
         {
         }
 

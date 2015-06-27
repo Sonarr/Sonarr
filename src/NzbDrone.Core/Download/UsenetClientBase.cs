@@ -49,6 +49,13 @@ namespace NzbDrone.Core.Download
             {
                 nzbData = _httpClient.Get(new HttpRequest(url)).ResponseData;
             }
+            catch (HttpException ex)
+            {
+                _logger.ErrorException(String.Format("Downloading nzb for episode '{0}' failed ({1})",
+                    remoteEpisode.Release.Title, url), ex);
+
+                throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);
+            }
             catch (WebException ex)
             {
                 _logger.ErrorException(String.Format("Downloading nzb for episode '{0}' failed ({1})",

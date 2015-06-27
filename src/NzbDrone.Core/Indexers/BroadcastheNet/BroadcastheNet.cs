@@ -20,8 +20,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public override bool SupportsSearch { get { return true; } }
         public override int PageSize { get { return 100; } }
 
-        public BroadcastheNet(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(httpClient, configService, parsingService, logger)
+        public BroadcastheNet(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
 
         }

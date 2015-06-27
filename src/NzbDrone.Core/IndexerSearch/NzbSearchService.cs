@@ -25,6 +25,7 @@ namespace NzbDrone.Core.IndexerSearch
     public class NzbSearchService : ISearchForNzb
     {
         private readonly IIndexerFactory _indexerFactory;
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly ISceneMappingService _sceneMapping;
         private readonly ISeriesService _seriesService;
         private readonly IEpisodeService _episodeService;
@@ -32,6 +33,7 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly Logger _logger;
 
         public NzbSearchService(IIndexerFactory indexerFactory,
+                                IIndexerStatusService indexerStatusService,
                                 ISceneMappingService sceneMapping,
                                 ISeriesService seriesService,
                                 IEpisodeService episodeService,
@@ -39,6 +41,7 @@ namespace NzbDrone.Core.IndexerSearch
                                 Logger logger)
         {
             _indexerFactory = indexerFactory;
+            _indexerStatusService = indexerStatusService;
             _sceneMapping = sceneMapping;
             _seriesService = seriesService;
             _episodeService = episodeService;
@@ -257,6 +260,13 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var indexer in indexers)
             {
+                var backOff = _indexerStatusService.GetBackOffDate(indexer.Definition.Id);
+                if (backOff > DateTime.UtcNow)
+                {
+                    _logger.Debug("Temporarily backing off on {0} till {1}.", indexer.Definition.Name, backOff);
+                    continue;
+                }
+
                 var indexerLocal = indexer;
 
                 taskList.Add(taskFactory.StartNew(() =>

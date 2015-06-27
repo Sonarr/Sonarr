@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Indexers
     public abstract class IndexerBase<TSettings> : IIndexer
         where TSettings : IProviderConfig, new()
     {
+        protected readonly IIndexerStatusService _indexerStatusService;
         protected readonly IConfigService _configService;
         protected readonly IParsingService _parsingService;
         protected readonly Logger _logger;
@@ -25,8 +26,9 @@ namespace NzbDrone.Core.Indexers
         public abstract Boolean SupportsRss { get; }
         public abstract Boolean SupportsSearch { get; }
 
-        public IndexerBase(IConfigService configService, IParsingService parsingService, Logger logger)
+        public IndexerBase(IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
         {
+            _indexerStatusService = indexerStatusService;
             _configService = configService;
             _parsingService = parsingService;
             _logger = logger;
@@ -85,6 +87,7 @@ namespace NzbDrone.Core.Indexers
 
             result.ForEach(c =>
             {
+                c.IndexerId = Definition.Id;
                 c.Indexer = Definition.Name;
                 c.DownloadProtocol = Protocol;
             });

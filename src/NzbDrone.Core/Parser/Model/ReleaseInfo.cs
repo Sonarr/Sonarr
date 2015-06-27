@@ -1,24 +1,24 @@
 using System;
+using System.Text;
 using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Parser.Model
 {
-    using System.Text;
-
     public class ReleaseInfo
     {
-        public String Guid { get; set; }
-        public String Title { get; set; }
-        public Int64 Size { get; set; }
-        public String DownloadUrl { get; set; }
-        public String InfoUrl { get; set; }
-        public String CommentUrl { get; set; }
-        public String Indexer { get; set; }
+        public string Guid { get; set; }
+        public string Title { get; set; }
+        public long Size { get; set; }
+        public string DownloadUrl { get; set; }
+        public string InfoUrl { get; set; }
+        public string CommentUrl { get; set; }
+        public int IndexerId { get; set; }
+        public string Indexer { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
-        public Int32 TvRageId { get; set; }
+        public int TvRageId { get; set; }
         public DateTime PublishDate { get; set; }
 
-        public Int32 Age
+        public int Age
         {
             get
             {
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Parser.Model
             private set { }
         }
 
-        public Double AgeHours
+        public double AgeHours
         {
             get
             {
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Parser.Model
             private set { }
         }
 
-        public Double AgeMinutes
+        public double AgeMinutes
         {
             get
             {
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Parser.Model
 
         public override string ToString()
         {
-            return String.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);
+            return string.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);
         }
 
         public virtual string ToString(string format)

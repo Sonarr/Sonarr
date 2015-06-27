@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Indexers
 {
     public class RssSyncService : IExecute<RssSyncCommand>
     {
+        private readonly IIndexerStatusService _indexerStatusService;
+        private readonly IIndexerFactory _indexerFactory;
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _processDownloadDecisions;
@@ -22,7 +24,9 @@ namespace NzbDrone.Core.Indexers
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RssSyncService(IFetchAndParseRss rssFetcherAndParser,
+        public RssSyncService(IIndexerStatusService indexerStatusService,
+                              IIndexerFactory indexerFactory,
+                              IFetchAndParseRss rssFetcherAndParser,
                               IMakeDownloadDecision downloadDecisionMaker,
                               IProcessDownloadDecisions processDownloadDecisions,
                               IEpisodeSearchService episodeSearchService,
@@ -30,6 +34,8 @@ namespace NzbDrone.Core.Indexers
                               IEventAggregator eventAggregator,
                               Logger logger)
         {
+            _indexerStatusService = indexerStatusService;
+            _indexerFactory = indexerFactory;
             _rssFetcherAndParser = rssFetcherAndParser;
             _downloadDecisionMaker = downloadDecisionMaker;
             _processDownloadDecisions = processDownloadDecisions;
@@ -62,13 +68,40 @@ namespace NzbDrone.Core.Indexers
 
         public void Execute(RssSyncCommand message)
         {
+            var rssStarted = DateTime.UtcNow;
+
             var processed = Sync();
             var grabbedOrPending = processed.Grabbed.Concat(processed.Pending).ToList();
 
             if (message.LastExecutionTime.HasValue && DateTime.UtcNow.Subtract(message.LastExecutionTime.Value).TotalHours > 3)
             {
-                _logger.Info("RSS Sync hasn't run since: {0}. Searching for any missing episodes since then.", message.LastExecutionTime.Value);
-                _episodeSearchService.MissingEpisodesAiredAfter(message.LastExecutionTime.Value.AddDays(-1), grabbedOrPending.SelectMany(d => d.RemoteEpisode.Episodes).Select(e => e.Id));
+                var lastGap = rssStarted;
+
+                foreach (var indexer in _indexerFactory.RssEnabled().Where(v => v.SupportsSearch))
+                {
+                    var lastRecentSearch = _indexerStatusService.GetLastRecentSearch(indexer.Definition.Id);
+                    if (!lastRecentSearch.HasValue || lastRecentSearch.Value >= rssStarted)
+                    {
+                        continue;
+                    }
+
+                    var backoffTime = _indexerStatusService.GetBackOffDate(indexer.Definition.Id);
+                    if (backoffTime > rssStarted)
+                    {
+                        _logger.Debug("Indexer {0} last continous rss sync was till {1}. But indexer is temporarily disabled, unable to search for missing episodes.", indexer.Definition.Name, lastRecentSearch.Value);
+                        continue;
+                    }
+
+                    _logger.Debug("Indexer {0} last continous rss sync was till {1}. Search may be required.", indexer.Definition.Name, lastRecentSearch.Value);
+
+                    if (lastRecentSearch.Value < lastGap)
+                    {
+                        lastGap = lastRecentSearch.Value;
+                    }
+                }
+
+                _logger.Info("RSS Sync hasn't run since {0} and didn't completely cover the period starting {1}. Searching for any missing episodes aired within that period.", message.LastExecutionTime.Value, lastGap);
+                _episodeSearchService.MissingEpisodesAiredAfter(lastGap, grabbedOrPending.SelectMany(d => d.RemoteEpisode.Episodes).Select(e => e.Id));
             }
 
             _eventAggregator.PublishEvent(new RssSyncCompleteEvent(processed));

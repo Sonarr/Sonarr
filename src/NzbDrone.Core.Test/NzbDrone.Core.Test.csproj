@@ -213,8 +213,10 @@
     <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
     <Compile Include="IndexerTests\HDBitsTests\HDBitsFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
+    <Compile Include="IndexerTests\IndexerStatusServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\RarbgTests\RarbgFixture.cs" />
+    <Compile Include="IndexerTests\RssSyncServiceFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssSettingsDetectorFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabFixture.cs" />

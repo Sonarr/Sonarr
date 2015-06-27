@@ -20,8 +20,8 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         public override Boolean SupportsSearch { get { return false; } }
         public override Int32 PageSize { get { return 0; } }
 
-        public Torrentleech(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(httpClient, configService, parsingService, logger)
+        public Torrentleech(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
 
         }

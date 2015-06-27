@@ -9,6 +9,11 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using System.Collections.Generic;
+using NzbDrone.Core.Indexers;
+using System;
+using NzbDrone.Core.Download.Clients;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.Test.Download
 {
@@ -100,6 +105,49 @@ namespace NzbDrone.Core.Test.Download
             Assert.Throws<WebException>(() => Subject.DownloadReport(_parseResult));
 
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
+        }
+
+        [Test]
+        public void Download_report_should_trigger_indexer_backoff_on_indexer_error()
+        {
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
+                .Throws(new WebException());
+
+            Assert.Throws<WebException>(() => Subject.DownloadReport(_parseResult));
+
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.ReportFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
+        }
+
+        [Test]
+        public void Download_report_should_trigger_indexer_backoff_on_http429_with_long_time()
+        {
+            var request = new HttpRequest("http://my.indexer.com");
+            var response = new HttpResponse(request, new HttpHeader(), new byte[0], (HttpStatusCode)429);
+            response.Headers["Retry-After"] = "300";
+
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
+                .Throws(new TooManyRequestsException(request, response));
+
+            Assert.Throws<TooManyRequestsException>(() => Subject.DownloadReport(_parseResult));
+
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.ReportFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5)), Times.Once());
+        }
+
+        [Test]
+        public void Download_report_should_not_trigger_indexer_backoff_on_downloadclient_error()
+        {
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
+                .Throws(new DownloadClientException("Some Error"));
+
+            Assert.Throws<DownloadClientException>(() => Subject.DownloadReport(_parseResult));
+
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.ReportFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Never());
         }
 
         [Test]

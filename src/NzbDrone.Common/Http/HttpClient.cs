@@ -113,7 +113,15 @@ namespace NzbDrone.Common.Http
             if (!request.SuppressHttpError && response.HasHttpError)
             {
                 _logger.Warn("HTTP Error - {0}", response);
-                throw new HttpException(request, response);
+
+                if ((int)response.StatusCode == 429)
+                {
+                    throw new TooManyRequestsException(request, response);
+                }
+                else
+                {
+                    throw new HttpException(request, response);
+                }
             }
 
             return response;

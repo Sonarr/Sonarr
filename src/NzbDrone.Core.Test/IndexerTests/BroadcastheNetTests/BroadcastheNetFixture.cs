@@ -59,7 +59,8 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
 
         private void VerifyBackOff()
         {
-            // TODO How to detect (and implement) back-off logic.
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.ReportFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
         }
 
         [Test]
@@ -86,8 +87,6 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0], System.Net.HttpStatusCode.Unauthorized));
 
             var results = Subject.FetchRecent();
-
-            results.Should().BeEmpty();
 
             results.Should().BeEmpty();
 
