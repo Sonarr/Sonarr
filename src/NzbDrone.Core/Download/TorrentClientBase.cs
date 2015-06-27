@@ -126,10 +126,16 @@ namespace NzbDrone.Core.Download
 
                 torrentFile = response.ResponseData;
             }
+            catch (HttpException ex)
+            {
+                _logger.ErrorException(String.Format("Downloading torrent file for episode '{0}' failed ({1})",
+                    remoteEpisode.Release.Title, torrentUrl), ex);
 
+                throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
+            }
             catch (WebException ex)
             {
-                _logger.ErrorException(String.Format("Downloading torrentfile for episode '{0}' failed ({1})",
+                _logger.ErrorException(String.Format("Downloading torrent file for episode '{0}' failed ({1})",
                     remoteEpisode.Release.Title, torrentUrl), ex);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);

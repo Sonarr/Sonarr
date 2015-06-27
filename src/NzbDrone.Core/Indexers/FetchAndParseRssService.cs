@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.TPL;
-
+using System.Collections;
+using System;
 namespace NzbDrone.Core.Indexers
 {
     public interface IFetchAndParseRss
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.Indexers
         {
             var result = new List<ReleaseInfo>();
 
-            var indexers = _indexerFactory.RssEnabled().ToList();
+            var indexers = _indexerFactory.RssEnabled();
 
             if (!indexers.Any())
             {

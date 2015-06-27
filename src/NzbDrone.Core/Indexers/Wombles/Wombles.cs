@@ -29,8 +29,8 @@ namespace NzbDrone.Core.Indexers.Wombles
             return new RssIndexerRequestGenerator("http://newshost.co.za/rss/?sec=TV&fr=false");
         }
 
-        public Wombles(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(httpClient, configService, parsingService, logger)
+        public Wombles(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
 
         }

@@ -111,6 +111,8 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<User>().RegisterModel("Users");
             Mapper.Entity<CommandModel>().RegisterModel("Commands")
                 .Ignore(c => c.Message);
+
+            Mapper.Entity<IndexerStatus>().RegisterModel("IndexerStatus");
         }
 
         private static void RegisterMappers()

@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             Subject.Definition = new IndexerDefinition()
                 {
+                    Id = 5,
                     Name = "Newznab",
                     Settings = new NewznabSettings()
                         {
@@ -47,6 +48,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             releaseInfo.DownloadUrl.Should().Be("http://nzb.su/getnzb/24967ef4c2e26296c65d3bbfa97aa8fe.nzb&i=37292&r=xxx");
             releaseInfo.InfoUrl.Should().Be("http://nzb.su/details/24967ef4c2e26296c65d3bbfa97aa8fe");
             releaseInfo.CommentUrl.Should().Be("http://nzb.su/details/24967ef4c2e26296c65d3bbfa97aa8fe#comments");
+            releaseInfo.IndexerId.Should().Be(Subject.Definition.Id);
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
             releaseInfo.PublishDate.Should().Be(DateTime.Parse("2012/02/27 16:09:39"));
             releaseInfo.Size.Should().Be(1183105773);

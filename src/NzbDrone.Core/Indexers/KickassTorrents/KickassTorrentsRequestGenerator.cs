@@ -24,8 +24,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            // We give kat a bit more pages to get to 100 total for recent, coz users have been missing releases.
-            pageableRequests.AddIfNotNull(GetPagedRequests(4, "tv"));
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "tv"));
 
             return pageableRequests;
         }

@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Download.Pending
                                          IHandle<EpisodeGrabbedEvent>,
                                          IHandle<RssSyncCompleteEvent>
     {
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly IPendingReleaseRepository _repository;
         private readonly ISeriesService _seriesService;
         private readonly IParsingService _parsingService;
@@ -44,7 +45,8 @@ namespace NzbDrone.Core.Download.Pending
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public PendingReleaseService(IPendingReleaseRepository repository,
+        public PendingReleaseService(IIndexerStatusService indexerStatusService,
+                                    IPendingReleaseRepository repository,
                                     ISeriesService seriesService,
                                     IParsingService parsingService,
                                     IDelayProfileService delayProfileService,
@@ -53,6 +55,7 @@ namespace NzbDrone.Core.Download.Pending
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
+            _indexerStatusService = indexerStatusService;
             _repository = repository;
             _seriesService = seriesService;
             _parsingService = parsingService;
@@ -86,7 +89,21 @@ namespace NzbDrone.Core.Download.Pending
 
         public List<ReleaseInfo> GetPending()
         {
-            return _repository.All().Select(p => p.Release).ToList();
+            var releases = _repository.All().Select(p => p.Release).ToList();
+
+            if (releases.Any())
+            {
+                releases = FilterBlockedIndexers(releases);
+            }
+
+            return releases;
+        }
+
+        private List<ReleaseInfo> FilterBlockedIndexers(List<ReleaseInfo> releases)
+        {
+            var blockedIndexers = new HashSet<int>(_indexerStatusService.GetBlockedIndexers().Select(v => v.IndexerId));
+
+            return releases.Where(release => !blockedIndexers.Contains(release.IndexerId)).ToList();
         }
 
         public List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId)

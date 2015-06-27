@@ -158,6 +158,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Http\HttpRequestBuilder.cs" />
+    <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Http\UriExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Http\UserAgentBuilder.cs" />

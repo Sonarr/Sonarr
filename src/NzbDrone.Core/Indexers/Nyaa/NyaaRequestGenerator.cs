@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(1, null));
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, null));
 
             return pageableRequests;
         }

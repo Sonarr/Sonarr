@@ -168,6 +168,7 @@
     <Compile Include="Download\DownloadClientTests\UTorrentTests\UTorrentFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
+    <Compile Include="Download\Pending\PendingReleaseServiceTests\PendingReleaseServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemovePendingFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveGrabbedFixture.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="HealthCheck\Checks\ImportMechanismCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerStatusCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheckFixture.cs" />
     <Compile Include="HealthCheck\HealthCheckFixture.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklistFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatusFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
     <Compile Include="IndexerTests\HDBitsTests\HDBitsFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
+    <Compile Include="IndexerTests\IndexerStatusServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\RarbgTests\RarbgFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />

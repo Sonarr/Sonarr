@@ -16,6 +16,7 @@ namespace NzbDrone.Api.Indexers
         public Double AgeHours { get; set; }
         public Double AgeMinutes { get; set; }
         public Int64 Size { get; set; }
+        public Int32 IndexerId { get; set; }
         public String Indexer { get; set; }
         public String ReleaseGroup { get; set; }
         public String SubGroup { get; set; }

@@ -48,18 +48,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                 .Setup(v => v.GetCapabilities(It.IsAny<TorznabSettings>()))
                 .Returns(_capabilities);
         }
-        
-        [Test]
-        public void should_return_one_page_for_feed()
-        {
-            var results = Subject.GetRecentRequests();
-
-            results.Should().HaveCount(1);
-
-            var pages = results.First().Take(10).ToList();
-
-            pages.Should().HaveCount(1);
-        }
 
         [Test]
         public void should_use_all_categories_for_feed()

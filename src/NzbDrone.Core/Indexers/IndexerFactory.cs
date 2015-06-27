@@ -15,21 +15,21 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly IIndexerRepository _providerRepository;
+        private readonly Logger _logger;
 
-        public IndexerFactory(IIndexerRepository providerRepository,
+        public IndexerFactory(IIndexerStatusService indexerStatusService,
+                              IIndexerRepository providerRepository,
                               IEnumerable<IIndexer> providers,
                               IContainer container, 
                               IEventAggregator eventAggregator,
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
+            _indexerStatusService = indexerStatusService;
             _providerRepository = providerRepository;
-        }
-
-        protected override void InitializeProviders()
-        {
-            //_providerRepository.DeleteImplementations("Animezb");
+            _logger = logger;
         }
 
         protected override List<IndexerDefinition> Active()
@@ -50,12 +50,37 @@ namespace NzbDrone.Core.Indexers
 
         public List<IIndexer> RssEnabled()
         {
-            return GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableRss).ToList();
+            var enabledIndexers = GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableRss);
+
+            var indexers = FilterBlockedIndexers(enabledIndexers);
+
+            return indexers.ToList();
         }
 
         public List<IIndexer> SearchEnabled()
         {
-            return GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableSearch).ToList();
-        }        
+            var enabledIndexers = GetAvailableProviders().Where(n => ((IndexerDefinition)n.Definition).EnableSearch);
+
+            var indexers = FilterBlockedIndexers(enabledIndexers);
+
+            return indexers.ToList();
+        }
+
+        private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)
+        {
+            var blockedIndexers = _indexerStatusService.GetBlockedIndexers().ToDictionary(v => v.IndexerId, v => v);
+
+            foreach (var indexer in indexers)
+            {
+                IndexerStatus blockedIndexerStatus;
+                if (blockedIndexers.TryGetValue(indexer.Definition.Id, out blockedIndexerStatus))
+                {
+                    _logger.Debug("Temporarily ignoring indexer {0} till {1} due to recent failures.", indexer.Definition.Name, blockedIndexerStatus.DisabledTill.Value);
+                    continue;
+                }
+
+                yield return indexer;
+            }
+        }
     }
 }

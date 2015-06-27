@@ -16,14 +16,7 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.IndexerSearch
 {
-    public interface IEpisodeSearchService
-    {
-        void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed);
-    }
-
-    public class EpisodeSearchService : IEpisodeSearchService, 
-                                        IExecute<EpisodeSearchCommand>, 
-                                        IExecute<MissingEpisodeSearchCommand>
+    public class EpisodeSearchService : IExecute<EpisodeSearchCommand>, IExecute<MissingEpisodeSearchCommand>
     {
         private readonly ISearchForNzb _nzbSearchService;
         private readonly IProcessDownloadDecisions _processDownloadDecisions;
@@ -42,28 +35,6 @@ namespace NzbDrone.Core.IndexerSearch
             _episodeService = episodeService;
             _queueService = queueService;
             _logger = logger;
-        }
-
-        public void MissingEpisodesAiredAfter(DateTime dateTime, IEnumerable<Int32> grabbed)
-        {
-            var missing = _episodeService.EpisodesBetweenDates(dateTime, DateTime.UtcNow, false)
-                                         .Where(e => !e.HasFile &&
-                                                !_queueService.GetQueue().Select(q => q.Episode.Id).Contains(e.Id) &&
-                                                !grabbed.Contains(e.Id))
-                                         .ToList();
-
-            var downloadedCount = 0;
-            _logger.Info("Searching for {0} missing episodes since last RSS Sync", missing.Count);
-
-            foreach (var episode in missing)
-            {
-                //TODO: Add a flag to the search to state it is a "scheduled" search
-                var decisions = _nzbSearchService.EpisodeSearch(episode);
-                var processed = _processDownloadDecisions.ProcessDecisions(decisions);
-                downloadedCount += processed.Grabbed.Count;
-            }
-
-            _logger.ProgressInfo("Completed search for {0} episodes. {1} reports downloaded.", missing.Count, downloadedCount);
         }
 
         private void SearchForMissingEpisodes(List<Episode> episodes)

@@ -70,8 +70,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             if (capabilities.SupportedTvSearchParameters != null)
             {
-                // TODO: We might consider getting multiple pages in the future, but atm we limit it to 1 page.
-                pageableRequests.AddIfNotNull(GetPagedRequests(1, Settings.Categories.Concat(Settings.AnimeCategories), "tvsearch", ""));
+                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories.Concat(Settings.AnimeCategories), "tvsearch", ""));
             }
 
             return pageableRequests;

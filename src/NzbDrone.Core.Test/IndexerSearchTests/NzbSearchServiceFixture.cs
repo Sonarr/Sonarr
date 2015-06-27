@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         public void SetUp()
         {
             _mockIndexer = Mocker.GetMock<IIndexer>();
+            _mockIndexer.SetupGet(s => s.Definition).Returns(new IndexerDefinition { Id = 1 });
             _mockIndexer.SetupGet(s => s.SupportsSearch).Returns(true);
 
             Mocker.GetMock<IIndexerFactory>()
