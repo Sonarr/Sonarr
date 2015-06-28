@@ -4,8 +4,8 @@ using NUnit.Framework;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Notifications.PushBullet;
-using NzbDrone.Core.Notifications.Pushover;
 using NzbDrone.Core.Test.Framework;
+
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]

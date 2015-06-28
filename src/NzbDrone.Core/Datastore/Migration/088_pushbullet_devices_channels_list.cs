@@ -8,7 +8,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(87)]
+    [Migration(88)]
     public class pushbullet_devices_channels_list : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
@@ -34,17 +34,25 @@ namespace NzbDrone.Core.Datastore.Migration
                         if (settings.ContainsKey("deviceIds"))
                         {
                             var deviceIdsString = settings.GetValueOrDefault("deviceIds", "") as string;
-                            var deviceIds = deviceIdsString.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
 
-                            settings["deviceIds"] = deviceIds;
+                            if (deviceIdsString.IsNotNullOrWhiteSpace())
+                            {
+                                var deviceIds = deviceIdsString.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+                                settings["deviceIds"] = deviceIds;
+                            }
                         }
 
                         if (settings.ContainsKey("channelTags"))
                         {
                             var channelTagsString = settings.GetValueOrDefault("channelTags", "") as string;
-                            var channelTags = channelTagsString.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries);
 
-                            settings["channelTags"] = channelTags;
+                            if (channelTagsString.IsNotNullOrWhiteSpace())
+                            {
+                                var channelTags = channelTagsString.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries);
+
+                                settings["channelTags"] = channelTags;
+                            }
                         }
 
                         using (var updateCmd = conn.CreateCommand())
