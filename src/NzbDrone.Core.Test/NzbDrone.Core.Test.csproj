@@ -209,7 +209,6 @@
     <Compile Include="IndexerTests\BasicRssParserFixture.cs" />
     <Compile Include="IndexerTests\BitMeTvTests\BitMeTvFixture.cs" />
     <Compile Include="IndexerTests\BroadcastheNetTests\BroadcastheNetFixture.cs" />
-    <Compile Include="IndexerTests\EztvTests\EztvFixture.cs" />
     <Compile Include="IndexerTests\HDBitsTests\HDBitsFixture.cs" />
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
@@ -406,7 +405,7 @@
     <Content Include="Files\Indexers\Fanzub\fanzub.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Files\Indexers\Eztv\Eztv.xml">
+    <Content Include="Files\Indexers\TorrentRss\Ezrss.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>

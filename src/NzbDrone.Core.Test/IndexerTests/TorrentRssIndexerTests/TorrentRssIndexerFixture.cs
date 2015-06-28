@@ -71,9 +71,9 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [Test]
-        public void should_parse_recent_feed_from_Eztv()
+        public void should_parse_recent_feed_from_Ezrss()
         {
-            GivenRecentFeedResponse("Eztv/Eztv.xml");
+            GivenRecentFeedResponse("TorrentRss/Ezrss.xml");
 
             var releases = Subject.FetchRecent();
 

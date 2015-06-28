@@ -241,6 +241,7 @@
     <Compile Include="Datastore\Migration\060_remove_enable_from_indexers.cs" />
     <Compile Include="Datastore\Migration\062_convert_quality_models.cs" />
     <Compile Include="Datastore\Migration\065_make_scene_numbering_nullable.cs" />
+    <Compile Include="Datastore\Migration\087_remove_eztv.cs" />
     <Compile Include="Datastore\Migration\078_add_commands_table.cs" />
     <Compile Include="Datastore\Migration\068_add_release_restrictions.cs" />
     <Compile Include="Datastore\Migration\066_add_tags.cs" />
@@ -473,9 +474,6 @@
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
     <Compile Include="Indexers\Exceptions\UnsupportedFeedException.cs" />
     <Compile Include="Indexers\EzrssTorrentRssParser.cs" />
-    <Compile Include="Indexers\Eztv\Eztv.cs" />
-    <Compile Include="Indexers\Eztv\EztvSettings.cs" />
-    <Compile Include="Indexers\Eztv\EztvRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\Fanzub.cs" />
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />

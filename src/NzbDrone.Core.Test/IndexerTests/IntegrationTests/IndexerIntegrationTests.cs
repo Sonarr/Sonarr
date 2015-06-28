@@ -4,7 +4,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Eztv;
 using NzbDrone.Core.Indexers.Fanzub;
 using NzbDrone.Core.Indexers.KickassTorrents;
 using NzbDrone.Core.Indexers.Nyaa;
@@ -122,24 +121,6 @@ namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
             };
 
             var result = indexer.Fetch(_singleSearchCriteria);
-
-            ValidateTorrentResult(result, hasSize: true, hasMagnet: true);
-        }
-
-        [Test]
-        public void eztv_fetch_recent()
-        {
-            Assert.Inconclusive("Eztv Down");
-
-            var indexer = Mocker.Resolve<Eztv>();
-
-            indexer.Definition = new IndexerDefinition
-            {
-                Name = "MyIndexer",
-                Settings = new EztvSettings()
-            };
-
-            var result = indexer.FetchRecent();
 
             ValidateTorrentResult(result, hasSize: true, hasMagnet: true);
         }

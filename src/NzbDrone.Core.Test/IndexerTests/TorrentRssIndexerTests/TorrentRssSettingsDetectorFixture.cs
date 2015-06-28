@@ -34,9 +34,9 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [Test]
-        public void should_detect_rss_settings_for_eztv()
+        public void should_detect_rss_settings_for_ezrss()
         {
-            GivenRecentFeedResponse("Eztv/Eztv.xml");
+            GivenRecentFeedResponse("TorrentRss/Ezrss.xml");
 
             var settings = Subject.Detect(_indexerSettings);
 
