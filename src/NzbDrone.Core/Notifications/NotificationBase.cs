@@ -18,6 +18,14 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
+        public virtual ProviderMessage Message
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get

@@ -37,6 +37,14 @@ namespace NzbDrone.Core.Indexers
             get { return typeof(TSettings); }
         }
 
+        public virtual ProviderMessage Message
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get

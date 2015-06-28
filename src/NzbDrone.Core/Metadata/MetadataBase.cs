@@ -20,6 +20,14 @@ namespace NzbDrone.Core.Metadata
             }
         }
 
+        public virtual ProviderMessage Message
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<ProviderDefinition> DefaultDefinitions
         {
             get

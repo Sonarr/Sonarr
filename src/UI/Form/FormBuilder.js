@@ -1,6 +1,7 @@
 var Marionette = require('marionette');
 var Handlebars = require('handlebars');
 var _ = require('underscore');
+require('./FormMessage');
 
 var _templateRenderer = function(templateName) {
     var templateFunction = Marionette.TemplateCache.get(templateName);

@@ -10,9 +10,9 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NLog;
 using NzbDrone.Core.Validation;
 using FluentValidation.Results;
-using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.RTorrent
 {
@@ -89,6 +89,14 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             get
             {
                 return "rTorrent";
+            }
+        }
+
+        public override ProviderMessage Message
+        {
+            get
+            {
+                return new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using rTorrent", ProviderMessageType.Warning);
             }
         }
 

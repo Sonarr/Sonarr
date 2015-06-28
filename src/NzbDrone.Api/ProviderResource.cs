@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.ClientSchema;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Api
 {
@@ -12,6 +13,7 @@ namespace NzbDrone.Api
         public string Implementation { get; set; }
         public string ConfigContract { get; set; }
         public string InfoLink { get; set; }
+        public ProviderMessage Message { get; set; }
 
         public List<ProviderResource> Presets { get; set; }
     }

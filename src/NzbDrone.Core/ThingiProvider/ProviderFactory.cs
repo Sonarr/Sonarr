@@ -141,6 +141,7 @@ namespace NzbDrone.Core.ThingiProvider
         public virtual TProviderDefinition GetProviderCharacteristics(TProvider provider, TProviderDefinition definition)
         {
             definition.ImplementationName = provider.Name;
+            definition.Message = provider.Message;
 
             return definition;
         }

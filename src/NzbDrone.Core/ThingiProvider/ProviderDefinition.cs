@@ -11,6 +11,7 @@ namespace NzbDrone.Core.ThingiProvider
         public string Implementation { get; set; }
         public string ConfigContract { get; set; }
         public virtual bool Enable { get; set; }
+        public ProviderMessage Message { get; set; }
 
         public IProviderConfig Settings
         {
