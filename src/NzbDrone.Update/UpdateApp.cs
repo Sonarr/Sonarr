@@ -42,7 +42,7 @@ namespace NzbDrone.Update
                 Logger.Info("Updating Sonarr to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
 
-                Logger.Info("Update compleded successfully");
+                Logger.Info("Update completed successfully");
             }
             catch (Exception e)
             {
