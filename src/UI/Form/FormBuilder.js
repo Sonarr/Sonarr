@@ -32,6 +32,10 @@ var _fieldBuilder = function(field) {
         return _templateRenderer.call(field, 'Form/PathTemplate');
     }
 
+    if (field.type === 'tag') {
+        return _templateRenderer.call(field, 'Form/TagTemplate');
+    }
+
     return _templateRenderer.call(field, 'Form/TextboxTemplate');
 };
 

@@ -254,6 +254,7 @@
     <Compile Include="Datastore\Migration\073_clear_ratings.cs" />
     <Compile Include="Datastore\Migration\077_add_add_options_to_series.cs" />
     <Compile Include="Datastore\Migration\085_expand_transmission_urlbase.cs" />
+    <Compile Include="Datastore\Migration\086_pushbullet_device_ids.cs" />
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_category.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tags.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
@@ -708,6 +709,7 @@
     <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
     <Compile Include="Notifications\Plex\PlexClientService.cs" />
+    <Compile Include="Notifications\PushBullet\PushBulletException.cs" />
     <Compile Include="Notifications\Synology\SynologyException.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />

@@ -21,16 +21,11 @@ namespace NzbDrone.Core.Notifications.PushBullet
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://www.pushbullet.com/")]
         public String ApiKey { get; set; }
 
-        [FieldDefinition(1, Label = "Device ID", HelpText = "device_iden in the device's URL on pushbullet.com (leave blank to send to all devices)")]
-        public String DeviceId { get; set; }
+        [FieldDefinition(1, Label = "Device IDs", HelpText = "List of device IDs, use device_iden in the device's URL on pushbullet.com (leave blank to send to all devices)", Type = FieldType.Tag)]
+        public String DeviceIds { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !String.IsNullOrWhiteSpace(ApiKey) && !String.IsNullOrWhiteSpace(DeviceId);
-            }
-        }
+        [FieldDefinition(2, Label = "Channel Tags", HelpText = "List of Channel Tags to send notifications to", Type = FieldType.Tag)]
+        public String ChannelTags { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
