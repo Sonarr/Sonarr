@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var items = Mocker.Resolve<NotificationRepository>().All();
 
             items.Should().HaveCount(1);
-            items.First().Settings.As<PushBulletSettings>().DeviceIds.Should().Be(deviceId);
+            items.First().Settings.As<PushBulletSettings>().DeviceIds.First().Should().Be(deviceId);
         }
     }
 }

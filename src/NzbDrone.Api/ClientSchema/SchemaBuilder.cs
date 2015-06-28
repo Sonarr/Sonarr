@@ -28,15 +28,15 @@ namespace NzbDrone.Api.ClientSchema
                 {
 
                     var field = new Field
-                        {
-                            Name = propertyInfo.Name,
-                            Label = fieldAttribute.Label,
-                            HelpText = fieldAttribute.HelpText,
-                            HelpLink = fieldAttribute.HelpLink,
-                            Order = fieldAttribute.Order,
-                            Advanced = fieldAttribute.Advanced,
-                            Type = fieldAttribute.Type.ToString().ToLowerInvariant()
-                        };
+                    {
+                        Name = propertyInfo.Name,
+                        Label = fieldAttribute.Label,
+                        HelpText = fieldAttribute.HelpText,
+                        HelpLink = fieldAttribute.HelpLink,
+                        Order = fieldAttribute.Order,
+                        Advanced = fieldAttribute.Advanced,
+                        Type = fieldAttribute.Type.ToString().ToLowerInvariant()
+                    };
 
                     var value = propertyInfo.GetValue(model, null);
                     if (value != null)
@@ -101,20 +101,37 @@ namespace NzbDrone.Api.ClientSchema
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    else if (propertyInfo.PropertyType == typeof (IEnumerable<Int32>))
+                    else if (propertyInfo.PropertyType == typeof(IEnumerable<Int32>))
                     {
                         IEnumerable<Int32> value;
 
-                        if (field.Value.GetType() == typeof (JArray))
+                        if (field.Value.GetType() == typeof(JArray))
                         {
-                            value = ((JArray) field.Value).Select(s => s.Value<Int32>());
+                            value = ((JArray)field.Value).Select(s => s.Value<Int32>());
                         }
 
                         else
                         {
-                            value = field.Value.ToString().Split(new []{','}, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToInt32(s));
+                            value = field.Value.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToInt32(s));
                         }
-                        
+
+                        propertyInfo.SetValue(target, value, null);
+                    }
+
+                    else if (propertyInfo.PropertyType == typeof(IEnumerable<string>))
+                    {
+                        IEnumerable<string> value;
+
+                        if (field.Value.GetType() == typeof(JArray))
+                        {
+                            value = ((JArray)field.Value).Select(s => s.Value<string>());
+                        }
+
+                        else
+                        {
+                            value = field.Value.ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        }
+
                         propertyInfo.SetValue(target, value, null);
                     }
 

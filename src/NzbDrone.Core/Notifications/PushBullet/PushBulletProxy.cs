@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
-using NzbDrone.Common.Extensions;
 using RestSharp;
 using NzbDrone.Core.Rest;
 
@@ -28,13 +26,11 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
         public void SendNotification(string title, string message, PushBulletSettings settings)
         {
-            var channelTags = GetIds(settings.ChannelTags);
-            var deviceIds = GetIds(settings.DeviceIds);
             var error = false;
 
-            if (channelTags.Any())
+            if (settings.ChannelTags.Any())
             {
-                foreach (var channelTag in channelTags)
+                foreach (var channelTag in settings.ChannelTags)
                 {
                     var request = BuildChannelRequest(channelTag);
 
@@ -51,9 +47,9 @@ namespace NzbDrone.Core.Notifications.PushBullet
             }
             else
             {
-                if (deviceIds.Any())
+                if (settings.DeviceIds.Any())
                 {
-                    foreach (var deviceId in deviceIds)
+                    foreach (var deviceId in settings.DeviceIds)
                     {
                         var request = BuildDeviceRequest(deviceId);
 
@@ -168,13 +164,6 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
                 throw new PushBulletException("Unable to send text message: {0}", ex, ex.Message);
             }
-        }
-
-        private List<string> GetIds(string input)
-        {
-            if (input.IsNullOrWhiteSpace()) return new List<string>();
-
-            return input.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
     }
 }
