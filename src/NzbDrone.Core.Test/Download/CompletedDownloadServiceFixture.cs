@@ -34,11 +34,7 @@ namespace NzbDrone.Core.Test.Download
                                                     .With(h => h.Title = "Drone.S01E01.HDTV")
                                                     .Build();
 
-            var remoteEpisode = new RemoteEpisode
-                                {
-                                    Series = new Series(),
-                                    Episodes = new List<Episode> { new Episode { Id = 1 } }
-                                };
+            var remoteEpisode = BuildRemoteEpisode();
 
             _trackedDownload = Builder<TrackedDownload>.CreateNew()
                     .With(c => c.State = TrackedDownloadStage.Downloading)
@@ -65,6 +61,16 @@ namespace NzbDrone.Core.Test.Download
 
         }
 
+        private RemoteEpisode BuildRemoteEpisode()
+        {
+            return new RemoteEpisode
+            {
+                Series = new Series(),
+                Episodes = new List<Episode> { new Episode { Id = 1 } }
+            }; 
+        }
+
+
         private void GivenNoGrabbedHistory()
         {
             Mocker.GetMock<IHistoryService>()
@@ -80,6 +86,24 @@ namespace NzbDrone.Core.Test.Download
                     {
                         new ImportResult(new ImportDecision(new LocalEpisode() { Path = @"C:\TestPath\Droned.S01E01.mkv" }))
                     });
+        }
+
+
+        private void GivenABadlyNamedDownload()
+        {
+            _trackedDownload.DownloadItem.DownloadId = "1234";
+            _trackedDownload.DownloadItem.Title = "Droned Pilot"; // Set a badly named download
+            Mocker.GetMock<IHistoryService>()
+               .Setup(s => s.MostRecentForDownloadId(It.Is<string>(i => i == "1234")))
+               .Returns(new History.History() { SourceTitle = "Droned S01E01" });
+
+            Mocker.GetMock<IParsingService>()
+               .Setup(s => s.GetSeries(It.IsAny<string>()))
+               .Returns((Series)null);
+
+            Mocker.GetMock<IParsingService>()
+                .Setup(s => s.GetSeries("Droned S01E01"))
+                .Returns(BuildRemoteEpisode().Series);
         }
 
         private void GivenSeriesMatch()
@@ -278,6 +302,47 @@ namespace NzbDrone.Core.Test.Download
                                new ImportResult(new ImportDecision(new LocalEpisode{Path = @"C:\TestPath\Droned.S01E01.mkv"}),"Test Failure")
                            });
 
+
+            Subject.Process(_trackedDownload);
+
+            AssertNoCompletedDownload();
+        }
+
+        [Test]
+        public void should_mark_as_imported_if_the_download_can_be_tracked_using_the_source_seriesid()
+        {
+            GivenABadlyNamedDownload();
+
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                  .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                  .Returns(new List<ImportResult>
+                           {
+                               new ImportResult(new ImportDecision(new LocalEpisode {Path = @"C:\TestPath\Droned.S01E01.mkv"}))
+                           });
+
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.GetSeries(It.IsAny<int>()))
+                  .Returns(BuildRemoteEpisode().Series);
+           
+            Subject.Process(_trackedDownload);
+
+            AssertCompletedDownload();
+        }
+
+        [Test]
+        public void should_not_mark_as_imported_if_the_download_cannot_be_tracked_using_the_source_title_as_it_was_initiated_externally()
+        {
+            GivenABadlyNamedDownload();
+
+            Mocker.GetMock<IDownloadedEpisodesImportService>()
+                  .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
+                  .Returns(new List<ImportResult>
+                           {
+                               new ImportResult(new ImportDecision(new LocalEpisode {Path = @"C:\TestPath\Droned.S01E01.mkv"}))
+                           });
+
+            Mocker.GetMock<IHistoryService>()
+            .Setup(s => s.MostRecentForDownloadId(It.Is<string>(i => i == "1234")));
 
             Subject.Process(_trackedDownload);
 

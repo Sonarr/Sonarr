@@ -175,6 +175,7 @@
     <None Include="Files\Indexers\Rarbg\RecentFeed_v2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Compile Include="Download\TrackedDownloads\TrackedDownloadServiceFixture.cs" />
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
