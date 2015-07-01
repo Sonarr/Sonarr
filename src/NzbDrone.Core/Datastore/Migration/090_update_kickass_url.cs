@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(89)]
+    [Migration(90)]
     public class update_kickass_url : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
