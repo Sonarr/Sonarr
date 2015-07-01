@@ -21,7 +21,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 ## Configuring Development Environment: ##
 
 ### Requirements ###
-- Visual Studio 2013 ([Express Edition](http://www.microsoft.com/visualstudio/eng/products/visual-studio-express-for-web "Express Edition") might work but not tested.)
+- Visual Studio 2013 [Free Community Edition](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
 - [Git](http://git-scm.com/downloads)
 - [NodeJS](http://nodejs.org/download/)
 - [Gulp](http://gulpjs.com)
@@ -30,6 +30,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 - Make sure all the required software mentioned above are installed.
 - Clone the repository into your development machine. [*info*](https://help.github.com/articles/working-with-repositories)
+- Grab the submodules `git submodule init && git submodule update`
 - install the required Node Packages `npm install`
 - install gulp `npm install gulp -g`
 - start gulp to monitor your dev environment for any changes that need post processing using `gulp watch` command.
@@ -44,7 +45,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### License ###
 * [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
-Copyright 2010-2014
+Copyright 2010-2015
 
 
 ### Sponsors ###
