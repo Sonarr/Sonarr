@@ -23,13 +23,12 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         {
             get
             {
-                return SceneTitles.Select(GetQueryTitle).ToList();
+                return SceneTitles.SelectMany(GetQueryTitle).ToList();
             }
         }
 
-        public static string GetQueryTitle(string title)
+        public static IEnumerable<string> GetQueryTitle(string title)
         {
-            Ensure.That(title,() => title).IsNotNullOrWhiteSpace();
 
             var cleanTitle = BeginningThe.Replace(title, String.Empty);
 
@@ -37,10 +36,26 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
             cleanTitle = SpecialCharacter.Replace(cleanTitle, "");
             cleanTitle = NonWordLessDot.Replace(cleanTitle, "+");
 
-            //remove any repeating +s
+            // Remove any repeating +s
             cleanTitle = Regex.Replace(cleanTitle, @"\+{2,}", "+");
             cleanTitle = cleanTitle.RemoveAccent();
-            return cleanTitle.Trim('+', ' ');
+            cleanTitle = cleanTitle.Trim('+', ' ');
+
+            if (!string.IsNullOrWhiteSpace(cleanTitle))
+            {
+                yield return cleanTitle;
+            }
+
+            // If the title contains a dot then add an additional title without it
+            // as some series drop them.
+            if (cleanTitle.IndexOf('.') > -1)
+            {
+                cleanTitle = cleanTitle.Replace(".", string.Empty);
+                if (!string.IsNullOrWhiteSpace(cleanTitle))
+                {
+                    yield return cleanTitle;
+                }
+            }
         }
     }
 }
