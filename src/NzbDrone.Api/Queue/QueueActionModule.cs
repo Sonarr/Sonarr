@@ -55,7 +55,7 @@ namespace NzbDrone.Api.Queue
 
             if (pendingRelease != null)
             {
-                _pendingReleaseService.RemovePendingQueueItem(id);
+                _pendingReleaseService.RemovePendingQueueItems(pendingRelease.Id);
 
                 return new object().AsResponse();
             }

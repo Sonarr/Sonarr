@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Download.Pending
     public interface IPendingReleaseService
     {
         void Add(DownloadDecision decision);
-        
+
         List<ReleaseInfo> GetPending();
         List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId);
         List<Queue.Queue> GetPendingQueue();
         Queue.Queue FindPendingQueueItem(int queueId);
-        void RemovePendingQueueItem(int queueId);
+        void RemovePendingQueueItems(int episodeId);
         RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds);
     }
 
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Download.Pending
             _logger = logger;
         }
 
-        
+
         public void Add(DownloadDecision decision)
         {
             var alreadyPending = GetPendingReleases();
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Download.Pending
                                                              .Intersect(episodeIds)
                                                              .Any());
 
-            if (existingReports.Any(MatchingReleasePredicate(decision)))
+            if (existingReports.Any(MatchingReleasePredicate(decision.RemoteEpisode.Release)))
             {
                 _logger.Debug("This release is already pending, not adding again");
                 return;
@@ -152,11 +152,17 @@ namespace NzbDrone.Core.Download.Pending
             return GetPendingQueue().SingleOrDefault(p => p.Id == queueId);
         }
 
-        public void RemovePendingQueueItem(int queueId)
+        public void RemovePendingQueueItems(int queueId)
         {
-            var id = FindPendingReleaseId(queueId);
+            var targetItem = _repository.Get(queueId);
+            var seriesReleases = _repository.AllBySeriesId(targetItem.SeriesId);
 
-            _repository.Delete(id);
+
+            var releasesToRemove = seriesReleases.Where(
+                c => c.ParsedEpisodeInfo.SeasonNumber == targetItem.ParsedEpisodeInfo.SeasonNumber &&
+                     c.ParsedEpisodeInfo.EpisodeNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.EpisodeNumbers));
+
+            _repository.DeleteMany(releasesToRemove.Select(c => c.Id));
         }
 
         public RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds)
@@ -223,11 +229,11 @@ namespace NzbDrone.Core.Download.Pending
             _eventAggregator.PublishEvent(new PendingReleasesUpdatedEvent());
         }
 
-        private Func<PendingRelease, bool> MatchingReleasePredicate(DownloadDecision decision)
+        private static Func<PendingRelease, bool> MatchingReleasePredicate(ReleaseInfo release)
         {
-            return p => p.Title == decision.RemoteEpisode.Release.Title &&
-                   p.Release.PublishDate == decision.RemoteEpisode.Release.PublishDate &&
-                   p.Release.Indexer == decision.RemoteEpisode.Release.Indexer;
+            return p => p.Title == release.Title &&
+                   p.Release.PublishDate == release.PublishDate &&
+                   p.Release.Indexer == release.Indexer;
         }
 
         private int GetDelay(RemoteEpisode remoteEpisode)
@@ -236,7 +242,7 @@ namespace NzbDrone.Core.Download.Pending
             var delay = delayProfile.GetProtocolDelay(remoteEpisode.Release.DownloadProtocol);
             var minimumAge = _configService.MinimumAge;
 
-            return new [] { delay, minimumAge }.Max();
+            return new[] { delay, minimumAge }.Max();
         }
 
         private void RemoveGrabbed(RemoteEpisode remoteEpisode)
@@ -278,7 +284,7 @@ namespace NzbDrone.Core.Download.Pending
 
             foreach (var rejectedRelease in rejected)
             {
-                var matching = pending.SingleOrDefault(MatchingReleasePredicate(rejectedRelease));
+                var matching = pending.SingleOrDefault(MatchingReleasePredicate(rejectedRelease.RemoteEpisode.Release));
 
                 if (matching != null)
                 {
