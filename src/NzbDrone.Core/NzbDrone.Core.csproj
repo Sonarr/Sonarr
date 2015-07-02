@@ -263,6 +263,7 @@
     <Compile Include="Datastore\Migration\083_additonal_blacklist_columns.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
     <Compile Include="Datastore\Migration\088_pushbullet_devices_channels_list.cs" />
+    <Compile Include="Datastore\Migration\089_update_kickass_url.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />

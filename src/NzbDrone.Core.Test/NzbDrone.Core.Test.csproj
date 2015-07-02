@@ -127,6 +127,7 @@
     <Compile Include="Datastore\Migration\081_move_dot_prefix_to_transmission_categoryFixture.cs" />
     <Compile Include="Datastore\Migration\079_dedupe_tagsFixture.cs" />
     <Compile Include="Datastore\Migration\075_force_lib_updateFixture.cs" />
+    <Compile Include="Datastore\Migration\089_update_kickass_urlFixture.cs" />
     <Compile Include="Datastore\ObjectDatabaseFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\PagingOffsetFixture.cs" />
     <Compile Include="Datastore\PagingSpecExtensionsTests\ToSortDirectionFixture.cs" />
