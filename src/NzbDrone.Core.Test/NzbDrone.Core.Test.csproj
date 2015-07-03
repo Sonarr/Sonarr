@@ -201,6 +201,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklistFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodesFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatusFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItemsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />

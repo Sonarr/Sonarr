@@ -451,6 +451,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatus.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleases.cs" />
