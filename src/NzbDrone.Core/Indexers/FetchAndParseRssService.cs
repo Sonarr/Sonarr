@@ -45,10 +45,10 @@ namespace NzbDrone.Core.Indexers
 
             foreach (var indexer in indexers)
             {
-                var backOff = _indexerStatusService.GetBackOffDate(indexer.Definition.Id);
-                if (backOff > DateTime.UtcNow)
+                var indexerStatus = _indexerStatusService.GetIndexerStatus(indexer.Definition.Id);
+                if (indexerStatus != null && indexerStatus.BackOffDate.HasValue && indexerStatus.BackOffDate.Value > DateTime.UtcNow)
                 {
-                    _logger.Debug("Temporarily backing off on {0} till {1}.", indexer.Definition.Name, backOff);
+                    _logger.Debug("Temporarily ignoring indexer {0} till {1} due to recent failures.", indexer.Definition.Name, indexerStatus.BackOffDate.Value);
                     continue;
                 }
 

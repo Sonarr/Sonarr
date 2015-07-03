@@ -54,8 +54,8 @@ namespace NzbDrone.Core.Test.IndexerTests
             var date = DateTime.UtcNow.Subtract(TimeSpan.FromHours(hours));
 
             Mocker.GetMock<IIndexerStatusService>()
-                .Setup(v => v.GetLastRecentSearch(It.IsAny<int>()))
-                .Returns(date);
+                .Setup(v => v.GetIndexerStatus(It.IsAny<int>()))
+                .Returns(new IndexerStatus { LastRecentSearch = date });
 
             return date;
         }
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             Subject.Execute(new RssSyncCommand() { LastExecutionTime = DateTime.UtcNow.Subtract(TimeSpan.FromHours(5.0)) });
 
             Mocker.GetMock<IIndexerStatusService>()
-                  .Verify(v => v.GetLastRecentSearch(It.IsAny<int>()), Times.Never());
+                  .Verify(v => v.GetIndexerStatus(It.IsAny<int>()), Times.Never());
         }
     }
 }

@@ -191,6 +191,7 @@
     <Compile Include="HealthCheck\Checks\ImportMechanismCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\IndexerCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheckFixture.cs" />
+    <Compile Include="HealthCheck\Checks\IndexerStatusCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheckFixture.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheckFixture.cs" />
     <Compile Include="HealthCheck\HealthCheckFixture.cs" />

@@ -9,14 +9,11 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerStatusService
     {
-        DateTime GetBackOffDate(int indexerId);
+        IndexerStatus GetIndexerStatus(int indexerId);
         void ReportSuccess(int indexerId);
         void ReportFailure(int indexerId, TimeSpan minimumBackOff = default(TimeSpan));
 
-        DateTime? GetLastRecentSearch(int indexerId);
-        void UpdateLastRecentSearch(int indexerId);
-        ReleaseInfo GetLastRecentReleaseInfo(int indexerId);
-        void UpdateLastRecentReleaseInfo(int indexerId, ReleaseInfo releaseInfo, bool fullyUpdated);
+        void UpdateRecentSearchStatus(int indexerId, ReleaseInfo releaseInfo, bool fullyUpdated);
     }
 
     public class IndexerStatusService : IIndexerStatusService
@@ -36,7 +33,7 @@ namespace NzbDrone.Core.Indexers
             _logger = logger;
         }
 
-        private IndexerStatus GetIndexerStatus(int indexerId)
+        public IndexerStatus GetIndexerStatus(int indexerId)
         {
             return _indexerStatusRepository.FindByIndexerId(indexerId) ?? new IndexerStatus { IndexerId = indexerId };
         }
@@ -53,18 +50,6 @@ namespace NzbDrone.Core.Indexers
             return TimeSpan.FromSeconds(backOffPeriod);
         }
 
-        public DateTime GetBackOffDate(int indexerId)
-        {
-            var status = GetIndexerStatus(indexerId);
-
-            if (status.FailureEscalation == 0 || !status.LastFailure.HasValue)
-            {
-                return DateTime.UtcNow;
-            }
-
-            return status.LastFailure.Value + CalculateBackOffPeriod(status);
-        }
-
         public void ReportSuccess(int indexerId)
         {
             lock (_syncRoot)
@@ -77,6 +62,7 @@ namespace NzbDrone.Core.Indexers
                 }
 
                 status.FailureEscalation--;
+                status.BackOffDate = null;
 
                 _indexerStatusRepository.Upsert(status);
             }
@@ -88,12 +74,14 @@ namespace NzbDrone.Core.Indexers
             {
                 var status = GetIndexerStatus(indexerId);
 
+                var now = DateTime.UtcNow;
+
                 if (status.FailureEscalation == 0)
                 {
-                    status.FirstFailure = DateTime.UtcNow;
+                    status.FirstFailure = now;
                 }
 
-                status.LastFailure = DateTime.UtcNow;
+                status.LastFailure = now;
                 status.FailureEscalation = Math.Min(MaximumEscalation, status.FailureEscalation + 1);
 
                 if (minimumBackOff != TimeSpan.Zero)
@@ -104,37 +92,13 @@ namespace NzbDrone.Core.Indexers
                     }
                 }
 
-                _indexerStatusRepository.Upsert(status);
-            }
-        }
-
-        public DateTime? GetLastRecentSearch(int indexerId)
-        {
-            var status = GetIndexerStatus(indexerId);
-
-            return status.LastRecentSearch;
-        }
-
-        public void UpdateLastRecentSearch(int indexerId)
-        {
-            lock (_syncRoot)
-            {
-                var status = GetIndexerStatus(indexerId);
-
-                status.LastRecentSearch = DateTime.UtcNow;
+                status.BackOffDate = now + CalculateBackOffPeriod(status);
 
                 _indexerStatusRepository.Upsert(status);
             }
         }
 
-        public ReleaseInfo GetLastRecentReleaseInfo(int indexerId)
-        {
-            var status = GetIndexerStatus(indexerId);
-
-            return status.LastRecentReleaseInfo;
-        }
-
-        public void UpdateLastRecentReleaseInfo(int indexerId, ReleaseInfo releaseInfo, bool fullyUpdated)
+        public void UpdateRecentSearchStatus(int indexerId, ReleaseInfo releaseInfo, bool fullyUpdated)
         {
             lock (_syncRoot)
             {

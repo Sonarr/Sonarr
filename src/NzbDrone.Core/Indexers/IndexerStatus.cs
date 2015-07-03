@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Indexers
         public DateTime? FirstFailure { get; set; }
         public DateTime? LastFailure { get; set; }
         public int FailureEscalation { get; set; }
+        public DateTime? BackOffDate { get; set; }
 
         public DateTime? LastRecentSearch { get; set; }
         public ReleaseInfo LastRecentReleaseInfo { get; set; }

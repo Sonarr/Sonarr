@@ -124,7 +124,11 @@ namespace NzbDrone.Core.Indexers
                 ReleaseInfo lastReleaseInfo = null;
                 if (isRecent)
                 {
-                    lastReleaseInfo = _indexerStatusService.GetLastRecentReleaseInfo(Definition.Id);
+                    var indexerStatus = _indexerStatusService.GetIndexerStatus(Definition.Id);
+                    if (indexerStatus != null)
+                    {
+                        lastReleaseInfo = indexerStatus.LastRecentReleaseInfo;
+                    }
                 }
 
                 foreach (var pageableRequest in pageableRequests)
@@ -182,7 +186,7 @@ namespace NzbDrone.Core.Indexers
                 if (isRecent && !releases.Empty())
                 {
                     lastReleaseInfo = releases.OrderByDescending(v => v.PublishDate).First();
-                    _indexerStatusService.UpdateLastRecentReleaseInfo(Definition.Id, lastReleaseInfo, fullyUpdated);
+                    _indexerStatusService.UpdateRecentSearchStatus(Definition.Id, lastReleaseInfo, fullyUpdated);
                 }
 
                 _indexerStatusService.ReportSuccess(Definition.Id);

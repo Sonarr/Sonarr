@@ -79,24 +79,24 @@ namespace NzbDrone.Core.Indexers
 
                 foreach (var indexer in _indexerFactory.RssEnabled().Where(v => v.SupportsSearch))
                 {
-                    var lastRecentSearch = _indexerStatusService.GetLastRecentSearch(indexer.Definition.Id);
-                    if (!lastRecentSearch.HasValue || lastRecentSearch.Value >= rssStarted)
+                    var indexerStatus = _indexerStatusService.GetIndexerStatus(indexer.Definition.Id);
+                    if (!indexerStatus.LastRecentSearch.HasValue || indexerStatus.LastRecentSearch.Value >= rssStarted)
                     {
                         continue;
                     }
+                    var lastRecentSearch = indexerStatus.LastRecentSearch.Value;
 
-                    var backoffTime = _indexerStatusService.GetBackOffDate(indexer.Definition.Id);
-                    if (backoffTime > rssStarted)
+                    if (indexerStatus.BackOffDate.HasValue && indexerStatus.BackOffDate.Value > rssStarted)
                     {
-                        _logger.Debug("Indexer {0} last continous rss sync was till {1}. But indexer is temporarily disabled, unable to search for missing episodes.", indexer.Definition.Name, lastRecentSearch.Value);
+                        _logger.Debug("Indexer {0} last continous rss sync was till {1}. But indexer is temporarily disabled, unable to search for missing episodes.", indexer.Definition.Name, lastRecentSearch);
                         continue;
                     }
 
-                    _logger.Debug("Indexer {0} last continous rss sync was till {1}. Search may be required.", indexer.Definition.Name, lastRecentSearch.Value);
+                    _logger.Debug("Indexer {0} last continous rss sync was till {1}. Search may be required.", indexer.Definition.Name, lastRecentSearch);
 
-                    if (lastRecentSearch.Value < lastGap)
+                    if (lastRecentSearch < lastGap)
                     {
-                        lastGap = lastRecentSearch.Value;
+                        lastGap = lastRecentSearch;
                     }
                 }
 

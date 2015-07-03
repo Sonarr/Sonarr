@@ -35,30 +35,6 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         [Test]
-        public void should_return_current_backoff_time()
-        {
-            WithStatus(new IndexerStatus { LastFailure = _epoch, FailureEscalation = 1 });
-
-            Subject.GetBackOffDate(1).Should().BeCloseTo(_epoch + TimeSpan.FromSeconds(5), 500);
-        }
-
-        [Test]
-        public void should_return_old_backoff_time()
-        {
-            WithStatus(new IndexerStatus { LastFailure = _epoch - TimeSpan.FromSeconds(10), FailureEscalation = 1 });
-
-            Subject.GetBackOffDate(1).Should().BeCloseTo(_epoch - TimeSpan.FromSeconds(5), 500);
-        }
-
-        [Test]
-        public void should_return_past_time_if_okay()
-        {
-            WithStatus(new IndexerStatus { LastFailure = _epoch - TimeSpan.FromSeconds(10), FailureEscalation = 0 });
-
-            Subject.GetBackOffDate(1).Should().BeOnOrBefore(DateTime.UtcNow);
-        }
-
-        [Test]
         public void should_start_backoff_on_first_failure()
         {
             WithStatus(new IndexerStatus());
@@ -67,7 +43,9 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             VerifyUpdate();
 
-            Subject.GetBackOffDate(1).Should().BeCloseTo(_epoch + TimeSpan.FromSeconds(5), 500);
+            var status = Subject.GetIndexerStatus(1);
+            status.BackOffDate.Should().HaveValue();
+            status.BackOffDate.Value.Should().BeCloseTo(_epoch + TimeSpan.FromSeconds(5), 500);
         }
 
         [Test]
@@ -79,7 +57,8 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             VerifyUpdate();
 
-            Subject.GetBackOffDate(1).Should().BeOnOrBefore(DateTime.UtcNow);
+            var status = Subject.GetIndexerStatus(1);
+            status.BackOffDate.Should().NotHaveValue();
         }
 
         [Test]
@@ -101,7 +80,9 @@ namespace NzbDrone.Core.Test.IndexerTests
             Subject.ReportSuccess(1);
             Subject.ReportFailure(1);
 
-            Subject.GetBackOffDate(1).Should().BeCloseTo(_epoch + TimeSpan.FromSeconds(10), 500);
+            var status = Subject.GetIndexerStatus(1);
+            status.BackOffDate.Should().HaveValue();
+            status.BackOffDate.Value.Should().BeCloseTo(_epoch + TimeSpan.FromSeconds(10), 500);
         }
     }
 }

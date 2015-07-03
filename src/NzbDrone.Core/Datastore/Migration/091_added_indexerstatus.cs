@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .WithColumn("FirstFailure").AsDateTime().Nullable()
                   .WithColumn("LastFailure").AsDateTime().Nullable()
                   .WithColumn("FailureEscalation").AsInt32().NotNullable()
+                  .WithColumn("BackOffDate").AsDateTime().Nullable()
                   .WithColumn("LastRecentSearch").AsDateTime().Nullable()
                   .WithColumn("LastRecentReleaseInfo").AsString().Nullable();
         }
