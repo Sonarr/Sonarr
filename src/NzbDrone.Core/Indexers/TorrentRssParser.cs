@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual Int32? GetSeeders(XElement item)
         {
-            if (ParseSeedersInDescription)
+            if (ParseSeedersInDescription && item.Element("description") != null)
             {
                 var matchSeeders = ParseSeedersRegex.Match(item.Element("description").Value);
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual Int32? GetPeers(XElement item)
         {
-            if (ParseSeedersInDescription)
+            if (ParseSeedersInDescription && item.Element("description") != null)
             {
                 var matchPeers = ParsePeersRegex.Match(item.Element("description").Value);
 

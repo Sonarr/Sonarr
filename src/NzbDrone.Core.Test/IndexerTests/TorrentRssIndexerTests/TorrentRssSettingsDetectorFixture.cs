@@ -195,6 +195,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         [TestCase("Wombles/wombles.xml")]
         [TestCase("TorrentRss/invalid/Eztv_InvalidSize.xml")]
         [TestCase("TorrentRss/invalid/ImmortalSeed_InvalidSize.xml")]
+        [TestCase("TorrentRss/Doki.xml")]
         public void should_detect_feed_without_size(string rssXmlFile)
         {
             _indexerSettings.AllowZeroSize = true;
