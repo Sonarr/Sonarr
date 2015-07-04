@@ -98,5 +98,35 @@ namespace NzbDrone.Core.Test.IndexerTests
             Mocker.GetMock<IIndexerStatusService>()
                   .Verify(v => v.GetIndexerStatus(It.IsAny<int>()), Times.Never());
         }
+
+        [Test]
+        public void should_not_ignore_pending_items_from_available_indexer()
+        {
+            Mocker.GetMock<IPendingReleaseService>()
+                  .Setup(v => v.GetPending())
+                  .Returns(new List<ReleaseInfo> { new ReleaseInfo { IndexerId = 1 } });
+
+            Subject.Execute(new RssSyncCommand() { LastExecutionTime = DateTime.UtcNow.Subtract(TimeSpan.FromHours(5.0)) });
+
+            Mocker.GetMock<IMakeDownloadDecision>()
+                  .Verify(v => v.GetRssDecision(It.Is<List<ReleaseInfo>>(d => d.Count == 0)), Times.Never());
+        }
+
+        [Test]
+        public void should_ignore_pending_items_from_unavailable_indexer()
+        {
+            Mocker.GetMock<IIndexerStatusService>()
+                .Setup(v => v.GetIndexerStatus(It.IsAny<int>()))
+                .Returns(new IndexerStatus { BackOffDate = DateTime.UtcNow.AddHours(2) });
+
+            Mocker.GetMock<IPendingReleaseService>()
+                  .Setup(v => v.GetPending())
+                  .Returns(new List<ReleaseInfo> { new ReleaseInfo { IndexerId = 1 } });
+
+            Subject.Execute(new RssSyncCommand() { LastExecutionTime = DateTime.UtcNow.Subtract(TimeSpan.FromHours(5.0)) });
+
+            Mocker.GetMock<IMakeDownloadDecision>()
+                  .Verify(v => v.GetRssDecision(It.Is<List<ReleaseInfo>>(d => d.Count == 0)), Times.Once());
+        }
     }
 }

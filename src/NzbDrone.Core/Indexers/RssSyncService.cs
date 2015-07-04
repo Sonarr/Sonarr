@@ -9,6 +9,7 @@ using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -50,7 +51,7 @@ namespace NzbDrone.Core.Indexers
         {
             _logger.ProgressInfo("Starting RSS Sync");
 
-            var reports = _rssFetcherAndParser.Fetch().Concat(_pendingReleaseService.GetPending()).ToList();
+            var reports = _rssFetcherAndParser.Fetch().Concat(FilterByIndexer(_pendingReleaseService.GetPending())).ToList();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
             var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
@@ -64,6 +65,34 @@ namespace NzbDrone.Core.Indexers
             _logger.ProgressInfo(message);
 
             return processed;
+        }
+
+        private IEnumerable<ReleaseInfo> FilterByIndexer(IEnumerable<ReleaseInfo> releases)
+        {
+            var indexerBackOff = new Dictionary<int, bool>();
+
+            foreach (var release in releases)
+            {
+                bool ignore;
+                if (!indexerBackOff.TryGetValue(release.IndexerId, out ignore))
+                {
+                    var indexerStatus = _indexerStatusService.GetIndexerStatus(release.IndexerId);
+
+                    if (indexerStatus == null || !indexerStatus.BackOffDate.HasValue || indexerStatus.BackOffDate.Value < DateTime.UtcNow)
+                    {
+                        indexerBackOff[release.IndexerId] = ignore = false;
+                    }
+                    else
+                    {
+                        indexerBackOff[release.IndexerId] = ignore = true;
+                    }
+                }
+
+                if (!ignore)
+                {
+                    yield return release;
+                }
+            }
         }
 
         public void Execute(RssSyncCommand message)
@@ -80,7 +109,7 @@ namespace NzbDrone.Core.Indexers
                 foreach (var indexer in _indexerFactory.RssEnabled().Where(v => v.SupportsSearch))
                 {
                     var indexerStatus = _indexerStatusService.GetIndexerStatus(indexer.Definition.Id);
-                    if (!indexerStatus.LastRecentSearch.HasValue || indexerStatus.LastRecentSearch.Value >= rssStarted)
+                    if (indexerStatus == null || !indexerStatus.LastRecentSearch.HasValue || indexerStatus.LastRecentSearch.Value >= rssStarted)
                     {
                         continue;
                     }
