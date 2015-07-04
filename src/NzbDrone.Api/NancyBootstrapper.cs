@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System;
+using NLog;
+using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
 using NzbDrone.Api.ErrorManagement;
@@ -36,7 +38,7 @@ namespace NzbDrone.Api
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
 
-            ApplicationPipelines.OnError.AddItemToEndOfPipeline(container.Resolve<NzbDroneErrorPipeline>().HandleException);
+            ApplicationPipelines.OnError.AddItemToEndOfPipeline((Func<NancyContext, Exception, Response>) container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }
 
         private void RegisterPipelines(IPipelines pipelines)
