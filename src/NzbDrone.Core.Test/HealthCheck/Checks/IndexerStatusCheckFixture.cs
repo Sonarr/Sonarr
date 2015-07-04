@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                         FirstFailure = DateTime.UtcNow.AddHours(-failureHours),
                         LastFailure = DateTime.UtcNow.AddHours(-0.1),
                         FailureEscalation = 5,
-                        BackOffDate = DateTime.UtcNow.AddHours(backoffHours)
+                        DisabledTill = DateTime.UtcNow.AddHours(backoffHours)
                     });
             }
             else

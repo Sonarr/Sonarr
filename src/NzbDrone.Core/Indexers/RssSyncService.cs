@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Indexers
                 {
                     var indexerStatus = _indexerStatusService.GetIndexerStatus(release.IndexerId);
 
-                    if (indexerStatus == null || !indexerStatus.BackOffDate.HasValue || indexerStatus.BackOffDate.Value < DateTime.UtcNow)
+                    if (indexerStatus == null || !indexerStatus.DisabledTill.HasValue || indexerStatus.DisabledTill.Value < DateTime.UtcNow)
                     {
                         indexerBackOff[release.IndexerId] = ignore = false;
                     }
@@ -109,13 +109,13 @@ namespace NzbDrone.Core.Indexers
                 foreach (var indexer in _indexerFactory.RssEnabled().Where(v => v.SupportsSearch))
                 {
                     var indexerStatus = _indexerStatusService.GetIndexerStatus(indexer.Definition.Id);
-                    if (indexerStatus == null || !indexerStatus.LastRecentSearch.HasValue || indexerStatus.LastRecentSearch.Value >= rssStarted)
+                    if (indexerStatus == null || !indexerStatus.LastContinuousRssSync.HasValue || indexerStatus.LastContinuousRssSync.Value >= rssStarted)
                     {
                         continue;
                     }
-                    var lastRecentSearch = indexerStatus.LastRecentSearch.Value;
+                    var lastRecentSearch = indexerStatus.LastContinuousRssSync.Value;
 
-                    if (indexerStatus.BackOffDate.HasValue && indexerStatus.BackOffDate.Value > rssStarted)
+                    if (indexerStatus.DisabledTill.HasValue && indexerStatus.DisabledTill.Value > rssStarted)
                     {
                         _logger.Debug("Indexer {0} last continous rss sync was till {1}. But indexer is temporarily disabled, unable to search for missing episodes.", indexer.Definition.Name, lastRecentSearch);
                         continue;

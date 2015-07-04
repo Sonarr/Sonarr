@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Indexers
                     var indexerStatus = _indexerStatusService.GetIndexerStatus(Definition.Id);
                     if (indexerStatus != null)
                     {
-                        lastReleaseInfo = indexerStatus.LastRecentReleaseInfo;
+                        lastReleaseInfo = indexerStatus.LastRssSyncReleaseInfo;
                     }
                 }
 

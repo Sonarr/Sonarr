@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Indexers
                 }
 
                 status.FailureEscalation--;
-                status.BackOffDate = null;
+                status.DisabledTill = null;
 
                 _indexerStatusRepository.Upsert(status);
             }
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Indexers
                     }
                 }
 
-                status.BackOffDate = now + CalculateBackOffPeriod(status);
+                status.DisabledTill = now + CalculateBackOffPeriod(status);
 
                 _indexerStatusRepository.Upsert(status);
             }
@@ -106,9 +106,9 @@ namespace NzbDrone.Core.Indexers
 
                 if (fullyUpdated)
                 {
-                    status.LastRecentSearch = DateTime.UtcNow;
+                    status.LastContinuousRssSync = DateTime.UtcNow;
                 }
-                status.LastRecentReleaseInfo = releaseInfo;
+                status.LastRssSyncReleaseInfo = releaseInfo;
 
                 _indexerStatusRepository.Upsert(status);
             }

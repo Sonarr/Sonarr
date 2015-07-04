@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             Mocker.GetMock<IIndexerStatusService>()
                 .Setup(v => v.GetIndexerStatus(It.IsAny<int>()))
-                .Returns(new IndexerStatus { LastRecentSearch = date });
+                .Returns(new IndexerStatus { LastContinuousRssSync = date });
 
             return date;
         }
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             Mocker.GetMock<IIndexerStatusService>()
                 .Setup(v => v.GetIndexerStatus(It.IsAny<int>()))
-                .Returns(new IndexerStatus { BackOffDate = DateTime.UtcNow.AddHours(2) });
+                .Returns(new IndexerStatus { DisabledTill = DateTime.UtcNow.AddHours(2) });
 
             Mocker.GetMock<IPendingReleaseService>()
                   .Setup(v => v.GetPending())
