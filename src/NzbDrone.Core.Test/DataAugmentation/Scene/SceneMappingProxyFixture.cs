@@ -5,7 +5,7 @@ using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.Categories;
 
-namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
+namespace NzbDrone.Core.Test.DataAugmentation.Scene
 {
     [TestFixture]
     [IntegrationTest]

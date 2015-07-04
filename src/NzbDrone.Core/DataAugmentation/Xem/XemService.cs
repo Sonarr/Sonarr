@@ -38,7 +38,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             {
                 var mappings = _xemProxy.GetSceneTvdbMappings(series.TvdbId);
 
-                if (!mappings.Any())
+                if (!mappings.Any() && !series.UseSceneNumbering)
                 {
                     _logger.Debug("Mappings for: {0} are empty, skipping", series);
                     _cache.Remove(series.TvdbId.ToString());
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 }
 
                 _episodeService.UpdateEpisodes(episodes);
-                series.UseSceneNumbering = true;
+                series.UseSceneNumbering = mappings.Any();
                 _seriesService.UpdateSeries(series);
 
                 _logger.Debug("XEM mapping updated for {0}", series);
@@ -123,7 +123,13 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 RefreshCache();
             }
 
-            if (!_cache.Find(message.Series.TvdbId.ToString()))
+            if (_cache.Count == 0)
+            {
+                _logger.Debug("Scene numbering is not available");
+                return;
+            }
+
+            if (!_cache.Find(message.Series.TvdbId.ToString()) && !message.Series.UseSceneNumbering)
             {
                 _logger.Debug("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
                 return;

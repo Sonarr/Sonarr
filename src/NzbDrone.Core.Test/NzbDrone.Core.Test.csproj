@@ -108,8 +108,9 @@
     <Compile Include="Blacklisting\BlacklistServiceFixture.cs" />
     <Compile Include="Configuration\ConfigCachingFixture.cs" />
     <Compile Include="Configuration\ConfigServiceFixture.cs" />
-    <Compile Include="DataAugmentationFixture\Scene\SceneMappingProxyFixture.cs" />
-    <Compile Include="DataAugmentationFixture\Scene\SceneMappingServiceFixture.cs" />
+    <Compile Include="DataAugmentation\SceneNumbering\XemServiceFixture.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingProxyFixture.cs" />
+    <Compile Include="DataAugmentation\Scene\SceneMappingServiceFixture.cs" />
     <Compile Include="DataAugmentation\DailySeries\DailySeriesDataProxyFixture.cs" />
     <Compile Include="Datastore\BasicRepositoryFixture.cs" />
     <Compile Include="Datastore\Converters\ProviderSettingConverterFixture.cs" />

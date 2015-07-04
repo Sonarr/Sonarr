@@ -12,7 +12,7 @@ using NzbDrone.Test.Common;
 using FluentAssertions;
 using NzbDrone.Common.Extensions;
 
-namespace NzbDrone.Core.Test.DataAugmentationFixture.Scene
+namespace NzbDrone.Core.Test.DataAugmentation.Scene
 {
     [TestFixture]
 
