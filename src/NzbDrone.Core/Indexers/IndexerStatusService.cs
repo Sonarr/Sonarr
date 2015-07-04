@@ -18,9 +18,9 @@ namespace NzbDrone.Core.Indexers
 
     public class IndexerStatusService : IIndexerStatusService
     {
-        const int MinimumBackOffPeriod = 5;
-        const int MaximumBackOffPeriod = 86400;
-        const int MaximumEscalation = 17;
+        const int MinimumBackOffPeriod = 5 * 60;
+        const int MaximumBackOffPeriod = 24 * 60 * 60;
+        const int MaximumEscalation = 10;
 
         private static readonly object _syncRoot = new object();
 
