@@ -48,6 +48,8 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
             _episodes.Add(new Episode { SeasonNumber = 2, EpisodeNumber = 3 });
             _episodes.Add(new Episode { SeasonNumber = 2, EpisodeNumber = 4 });
             _episodes.Add(new Episode { SeasonNumber = 2, EpisodeNumber = 5 });
+            _episodes.Add(new Episode { SeasonNumber = 3, EpisodeNumber = 1 });
+            _episodes.Add(new Episode { SeasonNumber = 3, EpisodeNumber = 2 });
 
             Mocker.GetMock<IEpisodeService>()
                   .Setup(v => v.GetEpisodeBySeries(It.IsAny<int>()))
@@ -142,6 +144,123 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.IsAny<Series>()), Times.Never());
+        }
+
+        [Test]
+        public void should_flag_unknown_future_episodes_if_existing_season_is_mapped()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Tvdb.Season == 2 && v.Tvdb.Episode == 5);
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 2 && v.EpisodeNumber == 5);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_flag_unknown_future_season_if_future_season_is_shifted()
+        {
+            GivenTvdbMappings();
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 3 && v.EpisodeNumber == 1);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_flag_unknown_future_season_if_future_season_is_not_shifted()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Scene.Season == 3);
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 3 && v.EpisodeNumber == 1);
+
+            episode.UnverifiedSceneNumbering.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_extrapolate_season_with_specials()
+        {
+            GivenTvdbMappings();
+            var specialMapping = _theXemTvdbMappings.First(v => v.Tvdb.Season == 2 && v.Tvdb.Episode == 5);
+            specialMapping.Tvdb.Season = 0;
+            specialMapping.Tvdb.Episode = 1;
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 2 && v.EpisodeNumber == 5);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
+            episode.SceneSeasonNumber.Should().NotHaveValue();
+            episode.SceneEpisodeNumber.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void should_extrapolate_season_with_future_episodes()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Tvdb.Season == 2 && v.Tvdb.Episode == 5);
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 2 && v.EpisodeNumber == 5);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
+            episode.SceneSeasonNumber.Should().Be(3);
+            episode.SceneEpisodeNumber.Should().Be(2);
+        }
+
+        [Test]
+        public void should_extrapolate_season_with_shifted_episodes()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Tvdb.Season == 2 && v.Tvdb.Episode == 5);
+            var dualMapping = _theXemTvdbMappings.First(v => v.Tvdb.Season == 2 && v.Tvdb.Episode == 4);
+            dualMapping.Scene.Season = 2;
+            dualMapping.Scene.Episode = 3;
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 2 && v.EpisodeNumber == 5);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
+            episode.SceneSeasonNumber.Should().Be(2);
+            episode.SceneEpisodeNumber.Should().Be(4);
+        }
+
+        [Test]
+        public void should_extrapolate_shifted_future_seasons()
+        {
+            GivenTvdbMappings();
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 3 && v.EpisodeNumber == 2);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
+            episode.SceneSeasonNumber.Should().Be(4);
+            episode.SceneEpisodeNumber.Should().Be(2);
+        }
+
+        [Test]
+        public void should_not_extrapolate_matching_future_seasons()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Scene.Season != 1);
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 3 && v.EpisodeNumber == 2);
+
+            episode.UnverifiedSceneNumbering.Should().BeFalse();
+            episode.SceneSeasonNumber.Should().NotHaveValue();
+            episode.SceneEpisodeNumber.Should().NotHaveValue();
         }
     }
 }

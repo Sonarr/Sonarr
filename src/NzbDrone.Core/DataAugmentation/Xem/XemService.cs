@@ -52,6 +52,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                     episode.SceneAbsoluteEpisodeNumber = null;
                     episode.SceneSeasonNumber = null;
                     episode.SceneEpisodeNumber = null;
+                    episode.UnverifiedSceneNumbering = false;
                 }
 
                 foreach (var mapping in mappings)
@@ -71,6 +72,11 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                     episode.SceneEpisodeNumber = mapping.Scene.Episode;
                 }
 
+                if (episodes.Any(v => v.SceneEpisodeNumber.HasValue && v.SceneSeasonNumber != 0))
+                {
+                    ExtrapolateMappings(series, episodes, mappings);
+                }
+
                 _episodeService.UpdateEpisodes(episodes);
                 series.UseSceneNumbering = mappings.Any();
                 _seriesService.UpdateSeries(series);
@@ -80,6 +86,70 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             catch (Exception ex)
             {
                 _logger.ErrorException("Error updating scene numbering mappings for: " + series, ex);
+            }
+        }
+
+        private void ExtrapolateMappings(Series series, List<Episode> episodes, List<Model.XemSceneTvdbMapping> mappings)
+        {
+            var mappedEpisodes = episodes.Where(v => v.SeasonNumber != 0 && v.SceneEpisodeNumber.HasValue).ToList();
+            var mappedSeasons = new HashSet<int>(mappedEpisodes.Select(v => v.SeasonNumber).Distinct());
+            var lastSceneSeason = mappings.Select(v => v.Scene.Season).Max();
+            var lastTvdbSeason = mappings.Select(v => v.Tvdb.Season).Max();
+            
+            // Mark all episodes not on the xem as unverified.
+            foreach (var episode in episodes)
+            {
+                if (episode.SeasonNumber == 0) continue;
+                if (episode.SceneEpisodeNumber.HasValue) continue;
+
+                if (mappedSeasons.Contains(episode.SeasonNumber))
+                {
+                    episode.UnverifiedSceneNumbering = true;
+                }
+
+                if (lastSceneSeason != lastTvdbSeason && episode.SeasonNumber > lastTvdbSeason)
+                {
+                    episode.UnverifiedSceneNumbering = true;
+                }
+            }
+
+            foreach (var episode in episodes)
+            {
+                if (episode.SeasonNumber == 0) continue;
+                if (episode.SceneEpisodeNumber.HasValue) continue;
+                if (episode.SeasonNumber < lastTvdbSeason) continue;
+                if (!episode.UnverifiedSceneNumbering) continue;
+
+                var seasonMappings = mappings.Where(v => v.Tvdb.Season == episode.SeasonNumber).ToList();
+                if (seasonMappings.Any(v => v.Tvdb.Episode >= episode.EpisodeNumber))
+                {
+                    continue;
+                }
+
+                if (seasonMappings.Any())
+                {
+                    var lastEpisodeMapping = seasonMappings.OrderBy(v => v.Tvdb.Episode).Last();
+                    var lastSceneSeasonMapping = mappings.Where(v => v.Scene.Season == lastEpisodeMapping.Scene.Season).OrderBy(v => v.Scene.Episode).Last();
+
+                    if (lastSceneSeasonMapping.Tvdb.Season == 0)
+                    {
+                        continue;
+                    }
+
+                    var offset = episode.EpisodeNumber - lastEpisodeMapping.Tvdb.Episode;
+
+                    episode.SceneSeasonNumber = lastEpisodeMapping.Scene.Season;
+                    episode.SceneEpisodeNumber = lastEpisodeMapping.Scene.Episode + offset;
+                    episode.SceneAbsoluteEpisodeNumber = lastEpisodeMapping.Scene.Absolute + offset;
+                }
+                else if (lastTvdbSeason != lastSceneSeason)
+                {
+                    var offset = episode.SeasonNumber - lastTvdbSeason;
+
+                    episode.SceneSeasonNumber = lastSceneSeason + offset;
+                    episode.SceneEpisodeNumber = episode.EpisodeNumber;
+                    // TODO: SceneAbsoluteEpisodeNumber.
+                }
             }
         }
 

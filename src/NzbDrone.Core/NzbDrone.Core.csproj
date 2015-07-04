@@ -264,6 +264,7 @@
     <Compile Include="Datastore\Migration\083_additonal_blacklist_columns.cs" />
     <Compile Include="Datastore\Migration\082_add_fanzub_settings.cs" />
     <Compile Include="Datastore\Migration\088_pushbullet_devices_channels_list.cs" />
+    <Compile Include="Datastore\Migration\092_add_unverifiedscenenumbering.cs" />
     <Compile Include="Datastore\Migration\090_update_kickass_url.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
@@ -621,6 +622,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotSampleSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\SameEpisodesImportSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\Specifications\UnverifiedSceneNumberingSpecification.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecification.cs" />
     <Compile Include="MediaFiles\Events\EpisodeDownloadedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
