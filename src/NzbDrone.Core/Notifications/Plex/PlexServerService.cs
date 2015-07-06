@@ -151,6 +151,11 @@ namespace NzbDrone.Core.Notifications.Plex
                     return new ValidationFailure("Host", "At least one TV library is required");
                 }
             }
+            catch(PlexAuthenticationException ex)
+            {
+                _logger.ErrorException("Unable to connect to Plex Server: " + ex.Message, ex);
+                return new ValidationFailure("Username", "Incorrect username or password");
+            }
             catch (Exception ex)
             {
                 _logger.ErrorException("Unable to connect to Plex Server: " + ex.Message, ex);
