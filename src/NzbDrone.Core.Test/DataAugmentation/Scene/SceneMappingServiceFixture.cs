@@ -177,6 +177,31 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             ExceptionVerification.ExpectedWarns(1);
         }
 
+
+        [TestCase("Working!!", "Working!!", 1)]
+        [TestCase("Working`!!", "Working`!!", 2)]
+        [TestCase("Working!!!", "Working!!!", 3)]
+        [TestCase("Working!!!!", "Working!!!", 3)]
+        [TestCase("Working !!", "Working!!", 1)]
+        public void should_return_single_match(string parseTitle, string title, int expectedSeasonNumber)
+        {
+            var mappings = new List<SceneMapping>
+            {
+                new SceneMapping { Title = "Working!!", ParseTerm = "working", SearchTerm = "Working!!", TvdbId = 100, SeasonNumber = -1 },
+                new SceneMapping { Title = "Working!!", ParseTerm = "working", SearchTerm = "Working!!", TvdbId = 100, SeasonNumber = 1 },
+                new SceneMapping { Title = "Working`!!", ParseTerm = "working", SearchTerm = "Working`!!", TvdbId = 100, SeasonNumber = 2 },
+                new SceneMapping { Title = "Working!!!", ParseTerm = "working", SearchTerm = "Working!!!", TvdbId = 100, SeasonNumber = 3 },
+            };
+
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+
+            var tvdbId = Subject.FindTvDbId(parseTitle);
+            var seasonNumber = Subject.GetSeasonNumber(parseTitle);
+
+            tvdbId.Should().Be(100);
+            seasonNumber.Should().Be(expectedSeasonNumber);
+        }
+
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());

@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title, int year)
         {
-            return _seriesRepository.FindByTitle(title, year);
+            return _seriesRepository.FindByTitle(title.CleanSeriesTitle(), year);
         }
 
         public void DeleteSeries(int seriesId, bool deleteFiles)

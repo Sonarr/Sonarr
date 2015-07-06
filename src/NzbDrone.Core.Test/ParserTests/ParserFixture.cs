@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "Seed")]
         public void should_parse_series_name(String postTitle, String title)
         {
-            var result = Parser.Parser.ParseSeriesName(postTitle);
+            var result = Parser.Parser.ParseSeriesName(postTitle).CleanSeriesTitle();
             result.Should().Be(title.CleanSeriesTitle());
         }
 
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[scnzbefnet][509103] 2.Broke.Girls.S03E18.720p.HDTV.X264-DIMENSION", "2 Broke Girls")]
         public void should_remove_request_info_from_title(String postTitle, String title)
         {
-            Parser.Parser.ParseTitle(postTitle).SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            Parser.Parser.ParseTitle(postTitle).SeriesTitle.Should().Be(title);
         }
     }
 }

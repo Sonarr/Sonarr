@@ -14,14 +14,14 @@ namespace NzbDrone.Core.Test.ParserTests
     {
         [TestCase("Conan 2011 04 18 Emma Roberts HDTV XviD BFF", "Conan", 2011, 04, 18)]
         [TestCase("The Tonight Show With Jay Leno 2011 04 15 1080i HDTV DD5 1 MPEG2 TrollHD", "The Tonight Show With Jay Leno", 2011, 04, 15)]
-        [TestCase("The.Daily.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "The.Daily.Show", 2010, 10, 11)]
-        [TestCase("The Daily Show - 2011-04-12 - Gov. Deval Patrick", "The.Daily.Show", 2011, 04, 12)]
+        [TestCase("The.Daily.Show.2010.10.11.Johnny.Knoxville.iTouch-MW", "The Daily Show", 2010, 10, 11)]
+        [TestCase("The Daily Show - 2011-04-12 - Gov. Deval Patrick", "The Daily Show", 2011, 04, 12)]
         [TestCase("2011.01.10 - Denis Leary - HD TV.mkv", "", 2011, 1, 10)]
         [TestCase("2011.03.13 - Denis Leary - HD TV.mkv", "", 2011, 3, 13)]
         [TestCase("The Tonight Show with Jay Leno - 2011-06-16 - Larry David, \"Bachelorette\" Ashley Hebert, Pitbull with Ne-Yo", "The Tonight Show with Jay Leno", 2011, 6, 16)]
-        [TestCase("2020.NZ.2012.16.02.PDTV.XviD-C4TV", "2020nz", 2012, 2, 16)]
-        [TestCase("2020.NZ.2012.13.02.PDTV.XviD-C4TV", "2020nz", 2012, 2, 13)]
-        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "2020nz", 2011, 12, 2)]
+        [TestCase("2020.NZ.2012.16.02.PDTV.XviD-C4TV", "2020 NZ", 2012, 2, 16)]
+        [TestCase("2020.NZ.2012.13.02.PDTV.XviD-C4TV", "2020 NZ", 2012, 2, 13)]
+        [TestCase("2020.NZ.2011.12.02.PDTV.XviD-C4TV", "2020 NZ", 2011, 12, 2)]
         [TestCase("Series Title - 2013-10-30 - Episode Title (1) [HDTV-720p]", "Series Title", 2013, 10, 30)]
         [TestCase("The_Voice_US_04.28.2014_hdtv.x264.Poke.mp4", "The Voice US", 2014, 4, 28)]
         [TestCase("At.Midnight.140722.720p.HDTV.x264-YesTV", "At Midnight", 2014, 07, 22)]
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
-            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.SeriesTitle.Should().Be(title);
             result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();

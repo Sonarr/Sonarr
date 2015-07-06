@@ -10,11 +10,11 @@ namespace NzbDrone.Core.Test.ParserTests
     public class MultiEpisodeParserFixture : CoreTest
     {
         [TestCase("WEEDS.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD", "WEEDS", 3, new[] { 1, 2, 3, 4, 5, 6 })]
-        [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two.and.a.Half.Men", 1, new[] { 3, 4 })]
+        [TestCase("Two.and.a.Half.Men.103.104.720p.HDTV.X264-DIMENSION", "Two and a Half Men", 1, new[] { 3, 4 })]
         [TestCase("Weeds.S03E01.S03E02.720p.HDTV.X264-DIMENSION", "Weeds", 3, new[] { 1, 2 })]
         [TestCase("The Borgias S01e01 e02 ShoHD On Demand 1080i DD5 1 ALANiS", "The Borgias", 1, new[] { 1, 2 })]
-        [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White.Collar", 2, new[] { 4, 5 })]
-        [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate.Housewives", 7, new[] { 22, 23 })]
+        [TestCase("White.Collar.2x04.2x05.720p.BluRay-FUTV", "White Collar", 2, new[] { 4, 5 })]
+        [TestCase("Desperate.Housewives.S07E22E23.720p.HDTV.X264-DIMENSION", "Desperate Housewives", 7, new[] { 22, 23 })]
         [TestCase("Desparate Housewives - S07E22 - S07E23 - And Lots of Security.. [HDTV-720p].mkv", "Desparate Housewives", 7, new[] { 22, 23 })]
         [TestCase("S03E01.S03E02.720p.HDTV.X264-DIMENSION", "", 3, new[] { 1, 2 })]
         [TestCase("Desparate Housewives - S07E22 - 7x23 - And Lots of Security.. [HDTV-720p].mkv", "Desparate Housewives", 7, new[] { 22, 23 })]
@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Kaamelott.S01E91-E100", "Kaamelott", 1, new[] { 91, 92, 93, 94, 95, 96, 97, 98, 99, 100 })]
         [TestCase("Neighbours.S29E161-E165.PDTV.x264-FQM", "Neighbours", 29, new[] { 161, 162, 163, 164, 165 })]
         [TestCase("Shortland.Street.S22E5363-E5366.HDTV.x264-FiHTV", "Shortland Street", 22, new[] { 5363, 5364, 5365, 5366 })]
-        [TestCase("the.office.101.102.hdtv-lol", "The Office", 1, new[] { 1, 2 })]
-        [TestCase("extant.10708.hdtv-lol.mp4", "Extant", 1, new[] { 7, 8 })]
-        [TestCase("extant.10910.hdtv-lol.mp4", "Extant", 1, new[] { 9, 10 })]
+        [TestCase("the.office.101.102.hdtv-lol", "the office", 1, new[] { 1, 2 })]
+        [TestCase("extant.10708.hdtv-lol.mp4", "extant", 1, new[] { 7, 8 })]
+        [TestCase("extant.10910.hdtv-lol.mp4", "extant", 1, new[] { 9, 10 })]
         [TestCase("E.010910.HDTVx264REPACKLOL.mp4", "E", 1, new[] { 9, 10 })]
         [TestCase("World Series of Poker - 2013x15 - 2013x16 - HD TV.mkv", "World Series of Poker", 2013, new[] { 15, 16 })]
         [TestCase("The Librarians US S01E01-E02 720p HDTV x264", "The Librarians US", 1, new [] { 1, 2 })]
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
-            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeFalse();
         }

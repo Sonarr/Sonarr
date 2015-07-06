@@ -9,10 +9,10 @@ namespace NzbDrone.Core.Test.ParserTests
     [TestFixture]
     public class SeasonParserFixture : CoreTest
     {
-        [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30.Rock", 4)]
-        [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks.and.Recreation", 2)]
-        [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The.Office.US", 3)]
-        [TestCase(@"Sons.of.Anarchy.S03.720p.BluRay-CLUE\REWARD", "Sons.of.Anarchy", 3)]
+        [TestCase("30.Rock.Season.04.HDTV.XviD-DIMENSION", "30 Rock", 4)]
+        [TestCase("Parks.and.Recreation.S02.720p.x264-DIMENSION", "Parks and Recreation", 2)]
+        [TestCase("The.Office.US.S03.720p.x264-DIMENSION", "The Office US", 3)]
+        [TestCase(@"Sons.of.Anarchy.S03.720p.BluRay-CLUE\REWARD", "Sons of Anarchy", 3)]
         [TestCase("Adventure Time S02 720p HDTV x264 CRON", "Adventure Time", 2)]
         [TestCase("Sealab.2021.S04.iNTERNAL.DVDRip.XviD-VCDVaULT", "Sealab 2021", 4)]
         [TestCase("Hawaii Five 0 S01 720p WEB DL DD5 1 H 264 NT", "Hawaii Five 0", 1)]
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
-            result.SeriesTitle.Should().Be(title.CleanSeriesTitle());
+            result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeTrue();

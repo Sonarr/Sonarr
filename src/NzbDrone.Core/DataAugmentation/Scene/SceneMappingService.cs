@@ -29,7 +29,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private readonly IEnumerable<ISceneMappingProvider> _sceneMappingProviders;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
-        private readonly ICached<SceneMapping> _getTvdbIdCache;
+        private readonly ICached<List<SceneMapping>> _getTvdbIdCache;
         private readonly ICached<List<SceneMapping>> _findByTvdbIdCache;
 
         public SceneMappingService(ISceneMappingRepository repository,
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _sceneMappingProviders = sceneMappingProviders;
             _eventAggregator = eventAggregator;
 
-            _getTvdbIdCache = cacheManager.GetCache<SceneMapping>(GetType(), "tvdb_id");
+            _getTvdbIdCache = cacheManager.GetCache<List<SceneMapping>>(GetType(), "tvdb_id");
             _findByTvdbIdCache = cacheManager.GetCache<List<SceneMapping>>(GetType(), "find_tvdb_id");
             _logger = logger;
         }
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                             sceneMapping.Type = sceneMappingProvider.GetType().Name;
                         }
 
-                        _repository.InsertMany(mappings.DistinctBy(s => s.ParseTerm).ToList());
+                        _repository.InsertMany(mappings.ToList());
                     }
                     else
                     {
@@ -154,7 +154,31 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 RefreshCache();
             }
 
-            return _getTvdbIdCache.Find(title.CleanSeriesTitle());
+            var candidates = _getTvdbIdCache.Find(title.CleanSeriesTitle());
+
+            if (candidates == null)
+            {
+                return null;
+            }
+
+            if (candidates.Count == 1)
+            {
+                return candidates.First();
+            }
+
+            var exactMatch = candidates.OrderByDescending(v => v.SeasonNumber)
+                                       .FirstOrDefault(v => v.Title == title);
+
+            if (exactMatch != null)
+            {
+                return exactMatch;
+            }
+
+            var closestMatch = candidates.OrderBy(v => title.LevenshteinDistance(v.Title, 10, 1, 10))
+                                         .ThenByDescending(v => v.SeasonNumber)
+                                         .First();
+
+            return closestMatch;
         }
 
         private void RefreshCache()
@@ -164,9 +188,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _getTvdbIdCache.Clear();
             _findByTvdbIdCache.Clear();
 
-            foreach (var sceneMapping in mappings)
+            foreach (var sceneMapping in mappings.GroupBy(v => v.ParseTerm))
             {
-                _getTvdbIdCache.Set(sceneMapping.ParseTerm.CleanSeriesTitle(), sceneMapping);
+                _getTvdbIdCache.Set(sceneMapping.Key, sceneMapping.ToList());
             }
 
             foreach (var sceneMapping in mappings.GroupBy(x => x.TvdbId))

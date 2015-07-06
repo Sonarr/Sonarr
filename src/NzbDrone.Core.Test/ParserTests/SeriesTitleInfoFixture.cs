@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
 
-            result.Title.Should().Be("house2004");
+            result.Title.Should().Be("House 2004");
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
 
-            result.TitleWithoutYear.Should().Be("house");
+            result.TitleWithoutYear.Should().Be("House");
         }
     }
 }
