@@ -6,7 +6,6 @@ var CalendarCollection = require('./CalendarCollection');
 var UiSettings = require('../Shared/UiSettingsModel');
 var QueueCollection = require('../Activity/Queue/QueueCollection');
 var Config = require('../Config');
-var SeriesCollection = require('../Series/SeriesCollection');
 
 require('../Mixins/backbone.signalr.mixin');
 require('fullcalendar');
@@ -96,7 +95,7 @@ module.exports = Marionette.ItemView.extend({
             }
         }
 
-        else if (SeriesCollection.get(event.model.get('seriesId')).get('seriesType') === 'anime' && event.model.get('seasonNumber') > 0 && !event.model.has('absoluteEpisodeNumber')) {
+        else if (event.model.get('series').seriesType === 'anime' && event.model.get('seasonNumber') > 0 && !event.model.has('absoluteEpisodeNumber')) {
             this._addStatusIcon(element, 'icon-sonarr-form-warning', 'Episode does not have an absolute episode number');
         }
     },
