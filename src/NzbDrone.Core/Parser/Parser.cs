@@ -644,7 +644,16 @@ namespace NzbDrone.Core.Parser
                     airmonth = tempDay;
                 }
 
-                var airDate = new DateTime(airYear, airmonth, airday);
+                DateTime airDate;
+
+                try
+                {
+                    airDate = new DateTime(airYear, airmonth, airday);
+                }
+                catch (Exception)
+                {
+                    throw new InvalidDateException("Invalid date found: {0}-{1}-{2}", airYear, airmonth, airday);
+                }
 
                 //Check if episode is in the future (most likely a parse error)
                 if (airDate > DateTime.Now.AddDays(1).Date || airDate < new DateTime(1970, 1, 1))
