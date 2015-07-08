@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title [1x05] Episode Title", "Series Title", 1, 5)]
         [TestCase("Series Title [S01E05] Episode Title", "Series Title", 1, 5)]
         [TestCase("Series Title Season 01 Episode 05 720p", "Series Title", 1, 5)]
-        [TestCase("Off the Air - 101 - Animals (460p.x264.vorbis-2.0) [449].mkv", "Off the Air", 1, 1)]
+        //[TestCase("Off the Air - 101 - Animals (460p.x264.vorbis-2.0) [449].mkv", "Off the Air", 1, 1)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
