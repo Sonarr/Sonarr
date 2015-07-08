@@ -16,9 +16,11 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         void AddTorrentFromUrl(string torrentUrl, RTorrentSettings settings);
         void AddTorrentFromFile(string fileName, byte[] fileContent, RTorrentSettings settings);
         void RemoveTorrent(string hash, RTorrentSettings settings);
-        void SetTorrentPriority(string hash, RTorrentSettings settings, RTorrentPriority priority);
+        void SetTorrentPriority(string hash, RTorrentPriority priority, RTorrentSettings settings);
         void SetTorrentLabel(string hash, string label, RTorrentSettings settings);
+        void SetTorrentDownloadDirectory(string hash, string directory, RTorrentSettings settings);
         bool HasHashTorrent(string hash, RTorrentSettings settings);
+        void StartTorrent(string hash, RTorrentSettings settings);
     }
 
     public interface IRTorrent : IXmlRpcProxy
@@ -26,10 +28,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [XmlRpcMethod("d.multicall2")]
         object[] TorrentMulticall(params string[] parameters);
 
-        [XmlRpcMethod("load.start")]
-        int LoadURL(string target, string data);
+        [XmlRpcMethod("load.normal")]
+        int LoadUrl(string target, string data);
 
-        [XmlRpcMethod("load.raw_start")]
+        [XmlRpcMethod("load.raw")]
         int LoadBinary(string target, byte[] data);
 
         [XmlRpcMethod("d.erase")]
@@ -41,11 +43,17 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [XmlRpcMethod("d.priority.set")]
         int SetPriority(string hash, long priority);
 
+        [XmlRpcMethod("d.directory.set")]
+        int SetDirectory(string hash, string directory);
+
         [XmlRpcMethod("d.name")]
         string GetName(string hash);
 
         [XmlRpcMethod("system.client_version")]
         string GetVersion();
+
+        [XmlRpcMethod("system.multicall")]
+        object[] SystemMulticall(object[] parameters);
     }
 
     public class RTorrentProxy : IRTorrentProxy
@@ -108,32 +116,13 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             return items;
         }
 
-        public bool HasHashTorrent(string hash, RTorrentSettings settings)
-        {
-            _logger.Debug("Executing remote method: d.name");
-
-            var client = BuildClient(settings);
-
-            try
-            {
-                var name = client.GetName(hash);
-                if (name.IsNullOrWhiteSpace()) return false;
-                bool metaTorrent = name == (hash + ".meta");
-                return !metaTorrent;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         public void AddTorrentFromUrl(string torrentUrl, RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: load.start");
+            _logger.Debug("Executing remote method: load.normal");
 
             var client = BuildClient(settings);
 
-            var response = client.LoadURL("", torrentUrl);
+            var response = client.LoadUrl("", torrentUrl);
             if (response != 0)
             {
                 throw new DownloadClientException("Could not add torrent: {0}.", torrentUrl);
@@ -142,7 +131,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public void AddTorrentFromFile(string fileName, Byte[] fileContent, RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: load.raw_start");
+            _logger.Debug("Executing remote method: load.raw");
 
             var client = BuildClient(settings);
 
@@ -166,7 +155,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
         }
 
-        public void SetTorrentPriority(string hash, RTorrentSettings settings, RTorrentPriority priority)
+        public void SetTorrentPriority(string hash, RTorrentPriority priority, RTorrentSettings settings)
         {
             _logger.Debug("Executing remote method: d.priority.set");
 
@@ -185,10 +174,68 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             var client = BuildClient(settings);
 
-            var satLabel = client.SetLabel(hash, label);
-            if (satLabel != label)
+            var setLabel = client.SetLabel(hash, label);
+            if (setLabel != label)
             {
                 throw new DownloadClientException("Could set label on torrent: {0}.", hash);
+            }
+        }
+
+        public void SetTorrentDownloadDirectory(string hash, string directory, RTorrentSettings settings)
+        {
+            _logger.Debug("Executing remote method: d.directory.set");
+
+            var client = BuildClient(settings);
+
+            var response = client.SetDirectory(hash, directory);
+            if (response != 0)
+            {
+                throw new DownloadClientException("Could not set directory for torrent: {0}.", hash);
+            }
+        }
+
+        public bool HasHashTorrent(string hash, RTorrentSettings settings)
+        {
+            _logger.Debug("Executing remote method: d.name");
+
+            var client = BuildClient(settings);
+
+            try
+            {
+                var name = client.GetName(hash);
+                if (name.IsNullOrWhiteSpace()) return false;
+                bool metaTorrent = name == (hash + ".meta");
+                return !metaTorrent;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public void StartTorrent(string hash, RTorrentSettings settings)
+        {
+            _logger.Debug("Executing remote methods: d.open and d.start");
+
+            var client = BuildClient(settings);
+
+            var multicallResponse = client.SystemMulticall(new[]
+                                                  {
+                                                      new
+                                                      {
+                                                          methodName = "d.open",
+                                                          @params = new[] { hash }
+                                                      },
+                                                      new
+                                                      {
+                                                          methodName = "d.start",
+                                                          @params = new[] { hash }
+                                                      },
+                                                  }).SelectMany(c => ((IEnumerable<int>)c));
+
+            if (multicallResponse.Any(r => r != 0))
+            {
+                throw new DownloadClientException("Could not start torrent: {0}.", hash);
             }
         }
 
