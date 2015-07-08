@@ -62,7 +62,6 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\Test", @"C:\Test\\")]
         [TestCase(@"C:\\\\\Test", @"C:\Test\\")]
         [TestCase(@"C:\Test\\\\", @"C:\Test\\")]
-        [TestCase(@"C:\Test", @"C:\Test\\")]
         [TestCase(@"\\Server\pool", @"\\Server\pool")]
         [TestCase(@"\\Server\pool\", @"\\Server\pool")]
         [TestCase(@"\\Server\pool", @"\\Server\pool\")]

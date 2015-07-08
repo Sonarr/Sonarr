@@ -151,7 +151,6 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\Test", @"C:\Test2\sub", @"C:\Test2\sub")]
         [TestCase(@"/Test", @"sub", @"/Test/sub")]
         [TestCase(@"/Test", @"sub/", @"/Test/sub/")]
-        [TestCase(@"/Test", @"sub/", @"/Test/sub/")]
         [TestCase(@"/Test/", @"sub/test/", @"/Test/sub/test/")]
         [TestCase(@"/Test/", @"/Test2/", @"/Test2/")]
         [TestCase(@"C:\Test", "", @"C:\Test")]

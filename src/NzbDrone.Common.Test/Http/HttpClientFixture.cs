@@ -84,8 +84,6 @@ namespace NzbDrone.Common.Test.Http
             ExceptionVerification.IgnoreWarns();
         }
 
-
-        [TestCase(HttpStatusCode.Moved)]
         [TestCase(HttpStatusCode.MovedPermanently)]
         public void should_not_follow_redirects_when_not_in_production(HttpStatusCode statusCode)
         {
