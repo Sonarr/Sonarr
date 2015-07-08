@@ -82,6 +82,9 @@ namespace NzbDrone.Update.UpdateEngine
 
             try
             {
+                _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+
                 if (OsInfo.IsWindows)
                 {
                     _terminateNzbDrone.Terminate(processId);

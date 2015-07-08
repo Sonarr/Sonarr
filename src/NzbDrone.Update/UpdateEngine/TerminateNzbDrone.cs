@@ -44,16 +44,21 @@ namespace NzbDrone.Update.UpdateEngine
                         _logger.ErrorException("couldn't stop service", e);
                     }
                 }
+
+                _logger.Info("Killing all running processes");
+
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
             }
             else
             {
+                _logger.Info("Killing all running processes");
+
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+
                 _processProvider.Kill(processId);
             }
-
-            _logger.Info("Killing all running processes");
-          
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
         }
     }
 }

@@ -244,6 +244,12 @@ namespace NzbDrone.Common.Processes
 
             foreach (var processInfo in processes)
             {
+                if (processInfo.Id == Process.GetCurrentProcess().Id)
+                {
+                    _logger.Debug("Tried killing own process, skipping: {0} [{1}]", processInfo.Id, processInfo.ProcessName);
+                    continue;
+                }
+
                 _logger.Debug("Killing process: {0} [{1}]", processInfo.Id, processInfo.ProcessName);
                 Kill(processInfo.Id);
             }
@@ -305,6 +311,18 @@ namespace NzbDrone.Common.Processes
                                    .Union(monoProcesses).ToList();
 
             _logger.Debug("Found {0} processes with the name: {1}", processes.Count, name);
+
+            try
+            {
+                foreach (var process in processes)
+                {
+                    _logger.Debug(" - [{0}] {1}", process.Id, process.ProcessName);
+                }
+            }
+            catch
+            {
+                // Don't crash on gettings some log data.
+            }
 
             return processes;
         }
