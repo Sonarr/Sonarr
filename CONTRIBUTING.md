@@ -22,7 +22,7 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 5.  Compile in Visual Studio
 
 ### Contributing Code ###
-- If you're adding a new, already requested feature, please comment on [Trello](https://trello.sonarr.tv "Trello") so work is not duplicated (If you want to add something not already on there, please talk to us first)
+- If you're adding a new, already requested feature, please comment on [Github Issues](https://github.com/Sonarr/Sonarr/issues "Github Issues") so work is not duplicated (If you want to add something not already on there, please talk to us first)
 - Rebase from NzbDrone's develop branch, don't merge
 - Make meaningful commits, or squash them
 - Feel free to make a pull request before work is complete, this will let us see where its at and make comments/suggest improvements
