@@ -73,30 +73,11 @@ namespace NzbDrone.Common.Http
                 AddRequestHeaders(webRequest, request.Headers);
             }
 
-            var cookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
-
-            if (request.Cookies.Count != 0)
-            {
-                foreach (var pair in request.Cookies)
-                {
-                    cookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
-                    {
-                        Expires = DateTime.UtcNow.AddHours(1)
-                    });
-                }
-            }
-
-            if (request.StoreResponseCookie)
-            {
-                webRequest.CookieContainer = cookieContainer;
-            }
-            else
-            {
-                webRequest.CookieContainer = new CookieContainer();
-                webRequest.CookieContainer.Add(cookieContainer.GetCookies(request.Url));
-            }
+            PrepareRequestCookies(request, webRequest);
 
             var response = ExecuteRequest(request, webRequest);
+
+            HandleResponseCookies(request, webRequest);
 
             stopWatch.Stop();
 
@@ -117,6 +98,56 @@ namespace NzbDrone.Common.Http
             }
 
             return response;
+        }
+
+        private void PrepareRequestCookies(HttpRequest request, HttpWebRequest webRequest)
+        {
+            lock (_cookieContainerCache)
+            {
+                var persistentCookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
+
+                if (request.Cookies.Count != 0)
+                {
+                    foreach (var pair in request.Cookies)
+                    {
+                        persistentCookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
+                        {
+                            Expires = DateTime.UtcNow.AddHours(1)
+                        });
+                    }
+                }
+
+                var requestCookies = persistentCookieContainer.GetCookies(request.Url);
+
+                if (requestCookies.Count == 0 && !request.StoreResponseCookie)
+                {
+                    return;
+                }
+
+                if (webRequest.CookieContainer == null)
+                {
+                    webRequest.CookieContainer = new CookieContainer();
+                }
+
+                webRequest.CookieContainer.Add(requestCookies);
+            }
+        }
+
+        private void HandleResponseCookies(HttpRequest request, HttpWebRequest webRequest)
+        {
+            if (!request.StoreResponseCookie)
+            {
+                return;
+            }
+
+            lock (_cookieContainerCache)
+            {
+                var persistentCookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
+
+                var cookies = webRequest.CookieContainer.GetCookies(request.Url);
+
+                persistentCookieContainer.Add(cookies);
+            }
         }
 
         private HttpResponse ExecuteRequest(HttpRequest request, HttpWebRequest webRequest)

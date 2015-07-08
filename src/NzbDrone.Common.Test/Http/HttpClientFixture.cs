@@ -226,6 +226,29 @@ namespace NzbDrone.Common.Test.Http
 
             ExceptionVerification.IgnoreErrors();
         }
+
+        [Test]
+        public void should_overwrite_response_cookie()
+        {
+            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            requestSet.AllowAutoRedirect = false;
+            requestSet.StoreResponseCookie = true;
+            requestSet.AddCookie("my", "oldcookie");
+
+            var responseSet = Subject.Get(requestSet);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("Cookie");
+
+            var cookie = response.Resource.Headers["Cookie"].ToString();
+
+            cookie.Should().Contain("my=cookie");
+
+            ExceptionVerification.IgnoreErrors();
+        }
     }
 
     public class HttpBinResource
