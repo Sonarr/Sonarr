@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             _logger.Trace("Sections response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
 
             return Json.Deserialize<PlexMediaContainer>(response.Content)
                        .Directories
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             _logger.Trace("Update response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
         }
 
         public void UpdateSeries(int metadataId, PlexServerSettings settings)
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             _logger.Trace("Update Series response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
         }
 
         public string Version(PlexServerSettings settings)
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             _logger.Trace("Version response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
 
             return Json.Deserialize<PlexIdentity>(response.Content).Version;
         }
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             _logger.Trace("Preferences response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
 
             return Json.Deserialize<PlexPreferences>(response.Content).Preferences;
         }
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Notifications.Plex
             var response = client.Execute(request);
 
             _logger.Trace("Sections response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
 
             var item = Json.Deserialize<PlexSectionResponse>(response.Content)
                            .Items
@@ -119,19 +119,17 @@ namespace NzbDrone.Core.Notifications.Plex
             return item.Id;
         }
 
-        private String Authenticate(string username, string password)
+        private String Authenticate(PlexServerSettings settings)
         {
             var request = GetMyPlexRequest("users/sign_in.json", Method.POST);
-            var client = GetMyPlexClient(username, password); 
+            var client = GetMyPlexClient(settings.Username, settings.Password); 
 
             var response = client.Execute(request);
 
             _logger.Debug("Authentication Response: {0}", response.Content);
-            CheckForError(response);
+            CheckForError(response, settings);
 
             var user = Json.Deserialize<PlexUser>(JObject.Parse(response.Content).SelectToken("user").ToString());
-
-            _authCache.Set(username, user.AuthenticationToken);
 
             return user.AuthenticationToken;
         }
@@ -170,26 +168,40 @@ namespace NzbDrone.Core.Notifications.Plex
             var request = new RestRequest(resource, method);
             request.AddHeader("Accept", "application/json");
 
-            if (!settings.Username.IsNullOrWhiteSpace())
+            if (settings.Username.IsNotNullOrWhiteSpace())
             {
-                request.AddParameter("X-Plex-Token", GetAuthenticationToken(settings.Username, settings.Password), ParameterType.HttpHeader);
+                request.AddParameter("X-Plex-Token", GetAuthenticationToken(settings), ParameterType.HttpHeader);
             }
 
             return request;
         }
 
-        private string GetAuthenticationToken(string username, string password)
+        private string GetAuthenticationToken(PlexServerSettings settings)
         {
-            return _authCache.Get(username, () => Authenticate(username, password));
+            var token = _authCache.Get(settings.Username + settings.Password, () => Authenticate(settings));
+
+            if (token.IsNullOrWhiteSpace())
+            {
+                throw new PlexAuthenticationException("Invalid Token - Update your username and password");
+            }
+
+            return token;
         }
 
-        private void CheckForError(IRestResponse response)
+        private void CheckForError(IRestResponse response, PlexServerSettings settings)
         {
             _logger.Trace("Checking for error");
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                throw new PlexException("Unauthorized");
+                if (settings.Username.IsNullOrWhiteSpace())
+                {
+                    throw new PlexAuthenticationException("Unauthorized - Username and password required");
+                }
+
+                //Set the token to null in the cache so we don't keep trying with bad credentials
+                _authCache.Set(settings.Username + settings.Password, null);
+                throw new PlexAuthenticationException("Unauthorized - Username or password is incorrect");
             }
 
             var error = Json.Deserialize<PlexError>(response.Content);

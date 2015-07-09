@@ -706,6 +706,7 @@
     <Compile Include="Notifications\Plex\Models\PlexPreferences.cs" />
     <Compile Include="Notifications\Plex\Models\PlexSectionItem.cs" />
     <Compile Include="Notifications\Plex\Models\PlexSection.cs" />
+    <Compile Include="Notifications\Plex\PlexAuthenticationException.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
     <Compile Include="Notifications\Plex\PlexClientService.cs" />
