@@ -5,6 +5,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.TrackedDownloads
 {
@@ -57,23 +58,35 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             try
             {
                 var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
-                if (parsedEpisodeInfo == null) return null;
+                var historyItems = _historyService.FindByDownloadId(downloadItem.DownloadId);
 
-                var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
-
-                if (remoteEpisode.Series == null || !remoteEpisode.Episodes.Any())
+                if (parsedEpisodeInfo != null)
                 {
-                    var historyItems = _historyService.FindByDownloadId(downloadItem.DownloadId);
-
-                    if (historyItems.Empty())
-                    {
-                        return null;
-                    }
-
-                    remoteEpisode = _parsingService.Map(parsedEpisodeInfo, historyItems.First().SeriesId, historyItems.Select(h => h.EpisodeId));
+                    trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo);
                 }
 
-                trackedDownload.RemoteEpisode = remoteEpisode;
+                if (historyItems.Any())
+                {
+                    var firstHistoryItem = historyItems.OrderByDescending(h => h.Date).First();
+                    trackedDownload.State = GetStateFromHistory(firstHistoryItem.EventType);
+
+                    if (parsedEpisodeInfo == null ||
+                        trackedDownload.RemoteEpisode == null ||
+                        trackedDownload.RemoteEpisode.Series == null ||
+                        trackedDownload.RemoteEpisode.Episodes.Empty())
+                    {
+                        parsedEpisodeInfo = Parser.Parser.ParseTitle(firstHistoryItem.SourceTitle);
+                        if (parsedEpisodeInfo != null)
+                        {
+                            trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, firstHistoryItem.SeriesId, historyItems.Select(h => h.EpisodeId));
+                        }
+                    }
+                }
+
+                if (trackedDownload.RemoteEpisode == null)
+                {
+                    return null;
+                }
             }
             catch (Exception e)
             {
@@ -81,15 +94,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 return null;
             }
 
-            var historyItem = _historyService.MostRecentForDownloadId(downloadItem.DownloadId);
-
-            if (historyItem != null)
-            {
-                trackedDownload.State = GetStateFromHistory(historyItem.EventType);
-            }
-
             _cache.Set(trackedDownload.DownloadItem.DownloadId, trackedDownload);
-
             return trackedDownload;
         }
 

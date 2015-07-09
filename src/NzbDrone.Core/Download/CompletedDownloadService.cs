@@ -11,6 +11,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
 {
@@ -27,12 +28,14 @@ namespace NzbDrone.Core.Download
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IParsingService _parsingService;
         private readonly Logger _logger;
+        private readonly ISeriesService _seriesService;
 
         public CompletedDownloadService(IConfigService configService,
                                         IEventAggregator eventAggregator,
                                         IHistoryService historyService,
                                         IDownloadedEpisodesImportService downloadedEpisodesImportService,
                                         IParsingService parsingService,
+                                        ISeriesService seriesService,
                                         Logger logger)
         {
             _configService = configService;
@@ -41,6 +44,7 @@ namespace NzbDrone.Core.Download
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
             _parsingService = parsingService;
             _logger = logger;
+            _seriesService = seriesService;
         }
 
         public void Process(TrackedDownload trackedDownload, bool ignoreWarnings = false)
@@ -80,8 +84,16 @@ namespace NzbDrone.Core.Download
 
                 if (series == null)
                 {
-                    trackedDownload.Warn("Series title mismatch, automatic import is not possible.");
-                    return;
+                    if (historyItem != null)
+                    {
+                        series = _seriesService.GetSeries(historyItem.SeriesId);
+                    }
+
+                    if (series == null)
+                    {
+                        trackedDownload.Warn("Series title mismatch, automatic import is not possible.");
+                        return;
+                    }
                 }
             }
 
