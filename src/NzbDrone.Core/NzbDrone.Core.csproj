@@ -348,6 +348,17 @@
     <Compile Include="Download\Clients\Deluge\DelugeUpdateUIResult.cs" />
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
+    <Compile Include="Download\Clients\Hadouken\AuthenticationType.cs" />
+    <Compile Include="Download\Clients\Hadouken\Hadouken.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenError.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenProxy.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenResponse.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenSettings.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenSettingsValidator.cs" />
+    <Compile Include="Download\Clients\Hadouken\IHadoukenProxy.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenTorrentState.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenSystemInfo.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenTorrent.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
     <Compile Include="Download\Clients\Nzbget\Nzbget.cs" />
