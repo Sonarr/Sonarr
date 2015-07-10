@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Download.Pending
         List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId);
         List<Queue.Queue> GetPendingQueue();
         Queue.Queue FindPendingQueueItem(int queueId);
-        void RemovePendingQueueItems(int episodeId);
+        void RemovePendingQueueItems(int queueId);
         RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds);
     }
 
@@ -154,9 +154,8 @@ namespace NzbDrone.Core.Download.Pending
 
         public void RemovePendingQueueItems(int queueId)
         {
-            var targetItem = _repository.Get(queueId);
+            var targetItem = FindPendingRelease(queueId);
             var seriesReleases = _repository.AllBySeriesId(targetItem.SeriesId);
-
 
             var releasesToRemove = seriesReleases.Where(
                 c => c.ParsedEpisodeInfo.SeasonNumber == targetItem.ParsedEpisodeInfo.SeasonNumber &&
@@ -167,10 +166,9 @@ namespace NzbDrone.Core.Download.Pending
 
         public RemoteEpisode OldestPendingRelease(int seriesId, IEnumerable<int> episodeIds)
         {
-            return GetPendingRemoteEpisodes(seriesId)
-                .Where(r => r.Episodes.Select(e => e.Id).Intersect(episodeIds).Any())
-                .OrderByDescending(p => p.Release.AgeHours)
-                .FirstOrDefault();
+            return GetPendingRemoteEpisodes(seriesId).Where(r => r.Episodes.Select(e => e.Id).Intersect(episodeIds).Any())
+                                                     .OrderByDescending(p => p.Release.AgeHours)
+                                                     .FirstOrDefault();
         }
 
         private List<PendingRelease> GetPendingReleases()
@@ -294,9 +292,9 @@ namespace NzbDrone.Core.Download.Pending
             }
         }
 
-        private int FindPendingReleaseId(int queueId)
+        private PendingRelease FindPendingRelease(int queueId)
         {
-            return GetPendingReleases().First(p => p.RemoteEpisode.Episodes.Any(e => queueId == GetQueueId(p, e))).Id;
+            return GetPendingReleases().First(p => p.RemoteEpisode.Episodes.Any(e => queueId == GetQueueId(p, e)));
         }
 
         private int GetQueueId(PendingRelease pendingRelease, Episode episode)
