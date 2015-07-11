@@ -1,3 +1,16 @@
 .clickable {
   cursor: pointer;
 }
+
+.clickable-text-decoration {
+  .clickable();
+
+  color: #428bca;
+  text-decoration: none;
+
+  &:focus, &:hover {
+    color: #2a6496;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

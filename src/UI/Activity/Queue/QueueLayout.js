@@ -3,7 +3,7 @@ var Backgrid = require('backgrid');
 var QueueCollection = require('./QueueCollection');
 var SeriesTitleCell = require('../../Cells/SeriesTitleCell');
 var EpisodeNumberCell = require('../../Cells/EpisodeNumberCell');
-var EpisodeTitleCell = require('../../Cells/EpisodeTitleCell');
+var QueueTitleCell = require('./QueueTitleCell');
 var QualityCell = require('../../Cells/QualityCell');
 var QueueStatusCell = require('./QueueStatusCell');
 var QueueActionsCell = require('./QueueActionsCell');
@@ -39,9 +39,9 @@ module.exports = Marionette.Layout.extend({
         },
         {
             name      : 'episodeTitle',
-            label     : 'Episode Title',
-            cell      : EpisodeTitleCell,
-            cellValue : 'episode'
+            label     : 'Title',
+            cell      : QueueTitleCell,
+            cellValue : 'this'
         },
         {
             name     : 'quality',
