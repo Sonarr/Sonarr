@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Queue
 {
@@ -43,34 +44,45 @@ namespace NzbDrone.Core.Queue
 
         private IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
         {
-            foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
+            if (trackedDownload.RemoteEpisode.Episodes != null && trackedDownload.RemoteEpisode.Episodes.Any())
             {
-                var queue = new Queue
+                foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
                 {
-                    Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
-                    Series = trackedDownload.RemoteEpisode.Series,
-                    Episode = episode,
-                    Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
-                    Title = trackedDownload.DownloadItem.Title,
-                    Size = trackedDownload.DownloadItem.TotalSize,
-                    Sizeleft = trackedDownload.DownloadItem.RemainingSize,
-                    Timeleft = trackedDownload.DownloadItem.RemainingTime,
-                    Status = trackedDownload.DownloadItem.Status.ToString(),
-                    TrackedDownloadStatus = trackedDownload.Status.ToString(),
-                    StatusMessages = trackedDownload.StatusMessages.ToList(),
-                    RemoteEpisode = trackedDownload.RemoteEpisode,
-                    DownloadId = trackedDownload.DownloadItem.DownloadId,
-                    Protocol = trackedDownload.Protocol
-                };
-
-                if (queue.Timeleft.HasValue)
-                {
-                    queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
+                    yield return MapEpisode(trackedDownload, episode);
                 }
+            }
+            else
+            {
+                // FIXME: Present queue items with unknown series/episodes
+            }
+        }
 
-                yield return queue;
+        private Queue MapEpisode(TrackedDownload trackedDownload, Episode episode)
+        {
+            var queue = new Queue
+            {
+                Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
+                Series = trackedDownload.RemoteEpisode.Series,
+                Episode = episode,
+                Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                Title = trackedDownload.DownloadItem.Title,
+                Size = trackedDownload.DownloadItem.TotalSize,
+                Sizeleft = trackedDownload.DownloadItem.RemainingSize,
+                Timeleft = trackedDownload.DownloadItem.RemainingTime,
+                Status = trackedDownload.DownloadItem.Status.ToString(),
+                TrackedDownloadStatus = trackedDownload.Status.ToString(),
+                StatusMessages = trackedDownload.StatusMessages.ToList(),
+                RemoteEpisode = trackedDownload.RemoteEpisode,
+                DownloadId = trackedDownload.DownloadItem.DownloadId,
+                Protocol = trackedDownload.Protocol
+            };
+
+            if (queue.Timeleft.HasValue)
+            {
+                queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
             }
 
+            return queue;
         }
     }
 }
