@@ -31,7 +31,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var queue = _queueService.GetQueue();
-            var matchingSeries = queue.Where(q => q.RemoteEpisode.Series.Id == subject.Series.Id);
+            var matchingSeries = queue.Where(q => q.RemoteEpisode.Series != null && q.RemoteEpisode.Series.Id == subject.Series.Id);
             var matchingEpisode = matchingSeries.Where(q => q.RemoteEpisode.Episodes.Select(e => e.Id).Intersect(subject.Episodes.Select(e => e.Id)).Any());
 
             foreach (var queueItem in matchingEpisode)

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
@@ -17,32 +18,39 @@ namespace Sonarr.Api.V3.Queue
     {
         private readonly IQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
+        private readonly IConfigService _configService;
 
-        public QueueModule(IBroadcastSignalRMessage broadcastSignalRMessage, IQueueService queueService, IPendingReleaseService pendingReleaseService)
+        public QueueModule(IBroadcastSignalRMessage broadcastSignalRMessage,
+                           IQueueService queueService,
+                           IPendingReleaseService pendingReleaseService,
+                           IConfigService configService)
             : base(broadcastSignalRMessage)
         {
             _queueService = queueService;
             _pendingReleaseService = pendingReleaseService;
+            _configService = configService;
             GetResourcePaged = GetQueue;
         }
 
         private PagingResource<QueueResource> GetQueue(PagingResource<QueueResource> pagingResource)
         {
             var pagingSpec = pagingResource.MapToPagingSpec<QueueResource, NzbDrone.Core.Queue.Queue>("timeleft", SortDirection.Ascending);
+            var includeUnknownSeriesItems = Request.GetBooleanQueryParameter("includeUnknownSeriesItems");
             var includeSeries = Request.GetBooleanQueryParameter("includeSeries");
             var includeEpisode = Request.GetBooleanQueryParameter("includeEpisode");
 
-            return ApplyToPage(GetQueue, pagingSpec, (q) => MapToResource(q, includeSeries, includeEpisode));
+            return ApplyToPage((spec) => GetQueue(spec, includeUnknownSeriesItems), pagingSpec, (q) => MapToResource(q, includeSeries, includeEpisode));
         }
 
-        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec)
+        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, bool includeUnknownSeriesItems)
         {
             var ascending = pagingSpec.SortDirection == SortDirection.Ascending;
             var orderByFunc = GetOrderByFunc(pagingSpec);
 
             var queue = _queueService.GetQueue();
+            var filteredQueue = includeUnknownSeriesItems ? queue : queue.Where(q => q.Series != null);
             var pending = _pendingReleaseService.GetPendingQueue();
-            var fullQueue = queue.Concat(pending).ToList();
+            var fullQueue = filteredQueue.Concat(pending).ToList();
             IOrderedEnumerable<NzbDrone.Core.Queue.Queue> ordered;
 
             if (pagingSpec.SortKey == "episode")

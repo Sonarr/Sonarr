@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore.Events;
@@ -38,7 +38,7 @@ namespace Sonarr.Api.V3.Queue
 
             if (seriesIdQuery.HasValue)
             {
-                return fullQueue.Where(q => q.Series.Id == (int)seriesIdQuery).ToResource(includeSeries, includeEpisode);
+                return fullQueue.Where(q => q.Series?.Id == (int)seriesIdQuery).ToResource(includeSeries, includeEpisode);
             }
 
             if (episodeIdsQuery.HasValue)
@@ -49,7 +49,7 @@ namespace Sonarr.Api.V3.Queue
                                                 .Select(e => Convert.ToInt32(e))
                                                 .ToList();
 
-                return fullQueue.Where(q => episodeIds.Contains(q.Episode.Id)).ToResource(includeSeries, includeEpisode);
+                return fullQueue.Where(q => q.Episode != null && episodeIds.Contains(q.Episode.Id)).ToResource(includeSeries, includeEpisode);
             }
 
             return fullQueue.ToResource(includeSeries, includeEpisode);

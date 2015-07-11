@@ -47,6 +47,7 @@ namespace Sonarr.Api.V3.Queue
             var resource = new QueueStatusResource
             {
                 Count = queue.Count + pending.Count,
+                UnknownCount = queue.Count(q => q.Series == null),
                 Errors = queue.Any(q => q.TrackedDownloadStatus.Equals("Error", StringComparison.InvariantCultureIgnoreCase)),
                 Warnings = queue.Any(q => q.TrackedDownloadStatus.Equals("Warning", StringComparison.InvariantCultureIgnoreCase))
             };
