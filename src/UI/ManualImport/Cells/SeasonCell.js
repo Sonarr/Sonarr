@@ -20,6 +20,11 @@ module.exports = NzbDroneCell.extend({
         return this;
     },
 
+    _refresh : function () {
+        this.$el.toggleClass('editable', this.model.get('series') !== undefined);
+        NzbDroneCell.prototype._refresh.call(this);
+    },
+
     _onClick : function () {
         var series = this.model.get('series');
 

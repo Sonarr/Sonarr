@@ -249,3 +249,24 @@ td.delete-episode-file-cell {
     margin-right : 2px;
   }
 }
+
+td.renderable.editable {
+
+  padding: 2px;
+
+  .cell-edit-decorator {
+    background    : rgba(240,240,255,0.1);
+    border        : 1px solid rgba(128,128,128,0.2);
+    border-radius : 5px;
+    height        : 100%;
+    padding       : 5px;
+
+    /* chrome doesn't behave properly with border-box, while moz doesn't with content-box */
+    -webkit-box-sizing: content-box;
+  }
+
+  .cell-edit-decorator:hover {
+    background    : rgba(240,240,255,0.5);
+    border        : 1px solid lightblue;
+  }
+}
