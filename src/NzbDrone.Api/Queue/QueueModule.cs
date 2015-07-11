@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
@@ -30,7 +30,7 @@ namespace NzbDrone.Api.Queue
 
         private IEnumerable<Core.Queue.Queue> GetQueueItems()
         {
-            var queue = _queueService.GetQueue();
+            var queue = _queueService.GetQueue().Where(q => q.Series != null);
             var pending = _pendingReleaseService.GetPendingQueue();
 
             return queue.Concat(pending);

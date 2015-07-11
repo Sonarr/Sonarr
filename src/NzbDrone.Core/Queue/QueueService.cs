@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Crypto;
@@ -40,38 +40,29 @@ namespace NzbDrone.Core.Queue
             _queue.Remove(Find(id));
         }
 
-        public void Handle(TrackedDownloadRefreshedEvent message)
-        {
-            _queue = message.TrackedDownloads.OrderBy(c => c.DownloadItem.RemainingTime).SelectMany(MapQueue)
-                .ToList();
-
-            _eventAggregator.PublishEvent(new QueueUpdatedEvent());
-        }
-
         private IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
         {
             if (trackedDownload.RemoteEpisode.Episodes != null && trackedDownload.RemoteEpisode.Episodes.Any())
             {
                 foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
                 {
-                    yield return MapEpisode(trackedDownload, episode);
+                    yield return MapQueueItem(trackedDownload, episode);
                 }
             }
             else
             {
-                // FIXME: Present queue items with unknown series/episodes
+                yield return MapQueueItem(trackedDownload, null);
             }
         }
 
-        private Queue MapEpisode(TrackedDownload trackedDownload, Episode episode)
+        private Queue MapQueueItem(TrackedDownload trackedDownload, Episode episode)
         {
             var queue = new Queue
             {
-                Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
                 Series = trackedDownload.RemoteEpisode.Series,
                 Episode = episode,
                 Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
-                Title = trackedDownload.DownloadItem.Title,
+                Title = Parser.Parser.RemoveFileExtension(trackedDownload.DownloadItem.Title),
                 Size = trackedDownload.DownloadItem.TotalSize,
                 Sizeleft = trackedDownload.DownloadItem.RemainingSize,
                 Timeleft = trackedDownload.DownloadItem.RemainingTime,
@@ -86,12 +77,29 @@ namespace NzbDrone.Core.Queue
                 Indexer = trackedDownload.Indexer
             };
 
+            if (episode != null)
+            {
+                queue.Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id));
+            }
+            else
+            {
+                queue.Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}", trackedDownload.DownloadItem.DownloadId));
+            }
+
             if (queue.Timeleft.HasValue)
             {
                 queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
             }
 
             return queue;
+        }
+
+        public void Handle(TrackedDownloadRefreshedEvent message)
+        {
+            _queue = message.TrackedDownloads.OrderBy(c => c.DownloadItem.RemainingTime).SelectMany(MapQueue)
+                            .ToList();
+
+            _eventAggregator.PublishEvent(new QueueUpdatedEvent());
         }
     }
 }
