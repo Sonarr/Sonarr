@@ -1,11 +1,15 @@
 ﻿using FizzWare.NBuilder;
 using NUnit.Framework;
+using System.Linq;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -20,15 +24,23 @@ namespace NzbDrone.Core.Test.Datastore
                 {
                     Name = "Test",
                     Cutoff = Quality.WEBDL720p,
-                    Items = Qualities.QualityFixture.GetDefaultQualities()
+                    Items = Qualities.QualityFixture.GetDefaultQualities(),
                 };
 
-            
+            var languageProfile = new LanguageProfile
+                {
+                    Name = "Test",
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
+                    Cutoff = Language.English
+                };
+
             profile = Db.Insert(profile);
+            languageProfile = Db.Insert(languageProfile);
 
             var series = Builder<Series>.CreateListOfSize(1)
                 .All()
                 .With(v => v.ProfileId = profile.Id)
+                .With(v => v.LanguageProfileId = languageProfile.Id)
                 .BuildListOfNew();
 
             Db.InsertMany(series);
@@ -65,6 +77,7 @@ namespace NzbDrone.Core.Test.Datastore
             {
                 Assert.IsNotNull(episode.Series);
                 Assert.IsFalse(episode.Series.Profile.IsLoaded);
+                Assert.IsFalse(episode.Series.LanguageProfile.IsLoaded);
             }
         }
 
@@ -100,8 +113,27 @@ namespace NzbDrone.Core.Test.Datastore
             {
                 Assert.IsNotNull(episode.Series);
                 Assert.IsTrue(episode.Series.Profile.IsLoaded);
+                Assert.IsFalse(episode.Series.LanguageProfile.IsLoaded);
             }
         }
 
+        [Test]
+        public void should_explicit_load_languageprofile_if_joined()
+        {
+            var db = Mocker.Resolve<IDatabase>();
+            var DataMapper = db.GetDataMapper();
+
+            var episodes = DataMapper.Query<Episode>()
+                                     .Join<Episode, Series>(Marr.Data.QGen.JoinType.Inner, v => v.Series, (l, r) => l.SeriesId == r.Id)
+                                     .Join<Series, LanguageProfile>(Marr.Data.QGen.JoinType.Inner, v => v.LanguageProfile, (l, r) => l.ProfileId == r.Id)
+                                     .ToList();
+
+            foreach (var episode in episodes)
+            {
+                Assert.IsNotNull(episode.Series);
+                Assert.IsFalse(episode.Series.Profile.IsLoaded);
+                Assert.IsTrue(episode.Series.LanguageProfile.IsLoaded);
+            }
+        }
     }
 }

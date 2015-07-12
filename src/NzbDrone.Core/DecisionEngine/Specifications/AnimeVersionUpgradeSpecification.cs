@@ -9,12 +9,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class AnimeVersionUpgradeSpecification : IDecisionEngineSpecification
     {
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
         private readonly Logger _logger;
 
-        public AnimeVersionUpgradeSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        public AnimeVersionUpgradeSpecification(UpgradableSpecification UpgradableSpecification, Logger logger)
         {
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = UpgradableSpecification;
             _logger = logger;
         }
 
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
-                if (_qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (_upgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     if (file.ReleaseGroup.IsNullOrWhiteSpace())
                     {

@@ -167,12 +167,6 @@
     <Compile Include="Series\SeriesImportModule.cs" />
     <Compile Include="SonarrV3FeedModule.cs" />
     <Compile Include="SonarrV3Module.cs" />
-    <Compile Include="Profiles\Languages\LanguageModule.cs" />
-    <Compile Include="Profiles\Languages\LanguageResource.cs" />
-    <Compile Include="Profiles\ProfileModule.cs" />
-    <Compile Include="Profiles\ProfileResource.cs" />
-    <Compile Include="Profiles\ProfileSchemaModule.cs" />
-    <Compile Include="Profiles\ProfileValidation.cs" />
     <Compile Include="Profiles\Quality\QualityProfileModule.cs" />
     <Compile Include="Profiles\Quality\QualityProfileResource.cs" />
     <Compile Include="Profiles\Quality\QualityProfileSchemaModule.cs" />

@@ -13,9 +13,9 @@ namespace Sonarr.Api.V3.Calendar
     {
         public CalendarModule(IEpisodeService episodeService,
                               ISeriesService seriesService,
-                              IQualityUpgradableSpecification qualityUpgradableSpecification,
+                              IUpgradableSpecification ugradableSpecification,
                               IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "calendar")
+            : base(episodeService, seriesService, ugradableSpecification, signalRBroadcaster, "calendar")
         {
             GetResourceAll = GetCalendar;
         }

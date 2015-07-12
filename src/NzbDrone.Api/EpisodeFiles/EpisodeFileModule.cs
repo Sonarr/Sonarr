@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Sonarr.Http.REST;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
@@ -8,6 +7,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.SignalR;
+using Sonarr.Http;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.EpisodeFiles
@@ -18,19 +18,19 @@ namespace NzbDrone.Api.EpisodeFiles
         private readonly IMediaFileService _mediaFileService;
         private readonly IDeleteMediaFiles _mediaFileDeletionService;
         private readonly ISeriesService _seriesService;
-        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly IUpgradableSpecification _upgradableSpecification;
 
         public EpisodeFileModule(IBroadcastSignalRMessage signalRBroadcaster,
                              IMediaFileService mediaFileService,
                              IDeleteMediaFiles mediaFileDeletionService,
                              ISeriesService seriesService,
-                             IQualityUpgradableSpecification qualityUpgradableSpecification)
+                             IUpgradableSpecification upgradableSpecification)
             : base(signalRBroadcaster)
         {
             _mediaFileService = mediaFileService;
             _mediaFileDeletionService = mediaFileDeletionService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             GetResourceById = GetEpisodeFile;
             GetResourceAll = GetEpisodeFiles;
             UpdateResource = SetQuality;
@@ -42,7 +42,7 @@ namespace NzbDrone.Api.EpisodeFiles
             var episodeFile = _mediaFileService.Get(id);
             var series = _seriesService.GetSeries(episodeFile.SeriesId);
 
-            return episodeFile.ToResource(series, _qualityUpgradableSpecification);
+            return episodeFile.ToResource(series, _upgradableSpecification);
         }
 
         private List<EpisodeFileResource> GetEpisodeFiles()
@@ -56,13 +56,14 @@ namespace NzbDrone.Api.EpisodeFiles
 
             var series = _seriesService.GetSeries(seriesId);
 
-            return _mediaFileService.GetFilesBySeries(seriesId).ConvertAll(f => f.ToResource(series, _qualityUpgradableSpecification));
+            return _mediaFileService.GetFilesBySeries(seriesId).ConvertAll(f => f.ToResource(series, _upgradableSpecification));
         }
 
         private void SetQuality(EpisodeFileResource episodeFileResource)
         {
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
+            episodeFile.Language = episodeFileResource.Language;
             _mediaFileService.Update(episodeFile);
         }
 

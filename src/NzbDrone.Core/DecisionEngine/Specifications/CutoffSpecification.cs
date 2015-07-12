@@ -7,12 +7,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class CutoffSpecification : IDecisionEngineSpecification
     {
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
         private readonly Logger _logger;
 
-        public CutoffSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        public CutoffSpecification(UpgradableSpecification UpgradableSpecification, Logger logger)
         {
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = UpgradableSpecification;
             _logger = logger;
         }
 
@@ -28,13 +28,16 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     _logger.Debug("File is no longer available, skipping this file.");
                     continue;
                 }
+                _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
 
-                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
-
-                if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, file.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (!_upgradableSpecification.CutoffNotMet(subject.Series.Profile, 
+                                                           subject.Series.LanguageProfile, 
+                                                           file.Quality, 
+                                                           file.Language, 
+                                                           subject.ParsedEpisodeInfo.Quality))
                 {
                     _logger.Debug("Cutoff already met, rejecting.");
-                    return Decision.Reject("Existing file meets cutoff: {0}", subject.Series.Profile.Value.Cutoff);
+                    return Decision.Reject("Existing file meets cutoff: {0} - {1}", subject.Series.Profile.Value.Cutoff, subject.Series.LanguageProfile.Value.Cutoff);
                 }
             }
 
