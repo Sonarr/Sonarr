@@ -40,56 +40,59 @@ namespace NzbDrone.Common.Http
 
         public HttpResponse GetResponse(HttpRequest httpRequest, HttpWebRequest webRequest)
         {
-            Stream responseStream = new MemoryStream();
-            Stream headerStream = new MemoryStream();
-
-            var curlEasy = new CurlEasy();
-            curlEasy.AutoReferer = false;
-            curlEasy.WriteFunction = (b, s, n, o) =>
+            lock (CurlGlobalHandle.Instance)
             {
-                responseStream.Write(b, 0, s * n);
-                return s * n;
-            };
-            curlEasy.HeaderFunction = (b, s, n, o) =>
-            {
-                headerStream.Write(b, 0, s * n);
-                return s * n;
-            };
+                Stream responseStream = new MemoryStream();
+                Stream headerStream = new MemoryStream();
 
-            curlEasy.UserAgent = webRequest.UserAgent;
-            curlEasy.FollowLocation = webRequest.AllowAutoRedirect;
-            curlEasy.HttpGet = webRequest.Method == "GET";
-            curlEasy.Post = webRequest.Method == "POST";
-            curlEasy.Put = webRequest.Method == "PUT";
-            curlEasy.Url = webRequest.RequestUri.ToString();
+                var curlEasy = new CurlEasy();
+                curlEasy.AutoReferer = false;
+                curlEasy.WriteFunction = (b, s, n, o) =>
+                {
+                    responseStream.Write(b, 0, s * n);
+                    return s * n;
+                };
+                curlEasy.HeaderFunction = (b, s, n, o) =>
+                {
+                    headerStream.Write(b, 0, s * n);
+                    return s * n;
+                };
 
-            if (webRequest.CookieContainer != null)
-            {
-                curlEasy.Cookie = webRequest.CookieContainer.GetCookieHeader(webRequest.RequestUri);
+                curlEasy.UserAgent = webRequest.UserAgent;
+                curlEasy.FollowLocation = webRequest.AllowAutoRedirect;
+                curlEasy.HttpGet = webRequest.Method == "GET";
+                curlEasy.Post = webRequest.Method == "POST";
+                curlEasy.Put = webRequest.Method == "PUT";
+                curlEasy.Url = webRequest.RequestUri.ToString();
+
+                if (webRequest.CookieContainer != null)
+                {
+                    curlEasy.Cookie = webRequest.CookieContainer.GetCookieHeader(webRequest.RequestUri);
+                }
+
+                if (!httpRequest.Body.IsNullOrWhiteSpace())
+                {
+                    // TODO: This might not go well with encoding.
+                    curlEasy.PostFields = httpRequest.Body;
+                    curlEasy.PostFieldSize = httpRequest.Body.Length;
+                }
+
+                curlEasy.HttpHeader = SerializeHeaders(webRequest);
+
+                var result = curlEasy.Perform();
+
+                if (result != CurlCode.Ok)
+                {
+                    throw new WebException(string.Format("Curl Error {0} for Url {1}", result, curlEasy.Url));
+                }
+
+                var webHeaderCollection = ProcessHeaderStream(webRequest, headerStream);
+                var responseData = ProcessResponseStream(webRequest, responseStream, webHeaderCollection);
+
+                var httpHeader = new HttpHeader(webHeaderCollection);
+
+                return new HttpResponse(httpRequest, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
             }
-
-            if (!httpRequest.Body.IsNullOrWhiteSpace())
-            {
-                // TODO: This might not go well with encoding.
-                curlEasy.PostFields = httpRequest.Body;
-                curlEasy.PostFieldSize = httpRequest.Body.Length;
-            }
-
-            curlEasy.HttpHeader = SerializeHeaders(webRequest);
-
-            var result = curlEasy.Perform();
-
-            if (result != CurlCode.Ok)
-            {
-                throw new WebException(string.Format("Curl Error {0} for Url {1}", result, curlEasy.Url));
-            }
-
-            var webHeaderCollection = ProcessHeaderStream(webRequest, headerStream);
-            var responseData = ProcessResponseStream(webRequest, responseStream, webHeaderCollection);
-
-            var httpHeader = new HttpHeader(webHeaderCollection);
-
-            return new HttpResponse(httpRequest, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
         }
 
         private CurlSlist SerializeHeaders(HttpWebRequest webRequest)
@@ -206,13 +209,16 @@ namespace NzbDrone.Common.Http
 
         public bool Initialize()
         {
-            if (_initialized)
+            lock (CurlGlobalHandle.Instance)
+            {
+                if (_initialized)
+                    return _available;
+
+                _initialized = true;
+                _available = Curl.GlobalInit(CurlInitFlag.All) == CurlCode.Ok;
+
                 return _available;
-
-            _initialized = true;
-            _available = Curl.GlobalInit(CurlInitFlag.All) == CurlCode.Ok;
-
-            return _available;
+            }
         }
 
         protected override bool ReleaseHandle()
