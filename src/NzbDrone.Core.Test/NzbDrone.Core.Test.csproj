@@ -277,6 +277,7 @@
     <Compile Include="Instrumentation\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
+    <Compile Include="Languages\LanguageFixture.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\ImageResizerFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
@@ -363,6 +364,8 @@
     <Compile Include="ParserTests\SceneCheckerFixture.cs" />
     <Compile Include="Profiles\ProfileRepositoryFixture.cs" />
     <Compile Include="Profiles\ProfileServiceFixture.cs" />
+    <Compile Include="Languages\LanguageProfileRepositoryFixture.cs" />
+    <Compile Include="Languages\LanguageProfileServiceFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\XemProxyFixture.cs" />
     <Compile Include="ProviderTests\DiskProviderTests\ArchiveProviderFixture.cs" />

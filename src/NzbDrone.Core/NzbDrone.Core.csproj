@@ -161,6 +161,7 @@
     <Compile Include="Datastore\Converters\DoubleConverter.cs" />
     <Compile Include="Datastore\Converters\EmbeddedDocumentConverter.cs" />
     <Compile Include="Datastore\Converters\EnumIntConverter.cs" />
+    <Compile Include="Datastore\Converters\LanguageIntConverter.cs" />
     <Compile Include="Datastore\Converters\TimeSpanConverter.cs" />
     <Compile Include="Datastore\Converters\Int32Converter.cs" />
     <Compile Include="Datastore\Converters\GuidConverter.cs" />
@@ -251,7 +252,6 @@
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\116_disable_nyaa.cs" />
-    <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
     <Compile Include="Datastore\Migration\113_consolidate_indexer_baseurl.cs" />
     <Compile Include="Datastore\Migration\114_rename_indexer_status_id.cs" />
     <Compile Include="Datastore\Migration\112_added_regex_to_scenemapping.cs" />
@@ -295,6 +295,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Datastore\Migration\105_rename_torrent_downloadstation.cs" />
+    <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
     <Compile Include="Datastore\Migration\111_create_language_profiles.cs" />
     <Compile Include="Datastore\Migration\115_add_downloadclient_status.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
@@ -321,7 +322,7 @@
     <Compile Include="DecisionEngine\DownloadDecisionPriorizationService.cs" />
     <Compile Include="DecisionEngine\IDecisionEngineSpecification.cs" />
     <Compile Include="DecisionEngine\IRejectWithReason.cs" />
-    <Compile Include="DecisionEngine\QualityUpgradableSpecification.cs" />
+    <Compile Include="DecisionEngine\UpgradableSpecification.cs" />
     <Compile Include="DecisionEngine\Rejection.cs" />
     <Compile Include="DecisionEngine\RejectionType.cs" />
     <Compile Include="DecisionEngine\SameEpisodesSpecification.cs" />
@@ -742,6 +743,11 @@
     <Compile Include="Jobs\ScheduledTask.cs" />
     <Compile Include="Jobs\Scheduler.cs" />
     <Compile Include="Jobs\TaskManager.cs" />
+    <Compile Include="Languages\Language.cs" />
+    <Compile Include="Languages\LanguageComparer.cs" />
+    <Compile Include="Languages\LanguagesBelowCutoff.cs" />
+    <Compile Include="Profiles\Languages\LanguageProfile.cs" />
+    <Compile Include="Profiles\Languages\LanguageProfileInUseException.cs" />
     <Compile Include="Lifecycle\ApplicationShutdownRequested.cs" />
     <Compile Include="Lifecycle\ApplicationStartedEvent.cs" />
     <Compile Include="Lifecycle\Commands\RestartCommand.cs" />
@@ -939,7 +945,13 @@
     <Compile Include="Profiles\Delay\DelayProfile.cs" />
     <Compile Include="Profiles\Delay\DelayProfileService.cs" />
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
-    <Compile Include="Profiles\ProfileRepository.cs" />
+    <Compile Include="Profiles\Languages\ProfileLanguageItem.cs" />
+    <Compile Include="Profiles\Languages\LanguageProfileRepository.cs" />
+    <Compile Include="Profiles\Qualities\Profile.cs" />
+    <Compile Include="Profiles\Qualities\ProfileInUseException.cs" />
+    <Compile Include="Profiles\Qualities\ProfileQualityItem.cs" />
+    <Compile Include="Profiles\Qualities\ProfileRepository.cs" />
+    <Compile Include="Profiles\Qualities\ProfileService.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
     <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
@@ -1050,7 +1062,6 @@
     <Compile Include="Organizer\NamingConfigService.cs" />
     <Compile Include="Organizer\SampleResult.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
-    <Compile Include="Parser\Language.cs" />
     <Compile Include="Parser\Model\LocalEpisode.cs" />
     <Compile Include="Parser\Model\ParsedEpisodeInfo.cs" />
     <Compile Include="Parser\Model\ReleaseInfo.cs" />
@@ -1061,11 +1072,8 @@
     <Compile Include="Parser\ParsingService.cs" />
     <Compile Include="Parser\SceneChecker.cs" />
     <Compile Include="Parser\QualityParser.cs" />
-    <Compile Include="Profiles\Profile.cs" />
-    <Compile Include="Profiles\ProfileInUseException.cs" />
-    <Compile Include="Profiles\ProfileQualityItem.cs" />
     <Compile Include="Profiles\Delay\DelayProfileRepository.cs" />
-    <Compile Include="Profiles\ProfileService.cs" />
+    <Compile Include="Profiles\Languages\LanguageProfileService.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1178,7 +1186,6 @@
     <Compile Include="Update\UpdateVerificationFailedException.cs" />
     <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\IpValidation.cs" />
-    <Compile Include="Validation\LanguageValidator.cs" />
     <Compile Include="Validation\NzbDroneValidationExtensions.cs" />
     <Compile Include="Validation\NzbDroneValidationFailure.cs" />
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
@@ -1193,6 +1200,7 @@
     <Compile Include="Validation\Paths\SeriesAncestorValidator.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
     <Compile Include="Validation\Paths\SeriesPathValidator.cs" />
+    <Compile Include="Validation\LanguageProfileExistsValidator.cs" />
     <Compile Include="Validation\ProfileExistsValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Validation\UrlValidator.cs" />

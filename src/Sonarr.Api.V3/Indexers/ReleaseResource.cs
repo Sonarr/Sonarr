@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using Sonarr.Http.REST;

@@ -10,7 +10,6 @@ namespace NzbDrone.Core.History
 {
     public interface IHistoryRepository : IBasicRepository<History>
     {
-        List<QualityModel> GetBestQualityInHistory(int episodeId);
         History MostRecentForEpisode(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         List<History> FindByDownloadId(string downloadId);
@@ -24,14 +23,6 @@ namespace NzbDrone.Core.History
         public HistoryRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-
-        public List<QualityModel> GetBestQualityInHistory(int episodeId)
-        {
-            var history = Query.Where(c => c.EpisodeId == episodeId);
-
-            return history.Select(h => h.Quality).ToList();
         }
 
         public History MostRecentForEpisode(int episodeId)

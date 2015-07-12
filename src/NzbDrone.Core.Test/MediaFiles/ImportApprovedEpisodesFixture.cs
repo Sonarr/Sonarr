@@ -12,11 +12,13 @@ using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {
@@ -36,6 +38,11 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             var series = Builder<Series>.CreateNew()
                                         .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                        .With(l => l.LanguageProfile = new LanguageProfile 
+                                        { 
+                                            Cutoff = Language.Spanish,
+                                            Languages = Languages.LanguageFixture.GetDefaultLanguages()
+                                        })
                                         .With(s => s.Path = @"C:\Test\TV\30 Rock".AsOsAgnostic())
                                         .Build();
 

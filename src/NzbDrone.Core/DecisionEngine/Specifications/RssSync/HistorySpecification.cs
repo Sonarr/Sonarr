@@ -11,17 +11,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
     public class HistorySpecification : IDecisionEngineSpecification
     {
         private readonly IHistoryService _historyService;
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public HistorySpecification(IHistoryService historyService,
-                                           QualityUpgradableSpecification qualityUpgradableSpecification,
+                                           UpgradableSpecification upgradableSpecification,
                                            IConfigService configService,
                                            Logger logger)
         {
             _historyService = historyService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _configService = configService;
             _logger = logger;
         }
@@ -48,8 +48,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                 {
                     var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
-                    var cutoffUnmet = _qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality);
-                    var upgradeable = _qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality);
+                    var cutoffUnmet = _upgradableSpecification.CutoffNotMet(subject.Series.Profile, subject.Series.LanguageProfile, mostRecent.Quality, mostRecent.Language, subject.ParsedEpisodeInfo.Quality);
+                    var upgradeable = _upgradableSpecification.IsUpgradable(subject.Series.Profile, subject.Series.LanguageProfile, mostRecent.Quality, mostRecent.Language, subject.ParsedEpisodeInfo.Quality, subject.ParsedEpisodeInfo.Language);
 
                     if (!recent && cdhEnabled)
                     {

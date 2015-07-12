@@ -11,9 +11,9 @@ namespace NzbDrone.Api.Wanted
     {
         public MissingModule(IEpisodeService episodeService,
                              ISeriesService seriesService,
-                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IUpgradableSpecification upgradableSpecification,
                              IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/missing")
+            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster, "wanted/missing")
         {
             GetResourcePaged = GetMissingEpisodes;
         }

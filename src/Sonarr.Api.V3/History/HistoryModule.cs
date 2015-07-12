@@ -14,15 +14,15 @@ namespace Sonarr.Api.V3.History
     public class HistoryModule : SonarrRestModule<HistoryResource>
     {
         private readonly IHistoryService _historyService;
-        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly IUpgradableSpecification _upgradableSpecification;
         private readonly IFailedDownloadService _failedDownloadService;
 
         public HistoryModule(IHistoryService historyService,
-                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IUpgradableSpecification upgradableSpecification,
                              IFailedDownloadService failedDownloadService)
         {
             _historyService = historyService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _failedDownloadService = failedDownloadService;
             GetResourcePaged = GetHistory;
 
@@ -45,7 +45,10 @@ namespace Sonarr.Api.V3.History
 
             if (model.Series != null)
             {
-                resource.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(model.Series.Profile.Value, model.Quality);
+                resource.QualityCutoffNotMet = _upgradableSpecification.CutoffNotMet(model.Series.Profile.Value,
+                                                                                     model.Series.LanguageProfile,
+                                                                                     model.Quality,
+                                                                                     model.Language);
             }
 
             return resource;

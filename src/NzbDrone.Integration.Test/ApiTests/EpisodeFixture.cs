@@ -23,6 +23,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             var newSeries = Series.Lookup("archer").Single(c => c.TvdbId == 110381);
 
             newSeries.ProfileId = 1;
+            newSeries.LanguageProfileId = 1;
             newSeries.Path = @"C:\Test\Archer".AsOsAgnostic();
 
             newSeries = Series.Post(newSeries);

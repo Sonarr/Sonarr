@@ -9,6 +9,7 @@ using NzbDrone.Core.Datastore.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Tv
 {
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Tv
         List<Episode> GetEpisodeByFileId(int fileId);
         List<Episode> EpisodesWithFiles(int seriesId);
         PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec, bool includeSpecials);
-        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials);
+        PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, bool includeSpecials);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
         List<Episode> EpisodesBetweenDates(DateTime startDate, DateTime endDate, bool includeUnmonitored);
@@ -116,7 +117,7 @@ namespace NzbDrone.Core.Tv
             return pagingSpec;
         }
 
-        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, bool includeSpecials)
+        public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, bool includeSpecials)
         {
             var startingSeasonNumber = 1;
 
@@ -125,8 +126,8 @@ namespace NzbDrone.Core.Tv
                 startingSeasonNumber = 0;
             }
 
-            pagingSpec.TotalRecords = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, startingSeasonNumber).GetRowCount();
-            pagingSpec.Records = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, startingSeasonNumber).ToList();
+            pagingSpec.TotalRecords = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).GetRowCount();
+            pagingSpec.Records = EpisodesWhereCutoffUnmetQuery(pagingSpec, qualitiesBelowCutoff, languagesBelowCutoff, startingSeasonNumber).ToList();
 
             return pagingSpec;
         }
@@ -220,14 +221,18 @@ namespace NzbDrone.Core.Tv
                             .Take(pagingSpec.PageSize);
         }
 
-        private SortBuilder<Episode> EpisodesWhereCutoffUnmetQuery(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, int startingSeasonNumber)
+        private SortBuilder<Episode> EpisodesWhereCutoffUnmetQuery(PagingSpec<Episode> pagingSpec, List<QualitiesBelowCutoff> qualitiesBelowCutoff, List<LanguagesBelowCutoff> languagesBelowCutoff, int startingSeasonNumber)
         {
             return Query.Join<Episode, Series>(JoinType.Inner, e => e.Series, (e, s) => e.SeriesId == s.Id)
                              .Join<Episode, EpisodeFile>(JoinType.Left, e => e.EpisodeFile, (e, s) => e.EpisodeFileId == s.Id)
                              .Where(pagingSpec.FilterExpression)
                              .AndWhere(e => e.EpisodeFileId != 0)
                              .AndWhere(e => e.SeasonNumber >= startingSeasonNumber)
-                             .AndWhere(BuildQualityCutoffWhereClause(qualitiesBelowCutoff))
+                             .AndWhere(
+                                String.Format("({0} OR {1})", 
+                                BuildLanguageCutoffWhereClause(languagesBelowCutoff), 
+                                BuildQualityCutoffWhereClause(qualitiesBelowCutoff)))
+                             //.AndWhere(BuildQualityCutoffWhereClause(qualitiesBelowCutoff, languagesBelowCutoff))
                              .OrderBy(pagingSpec.OrderByClause(), pagingSpec.ToSortDirection())
                              .Skip(pagingSpec.PagingOffset())
                              .Take(pagingSpec.PageSize);
@@ -238,6 +243,22 @@ namespace NzbDrone.Core.Tv
             return string.Format("WHERE datetime(strftime('%s', [t0].[AirDateUtc]) + [t1].[RunTime] * 60,  'unixepoch') <= '{0}'",
                                  currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
+
+        private string BuildLanguageCutoffWhereClause(List<LanguagesBelowCutoff> languagesBelowCutoff)
+        {
+            var clauses = new List<String>();
+
+            foreach (var language in languagesBelowCutoff)
+            {
+                foreach (var belowCutoff in language.LanguageIds)
+                {
+                    clauses.Add(String.Format("([t1].[LanguageProfileId] = {0} AND [t2].[Language] = {1})", language.ProfileId, belowCutoff));
+                }
+            }
+
+            return String.Format("({0})", String.Join(" OR ", clauses));
+        }
+
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {

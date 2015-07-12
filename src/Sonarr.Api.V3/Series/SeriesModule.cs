@@ -48,7 +48,8 @@ namespace Sonarr.Api.V3.Series
                             SeriesExistsValidator seriesExistsValidator,
                             DroneFactoryValidator droneFactoryValidator,
                             SeriesAncestorValidator seriesAncestorValidator,
-                            ProfileExistsValidator profileExistsValidator
+                            ProfileExistsValidator profileExistsValidator,
+                            LanguageProfileExistsValidator languageProfileExistsValidator
             )
             : base(signalRBroadcaster)
         {
@@ -77,6 +78,7 @@ namespace Sonarr.Api.V3.Series
                            .When(s => !s.Path.IsNullOrWhiteSpace());
 
             SharedValidator.RuleFor(s => s.QualityProfileId).SetValidator(profileExistsValidator);
+            SharedValidator.RuleFor(s => s.LanguageProfileId).SetValidator(languageProfileExistsValidator);
 
             PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => s.RootFolderPath.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => s.Path.IsNullOrWhiteSpace());

@@ -99,6 +99,10 @@
     <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
+    <Compile Include="Profiles\Language\LanguageProfileModule.cs" />
+    <Compile Include="Profiles\Language\LanguageProfileResource.cs" />
+    <Compile Include="Profiles\Language\LanguageProfileSchemaModule.cs" />
+    <Compile Include="Profiles\Language\LanguageValidator.cs" />
     <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="Queue\QueueBulkResource.cs" />
     <Compile Include="Queue\QueueDetailsModule.cs" />
@@ -157,12 +161,6 @@
     <Compile Include="Series\SeriesImportModule.cs" />
     <Compile Include="SonarrV3FeedModule.cs" />
     <Compile Include="SonarrV3Module.cs" />
-    <Compile Include="Profiles\Languages\LanguageModule.cs" />
-    <Compile Include="Profiles\Languages\LanguageResource.cs" />
-    <Compile Include="Profiles\ProfileModule.cs" />
-    <Compile Include="Profiles\ProfileResource.cs" />
-    <Compile Include="Profiles\ProfileSchemaModule.cs" />
-    <Compile Include="Profiles\ProfileValidation.cs" />
     <Compile Include="Profiles\Quality\QualityProfileModule.cs" />
     <Compile Include="Profiles\Quality\QualityProfileResource.cs" />
     <Compile Include="Profiles\Quality\QualityProfileSchemaModule.cs" />

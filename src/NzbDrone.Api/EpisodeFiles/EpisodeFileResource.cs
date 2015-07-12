@@ -4,6 +4,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.MediaFiles;
 using Sonarr.Http.REST;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -17,6 +18,7 @@ namespace NzbDrone.Api.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
         public QualityModel Quality { get; set; }
+        public Language Language { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
     }
@@ -43,7 +45,7 @@ namespace NzbDrone.Api.EpisodeFiles
             };
         }
 
-        public static EpisodeFileResource ToResource(this EpisodeFile model, Core.Tv.Series series, IQualityUpgradableSpecification qualityUpgradableSpecification)
+        public static EpisodeFileResource ToResource(this EpisodeFile model, Core.Tv.Series series, IUpgradableSpecification upgradableSpecification)
         {
             if (model == null) return null;
 
@@ -59,7 +61,8 @@ namespace NzbDrone.Api.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 Quality = model.Quality,
-                QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality)
+                Language = model.Language,
+                QualityCutoffNotMet = upgradableSpecification.CutoffNotMet(series.Profile.Value, series.LanguageProfile.Value, model.Quality, model.Language)
             };
         }
     }

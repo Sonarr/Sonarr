@@ -8,6 +8,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Parser
 {
@@ -268,6 +269,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex AnimeReleaseGroupRegex = new Regex(@"^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<spanish>\b(?:español|castellano)\b)",
+                                                                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -503,6 +507,99 @@ namespace NzbDrone.Core.Parser
                 });
 
             return title;
+        }
+
+        public static Language ParseLanguage(string title)
+        {
+            var lowerTitle = title.ToLower();
+
+            if (lowerTitle.Contains("english"))
+                return Language.English;
+
+            if (lowerTitle.Contains("french"))
+                return Language.French;
+
+            if (lowerTitle.Contains("spanish"))
+                return Language.Spanish;
+
+            if (lowerTitle.Contains("danish"))
+                return Language.Danish;
+
+            if (lowerTitle.Contains("dutch"))
+                return Language.Dutch;
+
+            if (lowerTitle.Contains("japanese"))
+                return Language.Japanese;
+
+            if (lowerTitle.Contains("cantonese"))
+                return Language.Cantonese;
+
+            if (lowerTitle.Contains("mandarin"))
+                return Language.Mandarin;
+
+            if (lowerTitle.Contains("korean"))
+                return Language.Korean;
+
+            if (lowerTitle.Contains("russian"))
+                return Language.Russian;
+
+            if (lowerTitle.Contains("polish"))
+                return Language.Polish;
+
+            if (lowerTitle.Contains("vietnamese"))
+                return Language.Vietnamese;
+
+            if (lowerTitle.Contains("swedish"))
+                return Language.Swedish;
+
+            if (lowerTitle.Contains("norwegian"))
+                return Language.Norwegian;
+
+            if (lowerTitle.Contains("nordic"))
+                return Language.Norwegian;
+
+            if (lowerTitle.Contains("finnish"))
+                return Language.Finnish;
+
+            if (lowerTitle.Contains("turkish"))
+                return Language.Turkish;
+
+            if (lowerTitle.Contains("portuguese"))
+                return Language.Portuguese;
+
+            if (lowerTitle.Contains("hungarian"))
+                return Language.Hungarian;
+                
+            var match = LanguageRegex.Match(title);
+
+            if (match.Groups["italian"].Captures.Cast<Capture>().Any())
+                return Language.Italian;
+
+            if (match.Groups["german"].Captures.Cast<Capture>().Any())
+                return Language.German;
+
+            if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
+                return Language.Flemish;
+
+            if (match.Groups["greek"].Captures.Cast<Capture>().Any())
+                return Language.Greek;
+
+            if (match.Groups["spanish"].Captures.Cast<Capture>().Any())
+                return Language.Spanish;
+
+            if (match.Groups["french"].Success)
+                return Language.French;
+
+            if (match.Groups["russian"].Success)
+                return Language.Russian;
+
+            if (match.Groups["dutch"].Success)
+                return Language.Dutch;
+
+            if (match.Groups["hungarian"].Success)
+                return Language.Hungarian;
+
+            return Language.English;
         }
 
         private static SeriesTitleInfo GetSeriesTitleInfo(string title)
