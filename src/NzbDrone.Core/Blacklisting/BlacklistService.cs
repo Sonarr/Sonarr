@@ -138,7 +138,8 @@ namespace NzbDrone.Core.Blacklisting
                                 Indexer = message.Data.GetValueOrDefault("indexer"),
                                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                                 Message = message.Message,
-                                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash")
+                                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
+                                Language = message.Language
                             };
 
             _blacklistRepository.Insert(blacklist);

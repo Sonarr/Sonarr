@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Core.Parser
+﻿using NzbDrone.Core.Languages;
+
+namespace NzbDrone.Core.Parser
 {
     public class IsoLanguage
     {

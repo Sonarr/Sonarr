@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            Mocker.Resolve<QualityUpgradableSpecification>();
+            Mocker.Resolve<UpgradableSpecification>();
             _subject = Mocker.Resolve<AnimeVersionUpgradeSpecification>();
 
             _episodeFile = new EpisodeFile

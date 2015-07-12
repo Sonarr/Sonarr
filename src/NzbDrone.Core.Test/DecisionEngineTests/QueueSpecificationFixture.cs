@@ -5,12 +5,14 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Queue;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -27,10 +29,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            Mocker.Resolve<QualityUpgradableSpecification>();
+            Mocker.Resolve<UpgradableSpecification>();
 
             _series = Builder<Series>.CreateNew()
-                                     .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(e => e.Profile = new Profile 
+                                                                { 
+                                                                    Items = Qualities.QualityFixture.GetDefaultQualities(),
+                                                                })
+                                     .With(l => l.LanguageProfile = new LanguageProfile 
+                                                                {
+                                                                    Languages = Languages.LanguageFixture.GetDefaultLanguages(),
+                                                                    Cutoff = Language.Spanish
+                                                                })
                                      .Build();
 
             _episode = Builder<Episode>.CreateNew()
@@ -51,7 +61,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                    .With(r => r.Series = _series)
                                                    .With(r => r.Episodes = new List<Episode> { _episode })
-                                                   .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD) })
+                                                   .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD) , Language = Language.Spanish})
                                                    .Build();
         }
 
@@ -97,14 +107,36 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_when_quality_in_queue_is_lower()
         {
             _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+            _series.LanguageProfile.Value.Cutoff = Language.Spanish;
 
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                                                        {
-                                                                                           Quality = new QualityModel(Quality.SDTV)
+                                                                                           Quality = new QualityModel(Quality.SDTV),
+                                                                                           Language = Language.Spanish
                                                                                        })
+                                                      .Build();
+
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_quality_in_queue_is_lower_but_language_is_higher()
+        {
+            _series.Profile.Value.Cutoff = Quality.Bluray1080p;
+            _series.LanguageProfile.Value.Cutoff = Language.Spanish;
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(r => r.Series = _series)
+                                                      .With(r => r.Episodes = new List<Episode> { _episode })
+                                                      .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
+                                                      {
+                                                          Quality = new QualityModel(Quality.SDTV),
+                                                          Language = Language.English
+                                                      })
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
@@ -128,19 +160,37 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_false_when_qualities_are_the_same()
+        public void should_return_false_when_qualities_are_the_same_and_languages_are_the_same()
         {
             var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
                                                       .With(r => r.Series = _series)
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                                                        {
-                                                                                           Quality = new QualityModel(Quality.DVD)
+                                                                                           Quality = new QualityModel(Quality.DVD),
+                                                                                           Language = Language.Spanish,
                                                                                        })
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_when_qualities_are_the_same_but_language_is_better()
+        {
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(r => r.Series = _series)
+                                                      .With(r => r.Episodes = new List<Episode> { _episode })
+                                                      .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
+                                                      {
+                                                          Quality = new QualityModel(Quality.DVD),
+                                                          Language = Language.English,
+                                                      })
+                                                      .Build();
+
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -153,7 +203,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                                                        {
-                                                                                           Quality = new QualityModel(Quality.HDTV720p)
+                                                                                           Quality = new QualityModel(Quality.HDTV720p),
+                                                                                           Language = Language.English
                                                                                        })
                                                       .Build();
 
@@ -169,7 +220,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(r => r.Episodes = new List<Episode> { _episode, _otherEpisode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                       {
-                                                          Quality = new QualityModel(Quality.HDTV720p)
+                                                          Quality = new QualityModel(Quality.HDTV720p),
+                                                          Language = Language.English
                                                       })
                                                       .Build();
 
@@ -185,7 +237,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                       {
-                                                          Quality = new QualityModel(Quality.HDTV720p)
+                                                          Quality = new QualityModel(Quality.HDTV720p),
+                                                          Language = Language.English
                                                       })
                                                       .Build();
 
@@ -203,7 +256,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(r => r.Episodes = new List<Episode> { _episode, _otherEpisode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                       {
-                                                          Quality = new QualityModel(Quality.HDTV720p)
+                                                          Quality = new QualityModel(Quality.HDTV720p),
+                                                          Language = Language.English
                                                       })
                                                       .Build();
 
@@ -223,7 +277,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                                         {
                                                                                             Quality =
                                                                                                 new QualityModel(
-                                                                                                Quality.HDTV720p)
+                                                                                                Quality.HDTV720p),
+                                                                                                Language = Language.English
                                                                                         })
                                                        .TheFirst(1)
                                                        .With(r => r.Episodes = new List<Episode> { _episode })
@@ -237,7 +292,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_false_if_quality_in_queue_meets_cutoff()
+        public void should_return_false_if_quality_and_language_in_queue_meets_cutoff()
         {
             _series.Profile.Value.Cutoff = _remoteEpisode.ParsedEpisodeInfo.Quality.Quality;
 
@@ -246,7 +301,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(r => r.Episodes = new List<Episode> { _episode })
                                                       .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
                                                       {
-                                                          Quality = new QualityModel(Quality.HDTV720p)
+                                                          Quality = new QualityModel(Quality.HDTV720p),
+                                                          Language = Language.Spanish
                                                       })
                                                       .Build();
 

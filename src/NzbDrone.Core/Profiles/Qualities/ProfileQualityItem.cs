@@ -1,7 +1,7 @@
 ﻿using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Qualities;
 
-namespace NzbDrone.Core.Profiles
+namespace NzbDrone.Core.Profiles.Qualities
 {
     public class ProfileQualityItem : IEmbeddedDocument
     {

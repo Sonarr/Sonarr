@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
@@ -12,6 +13,7 @@ namespace Sonarr.Api.V3.Blacklist
         public int SeriesId { get; set; }
         public List<int> EpisodeIds { get; set; }
         public string SourceTitle { get; set; }
+        public Language Language { get; set; }
         public QualityModel Quality { get; set; }
         public DateTime Date { get; set; }
         public DownloadProtocol Protocol { get; set; }
@@ -34,6 +36,7 @@ namespace Sonarr.Api.V3.Blacklist
                 SeriesId = model.SeriesId,
                 EpisodeIds = model.EpisodeIds,
                 SourceTitle = model.SourceTitle,
+                Language = model.Language,
                 Quality = model.Quality,
                 Date = model.Date,
                 Protocol = model.Protocol,

@@ -1,4 +1,5 @@
 using NLog;
+using System.Linq;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
@@ -18,14 +19,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            var wantedLanguage = subject.Series.Profile.Value.Language;
+            var wantedLanguage = subject.Series.LanguageProfile.Value.Languages;
+            var _language = subject.ParsedEpisodeInfo.Language;
 
             _logger.Debug("Checking if report meets language requirements. {0}", subject.ParsedEpisodeInfo.Language);
-
-            if (subject.ParsedEpisodeInfo.Language != wantedLanguage)
+        
+            if (!wantedLanguage.Exists(v => v.Allowed && v.Language == _language))
             {
-                _logger.Debug("Report Language: {0} rejected because it is not wanted, wanted {1}", subject.ParsedEpisodeInfo.Language, wantedLanguage);
-                return Decision.Reject("{0} is wanted, but found {1}", wantedLanguage, subject.ParsedEpisodeInfo.Language);
+                _logger.Debug("Report Language: {0} rejected because it is not wanted in profile {1}", _language, subject.Series.LanguageProfile.Value.Name);
+                return Decision.Reject("{0} is not allowed in profile {1}", _language, subject.Series.LanguageProfile.Value.Name);
             }
 
             return Decision.Accept();

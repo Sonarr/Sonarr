@@ -9,15 +9,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class QueueSpecification : IDecisionEngineSpecification
     {
         private readonly IQueueService _queueService;
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
         private readonly Logger _logger;
 
         public QueueSpecification(IQueueService queueService,
-                                       QualityUpgradableSpecification qualityUpgradableSpecification,
+                                       UpgradableSpecification UpgradableSpecification,
                                        Logger logger)
         {
             _queueService = queueService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = UpgradableSpecification;
             _logger = logger;
         }
 
@@ -34,18 +34,27 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             foreach (var remoteEpisode in matchingEpisode)
             {
-                _logger.Debug("Checking if existing release in queue meets cutoff. Queued quality is: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                _logger.Debug("Checking if existing release in queue meets cutoff. Queued quality is: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
 
-                if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, remoteEpisode.ParsedEpisodeInfo.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (!_upgradableSpecification.CutoffNotMet(subject.Series.Profile, 
+                                                           subject.Series.LanguageProfile, 
+                                                           remoteEpisode.ParsedEpisodeInfo.Quality, 
+                                                           remoteEpisode.ParsedEpisodeInfo.Language, 
+                                                           subject.ParsedEpisodeInfo.Quality))
                 {
-                    return Decision.Reject("Quality for release in queue already meets cutoff: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                    return Decision.Reject("Quality for release in queue already meets cutoff: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 }
 
-                _logger.Debug("Checking if release is higher quality than queued release. Queued quality is: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                _logger.Debug("Checking if release is higher quality than queued release. Queued quality is: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
 
-                if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, remoteEpisode.ParsedEpisodeInfo.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (!_upgradableSpecification.IsUpgradable(subject.Series.Profile,
+                                                           subject.Series.LanguageProfile, 
+                                                           remoteEpisode.ParsedEpisodeInfo.Quality, 
+                                                           remoteEpisode.ParsedEpisodeInfo.Language, 
+                                                           subject.ParsedEpisodeInfo.Quality, 
+                                                           subject.ParsedEpisodeInfo.Language))
                 {
-                    return Decision.Reject("Quality for release in queue is of equal or higher preference: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                    return Decision.Reject("Quality for release in queue is of equal or higher preference: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
                 }
             }
 

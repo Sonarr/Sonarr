@@ -3,11 +3,10 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
-namespace NzbDrone.Core.Profiles
+namespace NzbDrone.Core.Profiles.Qualities
 {
     public interface IProfileService
     {
@@ -75,7 +74,10 @@ namespace NzbDrone.Core.Profiles
                             .Select(v => new ProfileQualityItem { Quality = v.Quality, Allowed = allowed.Contains(v.Quality) })
                             .ToList();
 
-            var profile = new Profile { Name = name, Cutoff = cutoff, Items = items, Language = Language.English };
+            var profile = new Profile { Name = name, 
+                Cutoff = cutoff, 
+                Items = items, 
+            };
 
             return Add(profile);
         }

@@ -11,15 +11,16 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.History
 {
     public interface IHistoryService
     {
-        QualityModel GetBestQualityInHistory(Profile profile, int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
         History MostRecentForEpisode(int episodeId);
         History MostRecentForDownloadId(string downloadId);
@@ -88,14 +89,6 @@ namespace NzbDrone.Core.History
             return _historyRepository.FindByDownloadId(downloadId);
         }
 
-        public QualityModel GetBestQualityInHistory(Profile profile, int episodeId)
-        {
-            var comparer = new QualityModelComparer(profile);
-            return _historyRepository.GetBestQualityInHistory(episodeId)
-                .OrderByDescending(q => q, comparer)
-                .FirstOrDefault();
-        }
-
         private string FindDownloadId(EpisodeImportedEvent trackedDownload)
         {
             _logger.Debug("Trying to find downloadId for {0} from history", trackedDownload.ImportedEpisode.Path);
@@ -153,7 +146,8 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.Episode.Release.Title,
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
-                    DownloadId = message.DownloadId
+                    DownloadId = message.DownloadId,
+                    Language = message.Episode.ParsedEpisodeInfo.Language
                 };
 
                 history.Data.Add("Indexer", message.Episode.Release.Indexer);
@@ -211,7 +205,8 @@ namespace NzbDrone.Core.History
                         SourceTitle = message.ImportedEpisode.SceneName ?? Path.GetFileNameWithoutExtension(message.EpisodeInfo.Path),
                         SeriesId = message.ImportedEpisode.SeriesId,
                         EpisodeId = episode.Id,
-                        DownloadId = downloadId
+                        DownloadId = downloadId,
+                        Language = message.EpisodeInfo.Language
                     };
 
                 //Won't have a value since we publish this event before saving to DB.
@@ -236,7 +231,8 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.SourceTitle,
                     SeriesId = message.SeriesId,
                     EpisodeId = episodeId,
-                    DownloadId = message.DownloadId
+                    DownloadId = message.DownloadId,
+                    Language = message.Language
                 };
 
                 history.Data.Add("DownloadClient", message.DownloadClient);
