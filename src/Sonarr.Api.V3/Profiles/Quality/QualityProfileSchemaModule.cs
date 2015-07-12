@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using Sonarr.Http;
 
@@ -28,7 +27,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
             var qualityProfile = new Profile();
             qualityProfile.Cutoff = NzbDrone.Core.Qualities.Quality.Unknown;
             qualityProfile.Items = items;
-            profile.Language = Language.English;
 
             return qualityProfile.ToResource();
         }

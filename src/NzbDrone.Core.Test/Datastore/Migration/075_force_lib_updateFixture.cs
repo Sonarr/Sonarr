@@ -55,6 +55,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb(c =>
             {
+                c.Insert.IntoTable("Profiles").Row(new
+                {
+                    Name = "Profile1",
+                    CutOff = 0,
+                    Items = "[]",
+                    Language = 1
+                });
+
                 c.Insert.IntoTable("Series").Row(new
                 {
                     Tvdbid = 1,
@@ -69,7 +77,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Runtime= 0,
                     SeriesType=0,
                     UseSceneNumbering =0,
-                    LastInfoSync = "2000-01-01 00:00:00"
+                    LastInfoSync = "2000-01-01 00:00:00",
+                    ProfileId = 1
                 });
 
                 c.Insert.IntoTable("Series").Row(new
@@ -86,7 +95,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Runtime = 0,
                     SeriesType = 0,
                     UseSceneNumbering = 0,
-                    LastInfoSync = "2000-01-01 00:00:00"
+                    LastInfoSync = "2000-01-01 00:00:00",
+                    ProfileId = 1
                 });
             });
 

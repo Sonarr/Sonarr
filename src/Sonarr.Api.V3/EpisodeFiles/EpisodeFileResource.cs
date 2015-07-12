@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.IO;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using Sonarr.Http.REST;
@@ -16,10 +17,12 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
+        public Language Language { get; set; }
         public QualityModel Quality { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
+        public bool LanguageCutoffNotMet { get; set; }
     }
 
     public static class EpisodeFileResourceMapper
@@ -39,6 +42,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Size = model.Size,
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
+                Language = model.Language,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName)
                 //QualityCutoffNotMet
@@ -46,7 +50,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
         }
 
-        public static EpisodeFileResource ToResource(this EpisodeFile model, NzbDrone.Core.Tv.Series series, IQualityUpgradableSpecification qualityUpgradableSpecification)
+        public static EpisodeFileResource ToResource(this EpisodeFile model, NzbDrone.Core.Tv.Series series, IUpgradableSpecification upgradableSpecification)
         {
             if (model == null) return null;
 
@@ -61,9 +65,11 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Size = model.Size,
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
+                Language = model.Language,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
-                QualityCutoffNotMet = qualityUpgradableSpecification.CutoffNotMet(series.Profile.Value, model.Quality)
+                QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.Profile.Value, model.Quality),
+                LanguageCutoffNotMet = upgradableSpecification.LanguageCutoffNotMet(series.LanguageProfile.Value, model.Language)
             };
         }
     }

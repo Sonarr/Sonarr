@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -74,14 +73,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             foreach (var file in newFiles)
             {
                 var localEpisode = new LocalEpisode
-                                   {
-                                       Series = series,
-                                       DownloadClientEpisodeInfo = downloadClientItemInfo,
-                                       FolderEpisodeInfo = folderInfo,
-                                       Path = file,
-                                       SceneSource = sceneSource,
-                                       ExistingFile = series.Path.IsParentPath(file)
-                                   };
+                {
+                    Series = series,
+                    DownloadClientEpisodeInfo = downloadClientItemInfo,
+                    FolderEpisodeInfo = folderInfo,
+                    Path = file,
+                    SceneSource = sceneSource,
+                    ExistingFile = series.Path.IsParentPath(file)
+                };
 
                 decisions.AddIfNotNull(GetDecision(localEpisode, downloadClientItem, nonSampleVideoFileCount > 1));
             }

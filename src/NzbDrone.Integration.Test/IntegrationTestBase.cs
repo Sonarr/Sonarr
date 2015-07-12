@@ -213,6 +213,7 @@ namespace NzbDrone.Integration.Test
                 var lookup = Series.Lookup("tvdb:" + tvdbId);
                 var series = lookup.First();
                 series.ProfileId = 1;
+                series.LanguageProfileId = 1;
                 series.Path = Path.Combine(SeriesRootFolder, series.Title);
                 series.Monitored = true;
                 series.Seasons.ForEach(v => v.Monitored = true);

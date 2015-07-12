@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 
@@ -45,7 +46,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     RelativePath = "Series.Title.S01E01.en.srt",
                     Added = "2016-05-30 20:23:02.3725923",
                     LastUpdated = "2016-05-30 20:23:02.3725923",
-                    Language = Language.English,
+                    Language = (int)Language.English,
                     Extension = "en.srt"
                 });
             });

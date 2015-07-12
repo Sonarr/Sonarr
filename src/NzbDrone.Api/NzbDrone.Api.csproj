@@ -112,6 +112,8 @@
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
     <Compile Include="ProviderModuleBase.cs" />
+    <Compile Include="Profiles\ProfileModule.cs" />
+    <Compile Include="Profiles\ProfileResource.cs" />
     <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
@@ -164,8 +166,6 @@
     <Compile Include="Profiles\Languages\LanguageModule.cs" />
     <Compile Include="Profiles\Languages\LanguageResource.cs" />
     <Compile Include="Profiles\LegacyProfileModule.cs" />
-    <Compile Include="Profiles\ProfileModule.cs" />
-    <Compile Include="Profiles\ProfileResource.cs" />
     <Compile Include="Profiles\ProfileSchemaModule.cs" />
     <Compile Include="Profiles\ProfileValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

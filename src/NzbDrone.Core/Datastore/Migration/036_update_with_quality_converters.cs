@@ -3,7 +3,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 using System.Data;
 using System.Linq;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore.Converters;

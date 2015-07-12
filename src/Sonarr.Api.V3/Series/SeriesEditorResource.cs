@@ -8,6 +8,7 @@ namespace Sonarr.Api.V3.Series
         public List<int> SeriesIds { get; set; }
         public bool? Monitored { get; set; }
         public int? QualityProfileId { get; set; }
+        public int? LanguageProfileId { get; set; }
         public SeriesTypes? SeriesType { get; set; }
         public bool? SeasonFolder { get; set; }
         public string RootFolderPath { get; set; }

@@ -2,6 +2,7 @@
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Download
 {
@@ -21,5 +22,6 @@ namespace NzbDrone.Core.Download
         public string Message { get; set; }
         public Dictionary<string, string> Data { get; set; }
         public TrackedDownload TrackedDownload { get; set; }
+        public Language Language { get; set; }
     }
 }
