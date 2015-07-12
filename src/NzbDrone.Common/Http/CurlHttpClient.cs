@@ -45,53 +45,59 @@ namespace NzbDrone.Common.Http
                 Stream responseStream = new MemoryStream();
                 Stream headerStream = new MemoryStream();
 
-                var curlEasy = new CurlEasy();
-                curlEasy.AutoReferer = false;
-                curlEasy.WriteFunction = (b, s, n, o) =>
+                using (var curlEasy = new CurlEasy())
                 {
-                    responseStream.Write(b, 0, s * n);
-                    return s * n;
-                };
-                curlEasy.HeaderFunction = (b, s, n, o) =>
-                {
-                    headerStream.Write(b, 0, s * n);
-                    return s * n;
-                };
+                    curlEasy.AutoReferer = false;
+                    curlEasy.WriteFunction = (b, s, n, o) =>
+                    {
+                        responseStream.Write(b, 0, s * n);
+                        return s * n;
+                    };
+                    curlEasy.HeaderFunction = (b, s, n, o) =>
+                    {
+                        headerStream.Write(b, 0, s * n);
+                        return s * n;
+                    };
 
-                curlEasy.UserAgent = webRequest.UserAgent;
-                curlEasy.FollowLocation = webRequest.AllowAutoRedirect;
-                curlEasy.HttpGet = webRequest.Method == "GET";
-                curlEasy.Post = webRequest.Method == "POST";
-                curlEasy.Put = webRequest.Method == "PUT";
-                curlEasy.Url = webRequest.RequestUri.ToString();
+                    curlEasy.UserAgent = webRequest.UserAgent;
+                    curlEasy.FollowLocation = webRequest.AllowAutoRedirect;
+                    curlEasy.HttpGet = webRequest.Method == "GET";
+                    curlEasy.Post = webRequest.Method == "POST";
+                    curlEasy.Put = webRequest.Method == "PUT";
+                    curlEasy.Url = webRequest.RequestUri.ToString();
 
-                if (webRequest.CookieContainer != null)
-                {
-                    curlEasy.Cookie = webRequest.CookieContainer.GetCookieHeader(webRequest.RequestUri);
+                    if (webRequest.CookieContainer != null)
+                    {
+                        curlEasy.Cookie = webRequest.CookieContainer.GetCookieHeader(webRequest.RequestUri);
+                    }
+
+                    if (!httpRequest.Body.IsNullOrWhiteSpace())
+                    {
+                        // TODO: This might not go well with encoding.
+                        curlEasy.PostFieldSize = httpRequest.Body.Length;
+                        curlEasy.SetOpt(CurlOption.CopyPostFields, httpRequest.Body);
+                    }
+
+                    // Yes, we have to keep a ref to the object to prevent corrupting the unmanaged state
+                    using (var httpRequestHeaders = SerializeHeaders(webRequest))
+                    {
+                        curlEasy.HttpHeader = httpRequestHeaders;
+
+                        var result = curlEasy.Perform();
+
+                        if (result != CurlCode.Ok)
+                        {
+                            throw new WebException(string.Format("Curl Error {0} for Url {1}", result, curlEasy.Url));
+                        }
+                    }
+
+                    var webHeaderCollection = ProcessHeaderStream(webRequest, headerStream);
+                    var responseData = ProcessResponseStream(webRequest, responseStream, webHeaderCollection);
+
+                    var httpHeader = new HttpHeader(webHeaderCollection);
+
+                    return new HttpResponse(httpRequest, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
                 }
-
-                if (!httpRequest.Body.IsNullOrWhiteSpace())
-                {
-                    // TODO: This might not go well with encoding.
-                    curlEasy.PostFields = httpRequest.Body;
-                    curlEasy.PostFieldSize = httpRequest.Body.Length;
-                }
-
-                curlEasy.HttpHeader = SerializeHeaders(webRequest);
-
-                var result = curlEasy.Perform();
-
-                if (result != CurlCode.Ok)
-                {
-                    throw new WebException(string.Format("Curl Error {0} for Url {1}", result, curlEasy.Url));
-                }
-
-                var webHeaderCollection = ProcessHeaderStream(webRequest, headerStream);
-                var responseData = ProcessResponseStream(webRequest, responseStream, webHeaderCollection);
-
-                var httpHeader = new HttpHeader(webHeaderCollection);
-
-                return new HttpResponse(httpRequest, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
             }
         }
 
