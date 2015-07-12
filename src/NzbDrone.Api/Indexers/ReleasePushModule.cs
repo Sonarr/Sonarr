@@ -41,20 +41,18 @@ namespace NzbDrone.Api.Indexers
         {
             _logger.Info("Release pushed: {0}", release.Title);
 
-            ReleaseInfo info = release.InjectTo<ReleaseInfo>();
+            var info = release.InjectTo<ReleaseInfo>();
             info.Guid = "PUSH-" + info.DownloadUrl;
 
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
             var processed = _downloadDecisionProcessor.ProcessDecisions(decisions);
 
-            string status = processed.Grabbed.Any()  ? "grabbed"  :
-                            processed.Rejected.Any() ? "rejected" :
-                            processed.Pending.Any()  ? "pending"  :
-                                                       "error"    ;
+            var status = processed.Grabbed.Any()  ? "grabbed"  :
+                         processed.Rejected.Any() ? "rejected" :
+                         processed.Pending.Any()  ? "pending"  :
+                                                    "error"    ;
 
-            _logger.Info("Release {0}: {1}", status, info.Title);
-
-            return processed.AsResponse();
+            return status.AsResponse();
         }
     }
 }
