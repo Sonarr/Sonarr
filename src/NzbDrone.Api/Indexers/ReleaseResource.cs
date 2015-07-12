@@ -5,6 +5,7 @@ using Sonarr.Http.REST;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.DecisionEngine;
 using System.Linq;

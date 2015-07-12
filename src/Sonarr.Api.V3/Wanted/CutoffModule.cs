@@ -16,9 +16,9 @@ namespace Sonarr.Api.V3.Wanted
         public CutoffModule(IEpisodeCutoffService episodeCutoffService,
                             IEpisodeService episodeService,
                             ISeriesService seriesService,
-                            IQualityUpgradableSpecification qualityUpgradableSpecification,
+                            IUpgradableSpecification upgradableSpecification,
                             IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster, "wanted/cutoff")
+            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster, "wanted/cutoff")
         {
             _episodeCutoffService = episodeCutoffService;
             GetResourcePaged = GetCutoffUnmetEpisodes;

@@ -10,9 +10,9 @@ namespace NzbDrone.Api.Episodes
     {
         public EpisodeModule(ISeriesService seriesService,
                              IEpisodeService episodeService,
-                             IQualityUpgradableSpecification qualityUpgradableSpecification,
+                             IUpgradableSpecification upgradableSpecification,
                              IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalRBroadcaster)
+            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster)
         {
             GetResourceAll = GetEpisodes;
             UpdateResource = SetMonitored;

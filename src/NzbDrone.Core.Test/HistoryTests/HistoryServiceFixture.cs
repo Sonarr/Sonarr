@@ -7,15 +7,15 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
-using System.Collections.Generic;
 using NzbDrone.Core.Test.Qualities;
-using FluentAssertions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Test.HistoryTests
 {
@@ -23,48 +23,31 @@ namespace NzbDrone.Core.Test.HistoryTests
     {
         private Profile _profile;
         private Profile _profileCustom;
+        private LanguageProfile _languageProfile;
 
         [SetUp]
         public void Setup()
         {
-            _profile = new Profile { Cutoff = Quality.WEBDL720p, Items = QualityFixture.GetDefaultQualities() };
-            _profileCustom = new Profile { Cutoff = Quality.WEBDL720p, Items = QualityFixture.GetDefaultQualities(Quality.DVD) };
-        }
+            _profile = new Profile
+                {
+                    Cutoff = Quality.WEBDL720p,
+                    Items = QualityFixture.GetDefaultQualities(),
+                };
 
-        [Test]
-        public void should_return_null_if_no_history()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestQualityInHistory(2))
-                .Returns(new List<QualityModel>());
+            _profileCustom = new Profile
+                {
+                    Cutoff = Quality.WEBDL720p, 
+                    Items = QualityFixture.GetDefaultQualities(Quality.DVD),
 
-            var quality = Subject.GetBestQualityInHistory(_profile, 2);
+                };
 
-            quality.Should().BeNull();
-        }
 
-        [Test]
-        public void should_return_best_quality()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestQualityInHistory(2))
-                .Returns(new List<QualityModel> { new QualityModel(Quality.DVD), new QualityModel(Quality.Bluray1080p) });
-
-            var quality = Subject.GetBestQualityInHistory(_profile, 2);
-
-            quality.Should().Be(new QualityModel(Quality.Bluray1080p));
-        }
-
-        [Test]
-        public void should_return_best_quality_with_custom_order()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestQualityInHistory(2))
-                .Returns(new List<QualityModel> { new QualityModel(Quality.DVD), new QualityModel(Quality.Bluray1080p) });
-
-            var quality = Subject.GetBestQualityInHistory(_profileCustom, 2);
-
-            quality.Should().Be(new QualityModel(Quality.DVD));
+            _languageProfile = new LanguageProfile
+            {
+                Cutoff = Language.Spanish,
+                Languages = Languages.LanguageFixture.GetDefaultLanguages()
+            };
+        
         }
 
         [Test]

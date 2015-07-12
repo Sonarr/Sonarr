@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.DecisionEngine;
@@ -12,8 +10,6 @@ using NzbDrone.SignalR;
 using Sonarr.Api.V3.EpisodeFiles;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http;
-using Sonarr.Http.Extensions;
-using Sonarr.Http.Mapping;
 
 namespace Sonarr.Api.V3.Episodes
 {
@@ -24,31 +20,31 @@ namespace Sonarr.Api.V3.Episodes
     {
         protected readonly IEpisodeService _episodeService;
         protected readonly ISeriesService _seriesService;
-        protected readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        protected readonly IUpgradableSpecification _upgradableSpecification;
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
-                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IUpgradableSpecification upgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
-                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IUpgradableSpecification upgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster,
                                            string resource)
             : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
@@ -75,7 +71,7 @@ namespace Sonarr.Api.V3.Episodes
 
                 if (includeEpisodeFile && episode.EpisodeFileId != 0)
                 {
-                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification);
                 }
 
                 if (includeImages)
@@ -109,7 +105,7 @@ namespace Sonarr.Api.V3.Episodes
 
                     if (includeEpisodeFile && episode.EpisodeFileId != 0)
                     {
-                        resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                        resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification);
                     }
 
                     if (includeImages)
