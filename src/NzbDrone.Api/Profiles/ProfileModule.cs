@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Api.Profiles
 {
@@ -16,7 +15,6 @@ namespace NzbDrone.Api.Profiles
             SharedValidator.RuleFor(c => c.Name).NotEmpty();
             SharedValidator.RuleFor(c => c.Cutoff).NotNull();
             SharedValidator.RuleFor(c => c.Items).MustHaveAllowedQuality();
-            SharedValidator.RuleFor(c => c.Language).ValidLanguage();
 
             GetResourceAll = GetAll;
             GetResourceById = GetById;

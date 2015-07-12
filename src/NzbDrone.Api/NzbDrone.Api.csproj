@@ -100,6 +100,7 @@
     <Compile Include="Extensions\Pipelines\RequestLoggingPipeline.cs" />
     <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\RobotsTxtMapper.cs" />
+    <Compile Include="LanguageProfiles\LanguageProfileSchemaModule.cs" />
     <Compile Include="Indexers\ReleaseModuleBase.cs" />
     <Compile Include="Indexers\ReleasePushModule.cs" />
     <Compile Include="Parse\ParseModule.cs" />
@@ -108,6 +109,10 @@
     <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
+    <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />
+    <Compile Include="LanguageProfiles\LanguageValidator.cs" />
+    <Compile Include="Profiles\ProfileModule.cs" />
+    <Compile Include="Profiles\ProfileResource.cs" />
     <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
@@ -187,11 +192,9 @@
     <Compile Include="NzbDroneRestModule.cs" />
     <Compile Include="NzbDroneRestModuleWithSignalR.cs" />
     <Compile Include="PagingResource.cs" />
-    <Compile Include="Profiles\Languages\LanguageModule.cs" />
-    <Compile Include="Profiles\Languages\LanguageResource.cs" />
     <Compile Include="Profiles\LegacyProfileModule.cs" />
-    <Compile Include="Profiles\ProfileModule.cs" />
-    <Compile Include="Profiles\ProfileResource.cs" />
+    <Compile Include="LanguageProfiles\LanguageProfileModule.cs" />
+    <Compile Include="LanguageProfiles\LanguageProfileResource.cs" />
     <Compile Include="Profiles\ProfileSchemaModule.cs" />
     <Compile Include="Profiles\ProfileValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

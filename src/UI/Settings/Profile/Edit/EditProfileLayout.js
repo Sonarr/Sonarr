@@ -3,7 +3,6 @@ var vent = require('vent');
 var AppLayout = require('../../../AppLayout');
 var Marionette = require('marionette');
 var Backbone = require('backbone');
-var EditProfileItemView = require('./EditProfileItemView');
 var QualitySortableCollectionView = require('./QualitySortableCollectionView');
 var EditProfileView = require('./EditProfileView');
 var DeleteView = require('../DeleteProfileView');

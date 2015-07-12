@@ -1,6 +1,6 @@
 <div class="series-editor-footer">
     <div class="row">
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <label>Monitored</label>
 
             <select class="form-control x-action x-monitored">
@@ -10,12 +10,23 @@
             </select>
         </div>
 
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <label>Profile</label>
 
             <select class="form-control x-action x-profiles">
                 <option value="noChange">No change</option>
                 {{#each profiles.models}}
+                    <option value="{{id}}">{{attributes.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="form-group col-md-2">
+            <label>Language profile</label>
+
+            <select class="form-control x-action x-language-profiles">
+                <option value="noChange">No change</option>
+                {{#each languageProfiles.models}}
                     <option value="{{id}}">{{attributes.name}}</option>
                 {{/each}}
             </select>

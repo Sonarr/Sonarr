@@ -5,6 +5,7 @@ var EmptyView = require('../Index/EmptyView');
 var SeriesCollection = require('../SeriesCollection');
 var SeriesTitleCell = require('../../Cells/SeriesTitleCell');
 var ProfileCell = require('../../Cells/ProfileCell');
+var LanguageProfileCell = require('../../Cells/LanguageProfileCell');
 var SeriesStatusCell = require('../../Cells/SeriesStatusCell');
 var SeasonFolderCell = require('../../Cells/SeasonFolderCell');
 var SelectAllCell = require('../../Cells/SelectAllCell');
@@ -54,6 +55,11 @@ module.exports = Marionette.Layout.extend({
             name  : 'profileId',
             label : 'Profile',
             cell  : ProfileCell
+        },
+        {
+            name  : 'languageProfileId',
+            label : 'Language profile',
+            cell  : LanguageProfileCell
         },
         {
             name  : 'seasonFolder',

@@ -1,0 +1,27 @@
+<div class="form-group">
+    <label class="col-sm-3 control-label">Name</label>
+
+    <div class="col-sm-5">
+        <input type="text" name="name" class="form-control">
+    </div>
+</div>
+
+<hr>
+
+<div class="form-group">
+    <label class="col-sm-3 control-label">Cutoff</label>
+
+    <div class="col-sm-5">
+        <select class="form-control x-cutoff" name="cutoff.id" validation-name="cutoff">
+            {{#eachReverse languages}}
+                {{#if allowed}}
+                    <option value="{{language.id}}">{{language.name}}</option>
+                {{/if}}
+            {{/eachReverse}}
+        </select>
+    </div>
+
+    <div class="col-sm-1 help-inline">
+        <i class="icon-sonarr-form-info" title="Once this language is reached Sonarr will no longer download episodes"/>
+    </div>
+</div>

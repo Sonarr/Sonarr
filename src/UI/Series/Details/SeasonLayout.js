@@ -3,6 +3,7 @@ var Marionette = require('marionette');
 var Backgrid = require('backgrid');
 var ToggleCell = require('../../Cells/EpisodeMonitoredCell');
 var EpisodeTitleCell = require('../../Cells/EpisodeTitleCell');
+var EpisodeLanguageCell = require('../../Cells/EpisodeLanguageCell');
 var RelativeDateCell = require('../../Cells/RelativeDateCell');
 var EpisodeStatusCell = require('../../Cells/EpisodeStatusCell');
 var EpisodeActionsCell = require('../../Cells/EpisodeActionsCell');
@@ -64,6 +65,12 @@ module.exports = Marionette.Layout.extend({
             hideSeriesLink : true,
             cell           : EpisodeTitleCell,
             sortable       : false
+        },
+        {
+            name     : 'Language',
+            label    : 'Language',
+            cell     : EpisodeLanguageCell,
+            sortable : false
         },
         {
             name  : 'airDateUtc',

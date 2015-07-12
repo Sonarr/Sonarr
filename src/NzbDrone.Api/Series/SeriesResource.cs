@@ -52,6 +52,7 @@ namespace NzbDrone.Api.Series
         //View & Edit
         public string Path { get; set; }
         public int ProfileId { get; set; }
+        public int LanguageProfileId { get; set; }
 
         //Editing Only
         public bool SeasonFolder { get; set; }

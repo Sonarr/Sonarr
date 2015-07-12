@@ -2,6 +2,7 @@ var _ = require('underscore');
 var Marionette = require('marionette');
 var vent = require('vent');
 var Profiles = require('../../Profile/ProfileCollection');
+var LanguageProfiles = require('../../LanguageProfile/LanguageProfileCollection');
 var RootFolders = require('../../AddSeries/RootFolders/RootFolderCollection');
 var RootFolderLayout = require('../../AddSeries/RootFolders/RootFolderLayout');
 var UpdateFilesSeriesView = require('./Organize/OrganizeFilesView');
@@ -13,6 +14,7 @@ module.exports = Marionette.ItemView.extend({
     ui : {
         monitored           : '.x-monitored',
         profile             : '.x-profiles',
+        languageProfile     : '.x-language-profiles',
         seasonFolder        : '.x-season-folder',
         rootFolder          : '.x-root-folder',
         selectedCount       : '.x-selected-count',
@@ -28,8 +30,9 @@ module.exports = Marionette.ItemView.extend({
 
     templateHelpers : function() {
         return {
-            profiles    : Profiles,
-            rootFolders : RootFolders.toJSON()
+            profiles         : Profiles,
+            languageProfiles : LanguageProfiles,
+            rootFolders      : RootFolders.toJSON()
         };
     },
 
@@ -54,6 +57,7 @@ module.exports = Marionette.ItemView.extend({
 
         var monitored = this.ui.monitored.val();
         var profile = this.ui.profile.val();
+        var languageProfile = this.ui.languageProfile.val();
         var seasonFolder = this.ui.seasonFolder.val();
         var rootFolder = this.ui.rootFolder.val();
 
@@ -66,6 +70,10 @@ module.exports = Marionette.ItemView.extend({
 
             if (profile !== 'noChange') {
                 model.set('profileId', parseInt(profile, 10));
+            }
+
+            if (languageProfile !== 'noChange') {
+                model.set('languageProfileId', parseInt(languageProfile, 10));
             }
 
             if (seasonFolder === 'true') {

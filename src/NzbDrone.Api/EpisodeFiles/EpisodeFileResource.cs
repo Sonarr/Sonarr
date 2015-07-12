@@ -2,6 +2,7 @@
 using System.IO;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Api.EpisodeFiles
 {
@@ -15,6 +16,7 @@ namespace NzbDrone.Api.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
         public QualityModel Quality { get; set; }
+        public Language Language { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
     }

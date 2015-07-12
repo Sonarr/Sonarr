@@ -9,12 +9,14 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using FizzWare.NBuilder;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
@@ -55,6 +57,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(l => l.LanguageProfile =
+                                         new LanguageProfile
+                                         {
+                                             Languages = new List<ProfileLanguageItem>
+                                             {
+                                                 new ProfileLanguageItem { Allowed = true, Language = Language.English},
+                                                 new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
+                                                 new ProfileLanguageItem { Allowed = true, Language = Language.French}
+                                             }
+                                         })
                                      .Build();
 
             _quality = new QualityModel(Quality.DVD);

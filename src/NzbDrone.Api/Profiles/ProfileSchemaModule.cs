@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Profiles
@@ -28,7 +27,6 @@ namespace NzbDrone.Api.Profiles
             var profile = new Profile();
             profile.Cutoff = Quality.Unknown;
             profile.Items = items;
-            profile.Language = Language.English;
 
             return new List<ProfileResource> { profile.ToResource() };
         }

@@ -13,7 +13,6 @@ namespace NzbDrone.Api.Profiles
         public string Name { get; set; }
         public Quality Cutoff { get; set; }
         public List<ProfileQualityItemResource> Items { get; set; }
-        public Language Language { get; set; }
     }
 
     public class ProfileQualityItemResource : RestResource
