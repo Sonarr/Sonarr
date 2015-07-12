@@ -19,31 +19,31 @@ namespace NzbDrone.Api.Episodes
     {
         protected readonly IEpisodeService _episodeService;
         protected readonly ISeriesService _seriesService;
-        protected readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
+        protected readonly IUpgradableSpecification _upgradableSpecification;
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
-                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IUpgradableSpecification upgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
 
         protected EpisodeModuleWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
-                                           IQualityUpgradableSpecification qualityUpgradableSpecification,
+                                           IUpgradableSpecification upgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster,
                                            string resource)
             : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
 
             GetResourceById = GetEpisode;
         }
@@ -69,7 +69,7 @@ namespace NzbDrone.Api.Episodes
                 }
                 if (includeEpisodeFile && episode.EpisodeFileId != 0)
                 {
-                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification);
                 }
             }
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Api.Episodes
                     }
                     if (includeEpisodeFile && episodes[i].EpisodeFileId != 0)
                     {
-                        resource.EpisodeFile = episodes[i].EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                        resource.EpisodeFile = episodes[i].EpisodeFile.Value.ToResource(series, _upgradableSpecification);
                     }
                 }
             }

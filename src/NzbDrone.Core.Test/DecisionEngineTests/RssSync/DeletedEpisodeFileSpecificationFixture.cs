@@ -18,6 +18,7 @@ using NzbDrone.Common.Disk;
 using Moq;
 using NzbDrone.Test.Common;
 using System.IO;
+using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 {

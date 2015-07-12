@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Profiles.Quality
@@ -11,7 +10,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public string Name { get; set; }
         public NzbDrone.Core.Qualities.Quality Cutoff { get; set; }
         public List<QualityProfileQualityItemResource> Items { get; set; }
-        public Language Language { get; set; }
     }
 
     public class QualityProfileQualityItemResource : RestResource
@@ -33,7 +31,6 @@ namespace Sonarr.Api.V3.Profiles.Quality
                 Name = model.Name,
                 Cutoff = model.Cutoff,
                 Items = model.Items.ConvertAll(ToResource),
-                Language = model.Language
             };
         }
 
@@ -58,8 +55,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
                 Name = resource.Name,
                 Cutoff = (NzbDrone.Core.Qualities.Quality)resource.Cutoff.Id,
-                Items = resource.Items.ConvertAll(ToModel),
-                Language = resource.Language
+                Items = resource.Items.ConvertAll(ToModel)
             };
         }
 

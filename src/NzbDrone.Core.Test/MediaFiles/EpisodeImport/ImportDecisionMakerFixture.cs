@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -7,14 +7,16 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using FizzWare.NBuilder;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
+using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
@@ -56,6 +58,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.Path = @"C:\Test\Series".AsOsAgnostic())
                                      .With(e => e.Profile = new Profile { Items = Qualities.QualityFixture.GetDefaultQualities() })
+                                     .With(e => e.LanguageProfile = new LanguageProfile { Languages = Languages.LanguageFixture.GetDefaultLanguages() })
                                      .Build();
 
             _quality = new QualityModel(Quality.DVD);
@@ -64,11 +67,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             {
                 Series = _series,
                 Quality = _quality,
+                Language = Language.Spanish,
                 Episodes = new List<Episode> { new Episode() },
-                Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi"
+                Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.Spanish.XviD-OSiTV.avi"
             };
 
-            GivenVideoFiles(new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi".AsOsAgnostic() });
+            GivenVideoFiles(new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.Spanish.XviD-OSiTV.avi".AsOsAgnostic() });
         }
 
         private void GivenSpecifications(params Mock<IImportDecisionEngineSpecification>[] mocks)
@@ -179,7 +183,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             ExceptionVerification.ExpectedErrors(3);
         }
 
-        [Test]
         public void should_not_throw_if_episodes_are_not_found()
         {
             GivenSpecifications(_pass1);

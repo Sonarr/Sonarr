@@ -9,13 +9,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
     public class ProperSpecification : IDecisionEngineSpecification
     {
-        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly UpgradableSpecification _upgradableSpecification;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public ProperSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, IConfigService configService, Logger logger)
+        public ProperSpecification(UpgradableSpecification upgradableSpecification, IConfigService configService, Logger logger)
         {
-            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _upgradableSpecification = upgradableSpecification;
             _configService = configService;
             _logger = logger;
         }
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
-                if (_qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
+                if (_upgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality))
                 {
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {
