@@ -107,17 +107,30 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 
         private TorrentRssIndexerParserSettings GetGenericTorrentRssParserSettings(IndexerResponse response, TorrentRssIndexerSettings indexerSettings)
         {
-            var settings = new TorrentRssIndexerParserSettings
+            var parser = new TorrentRssParser
             {
+                UseEnclosureUrl = true,
                 UseEnclosureLength = true,
                 ParseSeedersInDescription = true
             };
 
-            var parser = new TorrentRssParser
+            var item = parser.GetItems(response).FirstOrDefault();
+            if (item == null)
             {
+                throw new UnsupportedFeedException("Empty feed, cannot check if feed is parsable.");
+            }
+
+            var settings = new TorrentRssIndexerParserSettings()
+            {
+                UseEnclosureUrl = true,
                 UseEnclosureLength = true,
                 ParseSeedersInDescription = true
             };
+
+            if (item.Element("enclosure") == null)
+            {
+                parser.UseEnclosureUrl = settings.UseEnclosureUrl = false;
+            }
 
             var releases = ParseResponse(parser, response);
             ValidateReleases(releases, indexerSettings);

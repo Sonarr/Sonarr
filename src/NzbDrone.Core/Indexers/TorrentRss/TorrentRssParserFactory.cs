@@ -42,6 +42,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
                     UseGuidInfoUrl = false,
                     ParseSeedersInDescription = parserSettings.ParseSeedersInDescription,
 
+                    UseEnclosureUrl = parserSettings.UseEnclosureUrl,
                     UseEnclosureLength = parserSettings.UseEnclosureLength,
                     ParseSizeInDescription = parserSettings.ParseSizeInDescription,
                     SizeElementName = parserSettings.SizeElementName

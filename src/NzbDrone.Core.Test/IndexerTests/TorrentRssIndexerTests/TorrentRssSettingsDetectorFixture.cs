@@ -43,6 +43,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
                 {
                     UseEZTVFormat = true,
+                    UseEnclosureUrl = false,
                     UseEnclosureLength = false,
                     ParseSizeInDescription = false,
                     ParseSeedersInDescription = false,
@@ -60,6 +61,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
+                UseEnclosureUrl = false,
                 UseEnclosureLength = false,
                 ParseSizeInDescription = true,
                 ParseSeedersInDescription = false,
@@ -77,6 +79,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
+                UseEnclosureUrl = false,
                 UseEnclosureLength = false,
                 ParseSizeInDescription = true,
                 ParseSeedersInDescription = true,
@@ -96,6 +99,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
+                UseEnclosureUrl = true,
                 UseEnclosureLength = false,
                 ParseSizeInDescription = false,
                 ParseSeedersInDescription = false,
@@ -113,6 +117,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
+                UseEnclosureUrl = true,
                 UseEnclosureLength = false,
                 ParseSizeInDescription = true,
                 ParseSeedersInDescription = false,
@@ -130,10 +135,31 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
             {
                 UseEZTVFormat = false,
+                UseEnclosureUrl = false,
                 UseEnclosureLength = false,
                 ParseSizeInDescription = false,
                 ParseSeedersInDescription = false,
                 SizeElementName = "size"
+            });
+        }
+
+        [Test]
+        public void should_detect_rss_settings_for_Doki()
+        {
+            _indexerSettings.AllowZeroSize = true;
+
+            GivenRecentFeedResponse("TorrentRss/Doki.xml");
+
+            var settings = Subject.Detect(_indexerSettings);
+
+            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            {
+                UseEZTVFormat = false,
+                UseEnclosureUrl = true,
+                UseEnclosureLength = false,
+                ParseSizeInDescription = false,
+                ParseSeedersInDescription = false,
+                SizeElementName = null
             });
         }
 

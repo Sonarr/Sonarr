@@ -123,5 +123,33 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().NotHaveValue();
             torrentInfo.Seeders.Should().NotHaveValue();
         }
+
+        [Test]
+        public void should_parse_recent_feed_from_Doki()
+        {
+            Subject.Definition.Settings.As<TorrentRssIndexerSettings>().AllowZeroSize = true;
+
+            GivenRecentFeedResponse("TorrentRss/Doki.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("[Doki] PriPara   50 (848x480 h264 AAC) [6F0B49FD] mkv");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("http://tracker.anime-index.org/download.php?id=82d8ad84403e01a7786130905ca169a3429e657f&f=%5BDoki%5D+PriPara+-+50+%28848x480+h264+AAC%29+%5B6F0B49FD%5D.mkv.torrent");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("Thu, 02 Jul 2015 08:18:29 GMT").ToUniversalTime());
+            torrentInfo.Size.Should().Be(0);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
+        }
     }
 }
