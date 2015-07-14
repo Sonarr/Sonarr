@@ -74,6 +74,11 @@ namespace NzbDrone.Core.Tv
                     {
                         ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
                     }
+
+                    else if (season.SeasonNumber == 0)
+                    {
+                        ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);                        
+                    }
                 }
 
                 if (season.SeasonNumber < lastSeason)

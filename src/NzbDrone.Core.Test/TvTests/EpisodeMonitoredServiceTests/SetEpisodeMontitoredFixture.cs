@@ -119,8 +119,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
 
             Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
-            VerifyMonitored(e => !e.HasFile);
-            VerifyNotMonitored(e => e.HasFile);
+            VerifyNotMonitored(e => e.SeasonNumber == 0);
         }
 
         [Test]
@@ -136,9 +135,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
 
             Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
-            VerifyMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.After(DateTime.UtcNow));
-            VerifyMonitored(e => !e.AirDateUtc.HasValue);
-            VerifyNotMonitored(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow));
+            VerifyNotMonitored(e => e.SeasonNumber == 0);
         }
 
         [Test]
