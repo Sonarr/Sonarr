@@ -22,7 +22,7 @@ module.exports = function() {
 
         this.savePromise.always(function() {
             self.saving = false;
-            
+
             if (!self.isClosed) {
                 self.ui.indicator.hide();
             }
