@@ -6,32 +6,42 @@ module.exports = function() {
 
     var saveInternal = function() {
         var self = this;
+
+        if (this.saving) {
+            return this.savePromise;
+        }
+
+        this.saving = true;
         this.ui.indicator.show();
 
         if (this._onBeforeSave) {
             this._onBeforeSave.call(this);
         }
 
-        var promise = this.model.save();
+        this.savePromise = this.model.save();
 
-        promise.always(function() {
+        this.savePromise.always(function() {
+            self.saving = false;
+            
             if (!self.isClosed) {
                 self.ui.indicator.hide();
             }
         });
 
-        promise.done(function() {
+        this.savePromise.done(function() {
             self.originalModelData = JSON.stringify(self.model.toJSON());
         });
 
-        return promise;
+        return this.savePromise;
     };
 
     this.prototype.initialize = function(options) {
-
         if (!this.model) {
             throw 'View has no model';
         }
+
+        this.testing = false;
+        this.saving = false;
 
         this.originalModelData = JSON.stringify(this.model.toJSON());
 
@@ -50,7 +60,6 @@ module.exports = function() {
     };
 
     this.prototype._save = function() {
-
         var self = this;
         var promise = saveInternal.call(this);
 
@@ -62,7 +71,6 @@ module.exports = function() {
     };
 
     this.prototype._saveAndAdd = function() {
-
         var self = this;
         var promise = saveInternal.call(this);
 
@@ -76,9 +84,15 @@ module.exports = function() {
     this.prototype._test = function() {
         var self = this;
 
+        if (this.testing) {
+            return;
+        }
+
+        this.testing = true;
         this.ui.indicator.show();
 
         this.model.test().always(function() {
+            self.testing = false;
             self.ui.indicator.hide();
         });
     };
