@@ -30,6 +30,131 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
+        public void should_use_verified_transfer_on_mono()
+        {
+            MonoOnly();
+
+            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.Transactional);
+        }
+
+        [Test]
+        public void should_not_use_verified_transfer_on_windows()
+        {
+            WindowsOnly();
+
+            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.VerifyOnly);
+
+            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
+        }
+
+        [Test]
+        public void should_throw_if_path_is_the_same()
+        {
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _sourcePath, TransferMode.HardLink));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _sourcePath), Times.Never());
+        }
+
+        [Test]
+        public void should_throw_if_different_casing_unless_moving()
+        {
+            var targetPath = Path.Combine(Path.GetDirectoryName(_sourcePath), Path.GetFileName(_sourcePath).ToUpper());
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, targetPath, TransferMode.HardLink));
+        }
+
+        [Test]
+        public void should_rename_via_temp_if_different_casing()
+        {
+            var targetPath = Path.Combine(Path.GetDirectoryName(_sourcePath), Path.GetFileName(_sourcePath).ToUpper());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _backupPath, true))
+                .Callback(() =>
+                {
+                    WithExistingFile(_backupPath, true);
+                    WithExistingFile(_sourcePath, false);
+                });
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_backupPath, targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(targetPath, true);
+                    WithExistingFile(_backupPath, false);
+                });
+
+            var result = Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_backupPath, targetPath, false), Times.Once());
+        }
+
+        [Test]
+        public void should_rollback_rename_via_temp_on_exception()
+        {
+            var targetPath = Path.Combine(Path.GetDirectoryName(_sourcePath), Path.GetFileName(_sourcePath).ToUpper());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _backupPath, true))
+                .Callback(() =>
+                {
+                    WithExistingFile(_backupPath, true);
+                    WithExistingFile(_sourcePath, false);
+                });
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_backupPath, targetPath, false))
+                .Throws(new IOException("Access Violation"));
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_backupPath, _sourcePath, false), Times.Once());
+        }
+
+        [Test]
+        public void should_log_error_if_rollback_move_fails()
+        {
+            var targetPath = Path.Combine(Path.GetDirectoryName(_sourcePath), Path.GetFileName(_sourcePath).ToUpper());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _backupPath, true))
+                .Callback(() =>
+                {
+                    WithExistingFile(_backupPath, true);
+                    WithExistingFile(_sourcePath, false);
+                });
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_backupPath, targetPath, false))
+                .Throws(new IOException("Access Violation"));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_backupPath, _sourcePath, false))
+                .Throws(new IOException("Access Violation"));
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move));
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_throw_if_destination_is_child_of_source()
+        {
+            var childPath = Path.Combine(_sourcePath, "child");
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, childPath, TransferMode.Move));
+        }
+
+        [Test]
         public void should_hardlink_only()
         {
             WithSuccessfulHardlink(_sourcePath, _targetPath);
@@ -48,23 +173,257 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_not_use_verified_transfer_on_windows()
+        public void should_fallback_to_copy_if_hardlink_failed()
         {
-            WindowsOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            WithFailedHardlink();
 
             var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
 
             Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Never());
+                .Verify(v => v.CopyFile(_sourcePath, _tempTargetPath, false), Times.Once());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_tempTargetPath, _targetPath, false), Times.Once());
+
+            VerifyDeletedFile(_sourcePath);
+        }
+
+        [Test]
+        public void mode_none_should_not_verify_copy()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.None;
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.CopyFile(_sourcePath, _targetPath, false), Times.Once());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetFileSize(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void mode_none_should_not_verify_move()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.None;
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetFileSize(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void mode_none_should_delete_existing_target_when_overwriting()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.None;
+
+            WithExistingFile(_targetPath);
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move, true);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_targetPath), Times.Once());
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
         }
 
         [Test]
-        public void should_retry_if_partial_copy()
+        public void mode_none_should_throw_if_existing_target_when_not_overwriting()
         {
-            MonoOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.None;
+
+            WithExistingFile(_targetPath);
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move, false));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_targetPath), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Never());
+        }
+
+        [Test]
+        public void mode_verifyonly_should_verify_copy()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetFileSize(_sourcePath), Times.Once());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetFileSize(_targetPath), Times.Once());
+        }
+
+        [Test]
+        public void mode_verifyonly_should_rollback_copy_on_partial_and_throw()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.CopyFile(_sourcePath, _targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(_targetPath, true, 900);
+                });
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_targetPath), Times.Once());
+        }
+
+        [Test]
+        public void should_log_error_if_rollback_copy_fails()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.CopyFile(_sourcePath, _targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(_targetPath, true, 900);
+                });
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.DeleteFile(_targetPath))
+                .Throws(new IOException("Access Violation"));
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy));
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void mode_verifyonly_should_verify_move()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+            
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetFileSize(_sourcePath), Times.Once());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.GetFileSize(_targetPath), Times.Once());
+        }
+
+        [Test]
+        public void mode_verifyonly_should_not_rollback_move_on_partial_and_throw()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(_sourcePath, false);
+                    WithExistingFile(_targetPath, true, 900);
+                });
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_targetPath), Times.Never());
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void mode_verifyonly_should_rollback_move_on_partial_if_source_remains()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(_targetPath, true, 900);
+                });
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move));
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_targetPath), Times.Once());
+        }
+
+        [Test]
+        public void should_log_error_if_rollback_partialmove_fails()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(_targetPath, true, 900);
+                });
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.DeleteFile(_targetPath))
+                .Throws(new IOException("Access Violation"));
+
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move));
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void mode_transactional_should_delete_old_backup()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            WithExistingFile(_backupPath);
+
+            WithSuccessfulHardlink(_sourcePath, _backupPath);
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_backupPath), Times.Once());
+        }
+
+        [Test]
+        public void mode_transactional_should_delete_old_partial()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            WithExistingFile(_tempTargetPath);
+
+            WithSuccessfulHardlink(_sourcePath, _backupPath);
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_tempTargetPath), Times.Once());
+        }
+
+        [Test]
+        public void mode_transactional_should_hardlink_before_move()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            WithSuccessfulHardlink(_sourcePath, _backupPath);
+
+            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Once());
+        }
+
+        [Test]
+        public void mode_transactional_should_retry_if_partial_copy()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
             var retry = 0;
             Mocker.GetMock<IDiskProvider>()
@@ -81,9 +440,9 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_retry_twice_if_partial_copy()
+        public void mode_transactional_should_retry_twice_if_partial_copy()
         {
-            MonoOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
             var retry = 0;
             Mocker.GetMock<IDiskProvider>()
@@ -101,22 +460,9 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_hardlink_before_move()
+        public void mode_transactional_should_remove_source_after_move()
         {
-            MonoOnly();
-
-            WithSuccessfulHardlink(_sourcePath, _backupPath);
-
-            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Once());
-        }
-
-        [Test]
-        public void should_remove_source_after_move()
-        {
-            MonoOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
@@ -130,9 +476,9 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_not_remove_source_if_partial_still_exists()
+        public void mode_transactional_should_not_remove_source_if_partial_still_exists()
         {
-            MonoOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
             var targetPath = Path.Combine(Path.GetDirectoryName(_targetPath), Path.GetFileName(_targetPath).ToUpper());
             var tempTargetPath = targetPath + ".partial~";
@@ -156,36 +502,29 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_rename_via_temp()
+        public void mode_transactional_should_remove_partial_if_copy_fails()
         {
-            var targetPath = Path.Combine(Path.GetDirectoryName(_sourcePath), Path.GetFileName(_sourcePath).ToUpper());
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            WithSuccessfulHardlink(_sourcePath, _backupPath);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(v => v.MoveFile(_sourcePath, _backupPath, false))
-                .Callback(() =>
-                    {
-                        WithExistingFile(_backupPath, true);
-                        WithExistingFile(_sourcePath, false);
-                    });
-
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(v => v.MoveFile(_backupPath, targetPath, false))
+                .Setup(v => v.CopyFile(_sourcePath, _tempTargetPath, false))
                 .Callback(() =>
                 {
-                    WithExistingFile(targetPath, true);
-                    WithExistingFile(_backupPath, false);
-                });
+                    WithExistingFile(_tempTargetPath, true, 900);
+                })
+                .Throws(new IOException("Blackbox IO error"));
 
-            var result = Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move);
-            
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.MoveFile(_backupPath, targetPath, false), Times.Once());
+            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy));
+
+            VerifyDeletedFile(_tempTargetPath);
         }
 
         [Test]
-        public void should_remove_backup_if_move_throws()
+        public void mode_transactional_should_remove_backup_if_move_throws()
         {
-            MonoOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
@@ -199,9 +538,9 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_remove_partial_if_move_fails()
+        public void mode_transactional_should_remove_partial_if_move_fails()
         {
-            MonoOnly();
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
@@ -216,24 +555,6 @@ namespace NzbDrone.Common.Test.DiskTests
             Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
 
             VerifyDeletedFile(_tempTargetPath);
-        }
-
-        [Test]
-        public void should_fallback_to_copy_if_hardlink_failed()
-        {
-            MonoOnly();
-
-            WithFailedHardlink();
-
-            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.CopyFile(_sourcePath, _tempTargetPath, false), Times.Once());
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.MoveFile(_tempTargetPath, _targetPath, false), Times.Once());
-
-            VerifyDeletedFile(_sourcePath);
         }
 
         [Test]
@@ -308,14 +629,6 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Throws(new IOException("Access denied"));
 
             Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy));
-        }
-
-        [Test]
-        public void should_throw_if_destination_is_child_of_source()
-        {
-            var childPath = Path.Combine(_sourcePath, "child");
-
-            Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, childPath, TransferMode.Move));
         }
 
         public DirectoryInfo GetFilledTempFolder()

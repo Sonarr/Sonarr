@@ -17,6 +17,13 @@ namespace NzbDrone.Common.Disk
         TransferMode TransferFile(String sourcePath, String targetPath, TransferMode mode, bool overwrite = false, bool verified = true);
     }
 
+    public enum DiskTransferVerificationMode
+    {
+        None,
+        VerifyOnly,
+        Transactional
+    }
+
     public class DiskTransferService : IDiskTransferService
     {
         private const Int32 RetryCount = 2;
@@ -24,10 +31,16 @@ namespace NzbDrone.Common.Disk
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
+        public DiskTransferVerificationMode VerificationMode { get; set; }
+
         public DiskTransferService(IDiskProvider diskProvider, Logger logger)
         {
             _diskProvider = diskProvider;
             _logger = logger;
+
+            // TODO: Atm we haven't seen partial transfers on windows so we disable verified transfer.
+            // (If enabled in the future, be sure to check specifically for ReFS, which doesn't support hardlinks.)
+            VerificationMode = OsInfo.IsWindows ? DiskTransferVerificationMode.VerifyOnly : DiskTransferVerificationMode.Transactional;
         }
 
         public TransferMode TransferFolder(String sourcePath, String targetPath, TransferMode mode, bool verified = true)
@@ -35,10 +48,8 @@ namespace NzbDrone.Common.Disk
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
 
-            if (OsInfo.IsWindows)
+            if (VerificationMode != DiskTransferVerificationMode.Transactional)
             {
-                // TODO: Atm we haven't seen partial transfers on windows so we disable verified transfer.
-                // (If enabled in the future, be sure to check specifically for ReFS, which doesn't support hardlinks.)
                 verified = false;
             }
 
@@ -74,10 +85,8 @@ namespace NzbDrone.Common.Disk
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
 
-            if (OsInfo.IsWindows)
+            if (VerificationMode != DiskTransferVerificationMode.Transactional)
             {
-                // TODO: Atm we haven't seen partial transfers on windows so we disable verified transfer.
-                // (If enabled in the future, be sure to check specifically for ReFS, which doesn't support hardlinks.)
                 verified = false;
             }
 
@@ -98,15 +107,21 @@ namespace NzbDrone.Common.Disk
                 if (mode.HasFlag(TransferMode.Move))
                 {
                     var tempPath = sourcePath + ".backup~";
-                    _diskProvider.MoveFile(sourcePath, tempPath);
 
-                    if (_diskProvider.FileExists(targetPath))
+                    _diskProvider.MoveFile(sourcePath, tempPath, true);
+                    try
                     {
-                        _diskProvider.MoveFile(tempPath, sourcePath);
-                    }
+                        ClearTargetPath(targetPath, overwrite);
 
-                    _diskProvider.MoveFile(tempPath, targetPath);
-                    return TransferMode.Move;
+                        _diskProvider.MoveFile(tempPath, targetPath);
+
+                        return TransferMode.Move;
+                    }
+                    catch
+                    {
+                        RollbackMove(sourcePath, tempPath);
+                        throw;
+                    }
                 }
 
                 return TransferMode.None;
@@ -117,10 +132,7 @@ namespace NzbDrone.Common.Disk
                 throw new IOException(string.Format("Destination cannot be a child of the source [{0}] => [{1}]", sourcePath, targetPath));
             }
 
-            if (_diskProvider.FileExists(targetPath) && overwrite)
-            {
-                _diskProvider.DeleteFile(targetPath);
-            }
+            ClearTargetPath(targetPath, overwrite);
 
             if (mode.HasFlag(TransferMode.HardLink))
             {
@@ -155,6 +167,52 @@ namespace NzbDrone.Common.Disk
 
                 throw new IOException(String.Format("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath));
             }
+            else if (VerificationMode == DiskTransferVerificationMode.VerifyOnly)
+            {
+                var originalSize = _diskProvider.GetFileSize(sourcePath);
+
+                if (mode.HasFlag(TransferMode.Copy))
+                {
+                    try
+                    {
+                        _diskProvider.CopyFile(sourcePath, targetPath);
+
+                        var targetSize = _diskProvider.GetFileSize(targetPath);
+                        if (targetSize != originalSize)
+                        {
+                            throw new IOException(string.Format("File copy incomplete. [{0}] was {1} bytes long instead of {2} bytes.", targetPath, targetSize, originalSize));
+                        }
+
+                        return TransferMode.Copy;
+                    }
+                    catch
+                    {
+                        RollbackCopy(sourcePath, targetPath);
+                        throw;
+                    }
+                }
+
+                if (mode.HasFlag(TransferMode.Move))
+                {
+                    try
+                    {
+                        _diskProvider.MoveFile(sourcePath, targetPath);
+
+                        var targetSize = _diskProvider.GetFileSize(targetPath);
+                        if (targetSize != originalSize)
+                        {
+                            throw new IOException(string.Format("File copy incomplete, data loss may have occured. [{0}] was {1} bytes long instead of the expected {2}.", targetPath, targetSize, originalSize));
+                        }
+
+                        return TransferMode.Move;
+                    }
+                    catch
+                    {
+                        RollbackPartialMove(sourcePath, targetPath);
+                        throw;
+                    }
+                }
+            }
             else
             {
                 if (mode.HasFlag(TransferMode.Copy))
@@ -173,39 +231,131 @@ namespace NzbDrone.Common.Disk
             return TransferMode.None;
         }
 
+        private void ClearTargetPath(String targetPath, bool overwrite)
+        {
+            if (_diskProvider.FileExists(targetPath))
+            {
+                if (overwrite)
+                {
+                    _diskProvider.DeleteFile(targetPath);
+                }
+                else
+                {
+                    throw new IOException(string.Format("Destination already exists [{0}]", targetPath));
+                }
+            }
+        }
+
+        private void RollbackPartialMove(string sourcePath, string targetPath)
+        {
+            try
+            {
+                _logger.Debug("Rolling back incomplete file move [{0}] to [{1}].", sourcePath, targetPath);
+
+                WaitForIO();
+
+                if (_diskProvider.FileExists(sourcePath))
+                {
+                    _diskProvider.DeleteFile(targetPath);
+                }
+                else
+                {
+                    _logger.Error("Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(string.Format("Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath), ex);
+            }
+        }
+
+        private void RollbackMove(string sourcePath, string targetPath)
+        {
+            try
+            {
+                _logger.Debug("Rolling back file move [{0}] to [{1}].", sourcePath, targetPath);
+
+                WaitForIO();
+
+                _diskProvider.MoveFile(targetPath, sourcePath);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(string.Format("Failed to properly rollback the file move [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath), ex);
+            }
+        }
+
+        private void RollbackCopy(string sourcePath, string targetPath)
+        {
+            try
+            {
+                _logger.Debug("Rolling back file copy [{0}] to [{1}].", sourcePath, targetPath);
+
+                WaitForIO();
+
+                if (_diskProvider.FileExists(targetPath))
+                {
+                    _diskProvider.DeleteFile(targetPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException(string.Format("Failed to properly rollback the file copy [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath), ex);
+            }
+        }
+
+        private void WaitForIO()
+        {
+            // This delay is intended to give the IO stack a bit of time to recover, this is especially required if remote NAS devices are involved.
+            Thread.Sleep(3000);
+        }
+
         private Boolean TryCopyFile(String sourcePath, String targetPath)
         {
             var originalSize = _diskProvider.GetFileSize(sourcePath);
 
             var tempTargetPath = targetPath + ".partial~";
 
-            for (var i = 0; i <= RetryCount; i++)
+            try
             {
-                _diskProvider.CopyFile(sourcePath, tempTargetPath);
+                for (var i = 0; i <= RetryCount; i++)
+                {
+                    _diskProvider.CopyFile(sourcePath, tempTargetPath);
+
+                    if (_diskProvider.FileExists(tempTargetPath))
+                    {
+                        var targetSize = _diskProvider.GetFileSize(tempTargetPath);
+                        if (targetSize == originalSize)
+                        {
+                            _diskProvider.MoveFile(tempTargetPath, targetPath);
+                            return true;
+                        }
+                    }
+
+                    WaitForIO();
+
+                    _diskProvider.DeleteFile(tempTargetPath);
+
+                    if (i == RetryCount)
+                    {
+                        _logger.Error("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath, i + 1, RetryCount);
+                    }
+                    else
+                    {
+                        _logger.Warn("Failed to completely transfer [{0}] to [{1}], retrying [{2}/{3}].", sourcePath, targetPath, i + 1, RetryCount);
+                    }
+                }
+            }
+            catch
+            {
+                WaitForIO();
 
                 if (_diskProvider.FileExists(tempTargetPath))
                 {
-                    var targetSize = _diskProvider.GetFileSize(tempTargetPath);
-
-                    if (targetSize == originalSize)
-                    {
-                        _diskProvider.MoveFile(tempTargetPath, targetPath);
-                        return true;
-                    }
+                    _diskProvider.DeleteFile(tempTargetPath);
                 }
 
-                Thread.Sleep(5000);
-
-                _diskProvider.DeleteFile(tempTargetPath);
-
-                if (i == RetryCount)
-                {
-                    _logger.Error("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath, i + 1, RetryCount);
-                }
-                else
-                {
-                    _logger.Warn("Failed to completely transfer [{0}] to [{1}], retrying [{2}/{3}].", sourcePath, targetPath, i + 1, RetryCount);
-                }
+                throw;
             }
 
             return false;
