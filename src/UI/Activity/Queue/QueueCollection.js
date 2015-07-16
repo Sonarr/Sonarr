@@ -1,8 +1,10 @@
 var _ = require('underscore');
 var PageableCollection = require('backbone.pageable');
+//var PageableCollection = require('../../Shared/Grid/SonarrPageableCollection');
 var QueueModel = require('./QueueModel');
 var FormatHelpers = require('../../Shared/FormatHelpers');
 var AsSortedCollection = require('../../Mixins/AsSortedCollection');
+var AsPageableCollection = require('../../Mixins/AsPageableCollection');
 var moment = require('moment');
 
 require('../../Mixins/backbone.signalr.mixin');
@@ -64,9 +66,9 @@ var QueueCollection = PageableCollection.extend({
 });
 
 QueueCollection = AsSortedCollection.call(QueueCollection);
+QueueCollection = AsPageableCollection.call(QueueCollection);
 
 var collection = new QueueCollection().bindSignalR();
 collection.fetch();
-
 
 module.exports = collection;
