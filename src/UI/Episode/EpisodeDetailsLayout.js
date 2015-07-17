@@ -1,7 +1,7 @@
 var Marionette = require('marionette');
 var SummaryLayout = require('./Summary/EpisodeSummaryLayout');
 var SearchLayout = require('./Search/EpisodeSearchLayout');
-var EpisodeActivityLayout = require('./Activity/EpisodeActivityLayout');
+var EpisodeHistoryLayout = require('./History/EpisodeHistoryLayout');
 var SeriesCollection = require('../Series/SeriesCollection');
 var Messenger = require('../Shared/Messenger');
 
@@ -10,14 +10,14 @@ module.exports = Marionette.Layout.extend({
     template  : 'Episode/EpisodeDetailsLayoutTemplate',
 
     regions : {
-        summary  : '#episode-summary',
-        activity : '#episode-activity',
-        search   : '#episode-search'
+        summary : '#episode-summary',
+        history : '#episode-history',
+        search  : '#episode-search'
     },
 
     ui : {
         summary   : '.x-episode-summary',
-        activity  : '.x-episode-activity',
+        history   : '.x-episode-history',
         search    : '.x-episode-search',
         monitored : '.x-episode-monitored'
     },
@@ -25,7 +25,7 @@ module.exports = Marionette.Layout.extend({
     events : {
 
         'click .x-episode-summary'   : '_showSummary',
-        'click .x-episode-activity'  : '_showActivity',
+        'click .x-episode-history'   : '_showHistory',
         'click .x-episode-search'    : '_showSearch',
         'click .x-episode-monitored' : '_toggleMonitored'
     },
@@ -77,13 +77,13 @@ module.exports = Marionette.Layout.extend({
         }));
     },
 
-    _showActivity : function(e) {
+    _showHistory : function(e) {
         if (e) {
             e.preventDefault();
         }
 
-        this.ui.activity.tab('show');
-        this.activity.show(new EpisodeActivityLayout({
+        this.ui.history.tab('show');
+        this.history.show(new EpisodeHistoryLayout({
             model  : this.model,
             series : this.series
         }));

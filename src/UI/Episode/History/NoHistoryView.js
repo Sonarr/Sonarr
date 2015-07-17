@@ -1,5 +1,5 @@
 var Marionette = require('marionette');
 
 module.exports = Marionette.ItemView.extend({
-    template : 'Episode/Activity/NoActivityViewTemplate'
+    template : 'Episode/History/NoHistoryViewTemplate'
 });

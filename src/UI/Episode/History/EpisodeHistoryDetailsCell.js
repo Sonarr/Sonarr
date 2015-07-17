@@ -6,7 +6,7 @@ var HistoryDetailsView = require('../../Activity/History/Details/HistoryDetailsV
 require('bootstrap');
 
 module.exports = NzbDroneCell.extend({
-    className : 'episode-activity-details-cell',
+    className : 'episode-history-details-cell',
 
     render : function() {
         this.$el.empty();

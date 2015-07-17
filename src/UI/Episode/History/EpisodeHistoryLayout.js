@@ -4,16 +4,16 @@ var HistoryCollection = require('../../Activity/History/HistoryCollection');
 var EventTypeCell = require('../../Cells/EventTypeCell');
 var QualityCell = require('../../Cells/QualityCell');
 var RelativeDateCell = require('../../Cells/RelativeDateCell');
-var EpisodeActivityActionsCell = require('./EpisodeActivityActionsCell');
-var EpisodeActivityDetailsCell = require('./EpisodeActivityDetailsCell');
-var NoActivityView = require('./NoActivityView');
+var EpisodeHistoryActionsCell = require('./EpisodeHistoryActionsCell');
+var EpisodeHistoryDetailsCell = require('./EpisodeHistoryDetailsCell');
+var NoHistoryView = require('./NoHistoryView');
 var LoadingView = require('../../Shared/LoadingView');
 
 module.exports = Marionette.Layout.extend({
-    template : 'Episode/Activity/EpisodeActivityLayoutTemplate',
+    template : 'Episode/History/EpisodeHistoryLayoutTemplate',
 
     regions : {
-        activityTable : '.activity-table'
+        historyTable : '.history-table'
     },
 
     columns : [
@@ -41,13 +41,13 @@ module.exports = Marionette.Layout.extend({
         {
             name     : 'this',
             label    : '',
-            cell     : EpisodeActivityDetailsCell,
+            cell     : EpisodeHistoryDetailsCell,
             sortable : false
         },
         {
             name     : 'this',
             label    : '',
-            cell     : EpisodeActivityActionsCell,
+            cell     : EpisodeHistoryActionsCell,
             sortable : false
         }
     ],
@@ -58,19 +58,19 @@ module.exports = Marionette.Layout.extend({
 
         this.collection = new HistoryCollection({
             episodeId : this.model.id,
-            tableName : 'episodeActivity'
+            tableName : 'episodeHistory'
         });
         this.collection.fetch();
         this.listenTo(this.collection, 'sync', this._showTable);
     },
 
     onRender : function() {
-        this.activityTable.show(new LoadingView());
+        this.historyTable.show(new LoadingView());
     },
 
     _showTable : function() {
         if (this.collection.any()) {
-            this.activityTable.show(new Backgrid.Grid({
+            this.historyTable.show(new Backgrid.Grid({
                 collection : this.collection,
                 columns    : this.columns,
                 className  : 'table table-hover table-condensed'
@@ -78,7 +78,7 @@ module.exports = Marionette.Layout.extend({
         }
 
         else {
-            this.activityTable.show(new NoActivityView());
+            this.historyTable.show(new NoHistoryView());
         }
     }
 });
