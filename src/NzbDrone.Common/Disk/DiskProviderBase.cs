@@ -380,6 +380,7 @@ namespace NzbDrone.Common.Disk
         {
             return DriveInfo.GetDrives()
                             .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network)
+                            .Where(d => d.IsReady)
                             .ToList();
         }
 
