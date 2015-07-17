@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Download
                 episodeGrabbedEvent.DownloadId = downloadClientId;
             }
 
-            _logger.ProgressInfo("Report sent to download client. {0}", downloadTitle);
+            _logger.ProgressInfo("Report sent to {0}. {1}", downloadClient.Definition.Name, downloadTitle);
             _eventAggregator.PublishEvent(episodeGrabbedEvent);
         }
     }

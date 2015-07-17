@@ -9,6 +9,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using System.Collections.Generic;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Core.Test.Download
 {
@@ -27,8 +28,8 @@ namespace NzbDrone.Core.Test.Download
                 .Returns(_downloadClients);
 
             Mocker.GetMock<IProvideDownloadClient>()
-                .Setup(v => v.GetDownloadClient(It.IsAny<Indexers.DownloadProtocol>()))
-                .Returns<Indexers.DownloadProtocol>(v => _downloadClients.FirstOrDefault(d => d.Protocol == v));
+                .Setup(v => v.GetDownloadClient(It.IsAny<DownloadProtocol>()))
+                .Returns<DownloadProtocol>(v => _downloadClients.FirstOrDefault(d => d.Protocol == v));
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                 .TheFirst(1).With(s => s.Id = 12)
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Test.Download
                 .Build().ToList();
 
             var releaseInfo = Builder<ReleaseInfo>.CreateNew()
-                .With(v => v.DownloadProtocol = Indexers.DownloadProtocol.Usenet)
+                .With(v => v.DownloadProtocol = DownloadProtocol.Usenet)
                 .With(v => v.DownloadUrl = "http://test.site/download1.ext")
                 .Build();
 
@@ -50,20 +51,24 @@ namespace NzbDrone.Core.Test.Download
 
         private Mock<IDownloadClient> WithUsenetClient()
         {
-            var mock = new Mock<IDownloadClient>(Moq.MockBehavior.Default);
+            var mock = new Mock<IDownloadClient>(MockBehavior.Default);
+            mock.SetupGet(s => s.Definition).Returns(Builder<IndexerDefinition>.CreateNew().Build());
+
             _downloadClients.Add(mock.Object);
 
-            mock.SetupGet(v => v.Protocol).Returns(Indexers.DownloadProtocol.Usenet);
+            mock.SetupGet(v => v.Protocol).Returns(DownloadProtocol.Usenet);
 
             return mock;
         }
 
         private Mock<IDownloadClient> WithTorrentClient()
         {
-            var mock = new Mock<IDownloadClient>(Moq.MockBehavior.Default);
+            var mock = new Mock<IDownloadClient>(MockBehavior.Default);
+            mock.SetupGet(s => s.Definition).Returns(Builder<IndexerDefinition>.CreateNew().Build());
+
             _downloadClients.Add(mock.Object);
 
-            mock.SetupGet(v => v.Protocol).Returns(Indexers.DownloadProtocol.Torrent);
+            mock.SetupGet(v => v.Protocol).Returns(DownloadProtocol.Torrent);
 
             return mock;
         }
@@ -131,7 +136,7 @@ namespace NzbDrone.Core.Test.Download
             var mockTorrent = WithTorrentClient();
             var mockUsenet = WithUsenetClient();
 
-            _parseResult.Release.DownloadProtocol = Indexers.DownloadProtocol.Torrent;
+            _parseResult.Release.DownloadProtocol = DownloadProtocol.Torrent;
 
             Subject.DownloadReport(_parseResult);
 
