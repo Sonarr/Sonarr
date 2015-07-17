@@ -3,6 +3,7 @@ var PageableCollection = require('backbone.pageable');
 var QueueModel = require('./QueueModel');
 var FormatHelpers = require('../../Shared/FormatHelpers');
 var AsSortedCollection = require('../../Mixins/AsSortedCollection');
+var moment = require('moment');
 
 require('../../Mixins/backbone.signalr.mixin');
 
@@ -11,7 +12,8 @@ var QueueCollection = PageableCollection.extend({
     model : QueueModel,
 
     state : {
-        pageSize : 15
+        pageSize : 15,
+        sortKey: 'timeleft'
     },
 
     mode : 'client',
@@ -44,6 +46,18 @@ var QueueCollection = PageableCollection.extend({
                 var episode = model.get('episode');
 
                 return episode.get('title');
+            }
+        },
+
+        timeleft : {
+            sortValue : function(model, attr) {
+                var eta = model.get('estimatedCompletionTime');
+
+                if (eta) {
+                    return moment(eta).unix();
+                }
+
+                return Number.MAX_VALUE;
             }
         }
     }
