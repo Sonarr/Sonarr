@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentValidation.Results;
 using NzbDrone.Api.Mapping;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Restrictions;
 
 namespace NzbDrone.Api.Restrictions
@@ -19,6 +21,16 @@ namespace NzbDrone.Api.Restrictions
             CreateResource = Create;
             UpdateResource = Update;
             DeleteResource = Delete;
+
+            SharedValidator.Custom(restriction =>
+            {
+                if (restriction.Ignored.IsNullOrWhiteSpace() && restriction.Required.IsNullOrWhiteSpace())
+                {
+                    return new ValidationFailure("", "Either 'Must contaion' or 'Must not contain' is required");
+                }
+
+                return null;
+            });
         }
 
         private RestrictionResource Get(Int32 id)
