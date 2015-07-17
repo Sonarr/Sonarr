@@ -26,7 +26,7 @@ namespace NzbDrone.Api.Restrictions
             {
                 if (restriction.Ignored.IsNullOrWhiteSpace() && restriction.Required.IsNullOrWhiteSpace())
                 {
-                    return new ValidationFailure("", "Either 'Must contaion' or 'Must not contain' is required");
+                    return new ValidationFailure("", "Either 'Must contain' or 'Must not contain' is required");
                 }
 
                 return null;
