@@ -69,6 +69,7 @@ namespace NzbDrone.Api.Series
         public HashSet<Int32> Tags { get; set; }
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
+        public Ratings Ratings { get; set; }
 
         //TODO: Add series statistics as a property of the series (instead of individual properties)
 

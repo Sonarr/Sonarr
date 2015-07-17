@@ -8,6 +8,11 @@
 
         <span class="label label-info">{{runtime}} minutes</span>
         <span class="label label-info">{{path}}</span>
+
+        {{#if ratings}}
+            <span class="label label-info" title="{{ratings.votes}} vote{{#if_gt ratings.votes compare="1"}}s{{/if_gt}}">{{ratings.value}}</span>
+        {{/if}}
+
         <span class="label label-info">{{Bytes sizeOnDisk}}</span>
 
         {{#if_eq fileCount compare="1"}}
