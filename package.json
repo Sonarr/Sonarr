@@ -34,7 +34,6 @@
     "jshint-stylish": "1.0.0",
     "run-sequence": "1.0.2",
     "streamqueue": "0.1.1",
-    "webpack": "1.5.3",
-    "yargs": "^3.15.0"
+    "webpack": "1.5.3"
   }
 }

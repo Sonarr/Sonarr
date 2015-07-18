@@ -119,6 +119,8 @@ wix/*.wixpdb
 setup/Output/
 *.~is
 
+UI.Phantom/
+
 #VS outout folders
 bin
 obj
@@ -127,3 +129,4 @@ output/*
 
 #OS X metadata files
 ._*
+
