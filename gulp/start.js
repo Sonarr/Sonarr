@@ -23,14 +23,31 @@ function download(url, dest, cb) {
 }
 
 function getLatest(cb) {
-  var req = http.get('http://services.sonarr.tv/v1/update/develop?os=osx', function (response) {
-    response.on('data', function (data) {
+  var branch = 'develop';
+  process.argv.forEach(function (val) {
+    var branchMatch = /branch=([\S]*)/.exec(val);
+    if (branchMatch && branchMatch.length > 1) {
+      branch = branchMatch[1];
+    }
+  });
+
+  var url = 'http://services.sonarr.tv/v1/update/' + branch + '?os=osx';
+
+  console.log('Checking for latest version:', url);
+
+  http.get(url, function (res) {
+    var data = '';
+
+    res.on('data', function (chunk) {
+      data += chunk;
+    });
+
+    res.on('end', function () {
       var updatePackage = JSON.parse(data).updatePackage;
-      console.log('Latest version avilable: ' + updatePackage.version + ' Release Date: ' + updatePackage.releaseDate);
+      console.log('Latest version available: ' + updatePackage.version + ' Release Date: ' + updatePackage.releaseDate);
       cb(updatePackage);
     });
-  });
-  req.on('error', function (e) {
+  }).on('error', function (e) {
     console.log('problem with request: ' + e.message);
   });
 }
