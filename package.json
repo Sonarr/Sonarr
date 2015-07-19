@@ -20,7 +20,7 @@
     "gulp-cached": "1.1.0",
     "gulp-concat": "2.6.0",
     "gulp-declare": "0.3.0",
-    "gulp-handlebars": "4.0.0",
+    "gulp-handlebars": "3.0.1",
     "gulp-jshint": "1.11.2",
     "gulp-less": "3.0.3",
     "gulp-print": "1.1.0",
