@@ -26,6 +26,10 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                             Categories = new Int32[] { 1 }
                         }
                 };
+
+            Mocker.GetMock<ITorznabCapabilitiesProvider>()
+                .Setup(v => v.GetCapabilities(It.IsAny<TorznabSettings>()))
+                .Returns(new TorznabCapabilities());
         }
 
         [Test]

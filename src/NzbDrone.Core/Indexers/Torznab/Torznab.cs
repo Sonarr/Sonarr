@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
@@ -11,6 +13,8 @@ namespace NzbDrone.Core.Indexers.Torznab
 {
     public class Torznab : HttpIndexerBase<TorznabSettings>
     {
+        private readonly ITorznabCapabilitiesProvider _torznabCapabilitiesProvider;
+
         public override string Name
         {
             get
@@ -24,9 +28,9 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new TorznabRequestGenerator()
+            return new TorznabRequestGenerator(_torznabCapabilitiesProvider)
             {
-                PageSize = PageSize, 
+                PageSize = PageSize,
                 Settings = Settings
             };
         }
@@ -44,10 +48,10 @@ namespace NzbDrone.Core.Indexers.Torznab
             }
         }
 
-        public Torznab(IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
+        public Torznab(ITorznabCapabilitiesProvider torznabCapabilitiesProvider, IHttpClient httpClient, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, configService, parsingService, logger)
         {
-
+            _torznabCapabilitiesProvider = torznabCapabilitiesProvider;
         }
 
         private IndexerDefinition GetDefinition(String name, TorznabSettings settings)
@@ -75,6 +79,43 @@ namespace NzbDrone.Core.Indexers.Torznab
             }
 
             return settings;
+        }
+
+        protected override void Test(List<ValidationFailure> failures)
+        {
+            base.Test(failures);
+
+            failures.AddIfNotNull(TestCapabilities());
+        }
+
+        protected virtual ValidationFailure TestCapabilities()
+        {
+            try
+            {
+                var capabilities = _torznabCapabilitiesProvider.GetCapabilities(Settings);
+
+                if (capabilities.SupportedSearchParameters != null && capabilities.SupportedSearchParameters.Contains("q"))
+                {
+                    return null;
+                }
+
+                if (capabilities.SupportedTvSearchParameters != null &&
+                    (capabilities.SupportedSearchParameters.Contains("q") || capabilities.SupportedSearchParameters.Contains("rid")) &&
+                    capabilities.SupportedTvSearchParameters.Contains("season") && capabilities.SupportedTvSearchParameters.Contains("ep"))
+                {
+                    return null;
+                }
+
+                return new ValidationFailure(string.Empty, "Indexer does not support required search parameters");
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
+            }
+
+            return null;
         }
     }
 }

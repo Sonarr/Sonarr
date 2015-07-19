@@ -538,6 +538,8 @@
     <Compile Include="Indexers\TorrentRss\TorrentRssParserFactory.cs" />
     <Compile Include="Indexers\TorrentRss\TorrentRssSettingsDetector.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
+    <Compile Include="Indexers\Torznab\TorznabCapabilities.cs" />
+    <Compile Include="Indexers\Torznab\TorznabCapabilitiesProvider.cs" />
     <Compile Include="Indexers\Torznab\Torznab.cs" />
     <Compile Include="Indexers\Torznab\TorznabException.cs" />
     <Compile Include="Indexers\Torznab\TorznabRequestGenerator.cs" />

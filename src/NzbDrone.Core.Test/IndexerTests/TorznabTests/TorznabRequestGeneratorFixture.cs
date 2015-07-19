@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers.Torznab;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -11,7 +12,9 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
 {
     public class TorznabRequestGeneratorFixture : CoreTest<TorznabRequestGenerator>
     {
-        AnimeEpisodeSearchCriteria _animeSearchCriteria;
+        private SingleEpisodeSearchCriteria _singleEpisodeSearchCriteria;
+        private AnimeEpisodeSearchCriteria _animeSearchCriteria;
+        private TorznabCapabilities _capabilities;
 
         [SetUp]
         public void SetUp()
@@ -22,6 +25,15 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                  Categories = new [] { 1, 2 },
                  AnimeCategories = new [] { 3, 4 },
                  ApiKey = "abcd",
+                 EnableRageIDLookup = true
+            };
+
+            _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
+            {
+                Series = new Tv.Series { TvRageId = 10 },
+                SceneTitles = new List<string> { "Monkey Island" },
+                SeasonNumber = 1,
+                EpisodeNumber = 2
             };
 
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
@@ -29,6 +41,12 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                 SceneTitles = new List<String>() { "Monkey+Island" },
                 AbsoluteEpisodeNumber = 100
             };
+
+            _capabilities = new TorznabCapabilities();
+
+            Mocker.GetMock<ITorznabCapabilitiesProvider>()
+                .Setup(v => v.GetCapabilities(It.IsAny<TorznabSettings>()))
+                .Returns(_capabilities);
         }
         
         [Test]
@@ -117,6 +135,32 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             var pages = results.First().Take(500).ToList();
 
             pages.Count.Should().BeLessThan(500);
+        }
+
+        [Test]
+        public void should_not_search_by_rid_if_not_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().NotContain("rid=10");
+            page.Url.Query.Should().Contain("q=Monkey");
+        }
+
+        [Test]
+        public void should_search_by_rid_if_supported()
+        {
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().Contain("rid=10");
         }
     }
 }

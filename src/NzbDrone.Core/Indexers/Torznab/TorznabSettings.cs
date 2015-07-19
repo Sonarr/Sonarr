@@ -68,6 +68,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional Torznab parameters", Advanced = true)]
         public string AdditionalParameters { get; set; }
 
+        // TODO: To be removed in the next version.
         [FieldDefinition(5, Type = FieldType.Checkbox, Label = "Enable RageID Lookup", HelpText = "Disable this if your tracker doesn't have tvrage ids, Sonarr will then use (more expensive) title queries.", Advanced = true)]
         public bool EnableRageIDLookup { get; set; }
 
