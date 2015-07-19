@@ -146,8 +146,9 @@ namespace NzbDrone.Core.Indexers.Torznab
             }
 
             var categoriesQuery = String.Join(",", categories.Distinct());
+            var rageLookupEnabled = Settings.EnableRageIDLookup ? "1" : "0";
 
-            var baseUrl = String.Format("{0}/api?t={1}&cat={2}&extended=1{3}", Settings.Url.TrimEnd('/'), searchType, categoriesQuery, Settings.AdditionalParameters);
+            var baseUrl = String.Format("{0}/api?t={1}&cat={2}&extended=1&rid_enabled={3}{4}", Settings.Url.TrimEnd('/'), searchType, categoriesQuery, rageLookupEnabled, Settings.AdditionalParameters);
 
             if (Settings.ApiKey.IsNotNullOrWhiteSpace())
             {
