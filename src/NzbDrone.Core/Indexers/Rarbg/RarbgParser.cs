@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
             if (jsonResponse.Resource.error_code.HasValue)
             {
-                if (jsonResponse.Resource.error_code == 20)
+                if (jsonResponse.Resource.error_code == 20 || jsonResponse.Resource.error_code == 8)
                 {
                     // No results found
                     return results;
