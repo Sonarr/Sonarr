@@ -41,9 +41,6 @@ namespace NzbDrone.Common.Disk
             // TODO: Atm we haven't seen partial transfers on windows so we disable verified transfer.
             // (If enabled in the future, be sure to check specifically for ReFS, which doesn't support hardlinks.)
             VerificationMode = OsInfo.IsWindows ? DiskTransferVerificationMode.VerifyOnly : DiskTransferVerificationMode.Transactional;
-
-            // TODO: Disabled the transactional logic entirely coz we have a couple of potential issues which we don't want in master.
-            VerificationMode = DiskTransferVerificationMode.VerifyOnly;
         }
 
         public TransferMode TransferFolder(String sourcePath, String targetPath, TransferMode mode, bool verified = true)

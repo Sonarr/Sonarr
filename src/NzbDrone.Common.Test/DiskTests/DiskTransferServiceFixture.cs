@@ -30,21 +30,6 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void should_not_use_verified_transfer()
-        {
-            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.VerifyOnly);
-
-            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Never());
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
-        }
-
-        [Test]
-        [Ignore("Disabled verified transfer temporarily.")]
         public void should_use_verified_transfer_on_mono()
         {
             MonoOnly();
@@ -53,7 +38,6 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        [Ignore("Disabled verified transfer temporarily.")]
         public void should_not_use_verified_transfer_on_windows()
         {
             WindowsOnly();
