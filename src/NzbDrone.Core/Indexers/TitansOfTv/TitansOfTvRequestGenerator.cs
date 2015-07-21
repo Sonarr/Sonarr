@@ -1,111 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Indexers.TitansOfTv
 {
     public class TitansOfTvRequestGenerator : IIndexerRequestGenerator
     {
+        public int MaxPages { get; set; }
+        public int PageSize { get; set; }
         public TitansOfTvSettings Settings { get; set; }
+        
+        public TitansOfTvRequestGenerator()
+        {
+            MaxPages = 30;
+            PageSize = 100;
+        }
 
         public IList<IEnumerable<IndexerRequest>> GetRecentRequests()
         {
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
-            var innerList = new List<IndexerRequest>();
-            var httpRequest = BuildHttpRequest(GetBaseUrl());
 
-            innerList.Add(new IndexerRequest(httpRequest));
-            pageableRequests.Add(innerList);
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages));
 
             return pageableRequests;
         }
 
-        private HttpRequest BuildHttpRequest(string url)
+        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var httpRequest = new HttpRequest(url, HttpAccept.Json);
-            httpRequest.Headers["X-Authorization"] = Settings.ApiKey;
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            return httpRequest;
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+                series_id: searchCriteria.Series.TvdbId,
+                episode: string.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber)));
+
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+                series_id: searchCriteria.Series.TvdbId,
+                season: string.Format("Season {0:00}", searchCriteria.SeasonNumber)));
+
+            return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.SingleEpisodeSearchCriteria searchCriteria)
+        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var url = GetBaseUrl() + "&series_id={series}&episode={episode}";
-            var requests = new List<IEnumerable<IndexerRequest>>();
-            var innerList = new List<IndexerRequest>();
-            requests.Add(innerList);
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            var httpRequest = BuildHttpRequest(url);
-            var episodeString = String.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber);
-            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
-            httpRequest.AddSegment("episode", episodeString);
+            // TODO: Search for all episodes?!?
 
-            var request = new IndexerRequest(httpRequest);
-            innerList.Add(request);
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+                series_id: searchCriteria.Series.TvdbId,
+                season: string.Format("Season {0:00}", searchCriteria.SeasonNumber)));
 
-            return requests;
+            return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.SeasonSearchCriteria searchCriteria)
+        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var url = GetBaseUrl() + "&series_id={series}&season={season}";
-            var requests = new List<IEnumerable<IndexerRequest>>();
-            var innerList = new List<IndexerRequest>();
-            requests.Add(innerList);
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
-            var httpRequest = BuildHttpRequest(url);
-            var seasonString = String.Format("Season {0:00}", searchCriteria.SeasonNumber);
-            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
-            httpRequest.AddSegment("season", seasonString);
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+                series_id: searchCriteria.Series.TvdbId,
+                air_date: searchCriteria.AirDate));
 
-            var request = new IndexerRequest(httpRequest);
-            innerList.Add(request);
-
-            httpRequest = BuildHttpRequest(url);
-            seasonString = String.Format("Season {0}", searchCriteria.SeasonNumber);
-            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
-            httpRequest.AddSegment("season", seasonString);
-
-            request = new IndexerRequest(httpRequest);
-            innerList.Add(request);
-
-            return requests;
+            return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.DailyEpisodeSearchCriteria searchCriteria)
-        {
-            var url = GetBaseUrl() + "&series_id={series}&air_date={air_date}";
-            var requests = new List<IEnumerable<IndexerRequest>>();
-            var innerList = new List<IndexerRequest>();
-
-            requests.Add(innerList);
-
-            var httpRequest = BuildHttpRequest(url);
-            var airDate = searchCriteria.AirDate.ToString("yyyy-MM-dd");
-
-            httpRequest.AddSegment("series", searchCriteria.Series.TvdbId.ToString(CultureInfo.InvariantCulture));
-            httpRequest.AddSegment("air_date", airDate);
-
-            var request = new IndexerRequest(httpRequest);
-            innerList.Add(request);
-
-            return requests;
-        }
-
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.AnimeEpisodeSearchCriteria searchCriteria)
+        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             return new List<IEnumerable<IndexerRequest>>();
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(IndexerSearch.Definitions.SpecialEpisodeSearchCriteria searchCriteria)
+        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
             return new List<IEnumerable<IndexerRequest>>();
         }
 
-        private string GetBaseUrl()
+        private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, int? series_id = null, string episode = null, string season = null, DateTime? air_date = null)
         {
-            return Settings.BaseUrl + "?limit=100";
+            var pageSize = PageSize;
+
+            if (pageSize == 0)
+            {
+                maxPages = 1;
+                pageSize = 100;
+            }
+
+            for (var page = 0; page < maxPages; page++)
+            {
+                var request = new IndexerRequest(string.Format("{0}/torrents?offset={1}&limit={2}", Settings.BaseUrl.TrimEnd('/'), page * pageSize, pageSize), HttpAccept.Json);
+                request.HttpRequest.Headers.Add("X-Authorization", Settings.ApiKey);
+
+                if (series_id.HasValue)
+                {
+                    request.HttpRequest.AddQueryParam("series_id", series_id.Value.ToString(CultureInfo.InvariantCulture));
+                }
+                
+                if (season != null)
+                {
+                    request.HttpRequest.AddQueryParam("season", season);
+                }
+                
+                if (episode != null)
+                {
+                    request.HttpRequest.AddQueryParam("episode", episode);
+                }
+                
+                if (air_date.HasValue)
+                {
+                    request.HttpRequest.AddQueryParam("air_date", air_date.Value.ToString("yyyy-MM-dd"));
+                }
+
+                yield return request;
+            }
         }
     }
 }

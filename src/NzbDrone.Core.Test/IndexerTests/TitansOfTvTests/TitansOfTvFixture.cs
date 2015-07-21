@@ -1,14 +1,14 @@
-﻿using Moq;
+﻿using System;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.TitansOfTv;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using System;
-using System.Linq;
-using FluentAssertions;
-using NzbDrone.Core.Indexers.TitansOfTv;
 
 namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
 {
@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
             Subject.Definition = new IndexerDefinition
                 {
                     Name = "TitansOfTV",
-                    Settings = new TitansOfTvSettings { ApiKey = "abc", BaseUrl = "https://titansof.tv/api/torrents" }
+                    Settings = new TitansOfTvSettings { ApiKey = "abc", BaseUrl = "https://titansof.tv/api" }
                 };
         }
 
         [Test]
-        public void should_parse_recent_feed_from_BroadcastheNet()
+        public void should_parse_recent_feed_from_TitansOfTv()
         {
             var recentFeed = ReadAllText(@"Files/Indexers/TitansOfTv/RecentFeed.json");
 
@@ -59,7 +59,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
 
         private void VerifyBackOff()
         {
-            // TODO How to detect (and implement) back-off logic.
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Once());
         }
 
         [Test]

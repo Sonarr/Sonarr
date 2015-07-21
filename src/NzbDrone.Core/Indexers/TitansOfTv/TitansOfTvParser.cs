@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
@@ -33,20 +33,24 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
             }
 
             var content = indexerResponse.HttpResponse.Content;
-            var parsed = JsonConvert.DeserializeObject<ApiResult>(content);
+            var parsed = Json.Deserialize<TitansOfTvApiResult>(content);
             var protocol = indexerResponse.HttpRequest.Url.Scheme + ":";
 
             foreach (var parsedItem in parsed.results)
             {
                 var release = new TorrentInfo();
-                release.Guid = String.Format("ToTV-{0}", parsedItem.id);
+                release.Guid = string.Format("ToTV-{0}", parsedItem.id);
                 release.DownloadUrl = RegexProtocol.Replace(parsedItem.download, protocol);
                 release.InfoUrl = RegexProtocol.Replace(parsedItem.episodeUrl, protocol);
+                if (parsedItem.commentUrl.IsNotNullOrWhiteSpace())
+                {
+                    release.CommentUrl = RegexProtocol.Replace(parsedItem.commentUrl, protocol);
+                }
                 release.DownloadProtocol = DownloadProtocol.Torrent;
                 release.Title = parsedItem.release_name;
-                release.Size = Convert.ToInt64(parsedItem.size);
-                release.Seeders = Convert.ToInt32(parsedItem.seeders);
-                release.Peers = Convert.ToInt32(parsedItem.leechers) + release.Seeders;
+                release.Size = parsedItem.size;
+                release.Seeders = parsedItem.seeders;
+                release.Peers = parsedItem.leechers + release.Seeders;
                 release.PublishDate = parsedItem.created_at;
                 results.Add(release);
             }

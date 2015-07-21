@@ -5,8 +5,7 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.TitansOfTv
 {
-
-       public class TitansOfTvSettingsValidator : AbstractValidator<TitansOfTvSettings>
+    public class TitansOfTvSettingsValidator : AbstractValidator<TitansOfTvSettings>
     {
         public TitansOfTvSettingsValidator()
         {
@@ -20,7 +19,7 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
 
         public TitansOfTvSettings()
         {
-            BaseUrl = "http://titansof.tv/api/torrents";
+            BaseUrl = "http://titansof.tv/api";
         }
 
         [FieldDefinition(0, Label = "API URL", Advanced = true, HelpText = "Do not change this unless you know what you're doing. Since your API key will be sent to that host.")]
