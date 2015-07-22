@@ -95,6 +95,10 @@ module.exports = Marionette.ItemView.extend({
             }
         }
 
+        else if (event.model.get('unverifiedSceneNumbering')) {
+            this._addStatusIcon(element, 'icon-sonarr-form-warning', 'Scene number hasn\'t been verified yet.');
+        }
+
         else if (event.model.get('series').seriesType === 'anime' && event.model.get('seasonNumber') > 0 && !event.model.has('absoluteEpisodeNumber')) {
             this._addStatusIcon(element, 'icon-sonarr-form-warning', 'Episode does not have an absolute episode number');
         }

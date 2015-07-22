@@ -26,7 +26,6 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             _xemProxy = xemProxy;
             _seriesService = seriesService;
             _logger = logger;
-            _logger = logger;
             _cache = cacheManager.GetCache<bool>(GetType());
         }
 
