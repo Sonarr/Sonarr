@@ -10,15 +10,18 @@ var stripbom = require('gulp-stripbom');
 
 var paths = require('./paths.js');
 
-gulp.task('handlebars', function () {
+gulp.task('handlebars', function() {
 
-    var coreStream = gulp.src([paths.src.templates, '!*/**/*Partial.*'])
-        .pipe(stripbom({ showLog: false }))
+    var coreStream = gulp.src([
+        paths.src.templates,
+        '!*/**/*Partial.*'
+    ])
+        .pipe(stripbom({ showLog : false }))
         .pipe(handlebars())
         .pipe(declare({
-            namespace: 'T',
-            noRedeclare: true,
-            processName: function (filePath) {
+            namespace   : 'T',
+            noRedeclare : true,
+            processName : function(filePath) {
 
                 filePath = path.relative(paths.src.root, filePath);
 
@@ -30,12 +33,12 @@ gulp.task('handlebars', function () {
         }));
 
     var partialStream = gulp.src([paths.src.partials])
-        .pipe(stripbom({ showLog: false }))
+        .pipe(stripbom({ showLog : false }))
         .pipe(handlebars())
         .pipe(wrap('Handlebars.template(<%= contents %>)'))
         .pipe(wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= contents %>)', {}, {
-            imports: {
-                processPartialName: function (fileName) {
+            imports : {
+                processPartialName : function(fileName) {
                     return JSON.stringify(
                         path.basename(fileName, '.js')
                     );
@@ -43,8 +46,7 @@ gulp.task('handlebars', function () {
             }
         }));
 
-
-    return streamqueue({ objectMode: true },
+    return streamqueue({ objectMode : true },
         partialStream,
         coreStream
     ).pipe(concat('templates.js'))

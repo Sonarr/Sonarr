@@ -36,7 +36,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             _configFileProvider = configFileProvider;
             _analyticsService = analyticsService;
             _cacheBreakProviderFactory = cacheBreakProviderFactory;
-            _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "index.html");
+            _indexPath = Path.Combine(appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, "index.html");
 
             API_KEY = configFileProvider.ApiKey;
             URL_BASE = configFileProvider.UrlBase;

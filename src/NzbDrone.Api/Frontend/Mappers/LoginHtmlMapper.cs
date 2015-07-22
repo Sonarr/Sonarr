@@ -12,6 +12,7 @@ namespace NzbDrone.Api.Frontend.Mappers
     public class LoginHtmlMapper : StaticResourceMapperBase
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly Func<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private readonly string _indexPath;
         private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -27,8 +28,9 @@ namespace NzbDrone.Api.Frontend.Mappers
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
+            _configFileProvider = configFileProvider;
             _cacheBreakProviderFactory = cacheBreakProviderFactory;
-            _indexPath = Path.Combine(appFolderInfo.StartUpFolder, "UI", "login.html");
+            _indexPath = Path.Combine(appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, "login.html");
 
             URL_BASE = configFileProvider.UrlBase;
         }

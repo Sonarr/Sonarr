@@ -2,17 +2,20 @@ using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Frontend.Mappers
 {
     public class StaticResourceMapper : StaticResourceMapperBase
     {
         private readonly IAppFolderInfo _appFolderInfo;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public StaticResourceMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, Logger logger)
+        public StaticResourceMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IConfigFileProvider configFileProvider, Logger logger)
             : base(diskProvider, logger)
         {
             _appFolderInfo = appFolderInfo;
+            _configFileProvider = configFileProvider;
         }
 
         public override string Map(string resourceUrl)
@@ -20,7 +23,7 @@ namespace NzbDrone.Api.Frontend.Mappers
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = path.Trim(Path.DirectorySeparatorChar);
 
-            return Path.Combine(_appFolderInfo.StartUpFolder, "UI", path);
+            return Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, path);
         }
 
         public override bool CanHandle(string resourceUrl)

@@ -84,7 +84,7 @@ gulp.task('getSonarr', function () {
     download(package.url, packagePath, function () {
       extract(packagePath, dirName, function () {
         // clean old binaries
-        console.log('Cleaning old binaries')
+        console.log('Cleaning old binaries');
         del.sync(['./_output/*', '!./_output/UI/']);
         console.log('copying binaries to target');
         gulp.src(dirName + '/NzbDrone/*.*')

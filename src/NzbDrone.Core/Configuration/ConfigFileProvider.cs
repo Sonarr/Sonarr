@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Configuration
         string ApiKey { get; }
         string SslCertHash { get; }
         string UrlBase { get; }
+        string UiFolder { get; }
         Boolean UpdateAutomatically { get; }
         UpdateMechanism UpdateMechanism { get; }
         String UpdateScriptPath { get; }
@@ -212,6 +213,14 @@ namespace NzbDrone.Core.Configuration
                 }
 
                 return "/" + urlBase.Trim('/').ToLower();
+            }
+        }
+
+        public string UiFolder
+        {
+            get
+            {
+                return GetValue("UiFolder", "UI", false);
             }
         }
 
