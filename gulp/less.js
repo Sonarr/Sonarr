@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
 var print = require('gulp-print');
+var livereload = require('gulp-livereload');
 
 var paths = require('./paths');
 var errorHandler = require('./errorHandler');
@@ -30,5 +31,6 @@ gulp.task('less', function () {
             strictImports: true
         }))
         .on('error', errorHandler.onError)
-        .pipe(gulp.dest(paths.dest.content));
+        .pipe(gulp.dest(paths.dest.content))
+        .pipe(livereload());
 });
