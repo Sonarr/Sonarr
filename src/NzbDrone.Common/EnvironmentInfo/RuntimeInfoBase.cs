@@ -108,8 +108,19 @@ namespace NzbDrone.Common.EnvironmentInfo
                 
             }
 
+			try
+			{
+				var currentAssmeblyLocation = typeof(RuntimeInfoBase).Assembly.Location;
+				if(currentAssmeblyLocation.ToLower().Contains("_output"))return false;
+			}
+			catch
+			{
+			
+			}
+
             string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
+            if (lowerCurrentDir.Contains("_output")) return false;
             if (lowerCurrentDir.StartsWith("/run/")) return false;
 
             return true;
