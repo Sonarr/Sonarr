@@ -125,6 +125,8 @@ namespace NzbDrone.Core.Download
                 }
 
                 torrentFile = response.ResponseData;
+
+                _logger.Debug("Downloading torrent for episode '{0}' finished ({1} bytes from {2})", torrentFile.Length, torrentUrl);
             }
             catch (HttpException ex)
             {
