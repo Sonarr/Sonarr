@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download
             {
                 nzbData = _httpClient.Get(new HttpRequest(url)).ResponseData;
 
-                _logger.Debug("Downloaded nzb for episode '{0}' finished ({1} bytes from {2})", nzbData.Length, url);
+                _logger.Debug("Downloaded nzb for episode '{0}' finished ({1} bytes from {2})", remoteEpisode.Release.Title, nzbData.Length, url);
             }
             catch (HttpException ex)
             {
