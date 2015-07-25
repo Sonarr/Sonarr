@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Indexers
 
                         pagedReleases.AddRange(page);
 
-                        if (isRecent)
+                        if (isRecent && page.Any())
                         {
                             if (lastReleaseInfo == null)
                             {
