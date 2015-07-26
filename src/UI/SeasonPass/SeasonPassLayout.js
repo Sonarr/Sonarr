@@ -9,6 +9,7 @@ var FooterView = require('./SeasonPassFooterView');
 var SelectAllCell = require('../Cells/SelectAllCell');
 var SeriesStatusCell = require('../Cells/SeriesStatusCell');
 var SeriesTitleCell = require('../Cells/SeriesTitleCell');
+var SeriesMonitoredCell = require('../Cells/ToggleCell');
 var SeasonsCell = require('./SeasonsCell');
 require('../Mixins/backbone.signalr.mixin');
 
@@ -37,6 +38,15 @@ module.exports = Marionette.Layout.extend({
             label     : 'Title',
             cell      : SeriesTitleCell,
             cellValue : 'this'
+        },
+        {
+            name       : 'monitored',
+            label      : '',
+            cell       : SeriesMonitoredCell,
+            trueClass  : 'icon-sonarr-monitored',
+            falseClass : 'icon-sonarr-unmonitored',
+            tooltip    : 'Toggle series monitored status',
+            sortable   : false
         },
         {
             name      : 'seasons',

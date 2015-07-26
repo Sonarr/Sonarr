@@ -8,12 +8,13 @@ module.exports = Marionette.ItemView.extend({
     template : 'SeasonPass/SeasonPassFooterViewTemplate',
 
     ui : {
-        monitor       : '.x-monitor',
-        selectedCount : '.x-selected-count',
-        container     : '.series-editor-footer',
-        actions       : '.x-action',
-        indicator     : '.x-indicator',
-        indicatorIcon : '.x-indicator-icon'
+        seriesMonitored : '.x-series-monitored',
+        monitor         : '.x-monitor',
+        selectedCount   : '.x-selected-count',
+        container       : '.series-editor-footer',
+        actions         : '.x-action',
+        indicator       : '.x-indicator',
+        indicatorIcon   : '.x-indicator-icon'
     },
 
     events : {
@@ -38,11 +39,17 @@ module.exports = Marionette.ItemView.extend({
     _update : function() {
         var self = this;
         var selected = this.editorGrid.getSelectedModels();
+        var seriesMonitored = this.ui.seriesMonitored.val();
         var monitoringOptions;
 
         _.each(selected, function(model) {
-            monitoringOptions = self._getMonitoringOptions(model);
+            if (seriesMonitored === 'true') {
+                model.set('monitored', true);
+            } else if (seriesMonitored === 'false') {
+                model.set('monitored', false);
+            }
 
+            monitoringOptions = self._getMonitoringOptions(model);
             model.set('addOptions', monitoringOptions);
         });
 
@@ -85,6 +92,10 @@ module.exports = Marionette.ItemView.extend({
         var monitor = this.ui.monitor.val();
         var lastSeason = _.max(model.get('seasons'), 'seasonNumber');
         var firstSeason = _.min(_.reject(model.get('seasons'), { seasonNumber : 0 }), 'seasonNumber');
+
+        if (monitor === 'noChange') {
+            return null;
+        }
 
         model.setSeasonPass(firstSeason.seasonNumber);
 
