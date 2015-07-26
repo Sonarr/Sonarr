@@ -72,7 +72,31 @@
 
 .icon-sonarr-spinner {
   .fa-icon-content(@fa-var-spinner);
-  margin: 0px -0.14em;
+}
+
+.fa-spin-overlay {
+  .fa-icon();
+  position         : relative;
+  text-align       : center;
+  vertical-align   : baseline;
+
+  i {
+    opacity        : 0.2;
+
+    &.icon-sonarr-spinner {
+      opacity        : 1.0;
+    }
+  }
+
+  span {
+    position       : absolute;
+    top            : 0;
+    left           : 0;
+    right          : 0;
+    bottom         : 0;
+
+    margin         : 0 -0.5em;
+  }
 }
 
 .icon-sonarr-rename {

@@ -25,7 +25,7 @@ module.exports = function() {
 
         var iconClasses = icon.attr('class').match(/(?:^|\s)icon\-.+?(?:$|\s)/);
 
-        if (iconClasses.length === 0) {
+        if (!iconClasses || iconClasses.length === 0) {
             return this;
         }
 
@@ -38,7 +38,8 @@ module.exports = function() {
         } else {
             icon.attr('data-idle-icon', iconClass);
             icon.removeClass(iconClass);
-            icon.addClass('fa-spin icon-sonarr-spinner');
+            icon.addClass('fa-spin-overlay');
+            icon.html('<i class="' + iconClass + '" /><span><i class="fa-spin icon-sonarr-spinner" /></span>');
         }
 
         return this;
@@ -47,8 +48,9 @@ module.exports = function() {
     $.fn.stopSpin = function() {
         var icon = this.find('i').andSelf('i');
 
+        icon.empty();
         this.removeClass('disabled');
-        icon.removeClass('fa-spin icon-sonarr-spinner');
+        icon.removeClass('fa-spin fa-spin-overlay');
         var idleIcon = icon.attr('data-idle-icon');
 
         if (idleIcon) {
