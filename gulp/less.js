@@ -22,7 +22,7 @@ gulp.task('less', function() {
         paths.src.root + 'Settings/settings.less',
         paths.src.root + 'System/Logs/logs.less',
         paths.src.root + 'System/Update/update.less',
-        paths.src.root + 'System/Info/info.less',
+        paths.src.root + 'System/Info/info.less'
     ];
 
     if (phantom) {
@@ -40,8 +40,8 @@ gulp.task('less', function() {
             paths.src.root + 'Settings/settings.less',
             paths.src.root + 'System/Logs/logs.less',
             paths.src.root + 'System/Update/update.less',
-            paths.src.root + 'System/Info/info.less',
-        ]
+            paths.src.root + 'System/Info/info.less'
+        ];
     }
 
     return gulp.src(src)
