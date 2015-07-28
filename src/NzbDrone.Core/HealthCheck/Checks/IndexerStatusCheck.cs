@@ -36,13 +36,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(), HealthCheckResult.Error, "All indexers are unavailable due to failures", "#indexers-are-unavailable-due-to-failures");
             }
 
-            if (backOffIndexers.Count > 1)
-            {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("{0} indexers are unavailable due to failures", backOffIndexers.Count), "#indexers-are-unavailable-due-to-failures");
-            }
-
-            var indexer = backOffIndexers.First();
-            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Indexer {0} is unavailable due to failures", indexer.Indexer.Definition.Name), "#indexers-are-unavailable-due-to-failures");
+            return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format("Indexers unavailable due to failures: {0}", string.Join(", ", backOffIndexers.Select(v => v.Indexer.Definition.Name))), "#indexers-are-unavailable-due-to-failures");
         }
     }
 }
