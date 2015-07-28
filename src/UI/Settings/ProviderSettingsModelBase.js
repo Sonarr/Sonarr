@@ -2,7 +2,7 @@ var $ = require('jquery');
 var DeepModel = require('backbone.deepmodel');
 var Messenger = require('../Shared/Messenger');
 
-module.exports = DeepModel.DeepModel.extend({
+module.exports = DeepModel.extend({
     test : function() {
         var self = this;
 

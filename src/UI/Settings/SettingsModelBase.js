@@ -3,7 +3,7 @@ var DeepModel = require('backbone.deepmodel');
 var AsChangeTrackingModel = require('../Mixins/AsChangeTrackingModel');
 var Messenger = require('../Shared/Messenger');
 
-var model = DeepModel.DeepModel.extend({
+var model = DeepModel.extend({
 
     initialize : function() {
         this.listenTo(vent, vent.Commands.SaveSettings, this.saveSettings);

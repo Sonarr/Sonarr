@@ -1,4 +1,4 @@
 var $ = require('jquery');
 var DeepModel = require('backbone.deepmodel');
 
-module.exports = DeepModel.DeepModel.extend({});
+module.exports = DeepModel.extend({});
