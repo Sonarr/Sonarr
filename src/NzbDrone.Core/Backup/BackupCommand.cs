@@ -13,11 +13,19 @@ namespace NzbDrone.Core.Backup
                 return true;
             }
         }
+
+        public override bool UpdateScheduledTask
+        {
+            get
+            {
+                return Type == BackupType.Scheduled;
+            }
+        }
     }
 
     public enum BackupType
     {
-        Scheduled = 0 ,
+        Scheduled = 0,
         Manual = 1,
         Update = 2
     }

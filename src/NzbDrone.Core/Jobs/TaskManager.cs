@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Jobs
         {
             var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.Body.GetType().FullName);
 
-            if (scheduledTask != null)
+            if (scheduledTask != null && message.Command.Body.UpdateScheduledTask)
             {
                 _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
                 _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, DateTime.UtcNow);

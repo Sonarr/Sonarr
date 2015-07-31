@@ -22,5 +22,13 @@ namespace NzbDrone.Core.Tv.Commands
                 return true;
             }
         }
+
+        public override bool UpdateScheduledTask
+        {
+            get
+            {
+                return !SeriesId.HasValue;
+            }
+        }
     }
 }
