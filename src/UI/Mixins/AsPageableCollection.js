@@ -19,8 +19,8 @@ module.exports = function() {
 
             originalEventHandler.apply(this, [].slice.call(arguments, 1));
 
-            var totalPages = Math.ceil(this.state.totalRecords / pageSize);
-            var newPage = Math.min(currentPage, totalPages);
+            var totalPages = Math.max(1,Math.ceil(this.state.totalRecords / pageSize));
+            var newPage =  Math.min(currentPage, totalPages);
 
             if (newPage !== this.state.currentPage) {
                 this.state.currentPage = newPage;
