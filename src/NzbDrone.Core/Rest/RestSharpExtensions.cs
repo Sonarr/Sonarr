@@ -43,6 +43,10 @@ namespace NzbDrone.Core.Rest
                     {
                         return response;
                     }
+                case HttpStatusCode.Created:
+                    {
+                        return response;
+                    }
                 default:
                     {
                         Logger.Warn("[{0}] [{1}] Failed. [{2}]", response.Request.Method, response.ResponseUri.ToString(), response.StatusCode);
