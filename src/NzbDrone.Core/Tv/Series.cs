@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Tv
             Images = new List<MediaCover.MediaCover>();
             Genres = new List<String>();
             Actors = new List<Actor>();
+            Seasons = new List<Season>();
             Tags = new HashSet<Int32>();
         }
 
