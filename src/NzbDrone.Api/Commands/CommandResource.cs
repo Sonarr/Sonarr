@@ -78,6 +78,18 @@ namespace NzbDrone.Api.Commands
             set { }
         }
 
+        public Boolean UpdateScheduledTask
+        {
+            get
+            {
+                if (Body != null) return Body.UpdateScheduledTask;
+
+                return false;
+            }
+
+            set { }
+        }
+
         public DateTime? LastExecutionTime { get; set; }
     }
 }
