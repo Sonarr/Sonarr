@@ -224,6 +224,9 @@ PackageTests()
     echo "Adding CurlSharp.dll.config (for dllmap)"
     cp $sourceFolder/NzbDrone.Common/CurlSharp.dll.config $testPackageFolder
 
+    echo "Copying CurlSharp libraries"
+    cp $sourceFolder/ExternalModules/CurlSharp/libs/i386/* $testPackageFolder
+
     echo "##teamcity[progressFinish 'Creating Test Package']"
 }
 

@@ -14,22 +14,49 @@ using Moq;
 
 namespace NzbDrone.Common.Test.Http
 {
-    [TestFixture]
+    [TestFixture(true)]
+    [TestFixture(false)]
     [IntegrationTest]
     public class HttpClientFixture : TestBase<HttpClient>
     {
+        private bool _forceCurl;
+
+        public HttpClientFixture(bool forceCurl)
+        {
+            _forceCurl = forceCurl;
+        }
+        
         [SetUp]
         public void SetUp()
         {
             Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
             Mocker.SetConstant<IRateLimitService>(Mocker.Resolve<RateLimitService>());
             Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new IHttpRequestInterceptor[0]);
+
+            if (_forceCurl)
+            {
+                Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<CurlHttpDispatcher>());
+            }
+            else
+            {
+                Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<ManagedHttpDispatcher>());
+            }
         }
 
         [Test]
         public void should_execute_simple_get()
         {
             var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Execute(request);
+
+            response.Content.Should().NotBeNullOrWhiteSpace();
+        }
+        
+        [Test]
+        public void should_execute_https_get()
+        {
+            var request = new HttpRequest("https://eu.httpbin.org/get");
 
             var response = Subject.Execute(request);
 
@@ -163,7 +190,7 @@ namespace NzbDrone.Common.Test.Http
             var oldRequest = new HttpRequest("http://eu.httpbin.org/get");
             oldRequest.AddCookie("my", "cookie");
 
-            var oldClient = new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<Logger>());
+            var oldClient = new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<IHttpDispatcher>(), Mocker.Resolve<Logger>());
 
             oldClient.Should().NotBeSameAs(Subject);
 
@@ -294,6 +321,32 @@ namespace NzbDrone.Common.Test.Http
 
             Mocker.GetMock<IHttpRequestInterceptor>()
                 .Verify(v => v.PostResponse(It.IsAny<HttpResponse>()), Times.Once());
+        }
+
+        public void should_parse_malformed_cloudflare_cookie()
+        {
+            // the date is bad in the below - should be 13-Jul-2016
+            string malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Wed, 13-Jul-16 16:19:50 GMT; path=/; HttpOnly";
+            string url = "http://eu.httpbin.org/response-headers?Set-Cookie=" +
+                System.Uri.EscapeUriString(malformedCookie);
+
+            var requestSet = new HttpRequest(url);
+            requestSet.AllowAutoRedirect = false;
+            requestSet.StoreResponseCookie = true;
+
+            var responseSet = Subject.Get(requestSet);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            var response = Subject.Get<HttpBinResource>(request);
+
+            response.Resource.Headers.Should().ContainKey("Cookie");
+
+            var cookie = response.Resource.Headers["Cookie"].ToString();
+
+            cookie.Should().Contain("__cfduid=d29e686a9d65800021c66faca0a29b4261436890790");
+
+            ExceptionVerification.IgnoreErrors();
         }
     }
 
