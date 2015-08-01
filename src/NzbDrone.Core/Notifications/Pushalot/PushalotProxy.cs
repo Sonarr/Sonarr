@@ -30,7 +30,11 @@ namespace NzbDrone.Core.Notifications.Pushalot
             var request = BuildRequest();
 
             request.AddParameter("Source", "Sonarr");
-            request.AddParameter("Image", "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/128.png");
+
+            if (settings.Image)
+            {
+                request.AddParameter("Image", "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/128.png");                
+            }
 
             request.AddParameter("Title", title);
             request.AddParameter("Body", message);

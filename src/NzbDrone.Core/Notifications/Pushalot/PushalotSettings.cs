@@ -16,13 +16,21 @@ namespace NzbDrone.Core.Notifications.Pushalot
 
     public class PushalotSettings : IProviderConfig
     {
+        public PushalotSettings()
+        {
+            Image = true;
+        }
+
         private static readonly PushalotSettingsValidator Validator = new PushalotSettingsValidator();
 
         [FieldDefinition(0, Label = "Authorization Token", HelpLink = "https://pushalot.com/manager/authorizations")]
-        public String AuthToken { get; set; }
+        public string AuthToken { get; set; }
 
         [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(PushalotPriority))]
-        public Int32 Priority { get; set; }
+        public int Priority { get; set; }
+
+        [FieldDefinition(2, Label = "Image", Type = FieldType.Checkbox, HelpText = "Include Sonarr logo with notifications")]
+        public bool Image { get; set; }
 
         public bool IsValid
         {
