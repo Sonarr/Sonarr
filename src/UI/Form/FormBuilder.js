@@ -29,6 +29,10 @@ var _fieldBuilder = function(field) {
         return _templateRenderer.call(field, 'Form/SelectTemplate');
     }
 
+    if (field.type === 'hidden') {
+        return _templateRenderer.call(field, 'Form/HiddenTemplate');
+    }
+
     if (field.type === 'path') {
         return _templateRenderer.call(field, 'Form/PathTemplate');
     }
@@ -36,6 +40,11 @@ var _fieldBuilder = function(field) {
     if (field.type === 'tag') {
         return _templateRenderer.call(field, 'Form/TagTemplate');
     }
+
+    if (field.type === 'action') {
+        return _templateRenderer.call(field, 'Form/ActionTemplate');
+    }
+
 
     return _templateRenderer.call(field, 'Form/TextboxTemplate');
 };

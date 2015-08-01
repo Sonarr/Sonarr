@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Annotations
 {
@@ -28,6 +27,7 @@ namespace NzbDrone.Core.Annotations
         Select,
         Path,
         Hidden,
-        Tag
+        Tag,
+        Action
     }
 }
