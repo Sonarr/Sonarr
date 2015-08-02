@@ -34,23 +34,27 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             foreach (var r in required)
             {
-                var split = r.Required.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var requiredTerms = r.Required.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                if (!ContainsAny(split, title))
+                var foundTerms = ContainsAny(requiredTerms, title);
+                if (foundTerms.Empty())
                 {
-                    _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, r.Required);
-                    return Decision.Reject("Does not contain one of the required terms: {0}", r.Required.Replace(",", ", "));
+                    var terms = string.Join(", ", requiredTerms);
+                    _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, terms);
+                    return Decision.Reject("Does not contain one of the required terms: {0}", terms);
                 }
             }
 
             foreach (var r in ignored)
             {
-                var split = r.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var ignoredTerms = r.Ignored.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-                if (ContainsAny(split, title))
+                var foundTerms = ContainsAny(ignoredTerms, title);
+                if (foundTerms.Any())
                 {
-                    _logger.Debug("[{0}] contains one or more ignored terms: {1}", title, r.Ignored);
-                    return Decision.Reject("Contains one or more ignored terms: {0}", r.Ignored.Replace(",", ", "));
+                    var terms = string.Join(", ", foundTerms);
+                    _logger.Debug("[{0}] contains these ignored terms: {1}", title, terms);
+                    return Decision.Reject("Contains these ignored terms: {0}", terms);
                 }
             }
 
@@ -58,9 +62,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             return Decision.Accept();
         }
 
-        private static Boolean ContainsAny(List<String> terms, String title)
+        private static List<string> ContainsAny(List<string> terms, string title)
         {
-            return terms.Any(t => title.ToLowerInvariant().Contains(t.ToLowerInvariant()));
+            return terms.Where(t => title.ToLowerInvariant().Contains(t.ToLowerInvariant())).ToList();
         }
     }
 }
