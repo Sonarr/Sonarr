@@ -10,8 +10,8 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 {
     public abstract class SearchCriteriaBase
     {
-        private static readonly Regex SpecialCharacter = new Regex(@"[`'.]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex NonWord = new Regex(@"[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex SpecialCharacter = new Regex(@"[`']", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex NonWordLessDot = new Regex(@"(?!\.)[\W]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex BeginningThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public Series Series { get; set; }
@@ -23,24 +23,39 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         {
             get
             {
-                return SceneTitles.Select(GetQueryTitle).ToList();
+                return SceneTitles.SelectMany(GetQueryTitle).ToList();
             }
         }
 
-        public static string GetQueryTitle(string title)
+        public static IEnumerable<string> GetQueryTitle(string title)
         {
-            Ensure.That(title,() => title).IsNotNullOrWhiteSpace();
 
             var cleanTitle = BeginningThe.Replace(title, String.Empty);
 
             cleanTitle = cleanTitle.Replace("&", "and");
             cleanTitle = SpecialCharacter.Replace(cleanTitle, "");
-            cleanTitle = NonWord.Replace(cleanTitle, "+");
+            cleanTitle = NonWordLessDot.Replace(cleanTitle, "+");
 
-            //remove any repeating +s
+            // Remove any repeating +s
             cleanTitle = Regex.Replace(cleanTitle, @"\+{2,}", "+");
             cleanTitle = cleanTitle.RemoveAccent();
-            return cleanTitle.Trim('+', ' ');
+            cleanTitle = cleanTitle.Trim('+', ' ');
+
+            if (!string.IsNullOrWhiteSpace(cleanTitle))
+            {
+                yield return cleanTitle;
+            }
+
+            // If the title contains a dot then add an additional title without it
+            // as some series drop them.
+            if (cleanTitle.IndexOf('.') > -1)
+            {
+                cleanTitle = cleanTitle.Replace(".", string.Empty);
+                if (!string.IsNullOrWhiteSpace(cleanTitle))
+                {
+                    yield return cleanTitle;
+                }
+            }
         }
     }
 }
