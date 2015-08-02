@@ -1,7 +1,6 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
@@ -111,6 +110,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title [S01E05] Episode Title", "Series Title", 1, 5)]
         [TestCase("Series Title Season 01 Episode 05 720p", "Series Title", 1, 5)]
         //[TestCase("Off the Air - 101 - Animals (460p.x264.vorbis-2.0) [449].mkv", "Off the Air", 1, 1)]
+        [TestCase("The Young And the Restless - S42 E10713 - 2015-07-20.mp4", "The Young And the Restless", 42, 10713)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {

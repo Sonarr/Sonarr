@@ -1,6 +1,5 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.ParserTests
@@ -39,9 +38,11 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("World Series of Poker - 2013x15 - 2013x16 - HD TV.mkv", "World Series of Poker", 2013, new[] { 15, 16 })]
         [TestCase("The Librarians US S01E01-E02 720p HDTV x264", "The Librarians US", 1, new [] { 1, 2 })]
         [TestCase("Series Title Season 01 Episode 05-06 720p", "Series Title", 1,new [] { 5, 6 })]
-        //[TestCase("", "", ,new [] {  })]
         //[TestCase("My Name Is Earl - S03E01-E02 - My Name Is Inmate 28301-016 [SDTV]", "My Name Is Earl", 3, new[] { 1, 2 })]
         //[TestCase("Adventure Time - 5x01 - x02 - Finn the Human (2) & Jake the Dog (3)", "Adventure Time", 5, new [] { 1, 2 })]
+        [TestCase("The Young And The Restless - S42 Ep10718 - Ep10722", "The Young And The Restless", 42, new[] { 10718, 10719, 10720, 10721, 10722 })]
+        [TestCase("The Young And The Restless - S42 Ep10688 - Ep10692", "The Young And The Restless", 42, new[] { 10688, 10689, 10690, 10691, 10692 })]
+        //[TestCase("", "", ,new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
