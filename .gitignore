@@ -97,7 +97,7 @@ App_Data/*.ldf
 _NCrunch_*
 _TeamCity*
 
-# NzbDrone
+# Sonarr
 config.xml
 nzbdrone.log*txt
 UpdateLogs/
@@ -105,7 +105,7 @@ UpdateLogs/
 *.test-cache
 *.userprefs
 */test-results/*
-.idea/*
+src/UI/.idea/*
 *log.txt
 node_modules/
 _output*
@@ -113,9 +113,6 @@ _rawPackage/
 _dotTrace*
 _tests/
 *.Result.xml
-wix/*.msi
-wix/*.wixobj
-wix/*.wixpdb
 setup/Output/
 *.~is
 

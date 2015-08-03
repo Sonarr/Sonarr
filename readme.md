@@ -5,7 +5,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ## Major Features Include: ##
 
-* Support for major platforms: Windows, Linux, OSX, Raspberry Pi, etc. 
+* Support for major platforms: Windows, Linux, OSX, Raspberry Pi, etc.
 * Automatically detects new episodes
 * Can scan your existing library and download any missing episodes
 * Can watch for better quality of the episodes you already have and do an automatic upgrade. *eg. from DVD to Blu-Ray*
@@ -35,7 +35,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 - install gulp `npm install gulp -g`
 - start gulp to monitor your dev environment for any changes that need post processing using `gulp watch` command.
 
-*Please note gulp must be running at all times while you are working with NzbDrone client source files.*
+*Please note gulp must be running at all times while you are working with Sonarr client source files.*
 
 
 ### Development ###

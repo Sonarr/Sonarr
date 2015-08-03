@@ -1,6 +1,6 @@
 # How to Contribute #
 
-We're always looking for people to help make NzbDrone even better, there are a number of ways to contribute. To get started, <a href="http://www.clahub.com/agreements/NzbDrone/NzbDrone">sign the Contributor License Agreement</a>.
+We're always looking for people to help make Sonarr even better, there are a number of ways to contribute. To get started, <a href="http://www.clahub.com/agreements/NzbDrone/NzbDrone">sign the Contributor License Agreement</a>.
 
 ## Documentation ##
 Setup guides, FAQ, the more information we have on the wiki the better.
@@ -15,7 +15,7 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 
 ### Getting started ###
 
-1.  Fork NzbDrone 
+1.  Fork Sonarr
 2.  Clone (develop branch)
 3.  Run `npm install`
 4.  Run `gulp watch` - Used to compile the UI components and copy them (leave this window open)
@@ -23,7 +23,7 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 
 ### Contributing Code ###
 - If you're adding a new, already requested feature, please comment on [Github Issues](https://github.com/Sonarr/Sonarr/issues "Github Issues") so work is not duplicated (If you want to add something not already on there, please talk to us first)
-- Rebase from NzbDrone's develop branch, don't merge
+- Rebase from Sonarr's develop branch, don't merge
 - Make meaningful commits, or squash them
 - Feel free to make a pull request before work is complete, this will let us see where its at and make comments/suggest improvements
 - Reach out to us on the forums or on IRC if you have any questions
