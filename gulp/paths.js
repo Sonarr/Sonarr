@@ -23,16 +23,16 @@ var paths = {
 if (phantom) {
     paths = {
         src  : {
-            root      : './src/UI.Phantom/',
-            templates : './src/UI.Phantom/**/*.hbs',
-            html      : './src/UI.Phantom/*.html',
-            partials  : './src/UI.Phantom/**/*Partial.hbs',
-            scripts   : './src/UI.Phantom/**/*.js',
-            less      : ['./src/UI.Phantom/**/*.less'],
-            content   : './src/UI.Phantom/Content/',
-            images    : './src/UI.Phantom/Content/Images/**/*',
+            root      : './UI.Phantom/',
+            templates : './UI.Phantom/**/*.hbs',
+            html      : './UI.Phantom/*.html',
+            partials  : './UI.Phantom/**/*Partial.hbs',
+            scripts   : './UI.Phantom/**/*.js',
+            less      : ['./UI.Phantom/**/*.less'],
+            content   : './UI.Phantom/Content/',
+            images    : './UI.Phantom/Content/Images/**/*',
             exclude   : {
-                libs : '!./src/UI.Phantom/JsLibraries/**'
+                libs : '!./UI.Phantom/JsLibraries/**'
             }
         },
         dest : {
