@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -93,6 +94,23 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         }
 
         [Test]
+        public void should_not_use_tvrageid_when_scene_naming_exception_exists()
+        {
+            GivenMatchByTvRageId();
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(v => v.FindTvdbId(It.IsAny<string>()))
+                  .Returns(10);
+
+            var result = Subject.Map(_parsedEpisodeInfo, _series.TvRageId);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.FindByTvRageId(It.IsAny<Int32>()), Times.Never());
+
+            result.Series.Should().BeNull();
+        }
+
+        [Test]
         public void should_use_search_criteria_series_title()
         {
             GivenMatchBySeriesTitle();
@@ -115,7 +133,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         }
 
         [Test]
-        public void should_FindByTvRageId_when_search_criteria_and_FIndByTitle_matching_fails()
+        public void should_FindByTvRageId_when_search_criteria_and_FindByTitle_matching_fails()
         {
             GivenParseResultSeriesDoesntMatchSearchCriteria();
 
@@ -129,7 +147,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         public void should_use_tvdbid_matching_when_alias_is_found()
         {
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.FindTvDbId(It.IsAny<String>()))
+                  .Setup(s => s.FindTvdbId(It.IsAny<String>()))
                   .Returns(_series.TvdbId);
 
             Subject.Map(_parsedEpisodeInfo, _series.TvRageId, _singleEpisodeSearchCriteria);

@@ -15,7 +15,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     public interface ISceneMappingService
     {
         List<String> GetSceneNames(int tvdbId, IEnumerable<Int32> seasonNumbers);
-        Nullable<int> FindTvDbId(string title);
+        Nullable<int> FindTvdbId(string title);
         List<SceneMapping> FindByTvdbId(int tvdbId);
         Nullable<Int32> GetSeasonNumber(string title);
     }
@@ -61,9 +61,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                                          .Select(m => m.SearchTerm).Distinct().ToList());
         }
 
-        public Nullable<Int32> FindTvDbId(string title)
+        public Nullable<Int32> FindTvdbId(string title)
         {
-            var mapping = FindTvdbId(title);
+            var mapping = FindMapping(title);
 
             if (mapping == null)
                 return null;
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public Nullable<Int32> GetSeasonNumber(string title)
         {
-            var mapping = FindTvdbId(title);
+            var mapping = FindMapping(title);
 
             if (mapping == null)
                 return null;
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _eventAggregator.PublishEvent(new SceneMappingsUpdatedEvent());
         }
 
-        private SceneMapping FindTvdbId(string title)
+        private SceneMapping FindMapping(string title)
         {
             if (_getTvdbIdCache.Count == 0)
             {

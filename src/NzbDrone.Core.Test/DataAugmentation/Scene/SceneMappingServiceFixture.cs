@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         [Test]
         public void should_refresh_cache_if_cache_is_empty_when_looking_for_tvdb_id()
         {
-            Subject.FindTvDbId("title");
+            Subject.FindTvdbId("title");
 
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
 
-            Subject.FindTvDbId("title");
+            Subject.FindTvdbId("title");
 
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
-            var tvdbId = Subject.FindTvDbId(parseTitle);
+            var tvdbId = Subject.FindTvdbId(parseTitle);
             var seasonNumber = Subject.GetSeasonNumber(parseTitle);
 
             tvdbId.Should().Be(100);
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
             foreach (var sceneMapping in _fakeMappings)
             {
                 Subject.GetSceneNames(sceneMapping.TvdbId, _fakeMappings.Select(m => m.SeasonNumber)).Should().Contain(sceneMapping.SearchTerm);
-                Subject.FindTvDbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
+                Subject.FindTvdbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
             }
         }
     }

@@ -116,8 +116,7 @@ namespace NzbDrone.Core.Parser
                     ParsedEpisodeInfo = parsedEpisodeInfo,
                 };
 
-            var series = searchCriteria == null ? GetSeries(parsedEpisodeInfo, tvRageId) :
-                                                  GetSeries(parsedEpisodeInfo, tvRageId, searchCriteria);
+            var series = GetSeries(parsedEpisodeInfo, tvRageId, searchCriteria);
 
             if (series == null)
             {
@@ -291,7 +290,7 @@ namespace NzbDrone.Core.Parser
         {
             if (searchCriteria != null)
             {
-                var tvdbId = _sceneMappingService.FindTvDbId(title);
+                var tvdbId = _sceneMappingService.FindTvdbId(title);
                 if (tvdbId.HasValue)
                 {
                     if (searchCriteria.Series.TvdbId == tvdbId)
@@ -354,33 +353,43 @@ namespace NzbDrone.Core.Parser
 
         private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId, SearchCriteriaBase searchCriteria)
         {
-            var tvdbId = _sceneMappingService.FindTvDbId(parsedEpisodeInfo.SeriesTitle);
+            Series series = null;
+
+            var tvdbId = _sceneMappingService.FindTvdbId(parsedEpisodeInfo.SeriesTitle);
 
             if (tvdbId.HasValue)
             {
-                if (searchCriteria.Series.TvdbId == tvdbId)
+                if (searchCriteria != null && searchCriteria.Series.TvdbId == tvdbId)
                 {
+                    return searchCriteria.Series;
+                }
+
+                series = _seriesService.FindByTvdbId(tvdbId.Value);
+
+                if (series == null)
+                {
+                    _logger.Debug("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
+                    return null;
+                }
+
+                return series;
+            }
+
+            if (searchCriteria != null)
+            {
+                if (searchCriteria.Series.CleanTitle == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle())
+                {
+                    return searchCriteria.Series;
+                }
+
+                if (tvRageId > 0 && tvRageId == searchCriteria.Series.TvRageId)
+                {
+                    //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
                     return searchCriteria.Series;
                 }
             }
 
-            if (parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle() == searchCriteria.Series.CleanTitle)
-            {
-                return searchCriteria.Series;
-            }
-
-            if (tvRageId > 0 && tvRageId == searchCriteria.Series.TvRageId)
-            {
-                //TODO: If series is found by TvRageId, we should report it as a scene naming exception, since it will fail to import
-                return searchCriteria.Series;
-            }
-
-            return GetSeries(parsedEpisodeInfo, tvRageId);
-        }
-
-        private Series GetSeries(ParsedEpisodeInfo parsedEpisodeInfo, int tvRageId)
-        {
-            var series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
+            series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitle);
 
             if (series == null && tvRageId > 0)
             {

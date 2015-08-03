@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Tv
         Series GetSeries(int seriesId);
         List<Series> GetSeries(IEnumerable<int> seriesIds);
         Series AddSeries(Series newSeries);
+        Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByTitle(string title);
         Series FindByTitle(string title, int year);
@@ -87,6 +88,11 @@ namespace NzbDrone.Core.Tv
             return newSeries;
         }
 
+        public Series FindByTvdbId(int tvRageId)
+        {
+            return _seriesRepository.FindByTvdbId(tvRageId);
+        }
+
         public Series FindByTvRageId(int tvRageId)
         {
             return _seriesRepository.FindByTvRageId(tvRageId);
@@ -94,7 +100,7 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTitle(string title)
         {
-            var tvdbId = _sceneMappingService.FindTvDbId(title);
+            var tvdbId = _sceneMappingService.FindTvdbId(title);
 
             if (tvdbId.HasValue)
             {
