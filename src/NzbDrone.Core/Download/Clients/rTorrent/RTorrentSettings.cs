@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(0, 65535);
-            RuleFor(c => c.TvCategory).NotEmpty();
+            RuleFor(c => c.TvCategory).NotEmpty()
                                       .WithMessage("A category is recommended")
                                       .AsWarning(); 
         }
