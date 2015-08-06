@@ -43,6 +43,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS", Language.Dutch)]
         [TestCase("Elementary - S02E16 - Kampfhaehne - mkv - by Videomann", Language.German)]
         [TestCase("Two.Greedy.Italians.S01E01.The.Family.720p.HDTV.x264-FTP", Language.English)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL", Language.Hungarian)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL", Language.Hungarian)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian)]
         public void should_parse_language(string postTitle, Language language)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

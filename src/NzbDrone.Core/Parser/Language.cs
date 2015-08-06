@@ -23,6 +23,7 @@
         Portuguese = 18,
         Flemish = 19,
         Greek = 20,
-        Korean = 21
+        Korean = 21,
+        Hungarian = 22
     }
 }
