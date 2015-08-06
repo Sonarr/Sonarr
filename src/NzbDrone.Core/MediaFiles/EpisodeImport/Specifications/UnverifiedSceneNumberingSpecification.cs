@@ -15,6 +15,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public Decision IsSatisfiedBy(LocalEpisode localEpisode)
         {
+            if (localEpisode.ExistingFile)
+            {
+                _logger.Debug("Skipping scene numbering check for existing episode");
+                Decision.Accept();
+            }
+
             if (localEpisode.Episodes.Any(v => v.UnverifiedSceneNumbering))
             {
                 _logger.Debug("This file uses unverified scene numbers, will not auto-import until numbering is confirmed on TheXEM. Skipping {0}", localEpisode.Path);
