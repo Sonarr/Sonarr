@@ -6,9 +6,11 @@ var phantom = require('./gulp/phantom');
 var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
 
 var uiFolder = 'UI';
+var root = path.join(__dirname, 'src', uiFolder);
 
 if (phantom) {
   uiFolder = 'UI.Phantom';
+  root = path.join(__dirname, uiFolder);
 }
 
 module.exports = {
@@ -17,7 +19,7 @@ module.exports = {
     main: 'main.js'
   },
   resolve: {
-    root: path.join(__dirname, 'src', uiFolder),
+    root: root,
     alias: {
       'vent': 'vent',
       'backbone': 'Shims/backbone',
