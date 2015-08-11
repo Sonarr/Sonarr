@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
+var sourcemaps = require('gulp-sourcemaps');
 var print = require('gulp-print');
 var phantom = require('./phantom');
 var livereload = require('gulp-livereload');
@@ -33,7 +34,7 @@ gulp.task('less', function() {
             paths.src.content + 'overrides.less',
             paths.src.root + 'Series/series.less',
             paths.src.root + 'Activity/activity.less',
-            paths.src.root + 'AddSeries/addSeries.less',
+            paths.src.root + 'AddSeries/AddSeries.less',
             paths.src.root + 'Calendar/calendar.less',
             paths.src.root + 'Cells/cells.less',
             paths.src.root + 'ManualImport/manualimport.less',
@@ -46,6 +47,7 @@ gulp.task('less', function() {
 
     return gulp.src(src)
         .pipe(print())
+        .pipe(sourcemaps.init())
         .pipe(less({
             dumpLineNumbers : 'false',
             compress        : true,
@@ -54,6 +56,7 @@ gulp.task('less', function() {
             strictImports   : true
         }))
         .on('error', errorHandler.onError)
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.dest.content))
         .pipe(livereload());
 });
