@@ -4,13 +4,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public class NzbgetGlobalStatus
     {
-        public UInt32 RemainingSizeLo { get; set; }
-        public UInt32 RemainingSizeHi { get; set; }
-        public UInt32 DownloadedSizeLo { get; set; }
-        public UInt32 DownloadedSizeHi { get; set; }
-        public UInt32 DownloadRate { get; set; }
-        public UInt32 AverageDownloadRate { get; set; }
-        public UInt32 DownloadLimit { get; set; }
-        public Boolean DownloadPaused { get; set; }
+        public uint RemainingSizeLo { get; set; }
+        public uint RemainingSizeHi { get; set; }
+        public uint DownloadedSizeLo { get; set; }
+        public uint DownloadedSizeHi { get; set; }
+        public int DownloadRate { get; set; }
+        public int AverageDownloadRate { get; set; }
+        public int DownloadLimit { get; set; }
+        public bool DownloadPaused { get; set; }
     }
 }
