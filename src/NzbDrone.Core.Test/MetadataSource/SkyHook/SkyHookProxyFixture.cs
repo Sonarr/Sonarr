@@ -8,7 +8,6 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.MetadataSource.SkyHook

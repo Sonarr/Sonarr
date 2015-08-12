@@ -74,14 +74,9 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                     {
                         return new List<Series> { GetSeriesInfo(tvdbId).Item1 };
                     }
-                    catch (Common.Http.HttpException ex)
+                    catch (SeriesNotFoundException)
                     {
-                        if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                        {
-                            return new List<Series>();
-                        }
-
-                        throw;
+                        return new List<Series>();
                     }
                 }
 
