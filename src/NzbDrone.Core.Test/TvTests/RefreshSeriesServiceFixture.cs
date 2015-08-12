@@ -5,10 +5,12 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Commands;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.TvTests
 {
@@ -34,14 +36,16 @@ namespace NzbDrone.Core.Test.TvTests
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetSeries(_series.Id))
                   .Returns(_series);
-
             
+            Mocker.GetMock<IProvideSeriesInfo>()
+                  .Setup(s => s.GetSeriesInfo(It.IsAny<int>()))
+                  .Callback<int>(p => { throw new SeriesNotFoundException(p); });
         }
 
         private void GivenNewSeriesInfo(Series series)
         {
             Mocker.GetMock<IProvideSeriesInfo>()
-                  .Setup(s => s.GetSeriesInfo(It.IsAny<Int32>()))
+                  .Setup(s => s.GetSeriesInfo(_series.TvdbId))
                   .Returns(new Tuple<Series, List<Episode>>(series, new List<Episode>()));
         }
 
@@ -89,6 +93,33 @@ namespace NzbDrone.Core.Test.TvTests
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvRageId == newSeriesInfo.TvRageId)));
+        }
+
+        [Test]
+        public void should_log_error_if_tvdb_id_not_found()
+        {
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.IsAny<Series>()), Times.Never());
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_update_if_tvdb_id_changed()
+        {
+            var newSeriesInfo = _series.JsonClone();
+            newSeriesInfo.TvdbId = _series.TvdbId + 1;
+
+            GivenNewSeriesInfo(newSeriesInfo);
+
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvdbId == newSeriesInfo.TvdbId)));
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }

@@ -61,11 +61,6 @@ namespace NzbDrone.Common.Http
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
             webRequest.ContentLength = 0;
 
-            if (!RuntimeInfoBase.IsProduction)
-            {
-                webRequest.AllowAutoRedirect = false;
-            }
-
             var stopWatch = Stopwatch.StartNew();
 
             if (request.Headers != null)
@@ -83,7 +78,7 @@ namespace NzbDrone.Common.Http
 
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
 
-            if (request.AllowAutoRedirect && !RuntimeInfoBase.IsProduction &&
+            if (!RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
                 response.StatusCode == HttpStatusCode.MovedPermanently ||
                 response.StatusCode == HttpStatusCode.Found))

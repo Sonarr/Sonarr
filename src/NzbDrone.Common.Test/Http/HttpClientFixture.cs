@@ -83,14 +83,25 @@ namespace NzbDrone.Common.Test.Http
             ExceptionVerification.IgnoreWarns();
         }
 
-        [TestCase(HttpStatusCode.MovedPermanently)]
-        public void should_not_follow_redirects_when_not_in_production(HttpStatusCode statusCode)
+        [Test]
+        public void should_not_follow_redirects_when_not_in_production()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/status/" + (int)statusCode);
+            var request = new HttpRequest("http://eu.httpbin.org/redirect/1");
 
-            Subject.Get<HttpBinResource>(request);
+            Subject.Get(request);
 
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void should_follow_redirects()
+        {
+            var request = new HttpRequest("http://eu.httpbin.org/redirect/1");
+            request.AllowAutoRedirect = true;
+
+            Subject.Get(request);
+
+            ExceptionVerification.ExpectedErrors(0);
         }
 
         [Test]

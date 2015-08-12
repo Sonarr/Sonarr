@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Common.Http
 {
@@ -15,6 +16,11 @@ namespace NzbDrone.Common.Http
             _segments = new Dictionary<string, string>();
             AllowAutoRedirect = true;
             Cookies = new Dictionary<string, string>();
+
+            if (!RuntimeInfoBase.IsProduction)
+            {
+                AllowAutoRedirect = false;
+            }
 
             if (httpAccept != null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
@@ -38,9 +39,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [Test]
         public void getting_details_of_invalid_series()
         {
-            Assert.Throws<Common.Http.HttpException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
-
-            ExceptionVerification.ExpectedWarns(1);
+            Assert.Throws<SeriesNotFoundException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
         }
 
         [Test]

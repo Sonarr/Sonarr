@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DataAugmentation.DailySeries;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -48,9 +49,26 @@ namespace NzbDrone.Core.Tv
         private void RefreshSeriesInfo(Series series)
         {
             _logger.ProgressInfo("Updating Info for {0}", series.Title);
-            var tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
+
+            Tuple<Series, List<Episode>> tuple;
+            
+            try
+            {
+                tuple = _seriesInfo.GetSeriesInfo(series.TvdbId);
+            }
+            catch (SeriesNotFoundException)
+            {
+                _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", series.Title, series.TvdbId);
+                return;
+            }
 
             var seriesInfo = tuple.Item1;
+
+            if (series.TvdbId != seriesInfo.TvdbId)
+            {
+                _logger.Warn("Series '{0}' (tvdbid {1}) was replaced with '{2}' (tvdbid {3}), because the original was a duplicate.", series.Title, series.TvdbId, seriesInfo.Title, seriesInfo.TvdbId);
+                series.TvdbId = seriesInfo.TvdbId;
+            }
 
             series.Title = seriesInfo.Title;
             series.TitleSlug = seriesInfo.TitleSlug;
