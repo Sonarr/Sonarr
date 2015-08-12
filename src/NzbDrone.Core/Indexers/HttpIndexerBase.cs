@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Indexers
                     if (!fullyUpdated && lastReleaseInfo != null)
                     {
                         var gapStart = lastReleaseInfo.PublishDate;
-                        var gapEnd = ordered.Last();
+                        var gapEnd = ordered.Last().PublishDate;
                         _logger.Warn("Indexer {0} rss sync didn't cover the period between {1} and {2} UTC. Search may be required.", Definition.Name, gapStart, gapEnd);
                     }
                     lastReleaseInfo = ordered.First();
