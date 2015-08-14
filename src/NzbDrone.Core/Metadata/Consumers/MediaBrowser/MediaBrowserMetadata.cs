@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
                     tvShow.Add(new XElement("FirstAired", series.FirstAired.Value.ToString("yyyy-MM-dd")));
                 }
                 tvShow.Add(new XElement("ContentRating", series.Certification));
-                tvShow.Add(new XElement("Added", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss tt"))); 
+                tvShow.Add(new XElement("Added", series.Added.ToString("MM/dd/yyyy HH:mm:ss tt"))); 
                 tvShow.Add(new XElement("LockData", "false"));
                 tvShow.Add(new XElement("Overview", series.Overview));
                 tvShow.Add(new XElement("LocalTitle", series.Title));
