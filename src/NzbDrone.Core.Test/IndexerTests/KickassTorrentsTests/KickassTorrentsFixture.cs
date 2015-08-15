@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
 
             torrentInfo.Title.Should().Be("Doctor Stranger.E03.140512.HDTV.H264.720p-iPOP.avi [CTRG]");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
-            torrentInfo.DownloadUrl.Should().Be("http://torcache.net/torrent/208C4F7866612CC88BFEBC7C496FA72C2368D1C0.torrent?title=[kickass.to]doctor.stranger.e03.140512.hdtv.h264.720p.ipop.avi.ctrg");
+            torrentInfo.DownloadUrl.Should().Be("http://torcache.net/torrent/208C4F7866612CC88BFEBC7C496FA72C2368D1C0.torrent?title=%5Bkickass.to%5Ddoctor.stranger.e03.140512.hdtv.h264.720p.ipop.avi.ctrg");
             torrentInfo.InfoUrl.Should().Be("http://kickass.to/doctor-stranger-e03-140512-hdtv-h264-720p-ipop-avi-ctrg-t9100648.html");
             torrentInfo.CommentUrl.Should().BeNullOrEmpty();
             torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
