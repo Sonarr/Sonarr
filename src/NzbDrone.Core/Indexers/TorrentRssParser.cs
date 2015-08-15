@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Indexers
         protected virtual String GetMagnetUrl(XElement item)
         {
             var downloadUrl = GetDownloadUrl(item);
-            if (downloadUrl.StartsWith("magnet:"))
+            if (downloadUrl.IsNotNullOrWhiteSpace() && downloadUrl.StartsWith("magnet:"))
             {
                 return downloadUrl;
             }

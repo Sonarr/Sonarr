@@ -59,12 +59,12 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         protected override String GetInfoUrl(XElement item)
         {
-            return item.TryGetValue("comments").TrimEnd("#comments");
+            return ParseUrl(item.TryGetValue("comments").TrimEnd("#comments"));
         }
 
         protected override String GetCommentUrl(XElement item)
         {
-            return item.TryGetValue("comments");
+            return ParseUrl(item.TryGetValue("comments"));
         }
 
         protected override Int64 GetSize(XElement item)
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                url = item.Element("enclosure").Attribute("url").Value;
+                url = ParseUrl((string)item.Element("enclosure").Attribute("url"));
             }
 
             return url;

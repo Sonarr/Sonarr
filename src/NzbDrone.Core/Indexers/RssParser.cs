@@ -28,6 +28,8 @@ namespace NzbDrone.Core.Indexers
         // Parse "Size: 1.3 GB" or "1.3 GB" parts in the description element and use that as Size.
         public Boolean ParseSizeInDescription { get; set; }
 
+        private IndexerResponse _indexerResponse;
+
         public RssParser()
         {
             _logger = NzbDroneLogger.GetLogger(this);
@@ -35,6 +37,8 @@ namespace NzbDrone.Core.Indexers
 
         public virtual IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
+            _indexerResponse = indexerResponse;
+
             var releases = new List<ReleaseInfo>();
 
             if (!PreProcess(indexerResponse))
@@ -168,25 +172,25 @@ namespace NzbDrone.Core.Indexers
         {
             if (UseEnclosureUrl)
             {
-                return item.Element("enclosure").Attribute("url").Value;
+                return ParseUrl((string)item.Element("enclosure").Attribute("url"));
             }
 
-            return item.Element("link").Value;
+            return ParseUrl((string)item.Element("link"));
         }
 
         protected virtual string GetInfoUrl(XElement item)
         {
             if (UseGuidInfoUrl)
             {
-                return (String)item.Element("guid");
+                return ParseUrl((string)item.Element("guid"));
             }
 
-            return String.Empty;
+            return null;
         }
 
         protected virtual string GetCommentUrl(XElement item)
         {
-            return (String)item.Element("comments");
+            return ParseUrl((string)item.Element("comments"));
         }
 
         protected virtual long GetSize(XElement item)
@@ -232,6 +236,31 @@ namespace NzbDrone.Core.Indexers
             }
 
             return channel.Elements("item");
+        }
+
+        protected virtual string ParseUrl(string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            try
+            {
+                var uri = new Uri(value, UriKind.RelativeOrAbsolute);
+
+                if (!uri.IsAbsoluteUri)
+                {
+                    uri = new Uri(_indexerResponse.HttpRequest.Url, uri);
+                }
+
+                return uri.AbsoluteUri;
+            }
+            catch (Exception ex)
+            {
+                _logger.DebugException(string.Format("Failed to parse Uri {0}, ignoring.", value), ex);
+                return null;
+            }
         }
 
         private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>(?:\d+,)*\d+(?:\.\d{1,2})?)\W?(?<unit>[KMG]i?B)(?![\w/])",

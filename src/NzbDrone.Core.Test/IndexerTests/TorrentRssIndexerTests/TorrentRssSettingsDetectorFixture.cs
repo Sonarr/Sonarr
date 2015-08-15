@@ -194,7 +194,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.Should().NotBeNull();
         }
 
-        [TestCase("TorrentRss/invalid/Eztv_InvalidDownloadUrl.xml")]
         [TestCase("TorrentRss/invalid/ImmortalSeed_InvalidDownloadUrl.xml")]
         public void should_reject_recent_feed_with_invalid_downloadurl(string rssXmlFile)
         {

@@ -1,5 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using System.Text;
+using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
 
@@ -34,5 +37,25 @@ namespace NzbDrone.Core.Test.IndexerTests
             result.Should().Be(0);
         }
 
+        private IndexerResponse CreateResponse(string url, string content)
+        {
+            var httpRequest = new HttpRequest(url);
+            var httpResponse = new HttpResponse(httpRequest, new HttpHeader(), Encoding.UTF8.GetBytes(content));
+
+            return new IndexerResponse(new IndexerRequest(httpRequest), httpResponse);
+        }
+
+        [Test]
+        public void should_handle_relative_url()
+        {
+            var xml = ReadAllText("Files", "Indexers", "relative_urls.xml");
+
+            var result = Subject.ParseResponse(CreateResponse("http://my.indexer.com/api?q=My+Favourite+Show", xml));
+
+            result.Should().HaveCount(1);
+
+            result.First().CommentUrl.Should().Be("http://my.indexer.com/details/123#comments");
+            result.First().DownloadUrl.Should().Be("http://my.indexer.com/getnzb/123.nzb&i=782&r=123");
+        }
     }
 }
