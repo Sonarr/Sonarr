@@ -39,7 +39,14 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfo = new MediaInfo();
                 _logger.Debug("Getting media info from {0}", filename);
 
-                mediaInfo.Option("ParseSpeed", "0.0");
+                if (filename.ToLower().EndsWith(".ts"))
+                {
+                    mediaInfo.Option("ParseSpeed", "0.3");
+                }
+                else
+                {
+                    mediaInfo.Option("ParseSpeed", "0.0");
+                }
 
                 int open;
 
