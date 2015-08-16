@@ -1,10 +1,13 @@
 var gulp = require('gulp');
+
 var less = require('gulp-less');
+var postcss = require('gulp-postcss');
 var sourcemaps = require('gulp-sourcemaps');
-var print = require('gulp-print');
-var phantom = require('./phantom');
+var autoprefixer = require('autoprefixer-core');
 var livereload = require('gulp-livereload');
 
+var print = require('gulp-print');
+var phantom = require('./phantom');
 var paths = require('./paths');
 var errorHandler = require('./errorHandler');
 
@@ -55,8 +58,9 @@ gulp.task('less', function() {
             ieCompat        : true,
             strictImports   : true
         }))
+        .pipe(postcss([ autoprefixer({ browsers: ['last 2 versions'] }) ]))
         .on('error', errorHandler.onError)
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write(paths.dest.content))
         .pipe(gulp.dest(paths.dest.content))
         .pipe(livereload());
 });

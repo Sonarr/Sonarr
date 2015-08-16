@@ -15,6 +15,7 @@
   "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
   "readmeFilename": "readme.md",
   "dependencies": {
+    "autoprefixer-core": "5.2.1",
     "del": "1.2.0",
     "gulp": "3.9.0",
     "gulp-cached": "1.1.0",
@@ -24,6 +25,7 @@
     "gulp-jshint": "1.11.2",
     "gulp-less": "3.0.3",
     "gulp-livereload": "3.8.0",
+    "gulp-postcss": "5.1.10",
     "gulp-print": "1.1.0",
     "gulp-replace": "0.5.3",
     "gulp-run": "1.6.8",
