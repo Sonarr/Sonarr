@@ -47,6 +47,7 @@ module.exports = {
       'jquery.knob': 'JsLibraries/jquery.knob',
       'jquery.easypiechart': 'JsLibraries/jquery.easypiechart',
       'jquery.dotdotdot': 'JsLibraries/jquery.dotdotdot',
+      'jquery.lazyload': 'JsLibraries/jquery.lazyload',
       'messenger': 'Shims/messenger',
       'jquery': 'Shims/jquery',
       'typeahead': 'JsLibraries/typeahead',
