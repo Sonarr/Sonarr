@@ -17,7 +17,7 @@ namespace NzbDrone.Api.Frontend.Mappers
         private readonly IAnalyticsService _analyticsService;
         private readonly Func<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private readonly string _indexPath;
-        private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src)=\").*?(css|js|png|ico|ics)(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ReplaceRegex = new Regex(@"(?:(?<attribute>href|src)=\"")(?<path>.*?(?<extension>css|js|png|ico|ics))(?:\"")(?:\s(?<nohash>data-no-hash))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static String API_KEY;
         private static String URL_BASE;
@@ -85,8 +85,19 @@ namespace NzbDrone.Api.Frontend.Mappers
 
             text = ReplaceRegex.Replace(text, match =>
             {
-                var url = cacheBreakProvider.AddCacheBreakerToPath(match.Value);
-                return URL_BASE + url;
+                string url;
+
+                if (match.Groups["nohash"].Success)
+                {
+                    url = match.Groups["path"].Value;
+                }
+
+                else
+                {
+                    url = cacheBreakProvider.AddCacheBreakerToPath(match.Groups["path"].Value);
+                }
+
+                return String.Format("{0}=\"{1}{2}\"", match.Groups["attribute"].Value, URL_BASE, url);
             });
 
             text = text.Replace("API_ROOT", URL_BASE + "/api");
