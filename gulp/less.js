@@ -32,7 +32,7 @@ gulp.task('less', function() {
     if (phantom) {
         src = [
             paths.src.content + 'bootstrap.less',
-            paths.src.content + 'angle.less',
+            paths.src.content + 'theme.less',
             paths.src.content + 'sonarr.less',
             paths.src.content + 'overrides.less',
             paths.src.root + 'Series/series.less',
