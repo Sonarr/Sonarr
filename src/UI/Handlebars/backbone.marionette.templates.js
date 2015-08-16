@@ -5,6 +5,7 @@ require('./Helpers/Html');
 require('./Helpers/Numbers');
 require('./Helpers/Episode');
 require('./Helpers/Series');
+require('./Helpers/Movies');
 require('./Helpers/Quality');
 require('./Helpers/System');
 require('./Helpers/EachReverse');

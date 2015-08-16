@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -25,6 +26,10 @@ namespace NzbDrone.Core.Notifications.Webhook
             _service.OnGrab(message.Series, message.Episode, message.Quality, Settings);
         }
 
+        public override void OnGrabMovie(GrabMovieMessage message)
+        {
+        }
+
         public override void OnDownload(DownloadMessage message)
         {
             _service.OnDownload(message.Series, message.EpisodeFile, Settings);
@@ -35,11 +40,44 @@ namespace NzbDrone.Core.Notifications.Webhook
             _service.OnRename(series, Settings);
         }
 
+        public override void OnDownloadMovie(DownloadMovieMessage message)
+        {
+        }
+
+        public override void OnRenameMovie(Movie movie)
+        {
+        }
+
+
         public override string Name
         {
             get
             {
                 return "Webhook";
+            }
+        }
+
+        public override bool SupportsOnDownloadMovie
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsOnRenameMovie
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsOnGrabMovie
+        {
+            get
+            {
+                return false;
             }
         }
 

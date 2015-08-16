@@ -10,6 +10,10 @@ var ReleaseLayout = require('./Release/ReleaseLayout');
 var SystemLayout = require('./System/SystemLayout');
 var SeasonPassLayout = require('./SeasonPass/SeasonPassLayout');
 var SeriesEditorLayout = require('./Series/Editor/SeriesEditorLayout');
+var AddMovieLayout = require('./AddMovie/AddMovieLayout');
+var MovieLayout = require('./Movie/Index/MovieIndexLayout');
+var MovieDetailsLayout = require('./Movie/Details/MovieDetailsLayout');
+var MovieCollection = require('Movie/MovieCollection');
 
 module.exports = NzbDroneController.extend({
     addSeries : function(action) {
@@ -55,5 +59,27 @@ module.exports = NzbDroneController.extend({
     seriesEditor : function() {
         this.setTitle('Series Editor');
         this.showMainRegion(new SeriesEditorLayout());
-    }
+    },
+		
+    addMovie : function(action) {
+        this.setTitle('Add Movies');
+        this.showMainRegion(new AddMovieLayout({ action : action }));	
+    },
+	
+	movies : function(action) {
+        this.setTitle('Movies');
+        this.showMainRegion(new MovieLayout());
+	},
+	
+	movieDetails : function(query) {
+        var movie = MovieCollection.where({ cleanTitle : query });
+
+        if (movie.length !== 0) {
+            var targetMovie = movie[0];
+            this.setTitle(targetMovie.get('title'));
+            this.showMainRegion(new MovieDetailsLayout({ model : targetMovie }));
+        } else {
+            this.showNotFound();
+        }
+	}
 });

@@ -1,5 +1,6 @@
 var Backbone = require('backbone');
 var SeriesCollection = require('../../Series/SeriesCollection');
+var MovieCollection = require('../../Movie/MovieCollection');
 
 module.exports = Backbone.Model.extend({
 
@@ -12,6 +13,7 @@ module.exports = Backbone.Model.extend({
 
     parse : function(model) {
         model.series = SeriesCollection.get(model.seriesId);
+        model.movie = MovieCollection.get(model.movieId);
         return model;
     }
 });

@@ -5,8 +5,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
@@ -15,6 +13,9 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using FizzWare.NBuilder;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Imports;
+using NzbDrone.Core.MediaFiles.Imports.Specifications;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             };
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
+                  .Setup(c => c.GetLocalItem(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
                   .Returns(_localEpisode);
 
             GivenVideoFiles(new List<string> { @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.XviD-OSiTV.avi".AsOsAgnostic() });
@@ -93,7 +94,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            Subject.GetImportDecisions(_videoFiles, new Series(), null, false);
+            Subject.GetImportDecisions(_videoFiles, _series, null, false);
 
             _fail1.Verify(c => c.IsSatisfiedBy(_localEpisode), Times.Once());
             _fail2.Verify(c => c.IsSatisfiedBy(_localEpisode), Times.Once());
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_fail1);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
 
             result.Single().Approved.Should().BeFalse();
         }
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_pass1, _fail1, _pass2, _pass3);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
 
             result.Single().Approved.Should().BeFalse();
         }
@@ -128,7 +129,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
 
             result.Single().Approved.Should().BeTrue();
         }
@@ -138,7 +139,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            var result = Subject.GetImportDecisions(_videoFiles, new Series());
+            var result = Subject.GetImportDecisions(_videoFiles, _series);
             result.Single().Rejections.Should().HaveCount(3);
         }
 
@@ -148,7 +149,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenSpecifications(_pass1);
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
+                  .Setup(c => c.GetLocalItem(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
                   .Throws<TestException>();
 
             _videoFiles = new List<String>
@@ -163,7 +164,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.GetImportDecisions(_videoFiles, _series);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
+                  .Verify(c => c.GetLocalItem(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
 
             ExceptionVerification.ExpectedErrors(3);
         }
@@ -176,7 +177,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             var result = Subject.GetImportDecisions(_videoFiles, _series);
 
-            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+            result.Single().LocalItem.Quality.Should().Be(expectedQuality);
         }
 
         [Test]
@@ -187,7 +188,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo{Quality = new QualityModel(Quality.SDTV)}, true);
 
-            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+            result.Single().LocalItem.Quality.Should().Be(expectedQuality);
         }
 
         [Test]
@@ -198,7 +199,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo { Quality = expectedQuality }, true);
 
-            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+            result.Single().LocalItem.Quality.Should().Be(expectedQuality);
         }
 
         [Test]
@@ -207,7 +208,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenSpecifications(_pass1);
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
+                  .Setup(c => c.GetLocalItem(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()))
                   .Returns(new LocalEpisode() { Path = "test" });
 
             _videoFiles = new List<String>
@@ -222,7 +223,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             var decisions = Subject.GetImportDecisions(_videoFiles, _series);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
+                  .Verify(c => c.GetLocalItem(It.IsAny<String>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Boolean>()), Times.Exactly(_videoFiles.Count));
 
             decisions.Should().HaveCount(3);
             decisions.First().Rejections.Should().NotBeEmpty();
@@ -246,10 +247,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.GetImportDecisions(_videoFiles, _series, folderInfo, true);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Exactly(3));
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Exactly(3));
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
         }
 
         [Test]
@@ -269,10 +270,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.GetImportDecisions(_videoFiles, _series, folderInfo, true);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Exactly(2));
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Exactly(2));
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
         }
 
         [Test]
@@ -291,10 +292,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.GetImportDecisions(_videoFiles, _series, folderInfo, true);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), true), Times.Exactly(1));
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), true), Times.Exactly(1));
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Never());
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Never());
         }
 
         [Test]
@@ -312,16 +313,19 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Mocker.GetMock<IDetectSample>()
                   .Setup(s => s.IsSample(_series, It.IsAny<QualityModel>(), It.Is<string>(c => c.Contains("sample")), It.IsAny<long>(), It.IsAny<int>()))
                   .Returns(true);
+            Mocker.GetMock<IDetectSample>()
+                  .Setup(s => s.IsSample(_series, It.IsAny<QualityModel>(), It.Is<string>(c => c.Contains("sample")), It.IsAny<long>(), It.IsAny<ParsedInfo>()))
+                  .Returns(true);
 
             var folderInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
 
             Subject.GetImportDecisions(_videoFiles, _series, folderInfo, true);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), true), Times.Exactly(2));
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), true), Times.Exactly(2));
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Never());
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Never());
         }
 
         [Test]
@@ -340,10 +344,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.GetImportDecisions(_videoFiles, _series, folderInfo, true);
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Exactly(1));
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), null, true), Times.Exactly(1));
 
             Mocker.GetMock<IParsingService>()
-                  .Verify(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
+                  .Verify(c => c.GetLocalItem(It.IsAny<string>(), It.IsAny<Series>(), It.Is<ParsedEpisodeInfo>(p => p != null), true), Times.Never());
         }
 
         [Test]
@@ -361,7 +365,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo { Quality = folderQuality}, true);
 
-            result.Single().LocalEpisode.Quality.Should().Be(_quality);
+            result.Single().LocalItem.Quality.Should().Be(_quality);
         }
     }
 }

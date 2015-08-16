@@ -1,5 +1,7 @@
-﻿using NzbDrone.Core.Blacklisting;
+﻿using System;
+using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.History;
 
 namespace NzbDrone.Api.Blacklist
 {
@@ -23,6 +25,22 @@ namespace NzbDrone.Api.Blacklist
                                      SortKey = pagingResource.SortKey,
                                      SortDirection = pagingResource.SortDirection
                                  };
+
+            var mediaType = Request.Query.mediaType;
+
+            if (mediaType.HasValue)
+            {
+                var type = (MediaType)Convert.ToInt32(mediaType.Value);
+                switch (type)
+                {
+                    case MediaType.Series:
+                        pagingSpec.FilterExpression = h => h.SeriesId > 0;
+                        break;
+                    case MediaType.Movies:
+                        pagingSpec.FilterExpression = h => h.MovieId > 0;
+                        break;
+                }
+            }
 
             return ApplyToPage(_blacklistService.Paged, pagingSpec);
         }

@@ -44,19 +44,20 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns(new List<Episode>{ _episode });
         }
 
-        private void AddPending(int id, int seasonNumber, int[] episodes)
+        private void AddPending(int id, int serieId, int seasonNumber, int[] episodes)
         {
             _pending.Add(new PendingRelease
              {
                  Id = id,
-                 ParsedEpisodeInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes }
+                 SeriesId = serieId,
+                 ParsedInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes }
              });
         }
 
         [Test]
         public void should_remove_same_release()
         {
-            AddPending(id: 1, seasonNumber: 2, episodes: new[] { 3 });
+            AddPending(id: 1, serieId: 1, seasonNumber: 2, episodes: new[] { 3 });
 
             var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
@@ -68,10 +69,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         [Test]
         public void should_remove_multiple_releases_release()
         {
-            AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 2, seasonNumber: 2, episodes: new[] { 2 });
-            AddPending(id: 3, seasonNumber: 2, episodes: new[] { 3 });
-            AddPending(id: 4, seasonNumber: 2, episodes: new[] { 3 });
+            AddPending(id: 1, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 2, serieId: 1, seasonNumber: 2, episodes: new[] { 2 });
+            AddPending(id: 3, serieId: 1, seasonNumber: 2, episodes: new[] { 3 });
+            AddPending(id: 4, serieId: 1, seasonNumber: 2, episodes: new[] { 3 });
 
             var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 3, _episode.Id));
 
@@ -83,10 +84,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         [Test]
         public void should_not_remove_diffrent_season()
         {
-            AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 3, seasonNumber: 3, episodes: new[] { 1 });
-            AddPending(id: 4, seasonNumber: 3, episodes: new[] { 1 });
+            AddPending(id: 1, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 2, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 3, serieId: 1, seasonNumber: 3, episodes: new[] { 1 });
+            AddPending(id: 4, serieId: 1, seasonNumber: 3, episodes: new[] { 1 });
 
             var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
@@ -98,10 +99,10 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         [Test]
         public void should_not_remove_diffrent_episodes()
         {
-            AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 3, seasonNumber: 2, episodes: new[] { 2 });
-            AddPending(id: 4, seasonNumber: 2, episodes: new[] { 3 });
+            AddPending(id: 1, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 2, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 3, serieId: 1, seasonNumber: 2, episodes: new[] { 2 });
+            AddPending(id: 4, serieId: 1, seasonNumber: 2, episodes: new[] { 3 });
 
             var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
@@ -113,8 +114,8 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         [Test]
         public void should_not_remove_multiepisodes()
         {
-            AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1, 2 });
+            AddPending(id: 1, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 2, serieId: 1, seasonNumber: 2, episodes: new[] { 1, 2 });
 
             var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
@@ -126,8 +127,8 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         [Test]
         public void should_not_remove_singleepisodes()
         {
-            AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
-            AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1, 2 });
+            AddPending(id: 1, serieId: 1, seasonNumber: 2, episodes: new[] { 1 });
+            AddPending(id: 2, serieId: 1, seasonNumber: 2, episodes: new[] { 1, 2 });
 
             var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 2, _episode.Id));
 

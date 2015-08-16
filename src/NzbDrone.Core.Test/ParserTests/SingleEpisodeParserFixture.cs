@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.First().Should().Be(episodeNumber);
-            result.SeriesTitle.Should().Be(title);
+            result.Title.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeFalse();
         }

@@ -10,6 +10,7 @@ namespace NzbDrone.Api.Config
         public String RecycleBin { get; set; }
         public Boolean AutoDownloadPropers { get; set; }
         public Boolean CreateEmptySeriesFolders { get; set; }
+        public Boolean CreateEmptyMovieFolders { get; set; }
         public FileDateType FileDate { get; set; }
 
         public Boolean SetPermissionsLinux { get; set; }

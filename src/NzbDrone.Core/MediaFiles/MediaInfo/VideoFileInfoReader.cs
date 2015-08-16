@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using NLog;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -109,7 +107,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                     Int32.TryParse(aBitRate, out audioBitRate);
                     Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
-                    
+
 
                     string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
                     int aCindex = audioChannelsStr.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);

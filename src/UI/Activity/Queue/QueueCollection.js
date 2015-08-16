@@ -26,6 +26,21 @@ var QueueCollection = PageableCollection.extend({
         });
     },
 
+    getSeries: function () {
+        var filtered = this.filter(function (element) {
+            return element.get('series').id !== undefined;
+        });
+        return new QueueCollection(filtered);
+    },
+
+
+    getMovies : function() {
+        var filtered = this.filter(function (element) {
+            return element.get('movie') !== undefined;
+        });
+        return new QueueCollection(filtered);
+    },
+
     sortMappings : {
         series : {
             sortValue : function(model, attr) {

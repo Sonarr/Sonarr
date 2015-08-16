@@ -48,6 +48,10 @@ var Collection = PagableCollection.extend({
 
     fetchEpisodeReleases : function(episodeId) {
         return this.fetch({ data : { episodeId : episodeId } });
+    },
+
+    fetchMovieReleases : function(movieId) {
+        return this.fetch({ data : { movieId : movieId } });
     }
 });
 

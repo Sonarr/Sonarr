@@ -1,14 +1,14 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {
     [TestFixture]
-    public class MediaFileRepositoryFixture : DbTest<MediaFileRepository, EpisodeFile>
+    public class MediaFileRepositoryFixture : DbTest<EpisodeFileRepository, EpisodeFile>
     {
         [Test]
         public void get_files_by_series()

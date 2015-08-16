@@ -111,6 +111,18 @@ namespace NzbDrone.Core.Indexers
             return FetchReleases(generator.GetSearchRequests(searchCriteria));
         }
 
+        public override IList<ReleaseInfo> Fetch(MovieSearchCriteria searchCriteria)
+        {
+            if (!SupportsSearch)
+            {
+                return new List<ReleaseInfo>();
+            }
+
+            var generator = GetRequestGenerator();
+
+            return FetchReleases(generator.GetSearchRequests(searchCriteria));
+        }
+
         protected virtual IList<ReleaseInfo> FetchReleases(IList<IEnumerable<IndexerRequest>> pageableRequests, bool isRecent = false)
         {
             var releases = new List<ReleaseInfo>();

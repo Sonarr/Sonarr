@@ -82,6 +82,12 @@ namespace NzbDrone.Core.Indexers.Nyaa
             return pageableRequests;
         }
 
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+
         private IEnumerable<IndexerRequest> GetPagedRequests(Int32 maxPages, String searchParameters)
         {
             var baseUrl = String.Format("{0}/?page=rss{1}", Settings.BaseUrl.TrimEnd('/'), Settings.AdditionalParameters);

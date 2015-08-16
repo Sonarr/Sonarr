@@ -8,12 +8,12 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 {
@@ -55,6 +55,30 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
             return hash;
         }
+
+        protected override string AddFromMagnetLink(RemoteMovie remoteMovie, string hash, string magnetLink)
+        {
+            throw new NotSupportedException("Blackhole does not support magnet links.");
+        }
+
+        protected override string AddFromTorrentFile(RemoteMovie remoteMovie, string hash, string filename, byte[] fileContent)
+        {
+            var title = remoteMovie.Release.Title;
+
+            title = FileNameBuilder.CleanFileName(title);
+
+            var filepath = Path.Combine(Settings.TorrentFolder, String.Format("{0}.torrent", title));
+
+            using (var stream = _diskProvider.OpenWriteStream(filepath))
+            {
+                stream.Write(fileContent, 0, fileContent.Length);
+            }
+
+            _logger.Debug("Torrent Download succeeded, saved to: {0}", filepath);
+
+            return hash;
+        }
+
 
         public override string Name
         {

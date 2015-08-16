@@ -12,7 +12,8 @@ using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
-
+using NzbDrone.Core.DecisionEngine.Specifications.RssSync.Common;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync

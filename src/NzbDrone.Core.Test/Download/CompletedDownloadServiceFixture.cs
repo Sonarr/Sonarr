@@ -10,7 +10,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.Imports;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.Download
             _trackedDownload = Builder<TrackedDownload>.CreateNew()
                     .With(c => c.State = TrackedDownloadStage.Downloading)
                     .With(c => c.DownloadItem = completed)
-                    .With(c => c.RemoteEpisode = remoteEpisode)
+                    .With(c => c.RemoteItem = remoteEpisode)
                     .Build();
 
 
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.Download
         
         private void GivenSuccessfulImport()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                 .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                 .Returns(new List<ImportResult>
                     {
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.Download
         {
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetSeries(It.IsAny<string>()))
-                  .Returns(_trackedDownload.RemoteEpisode.Series);
+                  .Returns(_trackedDownload.RemoteItem.Media as Series);
         }
 
         [TestCase(DownloadItemStatus.Downloading)]
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_mark_as_imported_if_all_episodes_were_imported()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_mark_as_imported_if_all_files_were_rejected()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -223,7 +223,7 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_mark_as_imported_if_no_episodes_were_parsed()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -236,7 +236,8 @@ namespace NzbDrone.Core.Test.Download
                                        new LocalEpisode {Path = @"C:\TestPath\Droned.S01E02.mkv"},new Rejection("Rejected!")), "Test Failure")
                            });
 
-            _trackedDownload.RemoteEpisode.Episodes.Clear();
+
+            (_trackedDownload.RemoteItem as RemoteEpisode).Episodes.Clear();
 
             Subject.Process(_trackedDownload);
 
@@ -246,7 +247,7 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_not_mark_as_imported_if_all_files_were_skipped()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -265,12 +266,12 @@ namespace NzbDrone.Core.Test.Download
         {
             GivenSeriesMatch();
 
-            _trackedDownload.RemoteEpisode.Episodes = new List<Episode>
+            (_trackedDownload.RemoteItem as RemoteEpisode).Episodes = new List<Episode>
             {
                 new Episode()
             };
 
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -286,14 +287,14 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_mark_as_failed_if_some_of_episodes_were_not_imported()
         {
-            _trackedDownload.RemoteEpisode.Episodes = new List<Episode>
+            (_trackedDownload.RemoteItem as RemoteEpisode).Episodes = new List<Episode>
             {
                 new Episode(),
                 new Episode(),
                 new Episode()
             };
 
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -313,7 +314,7 @@ namespace NzbDrone.Core.Test.Download
         {
             GivenABadlyNamedDownload();
 
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -334,7 +335,7 @@ namespace NzbDrone.Core.Test.Download
         {
             GivenABadlyNamedDownload();
 
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -364,12 +365,12 @@ namespace NzbDrone.Core.Test.Download
         [Test]
         public void should_mark_as_import_title_mismatch_if_ignore_warnings_is_true()
         {
-            _trackedDownload.RemoteEpisode.Episodes = new List<Episode>
+            (_trackedDownload.RemoteItem as RemoteEpisode).Episodes = new List<Episode>
             {
                 new Episode()
             };
 
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                   .Setup(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()))
                   .Returns(new List<ImportResult>
                            {
@@ -383,7 +384,7 @@ namespace NzbDrone.Core.Test.Download
 
         private void AssertNoAttemptedImport()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
+            Mocker.GetMock<IDownloadedMediaImportService>()
                 .Verify(v => v.ProcessPath(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>()), Times.Never());
 
             AssertNoCompletedDownload();
@@ -399,8 +400,8 @@ namespace NzbDrone.Core.Test.Download
 
         private void AssertCompletedDownload()
         {
-            Mocker.GetMock<IDownloadedEpisodesImportService>()
-                .Verify(v => v.ProcessPath(_trackedDownload.DownloadItem.OutputPath.FullPath, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem), Times.Once());
+            Mocker.GetMock<IDownloadedMediaImportService>()
+                .Verify(v => v.ProcessPath(_trackedDownload.DownloadItem.OutputPath.FullPath, _trackedDownload.RemoteItem.Media, _trackedDownload.DownloadItem), Times.Once());
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<DownloadCompletedEvent>()), Times.Once());

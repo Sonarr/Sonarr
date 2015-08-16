@@ -1,6 +1,6 @@
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
-    public class SeasonSearchCriteria : SearchCriteriaBase
+    public class SeasonSearchCriteria : SeriesSearchCriteriaBase
     {
         public int SeasonNumber { get; set; }
 
@@ -14,7 +14,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
         public override string ToString()
         {
-            return string.Format("[{0} : S{1:00}]", Series.Title, SeasonNumber);
+            return string.Format("[{0} : S{1:00}]", Media.Title, SeasonNumber);
         }
     }
 }

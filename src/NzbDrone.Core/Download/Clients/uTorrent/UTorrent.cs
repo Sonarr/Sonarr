@@ -47,6 +47,22 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return hash;
         }
 
+        protected override String AddFromMagnetLink(RemoteMovie remoteMovie, String hash, String magnetLink)
+        {
+            _proxy.AddTorrentFromUrl(magnetLink, Settings);
+            _proxy.SetTorrentLabel(hash, Settings.MovieCategory, Settings);
+
+            var isRecentMovie = remoteMovie.IsRecentMovie();
+
+            if (isRecentMovie && Settings.RecentMoviePriority == (int)UTorrentPriority.First ||
+                !isRecentMovie && Settings.OlderMoviePriority == (int)UTorrentPriority.First)
+            {
+                _proxy.MoveTorrentToTopInQueue(hash, Settings);
+            }
+
+            return hash;
+        }
+
         protected override String AddFromTorrentFile(RemoteEpisode remoteEpisode, String hash, String filename, Byte[] fileContent)
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
@@ -62,6 +78,23 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
             return hash;
         }
+
+        protected override String AddFromTorrentFile(RemoteMovie remoteMovie, String hash, String filename, Byte[] fileContent)
+        {
+            _proxy.AddTorrentFromFile(filename, fileContent, Settings);
+            _proxy.SetTorrentLabel(hash, Settings.MovieCategory, Settings);
+
+            var isRecentMovie = remoteMovie.IsRecentMovie();
+
+            if (isRecentMovie && Settings.RecentMoviePriority == (int)UTorrentPriority.First ||
+                !isRecentMovie && Settings.OlderMoviePriority == (int)UTorrentPriority.First)
+            {
+                _proxy.MoveTorrentToTopInQueue(hash, Settings);
+            }
+
+            return hash;
+        }
+
 
         public override string Name
         {
@@ -89,16 +122,20 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
             foreach (var torrent in torrents)
             {
-                if (torrent.Label != Settings.TvCategory)
+                if (torrent.Label != Settings.TvCategory && torrent.Label != Settings.MovieCategory)
                 {
                     continue;
                 }
 
-                var item = new DownloadClientItem();
-                item.DownloadId = torrent.Hash;
-                item.Title = torrent.Name;
-                item.TotalSize = torrent.Size;
-                item.Category = torrent.Label;
+                var item = new DownloadClientItem
+                {
+                    DownloadId = torrent.Hash,
+                    Title = torrent.Name,
+                    TotalSize = torrent.Size,
+                    Category = torrent.Label
+                };
+                if (torrent.Label == Settings.TvCategory) item.DownloadType = DownloadItemType.Series;
+                else if (torrent.Label == Settings.MovieCategory) item.DownloadType = DownloadItemType.Movie;
                 item.DownloadClient = Definition.Name;
                 item.RemainingSize = torrent.Remaining;
                 if (torrent.Eta != -1)
@@ -106,7 +143,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
                 }
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.RootDownloadPath));
+                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host,
+                    new OsPath(torrent.RootDownloadPath));
 
                 if (outputPath == null || outputPath.FileName == torrent.Name)
                 {
@@ -122,8 +160,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = "uTorrent is reporting an error";
                 }
-                else if (torrent.Status.HasFlag(UTorrentTorrentStatus.Loaded) && 
-                         torrent.Status.HasFlag(UTorrentTorrentStatus.Checked) && torrent.Remaining == 0 && torrent.Progress == 1.0)
+                else if (torrent.Status.HasFlag(UTorrentTorrentStatus.Loaded) &&
+                         torrent.Status.HasFlag(UTorrentTorrentStatus.Checked) && torrent.Remaining == 0 &&
+                         torrent.Progress == 1.0)
                 {
                     item.Status = DownloadItemStatus.Completed;
                 }
@@ -141,7 +180,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 }
 
                 // 'Started' without 'Queued' is when the torrent is 'forced seeding'
-                item.IsReadOnly = torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) || torrent.Status.HasFlag(UTorrentTorrentStatus.Started);
+                item.IsReadOnly = torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) ||
+                                  torrent.Status.HasFlag(UTorrentTorrentStatus.Started);
 
                 queueItems.Add(item);
             }

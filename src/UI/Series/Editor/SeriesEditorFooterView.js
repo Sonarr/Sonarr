@@ -2,8 +2,8 @@ var _ = require('underscore');
 var Marionette = require('marionette');
 var vent = require('vent');
 var Profiles = require('../../Profile/ProfileCollection');
-var RootFolders = require('../../AddSeries/RootFolders/RootFolderCollection');
-var RootFolderLayout = require('../../AddSeries/RootFolders/RootFolderLayout');
+var RootFolders = require('../../Shared/RootFolders/RootFolderCollection');
+var RootFolderLayout = require('../../Shared/RootFolders/RootFolderLayout');
 var UpdateFilesSeriesView = require('./Organize/OrganizeFilesView');
 var Config = require('../../Config');
 

@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers
 {
     public class RssSyncService : IExecute<RssSyncCommand>
     {
-        private readonly IIndexerStatusService _indexerStatusService;
-        private readonly IIndexerFactory _indexerFactory;
-        private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
-        private readonly IProcessDownloadDecisions _processDownloadDecisions;
-        private readonly IPendingReleaseService _pendingReleaseService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IIndexerFactory _indexerFactory;
+        private readonly IIndexerStatusService _indexerStatusService;
         private readonly Logger _logger;
+        private readonly IPendingReleaseService _pendingReleaseService;
+        private readonly IProcessDownloadDecisions _processDownloadDecisions;
+        private readonly IFetchAndParseRss _rssFetcherAndParser;
 
         public RssSyncService(IIndexerStatusService indexerStatusService,
                               IIndexerFactory indexerFactory,
@@ -41,6 +38,14 @@ namespace NzbDrone.Core.Indexers
             _pendingReleaseService = pendingReleaseService;
             _eventAggregator = eventAggregator;
             _logger = logger;
+        }
+
+        public void Execute(RssSyncCommand message)
+        {
+            var processed = Sync();
+            var grabbedOrPending = processed.Grabbed.Concat(processed.Pending).ToList();
+
+            _eventAggregator.PublishEvent(new RssSyncCompleteEvent(processed));
         }
 
 
@@ -65,14 +70,6 @@ namespace NzbDrone.Core.Indexers
             _logger.ProgressInfo(message);
 
             return processed;
-        }
-
-        public void Execute(RssSyncCommand message)
-        {
-            var processed = Sync();
-            var grabbedOrPending = processed.Grabbed.Concat(processed.Pending).ToList();
-
-            _eventAggregator.PublishEvent(new RssSyncCompleteEvent(processed));
         }
     }
 }

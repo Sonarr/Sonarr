@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             return new List<IEnumerable<IndexerRequest>>();
         }
 
-        private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)
+        private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SeriesSearchCriteriaBase searchCriteria)
         {
             if (searchCriteria.Series.TvdbId != 0)
             {
@@ -170,5 +170,11 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 yield return new IndexerRequest(builder.Build(""));
             }
         }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
     }
 }

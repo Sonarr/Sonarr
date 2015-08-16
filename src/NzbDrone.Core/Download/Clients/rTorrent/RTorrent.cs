@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
 
                 SetPriority(remoteEpisode, hash);
-                SetDownloadDirectory(hash);
+                SetDownloadDirectory(hash, Settings.TvDirectory);
 
                 _proxy.StartTorrent(hash, Settings);
 
@@ -83,12 +83,67 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
 
             SetPriority(remoteEpisode, hash);
-            SetDownloadDirectory(hash);
+            SetDownloadDirectory(hash, Settings.TvDirectory);
 
             _proxy.StartTorrent(hash, Settings);
 
             return hash;
         }
+
+        protected override string AddFromMagnetLink(RemoteMovie remoteMovie, string hash, string magnetLink)
+        {
+            _proxy.AddTorrentFromUrl(magnetLink, Settings);
+
+            // Wait until url has been resolved before returning
+            var TRIES = 5;
+            var RETRY_DELAY = 500; //ms
+            var ready = false;
+
+            for (var i = 0; i < TRIES; i++)
+            {
+                ready = _proxy.HasHashTorrent(hash, Settings);
+                if (ready)
+                {
+                    break;
+                }
+
+                Thread.Sleep(RETRY_DELAY);
+            }
+
+            if (ready)
+            {
+                _proxy.SetTorrentLabel(hash, Settings.MovieCategory, Settings);
+
+                SetPriority(remoteMovie, hash);
+                SetDownloadDirectory(hash, Settings.MovieDirectory);
+
+                _proxy.StartTorrent(hash, Settings);
+
+                return hash;
+            }
+            else
+            {
+                _logger.Debug("Magnet {0} could not be resolved in {1} tries at {2} ms intervals.", magnetLink, TRIES, RETRY_DELAY);
+                // Remove from client, since it is discarded
+                RemoveItem(hash, true);
+
+                return null;
+            }
+        }
+
+        protected override string AddFromTorrentFile(RemoteMovie remoteMovie, string hash, string filename, byte[] fileContent)
+        {
+            _proxy.AddTorrentFromFile(filename, fileContent, Settings);
+            _proxy.SetTorrentLabel(hash, Settings.MovieCategory, Settings);
+
+            SetPriority(remoteMovie, hash);
+            SetDownloadDirectory(hash, Settings.MovieDirectory);
+
+            _proxy.StartTorrent(hash, Settings);
+
+            return hash;
+        }
+
 
         public override string Name
         {
@@ -118,7 +173,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 foreach (RTorrentTorrent torrent in torrents)
                 {
                     // Don't concern ourselves with categories other than specified
-                    if (torrent.Category != Settings.TvCategory) continue;
+                    if (torrent.Category != Settings.TvCategory  &&  torrent.Category != Settings.MovieCategory) continue;
 
                     if (torrent.Path.StartsWith("."))
                     {
@@ -133,6 +188,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                     item.TotalSize = torrent.TotalSize;
                     item.RemainingSize = torrent.RemainingSize;
                     item.Category = torrent.Category;
+                    if (torrent.Category == Settings.TvCategory) item.DownloadType = DownloadItemType.Series;
+                    else if (torrent.Category == Settings.MovieCategory) item.DownloadType = DownloadItemType.Movie;
+
 
                     if (torrent.DownRate > 0) {
                         var secondsLeft = torrent.RemainingSize / torrent.DownRate;
@@ -244,11 +302,18 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             _proxy.SetTorrentPriority(hash, priority, Settings);
         }
 
-        private void SetDownloadDirectory(string hash)
+        private void SetPriority(RemoteMovie remoteMovie, string hash)
         {
-            if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
+            var priority = (RTorrentPriority)(remoteMovie.IsRecentMovie() ? Settings.RecentMoviePriority : Settings.OlderMoviePriority);
+            _proxy.SetTorrentPriority(hash, priority, Settings);
+        }
+
+
+        private void SetDownloadDirectory(string hash, string directory)
+        {
+            if (directory.IsNotNullOrWhiteSpace())
             {
-                _proxy.SetTorrentDownloadDirectory(hash, Settings.TvDirectory, Settings);
+                _proxy.SetTorrentDownloadDirectory(hash, directory, Settings);
             }
         }
     }

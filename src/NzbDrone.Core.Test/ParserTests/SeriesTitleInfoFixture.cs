@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "House.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.Parser.ParseTitle(title).TitleInfo;
 
             result.Year.Should().Be(0);
         }
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "House.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.Parser.ParseTitle(title).TitleInfo;
 
             result.Title.Should().Be(result.TitleWithoutYear);
         }
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "House.2004.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.Parser.ParseTitle(title).TitleInfo;
 
             result.Year.Should().Be(2004);
         }
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "House.2004.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.Parser.ParseTitle(title).TitleInfo;
 
             result.Title.Should().Be("House 2004");
         }
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "House.2004.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.Parser.ParseTitle(title).TitleInfo;
 
             result.TitleWithoutYear.Should().Be("House");
         }

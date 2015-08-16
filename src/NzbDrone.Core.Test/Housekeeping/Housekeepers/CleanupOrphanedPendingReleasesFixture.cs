@@ -16,8 +16,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_pending_items()
         {
             var pendingRelease = Builder<PendingRelease>.CreateNew()
-                .With(h => h.ParsedEpisodeInfo = new ParsedEpisodeInfo())
+                .With(h => h.SeriesId = 1)
+                .With(h => h.ParsedInfo = new ParsedEpisodeInfo())
                 .With(h => h.Release = new ReleaseInfo())
+                .With(h => h.MovieId = 0)
                 .BuildNew();
 
             Db.Insert(pendingRelease);
@@ -34,7 +36,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var pendingRelease = Builder<PendingRelease>.CreateNew()
                 .With(h => h.SeriesId = series.Id)
-                .With(h => h.ParsedEpisodeInfo = new ParsedEpisodeInfo())
+                .With(h => h.ParsedInfo = new ParsedEpisodeInfo())
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();
 

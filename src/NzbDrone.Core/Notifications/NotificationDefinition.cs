@@ -12,20 +12,26 @@ namespace NzbDrone.Core.Notifications
         }
 
         public bool OnGrab { get; set; }
+        public bool OnGrabMovie { get; set; }
         public bool OnDownload { get; set; }
+        public bool OnDownloadMovie { get; set; }
         public bool OnUpgrade { get; set; }
         public bool OnRename { get; set; }
+        public bool OnRenameMovie { get; set; }
         public bool SupportsOnGrab { get; set; }
+        public bool SupportsOnGrabMovie { get; set; }
         public bool SupportsOnDownload { get; set; }
+        public bool SupportsOnDownloadMovie { get; set; }
         public bool SupportsOnUpgrade { get; set; }
         public bool SupportsOnRename { get; set; }
+        public bool SupportsOnRenameMovie { get; set; }
         public HashSet<int> Tags { get; set; }
 
         public override bool Enable
         {
             get
             {
-                return OnGrab || OnDownload || (OnDownload && OnUpgrade);
+                return OnGrab || OnGrabMovie || OnDownload || OnDownloadMovie || (OnDownload && OnUpgrade);
             }
         }
     }

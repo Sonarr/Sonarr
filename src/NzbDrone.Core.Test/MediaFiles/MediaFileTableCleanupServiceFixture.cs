@@ -7,6 +7,8 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;

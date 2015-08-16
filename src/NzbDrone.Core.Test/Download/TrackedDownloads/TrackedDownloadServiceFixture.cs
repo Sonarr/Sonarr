@@ -42,13 +42,13 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                 Episodes = new List<Episode> { new Episode { Id = 4 } },
                 ParsedEpisodeInfo = new ParsedEpisodeInfo()
                 {
-                    SeriesTitle = "TV Series",
+                    Title = "TV Series",
                     SeasonNumber = 1
                 }
             };
 
             Mocker.GetMock<IParsingService>()
-               .Setup(s => s.Map(It.Is<ParsedEpisodeInfo>(i => i.SeasonNumber == 1 && i.SeriesTitle == "TV Series"), It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
+               .Setup(s => s.Map(It.Is<ParsedEpisodeInfo>(i => i.SeasonNumber == 1 && i.Title == "TV Series"), It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
                .Returns(remoteEpisode);
 
             var client = new DownloadClientDefinition()
@@ -66,11 +66,11 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
             var trackedDownload = Subject.TrackDownload(client, item);
 
             trackedDownload.Should().NotBeNull();
-            trackedDownload.RemoteEpisode.Should().NotBeNull();
-            trackedDownload.RemoteEpisode.Series.Should().NotBeNull();
-            trackedDownload.RemoteEpisode.Series.Id.Should().Be(5);
-            trackedDownload.RemoteEpisode.Episodes.First().Id.Should().Be(4);
-            trackedDownload.RemoteEpisode.ParsedEpisodeInfo.SeasonNumber.Should().Be(1);
+            trackedDownload.RemoteItem.Should().NotBeNull();
+            trackedDownload.RemoteItem.Media.Should().NotBeNull();
+            trackedDownload.RemoteItem.Media.Id.Should().Be(5);
+            (trackedDownload.RemoteItem as RemoteEpisode).Episodes.First().Id.Should().Be(4);
+            (trackedDownload.RemoteItem.ParsedInfo as ParsedEpisodeInfo).SeasonNumber.Should().Be(1);
         }
     }
 }

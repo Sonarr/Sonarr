@@ -6,6 +6,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Core.Test.Datastore
 {

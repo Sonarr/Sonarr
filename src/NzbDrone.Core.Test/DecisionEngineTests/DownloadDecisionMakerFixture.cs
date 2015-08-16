@@ -11,6 +11,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using FizzWare.NBuilder;
+using NzbDrone.Core.DecisionEngine.Specifications;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -54,7 +55,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
 
             Mocker.GetMock<IParsingService>()
-                  .Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
+                  .Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()))
                   .Returns(_remoteEpisode);
         }
 
@@ -125,7 +126,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var results = Subject.GetRssDecision(_reports).ToList();
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Never());
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()), Times.Never());
 
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
@@ -142,7 +143,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var results = Subject.GetRssDecision(_reports).ToList();
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Never());
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()), Times.Never());
 
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
@@ -170,7 +171,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenSpecifications(_pass1);
 
-            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()))
                      .Throws<TestException>();
 
             _reports = new List<ReleaseInfo>
@@ -182,7 +183,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.GetRssDecision(_reports);
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Exactly(_reports.Count));
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()), Times.Exactly(_reports.Count));
 
             ExceptionVerification.ExpectedErrors(3);
         }
@@ -221,7 +222,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 }).ToList();
 
             Mocker.GetMock<IParsingService>()
-                .Setup(v => v.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
+                .Setup(v => v.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()))
                 .Returns<ParsedEpisodeInfo, int, SearchCriteriaBase>((p,id,c) =>
                     new RemoteEpisode
                     {
@@ -233,7 +234,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(new List<IDecisionEngineSpecification>
             {
-                Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.EpisodeRequestedSpecification>()
+                Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.Series.EpisodeRequestedSpecification>()
             });
 
             var decisions = Subject.GetSearchDecision(reports, criteria);
@@ -254,7 +255,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             result.Should().HaveCount(1);
 
-            result.First().RemoteEpisode.DownloadAllowed.Should().BeFalse();
+            result.First().RemoteItem.DownloadAllowed.Should().BeFalse();
         }
 
         [Test]
@@ -268,7 +269,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             result.Should().HaveCount(1);
 
-            result.First().RemoteEpisode.DownloadAllowed.Should().BeFalse();
+            result.First().RemoteItem.DownloadAllowed.Should().BeFalse();
         }
     }
 }

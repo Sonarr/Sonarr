@@ -13,6 +13,7 @@ using NzbDrone.Core.Qualities;
 using System.Collections.Generic;
 using NzbDrone.Core.Test.Qualities;
 using FluentAssertions;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.HistoryTests
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                 .Setup(v => v.GetBestQualityInHistory(2))
                 .Returns(new List<QualityModel>());
 
-            var quality = Subject.GetBestQualityInHistory(_profile, 2);
+            var quality = Subject.GetBestEpisodeQualityInHistory(_profile, 2);
 
             quality.Should().BeNull();
         }
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                 .Setup(v => v.GetBestQualityInHistory(2))
                 .Returns(new List<QualityModel> { new QualityModel(Quality.DVD), new QualityModel(Quality.Bluray1080p) });
 
-            var quality = Subject.GetBestQualityInHistory(_profile, 2);
+            var quality = Subject.GetBestEpisodeQualityInHistory(_profile, 2);
 
             quality.Should().Be(new QualityModel(Quality.Bluray1080p));
         }
@@ -60,7 +61,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                 .Setup(v => v.GetBestQualityInHistory(2))
                 .Returns(new List<QualityModel> { new QualityModel(Quality.DVD), new QualityModel(Quality.Bluray1080p) });
 
-            var quality = Subject.GetBestQualityInHistory(_profileCustom, 2);
+            var quality = Subject.GetBestEpisodeQualityInHistory(_profileCustom, 2);
 
             quality.Should().Be(new QualityModel(Quality.DVD));
         }

@@ -191,6 +191,12 @@ namespace NzbDrone.Core.Indexers.Torznab
             return pageableRequests;
         }
 
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+
         private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, IEnumerable<int> categories, string searchType, string parameters)
         {
             if (categories.Empty())

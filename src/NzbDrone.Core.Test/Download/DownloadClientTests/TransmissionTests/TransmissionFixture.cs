@@ -103,6 +103,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         protected void GivenTvCategory()
         {
             _settings.TvCategory = "sonarr";
+            _settings.MovieCategory = "sonarrMovies";
         }
 
         protected void GivenFailedDownload()

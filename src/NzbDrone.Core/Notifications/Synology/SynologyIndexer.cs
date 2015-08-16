@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.Notifications.Synology
 {
@@ -24,6 +25,23 @@ namespace NzbDrone.Core.Notifications.Synology
         public override void OnGrab(GrabMessage grabMessage)
         {
 
+        }
+
+        public override void OnGrabMovie(GrabMovieMessage grabMessage)
+        {
+
+        }
+
+        public override void OnDownloadMovie(DownloadMovieMessage message)
+        {
+            if (Settings.UpdateLibrary)
+            {
+                var fullPath = Path.Combine(message.Movie.Path, message.OldFile.RelativePath);
+                _indexerProxy.DeleteFile(fullPath);
+                
+                fullPath = Path.Combine(message.Movie.Path, message.MovieFile.RelativePath);
+                _indexerProxy.AddFile(fullPath);
+            }
         }
 
         public override void OnDownload(DownloadMessage message)
@@ -53,6 +71,14 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
+        public override void OnRenameMovie(Movie movie)
+        {
+            if (Settings.UpdateLibrary)
+            {
+                _indexerProxy.UpdateFolder(movie.Path);
+            }
+        }
+
         public override string Name
         {
             get
@@ -62,6 +88,14 @@ namespace NzbDrone.Core.Notifications.Synology
         }
 
         public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsOnGrabMovie
         {
             get
             {

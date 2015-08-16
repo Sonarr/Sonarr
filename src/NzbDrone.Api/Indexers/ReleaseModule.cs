@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using FluentValidation;
 using Nancy;
+using Nancy.ModelBinding;
 using NLog;
+using NzbDrone.Api.Extensions;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Parser.Model;
-using Nancy.ModelBinding;
-using NzbDrone.Api.Extensions;
-using NzbDrone.Common.Cache;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.Indexers
@@ -25,7 +25,7 @@ namespace NzbDrone.Api.Indexers
         private readonly IDownloadService _downloadService;
         private readonly Logger _logger;
 
-        private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
+        private readonly ICached<RemoteItem> _remoteEpisodeCache;
 
         public ReleaseModule(IFetchAndParseRss rssFetcherAndParser,
                              ISearchForNzb nzbSearchService,
@@ -48,7 +48,7 @@ namespace NzbDrone.Api.Indexers
             PostValidator.RuleFor(s => s.DownloadAllowed).Equal(true);
             PostValidator.RuleFor(s => s.Guid).NotEmpty();
 
-            _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
+            _remoteEpisodeCache = cacheManager.GetCache<RemoteItem>(GetType(), "remoteItems");
         }
 
         private Response DownloadRelease(ReleaseResource release)
@@ -82,6 +82,11 @@ namespace NzbDrone.Api.Indexers
                 return GetEpisodeReleases(Request.Query.episodeId);
             }
 
+            if (Request.Query.movieId != null)
+            {
+                return GetMovieReleases(Request.Query.movieId);
+            }
+
             return GetRss();
         }
 
@@ -102,6 +107,24 @@ namespace NzbDrone.Api.Indexers
             return new List<ReleaseResource>();
         }
 
+        private List<ReleaseResource> GetMovieReleases(int movieId)
+        {
+            try
+            {
+                var decisions = _nzbSearchService.MovieSearch(movieId);
+                var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
+
+                return MapDecisions(prioritizedDecisions);
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Movie search failed: " + ex.Message, ex);
+            }
+
+            return new List<ReleaseResource>();
+        }
+
+
         private List<ReleaseResource> GetRss()
         {
             var reports = _rssFetcherAndParser.Fetch();
@@ -113,8 +136,8 @@ namespace NzbDrone.Api.Indexers
 
         protected override ReleaseResource MapDecision(DownloadDecision decision, int initialWeight)
         {
-            _remoteEpisodeCache.Set(decision.RemoteEpisode.Release.Guid, decision.RemoteEpisode, TimeSpan.FromMinutes(30));
-           return base.MapDecision(decision, initialWeight);
+            _remoteEpisodeCache.Set(decision.RemoteItem.Release.Guid, decision.RemoteItem, TimeSpan.FromMinutes(30));
+            return base.MapDecision(decision, initialWeight);
         }
     }
 }

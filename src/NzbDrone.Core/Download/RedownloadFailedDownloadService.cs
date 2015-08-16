@@ -43,6 +43,15 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
+            if (message.MovieId > 0)
+            {
+                _logger.Debug("Failed download is a movie, searching again");
+
+                _commandQueueManager.Push(new MovieSearchCommand(message.MovieId));
+
+                return;
+            }
+
             var seasonNumber = _episodeService.GetEpisode(message.EpisodeIds.First()).SeasonNumber;
             var episodesInSeason = _episodeService.GetEpisodesBySeason(message.SeriesId, seasonNumber);
 

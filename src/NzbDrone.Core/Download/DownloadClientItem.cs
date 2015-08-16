@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Download
         public String DownloadClient { get; set; }
         public String DownloadId { get; set; }
         public String Category { get; set; }
+        public DownloadItemType DownloadType { get; set; }
         public String Title { get; set; }
 
         public Int64 TotalSize { get; set; }

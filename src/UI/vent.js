@@ -7,7 +7,10 @@ vent.Events = {
     SeriesDeleted      : 'series:deleted',
     CommandComplete    : 'command:complete',
     ServerUpdated      : 'server:updated',
-    EpisodeFileDeleted : 'episodefile:deleted'
+    EpisodeFileDeleted : 'episodefile:deleted',
+    MovieFileDeleted   : 'moviefile:deleted',
+    MovieAdded         : 'movie:added',
+    MovieDeleted       : 'movie:deleted'
 };
 
 vent.Commands = {
@@ -23,11 +26,15 @@ vent.Commands = {
     SaveSettings             : 'saveSettings',
     ShowLogFile              : 'showLogFile',
     ShowRenamePreview        : 'showRenamePreview',
+    ShowRenameMoviePreview   : 'showRenameMoviePreview',
     ShowManualImport         : 'showManualImport',
     ShowFileBrowser          : 'showFileBrowser',
     CloseFileBrowser         : 'closeFileBrowser',
     OpenControlPanelCommand  : 'OpenControlPanelCommand',
-    CloseControlPanelCommand : 'CloseControlPanelCommand'
+    CloseControlPanelCommand : 'CloseControlPanelCommand',
+    EditMovieCommand         : 'EditMovieCommand',
+    DeleteMovieCommand       : 'DeleteMovieCommand',
+    ShowMovieDetails         : 'ShowMovieDetails'
 };
 
 vent.Hotkeys = {

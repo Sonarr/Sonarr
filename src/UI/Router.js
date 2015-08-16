@@ -20,6 +20,10 @@ module.exports = Marionette.AppRouter.extend({
         'system/:action'             : 'system',
         'seasonpass'                 : 'seasonPass',
         'serieseditor'               : 'seriesEditor',
+	    'addmovie'                   : 'addMovie',
+	    'addmovie/:action(/:query)'  : 'addMovie',
+		'movie'                      : 'movies',
+		'movie/:action'              : 'movieDetails',
         ':whatever'                  : 'showNotFound'
     }
 });

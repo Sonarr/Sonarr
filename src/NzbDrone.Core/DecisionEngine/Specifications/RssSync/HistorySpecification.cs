@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
         public RejectionType Type { get { return RejectionType.Permanent; } }
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteItem subject, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria != null)
             {
@@ -41,28 +41,60 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             foreach (var downloadClient in downloadClients.OfType<Sabnzbd>())
             {
                 _logger.Debug("Performing history status check on report");
-                foreach (var episode in subject.Episodes)
+                if (subject is RemoteEpisode)
                 {
-                    _logger.Debug("Checking current status of episode [{0}] in history", episode.Id);
-                    var mostRecent = _historyService.MostRecentForEpisode(episode.Id);
+                    foreach (var episode in (subject as RemoteEpisode).Episodes)
+                    {
+                        _logger.Debug("Checking current status of episode [{0}] in history", episode.Id);
+                        var mostRecent = _historyService.MostRecentForEpisode(episode.Id);
 
+                        if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
+                        {
+                            _logger.Debug("Latest history item is downloading, rejecting.");
+                            return Decision.Reject("Download has not been imported yet");
+                        }
+                    }
+                }
+
+                if (subject is RemoteMovie)
+                {
+                    _logger.Debug("Checking current status of movie [{0}] in history", subject.Media);
+                    var mostRecent = _historyService.MostRecentForMovie(subject.Media.Id);
                     if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                     {
                         _logger.Debug("Latest history item is downloading, rejecting.");
                         return Decision.Reject("Download has not been imported yet");
                     }
+
                 }
                 return Decision.Accept();
             }
 
-            foreach (var episode in subject.Episodes)
+            if (subject is RemoteEpisode)
             {
-                var bestQualityInHistory = _historyService.GetBestQualityInHistory(subject.Series.Profile, episode.Id);
+                foreach (var episode in (subject as RemoteEpisode).Episodes)
+                {
+                    var bestQualityInHistory = _historyService.GetBestEpisodeQualityInHistory(subject.Media.Profile, episode.Id);
+                    if (bestQualityInHistory != null)
+                    {
+                        _logger.Debug("Comparing history quality with report. History is {0}", bestQualityInHistory);
+
+                        if (!_qualityUpgradableSpecification.IsUpgradable(subject.Media.Profile, bestQualityInHistory, subject.ParsedInfo.Quality))
+                        {
+                            return Decision.Reject("Existing file in history is of equal or higher quality: {0}", bestQualityInHistory);
+                        }
+                    }
+                }
+            }
+
+            if (subject is RemoteMovie)
+            {
+                var bestQualityInHistory = _historyService.GetBestMovieQualityInHistory(subject.Media.Profile, subject.Media.Id);
                 if (bestQualityInHistory != null)
                 {
                     _logger.Debug("Comparing history quality with report. History is {0}", bestQualityInHistory);
 
-                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, bestQualityInHistory, subject.ParsedEpisodeInfo.Quality))
+                    if (!_qualityUpgradableSpecification.IsUpgradable(subject.Media.Profile, bestQualityInHistory, subject.ParsedInfo.Quality))
                     {
                         return Decision.Reject("Existing file in history is of equal or higher quality: {0}", bestQualityInHistory);
                     }

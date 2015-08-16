@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -12,6 +8,10 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
 {
@@ -33,6 +33,24 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
             var title = remoteEpisode.Release.Title;
+
+            title = FileNameBuilder.CleanFileName(title);
+
+            var filepath = Path.Combine(Settings.NzbFolder, title + ".nzb");
+
+            using (var stream = _diskProvider.OpenWriteStream(filepath))
+            {
+                stream.Write(fileContent, 0, fileContent.Length);
+            }
+
+            _logger.Debug("NZB Download succeeded, saved to: {0}", filepath);
+
+            return null;
+        }
+
+        protected override string AddFromNzbFile(RemoteMovie remoteMovie, string filename, byte[] fileContent)
+        {
+            var title = remoteMovie.Release.Title;
 
             title = FileNameBuilder.CleanFileName(title);
 

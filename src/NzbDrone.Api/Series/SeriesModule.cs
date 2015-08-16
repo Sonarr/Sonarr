@@ -15,6 +15,7 @@ using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Series
@@ -201,6 +202,8 @@ namespace NzbDrone.Api.Series
 
         public void Handle(EpisodeFileDeletedEvent message)
         {
+            if (message.EpisodeFile.SeriesId == 0)
+                return;
             if (message.Reason == DeleteMediaFileReason.Upgrade) return;
 
             BroadcastResourceChange(ModelAction.Updated, message.EpisodeFile.SeriesId);
@@ -228,7 +231,8 @@ namespace NzbDrone.Api.Series
 
         public void Handle(MediaCoversUpdatedEvent message)
         {
-            BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
+            if (message.CoverOrigin == MediaCoverOrigin.Series)
+                BroadcastResourceChange(ModelAction.Updated, message.Series.Id);
         }
     }
 }

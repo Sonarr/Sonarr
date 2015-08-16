@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
 
             _series = Builder<Series>.CreateNew()
                 .With(v => v.Id = 2)
-                .With(v => v.Images = new List<MediaCover.MediaCover> { new MediaCover.MediaCover(MediaCoverTypes.Poster, "") })
+                .With(v => v.Images = new List<MediaCover.MediaCover> { new MediaCover.MediaCover(MediaCoverTypes.Poster, "", MediaCoverOrigin.Series) })
                 .Build();
         }
 

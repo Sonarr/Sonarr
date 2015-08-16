@@ -5,6 +5,7 @@ using System.Text;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Notifications.Synology;
 using NzbDrone.Core.Test.Framework;

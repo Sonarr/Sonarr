@@ -18,6 +18,8 @@ gulp.task('less', function() {
         paths.src.content + 'theme.less',
         paths.src.content + 'overrides.less',
         paths.src.root + 'Series/series.less',
+        paths.src.root + 'Movie/movie.less',
+        paths.src.root + 'AddMovie/addMovie.less',
         paths.src.root + 'Activity/activity.less',
         paths.src.root + 'AddSeries/addSeries.less',
         paths.src.root + 'Calendar/calendar.less',

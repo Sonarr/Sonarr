@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Movies;
 using NzbDrone.Api.REST;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.History;
@@ -13,6 +14,7 @@ namespace NzbDrone.Api.History
     {
         public int EpisodeId { get; set; }
         public int SeriesId { get; set; }
+        public int MovieId { get; set; }
         public string SourceTitle { get; set; }
         public QualityModel Quality { get; set; }
         public Boolean QualityCutoffNotMet { get; set; }
@@ -27,5 +29,6 @@ namespace NzbDrone.Api.History
 
         public EpisodeResource Episode { get; set; }
         public SeriesResource Series { get; set; }
+        public MoviesResource Movie { get; set; }
     }
 }

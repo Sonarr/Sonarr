@@ -12,6 +12,8 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
 
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.DecisionEngine.Specifications.Common;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {

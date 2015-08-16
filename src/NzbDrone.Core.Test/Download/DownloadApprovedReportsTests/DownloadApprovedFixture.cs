@@ -178,8 +178,8 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         public void should_return_an_empty_list_when_none_are_appproved()
         {
             var decisions = new List<DownloadDecision>();
-            decisions.Add(new DownloadDecision(null, new Rejection("Failure!")));
-            decisions.Add(new DownloadDecision(null, new Rejection("Failure!")));
+            decisions.Add(new DownloadDecision((RemoteEpisode)null, new Rejection("Failure!")));
+            decisions.Add(new DownloadDecision((RemoteEpisode)null, new Rejection("Failure!")));
 
             Subject.GetQualifiedReports(decisions).Should().BeEmpty();
         }

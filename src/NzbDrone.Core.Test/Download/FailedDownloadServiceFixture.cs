@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.Download
             _trackedDownload = Builder<TrackedDownload>.CreateNew()
                     .With(c => c.State = TrackedDownloadStage.Downloading)
                     .With(c => c.DownloadItem = completed)
-                    .With(c => c.RemoteEpisode = remoteEpisode)
+                    .With(c => c.RemoteItem = remoteEpisode)
                     .Build();
 
 

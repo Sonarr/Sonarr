@@ -6,6 +6,8 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -93,7 +95,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenSingleEpisodeWithSingleEpisodeFile();
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+            Subject.UpgradeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Once());
         }
@@ -103,7 +105,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenMultipleEpisodesWithSingleEpisodeFile();
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+            Subject.UpgradeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Once());
         }
@@ -113,7 +115,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenMultipleEpisodesWithMultipleEpisodeFiles();
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+            Subject.UpgradeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Exactly(2));
         }
@@ -123,7 +125,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenSingleEpisodeWithSingleEpisodeFile();
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+            Subject.UpgradeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(It.IsAny<EpisodeFile>(), DeleteMediaFileReason.Upgrade), Times.Once());
         }
@@ -137,7 +139,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Setup(c => c.FileExists(It.IsAny<string>()))
                 .Returns(false);
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+            Subject.UpgradeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IMediaFileService>().Verify(v => v.Delete(_localEpisode.Episodes.Single().EpisodeFile.Value, DeleteMediaFileReason.Upgrade), Times.Once());
         }
@@ -151,7 +153,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Setup(c => c.FileExists(It.IsAny<string>()))
                 .Returns(false);
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode);
+            Subject.UpgradeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IRecycleBinProvider>().Verify(v => v.DeleteFile(It.IsAny<string>()), Times.Never());
         }
@@ -161,7 +163,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenSingleEpisodeWithSingleEpisodeFile();
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(1);
+            Subject.UpgradeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(1);
         }
 
         [Test]
@@ -169,7 +171,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenMultipleEpisodesWithMultipleEpisodeFiles();
 
-            Subject.UpgradeEpisodeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(2);
+            Subject.UpgradeFile(_episodeFile, _localEpisode).OldFiles.Count.Should().Be(2);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[scnzbefnet][509103] 2.Broke.Girls.S03E18.720p.HDTV.X264-DIMENSION", "2 Broke Girls")]
         public void should_remove_request_info_from_title(String postTitle, String title)
         {
-            Parser.Parser.ParseTitle(postTitle).SeriesTitle.Should().Be(title);
+            Parser.Parser.ParseTitle(postTitle).Title.Should().Be(title);
         }
     }
 }

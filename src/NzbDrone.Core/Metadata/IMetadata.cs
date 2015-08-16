@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using NzbDrone.Core.MediaFiles;
+﻿using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Metadata
 {

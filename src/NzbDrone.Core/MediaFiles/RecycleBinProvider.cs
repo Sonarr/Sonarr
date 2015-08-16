@@ -1,14 +1,15 @@
-﻿using System;
-using System.IO;
-using NLog;
+﻿using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.MediaFiles.Commands.Common;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Movies.Events;
 using NzbDrone.Core.Tv.Events;
+using System;
+using System.IO;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -20,7 +21,7 @@ namespace NzbDrone.Core.MediaFiles
         void Cleanup();
     }
 
-    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IExecute<CleanUpRecycleBinCommand>, IRecycleBinProvider
+    public class RecycleBinProvider : IHandleAsync<SeriesDeletedEvent>, IHandleAsync<MovieDeletedEvent>, IExecute<CleanUpRecycleBinCommand>, IRecycleBinProvider
     {
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
@@ -188,6 +189,17 @@ namespace NzbDrone.Core.MediaFiles
                 if (_diskProvider.FolderExists(message.Series.Path))
                 {
                     DeleteFolder(message.Series.Path);
+                }
+            }
+        }
+
+        public void HandleAsync(MovieDeletedEvent message)
+        {
+            if (message.DeleteFiles)
+            {
+                if (_diskProvider.FolderExists(message.Movie.Path))
+                {
+                    DeleteFolder(message.Movie.Path);
                 }
             }
         }

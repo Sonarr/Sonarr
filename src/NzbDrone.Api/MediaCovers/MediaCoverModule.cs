@@ -5,6 +5,7 @@ using Nancy.Responses;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.MediaCover;
 
 namespace NzbDrone.Api.MediaCovers
 {
@@ -12,7 +13,8 @@ namespace NzbDrone.Api.MediaCovers
     {
         private static readonly Regex RegexResizedImage = new Regex(@"-\d+\.jpg$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private const string MEDIA_COVER_ROUTE = @"/(?<seriesId>\d+)/(?<filename>(.+)\.(jpg|png|gif))";
+        private const string MEDIA_COVER_SERIES_ROUTE = @"/(?<seriesId>\d+)/(?<filename>(.+)\.(jpg|png|gif))";
+        private const string MEDIA_COVER_MOVIES_ROUTE = @"/(?<moviesTag>movies)/(?<movieId>\d+)/(?<filename>(.+)\.(jpg|png|gif))";
 
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IDiskProvider _diskProvider;
@@ -22,12 +24,14 @@ namespace NzbDrone.Api.MediaCovers
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
 
-            Get[MEDIA_COVER_ROUTE] = options => GetMediaCover(options.seriesId, options.filename);
+            Get[MEDIA_COVER_SERIES_ROUTE] = options => GetMediaCover(options.seriesId, options.filename, MediaCoverOrigin.Series);
+            Get[MEDIA_COVER_MOVIES_ROUTE] = options => GetMediaCover(options.movieId, options.filename, MediaCoverOrigin.Movie);
         }
 
-        private Response GetMediaCover(int seriesId, string filename)
+        private Response GetMediaCover(int id, string filename, MediaCoverOrigin coverOrigin)
         {
-            var filePath = Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover", seriesId.ToString(), filename);
+            var movie = coverOrigin == MediaCoverOrigin.Movie ? "movies" : "";
+            var filePath = Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover", movie, id.ToString(), filename);
 
             if (!_diskProvider.FileExists(filePath) || _diskProvider.GetFileSize(filePath) == 0)
             {

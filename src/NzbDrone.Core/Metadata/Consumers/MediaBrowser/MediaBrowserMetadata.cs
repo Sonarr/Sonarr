@@ -12,6 +12,7 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
 {

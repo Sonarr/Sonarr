@@ -4,10 +4,11 @@ using Marr.Data;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Tv
 {
-    public class Series : ModelBase
+    public class Series : Media
     {
         public Series()
         {
@@ -21,36 +22,39 @@ namespace NzbDrone.Core.Tv
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
         public string ImdbId { get; set; }
-        public string Title { get; set; }
-        public string CleanTitle { get; set; }
+
+        //public string Title { get; set; }
+        //public string CleanTitle { get; set; }
+
         public string SortTitle { get; set; }
         public SeriesStatusType Status { get; set; }
-        public string Overview { get; set; }
+        //public string Overview { get; set; }
         public string AirTime { get; set; }
-        public bool Monitored { get; set; }
-        public int ProfileId { get; set; }
+        //public bool Monitored { get; set; }
+        //public int ProfileId { get; set; }
         public bool SeasonFolder { get; set; }
-        public DateTime? LastInfoSync { get; set; }
-        public int Runtime { get; set; }
-        public List<MediaCover.MediaCover> Images { get; set; }
+        //public DateTime? LastInfoSync { get; set; }
+        //public int Runtime { get; set; }
+        //public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public string Network { get; set; }
         public bool UseSceneNumbering { get; set; }
         public string TitleSlug { get; set; }
-        public string Path { get; set; }
-        public int Year { get; set; }
+        //public string Path { get; set; }
+        //public int Year { get; set; }
         public Ratings Ratings { get; set; }
         public List<String> Genres { get; set; }
         public List<Actor> Actors { get; set; }
         public string Certification { get; set; }
-        public string RootFolderPath { get; set; }
+        //public string RootFolderPath { get; set; }
         public DateTime Added { get; set; }
         public DateTime? FirstAired { get; set; }
-        public LazyLoaded<Profile> Profile { get; set; }
+        //public LazyLoaded<Profile> Profile { get; set; }
 
         public List<Season> Seasons { get; set; }
-        public HashSet<Int32> Tags { get; set; }
+        //public HashSet<Int32> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
+        public override LazyLoaded<Profile> Profile { get; set; }
 
         public override string ToString()
         {

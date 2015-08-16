@@ -43,6 +43,8 @@ namespace NzbDrone.Api.History
         private PagingResource<HistoryResource> GetHistory(PagingResource<HistoryResource> pagingResource)
         {
             var episodeId = Request.Query.EpisodeId;
+            var movieId = Request.Query.movieId;
+            var mediaType = Request.Query.mediaType;
 
             var pagingSpec = new PagingSpec<Core.History.History>
                                  {
@@ -52,7 +54,34 @@ namespace NzbDrone.Api.History
                                      SortDirection = pagingResource.SortDirection
                                  };
 
-            if (pagingResource.FilterKey == "eventType")
+            if (mediaType.HasValue && pagingResource.FilterKey == "eventType")
+            {
+                var type = (MediaType)Convert.ToInt32(mediaType.Value);
+                var filterValue = (HistoryEventType)Convert.ToInt32(pagingResource.FilterValue);
+                switch (type)
+                {
+                    case MediaType.Series:
+                        pagingSpec.FilterExpression = h => h.SeriesId > 0 && h.EventType == filterValue;
+                        break;
+                    case MediaType.Movies:
+                        pagingSpec.FilterExpression = h => h.MovieId > 0 && h.EventType == filterValue;
+                        break;
+                }
+            }
+            else if (mediaType.HasValue)
+            {
+                var type = (MediaType)Convert.ToInt32(mediaType.Value);
+                switch (type)
+                {
+                    case MediaType.Series:
+                        pagingSpec.FilterExpression = h => h.SeriesId > 0;
+                        break;
+                    case MediaType.Movies:
+                        pagingSpec.FilterExpression = h => h.MovieId > 0;
+                        break;
+                }
+            }
+            else if (pagingResource.FilterKey == "eventType")
             {
                 var filterValue = (HistoryEventType)Convert.ToInt32(pagingResource.FilterValue);
                 pagingSpec.FilterExpression = v => v.EventType == filterValue;
@@ -62,6 +91,12 @@ namespace NzbDrone.Api.History
             {
                 int i = (int)episodeId;
                 pagingSpec.FilterExpression = h => h.EpisodeId == i;
+            }
+
+            if (movieId.HasValue)
+            {
+                int i = (int)movieId;
+                pagingSpec.FilterExpression = h => h.MovieId == i;
             }
 
             return ApplyToPage(_historyService.Paged, pagingSpec);

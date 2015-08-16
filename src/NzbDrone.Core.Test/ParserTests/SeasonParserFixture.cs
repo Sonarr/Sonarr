@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
-            result.SeriesTitle.Should().Be(title);
+            result.Title.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeTrue();

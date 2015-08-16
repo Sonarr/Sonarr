@@ -9,6 +9,7 @@ using RestSharp;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Parser.Model;
 using System.Collections.Generic;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {

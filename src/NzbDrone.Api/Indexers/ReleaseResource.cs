@@ -54,5 +54,7 @@ namespace NzbDrone.Api.Indexers
         public Boolean IsAbsoluteNumbering { get; set; }
         public Boolean IsPossibleSpecialEpisode { get; set; }
         public Boolean Special { get; set; }
+
+        public String MovieTitle { get; set; }
     }
 }

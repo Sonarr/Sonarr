@@ -4,6 +4,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.Blacklisting
 {
@@ -11,6 +12,8 @@ namespace NzbDrone.Core.Blacklisting
     {
         public int SeriesId { get; set; }
         public Series Series { get; set; }
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; }
         public List<int> EpisodeIds { get; set; }
         public string SourceTitle { get; set; }
         public QualityModel Quality { get; set; }

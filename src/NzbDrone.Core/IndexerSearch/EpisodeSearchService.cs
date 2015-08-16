@@ -107,7 +107,7 @@ namespace NzbDrone.Core.IndexerSearch
                                                                     }).Records.ToList();
             }
 
-            var queue = _queueService.GetQueue().Select(q => q.Episode.Id);
+            var queue = _queueService.GetQueue().OfType<SeriesQueue>().Select(q => q.Episode.Id);
             var missing = episodes.Where(e => !queue.Contains(e.Id)).ToList();
 
             SearchForMissingEpisodes(missing);

@@ -2,7 +2,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Marionette = require('marionette');
 var vent = require('vent');
-var RootFolders = require('../AddSeries/RootFolders/RootFolderCollection');
+var RootFolders = require('../Shared/RootFolders/RootFolderCollection');
 
 module.exports = Marionette.ItemView.extend({
     template : 'SeasonPass/SeasonPassFooterViewTemplate',

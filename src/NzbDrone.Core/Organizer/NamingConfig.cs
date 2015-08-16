@@ -11,12 +11,15 @@ namespace NzbDrone.Core.Organizer
                 return new NamingConfig
                     {
                         RenameEpisodes = false,
+                        RenameMovies = false,
                         MultiEpisodeStyle = 0,
                         StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
                         DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Full}",
                         AnimeEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
                         SeriesFolderFormat = "{Series Title}",
-                        SeasonFolderFormat = "Season {season}"
+                        SeasonFolderFormat = "Season {season}",
+                        StandardMovieFormat = "{Movie Title} - {Quality Full}",
+                        MovieFolderFormat = "{Movie Title} ({Year})"
                     };
             }
         }
@@ -28,5 +31,8 @@ namespace NzbDrone.Core.Organizer
         public string AnimeEpisodeFormat { get; set; }
         public string SeriesFolderFormat { get; set; }
         public string SeasonFolderFormat { get; set; }
+        public string StandardMovieFormat { get; set; }
+        public string MovieFolderFormat { get; set; }
+        public bool RenameMovies { get; set; }
     }
 }

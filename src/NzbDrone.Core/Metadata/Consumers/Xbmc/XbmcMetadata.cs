@@ -10,7 +10,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 
@@ -345,7 +345,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         {
             foreach (var image in series.Images)
             {
-                var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
+                var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType, MediaCoverOrigin.Series);
                 var destination = Path.Combine(series.Path, image.CoverType.ToString().ToLowerInvariant() + Path.GetExtension(source));
 
                 yield return new ImageFileResult(destination, source);

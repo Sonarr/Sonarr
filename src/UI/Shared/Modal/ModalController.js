@@ -2,11 +2,15 @@ var vent = require('vent');
 var AppLayout = require('../../AppLayout');
 var Marionette = require('marionette');
 var EditSeriesView = require('../../Series/Edit/EditSeriesView');
+var EditMovieView = require('../../Movie/Edit/EditMovieView');
 var DeleteSeriesView = require('../../Series/Delete/DeleteSeriesView');
+var DeleteMovieView = require('../../Movie/Delete/DeleteMovieView');
 var EpisodeDetailsLayout = require('../../Episode/EpisodeDetailsLayout');
+var MovieDetailsLayout = require('../../Movie/Modal/MovieDetailsLayout');
 var HistoryDetailsLayout = require('../../Activity/History/Details/HistoryDetailsLayout');
 var LogDetailsView = require('../../System/Logs/Table/Details/LogDetailsView');
 var RenamePreviewLayout = require('../../Rename/RenamePreviewLayout');
+var RenameMoviePreviewLayout = require('../../RenameMovie/RenameMoviePreviewLayout');
 var ManualImportLayout = require('../../ManualImport/ManualImportLayout');
 var FileBrowserLayout = require('../FileBrowser/FileBrowserLayout');
 
@@ -17,11 +21,15 @@ module.exports = Marionette.AppRouter.extend({
         vent.on(vent.Commands.OpenModal2Command, this._openModal2, this);
         vent.on(vent.Commands.CloseModal2Command, this._closeModal2, this);
         vent.on(vent.Commands.EditSeriesCommand, this._editSeries, this);
+        vent.on(vent.Commands.EditMovieCommand, this._editMovie, this);
         vent.on(vent.Commands.DeleteSeriesCommand, this._deleteSeries, this);
+        vent.on(vent.Commands.DeleteMovieCommand, this._deleteMovie, this);
         vent.on(vent.Commands.ShowEpisodeDetails, this._showEpisode, this);
+        vent.on(vent.Commands.ShowMovieDetails, this._showMovie, this);
         vent.on(vent.Commands.ShowHistoryDetails, this._showHistory, this);
         vent.on(vent.Commands.ShowLogDetails, this._showLogDetails, this);
         vent.on(vent.Commands.ShowRenamePreview, this._showRenamePreview, this);
+        vent.on(vent.Commands.ShowRenameMoviePreview, this._showRenameMoviePreview, this);
         vent.on(vent.Commands.ShowManualImport, this._showManualImport, this);
         vent.on(vent.Commands.ShowFileBrowser, this._showFileBrowser, this);
         vent.on(vent.Commands.CloseFileBrowser, this._closeFileBrowser, this);
@@ -48,8 +56,18 @@ module.exports = Marionette.AppRouter.extend({
         AppLayout.modalRegion.show(view);
     },
 
+    _editMovie : function(options) {
+        var view = new EditMovieView({ model : options.movie });
+        AppLayout.modalRegion.show(view);
+    },
+
     _deleteSeries : function(options) {
         var view = new DeleteSeriesView({ model : options.series });
+        AppLayout.modalRegion.show(view);
+    },
+
+    _deleteMovie : function(options) {
+        var view = new DeleteMovieView({ model : options.movie });
         AppLayout.modalRegion.show(view);
     },
 
@@ -58,6 +76,16 @@ module.exports = Marionette.AppRouter.extend({
             model          : options.episode,
             hideSeriesLink : options.hideSeriesLink,
             openingTab     : options.openingTab
+        });
+        AppLayout.modalRegion.show(view);
+    },
+
+    _showMovie : function(options) {
+        var view = new MovieDetailsLayout({
+            model               : options.movie,
+            movieFileCollection : options.movieFileCollection,
+            hideMovieLink       : options.hideMovieLink,
+            openingTab          : options.openingTab
         });
         AppLayout.modalRegion.show(view);
     },
@@ -74,6 +102,11 @@ module.exports = Marionette.AppRouter.extend({
 
     _showRenamePreview : function(options) {
         var view = new RenamePreviewLayout(options);
+        AppLayout.modalRegion.show(view);
+    },
+
+    _showRenameMoviePreview : function(options) {
+        var view = new RenameMoviePreviewLayout(options);
         AppLayout.modalRegion.show(view);
     },
 

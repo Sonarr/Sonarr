@@ -10,7 +10,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public DownloadClientItem DownloadItem { get; set; }
         public TrackedDownloadStage State { get; set; }
         public TrackedDownloadStatus Status { get; private set; }
-        public RemoteEpisode RemoteEpisode { get; set; }
+        /*public RemoteEpisode RemoteEpisode { get; set; }
+        public RemoteMovie RemoteMovie { get; set; }*/
+        public RemoteItem RemoteItem { get; set; }
         public TrackedDownloadStatusMessage[] StatusMessages { get; private set; }
         public DownloadProtocol Protocol { get; set; }
 

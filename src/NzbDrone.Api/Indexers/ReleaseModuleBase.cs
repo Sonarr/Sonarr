@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using Omu.ValueInjecter;
-using System.Linq;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -27,17 +27,28 @@ namespace NzbDrone.Api.Indexers
         {
             var release = new ReleaseResource();
 
-            release.InjectFrom(decision.RemoteEpisode.Release);
-            release.InjectFrom(decision.RemoteEpisode.ParsedEpisodeInfo);
+            release.InjectFrom(decision.RemoteItem.Release);
+            release.InjectFrom(decision.RemoteItem.ParsedInfo);
             release.InjectFrom(decision);
+            release.Title = decision.RemoteItem.Release.Title;
+
+            if (decision.RemoteItem is RemoteEpisode)
+            {
+                release.SeriesTitle = decision.RemoteItem.ParsedInfo.Title;
+            }
+            else if (decision.RemoteItem is RemoteMovie)
+            {
+                release.MovieTitle = decision.RemoteItem.ParsedInfo.Title;
+            }
+
             release.Rejections = decision.Rejections.Select(r => r.Reason).ToList();
-            release.DownloadAllowed = decision.RemoteEpisode.DownloadAllowed;
+            release.DownloadAllowed = decision.RemoteItem.DownloadAllowed;
             release.ReleaseWeight = initialWeight;
 
-            if (decision.RemoteEpisode.Series != null)
+            if (decision.RemoteItem.Media != null)
             {
-                release.QualityWeight = decision.RemoteEpisode
-                                                        .Series
+                release.QualityWeight = decision.RemoteItem
+                                                        .Media
                                                         .Profile
                                                         .Value
                                                         .Items
@@ -47,7 +58,7 @@ namespace NzbDrone.Api.Indexers
             release.QualityWeight += release.Quality.Revision.Real * 10;
             release.QualityWeight += release.Quality.Revision.Version;
 
-            var torrentRelease = decision.RemoteEpisode.Release as TorrentInfo;
+            var torrentRelease = decision.RemoteItem.Release as TorrentInfo;
 
             if (torrentRelease != null)
             {

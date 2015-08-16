@@ -4,12 +4,13 @@ using System.Linq;
 using NLog;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.EpisodeFiles
@@ -44,7 +45,7 @@ namespace NzbDrone.Api.EpisodeFiles
 
         private EpisodeFileResource GetEpisodeFile(int id)
         {
-            var episodeFile = _mediaFileService.Get(id);
+            var episodeFile = _mediaFileService.GetEpisodeFile(id);
             var series = _seriesService.GetSeries(episodeFile.SeriesId);
 
             return MapToResource(series, episodeFile);
@@ -67,14 +68,14 @@ namespace NzbDrone.Api.EpisodeFiles
 
         private void SetQuality(EpisodeFileResource episodeFileResource)
         {
-            var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
+            var episodeFile = _mediaFileService.GetEpisodeFile(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;
             _mediaFileService.Update(episodeFile);
         }
 
         private void DeleteEpisodeFile(int id)
         {
-            var episodeFile = _mediaFileService.Get(id);
+            var episodeFile = _mediaFileService.GetEpisodeFile(id);
             var series = _seriesService.GetSeries(episodeFile.SeriesId);
             var fullPath = Path.Combine(series.Path, episodeFile.RelativePath);
 

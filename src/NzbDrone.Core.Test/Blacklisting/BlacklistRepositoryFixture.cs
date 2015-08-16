@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Blacklisting
 {
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Test.Blacklisting
         {
             Subject.Insert(_blacklist);
 
-            Subject.BlacklistedByTitle(_blacklist.SeriesId, _blacklist.SourceTitle.ToUpperInvariant()).Should().HaveCount(1);
+            Subject.BlacklistedByTitle(new Series(),  _blacklist.SourceTitle.ToUpperInvariant()).Should().HaveCount(1);
         }
     }
 }

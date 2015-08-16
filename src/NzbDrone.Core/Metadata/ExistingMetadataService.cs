@@ -5,10 +5,12 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Metadata
 {
@@ -33,6 +35,7 @@ namespace NzbDrone.Core.Metadata
             _consumers = consumers.ToList();
         }
 
+        //TODO: Metadata for movies
         public void Handle(SeriesScannedEvent message)
         {
             if (!_diskProvider.FolderExists(message.Series.Path)) return;
@@ -59,7 +62,7 @@ namespace NzbDrone.Core.Metadata
                     if (metadata.Type == MetadataType.EpisodeImage ||
                         metadata.Type == MetadataType.EpisodeMetadata)
                     {
-                        var localEpisode = _parsingService.GetLocalEpisode(possibleMetadataFile, message.Series);
+                        var localEpisode = _parsingService.GetLocalItem(possibleMetadataFile, message.Series) as LocalEpisode;
 
                         if (localEpisode == null)
                         {
@@ -67,7 +70,7 @@ namespace NzbDrone.Core.Metadata
                             break;
                         }
 
-                        if (localEpisode.Episodes.Empty())
+                        if (!localEpisode.Episodes.Any())
                         {
                             _logger.Debug("Cannot find related episodes for: {0}", possibleMetadataFile);
                             break;

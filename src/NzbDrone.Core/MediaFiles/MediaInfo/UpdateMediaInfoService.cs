@@ -1,16 +1,17 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Tv;
-using System.Collections.Generic;
-using System.Linq;
-using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
-    public class UpdateMediaInfoService : IHandle<SeriesScannedEvent>
+    public class UpdateMediaInfoService : IHandle<SeriesScannedEvent>, IHandle<MovieScannedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileService _mediaFileService;
@@ -31,11 +32,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             _logger = logger;
         }
 
-        private void UpdateMediaInfo(Series series, List<EpisodeFile> mediaFiles)
+        private void UpdateMediaInfo(Media media, List<MediaModelBase> mediaFiles)
         {
             foreach (var mediaFile in mediaFiles)
             {
-                var path = Path.Combine(series.Path, mediaFile.RelativePath);
+                var path = Path.Combine(media.Path, mediaFile.RelativePath);
 
                 if (!_diskProvider.FileExists(path))
                 {
@@ -63,9 +64,24 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             var mediaFiles = _mediaFileService.GetFilesBySeries(message.Series.Id)
                                               .Where(c => c.MediaInfo == null)
+                                              .Select(c => c as MediaModelBase)
                                               .ToList();
 
             UpdateMediaInfo(message.Series, mediaFiles);
         }
+
+        public void Handle(MovieScannedEvent message)
+        {
+            if (!_configService.EnableMediaInfo)
+            {
+                _logger.Debug("MediaInfo is disabled");
+                return;
+            }
+
+            var mediaFiles = _mediaFileService.GetFileByMovie(message.Movie.Id).Where(m => m.MediaInfo == null).Select(c => c as MediaModelBase).ToList();
+
+            UpdateMediaInfo(message.Movie, mediaFiles);
+        }
     }
 }
+

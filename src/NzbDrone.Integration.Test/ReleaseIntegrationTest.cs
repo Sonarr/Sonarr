@@ -1,8 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using System.Net;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.Indexers;
-using System.Linq;
-using System.Net;
 
 namespace NzbDrone.Integration.Test
 {
@@ -15,7 +15,7 @@ namespace NzbDrone.Integration.Test
             var releases = Releases.All();
             var indexers = Indexers.All();
 
-            releases.Should().OnlyContain(c => c.Rejections.Contains("Unknown Series"));
+            releases.Should().OnlyContain(c => c.Rejections.Contains("Unknown Series") || c.Rejections.Contains("Unknown Movie"));
             releases.Should().OnlyContain(c => BeValidRelease(c));
         }
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Integration.Test
             // TODO: Maybe we should create a full mock Newznab server endpoint.
             //var result = Releases.Post(new ReleaseResource { Guid = releases.First().Guid });
             //result.Guid.Should().Be(releases.First().Guid); 
-            
+
             var result = Releases.Post(new ReleaseResource { Guid = releases.First().Guid }, HttpStatusCode.InternalServerError);
         }
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Integration.Test
             releaseResource.Age.Should().BeGreaterOrEqualTo(-1);
             releaseResource.Title.Should().NotBeNullOrWhiteSpace();
             releaseResource.DownloadUrl.Should().NotBeNullOrWhiteSpace();
-            releaseResource.SeriesTitle.Should().NotBeNullOrWhiteSpace();
+            releaseResource.Title.Should().NotBeNullOrWhiteSpace();
             //TODO: uncomment these after moving to restsharp for rss
             //releaseResource.NzbInfoUrl.Should().NotBeNullOrWhiteSpace();
             //releaseResource.Size.Should().BeGreaterThan(0);

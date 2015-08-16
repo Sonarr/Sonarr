@@ -2,53 +2,52 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false);
+        FileMoveResult UpgradeFile(MediaModelBase baseFile, LocalItem localItem, bool copyOnly = false);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
     {
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IMoveEpisodeFiles _episodeFileMover;
+        private readonly IMoveFiles _FileMover;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public UpgradeMediaFileService(IRecycleBinProvider recycleBinProvider,
                                        IMediaFileService mediaFileService,
-                                       IMoveEpisodeFiles episodeFileMover,
+                                       IMoveFiles fileMover,
                                        IDiskProvider diskProvider,
                                        Logger logger)
         {
             _recycleBinProvider = recycleBinProvider;
             _mediaFileService = mediaFileService;
-            _episodeFileMover = episodeFileMover;
+            _FileMover = fileMover;
             _diskProvider = diskProvider;
             _logger = logger;
         }
 
-        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false)
+        public FileMoveResult UpgradeFile(MediaModelBase baseFile, LocalItem localItem, bool copyOnly = false)
         {
-            var moveFileResult = new EpisodeFileMoveResult();
-            var existingFiles = localEpisode.Episodes
-                                            .Where(e => e.EpisodeFileId > 0)
-                                            .Select(e => e.EpisodeFile.Value)
-                                            .GroupBy(e => e.Id);
+            var moveFileResult = new FileMoveResult();
+            var existingFiles = localItem.MediaFiles.GroupBy(e => e.Id);
+
 
             foreach (var existingFile in existingFiles)
             {
                 var file = existingFile.First();
-                var episodeFilePath = Path.Combine(localEpisode.Series.Path, file.RelativePath);
+                var itemFilePath = Path.Combine(localItem.Media.Path, file.RelativePath);
 
-                if (_diskProvider.FileExists(episodeFilePath))
+                if (_diskProvider.FileExists(itemFilePath))
                 {
-                    _logger.Debug("Removing existing episode file: {0}", file);
-                    _recycleBinProvider.DeleteFile(episodeFilePath);
+                    _logger.Debug("Removing existing file: {0}", file);
+                    _recycleBinProvider.DeleteFile(itemFilePath);
                 }
 
                 moveFileResult.OldFiles.Add(file);
@@ -57,11 +56,11 @@ namespace NzbDrone.Core.MediaFiles
 
             if (copyOnly)
             {
-                moveFileResult.EpisodeFile = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode);
+                moveFileResult.File = _FileMover.CopyFile(baseFile, localItem);
             }
             else
             {
-                moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+                moveFileResult.File = _FileMover.MoveFile(baseFile, localItem);
             }
 
             return moveFileResult;

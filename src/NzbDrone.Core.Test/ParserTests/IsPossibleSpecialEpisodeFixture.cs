@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.ParserTests
                                     {
                                         EpisodeNumbers = new[]{ 7 },
                                         SeasonNumber = 1,
-                                        SeriesTitle = ""
+                                        Title = ""
                                     };
 
             parsedEpisodeInfo.IsPossibleSpecialEpisode.Should().BeFalse();
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var parsedEpisodeInfo = new ParsedEpisodeInfo
             {
                 SeasonNumber = 1,
-                SeriesTitle = ""
+                Title = ""
             };
 
             parsedEpisodeInfo.IsPossibleSpecialEpisode.Should().BeTrue();

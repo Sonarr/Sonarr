@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.HistoryTests
             Subject.Insert(historyBluray);
             Subject.Insert(historyDvd);
 
-            var downloadHistory = Subject.FindDownloadHistory(12, new QualityModel(Quality.Bluray1080p));
+            var downloadHistory = Subject.FindSeriesDownloadHistory(12, new QualityModel(Quality.Bluray1080p));
 
             downloadHistory.Should().HaveCount(1);
         }

@@ -42,6 +42,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             var history = Builder<History.History>.CreateNew()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.EpisodeId = _episode.Id)
+                                                  .With(h => h.MovieId = 0)
                                                   .BuildNew();
             Db.Insert(history);
 
@@ -57,6 +58,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             var history = Builder<History.History>.CreateNew()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.SeriesId = _series.Id)
+                                                  .With(h => h.MovieId = 0)
                                                   .BuildNew();
             Db.Insert(history);
 
@@ -74,6 +76,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                   .All()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.EpisodeId = _episode.Id)
+                                                  .With(h => h.MovieId = 0)
                                                   .TheFirst(1)
                                                   .With(h => h.SeriesId = _series.Id)
                                                   .BuildListOfNew();
@@ -95,6 +98,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                   .All()
                                                   .With(h => h.Quality = new QualityModel())
                                                   .With(h => h.SeriesId = _series.Id)
+                                                  .With(h => h.MovieId = 0)
                                                   .TheFirst(1)
                                                   .With(h => h.EpisodeId = _episode.Id)
                                                   .BuildListOfNew();

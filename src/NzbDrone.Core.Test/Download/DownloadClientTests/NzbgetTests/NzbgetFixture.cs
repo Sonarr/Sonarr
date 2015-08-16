@@ -83,6 +83,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var configItems = new Dictionary<String, String>();
             configItems.Add("Category1.Name", "tv");
             configItems.Add("Category1.DestDir", @"/remote/mount/tv");
+            configItems.Add("Category2.Name", "movie");
+            configItems.Add("Category2.DestDir", @"/remote/mount/movie");
 
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<NzbgetSettings>()))

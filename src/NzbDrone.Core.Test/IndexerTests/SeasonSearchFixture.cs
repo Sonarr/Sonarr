@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             WithIndexer(true, 25);
 
-            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string>{_series.Title} });
+            Subject.Fetch(new SeasonSearchCriteria { Media = _series, SceneTitles = new List<string>{_series.Title} });
 
             Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             WithIndexer(false, 125);
 
-            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
+            Subject.Fetch(new SeasonSearchCriteria { Media = _series, SceneTitles = new List<string> { _series.Title } });
 
             Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Once());
         }
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             WithIndexer(true, 100);
 
-            Subject.Fetch(new SeasonSearchCriteria { Series = _series, SceneTitles = new List<string> { _series.Title } });
+            Subject.Fetch(new SeasonSearchCriteria { Media = _series, SceneTitles = new List<string> { _series.Title } });
 
             Mocker.GetMock<IHttpClient>().Verify(v => v.Execute(It.IsAny<HttpRequest>()), Times.Exactly(10));
         }

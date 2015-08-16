@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                                    .All()
                                                    .With(h => h.SeriesId = _series.Id)
                                                    .With(h => h.Release = _release.JsonClone())
-                                                   .With(h => h.ParsedEpisodeInfo = parsedEpisodeInfo)
+                                                   .With(h => h.ParsedInfo = parsedEpisodeInfo)
                                                    .Build();
 
             Mocker.GetMock<IPendingReleaseRepository>()

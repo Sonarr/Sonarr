@@ -12,6 +12,7 @@ using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Profiles.Delay;
@@ -63,10 +64,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             Mocker.GetMock<IDelayProfileService>()
                   .Setup(s => s.BestForTags(It.IsAny<HashSet<int>>()))
                   .Returns(_delayProfile);
-
-            Mocker.GetMock<IPendingReleaseService>()
-                  .Setup(s => s.GetPendingRemoteEpisodes(It.IsAny<int>()))
-                  .Returns(new List<RemoteEpisode>());
         }
 
         private void GivenExistingFile(QualityModel quality)
