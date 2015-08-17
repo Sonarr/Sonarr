@@ -101,6 +101,7 @@
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
     <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\RobotsTxtMapper.cs" />
+    <Compile Include="Indexers\ReleaseModuleBase.cs" />
     <Compile Include="Indexers\ReleasePushModule.cs" />
     <Compile Include="Parse\ParseModule.cs" />
     <Compile Include="Parse\ParseResource.cs" />

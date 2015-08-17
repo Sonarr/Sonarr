@@ -3,11 +3,8 @@ using Nancy.ModelBinding;
 using FluentValidation;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Parser;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Extensions;
@@ -15,7 +12,7 @@ using NLog;
 
 namespace NzbDrone.Api.Indexers
 {
-    class ReleasePushModule : NzbDroneRestModule<ReleaseResource>
+    class ReleasePushModule : ReleaseModuleBase
     {
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _downloadDecisionProcessor;
@@ -39,7 +36,7 @@ namespace NzbDrone.Api.Indexers
 
         private Response ProcessRelease(ReleaseResource release)
         {
-            _logger.Info("Release pushed: {0}", release.Title);
+            _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
             var info = release.InjectTo<ReleaseInfo>();
             info.Guid = "PUSH-" + info.DownloadUrl;
@@ -47,12 +44,7 @@ namespace NzbDrone.Api.Indexers
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
             var processed = _downloadDecisionProcessor.ProcessDecisions(decisions);
 
-            var status = processed.Grabbed.Any()  ? "grabbed"  :
-                         processed.Rejected.Any() ? "rejected" :
-                         processed.Pending.Any()  ? "pending"  :
-                                                    "error"    ;
-
-            return status.AsResponse();
+            return MapDecisions(decisions).First().AsResponse();
         }
     }
 }
