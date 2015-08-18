@@ -9,8 +9,6 @@ using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
-using Omu.ValueInjecter;
-using System.Linq;
 using Nancy.ModelBinding;
 using NzbDrone.Api.Extensions;
 using NzbDrone.Common.Cache;
@@ -18,7 +16,7 @@ using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace NzbDrone.Api.Indexers
 {
-    public class ReleaseModule : NzbDroneRestModule<ReleaseResource>
+    public class ReleaseModule : ReleaseModuleBase
     {
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly ISearchForNzb _nzbSearchService;
@@ -113,55 +111,10 @@ namespace NzbDrone.Api.Indexers
             return MapDecisions(prioritizedDecisions);
         }
 
-        private List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
+        protected override ReleaseResource MapDecision(DownloadDecision decision, int initialWeight)
         {
-            var result = new List<ReleaseResource>();
-
-            foreach (var downloadDecision in decisions)
-            {
-                _remoteEpisodeCache.Set(downloadDecision.RemoteEpisode.Release.Guid, downloadDecision.RemoteEpisode, TimeSpan.FromMinutes(30));
-
-                var release = new ReleaseResource();
-
-                release.InjectFrom(downloadDecision.RemoteEpisode.Release);
-                release.InjectFrom(downloadDecision.RemoteEpisode.ParsedEpisodeInfo);
-                release.InjectFrom(downloadDecision);
-                release.Rejections = downloadDecision.Rejections.Select(r => r.Reason).ToList();
-                release.DownloadAllowed = downloadDecision.RemoteEpisode.DownloadAllowed;
-
-                release.ReleaseWeight = result.Count;
-
-                if (downloadDecision.RemoteEpisode.Series != null)
-                {
-                    release.QualityWeight = downloadDecision.RemoteEpisode
-                                                            .Series
-                                                            .Profile
-                                                            .Value
-                                                            .Items
-                                                            .FindIndex(v => v.Quality == release.Quality.Quality) * 100;
-                }
-
-                release.QualityWeight += release.Quality.Revision.Real * 10;
-                release.QualityWeight += release.Quality.Revision.Version;
-                
-                var torrentRelease = downloadDecision.RemoteEpisode.Release as TorrentInfo;
-
-                if (torrentRelease != null)
-                {
-                    release.Protocol = DownloadProtocol.Torrent;
-                    release.Seeders = torrentRelease.Seeders;
-                    //TODO: move this up the chains
-                    release.Leechers = torrentRelease.Peers - torrentRelease.Seeders;
-                }
-                else
-                {
-                    release.Protocol = DownloadProtocol.Usenet;
-                }
-
-                result.Add(release);
-            }
-
-            return result;
+            _remoteEpisodeCache.Set(decision.RemoteEpisode.Release.Guid, decision.RemoteEpisode, TimeSpan.FromMinutes(30));
+           return base.MapDecision(decision, initialWeight);
         }
     }
 }
