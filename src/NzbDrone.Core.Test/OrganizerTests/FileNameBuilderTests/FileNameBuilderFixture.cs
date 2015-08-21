@@ -57,6 +57,11 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _episodeFile.Quality.Revision.Version = 2;
         }
 
+        private void GivenReal()
+        {
+            _episodeFile.Quality.Revision.Real = 1;
+        }
+
         [Test]
         public void should_replace_Series_space_Title()
         {
@@ -205,6 +210,16 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("Proper");
+        }
+
+        [Test]
+        public void should_replace_quality_real_with_real()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Quality Real}";
+            GivenReal();
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("REAL");
         }
 
         [Test]
@@ -615,6 +630,16 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("South Park - S15E06 [HDTV-720p Proper]");
+        }
+
+        [Test]
+        public void should_replace_quality_full_with_quality_title_and_real_when_a_real()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} [{Quality Full}]";
+            GivenReal();
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("South Park - S15E06 [HDTV-720p REAL]");
         }
 
         [TestCase(' ')]

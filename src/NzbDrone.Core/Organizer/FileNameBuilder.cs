@@ -432,10 +432,12 @@ namespace NzbDrone.Core.Organizer
         {
             var qualityTitle = _qualityDefinitionService.Get(episodeFile.Quality.Quality).Title;
             var qualityProper = GetQualityProper(series, episodeFile.Quality);
+            var qualityReal = GetQualityReal(series, episodeFile.Quality);
 
-            tokenHandlers["{Quality Full}"] = m => string.Format("{0} {1}", qualityTitle, qualityProper);
+            tokenHandlers["{Quality Full}"] = m => String.Format("{0} {1} {2}", qualityTitle, qualityProper, qualityReal);
             tokenHandlers["{Quality Title}"] = m => qualityTitle;
             tokenHandlers["{Quality Proper}"] = m => qualityProper;
+            tokenHandlers["{Quality Real}"] = m => qualityReal;
         }
 
         private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
@@ -706,6 +708,16 @@ namespace NzbDrone.Core.Organizer
                 }
 
                 return "Proper";
+            }
+
+            return String.Empty;
+        }
+
+        private string GetQualityReal(Series series, QualityModel quality)
+        {
+            if (quality.Revision.Real > 0)
+            {
+                return "REAL";
             }
 
             return string.Empty;
