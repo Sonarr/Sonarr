@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             string episodeString = "[Unknown Episode]";
 
-            if (IsDaily && EpisodeNumbers == null)
+            if (IsDaily && EpisodeNumbers.Empty())
             {
                 episodeString = String.Format("{0}", AirDate);
             }
