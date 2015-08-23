@@ -138,6 +138,7 @@
     <Compile Include="Extensions\Int64Extensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\UrlExtensions.cs" />
     <Compile Include="Extensions\XmlExtentions.cs" />
     <Compile Include="HashUtil.cs" />
     <Compile Include="Http\CurlHttpClient.cs" />
