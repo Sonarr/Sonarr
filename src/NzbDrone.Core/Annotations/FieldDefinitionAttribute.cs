@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Annotations
         Path,
         Hidden,
         Tag,
-        Action
+        Action,
+        Url
     }
 }

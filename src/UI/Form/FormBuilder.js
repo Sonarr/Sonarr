@@ -17,6 +17,10 @@ var _fieldBuilder = function(field) {
         return _templateRenderer.call(field, 'Form/HiddenTemplate');
     }
 
+    if (field.type === 'url') {
+        return _templateRenderer.call(field, 'Form/UrlTemplate');
+    }
+
     if (field.type === 'password') {
         return _templateRenderer.call(field, 'Form/PasswordTemplate');
     }

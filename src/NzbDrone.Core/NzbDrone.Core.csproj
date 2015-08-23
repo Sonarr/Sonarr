@@ -746,6 +746,14 @@
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
     <Compile Include="Notifications\Twitter\TwitterException.cs" />
+    <Compile Include="Notifications\Webhook\WebhookEpisode.cs" />
+    <Compile Include="Notifications\Webhook\WebhookException.cs" />
+    <Compile Include="Notifications\Webhook\WebhookMethod.cs" />
+    <Compile Include="Notifications\Webhook\WebhookPayload.cs" />
+    <Compile Include="Notifications\Webhook\WebhookSeries.cs" />
+    <Compile Include="Notifications\Webhook\WebhookService.cs" />
+    <Compile Include="Notifications\Webhook\WebhookSettings.cs" />
+    <Compile Include="Notifications\Webhook\Webhook.cs" />
     <Compile Include="Organizer\NamingConfigRepository.cs" />
     <Compile Include="Notifications\Twitter\Twitter.cs" />
     <Compile Include="Notifications\Twitter\TwitterService.cs" />
@@ -992,6 +1000,7 @@
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
     <Compile Include="Validation\Paths\SeriesPathValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
+    <Compile Include="Validation\UrlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
