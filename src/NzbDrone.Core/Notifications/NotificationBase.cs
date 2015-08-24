@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Notifications
 
         public abstract string Link { get; }
 
-        public abstract void OnGrab(string message);
+        public abstract void OnGrab(GrabMessage grabMessage);
         public abstract void OnDownload(DownloadMessage message); 
         public abstract void OnRename(Series series);
 

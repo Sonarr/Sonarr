@@ -19,11 +19,11 @@ namespace NzbDrone.Core.Notifications.Pushover
             get { return "https://pushover.net/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Episode Grabbed";
 
-            _proxy.SendNotification(title, message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
+            _proxy.SendNotification(title, grabMessage.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
         public override void OnDownload(DownloadMessage message)

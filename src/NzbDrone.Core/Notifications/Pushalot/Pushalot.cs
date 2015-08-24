@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Notifications.Pushalot
             get { return "https://www.Pushalot.com/"; }
         }
 
-        public override void OnGrab(String message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Episode Grabbed";
 
-            _proxy.SendNotification(title, message, Settings);
+            _proxy.SendNotification(title, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)

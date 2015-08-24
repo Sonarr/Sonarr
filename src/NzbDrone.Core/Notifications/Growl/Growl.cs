@@ -19,11 +19,11 @@ namespace NzbDrone.Core.Notifications.Growl
             get { return "http://growl.info/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Episode Grabbed";
 
-            _growlService.SendNotification(title, message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
+            _growlService.SendNotification(title, grabMessage.Message, "GRAB", Settings.Host, Settings.Port, Settings.Password);
         }
 
         public override void OnDownload(DownloadMessage message)

@@ -90,14 +90,19 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(EpisodeGrabbedEvent message)
         {
-            var messageBody = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
+            var grabMessage = new GrabMessage {
+                Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality),
+                Series = message.Episode.Series,
+                Quality = message.Episode.ParsedEpisodeInfo.Quality,
+                Episode = message.Episode
+            };
 
             foreach (var notification in _notificationFactory.OnGrabEnabled())
             {
                 try
                 {
                     if (!ShouldHandleSeries(notification.Definition, message.Episode.Series)) continue;
-                    notification.OnGrab(messageBody);
+                    notification.OnGrab(grabMessage);
                 }
 
                 catch (Exception ex)

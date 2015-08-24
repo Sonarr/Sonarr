@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             get { return "http://www.notifymyandroid.com/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Episode Grabbed";
 
-            _proxy.SendNotification(title, message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
+            _proxy.SendNotification(title, grabMessage.Message, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)

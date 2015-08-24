@@ -20,10 +20,10 @@ namespace NzbDrone.Core.Notifications.Email
             get { return null; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string subject = "Sonarr [TV] - Grabbed";
-            var body = String.Format("{0} sent to queue.", message);
+            var body = String.Format("{0} sent to queue.", grabMessage.Message);
 
             _emailService.SendEmail(Settings, subject, body);
         }
