@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Notifications.Synology
             get { return "http://www.synology.com"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
 
         }

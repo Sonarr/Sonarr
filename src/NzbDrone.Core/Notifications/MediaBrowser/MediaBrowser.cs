@@ -20,13 +20,13 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             get { return "http://mediabrowser.tv/"; }
         }
 
-        public override void OnGrab(String message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Sonarr - Grabbed";
 
             if (Settings.Notify)
             {
-                _mediaBrowserService.Notify(Settings, title, message);
+                _mediaBrowserService.Notify(Settings, title, grabMessage.Message);
             }
         }
 

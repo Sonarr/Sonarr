@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Notifications.Plex
             get { return "http://www.plexapp.com/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
         }
 

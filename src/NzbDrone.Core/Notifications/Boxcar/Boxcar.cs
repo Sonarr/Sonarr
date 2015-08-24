@@ -19,11 +19,11 @@ namespace NzbDrone.Core.Notifications.Boxcar
             get { return "https://boxcar.io/client"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Episode Grabbed";
 
-            _proxy.SendNotification(title, message, Settings);
+            _proxy.SendNotification(title, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)

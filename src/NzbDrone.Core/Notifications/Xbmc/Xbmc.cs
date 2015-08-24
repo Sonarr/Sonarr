@@ -25,11 +25,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             get { return "http://xbmc.org/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string header = "Sonarr - Grabbed";
 
-            Notify(Settings, header, message);
+            Notify(Settings, header, grabMessage.Message);
         }
 
         public override void OnDownload(DownloadMessage message)

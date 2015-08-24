@@ -19,10 +19,10 @@ namespace NzbDrone.Core.Notifications.Plex
             get { return "http://www.plexapp.com/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string header = "Sonarr [TV] - Grabbed";
-            _plexClientService.Notify(Settings, header, message);
+            _plexClientService.Notify(Settings, header, grabMessage.Message);
         }
 
         public override void OnDownload(DownloadMessage message)

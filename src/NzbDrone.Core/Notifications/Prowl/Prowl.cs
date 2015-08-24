@@ -20,11 +20,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             get { return "http://www.prowlapp.com/"; }
         }
 
-        public override void OnGrab(string message)
+        public override void OnGrab(GrabMessage grabMessage)
         {
             const string title = "Episode Grabbed";
 
-            _prowlService.SendNotification(title, message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
+            _prowlService.SendNotification(title, grabMessage.Message, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
         public override void OnDownload(DownloadMessage message)
