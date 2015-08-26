@@ -13,6 +13,7 @@ using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 {
@@ -60,6 +61,14 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
             get
             {
                 return "Torrent Blackhole";
+            }
+        }
+
+        public override ProviderMessage Message
+        {
+            get
+            {
+                return new ProviderMessage("Sonarr will move files from the Watch folder, it will not hardlink or copy", ProviderMessageType.Warning);
             }
         }
 
