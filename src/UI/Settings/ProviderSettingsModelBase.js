@@ -71,7 +71,7 @@ module.exports = DeepModel.extend({
 
         Messenger.monitor({
             promise        : promise,
-            successMessage : 'Connecting for \'{0}\' completed'.format(this.get('name')),
+            successMessage : 'Connecting for \'{0}\' succeeded'.format(this.get('name')),
             errorMessage   : 'Connecting for \'{0}\' failed'.format(this.get('name'))
         });
 
@@ -99,7 +99,7 @@ module.exports = DeepModel.extend({
 
         Messenger.monitor({
             promise        : promise,
-            successMessage : 'Testing \'{0}\' completed'.format(this.get('name')),
+            successMessage : 'Testing \'{0}\' succeeded'.format(this.get('name')),
             errorMessage   : 'Testing \'{0}\' failed'.format(this.get('name'))
         });
 
