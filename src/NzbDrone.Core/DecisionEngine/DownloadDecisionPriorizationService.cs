@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine
 {
@@ -29,32 +27,110 @@ namespace NzbDrone.Core.DecisionEngine
                             .GroupBy(c => c.RemoteEpisode.Series.Id, (seriesId, d) =>
                                 {
                                     var downloadDecisions = d.ToList();
-                                    var series = downloadDecisions.First().RemoteEpisode.Series;
 
-                                    return downloadDecisions
-                                        .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(series.Profile))
-                                        .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
-                                        .ThenBy(c => PrioritizeDownloadProtocol(series, c.RemoteEpisode.Release.DownloadProtocol))
-                                        .ThenByDescending(c => c.RemoteEpisode.Episodes.Count)
-                                        .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / Math.Max(1, c.RemoteEpisode.Episodes.Count))
-                                        .ThenByDescending(c => TorrentInfo.GetSeeders(c.RemoteEpisode.Release))
-                                        .ThenBy(c => c.RemoteEpisode.Release.Age);
+                                    return downloadDecisions.OrderByDescending(c => ScoreRelease(c.RemoteEpisode));
                                 })
                             .SelectMany(c => c)
                             .Union(decisions.Where(c => c.RemoteEpisode.Series == null))
                             .ToList();
         }
 
-        private int PrioritizeDownloadProtocol(Series series, DownloadProtocol downloadProtocol)
+        private long ScoreRelease(RemoteEpisode remoteEpisode)
         {
-            var delayProfile = _delayProfileService.BestForTags(series.Tags);
+            var score = 0L;
 
-            if (downloadProtocol == delayProfile.PreferredProtocol)
+            score += GetQualityScore(remoteEpisode);
+            score += GetProtocolScore(remoteEpisode);
+            score += GetSizeScore(remoteEpisode);
+            score += GetEpisodeCountScore(remoteEpisode);
+            score += GetEpisodeNumberScore(remoteEpisode);
+            score += GetTorrentScore(remoteEpisode);
+            score += GetUsenetScore(remoteEpisode);
+
+            return score;
+        }
+
+        private long GetQualityScore(RemoteEpisode remoteEpisode)
+        {
+            var score = 0;
+            score += remoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == remoteEpisode.ParsedEpisodeInfo.Quality.Quality) * 1000000;
+            score += remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real * 100000;
+            score += remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version * 10000;
+
+            return score;
+        }
+
+        private long GetProtocolScore(RemoteEpisode remoteEpisode)
+        {
+            var delayProfile = _delayProfileService.BestForTags(remoteEpisode.Series.Tags);
+
+            if (remoteEpisode.Release.DownloadProtocol == delayProfile.PreferredProtocol)
             {
-                return 0;
+                return 5000;
             }
 
-            return 1;
+            return 0;
+        }
+
+        private long GetSizeScore(RemoteEpisode remoteEpisode)
+        {
+            var score = remoteEpisode.Release.Size.Round(200.Megabytes()) / Math.Max(1, remoteEpisode.Episodes.Count) / 1024 / 1024 / 100 * -1;
+
+            return score;
+        }
+
+        private long GetEpisodeCountScore(RemoteEpisode remoteEpisode)
+        {
+            if (remoteEpisode.ParsedEpisodeInfo.FullSeason)
+            {
+                return 100;
+            }
+
+            return remoteEpisode.Episodes.Count * -10;
+        }
+
+        private long GetEpisodeNumberScore(RemoteEpisode remoteEpisode)
+        {
+            return remoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault() * -1;
+        }
+
+        private long GetTorrentScore(RemoteEpisode remoteEpisode)
+        {
+            var score = 0;
+            var seeders = TorrentInfo.GetSeeders(remoteEpisode.Release);
+            var peers = TorrentInfo.GetPeers(remoteEpisode.Release);
+
+            if (seeders.HasValue)
+            {
+                score += Math.Min(seeders.Value, 3000);
+            }
+
+            if (peers.HasValue)
+            {
+                score += Math.Min(peers.Value / 10, 1000);
+            }
+
+            return score;
+        }
+
+        private long GetUsenetScore(RemoteEpisode remoteEpisode)
+        {
+            if (remoteEpisode.Release.DownloadProtocol == DownloadProtocol.Usenet)
+            {
+                if (remoteEpisode.Release.AgeHours < 24)
+                {
+                    return 1000;
+                }
+
+                if (remoteEpisode.Release.Age < 7)
+                {
+                    return 500;
+                }
+
+                return remoteEpisode.Release.Age / -100;
+            }
+
+            return 0;
         }
     }
 }
