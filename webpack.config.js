@@ -14,6 +14,8 @@ if (phantom) {
 }
 
 module.exports = {
+  devtool : '#source-map',
+  watchOptions : { poll: true },
   entry: {
     vendor: 'vendor.js',
     main: 'main.js'
@@ -65,7 +67,7 @@ module.exports = {
   ],
   module: {
 
-    //this doesn't work yet. wainting for https://github.com/spenceralger/rcloader/issues/5
+    //this doesn't work yet. waiting for https://github.com/spenceralger/rcloader/issues/5
     /*preLoaders: [
         {
             test: /\.js$/, // include .js files
