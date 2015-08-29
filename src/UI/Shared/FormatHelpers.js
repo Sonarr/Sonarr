@@ -3,16 +3,21 @@ var filesize = require('filesize');
 var UiSettings = require('./UiSettingsModel');
 
 module.exports = {
-    bytes : function(sourceSize) {
+    bytes : function(sourceSize, sourceRounding) {
         var size = Number(sourceSize);
+        var rounding = Number(sourceRounding);
 
         if (isNaN(size)) {
             return '';
         }
+        
+        if (isNaN(rounding)) {
+            rounding = 1;
+        }
 
         return filesize(size, {
             base  : 2,
-            round : 1
+            round : rounding
         });
     },
 

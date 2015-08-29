@@ -1,5 +1,4 @@
 var NzbDroneCell = require('../../Cells/NzbDroneCell');
-var fileSize = require('filesize');
 var moment = require('moment');
 var UiSettingsModel = require('../../Shared/UiSettingsModel');
 var FormatHelpers = require('../../Shared/FormatHelpers');
@@ -19,8 +18,8 @@ module.exports = NzbDroneCell.extend({
             }
 
             var timeleft = this.cellValue.get('timeleft');
-            var totalSize = fileSize(this.cellValue.get('size'), 1, false);
-            var remainingSize = fileSize(this.cellValue.get('sizeleft'), 1, false);
+            var totalSize = FormatHelpers.bytes(this.cellValue.get('size'), 2);
+            var remainingSize = FormatHelpers.bytes(this.cellValue.get('sizeleft'), 2);
 
             if (timeleft === undefined) {
                 this.$el.html('-');
