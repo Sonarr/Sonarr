@@ -7,6 +7,10 @@ var stripBom = function (dest) {
         .pipe(stripbom({ showLog: false }))
         .pipe(gulp.dest(dest));
 
+    gulp.src(paths.src.less)
+        .pipe(stripbom({ showLog: false }))
+        .pipe(gulp.dest(dest));
+
     gulp.src(paths.src.templates)
         .pipe(stripbom({ showLog: false }))
         .pipe(gulp.dest(dest));
