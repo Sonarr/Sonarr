@@ -18,7 +18,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             if (localEpisode.ExistingFile)
             {
                 _logger.Debug("Skipping scene numbering check for existing episode");
-                Decision.Accept();
+                return Decision.Accept();
             }
 
             if (localEpisode.Episodes.Any(v => v.UnverifiedSceneNumbering))
