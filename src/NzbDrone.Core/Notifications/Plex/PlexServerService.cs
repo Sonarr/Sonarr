@@ -30,7 +30,6 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger = logger;
         }
 
-
         public void UpdateLibrary(Series series, PlexServerSettings settings)
         {
             try
@@ -38,13 +37,11 @@ namespace NzbDrone.Core.Notifications.Plex
                 _logger.Debug("Sending Update Request to Plex Server");
                 
                 var sections = GetSections(settings);
-
-                //TODO: How long should we cache this for?
                 var partialUpdates = _partialUpdateCache.Get(settings.Host, () => PartialUpdatesAllowed(settings), TimeSpan.FromHours(2));
 
                 if (partialUpdates)
                 {
-                    sections.ForEach(s => UpdateSeries(s.Id, series, s.Language, settings));
+                    UpdatePartialSection(series, sections, settings);
                 }
 
                 else
@@ -116,20 +113,28 @@ namespace NzbDrone.Core.Notifications.Plex
             _plexServerProxy.Update(sectionId, settings);
         }
 
-        private void UpdateSeries(int sectionId, Series series, string language, PlexServerSettings settings)
+        private void UpdatePartialSection(Series series, List<PlexSection> sections, PlexServerSettings settings)
         {
-            _logger.Debug("Updating Plex host: {0}, Section: {1}, Series: {2}", settings.Host, sectionId, series);
+            var partiallyUpdated = false;
 
-            var metadataId = GetMetadataId(sectionId, series, language, settings);
-
-            if (metadataId.HasValue)
+            foreach (var section in sections)
             {
-                _plexServerProxy.UpdateSeries(metadataId.Value, settings);
+                var metadataId = GetMetadataId(section.Id, series, section.Language, settings);
+
+                if (metadataId.HasValue)
+                {
+                    _logger.Debug("Updating Plex host: {0}, Section: {1}, Series: {2}", settings.Host, section.Id, series);
+                    _plexServerProxy.UpdateSeries(metadataId.Value, settings);
+
+                    partiallyUpdated = true;
+                }
             }
 
-            else
+            // Only update complete sections if all partial updates failed
+            if (!partiallyUpdated)
             {
-                UpdateSection(sectionId, settings);
+                _logger.Debug("Unable to update partial section, updating all TV sections");
+                sections.ForEach(s => UpdateSection(s.Id, settings));
             }
         }
 
