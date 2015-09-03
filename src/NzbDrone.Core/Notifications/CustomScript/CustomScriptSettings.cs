@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
         [FieldDefinition(0, Label = "Path", Type = FieldType.Path)]
         public String Path { get; set; }
 
-        [FieldDefinition(0, Label = "Arguments", HelpText = "Arguments to pass to the script")]
+        [FieldDefinition(1, Label = "Arguments", HelpText = "Arguments to pass to the script")]
         public String Arguments { get; set; }
 
         public NzbDroneValidationResult Validate()
