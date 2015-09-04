@@ -58,15 +58,17 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             {
                 var downloadClients = _downloadClientProvider.GetDownloadClients();
 
-                var trackedDownload = new List<TrackedDownload>();
+                var trackedDownloads = new List<TrackedDownload>();
 
                 foreach (var downloadClient in downloadClients)
                 {
                     var clientTrackedDownloads = ProcessClientDownloads(downloadClient);
-                    trackedDownload.AddRange(clientTrackedDownloads.Where(c => c.State == TrackedDownloadStage.Downloading));
+
+                    // Only track completed downloads if 
+                    trackedDownloads.AddRange(clientTrackedDownloads.Where(DownloadIsTrackable));
                 }
 
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownload));
+                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
             }
             finally
             {
@@ -137,6 +139,23 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
 
             return trackedDownloads;
+        }
+
+        private bool DownloadIsTrackable(TrackedDownload trackedDownload)
+        {
+            // If the download has already been imported or failed don't track it
+            if (trackedDownload.State != TrackedDownloadStage.Downloading)
+            {
+                return false;
+            }
+
+            // If CDH is disabled and the download status is complete don't track it
+            if (!_configService.EnableCompletedDownloadHandling && trackedDownload.DownloadItem.Status == DownloadItemStatus.Completed)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void Execute(CheckForFinishedDownloadCommand message)
