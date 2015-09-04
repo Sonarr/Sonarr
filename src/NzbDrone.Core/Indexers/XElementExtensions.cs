@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Indexers
         {
             try
             {
-                DateTime result = DateTime.Today.Date + DateTime.Parse(timeString).TimeOfDay;
+                var result = DateTime.Today.Date + DateTime.Parse(timeString).TimeOfDay;
                 return result.ToUniversalTime();
             }
             catch (FormatException e)
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Indexers
         {
             try
             {
-                DateTime result = DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse(timeString).TimeOfDay;
+                var result = DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse(timeString).TimeOfDay;
                 return result.ToUniversalTime();
             }
             catch (FormatException e)
