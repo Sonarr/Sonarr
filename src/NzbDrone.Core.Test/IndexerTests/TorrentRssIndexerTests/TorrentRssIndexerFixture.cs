@@ -159,8 +159,11 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var releases = Subject.FetchRecent();
 
-            releases.Should().HaveCount(50);
-            releases.First().Should().BeOfType<TorrentInfo>();
+            releases.Should().HaveCount(5);
+            foreach (var release in releases)
+            {
+                release.Should().BeOfType<TorrentInfo>();
+            }
 
             var torrentInfo = releases.First() as TorrentInfo;
 
@@ -177,21 +180,35 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().Be(3);
             torrentInfo.Seeders.Should().Be(3);
 
-            releases.ElementAt(1).Should().BeOfType<TorrentInfo>();
-            var secondTorrentInfo = releases.ElementAt(1) as TorrentInfo;
+            torrentInfo = releases.ElementAt(1) as TorrentInfo;
 
-            secondTorrentInfo.Title.Should().Be("Mr Robot S01E10 eps1 9 1 zer0-daY avi 1080p WEB-DL DD5 1 H 264-NTb ");
-            secondTorrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
-            secondTorrentInfo.DownloadUrl.Should().Be("https://beyondhd.me/download.php?torrent=39504&torrent_pass=0123456789abcdef0123456789abcdef");
-            secondTorrentInfo.InfoUrl.Should().BeNullOrEmpty();
-            secondTorrentInfo.CommentUrl.Should().BeNullOrEmpty();
-            secondTorrentInfo.Indexer.Should().Be(Subject.Definition.Name);
-            secondTorrentInfo.PublishDate.Should().Be((DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse("10:52 AM").TimeOfDay).ToUniversalTime());
-            secondTorrentInfo.Size.Should().Be(2254857830);
-            secondTorrentInfo.InfoHash.Should().BeNull();
-            secondTorrentInfo.MagnetUrl.Should().BeNull();
-            secondTorrentInfo.Peers.Should().Be(31);
-            secondTorrentInfo.Seeders.Should().Be(31);
+            torrentInfo.Title.Should().Be("Mr Robot S01E10 eps1 9 1 zer0-daY avi 1080p WEB-DL DD5 1 H 264-NTb ");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://beyondhd.me/download.php?torrent=39504&torrent_pass=0123456789abcdef0123456789abcdef");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be((DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse("10:52 AM").TimeOfDay).ToUniversalTime());
+            torrentInfo.Size.Should().Be(2254857830);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(31);
+            torrentInfo.Seeders.Should().Be(31);
+
+            torrentInfo = releases.ElementAt(3) as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("The Last Ship S02E12 1080p WEB-DL DD5 1 H 264-pcsyndicate ");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://beyondhd.me/download.php?torrent=39493&torrent_pass=0123456789abcdef0123456789abcdef");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2 Sep 2015"));
+            torrentInfo.Size.Should().Be(1717986918);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(7);
+            torrentInfo.Seeders.Should().Be(7);
         }
 
         [Test]
@@ -201,8 +218,11 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 
             var releases = Subject.FetchRecent();
 
-            releases.Should().HaveCount(50);
-            releases.First().Should().BeOfType<TorrentInfo>();
+            releases.Should().HaveCount(5);
+            foreach (var release in releases)
+            {
+                release.Should().BeOfType<TorrentInfo>();
+            }
 
             var torrentInfo = releases.First() as TorrentInfo;
 
@@ -219,7 +239,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().Be(4);
             torrentInfo.Seeders.Should().Be(3);
 
-            releases.ElementAt(1).Should().BeOfType<TorrentInfo>();
             torrentInfo = releases.ElementAt(1) as TorrentInfo;
 
             torrentInfo.Title.Should().Be("Tosh 0 S07E16 1080p WEB-DL AAC2.0 H.264-pcsyndicate");
@@ -235,7 +254,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().Be(2);
             torrentInfo.Seeders.Should().Be(2);
 
-            releases.ElementAt(3).Should().BeOfType<TorrentInfo>();
             torrentInfo = releases.ElementAt(3) as TorrentInfo;
 
             torrentInfo.Title.Should().Be("The Last Ship S02E12 1080p WEB-DL DD5.1 H.264-pcsyndicate");
