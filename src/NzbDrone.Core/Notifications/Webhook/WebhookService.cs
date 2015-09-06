@@ -9,6 +9,8 @@ using RestSharp;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Parser.Model;
 using System.Collections.Generic;
+using NzbDrone.Core.Update;
+using System;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -17,7 +19,9 @@ namespace NzbDrone.Core.Notifications.Webhook
         void OnDownload(Series series, EpisodeFile episodeFile, WebhookSettings settings);
         void OnRename(Series series, WebhookSettings settings);
         void OnGrab(Series series, RemoteEpisode episode, QualityModel quality, WebhookSettings settings);
+        void OnSystemUpdateAvailable(WebhookSettings settings, UpdatePackage package);
         ValidationFailure Test(WebhookSettings settings);
+
     }
 
     public class WebhookService : IWebhookService
@@ -66,7 +70,21 @@ namespace NzbDrone.Core.Notifications.Webhook
             NotifyWebhook(payload, settings);
         }
 
-        public void NotifyWebhook(WebhookPayload body, WebhookSettings settings)
+
+        public void OnSystemUpdateAvailable(WebhookSettings settings, UpdatePackage package)
+        {
+            var payload = new 
+            {
+                EventType = "Grab",
+                Update = new {
+                    Branch = package.Branch.ToString(),
+                    Version = package.Version.ToString()
+                }
+            };
+            NotifyWebhook(payload, settings);
+        }
+
+        public void NotifyWebhook(object body, WebhookSettings settings)
         {
             try {
                 var client = RestClientFactory.BuildClient(settings.Url);
@@ -116,5 +134,6 @@ namespace NzbDrone.Core.Notifications.Webhook
 
             return null;
         }
+
     }
 }

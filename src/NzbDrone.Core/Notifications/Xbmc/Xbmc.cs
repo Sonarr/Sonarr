@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Xbmc
 {
@@ -43,6 +44,14 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public override void OnRename(Series series)
         {
             UpdateAndClean(series);
+        }
+
+        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        {
+            const string header = "Sonarr - New System Update";
+            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+
+            Notify(Settings, header, body);
         }
 
         public override string Name

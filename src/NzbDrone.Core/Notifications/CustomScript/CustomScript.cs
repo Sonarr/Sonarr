@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.CustomScript
 {
@@ -32,6 +33,10 @@ namespace NzbDrone.Core.Notifications.CustomScript
             _customScriptService.OnRename(series, Settings);
         }
 
+        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        {
+        }
+
         public override string Name
         {
             get
@@ -41,6 +46,14 @@ namespace NzbDrone.Core.Notifications.CustomScript
         }
 
         public override bool SupportsOnGrab
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsOnSystemUpdateAvailable
         {
             get
             {

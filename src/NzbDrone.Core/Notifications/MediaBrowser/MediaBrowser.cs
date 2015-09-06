@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.MediaBrowser
 {
@@ -50,6 +51,16 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             if (Settings.UpdateLibrary)
             {
                 _mediaBrowserService.Update(Settings, series);
+            }
+        }
+
+        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        {
+            if (Settings.Notify)
+            {
+                const string title = "Sonarr [TV] - New System Update";
+                var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+                _mediaBrowserService.Notify(Settings, title, body);
             }
         }
 

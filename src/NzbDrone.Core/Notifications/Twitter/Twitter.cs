@@ -2,6 +2,8 @@
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
+using System;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
@@ -32,6 +34,13 @@ namespace NzbDrone.Core.Notifications.Twitter
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        {
+            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+
+            _twitterService.SendNotification(body, Settings);
         }
 
         public override object ConnectData(string stage, IDictionary<string, object> query)

@@ -2,6 +2,8 @@
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
+using System;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
@@ -33,6 +35,14 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        {
+            const string header = "Sonarr [TV] - New System Update";
+            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+
+            _plexClientService.Notify(Settings, header, body);
         }
 
         public override string Name
