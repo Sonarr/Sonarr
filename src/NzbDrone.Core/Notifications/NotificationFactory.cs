@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Composition;
@@ -13,6 +14,7 @@ namespace NzbDrone.Core.Notifications
         List<INotification> OnDownloadEnabled();
         List<INotification> OnUpgradeEnabled();
         List<INotification> OnRenameEnabled();
+        List<INotification> OnSystemUpdateAvailableEnabled();
     }
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
@@ -40,6 +42,11 @@ namespace NzbDrone.Core.Notifications
         public List<INotification> OnRenameEnabled()
         {
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnRename).ToList();
+        }
+
+        public List<INotification> OnSystemUpdateAvailableEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnSystemUpdateAvailable).ToList();
         }
 
         public override NotificationDefinition GetProviderCharacteristics(INotification provider, NotificationDefinition definition)

@@ -10,6 +10,8 @@ namespace NzbDrone.Core.Update
     public interface ICheckUpdateService
     {
         UpdatePackage AvailableUpdate();
+        UpdatePackage LatestUpdate();
+
     }
 
     public class CheckUpdateService : ICheckUpdateService
@@ -18,7 +20,7 @@ namespace NzbDrone.Core.Update
         private readonly IConfigFileProvider _configFileProvider;
 
         private readonly Logger _logger;
-
+        private UpdatePackage _latestUpdate;
 
         public CheckUpdateService(IUpdatePackageProvider updatePackageProvider,
                                   IConfigFileProvider configFileProvider,
@@ -31,7 +33,13 @@ namespace NzbDrone.Core.Update
 
         public UpdatePackage AvailableUpdate()
         {
-            return _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
+            _latestUpdate = _updatePackageProvider.GetLatestUpdate(_configFileProvider.Branch, BuildInfo.Version);
+            return _latestUpdate;
+        }
+
+        public UpdatePackage LatestUpdate()
+        {
+            return _latestUpdate;
         }
     }
 }
