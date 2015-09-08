@@ -10,7 +10,7 @@ using FluentMigrator.Runner.Processors.SQLite;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
-    public class NzbDroneSqliteProcessor : SqliteProcessor
+    public class NzbDroneSqliteProcessor : SQLiteProcessor
     {
         public NzbDroneSqliteProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, FluentMigrator.Runner.Processors.IDbFactory factory)
             : base(connection, generator, announcer, options, factory)
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             }
 
             // What is the cleanest way to do this? Add function to Generator?
-            var quoter = new SqliteQuoter();
+            var quoter = new SQLiteQuoter();
             var columnsToTransfer = String.Join(", ", tableDefinition.Columns.Select(c => quoter.QuoteColumnName(c.Name)));
 
             Process(new CreateTableExpression() { TableName = tempTableName, Columns = tableDefinition.Columns.ToList() });

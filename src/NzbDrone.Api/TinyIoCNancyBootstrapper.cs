@@ -163,7 +163,7 @@ namespace NzbDrone.Api
         /// Creates a per request child/nested container
         /// </summary>
         /// <returns>Request container instance</returns>
-        protected override sealed TinyIoCContainer CreateRequestContainer()
+        protected override sealed TinyIoCContainer CreateRequestContainer(NancyContext context)
         {
             return this.ApplicationContainer.GetChildContainer();
         }

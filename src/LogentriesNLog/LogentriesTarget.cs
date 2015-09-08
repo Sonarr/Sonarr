@@ -1,6 +1,6 @@
 ﻿using System;
 using LogentriesCore;
-using LogentriesNLog.fastJSON;
+using fastJSON;
 using NLog;
 using NLog.Targets;
 
@@ -16,7 +16,6 @@ namespace LogentriesNLog
             logentriesAsync = new AsyncLogger();
             logentriesAsync.setImmediateFlush(true);
         }
-
 
         /** Debug flag. */
         public bool Debug
@@ -122,7 +121,7 @@ namespace LogentriesNLog
                 log.ExceptionType = logEvent.Exception.GetType().ToString();
             }
 
-            logentriesAsync.AddLine(JSON.Instance.ToJSON(log));
+            logentriesAsync.AddLine(JSON.ToJSON(log));
         }
 
         protected override void CloseTarget()

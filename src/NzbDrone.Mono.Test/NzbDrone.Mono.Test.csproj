@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NzbDrone.Mono.Test</RootNamespace>
     <AssemblyName>NzbDrone.Mono.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -39,6 +39,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -48,24 +50,9 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=3.4.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.3.4.0\lib\net40\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=3.4.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.3.4.0\lib\net40\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -73,6 +60,18 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.Posix">
+      <HintPath>..\Libraries\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.4.0.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.4.0.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
@@ -85,27 +84,27 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
-      <Project>{f2be0fdf-6e47-4827-a420-dd4ef82407f8}</Project>
+      <Project>{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}</Project>
       <Name>NzbDrone.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Common.Test\NzbDrone.Common.Test.csproj">
-      <Project>{bec74619-ddbb-4fba-b517-d3e20afc9997}</Project>
+      <Project>{BEC74619-DDBB-4FBA-B517-D3E20AFC9997}</Project>
       <Name>NzbDrone.Common.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Core\NzbDrone.Core.csproj">
-      <Project>{ff5ee3b6-913b-47ce-9ceb-11c51b4e1205}</Project>
+      <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
       <Name>NzbDrone.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Host\NzbDrone.Host.csproj">
-      <Project>{95c11a9e-56ed-456a-8447-2c89c1139266}</Project>
+      <Project>{95C11A9E-56ED-456A-8447-2C89C1139266}</Project>
       <Name>NzbDrone.Host</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Mono\NzbDrone.Mono.csproj">
-      <Project>{15ad7579-a314-4626-b556-663f51d97cd1}</Project>
+      <Project>{15AD7579-A314-4626-B556-663F51D97CD1}</Project>
       <Name>NzbDrone.Mono</Name>
     </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Test.Common\NzbDrone.Test.Common.csproj">
-      <Project>{caddfce0-7509-4430-8364-2074e1eefca2}</Project>
+      <Project>{CADDFCE0-7509-4430-8364-2074E1EEFCA2}</Project>
       <Name>NzbDrone.Test.Common</Name>
     </ProjectReference>
   </ItemGroup>

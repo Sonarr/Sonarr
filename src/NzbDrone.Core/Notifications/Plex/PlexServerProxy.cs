@@ -11,6 +11,7 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Notifications.Plex.Models;
 using NzbDrone.Core.Rest;
 using RestSharp;
+using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.Plex
 {

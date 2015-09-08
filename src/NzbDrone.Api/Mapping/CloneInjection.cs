@@ -4,76 +4,87 @@ using System.Collections.Generic;
 using System.Linq;
 using Marr.Data;
 using Omu.ValueInjecter;
+using Omu.ValueInjecter.Injections;
+using System.Reflection;
 
 namespace NzbDrone.Api.Mapping
 {
-    public class CloneInjection : ConventionInjection
+    public class CloneInjection : LoopInjection
     {
-        protected override bool Match(ConventionInfo conventionInfo)
+        protected override void Execute(PropertyInfo sp, object source, object target)
         {
-            return conventionInfo.SourceProp.Name == conventionInfo.TargetProp.Name &&
-                   conventionInfo.SourceProp.Value != null;
+            var tp = target.GetType().GetProperty(sp.Name);
+            if (tp == null) return;
+            var val = sp.GetValue(source);
+            if (val == null) return;
+
+            tp.SetValue(target, GetClone(sp, tp, val));
         }
 
-        protected override object SetValue(ConventionInfo conventionInfo)
+        private static object GetClone(PropertyInfo sp, PropertyInfo tp, object sourceValue)
         {
-            if (conventionInfo.SourceProp.Type == conventionInfo.TargetProp.Type)
-                return conventionInfo.SourceProp.Value;
-
-
-            if (conventionInfo.SourceProp.Type.IsArray)
+            if (sp.PropertyType == tp.PropertyType)
             {
-                var array = (Array)conventionInfo.SourceProp.Value;
-                var clone = (Array)array.Clone();
-
-                for (var index = 0; index < array.Length; index++)
-                {
-                    var item = array.GetValue(index);
-                    if (!item.GetType().IsValueType && !(item is string))
-                    {
-                        clone.SetValue(Activator.CreateInstance(item.GetType()).InjectFrom<CloneInjection>(item), index);
-                    }
-                }
-
-                return clone;
+                return sourceValue;
             }
 
-            if (conventionInfo.SourceProp.Type.IsGenericType)
+            if (sp.PropertyType.IsValueType || sp.PropertyType == typeof(string))
             {
-                var genericInterfaces = conventionInfo.SourceProp.Type.GetGenericTypeDefinition().GetInterfaces();
+                return sourceValue;
+            }
+
+            if (sp.PropertyType.IsArray)
+            {
+                var arr = sourceValue as Array;
+                var arrClone = arr.Clone() as Array;
+
+                for (int index = 0; index < arr.Length; index++)
+                {
+                    var a = arr.GetValue(index);
+                    if (a.GetType().IsValueType || a is string) continue;
+
+                    arrClone.SetValue(Activator.CreateInstance(a.GetType()).InjectFrom<CloneInjection>(a), index);
+                }
+
+                return arrClone;
+            }
+
+            if (sp.PropertyType.IsGenericType)
+            {
+                var genericInterfaces = sp.PropertyType.GetGenericTypeDefinition().GetInterfaces();
                 if (genericInterfaces.Any(d => d == typeof(IEnumerable)))
                 {
-                    return MapLists(conventionInfo);
+                    var genericArgument = tp.PropertyType.GetGenericArguments()[0];
+                    return MapLists(genericArgument, sourceValue);
                 }
 
                 if (genericInterfaces.Any(i => i == typeof(ILazyLoaded)))
                 {
-                    return MapLazy(conventionInfo);
+                    return MapLazy(sp, tp, sourceValue);
                 }
 
                 //unhandled generic type, you could also return null or throw
-                return conventionInfo.SourceProp.Value;
+                return sourceValue;
             }
 
             //for simple object types create a new instace and apply the clone injection on it
-            return Activator.CreateInstance(conventionInfo.TargetProp.Type)
-                            .InjectFrom<CloneInjection>(conventionInfo.SourceProp.Value);
+            return Activator.CreateInstance(tp.PropertyType).InjectFrom<CloneInjection>(sourceValue);
         }
 
-        private static object MapLazy(ConventionInfo conventionInfo)
+        private static object MapLazy(PropertyInfo sp, PropertyInfo tp, object sourceValue)
         {
-            var sourceArgument = conventionInfo.SourceProp.Type.GetGenericArguments()[0];
+            var sourceArgument = sp.PropertyType.GetGenericArguments()[0];
 
-            dynamic lazy = conventionInfo.SourceProp.Value;
+            dynamic lazy = sourceValue;
 
             if (lazy.IsLoaded && lazy.Value != null)
             {
-                if (conventionInfo.TargetProp.Type.IsAssignableFrom(sourceArgument))
+                if (tp.PropertyType.IsAssignableFrom(sourceArgument))
                 {
                     return lazy.Value;
                 }
 
-                var genericArgument = conventionInfo.TargetProp.Type;
+                var genericArgument = tp.PropertyType;
 
                 if (genericArgument.IsValueType || genericArgument == typeof(string))
                 {
@@ -82,7 +93,7 @@ namespace NzbDrone.Api.Mapping
 
                 if (genericArgument.IsGenericType)
                 {
-                    if (conventionInfo.SourceProp.Type.GetGenericTypeDefinition().GetInterfaces().Any(d => d == typeof(IEnumerable)))
+                    if (sp.PropertyType.GetGenericTypeDefinition().GetInterfaces().Any(d => d == typeof(IEnumerable)))
                     {
                         return MapLists(genericArgument, lazy.Value);
                     }
@@ -92,13 +103,6 @@ namespace NzbDrone.Api.Mapping
             }
 
             return null;
-        }
-
-        private static object MapLists(ConventionInfo conventionInfo)
-        {
-            var genericArgument = conventionInfo.TargetProp.Type.GetGenericArguments()[0];
-
-            return MapLists(genericArgument, conventionInfo.SourceProp.Value);
         }
 
         private static object MapLists(Type targetType, object sourceValue)
