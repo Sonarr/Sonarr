@@ -307,6 +307,9 @@ namespace NzbDrone.Core.Parser
                                 result.Language = ParseLanguage(title);
                                 Logger.Debug("Language parsed: {0}", result.Language);
 
+                                result.IsSubtitled = ParseSubtitle(title);
+                                Logger.Debug("Is sub-titled: {0}", result.IsSubtitled);
+
                                 result.Quality = QualityParser.ParseQuality(title);
                                 Logger.Debug("Quality parsed: {0}", result.Quality);
 
@@ -528,6 +531,22 @@ namespace NzbDrone.Core.Parser
                 return Language.Hungarian;
 
             return Language.English;
+        }
+
+        public static bool ParseSubtitle(string title)
+        {
+            var lowerTitle = title.ToLower();
+
+            if (lowerTitle.Contains("vost"))
+                return true;
+
+            if (lowerTitle.Contains("dub"))
+                return true;
+            
+            if (lowerTitle.Contains("sub"))
+                return true;
+
+            return false;
         }
 
         private static SeriesTitleInfo GetSeriesTitleInfo(string title)

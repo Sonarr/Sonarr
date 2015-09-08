@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Parser.Model
         public Boolean Special { get; set; }
         public String ReleaseGroup { get; set; }
         public String ReleaseHash { get; set; }
+		public Boolean IsSubtitled { get; set; }
 
         public ParsedEpisodeInfo()
         {
