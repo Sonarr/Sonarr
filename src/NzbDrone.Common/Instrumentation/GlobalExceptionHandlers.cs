@@ -40,13 +40,13 @@ namespace NzbDrone.Common.Instrumentation
                 if (exception is TypeInitializationException && exception.InnerException is DllNotFoundException ||
                     exception is DllNotFoundException)
                 {
-                    Logger.DebugException("Minor Fail: " + exception.Message, exception);
+                    Logger.Debug(exception, "Minor Fail: " + exception.Message);
                     return;
                 }
             }
 
             Console.WriteLine("EPIC FAIL: {0}", exception);
-            Logger.FatalException("EPIC FAIL: " + exception.Message, exception);
+            Logger.Fatal(exception, "EPIC FAIL: " + exception.Message);
         }
     }
 }

@@ -264,7 +264,7 @@ namespace NzbDrone.Common.Http
             }
             catch (Exception e)
             {
-                _logger.WarnException("Failed to get response from: " + url, e);
+                _logger.Warn(e, "Failed to get response from: " + url);
                 throw;
             }
         }
@@ -331,7 +331,6 @@ namespace NzbDrone.Common.Http
                         break;
                     case "Range":
                         throw new NotImplementedException();
-                        break;
                     case "Referer":
                         webRequest.Referer = header.Value.ToString();
                         break;
@@ -342,7 +341,6 @@ namespace NzbDrone.Common.Http
                         throw new NotSupportedException("User-Agent other than Sonarr not allowed.");
                     case "Proxy-Connection":
                         throw new NotImplementedException();
-                        break;
                     default:
                         webRequest.Headers.Add(header.Key, header.Value.ToString());
                         break;

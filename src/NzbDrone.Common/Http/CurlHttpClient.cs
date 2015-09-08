@@ -33,7 +33,7 @@ namespace NzbDrone.Common.Http
             }
             catch (Exception ex)
             {
-                Logger.TraceException("Initializing curl failed", ex);
+                Logger.Trace(ex, "Initializing curl failed");
                 return false;
             }
         }

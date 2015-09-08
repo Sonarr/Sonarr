@@ -17,7 +17,7 @@ namespace NzbDrone.Common.TPL
                         var aggregateException = t.Exception.Flatten();
                         foreach (var exception in aggregateException.InnerExceptions)
                         {
-                            Logger.ErrorException("Task Error", exception);
+                            Logger.Error(exception, "Task Error");
                         }
                     }
                 }, TaskContinuationOptions.OnlyOnFaulted);
