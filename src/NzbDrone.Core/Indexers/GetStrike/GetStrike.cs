@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers.GetStrike
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new GetStrikeRequestGenerator() { Settings = Settings };
+            return new GetStrikeRequestGenerator { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()

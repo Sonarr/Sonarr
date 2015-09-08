@@ -55,16 +55,16 @@ namespace NzbDrone.Core.Indexers.GetStrike
                 try
                 {
                     double unixTime = 0;
-                    if (Double.TryParse(result.Added, out unixTime))
+                    if (Double.TryParse(result.upload_date, out unixTime))
                     {
                         Added = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
                         Added = Added.AddSeconds(unixTime).ToLocalTime();
                     }
                     else
                     {
-                        Added = DateTime.ParseExact(result.Added, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+                        Added = DateTime.ParseExact(result.upload_date, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
                     }
-                } catch (System.FormatException e)
+                } catch (System.FormatException)
                 {
                     throw new IndexerException(indexerResponse,
                         "Bad date_time");
@@ -73,13 +73,13 @@ namespace NzbDrone.Core.Indexers.GetStrike
                 torrentInfos.Add(new TorrentInfo()
                 {
                     Guid = string.Format("getStrike-{0}", id++),
-                    Title = result.Title,
+                    Title = result.torrent_title,
                     Size = result.Size,
-                    InfoHash = result.Hash,
-                    MagnetUrl = result.MagnetUri,
-                    InfoUrl = result.Info,
-                    Seeders = result.Seeders,
-                    Peers = result.Leechers + result.Seeders,
+                    InfoHash = result.torrent_hash,
+                    MagnetUrl = result.magnet_uri,
+                    InfoUrl = result.page,
+                    Seeders = result.seeds,
+                    Peers = result.leeches + result.seeds,
                     PublishDate = Added
                 });
             }

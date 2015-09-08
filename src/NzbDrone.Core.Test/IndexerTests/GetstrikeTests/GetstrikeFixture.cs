@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.IndexerTests.GetstrikeTests
         [SetUp]
         public void Setup()
         {
-            Subject.Definition = new IndexerDefinition()
+            Subject.Definition = new IndexerDefinition
                 {
                     Name = "Getstrike",
                     Settings = new GetStrikeSettings(),
@@ -37,9 +37,9 @@ namespace NzbDrone.Core.Test.IndexerTests.GetstrikeTests
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
             SingleEpisodeSearchCriteria s = new SingleEpisodeSearchCriteria();
-            SingleEpisodeSearchCriteria searchCriteria = new SingleEpisodeSearchCriteria()
+            SingleEpisodeSearchCriteria searchCriteria = new SingleEpisodeSearchCriteria
                 {
-                    SceneTitles = new List<string>() { "Series Title" }
+                    SceneTitles = new List<string> { "Series Title" }
                 };
             var releases = Subject.Fetch(searchCriteria);
 
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Test.IndexerTests.GetstrikeTests
             SingleEpisodeSearchCriteria s = new SingleEpisodeSearchCriteria();
             SingleEpisodeSearchCriteria searchCriteria = new SingleEpisodeSearchCriteria()
             {
-                SceneTitles = new List<string>() { "Series Title" }
+                SceneTitles = new List<string> { "Series Title" }
             };
             var releases = Subject.Fetch(searchCriteria);
 
