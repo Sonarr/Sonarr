@@ -1,4 +1,4 @@
-$msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
+$msBuild =  join-path ${env:ProgramFiles(x86)} "MSBuild\12.0\bin\MSBuild.exe"
 $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
 $outputFolderOsx = '.\_output_osx'
@@ -13,18 +13,18 @@ Function Build()
 {
     Write-Host "##teamcity[progressStart 'Build']"
 
-    $clean = $msbuild + " src\nzbdrone.sln /t:Clean /m"
-    $build = $msbuild + " src\nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
+    $clean = " src\nzbdrone.sln /t:Clean /m"
+    $build = " src\nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
 
     if(Test-Path $outputFolder)
     {
         Remove-Item -Recurse -Force $outputFolder -ErrorAction Continue
     }
 
-    Invoke-Expression $clean
+    Invoke-Expression "& '$msbuild' $clean "
     CheckExitCode
 
-    Invoke-Expression $build
+    Invoke-Expression "& '$msbuild' $build "
     CheckExitCode
 
     CleanFolder $outputFolder
