@@ -99,8 +99,6 @@ namespace NzbDrone.Common.Exceptron
         /// Timmy@aol.com
         /// 26437
         /// ">ID that will uniquely identify the user</param>
-        /// <param name="httpContext"><see cref="System.Web.HttpContext"/> in which the exception occurred. If no <see cref="System.Web.HttpContext"/> is provided
-        /// <see cref="ExceptronClient"/> will try to get the current <see cref="System.Web.HttpContext"/> from <see cref="System.Web.HttpContext.Current"/></param>
         /// <returns></returns>
         public ExceptionResponse SubmitException(Exception exception, string component, ExceptionSeverity severity = ExceptionSeverity.None, string message = null, string userId = null)
         {

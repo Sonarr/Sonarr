@@ -77,6 +77,7 @@ namespace NzbDrone.Common.Exceptron.Message
 
         /// <summary>
         /// Request url
+        /// </summary>
         /// <remarks>Only used for exception in context of a web request/</remarks>
         public string url { get; set; }
 

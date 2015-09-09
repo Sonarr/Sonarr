@@ -60,7 +60,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to gzip response", ex);
+                _logger.Error(ex, "Unable to gzip response");
                 throw;
             }
         }

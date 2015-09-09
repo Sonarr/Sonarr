@@ -41,7 +41,7 @@ namespace NzbDrone.Update.UpdateEngine
                     }
                     catch (Exception e)
                     {
-                        _logger.ErrorException("couldn't stop service", e);
+                        _logger.Error(e, "couldn't stop service");
                     }
                 }
 

@@ -43,7 +43,7 @@ namespace NzbDrone.Update.UpdateEngine
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't create a data backup", e);
+                _logger.Error(e, "Couldn't create a data backup");
             }
         }
     }

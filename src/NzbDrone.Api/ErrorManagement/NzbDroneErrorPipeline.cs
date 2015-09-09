@@ -26,7 +26,7 @@ namespace NzbDrone.Api.ErrorManagement
 
             if (apiException != null)
             {
-                _logger.WarnException("API Error", apiException);
+                _logger.Warn(apiException, "API Error");
                 return apiException.ToErrorResponse();
             }
 
@@ -62,13 +62,11 @@ namespace NzbDrone.Api.ErrorManagement
                             Message = exception.Message,
                         }.AsResponse(HttpStatusCode.Conflict);
                 }
-
-                var sqlErrorMessage = String.Format("[{0} {1}]", context.Request.Method, context.Request.Path);
-
-                _logger.ErrorException(sqlErrorMessage, sqLiteException);
+                
+                _logger.Error(sqLiteException, "[{0} {1}]", context.Request.Method, context.Request.Path);
             }
             
-            _logger.FatalException("Request Failed", exception);
+            _logger.Fatal(exception, "Request Failed");
 
             return new ErrorModel
                 {

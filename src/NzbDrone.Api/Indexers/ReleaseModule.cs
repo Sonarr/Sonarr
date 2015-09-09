@@ -68,7 +68,7 @@ namespace NzbDrone.Api.Indexers
             }
             catch (ReleaseDownloadException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
             }
 
@@ -96,7 +96,7 @@ namespace NzbDrone.Api.Indexers
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Episode search failed: " + ex.Message, ex);
+                _logger.Error(ex, "Episode search failed: " + ex.Message);
             }
 
             return new List<ReleaseResource>();

@@ -93,7 +93,6 @@ namespace NzbDrone.Api
                         break;
                     case Lifetime.PerRequest:
                         throw new InvalidOperationException("Unable to directly register a per request lifetime.");
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -120,7 +119,6 @@ namespace NzbDrone.Api
                         break;
                     case Lifetime.PerRequest:
                         throw new InvalidOperationException("Unable to directly register a per request lifetime.");
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }

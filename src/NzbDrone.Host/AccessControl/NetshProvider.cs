@@ -30,7 +30,7 @@ namespace NzbDrone.Host.AccessControl
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Error executing netsh with arguments: " + arguments, ex);
+                _logger.Warn(ex, "Error executing netsh with arguments: " + arguments);
             }
 
             return null;
