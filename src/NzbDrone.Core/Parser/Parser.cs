@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex AnimeReleaseGroupRegex = new Regex(@"^(?:\[(?<subgroup>(?!\s).+?(?<!\s))\](?:_|-|\s|\.)?)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VOSTFR)(?:\W|_))|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann)|(?<flemish>flemish)|(?<greek>greek)|(?<french>\b(?:FR|VOSTFR)\b)|(?<russian>\brus\b)|(?<dutch>nl\W?subs?)|(?<hungarian>\b(?:HUNDUB|HUN)\b)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex YearInTitleRegex = new Regex(@"^(?<title>.+?)(?:\W|_)?(?<year>\d{4})",
@@ -307,7 +307,7 @@ namespace NzbDrone.Core.Parser
                                 result.Language = ParseLanguage(title);
                                 Logger.Debug("Language parsed: {0}", result.Language);
 
-                                result.IsSubtitled = ParseSubtitle(title);
+                                result.IsSubtitled = ParseSubtitle(title, result.SeriesTitle);
                                 Logger.Debug("Is sub-titled: {0}", result.IsSubtitled);
 
                                 result.Quality = QualityParser.ParseQuality(title);
@@ -533,9 +533,9 @@ namespace NzbDrone.Core.Parser
             return Language.English;
         }
 
-        public static bool ParseSubtitle(string title)
+        public static bool ParseSubtitle(string title, string seriesTitle)
         {
-            var lowerTitle = title.ToLower();
+            var lowerTitle = !string.IsNullOrEmpty(seriesTitle) ? title.Replace(seriesTitle, string.Empty).ToLower() : title.ToLower();
 
             if (lowerTitle.Contains("vost"))
                 return true;

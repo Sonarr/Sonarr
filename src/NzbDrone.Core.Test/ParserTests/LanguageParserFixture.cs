@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.2009.S01E14.Dutch.HDTV.XviD-LOL", Language.Dutch, false)]
         [TestCase("Castle.2009.S01E14.Japanese.HDTV.XviD-LOL", Language.Japanese, false)]
         [TestCase("Castle.2009.S01E14.Cantonese.HDTV.XviD-LOL", Language.Cantonese, false)]
-        [TestCase("Castle.2009.S01E14.Mandarin.HDTV.XviD-LOL", Language.Mandarin)]
+        [TestCase("Castle.2009.S01E14.Mandarin.HDTV.XviD-LOL", Language.Mandarin, false)]
         [TestCase("Castle.2009.S01E14.Korean.HDTV.XviD-LOL", Language.Korean, false)]
         [TestCase("Castle.2009.S01E14.Russian.HDTV.XviD-LOL", Language.Russian, false)]
         [TestCase("Castle.2009.S01E14.Polish.HDTV.XviD-LOL", Language.Polish, false)]
@@ -47,6 +47,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL", Language.Hungarian, false)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian, false)]
         [TestCase("Suburgatory.S01E01.FRENCH.720p.WEB-DL.H264-MiND", Language.French, false)]
+        [TestCase("Suburgatory S02E16 HDTV Xvid-G2LOQ VOSTFR", Language.French, true)]
+        [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN", Language.Hungarian, false)]
         public void should_parse_language(string postTitle, Language language, bool isSubtitled)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

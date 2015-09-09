@@ -342,7 +342,7 @@ namespace NzbDrone.Core.Parser
                 info.Quality = QualityParser.ParseQuality(title);
                 info.ReleaseGroup = Parser.ParseReleaseGroup(title);
                 info.Language = Parser.ParseLanguage(title);
-                info.IsSubtitled = Parser.ParseSubtitle(title);
+                info.IsSubtitled = Parser.ParseSubtitle(title, series.Title);
                 info.Special = true;
 
                 _logger.Debug("Found special episode {0} for title '{1}'", info, title);
