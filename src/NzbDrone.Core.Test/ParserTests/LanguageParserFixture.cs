@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL", Language.Hungarian, true)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL", Language.Hungarian, false)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian, false)]
+        [TestCase("Suburgatory.S01E01.FRENCH.720p.WEB-DL.H264-MiND", Language.French, false)]
         public void should_parse_language(string postTitle, Language language, bool isSubtitled)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
