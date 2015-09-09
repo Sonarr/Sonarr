@@ -199,7 +199,7 @@ Function PackageTests()
         Copy-Item -Recurse ($_.FullName + "\*")  $testPackageFolder -ErrorAction Ignore
     }
 
-    .\src\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
+    .\src\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.4 -Output $testPackageFolder
 
     Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force
