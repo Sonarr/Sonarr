@@ -43,12 +43,12 @@ namespace NzbDrone.Core.MediaFiles
                     if (ex is UnauthorizedAccessException || ex is InvalidOperationException || ex is FileNotFoundException)
                     {
                         _logger.Debug("Unable to apply folder permissions to: ", path);
-                        _logger.DebugException(ex.Message, ex);
+                        _logger.Debug(ex, ex.Message);
                     }
                     else
                     {
                         _logger.Warn("Unable to apply folder permissions to: ", path);
-                        _logger.WarnException(ex.Message, ex);
+                        _logger.Warn(ex, ex.Message);
                     }
                 }
             }
@@ -91,8 +91,8 @@ namespace NzbDrone.Core.MediaFiles
             catch (Exception ex)
             {
 
-                _logger.WarnException("Unable to apply permissions to: " + path, ex);
-                _logger.DebugException(ex.Message, ex);
+                _logger.Warn(ex, "Unable to apply permissions to: " + path);
+                _logger.Debug(ex, ex.Message);
             }
         }
     }

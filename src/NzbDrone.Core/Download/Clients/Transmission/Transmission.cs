@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
             catch (DownloadClientAuthenticationException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure("Username", "Authentication failure")
                 {
                     DetailedDescription = "Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
@@ -207,7 +207,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
             catch (WebException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 if (ex.Status == WebExceptionStatus.ConnectFailure)
                 {
                     return new NzbDroneValidationFailure("Host", "Unable to connect")
@@ -219,7 +219,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
             catch (Exception ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
             }
 
@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
             catch (Exception ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Notifications
 
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Unable to send OnGrab notification to: " + notification.Definition.Name, ex);
+                    _logger.Error(ex, "Unable to send OnGrab notification to: " + notification.Definition.Name);
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Notifications
 
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Unable to send OnDownload notification to: " + notification.Definition.Name, ex);
+                    _logger.Warn(ex, "Unable to send OnDownload notification to: " + notification.Definition.Name);
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Notifications
 
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Unable to send OnRename notification to: " + notification.Definition.Name, ex);
+                    _logger.Warn(ex, "Unable to send OnRename notification to: " + notification.Definition.Name);
                 }
             }
         }

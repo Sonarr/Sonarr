@@ -130,15 +130,15 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
-                _logger.ErrorException(String.Format("Downloading torrent file for episode '{0}' failed ({1})",
-                    remoteEpisode.Release.Title, torrentUrl), ex);
+                _logger.Error(ex, "Downloading torrent file for episode '{0}' failed ({1})",
+                    remoteEpisode.Release.Title, torrentUrl);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
             }
             catch (WebException ex)
             {
-                _logger.ErrorException(String.Format("Downloading torrent file for episode '{0}' failed ({1})",
-                    remoteEpisode.Release.Title, torrentUrl), ex);
+                _logger.Error(ex, "Downloading torrent file for episode '{0}' failed ({1})",
+                    remoteEpisode.Release.Title, torrentUrl);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
             }
@@ -168,8 +168,8 @@ namespace NzbDrone.Core.Download
             }
             catch (FormatException ex)
             {
-                _logger.ErrorException(String.Format("Failed to parse magnetlink for episode '{0}': '{1}'",
-                    remoteEpisode.Release.Title, magnetUrl), ex);
+                _logger.Error(ex, "Failed to parse magnetlink for episode '{0}': '{1}'",
+                    remoteEpisode.Release.Title, magnetUrl);
 
                 return null;
             }

@@ -11,7 +11,7 @@ namespace NzbDrone.Api
 {
     public class TinyIoCNancyBootstrapper : NancyBootstrapperWithRequestContainerBase<TinyIoCContainer>
     {
-        // <summary>
+        /// <summary>
         /// Default assemblies that are ignored for autoregister
         /// </summary>
         private static readonly IEnumerable<Func<Assembly, bool>> DefaultAutoRegisterIgnoredAssemblies = new Func<Assembly, bool>[]

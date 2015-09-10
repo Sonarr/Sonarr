@@ -135,7 +135,7 @@ namespace NzbDrone.Core.MediaFiles
 
                     catch (Exception ex)
                     {
-                        _logger.WarnException("Unable to set date of file [" + filePath + "]", ex);
+                        _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
                     }
                 }
             }
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.MediaFiles
                 catch (Exception ex)
                 {
                     ex.ExceptronIgnoreOnMono();
-                    _logger.WarnException("Unable to set date of file [" + filePath + "]", ex);
+                    _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
                 }
             }
 
