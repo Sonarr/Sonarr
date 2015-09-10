@@ -1,4 +1,9 @@
 $msBuild =  join-path ${env:ProgramFiles(x86)} "MSBuild\12.0\bin\MSBuild.exe"
+if(!(Test-Path -Path $msBuild))
+{
+    $msBuild =  join-path ${env:ProgramFiles(x86)} "MSBuild\14.0\bin\MSBuild.exe"
+}
+    
 $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
 $outputFolderOsx = '.\_output_osx'
