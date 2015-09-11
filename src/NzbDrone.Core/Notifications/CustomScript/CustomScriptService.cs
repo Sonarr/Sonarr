@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 {
     public interface ICustomScriptService
     {
-        void OnDownload(Series series, EpisodeFile episodeFile, CustomScriptSettings settings);
+        void OnDownload(Series series, EpisodeFile episodeFile, string sourcePath, CustomScriptSettings settings);
         void OnRename(Series series, CustomScriptSettings settings);
         ValidationFailure Test(CustomScriptSettings settings);
     }
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             _logger = logger;
         }
 
-        public void OnDownload(Series series, EpisodeFile episodeFile, CustomScriptSettings settings)
+        public void OnDownload(Series series, EpisodeFile episodeFile, string sourcePath, CustomScriptSettings settings)
         {
             var environmentVariables = new StringDictionary();
 
@@ -52,6 +52,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_EpisodeFile_QualityVersion", episodeFile.Quality.Revision.Version.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_ReleaseGroup", episodeFile.ReleaseGroup ?? String.Empty);
             environmentVariables.Add("Sonarr_EpisodeFile_SceneName", episodeFile.SceneName ?? String.Empty);
+            environmentVariables.Add("Sonarr_EpisodeFile_SourcePath", sourcePath);
+            environmentVariables.Add("Sonarr_EpisodeFile_SourceFolder", Path.GetDirectoryName(sourcePath));
             
             ExecuteScript(environmentVariables, settings);
         }

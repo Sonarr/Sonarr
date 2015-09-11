@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
         public override void OnDownload(DownloadMessage message)
         {
-            _customScriptService.OnDownload(message.Series, message.EpisodeFile, Settings);
+            _customScriptService.OnDownload(message.Series, message.EpisodeFile, message.SourcePath, Settings);
         }
 
         public override void OnRename(Series series)

@@ -119,6 +119,7 @@ namespace NzbDrone.Core.Notifications
             downloadMessage.Series = message.Episode.Series;
             downloadMessage.EpisodeFile = message.EpisodeFile;
             downloadMessage.OldFiles = message.OldFiles;
+            downloadMessage.SourcePath = message.Episode.Path;
 
             foreach (var notification in _notificationFactory.OnDownloadEnabled())
             {
