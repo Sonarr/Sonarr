@@ -41,6 +41,7 @@ namespace NzbDrone.Api.Indexers
         public String InfoUrl { get; set; }
         public Boolean DownloadAllowed { get; set; }
         public Int32 ReleaseWeight { get; set; }
+        public Boolean IsSubtitled { get; set; }
 
 
         public int? Seeders { get; set; }

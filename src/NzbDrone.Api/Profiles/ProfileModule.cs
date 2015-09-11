@@ -46,6 +46,7 @@ namespace NzbDrone.Api.Profiles
             model.Cutoff = (Quality)resource.Cutoff.Id;
             model.Items = resource.Items.InjectTo<List<ProfileQualityItem>>();
             model.Language = resource.Language;
+            model.AllowSubtitled = resource.AllowSubtitled;
 
             _profileService.Update(model);
         }

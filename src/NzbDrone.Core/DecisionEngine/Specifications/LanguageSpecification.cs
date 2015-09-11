@@ -27,6 +27,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return Decision.Reject("{0} is wanted, but found {1}", wantedLanguage, subject.ParsedEpisodeInfo.Language);
             }
 
+            var allowSubtitled = subject.Series.Profile.Value.AllowSubtitled;
+            _logger.Debug("Checking if report meets subtitle requirements. {0}", subject.ParsedEpisodeInfo.IsSubtitled);
+
+            if (subject.ParsedEpisodeInfo.IsSubtitled && !allowSubtitled)
+            {
+                _logger.Debug("Report Language: rejected because it is sub-titled");
+                return Decision.Reject("Sub-titled not wanted");
+            }
+
             return Decision.Accept();
         }
     }
