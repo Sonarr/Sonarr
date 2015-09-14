@@ -1,11 +1,4 @@
-﻿using NLog;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MetadataSource.Tmdb.Resource;
-using NzbDrone.Core.Movies;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +6,13 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
+using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.MediaCover;
+using NzbDrone.Core.MetadataSource.Tmdb.Resource;
+using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.MetadataSource.Tmdb
 {
@@ -59,6 +59,22 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
         public IEnumerable<Movies.Movie> SearchForNewMovie(string title)
         {
 
+            var lowerTitle = title.ToLowerInvariant();
+
+            if (lowerTitle.StartsWith("tmdb:") || lowerTitle.StartsWith("tmdbid:"))
+            {
+                var slug = lowerTitle.Split(':')[1].Trim();
+
+                int tmdbId;
+
+                if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !Int32.TryParse(slug, out tmdbId) || tmdbId <= 0)
+                {
+                    yield break;
+                }
+
+                yield return MapMovie(new MovieResource { id = tmdbId });
+            }
+
             var httpRequest = _requestBuilder.Build("search/movie");
             httpRequest.AddQueryParam("api_key", API_KEY);
             httpRequest.AddQueryParam("query", GetSearchTerm(title));
@@ -78,7 +94,7 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
                 catch (TooManyRequestsException ex)
                 {
 
-                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString())*1000 + GRACETIME;
+                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString()) * 1000 + GRACETIME;
                     _logger.Warn("Too many request for tmdb, waiting {0}ms", waitTime);
                     Thread.Sleep(waitTime);
                 }
@@ -95,10 +111,38 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
             }
         }
 
+        private HttpResponse<T> GetHttpResponse<T>(NzbDrone.Common.Http.HttpRequest httpRequest) where T : new()
+        {
+            var tries = 0;
+            HttpResponse<T> httpResponse = null;
+
+            while (tries++ < MAX_RETRIES && httpResponse == null)
+            {
+                try
+                {
+                    httpResponse = _httpClient.Get<T>(httpRequest);
+                }
+                catch (TooManyRequestsException ex)
+                {
+
+                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString()) * 1000 + GRACETIME;
+                    _logger.Warn("Too many request for tmdb, waiting {0}ms", waitTime);
+                    Thread.Sleep(waitTime);
+                }
+            }
+
+            if (httpResponse == null)
+            {
+                throw new Exception("Error fetching data from tmdb");
+            }
+
+            return httpResponse;
+        }
+
         private Movie MapMovie(MovieResource movie)
         {
             var newMovie = new Movies.Movie();
-            var httpRequest = _requestBuilder.Build("movie/"+movie.id);
+            var httpRequest = _requestBuilder.Build("movie/" + movie.id);
             httpRequest.AddQueryParam("api_key", API_KEY);
 
             var tries = 0;
@@ -125,9 +169,9 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
                 }
                 catch (TooManyRequestsException ex)
                 {
-                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString())*1000 + GRACETIME;
+                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString()) * 1000 + GRACETIME;
                     _logger.Warn("Too many request for tmdb, waiting {0}ms", waitTime);
-                    
+
                     Thread.Sleep(waitTime);
                 }
             }
@@ -149,22 +193,31 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
             try
             {
                 newMovie.Year = DateTime.Parse(movie.release_date).Year;
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
             }
             newMovie.Overview = movie.overview;
             newMovie.Runtime = movie.runtime;
-            //newMovie.TitleSlug = movie.url.ToLower().Replace("http://trackt.tv/movie/", "");
 
-            //newMovie.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = movie.images.banner });
             if (movie.poster_path != null)
-                newMovie.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, 
-                                                                Url = "http://image.tmdb.org/t/p/w154" + movie.poster_path, 
-                                                                CoverOrigin = MediaCoverOrigin.Movie});
+            {
+                newMovie.Images.Add(new MediaCover.MediaCover
+                {
+                    CoverType = MediaCoverTypes.Poster,
+                    Url = "http://image.tmdb.org/t/p/w154" + movie.poster_path,
+                    CoverOrigin = MediaCoverOrigin.Movie
+                });
+            }
             if (movie.backdrop_path != null)
-                newMovie.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart,
-                                                                Url = "http://image.tmdb.org/t/p/w780" + movie.backdrop_path,
-                                                                CoverOrigin = MediaCoverOrigin.Movie });
+            {
+                newMovie.Images.Add(new MediaCover.MediaCover
+                {
+                    CoverType = MediaCoverTypes.Fanart,
+                    Url = "http://image.tmdb.org/t/p/w780" + movie.backdrop_path,
+                    CoverOrigin = MediaCoverOrigin.Movie
+                });
+            }
             return newMovie;
         }
 
