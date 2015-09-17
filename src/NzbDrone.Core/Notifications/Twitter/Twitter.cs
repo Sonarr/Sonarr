@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Twitter
         {
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
 

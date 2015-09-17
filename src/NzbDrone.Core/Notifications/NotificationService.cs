@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Notifications
                 {
                     try
                     {
-                        notification.OnSystemUpdateAvailable(_lastUpdate);
+                        notification.OnUpdateAvailable(_lastUpdate);
                     }
                     catch (Exception ex)
                     {

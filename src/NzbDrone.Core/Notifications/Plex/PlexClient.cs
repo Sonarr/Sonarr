@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             const string header = "Sonarr [TV] - New System Update";
             var body = String.Format("New update is available - {0}", package.Version.ToString());

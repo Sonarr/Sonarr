@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Plex
             UpdateIfEnabled(series);
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
 
         }

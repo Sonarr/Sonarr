@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Email
         {
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             const string subject = "Sonarr [TV] - New System Update";
             var body = String.Format("New update is available - {0}", package.Version.ToString());

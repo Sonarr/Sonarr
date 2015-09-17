@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             _customScriptService.OnRename(series, Settings);
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
         }
 

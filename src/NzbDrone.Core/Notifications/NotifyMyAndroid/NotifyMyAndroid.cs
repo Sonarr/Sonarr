@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         {
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             const string title = "New update is available";
             var body = String.Format("New update is available - {0}", package.Version.ToString());

@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             _service.OnRename(series, Settings);
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             _service.OnSystemUpdateAvailable(Settings, package);
         }

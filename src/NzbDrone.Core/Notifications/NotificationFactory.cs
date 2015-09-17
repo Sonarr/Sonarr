@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Notifications
 
         public List<INotification> OnSystemUpdateAvailableEnabled()
         {
-            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnSystemUpdateAvailable).ToList();
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnUpdateAvailable).ToList();
         }
 
         public override NotificationDefinition GetProviderCharacteristics(INotification provider, NotificationDefinition definition)

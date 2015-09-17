@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
         }
 

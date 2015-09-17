@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
         {
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             const string title = "New System Update";
             var body = String.Format("New update is available - {0}", package.Version.ToString());
