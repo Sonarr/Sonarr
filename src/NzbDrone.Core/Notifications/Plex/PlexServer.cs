@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Notifications.Plex
             }
         }
 
-        public override bool SupportsOnSystemUpdateAvailable
+        public override bool SupportsOnUpdateAvailable
         {
             get
             {

@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             }
         }
 
-        public override bool SupportsOnSystemUpdateAvailable
+        public override bool SupportsOnUpdateAvailable
         {
             get
             {

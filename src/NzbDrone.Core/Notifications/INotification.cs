@@ -17,6 +17,6 @@ namespace NzbDrone.Core.Notifications
         bool SupportsOnDownload { get; }
         bool SupportsOnUpgrade { get; }
         bool SupportsOnRename { get; }
-        bool SupportsOnSystemUpdateAvailable { get; }
+        bool SupportsOnUpdateAvailable { get; }
     }
 }

@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override bool SupportsOnSystemUpdateAvailable
+        public override bool SupportsOnUpdateAvailable
         {
             get
             {

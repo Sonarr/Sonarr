@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Notifications
         public virtual bool SupportsOnDownload { get { return true; } }
         public virtual bool SupportsOnUpgrade { get { return true; } }
         public virtual bool SupportsOnRename { get { return true; } }
-        public virtual bool SupportsOnSystemUpdateAvailable { get { return true; } }
+        public virtual bool SupportsOnUpdateAvailable { get { return true; } }
 
         protected TSettings Settings
         {
