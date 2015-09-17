@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Notifications.Prowl
         public override void OnSystemUpdateAvailable(UpdatePackage package)
         {
             const string subject = "New System Update";
-            var body = string.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
 
             _prowlService.SendNotification(subject, body, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }

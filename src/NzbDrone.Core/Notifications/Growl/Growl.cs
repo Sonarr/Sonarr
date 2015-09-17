@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications.Growl
         public override void OnSystemUpdateAvailable(UpdatePackage package)
         {
             const string title = "New update is available";
-            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
 
             _growlService.SendNotification(title, body, "SYSTEMUPDATE", Settings.Host, Settings.Port, Settings.Password);
         }

@@ -54,12 +54,12 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             }
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             if (Settings.Notify)
             {
                 const string title = "Sonarr [TV] - New System Update";
-                var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+                var body = String.Format("New update is available - {0}", package.Version.ToString());
                 _mediaBrowserService.Notify(Settings, title, body);
             }
         }

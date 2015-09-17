@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         public override void OnSystemUpdateAvailable(UpdatePackage package)
         {
             const string title = "New update is available";
-            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
 
             _proxy.SendNotification(title, body, Settings.ApiKey, (NotifyMyAndroidPriority)Settings.Priority);
         }

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Notifications.Plex
         public override void OnSystemUpdateAvailable(UpdatePackage package)
         {
             const string header = "Sonarr [TV] - New System Update";
-            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
 
             _plexClientService.Notify(Settings, header, body);
         }

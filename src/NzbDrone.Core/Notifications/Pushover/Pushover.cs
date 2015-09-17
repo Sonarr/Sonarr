@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications.Pushover
         public override void OnSystemUpdateAvailable(UpdatePackage package)
         {
             const string title = "New System Update";
-            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
 
             _proxy.SendNotification(title, body, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }

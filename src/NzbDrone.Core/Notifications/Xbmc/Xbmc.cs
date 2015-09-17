@@ -46,10 +46,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(series);
         }
 
-        public override void OnSystemUpdateAvailable(UpdatePackage package)
+        public override void OnUpdateAvailable(UpdatePackage package)
         {
             const string header = "Sonarr - New System Update";
-            var body = String.Format("New update is available - {0} - {1}", package.Version.ToString(), package.Url.ToString());
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
 
             Notify(Settings, header, body);
         }
