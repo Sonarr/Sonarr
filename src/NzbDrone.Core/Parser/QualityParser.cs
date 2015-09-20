@@ -16,12 +16,13 @@ namespace NzbDrone.Core.Parser
                                                                 (?<bluray>BluRay|Blu-Ray|HDDVD|BD)|
                                                                 (?<webdl>WEB[-_. ]DL|WEBDL|WebRip|iTunesHD|WebHD)|
                                                                 (?<hdtv>HDTV)|
-                                                                (?<bdrip>BDRiP)|
+                                                                (?<bdrip>BDRip)|
                                                                 (?<brrip>BRRip)|
                                                                 (?<dvd>DVD|DVDRip|NTSC|PAL|xvidvd)|
                                                                 (?<dsr>WS[-_. ]DSR|DSR)|
                                                                 (?<pdtv>PDTV)|
-                                                                (?<sdtv>SDTV)
+                                                                (?<sdtv>SDTV)|
+                                                                (?<tvrip>TVRip)
                                                                 )\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
@@ -165,7 +166,8 @@ namespace NzbDrone.Core.Parser
 
             if (sourceMatch.Groups["pdtv"].Success ||
                 sourceMatch.Groups["sdtv"].Success ||
-                sourceMatch.Groups["dsr"].Success)
+                sourceMatch.Groups["dsr"].Success ||
+                sourceMatch.Groups["tvrip"].Success)
             {
                 if (HighDefPdtvRegex.IsMatch(normalizedName))
                 {
@@ -176,6 +178,7 @@ namespace NzbDrone.Core.Parser
                 result.Quality = Quality.SDTV;
                 return result;
             }
+
 
             //Anime Bluray matching
             if (AnimeBlurayRegex.Match(normalizedName).Success)

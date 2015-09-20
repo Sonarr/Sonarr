@@ -56,6 +56,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[HorribleSubs] Yowamushi Pedal - 32 [480p]", false)]
         [TestCase("[CR] Sailor Moon - 004 [480p][48CE2D0F]", false)]
         [TestCase("[Hatsuyuki] Naruto Shippuuden - 363 [848x480][ADE35E38]", false)]
+        [TestCase("Muppet.Babies.S03.TVRip.XviD-NOGRP", false)]
         public void should_parse_sdtv_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.SDTV, proper);
