@@ -110,9 +110,18 @@ namespace NzbDrone.Core.MediaFiles
                     }
                 }
 
-                _logger.Debug("Moving '{0}' to '{1}'", path, destination);
-                _diskTransferService.TransferFile(path, destination, TransferMode.Move);
-
+                try
+                {
+                    _logger.Debug("Moving '{0}' to '{1}'", path, destination);
+                    _diskTransferService.TransferFile(path, destination, TransferMode.Move);
+                }
+                catch (IOException e)
+                {
+                    var message = String.Format("Unable to move '{0}' to the recycling bin: '{1}'", path, destination);
+                    _logger.ErrorException(message, e);
+                    throw;
+                }
+                
                 //TODO: Better fix than this for non-Windows?
                 if (OsInfo.IsWindows)
                 {
