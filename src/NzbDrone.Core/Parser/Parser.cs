@@ -98,8 +98,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:(?<title>.+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                //Supports Season only releases
+                //Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                //4 digit season only releases
+                new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{4}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 //Episodes with airdate
