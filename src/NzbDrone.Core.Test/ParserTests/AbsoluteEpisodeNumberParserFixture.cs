@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeasonNumber.Should().Be(seasonNumber);
             result.EpisodeNumbers.SingleOrDefault().Should().Be(episodeNumber);
-            result.SeriesTitle.Should().Be(title);
+            result.Title.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeasonNumber.Should().Be(0);
             result.EpisodeNumbers.SingleOrDefault().Should().Be(0);
-            result.SeriesTitle.Should().Be(title);
+            result.Title.Should().Be(title);
             result.FullSeason.Should().BeFalse();
             result.Special.Should().BeTrue();
         }
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(absoluteEpisodeNumbers);
-            result.SeriesTitle.Should().Be(title);
+            result.Title.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
     }

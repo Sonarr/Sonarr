@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Api.REST;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Api.Episodes
 {

@@ -5,7 +5,9 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 

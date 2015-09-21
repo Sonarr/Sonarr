@@ -1,0 +1,46 @@
+<div class="series-item">
+    <div class="row">
+        <div class="col-md-2 col-xs-3">
+            <a href="{{movieRoute}}">
+                {{moviePoster}}
+            </a>
+        </div>
+        <div class="col-md-10 col-xs-9">
+            <div class="row">
+                <div class="col-md-10 col-xs-10">
+                    <a href="{{movieRoute}}" target="_blank">
+                        <h2>{{title}}</h2>
+                    </a>
+                </div>
+                <div class="col-md-2 col-xs-2">
+                    <div class="pull-right series-overview-list-actions">
+                        <i class="icon-sonarr-refresh x-refresh" title="Update movie info and scan disk"/>
+                        <i class="icon-sonarr-edit x-edit" title="Edit Movie"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <a href="{{movieRoute}}">
+                        <div>
+                            {{overview}}
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-md-12">
+                        &nbsp;
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-md-10 col-xs-8">
+                    {{profile profileId}}
+                </div>
+                <div class="col-md-2 col-xs-4">
+                    {{> MovieDownloadPartial }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

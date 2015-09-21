@@ -48,5 +48,10 @@ namespace NzbDrone.Core.Indexers
         {
             return new List<IEnumerable<IndexerRequest>>();
         }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
     }
 }

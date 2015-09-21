@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         private string _sabDrop;
         private string _nzbPath;
         private RemoteEpisode _remoteEpisode;
+        private RemoteMovie _remoteMovie;
 
         [SetUp]
         public void Setup()
@@ -41,6 +42,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
 
+            _remoteMovie = new RemoteMovie();
+            _remoteMovie.Release = new ReleaseInfo();
+            _remoteMovie.Release.Title = _title;
+            _remoteMovie.Release.DownloadUrl = _nzbUrl;
+
+            _remoteMovie.ParsedMovieInfo = new ParsedMovieInfo();
+
+
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new PneumaticSettings
             {
@@ -57,6 +66,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         public void should_download_file_if_it_doesnt_exist()
         {
             Subject.Download(_remoteEpisode);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
+        }
+
+        [Test]
+        public void should_download_movie_file_if_it_doesnt_exist()
+        {
+            Subject.Download(_remoteMovie);
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
         }
@@ -93,6 +110,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             _remoteEpisode.Release.Title = illegalTitle;
 
             Subject.Download(_remoteEpisode);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
+        }
+
+        [Test]
+        public void should_replace_illegal_characters_in_movie_title()
+        {
+            var illegalTitle = "Saturday Night Live - 2015 - Jeremy Renner/Maroon 5 [SDTV]";
+            var expectedFilename = Path.Combine(_pneumaticFolder, "Saturday Night Live - 2015 - Jeremy Renner+Maroon 5 [SDTV].nzb");
+            _remoteMovie.Release.Title = illegalTitle;
+
+            Subject.Download(_remoteMovie);
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
         }

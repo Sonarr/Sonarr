@@ -10,7 +10,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Tv;
 
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
                 return null;
             }
 
-            var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
+            var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType, MediaCoverOrigin.Series);
             var destination = Path.Combine(series.Path, Path.GetFileName(series.Path) + Path.GetExtension(source));
 
             return new List<ImageFileResult>{ new ImageFileResult(destination, source) };

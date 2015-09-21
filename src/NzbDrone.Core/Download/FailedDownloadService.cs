@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Download
                     trackedDownload.Warn("Download wasn't grabbed by sonarr, skipping");
                     return;
                 }
-            
+
                 trackedDownload.State = TrackedDownloadStage.DownloadFailed;
                 PublishDownloadFailedEvent(grabbedItems, failure, trackedDownload);
             }
@@ -88,7 +88,8 @@ namespace NzbDrone.Core.Download
             var downloadFailedEvent = new DownloadFailedEvent
             {
                 SeriesId = historyItem.SeriesId,
-                EpisodeIds = historyItems.Select(h => h.EpisodeId).ToList(),
+                MovieId = historyItem.MovieId,
+                EpisodeIds = historyItems.Where(h => h.SeriesId > 0).Select(h => h.EpisodeId).ToList(),
                 Quality = historyItem.Quality,
                 SourceTitle = historyItem.SourceTitle,
                 DownloadClient = historyItem.Data.GetValueOrDefault(History.History.DOWNLOAD_CLIENT),

@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         protected String _completedDownloadFolder;
         protected String _blackholeFolder;
         protected String _filePath;
+        protected String _movieFilePath;
 
         [SetUp]
         public void Setup()
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             _completedDownloadFolder = @"c:\blackhole\completed".AsOsAgnostic();
             _blackholeFolder = @"c:\blackhole\torrent".AsOsAgnostic();
             _filePath = (@"c:\blackhole\torrent\" + _title + ".torrent").AsOsAgnostic();
+            _movieFilePath = (@"c:\blackhole\torrent\" + _movieTitle + ".torrent").AsOsAgnostic();
 
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new TorrentBlackholeSettings
@@ -101,6 +103,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         }
 
         [Test]
+        public void Download_should_download_movie_file_if_it_doesnt_exist()
+        {
+            var remoteMovie = CreateRemoteMovie();
+
+            Subject.Download(remoteMovie);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.ToString() == _movieDownloadUrl)), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_movieFilePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public void Download_should_replace_illegal_characters_in_title()
         {
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
@@ -115,6 +129,23 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(expectedFilename), Times.Once());
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
+
+        [Test]
+        public void Download_should_replace_illegal_characters_in_movie_title()
+        {
+            var illegalTitle = "Saturday Night Live (2015) - Jeremy Renner/Maroon 5 [SDTV]";
+            var expectedFilename = Path.Combine(_blackholeFolder, "Saturday Night Live (2015) - Jeremy Renner+Maroon 5 [SDTV]" + Path.GetExtension(_filePath));
+
+            var remoteMovie = CreateRemoteMovie();
+            remoteMovie.Release.Title = illegalTitle;
+
+            Subject.Download(remoteMovie);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.ToString() == _movieDownloadUrl)), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(expectedFilename), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
 
         [Test]
         public void GetItems_should_considered_locked_files_queued()

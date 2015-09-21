@@ -1,0 +1,65 @@
+<div class="search-item {{#unless isExisting}}search-item-new{{/unless}}">
+    <div class="row">
+        <div class="col-md-2">
+            <a href="{{imdbUrl}}" target="_blank">
+                {{moviePoster}}
+            </a>
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="movie-title">
+					{{#if originalTitle}}
+					    {{originalTitleWithYear}}
+					{{else}}
+                        {{titleWithYear}}
+					{{/if}}
+                    </h2>
+                </div>
+            </div>
+            <div class="row new-movie-overview x-overview">
+                <div class="col-md-12 overview-internal">
+                    {{overview}}
+                </div>
+            </div>
+            <div class="row">
+                {{#unless existing}}
+                    {{#unless path}}
+                        <div class="form-group col-md-4">
+                            <label>Path</label>
+                            {{> RootFolderSelectionPartial rootFolders}}
+                        </div>
+                    {{/unless}}
+
+                    <div class="form-group col-md-2">
+                        <label>Profile</label>
+                        {{> ProfileSelectionPartial profiles}}
+                    </div>
+                {{/unless}}
+            </div>
+            <div class="row">
+                {{#unless existing}}
+                    <div class="form-group col-md-2 col-md-offset-10">
+                        <!--Uncomment if we need to add even more controls to add series-->
+                        <!--<label style="visibility: hidden">Add</label>-->
+                        <div class="btn-group">
+                            <button class="btn btn-success add x-add" title="Add">
+                                <i class="icon-sonarr-add"></i>
+                            </button>
+
+                            <button class="btn btn-success add x-add-search" title="Add and Search for movie">
+                                <i class="icon-sonarr-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="col-md-2 col-md-offset-10">
+                        <a class="btn btn-default" href="{{movieRoute}}">
+                            Already Exists
+                        </a>
+                    </div>
+                {{/unless}}
+            </div>
+        </div>
+    </div>
+</div>

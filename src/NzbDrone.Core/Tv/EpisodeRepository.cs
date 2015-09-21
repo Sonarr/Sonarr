@@ -6,8 +6,8 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Extensions;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Tv

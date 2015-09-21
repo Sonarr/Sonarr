@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
@@ -86,8 +87,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test, TestCaseSource("HashedReleaseParserCases")]
         public void should_properly_parse_hashed_releases(string path, string title, Quality quality, string releaseGroup)
         {
-            var result = Parser.Parser.ParsePath(path);
-            result.SeriesTitle.Should().Be(title);
+            var result = Parser.Parser.ParsePath(path, new Series());
+            result.Title.Should().Be(title);
             result.Quality.Quality.Should().Be(quality);
             result.ReleaseGroup.Should().Be(releaseGroup);
         }

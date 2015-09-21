@@ -1,6 +1,6 @@
+using NzbDrone.Core.MediaFiles;
 using System;
 using System.Collections.Generic;
-using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Configuration
         String RecycleBin { get; set; }
         Boolean AutoDownloadPropers { get; set; }
         Boolean CreateEmptySeriesFolders { get; set; }
+        Boolean CreateEmptyMovieFolders { get; set; }
         FileDateType FileDate { get; set; }
         Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
         Boolean CopyUsingHardlinks { get; set; }

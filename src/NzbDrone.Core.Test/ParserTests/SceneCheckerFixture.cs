@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("30.Rock.S04.720p.HDTV.X264-DIMENSION")]
         public void should_return_true_for_scene_names(string title)
         {
-            SceneChecker.IsSceneTitle(title).Should().BeTrue();
+            SceneChecker.IsSeriesSceneTitle(title).Should().BeTrue();
         }
 
 
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("30.Rock.720p.HDTV.X264-DIMENSION", Description = "no episode")]
         public void should_return_false_for_non_scene_names(string title)
         {
-            SceneChecker.IsSceneTitle(title).Should().BeFalse();
+            SceneChecker.IsSeriesSceneTitle(title).Should().BeFalse();
         }
 
 

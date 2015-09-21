@@ -1,0 +1,41 @@
+{{#if overview}}
+<div class="row movie-page-header">
+    <div class="visible-lg col-lg-2 poster">
+        {{moviePoster}}
+    </div>
+    <div class="col-md-12 col-lg-10">
+        <div>
+            <h1 class="header-text">
+                <i class="x-monitored" title="Toggle monitored state for this movie"/>
+                {{title}}
+                <div class="movie-actions pull-right">
+                    <div class="x-movie-file-editor">
+                        <i class="icon-sonarr-episode-file" title="Modify file for movie"/>
+                    </div>
+                    <div class="x-refresh">
+                        <i class="icon-sonarr-refresh icon-can-spin" title="Update movie info and scan disk"/>
+                    </div>
+                    <div class="x-rename">
+                        <i class="icon-sonarr-rename" title="Preview rename for this movie"/>
+                    </div>
+                    <div class="x-search">
+                        <i class="icon-sonarr-search" title="Search for this movie"/>
+                    </div>
+                    <div class="x-search-manual">
+                        <i class="icon-sonarr-search-manual" title="Manual Search for this movie"/>
+                    </div>
+                    <div class="x-edit">
+                        <i class="icon-sonarr-edit" title="Edit movie"/>
+                    </div>
+                </div>
+            </h1>
+        </div>
+        <div class="movie-detail-overview">
+            {{overview}}
+        </div>
+        <div id="info" class="movie-info"></div>
+    </div>
+</div>
+{{else}}
+<div id="not-found"></div>
+{{/if}}

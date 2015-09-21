@@ -1,15 +1,15 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Nzbget;
-using NzbDrone.Test.Common;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Download.Clients.Nzbget;
+using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {
@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                                               Username = "admin",
                                               Password = "pass",
                                               TvCategory = "tv",
+                                              MovieCategory = "movie",
                                               RecentTvPriority = (int)NzbgetPriority.High
                                           };
 
@@ -83,6 +84,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var configItems = new Dictionary<String, String>();
             configItems.Add("Category1.Name", "tv");
             configItems.Add("Category1.DestDir", @"/remote/mount/tv");
+            configItems.Add("Category2.Name", "movie");
+            configItems.Add("Category2.DestDir", @"/remote/mount/movie");
 
             Mocker.GetMock<INzbgetProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<NzbgetSettings>()))
@@ -163,7 +166,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             GivenQueue(_queued);
             GivenHistory(null);
-            
+
             var result = Subject.GetItems().Single();
 
             VerifyQueued(result);
@@ -318,6 +321,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
             var items = Subject.GetItems();
 
             items.Should().BeEmpty();
+        }
+
+        [Test]
+        public void GetItems_should_ignore_downloads_from_other_categories_except_movies()
+        {
+            _completed.Category = "movie";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.Should().HaveCount(1);
         }
 
         [Test]

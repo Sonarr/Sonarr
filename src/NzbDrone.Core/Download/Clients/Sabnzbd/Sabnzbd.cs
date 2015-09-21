@@ -43,6 +43,21 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return null;
         }
 
+        protected override string AddFromNzbFile(RemoteMovie remoteMovie, string filename, byte[] fileContent)
+        {
+            var category = Settings.MovieCategory;
+            var priority = remoteMovie.IsRecentMovie() ? Settings.RecentMoviePriority : Settings.OlderMoviePriority;
+
+            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
+
+            if (response != null && response.Ids.Any())
+            {
+                return response.Ids.First();
+            }
+
+            return null;
+        }
+
         private IEnumerable<DownloadClientItem> GetQueue()
         {
             SabnzbdQueue sabQueue;
@@ -185,8 +200,18 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             foreach (var downloadClientItem in GetQueue().Concat(GetHistory()))
             {
-                if (downloadClientItem.Category == Settings.TvCategory || downloadClientItem.Category == "*" && Settings.TvCategory.IsNullOrWhiteSpace())
+                if (Settings.TvCategory.IsNullOrWhiteSpace() && Settings.MovieCategory.IsNullOrWhiteSpace() && downloadClientItem.Category == "*")
                 {
+                    yield return downloadClientItem;
+                }
+                else if (downloadClientItem.Category == Settings.TvCategory || downloadClientItem.Category == "*" && Settings.TvCategory.IsNullOrWhiteSpace())
+                {
+                    downloadClientItem.DownloadType = DownloadItemType.Series;
+                    yield return downloadClientItem;
+                }
+                else if (downloadClientItem.Category == Settings.MovieCategory || downloadClientItem.Category == "*" && Settings.MovieCategory.IsNullOrWhiteSpace())
+                {
+                    downloadClientItem.DownloadType = DownloadItemType.Movie;
                     yield return downloadClientItem;
                 }
             }
@@ -339,6 +364,32 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 }
             }
 
+            category = GetCategories(config).FirstOrDefault((SabnzbdCategory v) => v.Name == Settings.MovieCategory);
+
+            if (category != null)
+            {
+                if (category.Dir.EndsWith("*"))
+                {
+                    return new NzbDroneValidationFailure("MovieCategory", "Enable Job folders")
+                    {
+                        InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/categories/", Settings.Host, Settings.Port),
+                        DetailedDescription = "Sonarr prefers each download to have a separate folder. With * appended to the Folder/Path Sabnzbd will not create these job folders. Go to Sabnzbd to fix it."
+                    };
+                }
+            }
+            else
+            {
+                if (!Settings.TvCategory.IsNullOrWhiteSpace())
+                {
+                    return new NzbDroneValidationFailure("MovieCategory", "Category does not exist")
+                    {
+                        InfoLink = String.Format("http://{0}:{1}/sabnzbd/config/categories/", Settings.Host, Settings.Port),
+                        DetailedDescription = "The Category your entered doesn't exist in Sabnzbd. Go to Sabnzbd to create it."
+                    };
+                }
+            }
+
+            //TODO: Warn movies sorting
             if (config.Misc.enable_tv_sorting)
             {
                 if (!config.Misc.tv_categories.Any<string>() ||

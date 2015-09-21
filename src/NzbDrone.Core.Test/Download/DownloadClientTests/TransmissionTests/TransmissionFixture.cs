@@ -1,13 +1,13 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Transmission;
+using NzbDrone.Core.MediaFiles.TorrentInfo;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 {
@@ -103,6 +103,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         protected void GivenTvCategory()
         {
             _settings.TvCategory = "sonarr";
+            _settings.MovieCategory = "sonarrMovies";
         }
 
         protected void GivenFailedDownload()
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                 .Setup(s => s.AddTorrentFromData(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<TransmissionSettings>()))
                 .Callback(PrepareClientToReturnQueuedItem);
         }
-        
+
         protected virtual void GivenTorrents(List<TransmissionTorrent> torrents)
         {
             if (torrents == null)
@@ -232,6 +233,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         }
 
         [Test]
+        public void Download_with_category_should_force_movie_directory()
+        {
+            GivenTvCategory();
+            GivenSuccessfulDownload();
+
+            var remoteMovie = CreateRemoteMovie();
+
+            var id = Subject.Download(remoteMovie);
+
+            id.Should().NotBeNullOrEmpty();
+
+            Mocker.GetMock<ITransmissionProxy>()
+                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/sonarrMovies", It.IsAny<TransmissionSettings>()), Times.Once());
+        }
+
+        [Test]
         public void Download_with_category_should_not_have_double_slashes()
         {
             GivenTvCategory();
@@ -258,6 +275,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             remoteEpisode.Release.DownloadUrl = magnetUrl;
 
             var id = Subject.Download(remoteEpisode);
+
+            id.Should().Be(expectedHash);
+        }
+
+        [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
+        public void Download_should_get_hash_from_magnet_url_movies(String magnetUrl, String expectedHash)
+        {
+            GivenSuccessfulDownload();
+
+            var remoteMovie = CreateRemoteMovie();
+            remoteMovie.Release.DownloadUrl = magnetUrl;
+
+            var id = Subject.Download(remoteMovie);
 
             id.Should().Be(expectedHash);
         }
@@ -303,7 +333,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         public void GetItems_should_return_completed_item_as_downloadItemStatus(TransmissionTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, Boolean expectedReadOnly)
         {
             _completed.Status = apiStatus;
-            
+
             PrepareClientToReturnCompletedItem();
 
             var item = Subject.GetItems().Single();

@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Queue
@@ -16,12 +17,20 @@ namespace NzbDrone.Core.Queue
 
     public class QueueService : IQueueService, IHandle<TrackedDownloadRefreshedEvent>
     {
-        private readonly IEventAggregator _eventAggregator;
         private static List<Queue> _queue = new List<Queue>();
+        private readonly IEventAggregator _eventAggregator;
 
         public QueueService(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
+        }
+
+        public void Handle(TrackedDownloadRefreshedEvent message)
+        {
+            _queue = message.TrackedDownloads.OrderBy(c => c.DownloadItem.RemainingTime).SelectMany(MapQueue)
+                .ToList();
+
+            _eventAggregator.PublishEvent(new QueueUpdatedEvent());
         }
 
         public List<Queue> GetQueue()
@@ -34,37 +43,31 @@ namespace NzbDrone.Core.Queue
             return _queue.SingleOrDefault(q => q.Id == id);
         }
 
-        public void Handle(TrackedDownloadRefreshedEvent message)
-        {
-            _queue = message.TrackedDownloads.OrderBy(c => c.DownloadItem.RemainingTime).SelectMany(MapQueue)
-                .ToList();
-
-            _eventAggregator.PublishEvent(new QueueUpdatedEvent());
-        }
-
         private IEnumerable<Queue> MapQueue(TrackedDownload trackedDownload)
         {
-            if (trackedDownload.RemoteEpisode.Episodes != null && trackedDownload.RemoteEpisode.Episodes.Any())
+            if (trackedDownload.RemoteItem is RemoteEpisode)
             {
-                foreach (var episode in trackedDownload.RemoteEpisode.Episodes)
+                var episodes = (trackedDownload.RemoteItem as RemoteEpisode).Episodes;
+                if (episodes != null && episodes.Any())
                 {
-                    yield return MapEpisode(trackedDownload, episode);
+                    foreach (var episode in episodes)
+                    {
+                        yield return MapEpisode(trackedDownload, episode);
+                    }
                 }
-            }
-            else
+            } else if (trackedDownload.RemoteItem is RemoteMovie)
             {
-                // FIXME: Present queue items with unknown series/episodes
+                yield return MapMovie(trackedDownload);
             }
         }
 
-        private Queue MapEpisode(TrackedDownload trackedDownload, Episode episode)
+        private Queue MapMovie(TrackedDownload trackedDownload)
         {
-            var queue = new Queue
+            var queue = new MovieQueue
             {
-                Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
-                Series = trackedDownload.RemoteEpisode.Series,
-                Episode = episode,
-                Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep0", trackedDownload.DownloadItem.DownloadId)),
+                Media = trackedDownload.RemoteItem.Media,
+                Quality = trackedDownload.RemoteItem.ParsedInfo.Quality,
                 Title = trackedDownload.DownloadItem.Title,
                 Size = trackedDownload.DownloadItem.TotalSize,
                 Sizeleft = trackedDownload.DownloadItem.RemainingSize,
@@ -72,7 +75,34 @@ namespace NzbDrone.Core.Queue
                 Status = trackedDownload.DownloadItem.Status.ToString(),
                 TrackedDownloadStatus = trackedDownload.Status.ToString(),
                 StatusMessages = trackedDownload.StatusMessages.ToList(),
-                RemoteEpisode = trackedDownload.RemoteEpisode,
+                RemoteItem = trackedDownload.RemoteItem,
+                DownloadId = trackedDownload.DownloadItem.DownloadId,
+                Protocol = trackedDownload.Protocol
+            };
+            if (queue.Timeleft.HasValue)
+            {
+                queue.EstimatedCompletionTime = DateTime.UtcNow.Add(queue.Timeleft.Value);
+            }
+
+            return queue;
+        }
+
+        private Queue MapEpisode(TrackedDownload trackedDownload, Episode episode)
+        {
+            var queue = new SeriesQueue
+            {
+                Id = HashConverter.GetHashInt31(string.Format("trackedDownload-{0}-ep{1}", trackedDownload.DownloadItem.DownloadId, episode.Id)),
+                Media = trackedDownload.RemoteItem.Media,
+                Episode = episode,
+                Quality = trackedDownload.RemoteItem.ParsedInfo.Quality,
+                Title = trackedDownload.DownloadItem.Title,
+                Size = trackedDownload.DownloadItem.TotalSize,
+                Sizeleft = trackedDownload.DownloadItem.RemainingSize,
+                Timeleft = trackedDownload.DownloadItem.RemainingTime,
+                Status = trackedDownload.DownloadItem.Status.ToString(),
+                TrackedDownloadStatus = trackedDownload.Status.ToString(),
+                StatusMessages = trackedDownload.StatusMessages.ToList(),
+                RemoteItem = trackedDownload.RemoteItem,
                 DownloadId = trackedDownload.DownloadItem.DownloadId,
                 Protocol = trackedDownload.Protocol
             };

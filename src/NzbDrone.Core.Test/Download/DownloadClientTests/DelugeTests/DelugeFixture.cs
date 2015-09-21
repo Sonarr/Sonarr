@@ -1,13 +1,13 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Deluge;
+using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
                 .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951".ToLower())
                 .Callback(PrepareClientToReturnQueuedItem);
         }
-        
+
         protected virtual void GivenTorrents(List<DelugeTorrent> torrents)
         {
             if (torrents == null)
@@ -212,6 +212,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             remoteEpisode.Release.DownloadUrl = magnetUrl;
 
             var id = Subject.Download(remoteEpisode);
+
+            id.Should().Be(expectedHash);
+        }
+
+        [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
+        public void Download_should_get_hash_from_magnet_url_movies(String magnetUrl, String expectedHash)
+        {
+            GivenSuccessfulDownload();
+
+            var remoteMovie = CreateRemoteMovie();
+            remoteMovie.Release.DownloadUrl = magnetUrl;
+
+            var id = Subject.Download(remoteMovie);
 
             id.Should().Be(expectedHash);
         }

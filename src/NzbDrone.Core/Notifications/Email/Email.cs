@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.Notifications.Email
 {
@@ -28,6 +29,14 @@ namespace NzbDrone.Core.Notifications.Email
             _emailService.SendEmail(Settings, subject, body);
         }
 
+        public override void OnGrabMovie(GrabMovieMessage grabMessage)
+        {
+            const string subject = "Sonarr [Movie] - Grabbed";
+            var body = String.Format("{0} sent to queue.", grabMessage.Message);
+
+            _emailService.SendEmail(Settings, subject, body);
+        }
+
         public override void OnDownload(DownloadMessage message)
         {
             const string subject = "Sonarr [TV] - Downloaded";
@@ -36,8 +45,29 @@ namespace NzbDrone.Core.Notifications.Email
             _emailService.SendEmail(Settings, subject, body);
         }
 
+        public override void OnDownloadMovie(DownloadMovieMessage message)
+        {
+            const string subject = "Sonarr [Movie] - Downloaded";
+            var body = String.Format("{0} Downloaded and sorted.", message.Message);
+
+            _emailService.SendEmail(Settings, subject, body);
+        }
+
+
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnRenameMovie(Movie movie)
+        {
+        }
+
+        public override bool SupportsOnRenameMovie
+        {
+            get
+            {
+                return false;
+            }
         }
 
         public override string Name

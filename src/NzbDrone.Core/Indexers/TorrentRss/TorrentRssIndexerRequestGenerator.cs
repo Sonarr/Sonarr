@@ -44,6 +44,11 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             return new List<IEnumerable<IndexerRequest>>();
         }
 
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
         private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
         {
             var request = new IndexerRequest(Settings.BaseUrl.Trim().TrimEnd('/'), HttpAccept.Rss);

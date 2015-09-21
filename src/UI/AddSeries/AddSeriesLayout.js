@@ -1,11 +1,11 @@
 var vent = require('vent');
 var AppLayout = require('../AppLayout');
 var Marionette = require('marionette');
-var RootFolderLayout = require('./RootFolders/RootFolderLayout');
+var RootFolderLayout = require('../Shared/RootFolders/RootFolderLayout');
 var ExistingSeriesCollectionView = require('./Existing/AddExistingSeriesCollectionView');
 var AddSeriesView = require('./AddSeriesView');
 var ProfileCollection = require('../Profile/ProfileCollection');
-var RootFolderCollection = require('./RootFolders/RootFolderCollection');
+var RootFolderCollection = require('../Shared/RootFolders/RootFolderCollection');
 require('../Series/SeriesCollection');
 
 module.exports = Marionette.Layout.extend({

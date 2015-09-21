@@ -42,6 +42,8 @@ namespace NzbDrone.Api.Config
             SharedValidator.RuleFor(c => c.AnimeEpisodeFormat).ValidAnimeEpisodeFormat();
             SharedValidator.RuleFor(c => c.SeriesFolderFormat).ValidSeriesFolderFormat();
             SharedValidator.RuleFor(c => c.SeasonFolderFormat).ValidSeasonFolderFormat();
+            SharedValidator.RuleFor(c => c.StandardMovieFormat).ValidStandardMovieFormat();
+            SharedValidator.RuleFor(c => c.MovieFolderFormat).ValidMovieFolderFormat();
         }
 
         private void UpdateNamingConfig(NamingConfigResource resource)
@@ -83,6 +85,7 @@ namespace NzbDrone.Api.Config
             var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
             var animeEpisodeSampleResult = _filenameSampleService.GetAnimeSample(nameSpec);
             var animeMultiEpisodeSampleResult = _filenameSampleService.GetAnimeMultiEpisodeSample(nameSpec);
+            var standardMovieSampleResult = _filenameSampleService.GetStandardMovieSample(nameSpec);
 
             sampleResource.SingleEpisodeExample = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult) != null
                     ? "Invalid format"
@@ -104,6 +107,10 @@ namespace NzbDrone.Api.Config
                     ? "Invalid format"
                     : animeMultiEpisodeSampleResult.FileName;
 
+            sampleResource.StandardMovieExample = _filenameValidationService.ValidateStandardMovieFilename(standardMovieSampleResult) != null
+                    ? "Invalid format"
+                    : standardMovieSampleResult.FileName;
+
             sampleResource.SeriesFolderExample = nameSpec.SeriesFolderFormat.IsNullOrWhiteSpace()
                 ? "Invalid format"
                 : _filenameSampleService.GetSeriesFolderSample(nameSpec);
@@ -111,6 +118,10 @@ namespace NzbDrone.Api.Config
             sampleResource.SeasonFolderExample = nameSpec.SeasonFolderFormat.IsNullOrWhiteSpace()
                 ? "Invalid format"
                 : _filenameSampleService.GetSeasonFolderSample(nameSpec);
+
+            sampleResource.MovieFolderExample = nameSpec.MovieFolderFormat.IsNullOrWhiteSpace()
+                ? "Invalid format"
+                : _filenameSampleService.GetMovieFolderSample(nameSpec);
 
             return sampleResource.AsResponse();
         }
@@ -122,12 +133,14 @@ namespace NzbDrone.Api.Config
             var dailyEpisodeSampleResult = _filenameSampleService.GetDailySample(nameSpec);
             var animeEpisodeSampleResult = _filenameSampleService.GetAnimeSample(nameSpec);
             var animeMultiEpisodeSampleResult = _filenameSampleService.GetAnimeMultiEpisodeSample(nameSpec);
+            var standardMovieSampleResult = _filenameSampleService.GetStandardMovieSample(nameSpec);
 
             var singleEpisodeValidationResult = _filenameValidationService.ValidateStandardFilename(singleEpisodeSampleResult);
             var multiEpisodeValidationResult = _filenameValidationService.ValidateStandardFilename(multiEpisodeSampleResult);
             var dailyEpisodeValidationResult = _filenameValidationService.ValidateDailyFilename(dailyEpisodeSampleResult);
             var animeEpisodeValidationResult = _filenameValidationService.ValidateAnimeFilename(animeEpisodeSampleResult);
             var animeMultiEpisodeValidationResult = _filenameValidationService.ValidateAnimeFilename(animeMultiEpisodeSampleResult);
+            var standardMovieValidationResult = _filenameValidationService.ValidateStandardMovieFilename(standardMovieSampleResult);
 
             var validationFailures = new List<ValidationFailure>();
 
@@ -136,6 +149,7 @@ namespace NzbDrone.Api.Config
             validationFailures.AddIfNotNull(dailyEpisodeValidationResult);
             validationFailures.AddIfNotNull(animeEpisodeValidationResult);
             validationFailures.AddIfNotNull(animeMultiEpisodeValidationResult);
+            validationFailures.AddIfNotNull(standardMovieValidationResult);
 
             if (validationFailures.Any())
             {

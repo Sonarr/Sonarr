@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using FluentAssertions;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Movies;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {
@@ -22,6 +23,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         protected readonly string _title = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE";
         protected readonly string _downloadUrl = "http://somewhere.com/Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.ext";
 
+        protected readonly string _movieTitle = "Droned.2015.1080p.WEB-DL-DRONE";
+        protected readonly string _movieDownloadUrl = "http://somewhere.com/Droned.2015.1080p.WEB-DL-DRONE.ext";
+
         [SetUp]
         public void SetupBase()
         {
@@ -30,8 +34,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
                 .Returns(30);
 
             Mocker.GetMock<IParsingService>()
-                .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), (SearchCriteriaBase)null))
+                .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), (SeriesSearchCriteriaBase)null))
                 .Returns(() => CreateRemoteEpisode());
+
+            Mocker.GetMock<IParsingService>()
+                .Setup(s => s.Map(It.IsAny<ParsedMovieInfo>(), (MovieSearchCriteriaBase)null))
+                .Returns(() => CreateRemoteMovie());
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
@@ -58,6 +66,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             remoteEpisode.Series = new Series();
 
             return remoteEpisode;
+        }
+
+        protected virtual RemoteMovie CreateRemoteMovie()
+        {
+            var remoteMovie = new RemoteMovie();
+            remoteMovie.Release = new ReleaseInfo();
+            remoteMovie.Release.Title = _movieTitle;
+            remoteMovie.Release.DownloadUrl = _movieDownloadUrl;
+            remoteMovie.Release.DownloadProtocol = Subject.Protocol;
+
+            remoteMovie.ParsedMovieInfo = new ParsedMovieInfo();
+
+            remoteMovie.Movie = new Movie();
+
+            return remoteMovie;
         }
 
         protected void VerifyIdentifiable(DownloadClientItem downloadClientItem)

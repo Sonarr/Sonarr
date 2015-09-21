@@ -44,6 +44,12 @@ namespace NzbDrone.Core.Indexers.BitMeTv
             return new List<IEnumerable<IndexerRequest>>();
         }
 
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+
         private IEnumerable<IndexerRequest> GetRssRequests()
         {
             var request = new IndexerRequest(String.Format("{0}/rss.php?uid={1}&passkey={2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey), HttpAccept.Html);

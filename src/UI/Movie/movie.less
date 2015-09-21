@@ -1,0 +1,357 @@
+@import "../Content/Bootstrap/variables";
+@import "../Shared/Styles/card.less";
+@import "../Shared/Styles/clickable.less";
+@import "../Content/prefixer";
+
+.movie-poster {
+  min-width: 56px;
+  max-width: 100%;
+}
+
+.edit-movie-modal, .delete-movie-modal {
+  overflow : visible;
+
+  .movie-poster {
+    padding-left : 20px;
+    width        : 168px;
+  }
+
+  .form-horizontal {
+    margin-top : 10px;
+  }
+
+  .twitter-typeahead {
+    .form-control[disabled] {
+      background-color: #ffffff;
+    }
+  }
+}
+
+.delete-movie-modal {
+  .path {
+    margin-left : 30px;
+  }
+
+  .delete-files-info {
+    margin-top : 10px;
+    display    : none;
+  }
+}
+
+.movie-item {
+  padding-bottom : 30px;
+
+  :hover {
+    text-decoration : none;
+  }
+
+  h2 {
+    margin-top : 0px;
+  }
+
+  a {
+    color : #000000;
+  }
+}
+
+.movie-detail-modal {
+
+  .episode-info {
+    margin-bottom : 10px;
+  }
+
+  .episode-overview {
+    font-style : italic;
+  }
+
+  .episode-file-info {
+    margin-top : 30px;
+    font-size  : 12px;
+  }
+
+  .episode-history-details-cell .popover {
+    max-width: 800px;
+  }
+
+  .hidden-series-title {
+    display : none;
+  }
+}
+
+.movie-page-header {
+  .card(black);
+  .opacity(0.9);
+  background : #000000;
+  color      : #ffffff;
+  padding    : 30px 15px;
+  margin     : 50px 10px;
+
+  .poster {
+    margin-top : 4px;
+  }
+
+  .header-text {
+    margin-top : 0px;
+  }
+}
+
+.movies-posters {
+  list-style-type: none;
+
+  @media (max-width: @screen-xs-max) {
+    padding        : 0px;
+  }
+
+  li {
+    display        : inline-block;
+    vertical-align : top;
+  }
+
+  .movies-posters-item {
+
+    .card;
+    .clickable;
+    margin-bottom : 20px;
+    //height        : 315px;
+
+    .center {
+      display      : block;
+      margin-left  : auto;
+      margin-right : auto;
+      text-align   : center;
+
+      .progress {
+        text-align : left;
+        margin-top : 5px;
+        left       : 0px;
+        width      : 170px;
+
+        .progressbar-front-text, .progressbar-back-text {
+          width : 170px;
+        }
+      }
+    }
+
+    .labels {
+      display : inline-block;
+      .opacity(0.75);
+      width   : 170px;
+
+      :hover {
+        cursor : default;
+      }
+
+      .label {
+        margin-top : 3px;
+        display    : block;
+      }
+
+      .tooltip {
+        .opacity(1);
+      }
+    }
+
+    @media (max-width: @screen-xs-max) {
+      height  : 235px;
+      margin  : 5px;
+      padding : 6px 5px;
+
+      .center {
+        .progress {
+          width : 125px;
+
+          .progressbar-front-text, .progressbar-back-text {
+            width : 125px
+          }
+        }
+      }
+
+      .labels {
+        width: 125px;
+      }
+    }
+  }
+
+  .movie-poster-container {
+    position : relative;
+    overflow : hidden;
+    display  : inline-block;
+
+    .placeholder-image ~ .title {
+      opacity: 1.0;
+    }
+
+    .title {
+      position   : absolute;
+      top        : 25px;
+      color      : #f5f5f5;
+      width      : 100%;
+      font-size  : 22px;
+      line-height: 24px;
+      opacity    : 0.0;
+      font-weight: 100;
+    }
+
+    .ended-banner {
+      color                    : #eeeeee;
+      background-color         : #b94a48;
+      .box-shadow(2px 2px 20px #888888);
+      -moz-transform-origin    : 50% 50%;
+      -webkit-transform-origin : 50% 50%;
+      position                 : absolute;
+      width                    : 320px;
+      top                      : 200px;
+      left                     : -122px;
+      text-align               : center;
+      .opacity(0.9);
+
+      .transform(rotate(45deg));
+    }
+
+    .movie-controls {
+      position         : absolute;;
+      top              : 0px;
+      overflow         : hidden;
+      background-color : #eeeeee;
+      width            : 100%;
+      text-align       : right;
+      padding-right    : 10px;
+      display          : none;
+      .opacity(0.8);
+
+      i {
+        .clickable();
+      }
+    }
+
+    .hidden-title {
+      position         : absolute;;
+      bottom           : 0px;
+      overflow         : hidden;
+      background-color : #eeeeee;
+      width            : 100%;
+      text-align       : center;
+      .opacity(0.8);
+      display          : none;
+    }
+
+    .movie-poster {
+      width       : 168px;
+      height      : 247px;
+      display     : block;
+      font-size   : 34px;
+      line-height : 34px;
+    }
+
+    @media (max-width: @screen-xs-max) {
+      .movie-poster {
+        width       : 120px;
+        height      : 176px;
+      }
+
+      .ended-banner {
+        top  : 145px;
+        left : -137px;
+      }
+    }
+  }
+}
+
+.movie-detail-overview {
+  margin-bottom : 50px;
+}
+
+.movie-stats {
+  font-size : 11px;
+}
+
+.movie-legend {
+  padding-top : 5px;
+}
+
+//Overview List
+.movie-overview-list-actions {
+  min-width: 56px;
+  max-width: 56px;
+
+  i {
+    .clickable();
+  }
+}
+
+//Editor
+
+.movie-editor-footer {
+  max-width: 1160px;
+  color: #f5f5f5;
+  margin-left: auto;
+  margin-right: auto;
+
+  .form-group {
+    padding-top: 0px;
+  }
+}
+
+.update-files-movie-modal {
+  .selected-movie {
+    margin-top: 15px;
+  }
+}
+
+//Movie Details
+
+.movie-info {
+  .row {
+    margin-bottom : 3px;
+
+    .label {
+      display       : inline-block;
+      margin-bottom : 2px;
+      padding       : 4px 6px 3px 6px
+    }
+  }
+
+  .movie-info-links {
+    @media (max-width: @screen-sm-max) {
+      display    : inline-block;
+      margin-top : 5px;
+    }
+  }
+}
+
+.scene-info {
+  .key, .value {
+    display : inline-block;
+  }
+
+  .key {
+    width          : 80px;
+    margin-left    : 10px;
+    vertical-align : top;
+  }
+
+  .value {
+    margin-right : 10px;
+    max-width    : 170px;
+  }
+
+  ul {
+    padding-left    : 0px;
+    list-style-type : none;
+  }
+}
+
+.movie-actions {
+
+  div {
+    display : inline-block
+  }
+
+  text-transform : none;
+
+  i {
+    .clickable();
+    font-size    : 24px;
+    margin-left : 5px;
+  }
+}

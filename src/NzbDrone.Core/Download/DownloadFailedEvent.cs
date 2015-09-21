@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Download
         }
 
         public Int32 SeriesId { get; set; }
+        public Int32 MovieId { get; set; }
         public List<Int32> EpisodeIds { get; set; }
         public QualityModel Quality { get; set; }
         public String SourceTitle { get; set; }

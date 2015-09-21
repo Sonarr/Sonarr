@@ -25,29 +25,52 @@ namespace NzbDrone.Core.DecisionEngine
 
         public List<DownloadDecision> PrioritizeDecisions(List<DownloadDecision> decisions)
         {
-            return decisions.Where(c => c.RemoteEpisode.Series != null)
-                            .GroupBy(c => c.RemoteEpisode.Series.Id, (seriesId, d) =>
-                                {
-                                    var downloadDecisions = d.ToList();
-                                    var series = downloadDecisions.First().RemoteEpisode.Series;
+            IEnumerable<DownloadDecision> notNullDecisions = decisions.Where(c => c.RemoteItem != null);
+            IEnumerable<DownloadDecision> movies = notNullDecisions.Where(c => c.RemoteItem is RemoteMovie);
+            IEnumerable<DownloadDecision> serie = notNullDecisions.Where(c => c.RemoteItem is RemoteEpisode);
 
-                                    return downloadDecisions
-                                        .OrderByDescending(c => c.RemoteEpisode.ParsedEpisodeInfo.Quality, new QualityModelComparer(series.Profile))
-                                        .ThenBy(c => c.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
-                                        .ThenBy(c => PrioritizeDownloadProtocol(series, c.RemoteEpisode.Release.DownloadProtocol))
-                                        .ThenByDescending(c => c.RemoteEpisode.Episodes.Count)
-                                        .ThenBy(c => c.RemoteEpisode.Release.Size.Round(200.Megabytes()) / Math.Max(1, c.RemoteEpisode.Episodes.Count))
-                                        .ThenByDescending(c => TorrentInfo.GetSeeders(c.RemoteEpisode.Release))
-                                        .ThenBy(c => c.RemoteEpisode.Release.Age);
-                                })
-                            .SelectMany(c => c)
-                            .Union(decisions.Where(c => c.RemoteEpisode.Series == null))
-                            .ToList();
+            IEnumerable<DownloadDecision> movieDecision = movies.Where(c => (c.RemoteItem as RemoteMovie).Movie!= null)
+                                                                .GroupBy(c => c.RemoteItem.Media.Id, (movieId, d) =>
+                                                                {
+                                                                    var downloadDecisions = d.ToList();
+                                                                    var movie = downloadDecisions.First().RemoteItem.Media;
+                                                                    
+                                                                    return downloadDecisions
+                                                                        .OrderByDescending(c => c.RemoteItem.ParsedInfo.Quality, new QualityModelComparer(movie.Profile))
+                                                                        .ThenBy(c => PrioritizeDownloadProtocol(movie.Tags, c.RemoteItem.Release.DownloadProtocol))
+                                                                        .ThenBy(c => c.RemoteItem.Release.Size.Round(600.Megabytes()))
+                                                                        .ThenByDescending(c => TorrentInfo.GetSeeders(c.RemoteItem.Release))
+                                                                        .ThenBy(c => c.RemoteItem.Release.Age);
+                                                                })
+                                                                .SelectMany(c => c)
+                                                                .Union(movies.Where (c => (c.RemoteItem as RemoteMovie).Movie == null))
+                                                                .ToList();
+
+            return serie.Where(c=> (c.RemoteItem as RemoteEpisode).Series != null)
+                        .GroupBy(c => c.RemoteItem.Media.Id, (seriesId, d) => 
+                        {
+                            var downloadDecisions = d.ToList();
+                            var series = downloadDecisions.First().RemoteItem.Media;
+                            
+                            return downloadDecisions
+                                .OrderByDescending(c => c.RemoteItem.ParsedInfo.Quality, new QualityModelComparer(series.Profile))
+                                .ThenBy(c => (c.RemoteItem as RemoteEpisode).Episodes.Select(e => e.EpisodeNumber).MinOrDefault())
+                                .ThenBy(c => PrioritizeDownloadProtocol(series.Tags, c.RemoteItem.Release.DownloadProtocol))
+                                .ThenByDescending(c => (c.RemoteItem as RemoteEpisode).Episodes.Count)
+                                .ThenBy(c => c.RemoteItem.Release.Size.Round(200.Megabytes()) / Math.Max(1, (c.RemoteItem as RemoteEpisode).Episodes.Count))
+                                .ThenByDescending(c => TorrentInfo.GetSeeders(c.RemoteItem.Release))
+                                .ThenBy(c => c.RemoteItem.Release.Age);
+                        })
+                        .SelectMany(c => c)
+                        .Union(serie.Where(c => (c.RemoteItem as RemoteEpisode).Series == null))
+                        .Union(movieDecision)
+                        .ToList();
+
         }
 
-        private int PrioritizeDownloadProtocol(Series series, DownloadProtocol downloadProtocol)
+        private int PrioritizeDownloadProtocol(HashSet<int> tags, DownloadProtocol downloadProtocol)
         {
-            var delayProfile = _delayProfileService.BestForTags(series.Tags);
+            var delayProfile = _delayProfileService.BestForTags(tags);
 
             if (downloadProtocol == delayProfile.PreferredProtocol)
             {

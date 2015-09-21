@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             RuleFor(c => c.Password).NotEmpty().When(c => !String.IsNullOrWhiteSpace(c.Username));
 
             RuleFor(c => c.TvCategory).NotEmpty().WithMessage("A category is recommended").AsWarning();
+            RuleFor(c => c.MovieCategory).NotEmpty().WithMessage("A category is recommended").AsWarning();
         }
     }
 
@@ -28,8 +29,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             Host = "localhost";
             Port = 6789;
             TvCategory = "tv";
+            MovieCategory = "movie";
             RecentTvPriority = (int)NzbgetPriority.Normal;
             OlderTvPriority = (int)NzbgetPriority.Normal;
+            RecentMoviePriority = (int)NzbgetPriority.Normal;
+            OlderMoviePriority = (int)NzbgetPriority.Normal;
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -55,6 +59,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         [FieldDefinition(7, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
+
+        [FieldDefinition(8, Label = "Movie Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
+        public String MovieCategory { get; set; }
+
+        [FieldDefinition(9, Label = "Recent Movie Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
+        public Int32 RecentMoviePriority { get; set; }
+
+        [FieldDefinition(10, Label = "Older Movie Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
+        public Int32 OlderMoviePriority { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

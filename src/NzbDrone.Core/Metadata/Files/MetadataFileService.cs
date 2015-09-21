@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Metadata.Files
         void Delete(int id);
     }
 
+    //TODO: Metadata for movies
     public class MetadataFileService : IMetadataFileService,
                                               IHandleAsync<SeriesDeletedEvent>,
                                               IHandleAsync<EpisodeFileDeletedEvent>,
@@ -88,6 +89,8 @@ namespace NzbDrone.Core.Metadata.Files
 
         public void HandleAsync(EpisodeFileDeletedEvent message)
         {
+            if (message.EpisodeFile.SeriesId == 0)
+                return;
             var episodeFile = message.EpisodeFile;
             var series = _seriesService.GetSeries(message.EpisodeFile.SeriesId);
 

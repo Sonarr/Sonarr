@@ -1,0 +1,33 @@
+<div class="modal-content">
+    <div class="movie-detail-modal">
+        <div class="modal-header">
+            <span class="hidden-movie-title x-movie-title">{{originalTitleWithYear}}</span>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+            <h3>
+                <i class="icon-sonarr-monitored x-movie-monitored movie-monitored" title="Toggle monitored status" />
+                {{title}}
+            </h3>
+
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs" id="myTab">
+                <li><a href="#movie-summary" class="x-movie-summary">Summary</a></li>
+                <li><a href="#movie-history" class="x-movie-history">History</a></li>
+                <li><a href="#movie-search" class="x-movie-search">Search</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane" id="movie-summary"/>
+                <div class="tab-pane" id="movie-history"/>
+                <div class="tab-pane" id="movie-search"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {{#unless hideMovieLink}}
+               <a href="{{movieRoute}}" class="btn btn-default pull-left" data-dismiss="modal">Go to Movies</a>
+            {{/unless}}
+
+            <button class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>

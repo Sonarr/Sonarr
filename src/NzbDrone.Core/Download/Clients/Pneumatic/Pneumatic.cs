@@ -70,6 +70,28 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return GetDownloadClientId(strmFile);
         }
 
+        public override string Download(RemoteMovie remoteMovie)
+        {
+            var url = remoteMovie.Release.DownloadUrl;
+            var title = remoteMovie.Release.Title;
+
+            title = FileNameBuilder.CleanFileName(title);
+
+            //Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
+            var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
+
+            _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
+            _httpClient.DownloadFile(url, nzbFile);
+
+            _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
+
+            var strmFile = WriteStrmFile(title, nzbFile);
+
+
+            return GetDownloadClientId(strmFile);
+        }
+
+
         public bool IsConfigured
         {
             get

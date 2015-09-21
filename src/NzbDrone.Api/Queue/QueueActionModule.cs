@@ -105,7 +105,7 @@ namespace NzbDrone.Api.Queue
                 throw new NotFoundException();
             }
 
-            _downloadService.DownloadReport(pendingRelease.RemoteEpisode);
+            _downloadService.DownloadReport(pendingRelease.RemoteItem);
 
             return resource.AsResponse();
         }

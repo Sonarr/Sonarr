@@ -77,6 +77,12 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
             return new List<IEnumerable<IndexerRequest>>();
         }
 
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
+
         private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, int? series_id = null, string episode = null, string season = null, DateTime? air_date = null)
         {
             var pageSize = PageSize;

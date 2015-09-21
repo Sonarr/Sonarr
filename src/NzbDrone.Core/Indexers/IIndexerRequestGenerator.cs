@@ -11,5 +11,6 @@ namespace NzbDrone.Core.Indexers
         IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria);
         IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria);
         IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria);
+        IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria);
     }
 }

@@ -10,6 +10,7 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 {
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var qualityUnmet = new EpisodeFile { RelativePath = "b", Quality = new QualityModel { Quality = Quality.SDTV } };
             var qualityRawHD = new EpisodeFile { RelativePath = "c", Quality = new QualityModel { Quality = Quality.RAWHD } };
 
-            MediaFileRepository fileRepository = Mocker.Resolve<MediaFileRepository>();
+            EpisodeFileRepository fileRepository = Mocker.Resolve<EpisodeFileRepository>();
 
             qualityMet = fileRepository.Insert(qualityMet);
             qualityUnmet = fileRepository.Insert(qualityUnmet);

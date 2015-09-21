@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Queue
 {
-    public class Queue : ModelBase
+    public abstract class Queue : ModelBase
     {
-        public Series Series { get; set; }
-        public Episode Episode { get; set; }
+        public Media Media { get; set; }
         public QualityModel Quality { get; set; }
         public Decimal Size { get; set; }
         public String Title { get; set; }
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Queue
         public String TrackedDownloadStatus { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
         public String DownloadId { get; set; }
-        public RemoteEpisode RemoteEpisode { get; set; }
+        public RemoteItem RemoteItem { get; set; }
         public DownloadProtocol Protocol { get; set; }
     }
 }

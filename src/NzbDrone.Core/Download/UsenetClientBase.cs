@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Download
         }
 
         protected abstract String AddFromNzbFile(RemoteEpisode remoteEpisode, String filename, Byte[] fileContent);
+        protected abstract String AddFromNzbFile(RemoteMovie remoteMovie, String filename, Byte[] fileContent);
 
         public override String Download(RemoteEpisode remoteEpisode)
         {
@@ -68,6 +69,38 @@ namespace NzbDrone.Core.Download
 
             _logger.Info("Adding report [{0}] to the queue.", remoteEpisode.Release.Title);
             return AddFromNzbFile(remoteEpisode, filename, nzbData);
+        }
+
+        public override String Download(RemoteMovie remoteMovie)
+        {
+            var url = remoteMovie.Release.DownloadUrl;
+            var filename = FileNameBuilder.CleanFileName(remoteMovie.Release.Title) + ".nzb";
+
+            Byte[] nzbData;
+
+            try
+            {
+                nzbData = _httpClient.Get(new HttpRequest(url)).ResponseData;
+
+                _logger.Debug("Downloaded nzb for movie '{0}' finished ({1} bytes from {2})", remoteMovie.Release.Title, nzbData.Length, url);
+            }
+            catch (HttpException ex)
+            {
+                _logger.ErrorException(String.Format("Downloading nzb for movie '{0}' failed ({1})",
+                    remoteMovie.Release.Title, url), ex);
+
+                throw new ReleaseDownloadException(remoteMovie.Release, "Downloading nzb failed", ex);
+            }
+            catch (WebException ex)
+            {
+                _logger.ErrorException(String.Format("Downloading nzb for movie '{0}' failed ({1})",
+                    remoteMovie.Release.Title, url), ex);
+
+                throw new ReleaseDownloadException(remoteMovie.Release, "Downloading nzb failed", ex);
+            }
+
+            _logger.Info("Adding report [{0}] to the queue.", remoteMovie.Release.Title);
+            return AddFromNzbFile(remoteMovie, filename, nzbData);
         }
     }
 }

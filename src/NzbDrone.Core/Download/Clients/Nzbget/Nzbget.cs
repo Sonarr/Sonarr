@@ -44,6 +44,21 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return response;
         }
 
+        protected override string AddFromNzbFile(RemoteMovie remoteMovie, string filename, byte[] fileContent)
+        {
+            var category = Settings.MovieCategory;
+            var priority = remoteMovie.IsRecentMovie() ? Settings.RecentMoviePriority : Settings.OlderMoviePriority;
+
+            var response = _proxy.DownloadNzb(fileContent, filename, category, priority, Settings);
+
+            if (response == null)
+            {
+                throw new DownloadClientException("Failed to add nzb {0}", filename);
+            }
+
+            return response;
+        }
+
         private IEnumerable<DownloadClientItem> GetQueue()
         {
             NzbgetGlobalStatus globalStatus;
@@ -197,7 +212,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            return GetQueue().Concat(GetHistory()).Where(downloadClientItem => downloadClientItem.Category == Settings.TvCategory);
+            return GetQueue().Concat(GetHistory())
+                             .Where(downloadClientItem => downloadClientItem.Category == Settings.TvCategory || downloadClientItem.Category == Settings.MovieCategory)
+                             .Select(s =>
+                             {
+                                 if (s.Category == Settings.TvCategory) s.DownloadType = DownloadItemType.Series;
+                                 else if (s.Category == Settings.MovieCategory) s.DownloadType = DownloadItemType.Movie;
+                                 return s;
+                             });
         }
 
         public override void RemoveItem(string downloadId, bool deleteData)
@@ -214,16 +236,22 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var config = _proxy.GetConfig(Settings);
 
-            var category = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+            var tvCategory = GetCategories(config).FirstOrDefault(v => v.Name == Settings.TvCategory);
+            var movieCategory = GetCategories(config).FirstOrDefault(v => v.Name == Settings.MovieCategory);
+
 
             var status = new DownloadClientStatus
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
             };
 
-            if (category != null)
+            if (tvCategory != null || movieCategory != null)
             {
-                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(category.DestDir)) };
+                status.OutputRootFolders = new List<OsPath>();
+                if (tvCategory != null)
+                    status.OutputRootFolders.Add(_remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(tvCategory.DestDir)));
+                if (movieCategory != null)
+                    status.OutputRootFolders.Add(_remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(movieCategory.DestDir)));
             }
 
             return status;
@@ -299,6 +327,15 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             if (!Settings.TvCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.TvCategory))
             {
                 return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
+                {
+                    InfoLink = String.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    DetailedDescription = "The Category your entered doesn't exist in NzbGet. Go to NzbGet to create it."
+                };
+            }
+
+            if (!Settings.MovieCategory.IsNullOrWhiteSpace() && !categories.Any(v => v.Name == Settings.MovieCategory))
+            {
+                return new NzbDroneValidationFailure("MovieCategory", "Category does not exist")
                 {
                     InfoLink = String.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
                     DetailedDescription = "The Category your entered doesn't exist in NzbGet. Go to NzbGet to create it."

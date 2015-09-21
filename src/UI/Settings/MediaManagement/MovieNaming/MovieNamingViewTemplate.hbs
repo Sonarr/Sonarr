@@ -1,0 +1,97 @@
+<fieldset>
+    <legend>Movie Naming</legend>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Rename Movies</label>
+
+        <div class="col-sm-8">
+            <div class="input-group">
+                <label class="checkbox toggle well">
+                    <input type="checkbox" name="renameMovies" class="x-rename-movies"/>
+
+                    <p>
+                        <span>Yes</span>
+                        <span>No</span>
+                    </p>
+
+                    <div class="btn btn-primary slide-button"/>
+                </label>
+
+                <span class="help-inline-checkbox">
+                    <i class="icon-sonarr-form-warning" title="Sonarr will use the existing file name if set to no"/>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="x-movie-naming-options">
+        <div class="basic-setting x-basic-movie-naming"></div>
+
+        <div class="form-group advanced-setting">
+            <label class="col-sm-3 control-label">Standard Movie Format</label>
+
+            <div class="col-sm-1 col-sm-push-8 help-inline">
+                <i class="icon-sonarr-form-info" title="" data-original-title="All caps or all lower-case can also be used"></i>
+                <a href="https://github.com/NzbDrone/NzbDrone/wiki/Sorting-and-Renaming" class="help-link" title="More information"><i class="icon-sonarr-form-info-link"/></a>
+            </div>
+
+            <div class="col-sm-8 col-sm-pull-1">
+                <div class="input-group x-helper-input">
+                    <input type="text" class="form-control naming-format" name="standardMovieFormat" data-onkeyup="true" />
+                    <div class="input-group-btn btn-group x-naming-token-helper">
+                        <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-sonarr-add"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {{> MovieTitleNamingPartial}}
+                            {{> QualityNamingPartial}}
+                            {{> MediaInfoNamingPartial}}
+                            {{> ReleaseGroupNamingPartial}}
+                            {{> OriginalTitleNamingPartial}}
+                            {{> SeparatorNamingPartial}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group advanced-setting">
+        <label class="col-sm-3 control-label">Movie Folder Format</label>
+
+        <div class="col-sm-1 col-sm-push-8 help-inline">
+            <i class="icon-sonarr-form-info" title="" data-original-title="All caps or all lower-case can also be used. Only used when adding a new series."></i>
+        </div>
+
+        <div class="col-sm-8 col-sm-pull-1">
+            <div class="input-group x-helper-input">
+                <input type="text" class="form-control naming-format" name="movieFolderFormat" data-onkeyup="true"/>
+                <div class="input-group-btn btn-group x-naming-token-helper">
+                    <button class="btn btn-icon-only dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-sonarr-add"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {{> MovieTitleNamingPartial}}
+                        {{> YearNamingPartial}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Movie Example</label>
+        
+        <div class="col-sm-8">
+            <p class="form-control-static x-movie-example naming-example"></p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Movie Folder Example</label>
+
+        <div class="col-sm-8">
+            <p class="form-control-static x-movie-folder-example naming-example"></p>
+        </div>
+    </div>
+</fieldset>

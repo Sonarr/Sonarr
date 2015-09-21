@@ -13,18 +13,26 @@ namespace NzbDrone.Core.MediaCover
         Headshot = 5
     }
 
+    public enum MediaCoverOrigin
+    {
+        Series = 0,
+        Movie = 1
+    }
+
     public class MediaCover : IEmbeddedDocument
     {
         public MediaCoverTypes CoverType { get; set; }
         public string Url { get; set; }
+        public MediaCoverOrigin CoverOrigin { get; set; }
 
         public MediaCover()
         {
         }
 
-        public MediaCover(MediaCoverTypes coverType, string url)
+        public MediaCover(MediaCoverTypes coverType, string url, MediaCoverOrigin coverOrigin)
         {
             CoverType = coverType;
+            CoverOrigin = coverOrigin;
             Url = url;
         }
     }

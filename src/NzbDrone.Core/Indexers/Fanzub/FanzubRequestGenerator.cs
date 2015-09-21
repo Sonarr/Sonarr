@@ -61,6 +61,11 @@ namespace NzbDrone.Core.Indexers.Fanzub
             return new List<IEnumerable<IndexerRequest>>();
         }
 
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            return new List<IEnumerable<IndexerRequest>>();
+        }
+
         private IEnumerable<IndexerRequest> GetPagedRequests(String query)
         {
             var url = new StringBuilder();

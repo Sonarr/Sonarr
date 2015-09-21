@@ -97,16 +97,23 @@
     <Compile Include="ClientSchema\SelectOption.cs" />
     <Compile Include="Commands\CommandModule.cs" />
     <Compile Include="Commands\CommandResource.cs" />
+    <Compile Include="MovieFiles\MovieFileModule.cs" />
+    <Compile Include="MovieFiles\MovieFileResource.cs" />
     <Compile Include="Extensions\AccessControlHeaders.cs" />
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
     <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\RobotsTxtMapper.cs" />
     <Compile Include="Indexers\ReleaseModuleBase.cs" />
     <Compile Include="Indexers\ReleasePushModule.cs" />
+    <Compile Include="Movies\MovieLookupModule.cs" />
+    <Compile Include="Movies\MovieResource.cs" />
+    <Compile Include="Movies\MoviesModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Movies\RenameMovieModule.cs" />
+    <Compile Include="Movies\RenameMovieResource.cs" />
     <Compile Include="Parse\ParseModule.cs" />
     <Compile Include="Parse\ParseResource.cs" />
-    <Compile Include="ManualImport\ManualImportModule.cs" />
-    <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />

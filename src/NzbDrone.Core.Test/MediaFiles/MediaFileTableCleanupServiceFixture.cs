@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Movies;
+using NzbDrone.Core.MediaFiles.Series;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -18,6 +22,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         private const string DELETED_PATH = "ANY FILE WITH THIS PATH IS CONSIDERED DELETED!";
         private List<Episode> _episodes;
         private Series _series;
+        private Movie _movie;
 
         [SetUp]
         public void SetUp()
@@ -29,6 +34,10 @@ namespace NzbDrone.Core.Test.MediaFiles
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.Path = @"C:\Test\TV\Series".AsOsAgnostic())
                                      .Build();
+
+            _movie = Builder<Movie>.CreateNew()
+                                   .With(s => s.Path = @"C:\Test\TV\mMvie".AsOsAgnostic())
+                                   .Build();
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(e => e.FileExists(It.Is<String>(c => !c.Contains(DELETED_PATH))))
@@ -46,6 +55,13 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(episodeFiles.ToList());
         }
 
+        private void GivenMovieFiles(IEnumerable<MovieFile> movieFile)
+        {
+            Mocker.GetMock<IMediaFileService>()
+                  .Setup(c => c.GetFileByMovie(It.IsAny<int>()))
+                  .Returns(movieFile.ToList());
+        }
+
         private void GivenFilesAreNotAttachedToEpisode()
         {
             _episodes.ForEach(e => e.EpisodeFileId = 0);
@@ -55,7 +71,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Returns(_episodes);
         }
 
-        private List<string> FilesOnDisk(IEnumerable<EpisodeFile> episodeFiles)
+        private List<string> FilesOnDisk(IEnumerable<MediaModelBase> episodeFiles)
         {
             return episodeFiles.Select(e => Path.Combine(_series.Path, e.RelativePath)).ToList();
         }
@@ -74,6 +90,19 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
+        public void should_skip_files_that_exist_in_disk_movie()
+        {
+            var movieFiles = Builder<MovieFile>.CreateListOfSize(1)
+                .Build();
+
+            GivenMovieFiles(movieFiles);
+
+            Subject.Clean(_movie, FilesOnDisk(movieFiles));
+
+            Mocker.GetMock<IEpisodeService>().Verify(c => c.UpdateEpisode(It.IsAny<Episode>()), Times.Never());
+        }
+
+        [Test]
         public void should_delete_non_existent_files()
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(10)
@@ -86,6 +115,21 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.Clean(_series, FilesOnDisk(episodeFiles.Where(e => e.RelativePath != DELETED_PATH)));
 
             Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<EpisodeFile>(e => e.RelativePath == DELETED_PATH), DeleteMediaFileReason.MissingFromDisk), Times.Exactly(2));
+        }
+
+        [Test]
+        public void should_delete_non_existent_file_movie()
+        {
+            var movieFiles = Builder<MovieFile>.CreateListOfSize(1)
+                .All()
+                .With(c => c.RelativePath = DELETED_PATH)
+                .Build();
+
+            GivenMovieFiles(movieFiles);
+
+            Subject.Clean(_movie, FilesOnDisk(movieFiles.Where(e => e.RelativePath != DELETED_PATH)));
+
+            Mocker.GetMock<IMediaFileService>().Verify(c => c.Delete(It.Is<MovieFile>(e => e.RelativePath == DELETED_PATH), DeleteMediaFileReason.MissingFromDisk), Times.Exactly(1));
         }
 
         [Test]

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Api.REST;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Api.Series;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Api.Movies;
+using NzbDrone.Api.REST;
+using NzbDrone.Api.Series;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Queue
 {
@@ -13,6 +14,7 @@ namespace NzbDrone.Api.Queue
     {
         public SeriesResource Series { get; set; }
         public EpisodeResource Episode { get; set; }
+        public MoviesResource Movie { get; set; }
         public QualityModel Quality { get; set; }
         public Decimal Size { get; set; }
         public String Title { get; set; }

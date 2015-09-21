@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             _parsedEpisodeInfo = new ParsedEpisodeInfo
             {
-                SeriesTitle = _series.Title,
+                Title = _series.Title,
                 SeasonNumber = 1,
                 EpisodeNumbers = new[] { 1 },
                 AbsoluteEpisodeNumbers = new int[0]
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = _series,
+                Media = _series,
                 EpisodeNumber = _episodes.First().EpisodeNumber,
                 SeasonNumber = _episodes.First().SeasonNumber,
                 Episodes = _episodes
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             GivenAbsoluteNumberingSeries();
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.SeriesTitle))
+                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.Title))
                   .Returns(seasonNumber);
 
             Mocker.GetMock<IEpisodeService>()
@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             GivenAbsoluteNumberingSeries();
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.SeriesTitle))
+                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.Title))
                   .Returns(seasonNumber);
 
             Mocker.GetMock<IEpisodeService>()
@@ -258,7 +258,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             GivenAbsoluteNumberingSeries();
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.SeriesTitle))
+                  .Setup(s => s.GetSeasonNumber(_parsedEpisodeInfo.Title))
                   .Returns(seasonNumber);
 
             Mocker.GetMock<IEpisodeService>()

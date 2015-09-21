@@ -6,6 +6,8 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -473,7 +475,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
 
-            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            _episodeFile.MediaInfo = new MediaInfoModel
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",
@@ -490,7 +492,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
 
-            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            _episodeFile.MediaInfo = new MediaInfoModel
             {
                 VideoCodec = "AVC",
                 AudioFormat = "DTS",

@@ -4,8 +4,9 @@ using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Commands;
+using NzbDrone.Core.MediaFiles.Commands.Series;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Test.MediaFiles
     {
         private Series _series;
         private List<EpisodeFile> _episodeFiles;
-            
+
         [SetUp]
         public void Setup()
         {
@@ -38,21 +39,21 @@ namespace NzbDrone.Core.Test.MediaFiles
         private void GivenNoEpisodeFiles()
         {
             Mocker.GetMock<IMediaFileService>()
-                  .Setup(s => s.Get(It.IsAny<IEnumerable<int>>()))
+                  .Setup(s => s.GetEpisodeFiles(It.IsAny<IEnumerable<int>>()))
                   .Returns(new List<EpisodeFile>());
         }
 
         private void GivenEpisodeFiles()
         {
             Mocker.GetMock<IMediaFileService>()
-                  .Setup(s => s.Get(It.IsAny<IEnumerable<int>>()))
+                  .Setup(s => s.GetEpisodeFiles(It.IsAny<IEnumerable<int>>()))
                   .Returns(_episodeFiles);
         }
 
         private void GivenMovedFiles()
         {
-            Mocker.GetMock<IMoveEpisodeFiles>()
-                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), _series));
+            Mocker.GetMock<IMoveFiles>()
+                  .Setup(s => s.MoveFile(It.IsAny<EpisodeFile>(), _series));
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenNoEpisodeFiles();
 
-            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int>{1}));
+            Subject.Execute(new RenameFilesCommand(_series.Id, new List<int> { 1 }));
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(v => v.PublishEvent(It.IsAny<SeriesRenamedEvent>()), Times.Never());
@@ -71,8 +72,8 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             GivenEpisodeFiles();
 
-            Mocker.GetMock<IMoveEpisodeFiles>()
-                  .Setup(s => s.MoveEpisodeFile(It.IsAny<EpisodeFile>(), It.IsAny<Series>()))
+            Mocker.GetMock<IMoveFiles>()
+                  .Setup(s => s.MoveFile(It.IsAny<EpisodeFile>(), It.IsAny<Series>()))
                   .Throws(new SameFilenameException("Same file name", "Filename"));
 
             Subject.Execute(new RenameFilesCommand(_series.Id, new List<int> { 1 }));
@@ -116,7 +117,7 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.Execute(new RenameFilesCommand(_series.Id, files));
 
             Mocker.GetMock<IMediaFileService>()
-                  .Verify(v => v.Get(files), Times.Once());
+                  .Verify(v => v.GetEpisodeFiles(files), Times.Once());
         }
     }
 }

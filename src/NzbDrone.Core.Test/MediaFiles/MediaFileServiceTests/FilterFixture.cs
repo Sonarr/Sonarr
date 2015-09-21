@@ -5,6 +5,8 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -36,7 +38,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 "C:\\file3.avi".AsOsAgnostic()
             };
 
-            Mocker.GetMock<IMediaFileRepository>()
+            Mocker.GetMock<IEpisodeFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>());
 
@@ -54,7 +56,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 "C:\\file3.avi".AsOsAgnostic()
             };
 
-            Mocker.GetMock<IMediaFileRepository>()
+            Mocker.GetMock<IEpisodeFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(files.Select(f => new EpisodeFile { RelativePath = Path.GetFileName(f) }).ToList());
 
@@ -72,7 +74,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 "C:\\file3.avi".AsOsAgnostic()
             };
 
-            Mocker.GetMock<IMediaFileRepository>()
+            Mocker.GetMock<IEpisodeFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
@@ -96,7 +98,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 "C:\\file3.avi".AsOsAgnostic()
             };
 
-            Mocker.GetMock<IMediaFileRepository>()
+            Mocker.GetMock<IEpisodeFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
@@ -120,7 +122,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 "C:\\file3.avi".AsOsAgnostic()
             };
 
-            Mocker.GetMock<IMediaFileRepository>()
+            Mocker.GetMock<IEpisodeFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
@@ -138,7 +140,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
                 "C:\\FILE1.avi".AsOsAgnostic()
             };
 
-            Mocker.GetMock<IMediaFileRepository>()
+            Mocker.GetMock<IEpisodeFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>());
 

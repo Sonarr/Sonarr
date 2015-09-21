@@ -11,6 +11,7 @@ namespace NzbDrone.Api.Notifications
         public bool OnRename { get; set; }
         public bool SupportsOnGrab { get; set; }
         public bool SupportsOnDownload { get; set; }
+        public bool SupportsOnDownloadMovie { get; set; }
         public bool SupportsOnUpgrade { get; set; }
         public bool SupportsOnRename { get; set; }
         public string TestCommand { get; set; }

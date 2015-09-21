@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -37,7 +38,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string path = @"C:\Test\Doctor.Who.2005.s01e01.internal.bdrip.x264-archivist.mkv";
 
-            Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
+            Parser.Parser.ParsePath(path, new Series()).ReleaseGroup.Should().Be("archivist");
         }
 
         [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP", "EVL")]

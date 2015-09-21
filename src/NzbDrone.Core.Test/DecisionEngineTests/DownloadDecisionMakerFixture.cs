@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using FizzWare.NBuilder;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -18,7 +20,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     public class DownloadDecisionMakerFixture : CoreTest<DownloadDecisionMaker>
     {
         private List<ReleaseInfo> _reports;
+        private List<ReleaseInfo> _movieReports;
         private RemoteEpisode _remoteEpisode;
+        private RemoteMovie _remoteMovie;
 
         private Mock<IDecisionEngineSpecification> _pass1;
         private Mock<IDecisionEngineSpecification> _pass2;
@@ -39,23 +43,35 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fail2 = new Mock<IDecisionEngineSpecification>();
             _fail3 = new Mock<IDecisionEngineSpecification>();
 
-            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Accept);
-            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Accept);
-            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Accept);
-            
-            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail1"));
-            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail2"));
-            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail3"));
+            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteItem>(), null)).Returns(Decision.Accept);
+            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteItem>(), null)).Returns(Decision.Accept);
+            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteItem>(), null)).Returns(Decision.Accept);
+
+            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteItem>(), null)).Returns(Decision.Reject("fail1"));
+            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteItem>(), null)).Returns(Decision.Reject("fail2"));
+            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteItem>(), null)).Returns(Decision.Reject("fail3"));
 
             _reports = new List<ReleaseInfo> { new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
-            _remoteEpisode = new RemoteEpisode {
+            _movieReports = new List<ReleaseInfo> { new ReleaseInfo { Title = "Zipper.2015.DVDRip.XviD-OSiTV" } };
+            _remoteEpisode = new RemoteEpisode
+            {
                 Series = new Series(),
                 Episodes = new List<Episode> { new Episode() }
             };
 
+            _remoteMovie = new RemoteMovie
+            {
+                Movie = new Movie()
+            };
+
             Mocker.GetMock<IParsingService>()
-                  .Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
+                  .Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()))
                   .Returns(_remoteEpisode);
+
+            Mocker.GetMock<IParsingService>()
+                  .Setup(c => c.Map(It.IsAny<ParsedMovieInfo>(), It.IsAny<MovieSearchCriteriaBase>()))
+                  .Returns(_remoteMovie);
+
         }
 
         private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
@@ -125,11 +141,28 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var results = Subject.GetRssDecision(_reports).ToList();
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Never());
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()), Times.Never());
 
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+
+            results.Should().BeEmpty();
+        }
+
+        [Test]
+        public void should_not_attempt_to_map_movie_if_not_parsable()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            _movieReports[0].Title = "Not parsable";
+
+            var results = Subject.GetRssDecision(_movieReports).ToList();
+
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedMovieInfo>(), It.IsAny<MovieSearchCriteriaBase>()), Times.Never());
+
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteMovie>(), null), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteMovie>(), null), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteMovie>(), null), Times.Never());
 
             results.Should().BeEmpty();
         }
@@ -142,7 +175,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var results = Subject.GetRssDecision(_reports).ToList();
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Never());
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()), Times.Never());
 
             _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
             _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
@@ -166,25 +199,46 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_not_attempt_to_make_decision_if_movie_is_unknown()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteMovie.Movie = null;
+            _remoteEpisode.Series = null;
+
+            Subject.GetRssDecision(_movieReports);
+
+            _pass1.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass2.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+            _pass3.Verify(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null), Times.Never());
+        }
+
+        [Test]
         public void broken_report_shouldnt_blowup_the_process()
         {
             GivenSpecifications(_pass1);
 
-            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()))
+                     .Throws<TestException>();
+            Mocker.GetMock<IParsingService>().Setup(c => c.Map(It.IsAny<ParsedMovieInfo>(), It.IsAny<MovieSearchCriteriaBase>()))
                      .Throws<TestException>();
 
             _reports = new List<ReleaseInfo>
                 {
                     new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
                     new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
-                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"}
+                    new ReleaseInfo{Title = "The.Office.S03E115.DVDRip.XviD-OSiTV"},
+                    new ReleaseInfo{Title = "Zipper.2015.DVDRip.XviD-OSiTV"},
+                    new ReleaseInfo{Title = "Zipper.2015.DVDRip.XviD-OSiTV"},
+                    new ReleaseInfo{Title = "Zipper.2015.DVDRip.XviD-OSiTV"}
                 };
 
             Subject.GetRssDecision(_reports);
 
-            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()), Times.Exactly(_reports.Count));
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()), Times.Exactly(_reports.Count));
+            Mocker.GetMock<IParsingService>().Verify(c => c.Map(It.IsAny<ParsedMovieInfo>(), It.IsAny<MovieSearchCriteriaBase>()), Times.Exactly(3));
 
-            ExceptionVerification.ExpectedErrors(3);
+            ExceptionVerification.ExpectedErrors(9);
         }
 
         [Test]
@@ -197,6 +251,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var result = Subject.GetRssDecision(_reports);
 
             result.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void should_return_unknown_movie_rejection_if_movie_is_unknown()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Series = null;
+            _remoteMovie.Movie = null;
+
+            var result = Subject.GetRssDecision(_movieReports);
+
+            // title.year is parsed as 4 digit season and episode
+            result.Should().HaveCount(2);
         }
 
         [Test]
@@ -214,15 +282,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var criteria = new SeasonSearchCriteria { Episodes = episodes.Take(1).ToList(), SeasonNumber = 1 };
 
-            var reports = episodes.Select(v => 
-                new ReleaseInfo() 
-                { 
-                    Title = string.Format("{0}.S{1:00}E{2:00}.720p.WEB-DL-DRONE", series.Title, v.SceneSeasonNumber, v.SceneEpisodeNumber) 
+            var reports = episodes.Select(v =>
+                new ReleaseInfo()
+                {
+                    Title = string.Format("{0}.S{1:00}E{2:00}.720p.WEB-DL-DRONE", series.Title, v.SceneSeasonNumber, v.SceneEpisodeNumber)
                 }).ToList();
 
             Mocker.GetMock<IParsingService>()
-                .Setup(v => v.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SearchCriteriaBase>()))
-                .Returns<ParsedEpisodeInfo, int, SearchCriteriaBase>((p,id,c) =>
+                .Setup(v => v.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<SeriesSearchCriteriaBase>()))
+                .Returns<ParsedEpisodeInfo, int, SearchCriteriaBase>((p, id, c) =>
                     new RemoteEpisode
                     {
                         DownloadAllowed = true,
@@ -233,7 +301,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(new List<IDecisionEngineSpecification>
             {
-                Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.EpisodeRequestedSpecification>()
+                Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.Series.EpisodeRequestedSpecification>()
             });
 
             var decisions = Subject.GetSearchDecision(reports, criteria);
@@ -254,7 +322,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             result.Should().HaveCount(1);
 
-            result.First().RemoteEpisode.DownloadAllowed.Should().BeFalse();
+            result.First().RemoteItem.DownloadAllowed.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_allow_download_if_movie_is_unknown()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _remoteEpisode.Series = null;
+            _remoteMovie.Movie = null;
+
+            var result = Subject.GetRssDecision(_movieReports);
+
+            result.Should().HaveCount(2);
+
+            result.First().RemoteItem.DownloadAllowed.Should().BeFalse();
+            result.Last().RemoteItem.DownloadAllowed.Should().BeFalse();
         }
 
         [Test]
@@ -268,7 +352,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             result.Should().HaveCount(1);
 
-            result.First().RemoteEpisode.DownloadAllowed.Should().BeFalse();
+            result.First().RemoteItem.DownloadAllowed.Should().BeFalse();
         }
     }
 }

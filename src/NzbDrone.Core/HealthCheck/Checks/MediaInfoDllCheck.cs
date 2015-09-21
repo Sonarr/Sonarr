@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NzbDrone.Core.MediaFiles.MediaInfo;
+using System;
 using System.Runtime.CompilerServices;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {

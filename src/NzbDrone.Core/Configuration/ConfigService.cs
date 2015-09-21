@@ -6,6 +6,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Configuration
@@ -155,6 +156,13 @@ namespace NzbDrone.Core.Configuration
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
 
             set { SetValue("CreateEmptySeriesFolders", value); }
+        }
+
+        public Boolean CreateEmptyMovieFolders
+        {
+            get { return GetValueBoolean("CreateEmptyMovieFolders", false); }
+
+            set { SetValue("CreateEmptyMovieFolders", value); }
         }
 
         public FileDateType FileDate

@@ -2,8 +2,8 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using NzbDrone.Common.Instrumentation;
 using NLog;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     totalRead += bufferRead;
 
                     var status = (BufferStatus)MediaInfo_Open_Buffer_Continue(_handle, buffer, (IntPtr)bufferRead);
-                    
+
                     if (status.HasFlag(BufferStatus.Finalized) || status <= 0 || bufferRead == 0)
                     {
                         Logger.Trace("Read file offset {0}-{1} ({2} bytes)", seekStart, stream.Position, stream.Position - seekStart);

@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NLog;
-using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Validation;
-using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected override String AddFromMagnetLink(RemoteEpisode remoteEpisode, String hash, String magnetLink)
         {
-            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(Settings.TvCategory), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected override String AddFromTorrentFile(RemoteEpisode remoteEpisode, String hash, String filename, Byte[] fileContent)
         {
-            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
+            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(Settings.TvCategory), Settings);
 
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
 
@@ -63,14 +63,45 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return hash;
         }
 
-        private String GetDownloadDirectory()
+        protected override String AddFromMagnetLink(RemoteMovie remoteMovie, String hash, String magnetLink)
         {
-            if (Settings.TvCategory.IsNullOrWhiteSpace()) return null;
+            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(Settings.MovieCategory), Settings);
+
+            var isRecentMovie = remoteMovie.IsRecentMovie();
+
+            if (isRecentMovie && Settings.RecentMoviePriority == (int)TransmissionPriority.First ||
+                !isRecentMovie && Settings.OlderMoviePriority == (int)TransmissionPriority.First)
+            {
+                _proxy.MoveTorrentToTopInQueue(hash, Settings);
+            }
+
+            return hash;
+        }
+
+        protected override String AddFromTorrentFile(RemoteMovie remoteMovie, String hash, String filename, Byte[] fileContent)
+        {
+            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(Settings.MovieCategory), Settings);
+
+            var isRecentMovie = remoteMovie.IsRecentMovie();
+
+            if (isRecentMovie && Settings.RecentMoviePriority == (int)TransmissionPriority.First ||
+                !isRecentMovie && Settings.OlderMoviePriority == (int)TransmissionPriority.First)
+            {
+                _proxy.MoveTorrentToTopInQueue(hash, Settings);
+            }
+
+            return hash;
+        }
+
+
+        private String GetDownloadDirectory(string category)
+        {
+            if (category.IsNullOrWhiteSpace()) return null;
 
             var config = _proxy.GetConfig(Settings);
             var destDir = (String)config.GetValueOrDefault("download-dir");
 
-            return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
+            return string.Format("{0}/{1}", destDir.TrimEnd('/'), category);
         }
 
         public override string Name
@@ -100,16 +131,29 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             foreach (var torrent in torrents)
             {
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadDir));
+                var itemType = DownloadItemType.Unknown;
+                var category = "sonarr";
+                var directories = outputPath.FullPath.Split('\\', '/');
 
-                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+                if (Settings.TvCategory.IsNotNullOrWhiteSpace() && directories.Contains(String.Format("{0}", Settings.TvCategory)))
                 {
-                    var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(String.Format("{0}", Settings.TvCategory))) continue;
+                    itemType = DownloadItemType.Series;
+                    category = Settings.TvCategory;
+                }
+                else if (Settings.MovieCategory.IsNotNullOrWhiteSpace() && directories.Contains(String.Format("{0}", Settings.MovieCategory)))
+                {
+                    itemType = DownloadItemType.Movie;
+                    category = Settings.MovieCategory;
+                }
+                else if (Settings.TvCategory.IsNotNullOrWhiteSpace() && Settings.MovieCategory.IsNotNullOrWhiteSpace())
+                {
+                    continue;
                 }
 
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.HashString.ToUpper();
-                item.Category = Settings.TvCategory;
+                item.Category = category;
+                item.DownloadType = itemType;
                 item.Title = torrent.Name;
 
                 item.DownloadClient = Definition.Name;
@@ -160,18 +204,34 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         public override DownloadClientStatus GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
-            var destDir = config.GetValueOrDefault("download-dir") as string;
-            
+            var tvDestDir = config.GetValueOrDefault("download-dir") as string;
+            var movieDestDir = config.GetValueOrDefault("download-dir") as string;
+
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                destDir = String.Format("{0}/.{1}", destDir, Settings.TvCategory);
+                tvDestDir = String.Format("{0}/.{1}", tvDestDir, Settings.TvCategory);
             }
 
-            return new DownloadClientStatus
+            if (Settings.MovieCategory.IsNotNullOrWhiteSpace())
+            {
+                movieDestDir = String.Format("{0}/.{1}", movieDestDir, Settings.MovieCategory);
+            }
+
+            if (tvDestDir == movieDestDir)
+                movieDestDir = null;
+
+            var returnValue = new DownloadClientStatus
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(destDir)) }
+                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(tvDestDir)) }
             };
+
+            if (movieDestDir.IsNotNullOrWhiteSpace())
+            {
+                returnValue.OutputRootFolders.Add(_remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(tvDestDir)));
+            }
+
+            return returnValue;
         }
 
         protected override void Test(List<ValidationFailure> failures)

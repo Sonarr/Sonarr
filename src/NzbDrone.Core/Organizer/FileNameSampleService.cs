@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Movies;
+using NzbDrone.Core.MediaFiles.Series;
+using NzbDrone.Core.MediaFiles.Movies;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 
 namespace NzbDrone.Core.Organizer
@@ -14,8 +17,10 @@ namespace NzbDrone.Core.Organizer
         SampleResult GetDailySample(NamingConfig nameSpec);
         SampleResult GetAnimeSample(NamingConfig nameSpec);
         SampleResult GetAnimeMultiEpisodeSample(NamingConfig nameSpec);
+        SampleResult GetStandardMovieSample(NamingConfig nameSpec);
         String GetSeriesFolderSample(NamingConfig nameSpec);
         String GetSeasonFolderSample(NamingConfig nameSpec);
+        String GetMovieFolderSample(NamingConfig nameSpec);
     }
 
     public class FileNameSampleService : IFilenameSampleService
@@ -34,10 +39,20 @@ namespace NzbDrone.Core.Organizer
         private static EpisodeFile _dailyEpisodeFile;
         private static EpisodeFile _animeEpisodeFile;
         private static EpisodeFile _animeMultiEpisodeFile;
+        private static Movie _standardMovie;
+        private static MovieFile _standardMovieFile;
 
         public FileNameSampleService(IBuildFileNames buildFileNames)
         {
             _buildFileNames = buildFileNames;
+
+            _standardMovie = new Movie
+            {
+                Title = "Movie Title",
+                Year = 2010,
+                OriginalTitle = "Movie Original Title"
+            };
+
 
             _standardSeries = new Series
             {
@@ -145,6 +160,17 @@ namespace NzbDrone.Core.Organizer
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
+
+            _standardMovieFile = new MovieFile
+            {
+                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
+                RelativePath = "Movie.Title.2010.720p.HDTV.x264-EVOLVE.mkv",
+                SceneName = "Movie.Title.2010.720p.HDTV.x264-EVOLVE",
+                ReleaseGroup = "RlsGrp",
+                MediaInfo = mediaInfo
+            };
+
+
         }
 
         public SampleResult GetStandardSample(NamingConfig nameSpec)
@@ -155,6 +181,18 @@ namespace NzbDrone.Core.Organizer
                 Series = _standardSeries,
                 Episodes = _singleEpisode,
                 EpisodeFile = _singleEpisodeFile
+            };
+
+            return result;
+        }
+
+        public SampleResult GetStandardMovieSample(NamingConfig nameSpec)
+        {
+            var result = new SampleResult
+            {
+                FileName = BuildSample(_standardMovie, _standardMovieFile, nameSpec),
+                Movie = _standardMovie,
+                MovieFile = _standardMovieFile
             };
 
             return result;
@@ -217,6 +255,11 @@ namespace NzbDrone.Core.Organizer
             return _buildFileNames.GetSeriesFolder(_standardSeries, nameSpec);
         }
 
+        public string GetMovieFolderSample(NamingConfig nameSpec)
+        {
+            return _buildFileNames.GetMovieFolder(_standardMovie, nameSpec);
+        }
+
         public string GetSeasonFolderSample(NamingConfig nameSpec)
         {
             return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, nameSpec);
@@ -233,5 +276,18 @@ namespace NzbDrone.Core.Organizer
                 return String.Empty;
             }
         }
+
+        private string BuildSample(Movie movie, MovieFile movieFile, NamingConfig nameSpec)
+        {
+            try
+            {
+                return _buildFileNames.BuildFileName(movie, movieFile, nameSpec);
+            }
+            catch (NamingFormatException)
+            {
+                return String.Empty;
+            }
+        }
+
     }
 }

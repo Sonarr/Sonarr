@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
+using NzbDrone.Core.DecisionEngine.Specifications.Series;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
@@ -65,14 +66,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes)
         {
-            var queue = remoteEpisodes.Select(remoteEpisode => new Queue.Queue
+            var queue = remoteEpisodes.Select(remoteEpisode => new SeriesQueue
             {
-                RemoteEpisode = remoteEpisode
+                RemoteItem = remoteEpisode
             });
 
             Mocker.GetMock<IQueueService>()
                 .Setup(s => s.GetQueue())
-                .Returns(queue.ToList());
+                .Returns(queue.Select(s => s as Queue.Queue).ToList());
         }
 
         [Test]

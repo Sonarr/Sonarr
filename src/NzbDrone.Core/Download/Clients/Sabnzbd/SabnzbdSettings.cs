@@ -28,6 +28,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             RuleFor(c => c.TvCategory).NotEmpty()
                                       .WithMessage("A category is recommended")
                                       .AsWarning();
+
+            RuleFor(c => c.MovieCategory).NotEmpty()
+                                         .WithMessage("A category is recommended")
+                                         .AsWarning();
+
         }
     }
 
@@ -40,8 +45,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             Host = "localhost";
             Port = 8080;
             TvCategory = "tv";
+            MovieCategory = "movie";
             RecentTvPriority = (int)SabnzbdPriority.Default;
+            RecentMoviePriority = (int)SabnzbdPriority.Default;
             OlderTvPriority = (int)SabnzbdPriority.Default;
+            OlderMoviePriority = (int)SabnzbdPriority.Default;
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -70,6 +78,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         [FieldDefinition(8, Label = "Use SSL", Type = FieldType.Checkbox)]
         public Boolean UseSsl { get; set; }
+
+        [FieldDefinition(9, Label = "Movie Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional")]
+        public String MovieCategory { get; set; }
+
+        [FieldDefinition(10, Label = "Recent Movie Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
+        public Int32 RecentMoviePriority { get; set; }
+
+        [FieldDefinition(11, Label = "Older Movie Priority", Type = FieldType.Select, SelectOptions = typeof(SabnzbdPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
+        public Int32 OlderMoviePriority { get; set; }
+
 
         public NzbDroneValidationResult Validate()
         {

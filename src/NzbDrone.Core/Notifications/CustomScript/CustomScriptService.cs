@@ -6,7 +6,9 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Processes;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Movies;
+using NzbDrone.Core.MediaFiles.Series;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
@@ -15,7 +17,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
     public interface ICustomScriptService
     {
         void OnDownload(Series series, EpisodeFile episodeFile, string sourcePath, CustomScriptSettings settings);
+        void OnDownloadMovie(Movie movie, MovieFile movieFile, string sourcePath, CustomScriptSettings settings);
         void OnRename(Series series, CustomScriptSettings settings);
+        void OnRenameMovie(Movie movie, CustomScriptSettings settings);
         ValidationFailure Test(CustomScriptSettings settings);
     }
 
@@ -54,7 +58,29 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_EpisodeFile_SceneName", episodeFile.SceneName ?? String.Empty);
             environmentVariables.Add("Sonarr_EpisodeFile_SourcePath", sourcePath);
             environmentVariables.Add("Sonarr_EpisodeFile_SourceFolder", Path.GetDirectoryName(sourcePath));
-            
+
+            ExecuteScript(environmentVariables, settings);
+        }
+
+        public void OnDownloadMovie(Movie movie, MovieFile movieFile, string sourcePath, CustomScriptSettings settings)
+        {
+            var environmentVariables = new StringDictionary();
+
+            environmentVariables.Add("Sonarr_EventType", "DownloadMovie");
+            environmentVariables.Add("Sonarr_Movie_Id", movie.Id.ToString());
+            environmentVariables.Add("Sonarr_Movie_Title", movie.Title);
+            environmentVariables.Add("Sonarr_Movie_Path", movie.Path);
+            environmentVariables.Add("Sonarr_Movie_TmdbId", movie.TmdbId.ToString());
+            environmentVariables.Add("Sonarr_MovieFile_Id", movieFile.Id.ToString());
+            environmentVariables.Add("Sonarr_MovieFile_RelativePath", movieFile.RelativePath);
+            environmentVariables.Add("Sonarr_MovieFile_Path", Path.Combine(movie.Path, movieFile.RelativePath));
+            environmentVariables.Add("Sonarr.MovieFile_Quality", movieFile.Quality.Quality.Name);
+            environmentVariables.Add("Sonarr.MovieFile_QualityVersion", movieFile.Quality.Revision.Version.ToString());
+            environmentVariables.Add("Sonarr.MovieFile_ReleaseGroup", movieFile.ReleaseGroup ?? String.Empty);
+            environmentVariables.Add("Sonarr.MovieFile_SceneName", movieFile.SceneName ?? String.Empty);
+            environmentVariables.Add("Sonarr_MovieFile_SourcePath", sourcePath);
+            environmentVariables.Add("Sonarr_MovieFile_SourceFolder", Path.GetDirectoryName(sourcePath));
+
             ExecuteScript(environmentVariables, settings);
         }
 
@@ -67,6 +93,19 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+
+            ExecuteScript(environmentVariables, settings);
+        }
+
+        public void OnRenameMovie(Movie movie, CustomScriptSettings settings)
+        {
+            var environmentVariables = new StringDictionary();
+
+            environmentVariables.Add("Sonarr_EventType", "RenameMovie");
+            environmentVariables.Add("Sonarr_Movie_Id", movie.Id.ToString());
+            environmentVariables.Add("Sonarr_Movie_Title", movie.Title);
+            environmentVariables.Add("Sonarr_Movie_Path", movie.Path);
+            environmentVariables.Add("Sonarr_Movie_TmdbId", movie.TmdbId.ToString());
 
             ExecuteScript(environmentVariables, settings);
         }

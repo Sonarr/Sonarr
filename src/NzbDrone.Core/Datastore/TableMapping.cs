@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Marr.Data;
 using Marr.Data.Mapping;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Reflection;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -13,25 +15,25 @@ using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
-using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.Movies;
+using NzbDrone.Core.MediaFiles.Series;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
-using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Restrictions;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tags;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -55,10 +57,13 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<NotificationDefinition>().RegisterDefinition("Notifications")
                   .Ignore(i => i.SupportsOnGrab)
+                  .Ignore(i => i.SupportsOnGrabMovie)
                   .Ignore(i => i.SupportsOnDownload)
+                  .Ignore(i => i.SupportsOnDownloadMovie)
                   .Ignore(i => i.SupportsOnUpgrade)
-                  .Ignore(i => i.SupportsOnRename);
-            
+                  .Ignore(i => i.SupportsOnRename)
+                  .Ignore(i => i.SupportsOnRenameMovie);
+
             Mapper.Entity<MetadataDefinition>().RegisterDefinition("Metadata");
 
             Mapper.Entity<DownloadClientDefinition>().RegisterDefinition("DownloadClients")
@@ -69,6 +74,12 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<History.History>().RegisterModel("History")
                   .AutoMapChildModels();
 
+            Mapper.Entity<Movie>().RegisterModel("Movies")
+                .Ignore(s => s.RootFolderPath)
+                .Relationship()
+                .HasOne(s => s.Profile, s => s.ProfileId)
+                .HasOne(s => s.MovieFile, s => s.MovieFileId);
+
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.RootFolderPath)
                   .Relationship()
@@ -78,9 +89,17 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(f => f.Path)
                   .Relationships.AutoMapICollectionOrComplexProperties()
                   .For("Episodes")
-                  .LazyLoad(condition: parent => parent.Id > 0, 
+                  .LazyLoad(condition: parent => parent.Id > 0,
                             query: (db, parent) => db.Query<Episode>().Where(c => c.EpisodeFileId == parent.Id).ToList())
                   .HasOne(file => file.Series, file => file.SeriesId);
+
+            Mapper.Entity<MovieFile>().RegisterModel("MovieFiles")
+                  .Ignore(f => f.Path)
+                  .Relationships.AutoMapICollectionOrComplexProperties()
+                  .For("Movie")
+                  .LazyLoad(condition: parent => parent.Id > 0,
+                            query: (db, parent) => db.Query<Movie>().Where(c => c.MovieFileId == parent.Id).ToList())
+                  .HasOne(file => file.Movie, file => file.MovieId);
 
             Mapper.Entity<Episode>().RegisterModel("Episodes")
                   .Ignore(e => e.SeriesTitle)
@@ -101,7 +120,8 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");
 
             Mapper.Entity<PendingRelease>().RegisterModel("PendingReleases")
-                  .Ignore(e => e.RemoteEpisode);
+                .Ignore(e => e.RemoteItem)
+                .Ignore(e => e.ParsedInfo);
 
             Mapper.Entity<RemotePathMapping>().RegisterModel("RemotePathMappings");
             Mapper.Entity<Tag>().RegisterModel("Tags");

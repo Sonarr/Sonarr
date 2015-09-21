@@ -1,0 +1,21 @@
+<div class="movies-posters-item">
+    <div class="center">
+        <div class="movie-poster-container x-movie-poster-container">
+            <div class="movie-controls x-movie-controls">
+                <i class="icon-sonarr-refresh x-refresh" title="Refresh Movie"/>
+                <i class="icon-sonarr-edit x-edit" title="Edit Movie"/>
+            </div>
+            <a href="{{movieRoute}}">
+                {{moviePoster}}
+            </a>
+            <div class="hidden-title x-title">
+                {{title}}
+            </div>
+        </div>
+    </div>
+    <div class="center">
+        <div class="labels">
+            {{> MovieDownloadPartial}}
+        </div>
+    </div>
+</div>

@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10 },
+                Media = new Tv.Series { TvRageId = 10 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
                 EpisodeNumber = 2

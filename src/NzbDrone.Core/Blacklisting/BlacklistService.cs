@@ -8,20 +8,23 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Core.Parser;
+using NzbDrone.Core.Movies.Events;
 
 namespace NzbDrone.Core.Blacklisting
 {
     public interface IBlacklistService
     {
-        bool Blacklisted(int seriesId, ReleaseInfo release);
+        bool Blacklisted(Media media, ReleaseInfo release);
         PagingSpec<Blacklist> Paged(PagingSpec<Blacklist> pagingSpec);
         void Delete(int id);
     }
-    public class BlacklistService : IBlacklistService,
 
+    public class BlacklistService : IBlacklistService,
                                     IExecute<ClearBlacklistCommand>,
                                     IHandle<DownloadFailedEvent>,
-                                    IHandleAsync<SeriesDeletedEvent>
+                                    IHandleAsync<SeriesDeletedEvent>,
+                                    IHandleAsync<MovieDeletedEvent>
     {
         private readonly IBlacklistRepository _blacklistRepository;
 
@@ -30,9 +33,9 @@ namespace NzbDrone.Core.Blacklisting
             _blacklistRepository = blacklistRepository;
         }
 
-        public bool Blacklisted(int seriesId, ReleaseInfo release)
+        public bool Blacklisted(Media media, ReleaseInfo release)
         {
-            var blacklistedByTitle = _blacklistRepository.BlacklistedByTitle(seriesId, release.Title);
+            var blacklistedByTitle = _blacklistRepository.BlacklistedByTitle(media, release.Title);
             
             if (release.DownloadProtocol == DownloadProtocol.Torrent)
             {
@@ -46,7 +49,7 @@ namespace NzbDrone.Core.Blacklisting
                                              .Any(b => SameTorrent(b, torrentInfo));
                 }
 
-                var blacklistedByTorrentInfohash = _blacklistRepository.BlacklistedByTorrentInfoHash(seriesId, torrentInfo.InfoHash);
+                var blacklistedByTorrentInfohash = _blacklistRepository.BlacklistedByTorrentInfoHash(media, torrentInfo.InfoHash);
 
                 return blacklistedByTorrentInfohash.Any(b => SameTorrent(b, torrentInfo));
             }
@@ -129,6 +132,7 @@ namespace NzbDrone.Core.Blacklisting
             var blacklist = new Blacklist
                             {
                                 SeriesId = message.SeriesId,
+                                MovieId = message.MovieId,
                                 EpisodeIds = message.EpisodeIds,
                                 SourceTitle = message.SourceTitle,
                                 Quality = message.Quality,
@@ -147,6 +151,13 @@ namespace NzbDrone.Core.Blacklisting
         public void HandleAsync(SeriesDeletedEvent message)
         {
             var blacklisted = _blacklistRepository.BlacklistedBySeries(message.Series.Id);
+
+            _blacklistRepository.DeleteMany(blacklisted);
+        }
+
+        public void HandleAsync(MovieDeletedEvent message)
+        {
+            var blacklisted = _blacklistRepository.BlacklistedByMovie(message.Movie.Id);
 
             _blacklistRepository.DeleteMany(blacklisted);
         }

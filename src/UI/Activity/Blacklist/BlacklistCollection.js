@@ -7,6 +7,8 @@ var Collection = PageableCollection.extend({
     url   : window.NzbDrone.ApiRoot + '/blacklist',
     model : BlacklistModel,
 
+    originalFetch : PageableCollection.prototype.fetch,
+
     state : {
         pageSize : 15,
         sortKey  : 'date',
@@ -24,6 +26,25 @@ var Collection = PageableCollection.extend({
             '1'  : 'desc'
         }
     },
+
+    initialize : function(options) {
+        if (options) {
+            if (options.mediaType) {
+                this.queryParams.mediaType = options.mediaType;
+            }
+        }
+    },
+
+    fetch : function(options) {
+        if (!options) {
+            options = {};
+        }
+
+        options.data = { mediaType : this.queryParams.mediaType };
+
+        return this.originalFetch.call(this, options);
+    },
+
 
     sortMappings : {
         'series' : { sortKey : 'series.sortTitle' }

@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Parser
 {

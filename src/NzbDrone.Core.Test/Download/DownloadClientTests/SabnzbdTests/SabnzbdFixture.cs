@@ -1,17 +1,17 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
+using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
-using NzbDrone.Core.RemotePathMappings;
-using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 {
@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                                               Username = "admin",
                                               Password = "pass",
                                               TvCategory = "tv",
+                                              MovieCategory = "movie",
                                               RecentTvPriority = (int)SabnzbdPriority.High
                                           };
             _queued = new SabnzbdQueue
@@ -95,7 +96,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                         },
                     Categories = new List<SabnzbdCategory>
                         {
-                            new SabnzbdCategory  { Name = "tv", Dir = "vv" }
+                            new SabnzbdCategory  { Name = "tv", Dir = "vv" },
+                            new SabnzbdCategory {Name = "movie", Dir = "vvv" }
                         }
                 };
 
@@ -165,7 +167,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             GivenQueue(_queued);
             GivenHistory(null);
-            
+
             var result = Subject.GetItems().Single();
 
             VerifyQueued(result);
@@ -271,6 +273,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         }
 
         [Test]
+        public void GetItems_should_ignore_downloads_from_other_categories_except_movies()
+        {
+            _completed.Items.First().Category = "movie";
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            var items = Subject.GetItems();
+
+            items.Should().HaveCount(1);
+        }
+
+        [Test]
         public void should_report_diskspace_unpack_error_as_warning()
         {
             _completed.Items.First().FailMessage = "Unpacking failed, write error or disk is full?";
@@ -371,7 +386,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _queued.DefaultRootFolder = rootFolder;
             _config.Misc.complete_dir = completeDir;
             _config.Categories.First().Dir = categoryDir;
-            
+
             GivenQueue(null);
 
             var result = Subject.GetStatus();

@@ -5,9 +5,9 @@ namespace NzbDrone.Core.MediaFiles.Events
 {
     public class SeriesRenamedEvent : IEvent
     {
-        public Series Series { get; private set; }
+        public Tv.Series Series { get; private set; }
 
-        public SeriesRenamedEvent(Series series)
+        public SeriesRenamedEvent(Tv.Series series)
         {
             Series = series;
         }

@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.GetSeries(title);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(s => s.FindByTitle(Parser.Parser.ParseTitle(title).SeriesTitle), Times.Once());
+                  .Verify(s => s.FindByTitle(Parser.Parser.ParseTitle(title).Title), Times.Once());
         }
 
         [Test]
@@ -40,8 +40,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.GetSeries(title);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(s => s.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
-                                             parsedEpisodeInfo.SeriesTitleInfo.Year), Times.Once());
+                  .Verify(s => s.FindByTitle(parsedEpisodeInfo.TitleInfo.TitleWithoutYear,
+                                             parsedEpisodeInfo.TitleInfo.Year), Times.Once());
         }
     }
 }

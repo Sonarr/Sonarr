@@ -8,12 +8,16 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.Commands.Series;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.MediaFiles.Imports;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Movies;
+using NzbDrone.Core.Movies.Events;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
@@ -21,38 +25,42 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IDiskScanService
     {
-        void Scan(Series series);
+        void Scan(Media media);
         string[] GetVideoFiles(string path, bool allDirectories = true);
     }
 
     public class DiskScanService :
         IDiskScanService,
         IHandle<SeriesUpdatedEvent>,
+        IHandle<MovieUpdatedEvent>,
         IExecute<RescanSeriesCommand>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMakeImportDecision _importDecisionMaker;
-        private readonly IImportApprovedEpisodes _importApprovedEpisodes;
+        private readonly IImportApprovedItems _importApprovedItems;
         private readonly IConfigService _configService;
         private readonly ISeriesService _seriesService;
+        private readonly IMovieService _movieService;
         private readonly IMediaFileTableCleanupService _mediaFileTableCleanupService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public DiskScanService(IDiskProvider diskProvider,
                                IMakeImportDecision importDecisionMaker,
-                               IImportApprovedEpisodes importApprovedEpisodes,
+                               IImportApprovedItems importApprovedItems,
                                IConfigService configService,
                                ISeriesService seriesService,
+                                IMovieService movieService,
                                IMediaFileTableCleanupService mediaFileTableCleanupService,
                                IEventAggregator eventAggregator,
                                Logger logger)
         {
             _diskProvider = diskProvider;
             _importDecisionMaker = importDecisionMaker;
-            _importApprovedEpisodes = importApprovedEpisodes;
+            _importApprovedItems = importApprovedItems;
             _configService = configService;
             _seriesService = seriesService;
+            _movieService = movieService;
             _mediaFileTableCleanupService = mediaFileTableCleanupService;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -61,62 +69,101 @@ namespace NzbDrone.Core.MediaFiles
         private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(extras|@eadir|\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public void Scan(Series series)
+        public void Scan(Media media)
         {
-            var rootFolder = _diskProvider.GetParentFolder(series.Path);
+            var rootFolder = _diskProvider.GetParentFolder(media.Path);
 
             if (!_diskProvider.FolderExists(rootFolder))
             {
-                _logger.Warn("Series' root folder ({0}) doesn't exist.", rootFolder);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderDoesNotExist));
+                _logger.Warn("Movie' root folder ({0}) doesn't exist.", rootFolder);
+                _eventAggregator.PublishEvent(GetScanSkippedEvent(media, ScanSkippedReason.RootFolderDoesNotExist));
                 return;
             }
 
             if (_diskProvider.GetDirectories(rootFolder).Empty())
             {
-                _logger.Warn("Series' root folder ({0}) is empty.", rootFolder);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RootFolderIsEmpty));
-                return; 
+                _logger.Warn("Movie' root folder ({0}) is empty.", rootFolder);
+                _eventAggregator.PublishEvent(GetScanSkippedEvent(media, ScanSkippedReason.RootFolderIsEmpty));
+                return;
             }
 
-            _logger.ProgressInfo("Scanning disk for {0}", series.Title);
-            
-            if (!_diskProvider.FolderExists(series.Path))
+            _logger.ProgressInfo("Scanning disk for {0}", media.Title);
+
+
+            if (!_diskProvider.FolderExists(media.Path))
             {
-                if (_configService.CreateEmptySeriesFolders &&
-                    _diskProvider.FolderExists(rootFolder))
+                if (CanCreateFolder(media) && _diskProvider.FolderExists(rootFolder))
                 {
-                    _logger.Debug("Creating missing series folder: {0}", series.Path);
-                    _diskProvider.CreateFolder(series.Path);
-                    SetPermissions(series.Path);
+                    _logger.Debug("Creating missing media folder: {0}", media.Path);
+                    _diskProvider.CreateFolder(media.Path);
+                    SetPermissions(media.Path);
                 }
                 else
                 {
-                    _logger.Debug("Series folder doesn't exist: {0}", series.Path);
+                    _logger.Debug("Media folder doesn't exist: {0}", media.Path);
                 }
 
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.SeriesFolderDoesNotExist));
+                _eventAggregator.PublishEvent(GetScanSkippedEvent(media, ScanSkippedReason.MediaFolderDoesNotExist));
                 return;
             }
 
             var videoFilesStopwatch = Stopwatch.StartNew();
-            var mediaFileList = FilterFiles(series, GetVideoFiles(series.Path)).ToList();
+            var mediaFileList = FilterFiles(media.Path, GetVideoFiles(media.Path)).ToList();
 
             videoFilesStopwatch.Stop();
-            _logger.Trace("Finished getting episode files for: {0} [{1}]", series, videoFilesStopwatch.Elapsed);
+            _logger.Trace("Finished getting media files for: {0} [{1}]", media, videoFilesStopwatch.Elapsed);
 
-            _logger.Debug("{0} Cleaning up media files in DB", series);
-            _mediaFileTableCleanupService.Clean(series, mediaFileList);
-            
+            _logger.Debug("{0} Cleaning up media files in DB", media);
+            _mediaFileTableCleanupService.Clean(media, mediaFileList);
+
             var decisionsStopwatch = Stopwatch.StartNew();
-            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, series);
+            var decisions = _importDecisionMaker.GetImportDecisions(mediaFileList, media);
             decisionsStopwatch.Stop();
-            _logger.Trace("Import decisions complete for: {0} [{1}]", series, decisionsStopwatch.Elapsed);
+            _logger.Trace("Import decisions complete for: {0} [{1}]", media, decisionsStopwatch.Elapsed);
 
-            _importApprovedEpisodes.Import(decisions, false);
+            _importApprovedItems.Import(decisions, false);
 
-            _logger.Info("Completed scanning disk for {0}", series.Title);
-            _eventAggregator.PublishEvent(new SeriesScannedEvent(series));
+            _logger.Info("Completed scanning disk for {0}", media.Title);
+            _eventAggregator.PublishEvent(GetScannedEvent(media));
+        }
+
+        private bool CanCreateFolder(Media media)
+        {
+            if (media is Tv.Series)
+            {
+                return _configService.CreateEmptySeriesFolders;
+            }
+            else if (media is Movie)
+            {
+                return _configService.CreateEmptyMovieFolders;
+            }
+            return false;
+        }
+
+        private IEvent GetScanSkippedEvent(Media media, ScanSkippedReason reason)
+        {
+            if (media is Tv.Series)
+            {
+                return new SeriesScanSkippedEvent(media as Tv.Series, reason);
+            }
+            else if (media is Movie)
+            {
+                return new MovieScanSkippedEvent(media as Movie, reason);
+            }
+            return null;
+        }
+
+        private IEvent GetScannedEvent(Media media)
+        {
+            if (media is Tv.Series)
+            {
+                return new SeriesScannedEvent(media as Tv.Series);
+            }
+            else if (media is Movie)
+            {
+                return new MovieScannedEvent(media as Movie);
+            }
+            return null;
         }
 
         public string[] GetVideoFiles(string path, bool allDirectories = true)
@@ -133,9 +180,9 @@ namespace NzbDrone.Core.MediaFiles
             return mediaFileList.ToArray();
         }
 
-        private IEnumerable<string> FilterFiles(Series series, IEnumerable<string> videoFiles)
+        private IEnumerable<string> FilterFiles(string FilePath, IEnumerable<string> videoFiles)
         {
-            return videoFiles.Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file)))
+            return videoFiles.Where(file => !ExcludedSubFoldersRegex.IsMatch(FilePath.GetRelativePath(file)))
                              .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)));
         }
 
@@ -158,11 +205,16 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.WarnException("Unable to apply permissions to: " + path, ex);
                 _logger.DebugException(ex.Message, ex);
             }
-        }       
+        }
 
         public void Handle(SeriesUpdatedEvent message)
         {
             Scan(message.Series);
+        }
+
+        public void Handle(MovieUpdatedEvent message)
+        {
+            Scan(message.Movie);
         }
 
         public void Execute(RescanSeriesCommand message)

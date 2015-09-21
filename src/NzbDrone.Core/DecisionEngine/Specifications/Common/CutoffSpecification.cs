@@ -1,0 +1,38 @@
+using System.Linq;
+using NLog;
+using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser.Model;
+
+namespace NzbDrone.Core.DecisionEngine.Specifications.Common
+{
+    public class CutoffSpecification : IDecisionEngineSpecification
+    {
+        private readonly QualityUpgradableSpecification _qualityUpgradableSpecification;
+        private readonly Logger _logger;
+
+        public CutoffSpecification(QualityUpgradableSpecification qualityUpgradableSpecification, Logger logger)
+        {
+            _qualityUpgradableSpecification = qualityUpgradableSpecification;
+            _logger = logger;
+        }
+
+        public RejectionType Type { get { return RejectionType.Permanent; } }
+
+        public virtual Decision IsSatisfiedBy(RemoteItem subject, SearchCriteriaBase searchCriteria)
+        {
+            foreach (var file in subject.MediaFiles)
+            {
+                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
+
+                
+                if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Media.Profile, file.Quality, subject.ParsedInfo.Quality))
+                {
+                    _logger.Debug("Cutoff already met, rejecting.");
+                    return Decision.Reject("Existing file meets cutoff: {0}", subject.Media.Profile.Value.Cutoff);
+                }
+            }
+
+            return Decision.Accept();
+        }
+    }
+}

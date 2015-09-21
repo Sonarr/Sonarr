@@ -1,4 +1,3 @@
-using System.Linq;
 using NLog;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -10,10 +9,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
     public class DelaySpecification : IDecisionEngineSpecification
     {
-        private readonly IPendingReleaseService _pendingReleaseService;
-        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
         private readonly IDelayProfileService _delayProfileService;
         private readonly Logger _logger;
+        private readonly IPendingReleaseService _pendingReleaseService;
+        private readonly IQualityUpgradableSpecification _qualityUpgradableSpecification;
 
         public DelaySpecification(IPendingReleaseService pendingReleaseService,
                                   IQualityUpgradableSpecification qualityUpgradableSpecification,
@@ -28,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
         public RejectionType Type { get { return RejectionType.Temporary; } }
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual Decision IsSatisfiedBy(RemoteItem subject, SearchCriteriaBase searchCriteria)
         {
             //How do we want to handle drone being off and the automatic search being triggered?
             //TODO: Add a flag to the search to state it is a "scheduled" search
@@ -39,8 +38,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return Decision.Accept();
             }
 
-            var profile = subject.Series.Profile.Value;
-            var delayProfile = _delayProfileService.BestForTags(subject.Series.Tags);
+            var profile = subject.Media.Profile.Value;
+            var delayProfile = _delayProfileService.BestForTags(subject.Media.Tags);
             var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
             var isPreferredProtocol = subject.Release.DownloadProtocol == delayProfile.PreferredProtocol;
 
@@ -54,26 +53,28 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (isPreferredProtocol)
             {
-                foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
+                foreach (var file in subject.MediaFiles)
                 {
-                    var upgradable = _qualityUpgradableSpecification.IsUpgradable(profile, file.Quality, subject.ParsedEpisodeInfo.Quality);
+                    var upgradable = _qualityUpgradableSpecification.IsUpgradable(profile, file.Quality, subject.ParsedInfo.Quality);
 
-                    if (upgradable)
+                    if (!upgradable)
                     {
-                        var revisionUpgrade = _qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedEpisodeInfo.Quality);
-
-                        if (revisionUpgrade)
-                        {
-                            _logger.Debug("New quality is a better revision for existing quality, skipping delay");
-                            return Decision.Accept();
-                        }
+                        continue;
                     }
+                    var revisionUpgrade = _qualityUpgradableSpecification.IsRevisionUpgrade(file.Quality, subject.ParsedInfo.Quality);
+
+                    if (!revisionUpgrade)
+                    {
+                        continue;
+                    }
+                    _logger.Debug("New quality is a better revision for existing quality, skipping delay");
+                    return Decision.Accept();
                 }
             }
 
             //If quality meets or exceeds the best allowed quality in the profile accept it immediately
             var bestQualityInProfile = new QualityModel(profile.LastAllowedQuality());
-            var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality, bestQualityInProfile) >= 0;
+            var isBestInProfile = comparer.Compare(subject.ParsedInfo.Quality, bestQualityInProfile) >= 0;
 
             if (isBestInProfile && isPreferredProtocol)
             {
@@ -81,9 +82,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return Decision.Accept();
             }
 
-            var episodeIds = subject.Episodes.Select(e => e.Id);
+            
 
-            var oldest = _pendingReleaseService.OldestPendingRelease(subject.Series.Id, episodeIds);
+            var oldest = _pendingReleaseService.OldestPendingRelease(subject);
+            //var episodeIds = subject.Episodes.Select(e => e.Id);
+            //var oldest = _pendingReleaseService.OldestPendingRelease(subject.Series.Id, episodeIds);
 
             if (oldest != null && oldest.Release.AgeMinutes > delay)
             {

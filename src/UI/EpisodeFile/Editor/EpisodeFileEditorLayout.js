@@ -139,7 +139,7 @@ module.exports = Marionette.Layout.extend({
             var profile = profileSchemaCollection.first();
 
             self.qualitySelectView = new QualitySelectView({ qualities: _.map(profile.get('items'), 'quality') });
-            self.listenTo(self.qualitySelectView, 'seasonedit:quality', self._changeQuality);
+            self.listenTo(self.qualitySelectView, 'movieedit:quality', self._changeQuality);
 
             self.quality.show(self.qualitySelectView);
         });

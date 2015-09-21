@@ -18,5 +18,6 @@ namespace NzbDrone.Core.Indexers
         IList<ReleaseInfo> Fetch(DailyEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(MovieSearchCriteria searchCriteria);
     }
 }

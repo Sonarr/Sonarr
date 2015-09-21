@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.MediaFiles.Series;
 
 namespace NzbDrone.Core.MediaFiles.Events
 {

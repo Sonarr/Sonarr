@@ -164,7 +164,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             {
                 newActor.Images = new List<MediaCover.MediaCover>
                 {
-                    new MediaCover.MediaCover(MediaCoverTypes.Headshot, arg.Image)
+                    new MediaCover.MediaCover(MediaCoverTypes.Headshot, arg.Image, MediaCoverOrigin.Series)
                 };
             }
 
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             //Don't include series fanart images as episode screenshot
             if (oracleEpisode.Image != null)
             {
-                episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, oracleEpisode.Image));
+                episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, oracleEpisode.Image, MediaCoverOrigin.Series));
             }
 
             return episode;

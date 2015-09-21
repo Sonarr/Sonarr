@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         {
             CleanupOrphanedBySeries();
             CleanupOrphanedByEpisode();
+            CleanupOrphanedByMovie();
         }
 
         private void CleanupOrphanedBySeries()
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                                      SELECT History.Id FROM History
                                      LEFT OUTER JOIN Series
                                      ON History.SeriesId = Series.Id
-                                     WHERE Series.Id IS NULL)");
+                                     WHERE Series.Id IS NULL AND History.MovieId = 0)");
         }
 
         private void CleanupOrphanedByEpisode()
@@ -38,7 +39,19 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                                      SELECT History.Id FROM History
                                      LEFT OUTER JOIN Episodes
                                      ON History.EpisodeId = Episodes.Id
-                                     WHERE Episodes.Id IS NULL)");
+                                     WHERE Episodes.Id IS NULL AND History.MovieId = 0)");
+        }
+
+        private void CleanupOrphanedByMovie()
+        {
+            var mapper = _database.GetDataMapper();
+
+            mapper.ExecuteNonQuery(@"DELETE FROM History
+                                     WHERE Id IN (
+                                     SELECT History.Id FROM History
+                                     LEFT OUTER JOIN Movies
+                                     ON History.MovieId = Movies.Id
+                                     WHERE Movies.Id IS NULL AND History.SeriesId = 0)");
         }
     }
 }

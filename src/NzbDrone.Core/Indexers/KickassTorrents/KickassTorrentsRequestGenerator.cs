@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             var pageableRequests = new List<IEnumerable<IndexerRequest>>();
 
             pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "tv"));
+            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "movies"));
 
             return pageableRequests;
         }
@@ -99,6 +100,20 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv"));
+            }
+
+            return pageableRequests;
+        }
+
+        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(MovieSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+
+            foreach (var queryTitle in searchCriteria.QueryTitles)
+            {
+                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                    PrepareQuery(queryTitle),
+                    "category:movies"));
             }
 
             return pageableRequests;

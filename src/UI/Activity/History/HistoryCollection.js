@@ -8,6 +8,8 @@ var Collection = PageableCollection.extend({
     url   : window.NzbDrone.ApiRoot + '/history',
     model : HistoryModel,
 
+    originalFetch : PageableCollection.prototype.fetch,
+
     state : {
         pageSize : 15,
         sortKey  : 'date',
@@ -50,18 +52,37 @@ var Collection = PageableCollection.extend({
     },
 
     sortMappings : {
-        'series' : { sortKey : 'series.sortTitle' }
+        'series' : { sortKey : 'series.sortTitle' },
+        'movie'  : { sortKey : 'movie.title' }
     },
 
     initialize : function(options) {
         delete this.queryParams.episodeId;
+        delete this.queryParams.movieId;
 
         if (options) {
+            if (options.mediaType) {
+                this.queryParams.mediaType = options.mediaType;
+            }
             if (options.episodeId) {
                 this.queryParams.episodeId = options.episodeId;
             }
+            if (options.movieId) {
+                this.queryParams.movieId = options.movieId;
+            }
         }
     },
+
+    fetch : function(options) {
+        if (!options) {
+            options = {};
+        }
+
+        options.data = { mediaType : this.queryParams.mediaType };
+
+        return this.originalFetch.call(this, options);
+    },
+
 
     parseState : function(resp) {
         return { totalRecords : resp.totalRecords };

@@ -38,14 +38,14 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             _parsedEpisodeInfo = new ParsedEpisodeInfo
             {
-                SeriesTitle = _series.Title,
+                Title = _series.Title,
                 SeasonNumber = 1,
                 EpisodeNumbers = new[] { 1 }
             };
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = _series,
+                Media = _series,
                 EpisodeNumber = _episodes.First().EpisodeNumber,
                 SeasonNumber = _episodes.First().SeasonNumber,
                 Episodes = _episodes
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
         private void GivenParseResultSeriesDoesntMatchSearchCriteria()
         {
-            _parsedEpisodeInfo.SeriesTitle = "Another Name";
+            _parsedEpisodeInfo.Title = "Another Name";
         }
 
         [Test]

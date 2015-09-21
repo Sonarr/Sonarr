@@ -1,13 +1,13 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.UTorrent;
+using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
@@ -30,7 +30,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
                                               Port = 2222,
                                               Username = "admin",
                                               Password = "pass",
-                                              TvCategory = "tv"
+                                              TvCategory = "tv",
+                                              MovieCategory = "movie"
                                           };
 
             _queued = new UTorrentTorrent
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
                         DownloadUrl = _downloadUrl,
                         RootDownloadPath = "somepath"
                     };
-            
+
             Mocker.GetMock<ITorrentFileInfoReader>()
                   .Setup(s => s.GetHashFromTorrentFile(It.IsAny<Byte[]>()))
                   .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951");
@@ -130,7 +131,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
                     PrepareClientToReturnQueuedItem();
                 });
         }
-        
+
         protected virtual void GivenTorrents(List<UTorrentTorrent> torrents)
         {
             if (torrents == null)
@@ -230,6 +231,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             items.Should().BeEmpty();
         }
 
+        [Test]
+        public void GetItems_should_ignore_downloads_from_other_categories_except_movies()
+        {
+            _completed.Label = "movie";
+            PrepareClientToReturnCompletedItem();
+
+            var items = Subject.GetItems();
+
+            items.Should().HaveCount(1);
+        }
         // Proxy.GetTorrents does not return original url. So item has to be found via magnet url.
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
         public void Download_should_get_hash_from_magnet_url(String magnetUrl, String expectedHash)
@@ -240,6 +251,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             remoteEpisode.Release.DownloadUrl = magnetUrl;
 
             var id = Subject.Download(remoteEpisode);
+
+            id.Should().Be(expectedHash);
+        }
+
+        // Proxy.GetTorrents does not return original url. So item has to be found via magnet url.
+        [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
+        public void Download_should_get_hash_from_magnet_url_movie(String magnetUrl, String expectedHash)
+        {
+            GivenSuccessfulDownload();
+
+            var remoteMovie = CreateRemoteMovie();
+            remoteMovie.Release.DownloadUrl = magnetUrl;
+
+            var id = Subject.Download(remoteMovie);
 
             id.Should().Be(expectedHash);
         }
@@ -296,13 +321,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         public void should_return_status_with_outputdirs()
         {
             var configItems = new Dictionary<String, String>();
-            
+
             configItems.Add("dir_active_download_flag", "true");
             configItems.Add("dir_active_download", @"C:\Downloads\Downloading\utorrent".AsOsAgnostic());
             configItems.Add("dir_completed_download", @"C:\Downloads\Finished\utorrent".AsOsAgnostic());
             configItems.Add("dir_completed_download_flag", "true");
             configItems.Add("dir_add_label", "true");
-            
+
             Mocker.GetMock<IUTorrentProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<UTorrentSettings>()))
                 .Returns(configItems);
@@ -312,6 +337,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(@"C:\Downloads\Finished\utorrent\tv".AsOsAgnostic());
+            result.OutputRootFolders.Last().Should().Be(@"C:\Downloads\Finished\utorrent\movie".AsOsAgnostic());
         }
 
         [Test]

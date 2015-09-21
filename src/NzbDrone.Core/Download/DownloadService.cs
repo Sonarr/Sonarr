@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        void DownloadReport(RemoteEpisode remoteEpisode);
+        void DownloadReport(RemoteItem remoteItem);
     }
 
 
@@ -39,7 +39,19 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void DownloadReport(RemoteEpisode remoteEpisode)
+        public void DownloadReport(RemoteItem remoteItem)
+        {
+            if (remoteItem is RemoteEpisode)
+            {
+                DownloadReport(remoteItem as RemoteEpisode);
+            }
+            else if (remoteItem is RemoteMovie)
+            {
+                DownloadReport(remoteItem as RemoteMovie);
+            }
+        }
+
+        private void DownloadReport(RemoteEpisode remoteEpisode)
         {
             Ensure.That(remoteEpisode.Series, () => remoteEpisode.Series).IsNotNull();
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
@@ -90,6 +102,58 @@ namespace NzbDrone.Core.Download
 
             _logger.ProgressInfo("Report sent to {0}. {1}", downloadClient.Definition.Name, downloadTitle);
             _eventAggregator.PublishEvent(episodeGrabbedEvent);
+        }
+
+        private void DownloadReport(RemoteMovie remoteMovie)
+        {
+            Ensure.That(remoteMovie.Movie, () => remoteMovie.Movie).IsNotNull();
+
+            var downloadTitle = remoteMovie.Release.Title;
+            var downloadClient = _downloadClientProvider.GetDownloadClient(remoteMovie.Release.DownloadProtocol);
+
+            if (downloadClient == null)
+            {
+                _logger.Warn("{0} Download client isn't configured yet.", remoteMovie.Release.DownloadProtocol);
+                return;
+            }
+
+            // Limit grabs to 2 per second.
+            if (remoteMovie.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteMovie.Release.DownloadUrl.StartsWith("magnet:"))
+            {
+                var uri = new Uri(remoteMovie.Release.DownloadUrl);
+                _rateLimitService.WaitAndPulse(uri.Host, TimeSpan.FromSeconds(2));
+            }
+
+            string downloadClientId;
+            try
+            {
+                downloadClientId = downloadClient.Download(remoteMovie);
+                _indexerStatusService.RecordSuccess(remoteMovie.Release.IndexerId);
+            }
+            catch (ReleaseDownloadException ex)
+            {
+                var http429 = ex.InnerException as TooManyRequestsException;
+                if (http429 != null)
+                {
+                    _indexerStatusService.RecordFailure(remoteMovie.Release.IndexerId, http429.RetryAfter);
+                }
+                else
+                {
+                    _indexerStatusService.RecordFailure(remoteMovie.Release.IndexerId);
+                }
+                throw;
+            }
+
+            var movieGrabbedEvent = new MovieGrabbedEvent(remoteMovie);
+            movieGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
+
+            if (!String.IsNullOrWhiteSpace(downloadClientId))
+            {
+                movieGrabbedEvent.DownloadId = downloadClientId;
+            }
+
+            _logger.ProgressInfo("Report sent to {0}. {1}", downloadClient.Definition.Name, downloadTitle);
+            _eventAggregator.PublishEvent(movieGrabbedEvent);
         }
     }
 }
