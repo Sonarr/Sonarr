@@ -2,7 +2,6 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -56,10 +55,11 @@ namespace NzbDrone.Core.Test.Datastore
         [Test]
         public void embedded_document_as_json()
         {
-            var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2 )};
+            var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2) };
 
             var history = Builder<History.History>.CreateNew()
                             .With(c => c.Id = 0)
+                            .With(c => c.MovieId = 0)
                             .With(c => c.Quality = quality)
                             .Build();
 
@@ -74,6 +74,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             var history = Builder<History.History>.CreateListOfSize(2)
                             .All().With(c => c.Id = 0)
+                            .With(c => c.MovieId = 0)
                             .Build().ToList();
 
             history[0].Quality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));

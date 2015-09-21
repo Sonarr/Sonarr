@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -19,7 +18,7 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
     public class TmdbProxy : ISearchForNewMovie, IProvideMoviesInfo
     {
         private readonly Logger _logger;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClient _httpClient;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
         private static readonly Regex RemoveYearRegex = new Regex(@"(?:\(\d+\))", RegexOptions.Compiled);
         private static readonly Regex InvalidSearchCharRegex = new Regex(@"(?:\*|\(|\)|'|!)", RegexOptions.Compiled);
@@ -28,21 +27,11 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
         private static readonly int MAX_RETRIES = 3;
         private static readonly int GRACETIME = 500;
 
-        public TmdbProxy(Logger logger, HttpClient httpClient)
+        public TmdbProxy(Logger logger, IHttpClient httpClient)
         {
             _logger = logger;
             _httpClient = httpClient;
             _requestBuilder = new HttpRequestBuilder("http://api.themoviedb.org/3/");
-        }
-
-
-        private static string GetPosterThumbnailUrl(string posterUrl)
-        {
-            if (posterUrl.Contains("poster-small.jpg")) return posterUrl;
-
-            var extension = Path.GetExtension(posterUrl);
-            var withoutExtension = posterUrl.Substring(0, posterUrl.Length - extension.Length);
-            return withoutExtension + "-300" + extension;
         }
 
         private static string GetSearchTerm(string phrase)
@@ -56,7 +45,7 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
             return phrase;
         }
 
-        public IEnumerable<Movies.Movie> SearchForNewMovie(string title)
+        public IEnumerable<Movie> SearchForNewMovie(string title)
         {
 
             var lowerTitle = title.ToLowerInvariant();
@@ -75,43 +64,42 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
                 yield return MapMovie(new MovieResource { id = tmdbId });
             }
 
-            var httpRequest = _requestBuilder.Build("search/movie");
-            httpRequest.AddQueryParam("api_key", API_KEY);
-            httpRequest.AddQueryParam("query", GetSearchTerm(title));
-
-            var tries = 0;
-            var done = false;
-            MovieSearchResource resource = new MovieSearchResource();
-            while (tries++ < MAX_RETRIES)
+            if (lowerTitle.StartsWith("imdb:") || lowerTitle.StartsWith("imdbid:"))
             {
-                try
-                {
-                    var httpResponse = _httpClient.Get<MovieSearchResource>(httpRequest);
-                    resource = httpResponse.Resource;
-                    done = true;
-                    break;
-                }
-                catch (TooManyRequestsException ex)
-                {
+                var imdbId = lowerTitle.Split(':')[1].Trim();
 
-                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString()) * 1000 + GRACETIME;
-                    _logger.Warn("Too many request for tmdb, waiting {0}ms", waitTime);
-                    Thread.Sleep(waitTime);
+                if (imdbId.IsNullOrWhiteSpace() || imdbId.Any(char.IsWhiteSpace))
+                {
+                    yield break;
+                }
+
+                var httpRequest = _requestBuilder.Build("find/" + imdbId);
+                httpRequest.AddQueryParam("external_source", "imdb_id");
+                httpRequest.AddQueryParam("api_key", API_KEY);
+                var httpResponse = GetHttpResponse<MovieSearchResource>(httpRequest);
+                var resource = httpResponse.Resource;
+
+                foreach (var movie in resource.movie_results.Take(10))
+                {
+                    yield return MapMovie(movie);
                 }
             }
-
-            if (!done)
+            else
             {
-                throw new Exception("Error fetching data from tmdb");
-            }
+                var httpRequest = _requestBuilder.Build("search/movie");
+                httpRequest.AddQueryParam("query", GetSearchTerm(title));
+                httpRequest.AddQueryParam("api_key", API_KEY);
+                var httpResponse = GetHttpResponse<MovieSearchResource>(httpRequest);
+                var resource = httpResponse.Resource;
 
-            foreach (var movie in resource.results.Take(10))
-            {
-                yield return MapMovie(movie);
+                foreach (var movie in resource.results.Take(10))
+                {
+                    yield return MapMovie(movie);
+                }
             }
         }
 
-        private HttpResponse<T> GetHttpResponse<T>(NzbDrone.Common.Http.HttpRequest httpRequest) where T : new()
+        private HttpResponse<T> GetHttpResponse<T>(Common.Http.HttpRequest httpRequest) where T : new()
         {
             var tries = 0;
             HttpResponse<T> httpResponse = null;
@@ -141,45 +129,22 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
 
         private Movie MapMovie(MovieResource movie)
         {
-            var newMovie = new Movies.Movie();
+            var newMovie = new Movie();
             var httpRequest = _requestBuilder.Build("movie/" + movie.id);
             httpRequest.AddQueryParam("api_key", API_KEY);
+            httpRequest.SuppressHttpError = true;
 
-            var tries = 0;
-            var done = false;
-            while (tries++ < MAX_RETRIES)
+            var httpResponse = GetHttpResponse<MovieResource>(httpRequest);
+            if (httpResponse.HasHttpError)
             {
-                try
+                if (httpResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    var httpResponse = _httpClient.Get<MovieResource>(httpRequest);
-                    if (httpResponse.HasHttpError)
-                    {
-                        if (httpResponse.StatusCode == HttpStatusCode.NotFound)
-                        {
-                            throw new MovieNotFoundException(movie.id);
-                        }
-                        else
-                        {
-                            throw new NzbDrone.Common.Http.HttpException(httpRequest, httpResponse);
-                        }
-                    }
-                    movie = httpResponse.Resource;
-                    done = true;
-                    break;
+                    throw new MovieNotFoundException(movie.id);
                 }
-                catch (TooManyRequestsException ex)
-                {
-                    var waitTime = Int32.Parse(ex.Response.Headers["Retry-After"].ToString()) * 1000 + GRACETIME;
-                    _logger.Warn("Too many request for tmdb, waiting {0}ms", waitTime);
-
-                    Thread.Sleep(waitTime);
-                }
+                throw new Common.Http.HttpException(httpRequest, httpResponse);
             }
 
-            if (!done)
-            {
-                throw new Exception("Error fetching data from tmdb");
-            }
+            movie = httpResponse.Resource;
 
             newMovie.TmdbId = movie.id;
             newMovie.OriginalTitle = movie.original_title;
@@ -194,7 +159,7 @@ namespace NzbDrone.Core.MetadataSource.Tmdb
             {
                 newMovie.Year = DateTime.Parse(movie.release_date).Year;
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
             newMovie.Overview = movie.overview;

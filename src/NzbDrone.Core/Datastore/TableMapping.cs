@@ -152,6 +152,7 @@ namespace NzbDrone.Core.Datastore
             MapRepository.Instance.RegisterTypeConverter(typeof(List<Int32>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<String>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(ParsedEpisodeInfo), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(ParsedMovieInfo), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(ReleaseInfo), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(HashSet<Int32>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(OsPath), new OsPathConverter());

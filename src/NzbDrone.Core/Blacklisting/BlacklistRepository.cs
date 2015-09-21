@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -21,6 +23,18 @@ namespace NzbDrone.Core.Blacklisting
         public BlacklistRepository(IMainDatabase database, IEventAggregator eventAggregator) :
             base(database, eventAggregator)
         {
+        }
+
+        public new Blacklist Insert(Blacklist item)
+        {
+            Debug.Assert(!(item.MovieId > 0 && item.SeriesId > 0));
+            return base.Insert(item);
+        }
+
+        public new void InsertMany(IList<Blacklist> models)
+        {
+            Debug.Assert(models.Any(m => !(m.SeriesId > 0 && m.MovieId > 0)));
+            base.InsertMany(models);
         }
 
         public List<Blacklist> BlacklistedByTitle(Media media, string sourceTitle)

@@ -9,7 +9,9 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("PendingReleases")
-                .AddColumn("MovieId").AsInt32().WithDefaultValue(0);
+                .AddColumn("MovieId").AsInt32().WithDefaultValue(0)
+                .AddColumn("ParsedMovieInfo").AsString().Nullable()
+                .AlterColumn("ParsedEpisodeInfo").AsString().Nullable();
         }
     }
 }

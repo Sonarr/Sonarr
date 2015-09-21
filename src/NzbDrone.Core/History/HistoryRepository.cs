@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Marr.Data.QGen;
 using NzbDrone.Core.Datastore;
@@ -29,6 +30,17 @@ namespace NzbDrone.Core.History
         {
         }
 
+        public new History Insert(History item)
+        {
+            Debug.Assert(!(item.MovieId > 0 && item.SeriesId > 0));
+            return base.Insert(item);
+        }
+
+        public new void InsertMany(IList<History> models)
+        {
+            Debug.Assert(models.Any(m => !(m.SeriesId > 0 && m.MovieId > 0)));
+            base.InsertMany(models);
+        }
 
         public List<QualityModel> GetBestQualityInHistory(int episodeId)
         {

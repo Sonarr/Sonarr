@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.DecisionEngine.Specifications.Common;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Restrictions;
 using NzbDrone.Core.Test.Framework;
@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     public class ReleaseRestrictionsSpecificationFixture : CoreTest<ReleaseRestrictionsSpecification>
     {
         private RemoteEpisode _remoteEpisode;
+        private RemoteMovie _remoteMovie;
 
         [SetUp]
         public void Setup()
@@ -31,6 +32,18 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                              Title = "Dexter.S08E01.EDITED.WEBRip.x264-KYR"
                                          }
                            };
+
+            _remoteMovie = new RemoteMovie
+            {
+                Movie = new Movie
+                {
+                    Tags = new HashSet<Int32>()
+                },
+                Release = new ReleaseInfo
+                {
+                    Title = "Zipper.2015.EDITED.WEBRip.x264-KYR"
+                }
+            };
         }
 
         private void GivenRestictions(String required, String ignored)
@@ -55,6 +68,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                   .Returns(new List<Restriction>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -63,6 +77,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenRestictions("WEBRip", null);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -71,6 +86,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenRestictions("doesnt,exist", null);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -79,6 +95,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenRestictions(null, "ignored");
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -87,6 +104,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenRestictions(null, "edited");
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
 
         [TestCase("EdiTED")]
@@ -98,6 +116,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenRestictions(required, null);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [TestCase("EdiTED")]
@@ -109,12 +128,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenRestictions(null, ignored);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
+
         }
 
         [Test]
         public void should_be_false_when_release_contains_one_restricted_word_and_one_required_word()
         {
             _remoteEpisode.Release.Title = "[ www.Speed.cd ] -Whose.Line.is.it.Anyway.US.S10E24.720p.HDTV.x264-BAJSKORV";
+            _remoteMovie.Release.Title = "[ www.Speed.cd ] -Whose.Line.is.it.Anyway.US.S10E24.720p.HDTV.x264-BAJSKORV";
 
             Mocker.GetMock<IRestrictionService>()
                   .Setup(s => s.AllForTags(It.IsAny<HashSet<Int32>>()))
@@ -124,6 +146,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                            });
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteMovie, null).Accepted.Should().BeFalse();
         }
     }
 }

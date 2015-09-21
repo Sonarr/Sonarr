@@ -2,8 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
-using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.HistoryTests
 {
@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Test.HistoryTests
         {
             var history = Builder<History.History>.CreateNew()
                 .With(c => c.Quality = new QualityModel())
+                .With(c => c.SeriesId = 0)
                 .BuildNew();
 
             history.Data.Add("key1", "value1");
@@ -33,12 +34,14 @@ namespace NzbDrone.Core.Test.HistoryTests
             var historyBluray = Builder<History.History>.CreateNew()
                 .With(c => c.Quality = new QualityModel(Quality.Bluray1080p))
                 .With(c => c.SeriesId = 12)
+                .With(c => c.MovieId = 0)
                 .With(c => c.EventType = HistoryEventType.Grabbed)
                 .BuildNew();
 
             var historyDvd = Builder<History.History>.CreateNew()
                 .With(c => c.Quality = new QualityModel(Quality.DVD))
                 .With(c => c.SeriesId = 12)
+                .With(c => c.MovieId = 0)
                 .With(c => c.EventType = HistoryEventType.Grabbed)
              .BuildNew();
 
@@ -50,5 +53,29 @@ namespace NzbDrone.Core.Test.HistoryTests
             downloadHistory.Should().HaveCount(1);
         }
 
+        [Test]
+        public void should_get_movie_download_history()
+        {
+            var historyBluray = Builder<History.History>.CreateNew()
+                .With(c => c.Quality = new QualityModel(Quality.Bluray1080p))
+                .With(c => c.MovieId = 12)
+                .With(c => c.SeriesId = 0)
+                .With(c => c.EventType = HistoryEventType.Grabbed)
+                .BuildNew();
+
+            var historyDvd = Builder<History.History>.CreateNew()
+                .With(c => c.Quality = new QualityModel(Quality.DVD))
+                .With(c => c.MovieId = 12)
+                .With(c => c.SeriesId = 0)
+                .With(c => c.EventType = HistoryEventType.Grabbed)
+             .BuildNew();
+
+            Subject.Insert(historyBluray);
+            Subject.Insert(historyDvd);
+
+            var downloadHistory = Subject.FindMovieDownloadHistory(12, new QualityModel(Quality.Bluray1080p));
+
+            downloadHistory.Should().HaveCount(1);
+        }
     }
 }

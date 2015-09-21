@@ -9,6 +9,7 @@ namespace NzbDrone.Core.MetadataSource.Tmdb.Resource
     {
         public int page;
         public List<MovieResource> results;
+        public List<MovieResource> movie_results; 
         public int total_pages;
         public int total_results;
     }

@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NLog;
-using NzbDrone.Core.Validation;
-using FluentValidation.Results;
-using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
-        {            
+        {
             List<UTorrentTorrent> torrents;
 
             try
@@ -199,19 +199,23 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             var config = _proxy.GetConfig(Settings);
 
             OsPath destDir = new OsPath(null);
+            OsPath movieDestDir = new OsPath(null);
 
             if (config.GetValueOrDefault("dir_active_download_flag") == "true")
             {
                 destDir = new OsPath(config.GetValueOrDefault("dir_active_download"));
+                movieDestDir = new OsPath(config.GetValueOrDefault("dir_active_download"));
             }
 
             if (config.GetValueOrDefault("dir_completed_download_flag") == "true")
             {
                 destDir = new OsPath(config.GetValueOrDefault("dir_completed_download"));
+                movieDestDir = new OsPath(config.GetValueOrDefault("dir_completed_download"));
 
                 if (config.GetValueOrDefault("dir_add_label") == "true")
                 {
                     destDir = destDir + Settings.TvCategory;
+                    movieDestDir = movieDestDir + Settings.MovieCategory;
                 }
             }
 
@@ -223,6 +227,11 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             if (!destDir.IsEmpty)
             {
                 status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
+            }
+
+            if (!movieDestDir.IsEmpty && movieDestDir != destDir)
+            {
+                status.OutputRootFolders.Add(_remotePathMappingService.RemapRemoteToLocal(Settings.Host, movieDestDir));
             }
 
             return status;

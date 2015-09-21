@@ -9,10 +9,10 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Movies;
+using NzbDrone.Core.Movies.Events;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
-using NzbDrone.Core.Movies.Events;
-using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.MediaCover
 {
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.MediaCover
             {
                 var filePath = GetCoverPath(seriesId, mediaCover.CoverType, mediaCover.CoverOrigin);
 
-                var movie = mediaCover.CoverOrigin == MediaCoverOrigin.Movie ? "/movies/" : "";
+                var movie = mediaCover.CoverOrigin == MediaCoverOrigin.Movie ? "movies/" : "";
 
                 mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + movie + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
 
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.MediaCover
         {
             var fileName = GetCoverPath(id, cover.CoverType, cover.CoverOrigin);
 
-            _logger.Info("Downloading {0} for {1} {2} {3}", cover.CoverType, id, cover.CoverOrigin == MediaCoverOrigin.Series ? "serie":"movie", cover.Url);
+            _logger.Info("Downloading {0} for {1} {2} {3}", cover.CoverType, id, cover.CoverOrigin == MediaCoverOrigin.Series ? "serie" : "movie", cover.Url);
             _httpClient.DownloadFile(cover.Url, fileName);
         }
 

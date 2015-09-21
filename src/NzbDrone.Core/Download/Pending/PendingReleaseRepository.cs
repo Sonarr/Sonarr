@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
@@ -18,6 +20,18 @@ namespace NzbDrone.Core.Download.Pending
         public PendingReleaseRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
+        }
+
+        public new PendingRelease Insert(PendingRelease item)
+        {
+            Debug.Assert(!(item.MovieId > 0 && item.SeriesId > 0));
+            return base.Insert(item);
+        }
+
+        public new void InsertMany(IList<PendingRelease> models)
+        {
+            Debug.Assert(models.Any(m => !(m.SeriesId > 0 && m.MovieId > 0)));
+            base.InsertMany(models);
         }
 
         public void DeleteBySeriesId(Int32 seriesId)

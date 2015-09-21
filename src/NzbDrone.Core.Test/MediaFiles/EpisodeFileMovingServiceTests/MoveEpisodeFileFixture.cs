@@ -8,8 +8,10 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.MediaFiles.Movies;
 using NzbDrone.Core.MediaFiles.Series;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -25,6 +27,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
         private EpisodeFile _episodeFile;
         private LocalEpisode _localEpisode;
 
+        private Movie _movie;
+        private MovieFile _movieFile;
+        private LocalMovie _localMovie;
+
         [SetUp]
         public void Setup()
         {
@@ -32,23 +38,45 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                                      .With(s => s.Path = @"C:\Test\TV\Series".AsOsAgnostic())
                                      .Build();
 
+            _movie = Builder<Movie>.CreateNew()
+                                   .With(s => s.Path = @"C:\Test\TV\Movie".AsOsAgnostic())
+                                   .Build();
+
             _episodeFile = Builder<EpisodeFile>.CreateNew()
                                                .With(f => f.Path = null)
                                                .With(f => f.RelativePath = @"Season 1\File.avi")
                                                .Build();
+
+            _movieFile = Builder<MovieFile>.CreateNew()
+                                           .With(f => f.Path = null)
+                                           .With(f => f.RelativePath = @"Movie.avi")
+                                           .Build();
 
             _localEpisode = Builder<LocalEpisode>.CreateNew()
                                                  .With(l => l.Series = _series)
                                                  .With(l => l.Episodes = Builder<Episode>.CreateListOfSize(1).Build().ToList())
                                                  .Build();
 
+            _localMovie = Builder<LocalMovie>.CreateNew()
+                                             .With(l => l.Movie = _movie)
+                                             .Build();
+
             Mocker.GetMock<IBuildFileNames>()
                   .Setup(s => s.BuildFileName(It.IsAny<List<Episode>>(), It.IsAny<Series>(), It.IsAny<EpisodeFile>(), null))
                   .Returns("File Name");
 
             Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.BuildFileName(It.IsAny<Movie>(), It.IsAny<MovieFile>(), null))
+                  .Returns("Movie File Name");
+
+            Mocker.GetMock<IBuildFileNames>()
                   .Setup(s => s.BuildFilePath(It.IsAny<Series>(), It.IsAny<Int32>(), It.IsAny<String>(), It.IsAny<String>()))
                   .Returns(@"C:\Test\TV\Series\Season 01\File Name.avi".AsOsAgnostic());
+
+            Mocker.GetMock<IBuildFileNames>()
+                  .Setup(s => s.BuildFilePath(It.IsAny<Movie>(), It.IsAny<String>(), It.IsAny<String>()))
+                  .Returns(@"C:\Test\TV\Movie\Movie File Name.avi".AsOsAgnostic());
+
 
             Mocker.GetMock<IBuildFileNames>()
                   .Setup(s => s.BuildSeasonPath(It.IsAny<Series>(), It.IsAny<int>()))
@@ -77,6 +105,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
         }
 
         [Test]
+        public void should_catch_UnauthorizedAccessException_during_folder_inheritance_movie()
+        {
+            WindowsOnly();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.InheritFolderPermissions(It.IsAny<String>()))
+                  .Throws<UnauthorizedAccessException>();
+
+            Subject.MoveFile(_movieFile, _localMovie);
+        }
+
+        [Test]
         public void should_catch_InvalidOperationException_during_folder_inheritance()
         {
             WindowsOnly();
@@ -89,6 +129,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
         }
 
         [Test]
+        public void should_catch_InvalidOperationException_during_folder_inheritance_movie()
+        {
+            WindowsOnly();
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.InheritFolderPermissions(It.IsAny<String>()))
+                  .Throws<InvalidOperationException>();
+
+            Subject.MoveFile(_movieFile, _localMovie);
+        }
+
+        [Test]
         public void should_notify_on_series_folder_creation()
         {
             Subject.MoveFile(_episodeFile, _localEpisode);
@@ -96,6 +148,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             Mocker.GetMock<IEventAggregator>()
                   .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
                       p.SeriesFolder.IsNotNullOrWhiteSpace())), Times.Once());
+        }
+
+        [Test]
+        public void should_notify_on_movie_folder_creation()
+        {
+            Subject.MoveFile(_movieFile, _localMovie);
+
+            Mocker.GetMock<IEventAggregator>()
+                  .Verify(s => s.PublishEvent<MovieFolderCreatedEvent>(It.Is<MovieFolderCreatedEvent>(p =>
+                      p.MovieFolder.IsNotNullOrWhiteSpace())), Times.Once());
         }
 
         [Test]
@@ -120,6 +182,20 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             Mocker.GetMock<IEventAggregator>()
                   .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
                       p.SeriesFolder.IsNotNullOrWhiteSpace())), Times.Never());
+        }
+
+        [Test]
+        public void should_not_notify_if_movie_folder_already_exists()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(s => s.FolderExists(_movie.Path))
+                  .Returns(true);
+
+            Subject.MoveFile(_movieFile, _localMovie);
+
+            Mocker.GetMock<IEventAggregator>()
+                  .Verify(s => s.PublishEvent<MovieFolderCreatedEvent>(It.Is<MovieFolderCreatedEvent>(p =>
+                      p.MovieFolder.IsNotNullOrWhiteSpace())), Times.Never());
         }
     }
 }
