@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Framework
         protected void UseRealHttp()
         {
             Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));
-            Mocker.SetConstant<IHttpClient>(new HttpClient(Mocker.Resolve<CacheManager>(), Mocker.Resolve<RateLimitService>(), TestLogger));
+            Mocker.SetConstant<IHttpClient>(new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<CacheManager>(), Mocker.Resolve<RateLimitService>(), TestLogger));
             Mocker.SetConstant<IDroneServicesRequestBuilder>(new DroneServicesHttpRequestBuilder());
         }
     }

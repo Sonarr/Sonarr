@@ -10,6 +10,7 @@ using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 using NLog;
 using NzbDrone.Common.TPL;
+using Moq;
 
 namespace NzbDrone.Common.Test.Http
 {
@@ -22,6 +23,7 @@ namespace NzbDrone.Common.Test.Http
         {
             Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
             Mocker.SetConstant<IRateLimitService>(Mocker.Resolve<RateLimitService>());
+            Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new IHttpRequestInterceptor[0]);
         }
 
         [Test]
@@ -161,7 +163,7 @@ namespace NzbDrone.Common.Test.Http
             var oldRequest = new HttpRequest("http://eu.httpbin.org/get");
             oldRequest.AddCookie("my", "cookie");
 
-            var oldClient = new HttpClient(Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<Logger>());
+            var oldClient = new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<Logger>());
 
             oldClient.Should().NotBeSameAs(Subject);
 
@@ -268,6 +270,30 @@ namespace NzbDrone.Common.Test.Http
             Assert.Throws<TooManyRequestsException>(() => Subject.Get(request));
 
             ExceptionVerification.IgnoreWarns();
+        }
+
+        [Test]
+        public void should_call_interceptor()
+        {
+            Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new [] { Mocker.GetMock<IHttpRequestInterceptor>().Object });
+
+            Mocker.GetMock<IHttpRequestInterceptor>()
+                .Setup(v => v.PreRequest(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => r);
+
+            Mocker.GetMock<IHttpRequestInterceptor>()
+                .Setup(v => v.PostResponse(It.IsAny<HttpResponse>()))
+                .Returns<HttpResponse>(r => r);
+
+            var request = new HttpRequest("http://eu.httpbin.org/get");
+
+            Subject.Get(request);
+
+            Mocker.GetMock<IHttpRequestInterceptor>()
+                .Verify(v => v.PreRequest(It.IsAny<HttpRequest>()), Times.Once());
+
+            Mocker.GetMock<IHttpRequestInterceptor>()
+                .Verify(v => v.PostResponse(It.IsAny<HttpResponse>()), Times.Once());
         }
     }
 

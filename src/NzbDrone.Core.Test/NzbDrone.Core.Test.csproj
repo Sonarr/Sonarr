@@ -210,6 +210,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleasesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasksFixture.cs" />
+    <Compile Include="Http\TorCacheHttpRequestInterceptorFixture.cs" />
     <Compile Include="IndexerSearchTests\SeriesSearchServiceFixture.cs" />
     <Compile Include="IndexerSearchTests\NzbSearchServiceFixture.cs" />
     <Compile Include="IndexerSearchTests\SearchDefinitionFixture.cs" />
