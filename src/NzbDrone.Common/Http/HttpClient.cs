@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -28,13 +29,13 @@ namespace NzbDrone.Common.Http
         private readonly IRateLimitService _rateLimitService;
         private readonly ICached<CookieContainer> _cookieContainerCache;
         private readonly ICached<bool> _curlTLSFallbackCache;
-        private readonly IEnumerable<IHttpRequestInterceptor> _requestInterceptors;
+        private readonly List<IHttpRequestInterceptor> _requestInterceptors;
 
         public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, Logger logger)
         {
             _logger = logger;
             _rateLimitService = rateLimitService;
-            _requestInterceptors = requestInterceptors;
+            _requestInterceptors = requestInterceptors.ToList();
             ServicePointManager.DefaultConnectionLimit = 12;
 
             _cookieContainerCache = cacheManager.GetCache<CookieContainer>(typeof(HttpClient));
