@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Blacklisting;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -14,6 +15,7 @@ namespace NzbDrone.Core.Test.Blacklisting
     public class BlacklistRepositoryFixture : DbTest<BlacklistRepository, Blacklist>
     {
         private Blacklist _blacklist;
+        private Blacklist _blacklistMovie;
 
         [SetUp]
         public void Setup()
@@ -26,12 +28,27 @@ namespace NzbDrone.Core.Test.Blacklisting
                          SourceTitle = "series.title.s01e01",
                          Date = DateTime.UtcNow
                      };
+
+            _blacklistMovie = new Blacklist
+            {
+                MovieId = 12345,
+                Quality = new QualityModel(Quality.Bluray720p),
+                SourceTitle = "movie.title.2004",
+                Date = DateTime.Now
+            };
         }
 
         [Test]
         public void should_be_able_to_write_to_database()
         {
             Subject.Insert(_blacklist);
+            Subject.All().Should().HaveCount(1);
+        }
+
+        [Test]
+        public void should_be_able_to_write_movie_to_database()
+        {
+            Subject.Insert(_blacklistMovie);
             Subject.All().Should().HaveCount(1);
         }
 
@@ -49,6 +66,14 @@ namespace NzbDrone.Core.Test.Blacklisting
             Subject.Insert(_blacklist);
 
             Subject.BlacklistedByTitle(new Series(),  _blacklist.SourceTitle.ToUpperInvariant()).Should().HaveCount(1);
+        }
+
+        [Test]
+        public void should_check_for_blacklisted_movie_title_case_insensative()
+        {
+            Subject.Insert(_blacklistMovie);
+
+            Subject.BlacklistedByTitle(new Movie(), _blacklistMovie.SourceTitle.ToUpperInvariant()).Should().HaveCount(1);
         }
     }
 }

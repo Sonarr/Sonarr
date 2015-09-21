@@ -2,13 +2,13 @@
 using FluentAssertions;
 using Marr.Data;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.DecisionEngine.Specifications.Common;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -32,6 +32,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             new object[] { Quality.Bluray720p }
         };
 
+        private RemoteMovie remoteMovie;
+
         [SetUp]
         public void Setup()
         {
@@ -44,6 +46,16 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Series = fakeSeries,
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
             };
+
+            var fakeMovie = Builder<Movie>.CreateNew()
+                         .With(c => c.Profile = (LazyLoaded<Profile>)new Profile { Cutoff = Quality.Bluray1080p })
+                         .Build();
+
+            remoteMovie = new RemoteMovie
+            {
+                Movie = fakeMovie,
+                ParsedMovieInfo = new ParsedMovieInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) }
+            };
         }
 
         [Test, TestCaseSource("AllowedTestCases")]
@@ -52,7 +64,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
             remoteEpisode.Series.Profile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
 
+            remoteMovie.ParsedMovieInfo.Quality.Quality = qualityType;
+            remoteMovie.Movie.Profile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
+
             Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(remoteMovie, null).Accepted.Should().BeTrue();
         }
 
         [Test, TestCaseSource("DeniedTestCases")]
@@ -61,7 +77,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
             remoteEpisode.Series.Profile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
 
+            remoteMovie.ParsedMovieInfo.Quality.Quality = qualityType;
+            remoteMovie.Movie.Profile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
+
             Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(remoteMovie, null).Accepted.Should().BeFalse();
         }
     }
 }

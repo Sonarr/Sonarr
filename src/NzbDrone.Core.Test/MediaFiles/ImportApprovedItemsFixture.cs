@@ -23,7 +23,7 @@ using NzbDrone.Test.Common;
 namespace NzbDrone.Core.Test.MediaFiles
 {
     [TestFixture]
-    public class ImportApprovedEpisodesFixture : CoreTest<ImportApprovedItems>
+    public class ImportApprovedItemsFixture : CoreTest<ImportApprovedItems>
     {
         private List<ImportDecision> _rejectedDecisions;
         private List<ImportDecision> _approvedDecisions;
