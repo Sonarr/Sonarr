@@ -28,6 +28,14 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
                 return null;
             }
 
+            // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
+            var torrentInfo = releaseInfo as TorrentInfo;
+            if (torrentInfo.Peers.HasValue && torrentInfo.Peers.Value == 0)
+            {
+                torrentInfo.Seeders = null;
+                torrentInfo.Peers = null;
+            }
+
             return base.PostProcess(item, releaseInfo);
         }
     }

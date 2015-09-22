@@ -9,6 +9,7 @@ using NzbDrone.Test.Common;
 using System;
 using System.Linq;
 using FluentAssertions;
+using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
 {
@@ -85,5 +86,50 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             releases.Should().HaveCount(4);
         }
 
+        [Test]
+        public void should_set_seeders_to_null()
+        {
+            // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
+            var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
+
+            recentFeed = Regex.Replace(recentFeed, @"(seeds|peers)\>\d*", "$1>0");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = (TorrentInfo)releases.First();
+
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
+        }
+
+        [Test]
+        public void should_not_set_seeders_to_null_if_has_peers()
+        {
+            // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
+            var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
+
+            recentFeed = Regex.Replace(recentFeed, @"(seeds)\>\d*", "$1>0");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = (TorrentInfo)releases.First();
+
+            torrentInfo.Peers.Should().HaveValue();
+            torrentInfo.Seeders.Should().HaveValue();
+        }
     }
 }
