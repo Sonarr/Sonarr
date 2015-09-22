@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using Marr.Data;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Profiles;
 
 namespace NzbDrone.Core.Tv
 {
@@ -54,7 +53,17 @@ namespace NzbDrone.Core.Tv
         public List<Season> Seasons { get; set; }
         //public HashSet<Int32> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
-        public override LazyLoaded<Profile> Profile { get; set; }
+        public new LazyLoaded<Profile> Profile
+        {
+            get
+            {
+                return base.Profile;
+            }
+            set
+            {
+                base.Profile = value;
+            }
+        }
 
         public override string ToString()
         {

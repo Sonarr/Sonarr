@@ -1,9 +1,9 @@
-﻿using Marr.Data;
+﻿using System;
+using System.Collections.Generic;
+using Marr.Data;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.Movies;
 using NzbDrone.Core.Parser;
-using System;
-using System.Collections.Generic;
 using NzbDrone.Core.Profiles;
 
 namespace NzbDrone.Core.Movies
@@ -22,14 +22,24 @@ namespace NzbDrone.Core.Movies
 
         public string OriginalTitle { get; set; }
 
-        public string TagLine { get; set; }       
+        public string TagLine { get; set; }
         public DateTime ReleaseDate { get; set; }
 
         public bool AddOptions { get; set; }
 
         public LazyLoaded<MovieFile> MovieFile { get; set; }
         public int MovieFileId { get; set; }
-        public override LazyLoaded<Profile> Profile { get; set; }
+        public new LazyLoaded<Profile> Profile
+        {
+            get
+            {
+                return base.Profile;
+            }
+            set
+            {
+                base.Profile = value;
+            }
+        }
 
         public override string ToString()
         {

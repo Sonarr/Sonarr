@@ -1,10 +1,8 @@
-﻿using Marr.Data;
+﻿using System;
+using System.Collections.Generic;
+using Marr.Data;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Profiles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NzbDrone.Core.Parser
 {
@@ -26,6 +24,6 @@ namespace NzbDrone.Core.Parser
         public HashSet<Int32> Tags { get; set; }
 
         public int ProfileId { get; set; }
-        public abstract LazyLoaded<Profile> Profile { get; set; }
+        public LazyLoaded<Profile> Profile { get; set; }
     }
 }
