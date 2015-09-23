@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Extensions
 
         public static string SizeSuffix(this Int64 bytes)
         {
-            const int bytesInKb = 1000;
+            const int bytesInKb = 1024;
 
             if (bytes < 0) return "-" + SizeSuffix(-bytes);
             if (bytes == 0) return "0 B";

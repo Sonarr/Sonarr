@@ -1,7 +1,7 @@
 var Marionette = require('marionette');
 var AsModelBoundView = require('../../../Mixins/AsModelBoundView');
-var fileSize = require('filesize');
 require('jquery-ui');
+var FormatHelpers = require('../../../Shared/FormatHelpers');
 
 var view = Marionette.ItemView.extend({
     template  : 'Settings/Quality/Definition/QualityDefinitionItemViewTemplate',
@@ -27,7 +27,6 @@ var view = Marionette.ItemView.extend({
 
     initialize : function(options) {
         this.profileCollection = options.profiles;
-        this.filesize = fileSize;
     },
 
     onRender : function() {
@@ -66,11 +65,10 @@ var view = Marionette.ItemView.extend({
     _changeSize : function() {
         var minSize = this.model.get('minSize') || this.slider.min;
         var maxSize = this.model.get('maxSize') || null;
-
         {
             var minBytes = minSize * 1024 * 1024;
-            var minThirty = fileSize(minBytes * 30, 1, false);
-            var minSixty = fileSize(minBytes * 60, 1, false);
+            var minThirty = FormatHelpers.bytes(minBytes * 30, 2);
+            var minSixty = FormatHelpers.bytes(minBytes * 60, 2);
 
             this.ui.thirtyMinuteMinSize.html(minThirty);
             this.ui.sixtyMinuteMinSize.html(minSixty);
@@ -82,8 +80,8 @@ var view = Marionette.ItemView.extend({
                 this.ui.sixtyMinuteMaxSize.html('Unlimited');
             } else {
                 var maxBytes = maxSize * 1024 * 1024;
-                var maxThirty = fileSize(maxBytes * 30, 1, false);
-                var maxSixty = fileSize(maxBytes * 60, 1, false);
+                var maxThirty = FormatHelpers.bytes(maxBytes * 30, 2);
+                var maxSixty = FormatHelpers.bytes(maxBytes * 60, 2);
 
                 this.ui.thirtyMinuteMaxSize.html(maxThirty);
                 this.ui.sixtyMinuteMaxSize.html(maxSixty);
