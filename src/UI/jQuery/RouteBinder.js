@@ -9,7 +9,7 @@ var routeBinder = {
 
     bind : function() {
         var self = this;
-        $(document).on('click', 'a[href]', function(event) {
+        $(document).on('click contextmenu', 'a[href]', function(event) {
             self._handleClick(event);
         });
     },
@@ -22,30 +22,25 @@ var routeBinder = {
             return;
         }
 
-        if ($target.hasClass('no-router')) {
+        var linkElement = $target.closest('a').first();
+        var href = linkElement.attr('href');
+
+        // Set noreferrer for external links.
+        if (href && href.startsWith('http') && !linkElement.attr('rel')) {
+            linkElement.attr('rel', 'noreferrer');
+        }
+
+        if (linkElement.hasClass('no-router') || event.type !== 'click') {
             return;
         }
-
-        var href = event.target.getAttribute('href');
-
-        if (!href && $target.closest('a') && $target.closest('a')[0]) {
-
-            var linkElement = $target.closest('a')[0];
-
-            if ($(linkElement).hasClass('no-router')) {
-                return;
-            }
-
-            href = linkElement.getAttribute('href');
-        }
-
-        event.preventDefault();
 
         if (!href) {
             throw 'couldn\'t find route target';
         }
 
         if (!href.startsWith('http')) {
+            event.preventDefault();
+
             if (event.ctrlKey) {
                 window.open(href, '_blank');
             }
@@ -55,12 +50,6 @@ var routeBinder = {
 
                 Backbone.history.navigate(relativeHref, { trigger : true });
             }
-        } else if (href.contains('#')) {
-            //Open in new tab without dereferer (since it doesn't support fragments)
-            window.open(href, '_blank');
-        } else {
-            //Open in new tab
-            window.open('http://www.dereferer.org/?' + encodeURI(href), '_blank');
         }
     }
 };
