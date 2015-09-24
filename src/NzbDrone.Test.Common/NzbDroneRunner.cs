@@ -33,19 +33,22 @@ namespace NzbDrone.Test.Common
             AppData = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
 
             var nzbdroneConsoleExe = "NzbDrone.Console.exe";
+            var nzbdroneDebugPath = "../../../../../_output/";
+            var nzbdroneReleasePath = "bin";
 
             if (OsInfo.IsNotWindows)
             {
                 nzbdroneConsoleExe = "NzbDrone.exe";
+                nzbdroneReleasePath = "../_output_mono/";
             }
 
             if (BuildInfo.IsDebug)
             {
-                Start("..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+                Start(Path.Combine(nzbdroneDebugPath, nzbdroneConsoleExe));
             }
             else
             {
-                Start(Path.Combine("bin", nzbdroneConsoleExe));
+                Start(Path.Combine(nzbdroneReleasePath, nzbdroneConsoleExe));
             }
 
             while (true)
