@@ -52,8 +52,6 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             torrentInfo.Size.Should().Be(1205364736);
             torrentInfo.InfoHash.Should().Be("208C4F7866612CC88BFEBC7C496FA72C2368D1C0");
             torrentInfo.MagnetUrl.Should().Be("magnet:?xt=urn:btih:208C4F7866612CC88BFEBC7C496FA72C2368D1C0&dn=doctor+stranger+e03+140512+hdtv+h264+720p+ipop+avi+ctrg&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce");
-            torrentInfo.Peers.Should().Be(311);
-            torrentInfo.Seeders.Should().Be(206);
         }
 
         [Test]
@@ -92,6 +90,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
             var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
 
+            recentFeed = recentFeed.Replace("<pubDate>Mon, 12 May 2014 16:16:49 +0000</pubDate>", string.Format("<pubDate>{0:R}</pubDate>", DateTime.UtcNow));
             recentFeed = Regex.Replace(recentFeed, @"(seeds|peers)\>\d*", "$1>0");
 
             Mocker.GetMock<IHttpClient>()
@@ -115,6 +114,7 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
             var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
 
+            recentFeed = recentFeed.Replace("<pubDate>Mon, 12 May 2014 16:16:49 +0000</pubDate>", string.Format("<pubDate>{0:R}</pubDate>", DateTime.UtcNow));
             recentFeed = Regex.Replace(recentFeed, @"(seeds)\>\d*", "$1>0");
 
             Mocker.GetMock<IHttpClient>()
@@ -128,8 +128,31 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
 
             var torrentInfo = (TorrentInfo)releases.First();
 
-            torrentInfo.Peers.Should().HaveValue();
-            torrentInfo.Seeders.Should().HaveValue();
+            torrentInfo.Peers.Should().Be(311);
+            torrentInfo.Seeders.Should().Be(0);
+        }
+
+        [Test]
+        public void should_not_set_seeders_to_null_if_older_than_12_hours()
+        {
+            // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
+            var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents.xml");
+
+            recentFeed = Regex.Replace(recentFeed, @"(seeds|peers)\>\d*", "$1>0");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = (TorrentInfo)releases.First();
+
+            torrentInfo.Peers.Should().Be(0);
+            torrentInfo.Seeders.Should().Be(0);
         }
     }
 }

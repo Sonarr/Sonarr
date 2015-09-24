@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common.Extensions;
@@ -28,9 +29,10 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
                 return null;
             }
 
-            // Atm, Kickass supplies 0 as seeders and leechers on the rss feed (but not the site), so set it to null if there aren't any peers.
+            // Atm, Kickass supplies 0 as seeders and leechers on the rss feed for recent releases, so set it to null if there aren't any peers.
+            // But only for releases younger than 12h (the real number seems to be close to 14h, but it depends on a number of factors).
             var torrentInfo = releaseInfo as TorrentInfo;
-            if (torrentInfo.Peers.HasValue && torrentInfo.Peers.Value == 0)
+            if (torrentInfo.Peers.HasValue && torrentInfo.Peers.Value == 0 && torrentInfo.PublishDate > DateTime.UtcNow.AddHours(-12))
             {
                 torrentInfo.Seeders = null;
                 torrentInfo.Peers = null;
