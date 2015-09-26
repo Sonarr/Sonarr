@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
@@ -11,6 +13,8 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class Newznab : HttpIndexerBase<NewznabSettings>
     {
+        private readonly INewznabCapabilitiesProvider _capabilitiesProvider;
+
         public override string Name
         {
             get
@@ -24,7 +28,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new NewznabRequestGenerator()
+            return new NewznabRequestGenerator(_capabilitiesProvider)
             {
                 PageSize = PageSize, 
                 Settings = Settings
@@ -50,10 +54,10 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public Newznab(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+        public Newznab(INewznabCapabilitiesProvider capabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
-
+            _capabilitiesProvider = capabilitiesProvider;
         }
 
         private IndexerDefinition GetDefinition(string name, NewznabSettings settings)
@@ -81,6 +85,43 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return settings;
+        }
+
+        protected override void Test(List<ValidationFailure> failures)
+        {
+            base.Test(failures);
+
+            failures.AddIfNotNull(TestCapabilities());
+        }
+
+        protected virtual ValidationFailure TestCapabilities()
+        {
+            try
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                if (capabilities.SupportedSearchParameters != null && capabilities.SupportedSearchParameters.Contains("q"))
+                {
+                    return null;
+                }
+
+                if (capabilities.SupportedTvSearchParameters != null &&
+                    new[] { "q", "tvdbid", "rid" }.Any(v => capabilities.SupportedTvSearchParameters.Contains(v)) &&
+                    new[] { "season", "ep" }.All(v => capabilities.SupportedTvSearchParameters.Contains(v)))
+                {
+                    return null;
+                }
+
+                return new ValidationFailure(string.Empty, "Indexer does not support required search parameters");
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
+            }
+
+            return null;
         }
     }
 }

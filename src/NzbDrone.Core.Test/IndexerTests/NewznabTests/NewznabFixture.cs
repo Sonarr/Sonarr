@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
@@ -26,6 +27,10 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                             Categories = new int[] { 1 }
                         }
                 };
+
+            Mocker.GetMock<INewznabCapabilitiesProvider>()
+                .Setup(v => v.GetCapabilities(It.IsAny<NewznabSettings>()))
+                .Returns(new NewznabCapabilities());
         }
 
         [Test]

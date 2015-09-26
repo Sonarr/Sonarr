@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Indexers.Torznab;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -27,9 +28,9 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                         }
                 };
 
-            Mocker.GetMock<ITorznabCapabilitiesProvider>()
-                .Setup(v => v.GetCapabilities(It.IsAny<TorznabSettings>()))
-                .Returns(new TorznabCapabilities());
+            Mocker.GetMock<INewznabCapabilitiesProvider>()
+                .Setup(v => v.GetCapabilities(It.IsAny<NewznabSettings>()))
+                .Returns(new NewznabCapabilities());
         }
 
         [Test]
@@ -56,6 +57,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
             releaseInfo.PublishDate.Should().Be(DateTime.Parse("2015/03/14 21:10:42"));
             releaseInfo.Size.Should().Be(2538463390);
+            releaseInfo.TvdbId.Should().Be(273181);
             releaseInfo.TvRageId.Should().Be(37780);
             releaseInfo.InfoHash.Should().Be("63e07ff523710ca268567dad344ce1e0e6b7e8a3");
             releaseInfo.Seeders.Should().Be(7);

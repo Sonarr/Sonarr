@@ -151,6 +151,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Size", message.Episode.Release.Size.ToString());
                 history.Data.Add("DownloadUrl", message.Episode.Release.DownloadUrl);
                 history.Data.Add("Guid", message.Episode.Release.Guid);
+                history.Data.Add("TvdbId", message.Episode.Release.TvdbId.ToString());
                 history.Data.Add("TvRageId", message.Episode.Release.TvRageId.ToString());
                 history.Data.Add("Protocol", ((int)message.Episode.Release.DownloadProtocol).ToString());
 

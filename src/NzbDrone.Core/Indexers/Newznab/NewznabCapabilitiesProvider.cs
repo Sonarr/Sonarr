@@ -7,27 +7,27 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
-namespace NzbDrone.Core.Indexers.Torznab
+namespace NzbDrone.Core.Indexers.Newznab
 {
-    public interface ITorznabCapabilitiesProvider
+    public interface INewznabCapabilitiesProvider
     {
-        TorznabCapabilities GetCapabilities(TorznabSettings settings);
+        NewznabCapabilities GetCapabilities(NewznabSettings settings);
     }
 
-    public class TorznabCapabilitiesProvider : ITorznabCapabilitiesProvider
+    public class NewznabCapabilitiesProvider : INewznabCapabilitiesProvider
     {
-        private readonly ICached<TorznabCapabilities> _capabilitiesCache;
+        private readonly ICached<NewznabCapabilities> _capabilitiesCache;
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public TorznabCapabilitiesProvider(ICacheManager cacheManager, IHttpClient httpClient, Logger logger)
+        public NewznabCapabilitiesProvider(ICacheManager cacheManager, IHttpClient httpClient, Logger logger)
         {
-            _capabilitiesCache = cacheManager.GetCache<TorznabCapabilities>(GetType());
+            _capabilitiesCache = cacheManager.GetCache<NewznabCapabilities>(GetType());
             _httpClient = httpClient;
             _logger = logger;
         }
 
-        public TorznabCapabilities GetCapabilities(TorznabSettings indexerSettings)
+        public NewznabCapabilities GetCapabilities(NewznabSettings indexerSettings)
         {
             var key = indexerSettings.ToJson();
             var capabilities = _capabilitiesCache.Get(key, () => FetchCapabilities(indexerSettings), TimeSpan.FromDays(7));
@@ -35,9 +35,9 @@ namespace NzbDrone.Core.Indexers.Torznab
             return capabilities;
         }
 
-        private TorznabCapabilities FetchCapabilities(TorznabSettings indexerSettings)
+        private NewznabCapabilities FetchCapabilities(NewznabSettings indexerSettings)
         {
-            var capabilities = new TorznabCapabilities();
+            var capabilities = new NewznabCapabilities();
 
             var url = string.Format("{0}/api?t=caps", indexerSettings.Url.TrimEnd('/'));
 
@@ -62,9 +62,9 @@ namespace NzbDrone.Core.Indexers.Torznab
             return capabilities;
         }
 
-        private TorznabCapabilities ParseCapabilities(HttpResponse response)
+        private NewznabCapabilities ParseCapabilities(HttpResponse response)
         {
-            var capabilities = new TorznabCapabilities();
+            var capabilities = new NewznabCapabilities();
 
             var xmlRoot = XDocument.Parse(response.Content).Element("caps");
 
@@ -97,17 +97,17 @@ namespace NzbDrone.Core.Indexers.Torznab
             {
                 foreach (var xmlCategory in xmlCategories.Elements("category"))
                 {
-                    var cat = new TorznabCategory
+                    var cat = new NewznabCategory
                     {
                         Id = int.Parse(xmlCategory.Attribute("id").Value),
                         Name = xmlCategory.Attribute("name").Value,
                         Description = xmlCategory.Attribute("description") != null ? xmlCategory.Attribute("description").Value : string.Empty,
-                        Subcategories = new List<TorznabCategory>()
+                        Subcategories = new List<NewznabCategory>()
                     };
 
                     foreach (var xmlSubcat in xmlCategory.Elements("subcat"))
                     {
-                        cat.Subcategories.Add(new TorznabCategory
+                        cat.Subcategories.Add(new NewznabCategory
                         {
                             Id = int.Parse(xmlSubcat.Attribute("id").Value),
                             Name = xmlSubcat.Attribute("name").Value,

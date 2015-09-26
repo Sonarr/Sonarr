@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -11,7 +12,9 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 {
     public class NewznabRequestGeneratorFixture : CoreTest<NewznabRequestGenerator>
     {
-        AnimeEpisodeSearchCriteria _animeSearchCriteria;
+        private SingleEpisodeSearchCriteria _singleEpisodeSearchCriteria;
+        private AnimeEpisodeSearchCriteria _animeSearchCriteria;
+        private NewznabCapabilities _capabilities;
 
         [SetUp]
         public void SetUp()
@@ -24,11 +27,25 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                  ApiKey = "abcd",
             };
 
+            _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
+            {
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20 },
+                SceneTitles = new List<string> { "Monkey Island" },
+                SeasonNumber = 1,
+                EpisodeNumber = 2
+            };
+
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
             {
                 SceneTitles = new List<string>() { "Monkey+Island" },
                 AbsoluteEpisodeNumber = 100
             };
+
+            _capabilities = new NewznabCapabilities();
+
+            Mocker.GetMock<INewznabCapabilitiesProvider>()
+                .Setup(v => v.GetCapabilities(It.IsAny<NewznabSettings>()))
+                .Returns(_capabilities);
         }
 
         [Test]
@@ -105,6 +122,74 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var pages = results.First().Take(500).ToList();
 
             pages.Count.Should().BeLessThan(500);
+        }
+
+        [Test]
+        public void should_not_search_by_rid_if_not_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().NotContain("rid=10");
+            page.Url.Query.Should().Contain("q=Monkey");
+        }
+
+        [Test]
+        public void should_search_by_rid_if_supported()
+        {
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().Contain("rid=10");
+        }
+
+        [Test]
+        public void should_not_search_by_tvdbid_if_not_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().NotContain("rid=10");
+            page.Url.Query.Should().Contain("q=Monkey");
+        }
+
+        [Test]
+        public void should_search_by_tvdbid_if_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "tvdbid", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().Contain("tvdbid=20");
+        }
+
+        [Test]
+        public void should_prefer_search_by_tvdbid_if_rid_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "tvdbid", "rid", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.Should().HaveCount(1);
+
+            var page = results.First().First();
+
+            page.Url.Query.Should().Contain("tvdbid=20");
+            page.Url.Query.Should().NotContain("rid=10");
         }
     }
 }

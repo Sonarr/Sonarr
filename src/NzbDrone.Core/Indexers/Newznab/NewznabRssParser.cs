@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             releaseInfo = base.ProcessItem(item, releaseInfo);
 
+            releaseInfo.TvdbId = GetTvdbId(item);
             releaseInfo.TvRageId = GetTvRageId(item);
 
             return releaseInfo;
@@ -95,6 +96,19 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return url;
+        }
+
+        protected virtual int GetTvdbId(XElement item)
+        {
+            var tvdbIdString = TryGetNewznabAttribute(item, "tvdbid");
+            int tvdbId;
+
+            if (!tvdbIdString.IsNullOrWhiteSpace() && int.TryParse(tvdbIdString, out tvdbId))
+            {
+                return tvdbId;
+            }
+
+            return 0;
         }
 
         protected virtual int GetTvRageId(XElement item)

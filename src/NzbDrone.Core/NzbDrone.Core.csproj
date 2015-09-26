@@ -519,6 +519,8 @@
     <Compile Include="Indexers\KickassTorrents\KickassTorrentsSettings.cs" />
     <Compile Include="Indexers\KickassTorrents\KickassTorrentsRequestGenerator.cs" />
     <Compile Include="Indexers\Newznab\Newznab.cs" />
+    <Compile Include="Indexers\Newznab\NewznabCapabilities.cs" />
+    <Compile Include="Indexers\Newznab\NewznabCapabilitiesProvider.cs" />
     <Compile Include="Indexers\Newznab\NewznabException.cs" />
     <Compile Include="Indexers\Newznab\NewznabRequestGenerator.cs" />
     <Compile Include="Indexers\Newznab\NewznabRssParser.cs" />
@@ -558,11 +560,8 @@
     <Compile Include="Indexers\TorrentRss\TorrentRssParserFactory.cs" />
     <Compile Include="Indexers\TorrentRss\TorrentRssSettingsDetector.cs" />
     <Compile Include="Indexers\TorrentRssParser.cs" />
-    <Compile Include="Indexers\Torznab\TorznabCapabilities.cs" />
-    <Compile Include="Indexers\Torznab\TorznabCapabilitiesProvider.cs" />
     <Compile Include="Indexers\Torznab\Torznab.cs" />
     <Compile Include="Indexers\Torznab\TorznabException.cs" />
-    <Compile Include="Indexers\Torznab\TorznabRequestGenerator.cs" />
     <Compile Include="Indexers\Torznab\TorznabRssParser.cs" />
     <Compile Include="Indexers\Torznab\TorznabSettings.cs" />
     <Compile Include="Indexers\Wombles\Wombles.cs" />

@@ -51,6 +51,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
             torrentInfo.PublishDate.Should().Be(DateTime.Parse("2015-06-25 04:13:44"));
             torrentInfo.Size.Should().Be(435402993);
             torrentInfo.InfoHash.Should().BeNullOrEmpty();
+            torrentInfo.TvdbId.Should().Be(0);
             torrentInfo.TvRageId.Should().Be(0);
             torrentInfo.MagnetUrl.Should().BeNullOrEmpty();
             torrentInfo.Peers.Should().Be(2+5);
