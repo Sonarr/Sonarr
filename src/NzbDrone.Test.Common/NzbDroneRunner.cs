@@ -78,6 +78,11 @@ namespace NzbDrone.Test.Common
 
         public void KillAll()
         {
+            if (_nzbDroneProcess != null)
+            {
+                _processProvider.Kill(_nzbDroneProcess.Id);                
+            }
+
             _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
             _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
         }
