@@ -87,6 +87,7 @@ namespace NzbDrone.Integration.Test
         {
             RestClient = new RestClient(RootUrl + "api/");
             RestClient.AddDefaultHeader("Authentication", _runner.ApiKey);
+            RestClient.AddDefaultHeader("X-Api-Key", _runner.ApiKey);
 
             Series = new SeriesClient(RestClient, _runner.ApiKey);
             Releases = new ReleaseClient(RestClient, _runner.ApiKey);

@@ -101,6 +101,7 @@ namespace NzbDrone.Integration.Test.Client
                 };
 
             request.AddHeader("Authorization", _apiKey);
+            request.AddHeader("X-Api-Key", _apiKey);
 
             return request;
         }
