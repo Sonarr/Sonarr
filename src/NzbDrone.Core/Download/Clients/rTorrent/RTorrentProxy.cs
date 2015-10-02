@@ -97,11 +97,13 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             var items = new List<RTorrentTorrent>();
             foreach (object[] torrent in ret)
             {
+                var labelDecoded = System.Web.HttpUtility.UrlDecode((string) torrent[3]);
+
                 var item = new RTorrentTorrent();
                 item.Name = (string) torrent[0];
                 item.Hash = (string) torrent[1];
                 item.Path = (string) torrent[2];
-                item.Category = (string) torrent[3];
+                item.Category = labelDecoded;
                 item.TotalSize = (long) torrent[4];
                 item.RemainingSize = (long) torrent[5];
                 item.DownRate = (long) torrent[6];
@@ -172,10 +174,12 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             _logger.Debug("Executing remote method: d.set_custom1");
 
+            var labelEncoded = System.Web.HttpUtility.UrlEncode(label);
+
             var client = BuildClient(settings);
 
-            var setLabel = client.SetLabel(hash, label);
-            if (setLabel != label)
+            var setLabel = client.SetLabel(hash, labelEncoded);
+            if (setLabel != labelEncoded)
             {
                 throw new DownloadClientException("Could set label on torrent: {0}.", hash);
             }
