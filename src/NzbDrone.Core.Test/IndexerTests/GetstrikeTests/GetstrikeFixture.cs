@@ -1,16 +1,16 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.GetStrike;
+using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
-using System;
-using System.Linq;
-using FluentAssertions;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Test.IndexerTests.GetstrikeTests
 {
@@ -36,17 +36,17 @@ namespace NzbDrone.Core.Test.IndexerTests.GetstrikeTests
                 .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
                 .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
 
-            SingleEpisodeSearchCriteria s = new SingleEpisodeSearchCriteria();
-            SingleEpisodeSearchCriteria searchCriteria = new SingleEpisodeSearchCriteria
+            var searchCriteria = new SingleEpisodeSearchCriteria
                 {
                     SceneTitles = new List<string> { "Series Title" }
                 };
+
             var releases = Subject.Fetch(searchCriteria);
 
             releases.Should().HaveCount(100);
-            releases.First().Should().BeOfType<TorrentInfo>();
+            releases.Cast<TorrentInfo>().Should().HaveCount(100);
 
-            var torrentInfo = (TorrentInfo) releases.First();
+            var torrentInfo = (TorrentInfo)releases.First();
 
             torrentInfo.Title.Should().Be("The Walking Dead S05E14 HDTV x264-KILLERS[ettv]");
             torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.IndexerTests.GetstrikeTests
             torrentInfo.Size.Should().Be(421684838);
             torrentInfo.InfoHash.Should().Be("DE8D9A5E469BAD2A0EE16636C5FE5A7BB9AD11C3");
             torrentInfo.MagnetUrl.Should().Be("magnet:?xt=urn:btih:DE8D9A5E469BAD2A0EE16636C5FE5A7BB9AD11C3&dn=The+Walking+Dead+S05E14+HDTV+x264-KILLERS%5Bettv%5D&tr=udp://open.demonii.com:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://exodus.desync.com:6969");
-            torrentInfo.Peers.Should().Be(75461+20349);
+            torrentInfo.Peers.Should().Be(75461 + 20349);
             torrentInfo.Seeders.Should().Be(75461);
         }
 

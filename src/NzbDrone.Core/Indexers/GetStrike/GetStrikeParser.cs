@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NzbDrone.Core.Indexers.Exceptions;
-using NzbDrone.Core.Parser.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using Newtonsoft.Json.Linq;
+using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Indexers.Exceptions;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.GetStrike
 {
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers.GetStrike
                     indexerResponse.HttpResponse.StatusCode);
             }
 
-            var jsonResponse = JsonConvert.DeserializeObject<GetStrikeResponse>(indexerResponse.Content);
+            var jsonResponse = Json.Deserialize<GetStrikeResponse>(indexerResponse.Content);
 
             if (jsonResponse.statuscode != 200)
             {
@@ -64,7 +64,8 @@ namespace NzbDrone.Core.Indexers.GetStrike
                     {
                         Added = DateTime.ParseExact(result.upload_date, "MMM d, yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
                     }
-                } catch (System.FormatException)
+                }
+                catch (System.FormatException)
                 {
                     throw new IndexerException(indexerResponse,
                         "Bad date_time");

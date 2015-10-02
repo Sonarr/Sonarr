@@ -1,8 +1,8 @@
-﻿using NzbDrone.Common.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using System;
-using System.Collections.Generic;
 
 namespace NzbDrone.Core.Indexers.GetStrike
 {
@@ -102,12 +102,15 @@ namespace NzbDrone.Core.Indexers.GetStrike
             var builder = new HttpRequestBuilder(Settings.BaseUrl);
             HttpRequest request = builder.Build(path);
             request.Method = HttpMethod.GET;
+
             if (phrase != null)
-            request.AddQueryParam("phrase", phrase);
+            {
+                request.AddQueryParam("phrase", phrase);
+            }
             request.AddQueryParam("category", category);
             request.AllowAutoRedirect = true;
 
             yield return new IndexerRequest(request);
-         }       
+        }
     }
 }
