@@ -40,23 +40,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
 
-            // Wait until url has been resolved before returning
-            var TRIES = 5;
-            var RETRY_DELAY = 500; //ms
-            var ready = false;
-
-            for (var i = 0; i < TRIES; i++)
-            {
-                ready = _proxy.HasHashTorrent(hash, Settings);
-                if (ready)
-                {
-                    break;
-                }
-
-                Thread.Sleep(RETRY_DELAY);
-            }
-
-            if (ready)
+            var tries = 10;
+            var retryDelay = 500;
+            if (WaitForTorrent(hash, tries, retryDelay))
             {
                 _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
 
@@ -69,8 +55,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
             else
             {
-                _logger.Debug("Magnet {0} could not be resolved in {1} tries at {2} ms intervals.", magnetLink, TRIES, RETRY_DELAY);
-                // Remove from client, since it is discarded
+                _logger.Debug("rTorrent could not resolve magnet {0}. Removing", magnetLink);
+
                 RemoveItem(hash, true);
 
                 return null;
@@ -80,14 +66,28 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
-            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
 
-            SetPriority(remoteEpisode, hash);
-            SetDownloadDirectory(hash);
+            var tries = 2;
+            var retryDelay = 100;
+            if (WaitForTorrent(hash, tries, retryDelay))
+            {
+                _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
 
-            _proxy.StartTorrent(hash, Settings);
+                SetPriority(remoteEpisode, hash);
+                SetDownloadDirectory(hash);
 
-            return hash;
+                _proxy.StartTorrent(hash, Settings);
+
+                return hash;
+            }
+            else
+            {
+                _logger.Debug("rTorrent could not add file");
+
+                RemoveItem(hash, true);
+
+                return null;
+            }
         }
 
         public override string Name
@@ -250,6 +250,23 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             {
                 _proxy.SetTorrentDownloadDirectory(hash, Settings.TvDirectory, Settings);
             }
+        }
+
+        private bool WaitForTorrent(string hash, int tries, int retryDelay)
+        {
+            for (var i = 0; i < tries; i++)
+            {
+                if (_proxy.HasHashTorrent(hash, Settings))
+                {
+                    return true;
+                }
+
+                Thread.Sleep(retryDelay);
+            }
+
+            _logger.Debug("Could not find hash {0} in {1} tries at {2} ms intervals.", hash, tries, retryDelay);
+
+            return false;
         }
     }
 }
