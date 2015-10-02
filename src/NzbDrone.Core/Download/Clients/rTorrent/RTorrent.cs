@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                     else if (torrent.IsActive) item.Status = DownloadItemStatus.Downloading;
                     else if (!torrent.IsActive) item.Status = DownloadItemStatus.Paused;
 
-                    // Since we do not know the user's intent, do not let Sonarr to remove the torrent
+                    // No stop ratio data is present, so do not delete
                     item.IsReadOnly = true;
 
                     items.Add(item);
