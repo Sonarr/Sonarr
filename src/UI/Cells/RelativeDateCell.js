@@ -12,14 +12,19 @@ module.exports = NzbDroneCell.extend({
 
         if (dateStr) {
             var date = moment(dateStr);
+            var diff = date.diff(moment().zone(date.zone()).startOf('day'), 'days', true);
             var result = '<span title="{0}">{1}</span>';
             var tooltip = date.format(UiSettings.longDateTime());
             var text;
 
-            if (UiSettings.get('showRelativeDates')) {
-                text = FormatHelpers.relativeDate(dateStr);
+            if (diff > 0 && diff < 1) {
+                text = date.format(UiSettings.time(true, false));
             } else {
-                text = date.format(UiSettings.get('shortDateFormat'));
+                if (UiSettings.get('showRelativeDates')) {
+                    text = FormatHelpers.relativeDate(dateStr);
+                } else {
+                    text = date.format(UiSettings.get('shortDateFormat'));
+                }
             }
 
             this.$el.html(result.format(tooltip, text));

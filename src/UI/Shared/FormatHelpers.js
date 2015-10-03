@@ -10,7 +10,7 @@ module.exports = {
         if (isNaN(size)) {
             return '';
         }
-        
+
         if (isNaN(rounding)) {
             rounding = 1;
         }
