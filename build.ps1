@@ -1,4 +1,9 @@
-$msBuild = 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe'
+$msBuild =  join-path ${env:ProgramFiles(x86)} "MSBuild\12.0\bin\MSBuild.exe"
+if(!(Test-Path -Path $msBuild))
+{
+    $msBuild =  join-path ${env:ProgramFiles(x86)} "MSBuild\14.0\bin\MSBuild.exe"
+}
+    
 $outputFolder = '.\_output'
 $outputFolderMono = '.\_output_mono'
 $outputFolderOsx = '.\_output_osx'
@@ -13,18 +18,18 @@ Function Build()
 {
     Write-Host "##teamcity[progressStart 'Build']"
 
-    $clean = $msbuild + " src\nzbdrone.sln /t:Clean /m"
-    $build = $msbuild + " src\nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
+    $clean = " src\nzbdrone.sln /t:Clean /m"
+    $build = " src\nzbdrone.sln /p:Configuration=Release /p:Platform=x86 /t:Build /m"
 
     if(Test-Path $outputFolder)
     {
         Remove-Item -Recurse -Force $outputFolder -ErrorAction Continue
     }
 
-    Invoke-Expression $clean
+    Invoke-Expression "& '$msbuild' $clean "
     CheckExitCode
 
-    Invoke-Expression $build
+    Invoke-Expression "& '$msbuild' $build "
     CheckExitCode
 
     CleanFolder $outputFolder
@@ -199,7 +204,7 @@ Function PackageTests()
         Copy-Item -Recurse ($_.FullName + "\*")  $testPackageFolder -ErrorAction Ignore
     }
 
-    .\src\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
+    .\src\.nuget\NuGet.exe install NUnit.Runners -Version 2.6.4 -Output $testPackageFolder
 
     Copy-Item $outputFolder\*.dll -Destination $testPackageFolder -Force
     Copy-Item $outputFolder\*.pdb -Destination $testPackageFolder -Force

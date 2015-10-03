@@ -91,7 +91,7 @@ namespace NzbDrone.Core.DecisionEngine
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("Couldn't process release.", e);
+                    _logger.Error(e, "Couldn't process release.");
                 }
 
                 reportNumber++;
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 e.Data.Add("report", remoteEpisode.Release.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Release.Title, e);
+                _logger.Error(e, "Couldn't evaluate decision on " + remoteEpisode.Release.Title);
                 return new Rejection(String.Format("{0}: {1}", spec.GetType().Name, e.Message));
             }
 

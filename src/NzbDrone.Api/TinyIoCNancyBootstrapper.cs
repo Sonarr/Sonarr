@@ -11,7 +11,7 @@ namespace NzbDrone.Api
 {
     public class TinyIoCNancyBootstrapper : NancyBootstrapperWithRequestContainerBase<TinyIoCContainer>
     {
-        // <summary>
+        /// <summary>
         /// Default assemblies that are ignored for autoregister
         /// </summary>
         private static readonly IEnumerable<Func<Assembly, bool>> DefaultAutoRegisterIgnoredAssemblies = new Func<Assembly, bool>[]
@@ -93,7 +93,6 @@ namespace NzbDrone.Api
                         break;
                     case Lifetime.PerRequest:
                         throw new InvalidOperationException("Unable to directly register a per request lifetime.");
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -120,7 +119,6 @@ namespace NzbDrone.Api
                         break;
                     case Lifetime.PerRequest:
                         throw new InvalidOperationException("Unable to directly register a per request lifetime.");
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -163,7 +161,7 @@ namespace NzbDrone.Api
         /// Creates a per request child/nested container
         /// </summary>
         /// <returns>Request container instance</returns>
-        protected override sealed TinyIoCContainer CreateRequestContainer()
+        protected override sealed TinyIoCContainer CreateRequestContainer(NancyContext context)
         {
             return this.ApplicationContainer.GetChildContainer();
         }

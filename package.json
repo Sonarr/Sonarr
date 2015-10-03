@@ -3,20 +3,17 @@
   "version": "2.0.0",
   "description": "Sonarr",
   "main": "main.js",
-  "scripts": {
-    "preinstall": ""
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/Sonarr/Sonarr.git"
   },
   "author": "",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
   "readmeFilename": "readme.md",
   "dependencies": {
-    "autoprefixer-core": "5.2.1",
-    "del": "1.2.0",
+    "autoprefixer": "6.0.2",
+    "del": "2.0.2",
     "gulp": "3.9.0",
     "gulp-cached": "1.1.0",
     "gulp-concat": "2.6.0",
@@ -27,19 +24,20 @@
     "gulp-livereload": "3.8.0",
     "gulp-postcss": "6.0.0",
     "gulp-print": "1.1.0",
-    "gulp-replace": "0.5.3",
-    "gulp-run": "1.6.8",
+    "gulp-replace": "0.5.4",
+    "gulp-run": "1.6.11",
     "gulp-sourcemaps": "1.5.2",
     "gulp-stripbom": "1.0.4",
-    "gulp-webpack": "1.5.0",
     "gulp-wrap": "0.11.0",
     "handlebars": "3.0.3",
+    "jshint": "2.8.0",
     "jshint-loader": "0.8.3",
     "jshint-stylish": "2.0.1",
-    "run-sequence": "1.1.1",
-    "streamqueue": "1.1.0",
-    "tar.gz": "0.1.1",
-    "webpack": "1.12.0",
+    "run-sequence": "1.1.2",
+    "stream-browserify":"2.0.1",
+    "streamqueue": "1.1.1",
+    "tar.gz": "1.0.1",
+    "webpack": "1.12.1",
     "webpack-stream": "2.1.0"
   }
 }

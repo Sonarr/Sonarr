@@ -376,11 +376,11 @@ namespace NzbDrone.Core.Metadata
             }
             catch (WebException e)
             {
-                _logger.Warn(string.Format("Couldn't download image {0} for {1}. {2}", url, series, e.Message));
+                _logger.Warn("Couldn't download image {0} for {1}. {2}", url, series, e.Message);
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't download image " + url + " for " + series, e);
+                _logger.Error(e, "Couldn't download image " + url + " for " + series);
             }
         }
 

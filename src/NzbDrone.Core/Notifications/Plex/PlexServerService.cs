@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
             catch(Exception ex)
             {
-                _logger.WarnException("Failed to Update Plex host: " + settings.Host, ex);
+                _logger.Warn(ex, "Failed to Update Plex host: " + settings.Host);
                 throw;
             }
         }
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Unable to check if partial updates are allowed", ex);
+                _logger.Warn(ex, "Unable to check if partial updates are allowed");
             }
 
             return false;
@@ -158,12 +158,12 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch(PlexAuthenticationException ex)
             {
-                _logger.ErrorException("Unable to connect to Plex Server: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to connect to Plex Server: " + ex.Message);
                 return new ValidationFailure("Username", "Incorrect username or password");
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to connect to Plex Server: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to connect to Plex Server: " + ex.Message);
                 return new ValidationFailure("Host", "Unable to connect to Plex Server");
             }
 

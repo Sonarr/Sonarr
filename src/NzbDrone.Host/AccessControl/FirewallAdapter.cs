@@ -56,7 +56,7 @@ namespace NzbDrone.Host.AccessControl
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to check for open port in firewall", ex);
+                _logger.Warn(ex, "Failed to check for open port in firewall");
             }
             return false;
         }
@@ -81,7 +81,7 @@ namespace NzbDrone.Host.AccessControl
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to open port in firewall for NzbDrone " + portNumber, ex);
+                _logger.Warn(ex, "Failed to open port in firewall for NzbDrone " + portNumber);
             }
         }
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Host.AccessControl
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to check if the firewall is enabled", ex);
+                _logger.Warn(ex, "Failed to check if the firewall is enabled");
                 return false;
             }
         }

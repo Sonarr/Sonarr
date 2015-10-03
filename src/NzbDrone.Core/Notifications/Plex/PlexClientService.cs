@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch(Exception ex)
             {
-                _logger.WarnException("Failed to send notification to Plex Client: " + settings.Host, ex);
+                _logger.Warn(ex, "Failed to send notification to Plex Client: " + settings.Host);
             }
         }
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to send test message: " + ex.Message);
                 return new ValidationFailure("Host", "Unable to send test message");
             }
 

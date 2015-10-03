@@ -229,14 +229,13 @@ namespace NzbDrone.Core.Indexers
             catch (IndexerException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                var message = String.Format("{0} - {1}", ex.Message, url);
-                _logger.WarnException(message, ex);
+                _logger.Warn(ex, "{0} - {1}", ex.Message, url);
             }
             catch (Exception feedEx)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
                 feedEx.Data.Add("FeedUrl", url);
-                _logger.ErrorException("An error occurred while processing feed. " + url, feedEx);
+                _logger.Error(feedEx, "An error occurred while processing feed. " + url);
             }
 
             return CleanupReleases(releases);
@@ -296,13 +295,13 @@ namespace NzbDrone.Core.Indexers
             }
             catch (UnsupportedFeedException ex)
             {
-                _logger.WarnException("Indexer feed is not supported: " + ex.Message, ex);
+                _logger.Warn(ex, "Indexer feed is not supported: " + ex.Message);
 
                 return new ValidationFailure(string.Empty, "Indexer feed is not supported: " + ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+                _logger.Warn(ex, "Unable to connect to indexer: " + ex.Message);
 
                 return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }

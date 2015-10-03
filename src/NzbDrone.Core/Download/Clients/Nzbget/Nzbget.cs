@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -284,7 +284,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 {
                     return new ValidationFailure("Username", "Authentication failed");
                 }
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return new ValidationFailure("Host", "Unable to connect to NZBGet");
             }
 

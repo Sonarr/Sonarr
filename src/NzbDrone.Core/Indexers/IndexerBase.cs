@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Indexers
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Test aborted due to exception", ex);
+                _logger.Error(ex, "Test aborted due to exception");
                 failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
             }
 

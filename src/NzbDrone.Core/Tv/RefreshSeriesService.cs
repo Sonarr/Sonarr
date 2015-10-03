@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Tv
             }
             catch (Exception e)
             {
-                _logger.WarnException("Couldn't update series path for " + series.Path, e);
+                _logger.Warn(e, "Couldn't update series path for " + series.Path);
             }
 
             series.Seasons = UpdateSeasons(series, seriesInfo);
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Tv
                         }
                         catch (Exception e)
                         {
-                            _logger.ErrorException("Couldn't refresh info for {0}".Inject(series), e);
+                            _logger.Error(e, "Couldn't refresh info for {0}", series);
                         }
                     }
 
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Tv
                         }
                         catch (Exception e)
                         {
-                            _logger.ErrorException("Couldn't rescan series {0}".Inject(series), e);
+                            _logger.Error(e, "Couldn't rescan series {0}", series);
                         }
                     }
                 }

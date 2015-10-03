@@ -114,7 +114,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 }
                 catch (Exception e)
                 {
-                    _logger.WarnException("Couldn't import episode " + localEpisode, e);
+                    _logger.Warn(e, "Couldn't import episode " + localEpisode);
                     importResults.Add(new ImportResult(importDecision, "Failed to import episode"));
                 }
             }

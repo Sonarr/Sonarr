@@ -6,6 +6,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Rest;
 using NLog;
 using RestSharp;
+using RestSharp.Authenticators;
 using Newtonsoft.Json.Linq;
 
 namespace NzbDrone.Core.Download.Clients.Transmission

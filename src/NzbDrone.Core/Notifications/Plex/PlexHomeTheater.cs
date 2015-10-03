@@ -80,8 +80,7 @@ namespace NzbDrone.Core.Notifications.Plex
             }
             catch (SocketException ex)
             {
-                var logMessage = String.Format("Unable to connect to PHT Host: {0}:{1}", Settings.Host, Settings.Port);
-                _logger.DebugException(logMessage, ex);
+                _logger.Debug(ex, "Unable to connect to PHT Host: {0}:{1}", Settings.Host, Settings.Port);
             }
         }
     }

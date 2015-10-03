@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Unable to retrieve queue and history items from " + downloadClient.Definition.Name, ex);
+                _logger.Warn(ex, "Unable to retrieve queue and history items from " + downloadClient.Definition.Name);
             }
 
             foreach (var downloadItem in downloadClientHistory)
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't process tracked download " + downloadItem.Title, e);
+                _logger.Error(e, "Couldn't process tracked download " + downloadItem.Title);
             }
 
             return trackedDownloads;

@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
             }
 
             return new XbmcVersion();
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to send test message: " + ex.Message);
                 return new ValidationFailure("Host", "Unable to send test message");
             }
 

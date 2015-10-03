@@ -34,7 +34,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
             catch (Exception ex)
             {
-                _logger.Error("Unable to communicate with download client: ", ex);
+                _logger.Error(ex, "Unable to communicate with download client: ");
                return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client: " + ex.Message);
             }
 

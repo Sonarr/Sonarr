@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
             }
 
             return new List<ActivePlayer>();
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
             }
         }
 

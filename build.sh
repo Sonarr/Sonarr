@@ -202,10 +202,10 @@ PackageTests()
     find . -maxdepth 6 -path $testSearchPattern -exec cp -r "{}" $testPackageFolder \;
 
     if [ $runtime = "dotnet" ] ; then
-        $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
+        $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.4 -Output $testPackageFolder
         cp $outputFolder/*.pdb $testPackageFolder
     else
-        mono $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
+        mono $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.4 -Output $testPackageFolder
     fi
 
     cp $outputFolder/*.dll $testPackageFolder
