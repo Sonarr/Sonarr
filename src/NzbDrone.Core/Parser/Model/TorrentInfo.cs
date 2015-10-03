@@ -7,10 +7,10 @@ namespace NzbDrone.Core.Parser.Model
     {
         public string MagnetUrl { get; set; }
         public string InfoHash { get; set; }
-        public Int32? Seeders { get; set; }
-        public Int32? Peers { get; set; }
+        public int? Seeders { get; set; }
+        public int? Peers { get; set; }
 
-        public static Int32? GetSeeders(ReleaseInfo release)
+        public static int? GetSeeders(ReleaseInfo release)
         {
             var torrentInfo = release as TorrentInfo;
 

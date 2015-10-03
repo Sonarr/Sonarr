@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         }
 
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
-        public override Int32 PageSize { get { return 100; } }
+        public override int PageSize { get { return 100; } }
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         }
 
-        private IndexerDefinition GetDefinition(String name, NewznabSettings settings)
+        private IndexerDefinition GetDefinition(string name, NewznabSettings settings)
         {
             return new IndexerDefinition
                    {
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                    };
         }
 
-        private NewznabSettings GetSettings(String url, params int[] categories)
+        private NewznabSettings GetSettings(string url, params int[] categories)
         {
             var settings = new NewznabSettings { Url = url };
 

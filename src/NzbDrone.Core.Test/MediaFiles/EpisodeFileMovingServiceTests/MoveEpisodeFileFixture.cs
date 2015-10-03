@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                   .Returns("File Name");
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.BuildFilePath(It.IsAny<Series>(), It.IsAny<Int32>(), It.IsAny<String>(), It.IsAny<String>()))
+                  .Setup(s => s.BuildFilePath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
                   .Returns(@"C:\Test\TV\Series\Season 01\File Name.avi".AsOsAgnostic());
 
             Mocker.GetMock<IBuildFileNames>()
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                   .Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FileExists(It.IsAny<String>()))
+                  .Setup(s => s.FileExists(It.IsAny<string>()))
                   .Returns(true);
         }
 
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             WindowsOnly();
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.InheritFolderPermissions(It.IsAny<String>()))
+                  .Setup(s => s.InheritFolderPermissions(It.IsAny<string>()))
                   .Throws<UnauthorizedAccessException>();
 
             Subject.MoveEpisodeFile(_episodeFile, _localEpisode);
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             WindowsOnly();
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.InheritFolderPermissions(It.IsAny<String>()))
+                  .Setup(s => s.InheritFolderPermissions(It.IsAny<string>()))
                   .Throws<InvalidOperationException>();
 
             Subject.MoveEpisodeFile(_episodeFile, _localEpisode);

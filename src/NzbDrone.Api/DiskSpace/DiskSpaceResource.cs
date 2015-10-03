@@ -7,7 +7,7 @@ namespace NzbDrone.Api.DiskSpace
     {
         public string Path { get; set; }
         public string Label { get; set; }
-        public Int64 FreeSpace { get; set; }
-        public Int64 TotalSpace { get; set; }
+        public long FreeSpace { get; set; }
+        public long TotalSpace { get; set; }
     }
 }

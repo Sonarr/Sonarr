@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     metadata.SeasonNumber = 0;
                 }
 
-                else if (Int32.TryParse(seasonNumberMatch, out seasonNumber))
+                else if (int.TryParse(seasonNumberMatch, out seasonNumber))
                 {
                     metadata.SeasonNumber = seasonNumber;
                 }
@@ -172,7 +172,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             xws.OmitXmlDeclaration = true;
             xws.Indent = false;
 
-            var episodeGuideUrl = String.Format("http://www.thetvdb.com/api/1D62F2F90030C444/series/{0}/all/en.zip", series.TvdbId);
+            var episodeGuideUrl = string.Format("http://www.thetvdb.com/api/1D62F2F90030C444/series/{0}/all/en.zip", series.TvdbId);
 
             using (var xw = XmlWriter.Create(sb, xws))
             {
@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
             _logger.Debug("Generating Episode Metadata for: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
 
-            var xmlResult = String.Empty;
+            var xmlResult = string.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
             {
                 var sb = new StringBuilder();
@@ -356,11 +356,11 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         {
             foreach (var image in season.Images)
             {
-                var filename = String.Format("season{0:00}-{1}.jpg", season.SeasonNumber, image.CoverType.ToString().ToLower());
+                var filename = string.Format("season{0:00}-{1}.jpg", season.SeasonNumber, image.CoverType.ToString().ToLower());
 
                 if (season.SeasonNumber == 0)
                 {
-                    filename = String.Format("season-specials-{0}.jpg", image.CoverType.ToString().ToLower());
+                    filename = string.Format("season-specials-{0}.jpg", image.CoverType.ToString().ToLower());
                 }
 
                 yield return new ImageFileResult(Path.Combine(series.Path, filename), image.Url);

@@ -35,9 +35,9 @@ namespace NzbDrone.Core.Configuration
             return _repository.All();
         }
 
-        public Dictionary<String, Object> AllWithDefaults()
+        public Dictionary<string, object> AllWithDefaults()
         {
-            var dict = new Dictionary<String, Object>(StringComparer.InvariantCultureIgnoreCase);
+            var dict = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
             var type = GetType();
             var properties = type.GetProperties();
@@ -71,12 +71,12 @@ namespace NzbDrone.Core.Configuration
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
-        public Boolean IsDefined(String key)
+        public bool IsDefined(string key)
         {
             return _repository.Get(key.ToLower()) != null;
         }
 
-        public String DownloadedEpisodesFolder
+        public string DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
 
@@ -97,11 +97,11 @@ namespace NzbDrone.Core.Configuration
 
         public string RecycleBin
         {
-            get { return GetValue("RecycleBin", String.Empty); }
+            get { return GetValue("RecycleBin", string.Empty); }
             set { SetValue("RecycleBin", value); }
         }
 
-        public Int32 RssSyncInterval
+        public int RssSyncInterval
         {
             get { return GetValueInt("RssSyncInterval", 15); }
 
@@ -115,42 +115,42 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("MinimumAge", value); }
         }
 
-        public Boolean AutoDownloadPropers
+        public bool AutoDownloadPropers
         {
             get { return GetValueBoolean("AutoDownloadPropers", true); }
 
             set { SetValue("AutoDownloadPropers", value); }
         }
 
-        public Boolean EnableCompletedDownloadHandling
+        public bool EnableCompletedDownloadHandling
         {
             get { return GetValueBoolean("EnableCompletedDownloadHandling", true); }
 
             set { SetValue("EnableCompletedDownloadHandling", value); }
         }
 
-        public Boolean RemoveCompletedDownloads
+        public bool RemoveCompletedDownloads
         {
             get { return GetValueBoolean("RemoveCompletedDownloads", false); }
 
             set { SetValue("RemoveCompletedDownloads", value); }
         }
 
-        public Boolean AutoRedownloadFailed
+        public bool AutoRedownloadFailed
         {
             get { return GetValueBoolean("AutoRedownloadFailed", true); }
 
             set { SetValue("AutoRedownloadFailed", value); }
         }
 
-        public Boolean RemoveFailedDownloads
+        public bool RemoveFailedDownloads
         {
             get { return GetValueBoolean("RemoveFailedDownloads", true); }
 
             set { SetValue("RemoveFailedDownloads", value); }
         }
 
-        public Boolean CreateEmptySeriesFolders
+        public bool CreateEmptySeriesFolders
         {
             get { return GetValueBoolean("CreateEmptySeriesFolders", false); }
 
@@ -164,125 +164,125 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("FileDate", value); }
         }
 
-        public String DownloadClientWorkingFolders
+        public string DownloadClientWorkingFolders
         {
             get { return GetValue("DownloadClientWorkingFolders", "_UNPACK_|_FAILED_"); }
             set { SetValue("DownloadClientWorkingFolders", value); }
         }
 
-        public Int32 DownloadedEpisodesScanInterval
+        public int DownloadedEpisodesScanInterval
         {
             get { return GetValueInt("DownloadedEpisodesScanInterval", 1); }
 
             set { SetValue("DownloadedEpisodesScanInterval", value); }
         }
 
-        public Int32 DownloadClientHistoryLimit
+        public int DownloadClientHistoryLimit
         {
             get { return GetValueInt("DownloadClientHistoryLimit", 30); }
 
             set { SetValue("DownloadClientHistoryLimit", value); }
         }
 
-        public Boolean SkipFreeSpaceCheckWhenImporting
+        public bool SkipFreeSpaceCheckWhenImporting
         {
             get { return GetValueBoolean("SkipFreeSpaceCheckWhenImporting", false); }
 
             set { SetValue("SkipFreeSpaceCheckWhenImporting", value); }
         }
 
-        public Boolean CopyUsingHardlinks
+        public bool CopyUsingHardlinks
         {
             get { return GetValueBoolean("CopyUsingHardlinks", false); }
 
             set { SetValue("CopyUsingHardlinks", value); }
         }
 
-        public Boolean EnableMediaInfo
+        public bool EnableMediaInfo
         {
             get { return GetValueBoolean("EnableMediaInfo", true); }
 
             set { SetValue("EnableMediaInfo", value); }
         }
 
-        public Boolean SetPermissionsLinux
+        public bool SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }
 
             set { SetValue("SetPermissionsLinux", value); }
         }
 
-        public String FileChmod
+        public string FileChmod
         {
             get { return GetValue("FileChmod", "0644"); }
 
             set { SetValue("FileChmod", value); }
         }
 
-        public String FolderChmod
+        public string FolderChmod
         {
             get { return GetValue("FolderChmod", "0755"); }
 
             set { SetValue("FolderChmod", value); }
         }
 
-        public String ChownUser
+        public string ChownUser
         {
             get { return GetValue("ChownUser", ""); }
 
             set { SetValue("ChownUser", value); }
         }
 
-        public String ChownGroup
+        public string ChownGroup
         {
             get { return GetValue("ChownGroup", ""); }
 
             set { SetValue("ChownGroup", value); }
         }
 
-        public Int32 FirstDayOfWeek
+        public int FirstDayOfWeek
         {
             get { return GetValueInt("FirstDayOfWeek", (int)OsInfo.FirstDayOfWeek); }
 
             set { SetValue("FirstDayOfWeek", value); }
         }
 
-        public String CalendarWeekColumnHeader
+        public string CalendarWeekColumnHeader
         {
             get { return GetValue("CalendarWeekColumnHeader", "ddd M/D"); }
 
             set { SetValue("CalendarWeekColumnHeader", value); }
         }
 
-        public String ShortDateFormat
+        public string ShortDateFormat
         {
             get { return GetValue("ShortDateFormat", "MMM D YYYY"); }
 
             set { SetValue("ShortDateFormat", value); }
         }
 
-        public String LongDateFormat
+        public string LongDateFormat
         {
             get { return GetValue("LongDateFormat", "dddd, MMMM D YYYY"); }
 
             set { SetValue("LongDateFormat", value); }
         }
 
-        public String TimeFormat
+        public string TimeFormat
         {
             get { return GetValue("TimeFormat", "h(:mm)a"); }
 
             set { SetValue("TimeFormat", value); }
         }
 
-        public Boolean ShowRelativeDates
+        public bool ShowRelativeDates
         {
             get { return GetValueBoolean("ShowRelativeDates", true); }
 
             set { SetValue("ShowRelativeDates", value); }
         }
 
-        public Boolean EnableColorImpairedMode
+        public bool EnableColorImpairedMode
         {
             get { return GetValueBoolean("EnableColorImpairedMode", false); }
 
@@ -296,29 +296,29 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("CleanupMetadataImages", value); }
         }
 
-        public String RijndaelPassphrase
+        public string RijndaelPassphrase
         {
             get { return GetValue("RijndaelPassphrase", Guid.NewGuid().ToString(), true); }
         }
 
-        public String HmacPassphrase
+        public string HmacPassphrase
         {
             get { return GetValue("HmacPassphrase", Guid.NewGuid().ToString(), true); }
         }
 
-        public String RijndaelSalt
+        public string RijndaelSalt
         {
             get { return GetValue("RijndaelSalt", Guid.NewGuid().ToString(), true); }
         }
 
-        public String HmacSalt
+        public string HmacSalt
         {
             get { return GetValue("HmacSalt", Guid.NewGuid().ToString(), true); }
         }
 
         private string GetValue(string key)
         {
-            return GetValue(key, String.Empty);
+            return GetValue(key, string.Empty);
         }
 
         private bool GetValueBoolean(string key, bool defaultValue = false)
@@ -345,7 +345,7 @@ namespace NzbDrone.Core.Configuration
 
             string dbValue;
 
-            if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !String.IsNullOrEmpty(dbValue))
+            if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !string.IsNullOrEmpty(dbValue))
                 return dbValue;
 
             _logger.Trace("Using default config value for '{0}' defaultValue:'{1}'", key, defaultValue);
@@ -357,7 +357,7 @@ namespace NzbDrone.Core.Configuration
             return defaultValue.ToString();
         }
 
-        private void SetValue(string key, Boolean value)
+        private void SetValue(string key, bool value)
         {
             SetValue(key, value.ToString());
         }

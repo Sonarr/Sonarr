@@ -4,7 +4,7 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class Rejection
     {
-        public String Reason { get; set; }
+        public string Reason { get; set; }
         public RejectionType Type { get; set; }
 
         public Rejection(string reason, RejectionType type = RejectionType.Permanent)
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         public override string ToString()
         {
-            return String.Format("[{0}] {1}", Type, Reason);
+            return string.Format("[{0}] {1}", Type, Reason);
         }
     }
 }

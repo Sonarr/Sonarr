@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Backup
             _diskProvider.EnsureFolder(_backupTempFolder);
             _diskProvider.EnsureFolder(GetBackupFolder(backupType));
 
-            var backupFilename = String.Format("nzbdrone_backup_{0:yyyy.MM.dd_HH.mm.ss}.zip", DateTime.Now);
+            var backupFilename = string.Format("nzbdrone_backup_{0:yyyy.MM.dd_HH.mm.ss}.zip", DateTime.Now);
             var backupPath = Path.Combine(GetBackupFolder(backupType), backupFilename);
 
             Cleanup();
@@ -153,12 +153,12 @@ namespace NzbDrone.Core.Backup
             _logger.Debug("Finished cleaning up old backup files");
         }
 
-        private String GetBackupFolder(BackupType backupType)
+        private string GetBackupFolder(BackupType backupType)
         {
             return Path.Combine(_appFolderInfo.GetBackupFolder(), backupType.ToString().ToLower());
         }
 
-        private IEnumerable<String> GetBackupFiles(String path)
+        private IEnumerable<string> GetBackupFiles(string path)
         {
             var files = _diskProvider.GetFiles(path, SearchOption.TopDirectoryOnly);
 

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         }
 
         [FieldDefinition(0, Label = "Rss URL", HelpText = "Enter to URL to an Fanzub compatible RSS feed")]
-        public String BaseUrl { get; set; }
+        public string BaseUrl { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

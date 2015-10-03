@@ -6,14 +6,14 @@ namespace NzbDrone.Api.Restrictions
 {
     public class RestrictionResource : RestResource
     {
-        public String Required { get; set; }
-        public String Preferred { get; set; }
-        public String Ignored { get; set; }
-        public HashSet<Int32> Tags { get; set; }
+        public string Required { get; set; }
+        public string Preferred { get; set; }
+        public string Ignored { get; set; }
+        public HashSet<int> Tags { get; set; }
 
         public RestrictionResource()
         {
-            Tags = new HashSet<Int32>();
+            Tags = new HashSet<int>();
         }
     }
 }

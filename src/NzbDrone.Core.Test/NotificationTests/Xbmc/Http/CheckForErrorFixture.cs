@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Http
         [Test]
         public void JsonError_true_empty_response()
         {
-            var response = String.Empty;
+            var response = string.Empty;
 
             Subject.CheckForError(response).Should().BeTrue();
         }

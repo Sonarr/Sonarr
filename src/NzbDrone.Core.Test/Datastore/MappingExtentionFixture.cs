@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             MapRepository.Instance.RegisterTypeConverter(typeof(List<EmbeddedType>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(EmbeddedType), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(int), new Int32Converter());
             
         }
 

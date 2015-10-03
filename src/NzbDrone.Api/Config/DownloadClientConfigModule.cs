@@ -19,7 +19,7 @@ namespace NzbDrone.Api.Config
                            .SetValidator(rootFolderValidator)
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator)
-                           .When(c => !String.IsNullOrWhiteSpace(c.DownloadedEpisodesFolder));
+                           .When(c => !string.IsNullOrWhiteSpace(c.DownloadedEpisodesFolder));
         }
     }
 }

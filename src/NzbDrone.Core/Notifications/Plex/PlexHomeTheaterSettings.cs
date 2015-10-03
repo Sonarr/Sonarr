@@ -15,21 +15,21 @@ namespace NzbDrone.Core.Notifications.Plex
         //These need to be kept in the same order as XBMC Settings, but we don't want them displayed
 
         [FieldDefinition(2, Label = "Username", Type = FieldType.Hidden)]
-        public String Username { get; set; }
+        public string Username { get; set; }
 
         [FieldDefinition(3, Label = "Password", Type = FieldType.Hidden)]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
         [FieldDefinition(5, Label = "GUI Notification", Type = FieldType.Hidden)]
-        public Boolean Notify { get; set; }
+        public bool Notify { get; set; }
 
         [FieldDefinition(6, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Hidden)]
-        public Boolean UpdateLibrary { get; set; }
+        public bool UpdateLibrary { get; set; }
 
         [FieldDefinition(7, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Hidden)]
-        public Boolean CleanLibrary { get; set; }
+        public bool CleanLibrary { get; set; }
 
         [FieldDefinition(8, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Hidden)]
-        public Boolean AlwaysUpdate { get; set; }
+        public bool AlwaysUpdate { get; set; }
     }
 }

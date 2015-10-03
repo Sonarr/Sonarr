@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Exceptions
     {
         public static void VerifyStatusCode(this HttpStatusCode statusCode, string message = null)
         {
-            if (String.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message))
             {
                 message = statusCode.ToString();
             }

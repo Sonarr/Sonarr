@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             _proxy = proxy;
         }
 
-        protected override String AddFromMagnetLink(RemoteEpisode remoteEpisode, String hash, String magnetLink)
+        protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return hash;
         }
 
-        protected override String AddFromTorrentFile(RemoteEpisode remoteEpisode, String hash, String filename, Byte[] fileContent)
+        protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromFile(filename, fileContent, Settings);
             _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
@@ -224,12 +224,12 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         DetailedDescription = "Please verify the hostname and port."
                     };
                 }
-                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
             return null;
@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 
             return null;

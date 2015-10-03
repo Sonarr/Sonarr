@@ -26,12 +26,12 @@ namespace NzbDrone.Core.Notifications.Plex
 
     public class PlexServerProxy : IPlexServerProxy
     {
-        private readonly ICached<String> _authCache;
+        private readonly ICached<string> _authCache;
         private readonly Logger _logger;
 
         public PlexServerProxy(ICacheManager cacheManager, Logger logger)
         {
-            _authCache = cacheManager.GetCache<String>(GetType(), "authCache");
+            _authCache = cacheManager.GetCache<string>(GetType(), "authCache");
             _logger = logger;
         }
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void Update(int sectionId, PlexServerSettings settings)
         {
-            var resource = String.Format("library/sections/{0}/refresh", sectionId);
+            var resource = string.Format("library/sections/{0}/refresh", sectionId);
             var request = GetPlexServerRequest(resource, Method.GET, settings);
             var client = GetPlexServerClient(settings);
             var response = client.Execute(request);
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public void UpdateSeries(int metadataId, PlexServerSettings settings)
         {
-            var resource = String.Format("library/metadata/{0}/refresh", metadataId);
+            var resource = string.Format("library/metadata/{0}/refresh", metadataId);
             var request = GetPlexServerRequest(resource, Method.PUT, settings);
             var client = GetPlexServerClient(settings);
             var response = client.Execute(request);
@@ -98,8 +98,8 @@ namespace NzbDrone.Core.Notifications.Plex
 
         public int? GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings)
         {
-            var guid = String.Format("com.plexapp.agents.thetvdb://{0}?lang={1}", tvdbId, language);
-            var resource = String.Format("library/sections/{0}/all?guid={1}", sectionId, System.Web.HttpUtility.UrlEncode(guid));
+            var guid = string.Format("com.plexapp.agents.thetvdb://{0}?lang={1}", tvdbId, language);
+            var resource = string.Format("library/sections/{0}/all?guid={1}", sectionId, System.Web.HttpUtility.UrlEncode(guid));
             var request = GetPlexServerRequest(resource, Method.GET, settings);
             var client = GetPlexServerClient(settings);
             var response = client.Execute(request);
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Notifications.Plex
             return item.Id;
         }
 
-        private String Authenticate(PlexServerSettings settings)
+        private string Authenticate(PlexServerSettings settings)
         {
             var request = GetMyPlexRequest("users/sign_in.json", Method.POST);
             var client = GetMyPlexClient(settings.Username, settings.Password); 
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             var protocol = settings.UseSsl ? "https" : "http";
 
-            return RestClientFactory.BuildClient(String.Format("{0}://{1}:{2}", protocol, settings.Host, settings.Port));
+            return RestClientFactory.BuildClient(string.Format("{0}://{1}:{2}", protocol, settings.Host, settings.Port));
         }
 
         private RestRequest GetPlexServerRequest(string resource, Method method, PlexServerSettings settings)

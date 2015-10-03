@@ -34,16 +34,16 @@ namespace NzbDrone.Core.Indexers.BitMeTv
         }
 
         [FieldDefinition(0, Label = "Website URL")]
-        public String BaseUrl { get; set; }
+        public string BaseUrl { get; set; }
 
         [FieldDefinition(1, Label = "UserId")]
-        public String UserId { get; set; }
+        public string UserId { get; set; }
 
         [FieldDefinition(2, Label = "RSS Passkey")]
-        public String RssPasskey { get; set; }
+        public string RssPasskey { get; set; }
 
         [FieldDefinition(3, Label = "Cookie", HelpText = "BitMeTv uses a login cookie needed to access the rss, you'll have to retrieve it via a browser.")]
-        public String Cookie { get; set; }
+        public string Cookie { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

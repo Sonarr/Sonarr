@@ -39,10 +39,10 @@ namespace NzbDrone.Test.Common
                 string exception = "";
                 if (log.Exception != null)
                 {
-                    exception = String.Format("[{0}: {1}]", log.Exception.GetType(), log.Exception.Message);
+                    exception = string.Format("[{0}: {1}]", log.Exception.GetType(), log.Exception.Message);
                 }
 
-                errors += Environment.NewLine + String.Format("[{0}] {1}: {2} {3}", log.Level, log.LoggerName, log.FormattedMessage, exception);
+                errors += Environment.NewLine + string.Format("[{0}] {1}: {2} {3}", log.Level, log.LoggerName, log.FormattedMessage, exception);
             }
             return errors;
         }
@@ -101,7 +101,7 @@ namespace NzbDrone.Test.Common
             if (levelLogs.Count != count)
             {
 
-                var message = String.Format("{0} {1}(s) were expected but {2} were logged.\n\r{3}",
+                var message = string.Format("{0} {1}(s) were expected but {2} were logged.\n\r{3}",
                     count, level, levelLogs.Count, GetLogsString(levelLogs));
 
                 message = "\n\r****************************************************************************************\n\r"

@@ -7,21 +7,21 @@ namespace NzbDrone.Core.Download
     [DebuggerDisplay("{DownloadClient}:{Title}")]
     public class DownloadClientItem
     {
-        public String DownloadClient { get; set; }
-        public String DownloadId { get; set; }
-        public String Category { get; set; }
-        public String Title { get; set; }
+        public string DownloadClient { get; set; }
+        public string DownloadId { get; set; }
+        public string Category { get; set; }
+        public string Title { get; set; }
 
-        public Int64 TotalSize { get; set; }
-        public Int64 RemainingSize { get; set; }
+        public long TotalSize { get; set; }
+        public long RemainingSize { get; set; }
         public TimeSpan? RemainingTime { get; set; }
 
         public OsPath OutputPath { get; set; }
-        public String Message { get; set; }
+        public string Message { get; set; }
 
         public DownloadItemStatus Status { get; set; }
-        public Boolean IsEncrypted { get; set; }
-        public Boolean IsReadOnly { get; set; }
+        public bool IsEncrypted { get; set; }
+        public bool IsReadOnly { get; set; }
 
         public bool Removed { get; set; }
     }

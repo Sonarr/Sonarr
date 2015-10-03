@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 {
     public class TransmissionResponse
     {
-        public String Result { get; set; }
-        public Dictionary<String, Object> Arguments { get; set; }
+        public string Result { get; set; }
+        public Dictionary<string, object> Arguments { get; set; }
     }
 }

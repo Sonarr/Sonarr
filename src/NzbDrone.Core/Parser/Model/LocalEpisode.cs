@@ -14,14 +14,14 @@ namespace NzbDrone.Core.Parser.Model
             Episodes = new List<Episode>();
         }
 
-        public String Path { get; set; }
-        public Int64 Size { get; set; }
+        public string Path { get; set; }
+        public long Size { get; set; }
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
         public QualityModel Quality { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
-        public Boolean ExistingFile { get; set; }
+        public bool ExistingFile { get; set; }
         
         public int SeasonNumber 
         { 

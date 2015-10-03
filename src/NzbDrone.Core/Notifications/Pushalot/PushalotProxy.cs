@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
 {
     public interface IPushalotProxy
     {
-        void SendNotification(String title, String message, PushalotSettings settings);
+        void SendNotification(string title, string message, PushalotSettings settings);
         ValidationFailure Test(PushalotSettings settings);
     }
 
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
             _logger = logger;
         }
 
-        public void SendNotification(String title, String message, PushalotSettings settings)
+        public void SendNotification(string title, string message, PushalotSettings settings)
         {
             var client = RestClientFactory.BuildClient(URL);
             var request = BuildRequest();

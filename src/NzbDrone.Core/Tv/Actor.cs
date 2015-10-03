@@ -11,8 +11,8 @@ namespace NzbDrone.Core.Tv
             Images = new List<MediaCover.MediaCover>();
         }
 
-        public String Name { get; set; }
-        public String Character { get; set; }
+        public string Name { get; set; }
+        public string Character { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
     }
 }

@@ -14,10 +14,10 @@ namespace NzbDrone.Common.Test.DiskTests
     [TestFixture]
     public class DiskTransferServiceFixture : TestBase<DiskTransferService>
     {
-        private readonly String _sourcePath = @"C:\source\my.video.mkv".AsOsAgnostic();
-        private readonly String _targetPath = @"C:\target\my.video.mkv".AsOsAgnostic();
-        private readonly String _backupPath = @"C:\source\my.video.mkv.backup~".AsOsAgnostic();
-        private readonly String _tempTargetPath = @"C:\target\my.video.mkv.partial~".AsOsAgnostic();
+        private readonly string _sourcePath = @"C:\source\my.video.mkv".AsOsAgnostic();
+        private readonly string _targetPath = @"C:\target\my.video.mkv".AsOsAgnostic();
+        private readonly string _backupPath = @"C:\source\my.video.mkv.backup~".AsOsAgnostic();
+        private readonly string _tempTargetPath = @"C:\target\my.video.mkv.partial~".AsOsAgnostic();
 
         [SetUp]
         public void SetUp()
@@ -669,7 +669,7 @@ namespace NzbDrone.Common.Test.DiskTests
         private void WithFailedHardlink()
         {
             Mocker.GetMock<IDiskProvider>()
-                .Setup(v => v.TryCreateHardLink(It.IsAny<String>(), It.IsAny<String>()))
+                .Setup(v => v.TryCreateHardLink(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(false);
         }
 
@@ -771,7 +771,7 @@ namespace NzbDrone.Common.Test.DiskTests
             CollectionAssert.AreEquivalent(sourceFiles, destFiles);
         }
 
-        private void VerifyDeletedFile(String filePath)
+        private void VerifyDeletedFile(string filePath)
         {
             var path = filePath;
 

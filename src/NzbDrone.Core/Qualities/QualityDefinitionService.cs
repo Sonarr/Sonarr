@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Qualities
     {
         void Update(QualityDefinition qualityDefinition);
         List<QualityDefinition> All();
-        QualityDefinition GetById(Int32 id);
+        QualityDefinition GetById(int id);
         QualityDefinition Get(Quality quality);
     }
 
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Qualities
             return GetAll().Values.OrderBy(d => d.Weight).ToList();
         }
 
-        public QualityDefinition GetById(Int32 id)
+        public QualityDefinition GetById(int id)
         {
             return GetAll().Values.Single(v => v.Id == id);
         }

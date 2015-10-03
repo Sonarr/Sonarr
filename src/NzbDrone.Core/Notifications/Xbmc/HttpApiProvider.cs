@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public void Notify(XbmcSettings settings, string title, string message)
         {
-            var notification = String.Format("Notification({0},{1},{2},{3})", title, message, settings.DisplayTime * 1000, "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png");
+            var notification = string.Format("Notification({0},{1},{2},{3})", title, message, settings.DisplayTime * 1000, "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png");
             var command = BuildExecBuiltInCommand(notification);
 
             SendCommand(settings, command);
@@ -83,10 +83,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
         internal string GetSeriesPath(XbmcSettings settings, Series series)
         {
             var query =
-                String.Format(
+                string.Format(
                     "select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = {0} and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath",
                     series.TvdbId);
-            var command = String.Format("QueryVideoDatabase({0})", query);
+            var command = string.Format("QueryVideoDatabase({0})", query);
 
             const string setResponseCommand =
                 "SetResponseFormat(webheader;false;webfooter;false;header;<xml>;footer;</xml>;opentag;<tag>;closetag;</tag>;closefinaltag;false)";
@@ -96,8 +96,8 @@ namespace NzbDrone.Core.Notifications.Xbmc
             var response = SendCommand(settings, command);
             SendCommand(settings, resetResponseCommand);
 
-            if (String.IsNullOrEmpty(response))
-                return String.Empty;
+            if (string.IsNullOrEmpty(response))
+                return string.Empty;
 
             var xDoc = XDocument.Load(new StringReader(response.Replace("&", "&amp;")));
             var xml = xDoc.Descendants("xml").Select(x => x).FirstOrDefault();
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             _logger.Debug("Looking for error in response: {0}", response);
 
-            if (String.IsNullOrWhiteSpace(response))
+            if (string.IsNullOrWhiteSpace(response))
             {
                 _logger.Debug("Invalid response from XBMC, the response is not valid JSON");
                 return true;
@@ -145,10 +145,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 var xbmcSeriesPath = GetSeriesPath(settings, series);
 
                 //If the path is found update it, else update the whole library
-                if (!String.IsNullOrEmpty(xbmcSeriesPath))
+                if (!string.IsNullOrEmpty(xbmcSeriesPath))
                 {
                     _logger.Debug("Updating series [{0}] on XBMC host: {1}", series, settings.Address);
-                    var command = BuildExecBuiltInCommand(String.Format("UpdateLibrary(video,{0})", xbmcSeriesPath));
+                    var command = BuildExecBuiltInCommand(string.Format("UpdateLibrary(video,{0})", xbmcSeriesPath));
                     SendCommand(settings, command);
                 }
 
@@ -169,9 +169,9 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private string SendCommand(XbmcSettings settings, string command)
         {
-            var url = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", settings.Address, command);
+            var url = string.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", settings.Address, command);
 
-            if (!String.IsNullOrEmpty(settings.Username))
+            if (!string.IsNullOrEmpty(settings.Username))
             {
                 return _httpProvider.DownloadString(url, settings.Username, settings.Password);
             }
@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private string BuildExecBuiltInCommand(string command)
         {
-            return String.Format("ExecBuiltIn({0})", command);
+            return string.Format("ExecBuiltIn({0})", command);
         }
     }
 }

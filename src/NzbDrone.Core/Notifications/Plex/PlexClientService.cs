@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             try
             {
-                var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
+                var command = string.Format("ExecBuiltIn(Notification({0}, {1}))", header, message);
                 SendCommand(settings.Host, settings.Port, command, settings.Username, settings.Password);
             }
             catch(Exception ex)
@@ -41,9 +41,9 @@ namespace NzbDrone.Core.Notifications.Plex
 
         private string SendCommand(string host, int port, string command, string username, string password)
         {
-            var url = String.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command={2}", host, port, command);
+            var url = string.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command={2}", host, port, command);
 
-            if (!String.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(username))
             {
                 return _httpProvider.DownloadString(url, username, password);
             }
@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Notifications.Plex
             try
             {
                 _logger.Debug("Sending Test Notifcation to Plex Client: {0}", settings.Host);
-                var command = String.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
+                var command = string.Format("ExecBuiltIn(Notification({0}, {1}))", "Test Notification", "Success! Notifications are setup correctly");
                 var result = SendCommand(settings.Host, settings.Port, command, settings.Username, settings.Password);
 
-                if (String.IsNullOrWhiteSpace(result) ||
+                if (string.IsNullOrWhiteSpace(result) ||
                     result.IndexOf("error", StringComparison.InvariantCultureIgnoreCase) > -1)
                 {
                     throw new Exception("Unable to connect to Plex Client");

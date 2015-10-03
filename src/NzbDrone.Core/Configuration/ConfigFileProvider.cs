@@ -38,9 +38,9 @@ namespace NzbDrone.Core.Configuration
         string SslCertHash { get; }
         string UrlBase { get; }
         string UiFolder { get; }
-        Boolean UpdateAutomatically { get; }
+        bool UpdateAutomatically { get; }
         UpdateMechanism UpdateMechanism { get; }
-        String UpdateScriptPath { get; }
+        string UpdateScriptPath { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Configuration
 
                 if (configValue.Key.Equals("SslCertHash", StringComparison.InvariantCultureIgnoreCase) && configValue.Value.ToString().IsNotNullOrWhiteSpace())
                 {
-                    SetValue(configValue.Key.FirstCharToUpper(), HiddenCharacterRegex.Replace(configValue.Value.ToString(), String.Empty));
+                    SetValue(configValue.Key.FirstCharToUpper(), HiddenCharacterRegex.Replace(configValue.Value.ToString(), string.Empty));
                     continue;
                 }
 

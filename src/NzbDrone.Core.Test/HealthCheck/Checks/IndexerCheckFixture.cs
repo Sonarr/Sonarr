@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     {
         private IIndexer _indexer;
 
-        private void GivenIndexer(Boolean supportsRss, Boolean supportsSearch)
+        private void GivenIndexer(bool supportsRss, bool supportsSearch)
         {
             var _indexer = Mocker.GetMock<IIndexer>();
             _indexer.SetupGet(s => s.SupportsRss).Returns(supportsRss);

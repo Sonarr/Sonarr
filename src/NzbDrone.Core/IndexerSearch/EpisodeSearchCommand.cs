@@ -6,7 +6,7 @@ namespace NzbDrone.Core.IndexerSearch
 {
     public class EpisodeSearchCommand : Command
     {
-        public List<Int32> EpisodeIds { get; set; }
+        public List<int> EpisodeIds { get; set; }
 
         public override bool SendUpdatesToClient
         {
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
         }
 
-        public EpisodeSearchCommand(List<Int32> episodeIds)
+        public EpisodeSearchCommand(List<int> episodeIds)
         {
             EpisodeIds = episodeIds;
         }

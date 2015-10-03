@@ -22,7 +22,7 @@ namespace NzbDrone.Api.Authentication
         private readonly IUserService _userService;
         private static readonly NzbDroneUser AnonymousUser = new NzbDroneUser { UserName = "Anonymous" };
         
-        private static String API_KEY;
+        private static string API_KEY;
         private static AuthenticationType AUTH_METHOD;
 
         public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)

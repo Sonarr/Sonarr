@@ -112,19 +112,19 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private class DestinationQualityModel036
         {
-            public Int32 Quality { get; set; }
-            public Boolean Proper { get; set; }
+            public int Quality { get; set; }
+            public bool Proper { get; set; }
         }
 
         private class SourceQualityModel036
         {
             public SourceQuality036 Quality { get; set; }
-            public Boolean Proper { get; set; }
+            public bool Proper { get; set; }
         }
 
         private class SourceQuality036
         {
-            public Int32 Id { get; set; }
+            public int Id { get; set; }
         }
     }
 }

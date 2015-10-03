@@ -14,11 +14,11 @@ namespace NzbDrone.Api.Series
         //Todo: We should get the entire Profile instead of ID and Name separately
 
         //View Only
-        public String Title { get; set; }
+        public string Title { get; set; }
         public List<AlternateTitleResource> AlternateTitles { get; set; }
-        public String SortTitle { get; set; }
+        public string SortTitle { get; set; }
 
-        public Int32 SeasonCount
+        public int SeasonCount
         {
             get
             {
@@ -28,45 +28,45 @@ namespace NzbDrone.Api.Series
             }
         }
 
-        public Int32? TotalEpisodeCount { get; set; }
-        public Int32? EpisodeCount { get; set; }
-        public Int32? EpisodeFileCount { get; set; }
-        public Int64? SizeOnDisk { get; set; }
+        public int? TotalEpisodeCount { get; set; }
+        public int? EpisodeCount { get; set; }
+        public int? EpisodeFileCount { get; set; }
+        public long? SizeOnDisk { get; set; }
         public SeriesStatusType Status { get; set; }
-        public String ProfileName { get; set; }
-        public String Overview { get; set; }
+        public string ProfileName { get; set; }
+        public string Overview { get; set; }
         public DateTime? NextAiring { get; set; }
         public DateTime? PreviousAiring { get; set; }
-        public String Network { get; set; }
-        public String AirTime { get; set; }
+        public string Network { get; set; }
+        public string AirTime { get; set; }
         public List<MediaCover> Images { get; set; }
 
-        public String RemotePoster { get; set; }
+        public string RemotePoster { get; set; }
         public List<SeasonResource> Seasons { get; set; }
-        public Int32 Year { get; set; }
+        public int Year { get; set; }
 
         //View & Edit
-        public String Path { get; set; }
-        public Int32 ProfileId { get; set; }
+        public string Path { get; set; }
+        public int ProfileId { get; set; }
 
         //Editing Only
-        public Boolean SeasonFolder { get; set; }
-        public Boolean Monitored { get; set; }
+        public bool SeasonFolder { get; set; }
+        public bool Monitored { get; set; }
 
-        public Boolean UseSceneNumbering { get; set; }
-        public Int32 Runtime { get; set; }
-        public Int32 TvdbId { get; set; }
-        public Int32 TvRageId { get; set; }
+        public bool UseSceneNumbering { get; set; }
+        public int Runtime { get; set; }
+        public int TvdbId { get; set; }
+        public int TvRageId { get; set; }
         public DateTime? FirstAired { get; set; }
         public DateTime? LastInfoSync { get; set; }
         public SeriesTypes SeriesType { get; set; }
-        public String CleanTitle { get; set; }
-        public String ImdbId { get; set; }
-        public String TitleSlug { get; set; }
-        public String RootFolderPath { get; set; }
-        public String Certification { get; set; }
-        public List<String> Genres { get; set; }
-        public HashSet<Int32> Tags { get; set; }
+        public string CleanTitle { get; set; }
+        public string ImdbId { get; set; }
+        public string TitleSlug { get; set; }
+        public string RootFolderPath { get; set; }
+        public string Certification { get; set; }
+        public List<string> Genres { get; set; }
+        public HashSet<int> Tags { get; set; }
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
         public Ratings Ratings { get; set; }
@@ -74,7 +74,7 @@ namespace NzbDrone.Api.Series
         //TODO: Add series statistics as a property of the series (instead of individual properties)
 
         //Used to support legacy consumers
-        public Int32 QualityProfileId
+        public int QualityProfileId
         {
             get
             {

@@ -14,8 +14,8 @@ namespace NzbDrone.Core.Organizer
         SampleResult GetDailySample(NamingConfig nameSpec);
         SampleResult GetAnimeSample(NamingConfig nameSpec);
         SampleResult GetAnimeMultiEpisodeSample(NamingConfig nameSpec);
-        String GetSeriesFolderSample(NamingConfig nameSpec);
-        String GetSeasonFolderSample(NamingConfig nameSpec);
+        string GetSeriesFolderSample(NamingConfig nameSpec);
+        string GetSeasonFolderSample(NamingConfig nameSpec);
     }
 
     public class FileNameSampleService : IFilenameSampleService
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Organizer
             }
             catch (NamingFormatException)
             {
-                return String.Empty;
+                return string.Empty;
             }
         }
     }

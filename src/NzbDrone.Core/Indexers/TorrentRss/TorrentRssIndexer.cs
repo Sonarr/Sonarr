@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         }
 
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
-        public override Boolean SupportsSearch { get { return false; } }
-        public override Int32 PageSize { get { return 0; } }
+        public override bool SupportsSearch { get { return false; } }
+        public override int PageSize { get { return 0; } }
 
         private readonly ITorrentRssParserFactory _torrentRssParserFactory;
 

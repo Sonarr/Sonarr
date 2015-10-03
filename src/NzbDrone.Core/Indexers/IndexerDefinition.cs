@@ -5,13 +5,13 @@ namespace NzbDrone.Core.Indexers
 {
     public class IndexerDefinition : ProviderDefinition
     {
-        public Boolean EnableRss { get; set; }
-        public Boolean EnableSearch { get; set; }
+        public bool EnableRss { get; set; }
+        public bool EnableSearch { get; set; }
         public DownloadProtocol Protocol { get; set; }
-        public Boolean SupportsRss { get; set; }
-        public Boolean SupportsSearch { get; set; }
+        public bool SupportsRss { get; set; }
+        public bool SupportsSearch { get; set; }
 
-        public override Boolean Enable
+        public override bool Enable
         {
             get
             {

@@ -14,7 +14,7 @@ namespace NzbDrone.Host
     {
         public static IContainer BuildContainer(StartupContext args)
         {
-            var assemblies = new List<String>
+            var assemblies = new List<string>
                              {
                                  "NzbDrone.Host",
                                  "NzbDrone.Common",

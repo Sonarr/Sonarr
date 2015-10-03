@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         private void GivenFiles()
         {
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetFiles(It.IsAny<String>(), SearchOption.AllDirectories))
+                .Setup(s => s.GetFiles(It.IsAny<string>(), SearchOption.AllDirectories))
                 .Returns(_files);
         }
 

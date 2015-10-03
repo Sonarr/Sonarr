@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Download.Pending
 
         private int GetQueueId(PendingRelease pendingRelease, Episode episode)
         {
-            return HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", pendingRelease.Id, episode.Id));
+            return HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", pendingRelease.Id, episode.Id));
         }
 
         private int PrioritizeDownloadProtocol(Series series, DownloadProtocol downloadProtocol)

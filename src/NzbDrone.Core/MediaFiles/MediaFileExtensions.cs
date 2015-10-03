@@ -7,11 +7,11 @@ namespace NzbDrone.Core.MediaFiles
 {
     public static class MediaFileExtensions
     {
-        private static Dictionary<String, Quality> _fileExtensions;
+        private static Dictionary<string, Quality> _fileExtensions;
 
         static MediaFileExtensions()
         {
-            _fileExtensions = new Dictionary<String, Quality>
+            _fileExtensions = new Dictionary<string, Quality>
             {
                 { ".m4v", Quality.SDTV },
                 { ".3gp", Quality.SDTV },
@@ -67,9 +67,9 @@ namespace NzbDrone.Core.MediaFiles
             };
         }
 
-        public static HashSet<String> Extensions
+        public static HashSet<string> Extensions
         {
-            get { return new HashSet<String>(_fileExtensions.Keys); }
+            get { return new HashSet<string>(_fileExtensions.Keys); }
         }
 
         public static Quality GetQualityForExtension(string extension)

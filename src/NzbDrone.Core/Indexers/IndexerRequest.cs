@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Indexers
     {
         public HttpRequest HttpRequest { get; private set; }
 
-        public IndexerRequest(String url, HttpAccept httpAccept)
+        public IndexerRequest(string url, HttpAccept httpAccept)
         {
             HttpRequest = new HttpRequest(url, httpAccept);
         }

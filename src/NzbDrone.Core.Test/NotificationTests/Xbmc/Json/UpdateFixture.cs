@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
             Subject.Update(_settings, series);
 
             Mocker.GetMock<IXbmcJsonApiProxy>()
-                  .Verify(v => v.UpdateLibrary(_settings, It.IsAny<String>()), Times.Once());
+                  .Verify(v => v.UpdateLibrary(_settings, It.IsAny<string>()), Times.Once());
         }
 
         [Test]

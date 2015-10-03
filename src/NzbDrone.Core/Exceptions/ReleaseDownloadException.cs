@@ -8,24 +8,24 @@ namespace NzbDrone.Core.Exceptions
     {
         public ReleaseInfo Release { get; set; }
 
-        public ReleaseDownloadException(ReleaseInfo release, String message, params Object[] args) : base(message, args)
+        public ReleaseDownloadException(ReleaseInfo release, string message, params object[] args) : base(message, args)
         {
             Release = release;
         }
 
-        public ReleaseDownloadException(ReleaseInfo release, String message)
+        public ReleaseDownloadException(ReleaseInfo release, string message)
             : base(message)
         {
             Release = release;
         }
 
-        public ReleaseDownloadException(ReleaseInfo release, String message, Exception innerException, params Object[] args)
+        public ReleaseDownloadException(ReleaseInfo release, string message, Exception innerException, params object[] args)
             : base(message, innerException, args)
         {
             Release = release;
         }
 
-        public ReleaseDownloadException(ReleaseInfo release, String message, Exception innerException)
+        public ReleaseDownloadException(ReleaseInfo release, string message, Exception innerException)
             : base(message, innerException)
         {
             Release = release;

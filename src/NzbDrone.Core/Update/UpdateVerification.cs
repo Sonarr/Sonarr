@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Update
 {
     public interface IVerifyUpdates
     {
-        Boolean Verify(UpdatePackage updatePackage, String packagePath);
+        bool Verify(UpdatePackage updatePackage, string packagePath);
     }
 
     public class UpdateVerification : IVerifyUpdates
@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Update
             _diskProvider = diskProvider;
         }
 
-        public Boolean Verify(UpdatePackage updatePackage, String packagePath)
+        public bool Verify(UpdatePackage updatePackage, string packagePath)
         {
             using (var fileStream = _diskProvider.OpenReadStream(packagePath))
             {

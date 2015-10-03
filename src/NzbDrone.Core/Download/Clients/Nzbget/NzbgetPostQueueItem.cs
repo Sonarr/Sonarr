@@ -4,13 +4,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public class NzbgetPostQueueItem
     {
-        public Int32 NzbId { get; set; }
-        public String NzbName { get; set; }
-        public String Stage { get; set; }
-        public String ProgressLabel { get; set; }
-        public Int32 FileProgress { get; set; }
-        public Int32 StageProgress { get; set; }
-        public Int32 TotalTimeSec { get; set; }
-        public Int32 StageTimeSec { get; set; }
+        public int NzbId { get; set; }
+        public string NzbName { get; set; }
+        public string Stage { get; set; }
+        public string ProgressLabel { get; set; }
+        public int FileProgress { get; set; }
+        public int StageProgress { get; set; }
+        public int TotalTimeSec { get; set; }
+        public int StageTimeSec { get; set; }
     }
 }

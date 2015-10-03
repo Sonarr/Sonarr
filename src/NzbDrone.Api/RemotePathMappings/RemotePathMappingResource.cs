@@ -5,8 +5,8 @@ namespace NzbDrone.Api.RemotePathMappings
 {
     public class RemotePathMappingResource : RestResource
     {
-        public String Host { get; set; }
-        public String RemotePath { get; set; }
-        public String LocalPath { get; set; }
+        public string Host { get; set; }
+        public string RemotePath { get; set; }
+        public string LocalPath { get; set; }
     }
 }

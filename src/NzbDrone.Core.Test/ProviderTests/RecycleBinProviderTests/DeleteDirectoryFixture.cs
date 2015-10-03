@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
         private void WithoutRecycleBin()
         {
-            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(String.Empty);
+            Mocker.GetMock<IConfigService>().SetupGet(s => s.RecycleBin).Returns(string.Empty);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);
 
-            Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTime(It.IsAny<String>(), It.IsAny<DateTime>()), Times.Exactly(3));
+            Mocker.GetMock<IDiskProvider>().Verify(v => v.FileSetLastWriteTime(It.IsAny<string>(), It.IsAny<DateTime>()), Times.Exactly(3));
         }
     }
 }

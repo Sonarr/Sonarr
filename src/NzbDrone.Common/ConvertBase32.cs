@@ -9,7 +9,7 @@ namespace NzbDrone.Common
         public static byte[] FromBase32String(string str)
         {
             int numBytes = str.Length * 5 / 8;
-            byte[] bytes = new Byte[numBytes];
+            byte[] bytes = new byte[numBytes];
 
             // all UPPERCASE chars
             str = str.ToUpper();

@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string FailMessage { get; set; }
 
         [JsonProperty(PropertyName = "bytes")]
-        public Int64 Size { get; set; }
+        public long Size { get; set; }
         public string Category { get; set; }
 
         [JsonProperty(PropertyName = "nzb_name")]

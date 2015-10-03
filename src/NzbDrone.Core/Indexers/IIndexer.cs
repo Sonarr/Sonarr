@@ -8,8 +8,8 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexer : IProvider
     {
-        Boolean SupportsRss { get; }
-        Boolean SupportsSearch { get; }
+        bool SupportsRss { get; }
+        bool SupportsSearch { get; }
         DownloadProtocol Protocol { get; }
         
         IList<ReleaseInfo> FetchRecent();

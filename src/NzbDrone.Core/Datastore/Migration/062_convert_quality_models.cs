@@ -23,9 +23,9 @@ namespace NzbDrone.Core.Datastore.Migration
             ConvertQualityModelsOnTable(conn, tran, "History");
         }
 
-        private void ConvertQualityModelsOnTable(IDbConnection conn, IDbTransaction tran, String tableName)
+        private void ConvertQualityModelsOnTable(IDbConnection conn, IDbTransaction tran, string tableName)
         {
-            var qualitiesToUpdate = new Dictionary<String, String>();
+            var qualitiesToUpdate = new Dictionary<string, string>();
 
             using (IDbCommand qualityModelCmd = conn.CreateCommand())
             {
@@ -71,13 +71,13 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private class LegacyQualityModel062
         {
-            public Int32 Quality { get; set; }
-            public Boolean Proper { get; set; }
+            public int Quality { get; set; }
+            public bool Proper { get; set; }
         }
 
         private class QualityModel062
         {
-            public Int32 Quality { get; set; }
+            public int Quality { get; set; }
             public Revision Revision { get; set; }
         }
     }

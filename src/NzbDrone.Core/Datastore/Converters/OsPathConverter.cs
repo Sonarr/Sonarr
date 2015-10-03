@@ -7,24 +7,24 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class OsPathConverter : IConverter
     {
-        public Object FromDB(ConverterContext context)
+        public object FromDB(ConverterContext context)
         {
             if (context.DbValue == DBNull.Value)
             {
                 return DBNull.Value;
             }
 
-            var value = (String)context.DbValue;
+            var value = (string)context.DbValue;
 
             return new OsPath(value);
         }
 
-        public Object FromDB(ColumnMap map, Object dbValue)
+        public object FromDB(ColumnMap map, object dbValue)
         {
             return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
-        public Object ToDB(Object clrValue)
+        public object ToDB(object clrValue)
         {
             var value = (OsPath)clrValue;
 
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Datastore.Converters
 
         public Type DbType
         {
-            get { return typeof(String); }
+            get { return typeof(string); }
         }
     }
 }

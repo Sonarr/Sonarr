@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 {
     public class NzbDroneSqliteProcessorFactory : SqliteProcessorFactory
     {
-        public override IMigrationProcessor Create(String connectionString, IAnnouncer announcer, IMigrationProcessorOptions options)
+        public override IMigrationProcessor Create(string connectionString, IAnnouncer announcer, IMigrationProcessorOptions options)
         {
             var factory = new MigrationDbFactory();
             var connection = factory.CreateConnection(connectionString);

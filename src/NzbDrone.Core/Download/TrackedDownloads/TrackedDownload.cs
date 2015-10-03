@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 {
     public class TrackedDownload
     {
-        public Int32 DownloadClient { get; set; }
+        public int DownloadClient { get; set; }
         public DownloadClientItem DownloadItem { get; set; }
         public TrackedDownloadStage State { get; set; }
         public TrackedDownloadStatus Status { get; private set; }
@@ -19,9 +19,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             StatusMessages = new TrackedDownloadStatusMessage[] {};
         }
 
-        public void Warn(String message, params object[] args)
+        public void Warn(string message, params object[] args)
         {
-            var statusMessage = String.Format(message, args);
+            var statusMessage = string.Format(message, args);
             Warn(new TrackedDownloadStatusMessage(DownloadItem.Title, statusMessage));
         }
 

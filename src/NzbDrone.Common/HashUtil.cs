@@ -24,7 +24,7 @@ namespace NzbDrone.Common
                     }
                 }
             }
-            return String.Format("{0:x8}", mCrc);
+            return string.Format("{0:x8}", mCrc);
         }
     }
 }

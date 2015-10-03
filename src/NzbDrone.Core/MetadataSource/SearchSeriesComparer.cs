@@ -12,12 +12,12 @@ namespace NzbDrone.Core.MetadataSource
         private static readonly Regex RegexCleanCountryYearPostfix = new Regex(@"(?<=.+)( \([A-Z]{2}\)| \(\d{4}\)| \([A-Z]{2}\) \(\d{4}\))$", RegexOptions.Compiled);
         private static readonly Regex ArticleRegex = new Regex(@"^(a|an|the)\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public String SearchQuery { get; private set; }
+        public string SearchQuery { get; private set; }
 
-        private readonly String _searchQueryWithoutYear;
-        private Int32? _year;
+        private readonly string _searchQueryWithoutYear;
+        private int? _year;
 
-        public SearchSeriesComparer(String searchQuery)
+        public SearchSeriesComparer(string searchQuery)
         {
             SearchQuery = searchQuery;
             
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.MetadataSource
             if (match.Success)
             {
                 _searchQueryWithoutYear = match.Groups["query"].Value.ToLowerInvariant();
-                _year = Int32.Parse(match.Groups["year"].Value);
+                _year = int.Parse(match.Groups["year"].Value);
             }
             else
             {
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.MetadataSource
             return Compare(x, y, s => SearchQuery.LevenshteinDistanceClean(s.Title) - GetYearFactor(s));
         }
         
-        public Int32 Compare<T>(Series x, Series y, Func<Series,T> keySelector)
+        public int Compare<T>(Series x, Series y, Func<Series,T> keySelector)
             where T : IComparable<T>
         {
             var keyX = keySelector(x);
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.MetadataSource
             return keyX.CompareTo(keyY);
         }
 
-        public Int32 CompareWithYear(Series x, Series y, Predicate<Series> canMatch)
+        public int CompareWithYear(Series x, Series y, Predicate<Series> canMatch)
         {
             var matchX = canMatch(x);
             var matchY = canMatch(y);
@@ -88,14 +88,14 @@ namespace NzbDrone.Core.MetadataSource
             return matchX.CompareTo(matchY);
         }
 
-        private String CleanPunctuation(String title)
+        private string CleanPunctuation(string title)
         {
             title = RegexCleanPunctuation.Replace(title, "");
 
             return title.ToLowerInvariant();
         }
 
-        private String CleanTitle(String title)
+        private string CleanTitle(string title)
         {
             title = RegexCleanPunctuation.Replace(title, "");
             title = RegexCleanCountryYearPostfix.Replace(title, "");
@@ -103,14 +103,14 @@ namespace NzbDrone.Core.MetadataSource
             return title.ToLowerInvariant();
         }
 
-        private String CleanArticles(String title)
+        private string CleanArticles(string title)
         {
             title = ArticleRegex.Replace(title, "");
 
             return title.Trim().ToLowerInvariant();
         }
 
-        private Int32 GetYearFactor(Series series)
+        private int GetYearFactor(Series series)
         {
             if (_year.HasValue)
             {

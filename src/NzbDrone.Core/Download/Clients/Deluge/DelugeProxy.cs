@@ -12,56 +12,56 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 {
     public interface IDelugeProxy
     {
-        String GetVersion(DelugeSettings settings);
-        Dictionary<String, Object> GetConfig(DelugeSettings settings);
+        string GetVersion(DelugeSettings settings);
+        Dictionary<string, object> GetConfig(DelugeSettings settings);
         DelugeTorrent[] GetTorrents(DelugeSettings settings);
-        DelugeTorrent[] GetTorrentsByLabel(String label, DelugeSettings settings);
-        String[] GetAvailablePlugins(DelugeSettings settings);
-        String[] GetEnabledPlugins(DelugeSettings settings);
-        String[] GetAvailableLabels(DelugeSettings settings);
-        void SetLabel(String hash, String label, DelugeSettings settings);
-        void SetTorrentConfiguration(String hash, String key, Object value, DelugeSettings settings);
-        void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings);
-        void AddLabel(String label, DelugeSettings settings);
-        String AddTorrentFromMagnet(String magnetLink, DelugeSettings settings);
-        String AddTorrentFromFile(String filename, Byte[] fileContent, DelugeSettings settings);
-        Boolean RemoveTorrent(String hash, Boolean removeData, DelugeSettings settings);
-        void MoveTorrentToTopInQueue(String hash, DelugeSettings settings);
+        DelugeTorrent[] GetTorrentsByLabel(string label, DelugeSettings settings);
+        string[] GetAvailablePlugins(DelugeSettings settings);
+        string[] GetEnabledPlugins(DelugeSettings settings);
+        string[] GetAvailableLabels(DelugeSettings settings);
+        void SetLabel(string hash, string label, DelugeSettings settings);
+        void SetTorrentConfiguration(string hash, string key, object value, DelugeSettings settings);
+        void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings);
+        void AddLabel(string label, DelugeSettings settings);
+        string AddTorrentFromMagnet(string magnetLink, DelugeSettings settings);
+        string AddTorrentFromFile(string filename, byte[] fileContent, DelugeSettings settings);
+        bool RemoveTorrent(string hash, bool removeData, DelugeSettings settings);
+        void MoveTorrentToTopInQueue(string hash, DelugeSettings settings);
     }
 
     public class DelugeProxy : IDelugeProxy
     {
-        private static readonly String[] requiredProperties = new String[] { "hash", "name", "state", "progress", "eta", "message", "is_finished", "save_path", "total_size", "total_done", "time_added", "active_time", "ratio", "is_auto_managed", "stop_at_ratio", "remove_at_ratio", "stop_ratio" };
+        private static readonly string[] requiredProperties = new string[] { "hash", "name", "state", "progress", "eta", "message", "is_finished", "save_path", "total_size", "total_done", "time_added", "active_time", "ratio", "is_auto_managed", "stop_at_ratio", "remove_at_ratio", "stop_ratio" };
 
         private readonly Logger _logger;
 
         private string _authPassword;
         private CookieContainer _authCookieContainer;
 
-        private static Int32 _callId;
+        private static int _callId;
 
         public DelugeProxy(Logger logger)
         {
             _logger = logger;
         }
 
-        public String GetVersion(DelugeSettings settings)
+        public string GetVersion(DelugeSettings settings)
         {
-            var response = ProcessRequest<String>(settings, "daemon.info");
+            var response = ProcessRequest<string>(settings, "daemon.info");
 
             return response.Result;
         }
 
-        public Dictionary<String, Object> GetConfig(DelugeSettings settings)
+        public Dictionary<string, object> GetConfig(DelugeSettings settings)
         {
-            var response = ProcessRequest<Dictionary<String, Object>>(settings, "core.get_config");
+            var response = ProcessRequest<Dictionary<string, object>>(settings, "core.get_config");
 
             return response.Result;
         }
 
         public DelugeTorrent[] GetTorrents(DelugeSettings settings)
         {
-            var filter = new Dictionary<String, Object>();
+            var filter = new Dictionary<string, object>();
 
             // TODO: get_torrents_status returns the files as well, which starts to cause deluge timeouts when you get enough season packs.
             //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
@@ -70,9 +70,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return GetTorrents(response.Result);
         }
 
-        public DelugeTorrent[] GetTorrentsByLabel(String label, DelugeSettings settings)
+        public DelugeTorrent[] GetTorrentsByLabel(string label, DelugeSettings settings)
         {
-            var filter = new Dictionary<String, Object>();
+            var filter = new Dictionary<string, object>();
             filter.Add("label", label);
 
             //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
@@ -81,83 +81,83 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return GetTorrents(response.Result);
         }
 
-        public String AddTorrentFromMagnet(String magnetLink, DelugeSettings settings)
+        public string AddTorrentFromMagnet(string magnetLink, DelugeSettings settings)
         {
-            var response = ProcessRequest<String>(settings, "core.add_torrent_magnet", magnetLink, new JObject());
+            var response = ProcessRequest<string>(settings, "core.add_torrent_magnet", magnetLink, new JObject());
 
             return response.Result;
         }
 
-        public String AddTorrentFromFile(String filename, Byte[] fileContent, DelugeSettings settings)
+        public string AddTorrentFromFile(string filename, byte[] fileContent, DelugeSettings settings)
         {
-            var response = ProcessRequest<String>(settings, "core.add_torrent_file", filename, Convert.ToBase64String(fileContent), new JObject());
+            var response = ProcessRequest<string>(settings, "core.add_torrent_file", filename, Convert.ToBase64String(fileContent), new JObject());
 
             return response.Result;
         }
 
-        public Boolean RemoveTorrent(String hashString, Boolean removeData, DelugeSettings settings)
+        public bool RemoveTorrent(string hashString, bool removeData, DelugeSettings settings)
         {
-            var response = ProcessRequest<Boolean>(settings, "core.remove_torrent", hashString, removeData);
+            var response = ProcessRequest<bool>(settings, "core.remove_torrent", hashString, removeData);
 
             return response.Result;
         }
 
-        public void MoveTorrentToTopInQueue(String hash, DelugeSettings settings)
+        public void MoveTorrentToTopInQueue(string hash, DelugeSettings settings)
         {
-            ProcessRequest<Object>(settings, "core.queue_top", (Object)new String[] { hash });
+            ProcessRequest<object>(settings, "core.queue_top", (object)new string[] { hash });
         }
 
-        public String[] GetAvailablePlugins(DelugeSettings settings)
+        public string[] GetAvailablePlugins(DelugeSettings settings)
         {
-            var response = ProcessRequest<String[]>(settings, "core.get_available_plugins");
+            var response = ProcessRequest<string[]>(settings, "core.get_available_plugins");
 
             return response.Result;
         }
 
-        public String[] GetEnabledPlugins(DelugeSettings settings)
+        public string[] GetEnabledPlugins(DelugeSettings settings)
         {
-            var response = ProcessRequest<String[]>(settings, "core.get_enabled_plugins");
+            var response = ProcessRequest<string[]>(settings, "core.get_enabled_plugins");
 
             return response.Result;
         }
 
-        public String[] GetAvailableLabels(DelugeSettings settings)
+        public string[] GetAvailableLabels(DelugeSettings settings)
         {
-            var response = ProcessRequest<String[]>(settings, "label.get_labels");
+            var response = ProcessRequest<string[]>(settings, "label.get_labels");
 
             return response.Result;
         }
 
-        public void SetTorrentConfiguration(String hash, String key, Object value, DelugeSettings settings)
+        public void SetTorrentConfiguration(string hash, string key, object value, DelugeSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add(key, value);
 
-            ProcessRequest<Object>(settings, "core.set_torrent_options", new String[] { hash }, arguments);
+            ProcessRequest<object>(settings, "core.set_torrent_options", new string[] { hash }, arguments);
         }
 
-        public void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings)
+        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, DelugeSettings settings)
         {
             if (seedConfiguration.Ratio != null)
             {
-                var ratioArguments = new Dictionary<String, Object>();
+                var ratioArguments = new Dictionary<string, object>();
                 ratioArguments.Add("stop_ratio", seedConfiguration.Ratio.Value);
 
-                ProcessRequest<Object>(settings, "core.set_torrent_options", new String[]{hash}, ratioArguments);
+                ProcessRequest<object>(settings, "core.set_torrent_options", new string[]{hash}, ratioArguments);
             }
         }
 
-        public void AddLabel(String label, DelugeSettings settings)
+        public void AddLabel(string label, DelugeSettings settings)
         {
-            ProcessRequest<Object>(settings, "label.add", label);
+            ProcessRequest<object>(settings, "label.add", label);
         }
 
-        public void SetLabel(String hash, String label, DelugeSettings settings)
+        public void SetLabel(string hash, string label, DelugeSettings settings)
         {
-            ProcessRequest<Object>(settings, "label.set_torrent", hash, label);
+            ProcessRequest<object>(settings, "label.set_torrent", hash, label);
         }
 
-        protected DelugeResponse<TResult> ProcessRequest<TResult>(DelugeSettings settings, String action, params Object[] arguments)
+        protected DelugeResponse<TResult> ProcessRequest<TResult>(DelugeSettings settings, string action, params object[] arguments)
         {
             var client = BuildClient(settings);
 
@@ -204,14 +204,14 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return response;
         }
         
-        private DelugeResponse<TResult> ProcessRequest<TResult>(IRestClient client, String action, Object[] arguments)
+        private DelugeResponse<TResult> ProcessRequest<TResult>(IRestClient client, string action, object[] arguments)
         {
             var request = new RestRequest(Method.POST);
             request.Resource = "json";
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
-            var data = new Dictionary<String, Object>();
+            var data = new Dictionary<string, object>();
             data.Add("id", GetCallId());
             data.Add("method", action);
 
@@ -232,14 +232,14 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var protocol = settings.UseSsl ? "https" : "http";
 
-            String url;
+            string url;
             if (!settings.UrlBase.IsNullOrWhiteSpace())
             {
-                url = String.Format(@"{0}://{1}:{2}/{3}", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
+                url = string.Format(@"{0}://{1}:{2}/{3}", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
             }
             else
             {
-                url = String.Format(@"{0}://{1}:{2}", protocol, settings.Host, settings.Port);
+                url = string.Format(@"{0}://{1}:{2}", protocol, settings.Host, settings.Port);
             }
 
             var restClient = RestClientFactory.BuildClient(url);
@@ -262,7 +262,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             restClient.CookieContainer = new CookieContainer();
 
-            var result = ProcessRequest<Boolean>(restClient, "auth.login", new Object[] { _authPassword });
+            var result = ProcessRequest<bool>(restClient, "auth.login", new object[] { _authPassword });
 
             if (!result.Result)
             {
@@ -277,23 +277,23 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         private void ConnectDaemon(IRestClient restClient)
         {
-            var resultConnected = ProcessRequest<Boolean>(restClient, "web.connected", new Object[0]);
+            var resultConnected = ProcessRequest<bool>(restClient, "web.connected", new object[0]);
 
             if (resultConnected.Result)
             {
                 return;
             }
 
-            var resultHosts = ProcessRequest<List<Object[]>>(restClient, "web.get_hosts", new Object[0]);
+            var resultHosts = ProcessRequest<List<object[]>>(restClient, "web.get_hosts", new object[0]);
 
             if (resultHosts.Result != null)
             {
                 // The returned list contains the id, ip, port and status of each available connection. We want the 127.0.0.1
-                var connection = resultHosts.Result.FirstOrDefault(v => "127.0.0.1" == (v[1] as String));
+                var connection = resultHosts.Result.FirstOrDefault(v => "127.0.0.1" == (v[1] as string));
 
                 if (connection != null)
                 {
-                    ProcessRequest<Object>(restClient, "web.connect", new Object[] { connection[0] });
+                    ProcessRequest<object>(restClient, "web.connect", new object[] { connection[0] });
                 }
                 else
                 {
@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
         }
 
-        private Int32 GetCallId()
+        private int GetCallId()
         {
             return System.Threading.Interlocked.Increment(ref _callId);
         }

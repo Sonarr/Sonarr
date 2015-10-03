@@ -32,13 +32,13 @@ namespace NzbDrone.Host.AccessControl
             if (!_configFileProvider.EnableSsl) return;
             if (IsRegistered()) return;
 
-            if (String.IsNullOrWhiteSpace(_configFileProvider.SslCertHash))
+            if (string.IsNullOrWhiteSpace(_configFileProvider.SslCertHash))
             {
                 _logger.Warn("Unable to enable SSL, SSL Cert Hash is required");
                 return;
             }
 
-            var arguments = String.Format("http add sslcert ipport=0.0.0.0:{0} certhash={1} appid={{{2}}}",
+            var arguments = string.Format("http add sslcert ipport=0.0.0.0:{0} certhash={1} appid={{{2}}}",
                                             _configFileProvider.SslPort,
                                             _configFileProvider.SslCertHash,
                                             APP_ID);
@@ -50,7 +50,7 @@ namespace NzbDrone.Host.AccessControl
         private bool IsRegistered()
         {
             var ipPort = "0.0.0.0:" + _configFileProvider.SslPort;
-            var arguments = String.Format("http show sslcert ipport={0}", ipPort);
+            var arguments = string.Format("http show sslcert ipport={0}", ipPort);
 
             var output = _netshProvider.Run(arguments);
 
@@ -79,7 +79,7 @@ namespace NzbDrone.Host.AccessControl
         private void Unregister()
         {
             var ipPort = "0.0.0.0:" + _configFileProvider.SslPort;
-            var arguments = String.Format("http delete sslcert ipport={0}", ipPort);
+            var arguments = string.Format("http delete sslcert ipport={0}", ipPort);
 
             _netshProvider.Run(arguments);
         }

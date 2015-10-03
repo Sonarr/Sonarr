@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
             {
-                SceneTitles = new List<String>() { "Monkey+Island" },
+                SceneTitles = new List<string>() { "Monkey+Island" },
                 AbsoluteEpisodeNumber = 100
             };
         }

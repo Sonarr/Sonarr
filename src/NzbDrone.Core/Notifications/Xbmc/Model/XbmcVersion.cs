@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Notifications.Xbmc.Model
 
         public static bool operator ==(XbmcVersion x, XbmcVersion y)
         {
-            var xObj = (Object)x;
+            var xObj = (object)x;
             var yObj = (object)y;
 
             if (xObj == null || yObj == null)
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Notifications.Xbmc.Model
 
         public override string ToString()
         {
-            return String.Format("{0}.{1}.{2}", Major, Minor, Patch);
+            return string.Format("{0}.{1}.{2}", Major, Minor, Patch);
         }
 
         public override int GetHashCode()

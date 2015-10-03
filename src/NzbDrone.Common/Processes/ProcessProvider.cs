@@ -23,8 +23,8 @@ namespace NzbDrone.Common.Processes
         void SetPriority(int processId, ProcessPriorityClass priority);
         void KillAll(string processName);
         void Kill(int processId);
-        Boolean Exists(int processId);
-        Boolean Exists(string processName);
+        bool Exists(int processId);
+        bool Exists(string processName);
         ProcessPriorityClass GetCurrentProcessPriority();
         Process Start(string path, string args = null, StringDictionary environmentVariables = null, Action<string> onOutputDataReceived = null, Action<string> onErrorDataReceived = null);
         Process SpawnNewProcess(string path, string args = null, StringDictionary environmentVariables = null);
@@ -58,7 +58,7 @@ namespace NzbDrone.Common.Processes
             return GetProcessById(processId) != null;
         }
 
-        public Boolean Exists(string processName)
+        public bool Exists(string processName)
         {
             return GetProcessesByName(processName).Any();
         }
@@ -342,7 +342,7 @@ namespace NzbDrone.Common.Processes
 
         private string GetMonoArgs(string path, string args)
         {
-            return String.Format("--debug {0} {1}", path, args);
+            return string.Format("--debug {0} {1}", path, args);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace NzbDrone.Api.Restrictions
             });
         }
 
-        private RestrictionResource Get(Int32 id)
+        private RestrictionResource Get(int id)
         {
             return _restrictionService.Get(id).InjectTo<RestrictionResource>();
         }
@@ -43,7 +43,7 @@ namespace NzbDrone.Api.Restrictions
             return ToListResource(_restrictionService.All);
         }
 
-        private Int32 Create(RestrictionResource resource)
+        private int Create(RestrictionResource resource)
         {
             return _restrictionService.Add(resource.InjectTo<Restriction>()).Id;
         }
@@ -53,7 +53,7 @@ namespace NzbDrone.Api.Restrictions
             _restrictionService.Update(resource.InjectTo<Restriction>());
         }
 
-        private void Delete(Int32 id)
+        private void Delete(int id)
         {
             _restrictionService.Delete(id);
         }

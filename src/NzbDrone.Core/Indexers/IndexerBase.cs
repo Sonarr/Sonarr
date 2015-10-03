@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Indexers
         public abstract string Name { get; }
         public abstract DownloadProtocol Protocol { get; }
 
-        public abstract Boolean SupportsRss { get; }
-        public abstract Boolean SupportsSearch { get; }
+        public abstract bool SupportsRss { get; }
+        public abstract bool SupportsSearch { get; }
 
         public IndexerBase(IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
         {

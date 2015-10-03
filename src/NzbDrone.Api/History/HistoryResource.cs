@@ -15,7 +15,7 @@ namespace NzbDrone.Api.History
         public int SeriesId { get; set; }
         public string SourceTitle { get; set; }
         public QualityModel Quality { get; set; }
-        public Boolean QualityCutoffNotMet { get; set; }
+        public bool QualityCutoffNotMet { get; set; }
         public DateTime Date { get; set; }
         public string Indexer { get; set; }
         public string ReleaseGroup { get; set; }

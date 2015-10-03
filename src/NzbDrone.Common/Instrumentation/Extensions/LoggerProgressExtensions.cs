@@ -7,19 +7,19 @@ namespace NzbDrone.Common.Instrumentation.Extensions
     {
         public static void ProgressInfo(this Logger logger, string message, params object[] args)
         {
-            var formattedMessage = String.Format(message, args);
+            var formattedMessage = string.Format(message, args);
             LogProgressMessage(logger, LogLevel.Info, formattedMessage);
         }
 
         public static void ProgressDebug(this Logger logger, string message, params object[] args)
         {
-            var formattedMessage = String.Format(message, args);
+            var formattedMessage = string.Format(message, args);
             LogProgressMessage(logger, LogLevel.Debug, formattedMessage);
         }
 
         public static void ProgressTrace(this Logger logger, string message, params object[] args)
         {
-            var formattedMessage = String.Format(message, args);
+            var formattedMessage = string.Format(message, args);
             LogProgressMessage(logger, LogLevel.Trace, formattedMessage);
         }
 

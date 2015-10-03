@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
     {
         private Series _series;
         private LocalEpisode _localEpisode;
-        private String _rootFolder;
+        private string _rootFolder;
 
         [SetUp]
         public void Setup()
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         private void GivenFreeSpace(long? size)
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Returns(size);
         }
 
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenFileSize(100.Megabytes());
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Throws(new TestException());
 
             Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(s => s.GetAvailableSpace(It.IsAny<String>()), Times.Never());
+                  .Verify(s => s.GetAvailableSpace(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             long? freeSpace = null;
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetAvailableSpace(It.IsAny<String>()))
+                  .Setup(s => s.GetAvailableSpace(It.IsAny<string>()))
                   .Returns(freeSpace);
 
             Subject.IsSatisfiedBy(_localEpisode).Accepted.Should().BeTrue();

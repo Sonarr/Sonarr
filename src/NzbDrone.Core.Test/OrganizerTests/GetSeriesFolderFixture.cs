@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("Venture Bros.", "{Series.Title}", "Venture.Bros")]
         [TestCase(".hack", "{Series.Title}", "hack")]
         [TestCase("30 Rock", ".{Series.Title}.", "30.Rock")]
-        public void should_use_seriesFolderFormat_to_build_folder_name(String seriesTitle, String format, String expected)
+        public void should_use_seriesFolderFormat_to_build_folder_name(string seriesTitle, string format, string expected)
         {
             namingConfig.SeriesFolderFormat = format;
 

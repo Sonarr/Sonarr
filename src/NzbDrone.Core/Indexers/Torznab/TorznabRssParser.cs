@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 {
     public class TorznabRssParser : TorrentRssParser
     {
-        public const String ns = "{http://torznab.com/schemas/2015/feed}";
+        public const string ns = "{http://torznab.com/schemas/2015/feed}";
 
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
@@ -57,12 +57,12 @@ namespace NzbDrone.Core.Indexers.Torznab
         }
 
 
-        protected override String GetInfoUrl(XElement item)
+        protected override string GetInfoUrl(XElement item)
         {
             return ParseUrl(item.TryGetValue("comments").TrimEnd("#comments"));
         }
 
-        protected override String GetCommentUrl(XElement item)
+        protected override string GetCommentUrl(XElement item)
         {
             return ParseUrl(item.TryGetValue("comments"));
         }
@@ -111,12 +111,12 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             return 0;
         }
-        protected override String GetInfoHash(XElement item)
+        protected override string GetInfoHash(XElement item)
         {
             return TryGetTorznabAttribute(item, "infohash");
         }
 
-        protected override String GetMagnetUrl(XElement item)
+        protected override string GetMagnetUrl(XElement item)
         {
             return TryGetTorznabAttribute(item, "magneturl");
         }
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             return base.GetPeers(item);
         }
 
-        protected String TryGetTorznabAttribute(XElement item, String key, String defaultValue = "")
+        protected string TryGetTorznabAttribute(XElement item, string key, string defaultValue = "")
         {
             var attr = item.Elements(ns + "attr").SingleOrDefault(e => e.Attribute("name").Value.Equals(key, StringComparison.CurrentCultureIgnoreCase));
 

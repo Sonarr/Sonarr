@@ -45,7 +45,7 @@ namespace NzbDrone.Common.Extensions
             }
 
             if (firstPath.Equals(secondPath, comparison.Value)) return true;
-            return String.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), comparison.Value);
+            return string.Equals(firstPath.CleanFilePath(), secondPath.CleanFilePath(), comparison.Value);
         }
 
         public static string GetRelativePath(this string parentPath, string childPath)

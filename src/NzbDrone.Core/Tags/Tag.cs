@@ -5,6 +5,6 @@ namespace NzbDrone.Core.Tags
 {
     public class Tag : ModelBase
     {
-        public String Label { get; set; }
+        public string Label { get; set; }
     }
 }

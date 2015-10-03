@@ -24,7 +24,7 @@ namespace NzbDrone.Common.Test
         [TestCase("/rooted/linux/path", OsPathKind.Unix)]
         [TestCase("/", OsPathKind.Unix)]
         [TestCase("linux/path", OsPathKind.Unix)]
-        public void should_auto_detect_kind(String path, OsPathKind kind)
+        public void should_auto_detect_kind(string path, OsPathKind kind)
         {
             var result = new OsPath(path);
 
@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Test
         [TestCase("/rooted/linux/path", "/rooted/linux/")]
         [TestCase("/rooted", "/")]
         [TestCase("/", null)]
-        public void should_return_parent_directory(String path, String expectedParent)
+        public void should_return_parent_directory(string path, string expectedParent)
         {
             var osPath = new OsPath(path);
 
@@ -83,7 +83,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\blaat")]
         [TestCase("/rooted/linux/path")]
         [TestCase("/")]
-        public void should_detect_rooted_ospaths(String path)
+        public void should_detect_rooted_ospaths(string path)
         {
             var osPath = new OsPath(path);
 
@@ -94,7 +94,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"rooted\windows\path")]
         [TestCase(@"path")]
         [TestCase("linux/path")]
-        public void should_detect_unrooted_ospaths(String path)
+        public void should_detect_unrooted_ospaths(string path)
         {
             var osPath = new OsPath(path);
 
@@ -110,7 +110,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"rooted\windows\path", "path")]
         [TestCase(@"path", "path")]
         [TestCase("linux/path", "path")]
-        public void should_return_filename(String path, String expectedFilePath)
+        public void should_return_filename(string path, string expectedFilePath)
         {
             var osPath = new OsPath(path);
 
@@ -154,7 +154,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"/Test/", @"sub/test/", @"/Test/sub/test/")]
         [TestCase(@"/Test/", @"/Test2/", @"/Test2/")]
         [TestCase(@"C:\Test", "", @"C:\Test")]
-        public void should_combine_path(String left, String right, String expectedResult)
+        public void should_combine_path(string left, string right, string expectedResult)
         {
             var osPathLeft = new OsPath(left);
             var osPathRight = new OsPath(right);
@@ -197,7 +197,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\Test\Data\", @"C:\Test\Data\Sub\Folder", @"Sub\Folder")]
         [TestCase(@"C:\Test\Data\", @"C:\Test\Data2\Sub\Folder", @"..\Data2\Sub\Folder")]
         [TestCase(@"/parent/folder", @"/parent/folder/Sub/Folder", @"Sub/Folder")]
-        public void should_create_relative_path(String parent, String child, String expected)
+        public void should_create_relative_path(string parent, string child, string expected)
         {
             var left = new OsPath(child);
             var right = new OsPath(parent);
@@ -220,7 +220,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\Test\", @"C:\Test", true)]
         [TestCase(@"C:\Test\", @"C:\Test\Contains\", true)]
         [TestCase(@"C:\Test\", @"C:\Other\", false)]
-        public void should_evaluate_contains(String parent, String child, Boolean expectedResult)
+        public void should_evaluate_contains(string parent, string child, bool expectedResult)
         {
             var left = new OsPath(parent);
             var right = new OsPath(child);

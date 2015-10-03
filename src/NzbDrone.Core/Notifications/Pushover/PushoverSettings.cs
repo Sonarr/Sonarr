@@ -25,16 +25,16 @@ namespace NzbDrone.Core.Notifications.Pushover
 
         //TODO: Get Pushover to change our app name (or create a new app) when we have a new logo
         [FieldDefinition(0, Label = "API Key", HelpLink = "https://pushover.net/apps/clone/nzbdrone")]
-        public String ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         [FieldDefinition(1, Label = "User Key", HelpLink = "https://pushover.net/")]
-        public String UserKey { get; set; }
+        public string UserKey { get; set; }
 
         [FieldDefinition(2, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(PushoverPriority) )]
-        public Int32 Priority { get; set; }
+        public int Priority { get; set; }
 
         [FieldDefinition(3, Label = "Sound", Type = FieldType.Textbox, HelpText = "Notification sound, leave blank to use the default", HelpLink = "https://pushover.net/api#sounds")]
-        public String Sound { get; set; }
+        public string Sound { get; set; }
 
         public bool IsValid
         {

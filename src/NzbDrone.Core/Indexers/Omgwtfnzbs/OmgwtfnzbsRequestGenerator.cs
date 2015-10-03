@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 {
     public class OmgwtfnzbsRequestGenerator : IIndexerRequestGenerator
     {
-        public String BaseUrl { get; set; }
+        public string BaseUrl { get; set; }
         public OmgwtfnzbsSettings Settings { get; set; }
 
         public OmgwtfnzbsRequestGenerator()
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(String.Format("{0}+S{1:00}E{2:00}",
+                pageableRequests.AddIfNotNull(GetPagedRequests(string.Format("{0}+S{1:00}E{2:00}",
                     queryTitle,
                     searchCriteria.SeasonNumber,
                     searchCriteria.EpisodeNumber)));
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(String.Format("{0}+S{1:00}",
+                pageableRequests.AddIfNotNull(GetPagedRequests(string.Format("{0}+S{1:00}",
                     queryTitle,
                     searchCriteria.SeasonNumber)));
             }
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(String.Format("{0}+{1:yyyy MM dd}",
+                pageableRequests.AddIfNotNull(GetPagedRequests(string.Format("{0}+{1:yyyy MM dd}",
                     queryTitle,
                     searchCriteria.AirDate)));
             }
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return pageableRequests;
         }
 
-        private IEnumerable<IndexerRequest> GetPagedRequests(String query)
+        private IEnumerable<IndexerRequest> GetPagedRequests(string query)
         {
             var url = new StringBuilder();
             url.AppendFormat("{0}?catid=19,20&user={1}&api={2}&eng=1&delay={3}", BaseUrl, Settings.Username, Settings.ApiKey, Settings.Delay);

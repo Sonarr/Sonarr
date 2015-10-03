@@ -61,15 +61,15 @@ namespace NzbDrone.Core.Datastore.Migration
             foreach (Match match in matches)
             {
                 var tokenMatch = GetTokenMatch(match);
-                var qualityFullToken = String.Format("Quality{0}Full", tokenMatch.Separator); ;
+                var qualityFullToken = string.Format("Quality{0}Full", tokenMatch.Separator); ;
 
-                if (tokenMatch.Token.All(t => !Char.IsLetter(t) || Char.IsLower(t)))
+                if (tokenMatch.Token.All(t => !char.IsLetter(t) || char.IsLower(t)))
                 {
-                    qualityFullToken = String.Format("quality{0}full", tokenMatch.Separator);
+                    qualityFullToken = string.Format("quality{0}full", tokenMatch.Separator);
                 }
-                else if (tokenMatch.Token.All(t => !Char.IsLetter(t) || Char.IsUpper(t)))
+                else if (tokenMatch.Token.All(t => !char.IsLetter(t) || char.IsUpper(t)))
                 {
-                    qualityFullToken = String.Format("QUALITY{0}FULL", tokenMatch.Separator);
+                    qualityFullToken = string.Format("QUALITY{0}FULL", tokenMatch.Separator);
                 }
 
                 result = result.Replace(match.Groups["token"].Value, qualityFullToken);

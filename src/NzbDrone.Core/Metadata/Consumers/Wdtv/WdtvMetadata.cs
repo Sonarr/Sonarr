@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
 
             _logger.Debug("Generating Episode Metadata for: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
 
-            var xmlResult = String.Empty;
+            var xmlResult = string.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
             {
                 var sb = new StringBuilder();
@@ -173,14 +173,14 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
 
                     var details = new XElement("details");
                     details.Add(new XElement("id", series.Id));
-                    details.Add(new XElement("title", String.Format("{0} - {1}x{2:00} - {3}", series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title)));
+                    details.Add(new XElement("title", string.Format("{0} - {1}x{2:00} - {3}", series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title)));
                     details.Add(new XElement("series_name", series.Title));
                     details.Add(new XElement("episode_name", episode.Title));
                     details.Add(new XElement("season_number", episode.SeasonNumber.ToString("00")));
                     details.Add(new XElement("episode_number", episode.EpisodeNumber.ToString("00")));
                     details.Add(new XElement("firstaired", episode.AirDate));
-                    details.Add(new XElement("genre", String.Join(" / ", series.Genres)));
-                    details.Add(new XElement("actor", String.Join(" / ", series.Actors.ConvertAll(c => c.Name + " - " + c.Character))));
+                    details.Add(new XElement("genre", string.Join(" / ", series.Genres)));
+                    details.Add(new XElement("actor", string.Join(" / ", series.Actors.ConvertAll(c => c.Name + " - " + c.Character))));
                     details.Add(new XElement("overview", episode.Overview));
 
 
@@ -283,9 +283,9 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
             return Path.ChangeExtension(episodeFilePath, "metathumb");
         }
 
-        private Dictionary<Int32, String> GetSeasonFolders(Series series)
+        private Dictionary<int, string> GetSeasonFolders(Series series)
         {
-            var seasonFolderMap = new Dictionary<Int32, String>();
+            var seasonFolderMap = new Dictionary<int, string>();
 
             foreach (var folder in _diskProvider.GetDirectories(series.Path))
             {
@@ -303,7 +303,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                     else
                     {
                         int matchedSeason;
-                        if (Int32.TryParse(seasonNumber, out matchedSeason))
+                        if (int.TryParse(seasonNumber, out matchedSeason))
                         {
                             seasonFolderMap[matchedSeason] = folder;
                         }

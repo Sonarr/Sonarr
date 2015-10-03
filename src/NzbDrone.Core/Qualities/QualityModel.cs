@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Qualities
 
         public override string ToString()
         {
-            return String.Format("{0} {1}", Quality, Revision);
+            return string.Format("{0} {1}", Quality, Revision);
         }
 
         public override int GetHashCode()

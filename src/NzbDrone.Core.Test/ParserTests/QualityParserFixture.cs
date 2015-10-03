@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test, TestCaseSource("SelfQualityParserCases")]
         public void parsing_our_own_quality_enum_name(Quality quality)
         {
-            var fileName = String.Format("My series S01E01 [{0}]", quality.Name);
+            var fileName = string.Format("My series S01E01 [{0}]", quality.Name);
             var result = QualityParser.ParseQuality(fileName);
             result.Quality.Should().Be(quality);
         }
@@ -222,7 +222,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             foreach (var c in new char[] { '-', '.', ' ', '_' })
             {
-                var title = String.Format("My series S01E01 {0}", qualityString.Replace(' ', c));
+                var title = string.Format("My series S01E01 {0}", qualityString.Replace(' ', c));
 
                 ParseAndVerifyQuality(title, quality, false);
             }

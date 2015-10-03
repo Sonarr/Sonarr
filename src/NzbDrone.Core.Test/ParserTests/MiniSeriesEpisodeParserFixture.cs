@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Hatfields and McCoys 2012 Part 1 REPACK 720p HDTV x264 2HD", "Hatfields and McCoys 2012", 1)]
 //        [TestCase("Band.Of.Brothers.EP02.Day.Of.Days.DVDRiP.XviD-DEiTY", "Band.Of.Brothers", 2)]
 //        [TestCase("", "", 0, 0)]
-        public void should_parse_mini_series_episode(String postTitle, String title, Int32 episodeNumber)
+        public void should_parse_mini_series_episode(string postTitle, string title, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();

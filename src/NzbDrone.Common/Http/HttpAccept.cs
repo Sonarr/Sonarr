@@ -8,9 +8,9 @@ namespace NzbDrone.Common.Http
         public static readonly HttpAccept Json = new HttpAccept("application/json");
         public static readonly HttpAccept Html = new HttpAccept("text/html");
         
-        public String Value { get; private set; }
+        public string Value { get; private set; }
 
-        public HttpAccept(String accept)
+        public HttpAccept(string accept)
         {
             Value = accept;
         }

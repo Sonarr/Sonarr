@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Indexers
             return ParseDate(dateString);
         }
 
-        public static List<String> Links(this XElement item)
+        public static List<string> Links(this XElement item)
         {
             var elements = item.Elements("link");
 

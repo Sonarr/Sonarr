@@ -339,7 +339,7 @@ namespace NzbDrone.Common.Exceptron.fastJSON
                     if (o != null && useExtension)
                     {
                         Type tt = o.GetType();
-                        if (tt == typeof(Object))
+                        if (tt == typeof(object))
                             map.Add(p.Name, tt.ToString());
                     }
                     append = true;

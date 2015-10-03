@@ -4,8 +4,8 @@ namespace NzbDrone.Update
 {
     public class UpdateStartupContext
     {
-        public Int32 ProcessId { get; set; }
-        public String ExecutingApplication { get; set; }
-        public String UpdateLocation { get; set; }
+        public int ProcessId { get; set; }
+        public string ExecutingApplication { get; set; }
+        public string UpdateLocation { get; set; }
     }
 }

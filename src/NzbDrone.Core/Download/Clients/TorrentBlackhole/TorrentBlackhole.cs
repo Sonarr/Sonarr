@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
             title = FileNameBuilder.CleanFileName(title);
 
-            var filepath = Path.Combine(Settings.TorrentFolder, String.Format("{0}.torrent", title));
+            var filepath = Path.Combine(Settings.TorrentFolder, string.Format("{0}.torrent", title));
 
             using (var stream = _diskProvider.OpenWriteStream(filepath))
             {

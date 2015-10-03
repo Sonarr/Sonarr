@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Download
             get;
         }
 
-        public abstract String Download(RemoteEpisode remoteEpisode);
+        public abstract string Download(RemoteEpisode remoteEpisode);
         public abstract IEnumerable<DownloadClientItem> GetItems();
         public abstract void RemoveItem(string downloadId, bool deleteData);
         public abstract DownloadClientStatus GetStatus();
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Download
 
         protected abstract void Test(List<ValidationFailure> failures);
 
-        protected ValidationFailure TestFolder(String folder, String propertyName, Boolean mustBeWritable = true)
+        protected ValidationFailure TestFolder(string folder, string propertyName, bool mustBeWritable = true)
         {
             if (!_diskProvider.FolderExists(folder))
             {

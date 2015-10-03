@@ -209,7 +209,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 return new List<ImportResult>
                        {
-                           UnknownSeriesResult(String.Format("Unknown Series for file: {0}", fileInfo.Name), fileInfo.FullName)
+                           UnknownSeriesResult(string.Format("Unknown Series for file: {0}", fileInfo.Name), fileInfo.FullName)
                        };
             }
 

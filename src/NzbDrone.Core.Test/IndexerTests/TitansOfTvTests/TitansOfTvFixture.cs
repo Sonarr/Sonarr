@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
         {
             Mocker.GetMock<IHttpClient>()
                   .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0], System.Net.HttpStatusCode.BadRequest));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0], System.Net.HttpStatusCode.BadRequest));
 
             var results = Subject.FetchRecent();
 
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
         {
             Mocker.GetMock<IHttpClient>()
                   .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0], System.Net.HttpStatusCode.Unauthorized));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0], System.Net.HttpStatusCode.Unauthorized));
 
             var results = Subject.FetchRecent();
 
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
         {
             Mocker.GetMock<IHttpClient>()
                   .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0], System.Net.HttpStatusCode.NotFound));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0], System.Net.HttpStatusCode.NotFound));
 
             var results = Subject.FetchRecent();
 
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TitansOfTvTests
         {
             Mocker.GetMock<IHttpClient>()
                   .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0], System.Net.HttpStatusCode.ServiceUnavailable));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0], System.Net.HttpStatusCode.ServiceUnavailable));
 
             var results = Subject.FetchRecent();
 

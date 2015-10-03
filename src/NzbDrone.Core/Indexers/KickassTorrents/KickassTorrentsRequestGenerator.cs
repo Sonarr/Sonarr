@@ -11,8 +11,8 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
     {
         public KickassTorrentsSettings Settings { get; set; }
 
-        public Int32 MaxPages { get; set; }
-        public Int32 PageSize { get; set; }
+        public int MaxPages { get; set; }
+        public int PageSize { get; set; }
 
         public KickassTorrentsRequestGenerator()
         {
@@ -38,12 +38,12 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv",
-                    String.Format("season:{0}", searchCriteria.SeasonNumber),
-                    String.Format("episode:{0}", searchCriteria.EpisodeNumber)));
+                    string.Format("season:{0}", searchCriteria.SeasonNumber),
+                    string.Format("episode:{0}", searchCriteria.EpisodeNumber)));
 
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
-                    String.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber),
+                    string.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber),
                     "category:tv"));
             }
 
@@ -59,12 +59,12 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv",
-                    String.Format("season:{0}", searchCriteria.SeasonNumber)));
+                    string.Format("season:{0}", searchCriteria.SeasonNumber)));
 
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv",
-                    String.Format("S{0:00}", searchCriteria.SeasonNumber)));
+                    string.Format("S{0:00}", searchCriteria.SeasonNumber)));
             }
 
             return pageableRequests;
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             {
                 pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
-                    String.Format("{0:yyyy-MM-dd}", searchCriteria.AirDate),
+                    string.Format("{0:yyyy-MM-dd}", searchCriteria.AirDate),
                     "category:tv"));
             }
 
@@ -104,26 +104,26 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             return pageableRequests;
         }
 
-        private IEnumerable<IndexerRequest> GetPagedRequests(Int32 maxPages, String rssType, params String[] searchParameters)
+        private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, string rssType, params string[] searchParameters)
         {
-            String searchUrl = null;
+            string searchUrl = null;
 
             if (searchParameters.Any())
             {
                 // Prevent adding a '/' if no search parameters are specified
                 if (Settings.VerifiedOnly)
                 {
-                    searchUrl = String.Format("/{0} verified:1", String.Join(" ", searchParameters));
+                    searchUrl = string.Format("/{0} verified:1", string.Join(" ", searchParameters));
                 }
                 else
                 {
-                    searchUrl = String.Format("/{0}", String.Join(" ", searchParameters)).Trim();
+                    searchUrl = string.Format("/{0}", string.Join(" ", searchParameters)).Trim();
                 }
             }
 
             if (PageSize == 0)
             {
-                var request = new IndexerRequest(String.Format("{0}/{1}{2}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl), HttpAccept.Rss);
+                var request = new IndexerRequest(string.Format("{0}/{1}{2}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl), HttpAccept.Rss);
                 request.HttpRequest.SuppressHttpError = true;
 
                 yield return request;
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             {
                 for (var page = 0; page < maxPages; page++)
                 {
-                    var request = new IndexerRequest(String.Format("{0}/{1}{2}/{3}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl, page + 1), HttpAccept.Rss);
+                    var request = new IndexerRequest(string.Format("{0}/{1}{2}/{3}/?rss=1&field=time_add&sorder=desc", Settings.BaseUrl.TrimEnd('/'), rssType, searchUrl, page + 1), HttpAccept.Rss);
                     request.HttpRequest.SuppressHttpError = true;
 
                     yield return request;
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             }
         }
 
-        private String PrepareQuery(String query)
+        private string PrepareQuery(string query)
         {
             return query.Replace('+', ' ');
         }

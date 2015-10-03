@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(@"C:\TV");
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FolderExists(It.IsAny<String>()))
+                  .Setup(s => s.FolderExists(It.IsAny<string>()))
                   .Returns(false);
         }
 

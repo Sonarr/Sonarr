@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Validation.Paths
 
             var droneFactory = _configService.DownloadedEpisodesFolder;
 
-            if (String.IsNullOrWhiteSpace(droneFactory)) return true;
+            if (string.IsNullOrWhiteSpace(droneFactory)) return true;
 
             return !droneFactory.PathEquals(context.PropertyValue.ToString());
         }

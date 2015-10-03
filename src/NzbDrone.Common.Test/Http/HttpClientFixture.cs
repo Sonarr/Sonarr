@@ -121,7 +121,7 @@ namespace NzbDrone.Common.Test.Http
         }
 
         [TestCase("Accept", "text/xml, text/rss+xml, application/rss+xml")]
-        public void should_send_headers(String header, String value)
+        public void should_send_headers(string header, string value)
         {
             var request = new HttpRequest("http://eu.httpbin.org/get");
             request.Headers.Add(header, value);

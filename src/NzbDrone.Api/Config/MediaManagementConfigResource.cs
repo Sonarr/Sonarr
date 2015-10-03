@@ -6,20 +6,20 @@ namespace NzbDrone.Api.Config
 {
     public class MediaManagementConfigResource : RestResource
     {
-        public Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
-        public String RecycleBin { get; set; }
-        public Boolean AutoDownloadPropers { get; set; }
-        public Boolean CreateEmptySeriesFolders { get; set; }
+        public bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
+        public string RecycleBin { get; set; }
+        public bool AutoDownloadPropers { get; set; }
+        public bool CreateEmptySeriesFolders { get; set; }
         public FileDateType FileDate { get; set; }
 
-        public Boolean SetPermissionsLinux { get; set; }
-        public String FileChmod { get; set; }
-        public String FolderChmod { get; set; }
-        public String ChownUser { get; set; }
-        public String ChownGroup { get; set; }
+        public bool SetPermissionsLinux { get; set; }
+        public string FileChmod { get; set; }
+        public string FolderChmod { get; set; }
+        public string ChownUser { get; set; }
+        public string ChownGroup { get; set; }
 
-        public Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
-        public Boolean CopyUsingHardlinks { get; set; }
-        public Boolean EnableMediaInfo { get; set; }
+        public bool SkipFreeSpaceCheckWhenImporting { get; set; }
+        public bool CopyUsingHardlinks { get; set; }
+        public bool EnableMediaInfo { get; set; }
     }
 }

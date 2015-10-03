@@ -65,7 +65,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
                     int tvdbId;
 
-                    if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !Int32.TryParse(slug, out tvdbId) || tvdbId <= 0)
+                    if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !int.TryParse(slug, out tvdbId) || tvdbId <= 0)
                     {
                         return new List<Series>();
                     }

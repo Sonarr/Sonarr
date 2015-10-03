@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                                      .Build();
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(e => e.FileExists(It.Is<String>(c => !c.Contains(DELETED_PATH))))
+                  .Setup(e => e.FileExists(It.Is<string>(c => !c.Contains(DELETED_PATH))))
                   .Returns(true);
 
             Mocker.GetMock<IEpisodeService>()

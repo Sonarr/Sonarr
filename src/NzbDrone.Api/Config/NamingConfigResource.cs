@@ -5,8 +5,8 @@ namespace NzbDrone.Api.Config
 {
     public class NamingConfigResource : RestResource
     {
-        public Boolean RenameEpisodes { get; set; }
-        public Int32 MultiEpisodeStyle { get; set; }
+        public bool RenameEpisodes { get; set; }
+        public int MultiEpisodeStyle { get; set; }
         public string StandardEpisodeFormat { get; set; }
         public string DailyEpisodeFormat { get; set; }
         public string AnimeEpisodeFormat { get; set; }

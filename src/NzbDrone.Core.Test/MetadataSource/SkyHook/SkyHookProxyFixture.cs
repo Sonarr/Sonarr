@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         [Test]
         public void getting_details_of_invalid_series()
         {
-            Assert.Throws<SeriesNotFoundException>(() => Subject.GetSeriesInfo(Int32.MaxValue));
+            Assert.Throws<SeriesNotFoundException>(() => Subject.GetSeriesInfo(int.MaxValue));
         }
 
         [Test]
@@ -76,14 +76,14 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             episodeGroup.Should().OnlyContain(c => c.Count() == 1);
 
             episodes.Should().Contain(c => c.SeasonNumber > 0);
-            episodes.Should().Contain(c => !String.IsNullOrWhiteSpace(c.Overview));
+            episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Overview));
 
             foreach (var episode in episodes)
             {
                 ValidateEpisode(episode);
 
                 //if atleast one episdoe has title it means parse it working.
-                episodes.Should().Contain(c => !String.IsNullOrWhiteSpace(c.Title));
+                episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Title));
             }
         }
 

@@ -86,12 +86,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
                     };
             
             Mocker.GetMock<ITorrentFileInfoReader>()
-                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<Byte[]>()))
+                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
                   .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951");
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0]));
         }
 
         protected void GivenRedirectToMagnet()
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new Byte[0], System.Net.HttpStatusCode.SeeOther));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new byte[0], System.Net.HttpStatusCode.SeeOther));
         }
 
         protected void GivenRedirectToTorrent()
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.Is<HttpRequest>(h => h.Url.AbsoluteUri == _downloadUrl)))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new Byte[0], System.Net.HttpStatusCode.Found));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new byte[0], System.Net.HttpStatusCode.Found));
         }
 
         protected void GivenFailedDownload()
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<IUTorrentProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<String>(), It.IsAny<UTorrentSettings>()))
+                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<UTorrentSettings>()))
                 .Callback(() =>
                 {
                     PrepareClientToReturnQueuedItem();
@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
         // Proxy.GetTorrents does not return original url. So item has to be found via magnet url.
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
-        public void Download_should_get_hash_from_magnet_url(String magnetUrl, String expectedHash)
+        public void Download_should_get_hash_from_magnet_url(string magnetUrl, string expectedHash)
         {
             GivenSuccessfulDownload();
 
@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Queued, DownloadItemStatus.Completed, true)]
         [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Started, DownloadItemStatus.Completed, true)]
         [TestCase(UTorrentTorrentStatus.Loaded | UTorrentTorrentStatus.Checked | UTorrentTorrentStatus.Queued | UTorrentTorrentStatus.Paused, DownloadItemStatus.Completed, true)]
-        public void GetItems_should_return_completed_item_as_downloadItemStatus(UTorrentTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, Boolean expectedReadOnly)
+        public void GetItems_should_return_completed_item_as_downloadItemStatus(UTorrentTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, bool expectedReadOnly)
         {
             _completed.Status = apiStatus;
 
@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         [Test]
         public void should_return_status_with_outputdirs()
         {
-            var configItems = new Dictionary<String, String>();
+            var configItems = new Dictionary<string, string>();
             
             configItems.Add("dir_active_download_flag", "true");
             configItems.Add("dir_active_download", @"C:\Downloads\Downloading\utorrent".AsOsAgnostic());

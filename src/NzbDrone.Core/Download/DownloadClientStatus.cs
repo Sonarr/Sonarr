@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Download
 {
     public class DownloadClientStatus
     {
-        public Boolean IsLocalhost { get; set; }
+        public bool IsLocalhost { get; set; }
         public List<OsPath> OutputRootFolders { get; set; }
     }
 }

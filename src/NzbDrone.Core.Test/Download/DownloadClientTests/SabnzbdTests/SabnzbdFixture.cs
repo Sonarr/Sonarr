@@ -107,14 +107,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
                 .Returns((SabnzbdAddResponse)null);
         }
 
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<ISabnzbdProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
                 .Returns(new SabnzbdAddResponse()
                 {
                     Status = true,
@@ -288,7 +288,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         public void Download_should_use_sabRecentTvPriority_when_recentEpisode_is_true()
         {
             Mocker.GetMock<ISabnzbdProxy>()
-                    .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()))
+                    .Setup(s => s.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()))
                     .Returns(new SabnzbdAddResponse());
 
             var remoteEpisode = CreateRemoteEpisode();
@@ -301,14 +301,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             Subject.Download(remoteEpisode);
 
             Mocker.GetMock<ISabnzbdProxy>()
-                  .Verify(v => v.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());
+                  .Verify(v => v.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());
         }
 
         [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE", @"Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
         [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE", @"SubDir\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
         [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv", @"SubDir\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
         [TestCase(@"Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv", @"SubDir\SubDir\Droned.S01E01_Pilot_1080p_WEB-DL-DRONE.mkv")]
-        public void should_return_path_to_jobfolder(String title, String storage)
+        public void should_return_path_to_jobfolder(string title, string storage)
         {
             _completed.Items.First().Title = title;
             _completed.Items.First().Storage = (@"C:\sorted\" + title + @"\" + storage).AsOsAgnostic();
@@ -366,7 +366,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [TestCase(@"Y:\nzbget\root", @"completed", @"vv", @"Y:\nzbget\root\completed\vv")]
         [TestCase(@"/nzbget/root", @"completed/downloads", @"vv", @"/nzbget/root/completed/downloads/vv")]
         [TestCase(@"/nzbget/root", @"completed", @"vv", @"/nzbget/root/completed/vv")]
-        public void should_return_status_with_outputdir(String rootFolder, String completeDir, String categoryDir, String expectedDir)
+        public void should_return_status_with_outputdir(string rootFolder, string completeDir, string categoryDir, string expectedDir)
         {
             _queued.DefaultRootFolder = rootFolder;
             _config.Misc.complete_dir = completeDir;

@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
             
             _logger.Debug("Generating Episode Metadata for: {0}", episodeFile.RelativePath);
 
-            var xmlResult = String.Empty;
+            var xmlResult = string.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
             {
                 var sb = new StringBuilder();
@@ -181,10 +181,10 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
                     var doc = new XDocument();
 
                     var details = new XElement("video");
-                    details.Add(new XElement("title", String.Format("{0} - {1}x{2} - {3}", series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title)));
+                    details.Add(new XElement("title", string.Format("{0} - {1}x{2} - {3}", series.Title, episode.SeasonNumber, episode.EpisodeNumber, episode.Title)));
                     details.Add(new XElement("year", episode.AirDate));
-                    details.Add(new XElement("genre", String.Join(" / ", series.Genres)));
-                    var actors = String.Join(" , ", series.Actors.ConvertAll(c => c.Name + " - " + c.Character).GetRange(0, Math.Min(3, series.Actors.Count)));
+                    details.Add(new XElement("genre", string.Join(" / ", series.Genres)));
+                    var actors = string.Join(" , ", series.Actors.ConvertAll(c => c.Name + " - " + c.Character).GetRange(0, Math.Min(3, series.Actors.Count)));
                     details.Add(new XElement("actors", actors));
                     details.Add(new XElement("description", episode.Overview));
                     details.Add(new XElement("length", series.Runtime));
@@ -263,9 +263,9 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
             return Path.ChangeExtension(episodeFilePath, "jpg");
         }
 
-        private Dictionary<Int32, String> GetSeasonFolders(Series series)
+        private Dictionary<int, string> GetSeasonFolders(Series series)
         {
-            var seasonFolderMap = new Dictionary<Int32, String>();
+            var seasonFolderMap = new Dictionary<int, string>();
 
             foreach (var folder in _diskProvider.GetDirectories(series.Path))
             {
@@ -283,7 +283,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
                     else
                     {
                         int matchedSeason;
-                        if (Int32.TryParse(seasonNumber, out matchedSeason))
+                        if (int.TryParse(seasonNumber, out matchedSeason))
                         {
                             seasonFolderMap[matchedSeason] = folder;
                         }

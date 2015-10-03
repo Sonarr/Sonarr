@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 return DBNull.Value;
             }
 
-            if (context.DbValue is Double)
+            if (context.DbValue is double)
             {
                 return context.DbValue;
             }
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 return DBNull.Value;
             }
 
-            if (dbValue is Double)
+            if (dbValue is double)
             {
                 return dbValue;
             }

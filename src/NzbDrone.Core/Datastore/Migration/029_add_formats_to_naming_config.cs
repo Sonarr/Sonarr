@@ -78,11 +78,11 @@ namespace NzbDrone.Core.Datastore.Migration
                             }
                         }
 
-                        var standardEpisodeFormat = String.Format("{0}{1}{2}", seriesTitlePattern,
+                        var standardEpisodeFormat = string.Format("{0}{1}{2}", seriesTitlePattern,
                                                                              GetNumberStyle(numberStyle).Pattern,
                                                                              episodeTitlePattern);
 
-                        var dailyEpisodeFormat = String.Format("{0}{1}{2}", seriesTitlePattern,
+                        var dailyEpisodeFormat = string.Format("{0}{1}{2}", seriesTitlePattern,
                                                                             dailyEpisodePattern,
                                                                             episodeTitlePattern);
 
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
-                            var text = String.Format("UPDATE NamingConfig " +
+                            var text = string.Format("UPDATE NamingConfig " +
                                                      "SET StandardEpisodeFormat = '{0}', " +
                                                      "DailyEpisodeFormat = '{1}'",
                                                      standardEpisodeFormat,

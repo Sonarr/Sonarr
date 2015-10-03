@@ -10,10 +10,10 @@ namespace NzbDrone.Core.Indexers
     public class TorrentRssParser : RssParser
     {
         // Parse various seeder/leecher/peers formats in the description element to determine number of seeders.
-        public Boolean ParseSeedersInDescription { get; set; }
+        public bool ParseSeedersInDescription { get; set; }
 
         // Use the specified element name to determine the size
-        public String SizeElementName { get; set; }
+        public string SizeElementName { get; set; }
 
         public TorrentRssParser()
         {
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Indexers
             return result;
         }
 
-        protected virtual String GetInfoHash(XElement item)
+        protected virtual string GetInfoHash(XElement item)
         {
             var magnetUrl = GetMagnetUrl(item);
             if (magnetUrl.IsNotNullOrWhiteSpace())
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Indexers
             return null;
         }
 
-        protected virtual String GetMagnetUrl(XElement item)
+        protected virtual string GetMagnetUrl(XElement item)
         {
             var downloadUrl = GetDownloadUrl(item);
             if (downloadUrl.IsNotNullOrWhiteSpace() && downloadUrl.StartsWith("magnet:"))
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Indexers
             return null;
         }
 
-        protected virtual Int32? GetSeeders(XElement item)
+        protected virtual int? GetSeeders(XElement item)
         {
             if (ParseSeedersInDescription && item.Element("description") != null)
             {
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Indexers
 
                 if (matchSeeders.Success)
                 {
-                    return Int32.Parse(matchSeeders.Groups["value"].Value);
+                    return int.Parse(matchSeeders.Groups["value"].Value);
                 }
 
                 var matchPeers = ParsePeersRegex.Match(item.Element("description").Value);
@@ -90,14 +90,14 @@ namespace NzbDrone.Core.Indexers
 
                 if (matchPeers.Success && matchLeechers.Success)
                 {
-                    return Int32.Parse(matchPeers.Groups["value"].Value) - Int32.Parse(matchLeechers.Groups["value"].Value);
+                    return int.Parse(matchPeers.Groups["value"].Value) - int.Parse(matchLeechers.Groups["value"].Value);
                 }
             }
 
             return null;
         }
 
-        protected virtual Int32? GetPeers(XElement item)
+        protected virtual int? GetPeers(XElement item)
         {
             if (ParseSeedersInDescription && item.Element("description") != null)
             {
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Indexers
 
                 if (matchPeers.Success)
                 {
-                    return Int32.Parse(matchPeers.Groups["value"].Value);
+                    return int.Parse(matchPeers.Groups["value"].Value);
                 }
 
                 var matchSeeders = ParseSeedersRegex.Match(item.Element("description").Value);
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Indexers
 
                 if (matchSeeders.Success && matchLeechers.Success)
                 {
-                    return Int32.Parse(matchSeeders.Groups["value"].Value) + Int32.Parse(matchLeechers.Groups["value"].Value);
+                    return int.Parse(matchSeeders.Groups["value"].Value) + int.Parse(matchLeechers.Groups["value"].Value);
                 }
             }
 

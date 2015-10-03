@@ -28,11 +28,11 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                       };
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.GetSeries(It.IsAny<Int32>()))
+                  .Setup(s => s.GetSeries(It.IsAny<int>()))
                   .Returns(_series);
 
             Mocker.GetMock<ISearchForNzb>()
-                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<Int32>(), false))
+                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false))
                   .Returns(new List<DownloadDecision>());
 
             Mocker.GetMock<IProcessDownloadDecisions>()
@@ -52,13 +52,13 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             Subject.Execute(new SeriesSearchCommand{ SeriesId = _series.Id });
 
             Mocker.GetMock<ISearchForNzb>()
-                .Verify(v => v.SeasonSearch(_series.Id, It.IsAny<Int32>(), false), Times.Exactly(_series.Seasons.Count(s => s.Monitored)));
+                .Verify(v => v.SeasonSearch(_series.Id, It.IsAny<int>(), false), Times.Exactly(_series.Seasons.Count(s => s.Monitored)));
         }
 
         [Test]
         public void should_start_with_lower_seasons_first()
         {
-            var seasonOrder = new List<Int32>();
+            var seasonOrder = new List<int>();
 
             _series.Seasons = new List<Season>
                               {
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                               };
 
             Mocker.GetMock<ISearchForNzb>()
-                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<Int32>(), false))
+                  .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false))
                   .Returns(new List<DownloadDecision>())
                   .Callback<int, int, bool>((seriesId, seasonNumber, missingOnly) => seasonOrder.Add(seasonNumber));
 

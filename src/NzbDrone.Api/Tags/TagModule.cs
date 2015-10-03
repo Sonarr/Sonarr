@@ -25,7 +25,7 @@ namespace NzbDrone.Api.Tags
             DeleteResource = Delete;
         }
 
-        private TagResource Get(Int32 id)
+        private TagResource Get(int id)
         {
             return _tagService.GetTag(id).InjectTo<TagResource>();
         }
@@ -35,7 +35,7 @@ namespace NzbDrone.Api.Tags
             return ToListResource(_tagService.All);
         }
 
-        private Int32 Create(TagResource resource)
+        private int Create(TagResource resource)
         {
             return _tagService.Add(resource.InjectTo<Tag>()).Id;
         }
@@ -45,7 +45,7 @@ namespace NzbDrone.Api.Tags
             _tagService.Update(resource.InjectTo<Tag>());
         }
 
-        private void Delete(Int32 id)
+        private void Delete(int id)
         {
             _tagService.Delete(id);
         }

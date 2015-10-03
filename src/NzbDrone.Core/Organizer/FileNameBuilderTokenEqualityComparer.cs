@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace NzbDrone.Core.Organizer
 {
-    public class FileNameBuilderTokenEqualityComparer : IEqualityComparer<String>
+    public class FileNameBuilderTokenEqualityComparer : IEqualityComparer<string>
     {
         public static readonly FileNameBuilderTokenEqualityComparer Instance = new FileNameBuilderTokenEqualityComparer();
 
@@ -15,19 +15,19 @@ namespace NzbDrone.Core.Organizer
             
         }
 
-        public bool Equals(String s1, String s2)
+        public bool Equals(string s1, string s2)
         {
             return SimplifyToken(s1).Equals(SimplifyToken(s2));
         }
 
-        public int GetHashCode(String str)
+        public int GetHashCode(string str)
         {
             return SimplifyToken(str).GetHashCode();
         }
 
         private static string SimplifyToken(string token)
         {
-            return SimpleTokenRegex.Replace(token, String.Empty).ToLower();
+            return SimpleTokenRegex.Replace(token, string.Empty).ToLower();
         }
     }
 }

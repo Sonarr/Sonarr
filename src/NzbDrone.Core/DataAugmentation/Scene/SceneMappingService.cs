@@ -14,7 +14,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        List<String> GetSceneNames(int tvdbId, IEnumerable<Int32> seasonNumbers);
+        List<string> GetSceneNames(int tvdbId, IEnumerable<int> seasonNumbers);
         Nullable<int> FindTvdbId(string title);
         List<SceneMapping> FindByTvdbId(int tvdbId);
         Nullable<Int32> GetSeasonNumber(string title);
@@ -47,13 +47,13 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _logger = logger;
         }
 
-        public List<String> GetSceneNames(int tvdbId, IEnumerable<Int32> seasonNumbers)
+        public List<string> GetSceneNames(int tvdbId, IEnumerable<int> seasonNumbers)
         {
             var names = _findByTvdbIdCache.Find(tvdbId.ToString());
 
             if (names == null)
             {
-                return new List<String>();
+                return new List<string>();
             }
 
             return FilterNonEnglish(names.Where(s => seasonNumbers.Contains(s.SeasonNumber) ||
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             }
         }
 
-        private List<String> FilterNonEnglish(List<String> titles)
+        private List<string> FilterNonEnglish(List<string> titles)
         {
             return titles.Where(title => title.All(c => c <= 255)).ToList();
         }

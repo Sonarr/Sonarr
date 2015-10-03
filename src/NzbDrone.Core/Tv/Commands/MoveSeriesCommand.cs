@@ -5,9 +5,9 @@ namespace NzbDrone.Core.Tv.Commands
 {
     public class MoveSeriesCommand : Command
     {
-        public Int32 SeriesId { get; set; }
-        public String SourcePath { get; set; }
-        public String DestinationPath { get; set; }
-        public String DestinationRootFolder { get; set; }
+        public int SeriesId { get; set; }
+        public string SourcePath { get; set; }
+        public string DestinationPath { get; set; }
+        public string DestinationRootFolder { get; set; }
     }
 }

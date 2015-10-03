@@ -137,7 +137,7 @@ namespace NzbDrone.Api
                 var providerResource = new TProviderResource();
                 providerResource.InjectFrom(providerDefinition);
                 providerResource.Fields = SchemaBuilder.ToSchema(providerDefinition.Settings);
-                providerResource.InfoLink = String.Format("https://github.com/NzbDrone/NzbDrone/wiki/Supported-{0}#{1}",
+                providerResource.InfoLink = string.Format("https://github.com/NzbDrone/NzbDrone/wiki/Supported-{0}#{1}",
                     typeof(TProviderResource).Name.Replace("Resource", "s"),
                     providerDefinition.Implementation.ToLower());
 

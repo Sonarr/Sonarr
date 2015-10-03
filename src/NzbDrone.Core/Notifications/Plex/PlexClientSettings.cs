@@ -25,16 +25,16 @@ namespace NzbDrone.Core.Notifications.Plex
         }
 
         [FieldDefinition(0, Label = "Host")]
-        public String Host { get; set; }
+        public string Host { get; set; }
 
         [FieldDefinition(1, Label = "Port")]
-        public Int32 Port { get; set; }
+        public int Port { get; set; }
 
         [FieldDefinition(2, Label = "Username")]
-        public String Username { get; set; }
+        public string Username { get; set; }
 
         [FieldDefinition(3, Label = "Password")]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
         public bool IsValid
         {

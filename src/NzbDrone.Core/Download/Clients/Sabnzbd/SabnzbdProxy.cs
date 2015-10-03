@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public interface ISabnzbdProxy
     {
-        SabnzbdAddResponse DownloadNzb(Byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
+        SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
         void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
@@ -30,10 +30,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _logger = logger;
         }
 
-        public SabnzbdAddResponse DownloadNzb(Byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings)
+        public SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings)
         {
             var request = new RestRequest(Method.POST);
-            var action = String.Format("mode=addfile&cat={0}&priority={1}", Uri.EscapeDataString(category), priority);
+            var action = string.Format("mode=addfile&cat={0}&priority={1}", Uri.EscapeDataString(category), priority);
 
             request.AddFile("name", nzbData, filename, "application/x-nzb");
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var request = new RestRequest();
 
-            var action = String.Format("mode={0}&name=delete&del_files={1}&value={2}", source, deleteData ? 1 : 0, id);
+            var action = string.Format("mode={0}&name=delete&del_files={1}&value={2}", source, deleteData ? 1 : 0, id);
 
             ProcessRequest(request, action, settings);
         }
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = String.Format("mode=queue&start={0}&limit={1}", start, limit);
+            var action = string.Format("mode=queue&start={0}&limit={1}", start, limit);
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = String.Format("mode=history&start={0}&limit={1}", start, limit);
+            var action = string.Format("mode=history&start={0}&limit={1}", start, limit);
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string RetryDownload(string id, SabnzbdSettings settings)
         {
             var request = new RestRequest();
-            var action = String.Format("mode=retry&value={0}", id);
+            var action = string.Format("mode=retry&value={0}", id);
 
             SabnzbdRetryResponse response;
 
@@ -132,10 +132,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var protocol = settings.UseSsl ? "https" : "http";
 
             var authentication = settings.ApiKey.IsNullOrWhiteSpace() ?
-                                 String.Format("ma_username={0}&ma_password={1}", settings.Username, Uri.EscapeDataString(settings.Password)) :
-                                 String.Format("apikey={0}", settings.ApiKey);
+                                 string.Format("ma_username={0}&ma_password={1}", settings.Username, Uri.EscapeDataString(settings.Password)) :
+                                 string.Format("apikey={0}", settings.ApiKey);
 
-            var url = String.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
+            var url = string.Format(@"{0}://{1}:{2}/api?{3}&{4}&output=json",
                                  protocol,
                                  settings.Host,
                                  settings.Port,

@@ -12,7 +12,7 @@ namespace NzbDrone.Api.Profiles
             Get["/"] = x =>
             {
                 string queryString = ConvertQueryParams(Request.Query);
-                var url = String.Format("/api/profile?{0}", queryString);
+                var url = string.Format("/api/profile?{0}", queryString);
 
                 return Response.AsRedirect(url);
             };

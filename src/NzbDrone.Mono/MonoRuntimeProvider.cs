@@ -15,7 +15,7 @@ namespace NzbDrone.Mono
             _logger = logger;
         }
 
-        public override String RuntimeVersion
+        public override string RuntimeVersion
         {
             get
             {
@@ -38,7 +38,7 @@ namespace NzbDrone.Mono
                     _logger.ErrorException("Unable to get mono version: " + ex.Message, ex);
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
     }

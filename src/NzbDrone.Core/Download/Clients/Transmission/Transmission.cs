@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         }
 
 
-        protected override String AddFromMagnetLink(RemoteEpisode remoteEpisode, String hash, String magnetLink)
+        protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return hash;
         }
 
-        protected override String AddFromTorrentFile(RemoteEpisode remoteEpisode, String hash, String filename, Byte[] fileContent)
+        protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
             _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
 
@@ -63,12 +63,12 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return hash;
         }
 
-        private String GetDownloadDirectory()
+        private string GetDownloadDirectory()
         {
             if (Settings.TvCategory.IsNullOrWhiteSpace()) return null;
 
             var config = _proxy.GetConfig(Settings);
-            var destDir = (String)config.GetValueOrDefault("download-dir");
+            var destDir = (string)config.GetValueOrDefault("download-dir");
 
             return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
         }
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(String.Format("{0}", Settings.TvCategory))) continue;
+                    if (!directories.Contains(string.Format("{0}", Settings.TvCategory))) continue;
                 }
 
                 var item = new DownloadClientItem();
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                destDir = String.Format("{0}/.{1}", destDir, Settings.TvCategory);
+                destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);
             }
 
             return new DownloadClientStatus
@@ -215,12 +215,12 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                         DetailedDescription = "Please verify the hostname and port."
                     };
                 }
-                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return new NzbDroneValidationFailure(String.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
             return null;
@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             catch (Exception ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-                return new NzbDroneValidationFailure(String.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 
             return null;

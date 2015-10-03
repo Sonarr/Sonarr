@@ -62,9 +62,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     int generalRuntime;
 
                     //Runtime
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
+                    int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
+                    int.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
 
                     if (audioRuntime == 0 && videoRuntime == 0 && generalRuntime == 0)
                     {
@@ -92,23 +92,23 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                     string subtitles = mediaInfo.Get(StreamKind.General, 0, "Text_Language_List");
                     string scanType = mediaInfo.Get(StreamKind.Video, 0, "ScanType");
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
-                    Decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out videoFrameRate);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Width"), out width);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "Height"), out height);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "BitRate"), out videoBitRate);
+                    decimal.TryParse(mediaInfo.Get(StreamKind.Video, 0, "FrameRate"), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out videoFrameRate);
 
                     //Runtime
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
+                    int.TryParse(mediaInfo.Get(StreamKind.Video, 0, "PlayTime"), out videoRuntime);
+                    int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "PlayTime"), out audioRuntime);
+                    int.TryParse(mediaInfo.Get(StreamKind.General, 0, "PlayTime"), out generalRuntime);
 
                     string aBitRate = mediaInfo.Get(StreamKind.Audio, 0, "BitRate");
                     int aBindex = aBitRate.IndexOf(" /", StringComparison.InvariantCultureIgnoreCase);
                     if (aBindex > 0)
                         aBitRate = aBitRate.Remove(aBindex);
 
-                    Int32.TryParse(aBitRate, out audioBitRate);
-                    Int32.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
+                    int.TryParse(aBitRate, out audioBitRate);
+                    int.TryParse(mediaInfo.Get(StreamKind.Audio, 0, "StreamCount"), out streamCount);
                     
 
                     string audioChannelsStr = mediaInfo.Get(StreamKind.Audio, 0, "Channel(s)");
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     if (aPindex > 0)
                         audioProfile = audioProfile.Remove(aPindex);
 
-                    Int32.TryParse(audioChannelsStr, out audioChannels);
+                    int.TryParse(audioChannelsStr, out audioChannels);
                     var mediaInfoModel = new MediaInfoModel
                                                 {
                                                     VideoCodec = mediaInfo.Get(StreamKind.Video, 0, "Codec/String"),

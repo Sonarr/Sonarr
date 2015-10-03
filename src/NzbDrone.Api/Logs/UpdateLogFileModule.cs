@@ -24,21 +24,21 @@ namespace NzbDrone.Api.Logs
             _diskProvider = diskProvider;
         }
 
-        protected override IEnumerable<String> GetLogFiles()
+        protected override IEnumerable<string> GetLogFiles()
         {
-            if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdateLogFolder())) return Enumerable.Empty<String>();
+            if (!_diskProvider.FolderExists(_appFolderInfo.GetUpdateLogFolder())) return Enumerable.Empty<string>();
 
             return _diskProvider.GetFiles(_appFolderInfo.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly)
                                      .Where(f => Regex.IsMatch(Path.GetFileName(f), LOGFILE_ROUTE.TrimStart('/'), RegexOptions.IgnoreCase))
                                      .ToList();
         }
 
-        protected override String GetLogFilePath(String filename)
+        protected override string GetLogFilePath(string filename)
         {
             return Path.Combine(_appFolderInfo.GetUpdateLogFolder(), filename);
         }
 
-        protected override String DownloadUrlRoot
+        protected override string DownloadUrlRoot
         {
             get
             {

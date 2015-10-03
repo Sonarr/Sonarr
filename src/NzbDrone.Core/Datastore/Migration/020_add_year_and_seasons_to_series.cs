@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (IDbCommand seasonsCmd = conn.CreateCommand())
                         {
                             seasonsCmd.Transaction = tran;
-                            seasonsCmd.CommandText = String.Format(@"SELECT SeasonNumber, Monitored FROM Seasons WHERE SeriesId = {0}", seriesId);
+                            seasonsCmd.CommandText = string.Format(@"SELECT SeasonNumber, Monitored FROM Seasons WHERE SeriesId = {0}", seriesId);
 
                             using (IDataReader seasonReader = seasonsCmd.ExecuteReader())
                             {
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         using (IDbCommand updateCmd = conn.CreateCommand())
                         {
-                            var text = String.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson() , seriesId);
+                            var text = string.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson() , seriesId);
 
                             updateCmd.Transaction = tran;
                             updateCmd.CommandText = text;

@@ -21,10 +21,10 @@ namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
         private static readonly UsenetBlackholeSettingsValidator Validator = new UsenetBlackholeSettingsValidator();
 
         [FieldDefinition(0, Label = "Nzb Folder", Type = FieldType.Path, HelpText = "Folder in which Sonarr will store the .nzb file")]
-        public String NzbFolder { get; set; }
+        public string NzbFolder { get; set; }
 
         [FieldDefinition(1, Label = "Watch Folder", Type = FieldType.Path, HelpText = "Folder from which Sonarr should import completed downloads")]
-        public String WatchFolder { get; set; }
+        public string WatchFolder { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

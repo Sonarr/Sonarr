@@ -239,7 +239,7 @@ namespace NzbDrone.Common.Http
                 }
             }
 
-            Byte[] data = null;
+            byte[] data = null;
 
             using (var responseStream = httpWebResponse.GetResponseStream())
             {

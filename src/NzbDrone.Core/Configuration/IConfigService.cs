@@ -7,58 +7,58 @@ namespace NzbDrone.Core.Configuration
     public interface IConfigService
     {
         IEnumerable<Config> All();
-        Dictionary<String, Object> AllWithDefaults();
+        Dictionary<string, object> AllWithDefaults();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
-        Boolean IsDefined(String key);
+        bool IsDefined(string key);
 
         //Download Client
-        String DownloadedEpisodesFolder { get; set; }
-        String DownloadClientWorkingFolders { get; set; }
-        Int32 DownloadedEpisodesScanInterval { get; set; }
-        Int32 DownloadClientHistoryLimit { get; set; }
+        string DownloadedEpisodesFolder { get; set; }
+        string DownloadClientWorkingFolders { get; set; }
+        int DownloadedEpisodesScanInterval { get; set; }
+        int DownloadClientHistoryLimit { get; set; }
 
         //Completed/Failed Download Handling (Download client)
-        Boolean EnableCompletedDownloadHandling { get; set; }
-        Boolean RemoveCompletedDownloads { get; set; }
+        bool EnableCompletedDownloadHandling { get; set; }
+        bool RemoveCompletedDownloads { get; set; }
 
-        Boolean AutoRedownloadFailed { get; set; }
-        Boolean RemoveFailedDownloads { get; set; }
+        bool AutoRedownloadFailed { get; set; }
+        bool RemoveFailedDownloads { get; set; }
 
         //Media Management
-        Boolean AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
-        String RecycleBin { get; set; }
-        Boolean AutoDownloadPropers { get; set; }
-        Boolean CreateEmptySeriesFolders { get; set; }
+        bool AutoUnmonitorPreviouslyDownloadedEpisodes { get; set; }
+        string RecycleBin { get; set; }
+        bool AutoDownloadPropers { get; set; }
+        bool CreateEmptySeriesFolders { get; set; }
         FileDateType FileDate { get; set; }
-        Boolean SkipFreeSpaceCheckWhenImporting { get; set; }
-        Boolean CopyUsingHardlinks { get; set; }
-        Boolean EnableMediaInfo { get; set; }
+        bool SkipFreeSpaceCheckWhenImporting { get; set; }
+        bool CopyUsingHardlinks { get; set; }
+        bool EnableMediaInfo { get; set; }
 
         //Permissions (Media Management)
-        Boolean SetPermissionsLinux { get; set; }
-        String FileChmod { get; set; }
-        String FolderChmod { get; set; }
-        String ChownUser { get; set; }
-        String ChownGroup { get; set; }
+        bool SetPermissionsLinux { get; set; }
+        string FileChmod { get; set; }
+        string FolderChmod { get; set; }
+        string ChownUser { get; set; }
+        string ChownGroup { get; set; }
 
         //Indexers
-        Int32 Retention { get; set; }
-        Int32 RssSyncInterval { get; set; }
-        Int32 MinimumAge { get; set; }
+        int Retention { get; set; }
+        int RssSyncInterval { get; set; }
+        int MinimumAge { get; set; }
 
         //UI
-        Int32 FirstDayOfWeek { get; set; }
-        String CalendarWeekColumnHeader { get; set; }
-        
-        String ShortDateFormat { get; set; }
-        String LongDateFormat { get; set; }
-        String TimeFormat { get; set; }
-        Boolean ShowRelativeDates { get; set; }
-        Boolean EnableColorImpairedMode { get; set; }
+        int FirstDayOfWeek { get; set; }
+        string CalendarWeekColumnHeader { get; set; }
+
+        string ShortDateFormat { get; set; }
+        string LongDateFormat { get; set; }
+        string TimeFormat { get; set; }
+        bool ShowRelativeDates { get; set; }
+        bool EnableColorImpairedMode { get; set; }
 
         //Internal
-        Boolean CleanupMetadataImages { get; set; }
+        bool CleanupMetadataImages { get; set; }
 
 
         //Forms Auth

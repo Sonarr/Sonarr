@@ -175,7 +175,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             {
                 int id;
 
-                if (Int32.TryParse(m.Title, out id))
+                if (int.TryParse(m.Title, out id))
                 {
                     _logger.Debug("Skipping all numeric name: {0} for {1}", m.Title, m.TvdbId);
                     return false;

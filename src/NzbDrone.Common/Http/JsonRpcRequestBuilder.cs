@@ -7,24 +7,24 @@ namespace NzbDrone.Common.Http
 {
     public class JsonRpcRequestBuilder : HttpRequestBuilder
     {
-        public String Method { get; private set; }
-        public List<Object> Parameters { get; private set; }
+        public string Method { get; private set; }
+        public List<object> Parameters { get; private set; }
 
-        public JsonRpcRequestBuilder(String baseUri, String method, IEnumerable<Object> parameters)
+        public JsonRpcRequestBuilder(string baseUri, string method, IEnumerable<object> parameters)
             : base (baseUri)
         {
             Method = method;
             Parameters = parameters.ToList();
         }
 
-        public override HttpRequest Build(String path)
+        public override HttpRequest Build(string path)
         {
             var request = base.Build(path);
             request.Method = HttpMethod.POST;
             request.Headers.Accept = "application/json-rpc, application/json";
             request.Headers.ContentType = "application/json-rpc";
 
-            var message = new Dictionary<String, Object>();
+            var message = new Dictionary<string, object>();
             message["jsonrpc"] = "2.0";
             message["method"] = Method;
             message["params"] = Parameters;
@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Http
             return request;
         }
 
-        public String CreateNextId()
+        public string CreateNextId()
         {
             return Guid.NewGuid().ToString().Substring(0, 8);
         }

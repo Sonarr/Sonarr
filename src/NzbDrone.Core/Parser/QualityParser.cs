@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Parser
             return result;
         }
 
-        private static Resolution ParseResolution(String name)
+        private static Resolution ParseResolution(string name)
         {
             var match = ResolutionRegex.Match(name);
 
@@ -300,7 +300,7 @@ namespace NzbDrone.Core.Parser
             return Resolution.Unknown;
         }
 
-        private static Quality OtherSourceMatch(String name)
+        private static Quality OtherSourceMatch(string name)
         {
             var match = OtherSourceRegex.Match(name);
 
@@ -311,7 +311,7 @@ namespace NzbDrone.Core.Parser
             return Quality.Unknown;
         }
 
-        private static QualityModel ParseQualityModifiers(String normalizedName)
+        private static QualityModel ParseQualityModifiers(string normalizedName)
         {
             var result = new QualityModel { Quality = Quality.Unknown };
 

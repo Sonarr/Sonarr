@@ -91,7 +91,7 @@ namespace NzbDrone.Core.RootFolders
         {
             var all = All();
 
-            if (String.IsNullOrWhiteSpace(rootFolder.Path) || !Path.IsPathRooted(rootFolder.Path))
+            if (string.IsNullOrWhiteSpace(rootFolder.Path) || !Path.IsPathRooted(rootFolder.Path))
             {
                 throw new ArgumentException("Invalid path");
             }
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.RootFolders
 
             if (!_diskProvider.FolderWritable(rootFolder.Path))
             {
-                throw new UnauthorizedAccessException(String.Format("Root folder path '{0}' is not writable by user '{1}'", rootFolder.Path, Environment.UserName));
+                throw new UnauthorizedAccessException(string.Format("Root folder path '{0}' is not writable by user '{1}'", rootFolder.Path, Environment.UserName));
             }
 
             _rootFolderRepository.Insert(rootFolder);
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.RootFolders
         private List<UnmappedFolder> GetUnmappedFolders(string path)
         {
             _logger.Debug("Generating list of unmapped folders");
-            if (String.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("Invalid path provided", "path");
 
             var results = new List<UnmappedFolder>();

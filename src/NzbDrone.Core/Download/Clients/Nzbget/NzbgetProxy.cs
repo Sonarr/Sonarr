@@ -10,12 +10,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 {
     public interface INzbgetProxy
     {
-        string DownloadNzb(Byte[] nzbData, string title, string category, int priority, NzbgetSettings settings);
+        string DownloadNzb(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings);
         NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings);
         List<NzbgetQueueItem> GetQueue(NzbgetSettings settings);
         List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings);
-        String GetVersion(NzbgetSettings settings);
-        Dictionary<String, String> GetConfig(NzbgetSettings settings);
+        string GetVersion(NzbgetSettings settings);
+        Dictionary<string, string> GetConfig(NzbgetSettings settings);
         void RemoveItem(string id, NzbgetSettings settings);
         void RetryDownload(string id, NzbgetSettings settings);
     }
@@ -29,12 +29,12 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             _logger = logger;
         }
 
-        public string DownloadNzb(Byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
+        public string DownloadNzb(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
         {
             var parameters = new object[] { title, category, priority, false, Convert.ToBase64String(nzbData) };
             var request = BuildRequest(new JsonRequest("append", parameters));
 
-            var response = Json.Deserialize<NzbgetResponse<Boolean>>(ProcessRequest(request, settings));
+            var response = Json.Deserialize<NzbgetResponse<bool>>(ProcessRequest(request, settings));
             _logger.Trace("Response: [{0}]", response.Result);
 
             if (!response.Result)
@@ -82,14 +82,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return Json.Deserialize<NzbgetResponse<List<NzbgetHistoryItem>>>(ProcessRequest(request, settings)).Result;
         }
 
-        public String GetVersion(NzbgetSettings settings)
+        public string GetVersion(NzbgetSettings settings)
         {
             var request = BuildRequest(new JsonRequest("version"));
 
-            return Json.Deserialize<NzbgetResponse<String>>(ProcessRequest(request, settings)).Result;
+            return Json.Deserialize<NzbgetResponse<string>>(ProcessRequest(request, settings)).Result;
         }
 
-        public Dictionary<String, String> GetConfig(NzbgetSettings settings)
+        public Dictionary<string, string> GetConfig(NzbgetSettings settings)
         {
             var request = BuildRequest(new JsonRequest("config"));
 
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var parameters = new object[] { command, offset, editText, id };
             var request = BuildRequest(new JsonRequest("editqueue", parameters));
-            var response = Json.Deserialize<NzbgetResponse<Boolean>>(ProcessRequest(request, settings));
+            var response = Json.Deserialize<NzbgetResponse<bool>>(ProcessRequest(request, settings));
 
             return response.Result;
         }
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var protocol = settings.UseSsl ? "https" : "http";
 
-            var url = String.Format("{0}://{1}:{2}/jsonrpc",
+            var url = string.Format("{0}://{1}:{2}/jsonrpc",
                                  protocol,
                                  settings.Host,
                                  settings.Port);

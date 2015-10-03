@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Indexers
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
             var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
-            var message = String.Format("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}", reports.Count, processed.Grabbed.Count);
+            var message = string.Format("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}", reports.Count, processed.Grabbed.Count);
 
             if (processed.Pending.Any())
             {

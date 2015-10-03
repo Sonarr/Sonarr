@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Indexers
             get { return _httpResponse; }
         }
 
-        public String Content
+        public string Content
         {
             get { return _httpResponse.Content; }
         }

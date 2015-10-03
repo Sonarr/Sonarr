@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Extensions
 
         public static string FirstCharToUpper(this string input)
         {
-            return input.First().ToString().ToUpper() + String.Join("", input.Skip(1));
+            return input.First().ToString().ToUpper() + string.Join("", input.Skip(1));
         }
 
         public static string Inject(this string format, params object[] formattingArgs)
@@ -70,12 +70,12 @@ namespace NzbDrone.Common.Extensions
 
         public static bool IsNullOrWhiteSpace(this string text)
         {
-            return String.IsNullOrWhiteSpace(text);
+            return string.IsNullOrWhiteSpace(text);
         }
 
         public static bool IsNotNullOrWhiteSpace(this string text)
         {
-            return !String.IsNullOrWhiteSpace(text);
+            return !string.IsNullOrWhiteSpace(text);
         }
 
         public static bool ContainsIgnoreCase(this string text, string contains)

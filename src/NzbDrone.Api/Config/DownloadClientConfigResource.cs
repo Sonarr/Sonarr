@@ -5,14 +5,14 @@ namespace NzbDrone.Api.Config
 {
     public class DownloadClientConfigResource : RestResource
     {
-        public String DownloadedEpisodesFolder { get; set; }
-        public String DownloadClientWorkingFolders { get; set; }
-        public Int32 DownloadedEpisodesScanInterval { get; set; }
+        public string DownloadedEpisodesFolder { get; set; }
+        public string DownloadClientWorkingFolders { get; set; }
+        public int DownloadedEpisodesScanInterval { get; set; }
 
-        public Boolean EnableCompletedDownloadHandling { get; set; }
-        public Boolean RemoveCompletedDownloads { get; set; }
+        public bool EnableCompletedDownloadHandling { get; set; }
+        public bool RemoveCompletedDownloads { get; set; }
 
-        public Boolean AutoRedownloadFailed { get; set; }
-        public Boolean RemoveFailedDownloads { get; set; }
+        public bool AutoRedownloadFailed { get; set; }
+        public bool RemoveFailedDownloads { get; set; }
     }
 }

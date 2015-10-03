@@ -81,14 +81,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                     };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
-                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<Byte[]>()))
+                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
                   .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951");
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0]));
 
-            _transmissionConfigItems = new Dictionary<String, Object>();
+            _transmissionConfigItems = new Dictionary<string, object>();
 
             _transmissionConfigItems.Add("download-dir", @"C:/Downloads/Finished/transmission");
             _transmissionConfigItems.Add("incomplete-dir", null);
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<ITransmissionProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<TransmissionSettings>()))
+                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<TransmissionSettings>()))
                 .Throws<InvalidOperationException>();
         }
 
@@ -116,14 +116,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         {
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[1000]));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<String>(), It.IsAny<String>(), It.IsAny<TransmissionSettings>()))
+                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<TransmissionSettings>()))
                 .Callback(PrepareClientToReturnQueuedItem);
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Setup(s => s.AddTorrentFromData(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<TransmissionSettings>()))
+                .Setup(s => s.AddTorrentFromData(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<TransmissionSettings>()))
                 .Callback(PrepareClientToReturnQueuedItem);
         }
         
@@ -228,7 +228,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [Test]
@@ -246,11 +246,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<Byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
-        public void Download_should_get_hash_from_magnet_url(String magnetUrl, String expectedHash)
+        public void Download_should_get_hash_from_magnet_url(string magnetUrl, string expectedHash)
         {
             GivenSuccessfulDownload();
 
@@ -300,7 +300,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         [TestCase(TransmissionTorrentStatus.Queued, DownloadItemStatus.Completed, true)]
         [TestCase(TransmissionTorrentStatus.SeedingWait, DownloadItemStatus.Completed, true)]
         [TestCase(TransmissionTorrentStatus.Seeding, DownloadItemStatus.Completed, true)]
-        public void GetItems_should_return_completed_item_as_downloadItemStatus(TransmissionTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, Boolean expectedReadOnly)
+        public void GetItems_should_return_completed_item_as_downloadItemStatus(TransmissionTorrentStatus apiStatus, DownloadItemStatus expectedItemStatus, bool expectedReadOnly)
         {
             _completed.Status = apiStatus;
             
@@ -363,7 +363,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         [TestCase("2.84+ ()")]
         [TestCase("2.84 (other info)")]
         [TestCase("2.84 (2.84)")]
-        public void should_version_should_only_check_version_number(String version)
+        public void should_version_should_only_check_version_number(string version)
         {
             Mocker.GetMock<ITransmissionProxy>()
                   .Setup(s => s.GetVersion(It.IsAny<TransmissionSettings>()))

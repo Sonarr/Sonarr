@@ -48,7 +48,7 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<DiskSpace> GetDroneFactoryFreeSpace()
         {
-            if (!String.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder))
+            if (!string.IsNullOrWhiteSpace(_configService.DownloadedEpisodesFolder))
             {
                 return GetDiskSpace(new[] { _diskProvider.GetPathRoot(_configService.DownloadedEpisodesFolder) });
             }
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.DiskSpace
             return GetDiskSpace(_diskProvider.GetFixedDrives(), true);
         }
 
-        private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<String> paths, bool suppressWarnings = false)
+        private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<string> paths, bool suppressWarnings = false)
         {
             foreach (var path in paths)
             {

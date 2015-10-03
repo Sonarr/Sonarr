@@ -134,9 +134,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             failures.AddIfNotNull(TestFolder(Settings.StrmFolder, "StrmFolder"));
         }
 
-        private String WriteStrmFile(String title, String nzbFile)
+        private string WriteStrmFile(string title, string nzbFile)
         {
-            String folder;
+            string folder;
 
             if (Settings.StrmFolder.IsNullOrWhiteSpace())
             {
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
                 folder = Settings.StrmFolder;
             }
 
-            var contents = String.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", nzbFile, title);
+            var contents = string.Format("plugin://plugin.program.pneumatic/?mode=strm&type=add_file&nzb={0}&nzbname={1}", nzbFile, title);
             var filename = Path.Combine(folder, title + ".strm");
 
             _diskProvider.WriteAllText(filename, contents);
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return filename;
         }
 
-        private String GetDownloadClientId(String filename)
+        private string GetDownloadClientId(string filename)
         {
             return Definition.Name + "_" + Path.GetFileName(filename) + "_" + _diskProvider.FileGetLastWrite(filename).Ticks;
         }

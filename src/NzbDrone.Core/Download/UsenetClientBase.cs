@@ -36,14 +36,14 @@ namespace NzbDrone.Core.Download
             }
         }
 
-        protected abstract String AddFromNzbFile(RemoteEpisode remoteEpisode, String filename, Byte[] fileContent);
+        protected abstract string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent);
 
-        public override String Download(RemoteEpisode remoteEpisode)
+        public override string Download(RemoteEpisode remoteEpisode)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var filename =  FileNameBuilder.CleanFileName(remoteEpisode.Release.Title) + ".nzb";
 
-            Byte[] nzbData;
+            byte[] nzbData;
 
             try
             {
@@ -53,14 +53,14 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
-                _logger.ErrorException(String.Format("Downloading nzb for episode '{0}' failed ({1})",
+                _logger.ErrorException(string.Format("Downloading nzb for episode '{0}' failed ({1})",
                     remoteEpisode.Release.Title, url), ex);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);
             }
             catch (WebException ex)
             {
-                _logger.ErrorException(String.Format("Downloading nzb for episode '{0}' failed ({1})",
+                _logger.ErrorException(string.Format("Downloading nzb for episode '{0}' failed ({1})",
                     remoteEpisode.Release.Title, url), ex);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);

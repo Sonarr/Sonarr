@@ -15,11 +15,11 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         private static readonly Regex BeginningThe = new Regex(@"^the\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public Series Series { get; set; }
-        public List<String> SceneTitles { get; set; }
+        public List<string> SceneTitles { get; set; }
         public List<Episode> Episodes { get; set; }
         public virtual bool MonitoredEpisodesOnly { get; set; }
 
-        public List<String> QueryTitles
+        public List<string> QueryTitles
         {
             get
             {
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         {
             Ensure.That(title,() => title).IsNotNullOrWhiteSpace();
 
-            var cleanTitle = BeginningThe.Replace(title, String.Empty);
+            var cleanTitle = BeginningThe.Replace(title, string.Empty);
 
             cleanTitle = cleanTitle.Replace("&", "and");
             cleanTitle = SpecialCharacter.Replace(cleanTitle, "");

@@ -4,9 +4,9 @@ namespace NzbDrone.Core.Organizer
 {
     public class EpisodeFormat
     {
-        public String Separator { get; set; }
-        public String EpisodePattern { get; set; }
-        public String EpisodeSeparator { get; set; }
-        public String SeasonEpisodePattern { get; set; }
+        public string Separator { get; set; }
+        public string EpisodePattern { get; set; }
+        public string EpisodeSeparator { get; set; }
+        public string SeasonEpisodePattern { get; set; }
     }
 }

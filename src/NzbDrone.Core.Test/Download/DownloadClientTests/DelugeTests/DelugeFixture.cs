@@ -79,22 +79,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
                     };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
-                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<Byte[]>()))
+                  .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
                   .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951");
 
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[0]));
         }
 
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<IDelugeProxy>()
-                .Setup(s => s.AddTorrentFromMagnet(It.IsAny<String>(), It.IsAny<DelugeSettings>()))
+                .Setup(s => s.AddTorrentFromMagnet(It.IsAny<string>(), It.IsAny<DelugeSettings>()))
                 .Throws<InvalidOperationException>();
 
             Mocker.GetMock<IDelugeProxy>()
-                .Setup(s => s.AddTorrentFromFile(It.IsAny<String>(), It.IsAny<Byte[]>(), It.IsAny<DelugeSettings>()))
+                .Setup(s => s.AddTorrentFromFile(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DelugeSettings>()))
                 .Throws<InvalidOperationException>();
         }
 
@@ -102,15 +102,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         {
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[1000]));
+                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
 
             Mocker.GetMock<IDelugeProxy>()
-                .Setup(s => s.AddTorrentFromMagnet(It.IsAny<String>(), It.IsAny<DelugeSettings>()))
+                .Setup(s => s.AddTorrentFromMagnet(It.IsAny<string>(), It.IsAny<DelugeSettings>()))
                 .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951".ToLower())
                 .Callback(PrepareClientToReturnQueuedItem);
 
             Mocker.GetMock<IDelugeProxy>()
-                .Setup(s => s.AddTorrentFromFile(It.IsAny<String>(), It.IsAny<Byte[]>(), It.IsAny<DelugeSettings>()))
+                .Setup(s => s.AddTorrentFromFile(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DelugeSettings>()))
                 .Returns("CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951".ToLower())
                 .Callback(PrepareClientToReturnQueuedItem);
         }
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         }
 
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
-        public void Download_should_get_hash_from_magnet_url(String magnetUrl, String expectedHash)
+        public void Download_should_get_hash_from_magnet_url(string magnetUrl, string expectedHash)
         {
             GivenSuccessfulDownload();
 
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         [TestCase(DelugeTorrentStatus.Queued, DownloadItemStatus.Queued)]
         [TestCase(DelugeTorrentStatus.Downloading, DownloadItemStatus.Downloading)]
         [TestCase(DelugeTorrentStatus.Seeding, DownloadItemStatus.Downloading)]
-        public void GetItems_should_return_queued_item_as_downloadItemStatus(String apiStatus, DownloadItemStatus expectedItemStatus)
+        public void GetItems_should_return_queued_item_as_downloadItemStatus(string apiStatus, DownloadItemStatus expectedItemStatus)
         {
             _queued.State = apiStatus;
 
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         [TestCase(DelugeTorrentStatus.Queued, DownloadItemStatus.Queued)]
         [TestCase(DelugeTorrentStatus.Downloading, DownloadItemStatus.Downloading)]
         [TestCase(DelugeTorrentStatus.Seeding, DownloadItemStatus.Downloading)]
-        public void GetItems_should_return_downloading_item_as_downloadItemStatus(String apiStatus, DownloadItemStatus expectedItemStatus)
+        public void GetItems_should_return_downloading_item_as_downloadItemStatus(string apiStatus, DownloadItemStatus expectedItemStatus)
         {
             _downloading.State = apiStatus;
 
@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         [TestCase(DelugeTorrentStatus.Checking, DownloadItemStatus.Downloading, true)]
         [TestCase(DelugeTorrentStatus.Queued, DownloadItemStatus.Completed, true)]
         [TestCase(DelugeTorrentStatus.Seeding, DownloadItemStatus.Completed, true)]
-        public void GetItems_should_return_completed_item_as_downloadItemStatus(String apiStatus, DownloadItemStatus expectedItemStatus, Boolean expectedReadOnly)
+        public void GetItems_should_return_completed_item_as_downloadItemStatus(string apiStatus, DownloadItemStatus expectedItemStatus, bool expectedReadOnly)
         {
             _completed.State = apiStatus;
 
@@ -284,7 +284,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         [Test]
         public void should_return_status_with_outputdirs()
         {
-            var configItems = new Dictionary<String, Object>();
+            var configItems = new Dictionary<string, object>();
 
             configItems.Add("download_location", @"C:\Downloads\Downloading\deluge".AsOsAgnostic());
             configItems.Add("move_completed_path", @"C:\Downloads\Finished\deluge".AsOsAgnostic());

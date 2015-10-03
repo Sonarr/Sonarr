@@ -18,7 +18,7 @@ namespace NzbDrone.Api.Logs
 
         public LogFileModuleBase(IDiskProvider diskProvider,
                                  IConfigFileProvider configFileProvider,
-                                 String route)
+                                 string route)
             : base("log/file" + route)
         {
             _diskProvider = diskProvider;
@@ -44,15 +44,15 @@ namespace NzbDrone.Api.Logs
                     Id = i + 1,
                     Filename = filename,
                     LastWriteTime = _diskProvider.FileGetLastWrite(file),
-                    ContentsUrl = String.Format("{0}/api/{1}/{2}", _configFileProvider.UrlBase, Resource, filename),
-                    DownloadUrl = String.Format("{0}/{1}/{2}", _configFileProvider.UrlBase, DownloadUrlRoot, filename)
+                    ContentsUrl = string.Format("{0}/api/{1}/{2}", _configFileProvider.UrlBase, Resource, filename),
+                    DownloadUrl = string.Format("{0}/{1}/{2}", _configFileProvider.UrlBase, DownloadUrlRoot, filename)
                 });
             }
 
             return result.OrderByDescending(l => l.LastWriteTime).ToList();
         }
 
-        private Response GetLogFileResponse(String filename)
+        private Response GetLogFileResponse(string filename)
         {
             var filePath = GetLogFilePath(filename);
 
@@ -64,9 +64,9 @@ namespace NzbDrone.Api.Logs
             return new TextResponse(data);
         }
 
-        protected abstract IEnumerable<String> GetLogFiles();
-        protected abstract String GetLogFilePath(String filename);
+        protected abstract IEnumerable<string> GetLogFiles();
+        protected abstract string GetLogFilePath(string filename);
 
-        protected abstract String DownloadUrlRoot { get; }
+        protected abstract string DownloadUrlRoot { get; }
     }
 }

@@ -9,14 +9,14 @@ namespace NzbDrone.Core.Qualities
         {
         }
         
-        public Revision(Int32 version = 1, Int32 real = 0)
+        public Revision(int version = 1, int real = 0)
         {
             Version = version;
             Real = real;
         }
 
-        public Int32 Version { get; set; }
-        public Int32 Real { get; set; }
+        public int Version { get; set; }
+        public int Real { get; set; }
 
         public bool Equals(Revision other)
         {

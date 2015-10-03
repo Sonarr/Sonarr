@@ -33,7 +33,7 @@ namespace NzbDrone.Core.MediaFiles
             var seriesFiles = _mediaFileService.GetFilesBySeries(series.Id);
             var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
-            var filesOnDiskKeys = new HashSet<String>(filesOnDisk, PathEqualityComparer.Instance);
+            var filesOnDiskKeys = new HashSet<string>(filesOnDisk, PathEqualityComparer.Instance);
             
             foreach (var seriesFile in seriesFiles)
             {
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 catch (Exception ex)
                 {
-                    var errorMessage = String.Format("Unable to cleanup EpisodeFile in DB: {0}", episodeFile.Id);
+                    var errorMessage = string.Format("Unable to cleanup EpisodeFile in DB: {0}", episodeFile.Id);
                     _logger.ErrorException(errorMessage, ex);
                 }
             }

@@ -36,18 +36,18 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         private void GivenFileExists()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(v => v.FileExists(It.IsAny<String>()))
+                  .Setup(v => v.FileExists(It.IsAny<string>()))
                   .Returns(true);
         }
 
         private void GivenSuccessfulScan()
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(v => v.GetMediaInfo(It.IsAny<String>()))
+                  .Setup(v => v.GetMediaInfo(It.IsAny<string>()))
                   .Returns(new MediaInfoModel());
         }
 
-        private void GivenFailedScan(String path)
+        private void GivenFailedScan(string path)
         {
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Setup(v => v.GetMediaInfo(path))

@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Datastore
         public IEnumerable<TModel> Get(IEnumerable<int> ids)
         {
             var idList = ids.ToList();
-            var query = String.Format("Id IN ({0})", String.Join(",", idList));
+            var query = string.Format("Id IN ({0})", string.Join(",", idList));
             var result = Query.Where(query).ToList();
 
             if (result.Count != idList.Count())

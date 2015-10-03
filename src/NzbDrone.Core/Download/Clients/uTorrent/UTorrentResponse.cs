@@ -6,15 +6,15 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 {
     public class UTorrentResponse
     {
-        public Int32 Build { get; set; }
+        public int Build { get; set; }
         public List<UTorrentTorrent> Torrents { get; set; }
-        public List<String[]> Label { get; set; }
-        public List<Object> RssFeeds { get; set; }
-        public List<Object> RssFilters { get; set; }
+        public List<string[]> Label { get; set; }
+        public List<object> RssFeeds { get; set; }
+        public List<object> RssFilters { get; set; }
 
         [JsonProperty(PropertyName = "torrentc")]
-        public String CacheNumber { get; set; }
+        public string CacheNumber { get; set; }
 
-        public List<Object[]> Settings { get; set; }
+        public List<object[]> Settings { get; set; }
     }
 }

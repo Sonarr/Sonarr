@@ -7,18 +7,18 @@ namespace NzbDrone.Core.Parser.Model
 {
     public class ParsedEpisodeInfo
     {
-        public String SeriesTitle { get; set; }
+        public string SeriesTitle { get; set; }
         public SeriesTitleInfo SeriesTitleInfo { get; set; }
         public QualityModel Quality { get; set; }
-        public Int32 SeasonNumber { get; set; }
-        public Int32[] EpisodeNumbers { get; set; }
-        public Int32[] AbsoluteEpisodeNumbers { get; set; }
-        public String AirDate { get; set; }
+        public int SeasonNumber { get; set; }
+        public int[] EpisodeNumbers { get; set; }
+        public int[] AbsoluteEpisodeNumbers { get; set; }
+        public string AirDate { get; set; }
         public Language Language { get; set; }
-        public Boolean FullSeason { get; set; }
-        public Boolean Special { get; set; }
-        public String ReleaseGroup { get; set; }
-        public String ReleaseHash { get; set; }
+        public bool FullSeason { get; set; }
+        public bool Special { get; set; }
+        public string ReleaseGroup { get; set; }
+        public string ReleaseHash { get; set; }
 
         public ParsedEpisodeInfo()
         {
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(AirDate);
+                return !string.IsNullOrWhiteSpace(AirDate);
             }
 
             //This prevents manually downloading a release from blowing up in mono
@@ -72,22 +72,22 @@ namespace NzbDrone.Core.Parser.Model
 
             if (IsDaily && EpisodeNumbers.Empty())
             {
-                episodeString = String.Format("{0}", AirDate);
+                episodeString = string.Format("{0}", AirDate);
             }
             else if (FullSeason)
             {
-                episodeString = String.Format("Season {0:00}", SeasonNumber);
+                episodeString = string.Format("Season {0:00}", SeasonNumber);
             }
             else if (EpisodeNumbers != null && EpisodeNumbers.Any())
             {
-                episodeString = String.Format("S{0:00}E{1}", SeasonNumber, String.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
+                episodeString = string.Format("S{0:00}E{1}", SeasonNumber, string.Join("-", EpisodeNumbers.Select(c => c.ToString("00"))));
             }
             else if (AbsoluteEpisodeNumbers != null && AbsoluteEpisodeNumbers.Any())
             {
-                episodeString = String.Format("{0}", String.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
+                episodeString = string.Format("{0}", string.Join("-", AbsoluteEpisodeNumbers.Select(c => c.ToString("000"))));
             }
 
-            return String.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
+            return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace NzbDrone.Update
 
         public static IContainer Build(IStartupContext startupContext)
         {
-            var assemblies = new List<String>
+            var assemblies = new List<string>
                              {
                                  "NzbDrone.Update",
                                  "NzbDrone.Common"

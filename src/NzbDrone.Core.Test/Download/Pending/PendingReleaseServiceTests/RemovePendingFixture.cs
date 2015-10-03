@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 3 });
 
-            var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
+            var queueId = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
             Subject.RemovePendingQueueItems(queueId);
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             AddPending(id: 3, seasonNumber: 2, episodes: new[] { 3 });
             AddPending(id: 4, seasonNumber: 2, episodes: new[] { 3 });
 
-            var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 3, _episode.Id));
+            var queueId = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", 3, _episode.Id));
 
             Subject.RemovePendingQueueItems(queueId);
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             AddPending(id: 3, seasonNumber: 3, episodes: new[] { 1 });
             AddPending(id: 4, seasonNumber: 3, episodes: new[] { 1 });
 
-            var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
+            var queueId = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
             Subject.RemovePendingQueueItems(queueId);
 
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             AddPending(id: 3, seasonNumber: 2, episodes: new[] { 2 });
             AddPending(id: 4, seasonNumber: 2, episodes: new[] { 3 });
 
-            var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
+            var queueId = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
             Subject.RemovePendingQueueItems(queueId);
 
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1, 2 });
 
-            var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 1, _episode.Id));
+            var queueId = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", 1, _episode.Id));
 
             Subject.RemovePendingQueueItems(queueId);
 
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1, 2 });
 
-            var queueId = HashConverter.GetHashInt31(String.Format("pending-{0}-ep{1}", 2, _episode.Id));
+            var queueId = HashConverter.GetHashInt31(string.Format("pending-{0}-ep{1}", 2, _episode.Id));
 
             Subject.RemovePendingQueueItems(queueId);
 

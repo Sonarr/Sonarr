@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Test
         [TestCase("Agents of cracked", "Agents of shield", 6)]
         [TestCase("ABCxxx", "ABC1xx", 1)]
         [TestCase("ABC1xx", "ABCxxx", 1)]
-        public void LevenshteinDistance(String text, String other, Int32 expected)
+        public void LevenshteinDistance(string text, string other, int expected)
         {
             text.LevenshteinDistance(other).Should().Be(expected);
         }
@@ -39,7 +39,7 @@ namespace NzbDrone.Common.Test
         [TestCase("Agents of shield", "the shield", 24)]
         [TestCase("ABCxxx", "ABC1xx", 3)]
         [TestCase("ABC1xx", "ABCxxx", 3)]
-        public void LevenshteinDistanceClean(String text, String other, Int32 expected)
+        public void LevenshteinDistanceClean(string text, string other, int expected)
         {
             text.ToLower().LevenshteinDistanceClean(other.ToLower()).Should().Be(expected);
         }

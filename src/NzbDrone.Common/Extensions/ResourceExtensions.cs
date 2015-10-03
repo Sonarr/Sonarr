@@ -6,11 +6,11 @@ namespace NzbDrone.Common.Extensions
 {
     public static class ResourceExtensions
     {
-        public static Byte[] GetManifestResourceBytes(this Assembly assembly, String name)
+        public static byte[] GetManifestResourceBytes(this Assembly assembly, string name)
         {
             var stream = assembly.GetManifestResourceStream(name);
 
-            var result = new Byte[stream.Length];
+            var result = new byte[stream.Length];
             var read = stream.Read(result, 0, result.Length);
 
             if (read != result.Length)

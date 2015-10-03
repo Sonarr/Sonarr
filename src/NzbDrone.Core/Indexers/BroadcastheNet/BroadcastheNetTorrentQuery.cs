@@ -6,31 +6,31 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
     public class BroadcastheNetTorrentQuery
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Id { get; set; }
+        public string Id { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Category { get; set; }
+        public string Category { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Name { get; set; }
+        public string Name { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Search { get; set; }
+        public string Search { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Codec { get; set; }
+        public string Codec { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Container { get; set; }
+        public string Container { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Source { get; set; }
+        public string Source { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Resolution { get; set; }
+        public string Resolution { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Origin { get; set; }
+        public string Origin { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Hash { get; set; }
+        public string Hash { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Tvdb { get; set; }
+        public string Tvdb { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Tvrage { get; set; }
+        public string Tvrage { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public String Age { get; set; }
+        public string Age { get; set; }
 
         public BroadcastheNetTorrentQuery Clone()
         {

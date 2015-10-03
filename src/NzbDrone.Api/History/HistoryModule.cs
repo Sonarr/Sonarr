@@ -71,7 +71,7 @@ namespace NzbDrone.Api.History
         {
             var id = (int)Request.Form.Id;
             _failedDownloadService.MarkAsFailed(id);
-            return new Object().AsResponse();
+            return new object().AsResponse();
         }
     }
 }

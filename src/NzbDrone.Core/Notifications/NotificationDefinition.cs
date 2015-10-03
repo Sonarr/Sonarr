@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Notifications
     {
         public NotificationDefinition()
         {
-            Tags = new HashSet<Int32>();
+            Tags = new HashSet<int>();
         }
 
         public bool OnGrab { get; set; }

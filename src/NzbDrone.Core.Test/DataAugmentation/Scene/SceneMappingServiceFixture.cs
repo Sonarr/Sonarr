@@ -205,14 +205,14 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<String>()), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<string>()), Times.Never());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Never());
         }
 
         private void AssertMappingUpdated()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<String>()), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<string>()), Times.Once());
             Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Once());
 
             foreach (var sceneMapping in _fakeMappings)

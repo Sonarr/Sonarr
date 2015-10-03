@@ -7,7 +7,7 @@ namespace NzbDrone.Common.Extensions
     {
         private static readonly string[] SizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
-        public static string SizeSuffix(this Int64 bytes)
+        public static string SizeSuffix(this long bytes)
         {
             const int bytesInKb = 1024;
 

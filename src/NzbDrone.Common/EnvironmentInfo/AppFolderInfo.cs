@@ -45,6 +45,6 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public string StartUpFolder { get; private set; }
 
-        public String TempFolder { get; private set; }
+        public string TempFolder { get; private set; }
     }
 }

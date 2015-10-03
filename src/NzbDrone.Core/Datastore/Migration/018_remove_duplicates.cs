@@ -68,19 +68,19 @@ namespace NzbDrone.Core.Datastore.Migration
             var deleteCmd = conn.CreateCommand();
             deleteCmd.Transaction = tran;
 
-            deleteCmd.CommandText = String.Format("DELETE FROM Series WHERE Id = {0}", seriesId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM Series WHERE Id = {0}", seriesId.ToString());
             deleteCmd.ExecuteNonQuery();
 
-            deleteCmd.CommandText = String.Format("DELETE FROM Episodes WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM Episodes WHERE SeriesId = {0}", seriesId.ToString());
             deleteCmd.ExecuteNonQuery();
 
-            deleteCmd.CommandText = String.Format("DELETE FROM Seasons WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM Seasons WHERE SeriesId = {0}", seriesId.ToString());
             deleteCmd.ExecuteNonQuery();
 
-            deleteCmd.CommandText = String.Format("DELETE FROM History WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM History WHERE SeriesId = {0}", seriesId.ToString());
             deleteCmd.ExecuteNonQuery();
 
-            deleteCmd.CommandText = String.Format("DELETE FROM EpisodeFiles WHERE SeriesId = {0}", seriesId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM EpisodeFiles WHERE SeriesId = {0}", seriesId.ToString());
             deleteCmd.ExecuteNonQuery();
         }
 
@@ -89,10 +89,10 @@ namespace NzbDrone.Core.Datastore.Migration
             var deleteCmd = conn.CreateCommand();
             deleteCmd.Transaction = tran;
 
-            deleteCmd.CommandText = String.Format("DELETE FROM Episodes WHERE Id = {0}", episodeId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM Episodes WHERE Id = {0}", episodeId.ToString());
             deleteCmd.ExecuteNonQuery();
 
-            deleteCmd.CommandText = String.Format("DELETE FROM History WHERE EpisodeId = {0}", episodeId.ToString());
+            deleteCmd.CommandText = string.Format("DELETE FROM History WHERE EpisodeId = {0}", episodeId.ToString());
             deleteCmd.ExecuteNonQuery();
         }
     }

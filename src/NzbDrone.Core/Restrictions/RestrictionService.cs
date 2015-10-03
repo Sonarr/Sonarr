@@ -9,10 +9,10 @@ namespace NzbDrone.Core.Restrictions
     public interface IRestrictionService
     {
         List<Restriction> All();
-        List<Restriction> AllForTag(Int32 tagId);
-        List<Restriction> AllForTags(HashSet<Int32> tagIds);
-        Restriction Get(Int32 id);
-        void Delete(Int32 id);
+        List<Restriction> AllForTag(int tagId);
+        List<Restriction> AllForTags(HashSet<int> tagIds);
+        Restriction Get(int id);
+        void Delete(int id);
         Restriction Add(Restriction restriction);
         Restriction Update(Restriction restriction);
     }
@@ -33,22 +33,22 @@ namespace NzbDrone.Core.Restrictions
             return _repo.All().ToList();
         }
 
-        public List<Restriction> AllForTag(Int32 tagId)
+        public List<Restriction> AllForTag(int tagId)
         {
             return _repo.All().Where(r => r.Tags.Contains(tagId) || r.Tags.Empty()).ToList();
         }
 
-        public List<Restriction> AllForTags(HashSet<Int32> tagIds)
+        public List<Restriction> AllForTags(HashSet<int> tagIds)
         {
             return _repo.All().Where(r => r.Tags.Intersect(tagIds).Any() || r.Tags.Empty()).ToList();
         }
 
-        public Restriction Get(Int32 id)
+        public Restriction Get(int id)
         {
             return _repo.Get(id);
         }
 
-        public void Delete(Int32 id)
+        public void Delete(int id)
         {
             _repo.Delete(id);
         }

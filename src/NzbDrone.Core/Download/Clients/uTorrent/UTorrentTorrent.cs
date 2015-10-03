@@ -6,37 +6,37 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
     [JsonConverter(typeof(UTorrentTorrentJsonConverter))]
     public class UTorrentTorrent
     {
-        public String Hash { get; set; }
+        public string Hash { get; set; }
         public UTorrentTorrentStatus Status { get; set; }
-        public String Name { get; set; }
-        public Int64 Size { get; set; }
-        public Double Progress { get; set; }
-        public Int64 Downloaded { get; set; }
-        public Int64 Uploaded { get; set; }
-        public Double Ratio { get; set; }
-        public Int32 UploadSpeed { get; set; }
-        public Int32 DownloadSpeed { get; set; }
+        public string Name { get; set; }
+        public long Size { get; set; }
+        public double Progress { get; set; }
+        public long Downloaded { get; set; }
+        public long Uploaded { get; set; }
+        public double Ratio { get; set; }
+        public int UploadSpeed { get; set; }
+        public int DownloadSpeed { get; set; }
 
-        public Int32 Eta { get; set; }
-        public String Label { get; set; }
-        public Int32 PeersConnected { get; set; }
-        public Int32 PeersInSwarm { get; set; }
-        public Int32 SeedsConnected { get; set; }
-        public Int32 SeedsInSwarm { get; set; }
-        public Double Availablity { get; set; }
-        public Int32 TorrentQueueOrder { get; set; }
-        public Int64 Remaining { get; set; }
-        public String DownloadUrl { get; set; }
+        public int Eta { get; set; }
+        public string Label { get; set; }
+        public int PeersConnected { get; set; }
+        public int PeersInSwarm { get; set; }
+        public int SeedsConnected { get; set; }
+        public int SeedsInSwarm { get; set; }
+        public double Availablity { get; set; }
+        public int TorrentQueueOrder { get; set; }
+        public long Remaining { get; set; }
+        public string DownloadUrl { get; set; }
 
-        public Object RssFeedUrl { get; set; }
-        public Object StatusMessage { get; set; }
-        public Object StreamId { get; set; }
-        public Object DateAdded { get; set; }
-        public Object DateCompleted { get; set; }
-        public Object AppUpdateUrl { get; set; }
-        public String RootDownloadPath { get; set; }
-        public Object Unknown27 { get; set; }
-        public Object Unknown28 { get; set; }
+        public object RssFeedUrl { get; set; }
+        public object StatusMessage { get; set; }
+        public object StreamId { get; set; }
+        public object DateAdded { get; set; }
+        public object DateCompleted { get; set; }
+        public object AppUpdateUrl { get; set; }
+        public string RootDownloadPath { get; set; }
+        public object Unknown27 { get; set; }
+        public object Unknown28 { get; set; }
     }
 
     class UTorrentTorrentJsonConverter : JsonConverter
@@ -54,12 +54,12 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             result.Status = (UTorrentTorrentStatus)reader.ReadAsInt32();
             result.Name = reader.ReadAsString();
             reader.Read();
-            result.Size = (Int64)reader.Value;
+            result.Size = (long)reader.Value;
             result.Progress = (int)reader.ReadAsInt32() / 1000.0;
             reader.Read();
-            result.Downloaded = (Int64)reader.Value;
+            result.Downloaded = (long)reader.Value;
             reader.Read();
-            result.Uploaded = (Int64)reader.Value;
+            result.Uploaded = (long)reader.Value;
             result.Ratio = (int)reader.ReadAsInt32() / 1000.0;
             result.UploadSpeed = (int)reader.ReadAsInt32();
             result.DownloadSpeed = (int)reader.ReadAsInt32();
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             result.Availablity = (int)reader.ReadAsInt32() / 65536.0;
             result.TorrentQueueOrder = (int)reader.ReadAsInt32();
             reader.Read();
-            result.Remaining = (Int64)reader.Value;
+            result.Remaining = (long)reader.Value;
 
             reader.Read();
 
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
             if (reader.TokenType != JsonToken.EndArray)
             {
-                result.DownloadUrl = (String)reader.Value;
+                result.DownloadUrl = (string)reader.Value;
             
                 reader.Read();
                 result.RssFeedUrl = reader.Value;

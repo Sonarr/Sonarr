@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
         }
 
         [FieldDefinition(0, Label = "Series Metadata", Type = FieldType.Checkbox)]
-        public Boolean SeriesMetadata { get; set; }
+        public bool SeriesMetadata { get; set; }
 
         public bool IsValid
         {

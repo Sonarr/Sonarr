@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Indexers
     public abstract class HttpIndexerBase<TSettings> : IndexerBase<TSettings>
         where TSettings : IProviderConfig, new()
     {
-        protected const Int32 MaxNumResultsPerQuery = 1000;
+        protected const int MaxNumResultsPerQuery = 1000;
 
         private readonly IHttpClient _httpClient;
 
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers
         public override bool SupportsSearch { get { return true; } }
         public bool SupportsPaging { get { return PageSize > 0; } }
 
-        public virtual Int32 PageSize { get { return 0; } }
+        public virtual int PageSize { get { return 0; } }
         public virtual TimeSpan RateLimit { get { return TimeSpan.FromSeconds(2); } }
 
         public abstract IIndexerRequestGenerator GetRequestGenerator();
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Indexers
         protected virtual IList<ReleaseInfo> FetchReleases(IList<IEnumerable<IndexerRequest>> pageableRequests, bool isRecent = false)
         {
             var releases = new List<ReleaseInfo>();
-            var url = String.Empty;
+            var url = string.Empty;
 
             var parser = GetParser();
 
@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Indexers
             catch (IndexerException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                var message = String.Format("{0} - {1}", ex.Message, url);
+                var message = string.Format("{0} - {1}", ex.Message, url);
                 _logger.WarnException(message, ex);
             }
             catch (Exception feedEx)
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Indexers
             return CleanupReleases(releases);
         }
 
-        protected virtual Boolean IsFullPage(IList<ReleaseInfo> page)
+        protected virtual bool IsFullPage(IList<ReleaseInfo> page)
         {
             return PageSize != 0 && page.Count >= PageSize;
         }

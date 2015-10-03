@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Datastore.Migration
                                                       PreferredProtocol = 1,
                                                       UsenetDelay = 0,
                                                       TorrentDelay = 0,
-                                                      Order = Int32.MaxValue,
+                                                      Order = int.MaxValue,
                                                       Tags = "[]"
                                                   });
 
@@ -50,9 +50,9 @@ namespace NzbDrone.Core.Datastore.Migration
                 var profile = profileClosure;
                 if (profile.GrabDelay == 0) continue;
 
-                var tag = String.Format("delay-{0}", profile.GrabDelay);
+                var tag = string.Format("delay-{0}", profile.GrabDelay);
                 var tagId = InsertTag(conn, tran, tag);
-                var tags = String.Format("[{0}]", tagId);
+                var tags = string.Format("[{0}]", tagId);
 
                 using (IDbCommand insertDelayProfileCmd = conn.CreateCommand())
                 {
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Datastore.Migration
             return profiles;
         }
 
-        private Int32 InsertTag(IDbConnection conn, IDbTransaction tran, string tagLabel)
+        private int InsertTag(IDbConnection conn, IDbTransaction tran, string tagLabel)
         {
             using (IDbCommand insertCmd = conn.CreateCommand())
             {
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Datastore.Migration
             {
                 getSeriesCmd.Transaction = tran;
                 getSeriesCmd.CommandText = "SELECT Id, Tags FROM Series WHERE ProfileId IN (?)";
-                getSeriesCmd.AddParameter(String.Join(",", profileIds));
+                getSeriesCmd.AddParameter(string.Join(",", profileIds));
 
                 using (IDataReader seriesReader = getSeriesCmd.ExecuteReader())
                 {

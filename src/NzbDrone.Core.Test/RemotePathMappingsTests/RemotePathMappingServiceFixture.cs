@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
 
         [TestCase("my-first-server.localdomain", "/mnt/storage", @"D:\storage1")]
         [TestCase("my-server.localdomain", "/mnt/storage2", @"D:\storage2")]
-        public void should_be_able_to_add_new_mapping(String host, String remotePath, String localPath)
+        public void should_be_able_to_add_new_mapping(string host, string remotePath, string localPath)
         {
             GivenMapping();
 
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
         
         [TestCase("my-server.localdomain", "/mnt/storage", @"D:\mountedstorage")]
         [TestCase("my-server.localdomain", "/mnt/storage", @"D:\mountedstorage2")]
-        public void adding_duplicated_mapping_should_throw(String host, String remotePath, String localPath)
+        public void adding_duplicated_mapping_should_throw(string host, string remotePath, string localPath)
         {
             localPath = localPath.AsOsAgnostic();
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
         [TestCase("my-server.localdomain", "/mnt/storage/downloads/tv", @"D:\mountedstorage\downloads\tv")]
         [TestCase("my-2server.localdomain", "/mnt/storage/downloads/tv", "/mnt/storage/downloads/tv")]
         [TestCase("my-server.localdomain", "/mnt/storageabc/downloads/tv", "/mnt/storageabc/downloads/tv")]
-        public void should_remap_remote_to_local(String host, String remotePath, String expectedLocalPath)
+        public void should_remap_remote_to_local(string host, string remotePath, string expectedLocalPath)
         {
             expectedLocalPath = expectedLocalPath.AsOsAgnostic();
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
         [TestCase("my-server.localdomain", "/mnt/storage/", @"D:\mountedstorage")]
         [TestCase("my-2server.localdomain", "/mnt/storage/downloads/tv", "/mnt/storage/downloads/tv")]
         [TestCase("my-server.localdomain", "/mnt/storageabc/downloads/tv", "/mnt/storageabc/downloads/tv")]
-        public void should_remap_local_to_remote(String host, String expectedRemotePath, String localPath)
+        public void should_remap_local_to_remote(string host, string expectedRemotePath, string localPath)
         {
             localPath = localPath.AsOsAgnostic();
 
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
         [TestCase(@"\\server\share\with/mixed/slashes", @"\\server\share\with\mixed\slashes\")]
         [TestCase(@"D:/with/forward/slashes", @"D:\with\forward\slashes\")]
         [TestCase(@"D:/with/mixed\slashes", @"D:\with\mixed\slashes\")]
-        public void should_fix_wrong_slashes_on_add(String remotePath, String cleanedPath)
+        public void should_fix_wrong_slashes_on_add(string remotePath, string cleanedPath)
         {
             GivenMapping();
 

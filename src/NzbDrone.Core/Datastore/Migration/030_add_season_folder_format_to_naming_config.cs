@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                 using (IDbCommand updateCmd = conn.CreateCommand())
                 {
-                    var text = String.Format("UPDATE NamingConfig " +
+                    var text = string.Format("UPDATE NamingConfig " +
                                              "SET SeasonFolderFormat = '{0}'",
                                              seasonFormat);
 

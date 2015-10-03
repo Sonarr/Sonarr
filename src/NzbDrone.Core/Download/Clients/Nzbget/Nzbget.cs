@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             var queueItems = new List<DownloadClientItem>();
 
-            Int64 totalRemainingSize = 0;
+            long totalRemainingSize = 0;
 
             foreach (var item in queue)
             {
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
                 historyItem.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(item.DestDir));
                 historyItem.Category = item.Category;
-                historyItem.Message = String.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
+                historyItem.Message = string.Format("PAR Status: {0} - Unpack Status: {1} - Move Status: {2} - Script Status: {3} - Delete Status: {4} - Mark Status: {5}", item.ParStatus, item.UnpackStatus, item.MoveStatus, item.ScriptStatus, item.DeleteStatus, item.MarkStatus);
                 historyItem.Status = DownloadItemStatus.Completed;
                 historyItem.RemainingTime = TimeSpan.Zero;
 
@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return status;
         }
 
-        protected IEnumerable<NzbgetCategory> GetCategories(Dictionary<String, String> config)
+        protected IEnumerable<NzbgetCategory> GetCategories(Dictionary<string, string> config)
         {
             for (int i = 1; i < 100; i++)
             {
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 if (destDir.IsNullOrWhiteSpace())
                 {
                     var mainDir = config.GetValueOrDefault("MainDir");
-                    destDir = config.GetValueOrDefault("DestDir", String.Empty).Replace("${MainDir}", mainDir);
+                    destDir = config.GetValueOrDefault("DestDir", string.Empty).Replace("${MainDir}", mainDir);
 
                     if (config.GetValueOrDefault("AppendCategoryDir", "yes") == "yes")
                     {
@@ -300,7 +300,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
                 {
-                    InfoLink = String.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
+                    InfoLink = string.Format("http://{0}:{1}/", Settings.Host, Settings.Port),
                     DetailedDescription = "The Category your entered doesn't exist in NzbGet. Go to NzbGet to create it."
                 };
             }
@@ -311,11 +311,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         // Javascript doesn't support 64 bit integers natively so json officially doesn't either. 
         // NzbGet api thus sends it in two 32 bit chunks. Here we join the two chunks back together.
         // Simplified decimal example: "42" splits into "4" and "2". To join them I shift (<<) the "4" 1 digit to the left = "40". combine it with "2". which becomes "42" again.
-        private Int64 MakeInt64(UInt32 high, UInt32 low)
+        private long MakeInt64(uint high, uint low)
         {
-            Int64 result = high;
+            long result = high;
 
-            result = (result << 32) | (Int64)low;
+            result = (result << 32) | (long)low;
 
             return result;
         }

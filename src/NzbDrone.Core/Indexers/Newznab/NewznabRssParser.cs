@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabRssParser : RssParser
     {
-        public const String ns = "{http://www.newznab.com/DTD/2010/feeds/attributes/}";
+        public const string ns = "{http://www.newznab.com/DTD/2010/feeds/attributes/}";
 
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
@@ -45,22 +45,22 @@ namespace NzbDrone.Core.Indexers.Newznab
             return releaseInfo;
         }
 
-        protected override String GetInfoUrl(XElement item)
+        protected override string GetInfoUrl(XElement item)
         {
             return ParseUrl(item.TryGetValue("comments").TrimEnd("#comments"));
         }
 
-        protected override String GetCommentUrl(XElement item)
+        protected override string GetCommentUrl(XElement item)
         {
             return ParseUrl(item.TryGetValue("comments"));
         }
 
-        protected override Int64 GetSize(XElement item)
+        protected override long GetSize(XElement item)
         {
-            Int64 size;
+            long size;
 
             var sizeString = TryGetNewznabAttribute(item, "size");
-            if (!sizeString.IsNullOrWhiteSpace() && Int64.TryParse(sizeString, out size))
+            if (!sizeString.IsNullOrWhiteSpace() && long.TryParse(sizeString, out size))
             {
                 return size;
             }
@@ -93,12 +93,12 @@ namespace NzbDrone.Core.Indexers.Newznab
             return url;
         }
 
-        protected virtual Int32 GetTvRageId(XElement item)
+        protected virtual int GetTvRageId(XElement item)
         {
             var tvRageIdString = TryGetNewznabAttribute(item, "rageid");
-            Int32 tvRageId;
+            int tvRageId;
 
-            if (!tvRageIdString.IsNullOrWhiteSpace() && Int32.TryParse(tvRageIdString, out tvRageId))
+            if (!tvRageIdString.IsNullOrWhiteSpace() && int.TryParse(tvRageIdString, out tvRageId))
             {
                 return tvRageId;
             }
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             return 0;
         }
 
-        protected String TryGetNewznabAttribute(XElement item, String key, String defaultValue = "")
+        protected string TryGetNewznabAttribute(XElement item, string key, string defaultValue = "")
         {
             var attr = item.Elements(ns + "attr").SingleOrDefault(e => e.Attribute("name").Value.Equals(key, StringComparison.CurrentCultureIgnoreCase));
 

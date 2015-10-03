@@ -13,19 +13,19 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     public interface ITransmissionProxy
     {
         List<TransmissionTorrent> GetTorrents(TransmissionSettings settings);
-        void AddTorrentFromUrl(String torrentUrl, String downloadDirectory, TransmissionSettings settings);
-        void AddTorrentFromData(Byte[] torrentData, String downloadDirectory, TransmissionSettings settings);
-        void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings);
-        Dictionary<String, Object> GetConfig(TransmissionSettings settings);
-        String GetVersion(TransmissionSettings settings);
-        void RemoveTorrent(String hash, Boolean removeData, TransmissionSettings settings);
-        void MoveTorrentToTopInQueue(String hashString, TransmissionSettings settings);
+        void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, TransmissionSettings settings);
+        void AddTorrentFromData(byte[] torrentData, string downloadDirectory, TransmissionSettings settings);
+        void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings);
+        Dictionary<string, object> GetConfig(TransmissionSettings settings);
+        string GetVersion(TransmissionSettings settings);
+        void RemoveTorrent(string hash, bool removeData, TransmissionSettings settings);
+        void MoveTorrentToTopInQueue(string hashString, TransmissionSettings settings);
     }
 
     public class TransmissionProxy: ITransmissionProxy
     {        
         private readonly Logger _logger;
-        private String _sessionId;
+        private string _sessionId;
 
         public TransmissionProxy(Logger logger)
         {
@@ -41,9 +41,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return torrents;
         }
 
-        public void AddTorrentFromUrl(String torrentUrl, String downloadDirectory, TransmissionSettings settings)
+        public void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, TransmissionSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("filename", torrentUrl);
 
             if (!downloadDirectory.IsNullOrWhiteSpace())
@@ -54,9 +54,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             ProcessRequest("torrent-add", arguments, settings);
         }
 
-        public void AddTorrentFromData(Byte[] torrentData, String downloadDirectory, TransmissionSettings settings)
+        public void AddTorrentFromData(byte[] torrentData, string downloadDirectory, TransmissionSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("metainfo", Convert.ToBase64String(torrentData));
 
             if (!downloadDirectory.IsNullOrWhiteSpace())
@@ -67,10 +67,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             ProcessRequest("torrent-add", arguments, settings);
         }
 
-        public void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings)
+        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
-            arguments.Add("ids", new String[] { hash });
+            var arguments = new Dictionary<string, object>();
+            arguments.Add("ids", new string[] { hash });
 
             if (seedConfiguration.Ratio != null)
             {
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             ProcessRequest("torrent-set", arguments, settings);
         }
 
-        public String GetVersion(TransmissionSettings settings)
+        public string GetVersion(TransmissionSettings settings)
         {
             // Gets the transmission version.
             var config = GetConfig(settings);
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return version.ToString();
         }
 
-        public Dictionary<String, Object> GetConfig(TransmissionSettings settings)
+        public Dictionary<string, object> GetConfig(TransmissionSettings settings)
         {
             // Gets the transmission version.
             var result = GetSessionVariables(settings);
@@ -105,19 +105,19 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return result.Arguments;
         }
 
-        public void RemoveTorrent(String hashString, Boolean removeData, TransmissionSettings settings)
+        public void RemoveTorrent(string hashString, bool removeData, TransmissionSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
-            arguments.Add("ids", new String[] { hashString });
+            var arguments = new Dictionary<string, object>();
+            arguments.Add("ids", new string[] { hashString });
             arguments.Add("delete-local-data", removeData);
 
             ProcessRequest("torrent-remove", arguments, settings);
         }
 
-        public void MoveTorrentToTopInQueue(String hashString, TransmissionSettings settings)
+        public void MoveTorrentToTopInQueue(string hashString, TransmissionSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
-            arguments.Add("ids", new String[] { hashString });
+            var arguments = new Dictionary<string, object>();
+            arguments.Add("ids", new string[] { hashString });
 
             ProcessRequest("queue-move-top", arguments, settings);
         }
@@ -139,9 +139,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return GetTorrentStatus(null, settings);
         }
 
-        private TransmissionResponse GetTorrentStatus(IEnumerable<String> hashStrings, TransmissionSettings settings)
+        private TransmissionResponse GetTorrentStatus(IEnumerable<string> hashStrings, TransmissionSettings settings)
         {
-            var fields = new String[]{
+            var fields = new string[]{
                 "id",
                 "hashString", // Unique torrent ID. Use this instead of the client id?
                 "name",
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 "errorString"
             };
             
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("fields", fields);
 
             if (hashStrings != null)
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return result;
         }
 
-        protected String GetSessionId(IRestClient client, TransmissionSettings settings)
+        protected string GetSessionId(IRestClient client, TransmissionSettings settings)
         {
             var request = new RestRequest();
             request.RequestFormat = DataFormat.Json;
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             if (restResponse.StatusCode == HttpStatusCode.MovedPermanently)
             {
-                var uri = new Uri(restResponse.ResponseUri, (String)restResponse.GetHeaderValue("Location"));
+                var uri = new Uri(restResponse.ResponseUri, (string)restResponse.GetHeaderValue("Location"));
 
                 throw new DownloadClientException("Remote site redirected to " + uri);
             }
@@ -194,7 +194,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                         throw new DownloadClientException("Remote host did not return a Session Id.");
                     }
 
-                    return (String)sessionId.Value;
+                    return (string)sessionId.Value;
                 }
                 case HttpStatusCode.Unauthorized:
                     throw new DownloadClientAuthenticationException("User authentication failed.");
@@ -205,11 +205,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             throw new DownloadClientException("Remote host did not return a Session Id.");
         }
         
-        public TransmissionResponse ProcessRequest(String action, Object arguments, TransmissionSettings settings)
+        public TransmissionResponse ProcessRequest(string action, object arguments, TransmissionSettings settings)
         {
             var client = BuildClient(settings);
 
-            if (String.IsNullOrWhiteSpace(_sessionId))
+            if (string.IsNullOrWhiteSpace(_sessionId))
             {
                 _sessionId = GetSessionId(client, settings);
             }
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("X-Transmission-Session-Id", _sessionId);
 
-            var data = new Dictionary<String, Object>();
+            var data = new Dictionary<string, object>();
             data.Add("method", action);
 
             if (arguments != null)
@@ -260,7 +260,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var protocol = settings.UseSsl ? "https" : "http";
             
-            var url = String.Format(@"{0}://{1}:{2}/{3}/rpc", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
+            var url = string.Format(@"{0}://{1}:{2}/{3}/rpc", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
 
             var restClient = RestClientFactory.BuildClient(url);
             restClient.FollowRedirects = false;

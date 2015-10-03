@@ -53,7 +53,7 @@ namespace NzbDrone.Update.UpdateEngine
         {
             _logger.Info("Verifying requirements before update...");
 
-            if (String.IsNullOrWhiteSpace(targetFolder))
+            if (string.IsNullOrWhiteSpace(targetFolder))
                 throw new ArgumentException("Target folder can not be null or empty");
 
             if (!_diskProvider.FolderExists(targetFolder))

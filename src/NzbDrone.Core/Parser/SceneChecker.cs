@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Parser
             if (parsedTitle == null ||
                 parsedTitle.ReleaseGroup == null ||
                 parsedTitle.Quality.Quality == Qualities.Quality.Unknown ||
-                String.IsNullOrWhiteSpace(parsedTitle.SeriesTitle))
+                string.IsNullOrWhiteSpace(parsedTitle.SeriesTitle))
             {
                 return false;
             }

@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             return response.Data.Select(d =>
             {
                 int tvdbId = 0;
-                Int32.TryParse(d, out tvdbId);
+                int.TryParse(d, out tvdbId);
 
                 return tvdbId;
             }).Where(t => t > 0).ToList();
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             var request = _xemRequestBuilder.Build("/allNames");
             request.UriBuilder.SetQueryParam("seasonNumbers", true);
 
-            var response = _httpClient.Get<XemResult<Dictionary<Int32, List<JObject>>>>(request).Resource;
+            var response = _httpClient.Get<XemResult<Dictionary<int, List<JObject>>>>(request).Resource;
 
             var result = new List<SceneMapping>();
 
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                     foreach (var n in name)
                     {
                         int seasonNumber;
-                        if (!Int32.TryParse(n.Value.ToString(), out seasonNumber))
+                        if (!int.TryParse(n.Value.ToString(), out seasonNumber))
                         {
                             continue;
                         }

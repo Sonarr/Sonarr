@@ -20,7 +20,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
         private void SetupFolders(string root)
         {
-            var folders = new List<String>
+            var folders = new List<string>
             {
                 RECYCLING_BIN,
                 "Chocolatey",
@@ -47,7 +47,7 @@ namespace NzbDrone.Common.Test.DiskTests
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectoryInfos(It.IsAny<String>()))
+                .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
             Subject.LookupContents(root, false).Directories.Should().NotContain(Path.Combine(root, RECYCLING_BIN));
@@ -60,7 +60,7 @@ namespace NzbDrone.Common.Test.DiskTests
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectoryInfos(It.IsAny<String>()))
+                .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
             Subject.LookupContents(root, false).Directories.Should().NotContain(Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
@@ -73,7 +73,7 @@ namespace NzbDrone.Common.Test.DiskTests
             SetupFolders(root);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(s => s.GetDirectoryInfos(It.IsAny<String>()))
+                .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
             var result = Subject.LookupContents(root, false);

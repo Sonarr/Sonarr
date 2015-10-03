@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Profiles
 {
     public class Profile : ModelBase
     {
-        public String Name { get; set; }
+        public string Name { get; set; }
         public Quality Cutoff { get; set; }
         public List<ProfileQualityItem> Items { get; set; }
         public Language Language { get; set; }

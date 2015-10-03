@@ -5,7 +5,7 @@ using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common
 {
-    public class PathEqualityComparer : IEqualityComparer<String>
+    public class PathEqualityComparer : IEqualityComparer<string>
     {
         public static readonly PathEqualityComparer Instance = new PathEqualityComparer();
 

@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Indexers.BitMeTv
 
         private IEnumerable<IndexerRequest> GetRssRequests()
         {
-            var request = new IndexerRequest(String.Format("{0}/rss.php?uid={1}&passkey={2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey), HttpAccept.Html);
+            var request = new IndexerRequest(string.Format("{0}/rss.php?uid={1}&passkey={2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.UserId, Settings.RssPasskey), HttpAccept.Html);
 
             request.HttpRequest.AddCookie(Settings.Cookie);
 

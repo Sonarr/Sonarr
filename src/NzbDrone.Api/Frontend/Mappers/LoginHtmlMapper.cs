@@ -17,7 +17,7 @@ namespace NzbDrone.Api.Frontend.Mappers
         private readonly string _indexPath;
         private static readonly Regex ReplaceRegex = new Regex("(?<=(?:href|src|data-main)=\").*?(?=\")", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static String URL_BASE;
+        private static string URL_BASE;
         private string _generatedContent;
 
         public LoginHtmlMapper(IAppFolderInfo appFolderInfo,

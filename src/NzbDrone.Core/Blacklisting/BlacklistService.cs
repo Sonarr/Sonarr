@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Blacklisting
                                 Quality = message.Quality,
                                 Date = DateTime.UtcNow,
                                 PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
-                                Size = Int64.Parse(message.Data.GetValueOrDefault("size", "0")),
+                                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
                                 Indexer = message.Data.GetValueOrDefault("indexer"),
                                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                                 Message = message.Message,

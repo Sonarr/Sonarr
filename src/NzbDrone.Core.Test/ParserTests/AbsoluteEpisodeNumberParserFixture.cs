@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[DeadFish] Kenzen Robo Daimidaler - 01 - Special [BD][720p][AAC]", "Kenzen Robo Daimidaler", 1)]
         [TestCase("[DeadFish] Kenzen Robo Daimidaler - 01 - OVA [BD][720p][AAC]", "Kenzen Robo Daimidaler", 1)]
         [TestCase("[DeadFish] Kenzen Robo Daimidaler - 01 - OVD [BD][720p][AAC]", "Kenzen Robo Daimidaler", 1)]
-        public void should_parse_absolute_specials(String postTitle, String title, Int32 absoluteEpisodeNumber)
+        public void should_parse_absolute_specials(string postTitle, string title, int absoluteEpisodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();

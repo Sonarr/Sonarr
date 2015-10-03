@@ -17,9 +17,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
     [TestFixture]
     public class TorrentBlackholeFixture : DownloadClientFixtureBase<TorrentBlackhole>
     {
-        protected String _completedDownloadFolder;
-        protected String _blackholeFolder;
-        protected String _filePath;
+        protected string _completedDownloadFolder;
+        protected string _blackholeFolder;
+        protected string _filePath;
 
         [SetUp]
         public void Setup()
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
                 .Returns(new[] { Path.Combine(_completedDownloadFolder, "somefile.mkv") });
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetFileSize(It.IsAny<String>()))
+                .Setup(c => c.GetFileSize(It.IsAny<string>()))
                 .Returns(1000000);
         }
 

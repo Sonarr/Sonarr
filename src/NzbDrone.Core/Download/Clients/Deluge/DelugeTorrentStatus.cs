@@ -4,11 +4,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 {
     class DelugeTorrentStatus
     {
-        public const String Paused = "Paused";
-        public const String Queued = "Queued";
-        public const String Downloading = "Downloading";
-        public const String Seeding = "Seeding";
-        public const String Checking = "Checking";
-        public const String Error = "Error";
+        public const string Paused = "Paused";
+        public const string Queued = "Queued";
+        public const string Downloading = "Downloading";
+        public const string Seeding = "Seeding";
+        public const string Checking = "Checking";
+        public const string Error = "Error";
     }
 }

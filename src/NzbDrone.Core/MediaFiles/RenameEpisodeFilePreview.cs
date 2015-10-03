@@ -5,11 +5,11 @@ namespace NzbDrone.Core.MediaFiles
 {
     public class RenameEpisodeFilePreview
     {
-        public Int32 SeriesId { get; set; }
-        public Int32 SeasonNumber { get; set; }
-        public List<Int32> EpisodeNumbers { get; set; }
-        public Int32 EpisodeFileId { get; set; }
-        public String ExistingPath { get; set; }
-        public String NewPath { get; set; }
+        public int SeriesId { get; set; }
+        public int SeasonNumber { get; set; }
+        public List<int> EpisodeNumbers { get; set; }
+        public int EpisodeFileId { get; set; }
+        public string ExistingPath { get; set; }
+        public string NewPath { get; set; }
     }
 }

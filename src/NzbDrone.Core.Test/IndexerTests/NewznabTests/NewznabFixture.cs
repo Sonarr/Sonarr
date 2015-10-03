@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                     Settings = new NewznabSettings()
                         {
                             Url = "http://indexer.local/",
-                            Categories = new Int32[] { 1 }
+                            Categories = new int[] { 1 }
                         }
                 };
         }

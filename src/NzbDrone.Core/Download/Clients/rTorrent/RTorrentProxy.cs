@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
         }
 
-        public void AddTorrentFromFile(string fileName, Byte[] fileContent, RTorrentSettings settings)
+        public void AddTorrentFromFile(string fileName, byte[] fileContent, RTorrentSettings settings)
         {
             _logger.Debug("Executing remote method: load.raw");
 

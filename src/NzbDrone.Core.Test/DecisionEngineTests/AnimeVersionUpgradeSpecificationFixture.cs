@@ -91,14 +91,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_be_false_when_existing_file_doesnt_have_a_release_group()
         {
-            _episodeFile.ReleaseGroup = String.Empty;
+            _episodeFile.ReleaseGroup = string.Empty;
             _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_should_be_false_when_release_doesnt_have_a_release_group()
         {
-            _remoteEpisode.ParsedEpisodeInfo.ReleaseGroup = String.Empty;
+            _remoteEpisode.ParsedEpisodeInfo.ReleaseGroup = string.Empty;
             _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 

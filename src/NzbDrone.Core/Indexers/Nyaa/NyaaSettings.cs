@@ -26,10 +26,10 @@ namespace NzbDrone.Core.Indexers.Nyaa
         }
 
         [FieldDefinition(0, Label = "Website URL")]
-        public String BaseUrl { get; set; }
+        public string BaseUrl { get; set; }
 
         [FieldDefinition(1, Label = "Additional Parameters", Advanced = true, HelpText = "Please note if you change the category you will have to add required/restricted rules about the subgroups to avoid foreign language releases.")]
-        public String AdditionalParameters { get; set; }
+        public string AdditionalParameters { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

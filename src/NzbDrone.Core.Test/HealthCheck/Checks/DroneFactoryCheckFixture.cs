@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(exists);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FolderWritable(It.IsAny<String>()))
+                  .Setup(s => s.FolderWritable(It.IsAny<string>()))
                   .Returns(exists && writable);
         }
         

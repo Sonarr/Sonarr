@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(AuthToken);
+                return !string.IsNullOrWhiteSpace(AuthToken);
             }
         }
 

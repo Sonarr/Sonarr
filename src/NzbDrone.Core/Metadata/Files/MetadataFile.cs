@@ -5,13 +5,13 @@ namespace NzbDrone.Core.Metadata.Files
 {
     public class MetadataFile : ModelBase
     {
-        public Int32 SeriesId { get; set; }
-        public String Consumer { get; set; }
+        public int SeriesId { get; set; }
+        public string Consumer { get; set; }
         public MetadataType Type { get; set; }
-        public String RelativePath { get; set; }
+        public string RelativePath { get; set; }
         public DateTime LastUpdated { get; set; }
-        public Int32? EpisodeFileId { get; set; }
-        public Int32? SeasonNumber { get; set; }
-        public String Hash { get; set; }
+        public int? EpisodeFileId { get; set; }
+        public int? SeasonNumber { get; set; }
+        public string Hash { get; set; }
     }
 }

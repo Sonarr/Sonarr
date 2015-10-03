@@ -367,7 +367,7 @@ namespace NzbDrone.Core.Metadata
             return result;
         }
 
-        private void DownloadImage(Series series, String url, String path)
+        private void DownloadImage(Series series, string url, string path)
         {
             try
             {
@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Metadata
             }
         }
 
-        private void SaveMetadataFile(String path, String contents)
+        private void SaveMetadataFile(string path, string contents)
         {
             _diskProvider.WriteAllText(path, contents);
             _mediaFileAttributeService.SetFilePermissions(path);

@@ -265,7 +265,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
         }
 
-        public String Option(String option, String value)
+        public string Option(string option, string value)
         {
             var pOption = MakeStringParameter(option);
             var pValue = MakeStringParameter(value);
@@ -304,11 +304,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfo_Open(IntPtr handle, IntPtr fileName);
         [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfo_Open_Buffer_Init(IntPtr handle, Int64 fileSize, Int64 fileOffset);
+        private static extern IntPtr MediaInfo_Open_Buffer_Init(IntPtr handle, long fileSize, long fileOffset);
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfo_Open_Buffer_Continue(IntPtr handle, byte[] buffer, IntPtr bufferSize);
         [DllImport("MediaInfo.dll")]
-        private static extern Int64 MediaInfo_Open_Buffer_Continue_GoTo_Get(IntPtr handle);
+        private static extern long MediaInfo_Open_Buffer_Continue_GoTo_Get(IntPtr handle);
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfo_Open_Buffer_Finalize(IntPtr handle);
         [DllImport("MediaInfo.dll")]
@@ -331,11 +331,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfoA_Open(IntPtr handle, IntPtr fileName);
         [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoA_Open_Buffer_Init(IntPtr handle, Int64 fileSize, Int64 fileOffset);
+        private static extern IntPtr MediaInfoA_Open_Buffer_Init(IntPtr handle, long fileSize, long fileOffset);
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfoA_Open_Buffer_Continue(IntPtr handle, byte[] buffer, IntPtr bufferSize);
         [DllImport("MediaInfo.dll")]
-        private static extern Int64 MediaInfoA_Open_Buffer_Continue_GoTo_Get(IntPtr handle);
+        private static extern long MediaInfoA_Open_Buffer_Continue_GoTo_Get(IntPtr handle);
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfoA_Open_Buffer_Finalize(IntPtr handle);
         [DllImport("MediaInfo.dll")]

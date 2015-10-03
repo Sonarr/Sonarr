@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                            {
                                Series = new Series
                                         {
-                                            Tags = new HashSet<Int32>()
+                                            Tags = new HashSet<int>()
                                         },
                                Release = new ReleaseInfo
                                          {
@@ -32,10 +32,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                            };
         }
 
-        private void GivenRestictions(String required, String ignored)
+        private void GivenRestictions(string required, string ignored)
         {
             Mocker.GetMock<IRestrictionService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<Int32>>()))
+                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
                   .Returns(new List<Restriction>
                            {
                                new Restriction
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_be_true_when_restrictions_are_empty()
         {
             Mocker.GetMock<IRestrictionService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<Int32>>()))
+                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
                   .Returns(new List<Restriction>());
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase("webrip")]
         [TestCase("X264")]
         [TestCase("X264,NOTTHERE")]
-        public void should_ignore_case_when_matching_required(String required)
+        public void should_ignore_case_when_matching_required(string required)
         {
             GivenRestictions(required, null);
 
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [TestCase("webrip")]
         [TestCase("X264")]
         [TestCase("X264,NOTTHERE")]
-        public void should_ignore_case_when_matching_ignored(String ignored)
+        public void should_ignore_case_when_matching_ignored(string ignored)
         {
             GivenRestictions(null, ignored);
 
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Release.Title = "[ www.Speed.cd ] -Whose.Line.is.it.Anyway.US.S10E24.720p.HDTV.x264-BAJSKORV";
 
             Mocker.GetMock<IRestrictionService>()
-                  .Setup(s => s.AllForTags(It.IsAny<HashSet<Int32>>()))
+                  .Setup(s => s.AllForTags(It.IsAny<HashSet<int>>()))
                   .Returns(new List<Restriction>
                            {
                                new Restriction { Required = "x264", Ignored = "www.Speed.cd" }

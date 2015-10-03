@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
                     DownloadRate = 7000000
                 });
 
-            var configItems = new Dictionary<String, String>();
+            var configItems = new Dictionary<string, string>();
             configItems.Add("Category1.Name", "tv");
             configItems.Add("Category1.DestDir", @"/remote/mount/tv");
 
@@ -92,14 +92,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
-                .Returns((String)null);
+                .Setup(s => s.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
+                .Returns((string)null);
         }
 
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<INzbgetProxy>()
-                .Setup(s => s.DownloadNzb(It.IsAny<Byte[]>(), It.IsAny<String>(), It.IsAny<String>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
+                .Setup(s => s.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<NzbgetSettings>()))
                 .Returns(Guid.NewGuid().ToString().Replace("-", ""));
         }
 

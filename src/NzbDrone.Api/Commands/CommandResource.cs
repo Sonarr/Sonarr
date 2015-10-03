@@ -7,8 +7,8 @@ namespace NzbDrone.Api.Commands
 {
     public class CommandResource : RestResource
     {
-        public String Name { get; set; }
-        public String Message { get; set; }
+        public string Name { get; set; }
+        public string Message { get; set; }
         public Command Body { get; set; }
         public CommandPriority Priority { get; set; }
         public CommandStatus Status { get; set; }
@@ -33,7 +33,7 @@ namespace NzbDrone.Api.Commands
             set { }
         }
 
-        public Boolean Manual
+        public bool Manual
         {
             get
             {
@@ -66,7 +66,7 @@ namespace NzbDrone.Api.Commands
             set { }
         }
 
-        public Boolean SendUpdatesToClient
+        public bool SendUpdatesToClient
         {
             get
             {
@@ -78,7 +78,7 @@ namespace NzbDrone.Api.Commands
             set { }
         }
 
-        public Boolean UpdateScheduledTask
+        public bool UpdateScheduledTask
         {
             get
             {

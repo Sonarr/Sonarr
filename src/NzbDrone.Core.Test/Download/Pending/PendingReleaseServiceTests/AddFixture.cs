@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns(new List<PendingRelease>());
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.GetSeries(It.IsAny<Int32>()))
+                  .Setup(s => s.GetSeries(It.IsAny<int>()))
                   .Returns(_series);
 
             Mocker.GetMock<IParsingService>()
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns((List<DownloadDecision> d) => d);
         }
 
-        private void GivenHeldRelease(String title, String indexer, DateTime publishDate)
+        private void GivenHeldRelease(string title, string indexer, DateTime publishDate)
         {
             var release = _release.JsonClone();
             release.Indexer = indexer;

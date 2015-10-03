@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             Mocker.GetMock<IRuntimeInfo>()
                   .SetupGet(s => s.RuntimeVersion)
-                  .Returns(String.Format("{0} (tarball Wed Sep 25 16:35:44 CDT 2013)", version));
+                  .Returns(string.Format("{0} (tarball Wed Sep 25 16:35:44 CDT 2013)", version));
         }
 
         [Test]

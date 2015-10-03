@@ -13,7 +13,7 @@ namespace NzbDrone.Host.AccessControl
     public interface IUrlAclAdapter
     {
         void ConfigureUrls();
-        List<String> Urls { get; }
+        List<string> Urls { get; }
     }
 
     public class UrlAclAdapter : IUrlAclAdapter
@@ -23,7 +23,7 @@ namespace NzbDrone.Host.AccessControl
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
 
-        public List<String> Urls
+        public List<string> Urls
         {
             get
             {
@@ -132,7 +132,7 @@ namespace NzbDrone.Host.AccessControl
                 return new List<UrlAcl>();
             }
 
-            var arguments = String.Format("http show urlacl");
+            var arguments = string.Format("http show urlacl");
             var output = _netshProvider.Run(arguments);
 
             if (output == null || !output.Standard.Any()) return new List<UrlAcl>();
@@ -159,7 +159,7 @@ namespace NzbDrone.Host.AccessControl
 
         private void RegisterUrl(UrlAcl urlAcl)
         {
-            var arguments = String.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl.Url);
+            var arguments = string.Format("http add urlacl {0} sddl=D:(A;;GX;;;S-1-1-0)", urlAcl.Url);
             _netshProvider.Run(arguments);
         }
 
@@ -180,7 +180,7 @@ namespace NzbDrone.Host.AccessControl
         {
             _logger.Trace("Removing URL ACL {0}", urlAcl.Url);
 
-            var arguments = String.Format("http delete urlacl {0}", urlAcl.Url);
+            var arguments = string.Format("http delete urlacl {0}", urlAcl.Url);
             _netshProvider.Run(arguments);
         }
 
@@ -205,7 +205,7 @@ namespace NzbDrone.Host.AccessControl
                 Scheme = scheme,
                 Address = address,
                 Port = port,
-                UrlBase = String.Empty
+                UrlBase = string.Empty
             });
 
             return urlAcls;

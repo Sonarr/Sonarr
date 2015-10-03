@@ -33,7 +33,7 @@ namespace NzbDrone.App.Test
         public void should_continue_if_only_instance()
         {
             Mocker.GetMock<IProcessProvider>()
-                  .Setup(c => c.FindProcessByName(It.Is<String>(f => f.Contains("NzbDrone"))))
+                  .Setup(c => c.FindProcessByName(It.Is<string>(f => f.Contains("NzbDrone"))))
                   .Returns(new List<ProcessInfo>
                            {
                                new ProcessInfo {Id = CURRENT_PROCESS_ID}

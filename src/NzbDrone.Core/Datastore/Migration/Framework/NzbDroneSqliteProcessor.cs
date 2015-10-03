@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             if (columnIndex == -1)
             {
-                throw new ApplicationException(String.Format("Column {0} does not exist on table {1}.", expression.Column.Name, expression.TableName));
+                throw new ApplicationException(string.Format("Column {0} does not exist on table {1}.", expression.Column.Name, expression.TableName));
             }
 
             columnDefinitions[columnIndex] = expression.Column;
@@ -62,13 +62,13 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             if (columnsToRemove.Any())
             {
-                throw new ApplicationException(String.Format("Column {0} does not exist on table {1}.", columnsToRemove.First(), expression.TableName));
+                throw new ApplicationException(string.Format("Column {0} does not exist on table {1}.", columnsToRemove.First(), expression.TableName));
             }
 
             ProcessAlterTable(tableDefinition);
         }
 
-        protected virtual TableDefinition GetTableSchema(String tableName)
+        protected virtual TableDefinition GetTableSchema(string tableName)
         {
             var schemaDumper = new SqliteSchemaDumper(this, Announcer);
             var schema = schemaDumper.ReadDbSchema();
@@ -89,11 +89,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             // What is the cleanest way to do this? Add function to Generator?
             var quoter = new SqliteQuoter();
-            var columnsToTransfer = String.Join(", ", tableDefinition.Columns.Select(c => quoter.QuoteColumnName(c.Name)));
+            var columnsToTransfer = string.Join(", ", tableDefinition.Columns.Select(c => quoter.QuoteColumnName(c.Name)));
 
             Process(new CreateTableExpression() { TableName = tempTableName, Columns = tableDefinition.Columns.ToList() });
 
-            Process(String.Format("INSERT INTO {0} SELECT {1} FROM {2}", quoter.QuoteTableName(tempTableName), columnsToTransfer, quoter.QuoteTableName(tableName)));
+            Process(string.Format("INSERT INTO {0} SELECT {1} FROM {2}", quoter.QuoteTableName(tempTableName), columnsToTransfer, quoter.QuoteTableName(tableName)));
 
             Process(new DeleteTableExpression() { TableName = tableName });
 

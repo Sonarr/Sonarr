@@ -13,7 +13,7 @@ namespace NzbDrone.Api.Extensions
     {
         private static readonly ICached<MethodInfo> SetterCache = new Cached<MethodInfo>();
 
-        public static IEnumerable<TParent> LoadSubtype<TParent, TChild, TSourceChild>(this IEnumerable<TParent> parents, Func<TParent, Int32> foreignKeySelector, Func<IEnumerable<Int32>, IEnumerable<TSourceChild>> sourceChildSelector)
+        public static IEnumerable<TParent> LoadSubtype<TParent, TChild, TSourceChild>(this IEnumerable<TParent> parents, Func<TParent, int> foreignKeySelector, Func<IEnumerable<int>, IEnumerable<TSourceChild>> sourceChildSelector)
             where TSourceChild : ModelBase, new()
             where TChild : RestResource, new()
             where TParent : RestResource

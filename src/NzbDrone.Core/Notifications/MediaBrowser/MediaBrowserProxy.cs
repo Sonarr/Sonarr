@@ -34,15 +34,15 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             ProcessRequest(request, settings);
         }
 
-        public void Update(MediaBrowserSettings settings, Int32 tvdbId)
+        public void Update(MediaBrowserSettings settings, int tvdbId)
         {
-            var path = String.Format("/Library/Series/Updated?tvdbid={0}", tvdbId);            
+            var path = string.Format("/Library/Series/Updated?tvdbid={0}", tvdbId);            
             var request = BuildRequest(path, settings);
 
             ProcessRequest(request, settings);
         }
 
-        private String ProcessRequest(HttpRequest request, MediaBrowserSettings settings)
+        private string ProcessRequest(HttpRequest request, MediaBrowserSettings settings)
         {
             request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
 
         private HttpRequest BuildRequest(string path, MediaBrowserSettings settings)
         {
-            var url = String.Format(@"http://{0}/mediabrowser", settings.Address);
+            var url = string.Format(@"http://{0}/mediabrowser", settings.Address);
             
             return new HttpRequestBuilder(url).Build(path);
         }

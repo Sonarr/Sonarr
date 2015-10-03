@@ -43,7 +43,7 @@ namespace NzbDrone.Api.Frontend
             {
                 var urlBase = _configFileProvider.UrlBase;
 
-                if (!String.IsNullOrEmpty(urlBase))
+                if (!string.IsNullOrEmpty(urlBase))
                 {
                     if (Request.Url.BasePath != urlBase)
                     {

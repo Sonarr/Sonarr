@@ -165,7 +165,7 @@ namespace NzbDrone.Common.Disk
                 return driveInfo.Name;
             }
 
-            return String.Format("{0} ({1})", driveInfo.Name, driveInfo.VolumeLabel);
+            return string.Format("{0} ({1})", driveInfo.Name, driveInfo.VolumeLabel);
         }
         
         private string GetParent(string path)
@@ -186,7 +186,7 @@ namespace NzbDrone.Common.Disk
 
             if (!path.Equals("/"))
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             return null;

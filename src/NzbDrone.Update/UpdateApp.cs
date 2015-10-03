@@ -100,7 +100,7 @@ namespace NzbDrone.Update
         private int ParseProcessId(string arg)
         {
             int id;
-            if (!Int32.TryParse(arg, out id) || id <= 0)
+            if (!int.TryParse(arg, out id) || id <= 0)
             {
                 throw new ArgumentOutOfRangeException("arg", "Invalid process ID");
             }

@@ -33,47 +33,47 @@ namespace NzbDrone.Core.Indexers
             return base.PreProcess(indexerResponse);
         }
 
-        protected override Int64 GetSize(XElement item)
+        protected override long GetSize(XElement item)
         {
             var contentLength = item.FindDecendants("contentLength").SingleOrDefault();
 
             if (contentLength != null)
             {
-                return (Int64)contentLength;
+                return (long)contentLength;
             }
 
             return base.GetSize(item);
         }
 
-        protected override String GetInfoHash(XElement item)
+        protected override string GetInfoHash(XElement item)
         {
             var infoHash = item.FindDecendants("infoHash").SingleOrDefault();
-            return (String)infoHash;
+            return (string)infoHash;
         }
 
-        protected override String GetMagnetUrl(XElement item)
+        protected override string GetMagnetUrl(XElement item)
         {
             var magnetURI = item.FindDecendants("magnetURI").SingleOrDefault();
-            return (String)magnetURI;
+            return (string)magnetURI;
         }
 
-        protected override Int32? GetSeeders(XElement item)
+        protected override int? GetSeeders(XElement item)
         {
             var seeds = item.FindDecendants("seeds").SingleOrDefault();
             if (seeds != null)
             {
-                return (Int32)seeds;
+                return (int)seeds;
             }
 
             return base.GetSeeders(item);
         }
 
-        protected override Int32? GetPeers(XElement item)
+        protected override int? GetPeers(XElement item)
         {
             var peers = item.FindDecendants("peers").SingleOrDefault();
             if (peers != null)
             {
-                return (Int32)peers;
+                return (int)peers;
             }
 
             return base.GetPeers(item);

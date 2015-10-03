@@ -5,6 +5,6 @@ namespace NzbDrone.Api.Tags
 {
     public class TagResource : RestResource
     {
-        public String Label { get; set; }
+        public string Label { get; set; }
     }
 }

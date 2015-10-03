@@ -8,7 +8,7 @@ namespace NzbDrone.Core.SeriesStats
     public interface ISeriesStatisticsRepository
     {
         List<SeasonStatistics> SeriesStatistics();
-        List<SeasonStatistics> SeriesStatistics(Int32 seriesId);
+        List<SeasonStatistics> SeriesStatistics(int seriesId);
     }
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.SeriesStats
             return mapper.Query<SeasonStatistics>(queryText);
         }
 
-        public List<SeasonStatistics> SeriesStatistics(Int32 seriesId)
+        public List<SeasonStatistics> SeriesStatistics(int seriesId)
         {
             var mapper = _database.GetDataMapper();
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.SeriesStats
             return mapper.Query<SeasonStatistics>(queryText);
         }
 
-        private String GetSelectClause()
+        private string GetSelectClause()
         {
             return @"SELECT Episodes.*, SUM(EpisodeFiles.Size) as SizeOnDisk FROM
                      (SELECT
@@ -67,12 +67,12 @@ namespace NzbDrone.Core.SeriesStats
                      GROUP BY Episodes.SeriesId, Episodes.SeasonNumber) as Episodes";
         }
 
-        private String GetGroupByClause()
+        private string GetGroupByClause()
         {
             return "GROUP BY Episodes.SeriesId, Episodes.SeasonNumber";
         }
 
-        private String GetEpisodeFilesJoin()
+        private string GetEpisodeFilesJoin()
         {
             return @"LEFT OUTER JOIN EpisodeFiles
                      ON EpisodeFiles.SeriesId = Episodes.SeriesId

@@ -6,9 +6,9 @@ namespace NzbDrone.Common.Extensions
     {
         public static Nullable<int> ParseInt32(this string source)
         {
-            Int32 result = 0;
+            int result = 0;
 
-            if (Int32.TryParse(source, out result))
+            if (int.TryParse(source, out result))
             {
                 return result;
             }
@@ -18,9 +18,9 @@ namespace NzbDrone.Common.Extensions
 
         public static Nullable<long> ParseInt64(this string source)
         {
-            Int64 result = 0;
+            long result = 0;
 
-            if (Int64.TryParse(source, out result))
+            if (long.TryParse(source, out result))
             {
                 return result;
             }

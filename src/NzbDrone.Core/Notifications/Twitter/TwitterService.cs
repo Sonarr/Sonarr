@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Notifications.Twitter
             oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/request_token";
             var qscoll = OAuthQuery(oAuthRequest);
 
-            return String.Format("https://api.twitter.com/oauth/authorize?oauth_token={0}", qscoll["oauth_token"]);
+            return string.Format("https://api.twitter.com/oauth/authorize?oauth_token={0}", qscoll["oauth_token"]);
         }
 
         public void SendNotification(string message, TwitterSettings settings)
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Notifications.Twitter
                 {
                     if (settings.Mention.IsNotNullOrWhiteSpace())
                     {
-                        message += String.Format(" @{0}", settings.Mention);
+                        message += string.Format(" @{0}", settings.Mention);
                     }
 
                     twitter.UpdateStatus(message);                    

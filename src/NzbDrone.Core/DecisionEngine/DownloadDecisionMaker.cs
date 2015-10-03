@@ -100,7 +100,7 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     if (decision.Rejections.Any())
                     {
-                        _logger.Debug("Release rejected for the following reasons: {0}", String.Join(", ", decision.Rejections));
+                        _logger.Debug("Release rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
                     }
 
                     yield return decision;
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.DecisionEngine
                 e.Data.Add("report", remoteEpisode.Release.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
                 _logger.ErrorException("Couldn't evaluate decision on " + remoteEpisode.Release.Title, e);
-                return new Rejection(String.Format("{0}: {1}", spec.GetType().Name, e.Message));
+                return new Rejection(string.Format("{0}: {1}", spec.GetType().Name, e.Message));
             }
 
             return null;

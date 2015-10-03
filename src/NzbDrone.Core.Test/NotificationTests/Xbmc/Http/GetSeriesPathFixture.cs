@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Http
         public void should_get_series_path()
         {
             const string queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/30 Rock/</field></record></xml>";
-            var query = String.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
+            var query = string.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
 
             Mocker.GetMock<IHttpProvider>()
                   .Setup(s => s.DownloadString(query, _settings.Username, _settings.Password))
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Http
         public void should_get_null_for_series_path()
         {
             const string queryResult = @"<xml></xml>";
-            var query = String.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
+            var query = string.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
 
             Mocker.GetMock<IHttpProvider>()
                   .Setup(s => s.DownloadString(query, _settings.Username, _settings.Password))
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Http
         public void should_get_series_path_with_special_characters_in_it()
         {
             const string queryResult = @"<xml><record><field>smb://xbmc:xbmc@HOMESERVER/TV/Law & Order- Special Victims Unit/</field></record></xml>";
-            var query = String.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
+            var query = string.Format("http://localhost:8080/xbmcCmds/xbmcHttp?command=QueryVideoDatabase(select path.strPath from path, tvshow, tvshowlinkpath where tvshow.c12 = 79488 and tvshowlinkpath.idShow = tvshow.idShow and tvshowlinkpath.idPath = path.idPath)");
 
             Mocker.GetMock<IHttpProvider>()
                   .Setup(s => s.DownloadString(query, _settings.Username, _settings.Password))

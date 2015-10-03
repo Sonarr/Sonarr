@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Indexers.HDBits
             var query = new TorrentQuery();
             if (TryAddSearchParameters(query, searchCriteria))
             {
-                query.Search = String.Format("{0:yyyy}-{0:MM}-{0:dd}", searchCriteria.AirDate);
+                query.Search = string.Format("{0:yyyy}-{0:MM}-{0:dd}", searchCriteria.AirDate);
 
                 requests.Add(GetRequest(query));
             }

@@ -11,24 +11,24 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 {
     public interface IUTorrentProxy
     {
-        Int32 GetVersion(UTorrentSettings settings);
-        Dictionary<String, String> GetConfig(UTorrentSettings settings);
+        int GetVersion(UTorrentSettings settings);
+        Dictionary<string, string> GetConfig(UTorrentSettings settings);
         List<UTorrentTorrent> GetTorrents(UTorrentSettings settings);
 
-        void AddTorrentFromUrl(String torrentUrl, UTorrentSettings settings);
-        void AddTorrentFromFile(String fileName, Byte[] fileContent, UTorrentSettings settings);
-        void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, UTorrentSettings settings);
+        void AddTorrentFromUrl(string torrentUrl, UTorrentSettings settings);
+        void AddTorrentFromFile(string fileName, byte[] fileContent, UTorrentSettings settings);
+        void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, UTorrentSettings settings);
 
-        void RemoveTorrent(String hash, Boolean removeData, UTorrentSettings settings);
-        void SetTorrentLabel(String hash, String label, UTorrentSettings settings);
-        void MoveTorrentToTopInQueue(String hash, UTorrentSettings settings);
+        void RemoveTorrent(string hash, bool removeData, UTorrentSettings settings);
+        void SetTorrentLabel(string hash, string label, UTorrentSettings settings);
+        void MoveTorrentToTopInQueue(string hash, UTorrentSettings settings);
     }
 
     public class UTorrentProxy : IUTorrentProxy
     {
         private readonly Logger _logger;
         private readonly CookieContainer _cookieContainer;
-        private String _authToken;
+        private string _authToken;
 
         public UTorrentProxy(Logger logger)
         {
@@ -36,9 +36,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             _cookieContainer = new CookieContainer();
         }
 
-        public Int32 GetVersion(UTorrentSettings settings)
+        public int GetVersion(UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("action", "getsettings");
 
             var result = ProcessRequest(arguments, settings);
@@ -46,14 +46,14 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return result.Build;
         }
 
-        public Dictionary<String, String> GetConfig(UTorrentSettings settings)
+        public Dictionary<string, string> GetConfig(UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("action", "getsettings");
 
             var result = ProcessRequest(arguments, settings);
 
-            var configuration = new Dictionary<String, String>();
+            var configuration = new Dictionary<string, string>();
 
             foreach (var configItem in result.Settings)
             {
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         public List<UTorrentTorrent> GetTorrents(UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("list", 1);
 
             var result = ProcessRequest(arguments, settings);
@@ -73,20 +73,20 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return result.Torrents;
         }
 
-        public void AddTorrentFromUrl(String torrentUrl, UTorrentSettings settings)
+        public void AddTorrentFromUrl(string torrentUrl, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("action", "add-url");
             arguments.Add("s", torrentUrl);
 
             ProcessRequest(arguments, settings);
         }
 
-        public void AddTorrentFromFile(String fileName, Byte[] fileContent, UTorrentSettings settings)
+        public void AddTorrentFromFile(string fileName, byte[] fileContent, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("action", "add-file");
-            arguments.Add("path", String.Empty);
+            arguments.Add("path", string.Empty);
 
             var client = BuildClient(settings);
 
@@ -106,9 +106,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             ProcessRequest(request, client);
         }
 
-        public void SetTorrentSeedingConfiguration(String hash, TorrentSeedConfiguration seedConfiguration, UTorrentSettings settings)
+        public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, UTorrentSettings settings)
         {
-            var arguments = new List<KeyValuePair<String, Object>>();
+            var arguments = new List<KeyValuePair<string, object>>();
             arguments.Add("action", "setprops");
             arguments.Add("hash", hash);
 
@@ -130,9 +130,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             ProcessRequest(arguments, settings);
         }
 
-        public void RemoveTorrent(String hash, Boolean removeData, UTorrentSettings settings)
+        public void RemoveTorrent(string hash, bool removeData, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
 
             if (removeData)
             {
@@ -148,9 +148,9 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             ProcessRequest(arguments, settings);
         }
 
-        public void SetTorrentLabel(String hash, String label, UTorrentSettings settings)
+        public void SetTorrentLabel(string hash, string label, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("action", "setprops");
             arguments.Add("hash", hash);
 
@@ -160,16 +160,16 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             ProcessRequest(arguments, settings);
         }
 
-        public void MoveTorrentToTopInQueue(String hash, UTorrentSettings settings)
+        public void MoveTorrentToTopInQueue(string hash, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<String, Object>();
+            var arguments = new Dictionary<string, object>();
             arguments.Add("action", "queuetop");
             arguments.Add("hash", hash);
 
             ProcessRequest(arguments, settings);
         }
 
-        public UTorrentResponse ProcessRequest(IEnumerable<KeyValuePair<String, Object>> arguments, UTorrentSettings settings)
+        public UTorrentResponse ProcessRequest(IEnumerable<KeyValuePair<string, object>> arguments, UTorrentSettings settings)
         {
             var client = BuildClient(settings);
 
@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             return uTorrentResult;
         }
 
-        private String GetAuthToken(IRestClient client)
+        private string GetAuthToken(IRestClient client)
         {
             var request = new RestRequest();
             request.RequestFormat = DataFormat.Json;
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         private IRestClient BuildClient(UTorrentSettings settings)
         {
-            var url = String.Format(@"http://{0}:{1}",
+            var url = string.Format(@"http://{0}:{1}",
                                  settings.Host,
                                  settings.Port);
 

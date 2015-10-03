@@ -25,10 +25,10 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         }
 
         [FieldDefinition(0, Label = "Website URL")]
-        public String BaseUrl { get; set; }
+        public string BaseUrl { get; set; }
 
         [FieldDefinition(1, Label = "API Key")]
-        public String ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

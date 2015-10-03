@@ -14,14 +14,14 @@ namespace NzbDrone.Core.Tv
     public interface IEpisodeService
     {
         Episode GetEpisode(int id);
-        List<Episode> GetEpisodes(IEnumerable<Int32> ids);
+        List<Episode> GetEpisodes(IEnumerable<int> ids);
         Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisode(int seriesId, int absoluteEpisodeNumber);
         Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle);
         List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber);
         Episode FindEpisodeBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber);
-        Episode GetEpisode(int seriesId, String date);
-        Episode FindEpisode(int seriesId, String date);
+        Episode GetEpisode(int seriesId, string date);
+        Episode FindEpisode(int seriesId, string date);
         List<Episode> GetEpisodeBySeries(int seriesId);
         List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber);
         List<Episode> EpisodesWithFiles(int seriesId);
@@ -83,12 +83,12 @@ namespace NzbDrone.Core.Tv
             return _episodeRepository.FindEpisodeBySceneNumbering(seriesId, sceneAbsoluteEpisodeNumber);
         }
 
-        public Episode GetEpisode(int seriesId, String date)
+        public Episode GetEpisode(int seriesId, string date)
         {
             return _episodeRepository.Get(seriesId, date);
         }
 
-        public Episode FindEpisode(int seriesId, String date)
+        public Episode FindEpisode(int seriesId, string date)
         {
             return _episodeRepository.Find(seriesId, date);
         }

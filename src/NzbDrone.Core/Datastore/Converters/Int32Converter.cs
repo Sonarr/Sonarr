@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 return DBNull.Value;
             }
 
-            if (context.DbValue is Int32)
+            if (context.DbValue is int)
             {
                 return context.DbValue;
             }
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 return DBNull.Value;
             }
 
-            if (dbValue is Int32)
+            if (dbValue is int)
             {
                 return dbValue;
             }

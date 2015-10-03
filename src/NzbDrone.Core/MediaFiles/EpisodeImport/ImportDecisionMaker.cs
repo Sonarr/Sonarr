@@ -17,7 +17,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IMakeImportDecision
     {
-        List<ImportDecision> GetImportDecisions(List<String> videoFiles, Series series);
+        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, ParsedEpisodeInfo folderInfo, bool sceneSource);
     }
 
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 //e.Data.Add("report", remoteEpisode.Report.ToJson());
                 //e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
                 _logger.ErrorException("Couldn't evaluate decision on " + localEpisode.Path, e);
-                return new Rejection(String.Format("{0}: {1}", spec.GetType().Name, e.Message));
+                return new Rejection(string.Format("{0}: {1}", spec.GetType().Name, e.Message));
             }
 
             return null;

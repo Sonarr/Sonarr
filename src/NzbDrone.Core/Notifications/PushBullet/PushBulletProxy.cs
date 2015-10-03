@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
             var request = new RestRequest(Method.POST);
             long integerId;
 
-            if (Int64.TryParse(deviceId, out integerId))
+            if (long.TryParse(deviceId, out integerId))
             {
                 request.AddParameter("device_id", integerId);
             }
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
                 request.AddParameter("title", title);
                 request.AddParameter("body", message);
 
-                client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, String.Empty);
+                client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, string.Empty);
                 client.ExecuteAndValidate(request);
             }
             catch (RestException ex)

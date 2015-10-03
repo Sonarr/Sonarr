@@ -75,7 +75,7 @@ namespace NzbDrone.Mono
                 throw new LinuxPermissionsException("Error setting file permissions: " + error);
             }
 
-            if (String.IsNullOrWhiteSpace(user) || String.IsNullOrWhiteSpace(group))
+            if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(group))
             {
                 Logger.Debug("User or Group for chown not configured, skipping chown.");
                 return;
@@ -162,7 +162,7 @@ namespace NzbDrone.Mono
             }
             catch (Exception ex)
             {
-                Logger.DebugException(String.Format("Hardlink '{0}' to '{1}' failed.", source, destination), ex);
+                Logger.DebugException(string.Format("Hardlink '{0}' to '{1}' failed.", source, destination), ex);
                 return false;
             }
         }

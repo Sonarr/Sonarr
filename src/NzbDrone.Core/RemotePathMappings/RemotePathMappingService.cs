@@ -19,8 +19,8 @@ namespace NzbDrone.Core.RemotePathMappings
         RemotePathMapping Get(int id);
         RemotePathMapping Update(RemotePathMapping mapping);
 
-        OsPath RemapRemoteToLocal(String host, OsPath remotePath);
-        OsPath RemapLocalToRemote(String host, OsPath localPath);
+        OsPath RemapRemoteToLocal(string host, OsPath remotePath);
+        OsPath RemapLocalToRemote(string host, OsPath localPath);
     }
 
     public class RemotePathMappingService : IRemotePathMappingService
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.RemotePathMappings
             }
         }
 
-        public OsPath RemapRemoteToLocal(String host, OsPath remotePath)
+        public OsPath RemapRemoteToLocal(string host, OsPath remotePath)
         {
             if (remotePath.IsEmpty)
             {
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.RemotePathMappings
             return remotePath;
         }
 
-        public OsPath RemapLocalToRemote(String host, OsPath localPath)
+        public OsPath RemapLocalToRemote(string host, OsPath localPath)
         {
             if (localPath.IsEmpty)
             {

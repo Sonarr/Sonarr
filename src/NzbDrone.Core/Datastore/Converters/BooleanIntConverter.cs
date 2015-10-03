@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 return DBNull.Value;
             }
 
-            var val = (Int64)context.DbValue;
+            var val = (long)context.DbValue;
 
             switch (val)
             {

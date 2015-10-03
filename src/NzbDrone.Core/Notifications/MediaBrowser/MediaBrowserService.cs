@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
 {
     public interface IMediaBrowserService
     {
-        void Notify(MediaBrowserSettings settings, String title, String message);
+        void Notify(MediaBrowserSettings settings, string title, string message);
         void Update(MediaBrowserSettings settings, Series series);
         ValidationFailure Test(MediaBrowserSettings settings);
     }
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             _logger = logger;
         }
 
-        public void Notify(MediaBrowserSettings settings, String title, String message)
+        public void Notify(MediaBrowserSettings settings, string title, string message)
         {
             _proxy.Notify(settings, title, message);
         }

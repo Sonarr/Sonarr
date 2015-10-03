@@ -11,9 +11,9 @@ namespace NzbDrone.Core.Notifications.Xbmc
 {
     public interface IXbmcJsonApiProxy
     {
-        String GetJsonVersion(XbmcSettings settings);
-        void Notify(XbmcSettings settings, String title, String message);
-        String UpdateLibrary(XbmcSettings settings, String path);
+        string GetJsonVersion(XbmcSettings settings);
+        void Notify(XbmcSettings settings, string title, string message);
+        string UpdateLibrary(XbmcSettings settings, string path);
         void CleanLibrary(XbmcSettings settings);
         List<ActivePlayer> GetActivePlayers(XbmcSettings settings);
         List<TvShow> GetSeries(XbmcSettings settings);
@@ -28,17 +28,17 @@ namespace NzbDrone.Core.Notifications.Xbmc
             _logger = logger;
         }
 
-        public String GetJsonVersion(XbmcSettings settings)
+        public string GetJsonVersion(XbmcSettings settings)
         {
             var request = new RestRequest();
             return ProcessRequest(request, settings, "JSONRPC.Version");
         }
 
-        public void Notify(XbmcSettings settings, String title, String message)
+        public void Notify(XbmcSettings settings, string title, string message)
         {
             var request = new RestRequest();
 
-            var parameters = new Dictionary<String, Object>();
+            var parameters = new Dictionary<string, object>();
             parameters.Add("title", title);
             parameters.Add("message", message);
             parameters.Add("image", "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png");
@@ -47,10 +47,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
             ProcessRequest(request, settings, "GUI.ShowNotification", parameters);
         }
 
-        public String UpdateLibrary(XbmcSettings settings, String path)
+        public string UpdateLibrary(XbmcSettings settings, string path)
         {
             var request = new RestRequest();
-            var parameters = new Dictionary<String, Object>();
+            var parameters = new Dictionary<string, object>();
             parameters.Add("directory", path);
 
             if (path.IsNullOrWhiteSpace())
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             var response = ProcessRequest(request, settings, "VideoLibrary.Scan", parameters);
 
-            return Json.Deserialize<XbmcJsonResult<String>>(response).Result;
+            return Json.Deserialize<XbmcJsonResult<string>>(response).Result;
         }
 
         public void CleanLibrary(XbmcSettings settings)
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public List<TvShow> GetSeries(XbmcSettings settings)
         {
             var request = new RestRequest();
-            var parameters = new Dictionary<String, Object>();
+            var parameters = new Dictionary<string, object>();
             parameters.Add("properties", new[] { "file", "imdbnumber" });
 
             var response = ProcessRequest(request, settings, "VideoLibrary.GetTvShows", parameters);
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return Json.Deserialize<TvShowResponse>(response).Result.TvShows;
         }
 
-        private String ProcessRequest(IRestRequest request, XbmcSettings settings, String method, Dictionary<String, Object> parameters = null)
+        private string ProcessRequest(IRestRequest request, XbmcSettings settings, string method, Dictionary<string, object> parameters = null)
         {
             var client = BuildClient(settings);
 
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private IRestClient BuildClient(XbmcSettings settings)
         {
-            var url = String.Format(@"http://{0}/jsonrpc", settings.Address);
+            var url = string.Format(@"http://{0}/jsonrpc", settings.Address);
             var client = RestClientFactory.BuildClient(url);
 
             if (!settings.Username.IsNullOrWhiteSpace())
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             _logger.Debug("Looking for error in response: {0}", response);
 
-            if (String.IsNullOrWhiteSpace(response.Content))
+            if (string.IsNullOrWhiteSpace(response.Content))
             {
                 throw new XbmcJsonException("Invalid response from XBMC, the response is not valid JSON");
             }
@@ -135,7 +135,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 var code = error.Error["code"];
                 var message = error.Error["message"];
 
-                var errorMessage = String.Format("XBMC Json Error. Code = {0}, Message: {1}", code, message);
+                var errorMessage = string.Format("XBMC Json Error. Code = {0}, Message: {1}", code, message);
                 throw new XbmcJsonException(errorMessage);
             }
         }

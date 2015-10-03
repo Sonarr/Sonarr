@@ -12,7 +12,7 @@ namespace NzbDrone.Core
         {
             Ensure.That(defaultValue, () => defaultValue).IsNotNull();
 
-            if (String.IsNullOrWhiteSpace(actual))
+            if (string.IsNullOrWhiteSpace(actual))
             {
                 return defaultValue.ToString();
             }
@@ -20,28 +20,28 @@ namespace NzbDrone.Core
             return actual;
         }
 
-        public static Int64 Megabytes(this int megabytes)
+        public static long Megabytes(this int megabytes)
         {
             return Convert.ToInt64(megabytes * 1024L * 1024L);
         }
 
-        public static Int64 Gigabytes(this int gigabytes)
+        public static long Gigabytes(this int gigabytes)
         {
             return Convert.ToInt64(gigabytes * 1024L * 1024L * 1024L);
         }
 
-        public static Int64 Megabytes(this double megabytes)
+        public static long Megabytes(this double megabytes)
         {
             return Convert.ToInt64(megabytes * 1024L * 1024L);
         }
 
-        public static Int64 Gigabytes(this double gigabytes)
+        public static long Gigabytes(this double gigabytes)
         {
             return Convert.ToInt64(gigabytes * 1024L * 1024L * 1024L);
         }
 
 
-        public static Int64 Round(this long number, long level)
+        public static long Round(this long number, long level)
         {
             return Convert.ToInt64(Math.Floor((decimal)number / level) * level);
         }
@@ -65,7 +65,7 @@ namespace NzbDrone.Core
 
         public static string ParentUriString(this Uri uri)
         {
-            return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - String.Join("", uri.Segments).Length - uri.Query.Length);
+            return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - string.Join("", uri.Segments).Length - uri.Query.Length);
         }
 
         public static int MaxOrDefault(this IEnumerable<int> ints)

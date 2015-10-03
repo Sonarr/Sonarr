@@ -139,7 +139,7 @@ namespace NzbDrone.Core.MediaFiles
                              .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)));
         }
 
-        private void SetPermissions(String path)
+        private void SetPermissions(string path)
         {
             if (!_configService.SetPermissionsLinux)
             {

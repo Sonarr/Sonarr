@@ -7,23 +7,23 @@ namespace NzbDrone.Api.Config
 {
     public class HostConfigResource : RestResource
     {
-        public String BindAddress { get; set; }
-        public Int32 Port { get; set; }
-        public Int32 SslPort { get; set; }
-        public Boolean EnableSsl { get; set; }
-        public Boolean LaunchBrowser { get; set; }
+        public string BindAddress { get; set; }
+        public int Port { get; set; }
+        public int SslPort { get; set; }
+        public bool EnableSsl { get; set; }
+        public bool LaunchBrowser { get; set; }
         public AuthenticationType AuthenticationMethod { get; set; }
-        public Boolean AnalyticsEnabled { get; set; }
-        public String Username { get; set; }
-        public String Password { get; set; }
-        public String LogLevel { get; set; }
-        public String Branch { get; set; }
-        public String ApiKey { get; set; }
-        public Boolean Torrent { get; set; }
-        public String SslCertHash { get; set; }
-        public String UrlBase { get; set; }
-        public Boolean UpdateAutomatically { get; set; }
+        public bool AnalyticsEnabled { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string LogLevel { get; set; }
+        public string Branch { get; set; }
+        public string ApiKey { get; set; }
+        public bool Torrent { get; set; }
+        public string SslCertHash { get; set; }
+        public string UrlBase { get; set; }
+        public bool UpdateAutomatically { get; set; }
         public UpdateMechanism UpdateMechanism { get; set; }
-        public String UpdateScriptPath { get; set; }
+        public string UpdateScriptPath { get; set; }
     }
 }

@@ -5,20 +5,20 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 {
     public class TrackedDownloadStatusMessage
     {
-        public String Title { get; set; }
-        public List<String> Messages { get; set; }
+        public string Title { get; set; }
+        public List<string> Messages { get; set; }
 
 
-        public TrackedDownloadStatusMessage(String title, List<String> messages)
+        public TrackedDownloadStatusMessage(string title, List<string> messages)
         {
             Title = title;
             Messages = messages;
         }
 
-        public TrackedDownloadStatusMessage(String title, String message)
+        public TrackedDownloadStatusMessage(string title, string message)
         {
             Title = title;
-            Messages = new List<String>{ message };
+            Messages = new List<string> { message };
         }
 
         //Constructor for use when deserializing JSON

@@ -11,7 +11,7 @@ namespace NzbDrone.Api.Wanted
             Get["/"] = x =>
             {
                 string queryString = ConvertQueryParams(Request.Query);
-                var url = String.Format("/api/wanted/missing?{0}", queryString);
+                var url = string.Format("/api/wanted/missing?{0}", queryString);
 
                 return Response.AsRedirect(url);
             };

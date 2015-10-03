@@ -35,7 +35,7 @@ namespace NzbDrone.Common.Reflection
                    || type == typeof(string)
                    || type == typeof(DateTime)
                    || type == typeof(Version)
-                   || type == typeof(Decimal);
+                   || type == typeof(decimal);
         }
 
         public static bool IsReadable(this PropertyInfo propertyInfo)
@@ -54,7 +54,7 @@ namespace NzbDrone.Common.Reflection
 
             if (attribute == null && isRequired)
             {
-                throw new ArgumentException(String.Format("The {0} attribute must be defined on member {1}", typeof(T).Name, member.Name));
+                throw new ArgumentException(string.Format("The {0} attribute must be defined on member {1}", typeof(T).Name, member.Name));
             }
 
             return (T)attribute;

@@ -4,30 +4,30 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 {
     public class BroadcastheNetTorrent
     {
-        public String GroupName { get; set; }
-        public Int32 GroupID { get; set; }
-        public Int32 TorrentID { get; set; }
-        public Int32 SeriesID { get; set; }
-        public String Series { get; set; }
-        public String SeriesBanner { get; set; }
-        public String SeriesPoster { get; set; }
-        public String YoutubeTrailer { get; set; }
-        public String Category { get; set; }
-        public Int32? Snatched { get; set; }
-        public Int32? Seeders { get; set; }
-        public Int32? Leechers { get; set; }
-        public String Source { get; set; }
-        public String Container { get; set; }
-        public String Codec { get; set; }
-        public String Resolution { get; set; }
-        public String Origin { get; set; }
-        public String ReleaseName { get; set; }
-        public Int64 Size { get; set; }
-        public Int64 Time { get; set; }
-        public Int32? TvdbID { get; set; }
-        public Int32? TvrageID { get; set; }
-        public String ImdbID { get; set; }
-        public String InfoHash { get; set; }
-        public String DownloadURL { get; set; }
+        public string GroupName { get; set; }
+        public int GroupID { get; set; }
+        public int TorrentID { get; set; }
+        public int SeriesID { get; set; }
+        public string Series { get; set; }
+        public string SeriesBanner { get; set; }
+        public string SeriesPoster { get; set; }
+        public string YoutubeTrailer { get; set; }
+        public string Category { get; set; }
+        public int? Snatched { get; set; }
+        public int? Seeders { get; set; }
+        public int? Leechers { get; set; }
+        public string Source { get; set; }
+        public string Container { get; set; }
+        public string Codec { get; set; }
+        public string Resolution { get; set; }
+        public string Origin { get; set; }
+        public string ReleaseName { get; set; }
+        public long Size { get; set; }
+        public long Time { get; set; }
+        public int? TvdbID { get; set; }
+        public int? TvrageID { get; set; }
+        public string ImdbID { get; set; }
+        public string InfoHash { get; set; }
+        public string DownloadURL { get; set; }
     }
 }

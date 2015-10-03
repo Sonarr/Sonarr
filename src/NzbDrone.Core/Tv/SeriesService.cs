@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Tv
         {
             Ensure.That(newSeries, () => newSeries).IsNotNull();
 
-            if (String.IsNullOrWhiteSpace(newSeries.Path))
+            if (string.IsNullOrWhiteSpace(newSeries.Path))
             {
                 var folderName = _fileNameBuilder.GetSeriesFolder(newSeries);
                 newSeries.Path = Path.Combine(newSeries.RootFolderPath, folderName);

@@ -31,7 +31,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
                 allowedMethods = response.Headers["Allow"];
             }
             
-            var requestedHeaders = String.Join(", ", request.Headers[AccessControlHeaders.RequestHeaders]);
+            var requestedHeaders = string.Join(", ", request.Headers[AccessControlHeaders.RequestHeaders]);
 
             response.Headers.Add(AccessControlHeaders.AllowOrigin, "*");
             response.Headers.Add(AccessControlHeaders.AllowMethods, allowedMethods);

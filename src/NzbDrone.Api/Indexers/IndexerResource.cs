@@ -5,10 +5,10 @@ namespace NzbDrone.Api.Indexers
 {
     public class IndexerResource : ProviderResource
     {
-        public Boolean EnableRss { get; set; }
-        public Boolean EnableSearch { get; set; }
-        public Boolean SupportsRss { get; set; }
-        public Boolean SupportsSearch { get; set; }
+        public bool EnableRss { get; set; }
+        public bool EnableSearch { get; set; }
+        public bool SupportsRss { get; set; }
+        public bool SupportsSearch { get; set; }
         public DownloadProtocol Protocol { get; set; }
     }
 }

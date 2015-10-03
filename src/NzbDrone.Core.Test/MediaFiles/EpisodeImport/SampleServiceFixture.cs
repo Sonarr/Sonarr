@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         private void GivenRuntime(int seconds)
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Setup(s => s.GetRunTime(It.IsAny<string>()))
                   .Returns(new TimeSpan(0, 0, seconds));
         }
 
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                              _localEpisode.Size,
                              _localEpisode.SeasonNumber);
 
-            Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<String>()), Times.Once());
+            Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<string>()), Times.Once());
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_acceptable_size()
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Setup(s => s.GetRunTime(It.IsAny<string>()))
                   .Throws<DllNotFoundException>();
 
             GivenFileSize(1000.Megabytes());
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         public void should_fall_back_to_file_size_if_mediainfo_dll_not_found_undersize()
         {
             Mocker.GetMock<IVideoFileInfoReader>()
-                  .Setup(s => s.GetRunTime(It.IsAny<String>()))
+                  .Setup(s => s.GetRunTime(It.IsAny<string>()))
                   .Throws<DllNotFoundException>();
 
             GivenFileSize(1.Megabytes());

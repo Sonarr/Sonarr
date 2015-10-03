@@ -4,26 +4,26 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 {
     public class TransmissionTorrent
     {
-        public Int32 Id { get; set; }
+        public int Id { get; set; }
 
-        public String HashString { get; set; }
+        public string HashString { get; set; }
 
-        public String Name { get; set; }
+        public string Name { get; set; }
 
-        public String DownloadDir { get; set; }
+        public string DownloadDir { get; set; }
 
-        public Int64 TotalSize { get; set; }
+        public long TotalSize { get; set; }
 
-        public Int64 LeftUntilDone { get; set; }
+        public long LeftUntilDone { get; set; }
 
-        public Boolean IsFinished { get; set; }
+        public bool IsFinished { get; set; }
 
-        public Int32 Eta { get; set; }
+        public int Eta { get; set; }
 
         public TransmissionTorrentStatus Status { get; set; }
 
-        public Int32 SecondsDownloading { get; set; }
+        public int SecondsDownloading { get; set; }
 
-        public String ErrorString { get; set; }
+        public string ErrorString { get; set; }
     }
 }

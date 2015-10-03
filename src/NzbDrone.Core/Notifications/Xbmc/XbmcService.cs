@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
             if (apiProvider == null)
             {
-                var message = String.Format("Invalid API Version: {0} for {1}", version, settings.Address);
+                var message = string.Format("Invalid API Version: {0} for {1}", version, settings.Address);
                 throw new InvalidXbmcVersionException(message);
             }
 

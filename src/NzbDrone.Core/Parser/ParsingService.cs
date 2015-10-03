@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Parser
                                     series.Title,
                                     episodes.First().SceneSeasonNumber,
                                     episodes.First().SceneEpisodeNumber,
-                                    String.Join(", ", episodes.Select(e => String.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber))));
+                                    string.Join(", ", episodes.Select(e => string.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber))));
 
                         result.AddRange(episodes);
                         continue;
@@ -406,7 +406,7 @@ namespace NzbDrone.Core.Parser
             return series;
         }
 
-        private Episode GetDailyEpisode(Series series, String airDate, SearchCriteriaBase searchCriteria)
+        private Episode GetDailyEpisode(Series series, string airDate, SearchCriteriaBase searchCriteria)
         {
             Episode episodeInfo = null;
 

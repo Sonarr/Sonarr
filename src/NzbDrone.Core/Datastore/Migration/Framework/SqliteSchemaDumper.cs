@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         public virtual IAnnouncer Announcer { get; set; }
         public SqliteProcessor Processor { get; set; }
 
-        protected internal virtual TableDefinition ReadTableSchema(String sqlSchema)
+        protected internal virtual TableDefinition ReadTableSchema(string sqlSchema)
         {
             var reader = new SqliteSyntaxReader(sqlSchema);
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return result;
         }
 
-        protected internal virtual IndexDefinition ReadIndexSchema(String sqlSchema)
+        protected internal virtual IndexDefinition ReadIndexSchema(string sqlSchema)
         {
             var reader = new SqliteSyntaxReader(sqlSchema);
 
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return index;
         }
 
-        protected virtual String ParseIdentifier(SqliteSyntaxReader reader)
+        protected virtual string ParseIdentifier(SqliteSyntaxReader reader)
         {
             reader.Read();
 

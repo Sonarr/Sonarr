@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string Url { get; set; }
 
         [FieldDefinition(1, Label = "Method", Type = FieldType.Select, SelectOptions = typeof(WebhookMethod), HelpText = "Which HTTP method to use submit to the Webservice")]
-        public Int32 Method { get; set; }
+        public int Method { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

@@ -6,15 +6,15 @@ namespace NzbDrone.Api.Config
     public class UiConfigResource : RestResource
     {
         //Calendar
-        public Int32 FirstDayOfWeek { get; set; }
-        public String CalendarWeekColumnHeader { get; set; }
+        public int FirstDayOfWeek { get; set; }
+        public string CalendarWeekColumnHeader { get; set; }
 
         //Dates
-        public String ShortDateFormat { get; set; }
-        public String LongDateFormat { get; set; }
-        public String TimeFormat { get; set; }
-        public Boolean ShowRelativeDates { get; set; }
+        public string ShortDateFormat { get; set; }
+        public string LongDateFormat { get; set; }
+        public string TimeFormat { get; set; }
+        public bool ShowRelativeDates { get; set; }
 
-        public Boolean EnableColorImpairedMode { get; set; }
+        public bool EnableColorImpairedMode { get; set; }
     }
 }

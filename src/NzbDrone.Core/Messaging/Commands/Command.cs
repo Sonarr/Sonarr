@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Messaging.Commands
             }
         }
 
-        public String Name { get; private set; }
+        public string Name { get; private set; }
         public DateTime? LastExecutionTime { get; set; }
         public CommandTrigger Trigger { get; set; }
 

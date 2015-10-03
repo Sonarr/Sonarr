@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, word);
+                var dirty = string.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be("wordword");
             }
         }
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, "a");
+                var dirty = string.Format(s, "a");
                 dirty.CleanSeriesTitle().Should().Be("wordword");
             }
         }
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, word);
+                var dirty = string.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be(("word" + word.ToLower() + "word"));
             }
 
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             foreach (var s in dirtyFormat)
             {
-                var dirty = String.Format(s, word);
+                var dirty = string.Format(s, word);
                 dirty.CleanSeriesTitle().Should().Be(word + "wordword");
             }
         }

@@ -221,23 +221,23 @@ namespace NzbDrone.Core.Tv
 
         private string BuildAirDateUtcCutoffWhereClause(DateTime currentTime)
         {
-            return String.Format("WHERE datetime(strftime('%s', [t0].[AirDateUtc]) + [t1].[RunTime] * 60,  'unixepoch') <= '{0}'",
+            return string.Format("WHERE datetime(strftime('%s', [t0].[AirDateUtc]) + [t1].[RunTime] * 60,  'unixepoch') <= '{0}'",
                                  currentTime.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
         {
-            var clauses = new List<String>();
+            var clauses = new List<string>();
 
             foreach (var profile in qualitiesBelowCutoff)
             {
                 foreach (var belowCutoff in profile.QualityIds)
                 {
-                    clauses.Add(String.Format("([t1].[ProfileId] = {0} AND [t2].[Quality] LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
+                    clauses.Add(string.Format("([t1].[ProfileId] = {0} AND [t2].[Quality] LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
                 }
             }
 
-            return String.Format("({0})", String.Join(" OR ", clauses));
+            return string.Format("({0})", string.Join(" OR ", clauses));
         }
 
         private Episode FindOneByAirDate(int seriesId, string date)

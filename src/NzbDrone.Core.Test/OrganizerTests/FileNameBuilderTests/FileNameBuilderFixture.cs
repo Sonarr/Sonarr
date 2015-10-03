@@ -623,7 +623,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase('_')]
         public void should_trim_extra_separators_from_end_when_quality_proper_is_not_included(char separator)
         {
-            _namingConfig.StandardEpisodeFormat = String.Format("{{Quality{0}Title}}{0}{{Quality{0}Proper}}", separator);
+            _namingConfig.StandardEpisodeFormat = string.Format("{{Quality{0}Title}}{0}{{Quality{0}Proper}}", separator);
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                    .Should().Be("HDTV-720p");
@@ -635,10 +635,10 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase('_')]
         public void should_trim_extra_separators_from_middle_when_quality_proper_is_not_included(char separator)
         {
-            _namingConfig.StandardEpisodeFormat = String.Format("{{Quality{0}Title}}{0}{{Quality{0}Proper}}{0}{{Episode{0}Title}}", separator);
+            _namingConfig.StandardEpisodeFormat = string.Format("{{Quality{0}Title}}{0}{{Quality{0}Proper}}{0}{{Episode{0}Title}}", separator);
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be(String.Format("HDTV-720p{0}City{0}Sushi", separator));
+                   .Should().Be(string.Format("HDTV-720p{0}City{0}Sushi", separator));
         }
 
         [Test]

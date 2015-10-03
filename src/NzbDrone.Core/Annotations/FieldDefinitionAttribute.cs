@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Annotations
         public string HelpText { get; set; }
         public string HelpLink { get; set; }
         public FieldType Type { get; set; }
-        public Boolean Advanced { get; set; }
+        public bool Advanced { get; set; }
         public Type SelectOptions { get; set; }
     }
 

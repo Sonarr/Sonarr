@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
                 var notificationResult = client.SendNotification(notification);
 
-                if (!String.IsNullOrWhiteSpace(notificationResult.ErrorMessage))
+                if (!string.IsNullOrWhiteSpace(notificationResult.ErrorMessage))
                 {
                     throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");
                 }
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Notifications.Prowl
                 _logger.Debug("Verifying API Key: {0}", apiKey);
 
                 var verificationResult = client.SendVerification(verificationRequest);
-                if (!String.IsNullOrWhiteSpace(verificationResult.ErrorMessage) &&
+                if (!string.IsNullOrWhiteSpace(verificationResult.ErrorMessage) &&
                     verificationResult.ResultCode != "200")
                 {
                     throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");

@@ -6,6 +6,6 @@ namespace NzbDrone.Core.Notifications.Plex
     public class PlexUser
     {
         [JsonProperty("authentication_token")]
-        public String AuthenticationToken { get; set; }
+        public string AuthenticationToken { get; set; }
     }
 }

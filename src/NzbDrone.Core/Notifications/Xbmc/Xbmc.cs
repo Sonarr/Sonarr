@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
             catch (SocketException ex)
             {
-                var logMessage = String.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
+                var logMessage = string.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
                 _logger.DebugException(logMessage, ex);
             }
         }
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
             catch (SocketException ex)
             {
-                var logMessage = String.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
+                var logMessage = string.Format("Unable to connect to XBMC Host: {0}:{1}", Settings.Host, Settings.Port);
                 _logger.DebugException(logMessage, ex);
             }
         }

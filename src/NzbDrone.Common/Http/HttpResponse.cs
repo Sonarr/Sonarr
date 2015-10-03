@@ -6,7 +6,7 @@ namespace NzbDrone.Common.Http
 {
     public class HttpResponse
     {
-        public HttpResponse(HttpRequest request, HttpHeader headers, Byte[] binaryData, HttpStatusCode statusCode = HttpStatusCode.OK)
+        public HttpResponse(HttpRequest request, HttpHeader headers, byte[] binaryData, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             Request = request;
             Headers = headers;
@@ -14,7 +14,7 @@ namespace NzbDrone.Common.Http
             StatusCode = statusCode;
         }
 
-        public HttpResponse(HttpRequest request, HttpHeader headers, String content, HttpStatusCode statusCode = HttpStatusCode.OK)
+        public HttpResponse(HttpRequest request, HttpHeader headers, string content, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             Request = request;
             Headers = headers;
@@ -26,11 +26,11 @@ namespace NzbDrone.Common.Http
         public HttpRequest Request { get; private set; }
         public HttpHeader Headers { get; private set; }
         public HttpStatusCode StatusCode { get; private set; }
-        public Byte[] ResponseData { get; private set; }
+        public byte[] ResponseData { get; private set; }
 
-        private String _content;
+        private string _content;
 
-        public String Content 
+        public string Content 
         {
             get
             {

@@ -4,7 +4,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 {
     public class TransmissionException : DownloadClientException
     {
-        public TransmissionException(String message)
+        public TransmissionException(string message)
             : base(message)
         {
 

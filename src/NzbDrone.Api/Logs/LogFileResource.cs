@@ -5,9 +5,9 @@ namespace NzbDrone.Api.Logs
 {
     public class LogFileResource : RestResource
     {
-        public String Filename { get; set; }
+        public string Filename { get; set; }
         public DateTime LastWriteTime { get; set; }
-        public String ContentsUrl { get; set; }
-        public String DownloadUrl { get; set; }
+        public string ContentsUrl { get; set; }
+        public string DownloadUrl { get; set; }
     }
 }

@@ -8,20 +8,20 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
     public class SqliteSyntaxReader
     {
-        public String Buffer { get; private set; }
-        public Int32 Index { get; private set; }
+        public string Buffer { get; private set; }
+        public int Index { get; private set; }
 
-        private Int32 _previousIndex;
+        private int _previousIndex;
 
         public TokenType Type { get; private set; }
-        public String Value { get; private set; }
+        public string Value { get; private set; }
 
-        public String ValueToUpper
+        public string ValueToUpper
         {
             get { return Value.ToUpperInvariant(); }
         }
 
-        public Boolean IsEndOfFile
+        public bool IsEndOfFile
         {
             get { return Index >= Buffer.Length; }
         }
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             UnknownSymbol
         }
 
-        public SqliteSyntaxReader(String sql)
+        public SqliteSyntaxReader(string sql)
         {
             Buffer = sql;
         }
@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return result;
         }
 
-        protected String ReadTerminatedString(Char terminator)
+        protected string ReadTerminatedString(char terminator)
         {
             var start = Index + 1;
             var end = Buffer.IndexOf(terminator, Index);
@@ -226,7 +226,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return Buffer.Substring(start, end - start);
         }
 
-        protected String ReadEscapedString(Char escape)
+        protected string ReadEscapedString(char escape)
         {
             var identifier = new StringBuilder();
 
@@ -248,9 +248,9 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             return identifier.ToString();
         }
 
-        public SyntaxErrorException CreateSyntaxException(String message, params object[] args)
+        public SyntaxErrorException CreateSyntaxException(string message, params object[] args)
         {
-            return new SyntaxErrorException(String.Format("{0}. Syntax Error near: {1}", String.Format(message, args), Buffer.Substring(_previousIndex)));
+            return new SyntaxErrorException(string.Format("{0}. Syntax Error near: {1}", string.Format(message, args), Buffer.Substring(_previousIndex)));
         }
     }
 }

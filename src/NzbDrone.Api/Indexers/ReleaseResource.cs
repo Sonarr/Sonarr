@@ -9,38 +9,38 @@ namespace NzbDrone.Api.Indexers
 {
     public class ReleaseResource : RestResource
     {
-        public String Guid { get; set; }
+        public string Guid { get; set; }
         public QualityModel Quality { get; set; }
-        public Int32 QualityWeight { get; set; }
-        public Int32 Age { get; set; }
-        public Double AgeHours { get; set; }
-        public Double AgeMinutes { get; set; }
-        public Int64 Size { get; set; }
-        public Int32 IndexerId { get; set; }
-        public String Indexer { get; set; }
-        public String ReleaseGroup { get; set; }
-        public String SubGroup { get; set; }
-        public String ReleaseHash { get; set; }
-        public String Title { get; set; }
-        public Boolean FullSeason { get; set; }
-        public Boolean SceneSource { get; set; }
-        public Int32 SeasonNumber { get; set; }
+        public int QualityWeight { get; set; }
+        public int Age { get; set; }
+        public double AgeHours { get; set; }
+        public double AgeMinutes { get; set; }
+        public long Size { get; set; }
+        public int IndexerId { get; set; }
+        public string Indexer { get; set; }
+        public string ReleaseGroup { get; set; }
+        public string SubGroup { get; set; }
+        public string ReleaseHash { get; set; }
+        public string Title { get; set; }
+        public bool FullSeason { get; set; }
+        public bool SceneSource { get; set; }
+        public int SeasonNumber { get; set; }
         public Language Language { get; set; }
-        public String AirDate { get; set; }
-        public String SeriesTitle { get; set; }
+        public string AirDate { get; set; }
+        public string SeriesTitle { get; set; }
         public int[] EpisodeNumbers { get; set; }
         public int[] AbsoluteEpisodeNumbers { get; set; }
-        public Boolean Approved { get; set; }
-        public Boolean TemporarilyRejected { get; set; }
-        public Boolean Rejected { get; set; }
-        public Int32 TvRageId { get; set; }
-        public IEnumerable<String> Rejections { get; set; }
+        public bool Approved { get; set; }
+        public bool TemporarilyRejected { get; set; }
+        public bool Rejected { get; set; }
+        public int TvRageId { get; set; }
+        public IEnumerable<string> Rejections { get; set; }
         public DateTime PublishDate { get; set; }
-        public String CommentUrl { get; set; }
-        public String DownloadUrl { get; set; }
-        public String InfoUrl { get; set; }
-        public Boolean DownloadAllowed { get; set; }
-        public Int32 ReleaseWeight { get; set; }
+        public string CommentUrl { get; set; }
+        public string DownloadUrl { get; set; }
+        public string InfoUrl { get; set; }
+        public bool DownloadAllowed { get; set; }
+        public int ReleaseWeight { get; set; }
 
 
         public int? Seeders { get; set; }
@@ -50,9 +50,9 @@ namespace NzbDrone.Api.Indexers
         //TODO: besides a test I don't think this is used...
         public DownloadProtocol DownloadProtocol { get; set; }
 
-        public Boolean IsDaily { get; set; }
-        public Boolean IsAbsoluteNumbering { get; set; }
-        public Boolean IsPossibleSpecialEpisode { get; set; }
-        public Boolean Special { get; set; }
+        public bool IsDaily { get; set; }
+        public bool IsAbsoluteNumbering { get; set; }
+        public bool IsPossibleSpecialEpisode { get; set; }
+        public bool Special { get; set; }
     }
 }

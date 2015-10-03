@@ -6,7 +6,7 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class GuidConverter : IConverter
     {
-        public Object FromDB(ConverterContext context)
+        public object FromDB(ConverterContext context)
         {
             if (context.DbValue == DBNull.Value)
             {
@@ -18,12 +18,12 @@ namespace NzbDrone.Core.Datastore.Converters
             return new Guid(value);
         }
 
-        public Object FromDB(ColumnMap map, Object dbValue)
+        public object FromDB(ColumnMap map, object dbValue)
         {
             return FromDB(new ConverterContext { ColumnMap = map, DbValue = dbValue });
         }
 
-        public Object ToDB(Object clrValue)
+        public object ToDB(object clrValue)
         {
             var value = clrValue;
 

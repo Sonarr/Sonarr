@@ -120,20 +120,20 @@ namespace NzbDrone.Core.Datastore
             RegisterEmbeddedConverter();
             RegisterProviderSettingConverter();
 
-            MapRepository.Instance.RegisterTypeConverter(typeof(Int32), new Int32Converter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(Double), new DoubleConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(int), new Int32Converter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(double), new DoubleConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(DateTime), new UtcConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(Boolean), new BooleanIntConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(bool), new BooleanIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Enum), new EnumIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Quality), new QualityIntConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(List<ProfileQualityItem>), new EmbeddedDocumentConverter(new QualityIntConverter()));
             MapRepository.Instance.RegisterTypeConverter(typeof(QualityModel), new EmbeddedDocumentConverter(new QualityIntConverter()));
-            MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<String, String>), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<Int32>), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(List<String>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(Dictionary<string, string>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<int>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(List<string>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(ParsedEpisodeInfo), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(ReleaseInfo), new EmbeddedDocumentConverter());
-            MapRepository.Instance.RegisterTypeConverter(typeof(HashSet<Int32>), new EmbeddedDocumentConverter());
+            MapRepository.Instance.RegisterTypeConverter(typeof(HashSet<int>), new EmbeddedDocumentConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(OsPath), new OsPathConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Guid), new GuidConverter());
             MapRepository.Instance.RegisterTypeConverter(typeof(Command), new CommandConverter());

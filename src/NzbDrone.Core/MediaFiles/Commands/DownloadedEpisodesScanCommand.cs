@@ -13,10 +13,10 @@ namespace NzbDrone.Core.MediaFiles.Commands
             }
         }
 
-        public Boolean SendUpdates { get; set; }
+        public bool SendUpdates { get; set; }
 
         // Properties used by third-party apps, do not modify.
-        public String Path { get; set; }
-        public String DownloadClientId { get; set; }
+        public string Path { get; set; }
+        public string DownloadClientId { get; set; }
     }
 }

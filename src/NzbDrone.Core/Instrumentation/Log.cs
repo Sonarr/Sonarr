@@ -17,6 +17,6 @@ namespace NzbDrone.Core.Instrumentation
 
         public string ExceptionType { get; set; }
 
-        public String Level { get; set; }
+        public string Level { get; set; }
     }
 }

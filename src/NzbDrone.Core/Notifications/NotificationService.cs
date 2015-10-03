@@ -47,19 +47,19 @@ namespace NzbDrone.Core.Notifications
             {
                 var episode = episodes.First();
 
-                return String.Format("{0} - {1} - {2} [{3}]",
+                return string.Format("{0} - {1} - {2} [{3}]",
                                          series.Title,
                                          episode.AirDate,
                                          episode.Title,
                                          qualityString);
             }
 
-            var episodeNumbers = String.Concat(episodes.Select(e => e.EpisodeNumber)
-                                                       .Select(i => String.Format("x{0:00}", i)));
+            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber)
+                                                       .Select(i => string.Format("x{0:00}", i)));
 
-            var episodeTitles = String.Join(" + ", episodes.Select(e => e.Title));
+            var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
 
-            return String.Format("{0} - {1}{2} - {3} [{4}]",
+            return string.Format("{0} - {1}{2} - {3} [{4}]",
                                     series.Title,
                                     episodes.First().SeasonNumber,
                                     episodeNumbers,

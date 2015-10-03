@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             const string header = "Test Header";
             const string message = "Test Message";
 
-            var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
+            var expectedUrl = string.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
 
             var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(expectedUrl))
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             const string header = "Test Header";
             const string message = "Test Message";
 
-            var expectedUrl = String.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
+            var expectedUrl = string.Format("http://localhost:3000/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification({0}, {1}))", header, message);
 
             var fakeHttp = Mocker.GetMock<IHttpProvider>();
             fakeHttp.Setup(s => s.DownloadString(expectedUrl, "plex", "plex"))

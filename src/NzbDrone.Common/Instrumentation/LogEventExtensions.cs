@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Instrumentation
         public static string GetHash(this LogEventInfo logEvent)
         {
             var stackString = logEvent.StackTrace.ToJson();
-            var hashSeed = String.Concat(logEvent.LoggerName, logEvent.Exception.GetType().ToString(), stackString, logEvent.Level);
+            var hashSeed = string.Concat(logEvent.LoggerName, logEvent.Exception.GetType().ToString(), stackString, logEvent.Level);
             return HashUtil.CalculateCrc(hashSeed);
         }
 
@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Instrumentation
             {
                 if (logEvent.Exception != null)
                 {
-                    if (String.IsNullOrWhiteSpace(message))
+                    if (string.IsNullOrWhiteSpace(message))
                     {
                         message = logEvent.Exception.Message;
                     }

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
         [TestCase(@"CREATE TABLE ""Test """"Table"" (""My""""Id"" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "Test \"Table", "My\"Id")]
         [TestCase(@"CREATE TABLE [Test Table] ([My Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)", "Test Table", "My Id")]
         [TestCase(@" CREATE  TABLE  `Test ``Table`  ( `My``  Id`  INTEGER  NOT  NULL  PRIMARY  KEY  AUTOINCREMENT ) ", "Test `Table", "My`  Id")]
-        public void should_parse_table_language_flavors(String sql, String tableName, String columnName)
+        public void should_parse_table_language_flavors(string sql, string tableName, string columnName)
         {
             var result = Subject.ReadTableSchema(sql);
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
         [TestCase(@"CREATE INDEX ""Test """"Index"" ON ""TestTable"" (""My""""Id"" ASC)", "Test \"Index", "TestTable", "My\"Id")]
         [TestCase(@"CREATE INDEX [Test Index] ON [TestTable] ([My Id]) ", "Test Index", "TestTable", "My Id")]
         [TestCase(@" CREATE  INDEX  `Test ``Index` ON ""TestTable""  ( `My``  Id`  ASC) ", "Test `Index", "TestTable", "My`  Id")]
-        public void should_parse_index_language_flavors(String sql, String indexName, String tableName, String columnName)
+        public void should_parse_index_language_flavors(string sql, string indexName, string tableName, string columnName)
         {
             var result = Subject.ReadIndexSchema(sql);
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
         [TestCase(@"CREATE TABLE TestTable (MyId)")]
         [TestCase(@"CREATE TABLE TestTable (MyId  NOT NULL PRIMARY KEY AUTOINCREMENT)")]
         [TestCase("CREATE TABLE TestTable\r\n(\t`MyId`\t NOT NULL PRIMARY KEY AUTOINCREMENT\n)")]
-        public void should_parse_column_attributes(String sql)
+        public void should_parse_column_attributes(string sql)
         {
             var result = Subject.ReadTableSchema(sql);
 

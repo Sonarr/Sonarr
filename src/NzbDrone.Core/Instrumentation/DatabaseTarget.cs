@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Instrumentation
 
                 if (logEvent.Exception != null)
                 {
-                    if (String.IsNullOrWhiteSpace(log.Message))
+                    if (string.IsNullOrWhiteSpace(log.Message))
                     {
                         log.Message = logEvent.Exception.Message;
                     }

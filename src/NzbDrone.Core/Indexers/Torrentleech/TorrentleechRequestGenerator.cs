@@ -44,9 +44,9 @@ namespace NzbDrone.Core.Indexers.Torrentleech
             return new List<IEnumerable<IndexerRequest>>();
         }
 
-        private IEnumerable<IndexerRequest> GetRssRequests(String searchParameters)
+        private IEnumerable<IndexerRequest> GetRssRequests(string searchParameters)
         {
-            yield return new IndexerRequest(String.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters), HttpAccept.Rss);
+            yield return new IndexerRequest(string.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters), HttpAccept.Rss);
         }
     }
 }

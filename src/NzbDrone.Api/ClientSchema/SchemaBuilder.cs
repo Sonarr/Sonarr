@@ -77,13 +77,13 @@ namespace NzbDrone.Api.ClientSchema
                 {
                     var field = fields.Find(f => f.Name == propertyInfo.Name);
 
-                    if (propertyInfo.PropertyType == typeof(Int32))
+                    if (propertyInfo.PropertyType == typeof(int))
                     {
                         var value = Convert.ToInt32(field.Value);
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    else if (propertyInfo.PropertyType == typeof(Int64))
+                    else if (propertyInfo.PropertyType == typeof(long))
                     {
                         var value = Convert.ToInt64(field.Value);
                         propertyInfo.SetValue(target, value, null);
@@ -101,13 +101,13 @@ namespace NzbDrone.Api.ClientSchema
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    else if (propertyInfo.PropertyType == typeof(IEnumerable<Int32>))
+                    else if (propertyInfo.PropertyType == typeof(IEnumerable<int>))
                     {
-                        IEnumerable<Int32> value;
+                        IEnumerable<int> value;
 
                         if (field.Value.GetType() == typeof(JArray))
                         {
-                            value = ((JArray)field.Value).Select(s => s.Value<Int32>());
+                            value = ((JArray)field.Value).Select(s => s.Value<int>());
                         }
 
                         else

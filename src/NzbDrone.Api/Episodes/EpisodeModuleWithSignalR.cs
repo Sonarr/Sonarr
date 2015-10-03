@@ -40,7 +40,7 @@ namespace NzbDrone.Api.Episodes
                                            ISeriesService seriesService,
                                            IQualityUpgradableSpecification qualityUpgradableSpecification,
                                            IBroadcastSignalRMessage signalRBroadcaster,
-                                           String resource)
+                                           string resource)
             : base(signalRBroadcaster, resource)
         {
             _episodeService = episodeService;

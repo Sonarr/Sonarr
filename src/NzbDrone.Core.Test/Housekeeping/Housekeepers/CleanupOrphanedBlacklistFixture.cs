@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         public void should_delete_orphaned_blacklist_items()
         {
             var blacklist = Builder<Blacklist>.CreateNew()
-                                              .With(h => h.EpisodeIds = new List<Int32>())
+                                              .With(h => h.EpisodeIds = new List<int>())
                                               .With(h => h.Quality = new QualityModel())
                                               .BuildNew();
 
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             Db.Insert(series);
 
             var blacklist = Builder<Blacklist>.CreateNew()
-                                              .With(h => h.EpisodeIds = new List<Int32>())
+                                              .With(h => h.EpisodeIds = new List<int>())
                                               .With(h => h.Quality = new QualityModel())
                                               .With(b => b.SeriesId = series.Id)
                                               .BuildNew();

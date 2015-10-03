@@ -26,22 +26,22 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         }
 
         [FieldDefinition(0, Label = "Host")]
-        public String Host { get; set; }
+        public string Host { get; set; }
 
         [FieldDefinition(1, Label = "Port")]
-        public Int32 Port { get; set; }
+        public int Port { get; set; }
 
         [FieldDefinition(2, Label = "API Key")]
-        public String ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         [FieldDefinition(3, Label = "Send Notifications", HelpText = "Have MediaBrowser send notfications to configured providers", Type = FieldType.Checkbox)]
-        public Boolean Notify { get; set; }
+        public bool Notify { get; set; }
 
         [FieldDefinition(4, Label = "Update Library", HelpText = "Update Library on Download & Rename?", Type = FieldType.Checkbox)]
-        public Boolean UpdateLibrary { get; set; }
+        public bool UpdateLibrary { get; set; }
 
         [JsonIgnore]
-        public String Address { get { return String.Format("{0}:{1}", Host, Port); } }
+        public string Address { get { return string.Format("{0}:{1}", Host, Port); } }
         
         public bool IsValid
         {

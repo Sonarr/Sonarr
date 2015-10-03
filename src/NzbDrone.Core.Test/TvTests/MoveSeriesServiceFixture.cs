@@ -33,14 +33,14 @@ namespace NzbDrone.Core.Test.TvTests
                        };
 
             Mocker.GetMock<ISeriesService>()
-                  .Setup(s => s.GetSeries(It.IsAny<Int32>()))
+                  .Setup(s => s.GetSeries(It.IsAny<int>()))
                   .Returns(_series);
         }
 
         private void GivenFailedMove()
         {
             Mocker.GetMock<IDiskTransferService>()
-                  .Setup(s => s.TransferFolder(It.IsAny<String>(), It.IsAny<String>(), TransferMode.Move, true))
+                  .Setup(s => s.TransferFolder(It.IsAny<string>(), It.IsAny<string>(), TransferMode.Move, true))
                   .Throws<IOException>();
         }
 

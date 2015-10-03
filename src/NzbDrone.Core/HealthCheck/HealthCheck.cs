@@ -10,7 +10,7 @@ namespace NzbDrone.Core.HealthCheck
 
         public Type Source { get; set; }
         public HealthCheckResult Type { get; set; }
-        public String Message { get; set; }
+        public string Message { get; set; }
         public Uri WikiUrl { get; set; }
 
         public HealthCheck(Type source)
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.HealthCheck
             Type = HealthCheckResult.Ok;
         }
 
-        public HealthCheck(Type source, HealthCheckResult type, String message, String wikiFragment = null)
+        public HealthCheck(Type source, HealthCheckResult type, string message, string wikiFragment = null)
         {
             Source = source;
             Type = type;
@@ -27,12 +27,12 @@ namespace NzbDrone.Core.HealthCheck
             WikiUrl = MakeWikiUrl(wikiFragment ?? MakeWikiFragment(message));
         }
 
-        private static String MakeWikiFragment(String message)
+        private static string MakeWikiFragment(string message)
         {
-            return "#" + CleanFragmentRegex.Replace(message.ToLower(), String.Empty).Replace(' ', '-');
+            return "#" + CleanFragmentRegex.Replace(message.ToLower(), string.Empty).Replace(' ', '-');
         }
 
-        private static Uri MakeWikiUrl(String fragment)
+        private static Uri MakeWikiUrl(string fragment)
         {
             var rootUri = new Uri("https://github.com/Sonarr/Sonarr/wiki/Health-checks");
             if (fragment.StartsWith("#"))

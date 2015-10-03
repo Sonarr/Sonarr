@@ -362,7 +362,7 @@ namespace NzbDrone.Common.Exceptron.fastJSON
 
             bool found = d.TryGetValue("$type", out tn);
 #if !SILVERLIGHT
-            if (found == false && type == typeof(Object))
+            if (found == false && type == typeof(object))
             {
                 return CreateDataset(d, globaltypes);
             }

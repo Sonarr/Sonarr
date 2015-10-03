@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Datastore.Migration
             {
                 downloadClientsCmd.Transaction = tran;
                 downloadClientsCmd.CommandText = @"SELECT Value FROM Config WHERE Key = 'downloadedepisodesfolder'";
-                var downloadedEpisodesFolder = downloadClientsCmd.ExecuteScalar() as String;
+                var downloadedEpisodesFolder = downloadClientsCmd.ExecuteScalar() as string;
 
                 downloadClientsCmd.Transaction = tran;
                 downloadClientsCmd.CommandText = @"SELECT Id, Implementation, Settings, ConfigContract FROM DownloadClients WHERE ConfigContract = 'FolderSettings'";
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             var newSettings = new
                             {
-                                NzbFolder = settingsJson.Value<String>("folder"),
+                                NzbFolder = settingsJson.Value<string>("folder"),
                                 WatchFolder = downloadedEpisodesFolder
                             }.ToJson();
 
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             var newSettings = new
                             {
-                                NzbFolder = settingsJson.Value<String>("folder")
+                                NzbFolder = settingsJson.Value<string>("folder")
                             }.ToJson();
 
                             using (IDbCommand updateCmd = conn.CreateCommand())
@@ -117,12 +117,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private sealed class MigrationHistoryItem
         {
-            public Int32 Id { get; set; }
-            public Int32 EpisodeId { get; set; }
-            public Int32 SeriesId { get; set; }
-            public String SourceTitle { get; set; }
+            public int Id { get; set; }
+            public int EpisodeId { get; set; }
+            public int SeriesId { get; set; }
+            public string SourceTitle { get; set; }
             public DateTime Date { get; set; }
-            public Dictionary<String, String> Data { get; set; }
+            public Dictionary<string, string> Data { get; set; }
             public MigrationHistoryEventType EventType { get; set; }
         }
 
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Datastore.Migration
                                 SeriesId = historyRead.GetInt32(2),
                                 SourceTitle = historyRead.GetString(3),
                                 Date = historyRead.GetDateTime(4),
-                                Data = Json.Deserialize<Dictionary<String, String>>(historyRead.GetString(5)),
+                                Data = Json.Deserialize<Dictionary<string, string>>(historyRead.GetString(5)),
                                 EventType = (MigrationHistoryEventType)historyRead.GetInt32(6)
                             });
                     }

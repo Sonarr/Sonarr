@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(Status) &&
+                return !string.IsNullOrWhiteSpace(Status) &&
                        Status.Equals("false", StringComparison.InvariantCultureIgnoreCase);
             }
         }

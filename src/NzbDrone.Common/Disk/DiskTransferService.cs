@@ -13,8 +13,8 @@ namespace NzbDrone.Common.Disk
 {
     public interface IDiskTransferService
     {
-        TransferMode TransferFolder(String sourcePath, String targetPath, TransferMode mode, bool verified = true);
-        TransferMode TransferFile(String sourcePath, String targetPath, TransferMode mode, bool overwrite = false, bool verified = true);
+        TransferMode TransferFolder(string sourcePath, string targetPath, TransferMode mode, bool verified = true);
+        TransferMode TransferFile(string sourcePath, string targetPath, TransferMode mode, bool overwrite = false, bool verified = true);
     }
 
     public enum DiskTransferVerificationMode
@@ -26,7 +26,7 @@ namespace NzbDrone.Common.Disk
 
     public class DiskTransferService : IDiskTransferService
     {
-        private const Int32 RetryCount = 2;
+        private const int RetryCount = 2;
 
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
@@ -43,7 +43,7 @@ namespace NzbDrone.Common.Disk
             VerificationMode = OsInfo.IsWindows ? DiskTransferVerificationMode.VerifyOnly : DiskTransferVerificationMode.Transactional;
         }
 
-        public TransferMode TransferFolder(String sourcePath, String targetPath, TransferMode mode, bool verified = true)
+        public TransferMode TransferFolder(string sourcePath, string targetPath, TransferMode mode, bool verified = true)
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
@@ -80,7 +80,7 @@ namespace NzbDrone.Common.Disk
             return result;
         }
 
-        public TransferMode TransferFile(String sourcePath, String targetPath, TransferMode mode, bool overwrite = false, bool verified = true)
+        public TransferMode TransferFile(string sourcePath, string targetPath, TransferMode mode, bool overwrite = false, bool verified = true)
         {
             Ensure.That(sourcePath, () => sourcePath).IsValidPath();
             Ensure.That(targetPath, () => targetPath).IsValidPath();
@@ -165,7 +165,7 @@ namespace NzbDrone.Common.Disk
                     }
                 }
 
-                throw new IOException(String.Format("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath));
+                throw new IOException(string.Format("Failed to completely transfer [{0}] to [{1}], aborting.", sourcePath, targetPath));
             }
             else if (VerificationMode == DiskTransferVerificationMode.VerifyOnly)
             {
@@ -231,7 +231,7 @@ namespace NzbDrone.Common.Disk
             return TransferMode.None;
         }
 
-        private void ClearTargetPath(String targetPath, bool overwrite)
+        private void ClearTargetPath(string targetPath, bool overwrite)
         {
             if (_diskProvider.FileExists(targetPath))
             {
@@ -310,7 +310,7 @@ namespace NzbDrone.Common.Disk
             Thread.Sleep(3000);
         }
 
-        private Boolean TryCopyFile(String sourcePath, String targetPath)
+        private bool TryCopyFile(string sourcePath, string targetPath)
         {
             var originalSize = _diskProvider.GetFileSize(sourcePath);
 
@@ -361,7 +361,7 @@ namespace NzbDrone.Common.Disk
             return false;
         }
 
-        private Boolean TryMoveFile(String sourcePath, String targetPath)
+        private bool TryMoveFile(string sourcePath, string targetPath)
         {
             var originalSize = _diskProvider.GetFileSize(sourcePath);
 
@@ -396,7 +396,7 @@ namespace NzbDrone.Common.Disk
                             _diskProvider.MoveFile(tempTargetPath, targetPath);
                             if (_diskProvider.FileExists(tempTargetPath))
                             {
-                                throw new IOException(String.Format("Temporary file '{0}' still exists, aborting.", tempTargetPath));
+                                throw new IOException(string.Format("Temporary file '{0}' still exists, aborting.", tempTargetPath));
                             }
                             _logger.Trace("Hardlink move succeeded, deleting source.");
                             _diskProvider.DeleteFile(sourcePath);

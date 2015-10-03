@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
                 return match.Groups["URL"].Value;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
     }
 }

@@ -63,7 +63,7 @@ namespace NzbDrone.Api.ErrorManagement
                         }.AsResponse(HttpStatusCode.Conflict);
                 }
 
-                var sqlErrorMessage = String.Format("[{0} {1}]", context.Request.Method, context.Request.Path);
+                var sqlErrorMessage = string.Format("[{0} {1}]", context.Request.Method, context.Request.Path);
 
                 _logger.ErrorException(sqlErrorMessage, sqLiteException);
             }

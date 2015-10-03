@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         [Test]
         public void write_long_log()
         {
-            var message = String.Empty;
+            var message = string.Empty;
             for (int i = 0; i < 100; i++)
             {
                 message += Guid.NewGuid();
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         {
 
             var ex = new InvalidOperationException("Fake Exception");
-            _uniqueMessage = String.Empty;
+            _uniqueMessage = string.Empty;
 
 
             _logger.ErrorException(_uniqueMessage, ex);

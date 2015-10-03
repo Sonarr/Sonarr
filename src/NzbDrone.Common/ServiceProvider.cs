@@ -42,7 +42,7 @@ namespace NzbDrone.Common
             _logger.Debug("Checking if service {0} exists.", name);
             return
                 ServiceController.GetServices().Any(
-                    s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
+                    s => string.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public virtual bool IsServiceRunning(string name)
@@ -50,7 +50,7 @@ namespace NzbDrone.Common
             _logger.Debug("Checking if '{0}' service is running", name);
 
             var service = ServiceController.GetServices()
-                .SingleOrDefault(s => String.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
+                .SingleOrDefault(s => string.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
 
             return service != null && (
                 service.Status != ServiceControllerStatus.Stopped ||
@@ -72,7 +72,7 @@ namespace NzbDrone.Common
             var serviceInstaller = new ServiceInstaller();
 
 
-            String[] cmdline = { @"/assemblypath=" + Process.GetCurrentProcess().MainModule.FileName };
+            string[] cmdline = { @"/assemblypath=" + Process.GetCurrentProcess().MainModule.FileName };
 
             var context = new InstallContext("service_install.log", cmdline);
             serviceInstaller.Context = context;
@@ -112,7 +112,7 @@ namespace NzbDrone.Common
 
         public virtual ServiceController GetService(string serviceName)
         {
-            return ServiceController.GetServices().FirstOrDefault(c => String.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
+            return ServiceController.GetServices().FirstOrDefault(c => string.Equals(c.ServiceName, serviceName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public virtual void Stop(string serviceName)
@@ -185,7 +185,7 @@ namespace NzbDrone.Common
 
         public void Restart(string serviceName)
         {
-            var args = String.Format("/C net.exe stop \"{0}\" && net.exe start \"{0}\"", serviceName);
+            var args = string.Format("/C net.exe stop \"{0}\" && net.exe start \"{0}\"", serviceName);
 
             _processProvider.Start("cmd.exe", args);
         }

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         }
 
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
-        public override Int32 PageSize { get { return 100; } }
+        public override int PageSize { get { return 100; } }
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             _torznabCapabilitiesProvider = torznabCapabilitiesProvider;
         }
 
-        private IndexerDefinition GetDefinition(String name, TorznabSettings settings)
+        private IndexerDefinition GetDefinition(string name, TorznabSettings settings)
         {
             return new IndexerDefinition
                    {
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Indexers.Torznab
                    };
         }
 
-        private TorznabSettings GetSettings(String url, params int[] categories)
+        private TorznabSettings GetSettings(string url, params int[] categories)
         {
             var settings = new TorznabSettings { Url = url };
 

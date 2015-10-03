@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (IDbCommand tagCmd = conn.CreateCommand())
             {
                 tagCmd.Transaction = tran;
-                tagCmd.CommandText = String.Format("SELECT Id, Tags FROM {0}", table);
+                tagCmd.CommandText = string.Format("SELECT Id, Tags FROM {0}", table);
 
                 using (IDataReader tagReader = tagCmd.ExecuteReader())
                 {
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (IDbCommand updateCmd = conn.CreateCommand())
                 {
                     updateCmd.Transaction = tran;
-                    updateCmd.CommandText = String.Format(@"UPDATE {0} SET Tags = ? WHERE Id = ?", table);
+                    updateCmd.CommandText = string.Format(@"UPDATE {0} SET Tags = ? WHERE Id = ?", table);
                     updateCmd.AddParameter(model.Tags.ToJson());
                     updateCmd.AddParameter(model.Id);
 
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (IDbCommand removeCmd = conn.CreateCommand())
             {
                 removeCmd.Transaction = tran;
-                removeCmd.CommandText = String.Format("DELETE FROM Tags WHERE Id IN ({0})", String.Join(",", idsToRemove));
+                removeCmd.CommandText = string.Format("DELETE FROM Tags WHERE Id IN ({0})", string.Join(",", idsToRemove));
                 removeCmd.ExecuteNonQuery();
             }
         }

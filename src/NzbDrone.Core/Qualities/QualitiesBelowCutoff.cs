@@ -5,8 +5,8 @@ namespace NzbDrone.Core.Qualities
 {
     public class QualitiesBelowCutoff
     {
-        public Int32 ProfileId { get; set; }
-        public IEnumerable<Int32> QualityIds { get; set; }
+        public int ProfileId { get; set; }
+        public IEnumerable<int> QualityIds { get; set; }
 
         public QualitiesBelowCutoff(int profileId, IEnumerable<int> qualityIds)
         {

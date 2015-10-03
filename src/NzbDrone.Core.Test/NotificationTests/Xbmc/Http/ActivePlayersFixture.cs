@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Http
                 UpdateLibrary = true
             };
 
-            _expectedUrl = String.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", _settings.Address, "getcurrentlyplaying");
+            _expectedUrl = string.Format("http://{0}/xbmcCmds/xbmcHttp?command={1}", _settings.Address, "getcurrentlyplaying");
         }
 
         [Test]

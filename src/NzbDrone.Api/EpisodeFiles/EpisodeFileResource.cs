@@ -6,15 +6,15 @@ namespace NzbDrone.Api.EpisodeFiles
 {
     public class EpisodeFileResource : RestResource
     {
-        public Int32 SeriesId { get; set; }
-        public Int32 SeasonNumber { get; set; }
-        public String RelativePath { get; set; }
-        public String Path { get; set; }
-        public Int64 Size { get; set; }
+        public int SeriesId { get; set; }
+        public int SeasonNumber { get; set; }
+        public string RelativePath { get; set; }
+        public string Path { get; set; }
+        public long Size { get; set; }
         public DateTime DateAdded { get; set; }
-        public String SceneName { get; set; }
+        public string SceneName { get; set; }
         public QualityModel Quality { get; set; }
 
-        public Boolean QualityCutoffNotMet { get; set; }
+        public bool QualityCutoffNotMet { get; set; }
     }
 }

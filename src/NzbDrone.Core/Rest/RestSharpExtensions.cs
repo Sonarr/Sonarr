@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Rest
             request.AddParameter(name, value.ToString(), ParameterType.GetOrPost);
         }
 
-        public static object GetHeaderValue(this IRestResponse response, String key)
+        public static object GetHeaderValue(this IRestResponse response, string key)
         {
             var header = response.Headers.FirstOrDefault(v => v.Name == key);
 

@@ -12,10 +12,10 @@ namespace NzbDrone.Core.Tv
         public Series()
         {
             Images = new List<MediaCover.MediaCover>();
-            Genres = new List<String>();
+            Genres = new List<string>();
             Actors = new List<Actor>();
             Seasons = new List<Season>();
-            Tags = new HashSet<Int32>();
+            Tags = new HashSet<int>();
         }
 
         public int TvdbId { get; set; }
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Tv
         public string Path { get; set; }
         public int Year { get; set; }
         public Ratings Ratings { get; set; }
-        public List<String> Genres { get; set; }
+        public List<string> Genres { get; set; }
         public List<Actor> Actors { get; set; }
         public string Certification { get; set; }
         public string RootFolderPath { get; set; }
@@ -49,12 +49,12 @@ namespace NzbDrone.Core.Tv
         public LazyLoaded<Profile> Profile { get; set; }
 
         public List<Season> Seasons { get; set; }
-        public HashSet<Int32> Tags { get; set; }
+        public HashSet<int> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
 
         public override string ToString()
         {
-            return String.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
+            return string.Format("[{0}][{1}]", TvdbId, Title.NullSafe());
         }
     }
 }

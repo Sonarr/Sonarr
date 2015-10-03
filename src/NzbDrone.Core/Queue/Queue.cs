@@ -14,15 +14,15 @@ namespace NzbDrone.Core.Queue
         public Series Series { get; set; }
         public Episode Episode { get; set; }
         public QualityModel Quality { get; set; }
-        public Decimal Size { get; set; }
-        public String Title { get; set; }
-        public Decimal Sizeleft { get; set; }
+        public decimal Size { get; set; }
+        public string Title { get; set; }
+        public decimal Sizeleft { get; set; }
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
-        public String Status { get; set; }
-        public String TrackedDownloadStatus { get; set; }
+        public string Status { get; set; }
+        public string TrackedDownloadStatus { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
-        public String DownloadId { get; set; }
+        public string DownloadId { get; set; }
         public RemoteEpisode RemoteEpisode { get; set; }
         public DownloadProtocol Protocol { get; set; }
     }

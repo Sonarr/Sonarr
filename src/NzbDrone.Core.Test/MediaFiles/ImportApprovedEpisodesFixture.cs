@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         [TestCase(".mkv")]
         [TestCase(".par2")]
         [TestCase(".nzb")]
-        public void should_remove_extension_from_nzb_title_for_scene_name(String extension)
+        public void should_remove_extension_from_nzb_title_for_scene_name(string extension)
         {
             var title = "malcolm.in.the.middle.s02e05.dvdrip.xvid-ingot";
 

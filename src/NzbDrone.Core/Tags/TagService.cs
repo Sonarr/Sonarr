@@ -7,11 +7,11 @@ namespace NzbDrone.Core.Tags
 {
     public interface ITagService
     {
-        Tag GetTag(Int32 tagId);
+        Tag GetTag(int tagId);
         List<Tag> All();
         Tag Add(Tag tag);
         Tag Update(Tag tag);
-        void Delete(Int32 tagId);
+        void Delete(int tagId);
     }
 
     public class TagService : ITagService
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Tags
             _eventAggregator = eventAggregator;
         }
 
-        public Tag GetTag(Int32 tagId)
+        public Tag GetTag(int tagId)
         {
             return _repo.Get(tagId);
         }
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Tags
             return tag;
         }
 
-        public void Delete(Int32 tagId)
+        public void Delete(int tagId)
         {
             _repo.Delete(tagId);
             _eventAggregator.PublishEvent(new TagsUpdatedEvent());

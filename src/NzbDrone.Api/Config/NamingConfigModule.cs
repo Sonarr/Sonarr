@@ -57,7 +57,7 @@ namespace NzbDrone.Api.Config
             var nameSpec = _namingConfigService.GetConfig();
             var resource = nameSpec.InjectTo<NamingConfigResource>();
 
-            if (String.IsNullOrWhiteSpace(resource.StandardEpisodeFormat))
+            if (string.IsNullOrWhiteSpace(resource.StandardEpisodeFormat))
             {
                 return resource;
             }

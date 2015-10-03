@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Processes
 
         public override string ToString()
         {
-            return String.Format("{0} - {1} - {2}", Time, Level, Content);
+            return string.Format("{0} - {1} - {2}", Time, Level, Content);
         }
     }
 

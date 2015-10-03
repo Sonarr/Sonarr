@@ -7,9 +7,9 @@ namespace NzbDrone.Core.Indexers
 {
     public class RssIndexerRequestGenerator : IIndexerRequestGenerator
     {
-        private readonly String _baseUrl;
+        private readonly string _baseUrl;
 
-        public RssIndexerRequestGenerator(String baseUrl)
+        public RssIndexerRequestGenerator(string baseUrl)
         {
             _baseUrl = baseUrl;
         }

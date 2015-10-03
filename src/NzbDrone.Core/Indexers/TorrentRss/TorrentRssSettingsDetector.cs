@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             return settings;
         }
 
-        private Boolean IsEZTVFeed(IndexerResponse response)
+        private bool IsEZTVFeed(IndexerResponse response)
         {
             using (var xmlTextReader = XmlReader.Create(new StringReader(response.Content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, ValidationType = ValidationType.None, IgnoreComments = true, XmlResolver = null }))
             {

@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             return _proxy.GetActivePlayers(settings); 
         }
 
-        public String GetSeriesPath(XbmcSettings settings, Series series)
+        public string GetSeriesPath(XbmcSettings settings, Series series)
         {
             var allSeries = _proxy.GetSeries(settings);
 
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             var matchingSeries = allSeries.FirstOrDefault(s =>
             {
                 var tvdbId = 0;
-                Int32.TryParse(s.ImdbNumber, out tvdbId);
+                int.TryParse(s.ImdbNumber, out tvdbId);
 
                 return tvdbId == series.TvdbId || s.Label == series.Title;
             });
