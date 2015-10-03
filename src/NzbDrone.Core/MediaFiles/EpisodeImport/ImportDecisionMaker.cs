@@ -93,7 +93,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (localEpisode.Episodes.Empty())
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Unable to parse episode(s) from filename"));
+                        decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
                     }
                     else
                     {
