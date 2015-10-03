@@ -20,10 +20,10 @@ namespace NzbDrone.Api.Episodes
 
         public bool HasFile { get; set; }
         public bool Monitored { get; set; }
-        public Nullable<Int32> AbsoluteEpisodeNumber { get; set; }
-        public Nullable<Int32> SceneAbsoluteEpisodeNumber { get; set; }
-        public Nullable<Int32> SceneEpisodeNumber { get; set; }
-        public Nullable<Int32> SceneSeasonNumber { get; set; }
+        public int? AbsoluteEpisodeNumber { get; set; }
+        public int? SceneAbsoluteEpisodeNumber { get; set; }
+        public int? SceneEpisodeNumber { get; set; }
+        public int? SceneSeasonNumber { get; set; }
         public bool UnverifiedSceneNumbering { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? GrabDate { get; set; }

@@ -89,7 +89,7 @@ namespace NzbDrone.Api.ClientSchema
                         propertyInfo.SetValue(target, value, null);
                     }
 
-                    else if (propertyInfo.PropertyType == typeof(Nullable<Int32>))
+                    else if (propertyInfo.PropertyType == typeof(int?))
                     {
                         var value = field.Value.ToString().ParseInt32();
                         propertyInfo.SetValue(target, value, null);

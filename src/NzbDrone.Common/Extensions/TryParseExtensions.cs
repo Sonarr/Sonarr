@@ -4,7 +4,7 @@ namespace NzbDrone.Common.Extensions
 {
     public static class TryParseExtensions
     {
-        public static Nullable<int> ParseInt32(this string source)
+        public static int? ParseInt32(this string source)
         {
             int result = 0;
 
