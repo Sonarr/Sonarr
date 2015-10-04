@@ -218,6 +218,16 @@ namespace NzbDrone.Core.MediaFiles
 
         private List<ImportResult> ProcessFile(FileInfo fileInfo, Series series, DownloadClientItem downloadClientItem = null)
         {
+            if (Path.GetFileNameWithoutExtension(fileInfo.Name).StartsWith("._"))
+            {
+                _logger.Debug("[{0}] starts with '._', skipping", fileInfo.FullName);
+
+                return new List<ImportResult>
+                       {
+                           new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName }, new Rejection("Invalid video file, filename starts with '._'")), "Invalid video file, filename starts with '._'")
+                       };
+            }
+
             if (downloadClientItem == null)
             {
                 if (_diskProvider.IsFileLocked(fileInfo.FullName))
