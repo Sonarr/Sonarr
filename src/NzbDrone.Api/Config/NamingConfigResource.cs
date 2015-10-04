@@ -6,6 +6,7 @@ namespace NzbDrone.Api.Config
     public class NamingConfigResource : RestResource
     {
         public bool RenameEpisodes { get; set; }
+        public bool ReplaceIllegalCharacters { get; set; }
         public int MultiEpisodeStyle { get; set; }
         public string StandardEpisodeFormat { get; set; }
         public string DailyEpisodeFormat { get; set; }

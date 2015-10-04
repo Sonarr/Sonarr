@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Organizer
                 return new NamingConfig
                     {
                         RenameEpisodes = false,
+                        ReplaceIllegalCharacters = true,
                         MultiEpisodeStyle = 0,
                         StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
                         DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Full}",
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Organizer
         }
 
         public bool RenameEpisodes { get; set; }
+        public bool ReplaceIllegalCharacters { get; set; }
         public int MultiEpisodeStyle { get; set; }
         public string StandardEpisodeFormat { get; set; }
         public string DailyEpisodeFormat { get; set; }

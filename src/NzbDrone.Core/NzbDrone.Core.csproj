@@ -270,6 +270,7 @@
     <Compile Include="Datastore\Migration\089_add_on_rename_to_notifcations.cs" />
     <Compile Include="Datastore\Migration\090_update_kickass_url.cs" />
     <Compile Include="Datastore\Migration\091_added_indexerstatus.cs" />
+    <Compile Include="Datastore\Migration\093_naming_config_replace_characters.cs" />
     <Compile Include="Datastore\Migration\092_add_unverifiedscenenumbering.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />

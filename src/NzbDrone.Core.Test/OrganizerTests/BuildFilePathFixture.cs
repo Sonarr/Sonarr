@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [SetUp]
         public void Setup()
         {
-            namingConfig = new NamingConfig();
+            namingConfig = NamingConfig.Default;
 
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig()).Returns(namingConfig);

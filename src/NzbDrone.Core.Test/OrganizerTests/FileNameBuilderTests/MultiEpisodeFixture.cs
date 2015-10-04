@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     .Build();
 
 
-            _namingConfig = new NamingConfig();
+            _namingConfig = NamingConfig.Default;
             _namingConfig.RenameEpisodes = true;
 
 

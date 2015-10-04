@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 
             _episodeFile = new EpisodeFile { Quality = new QualityModel(Quality.HDTV720p), ReleaseGroup = "SonarrTest" };
 
-            _namingConfig = new NamingConfig();
+            _namingConfig = NamingConfig.Default;
             _namingConfig.RenameEpisodes = true;
 
             Mocker.GetMock<INamingConfigService>()

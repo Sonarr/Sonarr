@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Organizer
             AddQualityTokens(tokenHandlers, series, episodeFile);
             AddMediaInfoTokens(tokenHandlers, episodeFile);
             
-            var fileName = ReplaceTokens(pattern, tokenHandlers).Trim();
+            var fileName = ReplaceTokens(pattern, tokenHandlers, namingConfig).Trim();
             fileName = FileNameCleanupRegex.Replace(fileName, match => match.Captures[0].Value[0].ToString());
             fileName = TrimSeparatorsRegex.Replace(fileName, string.Empty);
 
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Organizer
 
             AddSeriesTokens(tokenHandlers, series);
 
-            return CleanFolderName(ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers));
+            return CleanFolderName(ReplaceTokens(namingConfig.SeriesFolderFormat, tokenHandlers, namingConfig));
         }
 
         public string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null)
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Organizer
             AddSeriesTokens(tokenHandlers, series);
             AddSeasonTokens(tokenHandlers, seasonNumber);
 
-            return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers));
+            return CleanFolderName(ReplaceTokens(namingConfig.SeasonFolderFormat, tokenHandlers, namingConfig));
         }
 
         public static string CleanTitle(string title)
@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Organizer
             return title;
         }
 
-        public static string CleanFileName(string name)
+        public static string CleanFileName(string name, bool replace = true)
         {
             string result = name;
             string[] badCharacters = { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Organizer
 
             for (int i = 0; i < badCharacters.Length; i++)
             {
-                result = result.Replace(badCharacters[i], goodCharacters[i]);
+                result = result.Replace(badCharacters[i], replace ? goodCharacters[i] : string.Empty);
             }
 
             return result.Trim();
@@ -551,12 +551,12 @@ namespace NzbDrone.Core.Organizer
             return string.Join("+", tokens.Distinct());
         }
 
-        private string ReplaceTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers)
+        private string ReplaceTokens(string pattern, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig)
         {
-            return TitleRegex.Replace(pattern, match => ReplaceToken(match, tokenHandlers));
+            return TitleRegex.Replace(pattern, match => ReplaceToken(match, tokenHandlers, namingConfig));
         }
 
-        private string ReplaceToken(Match match, Dictionary<string, Func<TokenMatch, string>> tokenHandlers)
+        private string ReplaceToken(Match match, Dictionary<string, Func<TokenMatch, string>> tokenHandlers, NamingConfig namingConfig)
         {
             var tokenMatch = new TokenMatch
             {
@@ -591,7 +591,7 @@ namespace NzbDrone.Core.Organizer
                 replacementText = replacementText.Replace(" ", tokenMatch.Separator);
             }
 
-            replacementText = CleanFileName(replacementText);
+            replacementText = CleanFileName(replacementText, namingConfig.ReplaceIllegalCharacters);
 
             if (!replacementText.IsNullOrWhiteSpace())
             {
