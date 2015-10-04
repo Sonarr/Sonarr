@@ -107,16 +107,15 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger.Trace("Sections response: {0}", response.Content);
             CheckForError(response, settings);
 
-            var item = Json.Deserialize<PlexSectionResponse>(response.Content)
-                           .Items
-                           .FirstOrDefault();
+            var items = Json.Deserialize<PlexSectionResponse>(response.Content)
+                           .Items;
 
-            if (item == null)
+            if (items == null || items.Empty())
             {
                 return null;
             }
 
-            return item.Id;
+            return items.First().Id;
         }
 
         private string Authenticate(PlexServerSettings settings)
