@@ -21,7 +21,11 @@ namespace NzbDrone.Core.Indexers.Newznab
             var code = Convert.ToInt32(error.Attribute("code").Value);
             var errorMessage = error.Attribute("description").Value;
 
-            if (code >= 100 && code <= 199) throw new ApiKeyException("Invalid API key");
+            if (code >= 100 && code <= 199)
+            {
+                _logger.Warn("Invalid API Key: {0}", errorMessage);
+                throw new ApiKeyException("Invalid API key");
+            }
 
             if (!indexerResponse.Request.Url.ToString().Contains("apikey=") && errorMessage == "Missing parameter")
             {
