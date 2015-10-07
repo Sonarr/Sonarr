@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -28,6 +28,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private QualityModel _upgradableQuality;
         private QualityModel _notupgradableQuality;
         private Series _fakeSeries;
+        private const int FIRST_EPISODE_ID = 1;
+        private const int SECOND_EPISODE_ID = 2;
 
         [SetUp]
         public void Setup()
@@ -35,10 +37,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<QualityUpgradableSpecification>();
             _upgradeHistory = Mocker.Resolve<HistorySpecification>();
 
-            var singleEpisodeList = new List<Episode> { new Episode { Id = 1, SeasonNumber = 12, EpisodeNumber = 3 } };
+            var singleEpisodeList = new List<Episode> { new Episode { Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 } };
             var doubleEpisodeList = new List<Episode> { 
-                                                            new Episode {Id = 1, SeasonNumber = 12, EpisodeNumber = 3 }, 
-                                                            new Episode {Id = 2, SeasonNumber = 12, EpisodeNumber = 4 }, 
+                                                            new Episode {Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 }, 
+                                                            new Episode {Id = SECOND_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 4 }, 
                                                             new Episode {Id = 3, SeasonNumber = 12, EpisodeNumber = 5 }
                                                        };
 
@@ -62,71 +64,84 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _upgradableQuality = new QualityModel(Quality.SDTV, new Revision(version: 1));
             _notupgradableQuality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));
-
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 1)).Returns(_notupgradableQuality);
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 2)).Returns(_notupgradableQuality);
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 3)).Returns<QualityModel>(null);
-
-            Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClients())
-                  .Returns(new IDownloadClient[] { Mocker.GetMock<IDownloadClient>().Object });
         }
 
-        private void WithFirstReportUpgradable()
+        private void GivenMostRecentForEpisode(int episodeId, string downloadId, QualityModel quality, DateTime date, HistoryEventType eventType)
         {
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 1)).Returns(_upgradableQuality);
+            Mocker.GetMock<IHistoryService>().Setup(s => s.MostRecentForEpisode(episodeId))
+                  .Returns(new History.History { DownloadId = downloadId, Quality = quality, Date = date, EventType = eventType });
         }
 
-        private void WithSecondReportUpgradable()
+        [Test]
+        public void should_return_true_if_it_is_a_search()
         {
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 2)).Returns(_upgradableQuality);
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Accepted.Should().BeTrue();
         }
 
-        private void GivenSabnzbdDownloadClient()
+        [Test]
+        public void should_return_true_if_latest_history_item_is_null()
         {
-            Mocker.GetMock<IProvideDownloadClient>()
-                  .Setup(c => c.GetDownloadClients())
-                  .Returns(new IDownloadClient[] { Mocker.Resolve<Sabnzbd>() });
+            Mocker.GetMock<IHistoryService>().Setup(s => s.MostRecentForEpisode(It.IsAny<int>())).Returns((History.History)null);
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
-        private void GivenMostRecentForEpisode(HistoryEventType eventType)
+        [Test]
+        public void should_return_true_if_latest_history_item_is_not_grabbed()
         {
-            Mocker.GetMock<IHistoryService>().Setup(s => s.MostRecentForEpisode(It.IsAny<int>()))
-                  .Returns(new History.History { EventType = eventType });
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow, HistoryEventType.DownloadFailed);
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_latest_history_has_a_download_id()
+        {
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _notupgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_latest_history_item_is_old_than_one_hour()
+        {
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow.AddHours(-6), HistoryEventType.DownloadFailed);
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_be_upgradable_if_only_episode_is_upgradable()
         {
-            WithFirstReportUpgradable();
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_be_upgradable_if_both_episodes_are_upgradable()
         {
-            WithFirstReportUpgradable();
-            WithSecondReportUpgradable();
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
+            GivenMostRecentForEpisode(SECOND_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_not_be_upgradable_if_both_episodes_are_not_upgradable()
         {
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
+            GivenMostRecentForEpisode(SECOND_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_first_episodes_is_upgradable()
         {
-            WithFirstReportUpgradable();
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_not_upgradable_if_only_second_episodes_is_upgradable()
         {
-            WithSecondReportUpgradable();
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
+            GivenMostRecentForEpisode(SECOND_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
@@ -137,50 +152,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
             _upgradableQuality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
 
-            Mocker.GetMock<IHistoryService>().Setup(c => c.GetBestQualityInHistory(It.IsAny<Profile>(), 1)).Returns(_upgradableQuality);
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
 
             _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_true_if_it_is_a_search()
-        {
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, new SeasonSearchCriteria()).Accepted.Should().BeTrue();
-        }
-
-        [Test]
-        public void should_return_true_if_using_sabnzbd_and_nothing_in_history()
-        {
-            GivenSabnzbdDownloadClient();
-
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
-        }
-
-        [Test]
-        public void should_return_false_if_most_recent_in_history_is_grabbed()
-        {
-            GivenSabnzbdDownloadClient();
-            GivenMostRecentForEpisode(HistoryEventType.Grabbed);
-
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
-        }
-
-        [Test]
-        public void should_return_true_if_most_recent_in_history_is_failed()
-        {
-            GivenSabnzbdDownloadClient();
-            GivenMostRecentForEpisode(HistoryEventType.DownloadFailed);
-
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
-        }
-
-        [Test]
-        public void should_return_true_if_most_recent_in_history_is_imported()
-        {
-            GivenSabnzbdDownloadClient();
-            GivenMostRecentForEpisode(HistoryEventType.DownloadFolderImported);
-
-            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
     }
 }
