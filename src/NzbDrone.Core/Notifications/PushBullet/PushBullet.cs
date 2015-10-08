@@ -2,6 +2,8 @@
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using System;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
@@ -35,6 +37,14 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string title = "Sonarr - New System Update";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            _proxy.SendNotification(title, body, Settings);
         }
 
         public override string Name

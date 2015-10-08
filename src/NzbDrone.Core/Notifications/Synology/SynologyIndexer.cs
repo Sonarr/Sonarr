@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentValidation.Results;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Synology
 {
@@ -53,6 +55,10 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+        }
+
         public override string Name
         {
             get
@@ -62,6 +68,14 @@ namespace NzbDrone.Core.Notifications.Synology
         }
 
         public override bool SupportsOnRename
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsOnUpdateAvailable
         {
             get
             {

@@ -2,6 +2,8 @@
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
+using System;
 
 namespace NzbDrone.Core.Notifications.Pushover
 {
@@ -35,6 +37,14 @@ namespace NzbDrone.Core.Notifications.Pushover
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string title = "New System Update";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            _proxy.SendNotification(title, body, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
         }
 
         public override string Name

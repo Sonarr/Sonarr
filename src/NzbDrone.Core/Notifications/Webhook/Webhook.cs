@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -35,6 +36,10 @@ namespace NzbDrone.Core.Notifications.Webhook
             _service.OnRename(series, Settings);
         }
 
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            _service.OnSystemUpdateAvailable(Settings, package);
+        }
         public override string Name
         {
             get

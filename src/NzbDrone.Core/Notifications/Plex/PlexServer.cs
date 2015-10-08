@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
@@ -33,6 +35,11 @@ namespace NzbDrone.Core.Notifications.Plex
             UpdateIfEnabled(series);
         }
 
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+
+        }
+
         private void UpdateIfEnabled(Series series)
         {
             if (Settings.UpdateLibrary)
@@ -50,6 +57,14 @@ namespace NzbDrone.Core.Notifications.Plex
         }
 
         public override bool SupportsOnGrab
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool SupportsOnUpdateAvailable
         {
             get
             {

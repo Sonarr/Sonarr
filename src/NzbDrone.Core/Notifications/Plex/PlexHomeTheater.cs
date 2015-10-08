@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Notifications.Xbmc;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Plex
 {
@@ -43,6 +44,15 @@ namespace NzbDrone.Core.Notifications.Plex
         {
             
         }
+
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string header = "Sonarr - New System Update";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            Notify(Settings, header, body);
+        }
+
 
         public override string Name
         {

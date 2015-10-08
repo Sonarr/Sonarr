@@ -3,6 +3,8 @@ using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 using Prowlin;
+using System;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Prowl
 {
@@ -36,6 +38,14 @@ namespace NzbDrone.Core.Notifications.Prowl
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string subject = "New System Update";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            _prowlService.SendNotification(subject, body, Settings.ApiKey, (NotificationPriority)Settings.Priority);
         }
 
         public override string Name

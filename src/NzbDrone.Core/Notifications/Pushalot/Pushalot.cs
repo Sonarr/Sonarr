@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Pushalot
 {
@@ -36,6 +37,14 @@ namespace NzbDrone.Core.Notifications.Pushalot
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string title = "New System Update";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            _proxy.SendNotification(title, body, Settings);
         }
 
         public override string Name

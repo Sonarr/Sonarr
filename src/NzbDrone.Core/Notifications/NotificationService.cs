@@ -9,21 +9,32 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.HealthCheck;
+using NzbDrone.Core.HealthCheck.Checks;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications
 {
     public class NotificationService
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeDownloadedEvent>,
-          IHandle<SeriesRenamedEvent>
+          IHandle<SeriesRenamedEvent>,
+          IHandleAsync<HealthCheckCompleteEvent>
     {
         private readonly INotificationFactory _notificationFactory;
         private readonly Logger _logger;
+        private readonly IHealthCheckService _healthCheckService;
+        private readonly ICheckUpdateService _checkUpdateService;
 
-        public NotificationService(INotificationFactory notificationFactory, Logger logger)
+        private UpdatePackage _lastUpdate;
+
+        public NotificationService(INotificationFactory notificationFactory, IHealthCheckService healthCheckService, ICheckUpdateService checkUpdateService, Logger logger)
         {
             _notificationFactory = notificationFactory;
+            _healthCheckService = healthCheckService;
+            _checkUpdateService = checkUpdateService;
             _logger = logger;
+            _lastUpdate = null;
         }
 
         private string GetMessage(Series series, List<Episode> episodes, QualityModel quality)
@@ -156,6 +167,32 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _logger.WarnException("Unable to send OnRename notification to: " + notification.Definition.Name, ex);
+                }
+            }
+        }
+
+        public void HandleAsync(HealthCheckCompleteEvent message)
+        {
+            foreach (var check in _healthCheckService.Results().OfType<UpdateCheck>())
+            {
+                var lastUpdate = _checkUpdateService.LatestUpdate();
+                if (_lastUpdate != null && _lastUpdate.Version == lastUpdate.Version)
+                {
+                    /* Duplicate notification */
+                    return;
+                }
+                _lastUpdate = lastUpdate;
+
+                foreach (var notification in _notificationFactory.OnSystemUpdateAvailableEnabled())
+                {
+                    try
+                    {
+                        notification.OnUpdateAvailable(_lastUpdate);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.WarnException("Unable to send OnSystemUpdateAvailable notification to: " + notification.Definition.Name, ex);
+                    }
                 }
             }
         }

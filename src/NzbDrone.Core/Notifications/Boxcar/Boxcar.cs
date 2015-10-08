@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Boxcar
 {
@@ -37,6 +39,14 @@ namespace NzbDrone.Core.Notifications.Boxcar
         {
         }
 
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string title = "New update is available";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            _proxy.SendNotification(title, body, Settings);
+        }
+
         public override string Name
         {
             get
@@ -61,5 +71,6 @@ namespace NzbDrone.Core.Notifications.Boxcar
 
             return new ValidationResult(failures);
         }
+
     }
 }

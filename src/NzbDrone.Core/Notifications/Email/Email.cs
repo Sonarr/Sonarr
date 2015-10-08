@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Notifications.Email
 {
@@ -38,6 +39,14 @@ namespace NzbDrone.Core.Notifications.Email
 
         public override void OnRename(Series series)
         {
+        }
+
+        public override void OnUpdateAvailable(UpdatePackage package)
+        {
+            const string subject = "Sonarr [TV] - New System Update";
+            var body = String.Format("New update is available - {0}", package.Version.ToString());
+
+            _emailService.SendEmail(Settings, subject, body);
         }
 
         public override string Name
