@@ -316,6 +316,12 @@ namespace NzbDrone.Common.Disk
 
             var tempTargetPath = targetPath + ".partial~";
 
+            if (_diskProvider.FileExists(tempTargetPath))
+            {
+                _logger.Trace("Removing old partial.");
+                _diskProvider.DeleteFile(tempTargetPath);
+            }
+
             try
             {
                 for (var i = 0; i <= RetryCount; i++)

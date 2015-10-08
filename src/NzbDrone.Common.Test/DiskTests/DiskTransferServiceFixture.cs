@@ -378,7 +378,7 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void mode_transactional_should_delete_old_backup()
+        public void mode_transactional_should_delete_old_backup_on_move()
         {
             Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
@@ -393,7 +393,7 @@ namespace NzbDrone.Common.Test.DiskTests
         }
 
         [Test]
-        public void mode_transactional_should_delete_old_partial()
+        public void mode_transactional_should_delete_old_partial_on_move()
         {
             Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
 
@@ -402,6 +402,19 @@ namespace NzbDrone.Common.Test.DiskTests
             WithSuccessfulHardlink(_sourcePath, _backupPath);
 
             Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.DeleteFile(_tempTargetPath), Times.Once());
+        }
+
+        [Test]
+        public void mode_transactional_should_delete_old_partial_on_copy()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            WithExistingFile(_tempTargetPath);
+
+            Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy);
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.DeleteFile(_tempTargetPath), Times.Once());
