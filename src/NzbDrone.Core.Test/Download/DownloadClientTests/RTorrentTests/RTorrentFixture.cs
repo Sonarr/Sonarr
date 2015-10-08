@@ -57,12 +57,17 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.RTorrentTests
         protected void GivenSuccessfulDownload()
         {
             Mocker.GetMock<IRTorrentProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<RTorrentSettings>()))
-                .Callback(PrepareClientToReturnCompletedItem);
+                  .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<RTorrentSettings>()))
+                  .Callback(PrepareClientToReturnCompletedItem);
 
             Mocker.GetMock<IRTorrentProxy>()
-                .Setup(s => s.AddTorrentFromFile(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<RTorrentSettings>()))
-                .Callback(PrepareClientToReturnCompletedItem);
+                  .Setup(s => s.AddTorrentFromFile(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<RTorrentSettings>()))
+                  .Callback(PrepareClientToReturnCompletedItem);
+
+
+            Mocker.GetMock<IRTorrentProxy>()
+                  .Setup(s => s.HasHashTorrent(It.IsAny<string>(), It.IsAny<RTorrentSettings>()))
+                  .Returns(true);
         }
 
         protected virtual void GivenTorrents(List<RTorrentTorrent> torrents)
