@@ -503,6 +503,8 @@
     <Compile Include="Indexers\IndexerBase.cs" />
     <Compile Include="Indexers\IndexerDefinition.cs" />
     <Compile Include="Indexers\IndexerFactory.cs" />
+    <Compile Include="Indexers\IndexerPageableRequest.cs" />
+    <Compile Include="Indexers\IndexerPageableRequestChain.cs" />
     <Compile Include="Indexers\IndexerStatusRepository.cs" />
     <Compile Include="Indexers\IndexerRepository.cs" />
     <Compile Include="Indexers\IndexerRequest.cs" />

@@ -5,11 +5,11 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerRequestGenerator
     {
-        IList<IEnumerable<IndexerRequest>> GetRecentRequests();
-        IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria);
-        IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria);
-        IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria);
-        IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria);
-        IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria);
+        IndexerPageableRequestChain GetRecentRequests();
+        IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria);
+        IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria);
+        IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria);
+        IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria);
+        IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria);
     }
 }

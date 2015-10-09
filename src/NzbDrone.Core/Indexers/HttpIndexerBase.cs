@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Indexers
             return FetchReleases(generator.GetSearchRequests(searchCriteria));
         }
 
-        protected virtual IList<ReleaseInfo> FetchReleases(IList<IEnumerable<IndexerRequest>> pageableRequests, bool isRecent = false)
+        protected virtual IList<ReleaseInfo> FetchReleases(IndexerPageableRequestChain pageableRequestChain, bool isRecent = false)
         {
             var releases = new List<ReleaseInfo>();
             var url = string.Empty;
@@ -127,51 +127,61 @@ namespace NzbDrone.Core.Indexers
                     lastReleaseInfo = _indexerStatusService.GetLastRssSyncReleaseInfo(Definition.Id);
                 }
 
-                foreach (var pageableRequest in pageableRequests)
+                for (int i = 0; i < pageableRequestChain.Tiers; i++)
                 {
-                    var pagedReleases = new List<ReleaseInfo>();
+                    var pageableRequests = pageableRequestChain.GetTier(i);
 
-                    foreach (var request in pageableRequest)
+                    foreach (var pageableRequest in pageableRequests)
                     {
-                        url = request.Url.ToString();
+                        var pagedReleases = new List<ReleaseInfo>();
 
-                        var page = FetchPage(request, parser);
-
-                        pagedReleases.AddRange(page);
-
-                        if (isRecent && page.Any())
+                        foreach (var request in pageableRequest)
                         {
-                            if (lastReleaseInfo == null)
+                            url = request.Url.ToString();
+
+                            var page = FetchPage(request, parser);
+
+                            pagedReleases.AddRange(page);
+
+                            if (isRecent && page.Any())
                             {
-                                fullyUpdated = true;
-                                break;
+                                if (lastReleaseInfo == null)
+                                {
+                                    fullyUpdated = true;
+                                    break;
+                                }
+                                var oldestReleaseDate = page.Select(v => v.PublishDate).Min();
+                                if (oldestReleaseDate < lastReleaseInfo.PublishDate || page.Any(v => v.DownloadUrl == lastReleaseInfo.DownloadUrl))
+                                {
+                                    fullyUpdated = true;
+                                    break;
+                                }
+
+                                if (pagedReleases.Count >= MaxNumResultsPerQuery &&
+                                    oldestReleaseDate < DateTime.UtcNow - TimeSpan.FromHours(24))
+                                {
+                                    fullyUpdated = false;
+                                    break;
+                                }
                             }
-                            var oldestReleaseDate = page.Select(v => v.PublishDate).Min();
-                            if (oldestReleaseDate < lastReleaseInfo.PublishDate || page.Any(v => v.DownloadUrl == lastReleaseInfo.DownloadUrl))
+                            else if (pagedReleases.Count >= MaxNumResultsPerQuery)
                             {
-                                fullyUpdated = true;
                                 break;
                             }
 
-                            if (pagedReleases.Count >= MaxNumResultsPerQuery &&
-                                oldestReleaseDate < DateTime.UtcNow - TimeSpan.FromHours(24))
+                            if (!IsFullPage(page))
                             {
-                                fullyUpdated = false;
                                 break;
                             }
                         }
-                        else if (pagedReleases.Count >= MaxNumResultsPerQuery)
-                        {
-                            break;
-                        }
 
-                        if (!IsFullPage(page))
-                        {
-                            break;
-                        }
+                        releases.AddRange(pagedReleases);
                     }
 
-                    releases.AddRange(pagedReleases);
+                    if (releases.Any())
+                    {
+                        break;
+                    }
                 }
 
                 if (isRecent && !releases.Empty())
@@ -277,7 +287,7 @@ namespace NzbDrone.Core.Indexers
             {
                 var parser = GetParser();
                 var generator = GetRequestGenerator();
-                var releases = FetchPage(generator.GetRecentRequests().First().First(), parser);
+                var releases = FetchPage(generator.GetRecentRequests().GetAllTiers().First().First(), parser);
 
                 if (releases.Empty())
                 {

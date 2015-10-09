@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -11,18 +12,18 @@ namespace NzbDrone.Core.Indexers.HDBits
     {
         public HDBitsSettings Settings { get; set; }
 
-        public IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        public virtual IndexerPageableRequestChain GetRecentRequests()
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             pageableRequests.Add(GetRequest(new TorrentQuery()));
 
             return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            var requests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var queryBase = new TorrentQuery();
             if (TryAddSearchParameters(queryBase, searchCriteria))
@@ -36,32 +37,32 @@ namespace NzbDrone.Core.Indexers.HDBits
                 }
             }
 
-            return requests;
+            return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            return new IndexerPageableRequestChain();
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var requests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var query = new TorrentQuery();
             if (TryAddSearchParameters(query, searchCriteria))
             {
                 query.Search = string.Format("{0:yyyy}-{0:MM}-{0:dd}", searchCriteria.AirDate);
 
-                requests.Add(GetRequest(query));
+                pageableRequests.Add(GetRequest(query));
             }
 
-            return requests;
+            return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var requests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var queryBase = new TorrentQuery();
             if (TryAddSearchParameters(queryBase, searchCriteria))
@@ -72,16 +73,16 @@ namespace NzbDrone.Core.Indexers.HDBits
 
                     query.TvdbInfo.Season = seasonNumber;
 
-                    requests.Add(GetRequest(query));
+                    pageableRequests.Add(GetRequest(query));
                 }
             }
 
-            return requests;
+            return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var requests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var queryBase = new TorrentQuery();
             if (TryAddSearchParameters(queryBase, searchCriteria))
@@ -93,11 +94,11 @@ namespace NzbDrone.Core.Indexers.HDBits
                     query.TvdbInfo.Season = episode.SeasonNumber;
                     query.TvdbInfo.Episode = episode.EpisodeNumber;
 
-                    requests.Add(GetRequest(query));
+                    pageableRequests.Add(GetRequest(query));
                 }
             }
 
-            return requests;
+            return pageableRequests;
         }
 
         private bool TryAddSearchParameters(TorrentQuery query, SearchCriteriaBase searchCriteria)

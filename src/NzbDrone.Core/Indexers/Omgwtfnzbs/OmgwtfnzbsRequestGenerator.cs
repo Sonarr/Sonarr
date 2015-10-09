@@ -17,22 +17,22 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             BaseUrl = "https://rss.omgwtfnzbs.org/rss-download.php";
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        public virtual IndexerPageableRequestChain GetRecentRequests()
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(null));
+            pageableRequests.Add(GetPagedRequests(null));
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(string.Format("{0}+S{1:00}E{2:00}",
+                pageableRequests.Add(GetPagedRequests(string.Format("{0}+S{1:00}E{2:00}",
                     queryTitle,
                     searchCriteria.SeasonNumber,
                     searchCriteria.EpisodeNumber)));
@@ -41,13 +41,13 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(string.Format("{0}+S{1:00}",
+                pageableRequests.Add(GetPagedRequests(string.Format("{0}+S{1:00}",
                     queryTitle,
                     searchCriteria.SeasonNumber)));
             }
@@ -55,13 +55,13 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(string.Format("{0}+{1:yyyy MM dd}",
+                pageableRequests.Add(GetPagedRequests(string.Format("{0}+{1:yyyy MM dd}",
                     queryTitle,
                     searchCriteria.AirDate)));
             }
@@ -69,21 +69,21 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            return new IndexerPageableRequestChain();
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.EpisodeQueryTitles)
             {
                 var query = queryTitle.Replace('+', ' ');
                 query = System.Web.HttpUtility.UrlEncode(query);
 
-                pageableRequests.AddIfNotNull(GetPagedRequests(query));
+                pageableRequests.Add(GetPagedRequests(query));
             }
 
             return pageableRequests;

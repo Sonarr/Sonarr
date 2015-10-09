@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             _logger.Debug("Evaluating TorrentRss feed '{0}'", indexerSettings.BaseUrl);
 
             var requestGenerator = new TorrentRssIndexerRequestGenerator { Settings = indexerSettings };
-            var request = requestGenerator.GetRecentRequests().First().First();
+            var request = requestGenerator.GetRecentRequests().GetAllTiers().First().First();
 
             HttpResponse httpResponse = null;
             try

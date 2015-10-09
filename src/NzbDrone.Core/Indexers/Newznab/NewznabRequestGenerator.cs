@@ -72,128 +72,63 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        public virtual IndexerPageableRequestChain GetRecentRequests()
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
             if (capabilities.SupportedTvSearchParameters != null)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories.Concat(Settings.AnimeCategories), "tvsearch", ""));
+                pageableRequests.Add(GetPagedRequests(MaxPages, Settings.Categories.Concat(Settings.AnimeCategories), "tvsearch", ""));
             }
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
-            {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                    string.Format("&tvdbid={0}&season={1}&ep={2}",
-                    searchCriteria.Series.TvdbId,
+            AddTvIdPageableRequests(pageableRequests, MaxPages, Settings.Categories, searchCriteria,
+                string.Format("&season={0}&ep={1}",
                     searchCriteria.SeasonNumber,
-                    searchCriteria.EpisodeNumber)));
-            }
-            else if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
-            {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                    string.Format("&rid={0}&season={1}&ep={2}",
-                    searchCriteria.Series.TvRageId,
-                    searchCriteria.SeasonNumber,
-                    searchCriteria.EpisodeNumber)));
-            }
-            else if (SupportsTvSearch)
-            {
-                foreach (var queryTitle in searchCriteria.QueryTitles)
-                {
-                    pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                        string.Format("&q={0}&season={1}&ep={2}",
-                        NewsnabifyTitle(queryTitle),
-                        searchCriteria.SeasonNumber,
-                        searchCriteria.EpisodeNumber)));
-                }
-            }
+                    searchCriteria.EpisodeNumber));
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
-            {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                    string.Format("&tvdbid={0}&season={1}",
-                    searchCriteria.Series.TvdbId,
-                    searchCriteria.SeasonNumber)));
-            }
-            else if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
-            {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                    string.Format("&rid={0}&season={1}",
-                    searchCriteria.Series.TvRageId,
-                    searchCriteria.SeasonNumber)));
-            }
-            else if (SupportsTvSearch)
-            {
-                foreach (var queryTitle in searchCriteria.QueryTitles)
-                {
-                    pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                        string.Format("&q={0}&season={1}",
-                        NewsnabifyTitle(queryTitle),
-                        searchCriteria.SeasonNumber)));
-                }
-            }
+            AddTvIdPageableRequests(pageableRequests, MaxPages, Settings.Categories, searchCriteria,
+                string.Format("&season={0}",
+                    searchCriteria.SeasonNumber));
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
-            {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                    string.Format("&tvdbid={0}&season={1:yyyy}&ep={1:MM}/{1:dd}",
-                    searchCriteria.Series.TvdbId,
-                    searchCriteria.AirDate)));
-            }
-            else if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
-            {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                    string.Format("&rid={0}&season={1:yyyy}&ep={1:MM}/{1:dd}",
-                    searchCriteria.Series.TvRageId,
-                    searchCriteria.AirDate)));
-            }
-            else if (SupportsTvSearch)
-            {
-                foreach (var queryTitle in searchCriteria.QueryTitles)
-                {
-                    pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
-                        string.Format("&q={0}&season={1:yyyy}&ep={1:MM}/{1:dd}",
-                        NewsnabifyTitle(queryTitle),
-                        searchCriteria.AirDate)));
-                }
-            }
+            AddTvIdPageableRequests(pageableRequests, MaxPages, Settings.Categories, searchCriteria,
+                string.Format("&season={0:yyyy}&ep={0:MM}/{0:dd}",
+                searchCriteria.AirDate));
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             if (SupportsSearch)
             {
                 foreach (var queryTitle in searchCriteria.QueryTitles)
                 {
-                    pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search",
+                    pageableRequests.Add(GetPagedRequests(MaxPages, Settings.AnimeCategories, "search",
                         string.Format("&q={0}+{1:00}",
                         NewsnabifyTitle(queryTitle),
                         searchCriteria.AbsoluteEpisodeNumber)));
@@ -203,9 +138,9 @@ namespace NzbDrone.Core.Indexers.Newznab
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             if (SupportsSearch)
             {
@@ -214,13 +149,41 @@ namespace NzbDrone.Core.Indexers.Newznab
                     var query = queryTitle.Replace('+', ' ');
                     query = System.Web.HttpUtility.UrlEncode(query);
 
-                    pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, Settings.Categories.Concat(Settings.AnimeCategories), "search",
+                    pageableRequests.Add(GetPagedRequests(MaxPages, Settings.Categories.Concat(Settings.AnimeCategories), "search",
                         string.Format("&q={0}",
                         query)));
                 }
             }
 
             return pageableRequests;
+        }
+
+        private void AddTvIdPageableRequests(IndexerPageableRequestChain chain, int maxPages, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, string parameters)
+        {
+            {
+                if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
+                {
+                    chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
+                        string.Format("&tvdbid={0}{1}", searchCriteria.Series.TvdbId, parameters)));
+                }
+                else if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
+                {
+                    chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
+                        string.Format("&rid={0}{1}", searchCriteria.Series.TvRageId, parameters)));
+                }
+            }
+
+            if (SupportsTvSearch)
+            {
+                chain.AddTier();
+                foreach (var queryTitle in searchCriteria.QueryTitles)
+                {
+                    chain.Add(GetPagedRequests(MaxPages, Settings.Categories, "tvsearch",
+                        string.Format("&q={0}{1}",
+                        NewsnabifyTitle(queryTitle),
+                        parameters)));
+                }
+            }
         }
 
         private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, IEnumerable<int> categories, string searchType, string parameters)
