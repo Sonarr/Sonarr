@@ -212,6 +212,13 @@ namespace NzbDrone.Core.Indexers.TorrentRss
                     return true;
                 }
 
+                // Check namespaces
+                if (document.Descendants().Any(v => v.GetDefaultNamespace().NamespaceName == "http://xmlns.ezrss.it/0.1/"))
+                {
+                    _logger.Trace("Identified feed as EZTV compatible by EZTV Namespace");
+                    return true;
+                }
+
                 return false;
             }
         }
