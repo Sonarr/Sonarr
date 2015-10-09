@@ -72,6 +72,19 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        private bool SupportsTvMazeSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportedTvSearchParameters != null &&
+                       capabilities.SupportedTvSearchParameters.Contains("tvmazeid") &&
+                       capabilities.SupportedTvSearchParameters.Contains("season") &&
+                       capabilities.SupportedTvSearchParameters.Contains("ep");
+            }
+        }
+
         private bool SupportsAggregatedIdSearch
         {
             get
@@ -184,6 +197,11 @@ namespace NzbDrone.Core.Indexers.Newznab
                     ids += "&rid=" + searchCriteria.Series.TvRageId;
                 }
 
+                if (searchCriteria.Series.TvMazeId > 0 && SupportsTvMazeSearch)
+                {
+                    ids += "&tvmazeid=" + searchCriteria.Series.TvMazeId;
+                }
+
                 chain.Add(GetPagedRequests(maxPages, categories, "tvsearch", ids + parameters));
             }
             else
@@ -197,6 +215,12 @@ namespace NzbDrone.Core.Indexers.Newznab
                 {
                     chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
                         string.Format("&rid={0}{1}", searchCriteria.Series.TvRageId, parameters)));
+                }
+
+                else if (searchCriteria.Series.TvMazeId > 0 && SupportsTvMazeSearch)
+                {
+                    chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
+                        string.Format("&tvmazeid={0}{1}", searchCriteria.Series.TvMazeId, parameters)));
                 }
             }
 

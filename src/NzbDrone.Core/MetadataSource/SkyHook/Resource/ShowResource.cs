@@ -20,6 +20,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public string Slug { get; set; }
         public string FirstAired { get; set; }
         public int? TvRageId { get; set; }
+        public int? TvMazeId { get; set; }
 
         public string Status { get; set; }
         public int? Runtime { get; set; }

@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Tv
 
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
+        public int TvMazeId { get; set; }
         public string ImdbId { get; set; }
         public string Title { get; set; }
         public string CleanTitle { get; set; }
