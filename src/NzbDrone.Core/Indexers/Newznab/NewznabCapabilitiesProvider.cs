@@ -89,6 +89,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 else if (xmlTvSearch.Attribute("supportedParams") != null)
                 {
                     capabilities.SupportedTvSearchParameters = xmlTvSearch.Attribute("supportedParams").Value.Split(',');
+                    capabilities.SupportsAggregateIdSearch = true;
                 }
             }
 

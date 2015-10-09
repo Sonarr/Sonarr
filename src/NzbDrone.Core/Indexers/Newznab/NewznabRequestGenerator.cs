@@ -72,6 +72,16 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        private bool SupportsAggregatedIdSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportsAggregateIdSearch;
+            }
+        }
+
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
@@ -160,6 +170,23 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private void AddTvIdPageableRequests(IndexerPageableRequestChain chain, int maxPages, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, string parameters)
         {
+            if (SupportsAggregatedIdSearch)
+            {
+                var ids = "";
+
+                if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
+                {
+                    ids += "&tvdbid=" + searchCriteria.Series.TvdbId;
+                }
+
+                if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
+                {
+                    ids += "&rid=" + searchCriteria.Series.TvRageId;
+                }
+
+                chain.Add(GetPagedRequests(maxPages, categories, "tvsearch", ids + parameters));
+            }
+            else
             {
                 if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
                 {
