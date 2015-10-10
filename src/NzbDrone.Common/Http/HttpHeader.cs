@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Http
 {
     public class HttpHeader : Dictionary<string, object>
     {
-        public HttpHeader(NameValueCollection headers)
+        public HttpHeader(NameValueCollection headers) : base(StringComparer.OrdinalIgnoreCase)
         {
             foreach (var key in headers.AllKeys)
             {
@@ -17,7 +17,7 @@ namespace NzbDrone.Common.Http
             }
         }
 
-        public HttpHeader()
+        public HttpHeader() : base(StringComparer.OrdinalIgnoreCase)
         {
 
         }

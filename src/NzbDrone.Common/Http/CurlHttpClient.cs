@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using CurlSharp;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
@@ -16,6 +18,7 @@ namespace NzbDrone.Common.Http
     public class CurlHttpClient
     {
         private static Logger Logger = NzbDroneLogger.GetLogger(typeof(CurlHttpClient));
+        private static readonly Regex ExpiryDate = new Regex(@"(expires=)([^;]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public CurlHttpClient()
         {
@@ -64,7 +67,12 @@ namespace NzbDrone.Common.Http
                     curlEasy.HttpGet = webRequest.Method == "GET";
                     curlEasy.Post = webRequest.Method == "POST";
                     curlEasy.Put = webRequest.Method == "PUT";
-                    curlEasy.Url = webRequest.RequestUri.ToString();
+                    curlEasy.Url = webRequest.RequestUri.AbsoluteUri;
+
+                    if (OsInfo.IsWindows)
+                    {
+                        curlEasy.CaInfo = "curl-ca-bundle.crt";
+                    }
 
                     if (webRequest.CookieContainer != null)
                     {
@@ -152,18 +160,32 @@ namespace NzbDrone.Common.Http
 
             var webHeaderCollection = new WebHeaderCollection();
 
-            foreach (var header in headerString.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Skip(1))
+            // following a redirect we could have two sets of headers, so only process the last one
+            foreach (var header in headerString.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Reverse())
             {
+                if (!header.Contains(":")) break;
                 webHeaderCollection.Add(header);
             }
 
             var setCookie = webHeaderCollection.Get("Set-Cookie");
             if (setCookie != null && setCookie.Length > 0 && webRequest.CookieContainer != null)
             {
-                webRequest.CookieContainer.SetCookies(webRequest.RequestUri, setCookie);
+                webRequest.CookieContainer.SetCookies(webRequest.RequestUri, FixSetCookieHeader(setCookie));
             }
 
             return webHeaderCollection;
+        }
+
+        private string FixSetCookieHeader(string setCookie)
+        {
+            // fix up the date if it was malformed
+            var setCookieClean = ExpiryDate.Replace(setCookie, delegate(Match match)
+                                                    {
+                                                        string format = "ddd, dd-MMM-yyyy HH:mm:ss";
+                                                        DateTime dt = Convert.ToDateTime(match.Groups[2].Value);
+                                                        return match.Groups[1].Value + dt.ToUniversalTime().ToString(format) + " GMT";
+                                                    });
+            return setCookieClean;
         }
 
         private byte[] ProcessResponseStream(HttpWebRequest webRequest, Stream responseStream, WebHeaderCollection webHeaderCollection)

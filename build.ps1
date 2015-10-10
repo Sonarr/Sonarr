@@ -218,6 +218,9 @@ Function PackageTests()
     Write-Host "Adding NzbDrone.Core.dll.config (for dllmap)"
     Copy-Item "$sourceFolder\NzbDrone.Core\NzbDrone.Core.dll.config" -Destination $testPackageFolder -Force
 
+    Write-Host "Copying CurlSharp libraries"
+    Copy-Item $sourceFolder\ExternalModules\CurlSharp\libs\i386\* $testPackageFolder
+
     Write-Host "##teamcity[progressFinish 'Creating Test Package']"
 }
 

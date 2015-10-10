@@ -23,6 +23,119 @@ namespace NzbDrone.Common.Http
         HttpResponse<T> Post<T>(HttpRequest request) where T : new();
     }
 
+    public interface IHttpDispatcher
+    {
+        HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest);
+    }
+
+    public class ManagedHttpDispatcher : IHttpDispatcher
+    {
+        public HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest)
+        {
+            if (!request.Body.IsNullOrWhiteSpace())
+            {
+                var bytes = request.Headers.GetEncodingFromContentType().GetBytes(request.Body.ToCharArray());
+
+                webRequest.ContentLength = bytes.Length;
+                using (var writeStream = webRequest.GetRequestStream())
+                {
+                    writeStream.Write(bytes, 0, bytes.Length);
+                }
+            }
+
+            HttpWebResponse httpWebResponse;
+
+            try
+            {
+                httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
+            }
+            catch (WebException e)
+            {
+                httpWebResponse = (HttpWebResponse)e.Response;
+
+                if (httpWebResponse == null)
+                {
+                    throw;
+                }
+            }
+
+            Byte[] data = null;
+
+            using (var responseStream = httpWebResponse.GetResponseStream())
+            {
+                if (responseStream != null)
+                {
+                    data = responseStream.ToBytes();
+                }
+            }
+
+            return new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
+
+        }
+    }
+
+    public class CurlHttpDispatcher : IHttpDispatcher
+    {
+        public HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest)
+        {
+            var curlClient = new CurlHttpClient();
+
+            return curlClient.GetResponse(request, webRequest);
+        }
+    }
+
+    public class FallbackHttpDispatcher : IHttpDispatcher
+    {
+        private readonly Logger _logger;
+        private readonly ICached<bool> _curlTLSFallbackCache;
+
+        public FallbackHttpDispatcher(ICached<bool> curlTLSFallbackCache, Logger logger)
+        {
+            _logger = logger;
+            _curlTLSFallbackCache = curlTLSFallbackCache;
+        }
+
+        public HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest)
+        {
+
+            ManagedHttpDispatcher managedDispatcher = new ManagedHttpDispatcher();
+            CurlHttpDispatcher curlDispatcher = new CurlHttpDispatcher();
+
+            if (OsInfo.IsMonoRuntime && webRequest.RequestUri.Scheme == "https")
+            {
+                if (!_curlTLSFallbackCache.Find(webRequest.RequestUri.Host))
+                {
+                    try
+                    {
+                        return managedDispatcher.GetResponse(request, webRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.ToString().Contains("The authentication or decryption has failed."))
+                        {
+                            _logger.Debug("https request failed in tls error for {0}, trying curl fallback.", webRequest.RequestUri.Host);
+
+                            _curlTLSFallbackCache.Set(webRequest.RequestUri.Host, true);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                }
+
+                if (CurlHttpClient.CheckAvailability())
+                {
+                    return curlDispatcher.GetResponse(request, webRequest);
+                }
+
+                _logger.Trace("Curl not available, using default WebClient.");
+            }
+
+            return managedDispatcher.GetResponse(request, webRequest);
+        }
+    }
+
     public class HttpClient : IHttpClient
     {
         private readonly Logger _logger;
@@ -30,16 +143,23 @@ namespace NzbDrone.Common.Http
         private readonly ICached<CookieContainer> _cookieContainerCache;
         private readonly ICached<bool> _curlTLSFallbackCache;
         private readonly List<IHttpRequestInterceptor> _requestInterceptors;
+        private readonly IHttpDispatcher _httpDispatcher;
 
-        public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, Logger logger)
+        public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, IHttpDispatcher httpDispatcher, Logger logger)
         {
             _logger = logger;
             _rateLimitService = rateLimitService;
             _requestInterceptors = requestInterceptors.ToList();
             ServicePointManager.DefaultConnectionLimit = 12;
+            _httpDispatcher = httpDispatcher;
 
             _cookieContainerCache = cacheManager.GetCache<CookieContainer>(typeof(HttpClient));
-            _curlTLSFallbackCache = cacheManager.GetCache<bool>(typeof(HttpClient), "curlTLSFallback");
+        }
+
+        public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, Logger logger)
+            : this(requestInterceptors, cacheManager, rateLimitService, null, logger)
+        {
+            _httpDispatcher = new FallbackHttpDispatcher(cacheManager.GetCache<bool>(typeof(HttpClient), "curlTLSFallback"), _logger);
         }
 
         public HttpResponse Execute(HttpRequest request)
@@ -79,7 +199,7 @@ namespace NzbDrone.Common.Http
 
             PrepareRequestCookies(request, webRequest);
 
-            var response = ExecuteRequest(request, webRequest);
+            var response = _httpDispatcher.GetResponse(request, webRequest);
 
             HandleResponseCookies(request, webRequest);
 
@@ -89,8 +209,8 @@ namespace NzbDrone.Common.Http
 
             if (!RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
-                response.StatusCode == HttpStatusCode.MovedPermanently ||
-                response.StatusCode == HttpStatusCode.Found))
+                 response.StatusCode == HttpStatusCode.MovedPermanently ||
+                 response.StatusCode == HttpStatusCode.Found))
             {
                 _logger.Error("Server requested a redirect to [" + response.Headers["Location"] + "]. Update the request URL to avoid this redirect.");
             }
@@ -129,7 +249,9 @@ namespace NzbDrone.Common.Http
                     {
                         persistentCookieContainer.Add(new Cookie(pair.Key, pair.Value, "/", request.Url.Host)
                         {
-                            Expires = DateTime.UtcNow.AddHours(1)
+                            // Use Now rather than UtcNow to work around Mono cookie expiry bug.
+                            // See https://gist.github.com/ta264/7822b1424f72e5b4c961
+                            Expires = DateTime.Now.AddHours(1)
                         });
                     }
                 }
@@ -165,91 +287,6 @@ namespace NzbDrone.Common.Http
 
                 persistentCookieContainer.Add(cookies);
             }
-        }
-
-        private HttpResponse ExecuteRequest(HttpRequest request, HttpWebRequest webRequest)
-        {
-            if (OsInfo.IsMonoRuntime && webRequest.RequestUri.Scheme == "https")
-            {
-                if (!_curlTLSFallbackCache.Find(webRequest.RequestUri.Host))
-                {
-                    try
-                    {
-                        return ExecuteWebRequest(request, webRequest);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.ToString().Contains("The authentication or decryption has failed."))
-                        {
-                            _logger.Debug("https request failed in tls error for {0}, trying curl fallback.", webRequest.RequestUri.Host);
-
-                            _curlTLSFallbackCache.Set(webRequest.RequestUri.Host, true);
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-
-                if (CurlHttpClient.CheckAvailability())
-                {
-                    return ExecuteCurlRequest(request, webRequest);
-                }
-
-                _logger.Trace("Curl not available, using default WebClient.");
-            }
-            
-            return ExecuteWebRequest(request, webRequest);
-        }
-
-        private HttpResponse ExecuteCurlRequest(HttpRequest request, HttpWebRequest webRequest)
-        {
-            var curlClient = new CurlHttpClient();
-
-            return curlClient.GetResponse(request, webRequest);
-        }
-
-        private HttpResponse ExecuteWebRequest(HttpRequest request, HttpWebRequest webRequest)
-        {
-            if (!request.Body.IsNullOrWhiteSpace())
-            {
-                var bytes = request.Headers.GetEncodingFromContentType().GetBytes(request.Body.ToCharArray());
-
-                webRequest.ContentLength = bytes.Length;
-                using (var writeStream = webRequest.GetRequestStream())
-                {
-                    writeStream.Write(bytes, 0, bytes.Length);
-                }
-            }
-
-            HttpWebResponse httpWebResponse;
-
-            try
-            {
-                httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
-            }
-            catch (WebException e)
-            {
-                httpWebResponse = (HttpWebResponse)e.Response;
-
-                if (httpWebResponse == null)
-                {
-                    throw;
-                }
-            }
-
-            byte[] data = null;
-
-            using (var responseStream = httpWebResponse.GetResponseStream())
-            {
-                if (responseStream != null)
-                {
-                    data = responseStream.ToBytes();
-                }
-            }
-
-            return new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
         }
 
         public void DownloadFile(string url, string fileName)
