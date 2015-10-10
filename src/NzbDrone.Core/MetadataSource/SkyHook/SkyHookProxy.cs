@@ -110,6 +110,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                 series.TvRageId = show.TvRageId.Value;
             }
 
+            if (show.TvMazeId.HasValue)
+            {
+                series.TvMazeId = show.TvMazeId.Value;
+            }
+
             series.ImdbId = show.ImdbId;
             series.Title = show.Title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.Title);

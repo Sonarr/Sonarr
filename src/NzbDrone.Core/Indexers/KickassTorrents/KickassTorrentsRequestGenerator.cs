@@ -20,28 +20,28 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             PageSize = 25;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        public virtual IndexerPageableRequestChain GetRecentRequests()
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "tv"));
+            pageableRequests.Add(GetPagedRequests(MaxPages, "tv"));
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv",
                     string.Format("season:{0}", searchCriteria.SeasonNumber),
                     string.Format("episode:{0}", searchCriteria.EpisodeNumber)));
 
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     string.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber),
                     "category:tv"));
@@ -50,18 +50,18 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv",
                     string.Format("season:{0}", searchCriteria.SeasonNumber)));
 
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv",
                     string.Format("S{0:00}", searchCriteria.SeasonNumber)));
@@ -70,13 +70,13 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.QueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     string.Format("{0:yyyy-MM-dd}", searchCriteria.AirDate),
                     "category:tv"));
@@ -85,18 +85,18 @@ namespace NzbDrone.Core.Indexers.KickassTorrents
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            return new IndexerPageableRequestChain();
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             foreach (var queryTitle in searchCriteria.EpisodeQueryTitles)
             {
-                pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, "usearch",
+                pageableRequests.Add(GetPagedRequests(MaxPages, "usearch",
                     PrepareQuery(queryTitle),
                     "category:tv"));
             }

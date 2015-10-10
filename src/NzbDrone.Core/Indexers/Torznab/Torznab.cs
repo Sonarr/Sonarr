@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.ThingiProvider;
 
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 {
     public class Torznab : HttpIndexerBase<TorznabSettings>
     {
-        private readonly ITorznabCapabilitiesProvider _torznabCapabilitiesProvider;
+        private readonly INewznabCapabilitiesProvider _capabilitiesProvider;
 
         public override string Name
         {
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new TorznabRequestGenerator(_torznabCapabilitiesProvider)
+            return new NewznabRequestGenerator(_capabilitiesProvider)
             {
                 PageSize = PageSize,
                 Settings = Settings
@@ -48,10 +49,10 @@ namespace NzbDrone.Core.Indexers.Torznab
             }
         }
 
-        public Torznab(ITorznabCapabilitiesProvider torznabCapabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+        public Torznab(INewznabCapabilitiesProvider capabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)
         {
-            _torznabCapabilitiesProvider = torznabCapabilitiesProvider;
+            _capabilitiesProvider = capabilitiesProvider;
         }
 
         private IndexerDefinition GetDefinition(string name, TorznabSettings settings)
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         {
             try
             {
-                var capabilities = _torznabCapabilitiesProvider.GetCapabilities(Settings);
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 if (capabilities.SupportedSearchParameters != null && capabilities.SupportedSearchParameters.Contains("q"))
                 {
@@ -100,8 +101,8 @@ namespace NzbDrone.Core.Indexers.Torznab
                 }
 
                 if (capabilities.SupportedTvSearchParameters != null &&
-                    (capabilities.SupportedSearchParameters.Contains("q") || capabilities.SupportedSearchParameters.Contains("rid")) &&
-                    capabilities.SupportedTvSearchParameters.Contains("season") && capabilities.SupportedTvSearchParameters.Contains("ep"))
+                    new[] { "q", "tvdbid", "rid" }.Any(v => capabilities.SupportedTvSearchParameters.Contains(v)) &&
+                    new[] { "season", "ep" }.All(v => capabilities.SupportedTvSearchParameters.Contains(v)))
                 {
                     return null;
                 }

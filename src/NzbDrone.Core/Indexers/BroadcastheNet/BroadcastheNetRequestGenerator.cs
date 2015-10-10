@@ -19,18 +19,18 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             PageSize = 100;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        public virtual IndexerPageableRequestChain GetRecentRequests()
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages, null));
+            pageableRequests.Add(GetPagedRequests(MaxPages, null));
 
             return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequest = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters.Category = "Episode";
                     parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
 
-                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
 
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
@@ -52,42 +52,42 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters.Category = "Season";
                     parameters.Name = string.Format("Season {0}", seasonNumber);
 
-                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
             }
 
-            return pageableRequest;
+            return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var pageableRequest = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
                 {
-                    parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}E%", seasonNumber);
-
-                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
-
-                    parameters = parameters.Clone();
-
                     parameters.Category = "Season";
                     parameters.Name = string.Format("Season {0}", seasonNumber);
 
-                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = string.Format("S{0:00}E%", seasonNumber);
+
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
             }
 
-            return pageableRequest;
+            return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequest = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
             
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
@@ -95,15 +95,15 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 parameters.Category = "Episode";
                 parameters.Name = string.Format("{0:yyyy}.{0:MM}.{0:dd}", searchCriteria.AirDate);
 
-                pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
             }
 
-            return pageableRequest;
+            return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequest = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters.Category = "Episode";
                     parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
 
-                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
 
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
@@ -125,16 +125,16 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters.Category = "Season";
                     parameters.Name = string.Format("Season {0}", seasonNumber);
 
-                    pageableRequest.AddIfNotNull(GetPagedRequests(MaxPages, parameters));
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
             }
 
-            return pageableRequest;
+            return pageableRequests;
         }
 
-        public virtual IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            return new IndexerPageableRequestChain();
         }
 
         private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)

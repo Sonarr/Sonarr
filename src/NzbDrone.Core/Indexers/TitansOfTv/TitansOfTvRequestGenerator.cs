@@ -19,62 +19,64 @@ namespace NzbDrone.Core.Indexers.TitansOfTv
             PageSize = 100;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetRecentRequests()
+        public virtual IndexerPageableRequestChain GetRecentRequests()
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages));
+            pageableRequests.Add(GetPagedRequests(MaxPages));
 
             return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+            pageableRequests.Add(GetPagedRequests(MaxPages,
                 series_id: searchCriteria.Series.TvdbId,
                 episode: string.Format("S{0:00}E{1:00}", searchCriteria.SeasonNumber, searchCriteria.EpisodeNumber)));
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+            pageableRequests.Add(GetPagedRequests(MaxPages,
                 series_id: searchCriteria.Series.TvdbId,
                 season: string.Format("Season {0:00}", searchCriteria.SeasonNumber)));
 
             return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            pageableRequests.Add(GetPagedRequests(MaxPages,
+                series_id: searchCriteria.Series.TvdbId,
+                season: string.Format("Season {0:00}", searchCriteria.SeasonNumber)));
+
+            pageableRequests.AddTier();
 
             // TODO: Search for all episodes?!?
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
-                series_id: searchCriteria.Series.TvdbId,
-                season: string.Format("Season {0:00}", searchCriteria.SeasonNumber)));
-
             return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            var pageableRequests = new List<IEnumerable<IndexerRequest>>();
+            var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.AddIfNotNull(GetPagedRequests(MaxPages,
+            pageableRequests.Add(GetPagedRequests(MaxPages,
                 series_id: searchCriteria.Series.TvdbId,
                 air_date: searchCriteria.AirDate));
 
             return pageableRequests;
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            return new IndexerPageableRequestChain();
         }
 
-        public IList<IEnumerable<IndexerRequest>> GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
-            return new List<IEnumerable<IndexerRequest>>();
+            return new IndexerPageableRequestChain();
         }
 
         private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, int? series_id = null, string episode = null, string season = null, DateTime? air_date = null)

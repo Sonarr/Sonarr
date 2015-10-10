@@ -24,7 +24,7 @@ namespace NzbDrone.Api.Parse
                 return null;
             }
 
-            var remoteEpisode = _parsingService.Map(parsedEpisodeInfo);
+            var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
 
             if (remoteEpisode == null)
             {

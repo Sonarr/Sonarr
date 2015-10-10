@@ -96,6 +96,20 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_update_tvmaze_id_if_changed()
+        {
+            var newSeriesInfo = _series.JsonClone();
+            newSeriesInfo.TvMazeId = _series.TvMazeId + 1;
+
+            GivenNewSeriesInfo(newSeriesInfo);
+
+            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvMazeId == newSeriesInfo.TvMazeId)));
+        }
+
+        [Test]
         public void should_log_error_if_tvdb_id_not_found()
         {
             Subject.Execute(new RefreshSeriesCommand(_series.Id));

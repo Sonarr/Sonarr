@@ -226,8 +226,6 @@
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssSettingsDetectorFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabFixture.cs" />
-    <Compile Include="IndexerTests\TorznabTests\TorznabRequestGeneratorFixture.cs" />
-    <Compile Include="IndexerTests\TorznabTests\TorznabSettingFixture.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabFixture.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabRequestGeneratorFixture.cs" />
     <Compile Include="IndexerTests\NewznabTests\NewznabSettingFixture.cs" />

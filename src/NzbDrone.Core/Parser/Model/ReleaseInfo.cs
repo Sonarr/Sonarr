@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Parser.Model
         public int IndexerId { get; set; }
         public string Indexer { get; set; }
         public DownloadProtocol DownloadProtocol { get; set; }
+        public int TvdbId { get; set; }
         public int TvRageId { get; set; }
         public DateTime PublishDate { get; set; }
 
@@ -73,6 +74,7 @@ namespace NzbDrone.Core.Parser.Model
                     stringBuilder.AppendLine("Indexer: " + Indexer ?? "Empty");
                     stringBuilder.AppendLine("CommentUrl: " + CommentUrl ?? "Empty");
                     stringBuilder.AppendLine("DownloadProtocol: " + DownloadProtocol ?? "Empty");
+                    stringBuilder.AppendLine("TvdbId: " + TvdbId ?? "Empty");
                     stringBuilder.AppendLine("TvRageId: " + TvRageId ?? "Empty");
                     stringBuilder.AppendLine("PublishDate: " + PublishDate ?? "Empty");
                     return stringBuilder.ToString();

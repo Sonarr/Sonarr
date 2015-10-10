@@ -61,24 +61,24 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public NewznabSettings()
         {
-            Categories = new[] {5030, 5040};
-            AnimeCategories = Enumerable.Empty<Int32>();
+            Categories = new[] { 5030, 5040 };
+            AnimeCategories = Enumerable.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "URL")]
-        public String Url { get; set; }
+        public string Url { get; set; }
 
         [FieldDefinition(1, Label = "API Key")]
-        public String ApiKey { get; set; }
+        public string ApiKey { get; set; }
 
         [FieldDefinition(2, Label = "Categories", HelpText = "Comma Separated list, leave blank to disable standard/daily shows", Advanced = true)]
-        public IEnumerable<Int32> Categories { get; set; }
+        public IEnumerable<int> Categories { get; set; }
 
         [FieldDefinition(3, Label = "Anime Categories", HelpText = "Comma Separated list, leave blank to disable anime", Advanced = true)]
-        public IEnumerable<Int32> AnimeCategories { get; set; }
+        public IEnumerable<int> AnimeCategories { get; set; }
 
-        [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional newznab parameters", Advanced = true)]
-        public String AdditionalParameters { get; set; }
+        [FieldDefinition(4, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
+        public string AdditionalParameters { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

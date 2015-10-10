@@ -65,7 +65,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (parsedEpisodeInfo == null || parsedEpisodeInfo.IsPossibleSpecialEpisode)
                     {
-                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(report.Title, report.TvRageId, searchCriteria);
+                        var specialEpisodeInfo = _parsingService.ParseSpecialEpisodeTitle(report.Title, report.TvdbId, report.TvRageId, searchCriteria);
 
                         if (specialEpisodeInfo != null)
                         {
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
                     {
-                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvRageId, searchCriteria);
+                        var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;
 
                         if (remoteEpisode.Series != null)

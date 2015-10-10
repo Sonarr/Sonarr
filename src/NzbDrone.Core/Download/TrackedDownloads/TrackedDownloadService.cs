@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 if (parsedEpisodeInfo != null)
                 {
-                    trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo);
+                    trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
                 }
 
                 if (historyItems.Any())

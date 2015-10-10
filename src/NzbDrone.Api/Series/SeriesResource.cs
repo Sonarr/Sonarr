@@ -57,6 +57,7 @@ namespace NzbDrone.Api.Series
         public int Runtime { get; set; }
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
+        public int TvMazeId { get; set; }
         public DateTime? FirstAired { get; set; }
         public DateTime? LastInfoSync { get; set; }
         public SeriesTypes SeriesType { get; set; }

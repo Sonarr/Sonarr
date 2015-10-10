@@ -8,8 +8,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         {
         }
 
-        public TorznabException(string message)
-            : base(message)
+        public TorznabException(string message) : base(message)
         {
         }
     }

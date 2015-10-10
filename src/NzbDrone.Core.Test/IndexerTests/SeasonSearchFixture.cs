@@ -43,8 +43,11 @@ namespace NzbDrone.Core.Test.IndexerTests
                 .With(v => v.HttpRequest.Method = HttpMethod.GET)
                 .Build();
 
+            var pageable = new IndexerPageableRequestChain();
+            pageable.Add(requests);
+
             requestGenerator.Setup(s => s.GetSearchRequests(It.IsAny<SeasonSearchCriteria>()))
-                .Returns(new List<IEnumerable<IndexerRequest>> { requests });
+                .Returns(pageable);
 
             var parser = Mocker.GetMock<IParseIndexerResponse>();
             Subject._parser = parser.Object;

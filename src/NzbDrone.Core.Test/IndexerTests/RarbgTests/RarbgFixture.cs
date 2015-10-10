@@ -56,6 +56,7 @@ namespace NzbDrone.Core.Test.IndexerTests.RarbgTests
             torrentInfo.MagnetUrl.Should().BeNull();
             torrentInfo.Peers.Should().Be(304 + 200);
             torrentInfo.Seeders.Should().Be(304);
+            torrentInfo.TvdbId.Should().Be(268156);
             torrentInfo.TvRageId.Should().Be(35197);
         }
 

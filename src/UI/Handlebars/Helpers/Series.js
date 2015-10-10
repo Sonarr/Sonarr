@@ -35,6 +35,10 @@ Handlebars.registerHelper('tvRageUrl', function() {
     return 'http://www.tvrage.com/shows/id-' + this.tvRageId;
 });
 
+Handlebars.registerHelper('tvMazeUrl', function() {
+    return 'http://www.tvmaze.com/shows/' + this.tvMazeId + '/_';
+});
+
 Handlebars.registerHelper('route', function() {
     return StatusModel.get('urlBase') + '/series/' + this.titleSlug;
 });

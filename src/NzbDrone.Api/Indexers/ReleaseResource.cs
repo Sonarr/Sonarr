@@ -33,6 +33,7 @@ namespace NzbDrone.Api.Indexers
         public bool Approved { get; set; }
         public bool TemporarilyRejected { get; set; }
         public bool Rejected { get; set; }
+        public int TvdbId { get; set; }
         public int TvRageId { get; set; }
         public IEnumerable<string> Rejections { get; set; }
         public DateTime PublishDate { get; set; }
