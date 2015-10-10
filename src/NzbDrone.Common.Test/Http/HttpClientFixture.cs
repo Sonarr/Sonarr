@@ -11,36 +11,22 @@ using NzbDrone.Test.Common.Categories;
 using NLog;
 using NzbDrone.Common.TPL;
 using Moq;
+using NzbDrone.Common.Http.Dispatchers;
 
 namespace NzbDrone.Common.Test.Http
 {
-    [TestFixture(true)]
-    [TestFixture(false)]
     [IntegrationTest]
-    public class HttpClientFixture : TestBase<HttpClient>
-    {
-        private bool _forceCurl;
-
-        public HttpClientFixture(bool forceCurl)
-        {
-            _forceCurl = forceCurl;
-        }
-        
+    [TestFixture(typeof(ManagedHttpDispatcher))]
+    [TestFixture(typeof(CurlHttpDispatcher))]
+    public class HttpClientFixture<TDispatcher> : TestBase<HttpClient> where TDispatcher : IHttpDispatcher
+    {        
         [SetUp]
         public void SetUp()
         {
             Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
             Mocker.SetConstant<IRateLimitService>(Mocker.Resolve<RateLimitService>());
             Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new IHttpRequestInterceptor[0]);
-
-            if (_forceCurl)
-            {
-                Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<CurlHttpDispatcher>());
-            }
-            else
-            {
-                Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<ManagedHttpDispatcher>());
-            }
+            Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<TDispatcher>());
         }
 
         [Test]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -13,20 +12,13 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
-namespace NzbDrone.Common.Http
+namespace NzbDrone.Common.Http.Dispatchers
 {
-    public class CurlHttpClient
+    public class CurlHttpDispatcher : IHttpDispatcher
     {
-        private static Logger Logger = NzbDroneLogger.GetLogger(typeof(CurlHttpClient));
         private static readonly Regex ExpiryDate = new Regex(@"(expires=)([^;]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public CurlHttpClient()
-        {
-            if (!CheckAvailability())
-            {
-                throw new ApplicationException("Curl failed to initialize.");
-            }
-        }
+        private static readonly Logger _logger = NzbDroneLogger.GetLogger(typeof(CurlHttpDispatcher));
 
         public static bool CheckAvailability()
         {
@@ -36,13 +28,23 @@ namespace NzbDrone.Common.Http
             }
             catch (Exception ex)
             {
-                Logger.TraceException("Initializing curl failed", ex);
+                _logger.TraceException("Initializing curl failed", ex);
                 return false;
             }
         }
 
-        public HttpResponse GetResponse(HttpRequest httpRequest, HttpWebRequest webRequest)
+        public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
         {
+            if (!CheckAvailability())
+            {
+                throw new ApplicationException("Curl failed to initialize.");
+            }
+
+            if (request.NetworkCredential != null)
+            {
+                throw new NotImplementedException("Credentials not supported for curl dispatcher.");
+            }
+
             lock (CurlGlobalHandle.Instance)
             {
                 Stream responseStream = new MemoryStream();
@@ -61,33 +63,47 @@ namespace NzbDrone.Common.Http
                         headerStream.Write(b, 0, s * n);
                         return s * n;
                     };
+                    
+                    curlEasy.Url = request.Url.AbsoluteUri;
+                    switch (request.Method)
+                    {
+                        case HttpMethod.GET:
+                            curlEasy.HttpGet = true;
+                            break;
 
-                    curlEasy.UserAgent = webRequest.UserAgent;
-                    curlEasy.FollowLocation = webRequest.AllowAutoRedirect;
-                    curlEasy.HttpGet = webRequest.Method == "GET";
-                    curlEasy.Post = webRequest.Method == "POST";
-                    curlEasy.Put = webRequest.Method == "PUT";
-                    curlEasy.Url = webRequest.RequestUri.AbsoluteUri;
+                        case HttpMethod.POST:
+                            curlEasy.Post = true;
+                            break;
+
+                        case HttpMethod.PUT:
+                            curlEasy.Put = true;
+                            break;
+
+                        default:
+                            throw new NotSupportedException(string.Format("HttpCurl method {0} not supported", request.Method));
+                    }
+                    curlEasy.UserAgent = UserAgentBuilder.UserAgent;
+                    curlEasy.FollowLocation = request.AllowAutoRedirect;
 
                     if (OsInfo.IsWindows)
                     {
                         curlEasy.CaInfo = "curl-ca-bundle.crt";
                     }
 
-                    if (webRequest.CookieContainer != null)
+                    if (cookies != null)
                     {
-                        curlEasy.Cookie = webRequest.CookieContainer.GetCookieHeader(webRequest.RequestUri);
+                        curlEasy.Cookie = cookies.GetCookieHeader(request.Url);
                     }
 
-                    if (!httpRequest.Body.IsNullOrWhiteSpace())
+                    if (!request.Body.IsNullOrWhiteSpace())
                     {
                         // TODO: This might not go well with encoding.
-                        curlEasy.PostFieldSize = httpRequest.Body.Length;
-                        curlEasy.SetOpt(CurlOption.CopyPostFields, httpRequest.Body);
+                        curlEasy.PostFieldSize = request.Body.Length;
+                        curlEasy.SetOpt(CurlOption.CopyPostFields, request.Body);
                     }
 
                     // Yes, we have to keep a ref to the object to prevent corrupting the unmanaged state
-                    using (var httpRequestHeaders = SerializeHeaders(webRequest))
+                    using (var httpRequestHeaders = SerializeHeaders(request))
                     {
                         curlEasy.HttpHeader = httpRequestHeaders;
 
@@ -99,60 +115,38 @@ namespace NzbDrone.Common.Http
                         }
                     }
 
-                    var webHeaderCollection = ProcessHeaderStream(webRequest, headerStream);
-                    var responseData = ProcessResponseStream(webRequest, responseStream, webHeaderCollection);
+                    var webHeaderCollection = ProcessHeaderStream(request, cookies, headerStream);
+                    var responseData = ProcessResponseStream(request, responseStream, webHeaderCollection);
 
                     var httpHeader = new HttpHeader(webHeaderCollection);
 
-                    return new HttpResponse(httpRequest, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
+                    return new HttpResponse(request, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
                 }
             }
         }
 
-        private CurlSlist SerializeHeaders(HttpWebRequest webRequest)
+        private CurlSlist SerializeHeaders(HttpRequest request)
         {
-            if (webRequest.SendChunked)
+            if (!request.Headers.ContainsKey("Accept-Encoding"))
             {
-                throw new NotSupportedException("Chunked transfer is not supported");
+                request.Headers.Add("Accept-Encoding", "gzip");
             }
 
-            if (webRequest.ContentLength > 0)
+            if (request.Headers.ContentType == null)
             {
-                webRequest.Headers.Add("Content-Length", webRequest.ContentLength.ToString());
+                request.Headers.ContentType = string.Empty;
             }
-
-            if (webRequest.AutomaticDecompression.HasFlag(DecompressionMethods.GZip))
-            {
-                if (webRequest.AutomaticDecompression.HasFlag(DecompressionMethods.Deflate))
-                {
-                    webRequest.Headers.Add("Accept-Encoding", "gzip, deflate");
-                }
-                else
-                {
-                    webRequest.Headers.Add("Accept-Encoding", "gzip");
-                }
-            }
-            else
-            {
-                if (webRequest.AutomaticDecompression.HasFlag(DecompressionMethods.Deflate))
-                {
-                    webRequest.Headers.Add("Accept-Encoding", "deflate");
-                }
-            }
-
 
             var curlHeaders = new CurlSlist();
-            for (int i = 0; i < webRequest.Headers.Count; i++)
+            foreach (var header in request.Headers)
             {
-                curlHeaders.Append(webRequest.Headers.GetKey(i) + ": " + webRequest.Headers.Get(i));
+                curlHeaders.Append(header.Key + ": " + header.Value.ToString());
             }
-
-            curlHeaders.Append("Content-Type: " + webRequest.ContentType ?? string.Empty);
 
             return curlHeaders;
         }
 
-        private WebHeaderCollection ProcessHeaderStream(HttpWebRequest webRequest, Stream headerStream)
+        private WebHeaderCollection ProcessHeaderStream(HttpRequest request, CookieContainer cookies, Stream headerStream)
         {
             headerStream.Position = 0;
             var headerData = headerStream.ToBytes();
@@ -168,9 +162,9 @@ namespace NzbDrone.Common.Http
             }
 
             var setCookie = webHeaderCollection.Get("Set-Cookie");
-            if (setCookie != null && setCookie.Length > 0 && webRequest.CookieContainer != null)
+            if (setCookie != null && setCookie.Length > 0 && cookies != null)
             {
-                webRequest.CookieContainer.SetCookies(webRequest.RequestUri, FixSetCookieHeader(setCookie));
+                cookies.SetCookies(request.Url, FixSetCookieHeader(setCookie));
             }
 
             return webHeaderCollection;
@@ -180,30 +174,30 @@ namespace NzbDrone.Common.Http
         {
             // fix up the date if it was malformed
             var setCookieClean = ExpiryDate.Replace(setCookie, delegate(Match match)
-                                                    {
-                                                        string format = "ddd, dd-MMM-yyyy HH:mm:ss";
-                                                        DateTime dt = Convert.ToDateTime(match.Groups[2].Value);
-                                                        return match.Groups[1].Value + dt.ToUniversalTime().ToString(format) + " GMT";
-                                                    });
+            {
+                string format = "ddd, dd-MMM-yyyy HH:mm:ss";
+                DateTime dt = Convert.ToDateTime(match.Groups[2].Value);
+                return match.Groups[1].Value + dt.ToUniversalTime().ToString(format) + " GMT";
+            });
             return setCookieClean;
         }
 
-        private byte[] ProcessResponseStream(HttpWebRequest webRequest, Stream responseStream, WebHeaderCollection webHeaderCollection)
+        private byte[] ProcessResponseStream(HttpRequest request, Stream responseStream, WebHeaderCollection webHeaderCollection)
         {
             responseStream.Position = 0;
 
-            if (responseStream.Length != 0 && webRequest.AutomaticDecompression != DecompressionMethods.None)
+            if (responseStream.Length != 0)
             {
                 var encoding = webHeaderCollection["Content-Encoding"];
                 if (encoding != null)
                 {
-                    if (webRequest.AutomaticDecompression.HasFlag(DecompressionMethods.GZip) && encoding.IndexOf("gzip") != -1)
+                    if (encoding.IndexOf("gzip") != -1)
                     {
                         responseStream = new GZipStream(responseStream, CompressionMode.Decompress);
 
                         webHeaderCollection.Remove("Content-Encoding");
                     }
-                    else if (webRequest.AutomaticDecompression.HasFlag(DecompressionMethods.Deflate) && encoding.IndexOf("deflate") != -1)
+                    else if (encoding.IndexOf("deflate") != -1)
                     {
                         responseStream = new DeflateStream(responseStream, CompressionMode.Decompress);
 

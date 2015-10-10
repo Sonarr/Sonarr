@@ -141,7 +141,10 @@
     <Compile Include="Extensions\UrlExtensions.cs" />
     <Compile Include="Extensions\XmlExtentions.cs" />
     <Compile Include="HashUtil.cs" />
-    <Compile Include="Http\CurlHttpClient.cs" />
+    <Compile Include="Http\Dispatchers\CurlHttpDispatcher.cs" />
+    <Compile Include="Http\Dispatchers\FallbackHttpDispatcher.cs" />
+    <Compile Include="Http\Dispatchers\IHttpDispatcher.cs" />
+    <Compile Include="Http\Dispatchers\ManagedHttpDispatcher.cs" />
     <Compile Include="Http\GZipWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

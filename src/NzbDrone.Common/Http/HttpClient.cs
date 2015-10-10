@@ -8,6 +8,7 @@ using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Common.Http
@@ -21,119 +22,6 @@ namespace NzbDrone.Common.Http
         HttpResponse Head(HttpRequest request);
         HttpResponse Post(HttpRequest request);
         HttpResponse<T> Post<T>(HttpRequest request) where T : new();
-    }
-
-    public interface IHttpDispatcher
-    {
-        HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest);
-    }
-
-    public class ManagedHttpDispatcher : IHttpDispatcher
-    {
-        public HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest)
-        {
-            if (!request.Body.IsNullOrWhiteSpace())
-            {
-                var bytes = request.Headers.GetEncodingFromContentType().GetBytes(request.Body.ToCharArray());
-
-                webRequest.ContentLength = bytes.Length;
-                using (var writeStream = webRequest.GetRequestStream())
-                {
-                    writeStream.Write(bytes, 0, bytes.Length);
-                }
-            }
-
-            HttpWebResponse httpWebResponse;
-
-            try
-            {
-                httpWebResponse = (HttpWebResponse)webRequest.GetResponse();
-            }
-            catch (WebException e)
-            {
-                httpWebResponse = (HttpWebResponse)e.Response;
-
-                if (httpWebResponse == null)
-                {
-                    throw;
-                }
-            }
-
-            Byte[] data = null;
-
-            using (var responseStream = httpWebResponse.GetResponseStream())
-            {
-                if (responseStream != null)
-                {
-                    data = responseStream.ToBytes();
-                }
-            }
-
-            return new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
-
-        }
-    }
-
-    public class CurlHttpDispatcher : IHttpDispatcher
-    {
-        public HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest)
-        {
-            var curlClient = new CurlHttpClient();
-
-            return curlClient.GetResponse(request, webRequest);
-        }
-    }
-
-    public class FallbackHttpDispatcher : IHttpDispatcher
-    {
-        private readonly Logger _logger;
-        private readonly ICached<bool> _curlTLSFallbackCache;
-
-        public FallbackHttpDispatcher(ICached<bool> curlTLSFallbackCache, Logger logger)
-        {
-            _logger = logger;
-            _curlTLSFallbackCache = curlTLSFallbackCache;
-        }
-
-        public HttpResponse GetResponse(HttpRequest request, HttpWebRequest webRequest)
-        {
-
-            ManagedHttpDispatcher managedDispatcher = new ManagedHttpDispatcher();
-            CurlHttpDispatcher curlDispatcher = new CurlHttpDispatcher();
-
-            if (OsInfo.IsMonoRuntime && webRequest.RequestUri.Scheme == "https")
-            {
-                if (!_curlTLSFallbackCache.Find(webRequest.RequestUri.Host))
-                {
-                    try
-                    {
-                        return managedDispatcher.GetResponse(request, webRequest);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.ToString().Contains("The authentication or decryption has failed."))
-                        {
-                            _logger.Debug("https request failed in tls error for {0}, trying curl fallback.", webRequest.RequestUri.Host);
-
-                            _curlTLSFallbackCache.Set(webRequest.RequestUri.Host, true);
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-
-                if (CurlHttpClient.CheckAvailability())
-                {
-                    return curlDispatcher.GetResponse(request, webRequest);
-                }
-
-                _logger.Trace("Curl not available, using default WebClient.");
-            }
-
-            return managedDispatcher.GetResponse(request, webRequest);
-        }
     }
 
     public class HttpClient : IHttpClient
@@ -176,36 +64,22 @@ namespace NzbDrone.Common.Http
 
             _logger.Trace(request);
 
-            var webRequest = (HttpWebRequest)WebRequest.Create(request.Url);
-
-            // Deflate is not a standard and could break depending on implementation.
-            // we should just stick with the more compatible Gzip
-            //http://stackoverflow.com/questions/8490718/how-to-decompress-stream-deflated-with-java-util-zip-deflater-in-net
-            webRequest.AutomaticDecompression = DecompressionMethods.GZip;
-
-            webRequest.Credentials = request.NetworkCredential;
-            webRequest.Method = request.Method.ToString();
-            webRequest.UserAgent = UserAgentBuilder.UserAgent;
-            webRequest.KeepAlive = false;
-            webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
-            webRequest.ContentLength = 0;
-
             var stopWatch = Stopwatch.StartNew();
 
-            if (request.Headers != null)
-            {
-                AddRequestHeaders(webRequest, request.Headers);
-            }
+            var cookies = PrepareRequestCookies(request);
 
-            PrepareRequestCookies(request, webRequest);
+            var response = _httpDispatcher.GetResponse(request, cookies);
 
-            var response = _httpDispatcher.GetResponse(request, webRequest);
-
-            HandleResponseCookies(request, webRequest);
+            HandleResponseCookies(request, cookies);
 
             stopWatch.Stop();
 
             _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
+
+            foreach (var interceptor in _requestInterceptors)
+            {
+                response = interceptor.PostResponse(response);
+            }
 
             if (!RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
@@ -229,15 +103,10 @@ namespace NzbDrone.Common.Http
                 }
             }
 
-            foreach (var interceptor in _requestInterceptors)
-            {
-                response = interceptor.PostResponse(response);
-            }
-
             return response;
         }
 
-        private void PrepareRequestCookies(HttpRequest request, HttpWebRequest webRequest)
+        private CookieContainer PrepareRequestCookies(HttpRequest request)
         {
             lock (_cookieContainerCache)
             {
@@ -258,21 +127,15 @@ namespace NzbDrone.Common.Http
 
                 var requestCookies = persistentCookieContainer.GetCookies(request.Url);
 
-                if (requestCookies.Count == 0 && !request.StoreResponseCookie)
-                {
-                    return;
-                }
+                var cookieContainer = new CookieContainer();
 
-                if (webRequest.CookieContainer == null)
-                {
-                    webRequest.CookieContainer = new CookieContainer();
-                }
+                cookieContainer.Add(requestCookies);
 
-                webRequest.CookieContainer.Add(requestCookies);
+                return cookieContainer;
             }
         }
 
-        private void HandleResponseCookies(HttpRequest request, HttpWebRequest webRequest)
+        private void HandleResponseCookies(HttpRequest request, CookieContainer cookieContainer)
         {
             if (!request.StoreResponseCookie)
             {
@@ -283,7 +146,7 @@ namespace NzbDrone.Common.Http
             {
                 var persistentCookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
 
-                var cookies = webRequest.CookieContainer.GetCookies(request.Url);
+                var cookies = cookieContainer.GetCookies(request.Url);
 
                 persistentCookieContainer.Add(cookies);
             }
@@ -348,57 +211,6 @@ namespace NzbDrone.Common.Http
         {
             var response = Post(request);
             return new HttpResponse<T>(response);
-        }
-
-        protected virtual void AddRequestHeaders(HttpWebRequest webRequest, HttpHeader headers)
-        {
-            foreach (var header in headers)
-            {
-                switch (header.Key)
-                {
-                    case "Accept":
-                        webRequest.Accept = header.Value.ToString();
-                        break;
-                    case "Connection":
-                        webRequest.Connection = header.Value.ToString();
-                        break;
-                    case "Content-Length":
-                        webRequest.ContentLength = Convert.ToInt64(header.Value);
-                        break;
-                    case "Content-Type":
-                        webRequest.ContentType = header.Value.ToString();
-                        break;
-                    case "Date":
-                        webRequest.Date = (DateTime)header.Value;
-                        break;
-                    case "Expect":
-                        webRequest.Expect = header.Value.ToString();
-                        break;
-                    case "Host":
-                        webRequest.Host = header.Value.ToString();
-                        break;
-                    case "If-Modified-Since":
-                        webRequest.IfModifiedSince = (DateTime)header.Value;
-                        break;
-                    case "Range":
-                        throw new NotImplementedException();
-                        break;
-                    case "Referer":
-                        webRequest.Referer = header.Value.ToString();
-                        break;
-                    case "Transfer-Encoding":
-                        webRequest.TransferEncoding = header.Value.ToString();
-                        break;
-                    case "User-Agent":
-                        throw new NotSupportedException("User-Agent other than Sonarr not allowed.");
-                    case "Proxy-Connection":
-                        throw new NotImplementedException();
-                        break;
-                    default:
-                        webRequest.Headers.Add(header.Key, header.Value.ToString());
-                        break;
-                }
-            }
         }
     }
 }
