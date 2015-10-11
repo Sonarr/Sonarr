@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             _series = Builder<Series>.CreateNew()
                                      .With(v => v.Status == SeriesStatusType.Continuing)
+                                     .With(v => v.LastInfoSync == DateTime.UtcNow.AddHours(-12))
                                      .Build();
 
             Mocker.GetMock<IEpisodeService>()
