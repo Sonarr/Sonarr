@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                         {
                             Id = int.Parse(xmlSubcat.Attribute("id").Value),
                             Name = xmlSubcat.Attribute("name").Value,
-                            Description = xmlSubcat.Attribute("description") != null ? xmlCategory.Attribute("description").Value : string.Empty
+                            Description = xmlSubcat.Attribute("description") != null ? xmlSubcat.Attribute("description").Value : string.Empty
 
                         });
                     }

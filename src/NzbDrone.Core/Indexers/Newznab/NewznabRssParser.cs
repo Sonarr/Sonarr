@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 throw new ApiKeyException("Invalid API key");
             }
 
-            if (!indexerResponse.Request.Url.ToString().Contains("apikey=") && errorMessage == "Missing parameter")
+            if (!indexerResponse.Request.Url.ToString().Contains("apikey=") && (errorMessage == "Missing parameter" || errorMessage.Contains("apikey")))
             {
                 throw new ApiKeyException("Indexer requires an API key");
             }
