@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private void AddTvIdPageableRequests(IndexerPageableRequestChain chain, int maxPages, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, string parameters)
         {
-            if (SupportsAggregatedIdSearch)
+            if (SupportsAggregatedIdSearch && (SupportsTvdbSearch || SupportsTvRageSearch || SupportsTvMazeSearch))
             {
                 var ids = "";
 
