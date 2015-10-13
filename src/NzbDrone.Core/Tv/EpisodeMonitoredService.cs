@@ -26,72 +26,76 @@ namespace NzbDrone.Core.Tv
 
         public void SetEpisodeMonitoredStatus(Series series, MonitoringOptions monitoringOptions)
         {
-            _logger.Debug("[{0}] Setting episode monitored status.", series.Title);
-            
-            var episodes = _episodeService.GetEpisodeBySeries(series.Id);
-
-            if (monitoringOptions.IgnoreEpisodesWithFiles)
+            if (monitoringOptions != null)
             {
-                _logger.Debug("Ignoring Episodes with Files");
-                ToggleEpisodesMonitoredState(episodes.Where(e => e.HasFile), false);
-            }
+                _logger.Debug("[{0}] Setting episode monitored status.", series.Title);
 
-            else
-            {
-                _logger.Debug("Monitoring Episodes with Files");
-                ToggleEpisodesMonitoredState(episodes.Where(e => e.HasFile), true);
-            }
+                var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
-            if (monitoringOptions.IgnoreEpisodesWithoutFiles)
-            {
-                _logger.Debug("Ignoring Episodes without Files");
-                ToggleEpisodesMonitoredState(episodes.Where(e => !e.HasFile && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)), false);
-            }
-
-            else
-            {
-                _logger.Debug("Monitoring Episodes without Files");
-                ToggleEpisodesMonitoredState(episodes.Where(e => !e.HasFile && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)), true);
-            }
-
-            var lastSeason = series.Seasons.Select(s => s.SeasonNumber).MaxOrDefault();
-
-            foreach (var s in series.Seasons)
-            {
-                var season = s;
-
-                if (season.Monitored)
+                if (monitoringOptions.IgnoreEpisodesWithFiles)
                 {
-                    if (!monitoringOptions.IgnoreEpisodesWithFiles && !monitoringOptions.IgnoreEpisodesWithoutFiles)
-                    {
-                        ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), true);
-                    }
+                    _logger.Debug("Ignoring Episodes with Files");
+                    ToggleEpisodesMonitoredState(episodes.Where(e => e.HasFile), false);
                 }
 
                 else
                 {
-                    if (!monitoringOptions.IgnoreEpisodesWithFiles && !monitoringOptions.IgnoreEpisodesWithoutFiles)
-                    {
-                        ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
-                    }
-
-                    else if (season.SeasonNumber == 0)
-                    {
-                        ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);                        
-                    }
+                    _logger.Debug("Monitoring Episodes with Files");
+                    ToggleEpisodesMonitoredState(episodes.Where(e => e.HasFile), true);
                 }
 
-                if (season.SeasonNumber < lastSeason)
+                if (monitoringOptions.IgnoreEpisodesWithoutFiles)
                 {
-                    if (episodes.Where(e => e.SeasonNumber == season.SeasonNumber).All(e => !e.Monitored))
+                    _logger.Debug("Ignoring Episodes without Files");
+                    ToggleEpisodesMonitoredState(episodes.Where(e => !e.HasFile && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)), false);
+                }
+
+                else
+                {
+                    _logger.Debug("Monitoring Episodes without Files");
+                    ToggleEpisodesMonitoredState(episodes.Where(e => !e.HasFile && e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow)), true);
+                }
+
+                var lastSeason = series.Seasons.Select(s => s.SeasonNumber).MaxOrDefault();
+
+                foreach (var s in series.Seasons)
+                {
+                    var season = s;
+
+                    if (season.Monitored)
                     {
-                        season.Monitored = false;
+                        if (!monitoringOptions.IgnoreEpisodesWithFiles && !monitoringOptions.IgnoreEpisodesWithoutFiles)
+                        {
+                            ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), true);
+                        }
+                    }
+
+                    else
+                    {
+                        if (!monitoringOptions.IgnoreEpisodesWithFiles && !monitoringOptions.IgnoreEpisodesWithoutFiles)
+                        {
+                            ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
+                        }
+
+                        else if (season.SeasonNumber == 0)
+                        {
+                            ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
+                        }
+                    }
+
+                    if (season.SeasonNumber < lastSeason)
+                    {
+                        if (episodes.Where(e => e.SeasonNumber == season.SeasonNumber).All(e => !e.Monitored))
+                        {
+                            season.Monitored = false;
+                        }
                     }
                 }
+
+                _episodeService.UpdateEpisodes(episodes);
             }
 
             _seriesService.UpdateSeries(series);
-            _episodeService.UpdateEpisodes(episodes);
         }
 
         private void ToggleEpisodesMonitoredState(IEnumerable<Episode> episodes, bool monitored)

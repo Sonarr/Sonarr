@@ -67,6 +67,18 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         }
 
         [Test]
+        public void should_be_able_to_monitor_series_without_changing_episodes()
+        {
+            Subject.SetEpisodeMonitoredStatus(_series, null);
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>()), Times.Once());
+
+            Mocker.GetMock<IEpisodeService>()
+                  .Verify(v => v.UpdateEpisodes(It.IsAny<List<Episode>>()), Times.Never());
+        }
+
+        [Test]
         public void should_be_able_to_monitor_all_episodes()
         {
             Subject.SetEpisodeMonitoredStatus(_series, new MonitoringOptions());
