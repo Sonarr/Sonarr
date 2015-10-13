@@ -92,9 +92,16 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         {
             var mappedEpisodes = episodes.Where(v => v.SeasonNumber != 0 && v.SceneEpisodeNumber.HasValue).ToList();
             var mappedSeasons = new HashSet<int>(mappedEpisodes.Select(v => v.SeasonNumber).Distinct());
+
+            var sceneEpisodeMappings = mappings.ToLookup(v => v.Scene.Season)
+                                               .ToDictionary(v => v.Key, e => new HashSet<int>(e.Select(v => v.Scene.Episode)));
+
+            var firstTvdbEpisodeBySeason = mappings.ToLookup(v => v.Tvdb.Season)
+                                                   .ToDictionary(v => v.Key, e => e.Min(v => v.Tvdb.Episode));
+
             var lastSceneSeason = mappings.Select(v => v.Scene.Season).Max();
             var lastTvdbSeason = mappings.Select(v => v.Tvdb.Season).Max();
-            
+
             // Mark all episodes not on the xem as unverified.
             foreach (var episode in episodes)
             {
@@ -103,10 +110,22 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                 if (mappedSeasons.Contains(episode.SeasonNumber))
                 {
-                    episode.UnverifiedSceneNumbering = true;
-                }
+                    // Mark if a mapping exists for an earlier episode in this season.
+                    if (firstTvdbEpisodeBySeason[episode.SeasonNumber] <= episode.EpisodeNumber)
+                    {
+                        episode.UnverifiedSceneNumbering = true;
+                        continue;
+                    }
 
-                if (lastSceneSeason != lastTvdbSeason && episode.SeasonNumber > lastTvdbSeason)
+                    // Mark if a mapping exists with a scene number to this episode.
+                    if (sceneEpisodeMappings.ContainsKey(episode.SeasonNumber) &&
+                        sceneEpisodeMappings[episode.SeasonNumber].Contains(episode.EpisodeNumber))
+                    {
+                        episode.UnverifiedSceneNumbering = true;
+                        continue;
+                    }
+                }
+                else if (lastSceneSeason != lastTvdbSeason && episode.SeasonNumber > lastTvdbSeason)
                 {
                     episode.UnverifiedSceneNumbering = true;
                 }

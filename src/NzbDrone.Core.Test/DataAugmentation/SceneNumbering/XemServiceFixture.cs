@@ -60,13 +60,13 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
         {
             _theXemSeriesIds.Add(10);
 
-            AddTvdbMapping(1, 1, 1, 1, 1, 1);
-            AddTvdbMapping(2, 1, 2, 2, 1, 2);
-            AddTvdbMapping(3, 2, 1, 3, 2, 1);
-            AddTvdbMapping(4, 2, 2, 4, 2, 2);
-            AddTvdbMapping(5, 2, 3, 5, 2, 3);
-            AddTvdbMapping(6, 3, 1, 6, 2, 4);
-            AddTvdbMapping(7, 3, 2, 7, 2, 5);
+            AddTvdbMapping(1, 1, 1, 1, 1, 1); // 1x01 -> 1x01
+            AddTvdbMapping(2, 1, 2, 2, 1, 2); // 1x02 -> 1x02
+            AddTvdbMapping(3, 2, 1, 3, 2, 1); // 2x01 -> 2x01
+            AddTvdbMapping(4, 2, 2, 4, 2, 2); // 2x02 -> 2x02
+            AddTvdbMapping(5, 2, 3, 5, 2, 3); // 2x03 -> 2x03
+            AddTvdbMapping(6, 3, 1, 6, 2, 4); // 3x01 -> 2x04
+            AddTvdbMapping(7, 3, 2, 7, 2, 5); // 3x02 -> 2x05
         }
 
         private void GivenExistingMapping()
@@ -182,6 +182,33 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
             var episode = _episodes.First(v => v.SeasonNumber == 3 && v.EpisodeNumber == 1);
 
             episode.UnverifiedSceneNumbering.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_not_flag_past_episodes_if_not_causing_overlaps()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Scene.Season == 2);
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 2 && v.EpisodeNumber == 1);
+
+            episode.UnverifiedSceneNumbering.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_flag_past_episodes_if_causing_overlap()
+        {
+            GivenTvdbMappings();
+            _theXemTvdbMappings.RemoveAll(v => v.Scene.Season == 2 && v.Tvdb.Episode <= 1);
+            _theXemTvdbMappings.First(v => v.Scene.Season == 2 && v.Scene.Episode == 2).Scene.Episode = 1;
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            var episode = _episodes.First(v => v.SeasonNumber == 2 && v.EpisodeNumber == 1);
+
+            episode.UnverifiedSceneNumbering.Should().BeTrue();
         }
 
         [Test]
