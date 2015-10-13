@@ -7,6 +7,7 @@ var AsFilteredCollection = require('../Mixins/AsFilteredCollection');
 var AsSortedCollection = require('../Mixins/AsSortedCollection');
 var AsPersistedStateCollection = require('../Mixins/AsPersistedStateCollection');
 var moment = require('moment');
+require('../Mixins/backbone.signalr.mixin');
 
 var Collection = PageableCollection.extend({
     url       : window.NzbDrone.ApiRoot + '/series',
@@ -111,4 +112,4 @@ Collection = AsPersistedStateCollection.call(Collection);
 
 var data = ApiData.get('series');
 
-module.exports = new Collection(data, { full : true });
+module.exports = new Collection(data, { full : true }).bindSignalR();
