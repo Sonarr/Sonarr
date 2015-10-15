@@ -40,9 +40,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                 if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed && mostRecent.DownloadId.IsNullOrWhiteSpace() && mostRecent.Date.After(DateTime.UtcNow.AddHours(-1)))
                 {
+                    if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality))
+                    {
+                        return Decision.Reject("Recent grab event in history already meets cutoff: {0}", mostRecent.Quality);
+                    }
+
                     if (!_qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality))
                     {
-                        return Decision.Reject("Existing grab event in history is of equal or higher quality: {0}", mostRecent.Quality);
+                        return Decision.Reject("Recent grab event in history is of equal or higher quality: {0}", mostRecent.Quality);
                     }
                 }
             }
