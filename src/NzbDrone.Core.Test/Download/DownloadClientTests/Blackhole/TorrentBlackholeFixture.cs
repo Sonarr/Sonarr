@@ -196,5 +196,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(_completedDownloadFolder);
         }
+
+        [Test]
+        public void should_return_null_hash()
+        {
+            var remoteEpisode = CreateRemoteEpisode();
+
+            Subject.Download(remoteEpisode).Should().BeNull();
+        }
     }
 }

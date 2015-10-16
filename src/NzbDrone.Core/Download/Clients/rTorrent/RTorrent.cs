@@ -11,6 +11,7 @@ using NLog;
 using NzbDrone.Core.Validation;
 using FluentValidation.Results;
 using NzbDrone.Core.Download.Clients.rTorrent;
+using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
@@ -85,8 +86,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 _logger.Debug("rTorrent could not add file");
 
                 RemoveItem(hash, true);
-
-                return null;
+                throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed");
             }
         }
 

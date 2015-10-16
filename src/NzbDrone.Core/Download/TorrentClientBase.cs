@@ -85,11 +85,6 @@ namespace NzbDrone.Core.Download
                 hash = DownloadFromWebUrl(remoteEpisode, torrentUrl);
             }
 
-            if (hash == null)
-            {
-                throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed");
-            }
-
             return hash;
         }
 
@@ -147,9 +142,9 @@ namespace NzbDrone.Core.Download
             var hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
             var actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
 
-            if (hash != actualHash)
+            if (actualHash.IsNotNullOrWhiteSpace() && hash != actualHash)
             {
-                _logger.Warn(
+                _logger.Debug(
                     "{0} did not return the expected InfoHash for '{1}', Sonarr could potentially lose track of the download in progress.",
                     Definition.Implementation, remoteEpisode.Release.DownloadUrl);
             }
@@ -179,9 +174,9 @@ namespace NzbDrone.Core.Download
                 actualHash = AddFromMagnetLink(remoteEpisode, hash, magnetUrl);
             }
 
-            if (hash != actualHash)
+            if (actualHash.IsNotNullOrWhiteSpace() && hash != actualHash)
             {
-                _logger.Warn(
+                _logger.Debug(
                     "{0} did not return the expected InfoHash for '{1}', Sonarr could potentially lose track of the download in progress.",
                     Definition.Implementation, remoteEpisode.Release.DownloadUrl);
             }

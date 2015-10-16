@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
             _logger.Debug("Torrent Download succeeded, saved to: {0}", filepath);
 
-            return hash;
+            return null;
         }
 
         public override string Name
