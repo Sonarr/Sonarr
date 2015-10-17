@@ -103,6 +103,11 @@ namespace NzbDrone.Core.DecisionEngine
                         _logger.Debug("Release rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
                     }
 
+                    else
+                    {
+                        _logger.Debug("Release accepted");
+                    }
+
                     yield return decision;
                 }
             }
