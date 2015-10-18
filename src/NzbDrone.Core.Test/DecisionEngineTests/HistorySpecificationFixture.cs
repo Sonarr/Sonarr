@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_true_if_latest_history_item_is_older_than_twleve_hours()
+        public void should_return_true_if_latest_history_item_is_older_than_twelve_hours()
         {
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow.AddHours(-13), HistoryEventType.DownloadFailed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
