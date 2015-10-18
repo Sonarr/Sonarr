@@ -38,7 +38,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 _logger.Debug("Checking current status of episode [{0}] in history", episode.Id);
                 var mostRecent = _historyService.MostRecentForEpisode(episode.Id);
 
-                if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed && mostRecent.DownloadId.IsNullOrWhiteSpace() && mostRecent.Date.After(DateTime.UtcNow.AddHours(-1)))
+                if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed && mostRecent.DownloadId.IsNullOrWhiteSpace() && mostRecent.Date.After(DateTime.UtcNow.AddHours(-12)))
                 {
                     if (!_qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality))
                     {
