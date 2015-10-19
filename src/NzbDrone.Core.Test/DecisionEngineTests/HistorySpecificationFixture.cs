@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -63,12 +64,23 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _upgradableQuality = new QualityModel(Quality.SDTV, new Revision(version: 1));
             _notupgradableQuality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));
+
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.EnableCompletedDownloadHandling)
+                  .Returns(true);
         }
 
         private void GivenMostRecentForEpisode(int episodeId, string downloadId, QualityModel quality, DateTime date, HistoryEventType eventType)
         {
             Mocker.GetMock<IHistoryService>().Setup(s => s.MostRecentForEpisode(episodeId))
                   .Returns(new History.History { DownloadId = downloadId, Quality = quality, Date = date, EventType = eventType });
+        }
+
+        private void GivenCdhDisabled()
+        {
+            Mocker.GetMock<IConfigService>()
+                  .SetupGet(s => s.EnableCompletedDownloadHandling)
+                  .Returns(false);
         }
 
         [Test]
@@ -92,9 +104,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_true_if_latest_history_has_a_download_id()
+        public void should_return_true_if_latest_history_has_a_download_id_and_cdh_is_enabled()
         {
-            GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _notupgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
         }
 
@@ -173,6 +185,35 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _notupgradableQuality, DateTime.UtcNow.AddHours(-1), HistoryEventType.Grabbed);
             _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_latest_history_has_a_download_id_and_cdh_is_disabled()
+        {
+            GivenCdhDisabled();
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _upgradableQuality, DateTime.UtcNow.AddDays(-100), HistoryEventType.Grabbed);
+            _upgradeHistory.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_cutoff_already_met_and_cdh_is_disabled()
+        {
+            GivenCdhDisabled();
+            _fakeSeries.Profile = new Profile { Cutoff = Quality.WEBDL1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
+            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 1));
+            _upgradableQuality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
+
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _upgradableQuality, DateTime.UtcNow.AddDays(-100), HistoryEventType.Grabbed);
+
+            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_only_episode_is_not_upgradable_and_cdh_is_disabled()
+        {
+            GivenCdhDisabled();
+            GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _notupgradableQuality, DateTime.UtcNow.AddDays(-100), HistoryEventType.Grabbed);
+            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
     }
 }
