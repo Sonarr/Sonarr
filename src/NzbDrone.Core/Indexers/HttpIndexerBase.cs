@@ -306,13 +306,19 @@ namespace NzbDrone.Core.Indexers
             }
             catch (UnsupportedFeedException ex)
             {
-                _logger.WarnException("Indexer feed is not supported: " + ex.Message, ex);
+                _logger.WarnException("Indexer feed is not supported", ex);
 
                 return new ValidationFailure(string.Empty, "Indexer feed is not supported: " + ex.Message);
             }
+            catch (IndexerException ex)
+            {
+                _logger.WarnException("Unable to connect to indexer", ex);
+
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer. " + ex.Message);
+            }
             catch (Exception ex)
             {
-                _logger.WarnException("Unable to connect to indexer: " + ex.Message, ex);
+                _logger.WarnException("Unable to connect to indexer", ex);
 
                 return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }
