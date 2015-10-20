@@ -25,9 +25,15 @@ var routeBinder = {
         var linkElement = $target.closest('a').first();
         var href = linkElement.attr('href');
 
-        // Set noreferrer for external links.
-        if (href && href.startsWith('http') && !linkElement.attr('rel')) {
-            linkElement.attr('rel', 'noreferrer');
+        if (href && href.startsWith('http')) {
+            // Set noreferrer for external links.
+            if (!linkElement.attr('rel')) {
+                linkElement.attr('rel', 'noreferrer');
+            }
+            // Open all external links in new windows.
+            if (!linkElement.attr('target')) {
+                linkElement.attr('target', '_blank');
+            }
         }
 
         if (linkElement.hasClass('no-router') || event.type !== 'click') {
