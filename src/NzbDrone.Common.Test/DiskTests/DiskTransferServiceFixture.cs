@@ -34,7 +34,7 @@ namespace NzbDrone.Common.Test.DiskTests
         {
             MonoOnly();
 
-            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.Transactional);
+            Subject.VerificationMode.Should().Be(DiskTransferVerificationMode.TryTransactional);
         }
 
         [Test]
@@ -199,9 +199,6 @@ namespace NzbDrone.Common.Test.DiskTests
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.CopyFile(_sourcePath, _targetPath, false), Times.Once());
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.GetFileSize(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -213,9 +210,6 @@ namespace NzbDrone.Common.Test.DiskTests
 
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
-
-            Mocker.GetMock<IDiskProvider>()
-                .Verify(v => v.GetFileSize(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -375,6 +369,52 @@ namespace NzbDrone.Common.Test.DiskTests
             Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move));
 
             ExceptionVerification.ExpectedErrors(1);
+        }
+
+        [Test]
+        public void mode_transactional_should_move_and_verify_if_same_folder()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.Transactional;
+
+            var targetPath = _sourcePath + ".test";
+
+            var result = Subject.TransferFile(_sourcePath, targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.CopyFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, targetPath, false), Times.Once());
+        }
+
+        [Test]
+        public void mode_trytransactional_should_revert_to_verifyonly_if_hardlink_fails()
+        {
+            Subject.VerificationMode = DiskTransferVerificationMode.TryTransactional;
+
+            WithFailedHardlink();
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.MoveFile(_sourcePath, _targetPath, false))
+                .Callback(() =>
+                {
+                    WithExistingFile(_sourcePath, false);
+                    WithExistingFile(_targetPath, true);
+                });
+
+            var result = Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.TryCreateHardLink(_sourcePath, _backupPath), Times.Once());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.CopyFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()), Times.Never());
+
+            Mocker.GetMock<IDiskProvider>()
+                .Verify(v => v.MoveFile(_sourcePath, _targetPath, false), Times.Once());
         }
 
         [Test]
