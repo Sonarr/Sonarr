@@ -153,6 +153,14 @@ namespace NzbDrone.Common.Disk
             }
         }
 
+        public bool IsValid
+        {
+            get
+            {
+                return _path.IsPathValid();
+            }
+        }
+
         private int GetFileNameIndex()
         {
             if (_path.Length < 2)

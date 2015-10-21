@@ -381,6 +381,30 @@ namespace NzbDrone.Core.Test.Download
             AssertCompletedDownload();
         }
 
+        [Test]
+        public void should_warn_if_path_is_not_valid_for_windows()
+        {
+            WindowsOnly();
+
+            _trackedDownload.DownloadItem.OutputPath = new OsPath(@"/invalid/Windows/Path");
+
+            Subject.Process(_trackedDownload);
+
+            AssertNoAttemptedImport();
+        }
+
+        [Test]
+        public void should_warn_if_path_is_not_valid_for_linux()
+        {
+            MonoOnly();
+
+            _trackedDownload.DownloadItem.OutputPath = new OsPath(@"C:\Invalid\Mono\Path");
+
+            Subject.Process(_trackedDownload);
+
+            AssertNoAttemptedImport();
+        }
+
         private void AssertNoAttemptedImport()
         {
             Mocker.GetMock<IDownloadedEpisodesImportService>()

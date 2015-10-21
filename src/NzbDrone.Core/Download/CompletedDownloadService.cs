@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.EnsureThat;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -69,6 +71,13 @@ namespace NzbDrone.Core.Download
                 if (downloadItemOutputPath.IsEmpty)
                 {
                     trackedDownload.Warn("Download doesn't contain intermediate path, Skipping.");
+                    return;
+                }
+
+                if ((OsInfo.IsWindows && !downloadItemOutputPath.IsWindowsPath) ||
+                    (OsInfo.IsNotWindows && !downloadItemOutputPath.IsUnixPath))
+                {
+                    trackedDownload.Warn("[{0}] is not a valid local path. You may need a Remote Path Mapping.", downloadItemOutputPath);
                     return;
                 }
 
