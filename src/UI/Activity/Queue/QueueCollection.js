@@ -61,6 +61,19 @@ var QueueCollection = PageableCollection.extend({
 
                 return Number.MAX_VALUE;
             }
+        },
+
+        sizeleft : {
+            sortValue : function(model, attr) {
+                var size = model.get('size');
+                var sizeleft = model.get('sizeleft');
+
+                if (size && sizeleft) {
+                    return sizeleft / size;
+                }
+
+                return 0;
+            }
         }
     }
 });

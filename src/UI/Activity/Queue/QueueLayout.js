@@ -61,7 +61,7 @@ module.exports = Marionette.Layout.extend({
             cellValue : 'this'
         },
         {
-            name      : 'episode',
+            name      : 'sizeleft',
             label     : 'Progress',
             cell      : ProgressCell,
             cellValue : 'this'
