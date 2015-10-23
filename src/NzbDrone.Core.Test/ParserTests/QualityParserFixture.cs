@@ -228,6 +228,24 @@ namespace NzbDrone.Core.Test.ParserTests
             }
         }
 
+        [TestCase("Saturday.Night.Live.Vintage.S10E09.Eddie.Murphy.The.Honeydrippers.1080i.UPSCALE.HDTV.DD5.1.MPEG2-zebra")]
+        [TestCase("Dexter - S01E01 - Title [HDTV-1080p]")]
+        [TestCase("[CR] Sailor Moon - 004 [480p][48CE2D0F]")]
+        [TestCase("White.Van.Man.2011.S02E01.WS.PDTV.x264-REPACK-TLA")]
+        public void should_parse_quality_from_name(string title)
+        {
+            QualityParser.ParseQuality(title).QualitySource.Should().Be(QualitySource.Name);
+        }
+
+        [TestCase("Revolution.S01E02.Chained.Heat.mkv")]
+        [TestCase("Dexter - S01E01 - Title.avi")]
+        [TestCase("the_x-files.9x18.sunshine_days.avi")]
+        [TestCase("[CR] Sailor Moon - 004 [48CE2D0F].avi")]
+        public void should_parse_quality_from_extension(string title)
+        {
+            QualityParser.ParseQuality(title).QualitySource.Should().Be(QualitySource.Extension);
+        }
+
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)
         {
             var result = QualityParser.ParseQuality(title);

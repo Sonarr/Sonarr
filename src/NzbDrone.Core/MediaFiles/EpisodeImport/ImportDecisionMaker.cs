@@ -181,9 +181,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         private QualityModel GetQuality(ParsedEpisodeInfo folderInfo, QualityModel fileQuality, Series series)
         {
-            if (folderInfo != null &&
-                folderInfo.Quality.Quality != Quality.Unknown && 
-                new QualityModelComparer(series.Profile).Compare(folderInfo.Quality, fileQuality) > 0)
+            if (folderInfo != null && folderInfo.Quality.Quality != Quality.Unknown && fileQuality.QualitySource == QualitySource.Extension)
             {
                 _logger.Debug("Using quality from folder: {0}", folderInfo.Quality);
                 return folderInfo.Quality;
