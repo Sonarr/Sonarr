@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -175,9 +176,15 @@ namespace NzbDrone.Common.Http.Dispatchers
             // fix up the date if it was malformed
             var setCookieClean = ExpiryDate.Replace(setCookie, delegate(Match match)
             {
-                string format = "ddd, dd-MMM-yyyy HH:mm:ss";
-                DateTime dt = Convert.ToDateTime(match.Groups[2].Value);
-                return match.Groups[1].Value + dt.ToUniversalTime().ToString(format) + " GMT";
+                string shortFormat = "ddd, dd-MMM-yy HH:mm:ss";
+                string longFormat = "ddd, dd-MMM-yyyy HH:mm:ss";
+                DateTime dt;
+                if (DateTime.TryParseExact(match.Groups[2].Value, longFormat, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dt) ||
+                    DateTime.TryParseExact(match.Groups[2].Value, shortFormat, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dt) ||
+                    DateTime.TryParse(match.Groups[2].Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dt))
+                    return match.Groups[1].Value + dt.ToUniversalTime().ToString(longFormat, CultureInfo.InvariantCulture) + " GMT";
+                else
+                    return match.Value;
             });
             return setCookieClean;
         }

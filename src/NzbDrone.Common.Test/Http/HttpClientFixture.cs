@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Threading;
 using FluentAssertions;
+using Moq;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Http.Dispatchers;
+using NzbDrone.Common.TPL;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
-using NLog;
-using NzbDrone.Common.TPL;
-using Moq;
-using NzbDrone.Common.Http.Dispatchers;
 
 namespace NzbDrone.Common.Test.Http
 {
@@ -309,30 +311,43 @@ namespace NzbDrone.Common.Test.Http
                 .Verify(v => v.PostResponse(It.IsAny<HttpResponse>()), Times.Once());
         }
 
-        public void should_parse_malformed_cloudflare_cookie()
+        [TestCase("en-US")]
+        [TestCase("es-ES")]
+        public void should_parse_malformed_cloudflare_cookie(string culture)
         {
-            // the date is bad in the below - should be 13-Jul-2016
-            string malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Wed, 13-Jul-16 16:19:50 GMT; path=/; HttpOnly";
-            string url = "http://eu.httpbin.org/response-headers?Set-Cookie=" +
-                System.Uri.EscapeUriString(malformedCookie);
+            var origCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(culture);
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(culture);
+            try
+            {
+                // the date is bad in the below - should be 13-Jul-2016
+                string malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Wed, 13-Jul-16 16:19:50 GMT; path=/; HttpOnly";
+                string url = "http://eu.httpbin.org/response-headers?Set-Cookie=" +
+                    System.Uri.EscapeUriString(malformedCookie);
 
-            var requestSet = new HttpRequest(url);
-            requestSet.AllowAutoRedirect = false;
-            requestSet.StoreResponseCookie = true;
+                var requestSet = new HttpRequest(url);
+                requestSet.AllowAutoRedirect = false;
+                requestSet.StoreResponseCookie = true;
 
-            var responseSet = Subject.Get(requestSet);
+                var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+                var request = new HttpRequest("http://eu.httpbin.org/get");
 
-            var response = Subject.Get<HttpBinResource>(request);
+                var response = Subject.Get<HttpBinResource>(request);
 
-            response.Resource.Headers.Should().ContainKey("Cookie");
+                response.Resource.Headers.Should().ContainKey("Cookie");
 
-            var cookie = response.Resource.Headers["Cookie"].ToString();
+                var cookie = response.Resource.Headers["Cookie"].ToString();
 
-            cookie.Should().Contain("__cfduid=d29e686a9d65800021c66faca0a29b4261436890790");
+                cookie.Should().Contain("__cfduid=d29e686a9d65800021c66faca0a29b4261436890790");
 
-            ExceptionVerification.IgnoreErrors();
+                ExceptionVerification.IgnoreErrors();
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = origCulture;
+                Thread.CurrentThread.CurrentUICulture = origCulture;
+            }
         }
     }
 
