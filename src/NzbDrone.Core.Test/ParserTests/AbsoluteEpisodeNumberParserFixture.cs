@@ -82,6 +82,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Hatsuyuki] Dragon Ball Kai (2014) - 018 (116) [1280x720][C4A3B16E]", "Dragon Ball Kai (2014)", 18, 0, 0)]
         [TestCase("Dragon Ball Kai (2014) - 39 (137) [v2][720p.HDTV][Unison Fansub]", "Dragon Ball Kai (2014)", 39, 0, 0)]
         [TestCase("[HorribleSubs] Eyeshield 21 - 101 [480p].mkv", "Eyeshield 21", 101, 0, 0)]
+        [TestCase("[Cthuyuu].Taimadou.Gakuen.35.Shiken.Shoutai.-.03.[720p.H264.AAC][8AD82C3A]", "Taimadou Gakuen 35 Shiken Shoutai", 3, 0, 0)]
+        //[TestCase("Taimadou.Gakuen.35.Shiken.Shoutai.-.03.(1280x720.HEVC.AAC)", "Taimadou Gakuen 35 Shiken Shoutai", 3, 0, 0)]
+        [TestCase("[Cthuyuu] Taimadou Gakuen 35 Shiken Shoutai - 03 [720p H264 AAC][8AD82C3A]", "Taimadou Gakuen 35 Shiken Shoutai", 3, 0, 0)]
         //[TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
