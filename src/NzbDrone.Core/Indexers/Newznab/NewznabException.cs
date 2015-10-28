@@ -1,14 +1,16 @@
-﻿using NzbDrone.Common.Exceptions;
+﻿using NzbDrone.Core.Indexers.Exceptions;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {
-    public class NewznabException : NzbDroneException
+    public class NewznabException : IndexerException
     {
-        public NewznabException(string message, params object[] args) : base(message, args)
+        public NewznabException(IndexerResponse response, string message, params object[] args)
+            : base(response, message, args)
         {
         }
 
-        public NewznabException(string message) : base(message)
+        public NewznabException(IndexerResponse response, string message)
+            : base(response, message)
         {
         }
     }

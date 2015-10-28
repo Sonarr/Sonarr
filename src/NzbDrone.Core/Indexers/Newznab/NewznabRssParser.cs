@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 throw new RequestLimitReachedException("API limit reached");
             }
 
-            throw new NewznabException("Newznab error detected: {0}", errorMessage);
+            throw new NewznabException(indexerResponse, errorMessage);
         }
 
         protected override ReleaseInfo ProcessItem(XElement item, ReleaseInfo releaseInfo)
