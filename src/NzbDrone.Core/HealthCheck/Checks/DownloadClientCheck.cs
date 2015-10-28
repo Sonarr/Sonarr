@@ -25,17 +25,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available");
             }
 
-            try
+            foreach (var downloadClient in downloadClients)
             {
-                foreach (var downloadClient in downloadClients)
+                try
                 {
                     downloadClient.GetItems();
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Unable to communicate with download client: ", ex);
-               return new HealthCheck(GetType(), HealthCheckResult.Error, "Unable to communicate with download client: " + ex.Message);
+                catch (Exception ex)
+                {
+                    var message = String.Format("Unable to communicate with {0}.", downloadClient.Definition.Name);
+
+                    _logger.Error(message, ex);
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, message + " " + ex.Message);
+                }
             }
 
             return new HealthCheck(GetType());
