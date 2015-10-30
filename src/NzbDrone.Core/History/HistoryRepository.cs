@@ -5,13 +5,11 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.History
 {
     public interface IHistoryRepository : IBasicRepository<History>
     {
-        List<BestInHistory> GetBestInHistory(int episodeId);
         History MostRecentForEpisode(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         List<History> FindByDownloadId(string downloadId);
@@ -25,13 +23,6 @@ namespace NzbDrone.Core.History
         public HistoryRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-
-        public List<BestInHistory> GetBestInHistory(int episodeId)
-        {
-            var history = Query.Where(c => (c.EpisodeId == episodeId && c.EventType != HistoryEventType.EpisodeFileDeleted && c.EventType != HistoryEventType.DownloadFailed));
-            return history.Select(h => new BestInHistory { Language = h.Language, Quality = h.Quality }).ToList();
         }
 
         public History MostRecentForEpisode(int episodeId)

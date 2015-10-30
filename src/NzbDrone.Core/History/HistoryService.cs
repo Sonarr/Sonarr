@@ -20,19 +20,12 @@ namespace NzbDrone.Core.History
 {
     public interface IHistoryService
     {
-        BestInHistory GetBestInHistory(Profile profile, LanguageProfile languageProfile, int episodeId);
         PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
         History MostRecentForEpisode(int episodeId);
         History MostRecentForDownloadId(string downloadId);
         History Get(int historyId);
         List<History> Find(string downloadId, HistoryEventType eventType);
         List<History> FindByDownloadId(string downloadId);
-    }
-
-    public class BestInHistory
-    {
-        public QualityModel Quality { get; set; }
-        public Language Language { get; set; }
     }
 
     public class HistoryService : IHistoryService,
@@ -79,16 +72,6 @@ namespace NzbDrone.Core.History
         public List<History> FindByDownloadId(string downloadId)
         {
             return _historyRepository.FindByDownloadId(downloadId);
-        }
-
-        public BestInHistory GetBestInHistory(Profile profile, LanguageProfile languageProfile, int episodeId)
-        {
-            var comparer = new QualityModelComparer(profile);
-            var langComparer = new LanguageComparer(languageProfile);
-            return _historyRepository.GetBestInHistory(episodeId)
-                                     .OrderByDescending(q => q.Quality, comparer)
-                                     .ThenByDescending(q => q.Language, langComparer)                   
-                                     .FirstOrDefault();
         }
 
         private string FindDownloadId(EpisodeImportedEvent trackedDownload)

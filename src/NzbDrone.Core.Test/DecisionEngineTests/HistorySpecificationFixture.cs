@@ -11,7 +11,6 @@ using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
-
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Profiles.Qualities;
@@ -27,8 +26,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private RemoteEpisode _parseResultMulti;
         private RemoteEpisode _parseResultSingle;
-        private BestInHistory _upgradableQuality;
-        private BestInHistory _notupgradableQuality;
+        private Tuple<QualityModel, Language> _upgradableQuality;
+        private Tuple<QualityModel, Language> _notupgradableQuality;
         private Series _fakeSeries;
         private const int FIRST_EPISODE_ID = 1;
         private const int SECOND_EPISODE_ID = 2;
@@ -75,18 +74,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Episodes = singleEpisodeList
             };
 
-            _upgradableQuality = new BestInHistory { Quality = new QualityModel(Quality.SDTV, new Revision(version: 1)), Language = Language.English };
-            _notupgradableQuality = new BestInHistory { Quality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2)), Language = Language.English };
+            _upgradableQuality = new Tuple<QualityModel, Language> (new QualityModel(Quality.SDTV, new Revision(version: 1)), Language.English);
+
+            _notupgradableQuality = new Tuple<QualityModel, Language> (new QualityModel(Quality.HDTV1080p, new Revision(version: 2)), Language.English);
 
             Mocker.GetMock<IConfigService>()
                   .SetupGet(s => s.EnableCompletedDownloadHandling)
                   .Returns(true);
         }
 
-        private void GivenMostRecentForEpisode(int episodeId, string downloadId, BestInHistory quality, DateTime date, HistoryEventType eventType)
+        private void GivenMostRecentForEpisode(int episodeId, string downloadId, Tuple<QualityModel, Language> quality, DateTime date, HistoryEventType eventType)
         {
             Mocker.GetMock<IHistoryService>().Setup(s => s.MostRecentForEpisode(episodeId))
-                  .Returns(new History.History { DownloadId = downloadId, Quality = quality.Quality, Date = date, EventType = eventType, Language = quality.Language });
+                  .Returns(new History.History { DownloadId = downloadId, Quality = quality.Item1, Date = date, EventType = eventType, Language = quality.Item2 });
         }
 
         private void GivenCdhDisabled()
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _fakeSeries.Profile = new Profile { Cutoff = Quality.Bluray1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
-            _upgradableQuality = new BestInHistory { Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language = Language.English };
+            _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language.English);
 
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
 
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _fakeSeries.Profile = new Profile { Cutoff = Quality.WEBDL1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
             _parseResultSingle.ParsedEpisodeInfo.Language = Language.Spanish;
-            _upgradableQuality = new BestInHistory { Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language = Language.English };
+            _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language.English);
 
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
 
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _fakeSeries.Profile = new Profile { Cutoff = Quality.WEBDL1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
-            _upgradableQuality = new BestInHistory { Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language = Language.Spanish };
+            _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language.Spanish);
 
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, HistoryEventType.Grabbed);
 
@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenCdhDisabled();
             _fakeSeries.Profile = new Profile { Cutoff = Quality.WEBDL1080p, Items = Qualities.QualityFixture.GetDefaultQualities() };
             _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 1));
-            _upgradableQuality = new BestInHistory { Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language = Language.Spanish };
+            _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language.Spanish);
 
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, "test", _upgradableQuality, DateTime.UtcNow.AddDays(-100), HistoryEventType.Grabbed);
 

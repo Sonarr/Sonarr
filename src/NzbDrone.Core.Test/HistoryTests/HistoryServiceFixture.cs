@@ -12,7 +12,6 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
 using System.Collections.Generic;
 using NzbDrone.Core.Test.Qualities;
-using FluentAssertions;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -54,64 +53,6 @@ namespace NzbDrone.Core.Test.HistoryTests
                 Languages = _languages
             };
         
-        }
-
-        [Test]
-        public void should_return_null_if_no_history()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestInHistory(2))
-                .Returns(new List<BestInHistory>());
-
-            var bestItem = Subject.GetBestInHistory(_profile, _languageProfile, 2);
-
-            bestItem.Should().BeNull();
-        }
-
-        [Test]
-        public void should_return_best_quality()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestInHistory(2))
-                .Returns(new List<BestInHistory> 
-                { 
-                    new BestInHistory { Quality = new QualityModel(Quality.DVD), Language = Language.English }, 
-                    new BestInHistory{Quality = new QualityModel(Quality.Bluray1080p), Language = Language.English} 
-                });
-
-            var quality = Subject.GetBestInHistory(_profile, _languageProfile, 2).Quality;
-
-            quality.Should().Be(new QualityModel(Quality.Bluray1080p));
-        }
-
-        [Test]
-        public void should_return_best_quality_with_language()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestInHistory(2))
-                .Returns(new List<BestInHistory> 
-                { 
-                    new BestInHistory { Quality = new QualityModel(Quality.Bluray1080p), Language = Language.French }, 
-                    new BestInHistory { Quality = new QualityModel(Quality.Bluray1080p), Language = Language.English } 
-                });
-
-            var bestInHistory = Subject.GetBestInHistory(_profile, _languageProfile, 2);
-
-            bestInHistory.Quality.Should().Be(new QualityModel(Quality.Bluray1080p));
-            bestInHistory.Language.Should().Be(Language.French);
-        }
-
-
-        [Test]
-        public void should_return_best_quality_with_custom_order()
-        {
-            Mocker.GetMock<IHistoryRepository>()
-                .Setup(v => v.GetBestInHistory(2))
-                .Returns(new List<BestInHistory> { new BestInHistory {Quality = new QualityModel(Quality.DVD)}, new BestInHistory { Quality = new QualityModel(Quality.Bluray1080p)} });
-
-            var quality = Subject.GetBestInHistory(_profileCustom, _languageProfile, 2).Quality;
-
-            quality.Should().Be(new QualityModel(Quality.DVD));
         }
 
         [Test]
