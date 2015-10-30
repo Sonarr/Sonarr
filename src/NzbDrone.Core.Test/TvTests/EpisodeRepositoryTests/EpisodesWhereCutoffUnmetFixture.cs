@@ -43,12 +43,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var langProfile = new LanguageProfile
             {
                 Id = 1,
-                Languages = new List<ProfileLanguageItem>
-                {
-                    new ProfileLanguageItem { Allowed = true, Language = Language.English },
-                    new ProfileLanguageItem { Allowed = true, Language = Language.Spanish },
-                    new ProfileLanguageItem { Allowed = true, Language = Language.French }
-                },
+                Languages = Languages.LanguageFixture.GetDefaultLanguages(),
                 Cutoff = Language.Spanish
             };
 

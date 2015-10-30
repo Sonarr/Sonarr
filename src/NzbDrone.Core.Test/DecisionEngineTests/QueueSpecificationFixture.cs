@@ -31,12 +31,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             Mocker.Resolve<UpgradableSpecification>();
 
-            var _languages = new List<ProfileLanguageItem>();
-            _languages.Add(new ProfileLanguageItem { Language = Language.English, Allowed = true });
-            _languages.Add(new ProfileLanguageItem { Language = Language.Spanish, Allowed = true });
-            _languages.Add(new ProfileLanguageItem { Language = Language.French, Allowed = true });
-
-
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.Profile = new Profile 
                                                                 { 
@@ -44,7 +38,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                                 })
                                      .With(l => l.LanguageProfile = new LanguageProfile 
                                                                 {
-                                                                    Languages = _languages,
+                                                                    Languages = Languages.LanguageFixture.GetDefaultLanguages(),
                                                                     Cutoff = Language.Spanish
                                                                 })
                                      .Build();

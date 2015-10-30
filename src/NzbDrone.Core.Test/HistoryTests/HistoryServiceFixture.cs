@@ -10,7 +10,6 @@ using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Qualities;
-using System.Collections.Generic;
 using NzbDrone.Core.Test.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Languages;
@@ -27,12 +26,6 @@ namespace NzbDrone.Core.Test.HistoryTests
         [SetUp]
         public void Setup()
         {
-            var _languages = new List<ProfileLanguageItem>();
-            _languages.Add(new ProfileLanguageItem { Language = Language.English, Allowed = true });
-            _languages.Add(new ProfileLanguageItem { Language = Language.Spanish, Allowed = true });
-            _languages.Add(new ProfileLanguageItem { Language = Language.French, Allowed = true });
-
-
             _profile = new Profile
                 {
                     Cutoff = Quality.WEBDL720p,
@@ -50,7 +43,7 @@ namespace NzbDrone.Core.Test.HistoryTests
             _languageProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = _languages
+                Languages = Languages.LanguageFixture.GetDefaultLanguages()
             };
         
         }

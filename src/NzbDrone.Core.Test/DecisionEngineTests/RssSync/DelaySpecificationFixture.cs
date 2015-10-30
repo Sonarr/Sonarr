@@ -61,10 +61,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _profile.Cutoff = Quality.WEBDL720p;
 
             _langProfile.Cutoff = Language.Spanish;
-            _langProfile.Languages = new List<ProfileLanguageItem>();
-            _langProfile.Languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.English });
-            _langProfile.Languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.Spanish });
-            _langProfile.Languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.French });
+            _langProfile.Languages = Languages.LanguageFixture.GetDefaultLanguages();
 
             _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
             _remoteEpisode.Release = new ReleaseInfo();

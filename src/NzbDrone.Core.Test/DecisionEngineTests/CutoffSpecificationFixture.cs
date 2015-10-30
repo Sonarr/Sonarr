@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
-using System.Linq;
 using NUnit.Framework;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
-using System.Collections.Generic;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -25,10 +24,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new LanguageProfile
                 {
-                    Languages = Language.All
-                        .OrderByDescending(l => l.Name)
-                        .Select(v => new ProfileLanguageItem { Language = v, Allowed = v == Language.English })
-                        .ToList(),
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
                 new QualityModel(Quality.DVD, new Revision(version: 2)), Language.English).Should().BeTrue();
@@ -45,10 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new LanguageProfile
                 {
-                    Languages = Language.All
-                        .OrderByDescending(l => l.Name)
-                        .Select(v => new ProfileLanguageItem { Language = v, Allowed = v == Language.English })
-                        .ToList(),
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)), Language.English).Should().BeFalse();
@@ -65,10 +58,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new LanguageProfile
                 {
-                    Languages = Language.All
-                        .OrderByDescending(l => l.Name)
-                        .Select(v => new ProfileLanguageItem { Language = v, Allowed = v == Language.English })
-                        .ToList(),
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
                 new QualityModel(Quality.Bluray1080p, new Revision(version: 2)), Language.English).Should().BeFalse();
@@ -85,10 +75,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new LanguageProfile
                 {
-                    Languages = Language.All
-                        .OrderByDescending(l => l.Name)
-                        .Select(v => new ProfileLanguageItem { Language = v, Allowed = v == Language.English })
-                        .ToList(),
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
@@ -107,10 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 },
                 new LanguageProfile
                 {
-                    Languages = Language.All
-                        .OrderByDescending(l => l.Name)
-                        .Select(v => new ProfileLanguageItem { Language = v, Allowed = v == Language.English })
-                        .ToList(),
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 },
                 new QualityModel(Quality.HDTV720p, new Revision(version: 2)),
@@ -131,9 +115,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             LanguageProfile _langProfile = new LanguageProfile
                 {
                     Cutoff = Language.Spanish,
-                    Languages = new List<ProfileLanguageItem> { new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                                                new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                                                new ProfileLanguageItem { Allowed = true, Language = Language.French} }
+                    Languages = LanguageFixture.GetDefaultLanguages()
                 };
             
             Subject.CutoffNotMet(_profile,
@@ -156,9 +138,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = new List<ProfileLanguageItem> { new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.French} }
+                Languages = LanguageFixture.GetDefaultLanguages()
             };
 
             Subject.CutoffNotMet(
@@ -182,9 +162,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = new List<ProfileLanguageItem> { new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.French} }
+                Languages = LanguageFixture.GetDefaultLanguages()
             };
 
             Subject.CutoffNotMet(
@@ -208,9 +186,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = new List<ProfileLanguageItem> { new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.French} }
+                Languages = LanguageFixture.GetDefaultLanguages()
             };
 
             Subject.CutoffNotMet(
@@ -234,9 +210,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             LanguageProfile _langProfile = new LanguageProfile
             {
                 Cutoff = Language.Spanish,
-                Languages = new List<ProfileLanguageItem> { new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                                            new ProfileLanguageItem { Allowed = true, Language = Language.French} }
+                Languages = LanguageFixture.GetDefaultLanguages()
             };
 
             Subject.CutoffNotMet(

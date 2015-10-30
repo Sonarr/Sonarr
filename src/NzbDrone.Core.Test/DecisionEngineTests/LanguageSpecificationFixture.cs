@@ -6,8 +6,8 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
-using System.Collections.Generic;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -20,12 +20,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [SetUp]
         public void Setup()
         {
-            LanguageProfile _profile = new LazyLoaded<LanguageProfile>(new LanguageProfile());
-            _profile.Languages = new List<ProfileLanguageItem>();
-            _profile.Languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.English });
-            _profile.Languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.Spanish });
-            _profile.Languages.Add(new ProfileLanguageItem { Allowed = false, Language = Language.French });
-            _profile.Cutoff = Language.Spanish;
+            LanguageProfile _profile = new LazyLoaded<LanguageProfile> (new LanguageProfile
+            {
+                Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.Spanish),
+                Cutoff = Language.Spanish
+            });
 
             _remoteEpisode = new RemoteEpisode
             {

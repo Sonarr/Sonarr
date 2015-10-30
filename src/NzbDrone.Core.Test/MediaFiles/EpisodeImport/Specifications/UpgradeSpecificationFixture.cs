@@ -11,7 +11,6 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Languages;
-using System.Collections.Generic;
 using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
@@ -25,13 +24,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [SetUp]
         public void Setup()
         {
-
-            var _languages = new List<ProfileLanguageItem>();
-            _languages.Add(new ProfileLanguageItem { Language = Language.English, Allowed = true });
-            _languages.Add(new ProfileLanguageItem { Language = Language.Spanish, Allowed = true });
-            _languages.Add(new ProfileLanguageItem { Language = Language.French, Allowed = true });
-
-
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.SeriesType = SeriesTypes.Standard)
                                      .With(e => e.Profile = new Profile 
@@ -40,7 +32,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                         })
                                      .With(l => l.LanguageProfile = new LanguageProfile
                                         {
-                                            Languages = _languages,
+                                            Languages = Languages.LanguageFixture.GetDefaultLanguages(),
                                             Cutoff = Language.Spanish,
                                         })
                                      .Build();

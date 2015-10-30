@@ -7,8 +7,8 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
-using System.Collections.Generic;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -61,14 +61,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Items = Qualities.QualityFixture.GetDefaultQualities()
             };
 
-            var languages = new List<ProfileLanguageItem>();
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.English });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.Spanish });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.French });
-
             var langProfile = new LanguageProfile
             {
-                Languages = languages,
+                Languages = LanguageFixture.GetDefaultLanguages(),
                 Cutoff = Language.English
             };
 
@@ -82,12 +77,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             GivenAutoDownloadPropers(true);
 
-            var languages = new List<ProfileLanguageItem>();
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.English });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.Spanish });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.French });
-
-
             var profile = new Profile
             {
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
@@ -96,7 +85,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var langProfile = new LanguageProfile
             {
-                Languages = languages,
+                Languages = LanguageFixture.GetDefaultLanguages(),
                 Cutoff = languageCutoff
             };
 
@@ -114,14 +103,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };
 
-            var languages = new List<ProfileLanguageItem>();
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.English });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.Spanish });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.French });
-
             var langProfile = new LanguageProfile
             {
-                Languages = languages,
+                Languages = LanguageFixture.GetDefaultLanguages(),
                 Cutoff = Language.English
             };
 

@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
             var langProfile = new LanguageProfile
                 {
                     Name = "TestProfile",
-                    Languages = Language.All.OrderByDescending(l => l.Name).Select(l => new ProfileLanguageItem { Language = l, Allowed = l == Language.English }).ToList(),
+                    Languages = Languages.LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 };
 

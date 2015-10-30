@@ -263,6 +263,7 @@
     <Compile Include="InstrumentationTests\DatabaseTargetFixture.cs" />
     <Compile Include="JobTests\JobRepositoryFixture.cs" />
     <Compile Include="JobTests\TestJobs.cs" />
+    <Compile Include="Languages\LanguageFixture.cs" />
     <Compile Include="MediaCoverTests\CoverExistsSpecificationFixture.cs" />
     <Compile Include="MediaCoverTests\ImageResizerFixture.cs" />
     <Compile Include="MediaCoverTests\MediaCoverServiceFixture.cs" />
@@ -565,7 +566,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Profiles\" />
     <Folder Include="ProviderTests\UpdateProviderTests\" />
   </ItemGroup>
   <ItemGroup>

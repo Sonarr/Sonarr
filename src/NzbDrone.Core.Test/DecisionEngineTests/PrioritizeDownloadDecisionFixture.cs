@@ -16,6 +16,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -51,12 +52,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release.Size = size;
             remoteEpisode.Release.DownloadProtocol = downloadProtocol;
 
-            var languages = new List<ProfileLanguageItem>();
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.English });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.Spanish });
-            languages.Add(new ProfileLanguageItem { Allowed = true, Language = Language.French });
-
-
             remoteEpisode.Series = Builder<Series>.CreateNew()
                                                   .With(e => e.Profile = new Profile
                                                   {
@@ -64,7 +59,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                   })
                                                   .With(l => l.LanguageProfile = new LanguageProfile
                                                   {
-                                                      Languages = languages,
+                                                      Languages = LanguageFixture.GetDefaultLanguages(),
                                                       Cutoff = Language.Spanish
                                                   })
                                                   .Build();

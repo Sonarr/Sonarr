@@ -41,12 +41,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                                         .With(l => l.LanguageProfile = new LanguageProfile 
                                         { 
                                             Cutoff = Language.Spanish,
-                                            Languages = new List<ProfileLanguageItem>
-                                            {
-                                                new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                                new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                                new ProfileLanguageItem { Allowed = true, Language = Language.French}
-                                            }
+                                            Languages = Languages.LanguageFixture.GetDefaultLanguages()
                                         })
                                         .With(s => s.Path = @"C:\Test\TV\30 Rock".AsOsAgnostic())
                                         .Build();

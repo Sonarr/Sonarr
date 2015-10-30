@@ -16,6 +16,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -47,17 +48,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p, Items = Qualities.QualityFixture.GetDefaultQualities() })
-                         .With(l => l.LanguageProfile =
-                             new LanguageProfile
-                             {
-                                 Languages = new List<ProfileLanguageItem>
-                                 {
-                                     new ProfileLanguageItem { Allowed = true, Language = Language.English},
-                                     new ProfileLanguageItem { Allowed = true, Language = Language.Spanish},
-                                     new ProfileLanguageItem { Allowed = true, Language = Language.French}
-                                 },
-                                 Cutoff = Language.Spanish
-                             })
+                         .With(l => l.LanguageProfile = new LanguageProfile { Cutoff = Language.Spanish, Languages = LanguageFixture.GetDefaultLanguages() })
                          .Build();
 
             _parseResultMulti = new RemoteEpisode

@@ -9,6 +9,7 @@ using NzbDrone.Core.Qualities;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
+using NzbDrone.Core.Test.Languages;
 
 namespace NzbDrone.Core.Test.Datastore
 {
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Test.Datastore
             var languageProfile = new LanguageProfile
                 {
                     Name = "Test",
-                    Languages = Language.All.OrderByDescending(l => l.Name).Select(l => new ProfileLanguageItem { Language = l, Allowed = l == Language.English }).ToList(),
+                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
                     Cutoff = Language.English
                 };
 

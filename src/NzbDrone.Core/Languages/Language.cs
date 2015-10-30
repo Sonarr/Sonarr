@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Languages
         public static Language Flemish      { get { return new Language(19, "Flemish"); } }
         public static Language Greek        { get { return new Language(20, "Greek"); } }
         public static Language Korean       { get { return new Language(21, "Korean"); } }
-        public static Language Hungarian     { get { return new Language(22, "Hungarian"); } }
+        public static Language Hungarian    { get { return new Language(22, "Hungarian"); } }
 
         
         public static List<Language> All

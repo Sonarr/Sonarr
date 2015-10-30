@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var singleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
             var doubleEpisodeList = new List<Episode> { new Episode { EpisodeFile = _firstFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = _secondFile, EpisodeFileId = 1 }, new Episode { EpisodeFile = null } };
 
-            var languages = new List<ProfileLanguageItem> { new ProfileLanguageItem { Allowed = true, Language = Language.English }, new ProfileLanguageItem { Allowed = true, Language = Language.Spanish } };
+            var languages = Languages.LanguageFixture.GetDefaultLanguages(Language.English, Language.Spanish);
 
             var fakeSeries = Builder<Series>.CreateNew()
                          .With(c => c.Profile = new Profile { Cutoff = Quality.Bluray1080p, Items = Qualities.QualityFixture.GetDefaultQualities()})
