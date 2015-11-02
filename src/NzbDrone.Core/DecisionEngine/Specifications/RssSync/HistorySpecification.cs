@@ -46,18 +46,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                 if (mostRecent != null && mostRecent.EventType == HistoryEventType.Grabbed)
                 {
-                    var recentBlackhole = mostRecent.DownloadId.IsNullOrWhiteSpace() && mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
+                    var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
                     var cutoffUnmet = _qualityUpgradableSpecification.CutoffNotMet(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality);
                     var upgradeable = _qualityUpgradableSpecification.IsUpgradable(subject.Series.Profile, mostRecent.Quality, subject.ParsedEpisodeInfo.Quality);
 
-                    if (!recentBlackhole && cdhEnabled)
+                    if (!recent && cdhEnabled)
                     {
                         continue;
                     }
 
                     if (!cutoffUnmet)
                     {
-                        if (recentBlackhole)
+                        if (recent)
                         {
                             return Decision.Reject("Recent grab event in history already meets cutoff: {0}", mostRecent.Quality);  
                         }
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                     if (!upgradeable)
                     {
-                        if (recentBlackhole)
+                        if (recent)
                         {
                             return Decision.Reject("Recent grab event in history is of equal or higher quality: {0}", mostRecent.Quality);
                         }
