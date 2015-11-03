@@ -30,10 +30,13 @@ namespace NzbDrone.Api.ManualImport
 
         private ManualImportResource AddQualityWeight(ManualImportResource item)
         {
-            item.QualityWeight = Quality.DefaultQualityDefinitions.Single(q => q.Quality == item.Quality.Quality).Weight;
-            item.QualityWeight += item.Quality.Revision.Real * 10;
-            item.QualityWeight += item.Quality.Revision.Version;
-
+            if (item.Quality != null)
+            {
+                item.QualityWeight = Quality.DefaultQualityDefinitions.Single(q => q.Quality == item.Quality.Quality).Weight;
+                item.QualityWeight += item.Quality.Revision.Real * 10;
+                item.QualityWeight += item.Quality.Revision.Version;
+            }
+           
             return item;
         }
     }
