@@ -15,17 +15,17 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Hadouken
 {
-    public sealed class Hadouken : TorrentClientBase<HadoukenSettings>
+    public class Hadouken : TorrentClientBase<HadoukenSettings>
     {
         private readonly IHadoukenProxy _proxy;
 
         public Hadouken(IHadoukenProxy proxy,
-            ITorrentFileInfoReader torrentFileInfoReader,
-            IHttpClient httpClient,
-            IConfigService configService,
-            IDiskProvider diskProvider,
-            IRemotePathMappingService remotePathMappingService,
-            Logger logger)
+                        ITorrentFileInfoReader torrentFileInfoReader,
+                        IHttpClient httpClient,
+                        IConfigService configService,
+                        IDiskProvider diskProvider,
+                        IRemotePathMappingService remotePathMappingService,
+                        Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            IDictionary<string, HadoukenTorrent> torrents;
+            HadoukenTorrent[] torrents;
 
             try
             {
@@ -52,22 +52,20 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
             var items = new List<DownloadClientItem>();
 
-            foreach (var torrent in torrents.Values)
+            foreach (var torrent in torrents)
             {
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
-                outputPath += torrent.Name;
-
                 var eta = TimeSpan.FromSeconds(0);
 
                 if (torrent.DownloadRate > 0 && torrent.TotalSize > 0)
                 {
-                    eta = TimeSpan.FromSeconds(torrent.TotalSize/(double) torrent.DownloadRate);
+                    eta = TimeSpan.FromSeconds(torrent.TotalSize / (double)torrent.DownloadRate);
                 }
 
                 var item = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadId = torrent.InfoHash,
+                    DownloadId = torrent.InfoHash.ToUpper(),
                     OutputPath = outputPath + torrent.Name,
                     RemainingSize = torrent.TotalSize - torrent.DownloadedBytes,
                     RemainingTime = eta,
@@ -88,13 +86,22 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                 {
                     item.Status = DownloadItemStatus.Queued;
                 }
-                else if (torrent.IsPaused)
+                else if (torrent.State == HadoukenTorrentState.Paused)
                 {
                     item.Status = DownloadItemStatus.Paused;
                 }
                 else
                 {
                     item.Status = DownloadItemStatus.Downloading;
+                }
+
+                if (torrent.IsFinished && torrent.State == HadoukenTorrentState.Paused)
+                {
+                    item.IsReadOnly = false;
+                }
+                else
+                {
+                    item.IsReadOnly = true;
                 }
 
                 items.Add(item);
@@ -105,7 +112,14 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            _proxy.RemoveTorrent(Settings, downloadId, deleteData);
+            if (deleteData)
+            {
+                _proxy.RemoveTorrentAndData(Settings, downloadId);
+            }
+            else
+            {
+                _proxy.RemoveTorrent(Settings, downloadId);
+            }
         }
 
         public override DownloadClientStatus GetStatus()
@@ -136,7 +150,8 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentUri(Settings, magnetLink);
-            return hash;
+
+            return hash.ToUpper();
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
@@ -151,19 +166,14 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                 var sysInfo = _proxy.GetSystemInfo(Settings);
                 var version = new Version(sysInfo.Versions["hadouken"]);
 
-                if (version.Major < 5)
+                if (version < new Version("5.1"))
                 {
-                    return new ValidationFailure(string.Empty, "Old Hadouken client with unsupported API, need 5.0 or higher");                    
+                    return new ValidationFailure(string.Empty, "Old Hadouken client with unsupported API, need 5.1 or higher");                    
                 }
             }
             catch (DownloadClientAuthenticationException ex)
             {
                 _logger.ErrorException(ex.Message, ex);
-
-                if (Settings.AuthenticationType == (int) AuthenticationType.Token)
-                {
-                    return new NzbDroneValidationFailure("Token", "Authentication failed");
-                }
 
                 return new NzbDroneValidationFailure("Password", "Authentication failed");
             }

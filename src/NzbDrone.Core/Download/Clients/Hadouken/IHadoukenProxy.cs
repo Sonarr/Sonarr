@@ -6,10 +6,11 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
     public interface IHadoukenProxy
     {
         HadoukenSystemInfo GetSystemInfo(HadoukenSettings settings);
-        IDictionary<string, HadoukenTorrent> GetTorrents(HadoukenSettings settings);
+        HadoukenTorrent[] GetTorrents(HadoukenSettings settings);
         IDictionary<string, object> GetConfig(HadoukenSettings settings);
         string AddTorrentFile(HadoukenSettings settings, byte[] fileContent);
         void AddTorrentUri(HadoukenSettings settings, string torrentUrl);
-        void RemoveTorrent(HadoukenSettings settings, string downloadId, bool deleteData);
+        void RemoveTorrent(HadoukenSettings settings, string downloadId);
+        void RemoveTorrentAndData(HadoukenSettings settings, string downloadId);
     }
 }
