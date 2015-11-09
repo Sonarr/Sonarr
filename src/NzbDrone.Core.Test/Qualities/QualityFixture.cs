@@ -13,22 +13,38 @@ namespace NzbDrone.Core.Test.Qualities
     {
         public static object[] FromIntCases =
                 {
+                        new object[] {0, Quality.Unknown},
                         new object[] {1, Quality.SDTV},
                         new object[] {2, Quality.DVD},
+                        new object[] {3, Quality.WEBDL1080p},
                         new object[] {4, Quality.HDTV720p},
                         new object[] {5, Quality.WEBDL720p},
                         new object[] {6, Quality.Bluray720p},
-                        new object[] {7, Quality.Bluray1080p}
+                        new object[] {7, Quality.Bluray1080p},
+                        new object[] {8, Quality.WEBDL480p},
+                        new object[] {9, Quality.HDTV1080p},
+                        new object[] {10, Quality.RAWHD},
+                        new object[] {12, Quality.HDTV2160p},
+                        new object[] {13, Quality.WEBDL2160p},
+                        new object[] {14, Quality.Bluray2160p},
                 };
 
         public static object[] ToIntCases =
                 {
+                        new object[] {Quality.Unknown, 0},
                         new object[] {Quality.SDTV, 1},
                         new object[] {Quality.DVD, 2},
+                        new object[] {Quality.WEBDL1080p, 3},
                         new object[] {Quality.HDTV720p, 4},
                         new object[] {Quality.WEBDL720p, 5},
                         new object[] {Quality.Bluray720p, 6},
-                        new object[] {Quality.Bluray1080p, 7}
+                        new object[] {Quality.Bluray1080p, 7},
+                        new object[] {Quality.WEBDL480p, 8},
+                        new object[] {Quality.HDTV1080p, 9},
+                        new object[] {Quality.RAWHD, 10},
+                        new object[] {Quality.HDTV2160p, 12},
+                        new object[] {Quality.WEBDL2160p, 13},
+                        new object[] {Quality.Bluray2160p, 14},
                 };
 
         [Test, TestCaseSource("FromIntCases")]
@@ -49,16 +65,20 @@ namespace NzbDrone.Core.Test.Qualities
         {
             var qualities = new List<Quality>
             {
+                Quality.Unknown,
                 Quality.SDTV,
                 Quality.WEBDL480p,
                 Quality.DVD,
                 Quality.HDTV720p,
                 Quality.HDTV1080p,
+                Quality.HDTV2160p,
                 Quality.RAWHD,
                 Quality.WEBDL720p,
-                Quality.Bluray720p,
                 Quality.WEBDL1080p,
-                Quality.Bluray1080p
+                Quality.WEBDL2160p,
+                Quality.Bluray720p,
+                Quality.Bluray1080p,
+                Quality.Bluray2160p,
             };
 
             if (allowed.Length == 0)

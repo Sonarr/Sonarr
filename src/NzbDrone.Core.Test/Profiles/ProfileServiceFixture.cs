@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Test.Profiles
             Subject.Handle(new ApplicationStartedEvent());
 
             Mocker.GetMock<IProfileRepository>()
-                .Verify(v => v.Insert(It.IsAny<Profile>()), Times.Exactly(5));
+                .Verify(v => v.Insert(It.IsAny<Profile>()), Times.Exactly(6));
         }
 
         [Test]
