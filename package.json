@@ -4,7 +4,8 @@
   "description": "Sonarr",
   "main": "main.js",
   "scripts": {
-    "preinstall": ""
+    "build": "gulp build",
+    "start": "gulp watch"
   },
   "repository": {
     "type": "git",

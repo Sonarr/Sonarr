@@ -106,7 +106,7 @@ RunGulp()
     echo "##teamcity[progressFinish 'npm install']"
 
     echo "##teamcity[progressStart 'Running Gulp']"
-    CheckExitCode gulp build
+    CheckExitCode npm run build
     echo "##teamcity[progressFinish 'Running Gulp']"
 }
 
