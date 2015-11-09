@@ -18,10 +18,13 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.WEBDL480p },
             new object[] { Quality.HDTV720p },
             new object[] { Quality.HDTV1080p },
+            new object[] { Quality.HDTV2160p },
             new object[] { Quality.WEBDL720p },
             new object[] { Quality.WEBDL1080p },
+            new object[] { Quality.WEBDL2160p },
             new object[] { Quality.Bluray720p },
-            new object[] { Quality.Bluray1080p }
+            new object[] { Quality.Bluray1080p },
+            new object[] { Quality.Bluray2160p },
         };
 
         public static object[] OtherSourceQualityParserCases =
@@ -31,10 +34,13 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "480p WEB-DL", Quality.WEBDL480p },
             new object[] { "HD TV", Quality.HDTV720p },
             new object[] { "1080p HD TV", Quality.HDTV1080p },
+            new object[] { "2160p HD TV", Quality.HDTV2160p },
             new object[] { "720p WEB-DL", Quality.WEBDL720p },
             new object[] { "1080p WEB-DL", Quality.WEBDL1080p },
+            new object[] { "2160p WEB-DL", Quality.WEBDL2160p },
             new object[] { "720p BluRay", Quality.Bluray720p },
-            new object[] { "1080p BluRay", Quality.Bluray1080p }
+            new object[] { "1080p BluRay", Quality.Bluray1080p },
+            new object[] { "2160p BluRay", Quality.Bluray2160p },
         };
 
         [TestCase("S07E23 .avi ", false)]
@@ -155,6 +161,15 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
+        }
+
+        [TestCase("CASANOVA S01E01.2160P AMZN WEBRIP DD2.0 HI10P X264-TROLLUHD", false)]
+        [TestCase("JUST ADD MAGIC S01E01.2160P AMZN WEBRIP DD2.0 X264-TROLLUHD", false)]
+        [TestCase("The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBRip.DD2.0.Hi10p.X264-TrollUHD", false)]
+        [TestCase("The Man In the High Castle S01E01 2160p AMZN WEBRip DD2.0 Hi10P x264-TrollUHD", false)]
+        public void should_parse_webdl2160p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
         }
 
         [TestCase("WEEDS.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", false)]
