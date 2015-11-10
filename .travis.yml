@@ -1,0 +1,9 @@
+language: csharp
+solution: src/NzbDrone.sln
+before_install:
+  - sudo add-apt-repository ppa:djcj/mediainfo -y
+  - sudo apt-get update -qqy
+  - sudo apt-get install -qqy mediainfo
+script:
+  - ./build.sh
+  - ./tests_mono.sh
