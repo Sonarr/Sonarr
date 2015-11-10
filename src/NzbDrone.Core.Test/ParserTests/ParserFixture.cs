@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void should_remove_accents_from_title()
         {
-            const string title = "Carnivàle";
+            const string title = "Carniv\u00E0le";
             
             title.CleanSeriesTitle().Should().Be("carnivale");
         }

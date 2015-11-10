@@ -32,18 +32,18 @@ namespace NzbDrone.Update.Test
         }
 
         [Test]
-        public void should_call_update_with_corret_path()
+        public void should_call_update_with_correct_path()
         {
-            const string ProcessPath = @"C:\NzbDrone\nzbdrone.exe";
+            var ProcessPath = @"C:\NzbDrone\nzbdrone.exe".AsOsAgnostic();
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetProcessById(12))
                 .Returns(new ProcessInfo() { StartPath = ProcessPath });
 
 
-            Subject.Start(new[] { "12", "" });
+            Subject.Start(new[] { "12", "", ProcessPath });
 
 
-            Mocker.GetMock<IInstallUpdateService>().Verify(c => c.Start(@"C:\NzbDrone", 12), Times.Once());
+            Mocker.GetMock<IInstallUpdateService>().Verify(c => c.Start(@"C:\NzbDrone".AsOsAgnostic(), 12), Times.Once());
         }
 
 
