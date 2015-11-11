@@ -45,6 +45,11 @@ namespace NzbDrone.Core.Test.TvTests
             _series.LastInfoSync = DateTime.UtcNow.AddDays(-1);
         }
 
+        private void GivenSeriesLastRefreshedHalfADayAgo()
+        {
+            _series.LastInfoSync = DateTime.UtcNow.AddHours(-12);
+        }
+
         private void GivenSeriesLastRefreshedRecently()
         {
             _series.LastInfoSync = DateTime.UtcNow.AddHours(-1);
@@ -66,6 +71,8 @@ namespace NzbDrone.Core.Test.TvTests
         [Test]
         public void should_return_true_if_running_series_last_refreshed_more_than_6_hours_ago()
         {
+            GivenSeriesLastRefreshedHalfADayAgo();
+
             Subject.ShouldRefresh(_series).Should().BeTrue();
         }
 

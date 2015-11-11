@@ -23,7 +23,7 @@ namespace NzbDrone.Common.Test
         [TestCase("http://")]
         public void DownloadString_should_throw_on_error(string url)
         {
-            Assert.Throws<ArgumentException>(() => Subject.DownloadString(url));
+            Assert.Catch(() => Subject.DownloadString(url));
             ExceptionVerification.ExpectedWarns(1);
         }
     }

@@ -54,8 +54,9 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void Should_be_able_to_start_process()
+        public void Should_be_able_to_start_process_windows()
         {
+            WindowsOnly();
             var process = Subject.Start(Path.Combine(Directory.GetCurrentDirectory(), DummyApp.DUMMY_PROCCESS_NAME + ".exe"));
 
             Subject.Exists(DummyApp.DUMMY_PROCCESS_NAME).Should()
@@ -69,8 +70,9 @@ namespace NzbDrone.Common.Test
 
 
         [Test]
-        public void kill_all_should_kill_all_process_with_name()
+        public void kill_all_should_kill_all_process_with_name_windows()
         {
+            WindowsOnly();
             var dummy1 = StartDummyProcess();
             var dummy2 = StartDummyProcess();
 

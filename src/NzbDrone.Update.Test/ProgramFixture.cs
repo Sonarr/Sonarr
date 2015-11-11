@@ -32,8 +32,9 @@ namespace NzbDrone.Update.Test
         }
 
         [Test]
-        public void should_call_update_with_corret_path()
+        public void should_call_update_with_correct_path_windows()
         {
+            WindowsOnly();
             const string ProcessPath = @"C:\NzbDrone\nzbdrone.exe";
 
             Mocker.GetMock<IProcessProvider>().Setup(c => c.GetProcessById(12))
