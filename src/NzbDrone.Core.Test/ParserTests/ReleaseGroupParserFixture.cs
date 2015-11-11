@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01E01 Episode Title", null)]
         [TestCase("The Colbert Report - 2014-06-02 - Thomas Piketty.mkv", null)]
         [TestCase("Real Time with Bill Maher S12E17 May 23, 2014.mp4", null)]
-        [TestCase("Reizen Waes - S01E08 - Transistrië, Zuid-Ossetië en Abchazië SDTV.avi", null)]
+        [TestCase("Reizen Waes - S01E08 - Transistri\u00EB, Zuid-Osseti\u00EB en Abchazi\u00EB SDTV.avi", null)]
         [TestCase("Simpsons 10x11 - Wild Barts Cant Be Broken [rl].avi", null)]
         [TestCase("[ www.Torrenting.com ] - Revenge.S03E14.720p.HDTV.X264-DIMENSION", "DIMENSION")]
         [TestCase("Seed S02E09 HDTV x264-2HD [eztv]-[rarbg.com]", "2HD")]
