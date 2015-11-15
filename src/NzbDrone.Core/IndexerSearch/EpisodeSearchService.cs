@@ -50,12 +50,30 @@ namespace NzbDrone.Core.IndexerSearch
 
                     if (season.Count() > 1)
                     {
-                        decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true);
+                        try
+                        {
+                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            var message = String.Format("Unable to search for missing episodes in season {0} of [{1}]", season.Key, series.Key);
+                            _logger.ErrorException(message, ex);
+                            continue;
+                        }
                     }
 
                     else
                     {
-                        decisions = _nzbSearchService.EpisodeSearch(season.First());
+                        try
+                        {
+                            decisions = _nzbSearchService.EpisodeSearch(season.First());
+                        }
+                        catch (Exception ex)
+                        {
+                            var message = String.Format("Unable to search for missing episode: [{0}]", season.First());
+                            _logger.ErrorException(message, ex);
+                            continue;
+                        }
                     }
 
                     var processed = _processDownloadDecisions.ProcessDecisions(decisions);
