@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using FluentValidation.Results;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -59,32 +60,27 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private XbmcVersion GetJsonVersion(XbmcSettings settings)
         {
-            try
+            return _xbmcVersionCache.Get(settings.Address, () =>
             {
-                return _xbmcVersionCache.Get(settings.Address, () =>
+                var response = _proxy.GetJsonVersion(settings);
+
+                _logger.Debug("Getting version from response: " + response);
+                var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
+
+                var versionObject = result.Result.Property("version");
+
+                if (versionObject.Value.Type == JTokenType.Integer)
                 {
+                    return new XbmcVersion((int)versionObject.Value);
+                }
 
-                    var response = _proxy.GetJsonVersion(settings);
+                if (versionObject.Value.Type == JTokenType.Object)
+                {
+                    return Json.Deserialize<XbmcVersion>(versionObject.Value.ToString());
+                }
 
-                    _logger.Debug("Getting version from response: " + response);
-                    var result = Json.Deserialize<XbmcJsonResult<JObject>>(response);
-
-                    var versionObject = result.Result.Property("version");
-
-                    if (versionObject.Value.Type == JTokenType.Integer) return new XbmcVersion((int) versionObject.Value);
-
-                    if (versionObject.Value.Type == JTokenType.Object) return Json.Deserialize<XbmcVersion>(versionObject.Value.ToString());
-
-                    throw new InvalidCastException("Unknown Version structure!: " + versionObject);
-                }, TimeSpan.FromHours(12));
-            }
-
-            catch (Exception ex)
-            {
-                _logger.DebugException(ex.Message, ex);
-            }
-
-            return new XbmcVersion();
+                throw new InvalidCastException("Unknown Version structure!: " + versionObject);
+            }, TimeSpan.FromHours(12));
         }
 
         private IApiProvider GetApiProvider(XbmcSettings settings)
