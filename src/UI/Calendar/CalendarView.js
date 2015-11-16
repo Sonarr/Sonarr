@@ -90,7 +90,7 @@ module.exports = Marionette.ItemView.extend({
 
                 element.find('.chart').tooltip({
                     title     : 'Episode is downloading - {0}% {1}'.format(progress.toFixed(1), releaseTitle),
-                    container : '.fc-content-skeleton'
+                    container : '.fc'
                 });
             }
         }
@@ -271,7 +271,7 @@ module.exports = Marionette.ItemView.extend({
         element.find('.fc-time').after('<span class="status pull-right"><i class="{0}"></i></span>'.format(icon));
         element.find('.status').tooltip({
             title     : tooltip,
-            container : '.fc-content-skeleton'
+            container : '.fc'
         });
     },
 
