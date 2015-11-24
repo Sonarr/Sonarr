@@ -1,110 +1,59 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Configuration
 {
     [TestFixture]
-    public class ConfigServiceFixture : DbTest<ConfigService, Config>
+    public class ConfigServiceFixture : TestBase<ConfigService>
     {
         [SetUp]
         public void SetUp()
         {
-            Mocker.SetConstant<IConfigRepository>(Mocker.Resolve<ConfigRepository>());
-
-            Db.All<Config>().ForEach(Db.Delete);
         }
 
         [Test]
         public void Add_new_value_to_database()
         {
-            const string key = "MY_KEY";
-            const string value = "MY_VALUE";
+            const string key = "RssSyncInterval";
+            const int value = 12;
 
-            Subject.SetValue(key, value);
-            Subject.GetValue(key, "").Should().Be(value);
-        }
+            Subject.RssSyncInterval = value;
 
-        [Test]
-        public void Get_value_from_database()
-        {
-            const string key = "MY_KEY";
-            const string value = "MY_VALUE";
-
-
-            Db.Insert(new Config { Key = key, Value = value });
-            Db.Insert(new Config { Key = "Other Key", Value = "OtherValue" });
-
-            var result = Subject.GetValue(key, "");
-
-            result.Should().Be(value);
+            AssertUpsert(key, value);
         }
 
 
         [Test]
         public void Get_value_should_return_default_when_no_value()
         {
-            const string key = "MY_KEY";
-            const string value = "MY_VALUE";
-
-            var result = Subject.GetValue(key, value);
-
-            result.Should().Be(value);
-        }
-
-        [Test]
-        public void New_value_should_update_old_value_new_value()
-        {
-            const string key = "MY_KEY";
-            const string originalValue = "OLD_VALUE";
-            const string newValue = "NEW_VALUE";
-
-            Db.Insert(new Config { Key = key, Value = originalValue });
-
-            Subject.SetValue(key, newValue);
-            var result = Subject.GetValue(key, "");
-
-
-            result.Should().Be(newValue);
-            AllStoredModels.Should().HaveCount(1);
-        }
-
-        [Test]
-        public void New_value_should_update_old_value_same_value()
-        {
-            const string key = "MY_KEY";
-            const string value = "OLD_VALUE";
-
-            Subject.SetValue(key, value);
-            Subject.SetValue(key, value);
-            var result = Subject.GetValue(key, "");
-
-            result.Should().Be(value);
-            AllStoredModels.Should().HaveCount(1);
+            Subject.RssSyncInterval.Should().Be(15);
         }
 
         [Test]
         public void get_value_with_persist_should_store_default_value()
         {
-            const string key = "MY_KEY";
-            string value = Guid.NewGuid().ToString();
-
-            Subject.GetValue(key, value, persist: true).Should().Be(value);
-            Subject.GetValue(key, string.Empty).Should().Be(value);
+            var salt = Subject.HmacSalt;
+            salt.Should().NotBeNullOrWhiteSpace();
+            AssertUpsert("HmacSalt", salt);
         }
 
         [Test]
         public void get_value_with_out_persist_should_not_store_default_value()
         {
-            const string key = "MY_KEY";
-            string value1 = Guid.NewGuid().ToString();
-            string value2 = Guid.NewGuid().ToString();
+            var interval = Subject.RssSyncInterval;
+            interval.Should().Be(15);
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.Insert(It.IsAny<Config>()), Times.Never());
+        }
 
-            Subject.GetValue(key, value1).Should().Be(value1);
-            Subject.GetValue(key, value2).Should().Be(value2);
+        private void AssertUpsert(string key, object value)
+        {
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.Upsert(It.Is<Config>(v => v.Key == key.ToLowerInvariant() && v.Value == value.ToString())));
         }
 
         [Test]
@@ -114,6 +63,17 @@ namespace NzbDrone.Core.Test.Configuration
             var configProvider = Subject;
             var allProperties = typeof(ConfigService).GetProperties().Where(p => p.GetSetMethod() != null).ToList();
 
+            var keys = new List<string>();
+            var values = new List<Config>();
+
+            Mocker.GetMock<IConfigRepository>().Setup(c => c.Upsert(It.IsAny<Config>())).Callback<Config>(config =>
+            {
+                keys.Add(config.Key);
+                values.Add(config);
+            });
+
+
+            Mocker.GetMock<IConfigRepository>().Setup(c => c.All()).Returns(values);
 
 
             foreach (var propertyInfo in allProperties)
@@ -148,8 +108,7 @@ namespace NzbDrone.Core.Test.Configuration
                 returnValue.Should().Be(value, propertyInfo.Name);
             }
 
-            AllStoredModels.Should()
-                .HaveSameCount(allProperties, "two different properties are writing to the same key in db. Copy/Past fail.");
+            keys.Should().OnlyHaveUniqueItems();
         }
     }
 }

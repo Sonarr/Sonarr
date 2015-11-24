@@ -30,12 +30,7 @@ namespace NzbDrone.Core.Configuration
             _cache = new Dictionary<string, string>();
         }
 
-        public IEnumerable<Config> All()
-        {
-            return _repository.All();
-        }
-
-        public Dictionary<string, object> AllWithDefaults()
+        private Dictionary<string, object> AllWithDefaults()
         {
             var dict = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -45,7 +40,6 @@ namespace NzbDrone.Core.Configuration
             foreach (var propertyInfo in properties)
             {
                 var value = propertyInfo.GetValue(this, null);
-
                 dict.Add(propertyInfo.Name, value);
             }
 
@@ -65,7 +59,9 @@ namespace NzbDrone.Core.Configuration
                 var equal = configValue.Value.ToString().Equals(currentValue.ToString());
 
                 if (!equal)
+                {
                     SetValue(configValue.Key, configValue.Value.ToString());
+                }
             }
 
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
@@ -331,7 +327,7 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
-        public T GetValueEnum<T>(string key, T defaultValue)
+        private T GetValueEnum<T>(string key, T defaultValue)
         {
             return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
         }
@@ -346,7 +342,9 @@ namespace NzbDrone.Core.Configuration
             string dbValue;
 
             if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !string.IsNullOrEmpty(dbValue))
+            {
                 return dbValue;
+            }
 
             _logger.Trace("Using default config value for '{0}' defaultValue:'{1}'", key, defaultValue);
 
@@ -354,6 +352,7 @@ namespace NzbDrone.Core.Configuration
             {
                 SetValue(key, defaultValue.ToString());
             }
+
             return defaultValue.ToString();
         }
 
@@ -367,30 +366,19 @@ namespace NzbDrone.Core.Configuration
             SetValue(key, value.ToString());
         }
 
-        public void SetValue(string key, string value)
+        private void SetValue(string key, Enum value)
+        {
+            SetValue(key, value.ToString().ToLower());
+        }
+
+        private void SetValue(string key, string value)
         {
             key = key.ToLowerInvariant();
 
             _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
-
-            var dbValue = _repository.Get(key);
-
-            if (dbValue == null)
-            {
-                _repository.Insert(new Config { Key = key, Value = value });
-            }
-            else
-            {
-                dbValue.Value = value;
-                _repository.Update(dbValue);
-            }
+            _repository.Upsert(new Config {Key = key, Value = value});
 
             ClearCache();
-        }
-
-        public void SetValue(string key, Enum value)
-        {
-            SetValue(key, value.ToString().ToLower());
         }
 
         private void EnsureCache()
@@ -399,12 +387,13 @@ namespace NzbDrone.Core.Configuration
             {
                 if (!_cache.Any())
                 {
-                    _cache = All().ToDictionary(c => c.Key.ToLower(), c => c.Value);
+                    var all = _repository.All();
+                    _cache = all.ToDictionary(c => c.Key.ToLower(), c => c.Value);
                 }
             }
         }
 
-        public static void ClearCache()
+        private static void ClearCache()
         {
             lock (_cache)
             {
