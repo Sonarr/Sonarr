@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Indexers
                 IndexerStatus blockedIndexerStatus;
                 if (blockedIndexers.TryGetValue(indexer.Definition.Id, out blockedIndexerStatus))
                 {
-                    _logger.Debug("Temporarily ignoring indexer {0} till {1} due to recent failures.", indexer.Definition.Name, blockedIndexerStatus.DisabledTill.Value);
+                    _logger.Debug("Temporarily ignoring indexer {0} till {1} due to recent failures.", indexer.Definition.Name, blockedIndexerStatus.DisabledTill.Value.ToLocalTime());
                     continue;
                 }
 
