@@ -58,7 +58,6 @@ namespace NzbDrone.Core.Parser
             var normalizedName = name.Replace('_', ' ').Trim().ToLower();
             var result = ParseQualityModifiers(name, normalizedName);
 
-
             if (RawHDRegex.IsMatch(normalizedName))
             {
                 result.Quality = Quality.RAWHD;
@@ -276,6 +275,7 @@ namespace NzbDrone.Core.Parser
                 try
                 {
                     result.Quality = MediaFileExtensions.GetQualityForExtension(Path.GetExtension(name));
+                    result.QualitySource = QualitySource.Extension;
                 }
                 catch (ArgumentException)
                 {

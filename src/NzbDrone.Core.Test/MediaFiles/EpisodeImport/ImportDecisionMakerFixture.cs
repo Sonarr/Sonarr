@@ -84,8 +84,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _videoFiles = videoFiles.ToList();
 
             Mocker.GetMock<IMediaFileService>()
-                .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
-                .Returns(_videoFiles);
+                  .Setup(c => c.FilterExistingFiles(_videoFiles, It.IsAny<Series>()))
+                  .Returns(_videoFiles);
         }
 
         [Test]
@@ -180,21 +180,27 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_use_file_quality_if_folder_quality_is_lower_than_file_quality()
+        public void should_use_file_quality_if_file_quality_was_determined_by_name()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
             var expectedQuality = QualityParser.ParseQuality(_videoFiles.Single());
 
-            var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo{Quality = new QualityModel(Quality.SDTV)}, true);
+            var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo{Quality = new QualityModel(Quality.Bluray1080p)}, true);
 
             result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
         }
 
         [Test]
-        public void should_use_folder_quality_when_it_is_greater_than_file_quality()
+        public void should_use_folder_quality_when_file_quality_was_determined_by_the_extension()
         {
             GivenSpecifications(_pass1, _pass2, _pass3);
-            var expectedQuality = new QualityModel(Quality.Bluray1080p);
+            GivenVideoFiles(new string[] { @"C:\Test\Unsorted\The.Office.S03E115.mkv".AsOsAgnostic() });
+
+            _localEpisode.Path = _videoFiles.Single();
+            _localEpisode.Quality.QualitySource = QualitySource.Extension;
+            _localEpisode.Quality.Quality = Quality.HDTV720p;
+
+            var expectedQuality = new QualityModel(Quality.SDTV);
 
             var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo { Quality = expectedQuality }, true);
 
