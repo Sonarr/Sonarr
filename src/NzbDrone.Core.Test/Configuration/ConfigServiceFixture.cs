@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.Configuration
 
         private void AssertUpsert(string key, object value)
         {
-            Mocker.GetMock<IConfigRepository>().Verify(c => c.Upsert(It.Is<Config>(v => v.Key == key.ToLowerInvariant() && v.Value == value.ToString())));
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.Upsert(key.ToLowerInvariant(), value.ToString()));
         }
 
         [Test]
@@ -66,15 +66,13 @@ namespace NzbDrone.Core.Test.Configuration
             var keys = new List<string>();
             var values = new List<Config>();
 
-            Mocker.GetMock<IConfigRepository>().Setup(c => c.Upsert(It.IsAny<Config>())).Callback<Config>(config =>
+            Mocker.GetMock<IConfigRepository>().Setup(c => c.Upsert(It.IsAny<string>(), It.IsAny<string>())).Callback<string, string>((key, value) =>
             {
-                keys.Add(config.Key);
-                values.Add(config);
+                keys.Add(key);
+                values.Add(new Config { Key = key, Value = value });
             });
 
-
             Mocker.GetMock<IConfigRepository>().Setup(c => c.All()).Returns(values);
-
 
             foreach (var propertyInfo in allProperties)
             {

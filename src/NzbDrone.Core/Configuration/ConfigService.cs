@@ -376,7 +376,7 @@ namespace NzbDrone.Core.Configuration
             key = key.ToLowerInvariant();
 
             _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
-            _repository.Upsert(new Config {Key = key, Value = value});
+            _repository.Upsert(key, value);
 
             ClearCache();
         }
