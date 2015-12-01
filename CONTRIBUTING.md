@@ -16,7 +16,7 @@ Setup guides, FAQ, the more information we have on the wiki the better.
 ### Getting started ###
 
 1.  Fork Sonarr
-2.  Clone (develop branch)
+2.  Clone (develop branch) *you may need pull in submodules separately if you client doesn't clone them automatically (CurlSharp)*
 3.  Run `npm install`
 4.  Run `gulp watch` - Used to compile the UI components and copy them (leave this window open)
 5.  Compile in Visual Studio
