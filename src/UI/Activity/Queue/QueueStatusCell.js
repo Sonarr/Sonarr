@@ -36,6 +36,11 @@ module.exports = NzbDroneCell.extend({
                 title = 'Pending';
             }
 
+            if (status === 'downloadclientunavailable') {
+                icon = 'icon-sonarr-client-unavailable';
+                title = 'Download pending, download client is unavailable';
+            }
+
             if (status === 'failed') {
                 icon = 'icon-sonarr-download-failed';
                 title = 'Download failed';

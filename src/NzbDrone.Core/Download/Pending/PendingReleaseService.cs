@@ -20,8 +20,7 @@ namespace NzbDrone.Core.Download.Pending
 {
     public interface IPendingReleaseService
     {
-        void Add(DownloadDecision decision);
-
+        void Add(DownloadDecision decision, PendingReleaseReason reason);
         List<ReleaseInfo> GetPending();
         List<RemoteEpisode> GetPendingRemoteEpisodes(int seriesId);
         List<Queue.Queue> GetPendingQueue();
@@ -67,7 +66,7 @@ namespace NzbDrone.Core.Download.Pending
         }
 
 
-        public void Add(DownloadDecision decision)
+        public void Add(DownloadDecision decision, PendingReleaseReason reason)
         {
             var alreadyPending = GetPendingReleases();
 
@@ -84,7 +83,7 @@ namespace NzbDrone.Core.Download.Pending
             }
 
             _logger.Debug("Adding release to pending releases");
-            Insert(decision);
+            Insert(decision, reason);
         }
 
         public List<ReleaseInfo> GetPending()
@@ -132,6 +131,13 @@ namespace NzbDrone.Core.Download.Pending
                         ect = ect.AddMinutes(_configService.RssSyncInterval);
                     }
 
+                    var timeleft = ect.Subtract(DateTime.UtcNow);
+
+                    if (timeleft.TotalSeconds < 0)
+                    {
+                        timeleft = TimeSpan.Zero;
+                    }
+
                     var queue = new Queue.Queue
                                 {
                                     Id = GetQueueId(pendingRelease, episode),
@@ -142,9 +148,9 @@ namespace NzbDrone.Core.Download.Pending
                                     Size = pendingRelease.RemoteEpisode.Release.Size,
                                     Sizeleft = pendingRelease.RemoteEpisode.Release.Size,
                                     RemoteEpisode = pendingRelease.RemoteEpisode,
-                                    Timeleft = ect.Subtract(DateTime.UtcNow),
+                                    Timeleft = timeleft,
                                     EstimatedCompletionTime = ect,
-                                    Status = "Pending",
+                                    Status = pendingRelease.Reason == PendingReleaseReason.Delay ? "Pending" : "DownloadClientUnavailable",
                                     Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol
                                 };
                     queued.Add(queue);
@@ -224,7 +230,7 @@ namespace NzbDrone.Core.Download.Pending
             };
         }
 
-        private void Insert(DownloadDecision decision)
+        private void Insert(DownloadDecision decision, PendingReleaseReason reason)
         {
             _repository.Insert(new PendingRelease
             {
@@ -232,7 +238,8 @@ namespace NzbDrone.Core.Download.Pending
                 ParsedEpisodeInfo = decision.RemoteEpisode.ParsedEpisodeInfo,
                 Release = decision.RemoteEpisode.Release,
                 Title = decision.RemoteEpisode.Release.Title,
-                Added = DateTime.UtcNow
+                Added = DateTime.UtcNow,
+                Reason = reason
             });
 
             _eventAggregator.PublishEvent(new PendingReleasesUpdatedEvent());

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Episodes;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
 using System.Linq;
@@ -18,7 +20,10 @@ namespace NzbDrone.Api.Queue
         public decimal Size { get; set; }
         public string Title { get; set; }
         public decimal Sizeleft { get; set; }
+
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan? Timeleft { get; set; }
+
         public DateTime? EstimatedCompletionTime { get; set; }
         public string Status { get; set; }
         public string TrackedDownloadStatus { get; set; }

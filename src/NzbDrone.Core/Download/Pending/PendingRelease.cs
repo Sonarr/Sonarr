@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Download.Pending
         public DateTime Added { get; set; }
         public ParsedEpisodeInfo ParsedEpisodeInfo { get; set; }
         public ReleaseInfo Release { get; set; }
+        public PendingReleaseReason Reason { get; set; }
 
         //Not persisted
         public RemoteEpisode RemoteEpisode { get; set; }

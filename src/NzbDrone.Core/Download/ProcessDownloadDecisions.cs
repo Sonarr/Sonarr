@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Download.Pending;
 
 namespace NzbDrone.Core.Download
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.Download
 
                 if (report.TemporarilyRejected)
                 {
-                    _pendingReleaseService.Add(report);
+                    _pendingReleaseService.Add(report, PendingReleaseReason.Delay);
                     pending.Add(report);
                     continue;
                 }
@@ -74,10 +75,14 @@ namespace NzbDrone.Core.Download
                     _downloadService.DownloadReport(remoteEpisode);
                     grabbed.Add(report);
                 }
+                catch (DownloadClientUnavailableException e)
+                {
+                    _logger.Debug("Failed to send release to download client, storing until later");
+                    _pendingReleaseService.Add(report, PendingReleaseReason.StoreAndForward);
+                    pending.Add(report);
+                }
                 catch (Exception e)
                 {
-                    //TODO: support for store & forward
-                    //We'll need to differentiate between a download client error and an indexer error
                     _logger.Warn(e, "Couldn't add report to download queue. " + remoteEpisode);
                 }
             }
