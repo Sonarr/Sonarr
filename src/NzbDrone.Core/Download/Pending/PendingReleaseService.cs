@@ -153,6 +153,7 @@ namespace NzbDrone.Core.Download.Pending
                                     Status = pendingRelease.Reason == PendingReleaseReason.Delay ? "Pending" : "DownloadClientUnavailable",
                                     Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol
                                 };
+
                     queued.Add(queue);
                 }
             }
