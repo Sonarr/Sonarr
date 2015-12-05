@@ -10,11 +10,11 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
-using NzbDrone.Api.Validation;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Validation;
 using NzbDrone.SignalR;
 
 namespace NzbDrone.Api.Series
@@ -43,7 +43,8 @@ namespace NzbDrone.Api.Series
                             SeriesPathValidator seriesPathValidator,
                             SeriesExistsValidator seriesExistsValidator,
                             DroneFactoryValidator droneFactoryValidator,
-                            SeriesAncestorValidator seriesAncestorValidator
+                            SeriesAncestorValidator seriesAncestorValidator,
+                            ProfileExistsValidator profileExistsValidator
             )
             : base(signalRBroadcaster)
         {
@@ -59,7 +60,7 @@ namespace NzbDrone.Api.Series
             UpdateResource = UpdateSeries;
             DeleteResource = DeleteSeries;
 
-            SharedValidator.RuleFor(s => s.ProfileId).ValidId();
+            Validation.RuleBuilderExtensions.ValidId(SharedValidator.RuleFor(s => s.ProfileId));
 
             SharedValidator.RuleFor(s => s.Path)
                            .Cascade(CascadeMode.StopOnFirstFailure)
@@ -69,6 +70,8 @@ namespace NzbDrone.Api.Series
                            .SetValidator(droneFactoryValidator)
                            .SetValidator(seriesAncestorValidator)
                            .When(s => !s.Path.IsNullOrWhiteSpace());
+
+            SharedValidator.RuleFor(s => s.ProfileId).SetValidator(profileExistsValidator);
 
             PostValidator.RuleFor(s => s.Path).IsValidPath().When(s => s.RootFolderPath.IsNullOrWhiteSpace());
             PostValidator.RuleFor(s => s.RootFolderPath).IsValidPath().When(s => s.Path.IsNullOrWhiteSpace());
