@@ -113,6 +113,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Young And the Restless - S42 E10713 - 2015-07-20.mp4", "The Young And the Restless", 42, 10713)]
         [TestCase("quantico.103.hdtv-lol[ettv].mp4", "quantico", 1, 3)]
         [TestCase("Fargo - 01x02 - The Rooster Prince - [itz_theo]", "Fargo", 1, 2)]
+        [TestCase("Castle (2009) - [06x16] - Room 147.mp4", "Castle (2009)", 6, 16)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
