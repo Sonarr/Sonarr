@@ -43,6 +43,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Young And The Restless - S42 Ep10718 - Ep10722", "The Young And The Restless", 42, new[] { 10718, 10719, 10720, 10721, 10722 })]
         [TestCase("The Young And The Restless - S42 Ep10688 - Ep10692", "The Young And The Restless", 42, new[] { 10688, 10689, 10690, 10691, 10692 })]
         [TestCase("RWBY.S01E02E03.1080p.BluRay.x264-DeBTViD", "RWBY", 1, new [] { 2, 3 })]
+        [TestCase("grp-zoos01e11e12-1080p", "grp-zoo", 1, new [] { 11, 12 })]
+        [TestCase("grp-zoo-s01e11e12-1080p", "grp-zoo", 1, new [] { 11, 12 })]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
