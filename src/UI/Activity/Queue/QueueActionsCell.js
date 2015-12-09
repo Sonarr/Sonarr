@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var _ = require('underscore');
 var vent = require('../../vent');
 var TemplatedCell = require('../../Cells/TemplatedCell');
 var RemoveFromQueueView = require('./RemoveFromQueueView');
@@ -40,11 +41,12 @@ module.exports = TemplatedCell.extend({
 
     _grab : function() {
         var self = this;
+        var data = _.omit(this.model.toJSON(), 'series', 'episode');
 
         var promise = $.ajax({
             url  : window.NzbDrone.ApiRoot + '/queue/grab',
             type : 'POST',
-            data : JSON.stringify(this.model.toJSON())
+            data : JSON.stringify(data)
         });
 
         this.$(this.ui.grab).spinForPromise(promise);
