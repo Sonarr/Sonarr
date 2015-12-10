@@ -33,6 +33,7 @@ Function Build()
 
     Write-Host "Removing Mono.Posix.dll"
     Remove-Item "$outputFolder\Mono.Posix.dll"
+    Get-ChildItem $outputFolder -File -Filter "*.dylib" -Recurse | foreach ($_) {Remove-Item $_.Fullname}
 
     Write-Host "##teamcity[progressFinish 'Build']"
 }
@@ -231,6 +232,9 @@ Function RunGulp()
    CheckExitCode
 
    Invoke-Expression 'gulp build' -ErrorAction Continue -Verbose
+   CheckExitCode
+
+   Invoke-Expression 'gulp build --phantom' -ErrorAction Continue -Verbose
    CheckExitCode
 
    Write-Host "##teamcity[progressFinish 'Running Gulp']"
