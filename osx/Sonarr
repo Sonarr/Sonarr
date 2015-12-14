@@ -1,17 +1,31 @@
 #!/bin/sh
- 
+
 #get the bundle's MacOS directory full path
 DIR=$(cd "$(dirname "$0")"; pwd)
- 
+
 #change these values to match your app
 EXE_PATH="$DIR/NzbDrone.exe"
 APPNAME="Sonarr"
  
 #set up environment
-MONO_FRAMEWORK_PATH=/Library/Frameworks/Mono.framework/Versions/Current
-export DYLD_FALLBACK_LIBRARY_PATH="$DIR:$MONO_FRAMEWORK_PATH/lib:/lib:/usr/lib"
-export PATH="$MONO_FRAMEWORK_PATH/bin:$PATH"
- 
+if [[ -x '/opt/local/bin/mono' ]]; then
+    export PATH="/opt/local/bin:$PATH"
+fi
+
+export DYLD_FALLBACK_LIBRARY_PATH="$DIR"
+
+if [ -e /Library/Frameworks/Mono.framework ]; then
+	MONO_FRAMEWORK_PATH=/Library/Frameworks/Mono.framework/Versions/Current
+	export PATH="$MONO_FRAMEWORK_PATH/bin:$PATH"
+	export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:$MONO_FRAMEWORK_PATH/lib"
+fi
+
+if [[ -f '/opt/local/lib/libsqlite3.0.dylib' ]]; then
+	export DYLD_FALLBACK_LIBRARY_PATH="/opt/local/lib:$DYLD_FALLBACK_LIBRARY_PATH"
+fi
+
+export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:$HOME/lib:/usr/local/lib:/lib:/usr/lib"
+
 #mono version check
 REQUIRED_MAJOR=3
 REQUIRED_MINOR=10
@@ -21,6 +35,9 @@ VERSION_MSG="$APPNAME requires Mono Runtime Environment(MRE) $REQUIRED_MAJOR.$RE
 DOWNLOAD_URL="http://www.mono-project.com/download/#download-mac"
  
 MONO_VERSION="$(mono --version | grep 'Mono JIT compiler version ' |  cut -f5 -d\ )"
+# if [[ -o DEBUG ]]; then osascript -e "display dialog \"MONO_VERSION: $MONO_VERSION\""; fi
+
+
 MONO_VERSION_MAJOR="$(echo $MONO_VERSION | cut -f1 -d.)"
 MONO_VERSION_MINOR="$(echo $MONO_VERSION | cut -f2 -d.)"
 if [ -z "$MONO_VERSION" ] \
