@@ -6,8 +6,6 @@ namespace NzbDrone.Core.Configuration
 {
     public interface IConfigService
     {
-        IEnumerable<Config> All();
-        Dictionary<string, object> AllWithDefaults();
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
         bool IsDefined(string key);

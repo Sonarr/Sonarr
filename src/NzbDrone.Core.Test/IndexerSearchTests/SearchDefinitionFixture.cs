@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         [TestCase("Hawaii Five-0", Result = "Hawaii+Five+0")]
         [TestCase("Franklin & Bash", Result = "Franklin+and+Bash")]
         [TestCase("Chicago P.D.", Result = "Chicago+PD")]
-        [TestCase("Kourtney And Khloé Take The Hamptons", Result = "Kourtney+And+Khloe+Take+The+Hamptons")]
+        [TestCase("Kourtney And Khlo\u00E9 Take The Hamptons", Result = "Kourtney+And+Khloe+Take+The+Hamptons")]
         public string should_replace_some_special_characters(string input)
         {
             Subject.SceneTitles = new List<string> { input };

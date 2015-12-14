@@ -767,6 +767,7 @@
     <Compile Include="Profiles\Delay\DelayProfileTagInUseValidator.cs" />
     <Compile Include="Profiles\ProfileRepository.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageContext.cs" />
+    <Compile Include="Qualities\QualitySource.cs" />
     <Compile Include="Qualities\Revision.cs" />
     <Compile Include="RemotePathMappings\RemotePathMapping.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingRepository.cs" />
@@ -1003,6 +1004,7 @@
     <Compile Include="Validation\Paths\SeriesAncestorValidator.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
     <Compile Include="Validation\Paths\SeriesPathValidator.cs" />
+    <Compile Include="Validation\ProfileExistsValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Validation\UrlValidator.cs" />
   </ItemGroup>
@@ -1061,6 +1063,14 @@
   <ItemGroup>
     <Content Include="..\Libraries\MediaInfo\MediaInfo.dll">
       <Link>MediaInfo.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\MediaInfo\libmediainfo.0.dylib">
+      <Link>libmediainfo.0.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\Sqlite\libsqlite3.0.dylib">
+      <Link>libsqlite3.0.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

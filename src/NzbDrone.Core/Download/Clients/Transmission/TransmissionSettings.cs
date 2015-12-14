@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             RuleFor(c => c.UrlBase).ValidUrlBase();
 
-            RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$").WithMessage("Allowed characters a-z and -");
+            RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$", RegexOptions.IgnoreCase).WithMessage("Allowed characters a-z and -");
         }
     }
 
