@@ -163,6 +163,7 @@
     <Compile Include="Download\DownloadClientTests\NzbgetTests\NzbgetFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\RTorrentTests\RTorrentFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\QBittorrentTests\QBittorrentFixture.cs" />
     <Compile Include="Download\DownloadClientTests\SabnzbdTests\SabnzbdFixture.cs" />
     <Compile Include="Download\DownloadClientTests\TransmissionTests\TransmissionFixture.cs" />
     <Compile Include="Download\DownloadClientTests\UTorrentTests\UTorrentFixture.cs" />
