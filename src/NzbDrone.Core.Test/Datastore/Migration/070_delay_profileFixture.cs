@@ -88,8 +88,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                      RunTime = 0,
                                                      SeriesType = 0,
                                                      UseSceneNumbering = 0,
-                                                     Tags = "[1]",
-                                                     ProfileId = 1
+                                                     Tags = "[1]"
                                                  });
             });
 

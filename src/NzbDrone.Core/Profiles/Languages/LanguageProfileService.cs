@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Profiles.Languages
         void Delete(int id);
         List<LanguageProfile> All();
         LanguageProfile Get(int id);
+        bool Exists(int id);
     }
 
     public class LanguageProfileService : ILanguageProfileService, IHandle<ApplicationStartedEvent>
@@ -58,6 +59,11 @@ namespace NzbDrone.Core.Profiles.Languages
         public LanguageProfile Get(int id)
         {
             return _profileRepository.Get(id);
+        }
+
+        public bool Exists(int id)
+        {
+            return _profileRepository.Exists(id);
         }
 
         private LanguageProfile AddDefaultProfile(string name, Language cutoff, params Language[] allowed)

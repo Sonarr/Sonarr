@@ -1,14 +1,14 @@
 ﻿using FluentValidation.Validators;
-using NzbDrone.Core.Profiles.Qualities;
+using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Validation
 {
-    public class ProfileExistsValidator : PropertyValidator
+    public class LanguageProfileExistsValidator : PropertyValidator
     {
-        private readonly IProfileService _profileService;
+        private readonly ILanguageProfileService _profileService;
 
-        public ProfileExistsValidator(IProfileService profileService)
-            : base("Profile does not exist")
+        public LanguageProfileExistsValidator(ILanguageProfileService profileService)
+            : base("Language profile does not exist")
         {
             _profileService = profileService;
         }

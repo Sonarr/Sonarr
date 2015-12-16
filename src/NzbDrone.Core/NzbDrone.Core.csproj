@@ -283,7 +283,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Datastore\Migration\095_add_language_to_episodeFiles_history_and_blacklist.cs" />
-    <Compile Include="Datastore\Migration\096_create_language_profile.cs" />
+    <Compile Include="Datastore\Migration\102_create_language_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -1110,6 +1110,7 @@
     <Compile Include="Validation\Paths\SeriesAncestorValidator.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
     <Compile Include="Validation\Paths\SeriesPathValidator.cs" />
+    <Compile Include="Validation\LanguageProfileExistsValidator.cs" />
     <Compile Include="Validation\ProfileExistsValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Validation\UrlValidator.cs" />
