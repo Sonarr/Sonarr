@@ -273,6 +273,9 @@
     <Compile Include="Datastore\Migration\093_naming_config_replace_characters.cs" />
     <Compile Include="Datastore\Migration\092_add_unverifiedscenenumbering.cs" />
     <Compile Include="Datastore\Migration\094_add_tvmazeid.cs" />
+    <Compile Include="Datastore\Migration\098_remove_titans_of_tv.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -554,11 +557,6 @@
     <Compile Include="Indexers\RssSyncCommand.cs" />
     <Compile Include="Indexers\RssSyncCompleteEvent.cs" />
     <Compile Include="Indexers\RssSyncService.cs" />
-    <Compile Include="Indexers\TitansOfTv\TitansOfTv.cs" />
-    <Compile Include="Indexers\TitansOfTv\TitansOfTvApiResult.cs" />
-    <Compile Include="Indexers\TitansOfTv\TitansOfTvParser.cs" />
-    <Compile Include="Indexers\TitansOfTv\TitansOfTvRequestGenerator.cs" />
-    <Compile Include="Indexers\TitansOfTv\TitansOfTvSettings.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechRequestGenerator.cs" />
     <Compile Include="Indexers\Torrentleech\Torrentleech.cs" />
     <Compile Include="Indexers\Torrentleech\TorrentleechSettings.cs" />

@@ -223,7 +223,6 @@
     <Compile Include="IndexerTests\IndexerStatusServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
     <Compile Include="IndexerTests\RarbgTests\RarbgFixture.cs" />
-    <Compile Include="IndexerTests\TitansOfTvTests\TitansOfTvFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssSettingsDetectorFixture.cs" />
     <Compile Include="IndexerTests\TorznabTests\TorznabFixture.cs" />
@@ -509,9 +508,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Files\Indexers\TitansOfTv\RecentFeed.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Files\TestArchive.tar.gz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
