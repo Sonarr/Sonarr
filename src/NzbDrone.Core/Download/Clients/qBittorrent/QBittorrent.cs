@@ -12,6 +12,7 @@ using FluentValidation.Results;
 using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {
@@ -79,6 +80,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
         }
 
+        public override ProviderMessage Message
+        {
+            get
+            {
+                return new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using qBittorrent", ProviderMessageType.Warning);
+            }
+        }
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             List<QBittorrentTorrent> torrents;
@@ -107,6 +116,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
 
                 item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
+                
+                // At the moment there isn't an easy way to detect if the torrent has
+                // reached the seeding limit, We would need to check the preferences 
+                // and still not be completely sure if that torrent has a limit set for it
+                item.IsReadOnly = true;
 
                 if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
                 {
