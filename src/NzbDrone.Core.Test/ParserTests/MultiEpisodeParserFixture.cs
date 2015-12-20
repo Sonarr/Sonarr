@@ -45,6 +45,17 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("RWBY.S01E02E03.1080p.BluRay.x264-DeBTViD", "RWBY", 1, new [] { 2, 3 })]
         [TestCase("grp-zoos01e11e12-1080p", "grp-zoo", 1, new [] { 11, 12 })]
         [TestCase("grp-zoo-s01e11e12-1080p", "grp-zoo", 1, new [] { 11, 12 })]
+        [TestCase("Series Title.S6.E1.E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new [] { 1, 2 })]
+        [TestCase("Series Title.S6E1-E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new [] { 1, 2 })]
+        [TestCase("Series Title.S6E1-S6E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new [] { 1, 2 })]
+        [TestCase("Series Title.S6E1E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new [] { 1, 2 })]
+        [TestCase("Series Title.S6E1-E2-E3.Episode Name.1080p.WEB-DL", "Series Title", 6, new [] { 1, 2, 3})]
+        [TestCase("Series Title.S6.E1E3.Episode Name.1080p.WEB-DL", "Series Title", 6, new [] { 1, 2, 3 })]
+        [TestCase("Series Title.S6.E1-E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2 })]
+        [TestCase("Series Title.S6.E1-S6E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2 })]
+        [TestCase("Series Title.S6.E1E2.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2 })]
+        [TestCase("Series Title.S6.E1-E2-E3.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2, 3 })]
+        [TestCase("Series Title.S6.E1E3.Episode Name.1080p.WEB-DL", "Series Title", 6, new[] { 1, 2, 3 })]
         //[TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
