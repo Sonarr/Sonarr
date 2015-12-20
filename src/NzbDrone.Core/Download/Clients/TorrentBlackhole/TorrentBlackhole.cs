@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
         {
             get
             {
-                return new ProviderMessage("Sonarr will move files from the Watch folder, it will not hardlink or copy", ProviderMessageType.Warning);
+                return new ProviderMessage("Magnet links are not supported.", ProviderMessageType.Warning);
             }
         }
 
