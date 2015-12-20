@@ -238,6 +238,7 @@
     <Compile Include="TinyIoCNancyBootstrapper.cs" />
     <Compile Include="Update\UpdateModule.cs" />
     <Compile Include="Update\UpdateResource.cs" />
+    <Compile Include="Validation\RssSyncIntervalValidator.cs" />
     <Compile Include="Validation\EmptyCollectionValidator.cs" />
     <Compile Include="Validation\RuleBuilderExtensions.cs" />
     <Compile Include="Wanted\CutoffModule.cs" />

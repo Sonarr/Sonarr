@@ -31,5 +31,10 @@ namespace NzbDrone.Api.Validation
         {
             return ruleBuilder.SetValidator(new EmptyCollectionValidator<TProp>());
         }
+
+        public static IRuleBuilderOptions<T, int> IsValidRssSyncInterval<T>(this IRuleBuilder<T, int> ruleBuilder)
+        {
+            return ruleBuilder.SetValidator(new RssSyncIntervalValidator());
+        }
     }
 }

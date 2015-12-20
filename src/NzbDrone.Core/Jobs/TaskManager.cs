@@ -120,6 +120,11 @@ namespace NzbDrone.Core.Jobs
                 return 10;
             }
 
+            if (interval < 0)
+            {
+                return 0;
+            }
+
             return interval;
         }
 

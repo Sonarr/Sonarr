@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using NzbDrone.Api.Validation;
 using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Config
@@ -16,8 +17,7 @@ namespace NzbDrone.Api.Config
                            .GreaterThanOrEqualTo(0);
 
             SharedValidator.RuleFor(c => c.RssSyncInterval)
-                .InclusiveBetween(10, 120)
-                .When(c => c.RssSyncInterval > 0);
+                           .IsValidRssSyncInterval();
         }
     }
 }
