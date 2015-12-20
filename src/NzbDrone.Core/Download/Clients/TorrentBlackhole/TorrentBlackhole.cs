@@ -103,6 +103,8 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                     historyItem.RemainingTime = TimeSpan.Zero;
                 }
 
+                historyItem.IsReadOnly = Settings.ReadOnly;
+
                 yield return historyItem;
             }
 
@@ -131,6 +133,8 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                     historyItem.Status = DownloadItemStatus.Completed;
                     historyItem.RemainingTime = TimeSpan.Zero;
                 }
+
+                historyItem.IsReadOnly = Settings.ReadOnly;
 
                 yield return historyItem;
             }

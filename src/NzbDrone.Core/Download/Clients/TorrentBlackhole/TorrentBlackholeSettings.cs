@@ -1,5 +1,6 @@
-﻿using FluentValidation;
-using System;
+﻿using System.ComponentModel;
+using FluentValidation;
+using Newtonsoft.Json;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -18,6 +19,11 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
     public class TorrentBlackholeSettings : IProviderConfig
     {
+        public TorrentBlackholeSettings()
+        {
+            ReadOnly = true;
+        }
+
         private static readonly TorrentBlackholeSettingsValidator Validator = new TorrentBlackholeSettingsValidator();
 
         [FieldDefinition(0, Label = "Torrent Folder", Type = FieldType.Path, HelpText = "Folder in which Sonarr will store the .torrent file")]
@@ -25,6 +31,11 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
 
         [FieldDefinition(1, Label = "Watch Folder", Type = FieldType.Path, HelpText = "Folder from which Sonarr should import completed downloads")]
         public string WatchFolder { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        [FieldDefinition(2, Label = "Read Only", Type = FieldType.Checkbox, HelpText = "Instead of moving files this will instruct Sonarr to Copy or Hardlink (depending on settings/system configuration)")]
+        public bool ReadOnly { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
