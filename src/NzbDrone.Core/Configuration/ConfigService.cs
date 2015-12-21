@@ -111,6 +111,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("MinimumAge", value); }
         }
 
+        public bool GrabUnairedReleases
+        {
+            get { return GetValueBoolean("GrabUnairedReleases", true);  }
+
+            set { SetValue("GrabUnairedReleases", value); }
+        }
+
         public bool AutoDownloadPropers
         {
             get { return GetValueBoolean("AutoDownloadPropers", true); }

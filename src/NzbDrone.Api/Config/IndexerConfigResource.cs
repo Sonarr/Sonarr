@@ -8,5 +8,6 @@ namespace NzbDrone.Api.Config
         public int MinimumAge { get; set; }
         public int Retention { get; set; }
         public int RssSyncInterval { get; set; }
+        public bool GrabUnairedReleases { get; set; }
     }
 }

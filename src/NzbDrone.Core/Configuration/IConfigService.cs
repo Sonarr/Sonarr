@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Configuration
         int Retention { get; set; }
         int RssSyncInterval { get; set; }
         int MinimumAge { get; set; }
+        bool GrabUnairedReleases { get; set; }
 
         //UI
         int FirstDayOfWeek { get; set; }
