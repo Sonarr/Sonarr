@@ -349,6 +349,33 @@ namespace NzbDrone.Common.Test.Http
                 Thread.CurrentThread.CurrentUICulture = origCulture;
             }
         }
+
+        [TestCase("lang_code=en; expires=Fri, 23-Dec-2016 18:09:14 GMT; Max-Age=31536000; path=/; domain=.abc.com")]
+        public void should_reject_malformed_domain_cookie(string malformedCookie)
+        {
+            try
+            {
+                // the date is bad in the below - should be 13-Jul-2016
+                string url = "http://eu.httpbin.org/response-headers?Set-Cookie=" + Uri.EscapeUriString(malformedCookie);
+
+                var requestSet = new HttpRequest(url);
+                requestSet.AllowAutoRedirect = false;
+                requestSet.StoreResponseCookie = true;
+
+                var responseSet = Subject.Get(requestSet);
+
+                var request = new HttpRequest("http://eu.httpbin.org/get");
+
+                var response = Subject.Get<HttpBinResource>(request);
+
+                response.Resource.Headers.Should().NotContainKey("Cookie");
+
+                ExceptionVerification.IgnoreErrors();
+            }
+            finally
+            {
+            }
+        }
     }
 
     public class HttpBinResource

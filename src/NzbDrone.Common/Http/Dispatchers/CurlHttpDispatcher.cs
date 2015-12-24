@@ -165,7 +165,14 @@ namespace NzbDrone.Common.Http.Dispatchers
             var setCookie = webHeaderCollection.Get("Set-Cookie");
             if (setCookie != null && setCookie.Length > 0 && cookies != null)
             {
-                cookies.SetCookies(request.Url, FixSetCookieHeader(setCookie));
+                try
+                {
+                    cookies.SetCookies(request.Url, FixSetCookieHeader(setCookie));
+                }
+                catch (CookieException ex)
+                {
+                    _logger.Debug("Rejected cookie {0}: {1}", ex.InnerException.Message, setCookie);
+                }
             }
 
             return webHeaderCollection;
