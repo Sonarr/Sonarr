@@ -28,13 +28,16 @@ module.exports = Marionette.Layout.extend({
     },
 
     onClick : function(event) {
-
-        event.preventDefault();
-
         var target = $(event.target);
 
         //look down for <a/>
         var href = event.target.getAttribute('href');
+
+        if (href && href.startsWith("http")) {
+            return;
+        }
+
+        event.preventDefault();
 
         //if couldn't find it look up'
         if (!href && target.closest('a') && target.closest('a')[0]) {
