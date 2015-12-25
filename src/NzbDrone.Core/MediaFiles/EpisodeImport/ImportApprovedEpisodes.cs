@@ -11,6 +11,7 @@ using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Extras;
 
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
@@ -24,18 +25,21 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     {
         private readonly IUpgradeMediaFiles _episodeFileUpgrader;
         private readonly IMediaFileService _mediaFileService;
+        private readonly IExtraService _extraService;
         private readonly IDiskProvider _diskProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
         public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
                                       IMediaFileService mediaFileService,
+                                      IExtraService extraService,
                                       IDiskProvider diskProvider,
                                       IEventAggregator eventAggregator,
                                       Logger logger)
         {
             _episodeFileUpgrader = episodeFileUpgrader;
             _mediaFileService = mediaFileService;
+            _extraService = extraService;
             _diskProvider = diskProvider;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -98,9 +102,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     _mediaFileService.Add(episodeFile);
                     importResults.Add(new ImportResult(importDecision));
 
+                    if (newDownload)
+                    {
+                        _extraService.ImportExtraFiles(localEpisode, episodeFile, downloadClientItem != null && downloadClientItem.IsReadOnly);
+                    }
+
                     if (downloadClientItem != null)
                     {
-                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId));
+                        _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, newDownload, downloadClientItem.DownloadClient, downloadClientItem.DownloadId, downloadClientItem.IsReadOnly));
                     }
                     else
                     {

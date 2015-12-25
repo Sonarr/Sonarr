@@ -1,5 +1,5 @@
 ﻿using System;
-using NzbDrone.Core.Metadata;
+using NzbDrone.Core.Extras.Metadata;
 
 namespace NzbDrone.Api.Metadata
 {

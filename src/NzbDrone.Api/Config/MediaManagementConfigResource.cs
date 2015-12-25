@@ -1,5 +1,4 @@
-﻿using System;
-using NzbDrone.Api.REST;
+﻿using NzbDrone.Api.REST;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 
@@ -21,6 +20,7 @@ namespace NzbDrone.Api.Config
 
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
         public bool CopyUsingHardlinks { get; set; }
+        public string ExtraFileExtensions { get; set; }
         public bool EnableMediaInfo { get; set; }
     }
 

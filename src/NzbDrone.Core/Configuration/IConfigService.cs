@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Configuration
         bool SkipFreeSpaceCheckWhenImporting { get; set; }
         bool CopyUsingHardlinks { get; set; }
         bool EnableMediaInfo { get; set; }
+        string ExtraFileExtensions { get; set; }
 
         //Permissions (Media Management)
         bool SetPermissionsLinux { get; set; }

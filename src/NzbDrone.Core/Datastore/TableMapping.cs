@@ -14,8 +14,6 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Metadata;
-using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Notifications;
@@ -31,6 +29,10 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Authentication;
+using NzbDrone.Core.Extras.Metadata;
+using NzbDrone.Core.Extras.Metadata.Files;
+using NzbDrone.Core.Extras.Others;
+using NzbDrone.Core.Extras.Subtitles;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Datastore
@@ -92,13 +94,14 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<QualityDefinition>().RegisterModel("QualityDefinitions")
                   .Ignore(d => d.Weight);
 
-
             Mapper.Entity<Profile>().RegisterModel("Profiles");
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
             Mapper.Entity<SeasonStatistics>().MapResultSet();
             Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");
+            Mapper.Entity<SubtitleFile>().RegisterModel("SubtitleFiles");
+            Mapper.Entity<OtherExtraFile>().RegisterModel("ExtraFiles");
 
             Mapper.Entity<PendingRelease>().RegisterModel("PendingReleases")
                   .Ignore(e => e.RemoteEpisode);

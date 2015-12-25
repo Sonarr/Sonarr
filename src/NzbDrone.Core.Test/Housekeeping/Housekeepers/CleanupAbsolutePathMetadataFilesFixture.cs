@@ -2,8 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 

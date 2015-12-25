@@ -80,6 +80,8 @@
     <Compile Include="EnvironmentTests\EnvironmentProviderTest.cs" />
     <Compile Include="EnvironmentTests\StartupArgumentsFixture.cs" />
     <Compile Include="ExtensionTests\FromOctalStringFixture.cs" />
+    <Compile Include="ExtensionTests\IEnumerableExtensionTests\ExceptByFixture.cs" />
+    <Compile Include="ExtensionTests\IEnumerableExtensionTests\IntersectByFixture.cs" />
     <Compile Include="ExtensionTests\Int64ExtensionFixture.cs" />
     <Compile Include="Http\HttpClientFixture.cs" />
     <Compile Include="Http\HttpRequestBuilderFixture.cs" />

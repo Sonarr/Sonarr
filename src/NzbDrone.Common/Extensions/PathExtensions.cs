@@ -37,6 +37,11 @@ namespace NzbDrone.Common.Extensions
             return info.FullName.TrimEnd('/').Trim('\\', ' ');
         }
 
+        public static bool PathNotEquals(this string firstPath, string secondPath, StringComparison? comparison = null)
+        {
+            return !PathEquals(firstPath, secondPath, comparison);
+        }
+
         public static bool PathEquals(this string firstPath, string secondPath, StringComparison? comparison = null)
         {
             if (!comparison.HasValue)
