@@ -204,6 +204,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Sonny.With.a.Chance.S02E15", false)]
         [TestCase("Law & Order: Special Victims Unit - 11x11 - Quickie", false)]
+        [TestCase("Series.Title.S01E01.webm", false)]
         public void quality_parse(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Unknown, proper);

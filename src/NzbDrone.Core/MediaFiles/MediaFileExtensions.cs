@@ -13,6 +13,10 @@ namespace NzbDrone.Core.MediaFiles
         {
             _fileExtensions = new Dictionary<string, Quality>
             {
+                //Unknown
+                { ".webm", Quality.Unknown },
+
+                //SDTV
                 { ".m4v", Quality.SDTV },
                 { ".3gp", Quality.SDTV },
                 { ".nsv", Quality.SDTV },
