@@ -78,14 +78,18 @@ namespace NzbDrone.Core.DecisionEngine
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;
 
-                        if (remoteEpisode.Series != null)
+                        if (remoteEpisode.Series == null)
                         {
-                            remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();
-                            decision = GetDecisionForReport(remoteEpisode, searchCriteria);
+                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unknown Series"));
+                        }
+                        else if (remoteEpisode.Episodes.Empty())
+                        {
+                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unable to parse episodes from release name"));                            
                         }
                         else
                         {
-                            decision = new DownloadDecision(remoteEpisode, new Rejection("Unknown Series"));
+                            remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();
+                            decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
                     }
                 }
