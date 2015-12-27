@@ -6,6 +6,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Update;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
@@ -46,6 +47,29 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns(false);
 
             Subject.Check().ShouldBeError();
+        }
+
+        [Test]
+        public void should_not_return_error_when_app_folder_is_write_protected_and_external_script_enabled()
+        {
+            MonoOnly();
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .Setup(s => s.UpdateAutomatically)
+                  .Returns(true);
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .Setup(s => s.UpdateMechanism)
+                  .Returns(UpdateMechanism.Script);
+
+            Mocker.GetMock<IAppFolderInfo>()
+                  .Setup(s => s.StartUpFolder)
+                  .Returns(@"/opt/nzbdrone");
+
+            Mocker.GetMock<NzbDrone.Common.Disk.IDiskProvider>()
+                  .Verify(c => c.FolderWritable(Moq.It.IsAny<string>()), Times.Never());
+
+            Subject.Check().ShouldBeOk();
         }
     }
 }

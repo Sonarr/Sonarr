@@ -27,7 +27,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            if (OsInfo.IsWindows || _configFileProvider.UpdateAutomatically)
+            if ((OsInfo.IsWindows || _configFileProvider.UpdateAutomatically) &&
+                _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn)
             {
                 if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
                 {
