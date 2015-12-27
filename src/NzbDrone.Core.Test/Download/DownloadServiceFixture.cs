@@ -143,7 +143,28 @@ namespace NzbDrone.Core.Test.Download
             Assert.Throws<ReleaseDownloadException>(() => Subject.DownloadReport(_parseResult));
 
             Mocker.GetMock<IIndexerStatusService>()
-                .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5)), Times.Once());
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5.0)), Times.Once());
+        }
+
+        [Test]
+        public void Download_report_should_trigger_indexer_backoff_on_http429_based_on_date()
+        {
+            var request = new HttpRequest("http://my.indexer.com");
+            var response = new HttpResponse(request, new HttpHeader(), new byte[0], (HttpStatusCode)429);
+            response.Headers["Retry-After"] = DateTime.UtcNow.AddSeconds(300).ToString("r");
+
+            var mock = WithUsenetClient();
+            mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>()))
+                .Callback<RemoteEpisode>(v =>
+                {
+                    throw new ReleaseDownloadException(v.Release, "Error", new TooManyRequestsException(request, response));
+                });
+
+            Assert.Throws<ReleaseDownloadException>(() => Subject.DownloadReport(_parseResult));
+
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.RecordFailure(It.IsAny<int>(),
+                    It.IsInRange<TimeSpan>(TimeSpan.FromMinutes(4.9), TimeSpan.FromMinutes(5.1), Range.Inclusive)), Times.Once());
         }
 
         [Test]
