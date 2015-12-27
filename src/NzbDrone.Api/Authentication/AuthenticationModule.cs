@@ -3,6 +3,7 @@ using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Extensions;
 using Nancy.ModelBinding;
+using NzbDrone.Common.EnsureThat;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
@@ -23,6 +24,11 @@ namespace NzbDrone.Api.Authentication
 
         private Response Login(LoginResource resource)
         {
+            Ensure.That(resource.Username, () => resource.Username).IsNotNullOrWhiteSpace();
+
+            // TODO: A null or empty password should not be allowed, uncomment in v3
+            //Ensure.That(resource.Password, () => resource.Password).IsNotNullOrWhiteSpace();
+
             var user = _userService.FindUser(resource.Username, resource.Password);
 
             if (user == null)
