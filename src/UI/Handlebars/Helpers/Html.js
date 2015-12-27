@@ -14,15 +14,22 @@ window.NzbDrone.imageError = function(img) {
 };
 
 Handlebars.registerHelper('defaultImg', function(src, size) {
+    var endOfPath = /\.jpg($|\?)/g, 
+        oneX = src, twoX, srcset;
+    
     if (!src) {
         return new Handlebars.SafeString('onerror="window.NzbDrone.imageError(this);"');
     }
 
     if (size) {
-        src = src.replace(/\.jpg($|\?)/g, '-' + size + '.jpg$1');
+        oneX = src.replace(endOfPath, '-' + size + '.jpg$1');
+        twoX = src.replace(endOfPath, '-' + size * 2 + '.jpg$1');
+        srcset = 'srcset="{0} 1x, {1} 2x"'.format(oneX, twoX);
     }
 
-    return new Handlebars.SafeString('src="{0}" onerror="window.NzbDrone.imageError(this);"'.format(src));
+    return new Handlebars.SafeString(
+        'src="{0}" {1} onerror="window.NzbDrone.imageError(this);"'.format(oneX, srcset)
+    );
 });
 
 Handlebars.registerHelper('UrlBase', function() {
