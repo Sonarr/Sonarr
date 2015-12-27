@@ -79,7 +79,8 @@ namespace NzbDrone.Api.Episodes
         {
             var resources =  base.ToListResource(modelList);
 
-            return resources.LoadSubtype<EpisodeResource, SeriesResource, Core.Tv.Series>(e => e.SeriesId, _seriesService.GetSeries).ToList();
+            return LoadSeries(resources);
+
         }
 
         public void Handle(EpisodeGrabbedEvent message)
@@ -99,6 +100,11 @@ namespace NzbDrone.Api.Episodes
             {
                 BroadcastResourceChange(ModelAction.Updated, episode.Id);
             }
+        }
+
+        protected virtual List<EpisodeResource> LoadSeries(List<EpisodeResource> resources)
+        {
+            return resources.LoadSubtype<EpisodeResource, SeriesResource, Core.Tv.Series>(e => e.SeriesId, _seriesService.GetSeries).ToList();
         }
     }
 }

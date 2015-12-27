@@ -36,5 +36,10 @@ namespace NzbDrone.Api.Episodes
         {
             _episodeService.SetEpisodeMonitored(episodeResource.Id, episodeResource.Monitored);
         }
+
+        protected override List<EpisodeResource> LoadSeries(List<EpisodeResource> resources)
+        {
+            return resources;
+        }
     }
 }
