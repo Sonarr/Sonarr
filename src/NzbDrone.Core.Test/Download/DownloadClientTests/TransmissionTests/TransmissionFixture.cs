@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         protected TransmissionTorrent _downloading;
         protected TransmissionTorrent _failed;
         protected TransmissionTorrent _completed;
+        protected TransmissionTorrent _magnet;
         protected Dictionary<string, object> _transmissionConfigItems;
 
         [SetUp]
@@ -79,6 +80,17 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                         LeftUntilDone = 0,
                         DownloadDir = "somepath"
                     };
+
+            _magnet = new TransmissionTorrent
+            {
+                HashString = "HASH",
+                IsFinished = false,
+                Status = TransmissionTorrentStatus.Downloading,
+                Name = _title,
+                TotalSize = 0,
+                LeftUntilDone = 100,
+                DownloadDir = "somepath"
+            };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
                   .Setup(s => s.GetHashFromTorrentFile(It.IsAny<byte[]>()))
@@ -171,6 +183,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                 });
         }
 
+        protected void PrepareClientToReturnMagnetItem()
+        {
+            GivenTorrents(new List<TransmissionTorrent>
+                {
+                    _magnet
+                });
+        }
+
         [Test]
         public void queued_item_should_have_required_properties()
         {
@@ -201,6 +221,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             VerifyCompleted(item);
+        }
+
+        [Test]
+        public void magnet_download_should_not_return_the_item()
+        {
+            PrepareClientToReturnMagnetItem();
+            Subject.GetItems().Count().Should().Be(0);
         }
 
         [Test]

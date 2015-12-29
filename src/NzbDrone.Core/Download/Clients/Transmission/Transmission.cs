@@ -99,6 +99,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             foreach (var torrent in torrents)
             {
+                // If totalsize == 0 the torrent is a magnet downloading metadata
+                if (torrent.TotalSize == 0)
+                    continue;
+
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadDir));
 
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace())
