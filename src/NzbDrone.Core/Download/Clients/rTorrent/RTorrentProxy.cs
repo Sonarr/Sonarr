@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [XmlRpcMethod("d.multicall2")]
         object[] TorrentMulticall(params string[] parameters);
 
-        [XmlRpcMethod("load.normal")]
+        [XmlRpcMethod("load.start")]
         int LoadUrl(string target, string data);
 
         [XmlRpcMethod("load.raw")]
