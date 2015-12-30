@@ -44,7 +44,7 @@ namespace NzbDrone.Common.Disk
             {
                 return OsPathKind.Unix;
             }
-            if (path.Contains(':') || path.Contains('\\'))
+            if (HasWindowsDriveLetter(path) || path.Contains('\\'))
             {
                 return OsPathKind.Windows;
             }
@@ -53,6 +53,15 @@ namespace NzbDrone.Common.Disk
                 return OsPathKind.Unix;
             }
             return OsPathKind.Unknown;
+        }
+
+        private static bool HasWindowsDriveLetter(string path)
+        {
+            if (path.Length < 2)    return false;
+            if (!char.IsLetter(path[0]) || path[1] != ':') return false;
+            if (path.Length > 2 && path[2] != '\\' && path[2] != '/') return false;
+
+            return true;
         }
 
         private static string FixSlashes(string path, OsPathKind kind)
@@ -97,7 +106,7 @@ namespace NzbDrone.Common.Disk
             {
                 if (IsWindowsPath)
                 {
-                    return _path.StartsWith(@"\\") || _path.Contains(':');
+                    return _path.StartsWith(@"\\") || HasWindowsDriveLetter(_path);
                 }
                 if (IsUnixPath)
                 {

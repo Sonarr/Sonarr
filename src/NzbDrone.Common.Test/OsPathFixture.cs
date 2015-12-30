@@ -24,6 +24,7 @@ namespace NzbDrone.Common.Test
         [TestCase("/rooted/linux/path", OsPathKind.Unix)]
         [TestCase("/", OsPathKind.Unix)]
         [TestCase("linux/path", OsPathKind.Unix)]
+        [TestCase(@"Castle:unrooted+linux+path", OsPathKind.Unknown)]
         public void should_auto_detect_kind(string path, OsPathKind kind)
         {
             var result = new OsPath(path);
@@ -94,6 +95,8 @@ namespace NzbDrone.Common.Test
         [TestCase(@"rooted\windows\path")]
         [TestCase(@"path")]
         [TestCase("linux/path")]
+        [TestCase(@"Castle:unrooted+linux+path")]
+        [TestCase(@"C:unrooted+linux+path")]
         public void should_detect_unrooted_ospaths(string path)
         {
             var osPath = new OsPath(path);
