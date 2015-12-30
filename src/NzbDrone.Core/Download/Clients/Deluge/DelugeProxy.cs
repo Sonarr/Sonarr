@@ -243,7 +243,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
 
             var restClient = RestClientFactory.BuildClient(url);
-            restClient.Timeout = 4000;
+            restClient.Timeout = 15000;
 
             if (_authPassword != settings.Password || _authCookieContainer == null)
             {
