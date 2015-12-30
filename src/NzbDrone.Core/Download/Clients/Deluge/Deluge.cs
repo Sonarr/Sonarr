@@ -20,13 +20,14 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         private readonly IDelugeProxy _proxy;
 
         public Deluge(IDelugeProxy proxy,
+                      IResolveMagnetLink resolveMagnetLink,
                       ITorrentFileInfoReader torrentFileInfoReader,
                       IHttpClient httpClient,
                       IConfigService configService,
                       IDiskProvider diskProvider,
                       IRemotePathMappingService remotePathMappingService,
                       Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(resolveMagnetLink, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }

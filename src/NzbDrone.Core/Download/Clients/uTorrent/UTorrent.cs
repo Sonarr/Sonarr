@@ -20,13 +20,14 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         private readonly IUTorrentProxy _proxy;
 
         public UTorrent(IUTorrentProxy proxy,
+                        IResolveMagnetLink resolveMagnetLink,
                         ITorrentFileInfoReader torrentFileInfoReader,
                         IHttpClient httpClient,
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(resolveMagnetLink, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;
         }

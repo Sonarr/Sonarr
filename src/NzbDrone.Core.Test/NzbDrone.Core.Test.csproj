@@ -170,11 +170,15 @@
     <Compile Include="Download\DownloadClientTests\UTorrentTests\UTorrentFixture.cs" />
     <Compile Include="Download\DownloadServiceFixture.cs" />
     <Compile Include="Download\FailedDownloadServiceFixture.cs" />
+    <Compile Include="Download\MagnetResolverServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\PendingReleaseServiceFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemovePendingFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveRejectedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\RemoveGrabbedFixture.cs" />
     <Compile Include="Download\Pending\PendingReleaseServiceTests\AddFixture.cs" />
+    <None Include="Files\Download\640FE84C613C17F663551D218689A64E8AEBEABE.torrent.raw">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Files\Indexers\Rarbg\RecentFeed_v1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -22,13 +22,14 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
         private readonly IDiskScanService _diskScanService;
 
         public TorrentBlackhole(IDiskScanService diskScanService,
+                                IResolveMagnetLink resolveMagnetLink,
                                 ITorrentFileInfoReader torrentFileInfoReader,
                                 IHttpClient httpClient,
                                 IConfigService configService,
                                 IDiskProvider diskProvider,
                                 IRemotePathMappingService remotePathMappingService,
                                 Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(resolveMagnetLink, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _diskScanService = diskScanService;
         }

@@ -21,8 +21,10 @@ namespace NzbDrone.Core.Download
     {
         protected readonly IHttpClient _httpClient;
         protected readonly ITorrentFileInfoReader _torrentFileInfoReader;
+        protected readonly IResolveMagnetLink _resolveMagnetLink;
 
-        protected TorrentClientBase(ITorrentFileInfoReader torrentFileInfoReader,
+        protected TorrentClientBase(IResolveMagnetLink resolveMagnetLink,
+                                    ITorrentFileInfoReader torrentFileInfoReader,
                                     IHttpClient httpClient,
                                     IConfigService configService,
                                     IDiskProvider diskProvider,
@@ -32,6 +34,7 @@ namespace NzbDrone.Core.Download
         {
             _httpClient = httpClient;
             _torrentFileInfoReader = torrentFileInfoReader;
+            _resolveMagnetLink = resolveMagnetLink;
         }
         
         public override DownloadProtocol Protocol
@@ -176,7 +179,16 @@ namespace NzbDrone.Core.Download
 
             if (hash != null)
             {
-                actualHash = AddFromMagnetLink(remoteEpisode, hash, magnetUrl);
+                var torrentFile = _resolveMagnetLink.DownloadTorrentFromMagnet(magnetUrl);
+                if (torrentFile != null)
+                {
+                    var filename = string.Format("{0}.torrent", FileNameBuilder.CleanFileName(remoteEpisode.Release.Title));
+                    actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
+                }
+                else
+                {
+                    actualHash = AddFromMagnetLink(remoteEpisode, hash, magnetUrl);
+                }
             }
 
             if (actualHash.IsNotNullOrWhiteSpace() && hash != actualHash)
