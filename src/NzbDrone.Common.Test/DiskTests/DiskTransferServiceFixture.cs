@@ -24,6 +24,10 @@ namespace NzbDrone.Common.Test.DiskTests
         {
             Mocker.GetMock<IDiskProvider>(MockBehavior.Strict);
 
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.GetMount(It.IsAny<string>()))
+                .Returns((IMount)null);
+
             WithEmulatedDiskProvider();
 
             WithExistingFile(_sourcePath);

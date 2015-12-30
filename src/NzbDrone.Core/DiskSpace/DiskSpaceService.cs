@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.DiskSpace
 
         private IEnumerable<DiskSpace> GetFixedDisksFreeSpace()
         {
-            return GetDiskSpace(_diskProvider.GetFixedDrives(), true);
+            return GetDiskSpace(_diskProvider.GetMounts().Where(d => d.DriveType == DriveType.Fixed).Select(d => d.RootDirectory), true);
         }
 
         private IEnumerable<DiskSpace> GetDiskSpace(IEnumerable<string> paths, bool suppressWarnings = false)

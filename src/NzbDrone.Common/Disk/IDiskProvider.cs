@@ -40,11 +40,11 @@ namespace NzbDrone.Common.Disk
         void SetPermissions(string filename, WellKnownSidType accountSid, FileSystemRights rights, AccessControlType controlType);
         FileAttributes GetFileAttributes(string path);
         void EmptyFolder(string path);
-        string[] GetFixedDrives();
         string GetVolumeLabel(string path);
         FileStream OpenReadStream(string path);
         FileStream OpenWriteStream(string path);
-        List<DriveInfo> GetDrives();
+        List<IMount> GetMounts();
+        IMount GetMount(string path);
         List<DirectoryInfo> GetDirectoryInfos(string path);
         List<FileInfo> GetFileInfos(string path);
     }

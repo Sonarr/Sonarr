@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using FluentValidation.Validators;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Validation.Paths
 {
@@ -31,17 +32,11 @@ namespace NzbDrone.Core.Validation.Paths
 
             if (!DriveRegex.IsMatch(path)) return true;
             
-            var drives = _diskProvider.GetDrives();
+            var mount = _diskProvider.GetMount(path);
 
-            foreach (var drive in drives)
+            if (mount != null && mount.DriveType == DriveType.Network)
             {
-                if (path.StartsWith(drive.Name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    if (drive.DriveType == DriveType.Network)
-                    {
-                        return false;
-                    }
-                }
+                return false;
             }
 
             return true;

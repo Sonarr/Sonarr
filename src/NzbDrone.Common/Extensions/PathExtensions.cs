@@ -73,8 +73,14 @@ namespace NzbDrone.Common.Extensions
 
         public static bool IsParentPath(this string parentPath, string childPath)
         {
-            parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
-            childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
+            if (parentPath != "/")
+            {
+                parentPath = parentPath.TrimEnd(Path.DirectorySeparatorChar);
+            }
+            if (childPath != "/")
+            {
+                childPath = childPath.TrimEnd(Path.DirectorySeparatorChar);
+            }
 
             var parent = new DirectoryInfo(parentPath);
             var child = new DirectoryInfo(childPath);
