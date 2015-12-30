@@ -103,12 +103,12 @@ namespace NzbDrone.Common.Disk
 
         private List<FileSystemModel> GetDrives()
         {
-            return _diskProvider.GetDrives()
+            return _diskProvider.GetMounts()
                                 .Select(d => new FileSystemModel
                                              {
                                                  Type = FileSystemEntityType.Drive,
-                                                 Name = GetVolumeName(d),
-                                                 Path = d.Name,
+                                                 Name = d.VolumeLabel,
+                                                 Path = d.RootDirectory,
                                                  LastModified = null
                                              })
                                 .ToList();
@@ -156,16 +156,6 @@ namespace NzbDrone.Common.Disk
             }
 
             return path;
-        }
-
-        private string GetVolumeName(DriveInfo driveInfo)
-        {
-            if (driveInfo.VolumeLabel.IsNullOrWhiteSpace())
-            {
-                return driveInfo.Name;
-            }
-
-            return string.Format("{0} ({1})", driveInfo.Name, driveInfo.VolumeLabel);
         }
         
         private string GetParent(string path)

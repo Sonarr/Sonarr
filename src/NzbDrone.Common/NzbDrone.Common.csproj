@@ -72,6 +72,8 @@
     <Compile Include="ConvertBase32.cs" />
     <Compile Include="Crypto\HashProvider.cs" />
     <Compile Include="Disk\FileSystemLookupService.cs" />
+    <Compile Include="Disk\DriveInfoMount.cs" />
+    <Compile Include="Disk\IMount.cs" />
     <Compile Include="Disk\RelativeFileSystemModel.cs" />
     <Compile Include="Disk\FileSystemModel.cs" />
     <Compile Include="Disk\FileSystemResult.cs" />

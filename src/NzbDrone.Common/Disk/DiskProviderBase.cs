@@ -346,12 +346,12 @@ namespace NzbDrone.Common.Disk
 
         public string[] GetFixedDrives()
         {
-            return (DriveInfo.GetDrives().Where(x => x.DriveType == DriveType.Fixed).Select(x => x.Name)).ToArray();
+            return GetMounts().Where(x => x.DriveType == DriveType.Fixed).Select(x => x.RootDirectory).ToArray();
         }
 
         public string GetVolumeLabel(string path)
         {
-            var driveInfo = DriveInfo.GetDrives().SingleOrDefault(d => d.Name == path);
+            var driveInfo = GetMounts().SingleOrDefault(d => d.RootDirectory.PathEquals(path));
 
             if (driveInfo == null)
             {
@@ -376,11 +376,28 @@ namespace NzbDrone.Common.Disk
             return new FileStream(path, FileMode.Create);
         }
 
-        public List<DriveInfo> GetDrives()
+        public virtual List<IMount> GetMounts()
+        {
+            return GetDriveInfoMounts();
+        }
+
+        public virtual IMount GetMount(string path)
+        {
+            var mounts = GetMounts();
+
+            return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
+                                         drive.RootDirectory.IsParentPath(path))
+                      .OrderByDescending(drive => drive.RootDirectory.Length)
+                      .FirstOrDefault();
+        }
+
+        protected List<IMount> GetDriveInfoMounts()
         {
             return DriveInfo.GetDrives()
-                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network)
+                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
                             .Where(d => d.IsReady)
+                            .Select(d => new DriveInfoMount(d))
+                            .Cast<IMount>()
                             .ToList();
         }
 
