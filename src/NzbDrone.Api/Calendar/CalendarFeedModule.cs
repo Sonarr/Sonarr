@@ -22,14 +22,31 @@ namespace NzbDrone.Api.Calendar
 
         private Response GetCalendarFeed()
         {
-            var start = DateTime.Today.AddDays(-7);
-            var end = DateTime.Today.AddDays(28);
+            var pastDays = 7;
+            var futureDays = 28;            
+            var start = DateTime.Today.AddDays(-pastDays);
+            var end = DateTime.Today.AddDays(futureDays);
 
+            // TODO: Remove start/end parameters in v3, they don't work well for iCal
             var queryStart = Request.Query.Start;
             var queryEnd = Request.Query.End;
+            var queryPastDays = Request.Query.PastDays;
+            var queryFutureDays = Request.Query.FutureDays;
 
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
             if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
+
+            if (queryPastDays.HasValue)
+            {
+                pastDays = int.Parse(queryPastDays.Value);
+                start = DateTime.Today.AddDays(-pastDays);
+            }
+
+            if (queryFutureDays.HasValue)
+            {
+                futureDays = int.Parse(queryFutureDays.Value);
+                end = DateTime.Today.AddDays(futureDays);
+            }
 
             var episodes = _episodeService.EpisodesBetweenDates(start, end, false);
             var icalCalendar = new iCalendar();
