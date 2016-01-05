@@ -208,6 +208,22 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
+        public void should_use_folder_quality_when_greater_than_file_quality()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+            GivenVideoFiles(new string[] { @"C:\Test\Unsorted\The.Office.S03E115.mkv".AsOsAgnostic() });
+
+            _localEpisode.Path = _videoFiles.Single();
+            _localEpisode.Quality.Quality = Quality.HDTV720p;
+
+            var expectedQuality = new QualityModel(Quality.Bluray720p);
+
+            var result = Subject.GetImportDecisions(_videoFiles, _series, new ParsedEpisodeInfo { Quality = expectedQuality }, true);
+
+            result.Single().LocalEpisode.Quality.Should().Be(expectedQuality);
+        }
+
+        [Test]
         public void should_not_throw_if_episodes_are_not_found()
         {
             GivenSpecifications(_pass1);

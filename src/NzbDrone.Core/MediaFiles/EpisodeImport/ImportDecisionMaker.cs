@@ -181,13 +181,38 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         private QualityModel GetQuality(ParsedEpisodeInfo folderInfo, QualityModel fileQuality, Series series)
         {
-            if (folderInfo != null && folderInfo.Quality.Quality != Quality.Unknown && fileQuality.QualitySource == QualitySource.Extension)
+            if (UseFolderQuality(folderInfo, fileQuality, series))
             {
                 _logger.Debug("Using quality from folder: {0}", folderInfo.Quality);
                 return folderInfo.Quality;
             }
 
             return fileQuality;
+        }
+
+        private bool UseFolderQuality(ParsedEpisodeInfo folderInfo, QualityModel fileQuality, Series series)
+        {
+            if (folderInfo == null)
+            {
+                return false;
+            }
+
+            if (folderInfo.Quality.Quality == Quality.Unknown)
+            {
+                return false;
+            }
+
+            if (fileQuality.QualitySource == QualitySource.Extension)
+            {
+                return true;
+            }
+
+            if (new QualityModelComparer(series.Profile).Compare(folderInfo.Quality, fileQuality) > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
