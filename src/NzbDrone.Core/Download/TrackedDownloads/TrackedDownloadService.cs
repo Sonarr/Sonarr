@@ -75,7 +75,10 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         trackedDownload.RemoteEpisode.Series == null ||
                         trackedDownload.RemoteEpisode.Episodes.Empty())
                     {
-                        parsedEpisodeInfo = Parser.Parser.ParseTitle(firstHistoryItem.SourceTitle);
+                        // Try parsing the original source title and if that fails, try parsing it as a special
+                        // TODO: Pass the TVDB ID and TVRage IDs in as well so we have a better chance for finding the item
+                        parsedEpisodeInfo = Parser.Parser.ParseTitle(firstHistoryItem.SourceTitle) ?? _parsingService.ParseSpecialEpisodeTitle(firstHistoryItem.SourceTitle, 0, 0);
+
                         if (parsedEpisodeInfo != null)
                         {
                             trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, firstHistoryItem.SeriesId, historyItems.Where(v => v.EventType == HistoryEventType.Grabbed).Select(h => h.EpisodeId).Distinct());
