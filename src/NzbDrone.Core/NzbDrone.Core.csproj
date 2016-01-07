@@ -357,6 +357,33 @@
     <Compile Include="Download\Clients\Nzbget\NzbgetQueueItem.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetResponse.cs" />
     <Compile Include="Download\Clients\Nzbget\NzbgetSettings.cs" />
+    <Compile Include="Download\Clients\NzbVortex\JsonConverters\NzbVortexLoginResultTypeConverter.cs" />
+    <Compile Include="Download\Clients\NzbVortex\JsonConverters\NzbVortexResultTypeConverter.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexGroup.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexNotLoggedInException.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexAuthenticationException.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexJsonError.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexPriority.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexProxy.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexFiles.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexQueue.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexFile.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexQueueItem.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexLoginResultType.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexStateType.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexResultType.cs" />
+    <Compile Include="Download\Clients\NzbVortex\NzbVortexSettings.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexAddResponse.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexAuthNonceResponse.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexAuthResponse.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexGroupResponse.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexResponseBase.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexRetryResponse.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexApiVersionResponse.cs" />
+    <Compile Include="Download\Clients\NzbVortex\Responses\NzbVortexVersionResponse.cs" />
     <Compile Include="Download\Clients\Pneumatic\Pneumatic.cs" />
     <Compile Include="Download\Clients\Pneumatic\PneumaticSettings.cs" />
     <Compile Include="Download\Clients\qBittorrent\DigestAuthenticator.cs" />

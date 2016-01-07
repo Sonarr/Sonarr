@@ -161,6 +161,7 @@
     <Compile Include="Download\DownloadClientTests\DelugeTests\DelugeFixture.cs" />
     <Compile Include="Download\DownloadClientTests\DownloadClientFixtureBase.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetTests\NzbgetFixture.cs" />
+    <Compile Include="Download\DownloadClientTests\NzbVortexTests\NzbVortexFixture.cs" />
     <Compile Include="Download\DownloadClientTests\PneumaticProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\RTorrentTests\RTorrentFixture.cs" />
     <Compile Include="Download\DownloadClientTests\QBittorrentTests\QBittorrentFixture.cs" />
