@@ -424,6 +424,13 @@
     <Compile Include="Download\Clients\rTorrent\RTorrentProxy.cs" />
     <Compile Include="Download\Clients\rTorrent\RTorrentSettings.cs" />
     <Compile Include="Download\Clients\rTorrent\RTorrentTorrent.cs" />
+    <Compile Include="Download\Clients\Putio\Putio.cs" />
+    <Compile Include="Download\Clients\Putio\PutioException.cs" />
+    <Compile Include="Download\Clients\Putio\PutioPriority.cs" />
+    <Compile Include="Download\Clients\Putio\PutioProxy.cs" />
+    <Compile Include="Download\Clients\Putio\PutioSettings.cs" />
+    <Compile Include="Download\Clients\Putio\PutioTorrent.cs" />
+    <Compile Include="Download\Clients\Putio\PutioTorrentStatus.cs" />
     <Compile Include="Download\Clients\Transmission\Transmission.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionException.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionProxy.cs" />
