@@ -15,8 +15,8 @@ namespace NzbDrone.Core.Notifications.Twitter
     {
         void SendNotification(string message, TwitterSettings settings);
         ValidationFailure Test(TwitterSettings settings);
-        string GetOAuthRedirect(string callbackUrl);
-        object GetOAuthToken(string oauthToken, string oauthVerifier);
+        string GetOAuthRedirect(string consumerKey, string consumerSecret, string callbackUrl);
+        object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier);
     }
 
     public class TwitterService : ITwitterService
@@ -24,8 +24,8 @@ namespace NzbDrone.Core.Notifications.Twitter
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        private static string _consumerKey = "5jSR8a3cp0ToOqSMLMv5GtMQD";
-        private static string _consumerSecret = "dxoZjyMq4BLsC8KxyhSOrIndhCzJ0Dik2hrLzqyJcqoGk4Pfsp";
+//        private static string _consumerKey = "5jSR8a3cp0ToOqSMLMv5GtMQD";
+//        private static string _consumerSecret = "dxoZjyMq4BLsC8KxyhSOrIndhCzJ0Dik2hrLzqyJcqoGk4Pfsp";
 
         public TwitterService(IHttpClient httpClient, Logger logger)
         {
@@ -43,10 +43,10 @@ namespace NzbDrone.Core.Notifications.Twitter
             return HttpUtility.ParseQueryString(response.Content);
         }
 
-        public object GetOAuthToken(string oauthToken, string oauthVerifier)
+        public object GetOAuthToken(string consumerKey, string consumerSecret, string oauthToken, string oauthVerifier)
         {
             // Creating a new instance with a helper method
-            var oAuthRequest = OAuthRequest.ForAccessToken(_consumerKey, _consumerSecret, oauthToken, "", oauthVerifier);
+            var oAuthRequest = OAuthRequest.ForAccessToken(consumerKey, consumerSecret, oauthToken, "", oauthVerifier);
             oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/access_token";
             var qscoll = OAuthQuery(oAuthRequest);
             
@@ -57,10 +57,10 @@ namespace NzbDrone.Core.Notifications.Twitter
             };
         }
 
-        public string GetOAuthRedirect(string callbackUrl)
+        public string GetOAuthRedirect(string consumerKey, string consumerSecret, string callbackUrl)
         {
             // Creating a new instance with a helper method
-            var oAuthRequest = OAuthRequest.ForRequestToken(_consumerKey, _consumerSecret, callbackUrl);
+            var oAuthRequest = OAuthRequest.ForRequestToken(consumerKey, consumerSecret, callbackUrl);
             oAuthRequest.RequestUrl = "https://api.twitter.com/oauth/request_token";
             var qscoll = OAuthQuery(oAuthRequest);
 
@@ -73,10 +73,10 @@ namespace NzbDrone.Core.Notifications.Twitter
             {
                 var oAuth = new TinyTwitter.OAuthInfo
                 {
+                    ConsumerKey = settings.ConsumerKey,
+                    ConsumerSecret = settings.ConsumerSecret,
                     AccessToken = settings.AccessToken,
-                    AccessSecret = settings.AccessTokenSecret,
-                    ConsumerKey = _consumerKey,
-                    ConsumerSecret = _consumerSecret
+                    AccessSecret = settings.AccessTokenSecret
                 };
 
                 var twitter = new TinyTwitter.TinyTwitter(oAuth);
@@ -96,9 +96,9 @@ namespace NzbDrone.Core.Notifications.Twitter
                     twitter.UpdateStatus(message);                    
                 }
             }
-            catch (WebException e)
+            catch (WebException ex)
             {
-                using (var response = e.Response)
+                using (var response = ex.Response)
                 {
                     var httpResponse = (HttpWebResponse)response;
 
@@ -107,14 +107,14 @@ namespace NzbDrone.Core.Notifications.Twitter
                         if (responseStream == null)
                         {
                             _logger.Trace("Status Code: {0}", httpResponse.StatusCode);
-                            throw new TwitterException("Error received from Twitter: " + httpResponse.StatusCode, _logger , e);
+                            throw new TwitterException("Error received from Twitter: " + httpResponse.StatusCode, ex);
                         }
 
                         using (var reader = new StreamReader(responseStream))
                         {
                             var responseBody = reader.ReadToEnd();
                             _logger.Trace("Reponse: {0} Status Code: {1}", responseBody, httpResponse.StatusCode);
-                            throw new TwitterException("Error received from Twitter: " + responseBody, _logger, e);
+                            throw new TwitterException("Error received from Twitter: " + responseBody, ex);
                         }
                     }
                 }

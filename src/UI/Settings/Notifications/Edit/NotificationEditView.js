@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var vent = require('vent');
 var Marionette = require('marionette');
 var DeleteView = require('../Delete/NotificationDeleteView');
@@ -86,10 +87,20 @@ var view = Marionette.ItemView.extend({
     },
 
     _onAuthorizeNotification : function() {
+        this.ui.indicator.show();
+
         var self = this;
         var callbackUrl = window.location.origin + '/oauth.html';
-        this.ui.indicator.show();
-        var promise = this.model.connectData(this.ui.authorizedNotificationButton.data('value') + '?callbackUrl=' + callbackUrl);
+        var fields = this.model.get('fields');
+        var consumerKeyObj = _.findWhere(fields, { name: 'ConsumerKey' });
+        var consumerSecretObj = _.findWhere(fields, { name: 'ConsumerSecret' });
+        var queryParams = {
+            callbackUrl: callbackUrl,
+            consumerKey: (consumerKeyObj ? consumerKeyObj.value : ''),
+            consumerSecret: (consumerSecretObj ? consumerSecretObj.value : '')
+        };
+
+        var promise = this.model.connectData(this.ui.authorizedNotificationButton.data('value'), queryParams);
 
         promise.always(function() {
             self.ui.indicator.hide();

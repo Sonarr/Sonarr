@@ -9,6 +9,8 @@ namespace NzbDrone.Core.Notifications.Twitter
     {
         public TwitterSettingsValidator()
         {
+            RuleFor(c => c.ConsumerKey).NotEmpty();
+            RuleFor(c => c.ConsumerSecret).NotEmpty();
             RuleFor(c => c.AccessToken).NotEmpty();
             RuleFor(c => c.AccessTokenSecret).NotEmpty();
             //TODO: Validate that it is a valid username (numbers, letters and underscores - I think)
@@ -30,19 +32,25 @@ namespace NzbDrone.Core.Notifications.Twitter
             AuthorizeNotification = "step1";
         }
 
-        [FieldDefinition(0, Label = "Access Token", Advanced = true)]
+        [FieldDefinition(0, Label = "Consumer Key", HelpText = "Consumer key from a Twitter application", HelpLink = "https://github.com/Sonarr/Sonarr/wiki/Twitter-Notifications")]
+        public string ConsumerKey { get; set; }
+
+        [FieldDefinition(1, Label = "Consumer Secret", HelpText = "Consumer secret from a Twitter application", HelpLink = "https://github.com/Sonarr/Sonarr/wiki/Twitter-Notifications")]
+        public string ConsumerSecret { get; set; }
+
+        [FieldDefinition(2, Label = "Access Token", Advanced = true)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(1, Label = "Access Token Secret", Advanced = true)]
+        [FieldDefinition(3, Label = "Access Token Secret", Advanced = true)]
         public string AccessTokenSecret { get; set; }
 
-        [FieldDefinition(2, Label = "Mention", HelpText = "Mention this user in sent tweets")]
+        [FieldDefinition(4, Label = "Mention", HelpText = "Mention this user in sent tweets")]
         public string Mention { get; set; }
 
-        [FieldDefinition(3, Label = "Direct Message", Type = FieldType.Checkbox, HelpText = "Send a direct message instead of a public message")]
+        [FieldDefinition(5, Label = "Direct Message", Type = FieldType.Checkbox, HelpText = "Send a direct message instead of a public message")]
         public bool DirectMessage { get; set; }
 
-        [FieldDefinition(4, Label = "Connect to twitter", Type = FieldType.Action)]
+        [FieldDefinition(6, Label = "Connect to twitter", Type = FieldType.Action)]
         public string AuthorizeNotification { get; set; }
 
         public NzbDroneValidationResult Validate()

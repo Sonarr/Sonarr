@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Notifications.Twitter
                 {
                     nextStep = "step2",
                     action = "openWindow",
-                    url = _twitterService.GetOAuthRedirect(query["callbackUrl"].ToString())
+                    url = _twitterService.GetOAuthRedirect(query["consumerKey"].ToString(), query["consumerSecret"].ToString(), query["callbackUrl"].ToString())
                 };
             }
             else if (stage == "step2")
@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Notifications.Twitter
                 return new
                 {
                     action = "updateFields",
-                    fields = _twitterService.GetOAuthToken(query["oauth_token"].ToString(), query["oauth_verifier"].ToString())
+                    fields = _twitterService.GetOAuthToken(query["consumerKey"].ToString(), query["consumerSecret"].ToString(), query["oauth_token"].ToString(), query["oauth_verifier"].ToString())
                 };
             }
             return new {};
