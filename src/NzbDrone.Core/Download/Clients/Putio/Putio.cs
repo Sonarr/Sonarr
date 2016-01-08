@@ -41,19 +41,14 @@ namespace NzbDrone.Core.Download.Clients.Putio
         }
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            _proxy.AddTorrentFromUrl(magnetLink, GetDownloadDirectory(), Settings);
+            _proxy.AddTorrentFromUrl(magnetLink, Settings);
             return hash;
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            _proxy.AddTorrentFromData(fileContent, GetDownloadDirectory(), Settings);
+            _proxy.AddTorrentFromData(fileContent, Settings);
             return hash;
-        }
-
-        private string GetDownloadDirectory()
-        {
-            return string.Format("{0}", Settings.SaveParentId);
         }
 
         public override IEnumerable<DownloadClientItem> GetItems()
@@ -133,7 +128,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            _proxy.RemoveTorrent(downloadId.ToLower(), deleteData, Settings);
+            _proxy.RemoveTorrent(downloadId.ToLower(), Settings);
         }
 
         public override DownloadClientStatus GetStatus()

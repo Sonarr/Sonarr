@@ -31,12 +31,6 @@ namespace NzbDrone.Core.Download.Clients.Putio
         [FieldDefinition(1, Label = "Save Parent ID", Type = FieldType.Textbox, HelpText = "Adding a save parent ID specific to Sonarr avoids conflicts with unrelated downloads, but it's optional. Creates a .[SaveParentId] subdirectory in the output directory.")]
         public string SaveParentId { get; set; }
 
-        [FieldDefinition(2, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(PutioPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
-        public int RecentTvPriority { get; set; }
-
-        [FieldDefinition(3, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(PutioPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
-        public int OlderTvPriority { get; set; }
-
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));

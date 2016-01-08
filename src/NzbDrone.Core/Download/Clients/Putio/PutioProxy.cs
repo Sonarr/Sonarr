@@ -15,9 +15,9 @@ namespace NzbDrone.Core.Download.Clients.Putio
     public interface IPutioProxy
     {
         List<PutioTorrent> GetTorrents(PutioSettings settings);
-        void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, PutioSettings settings);
-        void AddTorrentFromData(byte[] torrentData, string downloadDirectory, PutioSettings settings);
-        void RemoveTorrent(string hash, bool removeData, PutioSettings settings);
+        void AddTorrentFromUrl(string torrentUrl, PutioSettings settings);
+        void AddTorrentFromData(byte[] torrentData, PutioSettings settings);
+        void RemoveTorrent(string hash, PutioSettings settings);
         Dictionary<String, Object> GetAccountSettings(PutioSettings settings);
     }
 
@@ -38,48 +38,21 @@ namespace NzbDrone.Core.Download.Clients.Putio
             return transfers;
         }
 
-        public void AddTorrentFromUrl(string torrentUrl, string downloadDirectory, PutioSettings settings)
+        public void AddTorrentFromUrl(string torrentUrl, PutioSettings settings)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("url", torrentUrl);
-
-            if (!downloadDirectory.IsNullOrWhiteSpace())
-            {
-                arguments.Add("save_parent_id", downloadDirectory);
-            }
-
             ProcessRequest(Method.POST, "transfers/add", arguments, settings);
         }
 
-        public void AddTorrentFromData(byte[] torrentData, string downloadDirectory, PutioSettings settings)
+        public void AddTorrentFromData(byte[] torrentData, PutioSettings settings)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("metainfo", Convert.ToBase64String(torrentData));
-
-            if (!downloadDirectory.IsNullOrWhiteSpace())
-            {
-                arguments.Add("save_parent_id", downloadDirectory);
-            }
-
             ProcessRequest(Method.POST, "transfers/add", arguments, settings);
         }
 
-        public string GetVersion(PutioSettings settings)
-        {
-            // Gets the Putio version.
-            var config = GetConfig(settings);
-            var version = config["version"];
-            return version.ToString();
-        }
-
-        public Dictionary<string, object> GetConfig(PutioSettings settings)
-        {
-            var config = new Dictionary<string, object>();
-            config.Add("version", "2");
-            return config;
-        }
-
-        public void RemoveTorrent(string hashString, bool removeData, PutioSettings settings)
+        public void RemoveTorrent(string hashString, PutioSettings settings)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("transfer_ids", new string[] { hashString });
@@ -98,7 +71,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
             return result;
         }
 
-        public Dictionary<String, Object> ProcessRequest(Method method, string resource, object arguments, PutioSettings settings)
+        public Dictionary<String, Object> ProcessRequest(Method method, string resource, Dictionary<String, Object> arguments, PutioSettings settings)
         {
             var client = BuildClient(settings);
 
@@ -108,7 +81,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
             if (arguments != null)
             {
-                request.AddObject(arguments);
+                foreach (KeyValuePair<string, object> e in arguments)
+                {
+                    request.AddParameter(e.Key, e.Value);
+                }
             }
 
             _logger.Debug("Method: {0} Url: {1}", method, client.BuildUri(request));
