@@ -26,13 +26,8 @@ module.exports = Marionette.Layout.extend({
     ],
 
     initialize : function() {
-        var self = this;
-
         this.seriesCollection = SeriesCollection.clone();
-
-        _.each(this.seriesCollection.models, function (model) {
-            model.collection = self.seriesCollection;
-        });
+        this._setModelCollection();
 
         this.listenTo(this.seriesCollection, 'row:selected', this._onSelected);
         this.listenTo(this, 'modal:afterShow', this._setFocus);
@@ -83,6 +78,7 @@ module.exports = Marionette.Layout.extend({
 
     _filter : function (term) {
         this.seriesCollection.setFilter(['title', term, 'contains']);
+        this._setModelCollection();
     },
 
     _onSelected : function (e) {
@@ -93,5 +89,13 @@ module.exports = Marionette.Layout.extend({
 
     _setFocus : function () {
         this.ui.filter.focus();
+    },
+    
+    _setModelCollection: function () {
+        var self = this;
+        
+        _.each(this.seriesCollection.models, function (model) {
+            model.collection = self.seriesCollection;
+        });
     }
 });
