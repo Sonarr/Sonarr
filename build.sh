@@ -5,7 +5,7 @@ outputFolderMono='./_output_mono'
 outputFolderOsx='./_output_osx'
 outputFolderOsxApp='./_output_osx_app'
 testPackageFolder='./_tests/'
-testSearchPattern='*.Test/bin/x86/Release/*'
+testSearchPattern='*.Test/bin/x86/Release'
 sourceFolder='./src'
 updateFolder=$outputFolder/NzbDrone.Update
 updateFolderMono=$outputFolderMono/NzbDrone.Update
@@ -199,7 +199,7 @@ PackageTests()
     rm -rf $testPackageFolder
     mkdir $testPackageFolder
 
-    find . -maxdepth 6 -path $testSearchPattern -exec cp -r "{}" $testPackageFolder \;
+    find $sourceFolder -path $testSearchPattern -exec cp -r -u -T "{}" $testPackageFolder \;
 
     if [ $runtime = "dotnet" ] ; then
         $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
