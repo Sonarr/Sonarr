@@ -7,7 +7,6 @@ var autoprefixer = require('autoprefixer-core');
 var livereload = require('gulp-livereload');
 
 var print = require('gulp-print');
-var phantom = require('./phantom');
 var paths = require('./paths');
 var errorHandler = require('./errorHandler');
 
@@ -28,14 +27,6 @@ gulp.task('less', function() {
         paths.src.root + 'System/Update/update.less',
         paths.src.root + 'System/Info/info.less'
     ];
-
-    if (phantom) {
-        src = [
-            paths.src.content + 'Bootstrap/bootstrap.less',
-            paths.src.content + 'Vendor/vendor.less',
-            paths.src.content + 'sonarr.less'
-        ];
-    }
 
     return gulp.src(src)
         .pipe(print())

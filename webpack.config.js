@@ -1,17 +1,11 @@
 var path = require('path');
 var stylish = require('jshint-stylish');
 var webpack = require('webpack');
-var phantom = require('./gulp/phantom');
 
 var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin();
 
 var uiFolder = 'UI';
 var root = path.join(__dirname, 'src', uiFolder);
-
-if (phantom) {
-  uiFolder = 'UI.Phantom';
-  root = path.join(__dirname, uiFolder);
-}
 
 module.exports = {
   devtool : '#source-map',
