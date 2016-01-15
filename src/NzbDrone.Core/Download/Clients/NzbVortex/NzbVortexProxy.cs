@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
         public string DownloadNzb(byte[] nzbData, string filename, int priority, NzbVortexSettings settings)
         {
-            var request = BuildRequest("/nzb/add", Method.POST, true, settings);
+            var request = BuildRequest("nzb/add", Method.POST, true, settings);
 
             request.AddFile("name", nzbData, filename, "application/x-nzb");
             request.AddQueryParameter("priority", priority.ToString());
