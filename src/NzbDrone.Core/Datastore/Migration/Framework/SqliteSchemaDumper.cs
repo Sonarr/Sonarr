@@ -11,14 +11,14 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
     // The original implementation had bad support for escaped identifiers, amongst other things.
     public class SqliteSchemaDumper
     {
-        public SqliteSchemaDumper(SqliteProcessor processor, IAnnouncer announcer)
+        public SqliteSchemaDumper(SQLiteProcessor processor, IAnnouncer announcer)
         {
             Announcer = announcer;
             Processor = processor;
         }
 
         public virtual IAnnouncer Announcer { get; set; }
-        public SqliteProcessor Processor { get; set; }
+        public SQLiteProcessor Processor { get; set; }
 
         protected internal virtual TableDefinition ReadTableSchema(string sqlSchema)
         {
