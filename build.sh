@@ -51,6 +51,9 @@ CleanFolder()
     echo "Removing vshost files"
     find $path -name "*.vshost.exe" -exec rm "{}" \;
 
+    echo "Removing dylib files"
+    find $path -name "*.dylib" -exec rm "{}" \;
+
     if [ -d $path/NuGet ] ; then
         echo "Removing NuGet"
         rm -rf $path/NuGet
@@ -119,7 +122,16 @@ CreateMdbs()
 {
     local path=$1
     if [ $runtime = "dotnet" ] ; then
-        find $path \( -name "*.exe" -o -name "*.dll" \) -not -name "MediaInfo.dll" -not -name "sqlite3.dll" -exec tools/pdb2mdb/pdb2mdb.exe "{}" \;
+        local pdbFiles=( $(find $path -name "*.pdb") )
+        for filename in "${pdbFiles[@]}"
+        do
+          if [ -e ${filename%.pdb}.dll ]  ; then
+            tools/pdb2mdb/pdb2mdb.exe ${filename%.pdb}.dll
+          fi
+          if [ -e ${filename%.pdb}.exe ]  ; then
+            tools/pdb2mdb/pdb2mdb.exe ${filename%.pdb}.exe
+          fi
+        done
     fi
 }
 
