@@ -45,7 +45,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 
 ### License ###
 * [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
-Copyright 2010-2015
+Copyright 2010-2016
 
 
 ### Sponsors ###
