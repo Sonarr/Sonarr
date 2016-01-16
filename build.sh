@@ -97,9 +97,9 @@ Build()
     else
         BuildWithXbuild
     fi
-    
+
     CleanFolder $outputFolder false
-    
+
     AddJsonNet
 
     echo "Removing Mono.Posix.dll"
@@ -110,11 +110,12 @@ Build()
 
 RunGulp()
 {
-    echo "##teamcity[progressStart 'Running Gulp']"
-
+    echo "##teamcity[progressStart 'npm install']"
     CheckExitCode npm install
-    CheckExitCode gulp build
+    echo "##teamcity[progressFinish 'npm install']"
 
+    echo "##teamcity[progressStart 'Running Gulp']"
+    CheckExitCode npm gulp build
     echo "##teamcity[progressFinish 'Running Gulp']"
 }
 
@@ -172,6 +173,8 @@ PackageMono()
 
     echo "Adding NzbDrone.Mono to UpdatePackage"
     cp $outputFolderMono/NzbDrone.Mono.* $updateFolderMono
+
+    echo "##teamcity[progressFinish 'Creating Mono Package']"
 }
 
 PackageOsx()
