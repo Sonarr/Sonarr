@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Indexers
         ReleaseInfo GetLastRssSyncReleaseInfo(int indexerId);
         void RecordSuccess(int indexerId);
         void RecordFailure(int indexerId, TimeSpan minimumBackOff = default(TimeSpan));
+        void RecordConnectionFailure(int indexerId);
 
         void UpdateRssSyncStatus(int indexerId, ReleaseInfo releaseInfo);
     }
@@ -85,7 +86,7 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        public void RecordFailure(int indexerId, TimeSpan minimumBackOff = default(TimeSpan))
+        protected void RecordFailure(int indexerId, TimeSpan minimumBackOff, bool escalate)
         {
             lock (_syncRoot)
             {
@@ -99,7 +100,10 @@ namespace NzbDrone.Core.Indexers
                 }
 
                 status.MostRecentFailure = now;
-                status.EscalationLevel = Math.Min(MaximumEscalationLevel, status.EscalationLevel + 1);
+                if (escalate)
+                {
+                    status.EscalationLevel = Math.Min(MaximumEscalationLevel, status.EscalationLevel + 1);
+                }
 
                 if (minimumBackOff != TimeSpan.Zero)
                 {
@@ -114,6 +118,17 @@ namespace NzbDrone.Core.Indexers
                 _indexerStatusRepository.Upsert(status);
             }
         }
+
+        public void RecordFailure(int indexerId, TimeSpan minimumBackOff = default(TimeSpan))
+        {
+            RecordFailure(indexerId, minimumBackOff, true);
+        }
+
+        public void RecordConnectionFailure(int indexerId)
+        {
+            RecordFailure(indexerId, default(TimeSpan), false);
+        }
+
 
         public void UpdateRssSyncStatus(int indexerId, ReleaseInfo releaseInfo)
         {

@@ -202,7 +202,16 @@ namespace NzbDrone.Core.Indexers
             }
             catch (WebException webException)
             {
-                _indexerStatusService.RecordFailure(Definition.Id);
+                if (webException.Status == WebExceptionStatus.NameResolutionFailure ||
+                    webException.Status == WebExceptionStatus.ConnectFailure)
+                {
+                    _indexerStatusService.RecordConnectionFailure(Definition.Id);
+                }
+                else
+                {
+                    _indexerStatusService.RecordFailure(Definition.Id);
+                }
+
                 if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
                     webException.Message.Contains("timed out"))
                 {
