@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         void SetTorrentDownloadDirectory(string hash, string directory, RTorrentSettings settings);
         bool HasHashTorrent(string hash, RTorrentSettings settings);
         void StartTorrent(string hash, RTorrentSettings settings);
+        void SetDeferredMagnetProperties(string hash, string category, string directory, RTorrentPriority priority, RTorrentSettings settings);
     }
 
     public interface IRTorrent : IXmlRpcProxy
@@ -45,6 +46,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         [XmlRpcMethod("d.directory.set")]
         int SetDirectory(string hash, string directory);
+
+        [XmlRpcMethod("system.method.set_key")]
+        int SetKey(string key, string cmd_key, string value);
 
         [XmlRpcMethod("d.name")]
         string GetName(string hash);
@@ -195,6 +199,49 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             if (response != 0)
             {
                 throw new DownloadClientException("Could not set directory for torrent: {0}.", hash);
+            }
+        }
+
+        public void SetDeferredMagnetProperties(string hash, string category, string directory, RTorrentPriority priority, RTorrentSettings settings)
+        {
+            var commands = new List<string>();
+
+            if (category.IsNotNullOrWhiteSpace())
+            {
+                commands.Add("d.set_custom1=" + category);
+            }
+
+            if (directory.IsNotNullOrWhiteSpace())
+            {
+                commands.Add("d.set_directory=" + directory);
+            }
+
+            if (priority != RTorrentPriority.Normal)
+            {
+                commands.Add("d.set_priority=" + (long)priority);
+            }
+
+            if (commands.Any())
+            {
+                var key = "event.download.inserted";
+                var cmd_key = "sonarr_deferred_" + hash;
+
+                commands.Add(string.Format("print=\"Applying deferred properties to {0}\"", hash));
+
+                // Remove event handler once triggered.
+                commands.Add(string.Format("\"system.method.set_key={0},{1}\"", key, cmd_key));
+
+                var setKeyValue = string.Format("branch=\"equal=d.get_hash=,cat={0}\",{{{1}}}", hash, string.Join(",", commands));
+
+                _logger.Debug("Executing remote method: method.set_key = {0},{1},{2}", key, cmd_key, setKeyValue);
+
+                var client = BuildClient(settings);
+
+                var response = client.SetKey(key, cmd_key, setKeyValue);
+                if (response != 0)
+                {
+                    throw new DownloadClientException("Could set properties for torrent: {0}.", hash);
+                }
             }
         }
 

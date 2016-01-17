@@ -41,26 +41,30 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
 
+            // Download the magnet to the appropriate directory.
+            _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
+            SetPriority(remoteEpisode, hash);
+            SetDownloadDirectory(hash);
+
+            // Once the magnet meta download finishes, rTorrent replaces it with the actual torrent download with default settings.
+            // Schedule an event to apply the appropriate settings when that happens.
+            var priority = (RTorrentPriority)(remoteEpisode.IsRecentEpisode() ? Settings.RecentTvPriority : Settings.OlderTvPriority);
+            _proxy.SetDeferredMagnetProperties(hash, Settings.TvCategory, Settings.TvDirectory, priority, Settings);
+
+            _proxy.StartTorrent(hash, Settings);
+
+            // Wait for the magnet to be resolved.
             var tries = 10;
             var retryDelay = 500;
             if (WaitForTorrent(hash, tries, retryDelay))
             {
-                _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
-
-                SetPriority(remoteEpisode, hash);
-                SetDownloadDirectory(hash);
-
-                _proxy.StartTorrent(hash, Settings);
-
                 return hash;
             }
             else
             {
-                _logger.Debug("rTorrent could not resolve magnet {0}. Removing", magnetLink);
+                _logger.Warn("rTorrent could not resolve magnet within {0} seconds, download may remain stuck: {1}.", tries * retryDelay / 1000, magnetLink);
 
-                RemoveItem(hash, true);
-
-                return null;
+                return hash;
             }
         }
 
