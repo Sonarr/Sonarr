@@ -117,6 +117,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             _settings.TvCategory = "sonarr";
         }
 
+        protected void GivenTvDirectory()
+        {
+            _settings.TvDirectory = @"C:/Downloads/Finished/sonarr";
+        }
+
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<ITransmissionProxy>()
@@ -243,6 +248,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         }
 
         [Test]
+        public void Download_with_TvDirectory_should_force_directory()
+        {
+            GivenTvDirectory();
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = Subject.Download(remoteEpisode);
+
+            id.Should().NotBeNullOrEmpty();
+
+            Mocker.GetMock<ITransmissionProxy>()
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+        }
+
+        [Test]
         public void Download_with_category_should_force_directory()
         {
             GivenTvCategory();
@@ -274,6 +295,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
             Mocker.GetMock<ITransmissionProxy>()
                 .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+        }
+
+        [Test]
+        public void Download_without_TvDirectory_and_Category_should_use_default()
+        {
+            GivenSuccessfulDownload();
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            var id = Subject.Download(remoteEpisode);
+
+            id.Should().NotBeNullOrEmpty();
+
+            Mocker.GetMock<ITransmissionProxy>()
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), null, It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
@@ -355,6 +391,24 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             GivenTvCategory();
 
             _downloading.DownloadDir = @"C:/Downloads/Finished/transmission/sonarr";
+
+            GivenTorrents(new List<TransmissionTorrent> 
+                {
+                    _downloading,
+                    _queued
+                });
+
+            var items = Subject.GetItems().ToList();
+
+            items.Count.Should().Be(1);
+            items.First().Status.Should().Be(DownloadItemStatus.Downloading);
+        }
+
+        public void should_exclude_items_not_in_TvDirectory()
+        {
+            GivenTvDirectory();
+
+            _downloading.DownloadDir = @"C:/Downloads/Finished/sonarr/subdir";
 
             GivenTorrents(new List<TransmissionTorrent> 
                 {

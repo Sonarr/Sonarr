@@ -65,12 +65,21 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         private string GetDownloadDirectory()
         {
-            if (Settings.TvCategory.IsNullOrWhiteSpace()) return null;
+            if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
+            {
+                return Settings.TvDirectory;
+            }
+            else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            {
+                var config = _proxy.GetConfig(Settings);
+                var destDir = (string)config.GetValueOrDefault("download-dir");
 
-            var config = _proxy.GetConfig(Settings);
-            var destDir = (string)config.GetValueOrDefault("download-dir");
-
-            return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
+                return string.Format("{0}/{1}", destDir.TrimEnd('/'), Settings.TvCategory);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public override string Name
@@ -103,13 +112,19 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 if (torrent.TotalSize == 0)
                     continue;
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.DownloadDir));
+                var outputPath = new OsPath(torrent.DownloadDir);
 
-                if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+                if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
+                {
+                    if (!new OsPath(Settings.TvDirectory).Contains(outputPath)) continue;
+                }
+                else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     var directories = outputPath.FullPath.Split('\\', '/');
                     if (!directories.Contains(string.Format("{0}", Settings.TvCategory))) continue;
                 }
+
+                outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
 
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.HashString.ToUpper();
