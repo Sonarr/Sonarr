@@ -11,9 +11,12 @@ namespace NzbDrone.Core.Http
     {
         public HttpRequest PreRequest(HttpRequest request)
         {
-            if (request.Url.Host == "torcache.net" && request.UriBuilder.Query.IsNotNullOrWhiteSpace())
+            // torcache behaves strangely when it has query params and/or no Referer or browser User-Agent.
+            // It's a bit vague, and we don't need the query params. So we remove the query params and set a Referer to be safe.
+            if (request.Url.Host == "torcache.net")
             {
                 request.UriBuilder.Query = string.Empty;
+                request.Headers.Add("Referer", request.Url.Scheme + @"://torcache.net/");
             }
 
             return request;
