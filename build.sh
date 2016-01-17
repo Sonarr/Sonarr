@@ -10,6 +10,7 @@ sourceFolder='./src'
 updateFolder=$outputFolder/NzbDrone.Update
 updateFolderMono=$outputFolderMono/NzbDrone.Update
 
+nuget='tools/nuget/nuget.exe';
 CheckExitCode()
 {
     "$@"
@@ -76,6 +77,7 @@ BuildWithMSBuild()
 {
     export PATH=$msBuild:$PATH
     CheckExitCode MSBuild.exe $sourceFolder/NzbDrone.sln //t:Clean //m
+    $nuget restore $sourceFolder/NzbDrone.sln
     CheckExitCode MSBuild.exe $sourceFolder/NzbDrone.sln //p:Configuration=Release //p:Platform=x86 //t:Build //m
 }
 
@@ -83,6 +85,7 @@ BuildWithXbuild()
 {
     export MONO_IOMAP=case
     CheckExitCode xbuild /t:Clean $sourceFolder/NzbDrone.sln
+    mono $nuget restore $sourceFolder/NzbDrone.sln
     CheckExitCode xbuild /p:Configuration=Release /p:Platform=x86 /t:Build $sourceFolder/NzbDrone.sln
 }
 
@@ -217,10 +220,9 @@ PackageTests()
     find $sourceFolder -path $testSearchPattern -exec cp -r -u -T "{}" $testPackageFolder \;
 
     if [ $runtime = "dotnet" ] ; then
-        $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
-        cp $outputFolder/*.pdb $testPackageFolder
+        $nuget install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
     else
-        mono $sourceFolder/.nuget/NuGet.exe install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
+        mono $nuget install NUnit.Runners -Version 2.6.1 -Output $testPackageFolder
     fi
 
     cp $outputFolder/*.dll $testPackageFolder
