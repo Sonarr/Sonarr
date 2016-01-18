@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         void SetTorrentDownloadDirectory(string hash, string directory, RTorrentSettings settings);
         bool HasHashTorrent(string hash, RTorrentSettings settings);
         void StartTorrent(string hash, RTorrentSettings settings);
+        void RecheckTorrent(string hash, RTorrentSettings settings);
     }
 
     public interface IRTorrent : IXmlRpcProxy
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [XmlRpcMethod("d.multicall2")]
         object[] TorrentMulticall(params string[] parameters);
 
-        [XmlRpcMethod("load.normal")]
+        [XmlRpcMethod("load.start")]
         int LoadUrl(string target, string data);
 
         [XmlRpcMethod("load.raw")]
@@ -36,6 +37,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         [XmlRpcMethod("d.erase")]
         int Remove(string hash);
+
+        [XmlRpcMethod("d.check_hash")]
+        int Recheck(string hash);
 
         [XmlRpcMethod("d.custom1.set")]
         string SetLabel(string hash, string label);
@@ -240,6 +244,19 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             if (multicallResponse.Any(r => r != 0))
             {
                 throw new DownloadClientException("Could not start torrent: {0}.", hash);
+            }
+        }
+
+        public void RecheckTorrent(string hash, RTorrentSettings settings)
+        {
+            _logger.Debug("Executing remote method: d.check_hash");
+
+            var client = BuildClient(settings);
+
+            var response = client.Recheck(hash);
+            if (response != 0)
+            {
+                throw new DownloadClientException("Could not recheck torrent: {0}.", hash);
             }
         }
 

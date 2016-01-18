@@ -41,10 +41,15 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
 
-            var tries = 10;
-            var retryDelay = 500;
+            //Magnet also download to the specified location.
+            SetDownloadDirectory(hash);
+
+            //Wait for 5mins - some old magnets need more time to be downloaded!
+            var tries = 30;
+            var retryDelay = 10000;
             if (WaitForTorrent(hash, tries, retryDelay))
             {
+                            
                 _proxy.SetTorrentLabel(hash, Settings.TvCategory, Settings);
 
                 SetPriority(remoteEpisode, hash);
@@ -52,11 +57,16 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
                 _proxy.StartTorrent(hash, Settings);
 
+                //If download directory is specified, we need to force recheck to start torrent.
+                if (!Settings.TvDirectory.IsNullOrWhiteSpace()) {
+                    _proxy.RecheckTorrent(hash, Settings);
+                }
+                
                 return hash;
             }
             else
             {
-                _logger.Debug("rTorrent could not resolve magnet {0}. Removing", magnetLink);
+                _logger.Error("rTorrent could not resolve magnet {0}. Removing", magnetLink);
 
                 RemoveItem(hash, true);
 
