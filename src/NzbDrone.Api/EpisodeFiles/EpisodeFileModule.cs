@@ -52,16 +52,16 @@ namespace NzbDrone.Api.EpisodeFiles
 
         private List<EpisodeFileResource> GetEpisodeFiles()
         {
-            var seriesId = (int?)Request.Query.SeriesId;
-
-            if (seriesId == null)
+            if (!Request.Query.SeriesId.HasValue)
             {
                 throw new BadRequestException("seriesId is missing");
             }
 
-            var series = _seriesService.GetSeries(seriesId.Value);
+            var seriesId = (int)Request.Query.SeriesId;
 
-            return _mediaFileService.GetFilesBySeries(seriesId.Value)
+            var series = _seriesService.GetSeries(seriesId);
+
+            return _mediaFileService.GetFilesBySeries(seriesId)
                                     .Select(f => MapToResource(series, f)).ToList();
         }
 
