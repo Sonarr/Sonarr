@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
-        SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings);
+        SabnzbdHistory GetHistory(int start, int limit, string category, SabnzbdSettings settings);
         string RetryDownload(string id, SabnzbdSettings settings);
     }
 
@@ -102,10 +102,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return Json.Deserialize<SabnzbdQueue>(JObject.Parse(response).SelectToken("queue").ToString());
         }
 
-        public SabnzbdHistory GetHistory(int start, int limit, SabnzbdSettings settings)
+        public SabnzbdHistory GetHistory(int start, int limit, string category, SabnzbdSettings settings)
         {
             var request = new RestRequest();
             var action = string.Format("mode=history&start={0}&limit={1}", start, limit);
+
+            if (category.IsNotNullOrWhiteSpace())
+            {
+                action += "&category=" + category;
+            }
 
             var response = ProcessRequest(request, action, settings);
             return Json.Deserialize<SabnzbdHistory>(JObject.Parse(response).SelectToken("history").ToString());

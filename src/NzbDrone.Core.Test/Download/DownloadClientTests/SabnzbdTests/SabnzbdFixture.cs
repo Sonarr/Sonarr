@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 history = new SabnzbdHistory() { Items = new List<SabnzbdHistoryItem>() };
 
             Mocker.GetMock<ISabnzbdProxy>()
-                .Setup(s => s.GetHistory(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()))
+                .Setup(s => s.GetHistory(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SabnzbdSettings>()))
                 .Returns(history);
         }
 

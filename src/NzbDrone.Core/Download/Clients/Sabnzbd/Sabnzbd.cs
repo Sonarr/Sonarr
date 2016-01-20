@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             try
             {
-                sabHistory = _proxy.GetHistory(0, _configService.DownloadClientHistoryLimit, Settings);
+                sabHistory = _proxy.GetHistory(0, _configService.DownloadClientHistoryLimit, Settings.TvCategory, Settings);
             }
             catch (DownloadClientException ex)
             {
