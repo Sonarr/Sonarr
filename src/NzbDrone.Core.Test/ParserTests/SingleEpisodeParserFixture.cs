@@ -116,6 +116,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle (2009) - [06x16] - Room 147.mp4", "Castle (2009)", 6, 16)]
         [TestCase("grp-zoos01e11-1080p", "grp-zoo", 1, 11)]
         [TestCase("grp-zoo-s01e11-1080p", "grp-zoo", 1, 11)]
+        [TestCase("Jeopardy!.S2016E14.2016-01-20.avi", "Jeopardy!", 2016, 14)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
