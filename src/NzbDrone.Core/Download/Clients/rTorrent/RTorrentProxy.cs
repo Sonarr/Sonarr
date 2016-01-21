@@ -223,7 +223,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             // Ensure it gets started if the user doesn't have schedule=...,start_tied=
             commands.Add("d.open=");
-            commands.Add("d.try_start=");
+            commands.Add("d.start=");
 
             if (commands.Any())
             {
