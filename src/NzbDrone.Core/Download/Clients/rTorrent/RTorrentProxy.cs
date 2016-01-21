@@ -221,9 +221,13 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 commands.Add("d.set_priority=" + (long)priority);
             }
 
+            // Ensure it gets started if the user doesn't have schedule=...,start_tied=
+            commands.Add("d.open=");
+            commands.Add("d.try_start=");
+
             if (commands.Any())
             {
-                var key = "event.download.inserted";
+                var key = "event.download.inserted_new";
                 var cmd_key = "sonarr_deferred_" + hash;
 
                 commands.Add(string.Format("print=\"Applying deferred properties to {0}\"", hash));
