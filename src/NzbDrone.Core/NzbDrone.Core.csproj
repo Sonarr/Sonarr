@@ -954,6 +954,9 @@
     <Compile Include="SeriesStats\SeriesStatistics.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsRepository.cs" />
     <Compile Include="SeriesStats\SeriesStatisticsService.cs" />
+    <Compile Include="Statistics\HistoryStatistics.cs" />
+    <Compile Include="Statistics\StatisticsGrouping.cs" />
+    <Compile Include="Statistics\StatisticsService.cs" />
     <Compile Include="Tags\Tag.cs" />
     <Compile Include="Tags\TagRepository.cs" />
     <Compile Include="Tags\TagService.cs" />

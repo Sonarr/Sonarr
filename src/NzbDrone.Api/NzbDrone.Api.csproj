@@ -230,6 +230,7 @@
     <Compile Include="Series\SeasonStatisticsResource.cs" />
     <Compile Include="System\Backup\BackupModule.cs" />
     <Compile Include="System\Backup\BackupResource.cs" />
+    <Compile Include="System\Statistics\StatisticsModule.cs" />
     <Compile Include="System\Tasks\TaskModule.cs" />
     <Compile Include="System\Tasks\TaskResource.cs" />
     <Compile Include="System\SystemModule.cs" />
