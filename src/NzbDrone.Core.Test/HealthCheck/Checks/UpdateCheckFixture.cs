@@ -22,8 +22,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.StartUpFolder)
                   .Returns(@"C:\NzbDrone");
 
-            Mocker.GetMock<NzbDrone.Common.Disk.IDiskProvider>()
-                  .Setup(c => c.FolderWritable(Moq.It.IsAny<string>()))
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(It.IsAny<string>()))
                   .Returns(false);
 
             Subject.Check().ShouldBeError();
@@ -34,16 +34,45 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             MonoOnly();
 
+            const string startupFolder = @"/opt/nzbdrone";
+
             Mocker.GetMock<IConfigFileProvider>()
                   .Setup(s => s.UpdateAutomatically)
                   .Returns(true);
 
             Mocker.GetMock<IAppFolderInfo>()
                   .Setup(s => s.StartUpFolder)
-                  .Returns(@"/opt/nzbdrone");
+                  .Returns(startupFolder);
 
-            Mocker.GetMock<NzbDrone.Common.Disk.IDiskProvider>()
-                  .Setup(c => c.FolderWritable(Moq.It.IsAny<string>()))
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(startupFolder))
+                  .Returns(false);
+
+            Subject.Check().ShouldBeError();
+        }
+
+        [Test]
+        public void should_return_error_when_ui_folder_is_write_protected_and_update_automatically_is_enabled()
+        {
+            MonoOnly();
+
+            const string startupFolder = @"/opt/nzbdrone";
+            const string uiFolder = @"/opt/nzbdrone/UI";
+
+            Mocker.GetMock<IConfigFileProvider>()
+                  .Setup(s => s.UpdateAutomatically)
+                  .Returns(true);
+
+            Mocker.GetMock<IAppFolderInfo>()
+                  .Setup(s => s.StartUpFolder)
+                  .Returns(startupFolder);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(startupFolder))
+                  .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(c => c.FolderWritable(uiFolder))
                   .Returns(false);
 
             Subject.Check().ShouldBeError();
@@ -66,8 +95,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.StartUpFolder)
                   .Returns(@"/opt/nzbdrone");
 
-            Mocker.GetMock<NzbDrone.Common.Disk.IDiskProvider>()
-                  .Verify(c => c.FolderWritable(Moq.It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IDiskProvider>()
+                  .Verify(c => c.FolderWritable(It.IsAny<string>()), Times.Never());
 
             Subject.Check().ShouldBeOk();
         }

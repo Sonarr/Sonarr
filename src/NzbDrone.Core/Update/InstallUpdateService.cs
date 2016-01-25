@@ -73,9 +73,17 @@ namespace NzbDrone.Core.Update
 
             if (OsInfo.IsWindows || _configFileProvider.UpdateMechanism != UpdateMechanism.Script)
             {
-                if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
+                var startupFolder = _appFolderInfo.StartUpFolder;
+                var uiFolder = Path.Combine(startupFolder, "UI");
+
+                if (!_diskProvider.FolderWritable(startupFolder))
                 {
-                    throw new UpdateFolderNotWritableException("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", _appFolderInfo.StartUpFolder, Environment.UserName);
+                    throw new UpdateFolderNotWritableException("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", startupFolder, Environment.UserName);
+                }
+
+                if (!_diskProvider.FolderWritable(uiFolder))
+                {
+                    throw new UpdateFolderNotWritableException("Cannot install update because UI folder '{0}' is not writable by the user '{1}'.", uiFolder, Environment.UserName);
                 }
             }
 

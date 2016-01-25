@@ -27,14 +27,24 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
+            var startupFolder = _appFolderInfo.StartUpFolder;
+            var uiFolder = Path.Combine(startupFolder, "UI");
+
             if ((OsInfo.IsWindows || _configFileProvider.UpdateAutomatically) &&
                 _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn)
             {
-                if (!_diskProvider.FolderWritable(_appFolderInfo.StartUpFolder))
+                if (!_diskProvider.FolderWritable(startupFolder))
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Error,
-                        string.Format("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", _appFolderInfo.StartUpFolder, Environment.UserName),
+                        string.Format("Cannot install update because startup folder '{0}' is not writable by the user '{1}'.", startupFolder, Environment.UserName),
                         "Cannot install update because startup folder is not writable by the user");
+                }
+
+                if (!_diskProvider.FolderWritable(uiFolder))
+                {
+                    return new HealthCheck(GetType(), HealthCheckResult.Error,
+                        string.Format("Cannot install update because UI folder '{0}' is not writable by the user '{1}'.", uiFolder, Environment.UserName),
+                        "Cannot install update because UI folder is not writable by the user");
                 }
             }
 
