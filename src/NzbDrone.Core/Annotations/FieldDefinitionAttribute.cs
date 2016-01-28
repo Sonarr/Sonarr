@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Annotations
         Checkbox,
         Select,
         Path,
+        FilePath,
         Hidden,
         Tag,
         Action,

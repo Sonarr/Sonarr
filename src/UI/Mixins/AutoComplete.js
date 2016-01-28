@@ -23,7 +23,7 @@ $.fn.autoComplete = function(options) {
         name       : options.resource.replace('/'),
         displayKey : '',
         source     : function(filter, callback) {
-            var data = {};
+            var data = options.data || {};
             data[options.query] = filter;
             $.ajax({
                 url      : window.NzbDrone.ApiRoot + options.resource,

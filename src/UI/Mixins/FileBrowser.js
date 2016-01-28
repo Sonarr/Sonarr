@@ -8,7 +8,7 @@ $.fn.fileBrowser = function(options) {
 
     inputs.each(function() {
         var input = $(this);
-        var inputOptions = $.extend({ input : input }, options);
+        var inputOptions = $.extend({ input : input, showFiles: input.hasClass('x-filepath') }, options);
         var inputGroup = $('<div class="input-group"></div>');
         var inputGroupButton = $('<span class="input-group-btn"></span>');
 
@@ -25,7 +25,8 @@ $.fn.fileBrowser = function(options) {
         button.on('click', function() {
             vent.trigger(vent.Commands.ShowFileBrowser, inputOptions);
         });
+
+        input.directoryAutoComplete({ includeFiles: inputOptions.showFiles });
     });
 
-    inputs.directoryAutoComplete();
 };
