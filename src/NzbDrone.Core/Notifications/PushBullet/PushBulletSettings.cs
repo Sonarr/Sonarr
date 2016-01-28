@@ -33,6 +33,9 @@ namespace NzbDrone.Core.Notifications.PushBullet
         [FieldDefinition(2, Label = "Channel Tags", HelpText = "List of Channel Tags to send notifications to", Type = FieldType.Tag)]
         public IEnumerable<string> ChannelTags { get; set; }
 
+        [FieldDefinition(3, Label = "Sender ID", HelpText = "The device ID to send notifications from, use device_iden in the device's URL on pushbullet.com (leave blank to send from yourself)")]
+        public string SenderId { get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
