@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using NLog;
 using RestSharp;
 using NzbDrone.Core.Rest;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
@@ -150,6 +151,11 @@ namespace NzbDrone.Core.Notifications.PushBullet
                 request.AddParameter("type", "note");
                 request.AddParameter("title", title);
                 request.AddParameter("body", message);
+
+                if (settings.SenderId.IsNotNullOrWhiteSpace())
+                {
+                    request.AddParameter("source_device_iden", settings.SenderId);
+                }
 
                 client.Authenticator = new HttpBasicAuthenticator(settings.ApiKey, string.Empty);
                 client.ExecuteAndValidate(request);
