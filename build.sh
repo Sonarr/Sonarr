@@ -74,7 +74,7 @@ BuildWithXbuild()
     export MONO_IOMAP=case
     CheckExitCode xbuild /t:Clean $slnFile
     mono $nuget restore $slnFile
-    CheckExitCode xbuild /p:Configuration=Release /p:Platform=x86 /t:Build /m /p:AllowedReferenceRelatedFileExtensions=.pdb $slnFile
+    CheckExitCode xbuild /p:Configuration=Release /p:Platform=x86 /t:Build /p:AllowedReferenceRelatedFileExtensions=.pdb $slnFile
 }
 
 Build()
