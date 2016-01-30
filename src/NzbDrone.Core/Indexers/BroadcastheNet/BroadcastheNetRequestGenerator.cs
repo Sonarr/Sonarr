@@ -96,6 +96,18 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 parameters.Name = string.Format("{0:yyyy}.{0:MM}.{0:dd}", searchCriteria.AirDate);
 
                 pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+
+                pageableRequests.AddTier();
+
+                foreach (var episode in searchCriteria.Episodes)
+                {
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                }
             }
 
             return pageableRequests;
