@@ -78,6 +78,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Mini-Series, treated as season 1, episodes are labelled as XofY
+                new Regex(@"^(?<title>.+?)(?:\W+(?:(?<episode>(?<!\d+)\d{1,2}(?!\d+))of\d+)+)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Supports Season 01 Episode 03
                 new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:[-_\W](?<![()\[]))+(?:\W?Season\W?)(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)+(?:Episode\W)(?:[-_. ]?(?<episode>(?<!\d+)\d{1,2}(?!\d+)))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
