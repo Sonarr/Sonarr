@@ -7,6 +7,8 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Http;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -310,6 +312,46 @@ namespace NzbDrone.Core.Configuration
         public string HmacSalt
         {
             get { return GetValue("HmacSalt", Guid.NewGuid().ToString(), true); }
+        }
+
+        public bool ProxyEnabled
+        {
+            get { return GetValueBoolean("ProxyEnabled", false); }
+        }
+
+        public ProxyType ProxyType
+        {
+            get { return GetValueEnum<ProxyType>("ProxyType", ProxyType.Http); }
+        }
+
+        public string ProxyHostname
+        {
+            get { return GetValue("ProxyHostname", string.Empty); }
+        }
+
+        public int ProxyPort
+        {
+            get { return GetValueInt("ProxyPort", 8080); }
+        }
+
+        public string ProxyUsername
+        {
+            get { return GetValue("ProxyUsername", string.Empty); }
+        }
+
+        public string ProxyPassword
+        {
+            get { return GetValue("ProxyPassword", string.Empty); }
+        }
+
+        public string ProxySubnetFilter
+        {
+            get { return GetValue("ProxySubnetFilter", string.Empty); }
+        }
+
+        public bool ProxyBypassLocalAddresses
+        {
+            get { return GetValueBoolean("ProxyBypassLocalAddresses", true); }
         }
 
         private string GetValue(string key)

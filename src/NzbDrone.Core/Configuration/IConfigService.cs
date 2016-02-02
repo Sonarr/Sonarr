@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Http;
+using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -64,5 +66,15 @@ namespace NzbDrone.Core.Configuration
         string HmacPassphrase { get; }
         string RijndaelSalt { get; }
         string HmacSalt { get; }
+
+        //Proxy
+        bool ProxyEnabled { get; }
+        ProxyType ProxyType { get; }
+        string ProxyHostname { get; }
+        int ProxyPort { get; }
+        string ProxyUsername { get; }
+        string ProxyPassword { get; }
+        string ProxySubnetFilter { get; }
+        bool ProxyBypassLocalAddresses { get; }
     }
 }

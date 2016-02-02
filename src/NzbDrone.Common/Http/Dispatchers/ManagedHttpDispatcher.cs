@@ -1,6 +1,9 @@
 using System;
 using System.Net;
 using NzbDrone.Common.Extensions;
+using com.LandonKey.SocksWebProxy.Proxy;
+using com.LandonKey.SocksWebProxy;
+using System.Net.Sockets;
 
 namespace NzbDrone.Common.Http.Dispatchers
 {
@@ -24,6 +27,33 @@ namespace NzbDrone.Common.Http.Dispatchers
             if (request.RequestTimeout != TimeSpan.Zero)
             {
                 webRequest.Timeout = (int)Math.Ceiling(request.RequestTimeout.TotalMilliseconds);
+            }
+
+            if (request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(request.Url))
+            {
+                var addresses = Dns.GetHostAddresses(request.Proxy.Host);
+                var socksUsername = request.Proxy.Username == null ? string.Empty : request.Proxy.Username;
+                var socksPassword = request.Proxy.Password == null ? string.Empty : request.Proxy.Password;
+
+                switch (request.Proxy.Type)
+                {
+                    case ProxyType.Http:
+                        if(request.Proxy.Username.IsNotNullOrWhiteSpace() && request.Proxy.Password.IsNotNullOrWhiteSpace())
+                        {
+                            webRequest.Proxy = new WebProxy(request.Proxy.Host + ":" + request.Proxy.Port, request.Proxy.BypassLocalAddress, request.Proxy.SubnetFilterAsArray, new NetworkCredential(request.Proxy.Username, request.Proxy.Password));
+                        }
+                        else
+                        {
+                            webRequest.Proxy = new WebProxy(request.Proxy.Host + ":" + request.Proxy.Port, request.Proxy.BypassLocalAddress, request.Proxy.SubnetFilterAsArray);
+                        }
+                        break;
+                    case ProxyType.Socks4:
+                        webRequest.Proxy = new SocksWebProxy(new ProxyConfig(IPAddress.Parse("127.0.0.1"), GetNextFreePort(), addresses[0], request.Proxy.Port, ProxyConfig.SocksVersion.Four, socksUsername, socksPassword), false);
+                        break;
+                    case ProxyType.Socks5:
+                        webRequest.Proxy = new SocksWebProxy(new ProxyConfig(IPAddress.Parse("127.0.0.1"), GetNextFreePort(), addresses[0], request.Proxy.Port, ProxyConfig.SocksVersion.Five, socksUsername, socksPassword), false);
+                        break;
+                }                
             }
 
             if (request.Headers != null)
@@ -116,6 +146,16 @@ namespace NzbDrone.Common.Http.Dispatchers
                         break;
                 }
             }
+        }
+
+        private static int GetNextFreePort()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+
+            return port;
         }
     }
 }

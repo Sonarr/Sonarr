@@ -487,6 +487,7 @@
     <Compile Include="HealthCheck\Checks\IndexerCheck.cs" />
     <Compile Include="HealthCheck\Checks\MediaInfoDllCheck.cs" />
     <Compile Include="HealthCheck\Checks\MonoVersionCheck.cs" />
+    <Compile Include="HealthCheck\Checks\ProxyCheck.cs" />
     <Compile Include="HealthCheck\Checks\RootFolderCheck.cs" />
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
@@ -514,6 +515,7 @@
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
+    <Compile Include="Http\ProxyHttpInterceptor.cs" />
     <Compile Include="Http\TorcacheHttpInterceptor.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTvSettings.cs" />

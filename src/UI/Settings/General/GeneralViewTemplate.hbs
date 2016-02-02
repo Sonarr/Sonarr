@@ -162,6 +162,114 @@
             </div>
         </div>
     </fieldset>
+    
+    <fieldset>
+        <legend>Proxy Settings</legend>
+        
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Use Proxy</label>
+            
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="proxyEnabled" class="form-control x-proxy"/>
+
+                        <p>
+                            <span>Yes</span>
+                            <span>No</span>
+                        </p>
+
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="x-proxy-settings">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Proxy Type</label>
+
+                <div class="col-sm-4">
+                    <select name="proxyType" class="form-control">
+                        <option value="http" selected="selected">HTTP(S)</option>
+                        <option value="socks4">Socks4</option>
+                        <option value="socks5">Socks5 (This option supports Tor)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Hostname</label>
+
+                <div class="col-sm-4">
+                    <input type="text" placeholder="localhost" name="proxyHostname" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Port</label>
+
+                <div class="col-sm-4">
+                    <input type="number" placeholder="8080" name="proxyPort" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Username</label>
+
+                <div class="col-sm-1 col-sm-push-4 help-inline">
+                    <i class="icon-sonarr-form-info" title="You only need to enter a username and password if one is required. Leave them blank otherwise."/>
+                </div>
+
+                <div class="col-sm-4 col-sm-pull-1">
+                    <input type="text" name="proxyUsername" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Password</label>
+
+                <div class="col-sm-1 col-sm-push-4 help-inline">
+                    <i class="icon-sonarr-form-info" title="You only need to enter a username and password if one is required. Leave them blank otherwise."/>
+                </div>
+
+                <div class="col-sm-4 col-sm-pull-1">
+                    <input type="password" name="proxyPassword" class="form-control"/>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Addresses for the proxy to ignore</label>
+
+                <div class="col-sm-1 col-sm-push-4 help-inline">
+                    <i class="icon-sonarr-form-info" title="Use ';' as a separator"/>
+                </div>
+                
+                <div class="col-sm-4 col-sm-pull-1">
+                    <input type="text" name="proxySubnetFilter" class="form-control"/>
+                </div>
+            </div>
+            
+            <div class="form-group">
+            <label class="col-sm-3 control-label">Bypass Proxy for Local Addresses?</label>
+            
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <label class="checkbox toggle well">
+                        <input type="checkbox" name="proxyBypassLocalAddresses" class="form-control"/>
+
+                        <p>
+                            <span>Yes</span>
+                            <span>No</span>
+                        </p>
+
+                        <div class="btn btn-primary slide-button"/>
+                    </label>
+                </div>
+            </div>
+        </div>
+        </div>
+    </fieldset>
 
     <fieldset>
         <legend>Logging</legend>

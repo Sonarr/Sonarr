@@ -76,7 +76,32 @@ namespace NzbDrone.Common.Http.Dispatchers
                         return s * n;
                     };
 
+                    if(request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(request.Url))
+                    
+                    {
+                        switch (request.Proxy.Type)
+                        {
+                            case ProxyType.Http:
+                                curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Http);
+                                curlEasy.SetOpt(CurlOption.ProxyAuth, CurlHttpAuth.Basic);
+                                curlEasy.SetOpt(CurlOption.ProxyUserPwd, request.Proxy.Username + ":" + request.Proxy.Password.ToString());
+                                break;
+                            case ProxyType.Socks4:
+                                curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Socks4);
+                                curlEasy.SetOpt(CurlOption.ProxyUsername, request.Proxy.Username);
+                                curlEasy.SetOpt(CurlOption.ProxyPassword, request.Proxy.Password);
+                                break;
+                            case ProxyType.Socks5:
+                                curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Socks5);
+                                curlEasy.SetOpt(CurlOption.ProxyUsername, request.Proxy.Username);
+                                curlEasy.SetOpt(CurlOption.ProxyPassword, request.Proxy.Password);
+                                break;
+                        }
+                        curlEasy.SetOpt(CurlOption.Proxy, request.Proxy.Host + ":" + request.Proxy.Port.ToString());
+                    }
+                    
                     curlEasy.Url = request.Url.FullUri;
+                    
                     switch (request.Method)
                     {
                         case HttpMethod.GET:
