@@ -112,7 +112,15 @@ namespace NzbDrone.Common.Http.Dispatchers
 
                         if (result != CurlCode.Ok)
                         {
-                            throw new WebException(string.Format("Curl Error {0} for Url {1}", result, curlEasy.Url));
+                            switch (result)
+                            {
+                                case CurlCode.SslCaCert:
+                                case (CurlCode)77:
+                                    throw new WebException(string.Format("Curl Error {0} for Url {1}, issues with your operating system SSL Root Certificate Bundle (ca-bundle).", result, curlEasy.Url));
+                                default:
+                                    throw new WebException(string.Format("Curl Error {0} for Url {1}", result, curlEasy.Url));
+
+                            }
                         }
                     }
 
