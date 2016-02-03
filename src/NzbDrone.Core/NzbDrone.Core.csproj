@@ -530,6 +530,11 @@
     <Compile Include="Indexers\Fanzub\FanzubRequestGenerator.cs" />
     <Compile Include="Indexers\Fanzub\FanzubSettings.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
+    <Compile Include="Indexers\GetStrike\GetStrike.cs" />
+    <Compile Include="Indexers\GetStrike\GetStrikeResponse.cs" />
+    <Compile Include="Indexers\GetStrike\GetStrikeParser.cs" />
+    <Compile Include="Indexers\GetStrike\GetStrikeRequestGenerator.cs" />
+    <Compile Include="Indexers\GetStrike\GetStrikeSettings.cs" />
     <Compile Include="Indexers\HDBits\HDBits.cs" />
     <Compile Include="Indexers\HDBits\HDBitsApi.cs" />
     <Compile Include="Indexers\HDBits\HDBitsParser.cs" />
