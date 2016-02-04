@@ -151,5 +151,124 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().NotHaveValue();
             torrentInfo.Seeders.Should().NotHaveValue();
         }
+
+        [Test]
+        public void should_parse_recent_feed_from_BeyondHD()
+        {
+            GivenRecentFeedResponse("TorrentRss/BeyondHD.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            foreach (var release in releases)
+            {
+                release.Should().BeOfType<TorrentInfo>();
+            }
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("Tosh 0 S07E16 720p WEB-DL AAC2 0 H 264-pcsyndicate ");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://beyondhd.me/download.php?torrent=39507&torrent_pass=0123456789abcdef0123456789abcdef");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be((DateTime.Today + DateTime.Parse("04:27 PM").TimeOfDay).ToUniversalTime());
+            torrentInfo.Size.Should().Be(672210616);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(3);
+            torrentInfo.Seeders.Should().Be(3);
+
+            torrentInfo = releases.ElementAt(1) as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("Mr Robot S01E10 eps1 9 1 zer0-daY avi 1080p WEB-DL DD5 1 H 264-NTb ");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://beyondhd.me/download.php?torrent=39504&torrent_pass=0123456789abcdef0123456789abcdef");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be((DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse("10:52 AM").TimeOfDay).ToUniversalTime());
+            torrentInfo.Size.Should().Be(2254857830);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(31);
+            torrentInfo.Seeders.Should().Be(31);
+
+            torrentInfo = releases.ElementAt(3) as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("The Last Ship S02E12 1080p WEB-DL DD5 1 H 264-pcsyndicate ");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://beyondhd.me/download.php?torrent=39493&torrent_pass=0123456789abcdef0123456789abcdef");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2 Sep 2015"));
+            torrentInfo.Size.Should().Be(1717986918);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(7);
+            torrentInfo.Seeders.Should().Be(7);
+        }
+
+        [Test]
+        public void should_parse_recent_feed_from_HD4Free()
+        {
+            GivenRecentFeedResponse("TorrentRss/HD4Free.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            foreach (var release in releases)
+            {
+                release.Should().BeOfType<TorrentInfo>();
+            }
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("Extant S02E11 1080p WEB-DL DD5.1 H.264-KiNGS");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://hd4free.xyz/download.php?torrent=12074&torrent_pass=0123456789abcdef0123456789abcdef&ssl=1");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be((DateTime.Today + DateTime.Parse("12:51 AM").TimeOfDay).ToUniversalTime());
+            torrentInfo.Size.Should().Be(1750199173);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(4);
+            torrentInfo.Seeders.Should().Be(3);
+
+            torrentInfo = releases.ElementAt(1) as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("Tosh 0 S07E16 1080p WEB-DL AAC2.0 H.264-pcsyndicate");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://hd4free.xyz/download.php?torrent=12054&torrent_pass=0123456789abcdef0123456789abcdef&ssl=1");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be((DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse("04:17 PM").TimeOfDay).ToUniversalTime());
+            torrentInfo.Size.Should().Be(835222241);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(2);
+            torrentInfo.Seeders.Should().Be(2);
+
+            torrentInfo = releases.ElementAt(3) as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("The Last Ship S02E12 1080p WEB-DL DD5.1 H.264-pcsyndicate");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("https://hd4free.xyz/download.php?torrent=12019&torrent_pass=0123456789abcdef0123456789abcdef&ssl=1");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("2 Sep 2015"));
+            torrentInfo.Size.Should().Be(1717986918);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().Be(2);
+            torrentInfo.Seeders.Should().Be(2);
+        }
+
     }
 }

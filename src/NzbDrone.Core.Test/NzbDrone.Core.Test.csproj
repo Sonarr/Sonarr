@@ -406,7 +406,13 @@
     <Content Include="Files\Indexers\relative_urls.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\TorrentRss\BeyondHD.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\Indexers\TorrentRss\Doki.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Indexers\TorrentRss\HD4Free.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Indexers\TorrentRss\invalid\Eztv_InvalidSize.xml">

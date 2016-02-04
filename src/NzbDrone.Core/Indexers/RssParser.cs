@@ -156,13 +156,42 @@ namespace NzbDrone.Core.Indexers
             return item.TryGetValue("title", "Unknown");
         }
 
+        private static readonly Regex DescriptionAddedTodayRegex = new Regex(@"Added: Today, (?<time>[\d:]+ [APM]{2}) <br\/>", RegexOptions.Compiled);
+        private static readonly Regex DescriptionAddedYesterdayRegex = new Regex(@"Added: Yesterday, (?<time>[\d:]+ [APM]{2}) <br\/>", RegexOptions.Compiled);
+        private static readonly Regex DescriptionAddedDateRegex = new Regex(@"Added: (?<date>[\d]{1,2} [\w+d]+ [\d]{2,4}) <br\/>", RegexOptions.Compiled);
+
         protected virtual DateTime GetPublishDate(XElement item)
         {
             var dateString = item.TryGetValue("pubDate");
 
             if (dateString.IsNullOrWhiteSpace())
             {
-                throw new UnsupportedFeedException("Rss feed must have a pubDate element with a valid publish date.");
+                // Try and parse the pubDate from the description
+                var descString = item.TryGetValue("description");
+
+                var addedTodayMatch = DescriptionAddedTodayRegex.Matches(descString);
+                var addedYesterdayMatch = DescriptionAddedYesterdayRegex.Matches(descString);
+                var addedDateMatch = DescriptionAddedDateRegex.Matches(descString);
+
+                if (addedTodayMatch.Count != 0)
+                {
+                    var timeString = addedTodayMatch[0].Groups["time"].Value;
+                    return XElementExtensions.ParseTodayDate(timeString);
+                }
+                else if (addedYesterdayMatch.Count != 0)
+                {
+                    var timeString = addedYesterdayMatch[0].Groups["time"].Value;
+                    return XElementExtensions.ParseYesterdayDate(timeString);
+                }
+                else if (addedDateMatch.Count != 0)
+                {
+                    dateString = addedDateMatch[0].Groups["date"].Value;
+                    return XElementExtensions.ParseDate(dateString);
+                }
+                else
+                {
+                    throw new UnsupportedFeedException("Rss feed must have a pubDate element with a valid publish date or an Added: field in the description.");
+                }
             }
 
             return XElementExtensions.ParseDate(dateString);

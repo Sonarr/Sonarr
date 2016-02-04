@@ -36,6 +36,34 @@ namespace NzbDrone.Core.Indexers
             return res;
         }
 
+        public static DateTime ParseTodayDate(string timeString)
+        {
+            try
+            {
+                var result = DateTime.Today.Date + DateTime.Parse(timeString).TimeOfDay;
+                return result.ToUniversalTime();
+            }
+            catch (FormatException e)
+            {
+                Logger.WarnException("Unable to parse " + timeString, e);
+                throw;
+            }
+        }
+
+        public static DateTime ParseYesterdayDate(string timeString)
+        {
+            try
+            {
+                var result = DateTime.Today.Date - TimeSpan.FromDays(1) + DateTime.Parse(timeString).TimeOfDay;
+                return result.ToUniversalTime();
+            }
+            catch (FormatException e)
+            {
+                Logger.WarnException("Unable to parse " + timeString, e);
+                throw;
+            }
+        }
+
         public static DateTime ParseDate(string dateString)
         {
             try
