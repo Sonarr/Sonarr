@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -16,6 +17,8 @@ namespace NzbDrone.Core.Indexers
 {
     public class RssParser : IParseIndexerResponse
     {
+        private static readonly Regex ReplaceEntities = new Regex("&[a-z]+;", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         protected readonly Logger _logger;
 
         // Use the 'guid' element content as InfoUrl.
@@ -71,7 +74,10 @@ namespace NzbDrone.Core.Indexers
         {
             try
             {
-                using (var xmlTextReader = XmlReader.Create(new StringReader(indexerResponse.Content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
+                var content = indexerResponse.Content;
+                content = ReplaceEntities.Replace(content, ReplaceEntity);
+
+                using (var xmlTextReader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
                 {
                     return XDocument.Load(xmlTextReader);
                 }
@@ -88,6 +94,19 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
+        protected virtual string ReplaceEntity(Match match)
+        {
+            try
+            {
+                var character = WebUtility.HtmlDecode(match.Value);
+                return string.Concat("&#", (int)character[0], ";");
+            }
+            catch
+            {
+                return match.Value;
+            }
+        }
+
         protected virtual ReleaseInfo CreateNewReleaseInfo()
         {
             return new ReleaseInfo();
@@ -95,7 +114,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual bool PreProcess(IndexerResponse indexerResponse)
         {
-            if (indexerResponse.HttpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
             {
                 throw new IndexerException(indexerResponse, "Indexer API call resulted in an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
             }

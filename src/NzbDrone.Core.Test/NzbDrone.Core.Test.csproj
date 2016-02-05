@@ -403,6 +403,9 @@
     <Content Include="Files\emptyfile.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\KickassTorrents\KickassTorrents_accents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\Indexers\relative_urls.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

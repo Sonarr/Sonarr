@@ -154,5 +154,20 @@ namespace NzbDrone.Core.Test.IndexerTests.KickassTorrentsTests
             torrentInfo.Peers.Should().Be(0);
             torrentInfo.Seeders.Should().Be(0);
         }
+
+        
+        [Test]
+        public void should_handle_xml_with_html_accents()
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/KickassTorrents/KickassTorrents_accents.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.GET)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+        }
     }
 }
