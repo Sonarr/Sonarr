@@ -67,10 +67,15 @@ namespace NzbDrone.Core.Qualities
         public static Quality HDTV1080p   { get { return new Quality(9,  "HDTV-1080p"); } }
         public static Quality RAWHD       { get { return new Quality(10, "Raw-HD"); } }
         //public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p"); } }
-        public static Quality HDTV2160p   { get { return new Quality(12, "HDTV-2160p"); } }
-        public static Quality WEBDL2160p  { get { return new Quality(13, "WEBDL-2160p"); } }
-        public static Quality Bluray2160p { get { return new Quality(14, "Bluray-2160p"); } }
-
+        //public static Quality WEBRip480p  { get { return new Quality(12, "WEBRip-480p"); } }
+        //public static Quality Bluray480p  { get { return new Quality(13, "Bluray-480p"); } }
+        //public static Quality WEBRip720p  { get { return new Quality(14, "WEBRip-720p"); } }
+        //public static Quality WEBRip1080p { get { return new Quality(15, "WEBRip-1080p"); } }
+        public static Quality HDTV2160p   { get { return new Quality(16, "HDTV-2160p"); } }
+        //public static Quality WEBRip2160p { get { return new Quality(17, "WEBRip-1080p"); } }
+        public static Quality WEBDL2160p  { get { return new Quality(18, "WEBDL-2160p"); } }
+        public static Quality Bluray2160p { get { return new Quality(19, "Bluray-2160p"); } }
+        
         public static List<Quality> All
         {
             get
@@ -112,9 +117,9 @@ namespace NzbDrone.Core.Qualities
                     new QualityDefinition(Quality.Bluray720p)  { Weight = 9,  MinSize = 0, MaxSize = 100 },
                     new QualityDefinition(Quality.WEBDL1080p)  { Weight = 10, MinSize = 0, MaxSize = 100 },
                     new QualityDefinition(Quality.Bluray1080p) { Weight = 11, MinSize = 0, MaxSize = 100 },
-                    new QualityDefinition(Quality.HDTV2160p)   { Weight = 12, MinSize = 0, MaxSize = 100 },
-                    new QualityDefinition(Quality.WEBDL2160p)  { Weight = 13, MinSize = 0, MaxSize = 100 },
-                    new QualityDefinition(Quality.Bluray2160p) { Weight = 14, MinSize = 0, MaxSize = 100 },
+                    new QualityDefinition(Quality.HDTV2160p)   { Weight = 12, MinSize = 0, MaxSize = null },
+                    new QualityDefinition(Quality.WEBDL2160p)  { Weight = 13, MinSize = 0, MaxSize = null },
+                    new QualityDefinition(Quality.Bluray2160p) { Weight = 14, MinSize = 0, MaxSize = null },
                 };
             }
         }
