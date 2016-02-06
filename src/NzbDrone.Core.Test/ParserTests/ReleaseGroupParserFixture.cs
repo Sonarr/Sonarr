@@ -41,6 +41,8 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP", "EVL")]
+        [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP-RP", "EVL")]
+        [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-Obfuscated", "EVL")]
         [TestCase("Lost.S04E04.720p.BluRay.x264-xHD-NZBgeek", "xHD")]
         [TestCase("Blue.Bloods.S05E11.720p.HDTV.X264-DIMENSION-NZBgeek", "DIMENSION")]
         [TestCase("Lost.S04E04.720p.BluRay.x264-xHD-1", "xHD")]
