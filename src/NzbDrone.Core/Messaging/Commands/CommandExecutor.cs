@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Messaging.Commands
             }
             catch (Exception ex)
             {
-                _logger.Error("Unknown error in thread: " + ex.Message, ex);
+                _logger.ErrorException("Unknown error in thread: " + ex.Message, ex);
             }
         }
 

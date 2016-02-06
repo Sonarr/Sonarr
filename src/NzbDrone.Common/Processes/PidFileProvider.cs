@@ -37,7 +37,7 @@ namespace NzbDrone.Common.Processes
             }
             catch (Exception ex)
             {
-                _logger.Error("Unable to write PID file: " + filename, ex);
+                _logger.ErrorException("Unable to write PID file: " + filename, ex);
                 throw;
             }
         }

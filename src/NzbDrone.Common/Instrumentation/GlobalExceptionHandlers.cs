@@ -19,7 +19,7 @@ namespace NzbDrone.Common.Instrumentation
             var exception = e.Exception;
 
             Console.WriteLine("Task Error: {0}", exception);
-            Logger.Error("Task Error: " + exception.Message, exception);
+            Logger.ErrorException("Task Error: " + exception.Message, exception);
         }
 
         private static void HandleAppDomainException(object sender, UnhandledExceptionEventArgs e)
