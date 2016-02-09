@@ -126,7 +126,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 folder = new FileInfo(file).Directory.FullName;
             }
 
-            var series = _parsingService.GetSeries(Path.GetFileNameWithoutExtension(file));
+            Series series = null;
+
+            var parsedEpisodeInfo = Parser.Parser.ParsePath(folder.GetRelativePath(file));
+            if (parsedEpisodeInfo != null)
+            {
+                series = _parsingService.GetSeries(parsedEpisodeInfo.SeriesTitle);
+            }
 
             if (series == null && downloadId.IsNotNullOrWhiteSpace())
             {
