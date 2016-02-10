@@ -30,7 +30,15 @@ namespace NzbDrone.Core.Parser.Model
                 return Episodes.Select(c => c.SeasonNumber).Distinct().Single();
             } 
         }
-        
+
+        public bool IsSpecial
+        {
+            get
+            {
+                return SeasonNumber == 0;
+            }
+        }
+
         public override string ToString()
         {
             return Path;

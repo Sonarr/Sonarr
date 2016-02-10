@@ -10,7 +10,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IDetectSample
     {
-        bool IsSample(Series series, QualityModel quality, string path, long size, int seasonNumber);
+        bool IsSample(Series series, QualityModel quality, string path, long size, bool isSpecial);
     }
 
     public class DetectSample : IDetectSample
@@ -34,9 +34,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
         }
 
-        public bool IsSample(Series series, QualityModel quality, string path, long size, int seasonNumber)
+        public bool IsSample(Series series, QualityModel quality, string path, long size, bool isSpecial)
         {
-            if (seasonNumber == 0)
+            if (isSpecial)
             {
                 _logger.Debug("Special, skipping sample check");
                 return false;

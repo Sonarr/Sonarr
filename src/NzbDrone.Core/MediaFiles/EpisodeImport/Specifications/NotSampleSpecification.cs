@@ -28,7 +28,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                                                 localEpisode.Quality,
                                                 localEpisode.Path,
                                                 localEpisode.Size,
-                                                localEpisode.SeasonNumber);
+                                                localEpisode.IsSpecial);
 
             if (sample)
             {

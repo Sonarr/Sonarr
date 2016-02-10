@@ -332,7 +332,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenVideoFiles(videoFiles.ToList());
 
             Mocker.GetMock<IDetectSample>()
-                  .Setup(s => s.IsSample(_series, It.IsAny<QualityModel>(), It.Is<string>(c => c.Contains("sample")), It.IsAny<long>(), It.IsAny<int>()))
+                  .Setup(s => s.IsSample(_series, It.IsAny<QualityModel>(), It.Is<string>(c => c.Contains("sample")), It.IsAny<long>(), It.IsAny<bool>()))
                   .Returns(true);
 
             var folderInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");

@@ -117,8 +117,7 @@ namespace NzbDrone.Core.MediaFiles
                 var size = _diskProvider.GetFileSize(videoFile);
                 var quality = QualityParser.ParseQuality(videoFile);
 
-                if (!_detectSample.IsSample(series, quality, videoFile, size,
-                    episodeParseResult.SeasonNumber))
+                if (!_detectSample.IsSample(series, quality, videoFile, size, episodeParseResult.IsPossibleSpecialEpisode))
                 {
                     _logger.Warn("Non-sample file detected: [{0}]", videoFile);
                     return false;

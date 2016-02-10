@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                       It.IsAny<QualityModel>(),
                       It.IsAny<string>(),
                       It.IsAny<long>(),
-                      It.IsAny<int>()))
+                      It.IsAny<bool>()))
                   .Returns(true);
 
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                       It.IsAny<QualityModel>(),
                       It.IsAny<string>(),
                       It.IsAny<long>(),
-                      It.IsAny<int>()))
+                      It.IsAny<bool>()))
                   .Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
@@ -350,7 +350,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                       It.IsAny<QualityModel>(),
                       It.IsAny<string>(),
                       It.IsAny<long>(),
-                      It.IsAny<int>()))
+                      It.IsAny<bool>()))
                   .Returns(true);
 
             Mocker.GetMock<IDiskProvider>()

@@ -163,7 +163,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             {
                 var size = _diskProvider.GetFileSize(file);
                 var fileQuality = QualityParser.ParseQuality(file);
-                var sample = _detectSample.IsSample(series, GetQuality(folderInfo, fileQuality, series), file, size, folderInfo.SeasonNumber);
+                var sample = _detectSample.IsSample(series, GetQuality(folderInfo, fileQuality, series), file, size, folderInfo.IsPossibleSpecialEpisode);
 
                 if (sample)
                 {

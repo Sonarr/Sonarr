@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                              _localEpisode.Quality,
                              _localEpisode.Path,
                              _localEpisode.Size,
-                             _localEpisode.SeasonNumber);
+                             _localEpisode.IsSpecial);
 
             Mocker.GetMock<IVideoFileInfoReader>().Verify(v => v.GetRunTime(It.IsAny<string>()), Times.Once());
         }
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_return_false_for_anime_speical()
+        public void should_return_false_for_anime_special()
         {
             _series.SeriesType = SeriesTypes.Anime;
             _localEpisode.Episodes[0].SeasonNumber = 0;
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                                          _localEpisode.Quality,
                                          _localEpisode.Path,
                                          _localEpisode.Size,
-                                         _localEpisode.SeasonNumber).Should().BeTrue();
+                                         _localEpisode.IsSpecial).Should().BeTrue();
         }
 
         private void ShouldBeFalse()
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                              _localEpisode.Quality,
                              _localEpisode.Path,
                              _localEpisode.Size,
-                             _localEpisode.SeasonNumber).Should().BeFalse();
+                             _localEpisode.IsSpecial).Should().BeFalse();
         }
     }
 }
