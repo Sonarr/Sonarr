@@ -23,14 +23,14 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
             const string title = "Episode Grabbed";
 
-            _proxy.SendNotification(title, grabMessage.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
+            _proxy.SendNotification(title, grabMessage.Message, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             const string title = "Episode Downloaded";
 
-            _proxy.SendNotification(title, message.Message, Settings.ApiKey, Settings.UserKey, (PushoverPriority)Settings.Priority, Settings.Sound);
+            _proxy.SendNotification(title, message.Message, Settings);
         }
 
         public override void OnRename(Series series)
