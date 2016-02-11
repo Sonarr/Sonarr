@@ -74,6 +74,7 @@
     <Compile Include="ProcMount.cs" />
     <Compile Include="ProcMountProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SymbolicLinkResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">

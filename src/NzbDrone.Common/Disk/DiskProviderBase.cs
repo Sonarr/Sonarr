@@ -383,12 +383,20 @@ namespace NzbDrone.Common.Disk
 
         public virtual IMount GetMount(string path)
         {
-            var mounts = GetMounts();
+            try
+            {
+                var mounts = GetMounts();
 
-            return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
-                                         drive.RootDirectory.IsParentPath(path))
-                      .OrderByDescending(drive => drive.RootDirectory.Length)
-                      .FirstOrDefault();
+                return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
+                                             drive.RootDirectory.IsParentPath(path))
+                          .OrderByDescending(drive => drive.RootDirectory.Length)
+                          .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Logger.DebugException(string.Format("Failed to get mount for path {0}", path), ex);
+                return null;
+            }
         }
 
         protected List<IMount> GetDriveInfoMounts()

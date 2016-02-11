@@ -16,10 +16,19 @@ namespace NzbDrone.Mono
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProvider));
 
         private readonly IProcMountProvider _procMountProvider;
+        private readonly ISymbolicLinkResolver _symLinkResolver;
 
-        public DiskProvider(IProcMountProvider procMountProvider)
+        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver)
         {
             _procMountProvider = procMountProvider;
+            _symLinkResolver = symLinkResolver;
+        }
+
+        public override IMount GetMount(string path)
+        {
+            path = _symLinkResolver.GetCompleteRealPath(path);
+
+            return base.GetMount(path);
         }
 
         public override long? GetAvailableSpace(string path)
