@@ -47,5 +47,6 @@ namespace NzbDrone.Common.Disk
         IMount GetMount(string path);
         List<DirectoryInfo> GetDirectoryInfos(string path);
         List<FileInfo> GetFileInfos(string path);
+        void RemoveEmptySubfolders(string path);
     }
 }

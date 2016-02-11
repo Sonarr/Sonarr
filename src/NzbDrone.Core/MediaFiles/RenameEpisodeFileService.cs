@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
@@ -30,6 +31,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IEventAggregator _eventAggregator;
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _filenameBuilder;
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public RenameEpisodeFileService(ISeriesService seriesService,
@@ -38,6 +40,7 @@ namespace NzbDrone.Core.MediaFiles
                                         IEventAggregator eventAggregator,
                                         IEpisodeService episodeService,
                                         IBuildFileNames filenameBuilder,
+                                        IDiskProvider diskProvider,
                                         Logger logger)
         {
             _seriesService = seriesService;
@@ -46,6 +49,7 @@ namespace NzbDrone.Core.MediaFiles
             _eventAggregator = eventAggregator;
             _episodeService = episodeService;
             _filenameBuilder = filenameBuilder;
+            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -134,6 +138,8 @@ namespace NzbDrone.Core.MediaFiles
 
             if (renamed.Any())
             {
+                _diskProvider.RemoveEmptySubfolders(series.Path);
+
                 _eventAggregator.PublishEvent(new SeriesRenamedEvent(series));
             }
         }

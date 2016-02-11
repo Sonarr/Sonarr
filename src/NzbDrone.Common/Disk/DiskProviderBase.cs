@@ -418,5 +418,19 @@ namespace NzbDrone.Common.Disk
 
             return di.GetFiles().ToList();
         }
+
+        public void RemoveEmptySubfolders(string path)
+        {
+            var subfolders = GetDirectories(path);
+            var files = GetFiles(path, SearchOption.AllDirectories);
+
+            foreach (var subfolder in subfolders)
+            {
+                if (files.None(f => subfolder.IsParentPath(f)))
+                {
+                    DeleteFolder(path, false);
+                }
+            }
+        }
     }
 }
