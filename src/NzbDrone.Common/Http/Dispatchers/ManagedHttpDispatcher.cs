@@ -100,7 +100,6 @@ namespace NzbDrone.Common.Http.Dispatchers
                         break;
                     case "Range":
                         throw new NotImplementedException();
-                        break;
                     case "Referer":
                         webRequest.Referer = header.Value.ToString();
                         break;
@@ -111,7 +110,6 @@ namespace NzbDrone.Common.Http.Dispatchers
                         throw new NotSupportedException("User-Agent other than Sonarr not allowed.");
                     case "Proxy-Connection":
                         throw new NotImplementedException();
-                        break;
                     default:
                         webRequest.Headers.Add(header.Key, header.Value.ToString());
                         break;

@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Indexers.Torznab
     {
         private static readonly TorznabSettingsValidator Validator = new TorznabSettingsValidator();
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

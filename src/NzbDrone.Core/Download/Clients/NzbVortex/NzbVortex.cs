@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             {
                 _proxy.GetQueue(1, Settings);
             }
-            catch (NzbVortexAuthenticationException ex)
+            catch (NzbVortexAuthenticationException)
             {
                 return new ValidationFailure("ApiKey", "API Key Incorrect");
             }

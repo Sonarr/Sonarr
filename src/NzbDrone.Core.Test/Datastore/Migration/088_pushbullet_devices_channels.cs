@@ -14,8 +14,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_convert_comma_separted_string_to_list()
         {
-            var deviceId = "device_id";
-
             WithTestDb(c =>
             {
                 c.Insert.IntoTable("Notifications").Row(new

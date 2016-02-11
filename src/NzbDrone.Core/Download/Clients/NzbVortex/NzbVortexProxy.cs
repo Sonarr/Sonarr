@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             {
                 return ProcessRequest(client, request).Content;
             }
-            catch (NzbVortexNotLoggedInException ex)
+            catch (NzbVortexNotLoggedInException)
             {
                 _logger.Warn("Not logged in response received, reauthenticating and retrying");
                 request.AddQueryParameter("sessionid", GetSessionId(true, settings));

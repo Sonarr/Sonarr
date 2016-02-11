@@ -124,8 +124,6 @@ namespace NzbDrone.Core.Indexers.Newznab
 
                 return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
             }
-
-            return null;
         }
     }
 }

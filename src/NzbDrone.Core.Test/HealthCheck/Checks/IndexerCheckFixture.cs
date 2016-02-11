@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Indexers;
@@ -10,17 +11,17 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
     [TestFixture]
     public class IndexerCheckFixture : CoreTest<IndexerCheck>
     {
-        private IIndexer _indexer;
+        private Mock<IIndexer> _indexerMock;
 
         private void GivenIndexer(bool supportsRss, bool supportsSearch)
         {
-            var _indexer = Mocker.GetMock<IIndexer>();
-            _indexer.SetupGet(s => s.SupportsRss).Returns(supportsRss);
-            _indexer.SetupGet(s => s.SupportsSearch).Returns(supportsSearch);
+            _indexerMock = Mocker.GetMock<IIndexer>();
+            _indexerMock.SetupGet(s => s.SupportsRss).Returns(supportsRss);
+            _indexerMock.SetupGet(s => s.SupportsSearch).Returns(supportsSearch);
 
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.GetAvailableProviders())
-                  .Returns(new List<IIndexer> { _indexer.Object });
+                  .Returns(new List<IIndexer> { _indexerMock.Object });
 
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.RssEnabled())
@@ -35,14 +36,14 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.RssEnabled())
-                  .Returns(new List<IIndexer> { _indexer });
+                  .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
         private void GivenSearchEnabled()
         {
             Mocker.GetMock<IIndexerFactory>()
                   .Setup(s => s.SearchEnabled())
-                  .Returns(new List<IIndexer> { _indexer });
+                  .Returns(new List<IIndexer> { _indexerMock.Object });
         }
 
         [Test]

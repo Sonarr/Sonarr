@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
         private const int TVDB_ID = 5;
         private XbmcSettings _settings;
         private Series _series;
-        private string _response;
         private List<TvShow> _xbmcSeries;
 
         [SetUp]
