@@ -22,13 +22,6 @@ namespace NzbDrone.Mono
             _procMountProvider = procMountProvider;
         }
 
-        public override IMount GetMount(string path)
-        {
-            path = UnixPath.GetCompleteRealPath(path);
-
-            return base.GetMount(path);
-        }
-
         public override long? GetAvailableSpace(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
