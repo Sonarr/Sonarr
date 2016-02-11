@@ -428,7 +428,7 @@ namespace NzbDrone.Common.Disk
             {
                 if (files.None(f => subfolder.IsParentPath(f)))
                 {
-                    DeleteFolder(path, false);
+                    DeleteFolder(subfolder, false);
                 }
             }
         }
