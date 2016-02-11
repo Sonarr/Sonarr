@@ -95,7 +95,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             }
             catch (Exception ex)
             {
-                _logger.WarnException(ex.Message, ex);
+                _logger.Warn(ex, ex.Message);
                 throw new SkyHookException("Search for '{0}' failed. Invalid response received from SkyHook.", title);
             }
         }

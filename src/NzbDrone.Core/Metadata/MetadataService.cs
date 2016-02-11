@@ -380,7 +380,7 @@ namespace NzbDrone.Core.Metadata
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't download image " + url + " for " + series, e);
+                _logger.Error(e, "Couldn't download image " + url + " for " + series);
             }
         }
 

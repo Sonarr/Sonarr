@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Housekeeping
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Error running housekeeping task: " + housekeeper.GetType().Name, ex);
+                    _logger.Error(ex, "Error running housekeeping task: " + housekeeper.GetType().Name);
                 }
             }
 

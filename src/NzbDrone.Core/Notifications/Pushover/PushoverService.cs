@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to send test message: " + ex.Message);
                 return new ValidationFailure("ApiKey", "Unable to send test message");
             }
 

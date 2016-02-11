@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Update
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException(string.Format("Couldn't change the branch from [{0}] to [{1}].", currentBranch, package.Branch), e);
+                    _logger.Error(e, string.Format("Couldn't change the branch from [{0}] to [{1}].", currentBranch, package.Branch));
                 }
             }
         }
@@ -215,17 +215,17 @@ namespace NzbDrone.Core.Update
             }
             catch (UpdateFolderNotWritableException ex)
             {
-                _logger.ErrorException("Update process failed", ex);
+                _logger.Error(ex, "Update process failed");
                 throw new CommandFailedException("Startup folder not writable by user '{0}'", ex, Environment.UserName);
             }
             catch (UpdateVerificationFailedException ex)
             {
-                _logger.ErrorException("Update process failed", ex);
+                _logger.Error(ex, "Update process failed");
                 throw new CommandFailedException("Downloaded update package is corrupt", ex);
             }
             catch (UpdateFailedException ex)
             {
-                _logger.ErrorException("Update process failed", ex);
+                _logger.Error(ex, "Update process failed");
                 throw new CommandFailedException(ex);
             }
         }

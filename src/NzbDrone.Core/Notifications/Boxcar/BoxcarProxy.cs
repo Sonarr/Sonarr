@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
             }
             catch (BoxcarException ex)
             {
-                _logger.ErrorException("Unable to send message", ex);
+                _logger.Error(ex, "Unable to send message");
                 throw new BoxcarException("Unable to send Boxcar notifications");
             }
         }
@@ -53,16 +53,16 @@ namespace NzbDrone.Core.Notifications.Boxcar
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.ErrorException("Access Token is invalid: " + ex.Message, ex);
+                    _logger.Error(ex, "Access Token is invalid: " + ex.Message);
                     return new ValidationFailure("Token", "Access Token is invalid");
                 }
 
-                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to send test message: " + ex.Message);
                 return new ValidationFailure("Token", "Unable to send test message");
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to send test message: " + ex.Message);
                 return new ValidationFailure("", "Unable to send test message");
             }
         }
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
             {
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.ErrorException("Access Token is invalid: " + ex.Message, ex);
+                    _logger.Error(ex, "Access Token is invalid: " + ex.Message);
                     throw;
                 }
 

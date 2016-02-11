@@ -35,7 +35,7 @@ namespace NzbDrone.Mono
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Unable to get mono version: " + ex.Message, ex);
+                    _logger.Error(ex, "Unable to get mono version: " + ex.Message);
                 }
 
                 return string.Empty;

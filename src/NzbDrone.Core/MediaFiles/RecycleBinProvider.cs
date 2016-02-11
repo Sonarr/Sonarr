@@ -118,7 +118,7 @@ namespace NzbDrone.Core.MediaFiles
                 catch (IOException e)
                 {
                     var message = string.Format("Unable to move '{0}' to the recycling bin: '{1}'", path, destination);
-                    _logger.ErrorException(message, e);
+                    _logger.Error(e, message);
                     throw;
                 }
                 

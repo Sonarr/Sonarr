@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't remove item from client " + trackedDownload.DownloadItem.Title, e);
+                _logger.Error(e, "Couldn't remove item from client " + trackedDownload.DownloadItem.Title);
             }
         }
     }

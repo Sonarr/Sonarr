@@ -32,7 +32,7 @@ namespace NzbDrone.Console
             {
                 System.Console.WriteLine("");
                 System.Console.WriteLine("");
-                Logger.FatalException("EPIC FAIL!", e);
+                Logger.Fatal(e, "EPIC FAIL!");
                 System.Console.WriteLine("Press any key to exit...");
                 System.Console.ReadLine();
                 Environment.Exit(1);

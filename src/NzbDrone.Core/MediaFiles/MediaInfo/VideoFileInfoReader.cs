@@ -151,11 +151,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
             catch (DllNotFoundException ex)
             {
-                _logger.ErrorException("mediainfo is required but was not found", ex);
+                _logger.Error(ex, "mediainfo is required but was not found");
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to parse media info from file: " + filename, ex);
+                _logger.Error(ex, "Unable to parse media info from file: " + filename);
             }
             finally
             {

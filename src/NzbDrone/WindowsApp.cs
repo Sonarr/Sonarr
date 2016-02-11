@@ -29,7 +29,7 @@ namespace NzbDrone
             }
             catch (Exception e)
             {
-                Logger.FatalException("EPIC FAIL: " + e.Message, e);
+                Logger.Fatal(e, "EPIC FAIL: " + e.Message);
                 var message = string.Format("{0}: {1}", e.GetType().Name, e.Message);
                 MessageBox.Show(text: message, buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
             }

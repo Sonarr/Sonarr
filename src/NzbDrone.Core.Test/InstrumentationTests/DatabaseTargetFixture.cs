@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         {
             var ex = new InvalidOperationException("Fake Exception");
 
-            _logger.ErrorException(_uniqueMessage, ex);
+            _logger.Error(ex, _uniqueMessage);
 
 
             VerifyLog(StoredModel, LogLevel.Error);
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             _uniqueMessage = string.Empty;
 
 
-            _logger.ErrorException(_uniqueMessage, ex);
+            _logger.Error(ex, _uniqueMessage);
 
             StoredModel.Message.Should().Be(ex.Message);
 

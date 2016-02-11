@@ -53,15 +53,13 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
-                _logger.ErrorException(string.Format("Downloading nzb for episode '{0}' failed ({1})",
-                    remoteEpisode.Release.Title, url), ex);
+                _logger.Error(ex, "Downloading nzb for episode '{0}' failed ({1})", remoteEpisode.Release.Title, url);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);
             }
             catch (WebException ex)
             {
-                _logger.ErrorException(string.Format("Downloading nzb for episode '{0}' failed ({1})",
-                    remoteEpisode.Release.Title, url), ex);
+                _logger.Error(ex, "Downloading nzb for episode '{0}' failed ({1})", remoteEpisode.Release.Title, url);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);
             }

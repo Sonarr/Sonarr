@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Download
                 {
                     //TODO: support for store & forward
                     //We'll need to differentiate between a download client error and an indexer error
-                    _logger.WarnException("Couldn't add report to download queue. " + remoteEpisode, e);
+                    _logger.Warn(e, "Couldn't add report to download queue. " + remoteEpisode);
                 }
             }
 

@@ -292,7 +292,7 @@ namespace NzbDrone.Common.Processes
             }
             catch (Win32Exception e)
             {
-                _logger.WarnException("Couldn't get process info for " + process.ProcessName, e);
+                _logger.Warn(e, "Couldn't get process info for " + process.ProcessName);
             }
 
             return processInfo;

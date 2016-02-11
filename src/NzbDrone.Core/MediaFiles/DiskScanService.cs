@@ -155,8 +155,8 @@ namespace NzbDrone.Core.MediaFiles
             catch (Exception ex)
             {
 
-                _logger.WarnException("Unable to apply permissions to: " + path, ex);
-                _logger.DebugException(ex.Message, ex);
+                _logger.Warn(ex, "Unable to apply permissions to: " + path);
+                _logger.Debug(ex, ex.Message);
             }
         }       
 

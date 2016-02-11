@@ -42,18 +42,18 @@ namespace NzbDrone.Core.Messaging.Commands
                     }
                     catch (Exception ex)
                     {
-                        _logger.ErrorException("Error occurred while executing task " + command.Name, ex);
+                        _logger.Error(ex, "Error occurred while executing task " + command.Name);
                     }
                 }
             }
             catch (ThreadAbortException ex)
             {
-                _logger.ErrorException("Thread aborted: " + ex.Message, ex);
+                _logger.Error(ex, "Thread aborted: " + ex.Message);
                 Thread.ResetAbort();
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unknown error in thread: " + ex.Message, ex);
+                _logger.Error(ex, "Unknown error in thread: " + ex.Message);
             }
         }
 

@@ -49,7 +49,7 @@ namespace NzbDrone.Mono
             }
             catch (InvalidOperationException ex)
             {
-                Logger.ErrorException("Couldn't get free space for " + path, ex);
+                Logger.Error(ex, "Couldn't get free space for " + path);
             }
 
             return null;
@@ -149,7 +149,7 @@ namespace NzbDrone.Mono
             }
             catch (InvalidOperationException e)
             {
-                Logger.ErrorException("Couldn't get total space for " + path, e);
+                Logger.Error(e, "Couldn't get total space for " + path);
             }
 
             return null;
@@ -164,7 +164,7 @@ namespace NzbDrone.Mono
             }
             catch (Exception ex)
             {
-                Logger.DebugException(string.Format("Hardlink '{0}' to '{1}' failed.", source, destination), ex);
+                Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
                 return false;
             }
         }

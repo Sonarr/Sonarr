@@ -135,7 +135,7 @@ namespace NzbDrone.Core.MediaFiles
 
             catch (Exception ex)
             {
-                _logger.WarnException("Unable to set last write time", ex);
+                _logger.Warn(ex, "Unable to set last write time");
             }
 
             _mediaFileAttributeService.SetFilePermissions(destinationFilePath);
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.MediaFiles
             }
             catch (IOException ex)
             {
-                _logger.ErrorException("Unable to create directory: " + directoryName, ex);
+                _logger.Error(ex, "Unable to create directory: " + directoryName);
             }
 
             _mediaFileAttributeService.SetFolderPermissions(directoryName);

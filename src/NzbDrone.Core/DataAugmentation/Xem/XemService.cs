@@ -84,7 +84,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Error updating scene numbering mappings for: " + series, ex);
+                _logger.Error(ex, "Error updating scene numbering mappings for: " + series);
             }
         }
 

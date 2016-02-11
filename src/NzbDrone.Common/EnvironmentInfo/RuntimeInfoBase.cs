@@ -60,7 +60,7 @@ namespace NzbDrone.Common.EnvironmentInfo
                 }
                 catch (Exception ex)
                 {
-                    _logger.WarnException("Error checking if the current user is an administrator.", ex);
+                    _logger.Warn(ex, "Error checking if the current user is an administrator.");
                     return false;
                 }
             }

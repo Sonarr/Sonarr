@@ -335,7 +335,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to process episode image for file: " + Path.Combine(series.Path, episodeFile.RelativePath), ex);
+                _logger.Error(ex, "Unable to process episode image for file: " + Path.Combine(series.Path, episodeFile.RelativePath));
                 
                 return new List<ImageFileResult>();
             }

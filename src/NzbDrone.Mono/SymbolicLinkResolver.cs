@@ -50,7 +50,7 @@ namespace NzbDrone.Mono
             }
             catch (Exception ex)
             {
-                _logger.DebugException(string.Format("Failed to check for symlinks in the path {0}", path), ex);
+                _logger.Debug(ex, string.Format("Failed to check for symlinks in the path {0}", path));
                 return path;
             }
         }

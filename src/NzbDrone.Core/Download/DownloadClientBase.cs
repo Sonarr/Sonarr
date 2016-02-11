@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception ex)
             {
-                _logger.WarnException(string.Format("[{0}] Error occurred while trying to delete data from '{1}'.", item.Title, item.OutputPath), ex);
+                _logger.Warn(ex, string.Format("[{0}] Error occurred while trying to delete data from '{1}'.", item.Title, item.OutputPath));
             }
         }
 
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Test aborted due to exception", ex);
+                _logger.Error(ex, "Test aborted due to exception");
                 failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
             }
 

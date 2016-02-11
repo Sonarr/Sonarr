@@ -53,7 +53,7 @@ namespace NzbDrone.Common.Http
             }
             catch (Exception e)
             {
-                _logger.WarnException("Failed to get response from: " + url, e);
+                _logger.Warn(e, "Failed to get response from: " + url);
                 throw;
             }
         }

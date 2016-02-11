@@ -29,7 +29,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             }
             catch (Exception ex)
             {
-                _logger.TraceException("Initializing curl failed", ex);
+                _logger.Trace(ex, "Initializing curl failed");
                 return false;
             }
         }

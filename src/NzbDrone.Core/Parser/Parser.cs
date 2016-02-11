@@ -358,7 +358,7 @@ namespace NzbDrone.Core.Parser
                         }
                         catch (InvalidDateException ex)
                         {
-                            Logger.DebugException(ex.Message, ex);
+                            Logger.Debug(ex, ex.Message);
                             break;
                         }
                     }
@@ -367,7 +367,7 @@ namespace NzbDrone.Core.Parser
             catch (Exception e)
             {
                 if (!title.ToLower().Contains("password") && !title.ToLower().Contains("yenc"))
-                    Logger.ErrorException("An error has occurred while trying to parse " + title, e);
+                    Logger.Error(e, "An error has occurred while trying to parse " + title);
             }
 
             Logger.Debug("Unable to parse {0}", title);

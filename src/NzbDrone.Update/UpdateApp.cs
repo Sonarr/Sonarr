@@ -46,7 +46,7 @@ namespace NzbDrone.Update
             }
             catch (Exception e)
             {
-                Logger.FatalException("An error has occurred while applying update package.", e);
+                Logger.Fatal(e, "An error has occurred while applying update package.");
             }
         }
 

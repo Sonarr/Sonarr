@@ -91,7 +91,7 @@ namespace NzbDrone.Core.DiskSpace
                 {
                     if (!suppressWarnings)
                     {
-                        _logger.WarnException("Unable to get free space for: " + path, ex);
+                        _logger.Warn(ex, "Unable to get free space for: " + path);
                     }
                 }
 

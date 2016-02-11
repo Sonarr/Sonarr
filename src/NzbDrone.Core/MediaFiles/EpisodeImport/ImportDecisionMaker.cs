@@ -111,7 +111,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
             catch (Exception e)
             {
-                _logger.ErrorException("Couldn't import file. " + file, e);
+                _logger.Error(e, "Couldn't import file. " + file);
             }
 
             return decision;
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             {
                 //e.Data.Add("report", remoteEpisode.Report.ToJson());
                 //e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.ErrorException("Couldn't evaluate decision on " + localEpisode.Path, e);
+                _logger.Error(e, "Couldn't evaluate decision on " + localEpisode.Path);
                 return new Rejection(string.Format("{0}: {1}", spec.GetType().Name, e.Message));
             }
 

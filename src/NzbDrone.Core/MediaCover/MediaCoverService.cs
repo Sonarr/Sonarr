@@ -103,7 +103,7 @@ namespace NzbDrone.Core.MediaCover
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException("Couldn't download media cover for " + series, e);
+                    _logger.Error(e, "Couldn't download media cover for " + series);
                 }
 
                 EnsureResizedCovers(series, cover, !alreadyExists);

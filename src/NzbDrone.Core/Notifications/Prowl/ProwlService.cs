@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
                 _logger.Warn("Invalid API Key: {0}", apiKey);
             }
         }
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
             catch (Exception ex)
             {
-                _logger.DebugException(ex.Message, ex);
+                _logger.Debug(ex, ex.Message);
                 _logger.Warn("Invalid API Key: {0}", apiKey);
                 throw new InvalidApiKeyException("API Key: " + apiKey + " is invalid");
             }
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Unable to send test message: " + ex.Message, ex);
+                _logger.Error(ex, "Unable to send test message: " + ex.Message);
                 return new ValidationFailure("ApiKey", "Unable to send test message");
             }
 

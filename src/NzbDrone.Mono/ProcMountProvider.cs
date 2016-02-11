@@ -40,7 +40,7 @@ namespace NzbDrone.Mono
             }
             catch (Exception ex)
             {
-                _logger.DebugException("Failed to retrieve mounts from /proc/mounts", ex);
+                _logger.Debug(ex, "Failed to retrieve mounts from /proc/mounts");
             }
 
             return new List<IMount>();
@@ -67,7 +67,7 @@ namespace NzbDrone.Mono
                 }
                 catch (Exception ex)
                 {
-                    _logger.DebugException("Failed to get filesystem types from /proc/filesystems, using default set.", ex);
+                    _logger.Debug(ex, "Failed to get filesystem types from /proc/filesystems, using default set.");
                 }
                 
                 if (result.Empty())

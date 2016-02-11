@@ -112,7 +112,7 @@ namespace NzbDrone.Windows
             }
             catch (Exception ex)
             {
-                Logger.DebugException(string.Format("Hardlink '{0}' to '{1}' failed.", source, destination), ex);
+                Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
                 return false;
             }
         }

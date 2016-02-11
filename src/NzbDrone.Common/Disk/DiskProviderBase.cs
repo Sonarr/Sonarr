@@ -304,7 +304,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception e)
             {
-                Logger.WarnException(string.Format("Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType), e);
+                Logger.Warn(e, string.Format("Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType));
                 throw;
             }
 
@@ -394,7 +394,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                Logger.DebugException(string.Format("Failed to get mount for path {0}", path), ex);
+                Logger.Debug(ex, string.Format("Failed to get mount for path {0}", path));
                 return null;
             }
         }

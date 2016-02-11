@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Messaging.Events
                 }
                 catch (Exception e)
                 {
-                    _logger.ErrorException(string.Format("{0} failed while processing [{1}]", handler.GetType().Name, eventName), e);
+                    _logger.Error(e, string.Format("{0} failed while processing [{1}]", handler.GetType().Name, eventName));
                 }
             }
 

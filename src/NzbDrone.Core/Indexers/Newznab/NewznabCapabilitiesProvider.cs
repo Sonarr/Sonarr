@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             catch (Exception ex)
             {
-                _logger.DebugException(string.Format("Failed to get capabilities from {0}: {1}", indexerSettings.Url, ex.Message), ex);
+                _logger.Debug(ex, string.Format("Failed to get capabilities from {0}: {1}", indexerSettings.Url, ex.Message));
             }
 
             return capabilities;

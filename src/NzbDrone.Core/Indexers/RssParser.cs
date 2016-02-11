@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Indexers
                 catch (Exception itemEx)
                 {
                     itemEx.Data.Add("Item", item.Title());
-                    _logger.ErrorException("An error occurred while processing feed item from " + indexerResponse.Request.Url, itemEx);
+                    _logger.Error(itemEx, "An error occurred while processing feed item from " + indexerResponse.Request.Url);
                 }
             }
 
@@ -277,7 +277,7 @@ namespace NzbDrone.Core.Indexers
             }
             catch (Exception ex)
             {
-                _logger.DebugException(string.Format("Failed to parse Uri {0}, ignoring.", value), ex);
+                _logger.Debug(ex, string.Format("Failed to parse Uri {0}, ignoring.", value));
                 return null;
             }
         }

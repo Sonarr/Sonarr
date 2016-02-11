@@ -71,7 +71,7 @@ namespace NzbDrone.Host
             }
             catch (Exception ex)
             {
-                _logger.WarnException("Failed to check for multiple instances of Sonarr.", ex);
+                _logger.Warn(ex, "Failed to check for multiple instances of Sonarr.");
                 return new List<int>();
             }
         }

@@ -132,7 +132,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Failed to rename file: " + episodeFilePath, ex);
+                    _logger.Error(ex, "Failed to rename file: " + episodeFilePath);
                 }
             }
 

@@ -35,7 +35,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     var message = String.Format("Unable to communicate with {0}.", downloadClient.Definition.Name);
 
-                    _logger.ErrorException(message, ex);
+                    _logger.Error(ex, message);
                     return new HealthCheck(GetType(), HealthCheckResult.Error, message + " " + ex.Message);
                 }
             }

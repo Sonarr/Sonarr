@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             }
             catch (Exception ex)
             {
-                _logger.WarnException(string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message), ex);
+                _logger.Warn(ex, string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message));
                 return null;
             }
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             }
             catch (Exception ex)
             {
-                _logger.TraceException("Feed wasn't parsable by Ezrss Parser", ex);
+                _logger.Trace(ex, "Feed wasn't parsable by Ezrss Parser");
                 return null;
             }
         }
@@ -233,7 +233,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             }
             catch (Exception ex)
             {
-                _logger.DebugException("Unable to parse indexer feed: " + ex.Message, ex);
+                _logger.Debug(ex, "Unable to parse indexer feed: " + ex.Message);
                 throw new UnsupportedFeedException("Unable to parse indexer: " + ex.Message);
             }
         }
