@@ -11,6 +11,7 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly IDelayProfileService _delayProfileService;
         public delegate int CompareDelegate(DownloadDecision x, DownloadDecision y);
+        public delegate int CompareDelegate<TSubject, TValue>(DownloadDecision x, DownloadDecision y);
 
         public DownloadDecisionComparer(IDelayProfileService delayProfileService)
         {
@@ -33,118 +34,54 @@ namespace NzbDrone.Core.DecisionEngine
             return comparers.Select(comparer => comparer(x, y)).FirstOrDefault(result => result != 0);
         }
 
+        private int Compare<TSubject, TValue>(TSubject left, TSubject right, Func<TSubject, TValue> funcValue)
+            where TValue : IComparable<TValue>
+        {
+            var leftValue = funcValue(left);
+            var rightValue = funcValue(right);
+
+            return leftValue.CompareTo(rightValue);
+        }
+
+        private int CompareReverse<TSubject, TValue>(TSubject left, TSubject right, Func<TSubject, TValue> funcValue)
+            where TValue : IComparable<TValue>
+        {
+            return Compare(left, right, funcValue)*-1;
+        }
+
+        private int Compare(params int[] comparers)
+        {
+            return comparers.Select(comparer => comparer).FirstOrDefault(result => result != 0);
+        }
+
         private int CompareQuality(DownloadDecision x, DownloadDecision y)
         {
-            var qualityX = x.RemoteEpisode.ParsedEpisodeInfo.Quality;
-            var qualityY = y.RemoteEpisode.ParsedEpisodeInfo.Quality;
-            var indexX = x.RemoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == qualityX.Quality);
-            var indexY = y.RemoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == qualityY.Quality);
-
-            if (indexX > indexY)
-            {
-                return 1;
-            }
-
-            if (indexX < indexY)
-            {
-                return -1;
-            }
-
-            if (qualityX.Revision.Real > qualityY.Revision.Real)
-            {
-                return 1;
-            }
-
-            if (qualityX.Revision.Real < qualityY.Revision.Real)
-            {
-                return -1;
-            }
-
-            if (qualityX.Revision.Version > qualityY.Revision.Version)
-            {
-                return 1;
-            }
-
-            if (qualityX.Revision.Version < qualityY.Revision.Version)
-            {
-                return -1;
-            }
-
-            return 0;
+            return Compare(Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == remoteEpisode.ParsedEpisodeInfo.Quality.Quality)),
+                           Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real),
+                           Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version));
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)
         {
-            var delayProfileX = _delayProfileService.BestForTags(x.RemoteEpisode.Series.Tags);
-            var delayProfileY = _delayProfileService.BestForTags(y.RemoteEpisode.Series.Tags);
-            var downloadProtocolX = x.RemoteEpisode.Release.DownloadProtocol;
-            var downloadProtocolY = y.RemoteEpisode.Release.DownloadProtocol;
-            var preferredX = downloadProtocolX == delayProfileX.PreferredProtocol;
-            var preferredY = downloadProtocolY == delayProfileY.PreferredProtocol;
-
-            if (preferredX && !preferredY)
+            var result = Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
             {
-                return 1;
-            }
+                var delayProfile = _delayProfileService.BestForTags(remoteEpisode.Series.Tags);
+                var downloadProtocol = remoteEpisode.Release.DownloadProtocol;
+                return downloadProtocol == delayProfile.PreferredProtocol;
+            });
 
-            if (!preferredX && preferredY)
-            {
-                return -1;
-            }
-
-            return 0;
+            return result;
         }
 
         private int CompareEpisodeCount(DownloadDecision x, DownloadDecision y)
         {
-            // Prefer season packs, otherwise prefer less episodes
-
-            var fullSeasonX = x.RemoteEpisode.ParsedEpisodeInfo.FullSeason;
-            var fullSeasonY = y.RemoteEpisode.ParsedEpisodeInfo.FullSeason;
-            var episodesX = x.RemoteEpisode.Episodes.Count;
-            var episodesY = y.RemoteEpisode.Episodes.Count;
-
-            if (fullSeasonX && !fullSeasonY)
-            {
-                return 1;
-            }
-
-            if (!fullSeasonX && fullSeasonY)
-            {
-                return -1;
-            }
-
-            if (episodesX < episodesY)
-            {
-                return 1;
-            }
-
-            if (episodesX > episodesY)
-            {
-                return -1;
-            }
-
-            return 0;
+            return Compare(Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.FullSeason),
+                           CompareReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count));
         }
 
         private int CompareEpisodeNumber(DownloadDecision x, DownloadDecision y)
         {
-            // Prefer lower episode numbers
-
-            var episodeNumberX = x.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault();
-            var episodeNumberY = y.RemoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault();
-
-            if (episodeNumberX < episodeNumberY)
-            {
-                return 1;
-            }
-
-            if (episodeNumberX > episodeNumberY)
-            {
-                return -1;
-            }
-
-            return 0;
+            return CompareReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault());
         }
 
         private int ComparePeers(DownloadDecision x, DownloadDecision y)
@@ -157,32 +94,18 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            var seedersX = TorrentInfo.GetSeeders(x.RemoteEpisode.Release);
-            var seedersY = TorrentInfo.GetSeeders(y.RemoteEpisode.Release);
-            var peersX = TorrentInfo.GetPeers(x.RemoteEpisode.Release);
-            var peersY = TorrentInfo.GetPeers(y.RemoteEpisode.Release);
-
-            if (seedersX > seedersY)
+            return Compare(Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
             {
-                return 1;
-            }
+                var seeders = TorrentInfo.GetSeeders(remoteEpisode.Release);
 
-            if (seedersX < seedersY)
-            {
-                return -1;
-            }
+                return seeders ?? 0;
+            }),
+                Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+                {
+                    var peers = TorrentInfo.GetPeers(remoteEpisode.Release);
 
-            if (peersX > peersY)
-            {
-                return 1;
-            }
-
-            if (peersX < peersY)
-            {
-                return -1;
-            }
-
-            return 0;
+                    return peers ?? 0;
+                }));
         }
 
         private int CompareAge(DownloadDecision x, DownloadDecision y)
@@ -193,40 +116,14 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            var minutesX = x.RemoteEpisode.Release.AgeMinutes;
-            var minutesY = y.RemoteEpisode.Release.AgeMinutes;
-
-            if (minutesX < minutesY)
-            {
-                return 1;
-            }
-
-            if (minutesX > minutesY)
-            {
-                return -1;
-            }
-
-            return 0;
+            return CompareReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.AgeMinutes);
         }
 
         private int CompareSize(DownloadDecision x, DownloadDecision y)
         {
             // TODO: Is smaller better? Smaller for usenet could mean no par2 files.
 
-            var sizeX = x.RemoteEpisode.Release.Size.Round(200.Megabytes());
-            var sizeY = y.RemoteEpisode.Release.Size.Round(200.Megabytes());
-
-            if (sizeX < sizeY)
-            {
-                return 1;
-            }
-
-            if (sizeX > sizeY)
-            {
-                return -1;
-            }
-
-            return 0;
+            return Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.Size.Round(200.Megabytes()));
         }
     }
 }

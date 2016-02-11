@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
 
 namespace NzbDrone.Core.DecisionEngine
