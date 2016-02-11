@@ -365,5 +365,33 @@ namespace NzbDrone.Core.Test.TvTests
 
             _insertedEpisodes.Should().OnlyContain(e => e.AirDateUtc.Value.ToString("s") == episodes.First().AirDateUtc.Value.ToString("s"));
         }
+
+        [Test]
+        public void should_prefer_regular_season_when_absolute_numbers_conflict()
+        {
+            var episodes = Builder<Episode>.CreateListOfSize(2)
+                                           .Build()
+                                           .ToList();
+
+            episodes[0].AbsoluteEpisodeNumber = episodes[1].AbsoluteEpisodeNumber;
+            episodes[0].SeasonNumber = 0;
+            episodes[0].EpisodeNumber.Should().NotBe(episodes[1].EpisodeNumber);
+
+            var existingEpisode = new Episode
+            {
+                SeasonNumber = episodes[0].SeasonNumber,
+                EpisodeNumber = episodes[0].EpisodeNumber,
+                AbsoluteEpisodeNumber = episodes[1].AbsoluteEpisodeNumber
+            };
+
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
+                .Returns(new List<Episode> { existingEpisode });
+
+            Subject.RefreshEpisodeInfo(GetAnimeSeries(), episodes);
+
+            _updatedEpisodes.First().SeasonNumber.Should().Be(episodes[1].SeasonNumber);
+            _updatedEpisodes.First().EpisodeNumber.Should().Be(episodes[1].EpisodeNumber);
+            _updatedEpisodes.First().AbsoluteEpisodeNumber.Should().Be(episodes[1].AbsoluteEpisodeNumber);
+        }
     }
 }

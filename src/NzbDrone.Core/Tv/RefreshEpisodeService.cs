@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Tv
 
             if (series.SeriesType == SeriesTypes.Anime)
             {
-                dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(series, dupeFreeRemoteEpisodes);
+                dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(dupeFreeRemoteEpisodes);
             }
 
             foreach (var episode in OrderEpisodes(series, dupeFreeRemoteEpisodes))
@@ -154,13 +154,14 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        private List<Episode> MapAbsoluteEpisodeNumbers(Series series, List<Episode> traktEpisodes)
+        private List<Episode> MapAbsoluteEpisodeNumbers(List<Episode> remoteEpisodes)
         {
             //Return all episodes with no abs number, but distinct for those with abs number
-            return traktEpisodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
-                                .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)
-                                .Concat(traktEpisodes.Where(e => !e.AbsoluteEpisodeNumber.HasValue))
-                                .ToList();
+            return remoteEpisodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
+                                 .OrderByDescending(e => e.SeasonNumber)
+                                 .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)
+                                 .Concat(remoteEpisodes.Where(e => !e.AbsoluteEpisodeNumber.HasValue))
+                                 .ToList();
         }
 
         private Episode GetEpisodeToUpdate(Series series, Episode episode, List<Episode> existingEpisodes)
