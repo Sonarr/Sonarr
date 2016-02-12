@@ -187,16 +187,15 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         {
             var mappings = new List<SceneMapping>
             {
-                new SceneMapping { Title = "Working!!", ParseTerm = "working", SearchTerm = "Working!!", TvdbId = 100, SeasonNumber = -1 },
-                new SceneMapping { Title = "Working!!", ParseTerm = "working", SearchTerm = "Working!!", TvdbId = 100, SeasonNumber = 1 },
-                new SceneMapping { Title = "Working`!!", ParseTerm = "working", SearchTerm = "Working`!!", TvdbId = 100, SeasonNumber = 2 },
-                new SceneMapping { Title = "Working!!!", ParseTerm = "working", SearchTerm = "Working!!!", TvdbId = 100, SeasonNumber = 3 },
+                new SceneMapping { Title = "Working!!", ParseTerm = "working", SearchTerm = "Working!!", TvdbId = 100, SceneSeasonNumber = 1 },
+                new SceneMapping { Title = "Working`!!", ParseTerm = "working", SearchTerm = "Working`!!", TvdbId = 100, SceneSeasonNumber = 2 },
+                new SceneMapping { Title = "Working!!!", ParseTerm = "working", SearchTerm = "Working!!!", TvdbId = 100, SceneSeasonNumber = 3 },
             };
 
             Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
 
             var tvdbId = Subject.FindTvdbId(parseTitle);
-            var seasonNumber = Subject.GetSeasonNumber(parseTitle);
+            var seasonNumber = Subject.GetSceneSeasonNumber(parseTitle);
 
             tvdbId.Should().Be(100);
             seasonNumber.Should().Be(expectedSeasonNumber);
@@ -217,7 +216,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             foreach (var sceneMapping in _fakeMappings)
             {
-                Subject.GetSceneNames(sceneMapping.TvdbId, _fakeMappings.Select(m => m.SeasonNumber)).Should().Contain(sceneMapping.SearchTerm);
+                Subject.GetSceneNamesBySeasonNumbers(sceneMapping.TvdbId, _fakeMappings.Select(m => m.SeasonNumber.Value)).Should().Contain(sceneMapping.SearchTerm);
                 Subject.FindTvdbId(sceneMapping.ParseTerm).Should().Be(sceneMapping.TvdbId);
             }
         }

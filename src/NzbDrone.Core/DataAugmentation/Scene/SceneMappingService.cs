@@ -14,10 +14,11 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        List<string> GetSceneNames(int tvdbId, IEnumerable<int> seasonNumbers);
+        List<string> GetSceneNamesBySeasonNumbers(int tvdbId, IEnumerable<int> seasonNumbers);
+        List<string> GetSceneNamesBySceneSeasonNumbers(int tvdbId, IEnumerable<int> sceneSeasonNumbers);
         int? FindTvdbId(string title);
         List<SceneMapping> FindByTvdbId(int tvdbId);
-        int? GetSeasonNumber(string title);
+        int? GetSceneSeasonNumber(string title);
     }
 
     public class SceneMappingService : ISceneMappingService,
@@ -46,7 +47,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _findByTvdbIdCache = cacheManager.GetCacheDictionary<List<SceneMapping>>(GetType(), "find_tvdb_id");
         }
 
-        public List<string> GetSceneNames(int tvdbId, IEnumerable<int> seasonNumbers)
+        public List<string> GetSceneNamesBySeasonNumbers(int tvdbId, IEnumerable<int> seasonNumbers)
         {
             var names = _findByTvdbIdCache.Find(tvdbId.ToString());
 
@@ -55,8 +56,22 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                 return new List<string>();
             }
 
-            return FilterNonEnglish(names.Where(s => seasonNumbers.Contains(s.SeasonNumber) ||
+            return FilterNonEnglish(names.Where(s => s.SeasonNumber.HasValue && seasonNumbers.Contains(s.SeasonNumber.Value) ||
                                                      s.SeasonNumber == -1)
+                                         .Select(m => m.SearchTerm).Distinct().ToList());
+        }
+
+        public List<string> GetSceneNamesBySceneSeasonNumbers(int tvdbId, IEnumerable<int> sceneSeasonNumbers)
+        {
+            var names = _findByTvdbIdCache.Find(tvdbId.ToString());
+
+            if (names == null)
+            {
+                return new List<string>();
+            }
+
+            return FilterNonEnglish(names.Where(s => s.SceneSeasonNumber.HasValue && sceneSeasonNumbers.Contains(s.SceneSeasonNumber.Value) ||
+                                                     s.SceneSeasonNumber == -1)
                                          .Select(m => m.SearchTerm).Distinct().ToList());
         }
 
@@ -87,14 +102,16 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mappings;
         }
 
-        public int? GetSeasonNumber(string title)
+        public int? GetSceneSeasonNumber(string title)
         {
             var mapping = FindMapping(title);
 
             if (mapping == null)
+            {
                 return null;
+            }
 
-            return mapping.SeasonNumber;
+            return mapping.SceneSeasonNumber;
         }
 
         private void UpdateMappings()

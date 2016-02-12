@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Queue;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.IndexerSearch
 {

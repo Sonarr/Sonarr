@@ -233,10 +233,12 @@ namespace NzbDrone.Core.IndexerSearch
             var spec = new TSpec();
 
             spec.Series = series;
-            spec.SceneTitles = _sceneMapping.GetSceneNames(series.TvdbId,
-                                                           episodes.Select(e => e.SeasonNumber)
-                                                                   .Concat(episodes.Where(v => v.SceneSeasonNumber.HasValue).Select(e => e.SceneSeasonNumber.Value)
-                                                                   .Distinct()));
+            spec.SceneTitles = _sceneMapping.GetSceneNamesBySeasonNumbers(series.TvdbId, episodes.Select(e => e.SeasonNumber))
+                                            .Concat(_sceneMapping.GetSceneNamesBySceneSeasonNumbers(series.TvdbId, 
+                                                episodes.Where(v => v.SceneSeasonNumber.HasValue)
+                                                        .Select(e => e.SceneSeasonNumber.Value)))
+                                            .Distinct()
+                                            .ToList();
 
             spec.Episodes = episodes;
 

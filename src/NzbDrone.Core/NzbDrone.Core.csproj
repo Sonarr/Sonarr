@@ -274,6 +274,7 @@
     <Compile Include="Datastore\Migration\091_added_indexerstatus.cs" />
     <Compile Include="Datastore\Migration\093_naming_config_replace_characters.cs" />
     <Compile Include="Datastore\Migration\092_add_unverifiedscenenumbering.cs" />
+    <Compile Include="Datastore\Migration\100_add_scene_season_number.cs" />
     <Compile Include="Datastore\Migration\094_add_tvmazeid.cs" />
     <Compile Include="Datastore\Migration\098_remove_titans_of_tv.cs">
       <SubType>Code</SubType>

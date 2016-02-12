@@ -55,6 +55,10 @@
             {{#if_eq seasonNumber compare="-1"}}
                 <span class="label label-default">{{title}}</span>
             {{/if_eq}}
+
+            {{#if_eq sceneSeasonNumber compare="-1"}}
+                <span class="label label-default">{{title}}</span>
+            {{/if_eq}}
         {{/each}}
     </div>
 </div>

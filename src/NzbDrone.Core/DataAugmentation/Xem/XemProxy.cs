@@ -106,7 +106,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                                    {
                                        Title = n.Key,
                                        SearchTerm = n.Key,
-                                       SeasonNumber = seasonNumber,
+                                       SceneSeasonNumber = seasonNumber,
                                        TvdbId = series.Key
                                    });
                     }

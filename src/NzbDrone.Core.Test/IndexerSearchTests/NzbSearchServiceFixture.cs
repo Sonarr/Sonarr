@@ -52,7 +52,11 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                 .Returns<int, int>((i, j) => _xemEpisodes.Where(d => d.SeasonNumber == j).ToList());
 
             Mocker.GetMock<ISceneMappingService>()
-                  .Setup(s => s.GetSceneNames(It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
+                  .Setup(s => s.GetSceneNamesBySeasonNumbers(It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
+                  .Returns(new List<string>());
+
+            Mocker.GetMock<ISceneMappingService>()
+                  .Setup(s => s.GetSceneNamesBySceneSeasonNumbers(It.IsAny<int>(), It.IsAny<IEnumerable<int>>()))
                   .Returns(new List<string>());
         }
 

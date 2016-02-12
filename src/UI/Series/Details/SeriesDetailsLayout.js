@@ -182,6 +182,14 @@ module.exports = Marionette.Layout.extend({
             return _.where(self.model.get('alternateTitles'), { seasonNumber : seasonNumber });
         });
 
+        reqres.setHandler(reqres.Requests.GetAlternateNameBySceneSeasonNumber, function(seriesId, sceneSeasonNumber) {
+            if (self.model.get('id') !== seriesId) {
+                return [];
+            }
+
+            return _.where(self.model.get('alternateTitles'), { sceneSeasonNumber : sceneSeasonNumber });
+        });
+
         $.when(this.episodeCollection.fetch(), this.episodeFileCollection.fetch()).done(function() {
             var seasonCollectionView = new SeasonCollectionView({
                 collection        : self.seasonCollection,

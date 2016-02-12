@@ -22,7 +22,7 @@ module.exports = NzbDroneCell.extend({
         if (reqres.hasHandler(reqres.Requests.GetAlternateNameBySeasonNumber)) {
 
             if (this.model.get('sceneSeasonNumber') > 0) {
-                alternateTitles = reqres.request(reqres.Requests.GetAlternateNameBySeasonNumber, this.model.get('seriesId'), this.model.get('sceneSeasonNumber'));
+                alternateTitles = reqres.request(reqres.Requests.GetAlternateNameBySceneSeasonNumber, this.model.get('seriesId'), this.model.get('sceneSeasonNumber'));
             }
 
             if (alternateTitles.length === 0) {
