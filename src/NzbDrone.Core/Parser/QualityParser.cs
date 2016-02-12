@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RealRegex = new Regex(@"\b(?<real>REAL)\b",
                                                                 RegexOptions.Compiled);
 
-        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480|848x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080))\b",
+        private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<_480p>480p|640x480|848x480)|(?<_576p>576p)|(?<_720p>720p|1280x720)|(?<_1080p>1080p|1920x1080)|(?<_2160p>2160p))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",
@@ -76,6 +76,12 @@ namespace NzbDrone.Core.Parser
                     return result;
                 }
 
+                if (resolution == Resolution._2160p)
+                {
+                    result.Quality = Quality.Bluray2160p;
+                    return result;
+                }
+
                 if (resolution == Resolution._1080p)
                 {
                     result.Quality = Quality.Bluray1080p;
@@ -94,6 +100,12 @@ namespace NzbDrone.Core.Parser
 
             if (sourceMatch.Groups["webdl"].Success)
             {
+                if (resolution == Resolution._2160p)
+                {
+                    result.Quality = Quality.WEBDL2160p;
+                    return result;
+                }
+
                 if (resolution == Resolution._1080p)
                 {
                     result.Quality = Quality.WEBDL1080p;
@@ -118,6 +130,12 @@ namespace NzbDrone.Core.Parser
 
             if (sourceMatch.Groups["hdtv"].Success)
             {
+                if (resolution == Resolution._2160p)
+                {
+                    result.Quality = Quality.HDTV2160p;
+                    return result;
+                }
+
                 if (resolution == Resolution._1080p)
                 {
                     result.Quality = Quality.HDTV1080p;
@@ -195,6 +213,12 @@ namespace NzbDrone.Core.Parser
                 }
 
                 result.Quality = Quality.Bluray720p;
+                return result;
+            }
+
+            if (resolution == Resolution._2160p)
+            {
+                result.Quality = Quality.HDTV2160p;
                 return result;
             }
 
@@ -296,6 +320,7 @@ namespace NzbDrone.Core.Parser
             if (match.Groups["_576p"].Success) return Resolution._576p;
             if (match.Groups["_720p"].Success) return Resolution._720p;
             if (match.Groups["_1080p"].Success) return Resolution._1080p;
+            if (match.Groups["_2160p"].Success) return Resolution._2160p;
 
             return Resolution.Unknown;
         }
@@ -346,6 +371,7 @@ namespace NzbDrone.Core.Parser
         _576p,
         _720p,
         _1080p,
+        _2160p,
         Unknown
     }
 }
