@@ -120,9 +120,9 @@
     <Compile Include="Datastore\MappingExtentionFixture.cs" />
     <Compile Include="Datastore\MarrDataLazyLoadingFixture.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profileFixture.cs" />
-    <Compile Include="Datastore\Migration\072_history_grabIdFixture.cs" />
+    <Compile Include="Datastore\Migration\072_history_downloadIdFixture.cs" />
     <Compile Include="Datastore\Migration\070_delay_profileFixture.cs" />
-    <Compile Include="Datastore\Migration\088_pushbullet_devices_channels.cs" />
+    <Compile Include="Datastore\Migration\088_pushbullet_devices_channels_listFixture.cs" />
     <Compile Include="Datastore\Migration\086_pushbullet_device_idsFixture.cs" />
     <Compile Include="Datastore\Migration\085_expand_transmission_urlbaseFixture.cs" />
     <Compile Include="Datastore\Migration\084_update_quality_minmax_sizeFixture.cs" />
@@ -186,9 +186,10 @@
     <Compile Include="FluentTest.cs" />
     <Compile Include="Framework\CoreTest.cs" />
     <Compile Include="Framework\DbTest.cs" />
+    <Compile Include="Framework\DirectDataMapper.cs" />
     <Compile Include="Framework\MigrationTest.cs" />
     <Compile Include="Framework\NBuilderExtensions.cs" />
-    <Compile Include="Framework\TestDbHelper.cs" />
+    <Compile Include="Framework\TestDatabase.cs" />
     <Compile Include="HealthCheck\Checks\DeleteBadMediaCovers.cs" />
     <Compile Include="HealthCheck\Checks\AppDataLocationFixture.cs" />
     <Compile Include="HealthCheck\Checks\DownloadClientCheckFixture.cs" />

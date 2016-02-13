@@ -6,7 +6,6 @@ using FluentMigrator;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.History;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
@@ -17,7 +16,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_move_grab_id_from_date_to_columns()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 InsertHistory(c, new Dictionary<string, string>
                 {
@@ -33,19 +32,19 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             });
 
-            var allProfiles = Mocker.Resolve<HistoryRepository>().All().ToList();
+            var history = db.Query<History72>("SELECT DownloadId, Data FROM History");
 
-            allProfiles.Should().HaveCount(2);
-            allProfiles.Should().NotContain(c => c.Data.ContainsKey("downloadClientId"));
-            allProfiles.Should().Contain(c => c.DownloadId == "123");
-            allProfiles.Should().Contain(c => c.DownloadId == "abc");
+            history.Should().HaveCount(2);
+            history.Should().NotContain(c => c.Data.ContainsKey("downloadClientId"));
+            history.Should().Contain(c => c.DownloadId == "123");
+            history.Should().Contain(c => c.DownloadId == "abc");
         }
 
 
         [Test]
         public void should_leave_items_with_no_grabid()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 InsertHistory(c, new Dictionary<string, string>
                 {
@@ -60,18 +59,18 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             });
 
-            var allProfiles = Mocker.Resolve<HistoryRepository>().All().ToList();
+            var history = db.Query<History72>("SELECT DownloadId, Data FROM History");
 
-            allProfiles.Should().HaveCount(2);
-            allProfiles.Should().NotContain(c => c.Data.ContainsKey("downloadClientId"));
-            allProfiles.Should().Contain(c => c.DownloadId == "123");
-            allProfiles.Should().Contain(c => c.DownloadId == null);
+            history.Should().HaveCount(2);
+            history.Should().NotContain(c => c.Data.ContainsKey("downloadClientId"));
+            history.Should().Contain(c => c.DownloadId == "123");
+            history.Should().Contain(c => c.DownloadId == null);
         }
 
         [Test]
         public void should_leave_other_data()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 InsertHistory(c, new Dictionary<string, string>
                 {
@@ -81,15 +80,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var allProfiles = Mocker.Resolve<HistoryRepository>().All().Single();
+            var history = db.Query<History72>("SELECT DownloadId, Data FROM History").Single();
 
-            allProfiles.Data.Should().NotContainKey("downloadClientId");
-            allProfiles.Data.Should().Contain(new KeyValuePair<string, string>("indexer", "test"));
-            allProfiles.Data.Should().Contain(new KeyValuePair<string, string>("group", "test2"));
+            history.Data.Should().NotContainKey("downloadClientId");
+            history.Data.Should().Contain(new KeyValuePair<string, string>("indexer", "test"));
+            history.Data.Should().Contain(new KeyValuePair<string, string>("group", "test2"));
 
-            allProfiles.DownloadId.Should().Be("123");
+            history.DownloadId.Should().Be("123");
         }
-
 
         private void InsertHistory(MigrationBase migrationBase, Dictionary<string, string> data)
         {

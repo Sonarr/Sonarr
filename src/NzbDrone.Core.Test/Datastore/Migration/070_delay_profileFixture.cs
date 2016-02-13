@@ -2,11 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Tags;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
@@ -16,7 +12,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_migrate_old_delays()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
@@ -35,10 +31,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var allProfiles = Mocker.Resolve<DelayProfileRepository>().All().ToList();
+            var allProfiles = db.Query<DelayProfile70>("SELECT * FROM DelayProfiles");
 
             allProfiles.Should().HaveCount(3);
-            allProfiles.Should().OnlyContain(c => c.PreferredProtocol == DownloadProtocol.Usenet);
+            allProfiles.Should().OnlyContain(c => c.PreferredProtocol == 1);
             allProfiles.Should().OnlyContain(c => c.TorrentDelay == 0);
             allProfiles.Should().Contain(c => c.UsenetDelay == 60);
             allProfiles.Should().Contain(c => c.UsenetDelay == 120);
@@ -47,17 +43,18 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_create_tag_for_delay_profile()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
+            {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
                     GrabDelay = 1,
                     Name = "OneHour",
                     Cutoff = 0,
                     Items = "[]"
-                })
-            );
+                });
+            });
 
-            var tags = Mocker.Resolve<TagRepository>().All().ToList();
+            var tags = db.Query<Tag69>("SELECT * FROM Tags");
 
             tags.Should().HaveCount(1);
             tags.First().Label.Should().Be("delay-60");
@@ -66,7 +63,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_add_tag_to_series_that_had_a_profile_with_delay_attached()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Profiles").Row(new
                                                    {
@@ -95,12 +92,11 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                  });
             });
 
-            var tag = Mocker.Resolve<TagRepository>().All().ToList().First();
-            var series = Mocker.Resolve<SeriesRepository>().All().ToList();
+            var tag = db.Query<Tag69>("SELECT Id, Label FROM Tags").Single();
+            var series = db.Query<Series69>("SELECT Tags FROM Series");
 
             series.Should().HaveCount(1);
-            series.First().Tags.Should().HaveCount(1);
-            series.First().Tags.First().Should().Be(tag.Id);
+            series.First().Tags.Should().BeEquivalentTo(tag.Id);
         }
     }
 }

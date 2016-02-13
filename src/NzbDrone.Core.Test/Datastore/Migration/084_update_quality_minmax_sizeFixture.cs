@@ -1,32 +1,28 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class update_quality_minmax_sizeFixture : MigrationTest<Core.Datastore.Migration.update_quality_minmax_size>
+    public class update_quality_minmax_sizeFixture : MigrationTest<update_quality_minmax_size>
     {
         [Test]
         public void should_not_fail_if_empty()
         {
-            WithTestDb(c =>
-            {
+            var db = WithMigrationTestDb();
 
-            });
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
 
-            var items = Mocker.Resolve<QualityDefinitionRepository>().All();
-
-            items.Should().HaveCount(0);
+            qualityDefinitions.Should().BeEmpty();
         }
 
         [Test]
         public void should_set_rawhd_to_null()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("QualityDefinitions").Row(new
                 {
@@ -44,17 +40,16 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<QualityDefinitionRepository>().All();
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
 
-            items.Should().HaveCount(2);
-
-            items.First(v => v.Quality.Id == 10).MaxSize.Should().NotHaveValue();
+            qualityDefinitions.Should().HaveCount(2);
+            qualityDefinitions.First(v => v.Quality == 10).MaxSize.Should().NotHaveValue();
         }
 
         [Test]
         public void should_set_zero_maxsize_to_null()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("QualityDefinitions").Row(new
                 {
@@ -65,17 +60,16 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<QualityDefinitionRepository>().All();
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
 
-            items.Should().HaveCount(1);
-
-            items.First(v => v.Quality.Id == 1).MaxSize.Should().NotHaveValue();
+            qualityDefinitions.Should().HaveCount(1);
+            qualityDefinitions.First(v => v.Quality == 1).MaxSize.Should().NotHaveValue();
         }
 
         [Test]
         public void should_preserve_values()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("QualityDefinitions").Row(new
                 {
@@ -93,11 +87,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<QualityDefinitionRepository>().All();
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
 
-            items.Should().HaveCount(2);
-
-            items.First(v => v.Quality.Id == 1).MaxSize.Should().Be(100);
+            qualityDefinitions.Should().HaveCount(2);
+            qualityDefinitions.First(v => v.Quality == 1).MaxSize.Should().Be(100);
         }
     }
 }

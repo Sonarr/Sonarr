@@ -1,29 +1,28 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.Datastore.Migration;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class force_lib_updateFixture : MigrationTest<Core.Datastore.Migration.force_lib_update>
+    public class force_lib_updateFixture : MigrationTest<force_lib_update>
     {
         [Test]
         public void should_not_fail_on_empty_db()
         {
-            WithTestDb(c => { });
+            var db = WithMigrationTestDb();
 
-            Mocker.Resolve<ScheduledTaskRepository>().All().Should().BeEmpty();
-            Mocker.Resolve<SeriesRepository>().All().Should().BeEmpty();
+            db.Query("SELECT * FROM ScheduledTasks").Should().BeEmpty();
+            db.Query("SELECT * FROM Series").Should().BeEmpty();
         }
 
 
         [Test]
         public void should_reset_job_last_execution_time()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("ScheduledTasks").Row(new
                 {
@@ -40,7 +39,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var jobs = Mocker.Resolve<ScheduledTaskRepository>().All().ToList();
+            var jobs = db.Query<ScheduledTasks75>("SELECT TypeName, LastExecution FROM ScheduledTasks");
 
             jobs.Single(c => c.TypeName == "NzbDrone.Core.Tv.Commands.RefreshSeriesCommand")
                 .LastExecution.Year.Should()
@@ -51,11 +50,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                .Be(2000);
         }
 
-
         [Test]
         public void should_reset_series_last_sync_time()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Series").Row(new
                 {
@@ -92,9 +90,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var jobs = Mocker.Resolve<SeriesRepository>().All().ToList();
+            var series = db.Query<Series69>("SELECT LastInfoSync FROM Series");
 
-            jobs.Should().OnlyContain(c => c.LastInfoSync.Value.Year == 2014);
+            series.Should().OnlyContain(c => c.LastInfoSync.Value.Year == 2014);
         }
     }
 }

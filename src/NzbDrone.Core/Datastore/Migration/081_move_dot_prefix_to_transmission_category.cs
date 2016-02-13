@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using FluentMigrator;
+using Newtonsoft.Json.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -52,5 +53,42 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
         }
+    }
+
+    public class DownloadClientDefinition81
+    {
+        public int Id { get; set; }
+        public bool Enable { get; set; }
+        public string Name { get; set; }
+        public string Implementation { get; set; }
+        public JObject Settings { get; set; }
+        public string ConfigContract { get; set; }
+    }
+
+    public class SabnzbdSettings81
+    {
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public string ApiKey { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string TvCategory { get; set; }
+        public int RecentTvPriority { get; set; }
+        public int OlderTvPriority { get; set; }
+        public bool UseSsl { get; set; }
+    }
+
+    public class TransmissionSettings81
+    {
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public string UrlBase { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string TvCategory { get; set; }
+        public string TvDirectory { get; set; }
+        public int RecentTvPriority { get; set; }
+        public int OlderTvPriority { get; set; }
+        public bool UseSsl { get; set; }
     }
 }

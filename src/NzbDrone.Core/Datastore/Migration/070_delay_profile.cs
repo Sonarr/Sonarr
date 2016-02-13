@@ -74,9 +74,9 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
 
-        private List<Profile70> GetProfiles(IDbConnection conn, IDbTransaction tran)
+        private List<Profile69> GetProfiles(IDbConnection conn, IDbTransaction tran)
         {
-            var profiles = new List<Profile70>();
+            var profiles = new List<Profile69>();
 
             using (IDbCommand getProfilesCmd = conn.CreateCommand())
             {
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var id = profileReader.GetInt32(0);
                         var delay = profileReader.GetInt32(1);
 
-                        profiles.Add(new Profile70
+                        profiles.Add(new Profile69
                         {
                             Id = id,
                             GrabDelay = delay * 60
@@ -145,21 +145,38 @@ namespace NzbDrone.Core.Datastore.Migration
                         }
                     }
                 }
-
-                getSeriesCmd.ExecuteNonQuery();
             }
         }
+    }
 
-        private class Profile70
-        {
-            public int Id { get; set; }
-            public int GrabDelay { get; set; }
-        }
+    public class Profile69
+    {
+        public int Id { get; set; }
+        public int GrabDelay { get; set; }
+    }
 
-        private class Series70
-        {
-            public int Id { get; set; }
-            public HashSet<int> Tags { get; set; }
-        }
+    public class Series69
+    {
+        public int Id { get; set; }
+        public List<int> Tags { get; set; }
+        public DateTime? LastInfoSync { get; set; }
+    }
+
+    public class Tag69
+    {
+        public int Id { get; set; }
+        public string Label { get; set; }
+    }
+
+    public class DelayProfile70
+    {
+        public int Id { get; set; }
+        public bool EnableUsenet { get; set; }
+        public bool EnableTorrent { get; set; }
+        public int PreferredProtocol { get; set; }
+        public int UsenetDelay { get; set; }
+        public int TorrentDelay { get; set; }
+        public int Order { get; set; }
+        public List<int> Tags { get; set; }
     }
 }

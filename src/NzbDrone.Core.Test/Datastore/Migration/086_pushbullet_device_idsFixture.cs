@@ -2,19 +2,18 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Notifications;
-using NzbDrone.Core.Notifications.PushBullet;
-using NzbDrone.Core.Notifications.Pushover;
+using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.Test.Framework;
+
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class pushbullet_device_idsFixture : MigrationTest<Core.Datastore.Migration.pushbullet_device_ids>
+    public class pushbullet_device_idsFixture : MigrationTest<pushbullet_device_ids>
     {
         [Test]
         public void should_not_fail_if_no_pushbullet()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Notifications").Row(new 
                 {
@@ -23,12 +22,12 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     OnUpgrade = false,
                     Name = "Pushover",
                     Implementation = "Pushover",
-                    Settings = new PushoverSettings().ToJson(),
+                    Settings = "{}",
                     ConfigContract = "PushoverSettings"
                 });
             });
 
-            var items = Mocker.Resolve<NotificationRepository>().All();
+            var items = db.Query<Notification86>("SELECT * FROM Notifications");
 
             items.Should().HaveCount(1);
         }
@@ -36,7 +35,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_not_fail_if_deviceId_is_not_set()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Notifications").Row(new
                 {
@@ -47,13 +46,13 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Implementation = "PushBullet",
                     Settings = new
                     {
-                        ApiKey = "my_api_key",
+                        ApiKey = "my_api_key"
                     }.ToJson(),
                     ConfigContract = "PushBulletSettings"
                 });
             });
 
-            var items = Mocker.Resolve<NotificationRepository>().All();
+            var items = db.Query<Notification86>("SELECT * FROM Notifications");
 
             items.Should().HaveCount(1);
         }
@@ -63,7 +62,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var deviceId = "device_id";
 
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Notifications").Row(new
                 {
@@ -81,10 +80,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<NotificationRepository>().All();
+            var items = db.Query<Notification86>("SELECT * FROM Notifications");
 
             items.Should().HaveCount(1);
-            items.First().Settings.As<PushBulletSettings>().DeviceIds.First().Should().Be(deviceId);
+            items.First().Settings.ToObject<PushBulletSettings86>().DeviceIds.First().Should().Be(deviceId);
         }
     }
 }

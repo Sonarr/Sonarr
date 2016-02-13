@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -18,5 +19,11 @@ namespace NzbDrone.Core.Datastore.Migration
         }
     }
 
-
+    public class ScheduledTasks75
+    {
+        public int Id { get; set; }
+        public string TypeName { get; set; }
+        public int Interval { get; set; }
+        public DateTime LastExecution { get; set; }
+    }
 }

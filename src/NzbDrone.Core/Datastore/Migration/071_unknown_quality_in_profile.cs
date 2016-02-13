@@ -19,72 +19,162 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertProfile(IDbConnection conn, IDbTransaction tran)
         {
-            var profiles = GetProfiles(conn, tran);
+            var updater = new ProfileUpdater70(conn, tran);
+            updater.PrependQuality(0);
+            updater.Commit();
+        }
+    }
+    public class Profile70
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Cutoff { get; set; }
+        public List<ProfileItem70> Items { get; set; }
+        public int Language { get; set; }
+    }
 
-            foreach (var profile in profiles)
+    public class ProfileItem70
+    {
+        public int Quality { get; set; }
+        public bool Allowed { get; set; }
+    }
+
+    public class ProfileUpdater70
+    {
+        private readonly IDbConnection _connection;
+        private readonly IDbTransaction _transaction;
+
+        private List<Profile70> _profiles;
+        private HashSet<Profile70> _changedProfiles = new HashSet<Profile70>();
+
+        public ProfileUpdater70(IDbConnection conn, IDbTransaction tran)
+        {
+            _connection = conn;
+            _transaction = tran;
+
+            _profiles = GetProfiles();
+        }
+
+        public void Commit()
+        {
+            foreach (var profile in _changedProfiles)
             {
-                if (profile.Items.Any(p => p.Quality == 0)) continue;
-
-                profile.Items.Insert(0, new ProfileItem71
-                                  {
-                                      Quality = 0,
-                                      Allowed = false
-                                  });
-
-                var itemsJson = profile.Items.ToJson();
-
-                using (IDbCommand updateProfileCmd = conn.CreateCommand())
+                using (var updateProfileCmd = _connection.CreateCommand())
                 {
-                    updateProfileCmd.Transaction = tran;
-                    updateProfileCmd.CommandText = "UPDATE Profiles SET Items = ? WHERE Id = ?";
-                    updateProfileCmd.AddParameter(itemsJson);
+                    updateProfileCmd.Transaction = _transaction;
+                    updateProfileCmd.CommandText = "UPDATE Profiles SET Name = ?, Cutoff = ?, Items = ?, Language = ? WHERE Id = ?";
+                    updateProfileCmd.AddParameter(profile.Name);
+                    updateProfileCmd.AddParameter(profile.Cutoff);
+                    updateProfileCmd.AddParameter(profile.Items.ToJson());
+                    updateProfileCmd.AddParameter(profile.Language);
                     updateProfileCmd.AddParameter(profile.Id);
 
                     updateProfileCmd.ExecuteNonQuery();
                 }
             }
+
+            _changedProfiles.Clear();
         }
 
-        private List<Profile71> GetProfiles(IDbConnection conn, IDbTransaction tran)
+        public void PrependQuality(int quality)
         {
-            var profiles = new List<Profile71>();
-
-            using (IDbCommand getProfilesCmd = conn.CreateCommand())
+            foreach (var profile in _profiles)
             {
-                getProfilesCmd.Transaction = tran;
-                getProfilesCmd.CommandText = @"SELECT Id, Items FROM Profiles";
+                if (profile.Items.Any(v => v.Quality == quality)) continue;
 
-                using (IDataReader profileReader = getProfilesCmd.ExecuteReader())
+                profile.Items.Insert(0, new ProfileItem70
+                {
+                    Quality = quality,
+                    Allowed = false
+                });
+
+                _changedProfiles.Add(profile);
+            }
+        }
+
+        public void AppendQuality(int quality)
+        {
+            foreach (var profile in _profiles)
+            {
+                if (profile.Items.Any(v => v.Quality == quality)) continue;
+
+                profile.Items.Add(new ProfileItem70
+                {
+                    Quality = quality,
+                    Allowed = false
+                });
+
+                _changedProfiles.Add(profile);
+            }
+        }
+
+        public void SplitQualityPrepend(int find, int quality)
+        {
+            foreach (var profile in _profiles)
+            {
+                if (profile.Items.Any(v => v.Quality == quality)) continue;
+
+                var findIndex = profile.Items.FindIndex(v => v.Quality == find);
+
+                profile.Items.Insert(findIndex, new ProfileItem70
+                {
+                    Quality = quality,
+                    Allowed = profile.Items[findIndex].Allowed
+                });
+
+                if (profile.Cutoff == find)
+                {
+                    profile.Cutoff = quality;
+                }
+
+                _changedProfiles.Add(profile);
+            }
+        }
+
+        public void SplitQualityAppend(int find, int quality)
+        {
+            foreach (var profile in _profiles)
+            {
+                if (profile.Items.Any(v => v.Quality == quality)) continue;
+
+                var findIndex = profile.Items.FindIndex(v => v.Quality == find);
+
+                profile.Items.Insert(findIndex + 1, new ProfileItem70
+                {
+                    Quality = quality,
+                    Allowed = false
+                });
+
+                _changedProfiles.Add(profile);
+            }
+        }
+
+        private List<Profile70> GetProfiles()
+        {
+            var profiles = new List<Profile70>();
+
+            using (var getProfilesCmd = _connection.CreateCommand())
+            {
+                getProfilesCmd.Transaction = _transaction;
+                getProfilesCmd.CommandText = @"SELECT Id, Name, Cutoff, Items, Language FROM Profiles";
+
+                using (var profileReader = getProfilesCmd.ExecuteReader())
                 {
                     while (profileReader.Read())
                     {
-                        var id = profileReader.GetInt32(0);
-                        var itemsJson = profileReader.GetString(1);
-
-                        var items = Json.Deserialize<List<ProfileItem71>>(itemsJson);
-                        
-                        profiles.Add(new Profile71
+                        profiles.Add(new Profile70
                         {
-                            Id = id,
-                            Items = items
+                            Id = profileReader.GetInt32(0),
+                            Name = profileReader.GetString(1),
+                            Cutoff = profileReader.GetInt32(2),
+                            Items = Json.Deserialize<List<ProfileItem70>>(profileReader.GetString(3)),
+                            Language = profileReader.GetInt32(4)
                         });
                     }
                 }
             }
 
             return profiles;
-        }
-
-        private class Profile71
-        {
-            public int Id { get; set; }
-            public List<ProfileItem71> Items { get; set; }
-        }
-
-        private class ProfileItem71
-        {
-            public int Quality { get; set; }
-            public bool Allowed { get; set; }
         }
     }
 }

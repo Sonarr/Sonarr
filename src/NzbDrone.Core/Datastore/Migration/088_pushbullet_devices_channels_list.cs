@@ -69,4 +69,12 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
     }
+
+    public class PushBulletSettings88
+    {
+        public string ApiKey { get; set; }
+        public string[] DeviceIds { get; set; }
+        public string[] ChannelTags { get; set; }
+        public string SenderId { get; set; }
+    }
 }

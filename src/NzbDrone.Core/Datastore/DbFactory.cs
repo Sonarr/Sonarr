@@ -12,7 +12,8 @@ namespace NzbDrone.Core.Datastore
 {
     public interface IDbFactory
     {
-        IDatabase Create(MigrationType migrationType = MigrationType.Main, Action<NzbDroneMigrationBase> beforeMigration = null);
+        IDatabase Create(MigrationType migrationType = MigrationType.Main);
+        IDatabase Create(MigrationContext migrationContext);
     }
 
     public class DbFactory : IDbFactory
@@ -43,12 +44,17 @@ namespace NzbDrone.Core.Datastore
             _connectionStringFactory = connectionStringFactory;
         }
 
-        public IDatabase Create(MigrationType migrationType = MigrationType.Main, Action<NzbDroneMigrationBase> beforeMigration = null)
+        public IDatabase Create(MigrationType migrationType = MigrationType.Main)
+        {
+            return Create(new MigrationContext(migrationType));
+        }
+
+        public IDatabase Create(MigrationContext migrationContext)
         {
             string connectionString;
 
 
-            switch (migrationType)
+            switch (migrationContext.MigrationType)
             {
                 case MigrationType.Main:
                     {
@@ -66,9 +72,9 @@ namespace NzbDrone.Core.Datastore
                     }
             }
 
-            _migrationController.MigrateToLatest(connectionString, migrationType, beforeMigration);
+            _migrationController.Migrate(connectionString, migrationContext);
 
-            var db = new Database(migrationType.ToString(), () =>
+            var db = new Database(migrationContext.MigrationType.ToString(), () =>
                 {
                     var dataMapper = new DataMapper(SQLiteFactory.Instance, connectionString)
                     {

@@ -15,4 +15,13 @@ namespace NzbDrone.Core.Datastore.Migration
             Execute.Sql("UPDATE QualityDefinitions SET MaxSize = NULL WHERE Quality = 10 OR MaxSize = 0");
         }
     }
+
+    public class QualityDefinition84
+    {
+        public int Id { get; set; }
+        public int Quality { get; set; }
+        public string Title { get; set; }
+        public int? MinSize { get; set; }
+        public int? MaxSize { get; set; }
+    }
 }

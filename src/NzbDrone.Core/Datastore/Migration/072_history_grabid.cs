@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var updateHistoryCmd = conn.CreateCommand())
             {
                 updateHistoryCmd.Transaction = tran;
-                updateHistoryCmd.CommandText = @"UPDATE History SET DownloadId = ? , Data = ? WHERE Id = ?";
+                updateHistoryCmd.CommandText = @"UPDATE History SET DownloadId = ?, Data = ? WHERE Id = ?";
 
                 updateHistoryCmd.AddParameter(downloadId);
                 updateHistoryCmd.AddParameter(dic.ToJson());
@@ -62,5 +62,18 @@ namespace NzbDrone.Core.Datastore.Migration
 
             }
         }
+    }
+
+    public class History72
+    {
+        public int EpisodeId { get; set; }
+        public int SeriesId { get; set; }
+        public string SourceTitle { get; set; }
+        public string Quality { get; set; }
+        public DateTime Date { get; set; }
+        public int EventType { get; set; }
+        public Dictionary<string, string> Data { get; set; }
+
+        public string DownloadId { get; set; }
     }
 }

@@ -58,4 +58,16 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
     }
+
+    public class DelugeSettings85
+    {
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public string UrlBase { get; set; }
+        public string Password { get; set; }
+        public string TvCategory { get; set; }
+        public int RecentTvPriority { get; set; }
+        public int OlderTvPriority { get; set; }
+        public bool UseSsl { get; set; }
+    }
 }

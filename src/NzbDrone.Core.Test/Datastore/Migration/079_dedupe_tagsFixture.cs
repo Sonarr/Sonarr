@@ -1,21 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Tags;
+using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class dedupe_tagsFixture : MigrationTest<Core.Datastore.Migration.dedupe_tags>
+    public class dedupe_tagsFixture : MigrationTest<dedupe_tags>
     {
         [Test]
         public void should_not_fail_if_series_tags_are_null()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Series").Row(new
                 {
@@ -40,13 +37,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            Mocker.Resolve<TagRepository>().All().Should().HaveCount(1);
+            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            tags.Should().HaveCount(1);
         }
 
         [Test]
         public void should_not_fail_if_series_tags_are_empty()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Series").Row(new
                 {
@@ -72,13 +70,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            Mocker.Resolve<TagRepository>().All().Should().HaveCount(1);
+            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            tags.Should().HaveCount(1);
         }
 
         [Test]
         public void should_remove_duplicate_labels_from_tags()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Tags").Row(new
                 {
@@ -91,13 +90,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            Mocker.Resolve<TagRepository>().All().Should().HaveCount(1);
+            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            tags.Should().HaveCount(1);
         }
 
         [Test]
         public void should_not_allow_duplicate_tag_to_be_inserted()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Tags").Row(new
                 {
@@ -105,13 +105,13 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            Assert.That(() => Mocker.Resolve<TagRepository>().Insert(new Tag { Label = "test" }), Throws.Exception);
+            Assert.That(() => db.Query("INSERT INTO Tags (Label) VALUES ('test')"), Throws.Exception);
         }
 
         [Test]
         public void should_replace_duplicated_tag_with_proper_tag()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Series").Row(new
                 {
@@ -142,13 +142,14 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            Mocker.Resolve<SeriesRepository>().Get(1).Tags.First().Should().Be(1);
+            var series = db.Query<Series69>("SELECT Tags FROM Series WHERE Id = 1").Single();
+            series.Tags.First().Should().Be(1);
         }
 
         [Test]
         public void should_only_update_affected_series()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Series").Row(new
                 {
@@ -197,7 +198,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            Mocker.Resolve<SeriesRepository>().Get(2).Tags.Should().BeEmpty();
+            var series = db.Query<Series69>("SELECT Tags FROM Series WHERE Id = 2").Single();
+            series.Tags.Should().BeEmpty();
         }
     }
 }

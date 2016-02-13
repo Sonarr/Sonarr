@@ -3,27 +3,25 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Download.Clients.Transmission;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Datastore.Migration;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
     [TestFixture]
-    public class move_dot_prefix_to_transmission_categoryFixture : MigrationTest<Core.Datastore.Migration.move_dot_prefix_to_transmission_category>
+    public class move_dot_prefix_to_transmission_categoryFixture : MigrationTest<move_dot_prefix_to_transmission_category>
     {
         [Test]
         public void should_not_fail_if_no_transmission()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
-                c.Insert.IntoTable("DownloadClients").Row(new 
+                c.Insert.IntoTable("DownloadClients").Row(new
                 {
                     Enable = 1,
                     Name = "Sab",
                     Implementation = "Sabnzbd",
-                    Settings = new SabnzbdSettings
+                    Settings = new
                     {
                         Host = "127.0.0.1",
                         TvCategory = "abc"
@@ -32,24 +30,23 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<DownloadClientRepository>().All();
+            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT Settings FROM DownloadClients");
 
-            items.Should().HaveCount(1);
-
-            items.First().Settings.As<SabnzbdSettings>().TvCategory.Should().Be("abc");
+            downloadClients.Should().HaveCount(1);
+            downloadClients.First().Settings.ToObject<SabnzbdSettings81>().TvCategory.Should().Be("abc");
         }
 
         [Test]
         public void should_be_updated_for_transmission()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
                     Enable = 1,
                     Name = "Trans",
                     Implementation = "Transmission",
-                    Settings = new TransmissionSettings
+                    Settings = new
                     {
                         Host = "127.0.0.1",
                         TvCategory = "abc"
@@ -58,24 +55,23 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<DownloadClientRepository>().All();
+            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT Settings FROM DownloadClients");
 
-            items.Should().HaveCount(1);
-
-            items.First().Settings.As<TransmissionSettings>().TvCategory.Should().Be(".abc");
+            downloadClients.Should().HaveCount(1);
+            downloadClients.First().Settings.ToObject<TransmissionSettings81>().TvCategory.Should().Be(".abc");
         }
 
         [Test]
         public void should_leave_empty_category_untouched()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("DownloadClients").Row(new
                 {
                     Enable = 1,
                     Name = "Trans",
                     Implementation = "Transmission",
-                    Settings = new TransmissionSettings
+                    Settings = new
                     {
                         Host = "127.0.0.1",
                         TvCategory = ""
@@ -84,11 +80,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var items = Mocker.Resolve<DownloadClientRepository>().All();
+            var downloadClients = db.Query<DownloadClientDefinition81>("SELECT Settings FROM DownloadClients");
 
-            items.Should().HaveCount(1);
-
-            items.First().Settings.As<TransmissionSettings>().TvCategory.Should().Be("");
+            downloadClients.Should().HaveCount(1);
+            downloadClients.First().Settings.ToObject<TransmissionSettings81>().TvCategory.Should().Be("");
         }
     }
 }

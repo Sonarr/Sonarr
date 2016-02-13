@@ -2,12 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Tags;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {
@@ -17,10 +12,11 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [Test]
         public void should_add_unknown_to_old_profile()
         {
-            WithTestDb(c =>
+            var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
+                    Id = 0,
                     Name = "SDTV",
                     Cutoff = 1,
                     Items = "[ { \"quality\": 1, \"allowed\": true } ]",
@@ -28,11 +24,12 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var allProfiles = Mocker.Resolve<ProfileRepository>().All().ToList();
+            var profiles = db.Query<Profile70>("SELECT Items FROM Profiles LIMIT 1");
 
-            allProfiles.Should().HaveCount(1);
-            allProfiles.First().Items.Should().HaveCount(2);
-            allProfiles.First().Items.Should().Contain(i => i.Quality.Id == 0 && i.Allowed == false);
+            var items = profiles.First().Items;
+            items.Should().HaveCount(2);
+            items.First().Quality.Should().Be(0);
+            items.First().Allowed.Should().Be(false);
         }
     }
 }
