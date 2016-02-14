@@ -100,5 +100,10 @@ namespace NzbDrone.Common.Extensions
                              .Select(x => Convert.ToByte(input.Substring(x, 2), 16))
                              .ToArray();
         }
+
+        public static string ToHexString(this byte[] input)
+        {
+            return string.Concat(Array.ConvertAll(input, x => x.ToString("X2")));
+        }
     }
 }

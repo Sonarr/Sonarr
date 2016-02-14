@@ -15,13 +15,15 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
 
-namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
+namespace NzbDrone.Core.Download.Clients.Blackhole
 {
     public class TorrentBlackhole : TorrentClientBase<TorrentBlackholeSettings>
     {
-        private readonly IDiskScanService _diskScanService;
+        private readonly IScanWatchFolder _scanWatchFolder;
 
-        public TorrentBlackhole(IDiskScanService diskScanService,
+        public TimeSpan ScanGracePeriod { get; set; }
+
+        public TorrentBlackhole(IScanWatchFolder scanWatchFolder,
                                 ITorrentFileInfoReader torrentFileInfoReader,
                                 IHttpClient httpClient,
                                 IConfigService configService,
@@ -30,7 +32,9 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
                                 Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
-            _diskScanService = diskScanService;
+            _scanWatchFolder = scanWatchFolder;
+
+            ScanGracePeriod = TimeSpan.FromSeconds(30);
         }
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
@@ -72,71 +76,28 @@ namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
             }
         }
 
+
+
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            foreach (var folder in _diskProvider.GetDirectories(Settings.WatchFolder))
+            foreach (var item in _scanWatchFolder.GetItems(Settings.WatchFolder, ScanGracePeriod))
             {
-                var title = FileNameBuilder.CleanFileName(Path.GetFileName(folder));
-
-                var files = _diskProvider.GetFiles(folder, SearchOption.AllDirectories);
-
-                var historyItem = new DownloadClientItem
+                yield return new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,
-                    DownloadId = Definition.Name + "_" + Path.GetFileName(folder) + "_" + _diskProvider.FolderGetCreationTime(folder).Ticks,
+                    DownloadId = Definition.Name + "_" + item.DownloadId,
                     Category = "sonarr",
-                    Title = title,
+                    Title = item.Title,
 
-                    TotalSize = files.Select(_diskProvider.GetFileSize).Sum(),
+                    TotalSize = item.TotalSize,
+                    RemainingTime = item.RemainingTime,
 
-                    OutputPath = new OsPath(folder)
+                    OutputPath = item.OutputPath,
+
+                    Status = item.Status,
+
+                    IsReadOnly = Settings.ReadOnly
                 };
-
-                if (files.Any(_diskProvider.IsFileLocked))
-                {
-                    historyItem.Status = DownloadItemStatus.Downloading;
-                }
-                else
-                {
-                    historyItem.Status = DownloadItemStatus.Completed;
-
-                    historyItem.RemainingTime = TimeSpan.Zero;
-                }
-
-                historyItem.IsReadOnly = Settings.ReadOnly;
-
-                yield return historyItem;
-            }
-
-            foreach (var videoFile in _diskScanService.GetVideoFiles(Settings.WatchFolder, false))
-            {
-                var title = FileNameBuilder.CleanFileName(Path.GetFileName(videoFile));
-
-                var historyItem = new DownloadClientItem
-                {
-                    DownloadClient = Definition.Name,
-                    DownloadId = Definition.Name + "_" + Path.GetFileName(videoFile) + "_" + _diskProvider.FileGetLastWrite(videoFile).Ticks,
-                    Category = "sonarr",
-                    Title = title,
-
-                    TotalSize = _diskProvider.GetFileSize(videoFile),
-
-                    OutputPath = new OsPath(videoFile)
-                };
-
-                if (_diskProvider.IsFileLocked(videoFile))
-                {
-                    historyItem.Status = DownloadItemStatus.Downloading;
-                }
-                else
-                {
-                    historyItem.Status = DownloadItemStatus.Completed;
-                    historyItem.RemainingTime = TimeSpan.Zero;
-                }
-
-                historyItem.IsReadOnly = Settings.ReadOnly;
-
-                yield return historyItem;
             }
         }
 

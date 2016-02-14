@@ -9,7 +9,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.UsenetBlackhole;
+using NzbDrone.Core.Download.Clients.Blackhole;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
@@ -28,6 +28,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             _completedDownloadFolder = @"c:\blackhole\completed".AsOsAgnostic();
             _blackholeFolder = @"c:\blackhole\nzb".AsOsAgnostic();
             _filePath = (@"c:\blackhole\nzb\" + _title + ".nzb").AsOsAgnostic();
+
+            Mocker.SetConstant<IScanWatchFolder>(Mocker.Resolve<ScanWatchFolder>());
 
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new UsenetBlackholeSettings
@@ -58,7 +60,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFiles(targetDir, SearchOption.AllDirectories))
-                .Returns(new[] { Path.Combine(_completedDownloadFolder, "somefile.mkv") });
+                .Returns(new[] { Path.Combine(targetDir, "somefile.mkv") });
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFileSize(It.IsAny<string>()))
@@ -68,12 +70,25 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         [Test]
         public void completed_download_should_have_required_properties()
         {
+            Subject.ScanGracePeriod = TimeSpan.Zero;
+
             GivenCompletedItem();
 
             var result = Subject.GetItems().Single();
 
             VerifyCompleted(result);
         }
+
+        [Test]
+        public void partial_download_should_have_required_properties()
+        {
+            GivenCompletedItem();
+
+            var result = Subject.GetItems().Single();
+
+            VerifyPostprocessing(result);
+        }
+
 
         [Test]
         public void should_return_category()
@@ -112,20 +127,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.ToString() == _downloadUrl)), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(expectedFilename), Times.Once());
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public void GetItems_should_considered_locked_files_downloading()
-        {
-            GivenCompletedItem();
-
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.IsFileLocked(It.IsAny<string>()))
-                .Returns(true);
-
-            var result = Subject.GetItems().Single();
-
-            result.Status.Should().Be(DownloadItemStatus.Downloading);
         }
 
         [Test]

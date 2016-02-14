@@ -8,7 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.TorrentBlackhole;
+using NzbDrone.Core.Download.Clients.Blackhole;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             _completedDownloadFolder = @"c:\blackhole\completed".AsOsAgnostic();
             _blackholeFolder = @"c:\blackhole\torrent".AsOsAgnostic();
             _filePath = (@"c:\blackhole\torrent\" + _title + ".torrent").AsOsAgnostic();
+
+            Mocker.SetConstant<IScanWatchFolder>(Mocker.Resolve<ScanWatchFolder>());
 
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = new TorrentBlackholeSettings
@@ -56,13 +58,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         protected void GivenCompletedItem()
         {
             var targetDir = Path.Combine(_completedDownloadFolder, _title);
+
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetDirectories(_completedDownloadFolder))
                 .Returns(new[] { targetDir });
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFiles(targetDir, SearchOption.AllDirectories))
-                .Returns(new[] { Path.Combine(_completedDownloadFolder, "somefile.mkv") });
+                .Returns(new[] { Path.Combine(targetDir, "somefile.mkv") });
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.GetFileSize(It.IsAny<string>()))
@@ -87,11 +90,23 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         [Test]
         public void completed_download_should_have_required_properties()
         {
+            Subject.ScanGracePeriod = TimeSpan.Zero;
+
             GivenCompletedItem();
 
             var result = Subject.GetItems().Single();
 
             VerifyCompleted(result);
+        }
+
+        [Test]
+        public void partial_download_should_have_required_properties()
+        {
+            GivenCompletedItem();
+
+            var result = Subject.GetItems().Single();
+
+            VerifyPostprocessing(result);
         }
 
         [Test]
@@ -140,21 +155,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             remoteEpisode.Release.DownloadUrl = null;
 
             Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode));
-        }
-
-        [Test]
-        public void GetItems_should_considered_locked_files_queued()
-        {
-            GivenCompletedItem();
-
-            Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.IsFileLocked(It.IsAny<string>()))
-                .Returns(true);
-
-            var items = Subject.GetItems().ToList();
-
-            items.Count.Should().Be(1);
-            items.First().Status.Should().Be(DownloadItemStatus.Downloading);
         }
 
         [Test]

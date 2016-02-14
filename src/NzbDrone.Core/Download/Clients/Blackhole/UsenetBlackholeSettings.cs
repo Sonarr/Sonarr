@@ -5,7 +5,7 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 
-namespace NzbDrone.Core.Download.Clients.UsenetBlackhole
+namespace NzbDrone.Core.Download.Clients.Blackhole
 {
     public class UsenetBlackholeSettingsValidator : AbstractValidator<UsenetBlackholeSettings>
     {

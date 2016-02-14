@@ -6,7 +6,7 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 
-namespace NzbDrone.Core.Download.Clients.TorrentBlackhole
+namespace NzbDrone.Core.Download.Clients.Blackhole
 {
     public class TorrentBlackholeSettingsValidator : AbstractValidator<TorrentBlackholeSettings>
     {
