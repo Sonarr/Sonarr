@@ -72,21 +72,24 @@
 }
 
 #scroll-up {
-  .clickable;
 
-  &:hover {
-    text-decoration : none;
-    .opacity         (0.4);
+  i {
+    .clickable;
+    .opacity(0.3);
+    margin: 0px 20px;
+
+    &:hover {
+      .opacity(0.4);
+    }
   }
 
-  .opacity   (0.2);
   position  : fixed;
   z-index   : 9999;
-  bottom    : 50px;
-  right     : 50px;
+  bottom    : 30px;
+  right     : 0px;
   display   : none;
   font-size : 56px;
-  color     : white;
+  color     : gray;
 }
 
 .control-panel-visible {
