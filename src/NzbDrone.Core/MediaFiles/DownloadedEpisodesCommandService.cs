@@ -54,17 +54,16 @@ namespace NzbDrone.Core.MediaFiles
             return _downloadedEpisodesImportService.ProcessRootFolder(new DirectoryInfo(downloadedEpisodesFolder));
         }
 
-        private List<ImportResult> ProcessFolder(DownloadedEpisodesScanCommand message)
+        private List<ImportResult> ProcessPath(DownloadedEpisodesScanCommand message)
         {
-            if (!_diskProvider.FolderExists(message.Path))
+            if (!_diskProvider.FolderExists(message.Path) && !_diskProvider.FileExists(message.Path))
             {
-                _logger.Warn("Folder specified for import scan [{0}] doesn't exist.", message.Path);
+                _logger.Warn("Folder/File specified for import scan [{0}] doesn't exist.", message.Path);
                 return new List<ImportResult>();
             }
 
             if (message.DownloadClientId.IsNotNullOrWhiteSpace())
             {
-
                 var trackedDownload = _trackedDownloadService.Find(message.DownloadClientId);
 
                 if (trackedDownload != null)
@@ -90,7 +89,7 @@ namespace NzbDrone.Core.MediaFiles
 
             if (message.Path.IsNotNullOrWhiteSpace())
             {
-                importResults = ProcessFolder(message);
+                importResults = ProcessPath(message);
             }
             else
             {
