@@ -68,6 +68,13 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             var xmlRoot = XDocument.Parse(response.Content).Element("caps");
 
+            var xmlLimits = xmlRoot.Element("limits");
+            if (xmlLimits != null)
+            {
+                capabilities.DefaultPageSize = int.Parse(xmlLimits.Attribute("default").Value);
+                capabilities.MaxPageSize = int.Parse(xmlLimits.Attribute("max").Value);
+            }
+
             var xmlSearching = xmlRoot.Element("searching");
             if (xmlSearching != null)
             {

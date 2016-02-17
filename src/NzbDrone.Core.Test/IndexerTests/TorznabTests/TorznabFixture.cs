@@ -15,6 +15,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
     [TestFixture]
     public class TorznabFixture : CoreTest<Torznab>
     {
+        private NewznabCapabilities _caps;
+
         [SetUp]
         public void Setup()
         {
@@ -28,9 +30,10 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
                         }
                 };
 
+            _caps = new NewznabCapabilities();
             Mocker.GetMock<INewznabCapabilitiesProvider>()
                 .Setup(v => v.GetCapabilities(It.IsAny<NewznabSettings>()))
-                .Returns(new NewznabCapabilities());
+                .Returns(_caps);
         }
 
         [Test]
@@ -92,6 +95,15 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             releaseInfo.InfoHash.Should().Be("9fb267cff5ae5603f07a347676ec3bf3e35f75e1");
             releaseInfo.Seeders.Should().Be(34128);
             releaseInfo.Peers.Should().Be(36724);
+        }
+
+        [Test]
+        public void should_use_pagesize_reported_by_caps()
+        {
+            _caps.MaxPageSize = 30;
+            _caps.DefaultPageSize = 25;
+
+            Subject.PageSize.Should().Be(25);
         }
     }
 }

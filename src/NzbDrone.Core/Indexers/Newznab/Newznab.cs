@@ -24,7 +24,10 @@ namespace NzbDrone.Core.Indexers.Newznab
         }
 
         public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
-        public override int PageSize { get { return 100; } }
+        public override int PageSize
+        {
+            get { return _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize; }
+        }
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {

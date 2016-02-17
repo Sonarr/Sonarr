@@ -226,6 +226,7 @@
     <Compile Include="IndexerTests\IndexerServiceFixture.cs" />
     <Compile Include="IndexerTests\IndexerStatusServiceFixture.cs" />
     <Compile Include="IndexerTests\IntegrationTests\IndexerIntegrationTests.cs" />
+    <Compile Include="IndexerTests\NewznabTests\NewznabCapabilitiesProviderFixture.cs" />
     <Compile Include="IndexerTests\RarbgTests\RarbgFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssParserFactoryFixture.cs" />
     <Compile Include="IndexerTests\TorrentRssIndexerTests\TorrentRssSettingsDetectorFixture.cs" />
@@ -407,6 +408,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Indexers\KickassTorrents\KickassTorrents_accents.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Files\Indexers\Newznab\newznab_caps.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Files\Indexers\relative_urls.xml">

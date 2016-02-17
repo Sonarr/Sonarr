@@ -5,6 +5,8 @@ namespace NzbDrone.Core.Indexers.Newznab
 {
     public class NewznabCapabilities
     {
+        public int DefaultPageSize { get; set; }
+        public int MaxPageSize { get; set; }
         public string[] SupportedSearchParameters { get; set; }
         public string[] SupportedTvSearchParameters { get; set; }
         public bool SupportsAggregateIdSearch { get; set; }
@@ -12,6 +14,8 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public NewznabCapabilities()
         {
+            DefaultPageSize = 100;
+            MaxPageSize = 100;
             SupportedSearchParameters = new[] { "q" };
             SupportedTvSearchParameters = new[] { "q", "rid", "season", "ep" }; // This should remain 'rid' for older newznab installs.
             SupportsAggregateIdSearch = false;

@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
     [TestFixture]
     public class NewznabFixture : CoreTest<Newznab>
     {
+        private NewznabCapabilities _caps;
+
         [SetUp]
         public void Setup()
         {
@@ -28,9 +30,10 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                         }
                 };
 
+            _caps = new NewznabCapabilities();
             Mocker.GetMock<INewznabCapabilitiesProvider>()
                 .Setup(v => v.GetCapabilities(It.IsAny<NewznabSettings>()))
-                .Returns(new NewznabCapabilities());
+                .Returns(_caps);
         }
 
         [Test]
@@ -57,6 +60,15 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             releaseInfo.Indexer.Should().Be(Subject.Definition.Name);
             releaseInfo.PublishDate.Should().Be(DateTime.Parse("2012/02/27 16:09:39"));
             releaseInfo.Size.Should().Be(1183105773);
+        }
+
+        [Test]
+        public void should_use_pagesize_reported_by_caps()
+        {
+            _caps.MaxPageSize = 30;
+            _caps.DefaultPageSize = 25;
+
+            Subject.PageSize.Should().Be(25);
         }
     }
 }
