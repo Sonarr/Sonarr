@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             return new NewznabRequestGenerator(_capabilitiesProvider)
             {
-                PageSize = PageSize, 
+                PageSize = PageSize,
                 Settings = Settings
             };
         }
