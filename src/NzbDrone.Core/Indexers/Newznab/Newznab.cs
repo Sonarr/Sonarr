@@ -45,6 +45,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             get
             {
                 yield return GetDefinition("Dognzb.cr", GetSettings("https://api.dognzb.cr"));
+                yield return GetDefinition("DrunkenSlug", GetSettings("https://api.drunkenslug.com"));
                 yield return GetDefinition("Nzb.su", GetSettings("https://api.nzb.su"));
                 yield return GetDefinition("NZBCat", GetSettings("https://nzb.cat"));
                 yield return GetDefinition("NZBFinder.ws", GetSettings("https://www.nzbfinder.ws"));
@@ -53,8 +54,9 @@ namespace NzbDrone.Core.Indexers.Newznab
                 yield return GetDefinition("Nzbs.org", GetSettings("http://nzbs.org", 5000));
                 yield return GetDefinition("OZnzb.com", GetSettings("https://api.oznzb.com"));
                 yield return GetDefinition("PFmonkey", GetSettings("https://www.pfmonkey.com"));
-                yield return GetDefinition("Usenet Crawler", GetSettings("https://www.usenet-crawler.com"));
+                yield return GetDefinition("SimplyNZBs", GetSettings("https://simplynzbs.com"));
                 yield return GetDefinition("6box", GetSettings("http://6box.me"));
+                yield return GetDefinition("Usenet Crawler", GetSettings("https://www.usenet-crawler.com"));
             }
         }
 
