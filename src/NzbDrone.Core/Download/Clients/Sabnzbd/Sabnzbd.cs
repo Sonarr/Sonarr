@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -27,6 +28,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             _proxy = proxy;
         }
+
+        private static readonly Regex VersionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?<candidate>.*)", RegexOptions.Compiled);
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
@@ -253,25 +256,44 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         protected override void Test(List<ValidationFailure> failures)
         {
-            failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestConnectionAndVersion());
             failures.AddIfNotNull(TestAuthentication());
             failures.AddIfNotNull(TestGlobalConfig());
             failures.AddIfNotNull(TestCategory());
         }
 
-        private ValidationFailure TestConnection()
+        private ValidationFailure TestConnectionAndVersion()
         {
             try
             {
-                _proxy.GetVersion(Settings);
+                var version = _proxy.GetVersion(Settings);
+                var parsed = VersionRegex.Match(version);
+
+                if (!parsed.Success)
+                {
+                    return new ValidationFailure("Version", "Unknown Version: " + version);
+                }
+
+                var major = Convert.ToInt32(parsed.Groups["major"].Value);
+                var minor = Convert.ToInt32(parsed.Groups["minor"].Value);
+
+                if (major >= 1)
+                {
+                    return null;
+                }
+
+                if (minor >= 7)
+                {
+                    return null;
+                }
+
+                return new ValidationFailure("Version", "Version 0.7.0+ is required, but found: " + version);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, ex.Message);
                 return new ValidationFailure("Host", "Unable to connect to SABnzbd");
             }
-
-            return null;
         }
 
         private ValidationFailure TestAuthentication()

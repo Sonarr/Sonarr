@@ -396,5 +396,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(@"O:\mymount".AsOsAgnostic());
         }
+
+        [TestCase("0.6.9", false)]
+        [TestCase("0.7.0", true)]
+        [TestCase("0.8.0", true)]
+        [TestCase("1.0.0", true)]
+        [TestCase("1.0.0RC1", true)]
+        public void should_test_version(string version, bool expected)
+        {
+            Mocker.GetMock<ISabnzbdProxy>()
+                  .Setup(v => v.GetVersion(It.IsAny<SabnzbdSettings>()))
+                  .Returns(version);
+
+            var error = Subject.Test();
+
+            error.IsValid.Should().Be(expected);
+        }
     }
 }

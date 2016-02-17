@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
         void RemoveFrom(string source, string id,bool deleteData, SabnzbdSettings settings);
         string ProcessRequest(IRestRequest restRequest, string action, SabnzbdSettings settings);
-        SabnzbdVersionResponse GetVersion(SabnzbdSettings settings);
+        string GetVersion(SabnzbdSettings settings);
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdQueue GetQueue(int start, int limit, SabnzbdSettings settings);
         SabnzbdHistory GetHistory(int start, int limit, string category, SabnzbdSettings settings);
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response.Content;
         }
 
-        public SabnzbdVersionResponse GetVersion(SabnzbdSettings settings)
+        public string GetVersion(SabnzbdSettings settings)
         {
             var request = new RestRequest();
             var action = "mode=version";
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 response = new SabnzbdVersionResponse();
             }
 
-            return response;
+            return response.Version;
         }
 
         public SabnzbdConfig GetConfig(SabnzbdSettings settings)
