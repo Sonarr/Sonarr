@@ -5,10 +5,9 @@ namespace NzbDrone.Core.Indexers.Wombles
 {
     public class WomblesRssParser : RssParser
     {
-        protected override long GetSize(XElement item)
+        public WomblesRssParser()
         {
-            // TODO: this can be found in the description element.
-            return 0;
+            ParseSizeInDescription = true;
         }
 
         protected override DateTime GetPublishDate(XElement item)
