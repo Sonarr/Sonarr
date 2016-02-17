@@ -30,7 +30,7 @@ namespace NzbDrone.Api.Indexers
 
             PostValidator.RuleFor(s => s.Title).NotEmpty();
             PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty();
-            PostValidator.RuleFor(s => s.DownloadProtocol).NotEmpty();
+            PostValidator.RuleFor(s => s.Protocol).NotEmpty();
             PostValidator.RuleFor(s => s.PublishDate).NotEmpty();
         }
 

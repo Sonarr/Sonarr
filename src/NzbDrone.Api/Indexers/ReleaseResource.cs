@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
@@ -48,8 +49,25 @@ namespace NzbDrone.Api.Indexers
         public int? Leechers { get; set; }
         public DownloadProtocol Protocol { get; set; }
 
-        //TODO: besides a test I don't think this is used...
-        public DownloadProtocol DownloadProtocol { get; set; }
+
+        // TODO: Remove in v3
+        // Used to support the original Release Push implementation
+        // JsonIgnore so we don't serialize it, but can still parse it
+        [JsonIgnore]
+        public DownloadProtocol DownloadProtocol
+        {
+            get
+            {
+                return Protocol;
+            }
+            set
+            {
+                if (value > 0 && Protocol == 0)
+                {
+                    Protocol = value;
+                }
+            }
+        }
 
         public bool IsDaily { get; set; }
         public bool IsAbsoluteNumbering { get; set; }
