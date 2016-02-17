@@ -29,7 +29,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             _proxy = proxy;
         }
 
-        private static readonly Regex VersionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?<candidate>.*)", RegexOptions.Compiled);
+        // patch can be a number (releases) or 'x' (git)
+        private static readonly Regex VersionRegex = new Regex(@"(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+|x)(?<candidate>.*)", RegexOptions.Compiled);
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {

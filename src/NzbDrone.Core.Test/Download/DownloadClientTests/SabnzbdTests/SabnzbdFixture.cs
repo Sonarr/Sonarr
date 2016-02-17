@@ -402,6 +402,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [TestCase("0.8.0", true)]
         [TestCase("1.0.0", true)]
         [TestCase("1.0.0RC1", true)]
+        [TestCase("1.1.x", true)]
         public void should_test_version(string version, bool expected)
         {
             Mocker.GetMock<ISabnzbdProxy>()
