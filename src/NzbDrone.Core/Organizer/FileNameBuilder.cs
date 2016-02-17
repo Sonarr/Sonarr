@@ -684,10 +684,17 @@ namespace NzbDrone.Core.Organizer
                 return episodes.First().Title.TrimEnd(EpisodeTitleTrimCharacters);
             }
 
-            var titles = episodes
-                .Select(c => c.Title.TrimEnd(EpisodeTitleTrimCharacters))
-                .Select(CleanupEpisodeTitle)
-                .Distinct();
+            var titles = episodes.Select(c => c.Title.TrimEnd(EpisodeTitleTrimCharacters))
+                                 .Select(CleanupEpisodeTitle)
+                                 .Distinct()
+                                 .ToList();
+
+            if (titles.All(t => t.IsNullOrWhiteSpace()))
+            {
+                titles = episodes.Select(c => c.Title.TrimEnd(EpisodeTitleTrimCharacters))
+                                 .Distinct()
+                                 .ToList();
+            }
 
             return string.Join(separator, titles);
         }

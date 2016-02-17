@@ -97,5 +97,17 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
                    .Should().Be("South Park - S15E06-E07 - Hello + World");
         }
+
+        [Test]
+        public void should_not_collaspe_when_result_is_empty()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Episode Title}";
+
+            _episode1.Title = "Part 1";
+            _episode2.Title = "Part 2";
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2 }, _series, _episodeFile)
+                   .Should().Be("Part 1 + Part 2");
+        }
     }
 }
