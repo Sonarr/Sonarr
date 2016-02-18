@@ -425,7 +425,7 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile);
             tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile);
-            tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? "Sonarr";
+            tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup ?? m.DefaultValue("Sonarr");
         }
 
         private void AddQualityTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile)
@@ -759,6 +759,18 @@ namespace NzbDrone.Core.Organizer
         public string Suffix { get; set; }
         public string Token { get; set; }
         public string CustomFormat { get; set; }
+
+        public string DefaultValue(string defaultValue)
+        {
+            if (string.IsNullOrEmpty(Prefix) && string.IsNullOrEmpty(Suffix))
+            {
+                return defaultValue;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
     }
 
     public enum MultiEpisodeStyle

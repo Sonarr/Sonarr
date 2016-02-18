@@ -712,6 +712,18 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be("Sonarr");
         }
 
+        [TestCase("{Episode Title}{-Release Group}", "City Sushi")]
+        [TestCase("{Episode Title}{ Release Group}", "City Sushi")]
+        [TestCase("{Episode Title}{ [Release Group]}", "City Sushi")]
+        public void should_not_use_Sonarr_as_release_group_if_pattern_has_separator(string pattern, string expectedFileName)
+        {
+            _episodeFile.ReleaseGroup = null;
+            _namingConfig.StandardEpisodeFormat = pattern;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(expectedFileName);
+        }
+
         [TestCase("0SEC")]
         [TestCase("2HD")]
         [TestCase("IMMERSE")]
