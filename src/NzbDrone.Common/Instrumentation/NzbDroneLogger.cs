@@ -103,25 +103,34 @@ namespace NzbDrone.Common.Instrumentation
 
         private static void RegisterAppFile(IAppFolderInfo appFolderInfo)
         {
+            RegisterAppFile(appFolderInfo, "appFileInfo", "sonarr.txt", 5);
+            RegisterAppFile(appFolderInfo, "appFileDebug", "sonarr.debug.txt", 50);
+            RegisterAppFile(appFolderInfo, "appFileTrace", "sonarr.trace.txt", 50);
+        }
+
+        private static LoggingRule RegisterAppFile(IAppFolderInfo appFolderInfo, string name, string fileName, int maxArchiveFiles)
+        {
             var fileTarget = new NzbDroneFileTarget();
 
-            fileTarget.Name = "rollingFileLogger";
-            fileTarget.FileName = Path.Combine(appFolderInfo.GetLogFolder(), "nzbdrone.txt");
+            fileTarget.Name = name;
+            fileTarget.FileName = Path.Combine(appFolderInfo.GetLogFolder(), fileName);
             fileTarget.AutoFlush = true;
             fileTarget.KeepFileOpen = false;
             fileTarget.ConcurrentWrites = false;
             fileTarget.ConcurrentWriteAttemptDelay = 50;
             fileTarget.ConcurrentWriteAttempts = 10;
             fileTarget.ArchiveAboveSize = 1024000;
-            fileTarget.MaxArchiveFiles = 5;
+            fileTarget.MaxArchiveFiles = maxArchiveFiles;
             fileTarget.EnableFileDelete = true;
             fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
             fileTarget.Layout = FILE_LOG_LAYOUT;
 
             var loggingRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
 
-            LogManager.Configuration.AddTarget("appfile", fileTarget);
+            LogManager.Configuration.AddTarget(name, fileTarget);
             LogManager.Configuration.LoggingRules.Add(loggingRule);
+
+            return loggingRule;
         }
 
         private static void RegisterUpdateFile(IAppFolderInfo appFolderInfo)

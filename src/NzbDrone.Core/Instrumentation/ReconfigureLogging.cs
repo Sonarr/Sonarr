@@ -28,22 +28,22 @@ namespace NzbDrone.Core.Instrumentation
             var rules = LogManager.Configuration.LoggingRules;
 
             //Console
-            var consoleLoggerRule = rules.SingleOrDefault(s => s.Targets.Any(t => t is ColoredConsoleTarget));
+            SetMinimumLogLevel(rules, "consoleLogger", minimumLogLevel);
 
-            if (consoleLoggerRule != null)
-            {
-                consoleLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
-                SetMinimumLogLevel(consoleLoggerRule, minimumLogLevel);
-            }
-            
             //Log Files
-            var rollingFileLoggerRule = rules.Single(s => s.Targets.Any(t => t is NzbDroneFileTarget));
-            rollingFileLoggerRule.EnableLoggingForLevel(LogLevel.Trace);
-            
-            SetMinimumLogLevel(rollingFileLoggerRule, minimumLogLevel);
-            SetMaxArchiveFiles(rollingFileLoggerRule, minimumLogLevel);
+            SetMinimumLogLevel(rules, "appFileInfo", minimumLogLevel <= LogLevel.Info ? LogLevel.Info : LogLevel.Off);
+            SetMinimumLogLevel(rules, "appFileDebug", minimumLogLevel <= LogLevel.Debug ? LogLevel.Debug : LogLevel.Off);
+            SetMinimumLogLevel(rules, "appFileTrace", minimumLogLevel <= LogLevel.Trace ? LogLevel.Trace : LogLevel.Off);
 
             LogManager.ReconfigExistingLoggers();
+        }
+
+        private void SetMinimumLogLevel(IList<LoggingRule> rules, string target, LogLevel minimumLogLevel)
+        {
+            foreach (var rule in rules.Where(v => v.Targets.Any(t => t.Name == target)))
+            {
+                SetMinimumLogLevel(rule, minimumLogLevel);
+            }
         }
 
         private void SetMinimumLogLevel(LoggingRule rule, LogLevel minimumLogLevel)
@@ -59,23 +59,6 @@ namespace NzbDrone.Core.Instrumentation
                 {
                     rule.EnableLoggingForLevel(logLevel);
                 }
-            }
-        }
-
-        private void SetMaxArchiveFiles(LoggingRule rule, LogLevel minimumLogLevel)
-        {
-            var target = rule.Targets.Single(t => t is NzbDroneFileTarget) as NzbDroneFileTarget;
-
-            if (target == null) return;
-
-            if (minimumLogLevel >= LogLevel.Info)
-            {
-                target.MaxArchiveFiles = 5;
-            }
-
-            else
-            {
-                target.MaxArchiveFiles = 50;
             }
         }
 
