@@ -24,7 +24,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Real Housewives of Some Place - S01E01 - Why are we doing this?", 0)]
         public void should_parse_reality_from_title(string title, int reality)
         {
-            //TODO: re-enable this when we have a reliable way to determine real
             QualityParser.ParseQuality(title).Revision.Real.Should().Be(reality);
         }
 
@@ -41,6 +40,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Hatsuyuki] Tokyo Ghoul - 07 [v2][848x480][23D8F455].avi", 2)]
         [TestCase("[DeadFish] Barakamon - 01v3 [720p][AAC]", 3)]
         [TestCase("[DeadFish] Momo Kyun Sword - 01v4 [720p][AAC]", 4)]
+        [TestCase("[Vivid-Asenshi] Akame ga Kill - 04v2 [266EE983]", 2)]
+        [TestCase("[Vivid-Asenshi] Akame ga Kill - 03v2 [66A05817]", 2)]
+        [TestCase("[Vivid-Asenshi] Akame ga Kill - 02v2 [1F67AB55]", 2)]
         public void should_parse_version_from_title(string title, int version)
         {
             QualityParser.ParseQuality(title).Revision.Version.Should().Be(version);
