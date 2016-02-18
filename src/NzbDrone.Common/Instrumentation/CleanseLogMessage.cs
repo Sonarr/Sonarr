@@ -50,7 +50,7 @@ namespace NzbDrone.Common.Instrumentation
                         var value = m.Value;
                         foreach (var capture in m.Groups["secret"].Captures.OfType<Capture>().Reverse())
                         {
-                            value = value.Replace(capture.Index - m.Index, capture.Length, "<removed>");
+                            value = value.Replace(capture.Index - m.Index, capture.Length, "(removed)");
                         }
 
                         return value;
