@@ -9,6 +9,7 @@ using NzbDrone.Core.Parser.Model;
 using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Extensions;
 using NLog;
+using NzbDrone.Core.Indexers;
 
 namespace NzbDrone.Api.Indexers
 {
@@ -38,11 +39,14 @@ namespace NzbDrone.Api.Indexers
         {
             _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl);
 
-            var info = release.InjectTo<ReleaseInfo>();
+            var info = release.Protocol == DownloadProtocol.Usenet ? 
+                                           release.InjectTo<ReleaseInfo>() :
+                                           release.InjectTo<TorrentInfo>();
+
             info.Guid = "PUSH-" + info.DownloadUrl;
 
             var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
-            var processed = _downloadDecisionProcessor.ProcessDecisions(decisions);
+            _downloadDecisionProcessor.ProcessDecisions(decisions);
 
             return MapDecisions(decisions).First().AsResponse();
         }
