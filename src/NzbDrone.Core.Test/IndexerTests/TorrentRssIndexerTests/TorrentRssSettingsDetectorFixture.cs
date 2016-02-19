@@ -217,7 +217,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [TestCase("Torrentleech/Torrentleech.xml")]
-        [TestCase("Wombles/wombles.xml")]
         [TestCase("TorrentRss/invalid/Eztv_InvalidSize.xml")]
         [TestCase("TorrentRss/invalid/ImmortalSeed_InvalidSize.xml")]
         [TestCase("TorrentRss/Doki.xml")]
