@@ -50,6 +50,17 @@ namespace NzbDrone.Core.Indexers.Newznab
             return releaseInfo;
         }
 
+        protected override ReleaseInfo PostProcess(XElement item, ReleaseInfo releaseInfo)
+        {
+            var enclosureType = item.Element("enclosure").Attribute("type").Value;
+            if (enclosureType.Contains("application/x-bittorrent"))
+            {
+                throw new UnsupportedFeedException("Feed contains {0}, did you intend to add a Torznab indexer?", enclosureType);
+            }
+
+            return base.PostProcess(item, releaseInfo);
+        }
+
         protected override string GetInfoUrl(XElement item)
         {
             return ParseUrl(item.TryGetValue("comments").TrimEnd("#comments"));
