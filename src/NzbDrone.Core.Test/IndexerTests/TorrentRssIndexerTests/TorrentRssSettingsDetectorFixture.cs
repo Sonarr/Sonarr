@@ -164,6 +164,26 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         }
 
         [Test]
+        public void should_detect_rss_settings_for_ExtraTorrents()
+        {
+            _indexerSettings.AllowZeroSize = true;
+
+            GivenRecentFeedResponse("TorrentRss/ExtraTorrents.xml");
+
+            var settings = Subject.Detect(_indexerSettings);
+
+            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            {
+                UseEZTVFormat = false,
+                UseEnclosureUrl = true,
+                UseEnclosureLength = true,
+                ParseSizeInDescription = false,
+                ParseSeedersInDescription = false,
+                SizeElementName = null
+            });
+        }
+
+        [Test]
         [Ignore("Cannot reliably reject unparseable titles")]
         public void should_reject_rss_settings_for_AwesomeHD()
         {

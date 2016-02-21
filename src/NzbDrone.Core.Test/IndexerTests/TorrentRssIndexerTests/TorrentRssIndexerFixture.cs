@@ -151,5 +151,31 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             torrentInfo.Peers.Should().NotHaveValue();
             torrentInfo.Seeders.Should().NotHaveValue();
         }
+
+        [Test]
+        public void should_parse_recent_feed_from_ExtraTorrents()
+        {
+            GivenRecentFeedResponse("TorrentRss/ExtraTorrents.xml");
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(5);
+            releases.First().Should().BeOfType<TorrentInfo>();
+
+            var torrentInfo = releases.First() as TorrentInfo;
+
+            torrentInfo.Title.Should().Be("One.Piece.E334.D ED.720p.HDTV.x264-W4F-={SPARROW}=-");
+            torrentInfo.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
+            torrentInfo.DownloadUrl.Should().Be("http://ac.me/download/4722030/One.Piece.E334.D+ED.720p.HDTV.x264-W4F-%3D%7BSPARROW%7D%3D-.torrent");
+            torrentInfo.InfoUrl.Should().BeNullOrEmpty();
+            torrentInfo.CommentUrl.Should().BeNullOrEmpty();
+            torrentInfo.Indexer.Should().Be(Subject.Definition.Name);
+            torrentInfo.PublishDate.Should().Be(DateTime.Parse("Sun, 21 Feb 2016 09:51:54 +0000").ToUniversalTime());
+            torrentInfo.Size.Should().Be(562386947);
+            torrentInfo.InfoHash.Should().BeNull();
+            torrentInfo.MagnetUrl.Should().BeNull();
+            torrentInfo.Peers.Should().NotHaveValue();
+            torrentInfo.Seeders.Should().NotHaveValue();
+        }
     }
 }
