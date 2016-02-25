@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -18,6 +20,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string complete_dir { get; set; }
         public string[] tv_categories { get; set; }
         public bool enable_tv_sorting { get; set; }
+        public string[] movie_categories { get; set; }
+        public bool enable_movie_sorting { get; set; }
+        [JsonConverter(typeof(SabnzbdStringArrayConverter))]
+        public string[] date_categories { get; set; }
+        public bool enable_date_sorting { get; set; }
         public bool pre_check { get; set; }
     }
 

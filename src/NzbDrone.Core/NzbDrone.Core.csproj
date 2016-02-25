@@ -396,6 +396,7 @@
     <Compile Include="Download\Clients\qBittorrent\QBittorrentSettings.cs" />
     <Compile Include="Download\Clients\qBittorrent\QBittorrentTorrent.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdPriorityTypeConverter.cs" />
+    <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdStringArrayConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\JsonConverters\SabnzbdQueueTimeConverter.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdRetryResponse.cs" />
     <Compile Include="Download\Clients\Sabnzbd\Responses\SabnzbdAddResponse.cs" />
