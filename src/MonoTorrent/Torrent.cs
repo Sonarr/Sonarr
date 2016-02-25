@@ -774,7 +774,8 @@ namespace MonoTorrent
                             break;
 
                         case ("nodes"):
-                            this.nodes = (BEncodedList)keypair.Value;
+                            if (keypair.Value.ToString().Length != 0)
+                                this.nodes = (BEncodedList)keypair.Value;
                             break;
 
                         case ("comment.utf-8"):
