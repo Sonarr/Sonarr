@@ -54,10 +54,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (unexpected.Count == 1)
                 {
-                    return Decision.Reject("Episode Number {0} was unexpected", unexpected.First());
+                    return Decision.Reject("Episode Number {0} was unexpected considering the {1} folder name", unexpected.First(), dirInfo.Name);
                 }
 
-                return Decision.Reject("Episode Numbers {0} were unexpected", string.Join(", ", unexpected));
+                return Decision.Reject("Episode Numbers {0} were unexpected considering the {1} folder name", string.Join(", ", unexpected), dirInfo.Name);
             }
 
             return Decision.Accept();
