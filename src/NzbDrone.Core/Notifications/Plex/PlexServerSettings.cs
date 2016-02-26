@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Notifications.Plex
         public PlexServerSettings()
         {
             Port = 32400;
+            UpdateLibrary = true;
         }
 
         [FieldDefinition(0, Label = "Host")]
