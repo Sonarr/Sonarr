@@ -35,27 +35,27 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            throw new NotImplementedException();
+            return _proxy.GetItems(Settings);
         }
 
         public override DownloadClientStatus GetStatus()
         {
-            throw new NotImplementedException();
+            return _proxy.GetStatus(Settings);
         }
 
         public override void RemoveItem(string downloadId, bool deleteData)
         {
-            throw new NotImplementedException();
+            _proxy.RemoveItem(downloadId, deleteData, Settings);
         }
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            throw new NotImplementedException();
+            return _proxy.AddFromFile(remoteEpisode, filename, fileContent, Settings);
         }
 
         protected override void Test(List<ValidationFailure> failures)
         {
-            throw new NotImplementedException();
+            _proxy.Test(failures, Settings);
         }
     }
 }
