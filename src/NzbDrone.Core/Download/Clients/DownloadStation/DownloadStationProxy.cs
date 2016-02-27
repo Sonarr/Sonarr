@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Results;
+using NLog;
 using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Rest;
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
     public class DownloadStationProxy : IDownloadStationProxy
     {
+        private readonly Logger _logger;
         private static readonly Dictionary<SynologyApi, string> Resources;
         private readonly CookieContainer _cookieContainer;
 
@@ -35,8 +37,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             };
         }
 
-        public DownloadStationProxy()
+        public DownloadStationProxy(Logger logger)
         {
+            _logger = logger;
             _cookieContainer = new CookieContainer();
         }
 
@@ -60,10 +63,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"additional", "detail,transfer"}
             };
 
-            var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
-            var items = response.Data.Select(t => t.ToDownloadClientItem());
+            try
+            {
+                var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
+                var items = response.Data.Select(t => t.ToDownloadClientItem());
 
-            return items;
+                return items;
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug("Failed to get items from Download Station");
+
+                throw;
+            }
         }
 
         public DownloadClientStatus GetStatus(DownloadStationSettings settings)
@@ -82,7 +94,18 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"force_complete", deleteData.ToString()}
             };
 
-            ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
+            try
+            {
+                ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug(string.Format("Failed to remove item {0} from Download Station", downloadId));
+
+                throw;
+            }
+
+            _logger.Trace(string.Format("Item {0} removed from Download Station", downloadId));
         }
 
         public void Test(List<ValidationFailure> failures, DownloadStationSettings settings)
@@ -106,8 +129,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (!response.Success)
             {
-                throw new DownloadClientAuthenticationException(response.Error.GetMessage(SynologyApi.Auth));
+                var message = response.Error.GetMessage(SynologyApi.Auth);
+                _logger.Debug(string.Format("Failed to log in to Download Station: {0} - {1}", response.Error.Code, message));
+
+                throw new DownloadClientAuthenticationException(message);
             }
+
+            _logger.Trace("Logged in to Download Station");
         }
 
         private DownloadStationResponse<T> ProcessRequest<T>(SynologyApi api, Dictionary<string, string> arguments, DownloadStationSettings settings)
@@ -119,6 +147,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             {
                 if (response.Error.SessionError)
                 {
+                    _logger.Debug(string.Format("Download Station session error: {0} - {1}", response.Error.Code, response.Error.GetMessage(api)));
+
                     Login(client, settings);
 
                     response = ProcessRequest<T>(client, api, arguments);
@@ -129,7 +159,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     }
                 }
 
-                throw new DownloadClientException(response.Error.GetMessage(api));
+                var message = response.Error.GetMessage(api);
+                _logger.Debug(string.Format("Download Station request failed: {0} - {1}", response.Error.Code, message));
+
+                throw new DownloadClientException(message);
             }
 
             return response;
