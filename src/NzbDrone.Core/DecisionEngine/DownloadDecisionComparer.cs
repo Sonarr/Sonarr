@@ -94,17 +94,18 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            return Compare(Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
-            {
-                var seeders = TorrentInfo.GetSeeders(remoteEpisode.Release);
+            return Compare(
+                Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+                {
+                    var seeders = TorrentInfo.GetSeeders(remoteEpisode.Release);
 
-                return seeders ?? 0;
-            }),
+                    return seeders.HasValue ? Math.Abs(Math.Log10(seeders.Value)) : 0;
+                }),
                 Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
                 {
                     var peers = TorrentInfo.GetPeers(remoteEpisode.Release);
 
-                    return peers ?? 0;
+                    return peers.HasValue ? Math.Abs(Math.Log10(peers.Value)) : 0;
                 }));
         }
 
@@ -116,7 +117,28 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            return CompareReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.AgeMinutes);
+            return Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            {
+                var ageHours = remoteEpisode.Release.AgeHours;
+                var age = remoteEpisode.Release.Age;
+
+                if (ageHours < 1)
+                {
+                    return 1000;
+                }
+
+                if (ageHours <= 24)
+                {
+                    return 100;
+                }
+
+                if (age <= 7)
+                {
+                    return 10;
+                }
+
+                return 1 - age/365;
+            });
         }
 
         private int CompareSize(DownloadDecision x, DownloadDecision y)
