@@ -2,6 +2,7 @@
 using NLog;
 using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Rest;
 using RestSharp;
 using System;
@@ -23,8 +24,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
     public class DownloadStationProxy : IDownloadStationProxy
     {
-        private readonly Logger _logger;
         private static readonly Dictionary<SynologyApi, string> Resources;
+        private readonly Logger _logger;
+        private readonly RemotePathMappingService _remotePathMappingService;
         private readonly CookieContainer _cookieContainer;
 
         static DownloadStationProxy()
@@ -37,8 +39,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             };
         }
 
-        public DownloadStationProxy(Logger logger)
+        public DownloadStationProxy(RemotePathMappingService remotePathMappingService, Logger logger)
         {
+            _remotePathMappingService = remotePathMappingService;
             _logger = logger;
             _cookieContainer = new CookieContainer();
         }
@@ -66,7 +69,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             try
             {
                 var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
-                var items = response.Data.Select(t => t.ToDownloadClientItem());
+                var items = response.Data.Select(t => t.ToDownloadClientItem(_remotePathMappingService, settings));
 
                 return items;
             }

@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NzbDrone.Common.Disk;
+using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
 {
@@ -19,7 +21,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
 
         public DownloadStationTaskAdditional Additional { get; set; }
 
-        public DownloadClientItem ToDownloadClientItem()
+        public DownloadClientItem ToDownloadClientItem(RemotePathMappingService remotePathMappingService, DownloadStationSettings settings)
         {
             return new DownloadClientItem
             {
@@ -28,6 +30,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
                 Title = Title,
                 TotalSize = Size,
                 RemainingSize = Size - Additional.Transfer.Downloaded,
+                OutputPath = remotePathMappingService.RemapRemoteToLocal(settings.Host, new OsPath(Additional.Detail.Destination)),
                 Message = GetMessage(),
                 Status = GetStatus()
             };
