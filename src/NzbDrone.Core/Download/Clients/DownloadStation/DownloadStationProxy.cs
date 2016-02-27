@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             throw new NotImplementedException();
         }
 
-        private void Login(DownloadStationSettings settings, IRestClient client)
+        private void Login(IRestClient client, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, string>
             {
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
         }
 
-        private DownloadStationResponse<T> ProcessRequest<T>(DownloadStationSettings settings, SynologyApi api, Dictionary<string, string> arguments)
+        private DownloadStationResponse<T> ProcessRequest<T>(SynologyApi api, Dictionary<string, string> arguments, DownloadStationSettings settings)
         {
             var client = BuildClient(settings);
             var response = ProcessRequest<T>(client, api, arguments);
@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             {
                 if (response.Error.SessionError)
                 {
-                    Login(settings, client);
+                    Login(client, settings);
 
                     response = ProcessRequest<T>(client, api, arguments);
 
