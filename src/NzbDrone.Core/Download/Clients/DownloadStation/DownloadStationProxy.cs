@@ -138,7 +138,19 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public void Test(List<ValidationFailure> failures, DownloadStationSettings settings)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var version = GetVersion(settings);
+
+                if (version < 3)
+                {
+                    failures.Add(new ValidationFailure(string.Empty, string.Format("Incompatible API version: 3 and later supported")));
+                }
+            }
+            catch (DownloadClientException e)
+            {
+                failures.Add(new ValidationFailure(string.Empty, e.Message));
+            }
         }
 
         private void Login(IRestClient client, DownloadStationSettings settings)
@@ -164,6 +176,20 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
 
             _logger.Trace("Logged in to Download Station");
+        }
+
+        private int GetVersion(DownloadStationSettings settings)
+        {
+            var arguments = new Dictionary<string, string>
+            {
+                {"api", "SYNO.DownloadStation.Task"},
+                {"version", "1"},
+                {"method", "getinfo"}
+            };
+
+            var response = ProcessRequest<DownloadStationInfo>(SynologyApi.DownloadStationInfo, arguments, settings);
+
+            return int.Parse(response.Data.Version.Split('.').First());
         }
 
         private IEnumerable<DownloadStationTask> GetTasks(DownloadStationSettings settings)
