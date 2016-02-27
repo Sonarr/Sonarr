@@ -345,6 +345,7 @@
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationProxy.cs" />
+    <Compile Include="Download\Clients\DownloadStation\DownloadStationRequestApi.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationSettings.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationTorrentClient.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationUsenetClient.cs" />
