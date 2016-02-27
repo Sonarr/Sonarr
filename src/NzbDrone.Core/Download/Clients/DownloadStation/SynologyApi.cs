@@ -1,9 +1,9 @@
 ﻿namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
-    public enum DownloadStationRequestApi
+    public enum SynologyApi
     {
-        Common,
-        Authentication,
-        Task
+        Auth,
+        DownloadStationInfo,
+        DownloadStationTask
     }
 }
