@@ -54,23 +54,43 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public string AddFromUrl(RemoteEpisode remoteEpisode, string url, DownloadStationSettings settings)
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<DownloadClientItem> GetItems(DownloadStationSettings settings)
-        {
             var arguments = new Dictionary<string, string>
             {
                 {"api", "SYNO.DownloadStation.Task"},
-                {"version", "1"},
-                {"method", "list"},
-                {"additional", "detail,transfer"}
+                {"version", "3"},
+                {"method", "create"},
+                {"uri", url}
             };
 
             try
             {
-                var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
-                var items = response.Data.Select(t => t.ToDownloadClientItem(_remotePathMappingService, settings));
+                var response = ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
+
+                try
+                {
+                    return GetTaskId(url, settings);
+                }
+                catch (DownloadClientException)
+                {
+                    _logger.Debug(string.Format("Task with URL {0} added to Download Station but failed to get task ID", url));
+
+                    throw;
+                }
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug(string.Format("Failed to add task with URL {0} to Download Station", url));
+
+                throw;
+            }
+        }
+
+        public IEnumerable<DownloadClientItem> GetItems(DownloadStationSettings settings)
+        {
+            try
+            {
+                var tasks = GetTasks(settings);
+                var items = tasks.Select(t => t.ToDownloadClientItem(_remotePathMappingService, settings));
 
                 return items;
             }
@@ -144,6 +164,45 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
 
             _logger.Trace("Logged in to Download Station");
+        }
+
+        private IEnumerable<DownloadStationTask> GetTasks(DownloadStationSettings settings)
+        {
+            var arguments = new Dictionary<string, string>
+            {
+                {"api", "SYNO.DownloadStation.Task"},
+                {"version", "1"},
+                {"method", "list"},
+                {"additional", "detail,transfer"}
+            };
+
+            var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
+
+            return response.Data;
+        }
+
+        private string GetTaskId(string uri, DownloadStationSettings settings)
+        {
+            var tasks = GetTasks(settings).Where(t => t.Additional.Detail.Uri == uri);
+
+            if (tasks.Any())
+            {
+                try
+                {
+                    return tasks.Single().Id;
+                }
+                catch (InvalidOperationException)
+                {
+                    var ids = string.Join(",", tasks.Select(t => t.Id));
+                    _logger.Debug(string.Format("Multiple tasks with URI {0} in Download Station: {1}", uri, ids));
+                }
+            }
+            else
+            {
+                _logger.Debug(string.Format("No such task with URI {0} in Download Station", uri));
+            }
+
+            throw new DownloadClientException("Failed to get task ID from Download Station");
         }
 
         private DownloadStationResponse<T> ProcessRequest<T>(SynologyApi api, Dictionary<string, string> arguments, DownloadStationSettings settings)
