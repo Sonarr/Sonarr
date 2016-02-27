@@ -140,6 +140,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
+                Login(BuildClient(settings), settings);
+
                 var version = GetVersion(settings);
 
                 if (version < 3)
