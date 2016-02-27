@@ -5,6 +5,7 @@ using NzbDrone.Core.Rest;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
@@ -51,7 +52,18 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public IEnumerable<DownloadClientItem> GetItems(DownloadStationSettings settings)
         {
-            throw new NotImplementedException();
+            var arguments = new Dictionary<string, string>
+            {
+                {"api", "SYNO.DownloadStation.Task"},
+                {"version", "1"},
+                {"method", "list"},
+                {"additional", "detail,transfer"}
+            };
+
+            var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
+            var items = response.Data.Select(t => t.ToDownloadClientItem());
+
+            return items;
         }
 
         public DownloadClientStatus GetStatus(DownloadStationSettings settings)

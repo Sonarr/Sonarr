@@ -18,5 +18,55 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
         public DownloadStationTaskStatus Status { get; set; }
 
         public DownloadStationTaskAdditional Additional { get; set; }
+
+        public DownloadClientItem ToDownloadClientItem()
+        {
+            return new DownloadClientItem
+            {
+                DownloadClient = "Download Station",
+                DownloadId = Id,
+                Title = Title,
+                TotalSize = Size,
+                RemainingSize = Size - Additional.Transfer.Downloaded,
+                Message = GetMessage(),
+                Status = GetStatus()
+            };
+        }
+
+        private string GetMessage()
+        {
+            if (StatusExtra != null)
+            {
+                if (Status == DownloadStationTaskStatus.Extracting)
+                {
+                    return string.Format("Extracting: %{0}", StatusExtra.UnzipProgress);
+                }
+
+                if (Status == DownloadStationTaskStatus.Error)
+                {
+                    return StatusExtra.ErrorDetail;
+                }
+            }
+
+            return null;
+        }
+
+        private DownloadItemStatus GetStatus()
+        {
+            switch (Status)
+            {
+                case DownloadStationTaskStatus.Waiting:
+                    return DownloadItemStatus.Queued;
+                case DownloadStationTaskStatus.Paused:
+                    return DownloadItemStatus.Paused;
+                case DownloadStationTaskStatus.Finished:
+                case DownloadStationTaskStatus.Seeding:
+                    return DownloadItemStatus.Completed;
+                case DownloadStationTaskStatus.Error:
+                    return DownloadItemStatus.Failed;
+            }
+
+            return DownloadItemStatus.Downloading;
+        }
     }
 }
