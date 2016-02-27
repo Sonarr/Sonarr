@@ -4,6 +4,6 @@
     {
         public DownloadStationTaskDetail Detail { get; set; }
 
-        public DownloadStationTaskTransfer Transfer { get; }
+        public DownloadStationTaskTransfer Transfer { get; set; }
     }
 }
