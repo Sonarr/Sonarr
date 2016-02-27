@@ -1,7 +1,11 @@
 ﻿using FluentValidation.Results;
+using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Rest;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
@@ -17,6 +21,24 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
     public class DownloadStationProxy : IDownloadStationProxy
     {
+        private static readonly Dictionary<SynologyApi, string> Resources;
+        private readonly CookieContainer _cookieContainer;
+
+        static DownloadStationProxy()
+        {
+            Resources = new Dictionary<SynologyApi, string>
+            {
+                {SynologyApi.Auth, "/auth.cgi"},
+                {SynologyApi.DownloadStationInfo, "/DownloadStation/info.cgi"},
+                {SynologyApi.DownloadStationTask, "/DownloadStation/task.cgi"}
+            };
+        }
+
+        public DownloadStationProxy()
+        {
+            _cookieContainer = new CookieContainer();
+        }
+
         public string AddFromFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent, DownloadStationSettings settings)
         {
             throw new NotImplementedException();
@@ -45,6 +67,79 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         public void Test(List<ValidationFailure> failures, DownloadStationSettings settings)
         {
             throw new NotImplementedException();
+        }
+
+        private void Login(DownloadStationSettings settings, IRestClient client)
+        {
+            var arguments = new Dictionary<string, string>
+            {
+                {"api", "SYNO.API.Auth"},
+                {"version", "1"},
+                {"method", "login"},
+                {"account", settings.Username},
+                {"passwd", settings.Password},
+                {"session", "DownloadStation"},
+            };
+
+            var response = ProcessRequest<object>(client, SynologyApi.Auth, arguments);
+
+            if (!response.Success)
+            {
+                throw new DownloadClientAuthenticationException(response.Error.GetMessage(SynologyApi.Auth));
+            }
+        }
+
+        private DownloadStationResponse<T> ProcessRequest<T>(DownloadStationSettings settings, SynologyApi api, Dictionary<string, string> arguments)
+        {
+            var client = BuildClient(settings);
+            var response = ProcessRequest<T>(client, api, arguments);
+
+            if (!response.Success)
+            {
+                if (response.Error.SessionError)
+                {
+                    Login(settings, client);
+
+                    response = ProcessRequest<T>(client, api, arguments);
+
+                    if (response.Success)
+                    {
+                        return response;
+                    }
+                }
+
+                throw new DownloadClientException(response.Error.GetMessage(api));
+            }
+
+            return response;
+        }
+
+        private DownloadStationResponse<T> ProcessRequest<T>(IRestClient client, SynologyApi api, Dictionary<string, string> arguments)
+        {
+            var request = new RestRequest(Method.GET)
+            {
+                Resource = Resources[api]
+            };
+
+            foreach (var arg in arguments)
+            {
+                request.AddParameter(arg.Key, arg.Value);
+            }
+
+            var response = client.Execute(request);
+            var result = response.Read<DownloadStationResponse<T>>(client);
+
+            return result;
+        }
+
+        private IRestClient BuildClient(DownloadStationSettings settings)
+        {
+            var url = string.Format("http://{0}:{1}/webapi", settings.Host, settings.Port);
+            var client = RestClientFactory.BuildClient(url);
+
+            client.CookieContainer = _cookieContainer;
+
+            return client;
         }
     }
 }

@@ -5,8 +5,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
     public class DownloadStationError
     {
         private static readonly Dictionary<int, string> CommonMessages;
-        private static readonly Dictionary<int, string> AuthenticationMessages;
-        private static readonly Dictionary<int, string> TaskMessages;
+        private static readonly Dictionary<int, string> AuthMessages;
+        private static readonly Dictionary<int, string> DownloadStationTaskMessages;
 
         static DownloadStationError()
         {
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
                 {107, "Session interrupted by duplicate login"}
             };
 
-            AuthenticationMessages = new Dictionary<int, string>
+            AuthMessages = new Dictionary<int, string>
             {
                 {400, "No such account or incorrect password"},
                 {401, "Account disabled"},
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
                 {404, "Failed to authenticate 2-step verification code"}
             };
 
-            TaskMessages = new Dictionary<int, string>
+            DownloadStationTaskMessages = new Dictionary<int, string>
             {
                 {400, "File upload failed"},
                 {401, "Max number of tasks reached"},
@@ -47,18 +47,26 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
 
         public int Code { get; set; }
 
-        public string GetMessage(DownloadStationRequestApi api)
+        public bool SessionError
         {
-            if (api == DownloadStationRequestApi.Authentication)
+            get
             {
-                if (AuthenticationMessages.ContainsKey(Code))
+                return Code == 105 || Code == 106 || Code == 107;
+            }
+        }
+
+        public string GetMessage(SynologyApi api)
+        {
+            if (api == SynologyApi.Auth)
+            {
+                if (AuthMessages.ContainsKey(Code))
                 {
-                    return AuthenticationMessages[Code];
+                    return AuthMessages[Code];
                 }
             }
-            else if (api == DownloadStationRequestApi.Task && TaskMessages.ContainsKey(Code))
+            else if (api == SynologyApi.DownloadStationTask && DownloadStationTaskMessages.ContainsKey(Code))
             {
-                return TaskMessages[Code];
+                return DownloadStationTaskMessages[Code];
             }
 
             return CommonMessages[Code];
