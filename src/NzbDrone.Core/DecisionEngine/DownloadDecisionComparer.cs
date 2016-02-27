@@ -99,13 +99,13 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     var seeders = TorrentInfo.GetSeeders(remoteEpisode.Release);
 
-                    return seeders.HasValue ? Math.Abs(Math.Log10(seeders.Value)) : 0;
+                    return seeders.HasValue ? Math.Round(Math.Log10(seeders.Value)) : 0;
                 }),
                 Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
                 {
                     var peers = TorrentInfo.GetPeers(remoteEpisode.Release);
 
-                    return peers.HasValue ? Math.Abs(Math.Log10(peers.Value)) : 0;
+                    return peers.HasValue ? Math.Round(Math.Log10(peers.Value)) : 0;
                 }));
         }
 
