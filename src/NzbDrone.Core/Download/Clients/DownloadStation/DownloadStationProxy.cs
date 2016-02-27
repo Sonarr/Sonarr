@@ -104,11 +104,30 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public DownloadClientStatus GetStatus(DownloadStationSettings settings)
         {
-            return new DownloadClientStatus
+            var arguments = new Dictionary<string, string>
             {
-                IsLocalhost = settings.Host == "127.0.0.1" || settings.Host == "localhost",
-                OutputRootFolders = new List<OsPath>()
+                {"api", "SYNO.DownloadStation.Info"},
+                {"version", "1"},
+                {"method", "getconfig"}
             };
+
+            try
+            {
+                var response = ProcessRequest<DownloadStationConfig>(SynologyApi.DownloadStationInfo, arguments, settings);
+                var path = new OsPath(response.Data.DefaultDestination);
+
+                return new DownloadClientStatus
+                {
+                    IsLocalhost = settings.Host == "127.0.0.1" || settings.Host == "localhost",
+                    OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(settings.Host, path) }
+                };
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug("Failed to get config from Download Station");
+
+                throw;
+            }
         }
 
         public void RemoveItem(string downloadId, bool deleteData, DownloadStationSettings settings)
