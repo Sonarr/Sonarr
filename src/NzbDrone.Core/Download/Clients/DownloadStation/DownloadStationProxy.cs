@@ -61,7 +61,16 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public void RemoveItem(string downloadId, bool deleteData, DownloadStationSettings settings)
         {
-            throw new NotImplementedException();
+            var arguments = new Dictionary<string, string>
+            {
+                {"api", "SYNO.DownloadStation.Task"},
+                {"version", "1"},
+                {"method", "delete"},
+                {"id", downloadId},
+                {"force_complete", deleteData.ToString()}
+            };
+
+            ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
         }
 
         public void Test(List<ValidationFailure> failures, DownloadStationSettings settings)
