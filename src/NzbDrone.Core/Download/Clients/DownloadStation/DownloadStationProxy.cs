@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -83,7 +84,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public DownloadClientStatus GetStatus(DownloadStationSettings settings)
         {
-            throw new NotImplementedException();
+            return new DownloadClientStatus
+            {
+                IsLocalhost = settings.Host == "127.0.0.1" || settings.Host == "localhost",
+                OutputRootFolders = new List<OsPath>()
+            };
         }
 
         public void RemoveItem(string downloadId, bool deleteData, DownloadStationSettings settings)
