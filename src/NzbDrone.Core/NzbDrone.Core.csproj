@@ -354,6 +354,7 @@
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTask.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskAdditional.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskDetail.cs" />
+    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskCollection.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskStatus.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskStatusExtra.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskTransfer.cs" />

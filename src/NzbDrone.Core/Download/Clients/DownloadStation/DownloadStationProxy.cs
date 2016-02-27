@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"additional", "detail,transfer"}
             };
 
-            var response = ProcessRequest<IEnumerable<DownloadStationTask>>(SynologyApi.DownloadStationTask, arguments, settings);
+            var response = ProcessRequest<DownloadStationTaskCollection>(SynologyApi.DownloadStationTask, arguments, settings);
 
             return response.Data;
         }
