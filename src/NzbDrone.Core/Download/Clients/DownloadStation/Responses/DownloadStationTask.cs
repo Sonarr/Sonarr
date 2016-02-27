@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
                 DownloadId = Id,
                 Title = Title,
                 TotalSize = Size,
-                RemainingSize = Size - Additional.Transfer.Downloaded,
+                RemainingSize = Additional.Transfer == null ? 0 : Size - Additional.Transfer.Downloaded,
                 OutputPath = remotePathMappingService.RemapRemoteToLocal(settings.Host, new OsPath(Additional.Detail.Destination)),
                 Message = GetMessage(),
                 Status = GetStatus()
