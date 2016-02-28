@@ -49,7 +49,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         public string AddFromFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent, DownloadStationSettings settings)
         {
-            throw new NotImplementedException();
+            var arguments = new Dictionary<string, string>
+            {
+                {"api", "SYNO.DownloadStation.Task"},
+                {"version", "1"},
+                {"method", "create"},
+            };
+
+            var request = BuildRequest(Method.POST, SynologyApi.DownloadStationTask, arguments);
+            request.AddFile("file", fileContent, filename);
+
+            return AddTask(request, filename, settings);
         }
 
         public string AddFromUrl(RemoteEpisode remoteEpisode, string url, DownloadStationSettings settings)
@@ -62,27 +72,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"uri", url}
             };
 
-            try
-            {
-                var response = ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
-            }
-            catch (DownloadClientException)
-            {
-                _logger.Debug(string.Format("Failed to add task with URL {0} to Download Station", url));
+            var request = BuildRequest(Method.POST, SynologyApi.DownloadStationTask, arguments);
 
-                throw;
-            }
-
-            try
-                {
-                    return GetTaskId(url, settings);
-                }
-                catch (DownloadClientException)
-                {
-                    _logger.Debug(string.Format("Task with URL {0} added to Download Station but failed to get task ID", url));
-
-                    throw;
-                }
+            return AddTask(request, url, settings);
         }
 
         public IEnumerable<DownloadClientItem> GetItems(DownloadStationSettings settings)
@@ -113,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             try
             {
-                var response = ProcessRequest<Dictionary<string, string>>(SynologyApi.DownloadStationInfo, arguments, settings);
+                var response = ProcessGetRequest<Dictionary<string, string>>(SynologyApi.DownloadStationInfo, arguments, settings);
                 var path = new OsPath(response.Data["default_destination"]);
 
                 return new DownloadClientStatus
@@ -143,7 +135,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             try
             {
-                ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
+                ProcessGetRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
             }
             catch (DownloadClientException)
             {
@@ -192,7 +184,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"session", "DownloadStation"},
             };
 
-            var response = ProcessRequest<object>(client, SynologyApi.Auth, arguments);
+            var request = BuildRequest(Method.GET, SynologyApi.Auth, arguments);
+            var response = ProcessRequest<object>(client, request);
 
             if (!response.Success)
             {
@@ -214,9 +207,34 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"method", "getinfo"}
             };
 
-            var response = ProcessRequest<Dictionary<string, string>>(SynologyApi.DownloadStationInfo, arguments, settings);
+            var response = ProcessGetRequest<Dictionary<string, string>>(SynologyApi.DownloadStationInfo, arguments, settings);
 
             return int.Parse(response.Data["version_string"].Split('.').First());
+        }
+
+        private string AddTask(IRestRequest request, string uri, DownloadStationSettings settings)
+        {
+            try
+            {
+                var response = ProcessRequest<object>(SynologyApi.DownloadStationTask, request, settings);
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug(string.Format("Failed to add task {0} to Download Station", uri));
+
+                throw;
+            }
+
+            try
+            {
+                return GetTaskId(uri, settings);
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug(string.Format("Task {0} added to Download Station but failed to get task ID", uri));
+
+                throw;
+            }
         }
 
         private IEnumerable<DownloadStationTask> GetTasks(DownloadStationSettings settings)
@@ -229,7 +247,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"additional", "detail,transfer"}
             };
 
-            var response = ProcessRequest<DownloadStationTaskCollection>(SynologyApi.DownloadStationTask, arguments, settings);
+            var response = ProcessGetRequest<DownloadStationTaskCollection>(SynologyApi.DownloadStationTask, arguments, settings);
 
             return response.Data;
         }
@@ -247,21 +265,28 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 catch (InvalidOperationException)
                 {
                     var ids = string.Join(",", tasks.Select(t => t.Id));
-                    _logger.Debug(string.Format("Multiple tasks with URI {0} in Download Station: {1}", uri, ids));
+                    _logger.Debug(string.Format("Multiple {0} tasks in Download Station: {1}", uri, ids));
                 }
             }
             else
             {
-                _logger.Debug(string.Format("No such task with URI {0} in Download Station", uri));
+                _logger.Debug(string.Format("No such task {0} in Download Station", uri));
             }
 
             throw new DownloadClientException("Failed to get task ID from Download Station");
         }
 
-        private DownloadStationResponse<T> ProcessRequest<T>(SynologyApi api, Dictionary<string, string> arguments, DownloadStationSettings settings)
+        private DownloadStationResponse<T> ProcessGetRequest<T>(SynologyApi api, Dictionary<string, string> arguments, DownloadStationSettings settings)
+        {
+            var request = BuildRequest(Method.GET, api, arguments);
+
+            return ProcessRequest<T>(SynologyApi.DownloadStationTask, request, settings);
+        }
+
+        private DownloadStationResponse<T> ProcessRequest<T>(SynologyApi api, IRestRequest request, DownloadStationSettings settings)
         {
             var client = BuildClient(settings);
-            var response = ProcessRequest<T>(client, api, arguments);
+            var response = ProcessRequest<T>(client, request);
 
             if (!response.Success)
             {
@@ -271,7 +296,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                     Login(client, settings);
 
-                    response = ProcessRequest<T>(client, api, arguments);
+                    response = ProcessRequest<T>(client, request);
 
                     if (response.Success)
                     {
@@ -288,9 +313,17 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return response;
         }
 
-        private DownloadStationResponse<T> ProcessRequest<T>(IRestClient client, SynologyApi api, Dictionary<string, string> arguments)
+        private DownloadStationResponse<T> ProcessRequest<T>(IRestClient client, IRestRequest request)
         {
-            var request = new RestRequest(Method.GET)
+            var response = client.Execute(request);
+            var result = response.Read<DownloadStationResponse<T>>(client);
+
+            return result;
+        }
+
+        private IRestRequest BuildRequest(Method method, SynologyApi api, Dictionary<string, string> arguments)
+        {
+            var request = new RestRequest(method)
             {
                 Resource = Resources[api]
             };
@@ -300,10 +333,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 request.AddParameter(arg.Key, arg.Value);
             }
 
-            var response = client.Execute(request);
-            var result = response.Read<DownloadStationResponse<T>>(client);
-
-            return result;
+            return request;
         }
 
         private IRestClient BuildClient(DownloadStationSettings settings)
