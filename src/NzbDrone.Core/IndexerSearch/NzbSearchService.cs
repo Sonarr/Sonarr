@@ -92,7 +92,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (series.SeriesType == SeriesTypes.Anime)
             {
-                return SearchAnimeSeason(series, episodes);
+                return SearchAnimeSeason(series, episodes, seasonNumber);
             }
 
             if (seasonNumber == 0)
@@ -197,9 +197,14 @@ namespace NzbDrone.Core.IndexerSearch
             {
                 searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.Value;
             }
+            // Season 0 indicates specials, not regular episodes
+            else if (episode.SeasonNumber == 0)
+            {
+                return SearchSpecial(series, new List<Episode> { episode });
+            }
             else
             {
-                throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", "Can not search for an episode without an absolute episode number");
+                throw new ArgumentOutOfRangeException("AbsoluteEpisodeNumber", "Can not search for a non-special episode without an absolute episode number");
             }
 
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
@@ -216,13 +221,21 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
 
-        private List<DownloadDecision> SearchAnimeSeason(Series series, List<Episode> episodes)
+        private List<DownloadDecision> SearchAnimeSeason(Series series, List<Episode> episodes, int seasonNumber)
         {
             var downloadDecisions = new List<DownloadDecision>();
 
-            foreach (var episode in episodes)
+            // Season 0 indicates specials, not regular episodes
+            if (seasonNumber == 0)
             {
-                downloadDecisions.AddRange(SearchAnime(series, episode));
+                downloadDecisions.AddRange(SearchSpecial(series, episodes));
+            }
+            else
+            {
+                foreach (var episode in episodes)
+                {
+                    downloadDecisions.AddRange(SearchAnime(series, episode));
+                }
             }
 
             return downloadDecisions;
