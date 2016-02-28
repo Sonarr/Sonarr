@@ -65,8 +65,15 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             try
             {
                 var response = ProcessRequest<object>(SynologyApi.DownloadStationTask, arguments, settings);
+            }
+            catch (DownloadClientException)
+            {
+                _logger.Debug(string.Format("Failed to add task with URL {0} to Download Station", url));
 
-                try
+                throw;
+            }
+
+            try
                 {
                     return GetTaskId(url, settings);
                 }
@@ -76,13 +83,6 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
                     throw;
                 }
-            }
-            catch (DownloadClientException)
-            {
-                _logger.Debug(string.Format("Failed to add task with URL {0} to Download Station", url));
-
-                throw;
-            }
         }
 
         public IEnumerable<DownloadClientItem> GetItems(DownloadStationSettings settings)
