@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Rest;
-using RestSharp;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -22,22 +22,20 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
     public class NzbgetProxy : INzbgetProxy
     {
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public NzbgetProxy(Logger logger)
+        public NzbgetProxy(IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
         }
 
         public string DownloadNzb(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
         {
-            var parameters = new object[] { title, category, priority, false, Convert.ToBase64String(nzbData) };
-            var request = BuildRequest(new JsonRequest("append", parameters));
+            var response = ProcessRequest<bool>(settings, "append", title, category, priority, false, nzbData);
 
-            var response = Json.Deserialize<NzbgetResponse<bool>>(ProcessRequest(request, settings));
-            _logger.Trace("Response: [{0}]", response.Result);
-
-            if (!response.Result)
+            if (!response)
             {
                 return null;
             }
@@ -63,37 +61,27 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public NzbgetGlobalStatus GetGlobalStatus(NzbgetSettings settings)
         {
-            var request = BuildRequest(new JsonRequest("status"));
-
-            return Json.Deserialize<NzbgetResponse<NzbgetGlobalStatus>>(ProcessRequest(request, settings)).Result;
+            return ProcessRequest<NzbgetGlobalStatus>(settings, "status");
         }
 
         public List<NzbgetQueueItem> GetQueue(NzbgetSettings settings)
         {
-            var request = BuildRequest(new JsonRequest("listgroups"));
-
-            return Json.Deserialize<NzbgetResponse<List<NzbgetQueueItem>>>(ProcessRequest(request, settings)).Result;
+            return ProcessRequest<List<NzbgetQueueItem>>(settings, "listgroups");
         }
 
         public List<NzbgetHistoryItem> GetHistory(NzbgetSettings settings)
         {
-            var request = BuildRequest(new JsonRequest("history"));
-
-            return Json.Deserialize<NzbgetResponse<List<NzbgetHistoryItem>>>(ProcessRequest(request, settings)).Result;
+            return ProcessRequest<List<NzbgetHistoryItem>>(settings, "history");
         }
 
         public string GetVersion(NzbgetSettings settings)
         {
-            var request = BuildRequest(new JsonRequest("version"));
-
-            return Json.Deserialize<NzbgetResponse<string>>(ProcessRequest(request, settings)).Result;
+            return ProcessRequest<string>(settings, "version");
         }
 
         public Dictionary<string, string> GetConfig(NzbgetSettings settings)
         {
-            var request = BuildRequest(new JsonRequest("config"));
-
-            return Json.Deserialize<NzbgetResponse<List<NzbgetConfigItem>>>(ProcessRequest(request, settings)).Result.ToDictionary(v => v.Name, v => v.Value);
+            return ProcessRequest<List<NzbgetConfigItem>>(settings, "config").ToDictionary(v => v.Name, v => v.Value);
         }
 
 
@@ -160,68 +148,43 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         private bool EditQueue(string command, int offset, string editText, int id, NzbgetSettings settings)
         {
-            var parameters = new object[] { command, offset, editText, id };
-            var request = BuildRequest(new JsonRequest("editqueue", parameters));
-            var response = Json.Deserialize<NzbgetResponse<bool>>(ProcessRequest(request, settings));
-
-            return response.Result;
+            return ProcessRequest<bool>(settings, "editqueue", command, offset, editText, id);
         }
 
-        private string ProcessRequest(IRestRequest restRequest, NzbgetSettings settings)
+        private T ProcessRequest<T>(NzbgetSettings settings, string method, params object[] parameters)
         {
-            var client = BuildClient(settings);
-            var response = client.Execute(restRequest);
+            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, "jsonrpc");
+
+            var builder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
+            builder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+
+            var httpRequest = builder.Build();
+
+            HttpResponse response;
+            try
+            {
+                response = _httpClient.Execute(httpRequest);
+            }
+            catch (HttpException ex)
+            {
+                if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new DownloadClientException("Authentication failed for NzbGet, please check your settings", ex);
+                }
+
+                throw new DownloadClientException("Unable to connect to NzbGet. " + ex.Message, ex);
+            }
+
             _logger.Trace("Response: {0}", response.Content);
 
-            CheckForError(response);
-
-            return response.Content;
-        }
-
-        private IRestClient BuildClient(NzbgetSettings settings)
-        {
-            var protocol = settings.UseSsl ? "https" : "http";
-
-            var url = string.Format("{0}://{1}:{2}/jsonrpc",
-                                 protocol,
-                                 settings.Host,
-                                 settings.Port);
-
-            _logger.Debug("Url: " + url);
-
-            var client = RestClientFactory.BuildClient(url);
-            client.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
-
-            return client;
-        }
-
-        private IRestRequest BuildRequest(JsonRequest jsonRequest)
-        {
-            var request = new RestRequest(Method.POST);
-
-            request.JsonSerializer = new JsonNetSerializer();
-            request.RequestFormat = DataFormat.Json;
-            request.AddBody(jsonRequest);
-
-            return request;
-        }
-
-        private void CheckForError(IRestResponse response)
-        {
-            if (response.ErrorException != null)
-            {
-                throw new DownloadClientException("Unable to connect to NzbGet. " + response.ErrorException.Message, response.ErrorException);
-            }
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-            {
-                throw new DownloadClientException("Authentication failed for NzbGet, please check your settings", response.ErrorException);
-            }
-
-            var result = Json.Deserialize<JsonError>(response.Content);
+            var result = Json.Deserialize<JsonRpcResponse<T>>(response.Content);
 
             if (result.Error != null)
+            {
                 throw new DownloadClientException("Error response received from nzbget: {0}", result.Error.ToString());
+            }
+
+            return result.Result;
         }
     }
 }

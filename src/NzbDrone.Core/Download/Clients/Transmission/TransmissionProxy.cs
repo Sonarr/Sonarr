@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Rest;
 using NLog;
-using RestSharp;
 using Newtonsoft.Json.Linq;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Cache;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
 {
@@ -23,13 +25,18 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     }
 
     public class TransmissionProxy: ITransmissionProxy
-    {        
+    {
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
-        private string _sessionId;
 
-        public TransmissionProxy(Logger logger)
+        private ICached<string> _authSessionIDCache;
+
+        public TransmissionProxy(ICacheManager cacheManager, IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
+
+            _authSessionIDCache = cacheManager.GetCache<string>(GetType(), "authSessionID");
         }
         
         public List<TransmissionTorrent> GetTorrents(TransmissionSettings settings)
@@ -167,56 +174,69 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return result;
         }
 
-        protected string GetSessionId(IRestClient client, TransmissionSettings settings)
+        private HttpRequestBuilder BuildRequest(TransmissionSettings settings)
         {
-            var request = new RestRequest();
-            request.RequestFormat = DataFormat.Json;
+            var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase)
+                .Resource("rpc")
+                .Accept(HttpAccept.Json);
 
-            _logger.Debug("Url: {0} GetSessionId", client.BuildUri(request));
-            var restResponse = client.Execute(request);
+            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            requestBuilder.AllowAutoRedirect = false;
 
-            if (restResponse.StatusCode == HttpStatusCode.MovedPermanently)
+            return requestBuilder;
+        }
+
+        private void AuthenticateClient(HttpRequestBuilder requestBuilder, TransmissionSettings settings, bool reauthenticate = false)
+        {
+            var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.Password);
+
+            var sessionId = _authSessionIDCache.Find(authKey);
+
+            if (sessionId == null || reauthenticate)
             {
-                var uri = new Uri(restResponse.ResponseUri, (string)restResponse.GetHeaderValue("Location"));
+                _authSessionIDCache.Remove(authKey);
 
-                throw new DownloadClientException("Remote site redirected to " + uri);
-            }
+                var authLoginRequest = BuildRequest(settings).Build();
+                authLoginRequest.SuppressHttpError = true;
 
-            // We expect the StatusCode = Conflict, coz that will provide us with a new session id.
-            switch (restResponse.StatusCode)
-            {
-                case HttpStatusCode.Conflict:
+                var response = _httpClient.Execute(authLoginRequest);
+                if (response.StatusCode == HttpStatusCode.MovedPermanently)
                 {
-                    var sessionId = restResponse.Headers.SingleOrDefault(o => o.Name == "X-Transmission-Session-Id");
+                    var url = response.Headers.GetSingleValue("Location");
+
+                    throw new DownloadClientException("Remote site redirected to " + url);
+                }
+                else if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    sessionId = response.Headers.GetSingleValue("X-Transmission-Session-Id");
 
                     if (sessionId == null)
                     {
                         throw new DownloadClientException("Remote host did not return a Session Id.");
                     }
-
-                    return (string)sessionId.Value;
                 }
-                case HttpStatusCode.Unauthorized:
-                    throw new DownloadClientAuthenticationException("User authentication failed.");
+                else
+                {
+                    throw new DownloadClientAuthenticationException("Failed to authenticate with Transmission.");
+                }
+
+                _logger.Debug("Transmission authentication succeeded.");
+
+                _authSessionIDCache.Set(authKey, sessionId);
             }
 
-            restResponse.ValidateResponse(client);
-
-            throw new DownloadClientException("Remote host did not return a Session Id.");
+            requestBuilder.SetHeader("X-Transmission-Session-Id", sessionId);
         }
         
         public TransmissionResponse ProcessRequest(string action, object arguments, TransmissionSettings settings)
         {
-            var client = BuildClient(settings);
+            var requestBuilder = BuildRequest(settings);
+            requestBuilder.Headers.ContentType = "application/json";
+            requestBuilder.SuppressHttpError = true;
 
-            if (string.IsNullOrWhiteSpace(_sessionId))
-            {
-                _sessionId = GetSessionId(client, settings);
-            }
+            AuthenticateClient(requestBuilder, settings);
 
-            var request = new RestRequest(Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("X-Transmission-Session-Id", _sessionId);
+            var request = requestBuilder.Post().Build();
 
             var data = new Dictionary<string, object>();
             data.Add("method", action);
@@ -226,23 +246,27 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 data.Add("arguments", arguments);
             }
 
-            request.AddBody(data);
+            request.SetContent(data.ToJson());
+            request.ContentSummary = string.Format("{0}(...)", action);
 
-            _logger.Debug("Url: {0} Action: {1}", client.BuildUri(request), action);
-            var restResponse = client.Execute(request);
-
-            if (restResponse.StatusCode == HttpStatusCode.Conflict)
+            var response = _httpClient.Execute(request);            
+            if (response.StatusCode == HttpStatusCode.Conflict)
             {
-                _sessionId = GetSessionId(client, settings);
-                request.Parameters.First(o => o.Name == "X-Transmission-Session-Id").Value = _sessionId;
-                restResponse = client.Execute(request);
+                AuthenticateClient(requestBuilder, settings, true);
+
+                request = requestBuilder.Post().Build();
+
+                request.SetContent(data.ToJson());
+                request.ContentSummary = string.Format("{0}(...)", action);
+
+                response = _httpClient.Execute(request);
             }
-            else if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new DownloadClientAuthenticationException("User authentication failed.");
             }
 
-            var transmissionResponse = restResponse.Read<TransmissionResponse>(client);
+            var transmissionResponse = Json.Deserialize<TransmissionResponse>(response.Content);
 
             if (transmissionResponse == null)
             {
@@ -254,23 +278,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             }
 
             return transmissionResponse;
-        }
-
-        private IRestClient BuildClient(TransmissionSettings settings)
-        {
-            var protocol = settings.UseSsl ? "https" : "http";
-            
-            var url = string.Format(@"{0}://{1}:{2}/{3}/rpc", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
-
-            var restClient = RestClientFactory.BuildClient(url);
-            restClient.FollowRedirects = false;
-
-            if (!settings.Username.IsNullOrWhiteSpace())
-            {
-                restClient.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
-            }
-
-            return restClient;
         }
     }
 }

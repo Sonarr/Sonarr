@@ -4,9 +4,10 @@ using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Rest;
-using RestSharp;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
 {
@@ -33,30 +34,31 @@ namespace NzbDrone.Core.Download.Clients.Deluge
     {
         private static readonly string[] requiredProperties = new string[] { "hash", "name", "state", "progress", "eta", "message", "is_finished", "save_path", "total_size", "total_done", "time_added", "active_time", "ratio", "is_auto_managed", "stop_at_ratio", "remove_at_ratio", "stop_ratio" };
 
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        private string _authPassword;
-        private CookieContainer _authCookieContainer;
+        private readonly ICached<Dictionary<string, string>> _authCookieCache;
 
-        private static int _callId;
-
-        public DelugeProxy(Logger logger)
+        public DelugeProxy(ICacheManager cacheManager, IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
+
+            _authCookieCache = cacheManager.GetCache<Dictionary<string, string>>(GetType(), "authCookies");
         }
 
         public string GetVersion(DelugeSettings settings)
         {
             var response = ProcessRequest<string>(settings, "daemon.info");
 
-            return response.Result;
+            return response;
         }
 
         public Dictionary<string, object> GetConfig(DelugeSettings settings)
         {
             var response = ProcessRequest<Dictionary<string, object>>(settings, "core.get_config");
 
-            return response.Result;
+            return response;
         }
 
         public DelugeTorrent[] GetTorrents(DelugeSettings settings)
@@ -67,7 +69,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
             var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", requiredProperties, filter);
 
-            return GetTorrents(response.Result);
+            return GetTorrents(response);
         }
 
         public DelugeTorrent[] GetTorrentsByLabel(string label, DelugeSettings settings)
@@ -78,28 +80,28 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
             var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", requiredProperties, filter);
 
-            return GetTorrents(response.Result);
+            return GetTorrents(response);
         }
 
         public string AddTorrentFromMagnet(string magnetLink, DelugeSettings settings)
         {
             var response = ProcessRequest<string>(settings, "core.add_torrent_magnet", magnetLink, new JObject());
 
-            return response.Result;
+            return response;
         }
 
         public string AddTorrentFromFile(string filename, byte[] fileContent, DelugeSettings settings)
         {
             var response = ProcessRequest<string>(settings, "core.add_torrent_file", filename, Convert.ToBase64String(fileContent), new JObject());
 
-            return response.Result;
+            return response;
         }
 
         public bool RemoveTorrent(string hashString, bool removeData, DelugeSettings settings)
         {
             var response = ProcessRequest<bool>(settings, "core.remove_torrent", hashString, removeData);
 
-            return response.Result;
+            return response;
         }
 
         public void MoveTorrentToTopInQueue(string hash, DelugeSettings settings)
@@ -111,21 +113,21 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var response = ProcessRequest<string[]>(settings, "core.get_available_plugins");
 
-            return response.Result;
+            return response;
         }
 
         public string[] GetEnabledPlugins(DelugeSettings settings)
         {
             var response = ProcessRequest<string[]>(settings, "core.get_enabled_plugins");
 
-            return response.Result;
+            return response;
         }
 
         public string[] GetAvailableLabels(DelugeSettings settings)
         {
             var response = ProcessRequest<string[]>(settings, "label.get_labels");
 
-            return response.Result;
+            return response;
         }
 
         public void SetTorrentConfiguration(string hash, string key, object value, DelugeSettings settings)
@@ -143,7 +145,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 var ratioArguments = new Dictionary<string, object>();
                 ratioArguments.Add("stop_ratio", seedConfiguration.Ratio.Value);
 
-                ProcessRequest<object>(settings, "core.set_torrent_options", new string[]{hash}, ratioArguments);
+                ProcessRequest<object>(settings, "core.set_torrent_options", new string[] { hash }, ratioArguments);
             }
         }
 
@@ -157,134 +159,122 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             ProcessRequest<object>(settings, "label.set_torrent", hash, label);
         }
 
-        protected DelugeResponse<TResult> ProcessRequest<TResult>(DelugeSettings settings, string action, params object[] arguments)
+        private JsonRpcRequestBuilder BuildRequest(DelugeSettings settings)
         {
-            var client = BuildClient(settings);
+            string url = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
 
-            DelugeResponse<TResult> response;
+            var builder = new JsonRpcRequestBuilder(url);
+            
+            builder.Resource("json");
+            builder.PostProcess += r => r.RequestTimeout = TimeSpan.FromSeconds(15);
 
-            try
-            {
-                response = ProcessRequest<TResult>(client, action, arguments);
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status == WebExceptionStatus.Timeout)
-                {
-                    _logger.Debug("Deluge timeout during request, daemon connection may have been broken. Attempting to reconnect.");
-                    response = new DelugeResponse<TResult>();
-                    response.Error = new DelugeError();
-                    response.Error.Code = 2;
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            AuthenticateClient(builder, settings);
+
+            return builder;
+        }
+
+        protected TResult ProcessRequest<TResult>(DelugeSettings settings, string method, params object[] arguments)
+        {
+            var requestBuilder = BuildRequest(settings);
+
+            var response = ProcessRequest<TResult>(requestBuilder, method, arguments);            
 
             if (response.Error != null)
             {
-                if (response.Error.Code == 1 || response.Error.Code == 2)
+                var error = response.Error.ToObject<DelugeError>();
+                if (error.Code == 1 || error.Code == 2)
                 {
-                    AuthenticateClient(client);
+                    AuthenticateClient(requestBuilder, settings, true);
 
-                    response = ProcessRequest<TResult>(client, action, arguments);
+                    response = ProcessRequest<TResult>(requestBuilder, method, arguments);
 
                     if (response.Error == null)
                     {
-                        return response;
+                        return response.Result;
                     }
+                    error = response.Error.ToObject<DelugeError>();
 
-                    throw new DownloadClientAuthenticationException(response.Error.Message);
+                    throw new DownloadClientAuthenticationException(error.Message);
                 }
 
-                throw new DelugeException(response.Error.Message, response.Error.Code);
+                throw new DelugeException(error.Message, error.Code);
             }
 
-            return response;
+            return response.Result;
         }
-        
-        private DelugeResponse<TResult> ProcessRequest<TResult>(IRestClient client, string action, object[] arguments)
+
+        private JsonRpcResponse<TResult> ProcessRequest<TResult>(JsonRpcRequestBuilder requestBuilder, string method, params object[] arguments)
         {
-            var request = new RestRequest(Method.POST);
-            request.Resource = "json";
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
+            var request = requestBuilder.Call(method, arguments).Build();
 
-            var data = new Dictionary<string, object>();
-            data.Add("id", GetCallId());
-            data.Add("method", action);
-
-            if (arguments != null)
+            HttpResponse response;
+            try
             {
-                data.Add("params", arguments);
+                response = _httpClient.Execute(request);
+
+                return Json.Deserialize<JsonRpcResponse<TResult>>(response.Content);
             }
-
-            request.AddBody(data);
-
-            _logger.Debug("Url: {0} Action: {1}", client.BuildUri(request), action);
-            var response = client.ExecuteAndValidate<DelugeResponse<TResult>>(request);
-
-            return response;
+            catch (HttpException ex)
+            {
+                if (ex.Response.StatusCode == HttpStatusCode.RequestTimeout)
+                {
+                    _logger.Debug("Deluge timeout during request, daemon connection may have been broken. Attempting to reconnect.");
+                    return new JsonRpcResponse<TResult>()
+                    {
+                        Error = JToken.Parse("{ Code = 2 }")
+                    };
+                }
+                else
+                {
+                    throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+                }
+            }
         }
 
-        private IRestClient BuildClient(DelugeSettings settings)
+        private void AuthenticateClient(JsonRpcRequestBuilder requestBuilder, DelugeSettings settings, bool reauthenticate = false)
         {
-            var protocol = settings.UseSsl ? "https" : "http";
+            var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.Password);
 
-            string url;
-            if (!settings.UrlBase.IsNullOrWhiteSpace())
+            var cookies = _authCookieCache.Find(authKey);
+
+            if (cookies == null || reauthenticate)
             {
-                url = string.Format(@"{0}://{1}:{2}/{3}", protocol, settings.Host, settings.Port, settings.UrlBase.Trim('/'));
+                _authCookieCache.Remove(authKey);
+
+                var authLoginRequest = requestBuilder.Call("auth.login", settings.Password).Build();
+                var response = _httpClient.Execute(authLoginRequest);
+                var result = Json.Deserialize<JsonRpcResponse<bool>>(response.Content);
+                if (!result.Result)
+                {
+                    _logger.Debug("Deluge authentication failed.");
+                    throw new DownloadClientAuthenticationException("Failed to authenticate with Deluge.");
+                }
+                _logger.Debug("Deluge authentication succeeded.");
+
+                cookies = response.GetCookies();
+
+                _authCookieCache.Set(authKey, cookies);
+
+                requestBuilder.SetCookies(cookies);
+
+                ConnectDaemon(requestBuilder);
             }
             else
             {
-                url = string.Format(@"{0}://{1}:{2}", protocol, settings.Host, settings.Port);
+                requestBuilder.SetCookies(cookies);
             }
-
-            var restClient = RestClientFactory.BuildClient(url);
-            restClient.Timeout = 15000;
-
-            if (_authPassword != settings.Password || _authCookieContainer == null)
-            {
-                _authPassword = settings.Password;
-                AuthenticateClient(restClient);
-            }
-            else
-            {
-                restClient.CookieContainer = _authCookieContainer;
-            }
-
-            return restClient;
         }
 
-        private void AuthenticateClient(IRestClient restClient)
+        private void ConnectDaemon(JsonRpcRequestBuilder requestBuilder)
         {
-            restClient.CookieContainer = new CookieContainer();
-
-            var result = ProcessRequest<bool>(restClient, "auth.login", new object[] { _authPassword });
-
-            if (!result.Result)
-            {
-                _logger.Debug("Deluge authentication failed.");
-                throw new DownloadClientAuthenticationException("Failed to authenticate with Deluge.");
-            }
-            _logger.Debug("Deluge authentication succeeded.");
-            _authCookieContainer = restClient.CookieContainer;
-
-            ConnectDaemon(restClient);
-        }
-
-        private void ConnectDaemon(IRestClient restClient)
-        {
-            var resultConnected = ProcessRequest<bool>(restClient, "web.connected", new object[0]);
+            var resultConnected = ProcessRequest<bool>(requestBuilder, "web.connected");
 
             if (resultConnected.Result)
             {
                 return;
             }
 
-            var resultHosts = ProcessRequest<List<object[]>>(restClient, "web.get_hosts", new object[0]);
+            var resultHosts = ProcessRequest<List<object[]>>(requestBuilder, "web.get_hosts");
 
             if (resultHosts.Result != null)
             {
@@ -293,18 +283,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
                 if (connection != null)
                 {
-                    ProcessRequest<object>(restClient, "web.connect", new object[] { connection[0] });
+                    ProcessRequest<object>(requestBuilder, "web.connect", new object[] { connection[0] });
                 }
                 else
                 {
                     throw new DownloadClientException("Failed to connect to Deluge daemon.");
                 }
             }
-        }
-
-        private int GetCallId()
-        {
-            return System.Threading.Interlocked.Increment(ref _callId);
         }
 
         private DelugeTorrent[] GetTorrents(DelugeUpdateUIResult result)

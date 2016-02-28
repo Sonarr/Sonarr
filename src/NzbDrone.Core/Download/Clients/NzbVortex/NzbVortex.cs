@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            NzbVortexQueue vortexQueue;
+            List<NzbVortexQueueItem> vortexQueue;
 
             try
             {
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
             var queueItems = new List<DownloadClientItem>();
 
-            foreach (var vortexQueueItem in vortexQueue.Items)
+            foreach (var vortexQueueItem in vortexQueue)
             {
                 var queueItem = new DownloadClientItem();
 
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             else
             {
                 var queue = _proxy.GetQueue(30, Settings);
-                var queueItem = queue.Items.FirstOrDefault(c => c.AddUUID == downloadId);
+                var queueItem = queue.FirstOrDefault(c => c.AddUUID == downloadId);
 
                 if (queueItem != null)
                 {
@@ -249,7 +249,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
             var filesResponse = _proxy.GetFiles(vortexQueueItem.Id, Settings);
 
-            if (filesResponse.Files.Count > 1)
+            if (filesResponse.Count > 1)
             {
                 var message = string.Format("Download contains multiple files and is not in a job folder: {0}", outputPath);
 
@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
                 _logger.Debug(message);
             }
 
-            return new OsPath(Path.Combine(outputPath.FullPath, filesResponse.Files.First().FileName));
+            return new OsPath(Path.Combine(outputPath.FullPath, filesResponse.First().FileName));
         }
     }
 }

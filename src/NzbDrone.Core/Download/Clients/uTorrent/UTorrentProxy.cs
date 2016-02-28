@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Rest;
-using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
 {
@@ -26,32 +28,37 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
     public class UTorrentProxy : IUTorrentProxy
     {
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
-        private readonly CookieContainer _cookieContainer;
-        private string _authToken;
 
-        public UTorrentProxy(Logger logger)
+        private readonly ICached<Dictionary<string, string>> _authCookieCache;
+        private readonly ICached<string> _authTokenCache;
+
+        public UTorrentProxy(ICacheManager cacheManager, IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
-            _cookieContainer = new CookieContainer();
+
+            _authCookieCache = cacheManager.GetCache<Dictionary<string, string>>(GetType(), "authCookies");
+            _authTokenCache = cacheManager.GetCache<string>(GetType(), "authTokens");
         }
 
         public int GetVersion(UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("action", "getsettings");
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "getsettings");
 
-            var result = ProcessRequest(arguments, settings);
+            var result = ProcessRequest(requestBuilder, settings);
 
             return result.Build;
         }
 
         public Dictionary<string, string> GetConfig(UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("action", "getsettings");
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "getsettings");
 
-            var result = ProcessRequest(arguments, settings);
+            var result = ProcessRequest(requestBuilder, settings);
 
             var configuration = new Dictionary<string, string>();
 
@@ -65,196 +72,175 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
         public List<UTorrentTorrent> GetTorrents(UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("list", 1);
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("list", 1);
 
-            var result = ProcessRequest(arguments, settings);
+            var result = ProcessRequest(requestBuilder, settings);
 
             return result.Torrents;
         }
 
         public void AddTorrentFromUrl(string torrentUrl, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("action", "add-url");
-            arguments.Add("s", torrentUrl);
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "add-url")
+                .AddQueryParam("s", torrentUrl);
 
-            ProcessRequest(arguments, settings);
+            ProcessRequest(requestBuilder, settings);
         }
 
         public void AddTorrentFromFile(string fileName, byte[] fileContent, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("action", "add-file");
-            arguments.Add("path", string.Empty);
+            var requestBuilder = BuildRequest(settings)
+                .Post()
+                .AddQueryParam("action", "add-file")
+                .AddQueryParam("path", string.Empty)
+                .AddFormUpload("torrent_file", fileName, fileContent, @"application/octet-stream");
 
-            var client = BuildClient(settings);
-
-            // add-file should use POST unlike all other methods which are GET
-            var request = new RestRequest(Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.Resource = "/gui/";
-            request.AddParameter("token", _authToken, ParameterType.QueryString);
-
-            foreach (var argument in arguments)
-            {
-                request.AddParameter(argument.Key, argument.Value, ParameterType.QueryString);
-            }
-            
-            request.AddFile("torrent_file", fileContent, fileName, @"application/octet-stream");
-
-            ProcessRequest(request, client);
+            ProcessRequest(requestBuilder, settings);
         }
 
         public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, UTorrentSettings settings)
         {
-            var arguments = new List<KeyValuePair<string, object>>();
-            arguments.Add("action", "setprops");
-            arguments.Add("hash", hash);
-
-            arguments.Add("s", "seed_override");
-            arguments.Add("v", 1);
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "setprops")
+                .AddQueryParam("hash", hash);
+            
+            requestBuilder.AddQueryParam("s", "seed_override")
+                          .AddQueryParam("v", 1);
 
             if (seedConfiguration.Ratio != null)
             {
-                arguments.Add("s","seed_ratio");
-                arguments.Add("v", Convert.ToInt32(seedConfiguration.Ratio.Value * 1000));
+                requestBuilder.AddQueryParam("s", "seed_ratio")
+                              .AddQueryParam("v", Convert.ToInt32(seedConfiguration.Ratio.Value * 1000));
             }
 
             if (seedConfiguration.SeedTime != null)
             {
-                arguments.Add("s", "seed_time");
-                arguments.Add("v", Convert.ToInt32(seedConfiguration.SeedTime.Value.TotalSeconds));
+                requestBuilder.AddQueryParam("s", "seed_time")
+                              .AddQueryParam("v", Convert.ToInt32(seedConfiguration.SeedTime.Value.TotalSeconds));
             }
 
-            ProcessRequest(arguments, settings);
+            ProcessRequest(requestBuilder, settings);
         }
 
         public void RemoveTorrent(string hash, bool removeData, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", removeData ? "removedata" : "remove")
+                .AddQueryParam("hash", hash);
 
-            if (removeData)
-            {
-                arguments.Add("action", "removedata");
-            }
-            else
-            {
-                arguments.Add("action", "remove");
-            }
-
-            arguments.Add("hash", hash);
-
-            ProcessRequest(arguments, settings);
+            ProcessRequest(requestBuilder, settings);
         }
 
         public void SetTorrentLabel(string hash, string label, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("action", "setprops");
-            arguments.Add("hash", hash);
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "setprops")
+                .AddQueryParam("hash", hash);
 
-            arguments.Add("s", "label");
-            arguments.Add("v", label);
+            requestBuilder.AddQueryParam("s", "label")
+                          .AddQueryParam("v", label);
 
-            ProcessRequest(arguments, settings);
+            ProcessRequest(requestBuilder, settings);
         }
 
         public void MoveTorrentToTopInQueue(string hash, UTorrentSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("action", "queuetop");
-            arguments.Add("hash", hash);
+            var requestBuilder = BuildRequest(settings)
+                .AddQueryParam("action", "queuetop")
+                .AddQueryParam("hash", hash);
 
-            ProcessRequest(arguments, settings);
+            ProcessRequest(requestBuilder, settings);
         }
 
-        public UTorrentResponse ProcessRequest(IEnumerable<KeyValuePair<string, object>> arguments, UTorrentSettings settings)
+        private HttpRequestBuilder BuildRequest(UTorrentSettings settings)
         {
-            var client = BuildClient(settings);
+            var requestBuilder = new HttpRequestBuilder(false, settings.Host, settings.Port)
+                .Resource("/gui/")
+                .Accept(HttpAccept.Json);
 
-            var request = new RestRequest(Method.GET);
-            request.RequestFormat = DataFormat.Json;
-            request.Resource = "/gui/";
-            request.AddParameter("token", _authToken, ParameterType.QueryString);
+            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
 
-            foreach (var argument in arguments)
-            {
-                request.AddParameter(argument.Key, argument.Value, ParameterType.QueryString);
-            }
-
-            return ProcessRequest(request, client);
+            return requestBuilder;
         }
 
-        private UTorrentResponse ProcessRequest(IRestRequest request, IRestClient client)
+        public UTorrentResponse ProcessRequest(HttpRequestBuilder requestBuilder, UTorrentSettings settings)
         {
-            _logger.Debug("Url: {0}", client.BuildUri(request));
-            var clientResponse = client.Execute(request);
+            AuthenticateClient(requestBuilder, settings);
 
-            if (clientResponse.StatusCode == HttpStatusCode.BadRequest)
+            var request = requestBuilder.Build();
+
+            HttpResponse response;
+            try
             {
-                // Token has expired. If the settings were incorrect or the API is disabled we'd have gotten an error 400 during GetAuthToken
-                _logger.Debug("uTorrent authentication token error.");
-
-                _authToken = GetAuthToken(client);
-
-                request.Parameters.First(v => v.Name == "token").Value = _authToken;
-                clientResponse = client.Execute(request);
+                response = _httpClient.Execute(request);
             }
-            else if (clientResponse.StatusCode == HttpStatusCode.Unauthorized)
+            catch (HttpException ex)
             {
-                throw new DownloadClientAuthenticationException("Failed to authenticate");
+                if (ex.Response.StatusCode == HttpStatusCode.BadRequest || ex.Response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _logger.Debug("Authentication required, logging in.");
+
+                    AuthenticateClient(requestBuilder, settings, true);
+
+                    request = requestBuilder.Build();
+
+                    response = _httpClient.Execute(request);
+                }
+                else
+                {
+                    throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+                }
             }
 
-            var uTorrentResult = clientResponse.Read<UTorrentResponse>(client);
-
-            return uTorrentResult;
+            return Json.Deserialize<UTorrentResponse>(response.Content);
         }
 
-        private string GetAuthToken(IRestClient client)
+        private void AuthenticateClient(HttpRequestBuilder requestBuilder, UTorrentSettings settings, bool reauthenticate = false)
         {
-            var request = new RestRequest();
-            request.RequestFormat = DataFormat.Json;
-            request.Resource = "/gui/token.html";
+            var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.Password);
 
-            _logger.Debug("Url: {0}", client.BuildUri(request));
-            var response = client.Execute(request);
+            var cookies = _authCookieCache.Find(authKey);
+            var authToken = _authTokenCache.Find(authKey);
 
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            if (cookies == null || authToken == null || reauthenticate)
             {
-                throw new DownloadClientAuthenticationException("Failed to authenticate");
+                _authCookieCache.Remove(authKey);
+                _authTokenCache.Remove(authKey);
+
+                var authLoginRequest = BuildRequest(settings).Resource("/gui/token.html").Build();
+
+                HttpResponse response;
+                try
+                {
+                    response = _httpClient.Execute(authLoginRequest);
+                    _logger.Debug("uTorrent authentication succeeded.");
+
+                    var xmlDoc = new System.Xml.XmlDocument();
+                    xmlDoc.LoadXml(response.Content);
+
+                    authToken = xmlDoc.FirstChild.FirstChild.InnerText;
+                }
+                catch (HttpException ex)
+                {
+                    if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        _logger.Debug("uTorrent authentication failed.");
+                        throw new DownloadClientAuthenticationException("Failed to authenticate with uTorrent.");
+                    }
+
+                    throw;
+                }
+
+                cookies = response.GetCookies();
+
+                _authCookieCache.Set(authKey, cookies);
+                _authTokenCache.Set(authKey, authToken);
             }
 
-            response.ValidateResponse(client);
-
-            var xmlDoc = new System.Xml.XmlDocument();
-            xmlDoc.LoadXml(response.Content);
-
-            var authToken = xmlDoc.FirstChild.FirstChild.InnerText;
-
-            _logger.Debug("uTorrent AuthToken={0}", authToken);
-
-            return authToken;
-        }
-
-        private IRestClient BuildClient(UTorrentSettings settings)
-        {
-            var url = string.Format(@"http://{0}:{1}",
-                                 settings.Host,
-                                 settings.Port);
-
-            var restClient = RestClientFactory.BuildClient(url);
-
-            restClient.Authenticator = new HttpBasicAuthenticator(settings.Username, settings.Password);
-            restClient.CookieContainer = _cookieContainer;
-
-            if (_authToken.IsNullOrWhiteSpace())
-            {
-                // µTorrent requires a token and cookie for authentication. The cookie is set automatically when getting the token.
-                _authToken = GetAuthToken(restClient);
-            }
-
-            return restClient;
+            requestBuilder.SetCookies(cookies);
+            requestBuilder.AddQueryParam("token", authToken, true);
         }
     }
 }

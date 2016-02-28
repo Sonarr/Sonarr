@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 
 namespace NzbDrone.Common.Http
 {
@@ -6,6 +7,6 @@ namespace NzbDrone.Common.Http
     {
         public string Id { get; set; }
         public T Result { get; set; }
-        public object Error { get; set; }
+        public JToken Error { get; set; }
     }
 }

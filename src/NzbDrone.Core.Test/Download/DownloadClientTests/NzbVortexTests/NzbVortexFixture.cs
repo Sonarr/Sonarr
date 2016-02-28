@@ -88,10 +88,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
 
             Mocker.GetMock<INzbVortexProxy>()
                 .Setup(s => s.GetQueue(It.IsAny<int>(), It.IsAny<NzbVortexSettings>()))
-                .Returns(new NzbVortexQueue
-                         {
-                             Items = list
-                         });
+                .Returns(list);
         }
 
         [Test]
@@ -244,7 +241,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
 
             Mocker.GetMock<INzbVortexProxy>()
                   .Setup(s => s.GetFiles(It.IsAny<int>(), It.IsAny<NzbVortexSettings>()))
-                  .Returns(new NzbVortexFiles{ Files = new List<NzbVortexFile> { new NzbVortexFile { FileName = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv" } } });
+                  .Returns(new List<NzbVortexFile> { new NzbVortexFile { FileName = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv" } });
 
             _completed.State = NzbVortexStateType.Done;
             GivenQueue(_completed);
@@ -263,11 +260,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
 
             Mocker.GetMock<INzbVortexProxy>()
                   .Setup(s => s.GetFiles(It.IsAny<int>(), It.IsAny<NzbVortexSettings>()))
-                  .Returns(new NzbVortexFiles { Files = new List<NzbVortexFile>
-                                                        {
-                                                            new NzbVortexFile { FileName = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv" },
-                                                            new NzbVortexFile { FileName = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.nfo" }
-                                                        } });
+                  .Returns(new List<NzbVortexFile>
+                           {
+                               new NzbVortexFile { FileName = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.mkv" },
+                               new NzbVortexFile { FileName = "Droned.S01E01.Pilot.1080p.WEB-DL-DRONE.nfo" }
+                           });
 
             _completed.State = NzbVortexStateType.Done;
             GivenQueue(_completed);

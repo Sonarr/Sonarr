@@ -1,15 +1,12 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Rest;
 using NzbDrone.Core.Download.Clients.NzbVortex.Responses;
-using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.NzbVortex
 {
@@ -20,216 +17,188 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         NzbVortexVersionResponse GetVersion(NzbVortexSettings settings);
         NzbVortexApiVersionResponse GetApiVersion(NzbVortexSettings settings);
         List<NzbVortexGroup> GetGroups(NzbVortexSettings settings);
-        NzbVortexQueue GetQueue(int doneLimit, NzbVortexSettings settings);
-        NzbVortexFiles GetFiles(int id, NzbVortexSettings settings);
+        List<NzbVortexQueueItem> GetQueue(int doneLimit, NzbVortexSettings settings);
+        List<NzbVortexFile> GetFiles(int id, NzbVortexSettings settings);
     }
 
     public class NzbVortexProxy : INzbVortexProxy
     {
-        private readonly ICached<string> _authCache;
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public NzbVortexProxy(ICacheManager cacheManager, Logger logger)
+        private readonly ICached<string> _authSessionIdCache;
+
+        public NzbVortexProxy(IHttpClient httpClient, ICacheManager cacheManager, Logger logger)
         {
-            _authCache = cacheManager.GetCache<string>(GetType(), "authCache");
+            _httpClient = httpClient;
             _logger = logger;
+
+            _authSessionIdCache = cacheManager.GetCache<string>(GetType(), "authCache");
         }
 
         public string DownloadNzb(byte[] nzbData, string filename, int priority, NzbVortexSettings settings)
         {
-            var request = BuildRequest("nzb/add", Method.POST, true, settings);
-
-            request.AddFile("name", nzbData, filename, "application/x-nzb");
-            request.AddQueryParameter("priority", priority.ToString());
-
+            var requestBuilder = BuildRequest(settings).Resource("nzb/add")
+                                                       .Post()
+                                                       .AddQueryParam("priority", priority.ToString());
+            
             if (settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                request.AddQueryParameter("groupname", settings.TvCategory);                
+                requestBuilder.AddQueryParam("groupname", settings.TvCategory);
             }
+            
+            requestBuilder.AddFormUpload("name", filename, nzbData, "application/x-nzb");
 
-            var response = ProcessRequest<NzbVortexAddResponse>(request, settings);
+            var response = ProcessRequest<NzbVortexAddResponse>(requestBuilder, true, settings);
 
             return response.Id;
         }
 
         public void Remove(int id, bool deleteData, NzbVortexSettings settings)
         {
-            var request = BuildRequest(string.Format("nzb/{0}/cancel", id), Method.GET, true, settings);
+            var requestBuilder = BuildRequest(settings).Resource(string.Format("nzb/{0}/{1}", id, deleteData ? "cancelDelete" : "cancel"));
 
-            if (deleteData)
-            {
-                request.Resource += "Delete";
-            }
-
-            ProcessRequest(request, settings);
+            ProcessRequest<NzbVortexResponseBase>(requestBuilder, true, settings);
         }
 
         public NzbVortexVersionResponse GetVersion(NzbVortexSettings settings)
         {
-            var request = BuildRequest("app/appversion", Method.GET, false, settings);
-            var response = ProcessRequest<NzbVortexVersionResponse>(request, settings);
+            var requestBuilder = BuildRequest(settings).Resource("app/appversion");
+
+            var response = ProcessRequest<NzbVortexVersionResponse>(requestBuilder, false, settings);
 
             return response;
         }
 
         public NzbVortexApiVersionResponse GetApiVersion(NzbVortexSettings settings)
         {
-            var request = BuildRequest("app/apilevel", Method.GET, false, settings);
-            var response = ProcessRequest<NzbVortexApiVersionResponse>(request, settings);
+            var requestBuilder = BuildRequest(settings).Resource("app/apilevel");
+
+            var response = ProcessRequest<NzbVortexApiVersionResponse>(requestBuilder, false, settings);
 
             return response;
         }
 
         public List<NzbVortexGroup> GetGroups(NzbVortexSettings settings)
         {
-            var request = BuildRequest("group", Method.GET, true, settings);
-            var response = ProcessRequest<NzbVortexGroupResponse>(request, settings);
+            var request = BuildRequest(settings).Resource("group");
+            var response = ProcessRequest<NzbVortexGroupResponse>(request, true, settings);
 
             return response.Groups;
         }
 
-        public NzbVortexQueue GetQueue(int doneLimit, NzbVortexSettings settings)
+        public List<NzbVortexQueueItem> GetQueue(int doneLimit, NzbVortexSettings settings)
         {
-            var request = BuildRequest("nzb", Method.GET, true, settings);
+            var requestBuilder = BuildRequest(settings).Resource("nzb");
+                
 
             if (settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                request.AddQueryParameter("groupName", settings.TvCategory);
+                requestBuilder.AddQueryParam("groupName", settings.TvCategory);
             }
 
-            request.AddQueryParameter("limitDone", doneLimit.ToString());
+            requestBuilder.AddQueryParam("limitDone", doneLimit.ToString());
 
-            var response = ProcessRequest<NzbVortexQueue>(request, settings);
+            var response = ProcessRequest<NzbVortexQueueResponse>(requestBuilder, true, settings);
 
-            return response;
+            return response.Items;
         }
 
-        public NzbVortexFiles GetFiles(int id, NzbVortexSettings settings)
+        public List<NzbVortexFile> GetFiles(int id, NzbVortexSettings settings)
         {
-            var request = BuildRequest(string.Format("file/{0}", id), Method.GET, true, settings);
-            var response = ProcessRequest<NzbVortexFiles>(request, settings);
+            var requestBuilder = BuildRequest(settings).Resource(string.Format("file/{0}", id));
 
-            return response;
+            var response = ProcessRequest<NzbVortexFilesResponse>(requestBuilder, true, settings);
+
+            return response.Files;
+        }
+        
+        private HttpRequestBuilder BuildRequest(NzbVortexSettings settings)
+        {
+            return new HttpRequestBuilder(true, settings.Host, settings.Port, "api");
         }
 
-        private string GetSessionId(bool force, NzbVortexSettings settings)
+        private T ProcessRequest<T>(HttpRequestBuilder requestBuilder, bool requiresAuthentication, NzbVortexSettings settings)
+            where T : NzbVortexResponseBase, new()
         {
-            var authCacheKey = string.Format("{0}_{1}_{2}", settings.Host, settings.Port, settings.ApiKey);
-
-            if (force)
-            {
-                _authCache.Remove(authCacheKey);
-            }
-
-            var sessionId = _authCache.Get(authCacheKey, () => Authenticate(settings));
-
-            return sessionId;
-        }
-
-        private string Authenticate(NzbVortexSettings settings)
-        {
-            var nonce = GetNonce(settings);
-            var cnonce = Guid.NewGuid().ToString();
-            var hashString = string.Format("{0}:{1}:{2}", nonce, cnonce, settings.ApiKey);
-            var sha256 = hashString.SHA256Hash();
-            var base64 = Convert.ToBase64String(sha256.HexToByteArray());
-            var request = BuildRequest("auth/login", Method.GET, false, settings);
-
-            request.AddQueryParameter("nonce", nonce);
-            request.AddQueryParameter("cnonce", cnonce);
-            request.AddQueryParameter("hash", base64);
-
-            var response = ProcessRequest(request, settings);
-            var result = Json.Deserialize<NzbVortexAuthResponse>(response);
-
-            if (result.LoginResult == NzbVortexLoginResultType.Failed)
-            {
-                throw new NzbVortexAuthenticationException("Authentication failed, check your API Key");
-            }
-
-            return result.SessionId;
-        }
-
-        private string GetNonce(NzbVortexSettings settings)
-        {
-            var request = BuildRequest("auth/nonce", Method.GET, false, settings);
-            
-            return ProcessRequest<NzbVortexAuthNonceResponse>(request, settings).AuthNonce;
-        }
-
-        private IRestClient BuildClient(NzbVortexSettings settings)
-        {
-            var url = string.Format(@"https://{0}:{1}/api", settings.Host, settings.Port);
-
-            return RestClientFactory.BuildClient(url);
-        }
-
-        private IRestRequest BuildRequest(string resource, Method method, bool requiresAuthentication, NzbVortexSettings settings)
-        {
-            var request = new RestRequest(resource, method);
-
             if (requiresAuthentication)
             {
-                request.AddQueryParameter("sessionid", GetSessionId(false, settings));
+                AuthenticateClient(requestBuilder, settings);
             }
 
-            return request;
-        }
-
-        private T ProcessRequest<T>(IRestRequest request, NzbVortexSettings settings) where T : new()
-        {
-            return Json.Deserialize<T>(ProcessRequest(request, settings));
-        }
-
-        private string ProcessRequest(IRestRequest request, NzbVortexSettings settings)
-        {
-            var client = BuildClient(settings);
-
+            HttpResponse response = null;
             try
             {
-                return ProcessRequest(client, request).Content;
-            }
-            catch (NzbVortexNotLoggedInException)
-            {
-                _logger.Warn("Not logged in response received, reauthenticating and retrying");
-                request.AddQueryParameter("sessionid", GetSessionId(true, settings));
+                response = _httpClient.Execute(requestBuilder.Build());
 
-                return ProcessRequest(client, request).Content;
-            }
-        }
+                var result = Json.Deserialize<T>(response.Content);
 
-        private IRestResponse ProcessRequest(IRestClient client, IRestRequest request)
-        {
-            _logger.Debug("URL: {0}/{1}", client.BaseUrl, request.Resource);
-            var response = client.Execute(request);
-
-            _logger.Trace("Response: {0}", response.Content);
-            CheckForError(response);
-
-            return response;
-        }
-
-        private void CheckForError(IRestResponse response)
-        {
-            if (response.ResponseStatus != ResponseStatus.Completed)
-            {
-                throw new DownloadClientException("Unable to connect to NZBVortex, please check your settings", response.ErrorException);
-            }
-
-            NzbVortexResponseBase result;
-
-            if (Json.TryDeserialize<NzbVortexResponseBase>(response.Content, out result))
-            {
                 if (result.Result == NzbVortexResultType.NotLoggedIn)
                 {
-                    throw new NzbVortexNotLoggedInException();
+                    _logger.Debug("Not logged in response received, reauthenticating and retrying");
+                    AuthenticateClient(requestBuilder, settings, true);
+
+                    response = _httpClient.Execute(requestBuilder.Build());
+
+                    result = Json.Deserialize<T>(response.Content);
+
+                    if (result.Result == NzbVortexResultType.NotLoggedIn)
+                    {
+                        throw new DownloadClientException("Unable to connect to remain authenticated to NzbVortex");
+                    }
                 }
+
+                return result;
+            }
+            catch (JsonException ex)
+            {
+                throw new DownloadClientException("NzbVortex response could not be processed {0}: {1}", ex.Message, response.Content);
+            }
+            catch (HttpException ex)
+            {
+                throw new DownloadClientException("Unable to connect to NZBVortex, please check your settings", ex);
+            }
+        }
+
+        private void AuthenticateClient(HttpRequestBuilder requestBuilder, NzbVortexSettings settings, bool reauthenticate = false)
+        {
+            var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.ApiKey);
+
+            var sessionId = _authSessionIdCache.Find(authKey);
+
+            if (sessionId == null || reauthenticate)
+            {
+                _authSessionIdCache.Remove(authKey);
+
+                var nonceRequest = BuildRequest(settings).Resource("auth/nonce").Build();
+                var nonceResponse = _httpClient.Execute(nonceRequest);
+
+                var nonce = Json.Deserialize<NzbVortexAuthNonceResponse>(nonceResponse.Content).AuthNonce;
+
+                var cnonce = Guid.NewGuid().ToString();
+
+                var hashString = string.Format("{0}:{1}:{2}", nonce, cnonce, settings.ApiKey);
+                var hash = Convert.ToBase64String(hashString.SHA256Hash().HexToByteArray());
+
+                var authRequest = BuildRequest(settings).Resource("auth/login")
+                                                        .AddQueryParam("nonce", nonce)
+                                                        .AddQueryParam("cnonce", cnonce)
+                                                        .AddQueryParam("hash", hash)
+                                                        .Build();
+                var authResponse = _httpClient.Execute(authRequest);
+                var authResult = Json.Deserialize<NzbVortexAuthResponse>(authResponse.Content);
+
+                if (authResult.LoginResult == NzbVortexLoginResultType.Failed)
+                {
+                    throw new NzbVortexAuthenticationException("Authentication failed, check your API Key");
+                }
+
+                sessionId = authResult.SessionId;
+
+                _authSessionIdCache.Set(authKey, sessionId);
             }
 
-            else
-            {
-                throw new DownloadClientException("Response could not be processed: {0}", response.Content);
-            }
+            requestBuilder.AddQueryParam("sessionid", sessionId);
         }
     }
 }
