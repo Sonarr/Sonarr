@@ -22,6 +22,7 @@ namespace NzbDrone.Common.Http
         public bool AllowAutoRedirect { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
+        public List<HttpFormData> FormData { get; private set; }
 
         public Action<HttpRequest> PostProcess { get; set; }
 
@@ -35,6 +36,7 @@ namespace NzbDrone.Common.Http
             Segments = new Dictionary<string, string>();
             Headers = new HttpHeader();
             Cookies = new Dictionary<string, string>();
+            FormData = new List<HttpFormData>();
         }
 
         public HttpRequestBuilder(bool useHttps, string host, int port, string urlBase = null)
@@ -63,6 +65,7 @@ namespace NzbDrone.Common.Http
             clone.Segments = new Dictionary<string, string>(clone.Segments);
             clone.Headers = new HttpHeader(clone.Headers);
             clone.Cookies = new Dictionary<string, string>(clone.Cookies);
+            clone.FormData = new List<HttpFormData>(clone.FormData);
             return clone;
         }
 
@@ -111,6 +114,8 @@ namespace NzbDrone.Common.Http
             {
                 request.Cookies[cookie.Key] = cookie.Value;
             }
+
+            ApplyFormData(request);
         }
 
         public virtual HttpRequest Build()
@@ -130,6 +135,86 @@ namespace NzbDrone.Common.Http
         public IHttpRequestBuilderFactory CreateFactory()
         {
             return new HttpRequestBuilderFactory(this);
+        }
+
+        protected virtual void ApplyFormData(HttpRequest request)
+        {
+            if (FormData.Empty()) return;
+
+            if (request.ContentData != null)
+            {
+                throw new ApplicationException("Cannot send HttpRequest Body and FormData simultaneously.");
+            }
+
+            var shouldSendAsMultipart = FormData.Any(v => v.ContentType != null || v.FileName != null || v.ContentData.Length > 1024);
+
+            if (shouldSendAsMultipart)
+            {
+                var boundary = "-----------------------------" + DateTime.Now.Ticks.ToString("x14");
+                var partBoundary = string.Format("--{0}\r\n", boundary);
+                var endBoundary = string.Format("--{0}--\r\n", boundary);
+
+                var bodyStream = new MemoryStream();
+                var summary = new StringBuilder();
+
+                using (var writer = new StreamWriter(bodyStream, new UTF8Encoding(false)))
+                {
+                    foreach (var formData in FormData)
+                    {
+                        writer.Write(partBoundary);
+
+                        writer.Write("Content-Disposition: form-data");
+                        if (formData.Name.IsNotNullOrWhiteSpace()) writer.Write("; name=\"{0}\"", formData.Name);
+                        if (formData.FileName.IsNotNullOrWhiteSpace()) writer.Write("; filename=\"{0}\"", formData.FileName);
+                        writer.Write("\r\n");
+
+                        if (formData.ContentType.IsNotNullOrWhiteSpace()) writer.Write("Content-Type: {0}\r\n", formData.ContentType);
+
+                        writer.Write("\r\n");
+                        writer.Flush();
+
+                        bodyStream.Write(formData.ContentData, 0, formData.ContentData.Length);
+                        writer.Write("\r\n");
+
+                        if (formData.FileName.IsNotNullOrWhiteSpace())
+                        {
+                            summary.AppendFormat("\r\n{0}={1} ({2} bytes)", formData.Name, formData.FileName, formData.ContentData.Length);
+                        }
+                        else
+                        {
+                            summary.AppendFormat("\r\n{0}={1}", formData.Name, Encoding.UTF8.GetString(formData.ContentData));
+                        }
+                    }
+
+                    writer.Write(endBoundary);
+                }
+
+                var body = bodyStream.ToArray();
+
+                // TODO: Scan through body to see if we have a boundary collision?
+
+                request.Headers.ContentType = "multipart/form-data; boundary=" + boundary;
+                request.SetContent(body);
+
+                if (request.ContentSummary == null)
+                {
+                    request.ContentSummary = summary.ToString();
+                }
+            }
+            else
+            {
+                var parameters = FormData.Select(v => string.Format("{0}={1}", v.Name, Uri.EscapeDataString(Encoding.UTF8.GetString(v.ContentData))));
+                var urlencoded = string.Join("&", parameters);
+                var body = Encoding.UTF8.GetBytes(urlencoded);
+
+                request.Headers.ContentType = "application/x-www-form-urlencoded";
+                request.SetContent(body);
+
+                if (request.ContentSummary == null)
+                {
+                    request.ContentSummary = urlencoded;
+                }
+            }
         }
 
         public virtual HttpRequestBuilder Resource(string resourceUrl)
@@ -223,5 +308,40 @@ namespace NzbDrone.Common.Http
 
             return this;
         }
+
+        public virtual HttpRequestBuilder AddFormParameter(string key, object value)
+        {
+            if (Method != HttpMethod.POST)
+            {
+                throw new NotSupportedException("HttpRequest Method must be POST to add FormParameter.");
+            }
+
+            FormData.Add(new HttpFormData
+            {
+                Name = key,
+                ContentData = Encoding.UTF8.GetBytes(value.ToString())
+            });
+
+            return this;
+        }
+
+        public virtual HttpRequestBuilder AddFormUpload(string name, string fileName, byte[] data, string contentType = "application/octet-stream")
+        {
+            if (Method != HttpMethod.POST)
+            {
+                throw new NotSupportedException("HttpRequest Method must be POST to add FormUpload.");
+            }
+
+            FormData.Add(new HttpFormData
+            {
+                Name = name,
+                FileName = fileName,
+                ContentData = data,
+                ContentType = contentType
+            });
+
+            return this;
+        }
     }
+
 }
