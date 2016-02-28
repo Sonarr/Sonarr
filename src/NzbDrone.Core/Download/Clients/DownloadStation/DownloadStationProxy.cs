@@ -159,7 +159,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                Login(BuildClient(settings), settings);
+                var client = BuildClient(settings);
+
+                Login(client, settings);
 
                 var version = GetVersion(settings);
 
@@ -169,6 +171,10 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 }
             }
             catch (DownloadClientException e)
+            {
+                failures.Add(new ValidationFailure(string.Empty, e.Message));
+            }
+            catch (WebException e)
             {
                 failures.Add(new ValidationFailure(string.Empty, e.Message));
             }
