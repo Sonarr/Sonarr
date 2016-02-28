@@ -113,8 +113,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             try
             {
-                var response = ProcessRequest<DownloadStationConfig>(SynologyApi.DownloadStationInfo, arguments, settings);
-                var path = new OsPath(response.Data.DefaultDestination);
+                var response = ProcessRequest<Dictionary<string, string>>(SynologyApi.DownloadStationInfo, arguments, settings);
+                var path = new OsPath(response.Data["default_destination"]);
 
                 return new DownloadClientStatus
                 {
@@ -214,9 +214,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                 {"method", "getinfo"}
             };
 
-            var response = ProcessRequest<DownloadStationInfo>(SynologyApi.DownloadStationInfo, arguments, settings);
+            var response = ProcessRequest<Dictionary<string, string>>(SynologyApi.DownloadStationInfo, arguments, settings);
 
-            return int.Parse(response.Data.Version.Split('.').First());
+            return int.Parse(response.Data["version_string"].Split('.').First());
         }
 
         private IEnumerable<DownloadStationTask> GetTasks(DownloadStationSettings settings)
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         private string GetTaskId(string uri, DownloadStationSettings settings)
         {
-            var tasks = GetTasks(settings).Where(t => t.Additional.Detail.Uri == uri);
+            var tasks = GetTasks(settings).Where(t => t.Additional.Detail["uri"] == uri);
 
             if (tasks.Any())
             {

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.RemotePathMappings;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
         public long Size { get; set; }
 
         [JsonProperty(PropertyName = "status_extra")]
-        public DownloadStationTaskStatusExtra StatusExtra { get; set; }
+        public Dictionary<string, string> StatusExtra { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public DownloadStationTaskStatus Status { get; set; }
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
 
         public DownloadClientItem ToDownloadClientItem(RemotePathMappingService remotePathMappingService, DownloadStationSettings settings)
         {
-            var path = new OsPath(Path.Combine(Additional.Detail.Destination, Title));
+            var path = new OsPath(Path.Combine(Additional.Detail["destination"], Title));
 
             return new DownloadClientItem
             {
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
                 DownloadId = Id,
                 Title = Title,
                 TotalSize = Size,
-                RemainingSize = Size - Additional.Transfer.Downloaded,
+                RemainingSize = Size - long.Parse(Additional.Transfer["size_downloaded"]),
                 OutputPath = remotePathMappingService.RemapRemoteToLocal(settings.Host, path),
                 Message = GetMessage(),
                 Status = GetStatus()
@@ -45,12 +46,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Responses
             {
                 if (Status == DownloadStationTaskStatus.Extracting)
                 {
-                    return string.Format("Extracting: %{0}", StatusExtra.UnzipProgress);
+                    return string.Format("Extracting: %{0}", int.Parse(StatusExtra["unzip_progress"]));
                 }
 
                 if (Status == DownloadStationTaskStatus.Error)
                 {
-                    return StatusExtra.ErrorDetail;
+                    return StatusExtra["error_detail"];
                 }
             }
 

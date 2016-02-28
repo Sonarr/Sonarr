@@ -348,17 +348,12 @@
     <Compile Include="Download\Clients\DownloadStation\DownloadStationSettings.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationTorrentClient.cs" />
     <Compile Include="Download\Clients\DownloadStation\DownloadStationUsenetClient.cs" />
-    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationConfig.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationError.cs" />
-    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationInfo.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationResponse.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTask.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskAdditional.cs" />
-    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskDetail.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskCollection.cs" />
     <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskStatus.cs" />
-    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskStatusExtra.cs" />
-    <Compile Include="Download\Clients\DownloadStation\Responses\DownloadStationTaskTransfer.cs" />
     <Compile Include="Download\Clients\DownloadStation\SynologyApi.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
