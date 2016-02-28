@@ -2,7 +2,6 @@
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download.Clients.DownloadStation.Responses;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Rest;
 using RestSharp;
@@ -19,8 +18,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         IEnumerable<DownloadClientItem> GetItems(DownloadStationSettings settings);
         DownloadClientStatus GetStatus(DownloadStationSettings settings);
         void RemoveItem(string downloadId, bool deleteData, DownloadStationSettings settings);
-        string AddFromUrl(RemoteEpisode remoteEpisode, string url, DownloadStationSettings settings);
-        string AddFromFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent, DownloadStationSettings settings);
+        string AddFromUrl(string url, DownloadStationSettings settings);
+        string AddFromFile(string filename, byte[] fileContent, DownloadStationSettings settings);
     }
 
     public class DownloadStationProxy : IDownloadStationProxy
@@ -47,7 +46,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             _cookieContainer = new CookieContainer();
         }
 
-        public string AddFromFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent, DownloadStationSettings settings)
+        public string AddFromFile(string filename, byte[] fileContent, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, string>
             {
@@ -62,7 +61,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             return AddTask(request, filename, settings);
         }
 
-        public string AddFromUrl(RemoteEpisode remoteEpisode, string url, DownloadStationSettings settings)
+        public string AddFromUrl(string url, DownloadStationSettings settings)
         {
             var arguments = new Dictionary<string, string>
             {

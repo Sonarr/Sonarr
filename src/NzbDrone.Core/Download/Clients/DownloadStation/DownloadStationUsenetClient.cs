@@ -5,7 +5,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
-using System;
 using System.Collections.Generic;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
@@ -50,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
         {
-            return _proxy.AddFromFile(remoteEpisode, filename, fileContent, Settings);
+            return _proxy.AddFromFile(filename, fileContent, Settings);
         }
 
         protected override void Test(List<ValidationFailure> failures)

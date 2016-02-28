@@ -6,7 +6,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
-using System;
 using System.Collections.Generic;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
@@ -52,12 +51,12 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            return _proxy.AddFromUrl(remoteEpisode, magnetLink, Settings);
+            return _proxy.AddFromUrl(magnetLink, Settings);
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            return _proxy.AddFromFile(remoteEpisode, filename, fileContent, Settings);
+            return _proxy.AddFromFile(filename, fileContent, Settings);
         }
 
         protected override void Test(List<ValidationFailure> failures)
