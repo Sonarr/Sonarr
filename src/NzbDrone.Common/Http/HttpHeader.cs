@@ -4,37 +4,92 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using NzbDrone.Common.Extensions;
+using System.Collections;
+using System.Globalization;
 
 namespace NzbDrone.Common.Http
 {
-    public class HttpHeader : Dictionary<string, object>
+    public class HttpHeader : NameValueCollection, IEnumerable<KeyValuePair<string, string>>, IEnumerable
     {
-        public HttpHeader(NameValueCollection headers) : base(StringComparer.OrdinalIgnoreCase)
+        public HttpHeader(NameValueCollection headers)
+            : base(headers)
         {
-            foreach (var key in headers.AllKeys)
+
+        }
+
+        public HttpHeader()
+        {
+
+        }
+
+        public bool ContainsKey(string key)
+        {
+            key = key.ToLowerInvariant();
+            return AllKeys.Any(v => v.ToLowerInvariant() == key);
+        }
+
+        public string GetSingleValue(string key)
+        {
+            var values = GetValues(key);
+            if (values == null || values.Length == 0)
             {
-                this[key] = headers[key];
+                return null;
+            }
+            if (values.Length > 1)
+            {
+                throw new ApplicationException(string.Format("Expected {0} to occur only once.", key));
+            }
+
+            return values[0];
+        }
+
+        protected T? GetSingleValue<T>(string key, Func<string, T> converter) where T : struct
+        {
+            var value = GetSingleValue(key);
+            if (value == null)
+            {
+                return null;
+            }
+
+            return converter(value);
+        }
+        protected void SetSingleValue(string key, string value)
+        {            
+            if (value == null)
+            {
+                Remove(key);
+            }
+            else
+            {
+                Set(key, value);
             }
         }
 
-        public HttpHeader() : base(StringComparer.OrdinalIgnoreCase)
+        protected void SetSingleValue<T>(string key, T? value, Func<T, string> converter = null) where T : struct
         {
-
+            if (!value.HasValue)
+            {
+                Remove(key);
+            }
+            else if (converter != null)
+            {
+                Set(key, converter(value.Value));
+            }
+            else
+            {
+                Set(key, value.Value.ToString());
+            }
         }
 
         public long? ContentLength
         {
             get
             {
-                if (!ContainsKey("Content-Length"))
-                {
-                    return null;
-                }
-                return Convert.ToInt64(this["Content-Length"]);
+                return GetSingleValue("Content-Length", Convert.ToInt64);
             }
             set
             {
-                this["Content-Length"] = value;
+                SetSingleValue("Content-Length", value);
             }
         }
 
@@ -42,15 +97,11 @@ namespace NzbDrone.Common.Http
         {
             get
             {
-                if (!ContainsKey("Content-Type"))
-                {
-                    return null;
-                }
-                return this["Content-Type"].ToString();
+                return GetSingleValue("Content-Type");
             }
             set
             {
-                this["Content-Type"] = value;
+                SetSingleValue("Content-Type", value);
             }
         }
 
@@ -58,25 +109,36 @@ namespace NzbDrone.Common.Http
         {
             get
             {
-                if (!ContainsKey("Accept"))
-                {
-                    return null;
-                }
-                return this["Accept"].ToString();
+                return GetSingleValue("Accept");
             }
             set
             {
-                this["Accept"] = value;
+                SetSingleValue("Accept", value);
             }
+        }
+
+        public new IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        {
+            return AllKeys.SelectMany(GetValues, (k, c) => new KeyValuePair<string, string>(k, c)).ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return base.GetEnumerator();
         }
 
         public Encoding GetEncodingFromContentType()
         {
+            return GetEncodingFromContentType(ContentType ?? string.Empty);
+        }
+
+        public static Encoding GetEncodingFromContentType(string contentType)
+        {
             Encoding encoding = null;
 
-            if (ContentType.IsNotNullOrWhiteSpace())
+            if (contentType.IsNotNullOrWhiteSpace())
             {
-                var charset = ContentType.ToLowerInvariant()
+                var charset = contentType.ToLowerInvariant()
                     .Split(';', '=', ' ')
                     .SkipWhile(v => v != "charset")
                     .Skip(1).FirstOrDefault();
@@ -98,6 +160,19 @@ namespace NzbDrone.Common.Http
             }
 
             return encoding;
+        }
+
+        public static DateTime ParseDateTime(string value)
+        {
+            return DateTime.ParseExact(value, "R", CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AssumeUniversal);
+        }
+
+        public static List<KeyValuePair<string, string>> ParseCookies(string cookies)
+        {
+            return cookies.Split(';')
+                          .Select(v => v.Trim().Split('='))
+                          .Select(v => new KeyValuePair<string, string>(v[0], v[1]))
+                          .ToList();
         }
     }
 }

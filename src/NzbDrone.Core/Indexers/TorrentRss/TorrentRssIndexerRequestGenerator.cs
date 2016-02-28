@@ -50,7 +50,10 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 
             if (Settings.Cookie.IsNotNullOrWhiteSpace())
             {
-                request.HttpRequest.AddCookie(Settings.Cookie);
+                foreach (var cookie in HttpHeader.ParseCookies(Settings.Cookie))
+                {
+                    request.HttpRequest.Cookies[cookie.Key] = cookie.Value;
+                }
             }
 
             yield return request;

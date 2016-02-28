@@ -172,14 +172,15 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 parameters = new BroadcastheNetTorrentQuery();
             }
 
-            var builder = new JsonRpcRequestBuilder(Settings.BaseUrl, "getTorrents", new object[] { Settings.ApiKey, parameters, PageSize, 0 });
-            builder.SupressHttpError = true;
+            var builder = new JsonRpcRequestBuilder(Settings.BaseUrl)
+                .Call("getTorrents", Settings.ApiKey, parameters, PageSize, 0);
+            builder.SuppressHttpError = true;
 
             for (var page = 0; page < maxPages;page++)
             {
-                builder.Parameters[3] = page * PageSize;
+                builder.JsonParameters[3] = page * PageSize;
 
-                yield return new IndexerRequest(builder.Build(""));
+                yield return new IndexerRequest(builder.Build());
             }
         }
     }

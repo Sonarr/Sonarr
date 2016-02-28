@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Http
         public HttpResponse Response { get; private set; }
 
         public HttpException(HttpRequest request, HttpResponse response)
-            : base(string.Format("HTTP request failed: [{0}:{1}] [{2}] at [{3}]", (int)response.StatusCode, response.StatusCode, request.Method, request.Url.ToString()))
+            : base(string.Format("HTTP request failed: [{0}:{1}] [{2}] at [{3}]", (int)response.StatusCode, response.StatusCode, request.Method, request.Url.AbsoluteUri))
         {
             Request = request;
             Response = response;

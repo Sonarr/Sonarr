@@ -63,11 +63,6 @@ namespace NzbDrone.Core
             return dateTime.ToShortDateString();
         }
 
-        public static string ParentUriString(this Uri uri)
-        {
-            return uri.AbsoluteUri.Remove(uri.AbsoluteUri.Length - string.Join("", uri.Segments).Length - uri.Query.Length);
-        }
-
         public static int MaxOrDefault(this IEnumerable<int> ints)
         {
             if (ints == null)

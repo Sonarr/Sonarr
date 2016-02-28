@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.Common.TPL;
 

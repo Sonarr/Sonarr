@@ -26,7 +26,7 @@ namespace NzbDrone.Common.Extensions
 
         public static void Add<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> collection, TKey key, TValue value)
         {
-            collection.Add(key, value);
+            collection.Add(new KeyValuePair<TKey, TValue>(key, value));
         }
     }
 }

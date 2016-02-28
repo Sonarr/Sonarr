@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Http
 {
     public class HttpResponse
     {
+        private static readonly Regex RegexSetCookie = new Regex("^(.*?)=(.*?)(?:;|$)", RegexOptions.Compiled);
+
         public HttpResponse(HttpRequest request, HttpHeader headers, byte[] binaryData, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             Request = request;
@@ -52,11 +57,27 @@ namespace NzbDrone.Common.Http
             }
         }
 
+        public Dictionary<string, string> GetCookies()
+        {
+            var result = new Dictionary<string, string>();
+
+            foreach (var cookie in Headers.GetValues("Set-Cookie"))
+            {
+                var match = RegexSetCookie.Match(cookie);
+                if (match.Success)
+                {
+                    result[match.Groups[1].Value] = match.Groups[2].Value;
+                }
+            }
+
+            return result;
+        }
+
         public override string ToString()
         {
             var result = string.Format("Res: [{0}] {1} : {2}.{3}", Request.Method, Request.Url, (int)StatusCode, StatusCode);
 
-            if (HasHttpError && !Headers.ContentType.Equals("text/html", StringComparison.InvariantCultureIgnoreCase))
+            if (HasHttpError && Headers.ContentType.IsNotNullOrWhiteSpace() && !Headers.ContentType.Equals("text/html", StringComparison.InvariantCultureIgnoreCase))
             {
                 result += Environment.NewLine + Content;
             }

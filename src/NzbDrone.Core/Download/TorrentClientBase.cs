@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Download
 
                 if (response.StatusCode == HttpStatusCode.SeeOther || response.StatusCode == HttpStatusCode.Found)
                 {
-                    var locationHeader = (string)response.Headers.GetValueOrDefault("Location", null);
+                    var locationHeader = response.Headers.GetSingleValue("Location");
 
                     _logger.Trace("Torrent request is being redirected to: {0}", locationHeader);
 

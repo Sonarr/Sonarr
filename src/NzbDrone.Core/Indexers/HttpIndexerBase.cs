@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Indexers
 
                         foreach (var request in pageableRequest)
                         {
-                            url = request.Url.ToString();
+                            url = request.Url.AbsoluteUri;
 
                             var page = FetchPage(request, parser);
 

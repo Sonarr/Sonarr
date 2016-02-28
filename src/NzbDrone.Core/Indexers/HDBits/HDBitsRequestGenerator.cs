@@ -114,8 +114,9 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         private IEnumerable<IndexerRequest> GetRequest(TorrentQuery query)
         {
-            var builder = new HttpRequestBuilder(Settings.BaseUrl);
-            var request = builder.Build("/api/torrents");
+            var request = new HttpRequestBuilder(Settings.BaseUrl)
+                .Resource("/api/torrents")
+                .Build();
 
             request.Method = HttpMethod.POST;
             const string appJson = "application/json";
@@ -125,7 +126,7 @@ namespace NzbDrone.Core.Indexers.HDBits
             query.Username = Settings.Username;
             query.Passkey = Settings.ApiKey;
 
-            request.Body = query.ToJson();
+            request.SetContent(query.ToJson());
 
             yield return new IndexerRequest(request);
         }

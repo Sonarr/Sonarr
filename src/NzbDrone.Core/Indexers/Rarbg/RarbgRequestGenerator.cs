@@ -75,30 +75,34 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
         private IEnumerable<IndexerRequest> GetPagedRequests(string mode, int? tvdbId, string query, params object[] args)
         {
+            var requestBuilder = new HttpRequestBuilder(Settings.BaseUrl)
+                .Resource("/pubapi_v2.php")
+                .Accept(HttpAccept.Json);
+                
             var httpRequest = new HttpRequest(Settings.BaseUrl + "/pubapi_v2.php", HttpAccept.Json);
 
-            httpRequest.AddQueryParam("mode", mode);
+            requestBuilder.AddQueryParam("mode", mode);
 
             if (tvdbId.HasValue)
             {
-                httpRequest.AddQueryParam("search_tvdb", tvdbId.Value.ToString());
+                requestBuilder.AddQueryParam("search_tvdb", tvdbId.Value);
             }
 
             if (query.IsNotNullOrWhiteSpace())
             {
-                httpRequest.AddQueryParam("search_string", string.Format(query, args));
+                requestBuilder.AddQueryParam("search_string", string.Format(query, args));
             }
 
             if (!Settings.RankedOnly)
             {
-                httpRequest.AddQueryParam("ranked", "0");
+                requestBuilder.AddQueryParam("ranked", "0");
             }
 
-            httpRequest.AddQueryParam("category", "18;41");
-            httpRequest.AddQueryParam("limit", "100");
-            httpRequest.AddQueryParam("token", _tokenProvider.GetToken(Settings));
-            httpRequest.AddQueryParam("format", "json_extended");
-            httpRequest.AddQueryParam("app_id", "Sonarr");
+            requestBuilder.AddQueryParam("category", "18;41");
+            requestBuilder.AddQueryParam("limit", "100");
+            requestBuilder.AddQueryParam("token", _tokenProvider.GetToken(Settings));
+            requestBuilder.AddQueryParam("format", "json_extended");
+            requestBuilder.AddQueryParam("app_id", "Sonarr");
 
             yield return new IndexerRequest(httpRequest);
         }

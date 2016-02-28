@@ -15,13 +15,13 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
     public class DailySeriesDataProxy : IDailySeriesDataProxy
     {
         private readonly IHttpClient _httpClient;
-        private readonly IDroneServicesRequestBuilder _requestBuilder;
+        private readonly IHttpRequestBuilderFactory _requestBuilder;
         private readonly Logger _logger;
 
-        public DailySeriesDataProxy(IHttpClient httpClient, IDroneServicesRequestBuilder requestBuilder, Logger logger)
+        public DailySeriesDataProxy(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, Logger logger)
         {
             _httpClient = httpClient;
-            _requestBuilder = requestBuilder;
+            _requestBuilder = requestBuilder.Services;
             _logger = logger;
         }
 
@@ -29,7 +29,10 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
         {
             try
             {
-                var dailySeriesRequest = _requestBuilder.Build("dailyseries");
+                var dailySeriesRequest = _requestBuilder.Create()
+                                                        .Resource("/dailyseries")
+                                                        .Build();
+
                 var response = _httpClient.Get<List<DailySeries>>(dailySeriesRequest);
                 return response.Resource.Select(c => c.TvdbId);
             }

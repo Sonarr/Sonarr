@@ -67,7 +67,7 @@
     <Compile Include="Cache\CachedDictionary.cs" />
     <Compile Include="Cache\ICached.cs" />
     <Compile Include="Cache\ICachedDictionary.cs" />
-    <Compile Include="Cloud\CloudClient.cs" />
+    <Compile Include="Cloud\SonarrCloudRequestBuilder.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />
     <Compile Include="Composition\IContainer.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="Http\HttpAccept.cs" />
     <Compile Include="Http\HttpClient.cs" />
     <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\HttpFormData.cs" />
     <Compile Include="Http\HttpHeader.cs" />
     <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\HttpProvider.cs" />
@@ -168,6 +169,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Http\HttpRequestBuilder.cs" />
+    <Compile Include="Http\HttpRequestBuilderFactory.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Http\UriExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />

@@ -266,18 +266,18 @@ namespace NzbDrone.Core.Indexers
 
             try
             {
-                var uri = new Uri(value, UriKind.RelativeOrAbsolute);
+                var url = new Uri(value, UriKind.RelativeOrAbsolute);
 
-                if (!uri.IsAbsoluteUri)
+                if (!url.IsAbsoluteUri)
                 {
-                    uri = new Uri(_indexerResponse.HttpRequest.Url, uri);
+                    url = new Uri(_indexerResponse.HttpRequest.Url, url);
                 }
 
-                return uri.AbsoluteUri;
+                return url.AbsoluteUri;
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, string.Format("Failed to parse Uri {0}, ignoring.", value));
+                _logger.Debug(ex, string.Format("Failed to parse Url {0}, ignoring.", value));
                 return null;
             }
         }

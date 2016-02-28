@@ -21,15 +21,14 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         {
             var path = "/Notifications/Admin";
             var request = BuildRequest(path, settings);
+            request.Headers.ContentType = "application/json";
 
-            request.Body = new
+            request.SetContent(new
                            {
                                Name = title,
                                Description = message,
                                ImageUrl = "https://raw.github.com/NzbDrone/NzbDrone/develop/Logo/64.png"
-                           }.ToJson();
-
-            request.Headers.ContentType = "application/json";
+                           }.ToJson());
 
             ProcessRequest(request, settings);
         }
@@ -58,7 +57,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         {
             var url = string.Format(@"http://{0}/mediabrowser", settings.Address);
             
-            return new HttpRequestBuilder(url).Build(path);
+            return new HttpRequestBuilder(url).Resource(path).Build();
         }
 
         private void CheckForError(HttpResponse response)
