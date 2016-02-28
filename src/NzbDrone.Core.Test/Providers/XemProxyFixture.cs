@@ -27,20 +27,6 @@ namespace NzbDrone.Core.Test.Providers
             ids.Should().Contain(i => i == 73141);
         }
 
-        [Test]
-        [Ignore("XEM's data is not clean")]
-        public void get_mapping_for_all_series()
-        {
-            var ids = Subject.GetXemSeriesIds();
-
-            var randomIds = ids.OrderBy(x => Guid.NewGuid()).Take(5);
-
-            foreach (var randomId in randomIds)
-            {
-                Subject.GetSceneTvdbMappings(randomId).Should().NotBeEmpty();
-            }
-        }
-
         [TestCase(12345, Description = "invalid id")]
         [TestCase(279042, Description = "no single connection")]
         public void should_return_empty_when_known_error(int id)
