@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             httpHeader["Location"] = "http://test.sonarr.tv/not-a-real-torrent.torrent";
 
             Mocker.GetMock<IHttpClient>()
-                  .Setup(s => s.Get(It.Is<HttpRequest>(h => h.Url.AbsoluteUri == _downloadUrl)))
+                  .Setup(s => s.Get(It.Is<HttpRequest>(h => h.Url.FullUri == _downloadUrl)))
                   .Returns<HttpRequest>(r => new HttpResponse(r, httpHeader, new Byte[0], System.Net.HttpStatusCode.Found));
         }
 

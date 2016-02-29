@@ -12,7 +12,7 @@ namespace NzbDrone.Common.Http
     {
         public HttpMethod Method { get; set; }
         public HttpAccept HttpAccept { get; set; }
-        public Uri BaseUrl { get; private set; }
+        public HttpUri BaseUrl { get; private set; }
         public string ResourceUrl { get; set; }
         public List<KeyValuePair<string, string>> QueryParams { get; private set; }
         public List<KeyValuePair<string, string>> SuffixQueryParams { get; private set; }
@@ -28,7 +28,7 @@ namespace NzbDrone.Common.Http
 
         public HttpRequestBuilder(string baseUrl)
         {
-            BaseUrl = new Uri(baseUrl);
+            BaseUrl = new HttpUri(baseUrl);
             ResourceUrl = string.Empty;
             Method = HttpMethod.GET;
             QueryParams = new List<KeyValuePair<string, string>>();
@@ -69,33 +69,28 @@ namespace NzbDrone.Common.Http
             return clone;
         }
 
-        protected virtual Uri CreateUri()
+        protected virtual HttpUri CreateUri()
         {
-            var builder = new UriBuilder(new Uri(BaseUrl, ResourceUrl));
+            var url = BaseUrl.CombinePath(ResourceUrl).AddQueryParams(QueryParams.Concat(SuffixQueryParams));
             
-            foreach (var queryParam in QueryParams.Concat(SuffixQueryParams))
-            {
-                builder.SetQueryParam(queryParam.Key, queryParam.Value);
-            }
-
             if (Segments.Any())
             {
-                var url = builder.Uri.ToString();
+                var fullUri = url.FullUri;
 
                 foreach (var segment in Segments)
                 {
-                    url = url.Replace(segment.Key, segment.Value);
+                    fullUri = fullUri.Replace(segment.Key, segment.Value);
                 }
 
-                builder = new UriBuilder(url);
+                url = new HttpUri(fullUri);
             }
 
-            return builder.Uri;
+            return url;
         }
 
         protected virtual HttpRequest CreateRequest()
         {
-            return new HttpRequest(CreateUri().ToString(), HttpAccept);
+            return new HttpRequest(CreateUri().FullUri, HttpAccept);
         }
 
         protected virtual void Apply(HttpRequest request)

@@ -13,9 +13,9 @@ namespace NzbDrone.Core.Http
         {
             // torcache behaves strangely when it has query params and/or no Referer or browser User-Agent.
             // It's a bit vague, and we don't need the query params. So we remove the query params and set a Referer to be safe.
-            if (request.UrlBuilder.Host == "torcache.net")
+            if (request.Url.Host == "torcache.net")
             {
-                request.UrlBuilder.Query = string.Empty;
+                request.Url = request.Url.SetQuery(string.Empty);
                 request.Headers.Add("Referer", request.Url.Scheme + @"://torcache.net/");
             }
 

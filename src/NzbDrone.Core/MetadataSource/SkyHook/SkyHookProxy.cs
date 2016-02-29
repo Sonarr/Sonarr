@@ -84,7 +84,6 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                     }
                 }
 
-                var term = System.Web.HttpUtility.UrlEncode((title.ToLower().Trim()));
                 var httpRequest = _requestBuilder.Create()
                                                  .SetSegment("route", "search")
                                                  .AddQueryParam("term", title.ToLower().Trim())

@@ -58,7 +58,7 @@ namespace NzbDrone.Common.Test.Http
 
             var response = Subject.Get<HttpBinResource>(request);
 
-            response.Resource.Url.Should().Be(request.Url.AbsoluteUri);
+            response.Resource.Url.Should().Be(request.Url.FullUri);
         }
 
         [Test]

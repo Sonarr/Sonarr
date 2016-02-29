@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Indexers
             HttpRequest = httpRequest;
         }
 
-        public Uri Url
+        public HttpUri Url
         {
             get { return HttpRequest.Url; }
         }

@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             var page = results.GetAllTiers().First().First();
 
-            page.Url.Query.Should().Contain("&cat=1,2,3,4&");
+            page.Url.FullUri.Should().Contain("&cat=1,2,3,4&");
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             var page = results.GetAllTiers().First().First();
 
-            page.Url.Query.Should().Contain("&cat=3,4&");
+            page.Url.FullUri.Should().Contain("&cat=3,4&");
         }
         
         [Test]
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             var page = results.GetAllTiers().First().First();
 
-            page.Url.Query.Should().Contain("?t=search&");
+            page.Url.FullUri.Should().Contain("?t=search&");
         }
 
         [Test]
@@ -107,9 +107,9 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             var pages = results.GetAllTiers().First().Take(3).ToList();
 
-            pages[0].Url.Query.Should().Contain("&offset=0&");
-            pages[1].Url.Query.Should().Contain("&offset=100&");
-            pages[2].Url.Query.Should().Contain("&offset=200&");
+            pages[0].Url.FullUri.Should().Contain("&offset=0&");
+            pages[1].Url.FullUri.Should().Contain("&offset=100&");
+            pages[2].Url.FullUri.Should().Contain("&offset=200&");
         }
 
         [Test]

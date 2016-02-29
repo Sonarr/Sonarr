@@ -5,6 +5,7 @@ using System.Net;
 using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
@@ -71,33 +72,22 @@ namespace NzbDrone.Core.Indexers.HDBits
 
         private string GetDownloadUrl(long torrentId)
         {
-            var args = new NameValueCollection(2);
-            args["id"] = torrentId.ToString();
-            args["passkey"] = _settings.ApiKey;
+            var url = new HttpUri(_settings.BaseUrl)
+                .CombinePath("/download.php")
+                .AddQueryParam("id", torrentId.ToString())
+                .AddQueryParam("passkey", _settings.ApiKey);
 
-            return BuildUrl("/download.php", args);
+            return url.FullUri;
         }
 
         private string GetInfoUrl(long torrentId)
         {
-            var args = new NameValueCollection(1);
-            args["id"] = torrentId.ToString();
+            var url = new HttpUri(_settings.BaseUrl)
+                .CombinePath("/details.php")
+                .AddQueryParam("id", torrentId.ToString());
 
-            return BuildUrl("/details.php", args);
+            return url.FullUri;
 
-        }
-
-        private string BuildUrl(string path, NameValueCollection args)
-        {
-            var builder = new UriBuilder(_settings.BaseUrl);
-            builder.Path = path;
-            var queryString = HttpUtility.ParseQueryString("");
-
-            queryString.Add(args);
-
-            builder.Query = queryString.ToString();
-
-            return builder.Uri.ToString();
         }
     }
 }

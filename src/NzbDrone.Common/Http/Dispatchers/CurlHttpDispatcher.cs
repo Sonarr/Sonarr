@@ -65,7 +65,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                         return s * n;
                     };
                     
-                    curlEasy.Url = request.Url.AbsoluteUri;
+                    curlEasy.Url = request.Url.FullUri;
                     switch (request.Method)
                     {
                         case HttpMethod.GET:
@@ -98,7 +98,7 @@ namespace NzbDrone.Common.Http.Dispatchers
 
                     if (cookies != null)
                     {
-                        curlEasy.Cookie = cookies.GetCookieHeader(request.Url);
+                        curlEasy.Cookie = cookies.GetCookieHeader((Uri)request.Url);
                     }
 
                     if (request.ContentData != null)
@@ -179,7 +179,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             {
                 try
                 {
-                    cookies.SetCookies(request.Url, FixSetCookieHeader(setCookie));
+                    cookies.SetCookies((Uri)request.Url, FixSetCookieHeader(setCookie));
                 }
                 catch (CookieException ex)
                 {

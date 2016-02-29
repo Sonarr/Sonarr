@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Test.Http
 
             var newRequest = Subject.PreRequest(request);
 
-            newRequest.Url.AbsoluteUri.Should().Be("http://torcache.net/download/123.torrent");
+            newRequest.Url.FullUri.Should().Be("http://torcache.net/download/123.torrent");
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.Http
 
             var newRequest = Subject.PreRequest(request);
 
-            newRequest.Url.AbsoluteUri.Should().Be(url);
+            newRequest.Url.FullUri.Should().Be(url);
         }
     }
 }

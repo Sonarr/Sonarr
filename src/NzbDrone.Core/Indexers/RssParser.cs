@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
@@ -266,14 +267,9 @@ namespace NzbDrone.Core.Indexers
 
             try
             {
-                var url = new Uri(value, UriKind.RelativeOrAbsolute);
+                var url = _indexerResponse.HttpRequest.Url + new HttpUri(value);
 
-                if (!url.IsAbsoluteUri)
-                {
-                    url = new Uri(_indexerResponse.HttpRequest.Url, url);
-                }
-
-                return url.AbsoluteUri;
+                return url.FullUri;
             }
             catch (Exception ex)
             {

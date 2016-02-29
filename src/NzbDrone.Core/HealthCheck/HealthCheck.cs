@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.HealthCheck
@@ -11,7 +12,7 @@ namespace NzbDrone.Core.HealthCheck
         public Type Source { get; set; }
         public HealthCheckResult Type { get; set; }
         public string Message { get; set; }
-        public Uri WikiUrl { get; set; }
+        public HttpUri WikiUrl { get; set; }
 
         public HealthCheck(Type source)
         {
@@ -32,19 +33,9 @@ namespace NzbDrone.Core.HealthCheck
             return "#" + CleanFragmentRegex.Replace(message.ToLower(), string.Empty).Replace(' ', '-');
         }
 
-        private static Uri MakeWikiUrl(string fragment)
+        private static HttpUri MakeWikiUrl(string fragment)
         {
-            var rootUri = new Uri("https://github.com/Sonarr/Sonarr/wiki/Health-checks");
-            if (fragment.StartsWith("#"))
-            { // Mono doesn't understand # and generates a different url than windows.
-                return new Uri(rootUri + fragment);
-            }
-            else
-            {
-                var fragmentUri = new Uri(fragment, UriKind.Relative);
-
-                return new Uri(rootUri, fragmentUri);
-            }
+            return new HttpUri("https://github.com/Sonarr/Sonarr/wiki/Health-checks") + new HttpUri(fragment);
         }
     }
 

@@ -8,7 +8,7 @@ namespace NzbDrone.Common.Http.Dispatchers
     {
         public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
         {
-            var webRequest = (HttpWebRequest)WebRequest.Create(request.Url);
+            var webRequest = (HttpWebRequest)WebRequest.Create((Uri)request.Url);
 
             // Deflate is not a standard and could break depending on implementation.
             // we should just stick with the more compatible Gzip

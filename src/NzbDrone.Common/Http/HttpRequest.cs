@@ -10,9 +10,9 @@ namespace NzbDrone.Common.Http
 {
     public class HttpRequest
     {
-        public HttpRequest(string uri, HttpAccept httpAccept = null)
+        public HttpRequest(string url, HttpAccept httpAccept = null)
         {
-            UrlBuilder = new UriBuilder(uri);
+            Url = new HttpUri(url);
             Headers = new HttpHeader();
             AllowAutoRedirect = true;
             Cookies = new Dictionary<string, string>();
@@ -28,8 +28,7 @@ namespace NzbDrone.Common.Http
             }
         }
 
-        public UriBuilder UrlBuilder { get; private set; }
-        public Uri Url { get { return UrlBuilder.Uri; } }
+        public HttpUri Url { get; set; }
         public HttpMethod Method { get; set; }
         public HttpHeader Headers { get; set; }
         public byte[] ContentData { get; set; }

@@ -162,6 +162,7 @@
     <Compile Include="Http\HttpProvider.cs" />
     <Compile Include="Http\HttpRequest.cs" />
     <Compile Include="Http\HttpResponse.cs" />
+    <Compile Include="Http\HttpUri.cs" />
     <Compile Include="Http\IHttpRequestInterceptor.cs" />
     <Compile Include="Http\JsonRpcRequestBuilder.cs" />
     <Compile Include="Http\JsonRpcResponse.cs" />
@@ -171,7 +172,6 @@
     <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="Http\HttpRequestBuilderFactory.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
-    <Compile Include="Http\UriExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Http\UserAgentBuilder.cs" />
     <Compile Include="Instrumentation\CleanseLogMessage.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="Extensions\ResourceExtensions.cs" />
     <Compile Include="Security\X509CertificateValidationPolicy.cs" />
+    <Compile Include="Serializer\HttpUriConverter.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="ServiceFactory.cs" />

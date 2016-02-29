@@ -125,7 +125,7 @@ namespace NzbDrone.Common.Http
                     }
                 }
 
-                var requestCookies = persistentCookieContainer.GetCookies(request.Url);
+                var requestCookies = persistentCookieContainer.GetCookies((Uri)request.Url);
 
                 var cookieContainer = new CookieContainer();
 
@@ -146,7 +146,7 @@ namespace NzbDrone.Common.Http
             {
                 var persistentCookieContainer = _cookieContainerCache.Get("container", () => new CookieContainer());
 
-                var cookies = cookieContainer.GetCookies(request.Url);
+                var cookies = cookieContainer.GetCookies((Uri)request.Url);
 
                 persistentCookieContainer.Add(cookies);
             }

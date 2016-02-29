@@ -56,8 +56,8 @@ namespace NzbDrone.Core.Download
             // Limit grabs to 2 per second.
             if (remoteEpisode.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteEpisode.Release.DownloadUrl.StartsWith("magnet:"))
             {
-                var uri = new Uri(remoteEpisode.Release.DownloadUrl);
-                _rateLimitService.WaitAndPulse(uri.Host, TimeSpan.FromSeconds(2));
+                var url = new HttpUri(remoteEpisode.Release.DownloadUrl);
+                _rateLimitService.WaitAndPulse(url.Host, TimeSpan.FromSeconds(2));
             }
 
             string downloadClientId;
