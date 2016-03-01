@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                   .Returns(Builder<SceneMapping>.CreateListOfSize(1).Build());
 
 
-            Subject.HandleAsync(new ApplicationStartedEvent());
+            Subject.Execute(new UpdateSceneMappingCommand());
 
             Mocker.GetMock<ISceneMappingRepository>()
                   .Verify(v => v.All(), Times.Once());

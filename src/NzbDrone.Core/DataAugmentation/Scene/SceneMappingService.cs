@@ -21,7 +21,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     }
 
     public class SceneMappingService : ISceneMappingService,
-                                       IHandleAsync<ApplicationStartedEvent>,
                                        IHandle<SeriesRefreshStartingEvent>,
                                        IExecute<UpdateSceneMappingCommand>
     {
@@ -202,11 +201,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         private List<string> FilterNonEnglish(List<string> titles)
         {
             return titles.Where(title => title.All(c => c <= 255)).ToList();
-        }
-
-        public void HandleAsync(ApplicationStartedEvent message)
-        {
-            UpdateMappings();
         }
 
         public void Handle(SeriesRefreshStartingEvent message)
