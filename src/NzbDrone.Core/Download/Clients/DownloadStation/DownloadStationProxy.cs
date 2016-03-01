@@ -213,6 +213,13 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         private string AddTask(IRestRequest request, string uri, DownloadStationSettings settings)
         {
+            if (!string.IsNullOrWhiteSpace(settings.Directory))
+            {
+                var directory = _remotePathMappingService.RemapLocalToRemote(settings.Host, new OsPath(settings.Directory));
+
+                request.AddParameter("destination", directory);
+            }
+
             try
             {
                 var response = ProcessRequest<object>(SynologyApi.DownloadStationTask, request, settings);

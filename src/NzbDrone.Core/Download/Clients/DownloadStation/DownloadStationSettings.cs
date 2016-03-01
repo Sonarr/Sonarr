@@ -2,6 +2,7 @@
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
+using NzbDrone.Core.Validation.Paths;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
 {
@@ -11,6 +12,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(0, 65535);
+            RuleFor(c => c.Username).NotEmpty();
+            RuleFor(c => c.Directory).IsValidPath().When(c => !string.IsNullOrEmpty(c.Directory));
         }
     }
 
@@ -40,5 +43,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
         [FieldDefinition(3, Label = "Password", Type = FieldType.Password)]
         public string Password { get; set; }
+
+        [FieldDefinition(4, Label = "Directory", Type = FieldType.Path, Advanced = true, HelpText = "Optional location to put downloads in, leave blank to use the default Download Station location")]
+        public string Directory { get; set; }
     }
 }
