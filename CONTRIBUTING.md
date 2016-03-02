@@ -1,6 +1,6 @@
 # How to Contribute #
 
-We're always looking for people to help make Sonarr even better, there are a number of ways to contribute. To get started, <a href="http://www.clahub.com/agreements/NzbDrone/NzbDrone">sign the Contributor License Agreement</a>.
+We're always looking for people to help make Sonarr even better, there are a number of ways to contribute.
 
 ## Documentation ##
 Setup guides, FAQ, the more information we have on the wiki the better.
