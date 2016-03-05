@@ -51,7 +51,7 @@ namespace NzbDrone.Api.Calendar
             var episodes = _episodeService.EpisodesBetweenDates(start, end, false);
             var icalCalendar = new iCalendar();
 
-            foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
+            foreach (var episode in episodes)
             {
                 var occurrence = icalCalendar.Create<Event>();
                 occurrence.UID = "NzbDrone_episode_" + episode.Id.ToString();

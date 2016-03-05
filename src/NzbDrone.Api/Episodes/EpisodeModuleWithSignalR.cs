@@ -79,8 +79,15 @@ namespace NzbDrone.Api.Episodes
         {
             var resources =  base.ToListResource(modelList);
 
-            return LoadSeries(resources);
+            var withSeries = LoadSeries(resources);
 
+            return withSeries.OrderByDescending(e => e.AirDateUtc.HasValue)
+                             .ThenBy(e => e.AirDateUtc.Value)
+                             .ThenBy(e => e.SeriesTitle)
+                             .ThenByDescending(e => e.SeasonNumber != 0)
+                             .ThenBy(e => e.SeasonNumber)
+                             .ThenBy(e => e.EpisodeNumber)
+                             .ToList();
         }
 
         public void Handle(EpisodeGrabbedEvent message)
