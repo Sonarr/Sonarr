@@ -11,6 +11,7 @@ using NzbDrone.Core.DataAugmentation.Xem.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
 {
@@ -144,6 +145,25 @@ namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.IsAny<Series>()), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_not_clear_scenenumbering_if_thexem_throws()
+        {
+            GivenExistingMapping();
+
+            Mocker.GetMock<IXemProxy>()
+                  .Setup(v => v.GetXemSeriesIds())
+                  .Throws(new InvalidOperationException());
+
+            Subject.Handle(new SeriesUpdatedEvent(_series));
+
+            Mocker.GetMock<ISeriesService>()
+                  .Verify(v => v.UpdateSeries(It.IsAny<Series>()), Times.Never());
+
+            ExceptionVerification.ExpectedWarns(1);
         }
 
         [Test]

@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Tv
 
         public void Execute(RefreshSeriesCommand message)
         {
-            _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent());
+            _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent(message.Trigger == CommandTrigger.Manual));
 
             if (message.SeriesId.HasValue)
             {

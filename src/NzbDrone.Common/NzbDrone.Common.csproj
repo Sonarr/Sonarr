@@ -64,7 +64,9 @@
     <Compile Include="ArchiveService.cs" />
     <Compile Include="Cache\Cached.cs" />
     <Compile Include="Cache\CacheManager.cs" />
+    <Compile Include="Cache\CachedDictionary.cs" />
     <Compile Include="Cache\ICached.cs" />
+    <Compile Include="Cache\ICachedDictionary.cs" />
     <Compile Include="Cloud\CloudClient.cs" />
     <Compile Include="Composition\Container.cs" />
     <Compile Include="Composition\ContainerBuilderBase.cs" />

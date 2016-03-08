@@ -16,7 +16,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
         private readonly IXemProxy _xemProxy;
         private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
-        private readonly ICached<bool> _cache;
+        private readonly ICachedDictionary<bool> _cache;
 
         public XemService(IEpisodeService episodeService,
                            IXemProxy xemProxy,
@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             _xemProxy = xemProxy;
             _seriesService = seriesService;
             _logger = logger;
-            _cache = cacheManager.GetCache<bool>(GetType());
+            _cache = cacheManager.GetCacheDictionary<bool>(GetType(), "mappedTvdbid");
         }
 
         private void PerformUpdate(Series series)
@@ -40,7 +40,6 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 if (!mappings.Any() && !series.UseSceneNumbering)
                 {
                     _logger.Debug("Mappings for: {0} are empty, skipping", series);
-                    _cache.Remove(series.TvdbId.ToString());
                     return;
                 }
 
@@ -171,18 +170,25 @@ namespace NzbDrone.Core.DataAugmentation.Xem
             }
         }
 
-        private void RefreshCache()
+        private void UpdateXemSeriesIds()
         {
-            var ids = _xemProxy.GetXemSeriesIds();
-
-            if (ids.Any())
+            try
             {
-                _cache.Clear();
+                var ids = _xemProxy.GetXemSeriesIds();
+
+                if (ids.Any())
+                {
+                    _cache.Update(ids.ToDictionary(v => v.ToString(), v => true));
+                    return;
+                }
+
+                _cache.ExtendTTL();
+                _logger.Warn("Failed to update Xem series list.");
             }
-
-            foreach (var id in ids)
+            catch (Exception ex)
             {
-                _cache.Set(id.ToString(), true, TimeSpan.FromHours(1));
+                _cache.ExtendTTL();
+                _logger.Warn(ex, "Failed to update Xem series list.");
             }
         }
 
@@ -206,9 +212,9 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public void Handle(SeriesUpdatedEvent message)
         {
-            if (_cache.Count == 0)
+            if (_cache.IsExpired(TimeSpan.FromHours(3)))
             {
-                RefreshCache();
+                UpdateXemSeriesIds();
             }
 
             if (_cache.Count == 0)
@@ -228,7 +234,10 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public void Handle(SeriesRefreshStartingEvent message)
         {
-            RefreshCache();
+            if (message.ManualTrigger && _cache.IsExpired(TimeSpan.FromMinutes(1)))
+            {
+                UpdateXemSeriesIds();
+            }
         }
     }
 }

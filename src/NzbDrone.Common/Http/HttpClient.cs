@@ -28,7 +28,6 @@ namespace NzbDrone.Common.Http
         private readonly Logger _logger;
         private readonly IRateLimitService _rateLimitService;
         private readonly ICached<CookieContainer> _cookieContainerCache;
-        private readonly ICached<bool> _curlTLSFallbackCache;
         private readonly List<IHttpRequestInterceptor> _requestInterceptors;
         private readonly IHttpDispatcher _httpDispatcher;
 

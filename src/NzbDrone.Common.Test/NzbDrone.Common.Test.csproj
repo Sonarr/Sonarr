@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CacheTests\CachedDictionaryFixture.cs" />
     <Compile Include="CacheTests\CachedFixture.cs" />
     <Compile Include="CacheTests\CachedManagerFixture.cs" />
     <Compile Include="ConfigFileProviderTest.cs" />
