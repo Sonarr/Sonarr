@@ -20,7 +20,7 @@ Handlebars.registerHelper('poster', function() {
 });
 
 Handlebars.registerHelper('traktUrl', function() {
-    return 'http://trakt.tv/show/' + this.titleSlug;
+    return 'http://trakt.tv/search/tvdb/' + this.tvdbId + '?id_type=show';
 });
 
 Handlebars.registerHelper('imdbUrl', function() {
