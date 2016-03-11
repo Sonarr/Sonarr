@@ -226,7 +226,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var seasonNumber = 1;
             var allCriteria = WatchForSearchCriteria();
 
-            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true);
+            Subject.SeasonSearch(_xemSeries.Id, seasonNumber, false);
 
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
