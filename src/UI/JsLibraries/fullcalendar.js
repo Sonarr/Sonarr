@@ -4439,7 +4439,8 @@ function compareSegs(seg1, seg2) {
 	return seg1.eventStartMS - seg2.eventStartMS || // earlier events go first
 		seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first
 		seg2.event.allDay - seg1.event.allDay || // tie? put all-day events first (booleans cast to 0/1)
-		(seg1.event.title || '').localeCompare(seg2.event.title); // tie? alphabetically by title
+		(seg1.event.title || '').localeCompare(seg2.event.title) || // tie? alphabetically by title
+        seg1.event.sortOrder - seg2.event.sortOrder; // tie? use sortOrder
 }
 
 fc.compareSegs = compareSegs; // export
