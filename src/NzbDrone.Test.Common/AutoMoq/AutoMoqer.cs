@@ -80,6 +80,8 @@ namespace NzbDrone.Test.Common.AutoMoq
         {
             if (_registeredMocks.ContainsKey(type) == false)
                 _registeredMocks.Add(type, mock);
+            if (mock != null)
+                _container.RegisterInstance(type, mock.Object);
         }
 
         public virtual void SetConstant<T>(T instance)

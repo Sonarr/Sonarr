@@ -96,6 +96,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             downloadClientItem.Status.Should().Be(DownloadItemStatus.Downloading);
         }
 
+        protected void VerifyPostprocessing(DownloadClientItem downloadClientItem)
+        {
+            VerifyIdentifiable(downloadClientItem);
+
+            //downloadClientItem.RemainingTime.Should().NotBe(TimeSpan.Zero);
+            //downloadClientItem.OutputPath.Should().NotBeNullOrEmpty();
+            downloadClientItem.Status.Should().Be(DownloadItemStatus.Downloading);
+        }
+
         protected void VerifyCompleted(DownloadClientItem downloadClientItem)
         {
             VerifyIdentifiable(downloadClientItem);

@@ -23,8 +23,6 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         [SetUp]
         public void Setup()
         {
-            Mocker.SetConstant<IHttpClient>(Mocker.GetMock<IHttpClient>().Object);
-            Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
             Mocker.SetConstant<ITorrentRssSettingsDetector>(Mocker.Resolve<TorrentRssSettingsDetector>());
             Mocker.SetConstant<ITorrentRssParserFactory>(Mocker.Resolve<TorrentRssParserFactory>());
 

@@ -332,6 +332,8 @@
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />
     <Compile Include="Download\CheckForFinishedDownloadCommand.cs" />
+    <Compile Include="Download\Clients\Blackhole\ScanWatchFolder.cs" />
+    <Compile Include="Download\Clients\Blackhole\WatchFolderItem.cs" />
     <Compile Include="Download\Clients\Deluge\Deluge.cs" />
     <Compile Include="Download\Clients\Deluge\DelugeError.cs" />
     <Compile Include="Download\Clients\Deluge\DelugeException.cs" />
@@ -411,8 +413,8 @@
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueue.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdQueueItem.cs" />
     <Compile Include="Download\Clients\Sabnzbd\SabnzbdSettings.cs" />
-    <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackhole.cs" />
-    <Compile Include="Download\Clients\TorrentBlackhole\TorrentBlackholeSettings.cs" />
+    <Compile Include="Download\Clients\Blackhole\TorrentBlackhole.cs" />
+    <Compile Include="Download\Clients\Blackhole\TorrentBlackholeSettings.cs" />
     <Compile Include="Download\Clients\TorrentSeedConfiguration.cs" />
     <Compile Include="Download\Clients\rTorrent\RTorrent.cs" />
     <Compile Include="Download\Clients\rTorrent\RTorrentPriority.cs" />
@@ -427,8 +429,8 @@
     <Compile Include="Download\Clients\Transmission\TransmissionTorrent.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionTorrentStatus.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionPriority.cs" />
-    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackhole.cs" />
-    <Compile Include="Download\Clients\UsenetBlackhole\UsenetBlackholeSettings.cs" />
+    <Compile Include="Download\Clients\Blackhole\UsenetBlackhole.cs" />
+    <Compile Include="Download\Clients\Blackhole\UsenetBlackholeSettings.cs" />
     <Compile Include="Download\Clients\uTorrent\UTorrentPriority.cs" />
     <Compile Include="Download\Clients\uTorrent\UTorrent.cs" />
     <Compile Include="Download\Clients\uTorrent\UTorrentProxy.cs" />
