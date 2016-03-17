@@ -43,7 +43,9 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             if (request.NetworkCredential != null)
             {
-                throw new NotImplementedException("Credentials not supported for curl dispatcher.");
+                var authInfo = request.NetworkCredential.UserName + ":" + request.NetworkCredential.Password;
+                authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+                request.Headers["Authorization"] = "Basic " + authInfo;
             }
 
             lock (CurlGlobalHandle.Instance)

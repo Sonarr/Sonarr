@@ -23,6 +23,11 @@ namespace NzbDrone.Common.Http.Dispatchers
             webRequest.ContentLength = 0;
             webRequest.CookieContainer = cookies;
 
+            if (request.NetworkCredential != null)
+            {
+                webRequest.PreAuthenticate = true;
+            }
+
             if (request.RequestTimeout != TimeSpan.Zero)
             {
                 webRequest.Timeout = (int)Math.Ceiling(request.RequestTimeout.TotalMilliseconds);
