@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
                 var oldWatchItem = lastWatchItems.GetValueOrDefault(newWatchItem.DownloadId);
 
-                if (PreCheckWatchItemExpiry(oldWatchItem, newWatchItem))
+                if (PreCheckWatchItemExpiry(newWatchItem, oldWatchItem))
                 {
                     newWatchItem.TotalSize = _diskProvider.GetFileSize(videoFile);
                     newWatchItem.Hash = GetHash(videoFile);
