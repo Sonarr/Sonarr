@@ -143,6 +143,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Da.Vincis.Demons.S02E04.720p.WEB.DL.nSD.x264-NhaNc3", false)]
         [TestCase("CSI.Miami.S04E25.720p.iTunesHD.AVC-TVS", false)]
         [TestCase("Castle.S06E23.720p.WebHD.h264-euHD", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.720p.WEB.x264-spamTV", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.720p.WEB.h264-spamTV", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -157,6 +159,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Glee.S04E09.Swan.Song.1080p.WEB-DL.DD5.1.H.264-ECI", false)]
         [TestCase("The.Big.Bang.Theory.S06E11.The.Santa.Simulation.1080p.WEB-DL.DD5.1.H.264", false)]
         [TestCase("Rosemary's.Baby.S01E02.Night.2.[WEBDL-1080p].mkv", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.1080p.WEB.x264-spamTV", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.1080p.WEB.h264-spamTV", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -166,6 +170,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("JUST ADD MAGIC S01E01.2160P AMZN WEBRIP DD2.0 X264-TROLLUHD", false)]
         [TestCase("The.Man.In.The.High.Castle.S01E01.2160p.AMZN.WEBRip.DD2.0.Hi10p.X264-TrollUHD", false)]
         [TestCase("The Man In the High Castle S01E01 2160p AMZN WEBRip DD2.0 Hi10P x264-TrollUHD", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.x264-spamTV", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.h264-spamTV", false)]
+        [TestCase("The.Nightly.Show.2016.03.14.2160p.WEB.PROPER.h264-spamTV", true)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
@@ -219,6 +226,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sonny.With.a.Chance.S02E15", false)]
         [TestCase("Law & Order: Special Victims Unit - 11x11 - Quickie", false)]
         [TestCase("Series.Title.S01E01.webm", false)]
+        [TestCase("Droned.S01E01.The.Web.MT-dd", false)]
         public void quality_parse(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Unknown, proper);
