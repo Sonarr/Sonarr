@@ -78,8 +78,6 @@ namespace NzbDrone.Core.Indexers.Rarbg
             var requestBuilder = new HttpRequestBuilder(Settings.BaseUrl)
                 .Resource("/pubapi_v2.php")
                 .Accept(HttpAccept.Json);
-                
-            var httpRequest = new HttpRequest(Settings.BaseUrl + "/pubapi_v2.php", HttpAccept.Json);
 
             requestBuilder.AddQueryParam("mode", mode);
 
@@ -104,7 +102,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
             requestBuilder.AddQueryParam("format", "json_extended");
             requestBuilder.AddQueryParam("app_id", "Sonarr");
 
-            yield return new IndexerRequest(httpRequest);
+            yield return new IndexerRequest(requestBuilder.Build());
         }
     }
 }
