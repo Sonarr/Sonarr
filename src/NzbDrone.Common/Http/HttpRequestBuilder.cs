@@ -98,7 +98,13 @@ namespace NzbDrone.Common.Http
             request.Method = Method;
             request.SuppressHttpError = SuppressHttpError;
             request.AllowAutoRedirect = AllowAutoRedirect;
-            request.NetworkCredential = NetworkCredential;
+
+            if (NetworkCredential != null)
+            {
+                var authInfo = NetworkCredential.UserName + ":" + NetworkCredential.Password;
+                authInfo = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(authInfo));
+                request.Headers.Set("Authorization", "Basic " + authInfo);
+            }
 
             foreach (var header in Headers)
             {

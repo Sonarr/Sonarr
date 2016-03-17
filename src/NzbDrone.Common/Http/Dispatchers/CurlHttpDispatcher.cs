@@ -41,13 +41,6 @@ namespace NzbDrone.Common.Http.Dispatchers
                 throw new ApplicationException("Curl failed to initialize.");
             }
 
-            if (request.NetworkCredential != null)
-            {
-                var authInfo = request.NetworkCredential.UserName + ":" + request.NetworkCredential.Password;
-                authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-                request.Headers["Authorization"] = "Basic " + authInfo;
-            }
-
             lock (CurlGlobalHandle.Instance)
             {
                 Stream responseStream = new MemoryStream();
@@ -66,7 +59,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                         headerStream.Write(b, 0, s * n);
                         return s * n;
                     };
-                    
+
                     curlEasy.Url = request.Url.FullUri;
                     switch (request.Method)
                     {

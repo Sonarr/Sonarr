@@ -33,7 +33,6 @@ namespace NzbDrone.Common.Http
         public HttpHeader Headers { get; set; }
         public byte[] ContentData { get; set; }
         public string ContentSummary { get; set; }
-        public NetworkCredential NetworkCredential { get; set; }
         public bool SuppressHttpError { get; set; }
         public bool AllowAutoRedirect { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }

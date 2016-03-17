@@ -15,17 +15,11 @@ namespace NzbDrone.Common.Http.Dispatchers
             //http://stackoverflow.com/questions/8490718/how-to-decompress-stream-deflated-with-java-util-zip-deflater-in-net
             webRequest.AutomaticDecompression = DecompressionMethods.GZip;
 
-            webRequest.Credentials = request.NetworkCredential;
             webRequest.Method = request.Method.ToString();
             webRequest.UserAgent = UserAgentBuilder.UserAgent;
             webRequest.KeepAlive = false;
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
             webRequest.CookieContainer = cookies;
-
-            if (request.NetworkCredential != null)
-            {
-                webRequest.PreAuthenticate = true;
-            }
 
             if (request.RequestTimeout != TimeSpan.Zero)
             {
