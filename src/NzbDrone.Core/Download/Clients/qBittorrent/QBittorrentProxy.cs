@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
@@ -68,7 +69,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             var request = BuildRequest(settings).Resource("/command/download")
                                                 .Post()
-                                                .AddQueryParam("urls", torrentUrl);
+                                                .AddFormParameter("urls", torrentUrl);
 
             ProcessRequest<object>(request, settings);
         }
@@ -168,6 +169,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         private void AuthenticateClient(HttpRequestBuilder requestBuilder, QBittorrentSettings settings, bool reauthenticate = false)
         {
+            if (settings.Username.IsNullOrWhiteSpace() || settings.Password.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
             var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.Password);
 
             var cookies = _authCookieCache.Find(authKey);
@@ -177,10 +183,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _authCookieCache.Remove(authKey);
 
                 var authLoginRequest = BuildRequest(settings).Resource("/login")
-                                                             .Post()
-                                                             .AddFormParameter("username", settings.Username)
-                                                             .AddFormParameter("password", settings.Password)
-                                                             .Build();
+                                                            .Post()
+                                                            .AddFormParameter("username", settings.Username ?? string.Empty)
+                                                            .AddFormParameter("password", settings.Password ?? string.Empty)
+                                                            .Build();
 
                 HttpResponse response;
                 try

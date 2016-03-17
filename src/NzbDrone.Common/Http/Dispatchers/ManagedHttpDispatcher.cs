@@ -20,7 +20,6 @@ namespace NzbDrone.Common.Http.Dispatchers
             webRequest.UserAgent = UserAgentBuilder.UserAgent;
             webRequest.KeepAlive = false;
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
-            webRequest.ContentLength = 0;
             webRequest.CookieContainer = cookies;
 
             if (request.NetworkCredential != null)
