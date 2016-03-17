@@ -5,6 +5,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
 using NzbDrone.Common.Http;
+using System.Net;
 
 namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
@@ -164,6 +165,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 response = _httpClient.Execute(httpRequest);
             }
             catch (HttpException ex)
+            {
+                throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
+            }
+            catch (WebException ex)
             {
                 throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
             }

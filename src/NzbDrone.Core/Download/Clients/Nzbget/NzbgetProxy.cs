@@ -174,6 +174,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 throw new DownloadClientException("Unable to connect to NzbGet. " + ex.Message, ex);
             }
+            catch (WebException ex)
+            {
+                throw new DownloadClientException("Unable to connect to NzbGet. " + ex.Message, ex);
+            }
 
             _logger.Trace("Response: {0}", response.Content);
 

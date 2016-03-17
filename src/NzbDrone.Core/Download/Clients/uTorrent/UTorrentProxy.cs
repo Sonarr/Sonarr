@@ -193,6 +193,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                     throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
                 }
             }
+            catch (WebException ex)
+            {
+                throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+            }
 
             return Json.Deserialize<UTorrentResponse>(response.Content);
         }
@@ -230,7 +234,11 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                         throw new DownloadClientAuthenticationException("Failed to authenticate with uTorrent.");
                     }
 
-                    throw;
+                    throw new DownloadClientException("Unable to connect to uTorrent, please check your settings", ex);
+                }
+                catch (WebException ex)
+                {
+                    throw new DownloadClientException("Unable to connect to uTorrent, please check your settings", ex);
                 }
 
                 cookies = response.GetCookies();

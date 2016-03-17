@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -155,6 +156,10 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
                 throw new DownloadClientException("NzbVortex response could not be processed {0}: {1}", ex.Message, response.Content);
             }
             catch (HttpException ex)
+            {
+                throw new DownloadClientException("Unable to connect to NZBVortex, please check your settings", ex);
+            }
+            catch (WebException ex)
             {
                 throw new DownloadClientException("Unable to connect to NZBVortex, please check your settings", ex);
             }

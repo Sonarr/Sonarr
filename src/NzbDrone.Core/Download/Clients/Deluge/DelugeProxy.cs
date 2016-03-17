@@ -229,6 +229,10 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
                 }
             }
+            catch (WebException ex)
+            {
+                throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+            }
         }
 
         private void AuthenticateClient(JsonRpcRequestBuilder requestBuilder, DelugeSettings settings, bool reauthenticate = false)
