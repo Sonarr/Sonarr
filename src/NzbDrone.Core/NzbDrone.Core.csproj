@@ -451,6 +451,7 @@
     <Compile Include="Download\Clients\uTorrent\UTorrentResponse.cs" />
     <Compile Include="Download\Clients\uTorrent\UTorrentSettings.cs" />
     <Compile Include="Download\Clients\uTorrent\UTorrentTorrent.cs" />
+    <Compile Include="Download\Clients\uTorrent\UTorrentTorrentCache.cs" />
     <Compile Include="Download\Clients\uTorrent\UTorrentTorrentStatus.cs" />
     <Compile Include="Download\Clients\Vuze\Vuze.cs" />
     <Compile Include="Download\CompletedDownloadService.cs" />

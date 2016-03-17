@@ -41,6 +41,9 @@ src/**/[Oo]bj/
 _ReSharper*
 _dotCover*
 
+# DevExpress CodeRush
+src/.cr/
+
 # NCrunch
 *.ncrunch*
 .*crunch*.local.xml
