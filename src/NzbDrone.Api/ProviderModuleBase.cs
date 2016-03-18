@@ -160,8 +160,10 @@ namespace NzbDrone.Api
 
         private Response Test(TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, true);
+            // Don't validate when getting the definition so we can validate afterwards (avoids validation being skipped because the provider is disabled)
+            var providerDefinition = GetDefinition(providerResource, true, false);
 
+            Validate(providerDefinition, true);
             Test(providerDefinition, true);
 
             return "{}";
