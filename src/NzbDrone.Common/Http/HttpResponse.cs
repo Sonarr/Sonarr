@@ -61,12 +61,16 @@ namespace NzbDrone.Common.Http
         {
             var result = new Dictionary<string, string>();
 
-            foreach (var cookie in Headers.GetValues("Set-Cookie"))
+            var setCookieHeaders = Headers.GetValues("Set-Cookie");
+            if (setCookieHeaders != null)
             {
-                var match = RegexSetCookie.Match(cookie);
-                if (match.Success)
+                foreach (var cookie in setCookieHeaders)
                 {
-                    result[match.Groups[1].Value] = match.Groups[2].Value;
+                    var match = RegexSetCookie.Match(cookie);
+                    if (match.Success)
+                    {
+                        result[match.Groups[1].Value] = match.Groups[2].Value;
+                    }
                 }
             }
 

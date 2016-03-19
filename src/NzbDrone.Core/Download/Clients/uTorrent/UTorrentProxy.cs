@@ -158,6 +158,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             var requestBuilder = new HttpRequestBuilder(false, settings.Host, settings.Port)
                 .Resource("/gui/")
+                .KeepAlive()
+                .SetHeader("Cache-Control", "no-cache")
                 .Accept(HttpAccept.Json);
 
             requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
@@ -248,7 +250,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             }
 
             requestBuilder.SetCookies(cookies);
-            requestBuilder.AddQueryParam("token", authToken, true);
+            requestBuilder.AddPrefixQueryParam("token", authToken, true);
         }
     }
 }

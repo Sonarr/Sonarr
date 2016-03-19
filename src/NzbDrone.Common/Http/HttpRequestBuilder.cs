@@ -20,6 +20,7 @@ namespace NzbDrone.Common.Http
         public HttpHeader Headers { get; private set; }
         public bool SuppressHttpError { get; set; }
         public bool AllowAutoRedirect { get; set; }
+        public bool ConnectionKeepAlive { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
         public List<HttpFormData> FormData { get; private set; }
@@ -98,6 +99,7 @@ namespace NzbDrone.Common.Http
             request.Method = Method;
             request.SuppressHttpError = SuppressHttpError;
             request.AllowAutoRedirect = AllowAutoRedirect;
+            request.ConnectionKeepAlive = ConnectionKeepAlive;
 
             if (NetworkCredential != null)
             {
@@ -232,6 +234,13 @@ namespace NzbDrone.Common.Http
             return this;
         }
 
+        public virtual HttpRequestBuilder KeepAlive(bool keepAlive = true)
+        {
+            ConnectionKeepAlive = keepAlive;
+
+            return this;
+        }
+
         public virtual HttpRequestBuilder Post()
         {
             Method = HttpMethod.POST;
@@ -249,6 +258,19 @@ namespace NzbDrone.Common.Http
         public virtual HttpRequestBuilder SetHeader(string name, string value)
         {
             Headers.Set(name, value);
+
+            return this;
+        }
+
+        public virtual HttpRequestBuilder AddPrefixQueryParam(string key, object value, bool replace = false)
+        {
+            if (replace)
+            {
+                QueryParams.RemoveAll(v => v.Key == key);
+                SuffixQueryParams.RemoveAll(v => v.Key == key);
+            }
+
+            QueryParams.Insert(0, new KeyValuePair<string, string>(key, value.ToString()));
 
             return this;
         }
