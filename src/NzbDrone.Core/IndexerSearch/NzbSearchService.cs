@@ -197,7 +197,6 @@ namespace NzbDrone.Core.IndexerSearch
             {
                 searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber.Value;
             }
-            // Season 0 indicates specials, not regular episodes
             else if (episode.SeasonNumber == 0)
             {
                 return SearchSpecial(series, new List<Episode> { episode });
@@ -225,7 +224,6 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var downloadDecisions = new List<DownloadDecision>();
 
-            // Season 0 indicates specials, not regular episodes
             if (seasonNumber == 0)
             {
                 downloadDecisions.AddRange(SearchSpecial(series, episodes));
