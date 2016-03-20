@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
             environmentVariables.Add("Sonarr_Release_SeasonNumber", remoteEpisode.ParsedEpisodeInfo.SeasonNumber.ToString());
             environmentVariables.Add("Sonarr_Release_EpisodeNumbers", string.Join(",", remoteEpisode.Episodes.Select(e => e.EpisodeNumber)));
             environmentVariables.Add("Sonarr_Release_Title", remoteEpisode.Release.Title);
@@ -62,6 +63,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_Id", episodeFile.Id.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_RelativePath", episodeFile.RelativePath);
             environmentVariables.Add("Sonarr_EpisodeFile_Path", Path.Combine(series.Path, episodeFile.RelativePath));
@@ -88,6 +90,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
 
             ExecuteScript(environmentVariables);
         }
