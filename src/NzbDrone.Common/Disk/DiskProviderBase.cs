@@ -293,18 +293,30 @@ namespace NzbDrone.Common.Disk
                 var sid = new SecurityIdentifier(accountSid, null);
 
                 var directoryInfo = new DirectoryInfo(filename);
-                var directorySecurity = directoryInfo.GetAccessControl();
+                var directorySecurity = directoryInfo.GetAccessControl(AccessControlSections.Access);
+
+                var rules = directorySecurity.GetAccessRules(true, false, typeof(SecurityIdentifier));
+
+                if (rules.OfType<FileSystemAccessRule>().Any(acl => acl.AccessControlType == controlType && (acl.FileSystemRights & rights) == rights && acl.IdentityReference.Equals(sid)))
+                {
+                    return;
+                }
 
                 var accessRule = new FileSystemAccessRule(sid, rights,
                                                           InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
-                                                          PropagationFlags.None, controlType);
+                                                          PropagationFlags.InheritOnly, controlType);
 
-                directorySecurity.AddAccessRule(accessRule);
-                directoryInfo.SetAccessControl(directorySecurity);
+                bool modified;
+                directorySecurity.ModifyAccessRule(AccessControlModification.Add, accessRule, out modified);
+
+                if (modified)
+                {
+                    directoryInfo.SetAccessControl(directorySecurity);
+                }
             }
             catch (Exception e)
             {
-                Logger.Warn(e, string.Format("Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType));
+                Logger.Warn(e, "Couldn't set permission for {0}. account:{1} rights:{2} accessControlType:{3}", filename, accountSid, rights, controlType);
                 throw;
             }
 
