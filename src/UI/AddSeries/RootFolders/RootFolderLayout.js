@@ -27,10 +27,10 @@ var Layout = Marionette.Layout.extend({
         this.rootfolderListView = new RootFolderCollectionView({ collection : RootFolderCollection });
 
         this.listenTo(this.rootfolderListView, 'itemview:folderSelected', this._onFolderSelected);
-        this.listenTo(RootFolderCollection, 'sync', this._showCurrentDirs);
     },
 
-    onRender : function() {
+    onShow : function() {
+        this.listenTo(RootFolderCollection, 'sync', this._showCurrentDirs);
         this.currentDirs.show(new LoadingView());
 
         if (RootFolderCollection.synced) {
