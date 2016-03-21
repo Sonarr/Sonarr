@@ -11,8 +11,7 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Instrumentation
 {
-    public class ReconfigureLogging : IHandleAsync<ConfigFileSavedEvent>,
-                                      IHandle<ApplicationStartedEvent>
+    public class ReconfigureLogging : IHandleAsync<ConfigFileSavedEvent>
     {
         private readonly IConfigFileProvider _configFileProvider;
 
@@ -76,11 +75,6 @@ namespace NzbDrone.Core.Instrumentation
         }
 
         public void HandleAsync(ConfigFileSavedEvent message)
-        {
-            Reconfigure();
-        }
-
-        public void Handle(ApplicationStartedEvent message)
         {
             Reconfigure();
         }

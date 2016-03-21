@@ -8,6 +8,7 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Processes;
 using NzbDrone.Common.Security;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Instrumentation;
 
 namespace NzbDrone.Host
 {
@@ -56,6 +57,8 @@ namespace NzbDrone.Host
 
         private static void Start(ApplicationModes applicationModes, StartupContext startupContext)
         {
+            _container.Resolve<ReconfigureLogging>().Reconfigure();
+
             if (!IsInUtilityMode(applicationModes))
             {
                 if (startupContext.Flags.Contains(StartupContext.RESTART))
