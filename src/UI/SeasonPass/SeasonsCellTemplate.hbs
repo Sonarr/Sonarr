@@ -1,6 +1,14 @@
 {{#each seasons}}
     {{debug}}
-    <span class="season">
+    {{#if_eq statistics.totalEpisodeCount compare=0}}
+    <span class="season season-unaired">
+    {{else}}
+    {{#if_eq statistics.percentOfEpisodes compare=100}}
+    <span class="season season-all">
+    {{else}}
+    <span class="season season-partial">
+    {{/if_eq}}
+    {{/if_eq}}
         <span class="label">
             <span class="x-season-monitored season-monitored" title="Toggle season monitored status" data-season-number="{{seasonNumber}}">
                 <i class="x-season-monitored-icon {{#if monitored}}icon-sonarr-monitored{{else}}icon-sonarr-unmonitored{{/if}}"/>
