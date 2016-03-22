@@ -793,6 +793,11 @@
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
     <Compile Include="Notifications\Plex\PlexClientService.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletException.cs" />
+    <Compile Include="Notifications\Slack\Payloads\Attachment.cs" />
+    <Compile Include="Notifications\Slack\Payloads\SlackPayload.cs" />
+    <Compile Include="Notifications\Slack\Slack.cs" />
+    <Compile Include="Notifications\Slack\SlackExeption.cs" />
+    <Compile Include="Notifications\Slack\SlackSettings.cs" />
     <Compile Include="Notifications\Synology\SynologyException.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
