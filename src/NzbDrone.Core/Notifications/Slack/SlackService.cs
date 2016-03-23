@@ -50,19 +50,8 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             try
             {
-                // Mock OnRenamePayload
-                var data = new Dictionary<string, string>
-                {
-                    {"$EventType", "Rename"},
-                    {"$Series_Id", "1"},
-                    {"$Series_Title", "How I met your mother"},
-                    {"$Series_Path", @"C:\path to somthing.mp4"},
-                    {"$Series_TvdbId", "123123123123"},
-                    {"$Series_Type", "Standard"}
-                };
-
-
-                this.OnRename(data, settings);
+                var message = string.Format("Test message from Sonarr posted at {0}", DateTime.Now);
+                NotifySlack(message, settings);
             }
             catch (SlackExeption ex)
             {
@@ -75,7 +64,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var payload = new SlackPayload()
             {
-                IconEmoji = ":ghost:",
+                IconEmoji = settings.Icon,
                 Text = text,
                 Username = settings.BotName
             };
@@ -98,7 +87,6 @@ namespace NzbDrone.Core.Notifications.Slack
 
         private string ConvertUserInput(string payloadText, Dictionary<string, string> mapping)
         {
-
             var text = payloadText;
             foreach (var variable in mapping)
             {

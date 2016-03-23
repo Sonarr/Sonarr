@@ -24,13 +24,13 @@ namespace NzbDrone.Core.Notifications.Slack
     {
         private static readonly SlackSettingsValidator Validator = new SlackSettingsValidator();
 
-        [FieldDefinition(0, Label = "WebHookUrl", HelpText = "slack channel webhook url.", Type = FieldType.Url)]
+        [FieldDefinition(0, Label = "WebHookUrl", HelpText = "slack channel webhook url.", Type = FieldType.Url, HelpLink = "https://my.slack.com/services/new/incoming-webhook/")]
         public string WebHookUrl { get; set; }
 
         [FieldDefinition(1, Label = "BotName", HelpText = "Name to be used for the notification.",Type = FieldType.Textbox)]
         public string BotName { get; set; }
 
-        [FieldDefinition(2, Label = "Icon", HelpText = "Icon to use.", Type = FieldType.Textbox)]
+        [FieldDefinition(2, Label = "Icon", HelpText = "Icon to use.", Type = FieldType.Textbox, HelpLink = "http://www.emoji-cheat-sheet.com/")]
         public string Icon { get; set; }
 
         [FieldDefinition(3, Label = "OnGrabPayload", HelpText = "Text to be posted on slack on grab.", Type = FieldType.Textbox)]
