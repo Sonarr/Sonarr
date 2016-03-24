@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Processes;
-using NzbDrone.Core.Rest;
 using NzbDrone.Core.Tv;
-using NzbDrone.Core.Validation;
-using RestSharp;
+
 
 namespace NzbDrone.Core.Notifications.Slack
 {
