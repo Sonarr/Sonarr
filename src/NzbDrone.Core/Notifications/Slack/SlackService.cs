@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Notifications.Slack
                         Fallback = message.Message,
                         Title = message.Series.Title,
                         TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
-                        Text = message.Message,
+                        Text = message.Episode.Release.Title,
                         Color = "warning"
                     }
                 }

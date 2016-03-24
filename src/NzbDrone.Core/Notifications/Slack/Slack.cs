@@ -12,8 +12,6 @@ namespace NzbDrone.Core.Notifications.Slack
         private readonly Logger _logger;
         private readonly ISlackService _service;
 
-        public override bool SupportsOnUpgrade => false;
-
         public Slack(Logger logger, ISlackService service)
         {
             _logger = logger;
