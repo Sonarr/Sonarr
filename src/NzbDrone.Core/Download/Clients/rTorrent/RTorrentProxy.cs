@@ -47,8 +47,8 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         [XmlRpcMethod("d.directory.set")]
         int SetDirectory(string hash, string directory);
 
-        [XmlRpcMethod("system.method.set_key")]
-        int SetKey(string key, string cmd_key, string value);
+        [XmlRpcMethod("method.set_key")]
+        int SetKey(string target, string key, string cmd_key, string value);
 
         [XmlRpcMethod("d.name")]
         string GetName(string hash);
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public void SetTorrentLabel(string hash, string label, RTorrentSettings settings)
         {
-            _logger.Debug("Executing remote method: d.set_custom1");
+            _logger.Debug("Executing remote method: d.custom1.set");
 
             var labelEncoded = System.Web.HttpUtility.UrlEncode(label);
 
@@ -208,17 +208,17 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
             if (category.IsNotNullOrWhiteSpace())
             {
-                commands.Add("d.set_custom1=" + category);
+                commands.Add("d.custom1.set=" + category);
             }
 
             if (directory.IsNotNullOrWhiteSpace())
             {
-                commands.Add("d.set_directory=" + directory);
+                commands.Add("d.directory.set=" + directory);
             }
 
             if (priority != RTorrentPriority.Normal)
             {
-                commands.Add("d.set_priority=" + (long)priority);
+                commands.Add("d.priority.set=" + (long)priority);
             }
 
             // Ensure it gets started if the user doesn't have schedule=...,start_tied=
@@ -233,15 +233,17 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 commands.Add(string.Format("print=\"Applying deferred properties to {0}\"", hash));
 
                 // Remove event handler once triggered.
-                commands.Add(string.Format("\"system.method.set_key={0},{1}\"", key, cmd_key));
+                commands.Add(string.Format("\"method.set_key={0},{1}\"", key, cmd_key));
 
-                var setKeyValue = string.Format("branch=\"equal=d.get_hash=,cat={0}\",{{{1}}}", hash, string.Join(",", commands));
+                var setKeyValue = string.Format("branch=\"equal=d.hash=,cat={0}\",{{{1}}}", hash, string.Join(",", commands));
 
                 _logger.Debug("Executing remote method: method.set_key = {0},{1},{2}", key, cmd_key, setKeyValue);
 
                 var client = BuildClient(settings);
 
-                var response = client.SetKey(key, cmd_key, setKeyValue);
+                // Commands need a target, in this case the target is an empty string
+                // See: https://github.com/rakshasa/rtorrent/issues/227
+                var response = client.SetKey("", key, cmd_key, setKeyValue);
                 if (response != 0)
                 {
                     throw new DownloadClientException("Could set properties for torrent: {0}.", hash);
