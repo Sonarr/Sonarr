@@ -5,7 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Core.Notifications.Slack.Payloads;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Rest;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 using RestSharp;
 
@@ -13,37 +16,89 @@ namespace NzbDrone.Core.Notifications.Slack
 {
     public interface ISlackService
     {
-        void OnDownload(Dictionary<string,string> mapping, SlackSettings settings);
-        void OnRename(Dictionary<string, string> mapping, SlackSettings settings);
-        void OnGrab(Dictionary<string, string> mapping, SlackSettings settings);
+        void OnDownload(DownloadMessage message, SlackSettings settings);
+        void OnRename(Series series, SlackSettings settings);
+        void OnGrab(GrabMessage message, SlackSettings settings);
         ValidationFailure Test(SlackSettings settings);
     }
 
     public class SlackService : ISlackService
     {
         private readonly Logger _logger;
+        private readonly IBuildFileNames _buildFileNames;
 
-        public SlackService(Logger logger)
+        public SlackService(Logger logger, IBuildFileNames buildFileNames)
         {
             _logger = logger;
+            _buildFileNames = buildFileNames;
         }
 
-        public void OnDownload(Dictionary<string, string> mapping, SlackSettings settings)
+        public void OnDownload(DownloadMessage message, SlackSettings settings)
         {
-            var text = ConvertUserInput(settings.OnDownloadPayload, mapping);
-            NotifySlack(text, settings);
+            var fileName = _buildFileNames.BuildFileName(message.EpisodeFile.Episodes, message.Series, message.EpisodeFile);
+
+            var payload = new SlackPayload()
+            {
+                IconEmoji = settings.Icon,
+                Username = settings.BotName,
+                Text = "Downloaded",
+                Attachments = new List<Attachment>()
+                {
+                    new Attachment()
+                    {
+                        Fallback = fileName,
+                        Title = message.Series.Title,
+                        TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
+                        Text = fileName,
+                        Color = "good"
+                    }
+                }
+            };
+
+            NotifySlack(payload, settings);
         }
 
-        public void OnRename(Dictionary<string, string> mapping, SlackSettings settings)
+        public void OnRename(Series series, SlackSettings settings)
         {
-            var text = ConvertUserInput(settings.OnRenamePayload, mapping);
-            NotifySlack(text, settings);
+            var payload = new SlackPayload()
+            {
+                IconEmoji = settings.Icon,
+                Username = settings.BotName,
+                Text = "Renamed",
+                Attachments = new List<Attachment>()
+                {
+                    new Attachment()
+                    {
+                        Title = series.Title,
+                        TitleLink = $"http://www.imdb.com/title/{series.ImdbId}/",
+                    }
+                }
+            };
+
+            NotifySlack(payload, settings);
         }
 
-        public void OnGrab(Dictionary<string, string> mapping, SlackSettings settings)
+        public void OnGrab(GrabMessage message, SlackSettings settings)
         {
-            var text = ConvertUserInput(settings.OnGrabPayload, mapping);
-            NotifySlack(text, settings);
+            var payload = new SlackPayload()
+            {
+                IconEmoji = settings.Icon,
+                Username = settings.BotName,
+                Text = "Grabbed",
+                Attachments = new List<Attachment>()
+                {
+                    new Attachment()
+                    {
+                        Fallback = message.Message,
+                        Title = message.Series.Title,
+                        TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
+                        Text = message.Message,
+                        Color = "warning"
+                    }
+                }
+            };
+
+            NotifySlack(payload, settings);
         }
 
         public ValidationFailure Test(SlackSettings settings)
@@ -51,7 +106,14 @@ namespace NzbDrone.Core.Notifications.Slack
             try
             {
                 var message = string.Format("Test message from Sonarr posted at {0}", DateTime.Now);
-                NotifySlack(message, settings);
+                var payload = new SlackPayload()
+                {
+                    IconEmoji = settings.Icon,
+                    Username = settings.BotName,
+                    Text = message
+                };
+
+                NotifySlack(payload, settings);
             }
             catch (SlackExeption ex)
             {
@@ -60,21 +122,14 @@ namespace NzbDrone.Core.Notifications.Slack
             return null;
         }
 
-        private void NotifySlack(string text, SlackSettings settings)
+        private void NotifySlack(SlackPayload text, SlackSettings settings)
         {
-            var payload = new SlackPayload()
-            {
-                IconEmoji = settings.Icon,
-                Text = text,
-                Username = settings.BotName
-            };
-
             try
             {
                 var client = RestClientFactory.BuildClient(settings.WebHookUrl);
                 var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
                 request.JsonSerializer = new JsonNetSerializer();
-                request.AddBody(payload);
+                request.AddBody(text);
                 client.ExecuteAndValidate(request);
             }
             catch (RestException ex)
@@ -82,28 +137,6 @@ namespace NzbDrone.Core.Notifications.Slack
                 _logger.Error(ex, "Unable to post payload {0}", text);
                 throw new SlackExeption("Unable to post payload", ex);
             }
-        }
-
-
-        private string ConvertUserInput(string payloadText, Dictionary<string, string> mapping)
-        {
-            var text = payloadText;
-            foreach (var variable in mapping)
-            {
-                text = Replace(text, variable.Key, variable.Value, StringComparison.OrdinalIgnoreCase);
-            }
-            return text;
-        }
-
-        private string Replace(string str, string old, string @new, StringComparison comparison)
-        {
-            @new = @new ?? "";
-            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(old) || old.Equals(@new, comparison))
-                return str;
-            int foundAt;
-            while ((foundAt = str.IndexOf(old, 0, StringComparison.CurrentCultureIgnoreCase)) != -1)
-                str = str.Remove(foundAt, old.Length).Insert(foundAt, @new);
-            return str;
         }
     }
 }

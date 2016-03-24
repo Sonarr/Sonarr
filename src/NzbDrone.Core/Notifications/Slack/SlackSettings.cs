@@ -14,9 +14,6 @@ namespace NzbDrone.Core.Notifications.Slack
             RuleFor(c => c.WebHookUrl).IsValidUrl();
             RuleFor(c => c.BotName).NotEmpty();
             RuleFor(c => c.Icon).NotEmpty();
-            RuleFor(c => c.OnGrabPayload).NotEmpty();
-            RuleFor(c => c.OnDownloadPayload).NotEmpty();
-            RuleFor(c => c.OnRenamePayload).NotEmpty();
         }
     }
 
@@ -32,17 +29,6 @@ namespace NzbDrone.Core.Notifications.Slack
 
         [FieldDefinition(2, Label = "Icon", HelpText = "Icon to use.", Type = FieldType.Textbox, HelpLink = "http://www.emoji-cheat-sheet.com/")]
         public string Icon { get; set; }
-
-        [FieldDefinition(3, Label = "OnGrabPayload", HelpText = "Text to be posted on slack on grab.", Type = FieldType.Textbox)]
-        public string OnGrabPayload { get; set; }
-
-        [FieldDefinition(4, Label = "OnDownloadPayload", HelpText = "Text to be posted on slack on download.", Type = FieldType.Textbox)]
-        public string OnDownloadPayload { get; set; }
-
-        [FieldDefinition(5, Label = "OnRenamePayload", HelpText = "Text to be posted on slack on rename.", Type = FieldType.Textbox)]
-        public string OnRenamePayload { get; set; }
-
-
 
         public NzbDroneValidationResult Validate()
         {
