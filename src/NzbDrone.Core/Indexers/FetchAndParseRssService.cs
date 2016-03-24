@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Common.TPL;
-using System.Collections;
 using System;
 namespace NzbDrone.Core.Indexers
 {
@@ -47,11 +46,18 @@ namespace NzbDrone.Core.Indexers
 
                 var task = taskFactory.StartNew(() =>
                      {
-                         var indexerFeed = indexerLocal.FetchRecent();
-
-                         lock (result)
+                         try
                          {
-                             result.AddRange(indexerFeed);
+                             var indexerReports = indexerLocal.FetchRecent();
+
+                             lock (result)
+                             {
+                                 result.AddRange(indexerReports);
+                             }
+                         }
+                         catch (Exception e)
+                         {
+                             _logger.Error(e, "Error during RSS Sync");
                          }
                      }).LogExceptions();
 
