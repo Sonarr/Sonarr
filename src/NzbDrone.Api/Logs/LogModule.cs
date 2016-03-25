@@ -1,6 +1,5 @@
 ﻿using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
-using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Logs
 {
@@ -16,7 +15,7 @@ namespace NzbDrone.Api.Logs
 
         private PagingResource<LogResource> GetLogs(PagingResource<LogResource> pagingResource)
         {
-            var pageSpec = pagingResource.InjectTo<PagingSpec<Log>>();
+            var pageSpec = pagingResource.MapToPagingSpec<LogResource, Log>();
 
             if (pageSpec.SortKey == "time")
             {
@@ -48,7 +47,7 @@ namespace NzbDrone.Api.Logs
                 }
             }
 
-            return ApplyToPage(_logService.Paged, pageSpec);
+            return ApplyToPage(_logService.Paged, pageSpec, LogResourceMapper.ToResource);
         }
     }
 }

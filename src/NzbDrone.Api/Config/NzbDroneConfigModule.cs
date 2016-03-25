@@ -2,7 +2,6 @@
 using System.Reflection;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Configuration;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.Config
 {
@@ -27,12 +26,13 @@ namespace NzbDrone.Api.Config
 
         private TResource GetConfig()
         {
-            var resource = new TResource();
-            resource.InjectFrom(_configService);
+            var resource = ToResource(_configService);
             resource.Id = 1;
 
             return resource;
         }
+
+        protected abstract TResource ToResource(IConfigService model);
 
         private TResource GetConfig(int id)
         {

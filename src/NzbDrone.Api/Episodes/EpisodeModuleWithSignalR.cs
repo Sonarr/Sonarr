@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Api.EpisodeFiles;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.DecisionEngine;
@@ -53,41 +54,65 @@ namespace NzbDrone.Api.Episodes
         protected EpisodeResource GetEpisode(int id)
         {
             var episode = _episodeService.GetEpisode(id);
-            episode.EpisodeFile.LazyLoad();
-            episode.Series = _seriesService.GetSeries(episode.SeriesId);
-            return ToResource(episode);
+            var resource = MapToResource(episode, true, true);
+            return resource;
         }
 
-        protected override EpisodeResource ToResource<TModel>(TModel model)
+        protected EpisodeResource MapToResource(Episode episode, bool includeSeries, bool includeEpisodeFile)
         {
-            var resource = base.ToResource(model);
+            var resource = episode.ToResource();
 
-            var episode = model as Episode;
-            if (episode != null)
+            if (includeSeries || includeEpisodeFile)
             {
-                if (episode.EpisodeFile.IsLoaded && episode.EpisodeFile.Value != null)
+                var series = episode.Series ?? _seriesService.GetSeries(episode.SeriesId);
+
+                if (includeSeries)
                 {
-                    resource.EpisodeFile.Path = Path.Combine(episode.Series.Path, episode.EpisodeFile.Value.RelativePath);
-                    resource.EpisodeFile.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(episode.Series.Profile.Value, episode.EpisodeFile.Value.Quality);
+                    resource.Series = series.ToResource();
+                }
+                if (includeEpisodeFile && episode.EpisodeFileId != 0)
+                {
+                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
                 }
             }
 
             return resource;
         }
 
-        protected override List<EpisodeResource> ToListResource<TModel>(IEnumerable<TModel> modelList)
+        protected List<EpisodeResource> MapToResource(List<Episode> episodes, bool includeSeries, bool includeEpisodeFile)
         {
-            var resources =  base.ToListResource(modelList);
+            var result = episodes.ToResource();
 
-            return LoadSeries(resources);
+            if (includeSeries || includeEpisodeFile)
+            {
+                var seriesDict = new Dictionary<int, Core.Tv.Series>();
+                for (var i = 0; i < episodes.Count; i++)
+                {
+                    var episode = episodes[i];
+                    var resource = result[i];
 
+                    var series = episode.Series ?? seriesDict.GetValueOrDefault(episodes[i].SeriesId) ?? _seriesService.GetSeries(episodes[i].SeriesId);
+                    seriesDict[series.Id] = series;
+                    
+                    if (includeSeries)
+                    {
+                        resource.Series = series.ToResource();
+                    }
+                    if (includeEpisodeFile && episodes[i].EpisodeFileId != 0)
+                    {
+                        resource.EpisodeFile = episodes[i].EpisodeFile.Value.ToResource(series, _qualityUpgradableSpecification);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public void Handle(EpisodeGrabbedEvent message)
         {
             foreach (var episode in message.Episode.Episodes)
             {
-                var resource = episode.InjectTo<EpisodeResource>();
+                var resource = episode.ToResource();
                 resource.Grabbed = true;
 
                 BroadcastResourceChange(ModelAction.Updated, resource);
@@ -100,11 +125,6 @@ namespace NzbDrone.Api.Episodes
             {
                 BroadcastResourceChange(ModelAction.Updated, episode.Id);
             }
-        }
-
-        protected virtual List<EpisodeResource> LoadSeries(List<EpisodeResource> resources)
-        {
-            return resources.LoadSubtype<EpisodeResource, SeriesResource, Core.Tv.Series>(e => e.SeriesId, _seriesService.GetSeries).ToList();
         }
     }
 }

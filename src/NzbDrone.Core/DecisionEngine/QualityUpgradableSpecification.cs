@@ -27,7 +27,6 @@ namespace NzbDrone.Core.DecisionEngine
                 int compare = new QualityModelComparer(profile).Compare(newQuality, currentQuality);
                 if (compare <= 0)
                 {
-                    _logger.Debug("existing item has better or equal quality. skipping");
                     return false;
                 }
 
@@ -42,29 +41,28 @@ namespace NzbDrone.Core.DecisionEngine
 
         public bool CutoffNotMet(Profile profile, QualityModel currentQuality, QualityModel newQuality = null)
         {
-            int compare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
+            var compare = new QualityModelComparer(profile).Compare(currentQuality.Quality, profile.Cutoff);
 
-            if (compare >= 0)
+            if (compare < 0)
             {
-                if (newQuality != null && IsRevisionUpgrade(currentQuality, newQuality))
-                {
-                    return true;
-                }
-
-                _logger.Debug("Existing item meets cut-off. skipping.");
-                return false;
+                return true;
             }
 
-            return true;
+            if (newQuality != null && IsRevisionUpgrade(currentQuality, newQuality))
+            {
+                return true;
+            }
+            
+            return false;
+
         }
 
         public bool IsRevisionUpgrade(QualityModel currentQuality, QualityModel newQuality)
         {
-            int compare = newQuality.Revision.CompareTo(currentQuality.Revision);
+            var compare = newQuality.Revision.CompareTo(currentQuality.Revision);
 
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
-                _logger.Debug("New quality is a better revision for existing quality");
                 return true;
             }
 

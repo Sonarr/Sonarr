@@ -24,7 +24,7 @@ namespace NzbDrone.Api.Queue
 
         private List<QueueResource> GetQueue()
         {
-            return ToListResource(GetQueueItems);
+            return GetQueueItems().ToResource();
         }
 
         private IEnumerable<Core.Queue.Queue> GetQueueItems()

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.RootFolders;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 
@@ -41,17 +40,19 @@ namespace NzbDrone.Api.RootFolders
 
         private RootFolderResource GetRootFolder(int id)
         {
-            return _rootFolderService.Get(id).InjectTo<RootFolderResource>();
+            return _rootFolderService.Get(id).ToResource();
         }
 
         private int CreateRootFolder(RootFolderResource rootFolderResource)
         {
-            return GetNewId<RootFolder>(_rootFolderService.Add, rootFolderResource);
+            var model = rootFolderResource.ToModel();
+
+            return _rootFolderService.Add(model).Id;
         }
 
         private List<RootFolderResource> GetRootFolders()
         {
-            return ToListResource(_rootFolderService.AllWithUnmappedFolders);
+            return _rootFolderService.AllWithUnmappedFolders().ToResource();
         }
 
         private void DeleteFolder(int id)

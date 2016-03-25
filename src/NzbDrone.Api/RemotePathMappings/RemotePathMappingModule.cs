@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation.Paths;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.RemotePathMappings
 {
@@ -39,17 +37,19 @@ namespace NzbDrone.Api.RemotePathMappings
 
         private RemotePathMappingResource GetMappingById(int id)
         {
-            return _remotePathMappingService.Get(id).InjectTo<RemotePathMappingResource>();
+            return _remotePathMappingService.Get(id).ToResource();
         }
 
-        private int CreateMapping(RemotePathMappingResource rootFolderResource)
+        private int CreateMapping(RemotePathMappingResource resource)
         {
-            return GetNewId<RemotePathMapping>(_remotePathMappingService.Add, rootFolderResource);
+            var model = resource.ToModel();
+
+            return _remotePathMappingService.Add(model).Id;
         }
 
         private List<RemotePathMappingResource> GetMappings()
         {
-            return ToListResource(_remotePathMappingService.All);
+            return _remotePathMappingService.All().ToResource();
         }
 
         private void DeleteMapping(int id)
@@ -59,9 +59,7 @@ namespace NzbDrone.Api.RemotePathMappings
 
         private void UpdateMapping(RemotePathMappingResource resource)
         {
-            var mapping = _remotePathMappingService.Get(resource.Id);
-
-            mapping.InjectFrom(resource);
+            var mapping = resource.ToModel();
 
             _remotePathMappingService.Update(mapping);
         }

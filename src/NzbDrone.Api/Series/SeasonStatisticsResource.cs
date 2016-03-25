@@ -1,4 +1,5 @@
 ﻿using System;
+using NzbDrone.Core.SeriesStats;
 
 namespace NzbDrone.Api.Series
 {
@@ -20,6 +21,23 @@ namespace NzbDrone.Api.Series
                 return (decimal)EpisodeFileCount / (decimal)EpisodeCount * 100;
             }
         }
+    }
 
+    public static class SeasonStatisticsResourceMapper
+    {
+        public static SeasonStatisticsResource ToResource(this SeasonStatistics model)
+        {
+            if (model == null) return null;
+
+            return new SeasonStatisticsResource
+            {
+                NextAiring = model.NextAiring,
+                PreviousAiring = model.PreviousAiring,
+                EpisodeFileCount = model.EpisodeFileCount,
+                EpisodeCount = model.EpisodeFileCount,
+                TotalEpisodeCount = model.TotalEpisodeCount,
+                SizeOnDisk = model.SizeOnDisk
+            };
+        }
     }
 }

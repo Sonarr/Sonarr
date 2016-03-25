@@ -14,6 +14,10 @@ namespace NzbDrone.Core.HealthCheck
         public string Message { get; set; }
         public HttpUri WikiUrl { get; set; }
 
+        public HealthCheck()
+        {
+        }
+
         public HealthCheck(Type source)
         {
             Source = source;

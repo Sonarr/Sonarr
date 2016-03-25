@@ -70,9 +70,6 @@
     <Reference Include="DDay.iCal">
       <HintPath>..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
     </Reference>
-    <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\packages\ValueInjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.SQLite, Version=1.0.84.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\Sqlite\System.Data.SQLite.dll</HintPath>
@@ -111,7 +108,6 @@
     <Compile Include="ManualImport\ManualImportResource.cs" />
     <Compile Include="Profiles\Delay\DelayProfileModule.cs" />
     <Compile Include="Profiles\Delay\DelayProfileResource.cs" />
-    <Compile Include="Profiles\Delay\DelayProfileValidator.cs" />
     <Compile Include="Queue\QueueActionModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingModule.cs" />
     <Compile Include="RemotePathMappings\RemotePathMappingResource.cs" />
@@ -146,7 +142,6 @@
     <Compile Include="ErrorManagement\ErrorModel.cs" />
     <Compile Include="ErrorManagement\NzbDroneErrorPipeline.cs" />
     <Compile Include="Exceptions\InvalidApiKeyException.cs" />
-    <Compile Include="Extensions\LazyExtensions.cs" />
     <Compile Include="Extensions\NancyJsonSerializer.cs" />
     <Compile Include="Extensions\Pipelines\CacheHeaderPipeline.cs" />
     <Compile Include="Extensions\Pipelines\GZipPipeline.cs" />
@@ -181,10 +176,6 @@
     <Compile Include="Logs\LogModule.cs" />
     <Compile Include="Logs\LogResource.cs" />
     <Compile Include="Logs\UpdateLogFileModule.cs" />
-    <Compile Include="Mapping\CloneInjection.cs" />
-    <Compile Include="Mapping\MappingValidation.cs" />
-    <Compile Include="Mapping\ResourceMappingException.cs" />
-    <Compile Include="Mapping\ValueInjectorExtensions.cs" />
     <Compile Include="MediaCovers\MediaCoverModule.cs" />
     <Compile Include="Metadata\MetadataModule.cs" />
     <Compile Include="Metadata\MetadataResource.cs" />

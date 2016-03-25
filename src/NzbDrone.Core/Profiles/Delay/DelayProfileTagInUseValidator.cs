@@ -2,7 +2,6 @@
 using System.Linq;
 using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Core.Profiles.Delay
 {
@@ -20,14 +19,14 @@ namespace NzbDrone.Core.Profiles.Delay
         {
             if (context.PropertyValue == null) return true;
 
-            var delayProfile = new DelayProfile();
-            delayProfile.InjectFrom(context.ParentContext.InstanceToValidate);
+            dynamic instance = context.ParentContext.InstanceToValidate;
+            var instanceId = (int)instance.Id;
 
             var collection = context.PropertyValue as HashSet<int>;
 
             if (collection == null || collection.Empty()) return true;
 
-            return _delayProfileService.All().None(d => d.Id != delayProfile.Id && d.Tags.Intersect(collection).Any());
+            return _delayProfileService.All().None(d => d.Id != instanceId && d.Tags.Intersect(collection).Any());
         }
     }
 }

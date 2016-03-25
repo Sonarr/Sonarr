@@ -6,7 +6,6 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Core.Annotations;
-using Omu.ValueInjecter;
 
 namespace NzbDrone.Api.ClientSchema
 {
@@ -56,18 +55,13 @@ namespace NzbDrone.Api.ClientSchema
             return result.OrderBy(r => r.Order).ToList();
         }
 
-        public static object ReadFormSchema(List<Field> fields, Type targetType, object defaults = null)
+        public static object ReadFromSchema(List<Field> fields, Type targetType)
         {
             Ensure.That(targetType, () => targetType).IsNotNull();
 
             var properties = targetType.GetSimpleProperties();
 
             var target = Activator.CreateInstance(targetType);
-
-            if (defaults != null)
-            {
-                target.InjectFrom(defaults);
-            }
 
             foreach (var propertyInfo in properties)
             {
@@ -146,9 +140,9 @@ namespace NzbDrone.Api.ClientSchema
 
         }
 
-        public static T ReadFormSchema<T>(List<Field> fields)
+        public static T ReadFromSchema<T>(List<Field> fields)
         {
-            return (T)ReadFormSchema(fields, typeof(T));
+            return (T)ReadFromSchema(fields, typeof(T));
         }
 
         private static List<SelectOption> GetSelectOptions(Type selectOptions)

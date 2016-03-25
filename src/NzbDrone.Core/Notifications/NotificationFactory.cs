@@ -42,16 +42,14 @@ namespace NzbDrone.Core.Notifications
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnRename).ToList();
         }
 
-        public override NotificationDefinition GetProviderCharacteristics(INotification provider, NotificationDefinition definition)
+        public override void SetProviderCharacteristics(INotification provider, NotificationDefinition definition)
         {
-            definition = base.GetProviderCharacteristics(provider, definition);
+            base.SetProviderCharacteristics(provider, definition);
 
             definition.SupportsOnGrab = provider.SupportsOnGrab;
             definition.SupportsOnDownload = provider.SupportsOnDownload;
             definition.SupportsOnUpgrade = provider.SupportsOnUpgrade;
             definition.SupportsOnRename = provider.SupportsOnRename;
-
-            return definition;
         }
     }
 }

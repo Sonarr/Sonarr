@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using FluentAssertions;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using NLog;
@@ -12,18 +13,24 @@ using NUnit.Framework;
 using NzbDrone.Api.Blacklist;
 using NzbDrone.Api.Commands;
 using NzbDrone.Api.Config;
+using NzbDrone.Api.DownloadClient;
+using NzbDrone.Api.EpisodeFiles;
 using NzbDrone.Api.Episodes;
 using NzbDrone.Api.History;
+using NzbDrone.Api.Profiles;
 using NzbDrone.Api.RootFolders;
 using NzbDrone.Api.Series;
 using NzbDrone.Api.Tags;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.SignalR;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 using RestSharp;
+using System.Collections;
 
 namespace NzbDrone.Integration.Test
 {
@@ -33,17 +40,20 @@ namespace NzbDrone.Integration.Test
         protected RestClient RestClient { get; private set; }
 
         public ClientBase<BlacklistResource> Blacklist;
-        public ClientBase<CommandResource> Commands;
+        public CommandClient Commands;
         public DownloadClientClient DownloadClients;
         public EpisodeClient Episodes;
         public ClientBase<HistoryResource> History;
         public IndexerClient Indexers;
         public ClientBase<NamingConfigResource> NamingConfig;
         public NotificationClient Notifications;
+        public ClientBase<ProfileResource> Profiles;
         public ReleaseClient Releases;
         public ClientBase<RootFolderResource> RootFolders;
         public SeriesClient Series;
         public ClientBase<TagResource> Tags;
+        public ClientBase<EpisodeResource> WantedMissing;
+        public ClientBase<EpisodeResource> WantedCutoffUnmet;
 
         private List<SignalRMessage> _signalRReceived;
         private Connection _signalrConnection;
@@ -102,10 +112,13 @@ namespace NzbDrone.Integration.Test
             Indexers = new IndexerClient(RestClient, ApiKey);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, ApiKey, "config/naming");
             Notifications = new NotificationClient(RestClient, ApiKey);
+            Profiles = new ClientBase<ProfileResource>(RestClient, ApiKey);
             Releases = new ReleaseClient(RestClient, ApiKey);
             RootFolders = new ClientBase<RootFolderResource>(RestClient, ApiKey);
             Series = new SeriesClient(RestClient, ApiKey);
             Tags = new ClientBase<TagResource>(RestClient, ApiKey);
+            WantedMissing = new ClientBase<EpisodeResource>(RestClient, ApiKey, "wanted/missing");
+            WantedCutoffUnmet = new ClientBase<EpisodeResource>(RestClient, ApiKey, "wanted/cutoff");
         }
 
         [OneTimeTearDown]
@@ -211,7 +224,7 @@ namespace NzbDrone.Integration.Test
                 Directory.CreateDirectory(series.Path);
 
                 result = Series.Post(series);
-
+                Commands.WaitAll();
                 WaitForCompletion(() => Episodes.GetEpisodesInSeries(result.Id).Count > 0);
             }
 
@@ -252,6 +265,41 @@ namespace NzbDrone.Integration.Test
             }
         }
 
+        public EpisodeFileResource EnsureEpisodeFile(SeriesResource series, int season, int episode, Quality quality)
+        {
+            var result = Episodes.GetEpisodesInSeries(series.Id).Single(v => v.SeasonNumber == season && v.EpisodeNumber == episode);
+
+            if (result.EpisodeFile == null)
+            {
+                var path = Path.Combine(SeriesRootFolder, series.Title, string.Format("Series.S{0}E{1}.{2}.mkv", season, episode, quality.Name));
+
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllText(path, "Fake Episode");
+
+                Commands.PostAndWait(new CommandResource { Name = "refreshseries", Body = new RefreshSeriesCommand(series.Id) });
+                Commands.WaitAll();
+                
+                result = Episodes.GetEpisodesInSeries(series.Id).Single(v => v.SeasonNumber == season && v.EpisodeNumber == episode);
+
+                result.EpisodeFile.Should().NotBeNull();
+            }
+
+            return result.EpisodeFile;
+        }
+
+        public ProfileResource EnsureProfileCutoff(int profileId, Quality cutoff)
+        {
+            var profile = Profiles.Get(profileId);
+
+            if (profile.Cutoff != cutoff)
+            {
+                profile.Cutoff = cutoff;
+                profile = Profiles.Put(profile);
+            }
+
+            return profile;
+        }
+
         public TagResource EnsureTag(string tagLabel)
         {
             var tag = Tags.All().FirstOrDefault(v => v.Label == tagLabel);
@@ -262,6 +310,51 @@ namespace NzbDrone.Integration.Test
             }
 
             return tag;
+        }
+
+        public void EnsureNoTag(string tagLabel)
+        {
+            var tag = Tags.All().FirstOrDefault(v => v.Label == tagLabel);
+
+            if (tag != null)
+            {
+                Tags.Delete(tag.Id);
+            }
+        }
+
+        public DownloadClientResource EnsureDownloadClient(bool enabled = true)
+        {
+            var client = DownloadClients.All().FirstOrDefault(v => v.Name == "Test UsenetBlackhole");
+
+            if (client == null)
+            {
+                var schema = DownloadClients.Schema().First(v => v.Implementation == "UsenetBlackhole");
+
+                schema.Enable = enabled;
+                schema.Name = "Test UsenetBlackhole";
+                schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+                schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+
+                client = DownloadClients.Post(schema);
+            }
+            else if (client.Enable != enabled)
+            {
+                client.Enable = enabled;
+
+                client = DownloadClients.Put(client);
+            }
+
+            return client;
+        }
+
+        public void EnsureNoDownloadClient()
+        {
+            var clients = DownloadClients.All();
+
+            foreach (var client in clients)
+            {
+                DownloadClients.Delete(client.Id);
+            }
         }
     }
 }

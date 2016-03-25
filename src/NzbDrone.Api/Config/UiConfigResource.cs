@@ -1,5 +1,6 @@
 ﻿using System;
 using NzbDrone.Api.REST;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Api.Config
 {
@@ -16,5 +17,24 @@ namespace NzbDrone.Api.Config
         public bool ShowRelativeDates { get; set; }
 
         public bool EnableColorImpairedMode { get; set; }
+    }
+
+    public static class UiConfigResourceMapper
+    {
+        public static UiConfigResource ToResource(IConfigService model)
+        {
+            return new UiConfigResource
+            {
+                FirstDayOfWeek = model.FirstDayOfWeek,
+                CalendarWeekColumnHeader = model.CalendarWeekColumnHeader,
+                
+                ShortDateFormat = model.ShortDateFormat,
+                LongDateFormat = model.LongDateFormat,
+                TimeFormat = model.TimeFormat,
+                ShowRelativeDates = model.ShowRelativeDates,
+
+                EnableColorImpairedMode = model.EnableColorImpairedMode,
+            };
+        }
     }
 }

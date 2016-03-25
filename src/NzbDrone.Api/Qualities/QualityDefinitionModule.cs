@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Api.Mapping;
 
 namespace NzbDrone.Api.Qualities
 {
@@ -21,18 +20,18 @@ namespace NzbDrone.Api.Qualities
 
         private void Update(QualityDefinitionResource resource)
         {
-            var model = resource.InjectTo<QualityDefinition>();
+            var model = resource.ToModel();
             _qualityDefinitionService.Update(model);
         }
 
         private QualityDefinitionResource GetById(int id)
         {
-            return _qualityDefinitionService.GetById(id).InjectTo<QualityDefinitionResource>();
+            return _qualityDefinitionService.GetById(id).ToResource();
         }
 
         private List<QualityDefinitionResource> GetAll()
         {
-            return ToListResource(_qualityDefinitionService.All);
+            return _qualityDefinitionService.All().ToResource();
         }
     }
 }

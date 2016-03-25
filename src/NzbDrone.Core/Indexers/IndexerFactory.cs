@@ -37,15 +37,13 @@ namespace NzbDrone.Core.Indexers
             return base.Active().Where(c => c.Enable).ToList();
         }
 
-        public override IndexerDefinition GetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
+        public override void SetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
-            definition = base.GetProviderCharacteristics(provider, definition);
+            base.SetProviderCharacteristics(provider, definition);
 
             definition.Protocol = provider.Protocol;
             definition.SupportsRss = provider.SupportsRss;
             definition.SupportsSearch = provider.SupportsSearch;
-
-            return definition;
         }
 
         public List<IIndexer> RssEnabled()

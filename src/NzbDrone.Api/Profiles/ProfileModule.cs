@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Validation;
@@ -28,9 +27,9 @@ namespace NzbDrone.Api.Profiles
 
         private int Create(ProfileResource resource)
         {
-            var model = resource.InjectTo<Profile>();
-            model = _profileService.Add(model);
-            return model.Id;
+            var model = resource.ToModel();
+
+            return _profileService.Add(model).Id;
         }
 
         private void DeleteProfile(int id)
@@ -40,26 +39,19 @@ namespace NzbDrone.Api.Profiles
 
         private void Update(ProfileResource resource)
         {
-            var model = _profileService.Get(resource.Id);
-            
-            model.Name = resource.Name;
-            model.Cutoff = (Quality)resource.Cutoff.Id;
-            model.Items = resource.Items.InjectTo<List<ProfileQualityItem>>();
-            model.Language = resource.Language;
+            var model = resource.ToModel();
 
             _profileService.Update(model);
         }
 
         private ProfileResource GetById(int id)
         {
-            return _profileService.Get(id).InjectTo<ProfileResource>();
+            return _profileService.Get(id).ToResource();
         }
 
         private List<ProfileResource> GetAll()
         {
-            var profiles = _profileService.All().InjectTo<List<ProfileResource>>();
-
-            return profiles;
+            return _profileService.All().ToResource();
         }
     }
 }

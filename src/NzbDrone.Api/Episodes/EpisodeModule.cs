@@ -27,7 +27,7 @@ namespace NzbDrone.Api.Episodes
 
             var seriesId = (int)Request.Query.SeriesId;
 
-            var resources = ToListResource(_episodeService.GetEpisodeBySeries(seriesId));
+            var resources = MapToResource(_episodeService.GetEpisodeBySeries(seriesId), false, true);
 
             return resources;
         }
@@ -35,11 +35,6 @@ namespace NzbDrone.Api.Episodes
         private void SetMonitored(EpisodeResource episodeResource)
         {
             _episodeService.SetEpisodeMonitored(episodeResource.Id, episodeResource.Monitored);
-        }
-
-        protected override List<EpisodeResource> LoadSeries(List<EpisodeResource> resources)
-        {
-            return resources;
         }
     }
 }

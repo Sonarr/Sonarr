@@ -1,6 +1,8 @@
 ﻿using System;
 using Nancy;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Api.Extensions;
+using NzbDrone.Api.Series;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
@@ -26,15 +28,16 @@ namespace NzbDrone.Api.History
             Post["/failed"] = x => MarkAsFailed();
         }
 
-        protected override HistoryResource ToResource<TModel>(TModel model)
+        protected HistoryResource MapToResource(Core.History.History model)
         {
-            var resource = base.ToResource(model);
+            var resource = model.ToResource();
 
-            var history = model as Core.History.History;
+            resource.Series = model.Series.ToResource();
+            resource.Episode = model.Episode.ToResource();
 
-            if (history != null && history.Series != null)
+            if (model.Series != null)
             {
-                resource.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(history.Series.Profile.Value, history.Quality);
+                resource.QualityCutoffNotMet = _qualityUpgradableSpecification.CutoffNotMet(model.Series.Profile.Value, model.Quality);
             }
 
             return resource;
@@ -64,7 +67,7 @@ namespace NzbDrone.Api.History
                 pagingSpec.FilterExpression = h => h.EpisodeId == i;
             }
 
-            return ApplyToPage(_historyService.Paged, pagingSpec);
+            return ApplyToPage(_historyService.Paged, pagingSpec, MapToResource);
         }
 
         private Response MarkAsFailed()

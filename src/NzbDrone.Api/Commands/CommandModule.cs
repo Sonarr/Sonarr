@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Api.Extensions;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Api.Validation;
 using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Events;
@@ -36,15 +35,13 @@ namespace NzbDrone.Api.Commands
 
         private CommandResource GetCommand(int id)
         {
-            return _commandQueueManager.Get(id).InjectTo<CommandResource>();
+            return _commandQueueManager.Get(id).ToResource();
         }
 
         private int StartCommand(CommandResource commandResource)
         {
-            var commandType =
-                _serviceFactory.GetImplementations(typeof (Command))
-                               .Single(c => c.Name.Replace("Command", "")
-                                             .Equals(commandResource.Name, StringComparison.InvariantCultureIgnoreCase));
+            var commandType = _serviceFactory.GetImplementations(typeof(Command))
+                                             .Single(c => c.Name.Replace("Command", "").Equals(commandResource.Name, StringComparison.InvariantCultureIgnoreCase));
 
             dynamic command = Request.Body.FromJson(commandType);
             command.Trigger = CommandTrigger.Manual;
@@ -55,14 +52,14 @@ namespace NzbDrone.Api.Commands
 
         private List<CommandResource> GetStartedCommands()
         {
-            return ToListResource(_commandQueueManager.GetStarted());
+            return _commandQueueManager.GetStarted().ToResource();
         }
 
         public void Handle(CommandUpdatedEvent message)
         {
             if (message.Command.Body.SendUpdatesToClient)
             {
-                BroadcastResourceChange(ModelAction.Updated, message.Command.InjectTo<CommandResource>());
+                BroadcastResourceChange(ModelAction.Updated, message.Command.ToResource());
             }
         }
     }

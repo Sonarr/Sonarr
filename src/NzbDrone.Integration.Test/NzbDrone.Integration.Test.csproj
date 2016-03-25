@@ -103,10 +103,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiTests\DiskSpaceFixture.cs" />
     <Compile Include="ApiTests\CalendarFixture.cs" />
     <Compile Include="ApiTests\BlacklistFixture.cs" />
     <Compile Include="ApiTests\DownloadClientFixture.cs" />
+    <Compile Include="ApiTests\EpisodeFileFixture.cs" />
+    <Compile Include="ApiTests\FileSystemFixture.cs" />
     <Compile Include="ApiTests\SeriesLookupFixture.cs" />
+    <Compile Include="ApiTests\WantedFixture.cs" />
     <Compile Include="Client\ClientBase.cs" />
     <Compile Include="Client\EpisodeClient.cs" />
     <Compile Include="Client\IndexerClient.cs" />

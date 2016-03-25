@@ -16,6 +16,5 @@ namespace NzbDrone.Integration.Test.ApiTests
             history.PageSize.Should().Be(15);
             history.Records.Should().BeEmpty();
         }
-
     }
 }

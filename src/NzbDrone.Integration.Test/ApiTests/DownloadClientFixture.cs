@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -8,9 +9,54 @@ namespace NzbDrone.Integration.Test.ApiTests
     [TestFixture]
     public class DownloadClientFixture : IntegrationTest
     {
-        [Test]
-        public void should_be_able_to_add()
+
+        [Test, Order(0)]
+        public void add_downloadclient_without_name_should_return_badrequest()
         {
+            EnsureNoDownloadClient();
+
+            var schema = DownloadClients.Schema().First(v => v.Implementation == "UsenetBlackhole");
+
+            schema.Enable = true;
+            schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+            schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+
+            DownloadClients.InvalidPost(schema);
+        }
+
+        [Test, Order(0)]
+        public void add_downloadclient_without_nzbfolder_should_return_badrequest()
+        {
+            EnsureNoDownloadClient();
+
+            var schema = DownloadClients.Schema().First(v => v.Implementation == "UsenetBlackhole");
+
+            schema.Enable = true;
+            schema.Name = "Test UsenetBlackhole";
+            schema.Fields.First(v => v.Name == "WatchFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Watch");
+
+            DownloadClients.InvalidPost(schema);
+        }
+
+        [Test, Order(0)]
+        public void add_downloadclient_without_watchfolder_should_return_badrequest()
+        {
+            EnsureNoDownloadClient();
+
+            var schema = DownloadClients.Schema().First(v => v.Implementation == "UsenetBlackhole");
+
+            schema.Enable = true;
+            schema.Name = "Test UsenetBlackhole";
+            schema.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb");
+
+            DownloadClients.InvalidPost(schema);
+        }
+
+        [Test, Order(1)]
+        public void add_downloadclient()
+        {
+            EnsureNoDownloadClient();
+
             var schema = DownloadClients.Schema().First(v => v.Implementation == "UsenetBlackhole");
 
             schema.Enable = true;
@@ -23,22 +69,54 @@ namespace NzbDrone.Integration.Test.ApiTests
             result.Enable.Should().BeTrue();
         }
 
-        [Test]
-        public void should_be_able_to_get()
+        [Test, Order(2)]
+        public void get_all_downloadclients()
         {
-            Assert.Ignore("TODO");
+            EnsureDownloadClient();
+
+            var clients = DownloadClients.All();
+
+            clients.Should().NotBeNullOrEmpty();
+        }
+
+        [Test, Order(2)]
+        public void get_downloadclient_by_id()
+        {
+            var client = EnsureDownloadClient();
+
+            var result = DownloadClients.Get(client.Id);
+
+            result.Should().NotBeNull();
         }
 
         [Test]
-        public void should_be_able_to_get_by_id()
+        public void get_downloadclient_by_unknown_id_should_return_404()
         {
-            Assert.Ignore("TODO");
+            var result = DownloadClients.InvalidGet(1000000);
         }
 
-        [Test]
-        public void should_be_enabled()
+        [Test, Order(3)]
+        public void update_downloadclient()
         {
-            Assert.Ignore("TODO");
+            EnsureNoDownloadClient();
+            var client = EnsureDownloadClient();
+
+            client.Fields.First(v => v.Name == "NzbFolder").Value = GetTempDirectory("Download", "UsenetBlackhole", "Nzb2");
+            var result = DownloadClients.Put(client);
+
+            result.Should().NotBeNull();
+        }
+
+        [Test, Order(4)]
+        public void delete_downloadclient()
+        {
+            var client = EnsureDownloadClient();
+
+            DownloadClients.Get(client.Id).Should().NotBeNull();
+
+            DownloadClients.Delete(client.Id);
+
+            DownloadClients.All().Should().NotContain(v => v.Id == client.Id);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
@@ -31,7 +30,7 @@ namespace NzbDrone.Api.Profiles
             profile.Items = items;
             profile.Language = Language.English;
 
-            return new List<ProfileResource> { profile.InjectTo<ProfileResource>() };
+            return new List<ProfileResource> { profile.ToResource() };
         }
     }
 }

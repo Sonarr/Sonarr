@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Messaging.Commands;
@@ -9,7 +11,7 @@ namespace NzbDrone.Api.Commands
     {
         public string Name { get; set; }
         public string Message { get; set; }
-        public Command Body { get; set; }
+        public object Body { get; set; }
         public CommandPriority Priority { get; set; }
         public CommandStatus Status { get; set; }
         public DateTime Queued { get; set; }
@@ -70,7 +72,7 @@ namespace NzbDrone.Api.Commands
         {
             get
             {
-                if (Body != null) return Body.SendUpdatesToClient;
+                if (Body != null) return (Body as Command).SendUpdatesToClient;
 
                 return false;
             }
@@ -82,7 +84,7 @@ namespace NzbDrone.Api.Commands
         {
             get
             {
-                if (Body != null) return Body.UpdateScheduledTask;
+                if (Body != null) return (Body as Command).UpdateScheduledTask;
 
                 return false;
             }
@@ -91,5 +93,38 @@ namespace NzbDrone.Api.Commands
         }
 
         public DateTime? LastExecutionTime { get; set; }
+    }
+
+    public static class CommandResourceMapper
+    {
+        public static CommandResource ToResource(this CommandModel model)
+        {
+            if (model == null) return null;
+
+            return new CommandResource
+            {
+                Id = model.Id,
+
+                Name = model.Name,
+                Message = model.Message,
+                Body = model.Body,
+                Priority = model.Priority,
+                Status = model.Status,
+                Queued = model.QueuedAt,
+                Started = model.StartedAt,
+                Ended = model.EndedAt,
+                Duration = model.Duration,
+                Exception = model.Exception,
+                Trigger = model.Trigger,
+
+                CompletionMessage = model.Body.CompletionMessage,
+                LastExecutionTime = model.Body.LastExecutionTime
+            };
+        }
+
+        public static List<CommandResource> ToResource(this IEnumerable<CommandModel> models)
+        {
+            return models.Select(ToResource).ToList();
+        }
     }
 }

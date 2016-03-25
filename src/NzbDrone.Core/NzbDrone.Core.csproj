@@ -105,9 +105,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Omu.ValueInjecter">
-      <HintPath>..\packages\ValueInjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
-    </Reference>
     <Reference Include="Prowlin">
       <HintPath>..\packages\Prowlin.0.9.4456.26422\lib\net40\Prowlin.dll</HintPath>
     </Reference>

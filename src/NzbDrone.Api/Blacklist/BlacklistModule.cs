@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Blacklisting;
+﻿using System;
+using NzbDrone.Core.Blacklisting;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Api.Blacklist
@@ -24,7 +25,7 @@ namespace NzbDrone.Api.Blacklist
                                      SortDirection = pagingResource.SortDirection
                                  };
 
-            return ApplyToPage(_blacklistService.Paged, pagingSpec);
+            return ApplyToPage(_blacklistService.Paged, pagingSpec, BlacklistResourceMapper.MapToResource);
         }
 
         private void DeleteBlacklist(int id)

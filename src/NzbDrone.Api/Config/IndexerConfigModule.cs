@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using NzbDrone.Api.Validation;
 using NzbDrone.Core.Configuration;
 
@@ -18,6 +19,11 @@ namespace NzbDrone.Api.Config
 
             SharedValidator.RuleFor(c => c.RssSyncInterval)
                            .IsValidRssSyncInterval();
+        }
+
+        protected override IndexerConfigResource ToResource(IConfigService model)
+        {
+            return IndexerConfigResourceMapper.ToResource(model);
         }
     }
 }

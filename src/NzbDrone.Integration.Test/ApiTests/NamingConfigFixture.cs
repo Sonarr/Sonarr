@@ -47,7 +47,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.AnimeEpisodeFormat = "{Series Title} - {season}x{episode:00} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.AnimeEpisodeFormat = "{Series Title} - {season} - {Episode Title}";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.DailyEpisodeFormat = "";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.DailyEpisodeFormat = "";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace NzbDrone.Integration.Test.ApiTests
             config.SeriesFolderFormat = "This and That";
 
             var errors = NamingConfig.InvalidPut(config);
-            errors.Should<dynamic>().NotBeEmpty();
+            errors.Should().NotBeNull();
         }
     }
 }
