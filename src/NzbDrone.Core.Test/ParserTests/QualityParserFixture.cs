@@ -161,6 +161,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Rosemary's.Baby.S01E02.Night.2.[WEBDL-1080p].mkv", false)]
         [TestCase("The.Nightly.Show.2016.03.14.1080p.WEB.x264-spamTV", false)]
         [TestCase("The.Nightly.Show.2016.03.14.1080p.WEB.h264-spamTV", false)]
+        [TestCase("Psych.S01.1080p.WEB-DL.AAC2.0.AVC-TrollHD", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
