@@ -40,6 +40,15 @@ namespace NzbDrone.Core.Test.ParserTests
             Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
         }
 
+        [TestCase("Marvels.Daredevil.S02E04.720p.WEBRip.x264-SKGTV English", "SKGTV")]
+        [TestCase("Marvels.Daredevil.S02E04.720p.WEBRip.x264-SKGTV_English", "SKGTV")]
+        [TestCase("Marvels.Daredevil.S02E04.720p.WEBRip.x264-SKGTV.English", "SKGTV")]
+        //[TestCase("", "")]
+        public void should_not_include_language_in_release_group(string title, string expected)
+        {
+            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+        }
+
         [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP", "EVL")]
         [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP-RP", "EVL")]
         [TestCase("The.Longest.Mystery.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-Obfuscated", "EVL")]
