@@ -1032,6 +1032,7 @@
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
     <Compile Include="Validation\Paths\PathExistsValidator.cs" />
     <Compile Include="Validation\Paths\PathValidator.cs" />
+    <Compile Include="Validation\Paths\StartupFolderValidator.cs" />
     <Compile Include="Validation\Paths\RootFolderValidator.cs" />
     <Compile Include="Validation\Paths\SeriesAncestorValidator.cs" />
     <Compile Include="Validation\Paths\SeriesExistsValidator.cs" />
