@@ -8,7 +8,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         Dictionary<string, string> Args { get; }
         bool InstallService { get; }
         bool UninstallService { get; }
-
+        bool LoggingEnabled { get; }
         string PreservedArguments { get; }
     }
 
@@ -21,6 +21,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public const string HELP = "?";
         public const string TERMINATE = "terminateexisting";
         public const string RESTART = "restart";
+        public const string NO_LOGS = "nologs";
 
         public StartupContext(params string[] args)
         {
@@ -62,6 +63,13 @@ namespace NzbDrone.Common.EnvironmentInfo
                 return Flags.Contains(UNINSTALL_SERVICE);
             }
         }
+        public bool LoggingEnabled
+        {
+            get
+            {
+                return !Flags.Contains(NO_LOGS);
+            }
+        }
 
         public string PreservedArguments
         {
@@ -77,6 +85,11 @@ namespace NzbDrone.Common.EnvironmentInfo
                 if (Flags.Contains(NO_BROWSER))
                 {
                     args += " /" + NO_BROWSER;
+                }
+
+                if (Flags.Contains(NO_LOGS))
+                {
+                    args += " /" + NO_LOGS;
                 }
 
                 return args.Trim();
