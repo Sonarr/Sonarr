@@ -3,7 +3,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
@@ -18,7 +17,10 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         List<string> GetSceneNamesBySceneSeasonNumbers(int tvdbId, IEnumerable<int> sceneSeasonNumbers);
         int? FindTvdbId(string title);
         List<SceneMapping> FindByTvdbId(int tvdbId);
+        SceneMapping FindSceneMapping(string title);
         int? GetSceneSeasonNumber(string title);
+        int? GetTvdbSeasonNumber(string title);
+        int? GetSceneSeasonNumber(int tvdbId, int seasonNumber);
     }
 
     public class SceneMappingService : ISceneMappingService,
@@ -49,7 +51,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public List<string> GetSceneNamesBySeasonNumbers(int tvdbId, IEnumerable<int> seasonNumbers)
         {
-            var names = _findByTvdbIdCache.Find(tvdbId.ToString());
+            var names = FindByTvdbId(tvdbId);
 
             if (names == null)
             {
@@ -63,7 +65,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public List<string> GetSceneNamesBySceneSeasonNumbers(int tvdbId, IEnumerable<int> sceneSeasonNumbers)
         {
-            var names = _findByTvdbIdCache.Find(tvdbId.ToString());
+            var names = FindByTvdbId(tvdbId);
 
             if (names == null)
             {
@@ -102,9 +104,45 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return mappings;
         }
 
+        public SceneMapping FindSceneMapping(string title)
+        {
+            return FindMapping(title);
+        }
+
         public int? GetSceneSeasonNumber(string title)
         {
             var mapping = FindMapping(title);
+
+            if (mapping == null)
+            {
+                return null;
+            }
+
+            return mapping.SceneSeasonNumber;
+        }
+
+        public int? GetTvdbSeasonNumber(string title)
+        {
+            var mapping = FindMapping(title);
+
+            if (mapping == null)
+            {
+                return null;
+            }
+
+            return mapping.SeasonNumber;
+        }
+
+        public int? GetSceneSeasonNumber(int tvdbId, int seasonNumber)
+        {
+            var mappings = FindByTvdbId(tvdbId);
+
+            if (mappings == null)
+            {
+                return null;
+            }
+
+            var mapping = mappings.FirstOrDefault(e => e.SeasonNumber == seasonNumber && e.SceneSeasonNumber.HasValue);
 
             if (mapping == null)
             {

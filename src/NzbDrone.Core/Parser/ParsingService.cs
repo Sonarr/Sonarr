@@ -141,8 +141,6 @@ namespace NzbDrone.Core.Parser
 
         public List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null)
         {
-            var result = new List<Episode>();
-
             if (parsedEpisodeInfo.FullSeason)
             {
                 return _episodeService.GetEpisodesBySeason(series.Id, parsedEpisodeInfo.SeasonNumber);
@@ -153,136 +151,25 @@ namespace NzbDrone.Core.Parser
                 if (series.SeriesType == SeriesTypes.Standard)
                 {
                     _logger.Warn("Found daily-style episode for non-daily series: {0}.", series);
-                    return result;
+                    return new List<Episode>();
                 }
 
                 var episodeInfo = GetDailyEpisode(series, parsedEpisodeInfo.AirDate, searchCriteria);
 
                 if (episodeInfo != null)
                 {
-                    result.Add(episodeInfo);
+                    return new List<Episode> { episodeInfo };
                 }
 
-                return result;
+                return new List<Episode>();
             }
 
             if (parsedEpisodeInfo.IsAbsoluteNumbering)
             {
-                var sceneSeasonNumber = _sceneMappingService.GetSceneSeasonNumber(parsedEpisodeInfo.SeriesTitle);
-
-                foreach (var absoluteEpisodeNumber in parsedEpisodeInfo.AbsoluteEpisodeNumbers)
-                {
-                    Episode episode = null;
-
-                    if (parsedEpisodeInfo.Special)
-                    {
-                        episode = _episodeService.FindEpisode(series.Id, 0, absoluteEpisodeNumber);
-                    }
-
-                    else if (sceneSource)
-                    {
-                        // Is there a reason why we excluded season 1 from this handling before?
-                        // Might have something to do with the scene name to season number check
-                        // If this needs to be reverted tests will need to be added
-                        if (sceneSeasonNumber.HasValue)
-                        {
-                            var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
-
-                            if (episodes.Count == 1)
-                            {
-                                episode = episodes.First();
-                            }
-
-                            if (episode == null)
-                            {
-                                episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
-                            }
-                        }
-
-                        else
-                        {
-                            episode = _episodeService.FindEpisodeBySceneNumbering(series.Id, absoluteEpisodeNumber);
-                        }
-                    }
-
-                    if (episode == null)
-                    {
-                        episode = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
-                    }
-                   
-                    if (episode != null)
-                    {
-                        _logger.Debug("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
-                                    absoluteEpisodeNumber,
-                                    series.Title,
-                                    episode.SeasonNumber,
-                                    episode.EpisodeNumber);
-
-                        result.Add(episode);
-                    }
-                }
-
-                return result;
+                return GetAnimeEpisodes(series, parsedEpisodeInfo, sceneSource);
             }
 
-            if (parsedEpisodeInfo.EpisodeNumbers == null)
-                return result;
-
-            foreach (var episodeNumber in parsedEpisodeInfo.EpisodeNumbers)
-            {
-                if (series.UseSceneNumbering && sceneSource)
-                {
-                    List<Episode> episodes = new List<Episode>();
-
-                    if (searchCriteria != null)
-                    {
-                        episodes = searchCriteria.Episodes.Where(e => e.SceneSeasonNumber == parsedEpisodeInfo.SeasonNumber &&
-                                                                          e.SceneEpisodeNumber == episodeNumber).ToList();
-                    }
-
-                    if (!episodes.Any())
-                    {
-                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
-                    }
-
-                    if (episodes != null && episodes.Any())
-                    {
-                        _logger.Debug("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}",
-                                    series.Title,
-                                    episodes.First().SceneSeasonNumber,
-                                    episodes.First().SceneEpisodeNumber,
-                                    string.Join(", ", episodes.Select(e => string.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber))));
-
-                        result.AddRange(episodes);
-                        continue;
-                    }
-                }
-
-                Episode episodeInfo = null;
-
-                if (searchCriteria != null)
-                {
-                    episodeInfo = searchCriteria.Episodes.SingleOrDefault(e => e.SeasonNumber == parsedEpisodeInfo.SeasonNumber &&
-                                                                          e.EpisodeNumber == episodeNumber);
-                }
-
-                if (episodeInfo == null)
-                {
-                    episodeInfo = _episodeService.FindEpisode(series.Id, parsedEpisodeInfo.SeasonNumber, episodeNumber);
-                }
-
-                if (episodeInfo != null)
-                {
-                    result.Add(episodeInfo);
-                }
-
-                else
-                {
-                    _logger.Debug("Unable to find {0}", parsedEpisodeInfo);
-                }
-            }
-
-            return result;
+            return GetStandardEpisodes(series, parsedEpisodeInfo, sceneSource, searchCriteria);
         }
 
         public ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, int tvdbId, int tvRageId, SearchCriteriaBase searchCriteria = null)
@@ -438,6 +325,144 @@ namespace NzbDrone.Core.Parser
             }
 
             return episodeInfo;
+        }
+
+        private List<Episode> GetAnimeEpisodes(Series series, ParsedEpisodeInfo parsedEpisodeInfo, bool sceneSource)
+        {
+            var result = new List<Episode>();
+
+            var sceneSeasonNumber = _sceneMappingService.GetSceneSeasonNumber(parsedEpisodeInfo.SeriesTitle);
+
+            foreach (var absoluteEpisodeNumber in parsedEpisodeInfo.AbsoluteEpisodeNumbers)
+            {
+                Episode episode = null;
+
+                if (parsedEpisodeInfo.Special)
+                {
+                    episode = _episodeService.FindEpisode(series.Id, 0, absoluteEpisodeNumber);
+                }
+
+                else if (sceneSource)
+                {
+                    // Is there a reason why we excluded season 1 from this handling before?
+                    // Might have something to do with the scene name to season number check
+                    // If this needs to be reverted tests will need to be added
+                    if (sceneSeasonNumber.HasValue)
+                    {
+                        var episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+
+                        if (episodes.Count == 1)
+                        {
+                            episode = episodes.First();
+                        }
+
+                        if (episode == null)
+                        {
+                            episode = _episodeService.FindEpisode(series.Id, sceneSeasonNumber.Value, absoluteEpisodeNumber);
+                        }
+                    }
+
+                    else
+                    {
+                        episode = _episodeService.FindEpisodeBySceneNumbering(series.Id, absoluteEpisodeNumber);
+                    }
+                }
+
+                if (episode == null)
+                {
+                    episode = _episodeService.FindEpisode(series.Id, absoluteEpisodeNumber);
+                }
+
+                if (episode != null)
+                {
+                    _logger.Debug("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
+                                absoluteEpisodeNumber,
+                                series.Title,
+                                episode.SeasonNumber,
+                                episode.EpisodeNumber);
+
+                    result.Add(episode);
+                }
+            }
+
+            return result;
+        }
+
+        private List<Episode> GetStandardEpisodes(Series series, ParsedEpisodeInfo parsedEpisodeInfo, bool sceneSource, SearchCriteriaBase searchCriteria)
+        {
+            var result = new List<Episode>();
+            var seasonNumber = parsedEpisodeInfo.SeasonNumber;
+
+            if (sceneSource)
+            {
+                var sceneMapping = _sceneMappingService.FindSceneMapping(parsedEpisodeInfo.SeriesTitle);
+
+                if (sceneMapping != null && sceneMapping.SeasonNumber.HasValue && sceneMapping.SeasonNumber.Value >= 0 &&
+                    sceneMapping.SceneSeasonNumber == seasonNumber)
+                {
+                    seasonNumber = sceneMapping.SeasonNumber.Value;
+                }
+            }
+
+            if (parsedEpisodeInfo.EpisodeNumbers == null)
+            {
+                return new List<Episode>();
+            }
+
+            foreach (var episodeNumber in parsedEpisodeInfo.EpisodeNumbers)
+            {
+                if (series.UseSceneNumbering && sceneSource)
+                {
+                    List<Episode> episodes = new List<Episode>();
+
+                    if (searchCriteria != null)
+                    {
+                        episodes = searchCriteria.Episodes.Where(e => e.SceneSeasonNumber == parsedEpisodeInfo.SeasonNumber &&
+                                                                      e.SceneEpisodeNumber == episodeNumber).ToList();
+                    }
+
+                    if (!episodes.Any())
+                    {
+                        episodes = _episodeService.FindEpisodesBySceneNumbering(series.Id, seasonNumber, episodeNumber);
+                    }
+
+                    if (episodes != null && episodes.Any())
+                    {
+                        _logger.Debug("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}",
+                                    series.Title,
+                                    episodes.First().SceneSeasonNumber,
+                                    episodes.First().SceneEpisodeNumber,
+                                    string.Join(", ", episodes.Select(e => string.Format("{0}x{1:00}", e.SeasonNumber, e.EpisodeNumber))));
+
+                        result.AddRange(episodes);
+                        continue;
+                    }
+                }
+
+                Episode episodeInfo = null;
+
+                if (searchCriteria != null)
+                {
+                    episodeInfo = searchCriteria.Episodes.SingleOrDefault(e => e.SeasonNumber == seasonNumber && e.EpisodeNumber == episodeNumber);
+                }
+
+                if (episodeInfo == null)
+                {
+                    episodeInfo = _episodeService.FindEpisode(series.Id, seasonNumber, episodeNumber);
+                }
+
+                if (episodeInfo != null)
+                {
+                    result.Add(episodeInfo);
+                }
+
+                else
+                {
+                    _logger.Debug("Unable to find {0}", parsedEpisodeInfo);
+                }
+            }
+
+            return result;
         }
     }
 }
