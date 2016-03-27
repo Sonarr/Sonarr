@@ -22,18 +22,14 @@ namespace NzbDrone.Core.Notifications.Slack
     public class SlackService : ISlackService
     {
         private readonly Logger _logger;
-        private readonly IBuildFileNames _buildFileNames;
 
-        public SlackService(Logger logger, IBuildFileNames buildFileNames)
+        public SlackService(Logger logger)
         {
             _logger = logger;
-            _buildFileNames = buildFileNames;
         }
 
         public void OnDownload(DownloadMessage message, SlackSettings settings)
         {
-            var fileName = _buildFileNames.BuildFileName(message.EpisodeFile.Episodes, message.Series, message.EpisodeFile);
-
             var payload = new SlackPayload()
             {
                 IconEmoji = settings.Icon,
@@ -43,10 +39,10 @@ namespace NzbDrone.Core.Notifications.Slack
                 {
                     new Attachment()
                     {
-                        Fallback = fileName,
+                        Fallback = message.Message,
                         Title = message.Series.Title,
                         TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
-                        Text = fileName,
+                        Text = message.Message,
                         Color = "good"
                     }
                 }
@@ -89,7 +85,7 @@ namespace NzbDrone.Core.Notifications.Slack
                         Fallback = message.Message,
                         Title = message.Series.Title,
                         TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
-                        Text = message.Episode.Release.Title,
+                        Text = message.Message,
                         Color = "warning"
                     }
                 }
@@ -119,19 +115,22 @@ namespace NzbDrone.Core.Notifications.Slack
             return null;
         }
 
-        private void NotifySlack(SlackPayload text, SlackSettings settings)
+        private void NotifySlack(SlackPayload payload, SlackSettings settings)
         {
             try
             {
                 var client = RestClientFactory.BuildClient(settings.WebHookUrl);
-                var request = new RestRequest(Method.POST) { RequestFormat = DataFormat.Json };
-                request.JsonSerializer = new JsonNetSerializer();
-                request.AddBody(text);
+                var request = new RestRequest(Method.POST)
+                {
+                    RequestFormat = DataFormat.Json,
+                    JsonSerializer = new JsonNetSerializer()
+                };
+                request.AddBody(payload);
                 client.ExecuteAndValidate(request);
             }
             catch (RestException ex)
             {
-                _logger.Error(ex, "Unable to post payload {0}", text);
+                _logger.Error(ex, "Unable to post payload {0}", payload);
                 throw new SlackExeption("Unable to post payload", ex);
             }
         }

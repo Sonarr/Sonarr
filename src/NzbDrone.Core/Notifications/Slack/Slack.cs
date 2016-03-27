@@ -20,14 +20,13 @@ namespace NzbDrone.Core.Notifications.Slack
 
         public override string Link
         {
-            get { return "https://github.com/Sonarr/Sonarr/wiki/Custom-Post-Processing-Scripts"; }
+            get { return "https://my.slack.com/services/new/incoming-webhook/"; }
         }
 
         public override void OnGrab(GrabMessage message)
         {
             _logger.Trace("OnGrab: {0}", message);
             _service.OnGrab(message, Settings);
-
         }
 
         public override void OnDownload(DownloadMessage message)
