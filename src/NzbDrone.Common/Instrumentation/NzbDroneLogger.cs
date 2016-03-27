@@ -30,6 +30,10 @@ namespace NzbDrone.Common.Instrumentation
             _isConfigured = true;
 
             GlobalExceptionHandlers.Register();
+            if (!startupContext.LoggingEnabled)
+            {
+                return;
+            }
 
             var appFolderInfo = new AppFolderInfo(startupContext);
 

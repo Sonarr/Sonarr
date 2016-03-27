@@ -15,33 +15,41 @@ namespace NzbDrone.Core.Instrumentation
 {
     public class DatabaseTarget : TargetWithLayout, IHandle<ApplicationShutdownRequested>
     {
-        private readonly SQLiteConnection _connection;
+        private readonly SQLiteConnection _connection = null;
 
         const string INSERT_COMMAND = "INSERT INTO [Logs]([Message],[Time],[Logger],[Exception],[ExceptionType],[Level]) " +
                                       "VALUES(@Message,@Time,@Logger,@Exception,@ExceptionType,@Level)";
 
         public DatabaseTarget(IConnectionStringFactory connectionStringFactory)
         {
-            _connection = new SQLiteConnection(connectionStringFactory.LogDbConnectionString);
-            _connection.Open();
+            if (LogManager.Configuration.AllTargets.Count > 0)
+            {
+                _connection = new SQLiteConnection(connectionStringFactory.LogDbConnectionString);
+                _connection.Open();
+            }
         }
 
         public void Register()
         {
             Rule = new LoggingRule("*", LogLevel.Info, this);
-
-            LogManager.Configuration.AddTarget("DbLogger", new AsyncTargetWrapper(this));
-            LogManager.Configuration.LoggingRules.Add(Rule);
-            LogManager.ConfigurationReloaded += OnLogManagerOnConfigurationReloaded;
-            LogManager.ReconfigExistingLoggers();
+            if (_connection != null)
+            {
+                LogManager.Configuration.AddTarget("DbLogger", new AsyncTargetWrapper(this));
+                LogManager.Configuration.LoggingRules.Add(Rule);
+                LogManager.ConfigurationReloaded += OnLogManagerOnConfigurationReloaded;
+                LogManager.ReconfigExistingLoggers();
+            }
         }
 
         public void UnRegister()
         {
-            LogManager.ConfigurationReloaded -= OnLogManagerOnConfigurationReloaded;
-            LogManager.Configuration.RemoveTarget("DbLogger");
-            LogManager.Configuration.LoggingRules.Remove(Rule);
-            LogManager.ReconfigExistingLoggers();
+            if (_connection != null)
+            {
+                LogManager.ConfigurationReloaded -= OnLogManagerOnConfigurationReloaded;
+                LogManager.Configuration.RemoveTarget("DbLogger");
+                LogManager.Configuration.LoggingRules.Remove(Rule);
+                LogManager.ReconfigExistingLoggers();
+            }
             Dispose();
         }
 
@@ -54,6 +62,10 @@ namespace NzbDrone.Core.Instrumentation
 
         protected override void Write(LogEventInfo logEvent)
         {
+            if (_connection == null)
+            {
+                return;
+            }
             try
             {
                 var log = new Log();
