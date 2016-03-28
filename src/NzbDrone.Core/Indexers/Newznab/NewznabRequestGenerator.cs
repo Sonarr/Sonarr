@@ -183,21 +183,25 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         private void AddTvIdPageableRequests(IndexerPageableRequestChain chain, int maxPages, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, string parameters)
         {
-            if (SupportsAggregatedIdSearch && (SupportsTvdbSearch || SupportsTvRageSearch || SupportsTvMazeSearch))
+            var includeTvdbSearch = SupportsTvdbSearch && searchCriteria.Series.TvdbId > 0;
+            var includeTvRageSearch = SupportsTvRageSearch && searchCriteria.Series.TvRageId > 0;
+            var includeTvMazeSearch = SupportsTvMazeSearch && searchCriteria.Series.TvMazeId > 0;
+
+            if (SupportsAggregatedIdSearch && (includeTvdbSearch || includeTvRageSearch || includeTvMazeSearch))
             {
                 var ids = "";
 
-                if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
+                if (includeTvdbSearch)
                 {
                     ids += "&tvdbid=" + searchCriteria.Series.TvdbId;
                 }
 
-                if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
+                if (includeTvRageSearch)
                 {
                     ids += "&rid=" + searchCriteria.Series.TvRageId;
                 }
 
-                if (searchCriteria.Series.TvMazeId > 0 && SupportsTvMazeSearch)
+                if (includeTvMazeSearch)
                 {
                     ids += "&tvmazeid=" + searchCriteria.Series.TvMazeId;
                 }
@@ -206,18 +210,18 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             else
             {
-                if (searchCriteria.Series.TvdbId > 0 && SupportsTvdbSearch)
+                if (includeTvdbSearch)
                 {
                     chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
                         string.Format("&tvdbid={0}{1}", searchCriteria.Series.TvdbId, parameters)));
                 }
-                else if (searchCriteria.Series.TvRageId > 0 && SupportsTvRageSearch)
+                else if (includeTvRageSearch)
                 {
                     chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
                         string.Format("&rid={0}{1}", searchCriteria.Series.TvRageId, parameters)));
                 }
 
-                else if (searchCriteria.Series.TvMazeId > 0 && SupportsTvMazeSearch)
+                else if (includeTvMazeSearch)
                 {
                     chain.Add(GetPagedRequests(maxPages, categories, "tvsearch",
                         string.Format("&tvmazeid={0}{1}", searchCriteria.Series.TvMazeId, parameters)));

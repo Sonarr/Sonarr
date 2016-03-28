@@ -235,6 +235,21 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         }
 
         [Test]
+        public void should_not_use_aggregrated_id_search_if_no_ids_are_known()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "rid", "season", "ep" };
+            _capabilities.SupportsAggregateIdSearch = true; // Turns true if indexer supplies supportedParams.
+
+            _singleEpisodeSearchCriteria.Series.TvRageId = 0;
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+
+            var page = results.GetTier(0).First().First();
+
+            page.Url.Query.Should().Contain("q=");
+        }
+
+        [Test]
         public void should_fallback_to_q()
         {
             _capabilities.SupportedTvSearchParameters = new[] { "q", "tvdbid", "rid", "season", "ep" };
