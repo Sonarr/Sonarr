@@ -1,5 +1,5 @@
 #! /bin/bash
-msBuild='/c/Windows/Microsoft.NET/Framework64/v4.0.30319/'
+msBuild='/c/Program Files (x86)/MSBuild/14.0/Bin'
 outputFolder='./_output'
 outputFolderMono='./_output_mono'
 outputFolderOsx='./_output_osx'
@@ -105,9 +105,9 @@ RunGulp()
     npm-cache install npm || CheckExitCode npm install
     echo "##teamcity[progressFinish 'npm install']"
 
-    echo "##teamcity[progressStart 'Running Gulp']"
+    echo "##teamcity[progressStart 'Running gulp']"
     CheckExitCode npm run build
-    echo "##teamcity[progressFinish 'Running Gulp']"
+    echo "##teamcity[progressFinish 'Running gulp']"
 }
 
 CreateMdbs()
