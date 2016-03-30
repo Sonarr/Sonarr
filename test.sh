@@ -3,6 +3,11 @@ TYPE=$2
 WHERE=""
 TEST_DIR="."
 TEST_PATTERN="*Test.dll"
+
+if [ -d "$TEST_DIR/_tests" ]; then
+  TEST_DIR="$TEST_DIR/_tests"
+fi
+
 NUNIT="$TEST_DIR/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe"
 NUNIT_COMMAND="$NUNIT"
 NUNIT_PARAMS="--teamcity"
