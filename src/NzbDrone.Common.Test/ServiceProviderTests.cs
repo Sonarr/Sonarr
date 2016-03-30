@@ -2,6 +2,7 @@
 using System.ServiceProcess;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Common.Test
@@ -12,7 +13,6 @@ namespace NzbDrone.Common.Test
     {
         private const string ALWAYS_INSTALLED_SERVICE = "SCardSvr"; //Smart Card
         private const string TEMP_SERVICE_NAME = "NzbDrone_Nunit";
-
 
         [SetUp]
         public void Setup()
