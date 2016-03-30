@@ -128,3 +128,4 @@ output/*
 ._*
 
 _start
+_temp_*/**/*
