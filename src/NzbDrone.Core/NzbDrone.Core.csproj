@@ -253,6 +253,7 @@
     <Compile Include="Datastore\Migration\069_quality_proper.cs" />
     <Compile Include="Datastore\Migration\070_delay_profile.cs" />
     <Compile Include="Datastore\Migration\096_disable_kickass.cs" />
+    <Compile Include="Datastore\Migration\095_add_additional_episodes_index.cs" />
     <Compile Include="Datastore\Migration\101_add_ultrahd_quality_in_profiles.cs" />
     <Compile Include="Datastore\Migration\071_unknown_quality_in_profile.cs" />
     <Compile Include="Datastore\Migration\072_history_grabid.cs" />
