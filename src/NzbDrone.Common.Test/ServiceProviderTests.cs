@@ -24,8 +24,10 @@ namespace NzbDrone.Common.Test
         [TearDown]
         public void TearDown()
         {
-            WindowsOnly();
-            CleanupService();
+            if (OsInfo.IsWindows)
+            {
+                CleanupService();
+            }
         }
 
 
