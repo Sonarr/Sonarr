@@ -1,7 +1,7 @@
 PLATFORM=$1
 TYPE=$2
 WHERE=""
-TEST_DIR="./_tests"
+TEST_DIR="."
 TEST_PATTERN="*Test.dll"
 NUNIT="$TEST_DIR/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe"
 NUNIT_COMMAND="$NUNIT"
