@@ -1,6 +1,6 @@
 PLATFORM=$1
 TYPE=$2
-WHERE=""
+WHERE="cat != ManualTest"
 TEST_DIR="."
 TEST_PATTERN="*Test.dll"
 
@@ -13,9 +13,9 @@ NUNIT_COMMAND="$NUNIT"
 NUNIT_PARAMS="--teamcity"
 
 if [ "$PLATFORM" = "Windows" ]; then
-  WHERE="cat != LINUX"
+  WHERE="$WHERE && cat != LINUX"
 elif [ "$PLATFORM" = "Linux" ]; then
-  WHERE="cat != WINDOWS"
+  WHERE="$WHERE && cat != WINDOWS"
   NUNIT_COMMAND="mono --debug --runtime=v4.0 $NUNIT"
 else
   echo "Platform must be provided: Windows or Linux"

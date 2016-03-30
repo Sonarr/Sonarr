@@ -86,6 +86,7 @@
     <Compile Include="AutoMoq\Unity\AutoMockingBuilderStrategy.cs" />
     <Compile Include="AutoMoq\Unity\AutoMockingContainerExtension.cs" />
     <Compile Include="Categories\DiskAccessTestAttribute.cs" />
+    <Compile Include="Categories\ManualTestAttribute.cs" />
     <Compile Include="Categories\IntegrationTestAttribute.cs" />
     <Compile Include="ConcurrencyCounter.cs" />
     <Compile Include="ExceptionVerification.cs" />

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Common.Test
 {
@@ -222,6 +223,7 @@ namespace NzbDrone.Common.Test
 
         [Test]
         [Explicit]
+        [ManualTest]
         public void get_actual_casing_should_return_original_casing_for_shares()
         {
             var path = @"\\server\Pool\Apps";

@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Common.Test
 {
@@ -72,6 +73,7 @@ namespace NzbDrone.Common.Test
 
         [Test]
         [Explicit]
+        [ManualTest]
         public void UnInstallService()
         {
             Subject.UnInstall(ServiceProvider.NZBDRONE_SERVICE_NAME);
@@ -80,6 +82,7 @@ namespace NzbDrone.Common.Test
 
         [Test]
         [Explicit]
+        [ManualTest]
         public void Should_be_able_to_start_and_stop_service()
         {
             Subject.GetService(ALWAYS_INSTALLED_SERVICE).Status
