@@ -8,7 +8,7 @@ using RestSharp;
 namespace NzbDrone.Integration.Test
 {
     [TestFixture]
-    [Ignore]
+    [Ignore("Command integration tests are bad, maybe?")]
     public class CommandIntegrationTest : IntegrationTest
     {
         [Test]

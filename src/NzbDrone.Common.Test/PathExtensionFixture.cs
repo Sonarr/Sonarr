@@ -153,7 +153,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        [Ignore]
+        [Ignore("Parent, not Grandparent")]
         public void should_not_be_parent_when_it_is_grandparent()
         {
             var path = Path.Combine(_parent, "parent", "child");
