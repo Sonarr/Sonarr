@@ -3,6 +3,7 @@ TYPE=$2
 WHERE="cat != ManualTest"
 TEST_DIR="."
 TEST_PATTERN="*Test.dll"
+ASSEMBLIES=""
 
 if [ -d "$TEST_DIR/_tests" ]; then
   TEST_DIR="$TEST_DIR/_tests"
@@ -34,5 +35,7 @@ else
 fi
 
 for i in `find $TEST_DIR -name "$TEST_PATTERN"`;
-  do $NUNIT_COMMAND --where "$WHERE" $NUNIT_PARAMS $i;
+  do ASSEMBLIES="$ASSEMBLIES $i"
 done
+
+$NUNIT_COMMAND --where "$WHERE" $NUNIT_PARAMS $ASSEMBLIES;
