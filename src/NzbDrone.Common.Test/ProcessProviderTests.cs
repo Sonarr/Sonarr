@@ -31,9 +31,20 @@ namespace NzbDrone.Common.Test
         [TearDown]
         public void TearDown()
         {
-            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c => c.Kill());
+            Process.GetProcessesByName(DummyApp.DUMMY_PROCCESS_NAME).ToList().ForEach(c =>
+            {
+                try
+                {
+                    c.Kill();
+                }
+                catch (Win32Exception ex)
+                {
+                    TestLogger.Warn(ex, "{0} when killing process", ex.Message);
+                    throw;
+                }
+                
+            });
         }
-
 
         [Test]
         public void GetById_should_return_null_if_process_doesnt_exist()
