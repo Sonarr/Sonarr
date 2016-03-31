@@ -89,7 +89,7 @@ namespace NzbDrone.Common.Test.CacheTests
             int hitCount = 0;
             _cachedString = new Cached<string>();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 _cachedString.Get("key", () =>
                     {
@@ -97,7 +97,7 @@ namespace NzbDrone.Common.Test.CacheTests
                         return null;
                     }, TimeSpan.FromMilliseconds(300));
 
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
 
             hitCount.Should().BeInRange(3, 6);
