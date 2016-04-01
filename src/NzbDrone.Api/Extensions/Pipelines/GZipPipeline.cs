@@ -5,6 +5,7 @@ using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
 using NLog;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Api.Extensions.Pipelines
 {
@@ -21,43 +22,35 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         public void Register(IPipelines pipelines)
         {
-            pipelines.AfterRequest.AddItemToEndOfPipeline(c => CompressResponse(c.Request, c.Response));
+            pipelines.AfterRequest.AddItemToEndOfPipeline(CompressResponse);
         }
 
-        private Response CompressResponse(Request request, Response response)
+        private void CompressResponse(NancyContext context)
         {
+            var request = context.Request;
+            var response = context.Response;
+
             try
             {
                 if (
                    !response.ContentType.Contains("image")
                 && !response.ContentType.Contains("font")
                 && request.Headers.AcceptEncoding.Any(x => x.Contains("gzip"))
-                && (!response.Headers.ContainsKey("Content-Encoding") || response.Headers["Content-Encoding"] != "gzip"))
+                && !AlreadyGzipEncoded(response)
+                && !ContentLengthIsTooSmall(response))
                 {
-                    var data = new MemoryStream();
-                    response.Contents.Invoke(data);
-                    data.Position = 0;
-                    if (data.Length < 1024)
-                    {
-                        response.Contents = stream =>
-                        {
-                            data.CopyTo(stream);
-                            stream.Flush();
-                        };
-                    }
-                    else
-                    {
-                        response.Headers["Content-Encoding"] = "gzip";
-                        response.Contents = s =>
-                        {
-                            var gzip = new GZipStream(s, CompressionMode.Compress, true);
-                            data.CopyTo(gzip);
-                            gzip.Close();
-                        };
-                    }
-                }
+                    var contents = response.Contents;
 
-                return response;
+                    response.Headers["Content-Encoding"] = "gzip";
+                    response.Contents = responseStream =>
+                    {
+                        using (var gzip = new GZipStream(responseStream, CompressionMode.Compress, true))
+                        using (var buffered = new BufferedStream(gzip, 8192))
+                        {
+                            contents.Invoke(buffered);
+                        }
+                    };
+                }
             }
 
             catch (Exception ex)
@@ -65,6 +58,26 @@ namespace NzbDrone.Api.Extensions.Pipelines
                 _logger.Error(ex, "Unable to gzip response");
                 throw;
             }
+        }
+
+        private static bool ContentLengthIsTooSmall(Response response)
+        {
+            var contentLength = response.Headers.GetValueOrDefault("Content-Length");
+            if (contentLength != null && long.Parse(contentLength) < 1024)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static bool AlreadyGzipEncoded(Response response)
+        {
+            var contentEncoding = response.Headers.GetValueOrDefault("Content-Encoding");
+            if (contentEncoding == "gzip")
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
