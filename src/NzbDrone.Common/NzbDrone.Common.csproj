@@ -205,7 +205,6 @@
     <Compile Include="Security\SecurityProtocolPolicy.cs" />
     <Compile Include="Security\X509CertificateValidationPolicy.cs" />
     <Compile Include="Serializer\HttpUriConverter.cs" />
-    <Compile Include="Serializer\TimeSpanConverter.cs" />
     <Compile Include="Serializer\IntConverter.cs" />
     <Compile Include="Serializer\Json.cs" />
     <Compile Include="Serializer\JsonVisitor.cs" />
