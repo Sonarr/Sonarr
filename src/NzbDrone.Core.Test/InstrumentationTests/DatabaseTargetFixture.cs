@@ -9,6 +9,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.InstrumentationTests
 {
@@ -68,6 +69,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
 
         [Test]
         [Explicit]
+        [ManualTest]
         public void perf_test()
         {
             MapRepository.Instance.EnableTraceLogging = false;
