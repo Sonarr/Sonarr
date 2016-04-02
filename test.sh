@@ -18,19 +18,22 @@ if [ "$PLATFORM" = "Windows" ]; then
 elif [ "$PLATFORM" = "Linux" ]; then
   WHERE="$WHERE && cat != WINDOWS"
   NUNIT_COMMAND="mono --debug --runtime=v4.0 $NUNIT"
+elif [ "$PLATFORM" = "Mac" ]; then
+  WHERE="$WHERE && cat != WINDOWS"
+  NUNIT_COMMAND="mono --debug --runtime=v4.0 $NUNIT"
 else
-  echo "Platform must be provided: Windows or Linux"
+  echo "Platform must be provided as first arguement: Windows, Linux or Mac"
   exit 1
 fi
 
 if [ "$TYPE" = "Unit" ]; then
   WHERE="$WHERE && cat != IntegrationTest && cat != AutomationTest"
-elif [ "$TYPE" = "Integration" ] ; then
+elif [ "$TYPE" = "Integration" ] || [ "$TYPE" = "int" ] ; then
   WHERE="$WHERE && cat == IntegrationTest"
 elif [ "$TYPE" = "Automation" ] ; then
   WHERE="$WHERE && cat == AutomationTest"
 else
-  echo "Type must be provided: Unit, Integration or Automation"
+  echo "Type must be provided as second argument: Unit, Integration or Automation"
   exit 2
 fi
 
