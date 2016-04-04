@@ -144,23 +144,12 @@ namespace NzbDrone.Common.Http
                 return basePath;
             }
 
-            var newPath = "/" + relativePath.TrimStart('/');
-
-            if (basePath != null && !relativePath.StartsWith("/"))
+            if (basePath.IsNullOrWhiteSpace())
             {
-                var baseSlashIndex = basePath.LastIndexOf('/');
-
-                if (baseSlashIndex == basePath.Length - 1)
-                {
-                    newPath = basePath.TrimEnd('/') + newPath;
-                }
-                else if (baseSlashIndex != 0)
-                {
-                    newPath = basePath.Substring(0, baseSlashIndex) + newPath;
-                }
+                return "/" + relativePath.TrimStart('/');
             }
 
-            return newPath;
+            return basePath.TrimEnd("/") + "/" + relativePath.TrimStart('/');
         }
 
         public HttpUri SetQuery(string query)
@@ -198,7 +187,6 @@ namespace NzbDrone.Common.Http
 
             return SetQuery(builder.ToString());
         }
-
 
         public override int GetHashCode()
         {
