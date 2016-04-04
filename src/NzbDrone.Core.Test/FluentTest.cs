@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Test
         public void Truncate_should_truncate_strings_to_max_specified_number_of_bytes()
         {
             
-            var str = ReadAllText("Files", "LongOverview.txt");
+            var str = ReadAllText("Files/LongOverview.txt");
 
             
             var resultString = str.Truncate(1000);

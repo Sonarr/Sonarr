@@ -206,7 +206,7 @@ namespace NzbDrone.Common.Test
         public void get_actual_casing_should_return_actual_casing_for_local_dir_in_windows()
         {
             WindowsOnly();
-            var path = Directory.GetCurrentDirectory().Replace("c:\\","C:\\");
+            var path = Directory.GetCurrentDirectory().Replace("c:\\","C:\\").Replace("system32", "System32");
 
             path.ToUpper().GetActualCasing().Should().Be(path);
             path.ToLower().GetActualCasing().Should().Be(path);

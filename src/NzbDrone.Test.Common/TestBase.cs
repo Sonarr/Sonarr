@@ -90,14 +90,11 @@ namespace NzbDrone.Test.Common
         [SetUp]
         public void TestBaseSetup()
         {
-
             GetType().IsPublic.Should().BeTrue("All Test fixtures should be public to work in mono.");
-
-
 
             LogManager.ReconfigExistingLoggers();
 
-            TempFolder = Path.Combine(Directory.GetCurrentDirectory(), "_temp_" + DateTime.Now.Ticks);
+            TempFolder = Path.Combine(TestContext.CurrentContext.TestDirectory, "_temp_" + DateTime.Now.Ticks);
 
             Directory.CreateDirectory(TempFolder);
         }
@@ -150,6 +147,16 @@ namespace NzbDrone.Test.Common
                 .Returns(VirtualPath);
 
             TestFolderInfo = Mocker.GetMock<IAppFolderInfo>().Object;
+        }
+
+        protected string GetTestPath(string path)
+        {
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine(path.Split('/')));
+        }
+
+        protected string ReadAllText(string path)
+        {
+            return File.ReadAllText(GetTestPath(path));
         }
 
         protected string GetTempFilePath()

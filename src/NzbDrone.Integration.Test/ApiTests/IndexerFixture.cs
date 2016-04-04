@@ -3,10 +3,10 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.ThingiProvider;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class IndexerIntegrationFixture : IntegrationTest
+    public class IndexerFixture : IntegrationTest
     {
         [Test]
         public void should_have_built_in_indexer()

@@ -12,6 +12,7 @@ using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
+using System.Reflection;
 
 namespace NzbDrone.Common.Http.Dispatchers
 {
@@ -20,6 +21,21 @@ namespace NzbDrone.Common.Http.Dispatchers
         private static readonly Regex ExpiryDate = new Regex(@"(expires=)([^;]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Logger _logger = NzbDroneLogger.GetLogger(typeof(CurlHttpDispatcher));
+
+        private const string _caBundleFileName = "curl-ca-bundle.crt";
+        private static readonly string _caBundleFilePath;
+
+        static CurlHttpDispatcher()
+        {
+            if (Assembly.GetExecutingAssembly().Location.IsNotNullOrWhiteSpace())
+            {
+                _caBundleFilePath = Path.Combine(Assembly.GetExecutingAssembly().Location, "..", _caBundleFileName);
+            }
+            else
+            {
+                _caBundleFilePath = _caBundleFileName;
+            }
+        }
 
         public static bool CheckAvailability()
         {
@@ -88,7 +104,7 @@ namespace NzbDrone.Common.Http.Dispatchers
 
                     if (OsInfo.IsWindows)
                     {
-                        curlEasy.CaInfo = "curl-ca-bundle.crt";
+                        curlEasy.CaInfo = _caBundleFilePath;
                     }
 
                     if (cookies != null)

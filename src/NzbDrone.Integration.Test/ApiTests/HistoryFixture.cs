@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class HistoryIntegrationTest : IntegrationTest
+    public class HistoryFixture : IntegrationTest
     {
         [Test]
         public void history_should_be_empty()

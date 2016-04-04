@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         [Test]
         public void get_runtime()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Media", "H264_sample.mp4");
+            var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Files", "Media", "H264_sample.mp4");
 
             Subject.GetRunTime(path).Seconds.Should().Be(10);
 
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         [Test]
         public void get_info()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Media", "H264_sample.mp4");
+            var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Files", "Media", "H264_sample.mp4");
 
             var info = Subject.GetMediaInfo(path);
 
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         [Test]
         public void get_info_unicode()
         {
-            var srcPath = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Media", "H264_sample.mp4");
+            var srcPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Files", "Media", "H264_sample.mp4");
 
             var tempPath = GetTempFilePath();
             Directory.CreateDirectory(tempPath);
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         [Test]
         public void should_dispose_file_after_scanning_mediainfo()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "Files", "Media", "H264_sample.mp4");
+            var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "Files", "Media", "H264_sample.mp4");
 
             var info = Subject.GetMediaInfo(path);
 

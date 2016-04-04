@@ -10,11 +10,6 @@ namespace NzbDrone.Core.Test.Framework
 {
     public abstract class CoreTest : TestBase
     {
-        protected string ReadAllText(params string[] path)
-        {
-            return File.ReadAllText(Path.Combine(path));
-        }
-
         protected void UseRealHttp()
         {
             Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));

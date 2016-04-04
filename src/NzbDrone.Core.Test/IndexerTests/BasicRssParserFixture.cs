@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         [Test]
         public void should_handle_relative_url()
         {
-            var xml = ReadAllText("Files", "Indexers", "relative_urls.xml");
+            var xml = ReadAllText("Files/Indexers/relative_urls.xml");
 
             var result = Subject.ParseResponse(CreateResponse("http://my.indexer.com/api?q=My+Favourite+Show", xml));
 

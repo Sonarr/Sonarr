@@ -3,10 +3,10 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Api.RootFolders;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class RootFolderIntegrationTest : IntegrationTest
+    public class RootFolderFixture : IntegrationTest
     {
         [Test]
         public void should_have_no_root_folder_initially()

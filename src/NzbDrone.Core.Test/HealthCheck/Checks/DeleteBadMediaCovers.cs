@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.OpenReadStream(imagePath))
-                .Returns(new FileStream("Files\\html_image.jpg".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
+                .Returns(new FileStream(GetTestPath("Files/html_image.jpg"), FileMode.Open, FileAccess.Read));
 
 
             Subject.Clean();
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.OpenReadStream(imagePath))
-                              .Returns(new FileStream("Files\\emptyfile.txt".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
+                              .Returns(new FileStream(GetTestPath("Files/emptyfile.txt"), FileMode.Open, FileAccess.Read));
 
 
             Subject.Clean();
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(c => c.OpenReadStream(imagePath))
-                              .Returns(new FileStream("Files\\Queue.txt".AsOsAgnostic(), FileMode.Open, FileAccess.Read));
+                              .Returns(new FileStream(GetTestPath("Files/Queue.txt"), FileMode.Open, FileAccess.Read));
 
 
             Subject.Clean();

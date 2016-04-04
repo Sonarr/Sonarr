@@ -161,7 +161,7 @@ module.exports = Marionette.ItemView.extend({
                 statusLevel : self._getStatusLevel(model, end),
                 downloading : QueueCollection.findEpisode(model.get('id')),
                 model       : model,
-                sortOrder   : (model.get('seasonNumber') == 0 ? 1000000 : model.get('seasonNumber') * 10000) + model.get('episodeNumber')
+                sortOrder   : (model.get('seasonNumber') === 0 ? 1000000 : model.get('seasonNumber') * 10000) + model.get('episodeNumber')
             };
 
             events.push(event);

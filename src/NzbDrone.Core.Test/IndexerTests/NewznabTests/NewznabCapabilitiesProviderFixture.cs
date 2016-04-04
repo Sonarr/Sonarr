@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                 Url = "http://indxer.local"
             };
 
-            _caps = ReadAllText("Files", "Indexers", "Newznab", "newznab_caps.xml");
+            _caps = ReadAllText("Files/Indexers/Newznab/newznab_caps.xml");
         }
 
         private void GivenCapsResponse(string caps)

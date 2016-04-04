@@ -4,10 +4,10 @@ using NzbDrone.Api.Indexers;
 using System.Linq;
 using System.Net;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class ReleaseIntegrationTest : IntegrationTest
+    public class ReleaseFixture : IntegrationTest
     {
         [Test]
         public void should_only_have_unknown_series_releases()

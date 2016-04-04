@@ -4,10 +4,10 @@ using FluentAssertions;
 using NUnit.Framework;
 
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class NotificationIntegrationFixture : IntegrationTest
+    public class NotificationFixture : IntegrationTest
     {
         [Test]
         public void should_not_have_any_default_notifications()

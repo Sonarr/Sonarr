@@ -4,10 +4,10 @@ using NUnit.Framework;
 using System.Linq;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class SeriesEditorIntegrationTest : IntegrationTest
+    public class SeriesEditorFixture : IntegrationTest
     {
         private void GivenExistingSeries()
         {

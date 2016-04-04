@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.MediaCoverTests
             var mainFile = Path.Combine(TempFolder, "logo.png");
             var resizedFile = Path.Combine(TempFolder, "logo-170.png");
 
-            File.Copy(@"Files/1024.png", mainFile);
+            File.Copy(GetTestPath("Files/1024.png"), mainFile);
 
             Subject.Resize(mainFile, resizedFile, 170);
 

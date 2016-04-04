@@ -30,7 +30,7 @@ namespace NzbDrone.Test.Common
 
         public void Start()
         {
-            AppData = Path.Combine(Directory.GetCurrentDirectory(), "_intg_" + DateTime.Now.Ticks);
+            AppData = Path.Combine(TestContext.CurrentContext.TestDirectory, "_intg_" + DateTime.Now.Ticks);
 
             var nzbdroneConsoleExe = "NzbDrone.Console.exe";
 
@@ -41,7 +41,7 @@ namespace NzbDrone.Test.Common
 
             if (BuildInfo.IsDebug)
             {
-                Start("..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe");
+                Start(Path.Combine(TestContext.CurrentContext.TestDirectory, "..\\..\\..\\..\\..\\_output\\NzbDrone.Console.exe"));
             }
             else
             {

@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class NamingConfigTests : IntegrationTest
+    public class NamingConfigFixture : IntegrationTest
     {
 
         [Test]

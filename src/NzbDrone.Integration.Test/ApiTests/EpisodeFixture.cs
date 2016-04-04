@@ -6,10 +6,10 @@ using NzbDrone.Api.Series;
 using System.Linq;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Integration.Test
+namespace NzbDrone.Integration.Test.ApiTests
 {
     [TestFixture]
-    public class EpisodeIntegrationTests : IntegrationTest
+    public class EpisodeFixture : IntegrationTest
     {
         private SeriesResource series;
 
@@ -28,16 +28,9 @@ namespace NzbDrone.Integration.Test
 
             newSeries = Series.Post(newSeries);
 
-            while (true)
-            {
-                if (Episodes.GetEpisodesInSeries(newSeries.Id).Count > 0)
-                {
-                    return newSeries;
-                }
+            WaitForCompletion(() => Episodes.GetEpisodesInSeries(newSeries.Id).Count > 0);
 
-                Console.WriteLine("Waiting for episodes to load.");
-                Thread.Sleep(1000);
-            }
+            return newSeries;
         }
 
         [Test]

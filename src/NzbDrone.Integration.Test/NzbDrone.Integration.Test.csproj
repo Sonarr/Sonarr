@@ -103,27 +103,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiTests\CalendarFixture.cs" />
+    <Compile Include="ApiTests\BlacklistFixture.cs" />
+    <Compile Include="ApiTests\DownloadClientFixture.cs" />
+    <Compile Include="ApiTests\SeriesLookupFixture.cs" />
     <Compile Include="Client\ClientBase.cs" />
     <Compile Include="Client\EpisodeClient.cs" />
     <Compile Include="Client\IndexerClient.cs" />
+    <Compile Include="Client\DownloadClientClient.cs" />
     <Compile Include="Client\NotificationClient.cs" />
+    <Compile Include="Client\CommandClient.cs" />
     <Compile Include="Client\ReleaseClient.cs" />
     <Compile Include="Client\SeriesClient.cs" />
-    <Compile Include="CommandIntegerationTests.cs" />
+    <Compile Include="ApiTests\CommandFixture.cs" />
     <Compile Include="CorsFixture.cs" />
-    <Compile Include="EpisodeIntegrationTests.cs" />
-    <Compile Include="HistoryIntegrationTest.cs" />
-    <Compile Include="IndexerIntegrationFixture.cs" />
-    <Compile Include="IndexHtmlIntegrationFixture.cs" />
+    <Compile Include="ApiTests\EpisodeFixture.cs" />
+    <Compile Include="ApiTests\HistoryFixture.cs" />
+    <Compile Include="ApiTests\IndexerFixture.cs" />
+    <Compile Include="IndexHtmlFixture.cs" />
     <Compile Include="IntegrationTest.cs" />
-    <Compile Include="IntegrationTestDirectoryInfo.cs" />
-    <Compile Include="NamingConfigTests.cs" />
-    <Compile Include="NotificationIntegrationFixture.cs" />
+    <Compile Include="IntegrationTestBase.cs" />
+    <Compile Include="ApiTests\NamingConfigFixture.cs" />
+    <Compile Include="ApiTests\NotificationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReleaseIntegrationTest.cs" />
-    <Compile Include="RootFolderIntegrationTest.cs" />
-    <Compile Include="SeriesEditorIntegrationTest.cs" />
-    <Compile Include="SeriesIntegrationTest.cs" />
+    <Compile Include="ApiTests\ReleaseFixture.cs" />
+    <Compile Include="ApiTests\RootFolderFixture.cs" />
+    <Compile Include="ApiTests\SeriesEditorFixture.cs" />
+    <Compile Include="ApiTests\SeriesFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NzbDrone.Test.Common\App.config">
