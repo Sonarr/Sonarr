@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var requestBuilder = BuildRequest(settings);
 
-            var response = ProcessRequest<TResult>(requestBuilder, method, arguments);            
+            var response = ExecuteRequest<TResult>(requestBuilder, method, arguments);
 
             if (response.Error != null)
             {
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 {
                     AuthenticateClient(requestBuilder, settings, true);
 
-                    response = ProcessRequest<TResult>(requestBuilder, method, arguments);
+                    response = ExecuteRequest<TResult>(requestBuilder, method, arguments);
 
                     if (response.Error == null)
                     {
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return response.Result;
         }
 
-        private JsonRpcResponse<TResult> ProcessRequest<TResult>(JsonRpcRequestBuilder requestBuilder, string method, params object[] arguments)
+        private JsonRpcResponse<TResult> ExecuteRequest<TResult>(JsonRpcRequestBuilder requestBuilder, string method, params object[] arguments)
         {
             var request = requestBuilder.Call(method, arguments).Build();
 
@@ -232,6 +232,15 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             catch (WebException ex)
             {
                 throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+            }
+        }
+
+        private void VerifyResponse<TResult>(JsonRpcResponse<TResult> response)
+        {
+            if (response.Error != null)
+            {
+                var error = response.Error.ToObject<DelugeError>();
+                throw new DelugeException(error.Message, error.Code);
             }
         }
 
@@ -271,14 +280,16 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         private void ConnectDaemon(JsonRpcRequestBuilder requestBuilder)
         {
-            var resultConnected = ProcessRequest<bool>(requestBuilder, "web.connected");
+            var resultConnected = ExecuteRequest<bool>(requestBuilder, "web.connected");
+            VerifyResponse(resultConnected);
 
             if (resultConnected.Result)
             {
                 return;
             }
 
-            var resultHosts = ProcessRequest<List<object[]>>(requestBuilder, "web.get_hosts");
+            var resultHosts = ExecuteRequest<List<object[]>>(requestBuilder, "web.get_hosts");
+            VerifyResponse(resultHosts);
 
             if (resultHosts.Result != null)
             {
@@ -287,13 +298,14 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
                 if (connection != null)
                 {
-                    ProcessRequest<object>(requestBuilder, "web.connect", new object[] { connection[0] });
-                }
-                else
-                {
-                    throw new DownloadClientException("Failed to connect to Deluge daemon.");
+                    var resultConnect = ExecuteRequest<object>(requestBuilder, "web.connect", new object[] { connection[0] });
+                    VerifyResponse(resultConnect);
+
+                    return;
                 }
             }
+
+           throw new DownloadClientException("Failed to connect to Deluge daemon.");
         }
 
         private DelugeTorrent[] GetTorrents(DelugeUpdateUIResult result)
