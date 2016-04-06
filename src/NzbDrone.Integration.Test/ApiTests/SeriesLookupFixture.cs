@@ -26,6 +26,7 @@ namespace NzbDrone.Integration.Test.ApiTests
         }
 
         [Test]
+        [Ignore("Unreliable")]
         public void lookup_random_series_using_asterix()
         {
             var series = Series.Lookup("*");
