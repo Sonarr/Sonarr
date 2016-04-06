@@ -131,7 +131,7 @@ namespace NzbDrone.Common.Http
                 return _queryParams;
             }
         }
-        
+
         public HttpUri CombinePath(string path)
         {
             return new HttpUri(Scheme, Host, Port, CombinePath(Path, path), Query, Fragment);
@@ -144,23 +144,34 @@ namespace NzbDrone.Common.Http
                 return basePath;
             }
 
-            var newPath = "/" + relativePath.TrimStart('/');
-
-            if (basePath != null && !relativePath.StartsWith("/"))
+            if (basePath.IsNullOrWhiteSpace())
             {
-                var baseSlashIndex = basePath.LastIndexOf('/');
-
-                if (baseSlashIndex == basePath.Length - 1)
-                {
-                    newPath = basePath.TrimEnd('/') + newPath;
-                }
-                else if (baseSlashIndex != 0)
-                {
-                    newPath = basePath.Substring(0, baseSlashIndex) + newPath;
-                }
+                return relativePath;
             }
 
-            return newPath;
+            return basePath.TrimEnd('/') + "/" + relativePath.TrimStart('/');
+        }
+
+        private static string CombineRelativePath(string basePath, string relativePath)
+        {
+            if (relativePath.IsNullOrWhiteSpace())
+            {
+                return basePath;
+            }
+
+            if (relativePath.StartsWith("/"))
+            {
+                return relativePath;
+            }
+
+            var baseSlashIndex = basePath.LastIndexOf('/');
+
+            if (baseSlashIndex >= 0)
+            {
+                return basePath.Substring(0, baseSlashIndex) + "/" + relativePath;
+            }
+            
+            return relativePath;
         }
 
         public HttpUri SetQuery(string query)
@@ -252,7 +263,7 @@ namespace NzbDrone.Common.Http
 
             if (relativeUrl.Path.IsNotNullOrWhiteSpace())
             {
-                return new HttpUri(baseUrl.Scheme, baseUrl.Host, baseUrl.Port, HttpUri.CombinePath(baseUrl.Path, relativeUrl.Path), relativeUrl.Query, relativeUrl.Fragment);
+                return new HttpUri(baseUrl.Scheme, baseUrl.Host, baseUrl.Port, CombineRelativePath(baseUrl.Path, relativeUrl.Path), relativeUrl.Query, relativeUrl.Fragment);
             }
             
             return new HttpUri(baseUrl.Scheme, baseUrl.Host, baseUrl.Port, baseUrl.Path, relativeUrl.Query, relativeUrl.Fragment);
