@@ -116,7 +116,10 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         
         private HttpRequestBuilder BuildRequest(NzbVortexSettings settings)
         {
-            return new HttpRequestBuilder(true, settings.Host, settings.Port, "api");
+            var requestBuilder = new HttpRequestBuilder(true, settings.Host, settings.Port, "api");
+            requestBuilder.LogResponseContent = true;
+
+            return requestBuilder;
         }
 
         private T ProcessRequest<T>(HttpRequestBuilder requestBuilder, bool requiresAuthentication, NzbVortexSettings settings)

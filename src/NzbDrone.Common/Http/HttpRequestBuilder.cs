@@ -21,6 +21,7 @@ namespace NzbDrone.Common.Http
         public bool SuppressHttpError { get; set; }
         public bool AllowAutoRedirect { get; set; }
         public bool ConnectionKeepAlive { get; set; }
+        public bool LogResponseContent { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
         public List<HttpFormData> FormData { get; private set; }
@@ -100,6 +101,7 @@ namespace NzbDrone.Common.Http
             request.SuppressHttpError = SuppressHttpError;
             request.AllowAutoRedirect = AllowAutoRedirect;
             request.ConnectionKeepAlive = ConnectionKeepAlive;
+            request.LogResponseContent = LogResponseContent;
 
             if (NetworkCredential != null)
             {

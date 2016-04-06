@@ -162,6 +162,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 .SetHeader("Cache-Control", "no-cache")
                 .Accept(HttpAccept.Json);
 
+            requestBuilder.LogResponseContent = true;
             requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
 
             return requestBuilder;

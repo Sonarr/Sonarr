@@ -163,14 +163,15 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             string url = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
 
-            var builder = new JsonRpcRequestBuilder(url);
+            var requestBuilder = new JsonRpcRequestBuilder(url);
+            requestBuilder.LogResponseContent = true;
             
-            builder.Resource("json");
-            builder.PostProcess += r => r.RequestTimeout = TimeSpan.FromSeconds(15);
+            requestBuilder.Resource("json");
+            requestBuilder.PostProcess += r => r.RequestTimeout = TimeSpan.FromSeconds(15);
 
-            AuthenticateClient(builder, settings);
+            AuthenticateClient(requestBuilder, settings);
 
-            return builder;
+            return requestBuilder;
         }
 
         protected TResult ProcessRequest<TResult>(DelugeSettings settings, string method, params object[] arguments)
@@ -255,6 +256,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 _authCookieCache.Remove(authKey);
 
                 var authLoginRequest = requestBuilder.Call("auth.login", settings.Password).Build();
+                authLoginRequest.ContentSummary = "auth.login(\"(removed)\")";
                 var response = _httpClient.Execute(authLoginRequest);
                 var result = Json.Deserialize<JsonRpcResponse<bool>>(response.Content);
                 if (!result.Result)

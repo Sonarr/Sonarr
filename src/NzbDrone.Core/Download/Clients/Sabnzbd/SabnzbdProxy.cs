@@ -138,6 +138,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 .Accept(HttpAccept.Json)
                 .AddQueryParam("mode", mode);
 
+            requestBuilder.LogResponseContent = true;
+
             if (settings.ApiKey.IsNotNullOrWhiteSpace())
             {
                 requestBuilder.AddSuffixQueryParam("apikey", settings.ApiKey);

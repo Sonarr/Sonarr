@@ -81,6 +81,11 @@ namespace NzbDrone.Common.Http
                 response = interceptor.PostResponse(response);
             }
 
+            if (request.LogResponseContent)
+            {
+                _logger.Trace("Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
+            }
+
             if (!RuntimeInfoBase.IsProduction &&
                 (response.StatusCode == HttpStatusCode.Moved ||
                  response.StatusCode == HttpStatusCode.MovedPermanently ||

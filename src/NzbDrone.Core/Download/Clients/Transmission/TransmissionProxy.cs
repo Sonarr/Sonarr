@@ -180,6 +180,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 .Resource("rpc")
                 .Accept(HttpAccept.Json);
 
+            requestBuilder.LogResponseContent = true;
             requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
             requestBuilder.AllowAutoRedirect = false;
 

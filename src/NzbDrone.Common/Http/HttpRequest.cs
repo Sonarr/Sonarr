@@ -36,6 +36,7 @@ namespace NzbDrone.Common.Http
         public bool SuppressHttpError { get; set; }
         public bool AllowAutoRedirect { get; set; }
         public bool ConnectionKeepAlive { get; set; }
+        public bool LogResponseContent { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
         public bool StoreResponseCookie { get; set; }
         public TimeSpan RequestTimeout { get; set; }

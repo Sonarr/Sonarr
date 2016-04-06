@@ -155,10 +155,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         {
             var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, "jsonrpc");
 
-            var builder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
-            builder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
+            requestBuilder.LogResponseContent = true;
+            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
 
-            var httpRequest = builder.Build();
+            var httpRequest = requestBuilder.Build();
 
             HttpResponse response;
             try
