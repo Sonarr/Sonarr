@@ -18,6 +18,10 @@ namespace NzbDrone.Mono
         private readonly IProcMountProvider _procMountProvider;
         private readonly ISymbolicLinkResolver _symLinkResolver;
 
+        // Mono supports sending -1 for a uint to indicate that the owner or group should not be set
+        // `unchecked((uint)-1)` and `uint.MaxValue` are the same thing.
+        private const uint UNCHANGED_ID = uint.MaxValue;
+
         public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver)
         {
             _procMountProvider = procMountProvider;
@@ -75,56 +79,8 @@ namespace NzbDrone.Mono
 
         public override void SetPermissions(string path, string mask, string user, string group)
         {
-            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
-
-            var filePermissions = NativeConvert.FromOctalPermissionString(mask);
-
-            if (Syscall.chmod(path, filePermissions) < 0)
-            {
-                var error = Stdlib.GetLastError();
-
-                throw new LinuxPermissionsException("Error setting file permissions: " + error);
-            }
-
-            if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(group))
-            {
-                Logger.Debug("User or Group for chown not configured, skipping chown.");
-                return;
-            }
-
-            uint userId;
-            uint groupId;
-            
-            if (!uint.TryParse(user, out userId))
-            {
-                var u = Syscall.getpwnam(user);
-
-                if (u == null)
-                {
-                    throw new LinuxPermissionsException("Unknown user: {0}", user);
-                }
-
-                userId = u.pw_uid;
-            }
-
-            if (!uint.TryParse(group, out groupId))
-            {
-                var g = Syscall.getgrnam(group);
-
-                if (g == null)
-                {
-                    throw new LinuxPermissionsException("Unknown group: {0}", group);
-                }
-
-                groupId = g.gr_gid;
-            }
-
-            if (Syscall.chown(path, userId, groupId) < 0)
-            {
-                var error = Stdlib.GetLastError();
-
-                throw new LinuxPermissionsException("Error setting file owner and/or group: " + error);
-            }
+            SetPermissions(path, mask);
+            SetOwner(path, user, group);
         }
 
         public override System.Collections.Generic.List<IMount> GetMounts()
@@ -167,6 +123,89 @@ namespace NzbDrone.Mono
                 Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
                 return false;
             }
+        }
+
+        private void SetPermissions(string path, string mask)
+        {
+            Logger.Debug("Setting permissions: {0} on {1}", mask, path);
+
+            var filePermissions = NativeConvert.FromOctalPermissionString(mask);
+
+            if (Syscall.chmod(path, filePermissions) < 0)
+            {
+                var error = Stdlib.GetLastError();
+
+                throw new LinuxPermissionsException("Error setting file permissions: " + error);
+            }
+        }
+
+        private void SetOwner(string path, string user, string group)
+        {
+            if (string.IsNullOrWhiteSpace(user) && string.IsNullOrWhiteSpace(group))
+            {
+                Logger.Debug("User and Group for chown not configured, skipping chown.");
+                return;
+            }
+
+            var userId = GetUserId(user);
+            var groupId = GetGroupId(group);
+
+            if (Syscall.chown(path, userId, groupId) < 0)
+            {
+                var error = Stdlib.GetLastError();
+
+                throw new LinuxPermissionsException("Error setting file owner and/or group: " + error);
+            }
+        }
+
+        private uint GetUserId(string user)
+        {
+            if (user.IsNullOrWhiteSpace())
+            {
+                return UNCHANGED_ID;
+            }
+
+            uint userId;
+
+            if (uint.TryParse(user, out userId))
+            {
+                return userId;
+            }
+
+            var u = Syscall.getpwnam(user);
+
+            if (u == null)
+            {
+                throw new LinuxPermissionsException("Unknown user: {0}", user);
+            }
+
+            return u.pw_uid;
+        }
+
+        private uint GetGroupId(string group)
+        {
+            if (group.IsNullOrWhiteSpace())
+            {
+                return UNCHANGED_ID;
+            }
+
+            uint groupId;
+
+            if (uint.TryParse(group, out groupId))
+            {
+                return groupId;
+            }
+
+            var g = Syscall.getgrnam(group);
+
+            if (g == null)
+            {
+                throw new LinuxPermissionsException("Unknown group: {0}", group);
+            }
+
+            return g.gr_gid;
+
+            
         }
     }
 }
