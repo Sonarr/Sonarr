@@ -40,7 +40,6 @@ namespace NzbDrone.Common.Test
                 catch (Win32Exception ex)
                 {
                     TestLogger.Warn(ex, "{0} when killing process", ex.Message);
-                    throw;
                 }
                 
             });
