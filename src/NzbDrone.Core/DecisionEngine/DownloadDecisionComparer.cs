@@ -26,15 +26,15 @@ namespace NzbDrone.Core.DecisionEngine
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
-                ComparePeers,
-                CompareAge,
+                ComparePeersIfTorrent,
+                CompareAgeIfUsenet,
                 CompareSize
             };
 
             return comparers.Select(comparer => comparer(x, y)).FirstOrDefault(result => result != 0);
         }
 
-        private int Compare<TSubject, TValue>(TSubject left, TSubject right, Func<TSubject, TValue> funcValue)
+        private int CompareBy<TSubject, TValue>(TSubject left, TSubject right, Func<TSubject, TValue> funcValue)
             where TValue : IComparable<TValue>
         {
             var leftValue = funcValue(left);
@@ -43,27 +43,27 @@ namespace NzbDrone.Core.DecisionEngine
             return leftValue.CompareTo(rightValue);
         }
 
-        private int CompareReverse<TSubject, TValue>(TSubject left, TSubject right, Func<TSubject, TValue> funcValue)
+        private int CompareByReverse<TSubject, TValue>(TSubject left, TSubject right, Func<TSubject, TValue> funcValue)
             where TValue : IComparable<TValue>
         {
-            return Compare(left, right, funcValue)*-1;
+            return CompareBy(left, right, funcValue)*-1;
         }
 
-        private int Compare(params int[] comparers)
+        private int CompareAll(params int[] comparers)
         {
             return comparers.Select(comparer => comparer).FirstOrDefault(result => result != 0);
         }
 
         private int CompareQuality(DownloadDecision x, DownloadDecision y)
         {
-            return Compare(Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == remoteEpisode.ParsedEpisodeInfo.Quality.Quality)),
-                           Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real),
-                           Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version));
+            return CompareAll(CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Series.Profile.Value.Items.FindIndex(v => v.Quality == remoteEpisode.ParsedEpisodeInfo.Quality.Quality)),
+                           CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Real),
+                           CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.Quality.Revision.Version));
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)
         {
-            var result = Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            var result = CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
             {
                 var delayProfile = _delayProfileService.BestForTags(remoteEpisode.Series.Tags);
                 var downloadProtocol = remoteEpisode.Release.DownloadProtocol;
@@ -75,16 +75,16 @@ namespace NzbDrone.Core.DecisionEngine
 
         private int CompareEpisodeCount(DownloadDecision x, DownloadDecision y)
         {
-            return Compare(Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.FullSeason),
-                           CompareReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count));
+            return CompareAll(CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ParsedEpisodeInfo.FullSeason),
+                           CompareByReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Count));
         }
 
         private int CompareEpisodeNumber(DownloadDecision x, DownloadDecision y)
         {
-            return CompareReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault());
+            return CompareByReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Episodes.Select(e => e.EpisodeNumber).MinOrDefault());
         }
 
-        private int ComparePeers(DownloadDecision x, DownloadDecision y)
+        private int ComparePeersIfTorrent(DownloadDecision x, DownloadDecision y)
         {
             // Different protocols should get caught when checking the preferred protocol,
             // since we're dealing with the same series in our comparisions
@@ -94,22 +94,22 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            return Compare(
-                Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            return CompareAll(
+                CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
                 {
                     var seeders = TorrentInfo.GetSeeders(remoteEpisode.Release);
 
-                    return seeders.HasValue ? Math.Round(Math.Log10(seeders.Value)) : 0;
+                    return seeders.HasValue && seeders.Value > 0 ? Math.Round(Math.Log10(seeders.Value)) : 0;
                 }),
-                Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+                CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
                 {
                     var peers = TorrentInfo.GetPeers(remoteEpisode.Release);
 
-                    return peers.HasValue ? Math.Round(Math.Log10(peers.Value)) : 0;
+                    return peers.HasValue && peers.Value > 0 ? Math.Round(Math.Log10(peers.Value)) : 0;
                 }));
         }
 
-        private int CompareAge(DownloadDecision x, DownloadDecision y)
+        private int CompareAgeIfUsenet(DownloadDecision x, DownloadDecision y)
         {
             if (x.RemoteEpisode.Release.DownloadProtocol != DownloadProtocol.Usenet ||
                 y.RemoteEpisode.Release.DownloadProtocol != DownloadProtocol.Usenet)
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            return Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
             {
                 var ageHours = remoteEpisode.Release.AgeHours;
                 var age = remoteEpisode.Release.Age;
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.DecisionEngine
                     return 10;
                 }
 
-                return 1 - age/365;
+                return 1;
             });
         }
 
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             // TODO: Is smaller better? Smaller for usenet could mean no par2 files.
 
-            return Compare(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.Size.Round(200.Megabytes()));
+            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.Size.Round(200.Megabytes()));
         }
     }
 }

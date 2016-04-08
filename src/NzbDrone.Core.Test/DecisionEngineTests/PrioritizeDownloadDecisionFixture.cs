@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_prefer_releases_with_more_peers_given_equal_number_of_peers()
+        public void should_prefer_releases_with_more_peers_given_equal_number_of_seeds()
         {
             var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
             var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
@@ -269,6 +269,84 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             ((TorrentInfo)qualifiedReports.First().RemoteEpisode.Release).Peers.Should().Be(torrentInfo2.Peers);
+        }
+
+        [Test]
+        public void should_prefer_releases_with_more_peers_no_seeds()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+
+            var torrentInfo1 = new TorrentInfo();
+            torrentInfo1.PublishDate = DateTime.Now;
+            torrentInfo1.Size = 0;
+            torrentInfo1.DownloadProtocol = DownloadProtocol.Torrent;
+            torrentInfo1.Seeders = 0;
+            torrentInfo1.Peers = 10;
+
+
+            var torrentInfo2 = torrentInfo1.JsonClone();
+            torrentInfo2.Seeders = 0;
+            torrentInfo2.Peers = 100;
+
+            remoteEpisode1.Release = torrentInfo1;
+            remoteEpisode2.Release = torrentInfo2;
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            ((TorrentInfo)qualifiedReports.First().RemoteEpisode.Release).Peers.Should().Be(torrentInfo2.Peers);
+        }
+
+        [Test]
+        public void should_prefer_first_release_if_peers_and_size_are_too_similar()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+
+            var torrentInfo1 = new TorrentInfo();
+            torrentInfo1.PublishDate = DateTime.Now;
+            torrentInfo1.DownloadProtocol = DownloadProtocol.Torrent;
+            torrentInfo1.Seeders = 1000;
+            torrentInfo1.Peers = 10;
+            torrentInfo1.Size = 200.Megabytes();
+
+            var torrentInfo2 = torrentInfo1.JsonClone();
+            torrentInfo2.Seeders = 1100;
+            torrentInfo2.Peers = 10;
+            torrentInfo1.Size = 250.Megabytes();
+
+            remoteEpisode1.Release = torrentInfo1;
+            remoteEpisode2.Release = torrentInfo2;
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            ((TorrentInfo) qualifiedReports.First().RemoteEpisode.Release).Should().Be(torrentInfo1);
+        }
+
+        [Test]
+        public void should_prefer_first_release_if_age_and_size_are_too_similar()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+
+            remoteEpisode1.Release.PublishDate = DateTime.UtcNow.AddDays(-100);
+            remoteEpisode1.Release.Size = 200.Megabytes();
+
+            remoteEpisode2.Release.PublishDate = DateTime.UtcNow.AddDays(-150);
+            remoteEpisode2.Release.Size = 250.Megabytes();
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.Release.Should().Be(remoteEpisode1.Release);
         }
     }
 }
