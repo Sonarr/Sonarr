@@ -274,6 +274,7 @@ namespace NzbDrone.Core.Metadata
                                };
 
                 _diskProvider.CopyFile(image.Url, image.RelativePath);
+                _mediaFileAttributeService.SetFilePermissions(image.RelativePath);
 
                 result.Add(metadata);
             }
