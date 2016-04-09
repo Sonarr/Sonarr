@@ -173,7 +173,14 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
                 if (!successStatus.Contains(item.DeleteStatus) && item.DeleteStatus.IsNotNullOrWhiteSpace())
                 {
-                    historyItem.Status = DownloadItemStatus.Warning;
+                    if (item.DeleteStatus == "COPY" || item.DeleteStatus == "DUPE")
+                    {
+                        historyItem.Status = DownloadItemStatus.Failed;
+                    }
+                    else
+                    {
+                        historyItem.Status = DownloadItemStatus.Warning;
+                    }
                 }
 
                 if (item.DeleteStatus == "HEALTH")
