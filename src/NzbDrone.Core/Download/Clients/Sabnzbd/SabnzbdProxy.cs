@@ -175,8 +175,6 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 throw new DownloadClientException("Unable to connect to SABnzbd, please check your settings", ex);
             }
 
-            _logger.Trace("Response: {0}", response.Content);
-
             CheckForError(response);
 
             return response.Content;

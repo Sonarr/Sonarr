@@ -180,8 +180,6 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 throw new DownloadClientException("Unable to connect to NzbGet. " + ex.Message, ex);
             }
 
-            _logger.Trace("Response: {0}", response.Content);
-
             var result = Json.Deserialize<JsonRpcResponse<T>>(response.Content);
 
             if (result.Error != null)
