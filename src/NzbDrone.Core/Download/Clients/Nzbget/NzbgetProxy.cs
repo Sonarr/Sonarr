@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using System.Net;
+using NzbDrone.Common.Cache;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
 {
@@ -25,16 +26,76 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public NzbgetProxy(IHttpClient httpClient, Logger logger)
+        private readonly ICached<string> _versionCache;
+
+        public NzbgetProxy(IHttpClient httpClient, ICacheManager cacheManager, Logger logger)
         {
             _httpClient = httpClient;
             _logger = logger;
+
+            _versionCache = cacheManager.GetCache<string>(GetType(), "versions");
+        }
+
+        private bool HasVersion(int minimumVersion, NzbgetSettings settings)
+        {
+            var versionString = _versionCache.Find(settings.Host + ":" + settings.Port) ?? GetVersion(settings);
+
+            var version = int.Parse(versionString.Split(new[] { '.', '-' })[0]);
+
+            return version >= minimumVersion;
         }
 
         public string DownloadNzb(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
         {
-            var response = ProcessRequest<bool>(settings, "append", title, category, priority, false, nzbData);
+            if (HasVersion(16, settings))
+            {
+                var droneId = Guid.NewGuid().ToString().Replace("-", "");
+                var response = ProcessRequest<int>(settings, "append", title, nzbData, category, priority, false, false, string.Empty, 0, "all", new string[] { "drone", droneId });
+                if (response <= 0)
+                {
+                    return null;
+                }
 
+                return droneId;
+            }
+            else if (HasVersion(13, settings))
+            {
+                return DownloadNzbLegacy13(nzbData, title, category, priority, settings);
+            }
+            else
+            {
+                return DownloadNzbLegacy12(nzbData, title, category, priority, settings);
+            }
+        }
+
+        private string DownloadNzbLegacy13(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
+        {
+            var response = ProcessRequest<int>(settings, "append", title, nzbData, category, priority, false, false, string.Empty, 0, "all");
+            if (response <= 0)
+            {
+                return null;
+            }
+
+            var queue = GetQueue(settings);
+            var item = queue.FirstOrDefault(q => q.NzbId == response);
+
+            if (item == null)
+            {
+                return null;
+            }
+
+            var droneId = Guid.NewGuid().ToString().Replace("-", "");
+            var editResult = EditQueue("GroupSetParameter", 0, "drone=" + droneId, item.NzbId, settings);
+            if (editResult)
+            {
+                _logger.Debug("Nzbget download drone parameter set to: {0}", droneId);
+            }
+
+            return droneId;
+        }
+        private string DownloadNzbLegacy12(byte[] nzbData, string title, string category, int priority, NzbgetSettings settings)
+        {
+            var response = ProcessRequest<bool>(settings, "append", title, category, priority, false, nzbData);
             if (!response)
             {
                 return null;
@@ -76,7 +137,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         public string GetVersion(NzbgetSettings settings)
         {
-            return ProcessRequest<string>(settings, "version");
+            var response = ProcessRequest<string>(settings, "version");
+
+            _versionCache.Set(settings.Host + ":" + settings.Port, response, TimeSpan.FromDays(1));
+
+            return response;
         }
 
         public Dictionary<string, string> GetConfig(NzbgetSettings settings)
