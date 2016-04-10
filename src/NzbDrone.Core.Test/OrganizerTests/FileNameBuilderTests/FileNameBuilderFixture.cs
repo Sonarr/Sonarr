@@ -703,13 +703,13 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
-        public void should_use_Sonarr_as_release_group_when_not_available()
+        public void should_not_use_anything_as_release_group_when_not_available()
         {
             _episodeFile.ReleaseGroup = null;
             _namingConfig.StandardEpisodeFormat = "{Release Group}";
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be("Sonarr");
+                   .Should().Be(string.Empty);
         }
 
         [TestCase("{Episode Title}{-Release Group}", "City Sushi")]
