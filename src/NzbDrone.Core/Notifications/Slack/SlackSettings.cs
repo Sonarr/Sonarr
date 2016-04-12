@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Slack
         public SlackSettingsValidator()
         {
             RuleFor(c => c.WebHookUrl).IsValidUrl();
-            RuleFor(c => c.BotName).NotEmpty();
+            RuleFor(c => c.Username).NotEmpty();
             RuleFor(c => c.Icon).NotEmpty();
         }
     }
@@ -19,13 +19,13 @@ namespace NzbDrone.Core.Notifications.Slack
     {
         private static readonly SlackSettingsValidator Validator = new SlackSettingsValidator();
 
-        [FieldDefinition(0, Label = "WebHookUrl", HelpText = "slack channel webhook url.", Type = FieldType.Url, HelpLink = "https://my.slack.com/services/new/incoming-webhook/")]
+        [FieldDefinition(0, Label = "Webhook URL", HelpText = "Slack channel webhook url", Type = FieldType.Url, HelpLink = "https://my.slack.com/services/new/incoming-webhook/")]
         public string WebHookUrl { get; set; }
 
-        [FieldDefinition(1, Label = "BotName", HelpText = "Name to be used for the notification.",Type = FieldType.Textbox)]
-        public string BotName { get; set; }
+        [FieldDefinition(1, Label = "Username", HelpText = "Choose the username that this integration will post as", Type = FieldType.Textbox)]
+        public string Username { get; set; }
 
-        [FieldDefinition(2, Label = "Icon", HelpText = "Icon to use.", Type = FieldType.Textbox, HelpLink = "http://www.emoji-cheat-sheet.com/")]
+        [FieldDefinition(2, Label = "Icon", HelpText = "Change the icon that is used for messages from this integration", Type = FieldType.Textbox, HelpLink = "http://www.emoji-cheat-sheet.com/")]
         public string Icon { get; set; }
 
         public NzbDroneValidationResult Validate()

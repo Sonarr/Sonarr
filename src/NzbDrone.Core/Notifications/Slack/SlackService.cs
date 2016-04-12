@@ -30,18 +30,17 @@ namespace NzbDrone.Core.Notifications.Slack
 
         public void OnDownload(DownloadMessage message, SlackSettings settings)
         {
-            var payload = new SlackPayload()
+            var payload = new SlackPayload
             {
                 IconEmoji = settings.Icon,
-                Username = settings.BotName,
+                Username = settings.Username,
                 Text = "Downloaded",
-                Attachments = new List<Attachment>()
+                Attachments = new List<Attachment>
                 {
                     new Attachment()
                     {
                         Fallback = message.Message,
                         Title = message.Series.Title,
-                        TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
                         Text = message.Message,
                         Color = "good"
                     }
@@ -53,17 +52,16 @@ namespace NzbDrone.Core.Notifications.Slack
 
         public void OnRename(Series series, SlackSettings settings)
         {
-            var payload = new SlackPayload()
+            var payload = new SlackPayload
             {
                 IconEmoji = settings.Icon,
-                Username = settings.BotName,
+                Username = settings.Username,
                 Text = "Renamed",
-                Attachments = new List<Attachment>()
+                Attachments = new List<Attachment>
                 {
-                    new Attachment()
+                    new Attachment
                     {
                         Title = series.Title,
-                        TitleLink = $"http://www.imdb.com/title/{series.ImdbId}/",
                     }
                 }
             };
@@ -73,18 +71,17 @@ namespace NzbDrone.Core.Notifications.Slack
 
         public void OnGrab(GrabMessage message, SlackSettings settings)
         {
-            var payload = new SlackPayload()
+            var payload = new SlackPayload
             {
                 IconEmoji = settings.Icon,
-                Username = settings.BotName,
+                Username = settings.Username,
                 Text = "Grabbed",
-                Attachments = new List<Attachment>()
+                Attachments = new List<Attachment>
                 {
-                    new Attachment()
+                    new Attachment
                     {
                         Fallback = message.Message,
                         Title = message.Series.Title,
-                        TitleLink = $"http://www.imdb.com/title/{message.Series.ImdbId}/",
                         Text = message.Message,
                         Color = "warning"
                     }
@@ -98,20 +95,22 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             try
             {
-                var message = string.Format("Test message from Sonarr posted at {0}", DateTime.Now);
-                var payload = new SlackPayload()
+                var message = $"Test message from Sonarr posted at {DateTime.Now}";
+                var payload = new SlackPayload
                 {
                     IconEmoji = settings.Icon,
-                    Username = settings.BotName,
+                    Username = settings.Username,
                     Text = message
                 };
 
                 NotifySlack(payload, settings);
+                
             }
             catch (SlackExeption ex)
             {
                 return new NzbDroneValidationFailure("Unable to post", ex.Message);
             }
+
             return null;
         }
 
