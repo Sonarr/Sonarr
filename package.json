@@ -12,7 +12,7 @@
     "url": "git://github.com/Sonarr/Sonarr.git"
   },
   "author": "",
-  "license": "BSD",
+  "license": "GPL-3.0",
   "gitHead": "9ff7aa1bf7fe38c4c5bdb92f56c8ad556916ed67",
   "readmeFilename": "readme.md",
   "dependencies": {
