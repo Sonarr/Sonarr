@@ -39,8 +39,10 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         // Deluge
         [TestCase(@",{""download_location"": ""C:\Users\\mySecret mySecret\\Downloads""}")]
         [TestCase(@",{""download_location"": ""/home/mySecret/Downloads""}")]
+        [TestCase(@"auth.login(""mySecret"")")]
         // BroadcastheNet
         [TestCase(@"method: ""getTorrents"", ""params"": [ ""mySecret"",")]
+        [TestCase(@"getTorrents(""mySecret"", [asdfasdf], 100, 0)")]
         [TestCase(@"""DownloadURL"":""https:\/\/broadcasthe.net\/torrents.php?action=download&id=123&authkey=mySecret&torrent_pass=mySecret""")]
         public void should_clean_message(string message)
         {
