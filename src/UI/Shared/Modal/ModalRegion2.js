@@ -16,6 +16,14 @@ var region = ModalRegionBase.extend({
         this.$el.on('shown.bs.modal', function() {
             $('.modal-backdrop:last').css('z-index', 1059);
         });
+    },
+
+    _closed : function () {
+        ModalRegionBase.prototype._closed.apply(this, arguments);
+
+        if (require('../../AppLayout').modalRegion.currentView) {
+            $('body').addClass('modal-open');
+        }
     }
 });
 

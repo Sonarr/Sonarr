@@ -31,6 +31,7 @@ var region = Marionette.Region.extend({
         });
 
         this.$el.on('hide.bs.modal', $.proxy(this._closing, this));
+        this.$el.on('hidden.bs.modal', $.proxy(this._closed, this));
 
         this.currentView.$el.addClass('modal-dialog');
 
@@ -52,6 +53,12 @@ var region = Marionette.Region.extend({
         }
 
         this.reset();
+    },
+
+    _closed: function () {
+        if (this.$el) {
+            this.$el.off('hidden.bs.modal');
+        }
     }
 });
 
