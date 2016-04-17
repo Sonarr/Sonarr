@@ -96,6 +96,9 @@ namespace NzbDrone.Core.DecisionEngine
                 catch (Exception e)
                 {
                     _logger.Error(e, "Couldn't process release.");
+
+                    var remoteEpisode = new RemoteEpisode { Release = report };
+                    decision = new DownloadDecision(remoteEpisode, new Rejection("Unexpected error processing release"));
                 }
 
                 reportNumber++;

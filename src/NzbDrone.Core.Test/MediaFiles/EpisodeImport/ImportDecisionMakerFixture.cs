@@ -385,5 +385,24 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             result.Single().LocalEpisode.Quality.Should().Be(_quality);
         }
+
+        [Test]
+        public void should_return_a_decision_when_exception_is_caught()
+        {
+            Mocker.GetMock<IParsingService>()
+                  .Setup(c => c.GetLocalEpisode(It.IsAny<string>(), It.IsAny<Series>(), It.IsAny<ParsedEpisodeInfo>(), It.IsAny<bool>()))
+                  .Throws<TestException>();
+
+            _videoFiles = new List<string>
+                {
+                    "The.Office.S03E115.DVDRip.XviD-OSiTV"
+                };
+
+            GivenVideoFiles(_videoFiles);
+
+            Subject.GetImportDecisions(_videoFiles, _series).Should().HaveCount(1);
+
+            ExceptionVerification.ExpectedErrors(1);
+        }
     }
 }

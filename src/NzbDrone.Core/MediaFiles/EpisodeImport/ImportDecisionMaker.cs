@@ -112,6 +112,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             catch (Exception e)
             {
                 _logger.Error(e, "Couldn't import file. " + file);
+
+                var localEpisode = new LocalEpisode { Path = file };
+                decision = new ImportDecision(localEpisode, new Rejection("Unexpected error processing file"));
             }
 
             return decision;
