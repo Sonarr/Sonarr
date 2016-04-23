@@ -7,6 +7,7 @@
         Paused,
         Checking,
         Downloading,
+        ToPP,
         QuickCheck,
         Verifying,
         Repairing,
@@ -15,6 +16,7 @@
         Moving,
         Running,        // Running PP Script
         Completed,
-        Failed
+        Failed,
+        Deleted
     }
 }

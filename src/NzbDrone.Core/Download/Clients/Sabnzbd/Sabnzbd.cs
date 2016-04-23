@@ -65,6 +65,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             foreach (var sabQueueItem in sabQueue.Items)
             {
+                if (sabQueueItem.Status == SabnzbdDownloadStatus.Deleted)
+                {
+                    continue;
+                }
+
                 var queueItem = new DownloadClientItem();
                 queueItem.DownloadClient = Definition.Name;
                 queueItem.DownloadId = sabQueueItem.Id;
@@ -119,6 +124,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             foreach (var sabHistoryItem in sabHistory.Items)
             {
+                if (sabHistoryItem.Status == SabnzbdDownloadStatus.Deleted)
+                {
+                    continue;
+                }
+
                 var historyItem = new DownloadClientItem
                 {
                     DownloadClient = Definition.Name,

@@ -188,6 +188,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         [TestCase(SabnzbdDownloadStatus.Checking)]
         [TestCase(SabnzbdDownloadStatus.Downloading)]
         [TestCase(SabnzbdDownloadStatus.QuickCheck)]
+        [TestCase(SabnzbdDownloadStatus.ToPP)]
         [TestCase(SabnzbdDownloadStatus.Verifying)]
         [TestCase(SabnzbdDownloadStatus.Repairing)]
         [TestCase(SabnzbdDownloadStatus.Fetching)]
@@ -229,6 +230,28 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             var result = Subject.GetItems().Single();
 
             VerifyFailed(result);
+        }
+
+        [Test]
+        public void deleted_queue_item_should_be_ignored()
+        {
+            _queued.Items.First().Status = SabnzbdDownloadStatus.Deleted;
+
+            GivenQueue(_queued);
+            GivenHistory(null);
+
+            Subject.GetItems().Should().BeEmpty();
+        }
+
+        [Test]
+        public void deleted_history_item_should_be_ignored()
+        {
+            _completed.Items.First().Status = SabnzbdDownloadStatus.Deleted;
+
+            GivenQueue(null);
+            GivenHistory(_completed);
+
+            Subject.GetItems().Should().BeEmpty();
         }
 
         [TestCase("[ TOWN ]-[ http://www.town.ag ]-[ ANIME ]-[Usenet Provider >> http://www.ssl- <<] - [Commie] Aldnoah Zero 18 [234C8FC7]", "[ TOWN ]-[ http-++www.town.ag ]-[ ANIME ]-[Usenet Provider  http-++www.ssl- ] - [Commie] Aldnoah Zero 18 [234C8FC7].nzb")]
