@@ -32,7 +32,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     return new HealthCheck(GetType(), HealthCheckResult.Error, "Failed to resolve the IP Address for the Configured Proxy Host:  " + _configService.ProxyHostname);
                 }
 
-                var request = new HttpRequestBuilder("https://services.sonarr.tv/").Build("/ping");
+                var request = new HttpRequestBuilder("https://services.sonarr.tv/ping").Build();
 
                 try
                 {

@@ -76,7 +76,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                         return s * n;
                     };
 
-                    if(request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(request.Url))
+                    if(request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(new Uri(request.Url.FullUri)))
                     
                     {
                         switch (request.Proxy.Type)

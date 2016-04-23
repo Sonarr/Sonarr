@@ -29,7 +29,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                 webRequest.Timeout = (int)Math.Ceiling(request.RequestTimeout.TotalMilliseconds);
             }
 
-            if (request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(request.Url))
+            if (request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(new Uri(request.Url.FullUri)))
             {
                 var addresses = Dns.GetHostAddresses(request.Proxy.Host);
                 var socksUsername = request.Proxy.Username == null ? string.Empty : request.Proxy.Username;
