@@ -120,8 +120,8 @@ namespace NzbDrone.Core.Notifications.Plex
 
         private string Authenticate(PlexServerSettings settings)
         {
-            var request = GetMyPlexRequest("users/sign_in.json", Method.POST);
-            var client = GetMyPlexClient(settings.Username, settings.Password); 
+            var request = GetPlexTvRequest("users/sign_in.json", Method.POST);
+            var client = GetPlexTvClient(settings.Username, settings.Password); 
 
             var response = client.Execute(request);
 
@@ -133,15 +133,15 @@ namespace NzbDrone.Core.Notifications.Plex
             return user.AuthenticationToken;
         }
 
-        private RestClient GetMyPlexClient(string username, string password)
+        private RestClient GetPlexTvClient(string username, string password)
         {
-            var client = RestClientFactory.BuildClient("https://my.plexapp.com");
+            var client = RestClientFactory.BuildClient("https://plex.tv");
             client.Authenticator = new HttpBasicAuthenticator(username, password);
 
             return client;
         }
 
-        private RestRequest GetMyPlexRequest(string resource, Method method)
+        private RestRequest GetPlexTvRequest(string resource, Method method)
         {
             var request = new RestRequest(resource, method);
             request.AddHeader("X-Plex-Platform", "Windows");
