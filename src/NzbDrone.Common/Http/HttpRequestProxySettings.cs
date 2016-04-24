@@ -12,6 +12,8 @@ namespace NzbDrone.Common.Http
             Port = port;
             Username = username;
             Password = password;
+            SubnetFilter = filterSubnet;
+            BypassLocalAddress = bypassLocalAddress;
         }
 
         public ProxyType Type { get; private set; }

@@ -4,6 +4,7 @@ using NzbDrone.Common.Extensions;
 using com.LandonKey.SocksWebProxy.Proxy;
 using com.LandonKey.SocksWebProxy;
 using System.Net.Sockets;
+using System.Linq;
 
 namespace NzbDrone.Common.Http.Dispatchers
 {
@@ -31,7 +32,14 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             if (request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(new Uri(request.Url.FullUri)))
             {
-                var addresses = Dns.GetHostAddresses(request.Proxy.Host);
+                var proxyHost = request.Proxy.Host;
+                if(request.Proxy.Host == "localhost")
+                {
+                    proxyHost = "127.0.0.1";
+                }
+
+                var addresses = Dns.GetHostAddresses(proxyHost);
+
                 var socksUsername = request.Proxy.Username == null ? string.Empty : request.Proxy.Username;
                 var socksPassword = request.Proxy.Password == null ? string.Empty : request.Proxy.Password;
 

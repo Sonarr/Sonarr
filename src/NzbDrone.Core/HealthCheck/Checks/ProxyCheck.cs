@@ -27,7 +27,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             if (_configService.ProxyEnabled)
             {
                 var addresses = Dns.GetHostAddresses(_configService.ProxyHostname);
-                if(addresses.Length != 1)
+                if(!addresses.Any())
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Error, "Failed to resolve the IP Address for the Configured Proxy Host:  " + _configService.ProxyHostname);
                 }
