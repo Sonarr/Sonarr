@@ -32,13 +32,16 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             if (request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(new Uri(request.Url.FullUri)))
             {
-                var proxyHost = request.Proxy.Host;
-                if(request.Proxy.Host == "localhost")
-                {
-                    proxyHost = "127.0.0.1";
-                }
+                var addresses = Dns.GetHostAddresses(request.Proxy.Host);
 
-                var addresses = Dns.GetHostAddresses(proxyHost);
+                if(addresses.Length > 1)
+                {
+                    var ipv4Only = addresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
+                    if (ipv4Only.Any())
+                    {
+                        addresses = ipv4Only.ToArray();
+                    }
+                }
 
                 var socksUsername = request.Proxy.Username == null ? string.Empty : request.Proxy.Username;
                 var socksPassword = request.Proxy.Password == null ? string.Empty : request.Proxy.Password;
