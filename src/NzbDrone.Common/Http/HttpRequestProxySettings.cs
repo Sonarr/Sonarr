@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Net;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http
 {
     public class HttpRequestProxySettings
     {
-        public HttpRequestProxySettings(ProxyType type, string host, int port, string filterSubnet, bool bypassLocalAddress, string username = null, string password = null)
+        public HttpRequestProxySettings(ProxyType type, string host, int port, string bypassFilter, bool bypassLocalAddress, string username = null, string password = null)
         {
             Type = type;
-            Host = host;
+            Host = host.IsNullOrWhiteSpace() ? "127.0.0.1" : host;
             Port = port;
-            Username = username;
-            Password = password;
-            SubnetFilter = filterSubnet;
+            Username = username ?? string.Empty;
+            Password = password ?? string.Empty;
+            BypassFilter = bypassFilter ?? string.Empty;
             BypassLocalAddress = bypassLocalAddress;
         }
 
@@ -21,27 +22,34 @@ namespace NzbDrone.Common.Http
         public int Port { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
-        public string SubnetFilter { get; private set; }
+        public string BypassFilter { get; private set; }
         public bool BypassLocalAddress { get; private set; }
 
         public string[] SubnetFilterAsArray
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(SubnetFilter))
+                if (!string.IsNullOrWhiteSpace(BypassFilter))
                 {
-                    return SubnetFilter.Split(';');
+                    return BypassFilter.Split(';');
                 }
                 return new string[] { };
             }
         }
 
-        public bool ShouldProxyBeBypassed(Uri url)
+        public string Key
         {
-            //We are utilising the WebProxy implementation here to save us having to reimplement it. This way we use Microsofts implementation
-            WebProxy proxy = new WebProxy(Host + ":" + Port, BypassLocalAddress, SubnetFilterAsArray);
-
-            return proxy.IsBypassed(url);
+            get
+            {
+                return string.Join("_",
+                    Type,
+                    Host,
+                    Port,
+                    Username,
+                    Password,
+                    BypassFilter,
+                    BypassLocalAddress);
+            }
         }
     }
 }

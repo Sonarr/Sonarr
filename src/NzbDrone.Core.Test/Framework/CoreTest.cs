@@ -3,6 +3,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.Common.TPL;
 using NzbDrone.Test.Common;
 
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Test.Framework
         protected void UseRealHttp()
         {
             Mocker.SetConstant<IHttpProvider>(new HttpProvider(TestLogger));
-            Mocker.SetConstant<IHttpClient>(new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<CacheManager>(), Mocker.Resolve<RateLimitService>(), TestLogger));
+            Mocker.SetConstant<IHttpClient>(new HttpClient(new IHttpRequestInterceptor[0], Mocker.Resolve<CacheManager>(), Mocker.Resolve<RateLimitService>(), Mocker.Resolve<FallbackHttpDispatcher>(), TestLogger));
             Mocker.SetConstant<ISonarrCloudRequestBuilder>(new SonarrCloudRequestBuilder());
         }
     }

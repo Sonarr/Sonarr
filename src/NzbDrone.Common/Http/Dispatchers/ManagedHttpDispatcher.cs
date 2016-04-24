@@ -4,12 +4,22 @@ using NzbDrone.Common.Extensions;
 using com.LandonKey.SocksWebProxy.Proxy;
 using com.LandonKey.SocksWebProxy;
 using System.Net.Sockets;
-using System.Linq;
 
 namespace NzbDrone.Common.Http.Dispatchers
 {
     public class ManagedHttpDispatcher : IHttpDispatcher
     {
+        private readonly IHttpProxySettingsProvider _proxySettingsProvider;
+
+        private readonly ICached<IWebProxy> _webProxyCache;
+
+        public ManagedHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider, ICacheManager cacheManager)
+        {
+            _proxySettingsProvider = proxySettingsProvider;
+
+            _webProxyCache = cacheManager.GetCache<IWebProxy>(GetType(), "webProxy");
+        }
+
         public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
         {
             var webRequest = (HttpWebRequest)WebRequest.Create((Uri)request.Url);
@@ -30,42 +40,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                 webRequest.Timeout = (int)Math.Ceiling(request.RequestTimeout.TotalMilliseconds);
             }
 
-            if (request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(new Uri(request.Url.FullUri)))
-            {
-                var addresses = Dns.GetHostAddresses(request.Proxy.Host);
-
-                if(addresses.Length > 1)
-                {
-                    var ipv4Only = addresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
-                    if (ipv4Only.Any())
-                    {
-                        addresses = ipv4Only.ToArray();
-                    }
-                }
-
-                var socksUsername = request.Proxy.Username == null ? string.Empty : request.Proxy.Username;
-                var socksPassword = request.Proxy.Password == null ? string.Empty : request.Proxy.Password;
-
-                switch (request.Proxy.Type)
-                {
-                    case ProxyType.Http:
-                        if(request.Proxy.Username.IsNotNullOrWhiteSpace() && request.Proxy.Password.IsNotNullOrWhiteSpace())
-                        {
-                            webRequest.Proxy = new WebProxy(request.Proxy.Host + ":" + request.Proxy.Port, request.Proxy.BypassLocalAddress, request.Proxy.SubnetFilterAsArray, new NetworkCredential(request.Proxy.Username, request.Proxy.Password));
-                        }
-                        else
-                        {
-                            webRequest.Proxy = new WebProxy(request.Proxy.Host + ":" + request.Proxy.Port, request.Proxy.BypassLocalAddress, request.Proxy.SubnetFilterAsArray);
-                        }
-                        break;
-                    case ProxyType.Socks4:
-                        webRequest.Proxy = new SocksWebProxy(new ProxyConfig(IPAddress.Parse("127.0.0.1"), GetNextFreePort(), addresses[0], request.Proxy.Port, ProxyConfig.SocksVersion.Four, socksUsername, socksPassword), false);
-                        break;
-                    case ProxyType.Socks5:
-                        webRequest.Proxy = new SocksWebProxy(new ProxyConfig(IPAddress.Parse("127.0.0.1"), GetNextFreePort(), addresses[0], request.Proxy.Port, ProxyConfig.SocksVersion.Five, socksUsername, socksPassword), false);
-                        break;
-                }                
-            }
+            AddProxy(webRequest, request);
 
             if (request.Headers != null)
             {
@@ -108,6 +83,50 @@ namespace NzbDrone.Common.Http.Dispatchers
             }
 
             return new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
+        }
+
+        protected virtual void AddProxy(HttpWebRequest webRequest, HttpRequest request)
+        {
+            var proxySettings = _proxySettingsProvider.GetProxySettings(request);
+            if (proxySettings != null)
+            {
+                webRequest.Proxy = _webProxyCache.Get(proxySettings.Key, () => CreateWebProxy(proxySettings), TimeSpan.FromMinutes(5));
+            }
+
+            _webProxyCache.ClearExpired();
+        }
+
+        private IWebProxy CreateWebProxy(HttpRequestProxySettings proxySettings)
+        {
+            var addresses = Dns.GetHostAddresses(proxySettings.Host);
+
+            if(addresses.Length > 1)
+            {
+                var ipv4Only = addresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
+                if (ipv4Only.Any())
+                {
+                    addresses = ipv4Only.ToArray();
+                }
+            }
+
+            switch (proxySettings.Type)
+            {
+                case ProxyType.Http:
+                    if (proxySettings.Username.IsNotNullOrWhiteSpace() && proxySettings.Password.IsNotNullOrWhiteSpace())
+                    {
+                        return new WebProxy(proxySettings.Host + ":" + proxySettings.Port, proxySettings.BypassLocalAddress, proxySettings.SubnetFilterAsArray, new NetworkCredential(proxySettings.Username, proxySettings.Password));
+                    }
+                    else
+                    {
+                        return new WebProxy(proxySettings.Host + ":" + proxySettings.Port, proxySettings.BypassLocalAddress, proxySettings.SubnetFilterAsArray);
+                    }
+                case ProxyType.Socks4:
+                    return new SocksWebProxy(new ProxyConfig(IPAddress.Loopback, GetNextFreePort(), addresses[0], proxySettings.Port, ProxyConfig.SocksVersion.Four, proxySettings.Username, proxySettings.Password), false);
+                case ProxyType.Socks5:
+                    return new SocksWebProxy(new ProxyConfig(IPAddress.Loopback, GetNextFreePort(), addresses[0], proxySettings.Port, ProxyConfig.SocksVersion.Five, proxySettings.Username, proxySettings.Password), false);
+            }
+
+            return null;
         }
 
         protected virtual void AddRequestHeaders(HttpWebRequest webRequest, HttpHeader headers)

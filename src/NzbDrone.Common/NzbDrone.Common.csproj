@@ -171,6 +171,7 @@
     <Compile Include="Http\HttpRequestProxySettings.cs" />
     <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\HttpUri.cs" />
+    <Compile Include="Http\IHttpProxySettingsProvider.cs" />
     <Compile Include="Http\IHttpRequestInterceptor.cs" />
     <Compile Include="Http\JsonRpcRequestBuilder.cs" />
     <Compile Include="Http\JsonRpcResponse.cs" />

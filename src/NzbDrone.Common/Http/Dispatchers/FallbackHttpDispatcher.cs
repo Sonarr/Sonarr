@@ -8,17 +8,18 @@ namespace NzbDrone.Common.Http.Dispatchers
 {
     public class FallbackHttpDispatcher : IHttpDispatcher
     {
-        private readonly Logger _logger;
-        private readonly ICached<bool> _curlTLSFallbackCache;
         private readonly ManagedHttpDispatcher _managedDispatcher;
         private readonly CurlHttpDispatcher _curlDispatcher;
+        private readonly Logger _logger;
 
-        public FallbackHttpDispatcher(ICached<bool> curlTLSFallbackCache, Logger logger)
+        private readonly ICached<bool> _curlTLSFallbackCache;
+
+        public FallbackHttpDispatcher(ManagedHttpDispatcher managedDispatcher, CurlHttpDispatcher curlDispatcher, ICacheManager cacheManager, Logger logger)
         {
+            _managedDispatcher = managedDispatcher;
+            _curlDispatcher = curlDispatcher;
+            _curlTLSFallbackCache = cacheManager.GetCache<bool>(GetType(), "curlTLSFallback");
             _logger = logger;
-            _curlTLSFallbackCache = curlTLSFallbackCache;
-            _managedDispatcher = new ManagedHttpDispatcher();
-            _curlDispatcher = new CurlHttpDispatcher();
         }
 
         public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
@@ -46,7 +47,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                     }
                 }
 
-                if (CurlHttpDispatcher.CheckAvailability())
+                if (_curlDispatcher.CheckAvailability())
                 {
                     return _curlDispatcher.GetResponse(request, cookies);
                 }

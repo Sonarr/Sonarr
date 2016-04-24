@@ -20,7 +20,8 @@ namespace NzbDrone.Common.Http.Dispatchers
     {
         private static readonly Regex ExpiryDate = new Regex(@"(expires=)([^;]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly Logger _logger = NzbDroneLogger.GetLogger(typeof(CurlHttpDispatcher));
+        private readonly IHttpProxySettingsProvider _proxySettingsProvider;
+        private readonly Logger _logger;
 
         private const string _caBundleFileName = "curl-ca-bundle.crt";
         private static readonly string _caBundleFilePath;
@@ -36,8 +37,14 @@ namespace NzbDrone.Common.Http.Dispatchers
                 _caBundleFilePath = _caBundleFileName;
             }
         }
+        
+        public CurlHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider, Logger logger)
+        {
+            _proxySettingsProvider = proxySettingsProvider;
+            _logger = logger;
+        }
 
-        public static bool CheckAvailability()
+        public bool CheckAvailability()
         {
             try
             {
@@ -76,32 +83,10 @@ namespace NzbDrone.Common.Http.Dispatchers
                         return s * n;
                     };
 
-                    if(request.Proxy != null && !request.Proxy.ShouldProxyBeBypassed(new Uri(request.Url.FullUri)))
-                    
-                    {
-                        switch (request.Proxy.Type)
-                        {
-                            case ProxyType.Http:
-                                curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Http);
-                                curlEasy.SetOpt(CurlOption.ProxyAuth, CurlHttpAuth.Basic);
-                                curlEasy.SetOpt(CurlOption.ProxyUserPwd, request.Proxy.Username + ":" + request.Proxy.Password.ToString());
-                                break;
-                            case ProxyType.Socks4:
-                                curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Socks4);
-                                curlEasy.SetOpt(CurlOption.ProxyUsername, request.Proxy.Username);
-                                curlEasy.SetOpt(CurlOption.ProxyPassword, request.Proxy.Password);
-                                break;
-                            case ProxyType.Socks5:
-                                curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Socks5);
-                                curlEasy.SetOpt(CurlOption.ProxyUsername, request.Proxy.Username);
-                                curlEasy.SetOpt(CurlOption.ProxyPassword, request.Proxy.Password);
-                                break;
-                        }
-                        curlEasy.SetOpt(CurlOption.Proxy, request.Proxy.Host + ":" + request.Proxy.Port.ToString());
-                    }
-                    
+                    AddProxy(curlEasy, request);
+
                     curlEasy.Url = request.Url.FullUri;
-                    
+
                     switch (request.Method)
                     {
                         case HttpMethod.GET:
@@ -171,6 +156,34 @@ namespace NzbDrone.Common.Http.Dispatchers
 
                     return new HttpResponse(request, httpHeader, responseData, (HttpStatusCode)curlEasy.ResponseCode);
                 }
+            }
+        }
+
+        private void AddProxy(CurlEasy curlEasy, HttpRequest request)
+        {
+            var proxySettings = _proxySettingsProvider.GetProxySettings(request);
+            if (proxySettings != null)
+
+            {
+                switch (proxySettings.Type)
+                {
+                    case ProxyType.Http:
+                        curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Http);
+                        curlEasy.SetOpt(CurlOption.ProxyAuth, CurlHttpAuth.Basic);
+                        curlEasy.SetOpt(CurlOption.ProxyUserPwd, proxySettings.Username + ":" + proxySettings.Password.ToString());
+                        break;
+                    case ProxyType.Socks4:
+                        curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Socks4);
+                        curlEasy.SetOpt(CurlOption.ProxyUsername, proxySettings.Username);
+                        curlEasy.SetOpt(CurlOption.ProxyPassword, proxySettings.Password);
+                        break;
+                    case ProxyType.Socks5:
+                        curlEasy.SetOpt(CurlOption.ProxyType, CurlProxyType.Socks5);
+                        curlEasy.SetOpt(CurlOption.ProxyUsername, proxySettings.Username);
+                        curlEasy.SetOpt(CurlOption.ProxyPassword, proxySettings.Password);
+                        break;
+                }
+                curlEasy.SetOpt(CurlOption.Proxy, proxySettings.Host + ":" + proxySettings.Port.ToString());
             }
         }
 
