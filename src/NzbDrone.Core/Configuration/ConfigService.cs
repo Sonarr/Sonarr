@@ -7,8 +7,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Http;
-using NzbDrone.Common.Http;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -344,7 +343,7 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("ProxyPassword", string.Empty); }
         }
 
-        public string ProxySubnetFilter
+        public string ProxyBypassFilter
         {
             get { return GetValue("ProxySubnetFilter", string.Empty); }
         }

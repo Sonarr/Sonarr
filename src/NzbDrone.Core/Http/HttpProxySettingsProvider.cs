@@ -1,11 +1,8 @@
-﻿using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Net;
-using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Http.Proxy;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Http
 {
@@ -18,17 +15,17 @@ namespace NzbDrone.Core.Http
             _configService = configService;
         }
 
-        public HttpRequestProxySettings GetProxySettings(HttpRequest request)
+        public HttpProxySettings GetProxySettings(HttpRequest request)
         {
             if (!_configService.ProxyEnabled)
             {
                 return null;
             }
             
-            var proxySettings = new HttpRequestProxySettings(_configService.ProxyType,
+            var proxySettings = new HttpProxySettings(_configService.ProxyType,
                                 _configService.ProxyHostname,
                                 _configService.ProxyPort,
-                                _configService.ProxySubnetFilter,
+                                _configService.ProxyBypassFilter,
                                 _configService.ProxyBypassLocalAddresses,
                                 _configService.ProxyUsername,
                                 _configService.ProxyPassword);
@@ -41,7 +38,7 @@ namespace NzbDrone.Core.Http
             return proxySettings;
         }
 
-        public bool ShouldProxyBeBypassed(HttpRequestProxySettings proxySettings, HttpUri url)
+        public bool ShouldProxyBeBypassed(HttpProxySettings proxySettings, HttpUri url)
         {
             //We are utilising the WebProxy implementation here to save us having to reimplement it. This way we use Microsofts implementation
             var proxy = new WebProxy(proxySettings.Host + ":" + proxySettings.Port, proxySettings.BypassLocalAddress, proxySettings.SubnetFilterAsArray);

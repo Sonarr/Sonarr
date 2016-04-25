@@ -4,20 +4,20 @@ using NzbDrone.Common.Extensions;
 using com.LandonKey.SocksWebProxy.Proxy;
 using com.LandonKey.SocksWebProxy;
 using System.Net.Sockets;
+using System.Linq;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Common.Http.Dispatchers
 {
     public class ManagedHttpDispatcher : IHttpDispatcher
     {
         private readonly IHttpProxySettingsProvider _proxySettingsProvider;
+        private readonly ICreateManagedWebProxy _createManagedWebProxy;
 
-        private readonly ICached<IWebProxy> _webProxyCache;
-
-        public ManagedHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider, ICacheManager cacheManager)
+        public ManagedHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider, ICreateManagedWebProxy createManagedWebProxy)
         {
             _proxySettingsProvider = proxySettingsProvider;
-
-            _webProxyCache = cacheManager.GetCache<IWebProxy>(GetType(), "webProxy");
+            _createManagedWebProxy = createManagedWebProxy;
         }
 
         public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
@@ -90,45 +90,10 @@ namespace NzbDrone.Common.Http.Dispatchers
             var proxySettings = _proxySettingsProvider.GetProxySettings(request);
             if (proxySettings != null)
             {
-                webRequest.Proxy = _webProxyCache.Get(proxySettings.Key, () => CreateWebProxy(proxySettings), TimeSpan.FromMinutes(5));
+                webRequest.Proxy = _createManagedWebProxy.GetWebProxy(proxySettings);
             }
-
-            _webProxyCache.ClearExpired();
         }
-
-        private IWebProxy CreateWebProxy(HttpRequestProxySettings proxySettings)
-        {
-            var addresses = Dns.GetHostAddresses(proxySettings.Host);
-
-            if(addresses.Length > 1)
-            {
-                var ipv4Only = addresses.Where(a => a.AddressFamily == AddressFamily.InterNetwork);
-                if (ipv4Only.Any())
-                {
-                    addresses = ipv4Only.ToArray();
-                }
-            }
-
-            switch (proxySettings.Type)
-            {
-                case ProxyType.Http:
-                    if (proxySettings.Username.IsNotNullOrWhiteSpace() && proxySettings.Password.IsNotNullOrWhiteSpace())
-                    {
-                        return new WebProxy(proxySettings.Host + ":" + proxySettings.Port, proxySettings.BypassLocalAddress, proxySettings.SubnetFilterAsArray, new NetworkCredential(proxySettings.Username, proxySettings.Password));
-                    }
-                    else
-                    {
-                        return new WebProxy(proxySettings.Host + ":" + proxySettings.Port, proxySettings.BypassLocalAddress, proxySettings.SubnetFilterAsArray);
-                    }
-                case ProxyType.Socks4:
-                    return new SocksWebProxy(new ProxyConfig(IPAddress.Loopback, GetNextFreePort(), addresses[0], proxySettings.Port, ProxyConfig.SocksVersion.Four, proxySettings.Username, proxySettings.Password), false);
-                case ProxyType.Socks5:
-                    return new SocksWebProxy(new ProxyConfig(IPAddress.Loopback, GetNextFreePort(), addresses[0], proxySettings.Port, ProxyConfig.SocksVersion.Five, proxySettings.Username, proxySettings.Password), false);
-            }
-
-            return null;
-        }
-
+        
         protected virtual void AddRequestHeaders(HttpWebRequest webRequest, HttpHeader headers)
         {
             foreach (var header in headers)
@@ -176,16 +141,6 @@ namespace NzbDrone.Common.Http.Dispatchers
                         break;
                 }
             }
-        }
-
-        private static int GetNextFreePort()
-        {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-
-            return port;
         }
     }
 }

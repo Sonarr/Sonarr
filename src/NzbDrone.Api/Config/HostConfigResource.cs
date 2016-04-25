@@ -2,8 +2,7 @@
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Update;
-using NzbDrone.Core.Http;
-using NzbDrone.Common.Http;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Api.Config
 {
@@ -33,7 +32,7 @@ namespace NzbDrone.Api.Config
         public int ProxyPort { get; set; }
         public string ProxyUsername { get; set; }
         public string ProxyPassword { get; set; }
-        public string ProxySubnetFilter { get; set; }
+        public string ProxyBypassFilter { get; set; }
         public bool ProxyBypassLocalAddresses { get; set; }
     }
 }

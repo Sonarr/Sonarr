@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Http;
 using NzbDrone.Common.Http;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Configuration
         int ProxyPort { get; }
         string ProxyUsername { get; }
         string ProxyPassword { get; }
-        string ProxySubnetFilter { get; }
+        string ProxyBypassFilter { get; }
         bool ProxyBypassLocalAddresses { get; }
     }
 }

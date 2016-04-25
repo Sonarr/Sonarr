@@ -2,11 +2,11 @@
 using System.Net;
 using NzbDrone.Common.Extensions;
 
-namespace NzbDrone.Common.Http
+namespace NzbDrone.Common.Http.Proxy
 {
-    public class HttpRequestProxySettings
+    public class HttpProxySettings
     {
-        public HttpRequestProxySettings(ProxyType type, string host, int port, string bypassFilter, bool bypassLocalAddress, string username = null, string password = null)
+        public HttpProxySettings(ProxyType type, string host, int port, string bypassFilter, bool bypassLocalAddress, string username = null, string password = null)
         {
             Type = type;
             Host = host.IsNullOrWhiteSpace() ? "127.0.0.1" : host;

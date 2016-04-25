@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NzbDrone.Common.Http
+namespace NzbDrone.Common.Http.Proxy
 {
     public interface IHttpProxySettingsProvider
     {
-        HttpRequestProxySettings GetProxySettings(HttpRequest request);
+        HttpProxySettings GetProxySettings(HttpRequest request);
     }
 }

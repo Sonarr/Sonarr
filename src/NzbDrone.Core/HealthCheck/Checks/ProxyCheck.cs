@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using NzbDrone.Common.Cloud;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
@@ -15,11 +16,15 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IConfigService _configService;
         private readonly IHttpClient _client;
 
-        public ProxyCheck(IConfigService configService, IHttpClient client, Logger logger)
+        private readonly IHttpRequestBuilderFactory _cloudRequestBuilder;
+
+        public ProxyCheck(ISonarrCloudRequestBuilder cloudRequestBuilder, IConfigService configService, IHttpClient client, Logger logger)
         {
             _configService = configService;
             _client = client;
             _logger = logger;
+
+            _cloudRequestBuilder = cloudRequestBuilder.Services;
         }
 
         public override HealthCheck Check()
@@ -29,10 +34,12 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 var addresses = Dns.GetHostAddresses(_configService.ProxyHostname);
                 if(!addresses.Any())
                 {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "Failed to resolve the IP Address for the Configured Proxy Host:  " + _configService.ProxyHostname);
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Failed to resolve the IP Address for the Configured Proxy Host {0}", _configService.ProxyHostname));
                 }
 
-                var request = new HttpRequestBuilder("https://services.sonarr.tv/ping").Build();
+                var request = _cloudRequestBuilder.Create()
+                                                  .Resource("/ping")
+                                                  .Build();
 
                 try
                 {
@@ -41,14 +48,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     // We only care about 400 responses, other error codes can be ignored 
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        _logger.Error("Proxy Health Check failed: {0}. Response Data: {1} ", response.StatusCode.ToString(), response.ResponseData);
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, "Failed to load https://sonarr.tv/, got HTTP " + response.StatusCode.ToString());
+                        _logger.Error("Proxy Health Check failed: {0}", response.StatusCode);
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Failed to test proxy: StatusCode {1}", request.Url, response.StatusCode));
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.ErrorException("Proxy Health Check failed.", ex);
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "An exception occured while trying to load https://sonarr.tv/: " + ex.Message);
+                    _logger.Error(ex, "Proxy Health Check failed: {0}", ex.Message);
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Failed to test proxy: {1}", request.Url, ex.Message));
                 }
             }
 

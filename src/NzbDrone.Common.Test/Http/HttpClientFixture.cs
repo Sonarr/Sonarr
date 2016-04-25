@@ -11,6 +11,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Http.Dispatchers;
+using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Common.TPL;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
@@ -26,9 +27,14 @@ namespace NzbDrone.Common.Test.Http
         public void SetUp()
         {
             Mocker.SetConstant<ICacheManager>(Mocker.Resolve<CacheManager>());
+            Mocker.SetConstant<ICreateManagedWebProxy>(Mocker.Resolve<ManagedWebProxyFactory>());
             Mocker.SetConstant<IRateLimitService>(Mocker.Resolve<RateLimitService>());
             Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new IHttpRequestInterceptor[0]);
             Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<TDispatcher>());
+
+            //Mocker.GetMock<IHttpProxySettingsProvider>()
+            //      .Setup(v => v.GetProxySettings(It.IsAny<HttpRequest>()))
+            //      .Returns(new HttpProxySettings(ProxyType.Socks5, "127.0.0.1", 5476, "", false));
         }
 
         [Test]
