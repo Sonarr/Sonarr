@@ -497,6 +497,7 @@
     <Compile Include="History\History.cs" />
     <Compile Include="History\HistoryRepository.cs" />
     <Compile Include="History\HistoryService.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalUsers.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupCommandQueue.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />

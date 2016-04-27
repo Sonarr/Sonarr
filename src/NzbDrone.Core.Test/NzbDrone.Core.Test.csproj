@@ -207,6 +207,7 @@
     <Compile Include="HealthCheck\HealthCheckFixture.cs" />
     <Compile Include="HistoryTests\HistoryRepositoryFixture.cs" />
     <Compile Include="HistoryTests\HistoryServiceFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalUsersFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecsFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklistFixture.cs" />
