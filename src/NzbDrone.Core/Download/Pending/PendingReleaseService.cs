@@ -299,12 +299,12 @@ namespace NzbDrone.Core.Download.Pending
 
             foreach (var rejectedRelease in rejected)
             {
-                var matching = pending.SingleOrDefault(MatchingReleasePredicate(rejectedRelease.RemoteEpisode.Release));
+                var matching = pending.Where(MatchingReleasePredicate(rejectedRelease.RemoteEpisode.Release));
 
-                if (matching != null)
+                foreach (var pendingRelease in matching)
                 {
                     _logger.Debug("Removing previously pending release, as it has now been rejected.");
-                    Delete(matching);
+                    Delete(pendingRelease);
                 }
             }
         }
