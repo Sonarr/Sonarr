@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         {
             var path = string.Format("/Library/Series/Updated?tvdbid={0}", tvdbId);            
             var request = BuildRequest(path, settings);
+            request.Headers.Add("Content-Length", "0");
 
             ProcessRequest(request, settings);
         }
