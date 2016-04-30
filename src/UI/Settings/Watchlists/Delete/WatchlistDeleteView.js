@@ -11,7 +11,7 @@ module.exports = Marionette.ItemView.extend({
 		this.model.destroy({
 			wait 	: true,
 			success : function() {
-				ven.trigger(vent.Commands.CloseModalCommand);
+				vent.trigger(vent.Commands.CloseModalCommand);
 			}
 		});
 	}

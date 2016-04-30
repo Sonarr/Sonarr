@@ -5,7 +5,7 @@ var SchemaModal = require('./Add/WatchlistSchemaModal');
 module.exports = Marionette.CompositeView.extend({
 	itemView          : ItemView,
 	itemViewContainer : '.watchlist-list',
-	template          : 'Settings/Notifications/NotificationCollectionViewTemplate',
+	template          : 'Settings/Watchlists/WatchlistCollectionViewTemplate',
 
 	ui : {
 		'addCard' : '.x-add-card'
