@@ -116,9 +116,11 @@ namespace NzbDrone.Core.Tv
 
         private List<Season> UpdateSeasons(Series series, Series seriesInfo)
         {
-            foreach (var season in seriesInfo.Seasons)
+            var seasons = seriesInfo.Seasons.DistinctBy(s => s.SeasonNumber).ToList();
+
+            foreach (var season in seasons)
             {
-                var existingSeason = series.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
+                var existingSeason = series.Seasons.FirstOrDefault(s => s.SeasonNumber == season.SeasonNumber);
 
                 //Todo: Should this should use the previous season's monitored state?
                 if (existingSeason == null)
@@ -139,7 +141,7 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
-            return seriesInfo.Seasons;
+            return seasons;
         }
 
         public void Execute(RefreshSeriesCommand message)
