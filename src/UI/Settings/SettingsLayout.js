@@ -16,6 +16,8 @@ var DownloadClientLayout = require('./DownloadClient/DownloadClientLayout');
 var DownloadClientSettingsModel = require('./DownloadClient/DownloadClientSettingsModel');
 var NotificationCollectionView = require('./Notifications/NotificationCollectionView');
 var NotificationCollection = require('./Notifications/NotificationCollection');
+var WatchlistCollectionView = require('./Watchlists/WatchlistCollectionView');
+var WatchlistCollection = require('./Watchlists/WatchlistCollection');
 var MetadataLayout = require('./Metadata/MetadataLayout');
 var GeneralView = require('./General/GeneralView');
 var UiView = require('./UI/UiView');
@@ -33,6 +35,7 @@ module.exports = Marionette.Layout.extend({
         indexers        : '#indexers',
         downloadClient  : '#download-client',
         notifications   : '#notifications',
+        watchlists      : '#watchlists',
         metadata        : '#metadata',
         general         : '#general',
         uiRegion        : '#ui',
@@ -46,6 +49,7 @@ module.exports = Marionette.Layout.extend({
         indexersTab        : '.x-indexers-tab',
         downloadClientTab  : '.x-download-client-tab',
         notificationsTab   : '.x-notifications-tab',
+        watchlistsTab      : '.x-watchlists-tab',
         metadataTab        : '.x-metadata-tab',
         generalTab         : '.x-general-tab',
         uiTab              : '.x-ui-tab',
@@ -59,6 +63,7 @@ module.exports = Marionette.Layout.extend({
         'click .x-indexers-tab'         : '_showIndexers',
         'click .x-download-client-tab'  : '_showDownloadClient',
         'click .x-notifications-tab'    : '_showNotifications',
+        'click .x-watchlists-tab'       : '_showWatchlists',
         'click .x-metadata-tab'         : '_showMetadata',
         'click .x-general-tab'          : '_showGeneral',
         'click .x-ui-tab'               : '_showUi',
@@ -83,6 +88,7 @@ module.exports = Marionette.Layout.extend({
         this.indexerSettings = new IndexerSettingsModel();
         this.downloadClientSettings = new DownloadClientSettingsModel();
         this.notificationCollection = new NotificationCollection();
+        this.watchlistCollection = new WatchlistCollection();
         this.generalSettings = new GeneralSettingsModel();
         this.uiSettings = new UiSettingsModel();
         Backbone.$.when(this.mediaManagementSettings.fetch(), this.namingSettings.fetch(), this.indexerSettings.fetch(), this.downloadClientSettings.fetch(),
@@ -98,6 +104,7 @@ module.exports = Marionette.Layout.extend({
                     self.indexers.show(new IndexerLayout({ model : self.indexerSettings }));
                     self.downloadClient.show(new DownloadClientLayout({ model : self.downloadClientSettings }));
                     self.notifications.show(new NotificationCollectionView({ collection : self.notificationCollection }));
+                    self.watchlists.show(new WatchlistCollectionView({ collection : self.watchlistCollection }));
                     self.metadata.show(new MetadataLayout());
                     self.general.show(new GeneralView({ model : self.generalSettings }));
                     self.uiRegion.show(new UiView({ model : self.uiSettings }));
@@ -126,6 +133,9 @@ module.exports = Marionette.Layout.extend({
                 break;
             case 'notifications':
                 this._showNotifications();
+                break;
+            case 'watchlists':
+                this._showWatchlists();
                 break;
             case 'metadata':
                 this._showMetadata();
@@ -193,6 +203,15 @@ module.exports = Marionette.Layout.extend({
 
         this.ui.notificationsTab.tab('show');
         this._navigate('settings/connect');
+    },
+
+    _showWatchlists : function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        this.ui.watchlistsTab.tab('show');
+        this._navigate('settings/watchlists');
     },
 
     _showMetadata : function(e) {
