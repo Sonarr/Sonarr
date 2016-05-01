@@ -1,10 +1,6 @@
 using System;
 using System.Net;
 using NzbDrone.Common.Extensions;
-using com.LandonKey.SocksWebProxy.Proxy;
-using com.LandonKey.SocksWebProxy;
-using System.Net.Sockets;
-using System.Linq;
 using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Common.Http.Dispatchers
