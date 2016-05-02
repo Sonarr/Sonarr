@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         void AddTorrentFromData(byte[] torrentData, string downloadDirectory, TransmissionSettings settings);
         void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, TransmissionSettings settings);
         Dictionary<string, object> GetConfig(TransmissionSettings settings);
-        string GetVersion(TransmissionSettings settings);
+        string GetProtocolVersion(TransmissionSettings settings);
         void RemoveTorrent(string hash, bool removeData, TransmissionSettings settings);
         void MoveTorrentToTopInQueue(string hashString, TransmissionSettings settings);
     }
@@ -94,12 +94,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             ProcessRequest("torrent-set", arguments, settings);
         }
 
-        public string GetVersion(TransmissionSettings settings)
+        public string GetProtocolVersion(TransmissionSettings settings)
         {
-            // Gets the transmission version.
             var config = GetConfig(settings);
 
-            var version = config["version"];
+            var version = config["rpc-version"];
 
             return version.ToString();
         }

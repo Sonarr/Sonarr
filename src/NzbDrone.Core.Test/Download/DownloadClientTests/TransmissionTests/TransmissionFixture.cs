@@ -440,17 +440,46 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             items.First().OutputPath.Should().Be(@"C:\Downloads\Finished\transmission\" + _title);
         }
 
-        [TestCase("2.84 ()")]
-        [TestCase("2.84+ ()")]
-        [TestCase("2.84 (other info)")]
-        [TestCase("2.84 (2.84)")]
-        public void should_version_should_only_check_version_number(string version)
+        [Test]
+        public void should_fix_mixed_slashes()
+        {
+            WindowsOnly();
+
+            _downloading.DownloadDir = @"C:\Downloads/Finished";
+
+            GivenTorrents(new List<TransmissionTorrent>
+                {
+                    _downloading
+                });
+
+            var items = Subject.GetItems().ToList();
+
+            items.Should().HaveCount(1);
+            items.First().OutputPath.Should().Be(@"C:\Downloads\Finished\" + _title);
+        }
+
+        [TestCase("14")]
+        [TestCase("15")]
+        [TestCase("17")]
+        public void should_check_protocol_version_number(string version)
         {
             Mocker.GetMock<ITransmissionProxy>()
-                  .Setup(s => s.GetVersion(It.IsAny<TransmissionSettings>()))
+                  .Setup(s => s.GetProtocolVersion(It.IsAny<TransmissionSettings>()))
                   .Returns(version);
 
-            Subject.Test();
+            Subject.Test().IsValid.Should().BeTrue();
+        }
+
+        [TestCase("")]
+        [TestCase("0")]
+        [TestCase("10")]
+        public void should_fail_validation_with_invalid_protocol_version(string version)
+        {
+            Mocker.GetMock<ITransmissionProxy>()
+                  .Setup(s => s.GetProtocolVersion(It.IsAny<TransmissionSettings>()))
+                  .Returns(version);
+
+            Subject.Test().IsValid.Should().BeFalse();
         }
 
         [TestCase(-1)] // Infinite/Unknown

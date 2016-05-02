@@ -20,6 +20,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
     {
         private readonly ITransmissionProxy _proxy;
 
+        protected string MinimalProtocolVersion = "14";
+        protected string MinimalClientVersion = "2.40";
+
         public Transmission(ITransmissionProxy proxy,
                             ITorrentFileInfoReader torrentFileInfoReader,
                             IHttpClient httpClient,
@@ -204,16 +207,14 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             try
             {
-                var versionString = _proxy.GetVersion(Settings);
+                var versionString = _proxy.GetProtocolVersion(Settings);
 
-                _logger.Debug("Transmission version information: {0}", versionString);
+                _logger.Debug("{0} protocol version information: {1}", Name, versionString);
 
-                var versionResult = Regex.Match(versionString, @"(?<!\(|(\d|\.)+)(\d|\.)+(?!\)|(\d|\.)+)").Value;
-                var version = Version.Parse(versionResult);
-
-                if (version < new Version(2, 40))
+                int version;
+                if (!int.TryParse(versionString, out version) || version < Convert.ToInt32(MinimalProtocolVersion))
                 {
-                    return new ValidationFailure(string.Empty, "Transmission version not supported, should be 2.40 or higher.");
+                    return new ValidationFailure(string.Empty, string.Format("{0} protocol version not supported, should be RPC version {1} (v{2}) or higher.", Name, MinimalProtocolVersion, MinimalClientVersion));
                 }
             }
             catch (DownloadClientAuthenticationException ex)
@@ -221,7 +222,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure("Username", "Authentication failure")
                 {
-                    DetailedDescription = "Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
+                    DetailedDescription = string.Format("Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing {0} by WhiteList limitations in the {0} configuration.", Name)
                 };
             }
             catch (WebException ex)
