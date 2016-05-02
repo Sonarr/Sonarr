@@ -193,12 +193,12 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 }
                 else
                 {
-                    throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+                    throw new DownloadClientException("Unable to connect to uTorrent, please check your settings", ex);
                 }
             }
             catch (WebException ex)
             {
-                throw new DownloadClientException("Unable to connect to Deluge, please check your settings", ex);
+                throw new DownloadClientException("Unable to connect to uTorrent, please check your settings", ex);
             }
 
             return Json.Deserialize<UTorrentResponse>(response.Content);
