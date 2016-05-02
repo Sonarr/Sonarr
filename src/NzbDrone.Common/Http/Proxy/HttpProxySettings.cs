@@ -25,13 +25,21 @@ namespace NzbDrone.Common.Http.Proxy
         public string BypassFilter { get; private set; }
         public bool BypassLocalAddress { get; private set; }
 
-        public string[] SubnetFilterAsArray
+        public string[] BypassListAsArray
         {
             get
             {
                 if (!string.IsNullOrWhiteSpace(BypassFilter))
                 {
-                    return BypassFilter.Split(';');
+                    var hostlist = BypassFilter.Split(',');
+                    for(int i = 0; i < hostlist.Length; i++)
+                    {
+                        if(hostlist[i].StartsWith("*"))
+                        {
+                            hostlist[i] = ";" + hostlist[i];
+                        }
+                    }
+                    return hostlist;
                 }
                 return new string[] { };
             }
