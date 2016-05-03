@@ -1,16 +1,17 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Transmission;
+using NzbDrone.Core.Download.Clients.Vuze;
+using NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests;
 
-namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
+namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
 {
     [TestFixture]
-    public class TransmissionFixture : TransmissionFixtureBase<Transmission>
+    public class VuzeFixture : TransmissionFixtureBase<Vuze>
     {
         [Test]
         public void queued_item_should_have_required_properties()
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                  .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [Test]
@@ -244,7 +245,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         {
             WindowsOnly();
 
-            _downloading.DownloadDir = @"C:/Downloads/Finished/transmission";
+            _downloading.DownloadDir = @"C:/Downloads/Finished/transmission/" + _title;
 
             GivenTorrents(new List<TransmissionTorrent>
                 {
@@ -257,19 +258,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             items.First().OutputPath.Should().Be(@"C:\Downloads\Finished\transmission\" + _title);
         }
 
-        [TestCase("2.84 ()")]
-        [TestCase("2.84+ ()")]
-        [TestCase("2.84 (other info)")]
-        [TestCase("2.84 (2.84)")]
-        public void should_only_check_version_number(string version)
-        {
-            Mocker.GetMock<ITransmissionProxy>()
-                  .Setup(s => s.GetClientVersion(It.IsAny<TransmissionSettings>()))
-                  .Returns(version);
-
-            Subject.Test().IsValid.Should().BeTrue();
-        }
-
         [TestCase(-1)] // Infinite/Unknown
         [TestCase(-2)] // Magnet Downloading
         public void should_ignore_negative_eta(int eta)
@@ -280,5 +268,48 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             var item = Subject.GetItems().Single();
             item.RemainingTime.Should().NotHaveValue();
         }
+
+        [TestCase("14")]
+        [TestCase("15")]
+        [TestCase("20")]
+        public void should_only_check_protocol_version_number(string version)
+        {
+            Mocker.GetMock<ITransmissionProxy>()
+                  .Setup(s => s.GetProtocolVersion(It.IsAny<TransmissionSettings>()))
+                  .Returns(version);
+
+            Subject.Test().IsValid.Should().BeTrue();
+        }
+
+        [TestCase("")]
+        [TestCase("10")]
+        [TestCase("foo")]
+        public void should_fail_with_unsupported_protocol_version(string version)
+        {
+            Mocker.GetMock<ITransmissionProxy>()
+                  .Setup(s => s.GetProtocolVersion(It.IsAny<TransmissionSettings>()))
+                  .Returns(version);
+
+            Subject.Test().IsValid.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_have_correct_output_directory()
+        {
+            WindowsOnly();
+
+            _downloading.DownloadDir = @"C:/Downloads/" + _title;
+
+            GivenTorrents(new List<TransmissionTorrent>
+                {
+                    _downloading
+                });
+
+            var items = Subject.GetItems().ToList();
+
+            items.Should().HaveCount(1);
+            items.First().OutputPath.Should().Be(@"C:\Downloads\" + _title);
+        }
+
     }
 }
