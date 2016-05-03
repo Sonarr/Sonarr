@@ -121,54 +121,62 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 else if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                 {
                     var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(string.Format("{0}", Settings.TvCategory))) continue;
+                    if (!directories.Contains(Settings.TvCategory)) continue;
                 }
 
                 outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
 
-                var item = new DownloadClientItem();
-                item.DownloadId = torrent.HashString.ToUpper();
-                item.Category = Settings.TvCategory;
-                item.Title = torrent.Name;
-
-                item.DownloadClient = Definition.Name;
-
-                item.OutputPath = outputPath + torrent.Name;
-                item.TotalSize = torrent.TotalSize;
-                item.RemainingSize = torrent.LeftUntilDone;
-                if (torrent.Eta >= 0)
-                {
-                    item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
-                }
-
-                if (!torrent.ErrorString.IsNullOrWhiteSpace())
-                {
-                    item.Status = DownloadItemStatus.Warning;
-                    item.Message = torrent.ErrorString;
-                }
-                else if (torrent.Status == TransmissionTorrentStatus.Seeding || torrent.Status == TransmissionTorrentStatus.SeedingWait)
-                {
-                    item.Status = DownloadItemStatus.Completed;
-                }
-                else if (torrent.IsFinished && torrent.Status != TransmissionTorrentStatus.Check && torrent.Status != TransmissionTorrentStatus.CheckWait)
-                {
-                    item.Status = DownloadItemStatus.Completed;
-                }
-                else if (torrent.Status == TransmissionTorrentStatus.Queued)
-                {
-                    item.Status = DownloadItemStatus.Queued;
-                }
-                else
-                {
-                    item.Status = DownloadItemStatus.Downloading;
-                }
-
-                item.IsReadOnly = torrent.Status != TransmissionTorrentStatus.Stopped;
+                var item = CreateDownloadItem(torrent, outputPath);
 
                 items.Add(item);
             }
 
             return items;
+        }
+
+        protected virtual DownloadClientItem CreateDownloadItem(TransmissionTorrent torrent, OsPath outputPath)
+        {
+            var item = new DownloadClientItem();
+            item.DownloadId = torrent.HashString.ToUpper();
+            item.Category = Settings.TvCategory;
+            item.Title = torrent.Name;
+
+            item.DownloadClient = Definition.Name;
+
+            item.OutputPath = outputPath + torrent.Name;
+            item.TotalSize = torrent.TotalSize;
+            item.RemainingSize = torrent.LeftUntilDone;
+            if (torrent.Eta >= 0)
+            {
+                item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
+            }
+
+            if (!torrent.ErrorString.IsNullOrWhiteSpace())
+            {
+                item.Status = DownloadItemStatus.Warning;
+                item.Message = torrent.ErrorString;
+            }
+            else if (torrent.Status == TransmissionTorrentStatus.Seeding ||
+                     torrent.Status == TransmissionTorrentStatus.SeedingWait)
+            {
+                item.Status = DownloadItemStatus.Completed;
+            }
+            else if (torrent.IsFinished && torrent.Status != TransmissionTorrentStatus.Check &&
+                     torrent.Status != TransmissionTorrentStatus.CheckWait)
+            {
+                item.Status = DownloadItemStatus.Completed;
+            }
+            else if (torrent.Status == TransmissionTorrentStatus.Queued)
+            {
+                item.Status = DownloadItemStatus.Queued;
+            }
+            else
+            {
+                item.Status = DownloadItemStatus.Downloading;
+            }
+
+            item.IsReadOnly = torrent.Status != TransmissionTorrentStatus.Stopped;
+            return item;
         }
 
         public override void RemoveItem(string downloadId, bool deleteData)
@@ -204,24 +212,14 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             try
             {
-                var versionString = _proxy.GetVersion(Settings);
-
-                _logger.Debug("Transmission version information: {0}", versionString);
-
-                var versionResult = Regex.Match(versionString, @"(?<!\(|(\d|\.)+)(\d|\.)+(?!\)|(\d|\.)+)").Value;
-                var version = Version.Parse(versionResult);
-
-                if (version < new Version(2, 40))
-                {
-                    return new ValidationFailure(string.Empty, "Transmission version not supported, should be 2.40 or higher.");
-                }
+                return ValidateVersion();
             }
             catch (DownloadClientAuthenticationException ex)
             {
                 _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure("Username", "Authentication failure")
                 {
-                    DetailedDescription = "Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing Transmission by WhiteList limitations in the Transmission configuration."
+                    DetailedDescription = string.Format("Please verify your username and password. Also verify if the host running Sonarr isn't blocked from accessing {0} by WhiteList limitations in the {0} configuration.", Name)
                 };
             }
             catch (WebException ex)
@@ -240,6 +238,21 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             {
                 _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+            }
+        }
+
+        protected virtual ValidationFailure ValidateVersion()
+        {
+            var versionString = _proxy.GetClientVersion(Settings);
+
+            _logger.Debug("Transmission version information: {0}", versionString);
+
+            var versionResult = Regex.Match(versionString, @"(?<!\(|(\d|\.)+)(\d|\.)+(?!\)|(\d|\.)+)").Value;
+            var version = Version.Parse(versionResult);
+
+            if (version < new Version(2, 40))
+            {
+                return new ValidationFailure(string.Empty, "Transmission version not supported, should be 2.40 or higher.");
             }
 
             return null;
