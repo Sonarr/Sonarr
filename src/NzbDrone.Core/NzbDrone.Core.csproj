@@ -425,6 +425,7 @@
     <Compile Include="Download\Clients\rTorrent\RTorrentSettings.cs" />
     <Compile Include="Download\Clients\rTorrent\RTorrentTorrent.cs" />
     <Compile Include="Download\Clients\Transmission\Transmission.cs" />
+    <Compile Include="Download\Clients\Transmission\TransmissionBase.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionException.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionProxy.cs" />
     <Compile Include="Download\Clients\Transmission\TransmissionResponse.cs" />

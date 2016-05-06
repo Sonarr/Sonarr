@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+                  .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+                  .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
+                  .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), @"C:/Downloads/Finished/transmission/sonarr", It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             id.Should().NotBeNullOrEmpty();
 
             Mocker.GetMock<ITransmissionProxy>()
-                .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), null, It.IsAny<TransmissionSettings>()), Times.Once());
+                  .Verify(v => v.AddTorrentFromData(It.IsAny<byte[]>(), null, It.IsAny<TransmissionSettings>()), Times.Once());
         }
 
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
@@ -261,7 +261,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         [TestCase("2.84+ ()")]
         [TestCase("2.84 (other info)")]
         [TestCase("2.84 (2.84)")]
-        public void should_check_version_number(string version)
+        public void should_only_check_version_number(string version)
         {
             Mocker.GetMock<ITransmissionProxy>()
                   .Setup(s => s.GetClientVersion(It.IsAny<TransmissionSettings>()))

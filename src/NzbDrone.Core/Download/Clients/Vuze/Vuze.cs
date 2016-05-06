@@ -10,10 +10,9 @@ using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Vuze
 {
-    public class Vuze : Transmission.Transmission
+    public class Vuze : TransmissionBase
     {
-        private const int MINIMAL_SUPPORTED_PROTOCOL_VERSION = 14;
-        private readonly ITransmissionProxy _proxy;
+        private const int MINIMUM_SUPPORTED_PROTOCOL_VERSION = 14;
 
         public Vuze(ITransmissionProxy proxy,
                     ITorrentFileInfoReader torrentFileInfoReader,
@@ -24,23 +23,15 @@ namespace NzbDrone.Core.Download.Clients.Vuze
                     Logger logger)
             : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
-            _proxy = proxy;
         }
 
-        protected override DownloadClientItem CreateDownloadItem(TransmissionTorrent torrent, OsPath outputPath)
+        protected override OsPath GetOutputPath(OsPath outputPath, TransmissionTorrent torrent)
         {
-            // Vuze reports outputPath containing the torrent name already, so we need to subtract it
-            // for the Transmission protocol compatibility
+            // Vuze reports outputPath containing the torrent name already
 
-            if (outputPath.FullPath.EndsWith(torrent.Name, StringComparison.Ordinal))
-            {
-                var startOfTorrentName = outputPath.FullPath.LastIndexOf(torrent.Name, StringComparison.Ordinal);
-                outputPath = new OsPath(outputPath.FullPath.Substring(0, startOfTorrentName));
+            _logger.Debug("Vuze output directory: {0}", outputPath);
 
-                _logger.Debug("Vuze output directory: {0}", outputPath);
-            }
-
-            return base.CreateDownloadItem(torrent, outputPath);
+            return outputPath;
         }
 
         protected override ValidationFailure ValidateVersion()
@@ -50,7 +41,7 @@ namespace NzbDrone.Core.Download.Clients.Vuze
             _logger.Debug("Vuze protocol version information: {0}", versionString);
 
             int version;
-            if (!int.TryParse(versionString, out version) || version < MINIMAL_SUPPORTED_PROTOCOL_VERSION)
+            if (!int.TryParse(versionString, out version) || version < MINIMUM_SUPPORTED_PROTOCOL_VERSION)
             {
                 {
                     return new ValidationFailure(string.Empty, "Protocol version not supported, use Vuze 5.0.0.0 or higher with Vuze Web Remote plugin.");
