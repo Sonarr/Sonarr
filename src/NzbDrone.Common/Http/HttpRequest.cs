@@ -44,14 +44,27 @@ namespace NzbDrone.Common.Http
 
         public override string ToString()
         {
-            if (ContentSummary == null)
+            return ToString();
+        }
+
+        public string ToString(bool includeMethod = true, bool includeSummary = true)
+        {
+            var builder = new StringBuilder();
+
+            if (includeMethod)
             {
-                return string.Format("Req: [{0}] {1}", Method, Url);
+                builder.AppendFormat("Req: [{0}] ", Method);
             }
-            else
+
+            builder.Append(Url);
+
+            if (includeSummary && ContentSummary.IsNotNullOrWhiteSpace())
             {
-                return string.Format("Req: [{0}] {1}: {2}", Method, Url, ContentSummary);
+                builder.Append(": ");
+                builder.Append(ContentSummary);
             }
+
+            return builder.ToString();
         }
 
         public void SetContent(byte[] data)

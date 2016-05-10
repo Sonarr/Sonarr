@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Common.Http
@@ -86,7 +87,7 @@ namespace NzbDrone.Common.Http
             else
             {
                 data = value;
-                summary = data.ToJson();
+                summary = JsonConvert.SerializeObject(data);
             }
         }
 

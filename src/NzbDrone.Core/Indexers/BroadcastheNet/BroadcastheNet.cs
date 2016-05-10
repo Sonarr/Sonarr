@@ -28,7 +28,19 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new BroadcastheNetRequestGenerator() { Settings = Settings, PageSize = PageSize };
+            var requestGenerator = new BroadcastheNetRequestGenerator() { Settings = Settings, PageSize = PageSize };
+
+            var releaseInfo = _indexerStatusService.GetLastRssSyncReleaseInfo(Definition.Id);
+            if (releaseInfo != null)
+            {
+                int torrentID;
+                if (int.TryParse(releaseInfo.Guid.Replace("BTN-", string.Empty), out torrentID))
+                {
+                    requestGenerator.LastRecentTorrentID = torrentID;
+                }
+            }
+
+            return requestGenerator;
         }
 
         public override IParseIndexerResponse GetParser()

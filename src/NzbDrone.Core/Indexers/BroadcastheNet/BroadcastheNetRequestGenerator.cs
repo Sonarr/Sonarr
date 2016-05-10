@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public int PageSize { get; set; }
         public BroadcastheNetSettings Settings { get; set; }
 
+        public int? LastRecentTorrentID { get; set; }
+
         public BroadcastheNetRequestGenerator()
         {
             MaxPages = 10;
@@ -23,7 +25,18 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.Add(GetPagedRequests(MaxPages, null));
+            var parameters = new BroadcastheNetTorrentQuery();
+
+            if (LastRecentTorrentID.HasValue)
+            {
+                parameters.Id = ">=" + (LastRecentTorrentID.Value - 100);
+            }
+            else
+            {
+                parameters.Age = "<=86400";
+            }
+
+            pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
 
             return pageableRequests;
         }
@@ -167,11 +180,6 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, BroadcastheNetTorrentQuery parameters)
         {
-            if (parameters == null)
-            {
-                parameters = new BroadcastheNetTorrentQuery();
-            }
-
             var builder = new JsonRpcRequestBuilder(Settings.BaseUrl)
                 .Call("getTorrents", Settings.ApiKey, parameters, PageSize, 0);
             builder.SuppressHttpError = true;

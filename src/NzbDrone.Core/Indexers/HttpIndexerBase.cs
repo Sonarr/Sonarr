@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual IndexerResponse FetchIndexerResponse(IndexerRequest request)
         {
-            _logger.Debug("Downloading Feed " + request.Url);
+            _logger.Debug("Downloading Feed " + request.HttpRequest.ToString(false));
 
             if (request.HttpRequest.RateLimit < RateLimit)
             {
