@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
                 torrentInfo.Size = torrent.size;
                 torrentInfo.DownloadUrl = torrent.download;
                 torrentInfo.InfoUrl = torrent.info_page;
-                torrentInfo.PublishDate = torrent.pubdate;
+                torrentInfo.PublishDate = torrent.pubdate.ToUniversalTime();
                 torrentInfo.Seeders = torrent.seeders;
                 torrentInfo.Peers = torrent.leechers + torrent.seeders;
 

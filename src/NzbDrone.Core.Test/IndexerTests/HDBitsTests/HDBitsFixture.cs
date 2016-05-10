@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
             first.DownloadProtocol.Should().Be(DownloadProtocol.Torrent);
             first.DownloadUrl.Should().Be("https://hdbits.org/download.php?id=257142&passkey=fakekey");
             first.InfoUrl.Should().Be("https://hdbits.org/details.php?id=257142");
-            first.PublishDate.Should().Be(DateTime.Parse("2015-04-04T20:30:46+0000"));
+            first.PublishDate.Should().Be(DateTime.Parse("2015-04-04T20:30:46+0000").ToUniversalTime());
             first.Size.Should().Be(1718009717);
             first.InfoHash.Should().Be("EABC50AEF9F53CEDED84ADF14144D3368E586F3A");
             first.MagnetUrl.Should().BeNullOrEmpty();

@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Indexers.HDBits
                     InfoUrl = GetInfoUrl(id),
                     Seeders = result.Seeders,
                     Peers = result.Leechers + result.Seeders,
-                    PublishDate = result.Added
+                    PublishDate = result.Added.ToUniversalTime()
                 });
             }
 
