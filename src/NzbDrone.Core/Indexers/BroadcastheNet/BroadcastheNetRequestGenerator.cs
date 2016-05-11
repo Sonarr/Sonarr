@@ -25,18 +25,18 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            var parameters = new BroadcastheNetTorrentQuery();
-
             if (LastRecentTorrentID.HasValue)
             {
-                parameters.Id = ">=" + (LastRecentTorrentID.Value - 100);
+                pageableRequests.Add(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery()
+                {
+                    Id = ">=" + (LastRecentTorrentID.Value - 100)
+                }));
             }
-            else
+            
+            pageableRequests.AddTier(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery()
             {
-                parameters.Age = "<=86400";
-            }
-
-            pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                Age = "<=86400"
+            }));
 
             return pageableRequests;
         }
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-            
+
             var parameters = new BroadcastheNetTorrentQuery();
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 .Call("getTorrents", Settings.ApiKey, parameters, PageSize, 0);
             builder.SuppressHttpError = true;
 
-            for (var page = 0; page < maxPages;page++)
+            for (var page = 0; page < maxPages; page++)
             {
                 builder.JsonParameters[3] = page * PageSize;
 
