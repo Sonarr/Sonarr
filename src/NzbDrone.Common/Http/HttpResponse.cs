@@ -79,7 +79,7 @@ namespace NzbDrone.Common.Http
 
         public override string ToString()
         {
-            var result = string.Format("Res: [{0}] {1} : {2}.{3}", Request.Method, Request.Url, (int)StatusCode, StatusCode);
+            var result = string.Format("Res: [{0}] {1}: {2}.{3}", Request.Method, Request.Url, (int)StatusCode, StatusCode);
 
             if (HasHttpError && Headers.ContentType.IsNotNullOrWhiteSpace() && !Headers.ContentType.Equals("text/html", StringComparison.InvariantCultureIgnoreCase))
             {

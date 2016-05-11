@@ -74,7 +74,7 @@ namespace NzbDrone.Common.Http
 
             stopWatch.Stop();
 
-            _logger.Trace("{0} ({1:n0} ms)", response, stopWatch.ElapsedMilliseconds);
+            _logger.Trace("{0} ({1} ms)", response, stopWatch.ElapsedMilliseconds);
 
             foreach (var interceptor in _requestInterceptors)
             {

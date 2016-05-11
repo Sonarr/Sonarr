@@ -100,6 +100,7 @@
     <Compile Include="Commands\CommandResource.cs" />
     <Compile Include="Extensions\AccessControlHeaders.cs" />
     <Compile Include="Extensions\Pipelines\CorsPipeline.cs" />
+    <Compile Include="Extensions\Pipelines\RequestLoggingPipeline.cs" />
     <Compile Include="Frontend\Mappers\LoginHtmlMapper.cs" />
     <Compile Include="Frontend\Mappers\RobotsTxtMapper.cs" />
     <Compile Include="Indexers\ReleaseModuleBase.cs" />
