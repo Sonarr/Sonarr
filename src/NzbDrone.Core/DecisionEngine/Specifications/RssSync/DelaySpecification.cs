@@ -30,12 +30,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
-            //How do we want to handle drone being off and the automatic search being triggered?
-            //TODO: Add a flag to the search to state it is a "scheduled" search
-
-            if (searchCriteria != null)
+            if (searchCriteria != null && searchCriteria.UserInvokedSearch)
             {
-                _logger.Debug("Ignore delay for searches");
+                _logger.Debug("Ignoring delay for user invoked search");
                 return Decision.Accept();
             }
 
@@ -71,7 +68,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 }
             }
 
-            //If quality meets or exceeds the best allowed quality in the profile accept it immediately
+            // If quality meets or exceeds the best allowed quality in the profile accept it immediately
             var bestQualityInProfile = new QualityModel(profile.LastAllowedQuality());
             var isBestInProfile = comparer.Compare(subject.ParsedEpisodeInfo.Quality, bestQualityInProfile) >= 0;
 

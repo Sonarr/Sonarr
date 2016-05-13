@@ -87,9 +87,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         }
 
         [Test]
-        public void should_be_true_when_search()
+        public void should_be_true_when_user_invoked_search()
         {
-            Subject.IsSatisfiedBy(new RemoteEpisode(), new SingleEpisodeSearchCriteria()).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(new RemoteEpisode(), new SingleEpisodeSearchCriteria { UserInvokedSearch = true }).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_false_when_system_invoked_search_and_release_is_younger_than_delay()
+        {
+            _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.SDTV);
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
+
+            _delayProfile.UsenetDelay = 720;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, new SingleEpisodeSearchCriteria()).Accepted.Should().BeFalse();
         }
 
         [Test]

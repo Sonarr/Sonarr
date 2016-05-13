@@ -39,7 +39,7 @@ namespace NzbDrone.Core.IndexerSearch
                     continue;
                 }
 
-                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false);
+                var decisions = _nzbSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, message.Trigger == CommandTrigger.Manual);
                 downloadedCount += _processDownloadDecisions.ProcessDecisions(decisions).Grabbed.Count;
             }
 
