@@ -9,6 +9,8 @@ using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Processes;
+using NzbDrone.Mono;
+using NzbDrone.Windows;
 using RestSharp;
 
 namespace NzbDrone.Test.Common
@@ -24,7 +26,15 @@ namespace NzbDrone.Test.Common
 
         public NzbDroneRunner(Logger logger, int port = 8989)
         {
-            _processProvider = new ProcessProvider(logger);
+            if (OsInfo.IsWindows)
+            {
+                _processProvider = new WindowsProcessProvider(logger);
+            }
+            else
+            {
+                _processProvider = new MonoProcessProvider(logger);
+            }
+            
             _restClient = new RestClient("http://localhost:8989/api");
         }
 
@@ -84,8 +94,8 @@ namespace NzbDrone.Test.Common
                 _processProvider.Kill(_nzbDroneProcess.Id);                
             }
 
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-            _processProvider.KillAll(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+            _processProvider.KillAll(ProcessProviderBase.NZB_DRONE_CONSOLE_PROCESS_NAME);
+            _processProvider.KillAll(ProcessProviderBase.NZB_DRONE_PROCESS_NAME);
         }
 
         private void Start(string outputNzbdroneConsoleExe)

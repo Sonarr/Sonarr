@@ -203,7 +203,7 @@
     <Compile Include="Processes\PidFileProvider.cs" />
     <Compile Include="Processes\ProcessOutput.cs" />
     <Compile Include="Processes\ProcessOutputLine.cs" />
-    <Compile Include="Processes\ProcessProvider.cs" />
+    <Compile Include="Processes\ProcessProviderBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
@@ -222,6 +222,7 @@
     <Compile Include="TPL\RateLimitService.cs" />
     <Compile Include="TPL\TaskExtensions.cs" />
     <Compile Include="Extensions\TryParseExtensions.cs" />
+    <Compile Include="Processes\IProcessProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

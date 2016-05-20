@@ -66,6 +66,7 @@
     <Compile Include="Disk\DiskProvider.cs" />
     <Compile Include="EnvironmentInfo\DotNetRuntimeProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WindowsProcessProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">

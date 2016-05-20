@@ -118,6 +118,14 @@
       <Project>{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}</Project>
       <Name>NzbDrone.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Mono\NzbDrone.Mono.csproj">
+      <Project>{15AD7579-A314-4626-B556-663F51D97CD1}</Project>
+      <Name>NzbDrone.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NzbDrone.Windows\NzbDrone.Windows.csproj">
+      <Project>{911284D3-F130-459E-836C-2430B6FBF21D}</Project>
+      <Name>NzbDrone.Windows</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

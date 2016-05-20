@@ -82,8 +82,8 @@ namespace NzbDrone.Update.UpdateEngine
 
             try
             {
-                _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-                _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+                _processProvider.FindProcessByName(ProcessProviderBase.NZB_DRONE_CONSOLE_PROCESS_NAME);
+                _processProvider.FindProcessByName(ProcessProviderBase.NZB_DRONE_PROCESS_NAME);
 
                 if (OsInfo.IsWindows)
                 {
@@ -128,14 +128,14 @@ namespace NzbDrone.Update.UpdateEngine
                     {
                         System.Threading.Thread.Sleep(1000);
 
-                        if (_processProvider.Exists(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                        if (_processProvider.Exists(ProcessProviderBase.NZB_DRONE_PROCESS_NAME))
                         {
                             _logger.Info("Sonarr was restarted by external process.");
                             break;
                         }
                     }
 
-                    if (!_processProvider.Exists(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                    if (!_processProvider.Exists(ProcessProviderBase.NZB_DRONE_PROCESS_NAME))
                     {
                         _startNzbDrone.Start(appType, installationFolder);
                     }

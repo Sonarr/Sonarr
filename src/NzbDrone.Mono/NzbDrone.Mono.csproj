@@ -76,6 +76,8 @@
     <Compile Include="Disk\ProcMountProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Disk\SymbolicLinkResolver.cs" />
+    <Compile Include="SymbolicLinkResolver.cs" />
+    <Compile Include="MonoProcessProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">
