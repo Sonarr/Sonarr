@@ -20,14 +20,14 @@ namespace NzbDrone.Core.Notifications.Twitter
             get { return "https://twitter.com/"; }
         }
 
-        public override void OnGrab(GrabMessage grabMessage)
+        public override void OnGrab(GrabMessage message)
         {
-            _twitterService.SendNotification(grabMessage.Message, Settings);
+            _twitterService.SendNotification($"Grabbed: {message.Message}", Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            _twitterService.SendNotification(message.Message, Settings);
+            _twitterService.SendNotification($"Imported: {message.Message}", Settings);
         }
 
         public override void OnRename(Series series)
