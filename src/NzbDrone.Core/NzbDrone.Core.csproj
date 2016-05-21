@@ -1036,6 +1036,7 @@
     <Compile Include="Validation\NzbDroneValidationState.cs" />
     <Compile Include="Validation\Paths\MappedNetworkDriveValidator.cs" />
     <Compile Include="Validation\Paths\DroneFactoryValidator.cs" />
+    <Compile Include="Validation\Paths\FolderWritableValidator.cs" />
     <Compile Include="Validation\Paths\PathExistsValidator.cs" />
     <Compile Include="Validation\Paths\PathValidator.cs" />
     <Compile Include="Validation\Paths\StartupFolderValidator.cs" />
