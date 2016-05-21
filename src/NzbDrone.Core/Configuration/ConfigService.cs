@@ -345,7 +345,7 @@ namespace NzbDrone.Core.Configuration
 
         public string ProxyBypassFilter
         {
-            get { return GetValue("ProxySubnetFilter", string.Empty); }
+            get { return GetValue("ProxyBypassFilter", string.Empty); }
         }
 
         public bool ProxyBypassLocalAddresses
