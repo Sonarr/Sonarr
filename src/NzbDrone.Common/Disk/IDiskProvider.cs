@@ -30,6 +30,7 @@ namespace NzbDrone.Common.Disk
         void MoveFile(string source, string destination, bool overwrite = false);
         bool TryCreateHardLink(string source, string destination);
         void DeleteFolder(string path, bool recursive);
+        string[] ReadAllLines(string filePath);
         string ReadAllText(string filePath);
         void WriteAllText(string filename, string contents);
         void FolderSetLastWriteTime(string path, DateTime dateTime);

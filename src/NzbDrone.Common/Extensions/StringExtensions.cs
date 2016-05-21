@@ -105,5 +105,17 @@ namespace NzbDrone.Common.Extensions
         {
             return string.Concat(Array.ConvertAll(input, x => x.ToString("X2")));
         }
+
+        public static string FromOctalString(this string octalValue)
+        {
+            octalValue = octalValue.TrimStart('\\');
+
+            var first = int.Parse(octalValue.Substring(0, 1));
+            var second = int.Parse(octalValue.Substring(1, 1));
+            var third = int.Parse(octalValue.Substring(2, 1));
+            var byteResult = (byte)((first << 6) | (second << 3) | (third));
+
+            return Encoding.ASCII.GetString(new [] { byteResult });
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -17,13 +18,16 @@ namespace NzbDrone.Mono
     {
         private static string[] _fixedTypes = new [] { "ext3", "ext2", "ext4", "vfat", "fuseblk", "xfs", "jfs", "msdos", "ntfs", "minix", "hfs", "hfsplus", "qnx4", "ufs", "btrfs" };
         private static string[] _networkDriveTypes = new [] { "cifs", "nfs", "nfs4", "nfsd", "sshfs" };
+        private static readonly Regex OctalRegex = new Regex(@"\\\d{3}", RegexOptions.Compiled);
 
         private static Dictionary<string, bool> _fileSystems;
 
+        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public ProcMountProvider(Logger logger)
+        public ProcMountProvider(IDiskProvider diskProvider, Logger logger)
         {
+            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -31,9 +35,9 @@ namespace NzbDrone.Mono
         {
             try
             {
-                if (File.Exists(@"/proc/mounts"))
+                if (_diskProvider.FileExists(@"/proc/mounts"))
                 {
-                    var lines = File.ReadAllLines(@"/proc/mounts");
+                    var lines = _diskProvider.ReadAllLines(@"/proc/mounts");
 
                     return lines.Select(ParseLine).OfType<IMount>().ToList();
                 }
@@ -53,9 +57,9 @@ namespace NzbDrone.Mono
                 var result = new Dictionary<string, bool>();
                 try
                 {
-                    if (File.Exists(@"/proc/filesystems"))
+                    if (_diskProvider.FileExists(@"/proc/filesystems"))
                     {
-                        var lines = File.ReadAllLines(@"/proc/filesystems");
+                        var lines = _diskProvider.ReadAllLines(@"/proc/filesystems");
 
                         foreach (var line in lines)
                         {
@@ -94,7 +98,7 @@ namespace NzbDrone.Mono
             }
 
             var name = split[0];
-            var mount = split[1];
+            var mount = GetMount(split[1]);
             var type = split[2];
             var options = ParseOptions(split[3]);
 
@@ -131,6 +135,11 @@ namespace NzbDrone.Mono
             }
 
             return result;
+        }
+
+        private string GetMount(string mount)
+        {
+            return OctalRegex.Replace(mount, match => match.Captures[0].Value.FromOctalString());
         }
     }
 }

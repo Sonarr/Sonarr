@@ -222,6 +222,13 @@ namespace NzbDrone.Common.Disk
             Directory.Delete(path, recursive);
         }
 
+        public string[] ReadAllLines(string filePath)
+        {
+            Ensure.That(filePath, () => filePath).IsValidPath();
+
+            return File.ReadAllLines(filePath);
+        }
+
         public string ReadAllText(string filePath)
         {
             Ensure.That(filePath, () => filePath).IsValidPath();
