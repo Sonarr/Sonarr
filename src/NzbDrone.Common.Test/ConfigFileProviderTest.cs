@@ -17,17 +17,18 @@ namespace NzbDrone.Common.Test
     public class ConfigFileProviderTest : TestBase<ConfigFileProvider>
     {
         private string _configFileContents;
+        private string _configFilePath;
 
         [SetUp]
         public void SetUp()
         {
             WithTempAsAppPath();
 
-            var configFile = Mocker.Resolve<IAppFolderInfo>().GetConfigPath();
+            _configFilePath = Mocker.Resolve<IAppFolderInfo>().GetConfigPath();
 
             _configFileContents = null;
 
-            WithMockConfigFile(configFile);
+            WithMockConfigFile(_configFilePath);
         }
 
         protected void WithMockConfigFile(string configFile)
@@ -187,5 +188,30 @@ namespace NzbDrone.Common.Test
             Subject.SslPort.Should().Be(sslPort);
         }
 
+        [Test]
+        public void should_throw_if_config_file_is_empty()
+        {
+            Mocker.GetMock<IDiskProvider>()
+                  .Setup(v => v.FileExists(_configFilePath))
+                  .Returns(true);
+
+            Assert.Throws<InvalidConfigFileException>(() => Subject.GetValue("key", "value"));
+        }
+
+        [Test]
+        public void should_throw_if_config_file_contains_only_null_character()
+        {
+            _configFileContents = "\0";
+
+            Assert.Throws<InvalidConfigFileException>(() => Subject.GetValue("key", "value"));
+        }
+
+        [Test]
+        public void should_throw_if_config_file_contains_invalid_xml()
+        {
+            _configFileContents = "{ \"key\": \"value\" }";
+
+            Assert.Throws<InvalidConfigFileException>(() => Subject.GetValue("key", "value"));
+        }
     }
 }

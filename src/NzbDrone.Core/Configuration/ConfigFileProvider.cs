@@ -348,6 +348,18 @@ namespace NzbDrone.Core.Configuration
                 {
                     if (_diskProvider.FileExists(_configFile))
                     {
+                        var contents = _diskProvider.ReadAllText(_configFile);
+
+                        if (contents.IsNullOrWhiteSpace())
+                        {
+                            throw new InvalidConfigFileException($"{_configFile} is empty. Please delete the config file and Sonarr will recreate it.");
+                        }
+
+                        if (contents.All(char.IsControl))
+                        {
+                            throw new InvalidConfigFileException($"{_configFile} is corrupt. Please delete the config file and Sonarr will recreate it.");
+                        }
+
                         return XDocument.Parse(_diskProvider.ReadAllText(_configFile));
                     }
 
@@ -360,7 +372,7 @@ namespace NzbDrone.Core.Configuration
 
             catch (XmlException ex)
             {
-                throw new InvalidConfigFileException(_configFile + " is invalid, please see the http://wiki.sonarr.tv for steps to resolve this issue.", ex);
+                throw new InvalidConfigFileException($"{_configFile} is corrupt is invalid. Please delete the config file and Sonarr will recreate it.", ex);
             }
         }
 
