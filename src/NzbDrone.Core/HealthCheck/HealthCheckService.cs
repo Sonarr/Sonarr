@@ -23,7 +23,9 @@ namespace NzbDrone.Core.HealthCheck
                                       IHandleAsync<ApplicationStartedEvent>,
                                       IHandleAsync<ConfigSavedEvent>,
                                       IHandleAsync<ProviderUpdatedEvent<IIndexer>>,
-                                      IHandleAsync<ProviderUpdatedEvent<IDownloadClient>>
+                                      IHandleAsync<ProviderDeletedEvent<IIndexer>>,
+                                      IHandleAsync<ProviderUpdatedEvent<IDownloadClient>>,
+                                      IHandleAsync<ProviderDeletedEvent<IDownloadClient>>
     {
         private readonly IEnumerable<IProvideHealthCheck> _healthChecks;
         private readonly IEventAggregator _eventAggregator;
@@ -72,6 +74,16 @@ namespace NzbDrone.Core.HealthCheck
             _eventAggregator.PublishEvent(new HealthCheckCompleteEvent());
         }
 
+        public void Execute(CheckHealthCommand message)
+        {
+            PerformHealthCheck(c => message.Trigger == CommandTrigger.Manual || c.CheckOnSchedule);
+        }
+
+        public void HandleAsync(ApplicationStartedEvent message)
+        {
+            PerformHealthCheck(c => c.CheckOnStartup);
+        }
+
         public void HandleAsync(ConfigSavedEvent message)
         {
             PerformHealthCheck(c => c.CheckOnConfigChange);
@@ -82,19 +94,19 @@ namespace NzbDrone.Core.HealthCheck
             PerformHealthCheck(c => c.CheckOnConfigChange);
         }
 
+        public void HandleAsync(ProviderDeletedEvent<IIndexer> message)
+        {
+            PerformHealthCheck(c => c.CheckOnConfigChange);
+        }
+
         public void HandleAsync(ProviderUpdatedEvent<IDownloadClient> message)
         {
             PerformHealthCheck(c => c.CheckOnConfigChange);
         }
 
-        public void HandleAsync(ApplicationStartedEvent message)
+        public void HandleAsync(ProviderDeletedEvent<IDownloadClient> message)
         {
-            PerformHealthCheck(c => c.CheckOnStartup);
-        }
-
-        public void Execute(CheckHealthCommand message)
-        {
-            PerformHealthCheck(c => message.Trigger == CommandTrigger.Manual || c.CheckOnSchedule);
+            PerformHealthCheck(c => c.CheckOnConfigChange);
         }
     }
 }
