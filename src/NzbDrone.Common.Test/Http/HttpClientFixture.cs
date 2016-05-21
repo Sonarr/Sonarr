@@ -22,7 +22,11 @@ namespace NzbDrone.Common.Test.Http
     [TestFixture(typeof(ManagedHttpDispatcher))]
     [TestFixture(typeof(CurlHttpDispatcher))]
     public class HttpClientFixture<TDispatcher> : TestBase<HttpClient> where TDispatcher : IHttpDispatcher
-    {        
+    {
+        private static string[] _httpBinHosts = new[] { "eu.httpbin.org", "httpbin.org" };
+        private static int _httpBinRandom;
+        private string _httpBinHost;
+
         [SetUp]
         public void SetUp()
         {
@@ -32,15 +36,19 @@ namespace NzbDrone.Common.Test.Http
             Mocker.SetConstant<IEnumerable<IHttpRequestInterceptor>>(new IHttpRequestInterceptor[0]);
             Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<TDispatcher>());
 
+            // Used for manual testing of socks proxies.
             //Mocker.GetMock<IHttpProxySettingsProvider>()
             //      .Setup(v => v.GetProxySettings(It.IsAny<HttpRequest>()))
             //      .Returns(new HttpProxySettings(ProxyType.Socks5, "127.0.0.1", 5476, "", false));
+
+            // Roundrobin over the two servers, to reduce the chance of hitting the ratelimiter.
+            _httpBinHost = _httpBinHosts[_httpBinRandom++ % _httpBinHosts.Length];
         }
 
         [Test]
         public void should_execute_simple_get()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             var response = Subject.Execute(request);
 
@@ -50,7 +58,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_execute_https_get()
         {
-            var request = new HttpRequest("https://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("https://{0}/get", _httpBinHost));
 
             var response = Subject.Execute(request);
 
@@ -60,7 +68,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_execute_typed_get()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -72,7 +80,7 @@ namespace NzbDrone.Common.Test.Http
         {
             var message = "{ my: 1 }";
 
-            var request = new HttpRequest("http://eu.httpbin.org/post");
+            var request = new HttpRequest(string.Format("http://{0}/post", _httpBinHost));
             request.SetContent(message);
 
             var response = Subject.Post<HttpBinResource>(request);
@@ -83,7 +91,7 @@ namespace NzbDrone.Common.Test.Http
         [TestCase("gzip")]
         public void should_execute_get_using_gzip(string compression)
         {
-            var request = new HttpRequest("http://eu.httpbin.org/" + compression);
+            var request = new HttpRequest(string.Format("http://{0}/{1}", _httpBinHost, compression));
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -99,7 +107,7 @@ namespace NzbDrone.Common.Test.Http
         [TestCase(HttpStatusCode.BadGateway)]
         public void should_throw_on_unsuccessful_status_codes(int statusCode)
         {
-            var request = new HttpRequest("http://eu.httpbin.org/status/" + statusCode);
+            var request = new HttpRequest(string.Format("http://{0}/status/{1}", _httpBinHost, statusCode));
 
             var exception = Assert.Throws<HttpException>(() => Subject.Get<HttpBinResource>(request));
 
@@ -111,7 +119,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_not_follow_redirects_when_not_in_production()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/redirect/1");
+            var request = new HttpRequest(string.Format("http://{0}/redirect/1", _httpBinHost));
 
             Subject.Get(request);
 
@@ -121,7 +129,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_follow_redirects()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/redirect/1");
+            var request = new HttpRequest(string.Format("http://{0}/redirect/1", _httpBinHost));
             request.AllowAutoRedirect = true;
 
             Subject.Get(request);
@@ -132,7 +140,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_send_user_agent()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -146,7 +154,7 @@ namespace NzbDrone.Common.Test.Http
         [TestCase("Accept", "text/xml, text/rss+xml, application/rss+xml")]
         public void should_send_headers(string header, string value)
         {
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
             request.Headers.Add(header, value);
 
             var response = Subject.Get<HttpBinResource>(request);
@@ -169,7 +177,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_send_cookie()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
             request.Cookies["my"] = "cookie";
 
             var response = Subject.Get<HttpBinResource>(request);
@@ -226,12 +234,12 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_not_store_response_cookie()
         {
-            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            var requestSet = new HttpRequest(string.Format("http://{0}/cookies/set?my=cookie", _httpBinHost));
             requestSet.AllowAutoRedirect = false;
 
             var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -243,13 +251,13 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_store_response_cookie()
         {
-            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            var requestSet = new HttpRequest(string.Format("http://{0}/cookies/set?my=cookie", _httpBinHost));
             requestSet.AllowAutoRedirect = false;
             requestSet.StoreResponseCookie = true;
 
             var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -265,14 +273,14 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_overwrite_response_cookie()
         {
-            var requestSet = new HttpRequest("http://eu.httpbin.org/cookies/set?my=cookie");
+            var requestSet = new HttpRequest(string.Format("http://{0}/cookies/set?my=cookie", _httpBinHost));
             requestSet.AllowAutoRedirect = false;
             requestSet.StoreResponseCookie = true;
             requestSet.Cookies["my"] = "oldcookie";
 
             var responseSet = Subject.Get(requestSet);
 
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             var response = Subject.Get<HttpBinResource>(request);
 
@@ -288,7 +296,7 @@ namespace NzbDrone.Common.Test.Http
         [Test]
         public void should_throw_on_http429_too_many_requests()
         {
-            var request = new HttpRequest("http://eu.httpbin.org/status/429");
+            var request = new HttpRequest(string.Format("http://{0}/status/429", _httpBinHost));
 
             Assert.Throws<TooManyRequestsException>(() => Subject.Get(request));
 
@@ -308,7 +316,7 @@ namespace NzbDrone.Common.Test.Http
                 .Setup(v => v.PostResponse(It.IsAny<HttpResponse>()))
                 .Returns<HttpResponse>(r => r);
 
-            var request = new HttpRequest("http://eu.httpbin.org/get");
+            var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
             Subject.Get(request);
 
@@ -330,7 +338,7 @@ namespace NzbDrone.Common.Test.Http
             {
                 // the date is bad in the below - should be 13-Jul-2016
                 string malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Wed, 13-Jul-16 16:19:50 GMT; path=/; HttpOnly";
-                var requestSet = new HttpRequestBuilder("http://eu.httpbin.org/response-headers")
+                var requestSet = new HttpRequestBuilder(string.Format("http://{0}/response-headers", _httpBinHost))
                     .AddQueryParam("Set-Cookie", malformedCookie)
                     .Build();
 
@@ -339,7 +347,7 @@ namespace NzbDrone.Common.Test.Http
 
                 var responseSet = Subject.Get(requestSet);
 
-                var request = new HttpRequest("http://eu.httpbin.org/get");
+                var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
                 var response = Subject.Get<HttpBinResource>(request);
 
@@ -364,7 +372,7 @@ namespace NzbDrone.Common.Test.Http
             try
             {
                 // the date is bad in the below - should be 13-Jul-2016
-                string url = "http://eu.httpbin.org/response-headers?Set-Cookie=" + Uri.EscapeUriString(malformedCookie);
+                string url = string.Format("http://{0}/response-headers?Set-Cookie={1}", _httpBinHost, Uri.EscapeUriString(malformedCookie));
 
                 var requestSet = new HttpRequest(url);
                 requestSet.AllowAutoRedirect = false;
@@ -372,7 +380,7 @@ namespace NzbDrone.Common.Test.Http
 
                 var responseSet = Subject.Get(requestSet);
 
-                var request = new HttpRequest("http://eu.httpbin.org/get");
+                var request = new HttpRequest(string.Format("http://{0}/get", _httpBinHost));
 
                 var response = Subject.Get<HttpBinResource>(request);
 
@@ -383,21 +391,6 @@ namespace NzbDrone.Common.Test.Http
             finally
             {
             }
-        }
-
-        public void should_submit_formparameters_in_body()
-        {
-            Assert.Fail();
-        }
-
-        public void should_submit_attachments_as_multipart()
-        {
-            Assert.Fail();
-        }
-
-        public void should_submit_formparameters_as_multipart_if_attachments_exist()
-        {
-            Assert.Fail();
         }
     }
 
