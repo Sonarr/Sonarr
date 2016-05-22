@@ -16,7 +16,6 @@ using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Update;
 
-
 namespace NzbDrone.Core.Configuration
 {
     public interface IConfigFileProvider : IHandleAsync<ApplicationStartedEvent>,

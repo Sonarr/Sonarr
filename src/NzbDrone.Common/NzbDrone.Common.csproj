@@ -45,6 +45,13 @@
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.3.0-rc1\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="Org.Mentalis, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNet4.SocksProxy.1.1.0.0\lib\net40\Org.Mentalis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SocksWebProxy, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNet4.SocksProxy.1.1.0.0\lib\net40\SocksWebProxy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -150,6 +157,7 @@
     <Compile Include="Http\Dispatchers\FallbackHttpDispatcher.cs" />
     <Compile Include="Http\Dispatchers\IHttpDispatcher.cs" />
     <Compile Include="Http\Dispatchers\ManagedHttpDispatcher.cs" />
+    <Compile Include="Http\Proxy\ManagedWebProxyFactory.cs" />
     <Compile Include="Http\GZipWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -161,8 +169,10 @@
     <Compile Include="Http\HttpMethod.cs" />
     <Compile Include="Http\HttpProvider.cs" />
     <Compile Include="Http\HttpRequest.cs" />
+    <Compile Include="Http\Proxy\HttpProxySettings.cs" />
     <Compile Include="Http\HttpResponse.cs" />
     <Compile Include="Http\HttpUri.cs" />
+    <Compile Include="Http\Proxy\IHttpProxySettingsProvider.cs" />
     <Compile Include="Http\IHttpRequestInterceptor.cs" />
     <Compile Include="Http\JsonRpcRequestBuilder.cs" />
     <Compile Include="Http\JsonRpcResponse.cs" />
@@ -171,6 +181,7 @@
     </Compile>
     <Compile Include="Http\HttpRequestBuilder.cs" />
     <Compile Include="Http\HttpRequestBuilderFactory.cs" />
+    <Compile Include="Http\Proxy\ProxyType.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Http\UserAgentBuilder.cs" />

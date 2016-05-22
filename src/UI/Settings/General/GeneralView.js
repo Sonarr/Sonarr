@@ -11,6 +11,7 @@ var view = Marionette.ItemView.extend({
 
     events : {
         'change .x-auth'             : '_setAuthOptionsVisibility',
+        'change .x-proxy'            : '_setProxyOptionsVisibility',
         'change .x-ssl'              : '_setSslOptionsVisibility',
         'click .x-reset-api-key'     : '_resetApiKey',
         'change .x-update-mechanism' : '_setScriptGroupVisibility'
@@ -25,7 +26,9 @@ var view = Marionette.ItemView.extend({
         copyApiKey      : '.x-copy-api-key',
         apiKeyInput     : '.x-api-key',
         updateMechanism : '.x-update-mechanism',
-        scriptGroup     : '.x-script-group'
+        scriptGroup     : '.x-script-group',
+        proxyToggle     : '.x-proxy',
+        proxyOptions    : '.x-proxy-settings'
     },
 
     initialize : function() {
@@ -35,6 +38,10 @@ var view = Marionette.ItemView.extend({
     onRender : function() {
         if (this.ui.authToggle.val() === 'none') {
             this.ui.authOptions.hide();
+        }
+
+        if (!this.ui.proxyToggle.prop('checked')) {
+            this.ui.proxyOptions.hide();
         }
 
         if (!this.ui.sslToggle.prop('checked')) {
@@ -67,6 +74,15 @@ var view = Marionette.ItemView.extend({
 
         else {
             this.ui.authOptions.slideUp();
+        }
+    },
+
+    _setProxyOptionsVisibility : function() {
+        if (this.ui.proxyToggle.prop('checked')) {
+            this.ui.proxyOptions.slideDown();
+        }
+        else {
+            this.ui.proxyOptions.slideUp();
         }
     },
 

@@ -2,6 +2,7 @@
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Update;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Api.Config
 {
@@ -25,5 +26,13 @@ namespace NzbDrone.Api.Config
         public bool UpdateAutomatically { get; set; }
         public UpdateMechanism UpdateMechanism { get; set; }
         public string UpdateScriptPath { get; set; }
+        public bool ProxyEnabled { get; set; }
+        public ProxyType ProxyType { get; set; }
+        public string ProxyHostname { get; set; }
+        public int ProxyPort { get; set; }
+        public string ProxyUsername { get; set; }
+        public string ProxyPassword { get; set; }
+        public string ProxyBypassFilter { get; set; }
+        public bool ProxyBypassLocalAddresses { get; set; }
     }
 }

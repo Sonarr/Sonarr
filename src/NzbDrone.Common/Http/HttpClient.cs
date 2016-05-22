@@ -35,19 +35,13 @@ namespace NzbDrone.Common.Http
 
         public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, IHttpDispatcher httpDispatcher, Logger logger)
         {
-            _logger = logger;
-            _rateLimitService = rateLimitService;
             _requestInterceptors = requestInterceptors.ToList();
-            ServicePointManager.DefaultConnectionLimit = 12;
+            _rateLimitService = rateLimitService;
             _httpDispatcher = httpDispatcher;
+            _logger = logger;
 
+            ServicePointManager.DefaultConnectionLimit = 12;
             _cookieContainerCache = cacheManager.GetCache<CookieContainer>(typeof(HttpClient));
-        }
-
-        public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors, ICacheManager cacheManager, IRateLimitService rateLimitService, Logger logger)
-            : this(requestInterceptors, cacheManager, rateLimitService, null, logger)
-        {
-            _httpDispatcher = new FallbackHttpDispatcher(cacheManager.GetCache<bool>(typeof(HttpClient), "curlTLSFallback"), _logger);
         }
 
         public HttpResponse Execute(HttpRequest request)

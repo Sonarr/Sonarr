@@ -16,7 +16,7 @@ namespace NzbDrone.Common.Http
             Headers = new HttpHeader();
             AllowAutoRedirect = true;
             Cookies = new Dictionary<string, string>();
-
+            
             if (!RuntimeInfoBase.IsProduction)
             {
                 AllowAutoRedirect = false;

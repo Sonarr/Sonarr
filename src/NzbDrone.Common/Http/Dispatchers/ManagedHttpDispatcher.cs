@@ -1,11 +1,21 @@
 using System;
 using System.Net;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Common.Http.Dispatchers
 {
     public class ManagedHttpDispatcher : IHttpDispatcher
     {
+        private readonly IHttpProxySettingsProvider _proxySettingsProvider;
+        private readonly ICreateManagedWebProxy _createManagedWebProxy;
+
+        public ManagedHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider, ICreateManagedWebProxy createManagedWebProxy)
+        {
+            _proxySettingsProvider = proxySettingsProvider;
+            _createManagedWebProxy = createManagedWebProxy;
+        }
+
         public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
         {
             var webRequest = (HttpWebRequest)WebRequest.Create((Uri)request.Url);
@@ -25,6 +35,8 @@ namespace NzbDrone.Common.Http.Dispatchers
             {
                 webRequest.Timeout = (int)Math.Ceiling(request.RequestTimeout.TotalMilliseconds);
             }
+
+            AddProxy(webRequest, request);
 
             if (request.Headers != null)
             {
@@ -69,6 +81,15 @@ namespace NzbDrone.Common.Http.Dispatchers
             return new HttpResponse(request, new HttpHeader(httpWebResponse.Headers), data, httpWebResponse.StatusCode);
         }
 
+        protected virtual void AddProxy(HttpWebRequest webRequest, HttpRequest request)
+        {
+            var proxySettings = _proxySettingsProvider.GetProxySettings(request);
+            if (proxySettings != null)
+            {
+                webRequest.Proxy = _createManagedWebProxy.GetWebProxy(proxySettings);
+            }
+        }
+        
         protected virtual void AddRequestHeaders(HttpWebRequest webRequest, HttpHeader headers)
         {
             foreach (var header in headers)
