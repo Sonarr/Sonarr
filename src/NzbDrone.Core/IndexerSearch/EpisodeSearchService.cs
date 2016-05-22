@@ -34,7 +34,7 @@ namespace NzbDrone.Core.IndexerSearch
             _logger = logger;
         }
 
-        private void SearchForMissingEpisodes(List<Episode> episodes)
+        private void SearchForMissingEpisodes(List<Episode> episodes, bool userInvokedSearch)
         {
             _logger.ProgressInfo("Performing missing search for {0} episodes", episodes.Count);
             var downloadedCount = 0;
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true);
+                            decisions = _nzbSearchService.SeasonSearch(series.Key, season.Key, true, userInvokedSearch);
                         }
                         catch (Exception ex)
                         {
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.IndexerSearch
                     {
                         try
                         {
-                            decisions = _nzbSearchService.EpisodeSearch(season.First());
+                            decisions = _nzbSearchService.EpisodeSearch(season.First(), userInvokedSearch);
                         }
                         catch (Exception ex)
                         {
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.IndexerSearch
         {
             foreach (var episodeId in message.EpisodeIds)
             {
-                var decisions = _nzbSearchService.EpisodeSearch(episodeId);
+                var decisions = _nzbSearchService.EpisodeSearch(episodeId, message.Trigger == CommandTrigger.Manual);
                 var processed = _processDownloadDecisions.ProcessDecisions(decisions);
 
                 _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", processed.Grabbed.Count);
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.IndexerSearch
             var queue = _queueService.GetQueue().Select(q => q.Episode.Id);
             var missing = episodes.Where(e => !queue.Contains(e.Id)).ToList();
 
-            SearchForMissingEpisodes(missing);
+            SearchForMissingEpisodes(missing, message.Trigger == CommandTrigger.Manual);
         }
     }
 }
