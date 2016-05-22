@@ -80,7 +80,7 @@ namespace NzbDrone.Common
             serviceInstaller.ServiceName = serviceName;
             serviceInstaller.Description = "NzbDrone Application Server";
             serviceInstaller.StartType = ServiceStartMode.Automatic;
-            serviceInstaller.ServicesDependedOn = new[] { "EventLog", "Tcpip" };
+            serviceInstaller.ServicesDependedOn = new[] { "EventLog", "Tcpip", "http" };
 
             serviceInstaller.Parent = installer;
 
