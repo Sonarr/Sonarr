@@ -9,6 +9,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                                   new Season { SeasonNumber = 1, Monitored = true }
                               };
 
-            Subject.Execute(new SeriesSearchCommand{ SeriesId = _series.Id });
+            Subject.Execute(new SeriesSearchCommand { SeriesId = _series.Id, Trigger = CommandTrigger.Manual });
 
             Mocker.GetMock<ISearchForNzb>()
                 .Verify(v => v.SeasonSearch(_series.Id, It.IsAny<int>(), false, true), Times.Exactly(_series.Seasons.Count(s => s.Monitored)));
@@ -70,9 +71,9 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             Mocker.GetMock<ISearchForNzb>()
                   .Setup(s => s.SeasonSearch(_series.Id, It.IsAny<int>(), false, true))
                   .Returns(new List<DownloadDecision>())
-                  .Callback<int, int, bool>((seriesId, seasonNumber, missingOnly) => seasonOrder.Add(seasonNumber));
+                  .Callback<int, int, bool, bool>((seriesId, seasonNumber, missingOnly, userInvokedSearch) => seasonOrder.Add(seasonNumber));
 
-            Subject.Execute(new SeriesSearchCommand { SeriesId = _series.Id });
+            Subject.Execute(new SeriesSearchCommand { SeriesId = _series.Id, Trigger = CommandTrigger.Manual });
 
             seasonOrder.First().Should().Be(_series.Seasons.OrderBy(s => s.SeasonNumber).First().SeasonNumber);
         }
