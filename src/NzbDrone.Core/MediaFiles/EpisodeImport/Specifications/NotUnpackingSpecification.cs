@@ -26,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             if (localEpisode.ExistingFile)
             {
-                _logger.Debug("{0} is in series folder, unpacking check", localEpisode.Path);
+                _logger.Debug("{0} is in series folder, skipping unpacking check", localEpisode.Path);
                 return Decision.Accept();
             }
 
