@@ -20,14 +20,15 @@ namespace NzbDrone.Mono
         private static string[] _networkDriveTypes = new [] { "cifs", "nfs", "nfs4", "nfsd", "sshfs" };
         private static readonly Regex OctalRegex = new Regex(@"\\\d{3}", RegexOptions.Compiled);
 
+        private const string PROC_MOUNTS_FILENAME = @"/proc/mounts";
+        private const string PROC_FILESYSTEMS_FILENAME = @"/proc/filesystems";
+
         private static Dictionary<string, bool> _fileSystems;
 
-        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public ProcMountProvider(IDiskProvider diskProvider, Logger logger)
+        public ProcMountProvider(Logger logger)
         {
-            _diskProvider = diskProvider;
             _logger = logger;
         }
 
@@ -35,16 +36,16 @@ namespace NzbDrone.Mono
         {
             try
             {
-                if (_diskProvider.FileExists(@"/proc/mounts"))
+                if (File.Exists(PROC_MOUNTS_FILENAME))
                 {
-                    var lines = _diskProvider.ReadAllLines(@"/proc/mounts");
+                    var lines = File.ReadAllLines(PROC_MOUNTS_FILENAME);
 
                     return lines.Select(ParseLine).OfType<IMount>().ToList();
                 }
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Failed to retrieve mounts from /proc/mounts");
+                _logger.Debug(ex, "Failed to retrieve mounts from {0}", PROC_MOUNTS_FILENAME);
             }
 
             return new List<IMount>();
@@ -57,9 +58,9 @@ namespace NzbDrone.Mono
                 var result = new Dictionary<string, bool>();
                 try
                 {
-                    if (_diskProvider.FileExists(@"/proc/filesystems"))
+                    if (File.Exists(PROC_FILESYSTEMS_FILENAME))
                     {
-                        var lines = _diskProvider.ReadAllLines(@"/proc/filesystems");
+                        var lines = File.ReadAllLines(PROC_FILESYSTEMS_FILENAME);
 
                         foreach (var line in lines)
                         {
@@ -71,7 +72,7 @@ namespace NzbDrone.Mono
                 }
                 catch (Exception ex)
                 {
-                    _logger.Debug(ex, "Failed to get filesystem types from /proc/filesystems, using default set.");
+                    _logger.Debug(ex, "Failed to get filesystem types from {0}, using default set.", PROC_FILESYSTEMS_FILENAME);
                 }
                 
                 if (result.Empty())
@@ -90,15 +91,15 @@ namespace NzbDrone.Mono
 
         private IMount ParseLine(string line)
         {
-            var split = line.Split(' ');
+            var split = line.Split(' ').Select(ExpandEscapes).ToArray();
 
             if (split.Length != 6)
             {
-                _logger.Debug("Unable to parser /proc/mount line: {0}", line);
+                _logger.Debug("Unable to parse {0} line: {1}", PROC_MOUNTS_FILENAME, line);
             }
 
             var name = split[0];
-            var mount = GetMount(split[1]);
+            var mount = split[1];
             var type = split[2];
             var options = ParseOptions(split[3]);
 
@@ -137,7 +138,7 @@ namespace NzbDrone.Mono
             return result;
         }
 
-        private string GetMount(string mount)
+        private string ExpandEscapes(string mount)
         {
             return OctalRegex.Replace(mount, match => match.Captures[0].Value.FromOctalString());
         }
