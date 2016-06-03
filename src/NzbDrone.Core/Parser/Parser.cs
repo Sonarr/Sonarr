@@ -114,6 +114,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:(?<title>.+?)(?:_|-|\s|\.)+)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?:(?:[-_. ]{1,3}ep){1,2}(?<episode>(?<!\d+)\d{5}(?!\d+)))+",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Separated season and episode numbers S01 - E01
+                new Regex(@"^(?<title>.+?)\WS(?<season>\d{2}(?!\d+))(\W-\W)E(?<episode>(?<!\d+)\d{2}(?!\d+))(?!\\)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Season only releases
                 new Regex(@"^(?<title>.+?)\W(?:S|Season)\W?(?<season>\d{1,2}(?!\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),

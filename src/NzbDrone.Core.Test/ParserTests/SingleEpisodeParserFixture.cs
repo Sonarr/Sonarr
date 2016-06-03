@@ -120,6 +120,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Ken.Burns.The.Civil.War.5of9.The.Universe.Of.Battle.1990.DVDRip.x264-HANDJOB", "Ken Burns The Civil War", 1, 5)]
         [TestCase("Judge Judy 2016 02 25 S20E142", "Judge Judy", 20, 142)]
         [TestCase("Judge Judy 2016 02 25 S20E143", "Judge Judy", 20, 143)]
+        [TestCase("Red Dwarf - S02 - E06 - Parallel Universe", "Red Dwarf", 2, 6)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
