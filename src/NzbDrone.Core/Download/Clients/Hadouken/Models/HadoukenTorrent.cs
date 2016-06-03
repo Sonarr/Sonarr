@@ -5,6 +5,7 @@
         public string InfoHash { get; set; }
         public double Progress { get; set; }
         public string Name { get; set; }
+        public string Label { get; set; }
         public string SavePath { get; set; }
         public HadoukenTorrentState State { get; set; }
         public bool IsFinished { get; set; }

@@ -54,6 +54,11 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
             foreach (var torrent in torrents)
             {
+                if (Settings.Category.IsNotNullOrWhiteSpace() && torrent.Label != Settings.Category)
+                {
+                    continue;
+                }
+
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
                 var eta = TimeSpan.FromSeconds(0);
 

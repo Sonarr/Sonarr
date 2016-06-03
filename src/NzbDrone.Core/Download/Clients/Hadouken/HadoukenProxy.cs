@@ -1,48 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Net;
 using NLog;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Hadouken.Models;
-using NzbDrone.Core.Rest;
-using RestSharp;
 
 namespace NzbDrone.Core.Download.Clients.Hadouken
 {
+    public interface IHadoukenProxy
+    {
+        HadoukenSystemInfo GetSystemInfo(HadoukenSettings settings);
+        HadoukenTorrent[] GetTorrents(HadoukenSettings settings);
+        IDictionary<string, object> GetConfig(HadoukenSettings settings);
+        string AddTorrentFile(HadoukenSettings settings, byte[] fileContent);
+        void AddTorrentUri(HadoukenSettings settings, string torrentUrl);
+        void RemoveTorrent(HadoukenSettings settings, string downloadId);
+        void RemoveTorrentAndData(HadoukenSettings settings, string downloadId);
+    }
+
     public class HadoukenProxy : IHadoukenProxy
     {
         private static int _callId;
+        private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public HadoukenProxy(Logger logger)
+        public HadoukenProxy(IHttpClient httpClient, Logger logger)
         {
+            _httpClient = httpClient;
             _logger = logger;
         }
 
         public HadoukenSystemInfo GetSystemInfo(HadoukenSettings settings)
         {
-            return ProcessRequest<HadoukenSystemInfo>(settings, "core.getSystemInfo").Result;
+            return ProcessRequest<HadoukenSystemInfo>(settings, "core.getSystemInfo");
         }
 
         public HadoukenTorrent[] GetTorrents(HadoukenSettings settings)
         {
-            var result = ProcessRequest<HadoukenResponseResult>(settings, "webui.list").Result;
+            var result = ProcessRequest<HadoukenTorrentResponse>(settings, "webui.list");
             
             return GetTorrents(result.Torrents);
         }
 
         public IDictionary<string, object> GetConfig(HadoukenSettings settings)
         {
-            return ProcessRequest<IDictionary<string, object>>(settings, "webui.getSettings").Result;
+            return ProcessRequest<IDictionary<string, object>>(settings, "webui.getSettings");
         }
 
         public string AddTorrentFile(HadoukenSettings settings, byte[] fileContent)
         {
-            return ProcessRequest<string>(settings, "webui.addTorrent", "file", Convert.ToBase64String(fileContent)).Result;
+            return ProcessRequest<string>(settings, "webui.addTorrent", "file", Convert.ToBase64String(fileContent), new { label = settings.Category });
         }
 
         public void AddTorrentUri(HadoukenSettings settings, string torrentUrl)
         {
-            ProcessRequest<string>(settings, "webui.addTorrent", "url", torrentUrl);
+            ProcessRequest<string>(settings, "webui.addTorrent", "url", torrentUrl, new { label = settings.Category });
         }
 
         public void RemoveTorrent(HadoukenSettings settings, string downloadId)
@@ -55,53 +68,24 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             ProcessRequest<bool>(settings, "webui.perform", "removedata", new string[] { downloadId });
         }
 
-        private HadoukenResponse<TResult> ProcessRequest<TResult>(HadoukenSettings settings, string method, params object[] parameters)
+        private T ProcessRequest<T>(HadoukenSettings settings, string method, params object[] parameters)
         {
-            var client = BuildClient(settings);
-            return ProcessRequest<TResult>(client, method, parameters);
-        }
+            var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, "api");
+            var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
+            requestBuilder.LogResponseContent = true;
+            requestBuilder.NetworkCredential = new NetworkCredential(settings.Username, settings.Password);
+            requestBuilder.Headers.Add("Accept-Encoding", "gzip,deflate");
 
-        private HadoukenResponse<TResult> ProcessRequest<TResult>(IRestClient client, string method, params object[] parameters)
-        {
-            var request = new RestRequest(Method.POST);
-            request.Resource = "api";
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
+            var httpRequest = requestBuilder.Build();
+            var response = _httpClient.Execute(httpRequest);
+            var result = Json.Deserialize<JsonRpcResponse<T>>(response.Content);
 
-            var data = new Dictionary<String, Object>();
-            data.Add("id", GetCallId());
-            data.Add("method", method);
-
-            if (parameters != null)
+            if (result.Error != null)
             {
-                data.Add("params", parameters);
+                throw new DownloadClientException("Error response received from Hadouken: {0}", result.Error.ToString());
             }
 
-            request.AddBody(data);
-
-            _logger.Debug("Url: {0} Method: {1}", client.BuildUri(request), method);
-            return client.ExecuteAndValidate<HadoukenResponse<TResult>>(request);
-        }
-
-        private IRestClient BuildClient(HadoukenSettings settings)
-        {
-            var protocol = settings.UseSsl ? "https" : "http";
-            var url = string.Format(@"{0}://{1}:{2}", protocol, settings.Host, settings.Port);
-
-            var restClient = RestClientFactory.BuildClient(url);
-            restClient.Timeout = 4000;
-
-            var basicData = Encoding.UTF8.GetBytes(string.Format("{0}:{1}", settings.Username, settings.Password));
-            var basicHeader = Convert.ToBase64String(basicData);
-
-            restClient.AddDefaultHeader("Authorization", string.Format("Basic {0}", basicHeader));
-
-            return restClient;
-        }
-
-        private int GetCallId()
-        {
-            return System.Threading.Interlocked.Increment(ref _callId);
+            return result.Result;
         }
 
         private HadoukenTorrent[] GetTorrents(object[][] torrentsRaw)
@@ -141,6 +125,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                     Progress = Convert.ToDouble(item[4]),
                     DownloadedBytes = Convert.ToInt64(item[5]),
                     DownloadRate = Convert.ToInt64(item[9]),
+                    Label = Convert.ToString(item[11]),
                     Error = Convert.ToString(item[21]),
                     SavePath = Convert.ToString(item[26])
                 };
