@@ -36,7 +36,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                 TotalSize = 1000,
                 DownloadedBytes = 0,
                 Progress = 0.0,
-                SavePath = "somepath"
+                SavePath = "somepath",
+                Label = "sonarr-tv"
             };
 
             _downloading = new HadoukenTorrent
@@ -48,7 +49,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                 TotalSize = 1000,
                 DownloadedBytes = 100,
                 Progress = 10.0,
-                SavePath = "somepath"
+                SavePath = "somepath",
+                Label = "sonarr-tv"
             };
 
             _failed = new HadoukenTorrent
@@ -61,7 +63,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                 TotalSize = 1000,
                 DownloadedBytes = 100,
                 Progress = 10.0,
-                SavePath = "somepath"
+                SavePath = "somepath",
+                Label = "sonarr-tv"
             };
 
             _completed = new HadoukenTorrent
@@ -73,7 +76,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                 TotalSize = 1000,
                 DownloadedBytes = 1000,
                 Progress = 100.0,
-                SavePath = "somepath"
+                SavePath = "somepath",
+                Label = "sonarr-tv"
             };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
@@ -230,7 +234,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                 TotalSize = 1000,
                 DownloadedBytes = 1000,
                 Progress = 100.0,
-                SavePath = "somepath"
+                SavePath = "somepath",
+                Label = "sonarr-tv"
             };
 
             var torrents = new HadoukenTorrent[] { torrent };
@@ -238,11 +243,34 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
                 .Setup(v => v.GetTorrents(It.IsAny<HadoukenSettings>()))
                 .Returns(torrents);
 
-            // Act
             var result = Subject.GetItems();
             var downloadItem = result.First();
 
             downloadItem.DownloadId.Should().Be("HASH");
+        }
+
+        [Test]
+        public void GetItems_should_ignore_torrents_with_a_different_category()
+        {
+            var torrent = new HadoukenTorrent
+            {
+                InfoHash = "hash",
+                IsFinished = true,
+                State = HadoukenTorrentState.Paused,
+                Name = _title,
+                TotalSize = 1000,
+                DownloadedBytes = 1000,
+                Progress = 100.0,
+                SavePath = "somepath",
+                Label = "sonarr-tv-other"
+            };
+
+            var torrents = new HadoukenTorrent[] { torrent };
+            Mocker.GetMock<IHadoukenProxy>()
+                .Setup(v => v.GetTorrents(It.IsAny<HadoukenSettings>()))
+                .Returns(torrents);
+
+            Subject.GetItems().Should().BeEmpty();
         }
 
         [Test]
