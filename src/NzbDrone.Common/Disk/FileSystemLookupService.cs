@@ -20,7 +20,7 @@ namespace NzbDrone.Common.Disk
 
         private readonly HashSet<string> _setToRemove = new HashSet<string>
                                                         {
-                                                            //Windows
+                                                            // Windows
                                                             "boot",
                                                             "bootmgr",
                                                             "cache",
@@ -32,14 +32,20 @@ namespace NzbDrone.Common.Disk
                                                             "temporary internet files",
                                                             "windows",
 
-                                                            //OS X
+                                                            // OS X
                                                             ".fseventd",
                                                             ".spotlight",
                                                             ".trashes",
                                                             ".vol",
                                                             "cachedmessages",
                                                             "caches",
-                                                            "trash"
+                                                            "trash",
+
+                                                            // QNAP
+                                                            ".@__thumb",
+
+                                                            // Synology
+                                                            "@eadir"
                                                         };
 
         public FileSystemLookupService(IDiskProvider diskProvider, Logger logger)
