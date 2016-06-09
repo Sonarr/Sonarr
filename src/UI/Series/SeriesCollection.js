@@ -63,6 +63,11 @@ var Collection = PageableCollection.extend({
         'monitored'  : [
             'monitored',
             true
+        ],
+        'missing'  : [
+            'percentOfEpisodes',
+            100,
+            'lt'
         ]
     },
 
