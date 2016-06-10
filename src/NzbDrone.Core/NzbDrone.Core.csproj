@@ -641,6 +641,7 @@
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\ReconfigureLogging.cs" />
+    <Compile Include="Instrumentation\SlowRunningAsyncTargetWrapper.cs" />
     <Compile Include="Jobs\ScheduledTaskRepository.cs" />
     <Compile Include="Jobs\ScheduledTask.cs" />
     <Compile Include="Jobs\Scheduler.cs" />
