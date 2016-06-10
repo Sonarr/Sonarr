@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Threading;
 using FluentAssertions;
 using Marr.Data;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
@@ -35,7 +36,6 @@ namespace NzbDrone.Core.Test.InstrumentationTests
 
             LogManager.ReconfigExistingLoggers();
 
-
             _logger = NzbDroneLogger.GetLogger(this);
 
             _uniqueMessage = "Unique message: " + Guid.NewGuid();
@@ -45,6 +45,8 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         public void write_log()
         {
             _logger.Info(_uniqueMessage);
+
+            Thread.Sleep(600);
 
             StoredModel.Message.Should().Be(_uniqueMessage);
             VerifyLog(StoredModel, LogLevel.Info);
@@ -60,6 +62,8 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             }
 
             _logger.Info(message);
+
+            Thread.Sleep(600);
 
             StoredModel.Message.Should().HaveLength(message.Length);
             StoredModel.Message.Should().Be(message);
@@ -77,6 +81,9 @@ namespace NzbDrone.Core.Test.InstrumentationTests
             {
                 _logger.Info(Guid.NewGuid());
             }
+
+            Thread.Sleep(600);
+
             MapRepository.Instance.EnableTraceLogging = true;
         }
 
@@ -87,6 +94,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
 
             _logger.Error(ex, _uniqueMessage);
 
+            Thread.Sleep(600);
 
             VerifyLog(StoredModel, LogLevel.Error);
             StoredModel.Message.Should().Be(_uniqueMessage + ": " + ex.Message);
@@ -99,12 +107,12 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         [Test]
         public void exception_log_with_no_message_should_use_exceptions_message()
         {
-
             var ex = new InvalidOperationException("Fake Exception");
             _uniqueMessage = string.Empty;
 
-
             _logger.Error(ex, _uniqueMessage);
+
+            Thread.Sleep(600);
 
             StoredModel.Message.Should().Be(ex.Message);
 
@@ -118,6 +126,8 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         {
             var epFile = new EpisodeFile();
             _logger.Debug("File {0} no longer exists on disk. removing from database.", epFile.RelativePath);
+
+            Thread.Sleep(600);
 
             epFile.RelativePath.Should().BeNull();
         }
