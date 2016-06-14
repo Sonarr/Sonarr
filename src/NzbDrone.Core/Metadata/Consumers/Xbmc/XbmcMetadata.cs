@@ -276,6 +276,46 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                         details.Add(new XElement("rating", episode.Ratings.Value));
                     }
 
+                    if (episodeFile.MediaInfo != null)
+                    {
+                        var fileInfo = new XElement("fileinfo");
+                        var streamDetails = new XElement("streamdetails");
+
+                        var video = new XElement("video");
+                        video.Add(new XElement("aspect", (float) episodeFile.MediaInfo.Width / (float) episodeFile.MediaInfo.Height));
+                        video.Add(new XElement("bitrate", episodeFile.MediaInfo.VideoBitrate));
+                        video.Add(new XElement("codec", episodeFile.MediaInfo.VideoCodec));
+                        video.Add(new XElement("framerate", episodeFile.MediaInfo.VideoFps));
+                        video.Add(new XElement("height", episodeFile.MediaInfo.Height));
+                        video.Add(new XElement("scantype", episodeFile.MediaInfo.ScanType));
+                        video.Add(new XElement("width", episodeFile.MediaInfo.Height));
+
+                        if (episodeFile.MediaInfo.RunTime != null)
+                        {
+                            video.Add(new XElement("duration", episodeFile.MediaInfo.RunTime.TotalMinutes));
+                            video.Add(new XElement("durationinseconds", episodeFile.MediaInfo.RunTime.TotalSeconds));
+                        }
+
+                        streamDetails.Add(video);
+
+                        var audio = new XElement("audio");
+                        audio.Add(new XElement("bitrate", episodeFile.MediaInfo.AudioBitrate));
+                        audio.Add(new XElement("channels", episodeFile.MediaInfo.AudioChannels));
+                        audio.Add(new XElement("codec", episodeFile.MediaInfo.AudioFormat));
+                        audio.Add(new XElement("language", episodeFile.MediaInfo.AudioLanguages));
+                        streamDetails.Add(audio);
+
+                        if (episodeFile.MediaInfo.Subtitles != null && episodeFile.MediaInfo.Subtitles.Length > 0)
+                        {
+                            var subtitle = new XElement("subtitle");
+                            subtitle.Add(new XElement("language", episodeFile.MediaInfo.Subtitles));
+                            streamDetails.Add(subtitle);
+                        }
+
+                        fileInfo.Add(streamDetails);
+                        details.Add(fileInfo);
+                    }
+
                     //Todo: get guest stars, writer and director
                     //details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
                     //details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
