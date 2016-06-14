@@ -164,6 +164,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Psych.S01.1080p.WEB-DL.AAC2.0.AVC-TrollHD", false)]
         [TestCase("Series Title S06E08 1080p WEB h264-EXCLUSIVE", false)]
         [TestCase("Series Title S06E08 No One PROPER 1080p WEB DD5 1 H 264-EXCLUSIVE", true)]
+        [TestCase("Series Title S06E08 No One PROPER 1080p WEB H 264-EXCLUSIVE", true)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
