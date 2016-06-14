@@ -199,7 +199,7 @@ module.exports = Marionette.Layout.extend({
                     key      : 'missing',
                     title    : '',
                     tooltip  : 'Missing',
-                    icon     : 'icon-sonarr-edit',
+                    icon     : 'icon-sonarr-missing',
                     callback : this._setFilter
                 }
             ]
