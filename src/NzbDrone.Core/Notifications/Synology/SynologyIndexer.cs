@@ -61,14 +61,6 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
