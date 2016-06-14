@@ -53,7 +53,14 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
-                _logger.Error(ex, "Downloading nzb for episode '{0}' failed ({1})", remoteEpisode.Release.Title, url);
+                if ((int)ex.Response.StatusCode == 429)
+                {
+                    _logger.Error("API Grab Limit reached for {0}", url);
+                }
+                else
+                {
+                    _logger.Error(ex, "Downloading nzb for episode '{0}' failed ({1})", remoteEpisode.Release.Title, url);
+                }
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading nzb failed", ex);
             }

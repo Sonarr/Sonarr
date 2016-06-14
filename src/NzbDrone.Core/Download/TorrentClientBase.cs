@@ -130,7 +130,14 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
-                _logger.Error(ex, "Downloading torrent file for episode '{0}' failed ({1})", remoteEpisode.Release.Title, torrentUrl);
+                if ((int)ex.Response.StatusCode == 429)
+                {
+                    _logger.Error("API Grab Limit reached for {0}", torrentUrl);
+                }
+                else
+                {
+                    _logger.Error(ex, "Downloading torrent file for episode '{0}' failed ({1})", remoteEpisode.Release.Title, torrentUrl);
+                }
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
             }
