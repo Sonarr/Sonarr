@@ -50,7 +50,7 @@ module.exports = function() {
                 return model.get(self.state.filterKey) >= self.state.filterValue;
             }
             else if (self.state.filterType === 'ne') {
-                return !(model.get(self.state.filterKey) === self.state.filterValue);
+                return model.get(self.state.filterKey) !== self.state.filterValue;
             }
             else {
                 return model.get(self.state.filterKey) === self.state.filterValue;
