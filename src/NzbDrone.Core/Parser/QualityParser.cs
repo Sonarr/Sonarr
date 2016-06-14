@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 
@@ -10,11 +11,11 @@ namespace NzbDrone.Core.Parser
 {
     public class QualityParser
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(QualityParser));
 
         private static readonly Regex SourceRegex = new Regex(@"\b(?:
                                                                 (?<bluray>BluRay|Blu-Ray|HDDVD|BD)|
-                                                                (?<webdl>WEB[-_. ]DL|WEBDL|WebRip|iTunesHD|WebHD|\.WEB\.[xh]26[45]|\d+0p\.WEB\.)|
+                                                                (?<webdl>WEB[-_. ]DL|WEBDL|WebRip|iTunesHD|WebHD|[. ]WEB[. ](?:[xh]26[45]|DD5[. ]1)|\d+0p\.WEB\.)|
                                                                 (?<hdtv>HDTV)|
                                                                 (?<bdrip>BDRip)|
                                                                 (?<brrip>BRRip)|

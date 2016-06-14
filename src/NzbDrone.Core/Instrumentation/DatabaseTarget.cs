@@ -28,9 +28,11 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Register()
         {
-            Rule = new LoggingRule("*", LogLevel.Info, this);
+            var target = new SlowRunningAsyncTargetWrapper(this) { TimeToSleepBetweenBatches = 500 };
 
-            LogManager.Configuration.AddTarget("DbLogger", new AsyncTargetWrapper(this));
+            Rule = new LoggingRule("*", LogLevel.Info, target);
+
+            LogManager.Configuration.AddTarget("DbLogger", target);
             LogManager.Configuration.LoggingRules.Add(Rule);
             LogManager.ConfigurationReloaded += OnLogManagerOnConfigurationReloaded;
             LogManager.ReconfigExistingLoggers();

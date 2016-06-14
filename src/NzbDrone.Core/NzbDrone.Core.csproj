@@ -81,7 +81,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.0-rc1\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.4\lib\net40\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OAuth">
@@ -348,6 +348,13 @@
     <Compile Include="Download\Clients\Deluge\DelugeUpdateUIResult.cs" />
     <Compile Include="Download\Clients\DownloadClientAuthenticationException.cs" />
     <Compile Include="Download\Clients\DownloadClientException.cs" />
+    <Compile Include="Download\Clients\Hadouken\Hadouken.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenProxy.cs" />
+    <Compile Include="Download\Clients\Hadouken\HadoukenSettings.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenTorrentResponse.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenTorrentState.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenSystemInfo.cs" />
+    <Compile Include="Download\Clients\Hadouken\Models\HadoukenTorrent.cs" />
     <Compile Include="Download\Clients\Nzbget\ErrorModel.cs" />
     <Compile Include="Download\Clients\Nzbget\JsonError.cs" />
     <Compile Include="Download\Clients\Nzbget\Nzbget.cs" />
@@ -634,6 +641,7 @@
     <Compile Include="Instrumentation\LogRepository.cs" />
     <Compile Include="Instrumentation\LogService.cs" />
     <Compile Include="Instrumentation\ReconfigureLogging.cs" />
+    <Compile Include="Instrumentation\SlowRunningAsyncTargetWrapper.cs" />
     <Compile Include="Jobs\ScheduledTaskRepository.cs" />
     <Compile Include="Jobs\ScheduledTask.cs" />
     <Compile Include="Jobs\Scheduler.cs" />
@@ -785,6 +793,11 @@
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
     <Compile Include="Notifications\Plex\PlexClientService.cs" />
     <Compile Include="Notifications\PushBullet\PushBulletException.cs" />
+    <Compile Include="Notifications\Slack\Payloads\Attachment.cs" />
+    <Compile Include="Notifications\Slack\Payloads\SlackPayload.cs" />
+    <Compile Include="Notifications\Slack\Slack.cs" />
+    <Compile Include="Notifications\Slack\SlackExeption.cs" />
+    <Compile Include="Notifications\Slack\SlackSettings.cs" />
     <Compile Include="Notifications\Synology\SynologyException.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
