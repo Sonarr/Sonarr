@@ -82,6 +82,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?:Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+)))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Mini-Series, treated as season 1, episodes are labelled as Part One/Two/Three/...Nine, Part.One, Part_One
+                new Regex(@"^(?<title>.+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(?>[-._ ])))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Mini-Series, treated as season 1, episodes are labelled as XofY
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?<episode>(?<!\d+)\d{1,2}(?!\d+))of\d+)+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -249,6 +253,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex DuplicateSpacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
 
         private static readonly Regex RequestInfoRegex = new Regex(@"\[.+?\]", RegexOptions.Compiled);
+
+        private static readonly string[] Numbers = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -628,8 +634,8 @@ namespace NzbDrone.Core.Parser
                     //Allows use to return a list of 0 episodes (We can handle that as a full season release)
                     if (episodeCaptures.Any())
                     {
-                        var first = Convert.ToInt32(episodeCaptures.First().Value);
-                        var last = Convert.ToInt32(episodeCaptures.Last().Value);
+                        var first = ParseNumber(episodeCaptures.First().Value);
+                        var last = ParseNumber(episodeCaptures.Last().Value);
 
                         if (first > last)
                         {
@@ -773,6 +779,25 @@ namespace NzbDrone.Core.Parser
             }
 
             return string.Empty;
+        }
+
+        private static int ParseNumber(string value)
+        {
+            int number;
+
+            if (int.TryParse(value, out number))
+            {
+                return number;
+            }
+
+            number = Array.IndexOf(Numbers, value.ToLower());
+
+            if (number != -1)
+            {
+                return number;
+            }
+
+            throw new FormatException(string.Format("{0} isn't a number", value));
         }
     }
 }
