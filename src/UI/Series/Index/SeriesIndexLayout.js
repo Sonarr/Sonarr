@@ -194,6 +194,13 @@ module.exports = Marionette.Layout.extend({
                     tooltip  : 'Ended Only',
                     icon     : 'icon-sonarr-series-ended',
                     callback : this._setFilter
+                },
+                {
+                    key      : 'missing',
+                    title    : '',
+                    tooltip  : 'Missing',
+                    icon     : 'icon-sonarr-missing',
+                    callback : this._setFilter
                 }
             ]
         };
