@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Metadata;
 using NzbDrone.Core.Metadata.Files;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -16,7 +15,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         [Test]
         public void should_not_delete_metadata_files_that_have_a_relative_path()
         {
-            var relativePath = @"C:\Test\".AsOsAgnostic().GetRelativePath(@"C:\Test\Relative\Path");
+            var relativePath = @"C:\Test\".AsOsAgnostic().GetRelativePath(@"C:\Test\Relative\Path".AsOsAgnostic());
             var file = Builder<MetadataFile>.CreateNew()
                                             .With(m => m.RelativePath = relativePath)
                                             .BuildNew();
