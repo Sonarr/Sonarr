@@ -212,6 +212,7 @@
     <Compile Include="HistoryTests\HistoryServiceFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalUsersFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecsFixture.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupAbsolutePathMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFilesFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklistFixture.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFilesFixture.cs" />

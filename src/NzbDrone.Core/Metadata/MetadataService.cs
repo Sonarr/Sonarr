@@ -183,11 +183,18 @@ namespace NzbDrone.Core.Metadata
                                {
                                    SeriesId = series.Id,
                                    Consumer = consumer.GetType().Name,
-                                   Type = MetadataType.SeriesMetadata,
+                                   Type = MetadataType.SeriesMetadata
                                };
 
             if (hash == metadata.Hash)
             {
+                if (seriesMetadata.RelativePath != metadata.RelativePath)
+                {
+                    metadata.RelativePath = seriesMetadata.RelativePath;
+
+                    return metadata;
+                }
+
                 return null;
             }
 
@@ -273,7 +280,7 @@ namespace NzbDrone.Core.Metadata
                                    RelativePath = image.RelativePath
                                };
 
-                _diskProvider.CopyFile(image.Url, image.RelativePath);
+                _diskProvider.CopyFile(image.Url, Path.Combine(series.Path, image.RelativePath));
                 _mediaFileAttributeService.SetFilePermissions(image.RelativePath);
 
                 result.Add(metadata);
@@ -368,16 +375,16 @@ namespace NzbDrone.Core.Metadata
             return result;
         }
 
-        private void DownloadImage(Series series, string url, string path)
+        private void DownloadImage(Series series, string url, string relativePath)
         {
             try
             {
-                _httpClient.DownloadFile(url, path);
-                _mediaFileAttributeService.SetFilePermissions(path);
+                _httpClient.DownloadFile(url, Path.Combine(series.Path, relativePath));
+                _mediaFileAttributeService.SetFilePermissions(relativePath);
             }
             catch (WebException e)
             {
-                _logger.Warn(string.Format("Couldn't download image {0} for {1}. {2}", url, series, e.Message));
+                _logger.Warn("Couldn't download image {0} for {1}. {2}", url, series, e.Message);
             }
             catch (Exception e)
             {

@@ -222,7 +222,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
 
                 _logger.Debug("Saving tvshow.nfo for {0}", series.Title);
 
-                return new MetadataFileResult(Path.Combine(series.Path, "tvshow.nfo"), doc.ToString());
+                return new MetadataFileResult("tvshow.nfo", doc.ToString());
             }
         }
 
@@ -386,7 +386,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
             foreach (var image in series.Images)
             {
                 var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
-                var destination = Path.Combine(series.Path, image.CoverType.ToString().ToLowerInvariant() + Path.GetExtension(source));
+                var destination = image.CoverType.ToString().ToLowerInvariant() + Path.GetExtension(source);
 
                 yield return new ImageFileResult(destination, source);
             }
@@ -403,7 +403,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                     filename = string.Format("season-specials-{0}.jpg", image.CoverType.ToString().ToLower());
                 }
 
-                yield return new ImageFileResult(Path.Combine(series.Path, filename), image.Url);
+                yield return new ImageFileResult(filename, image.Url);
             }
         }
 

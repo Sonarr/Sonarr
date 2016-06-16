@@ -70,18 +70,19 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                         continue;
                     }
 
-                    var existingFilename = Path.Combine(series.Path, metadataFile.RelativePath);
-                    newFilename = Path.Combine(series.Path, newFilename);
+                    var existingPath = Path.Combine(series.Path, metadataFile.RelativePath);
+                    var newPath = Path.Combine(series.Path, newFilename);
 
-                    if (!newFilename.PathEquals(existingFilename))
+                    if (!newPath.PathEquals(existingPath))
                     {
-                        _diskProvider.MoveFile(existingFilename, newFilename);
-                        metadataFile.RelativePath = series.Path.GetRelativePath(newFilename);
+                        _diskProvider.MoveFile(existingPath, newPath);
+                        metadataFile.RelativePath = newFilename;
 
                         updatedMetadataFiles.Add(metadataFile);
                     }
                 }
             }
+
             return updatedMetadataFiles;
         }
 
@@ -217,7 +218,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
             }
 
             var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
-            var destination = Path.Combine(series.Path, "folder" + Path.GetExtension(source));
+            var destination = "folder" + Path.GetExtension(source);
 
             return new List<ImageFileResult>
                    {
@@ -250,7 +251,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Wdtv
                 return new List<ImageFileResult>();
             }
 
-            var path = Path.Combine(series.Path, seasonFolder, "folder.jpg");
+            var path = Path.Combine(seasonFolder, "folder.jpg");
 
             return new List<ImageFileResult>{ new ImageFileResult(path, image.Url) };
         }

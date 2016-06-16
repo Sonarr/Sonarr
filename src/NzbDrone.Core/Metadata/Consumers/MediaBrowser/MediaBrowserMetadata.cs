@@ -88,36 +88,29 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
                 tvShow.Add(new XElement("Status", series.Status));
                 tvShow.Add(new XElement("Network", series.Network));
                 tvShow.Add(new XElement("Airs_Time", series.AirTime));
-                //tvShow.Add(new XElement("Airs_DayOfWeek", 
+
                 if (series.FirstAired.HasValue)
                 {
                     tvShow.Add(new XElement("FirstAired", series.FirstAired.Value.ToString("yyyy-MM-dd")));
                 }
+
                 tvShow.Add(new XElement("ContentRating", series.Certification));
                 tvShow.Add(new XElement("Added", series.Added.ToString("MM/dd/yyyy HH:mm:ss tt"))); 
                 tvShow.Add(new XElement("LockData", "false"));
                 tvShow.Add(new XElement("Overview", series.Overview));
                 tvShow.Add(new XElement("LocalTitle", series.Title));
+
                 if (series.FirstAired.HasValue)
                 {
                     tvShow.Add(new XElement("PremiereDate", series.FirstAired.Value.ToString("yyyy-MM-dd")));
                 }
-                //tvShow.Add(new XElement("EndDate", series.EndDate.ToString("yyyy-MM-dd")));
+
                 tvShow.Add(new XElement("Rating", series.Ratings.Value));
-                //tvShow.Add(new XElement("VoteCount", 
                 tvShow.Add(new XElement("ProductionYear", series.Year));
-                //tvShow.Add(new XElement("Website", 
                 tvShow.Add(new XElement("RunningTime", series.Runtime));
                 tvShow.Add(new XElement("IMDB", series.ImdbId));
-                //tvShow.Add(new XElement("TMDbId", 
-                //tvShow.Add(new XElement("Zap2itId",
                 tvShow.Add(new XElement("TVRageId", series.TvRageId));
                 tvShow.Add(new XElement("Genres", series.Genres.Select(genre => new XElement("Genre", genre))));
-
-                // Studios
-                    // Studio
-                    // Studio
-                // ??
 
                 var persons   = new XElement("Persons");
 
@@ -138,7 +131,7 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
 
                 _logger.Debug("Saving series.xml for {0}", series.Title);
 
-                return new MetadataFileResult(Path.Combine(series.Path, "series.xml"), doc.ToString());
+                return new MetadataFileResult("series.xml", doc.ToString());
             }
         }
  

@@ -510,6 +510,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalUsers.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupAdditionalNamingSpecs.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupCommandQueue.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupAbsolutePathMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupDuplicateMetadataFiles.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedBlacklist.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodeFiles.cs" />
