@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Notifications.Slack
             {
                 IconEmoji = Settings.Icon,
                 Username = Settings.Username,
-                Text = "Grabbed",
+                Text = $"Grabbed: {message.Message}",
                 Attachments = new List<Attachment>
                 {
                     new Attachment
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Notifications.Slack
             {
                 IconEmoji = Settings.Icon,
                 Username = Settings.Username,
-                Text = "Downloaded",
+                Text = $"Imported: {message.Message}",
                 Attachments = new List<Attachment>
                 {
                     new Attachment
