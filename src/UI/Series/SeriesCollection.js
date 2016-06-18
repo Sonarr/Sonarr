@@ -65,9 +65,9 @@ var Collection = PageableCollection.extend({
             true
         ],
         'missing'  : [
-            'percentOfEpisodes',
-            100,
-            'lt'
+            null,
+            null,
+            function(model) { return model.get('episodeCount') !== model.get('episodeFileCount'); }
         ]
     },
 

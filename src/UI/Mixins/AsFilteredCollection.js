@@ -31,26 +31,15 @@ module.exports = function() {
         self.shadowCollection = originalMakeFullCollection.call(this, models, options);
 
         var filterModel = function(model) {
-            if (!self.state.filterKey || !self.state.filterValue) {
+            if (_.isFunction(self.state.filterType)) {
+                return self.state.filterType(model);
+            }
+
+            if (!self.state.filterKey) {
                 return true;
             }
             else if (self.state.filterType === 'contains') {
                 return model.get(self.state.filterKey).toLowerCase().indexOf(self.state.filterValue.toLowerCase()) > -1;
-            }
-            else if (self.state.filterType === 'lt') {
-                return model.get(self.state.filterKey) < self.state.filterValue;
-            }
-            else if (self.state.filterType === 'gt') {
-                return model.get(self.state.filterKey) > self.state.filterValue;
-            }
-            else if (self.state.filterType === 'le') {
-                return model.get(self.state.filterKey) <= self.state.filterValue;
-            }
-            else if (self.state.filterType === 'ge') {
-                return model.get(self.state.filterKey) >= self.state.filterValue;
-            }
-            else if (self.state.filterType === 'ne') {
-                return model.get(self.state.filterKey) !== self.state.filterValue;
             }
             else {
                 return model.get(self.state.filterKey) === self.state.filterValue;
