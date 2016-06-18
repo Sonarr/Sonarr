@@ -264,9 +264,11 @@ namespace NzbDrone.Core.Metadata
 
             foreach (var image in consumer.SeriesImages(series))
             {
-                if (_diskProvider.FileExists(image.RelativePath))
+                var fullPath = Path.Combine(series.Path, image.RelativePath);
+
+                if (_diskProvider.FileExists(fullPath))
                 {
-                    _logger.Debug("Series image already exists: {0}", image.RelativePath);
+                    _logger.Debug("Series image already exists: {0}", fullPath);
                     continue;
                 }
 
@@ -280,8 +282,7 @@ namespace NzbDrone.Core.Metadata
                                    RelativePath = image.RelativePath
                                };
 
-                _diskProvider.CopyFile(image.Url, Path.Combine(series.Path, image.RelativePath));
-                _mediaFileAttributeService.SetFilePermissions(image.RelativePath);
+                DownloadImage(series, image);
 
                 result.Add(metadata);
             }
@@ -293,17 +294,15 @@ namespace NzbDrone.Core.Metadata
         {
             var result = new List<MetadataFile>();
 
-            foreach (var seasonItem in series.Seasons)
+            foreach (var season in series.Seasons)
             {
-                var season = seasonItem;
-
-                foreach (var imageItem in consumer.SeasonImages(series, season))
+                foreach (var image in consumer.SeasonImages(series, season))
                 {
-                    var image = imageItem;
+                    var fullPath = Path.Combine(series.Path, image.RelativePath);
 
-                    if (_diskProvider.FileExists(image.RelativePath))
+                    if (_diskProvider.FileExists(fullPath))
                     {
-                        _logger.Debug("Season image already exists: {0}", image.RelativePath);
+                        _logger.Debug("Season image already exists: {0}", fullPath);
                         continue;
                     }
 
@@ -319,7 +318,7 @@ namespace NzbDrone.Core.Metadata
                                     RelativePath = image.RelativePath
                                 };
 
-                    DownloadImage(series, image.Url, image.RelativePath);
+                    DownloadImage(series, image);
 
                     result.Add(metadata);
                 }
@@ -338,7 +337,7 @@ namespace NzbDrone.Core.Metadata
 
                 if (_diskProvider.FileExists(fullPath))
                 {
-                    _logger.Debug("Episode image already exists: {0}", image.RelativePath);
+                    _logger.Debug("Episode image already exists: {0}", fullPath);
                     continue;
                 }
 
@@ -367,7 +366,7 @@ namespace NzbDrone.Core.Metadata
                                    RelativePath = image.RelativePath
                                };
 
-                DownloadImage(series, image.Url, fullPath);
+                DownloadImage(series, image);
 
                 result.Add(metadata);
             }
@@ -375,20 +374,29 @@ namespace NzbDrone.Core.Metadata
             return result;
         }
 
-        private void DownloadImage(Series series, string url, string relativePath)
+        private void DownloadImage(Series series, ImageFileResult image)
         {
+            var fullPath = Path.Combine(series.Path, image.RelativePath);
+
             try
             {
-                _httpClient.DownloadFile(url, Path.Combine(series.Path, relativePath));
-                _mediaFileAttributeService.SetFilePermissions(relativePath);
+                if (image.Url.StartsWith("http"))
+                {
+                    _httpClient.DownloadFile(image.Url, fullPath);
+                }
+                else
+                {
+                    _diskProvider.CopyFile(image.Url, fullPath);
+                }
+                _mediaFileAttributeService.SetFilePermissions(fullPath);
             }
-            catch (WebException e)
+            catch (WebException ex)
             {
-                _logger.Warn("Couldn't download image {0} for {1}. {2}", url, series, e.Message);
+                _logger.Warn(ex, "Couldn't download image {0} for {1}. {2}", image.Url, series, ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.Error(e, "Couldn't download image " + url + " for " + series);
+                _logger.Error(ex, "Couldn't download image {0} for {1}. {2}", image.Url, series, ex.Message);
             }
         }
 
