@@ -188,7 +188,18 @@ namespace NzbDrone.Core.Metadata.Consumers.Roksbox
                     details.Add(new XElement("actors", actors));
                     details.Add(new XElement("description", episode.Overview));
                     details.Add(new XElement("length", series.Runtime));
-                    details.Add(new XElement("mpaa", ValidCertification.Contains(series.Certification.ToUpperInvariant()) ? series.Certification.ToUpperInvariant() : "UNRATED"));
+
+                    if (series.Certification.IsNotNullOrWhiteSpace() &&
+                        ValidCertification.Contains(series.Certification.ToUpperInvariant()))
+                    {
+                        details.Add(new XElement("mpaa", series.Certification.ToUpperInvariant()));
+                    }
+
+                    else
+                    {
+                        details.Add(new XElement("mpaa", "UNRATED"));
+                    }
+
                     doc.Add(details);
                     doc.Save(xw);
 
