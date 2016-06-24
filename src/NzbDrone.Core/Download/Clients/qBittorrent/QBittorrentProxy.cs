@@ -94,12 +94,26 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public void SetTorrentLabel(string hash, string label, QBittorrentSettings settings)
         {
-            var request = BuildRequest(settings).Resource("/command/setLabel")
-                                                .Post()
-                                                .AddFormParameter("hashes", hash)
-                                                .AddFormParameter("label", label);
-
-            ProcessRequest<object>(request, settings);
+            var setCategoryRequest = BuildRequest(settings).Resource("/command/setCategory")
+                                                        .Post()
+                                                        .AddFormParameter("hashes", hash)
+                                                        .AddFormParameter("category", label);
+            try
+            { 
+                ProcessRequest<object>(setCategoryRequest, settings);
+            }
+            catch(DownloadClientException ex)
+            {
+                // if setCategory fails due to method not being found, then try older setLabel command for qbittorent < v.3.3.5
+                if (ex.InnerException is HttpException && (ex.InnerException as HttpException).Response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    var setLabelRequest = BuildRequest(settings).Resource("/command/setLabel")
+                                                                .Post()
+                                                                .AddFormParameter("hashes", hash)
+                                                                .AddFormParameter("label", label);
+                    ProcessRequest<object>(setLabelRequest, settings);
+                }
+            }
         }
 
         public void MoveTorrentToTopInQueue(string hash, QBittorrentSettings settings)
