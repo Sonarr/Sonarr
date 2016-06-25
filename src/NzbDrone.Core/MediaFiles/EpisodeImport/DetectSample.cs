@@ -108,7 +108,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private int GetMinimumAllowedRuntime(Series series)
         {
             //Webisodes - 90 seconds
-            if (series.Runtime <= 5)
+            if (series.Runtime <= 10)
             {
                 return 90;
             }

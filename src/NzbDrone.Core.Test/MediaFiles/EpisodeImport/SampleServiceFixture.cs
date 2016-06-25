@@ -105,9 +105,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         }
 
         [Test]
-        public void should_return_false_if_runtime_greater_than_than_minimum()
+        public void should_return_false_if_runtime_greater_than_minimum()
         {
             GivenRuntime(600);
+
+            ShouldBeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_runtime_greater_than_webisode_minimum()
+        {
+            _series.Runtime = 6;
+            GivenRuntime(299);
 
             ShouldBeFalse();
         }
