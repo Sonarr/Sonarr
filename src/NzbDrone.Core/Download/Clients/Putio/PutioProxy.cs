@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
-	public interface IPutioProxy
+    public interface IPutioProxy
     {
         List<PutioTorrent> GetTorrents(PutioSettings settings);
-		PutioFile GetFile(long fileId, PutioSettings settings);
+        PutioFile GetFile(long fileId, PutioSettings settings);
         void AddTorrentFromUrl(string torrentUrl, PutioSettings settings);
         void AddTorrentFromData(byte[] torrentData, PutioSettings settings);
         void RemoveTorrent(string hash, PutioSettings settings);
@@ -19,25 +19,25 @@ namespace NzbDrone.Core.Download.Clients.Putio
     }
 
     public class PutioProxy: IPutioProxy
-    {        
+    {
         private readonly Logger _logger;
 
         public PutioProxy(Logger logger)
         {
             _logger = logger;
         }
-        
+
         public List<PutioTorrent> GetTorrents(PutioSettings settings)
         {
-			var result = ProcessRequest<PutioTransfersResponse>(Method.GET, "transfers/list", null, settings);
-			return result.Transfers;
+            var result = ProcessRequest<PutioTransfersResponse>(Method.GET, "transfers/list", null, settings);
+            return result.Transfers;
         }
 
-		public PutioFile GetFile(long fileId, PutioSettings settings)
-		{
-			var result = ProcessRequest<PutioFileResponse>(Method.GET, "files/" + fileId, null, settings);
-			return result.File;
-		}
+        public PutioFile GetFile(long fileId, PutioSettings settings)
+        {
+            var result = ProcessRequest<PutioFileResponse>(Method.GET, "files/" + fileId, null, settings);
+            return result.File;
+        }
 
         public void AddTorrentFromUrl(string torrentUrl, PutioSettings settings)
         {
@@ -62,10 +62,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public void GetAccountSettings(PutioSettings settings)
         {
-			ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
+            ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
         }
 
-		public TResponseType ProcessRequest<TResponseType>(Method method, string resource, Dictionary<string, object> arguments, PutioSettings settings) where TResponseType : PutioGenericResponse
+        public TResponseType ProcessRequest<TResponseType>(Method method, string resource, Dictionary<string, object> arguments, PutioSettings settings) where TResponseType : PutioGenericResponse
         {
             var client = BuildClient(settings);
 
@@ -85,13 +85,13 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
             var restResponse = client.Execute(request);
 
-			var json = new JsonDeserializer();
+            var json = new JsonDeserializer();
 
-			TResponseType output = json.Deserialize<TResponseType>(restResponse);
+            TResponseType output = json.Deserialize<TResponseType>(restResponse);
 
-			if (output.Status != "OK") 
+            if (output.Status != "OK") 
             {
-				throw new PutioException(output.ErrorMessage);
+                throw new PutioException(output.ErrorMessage);
             }
 
             return output;

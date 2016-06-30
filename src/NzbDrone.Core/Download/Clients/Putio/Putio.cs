@@ -14,7 +14,7 @@ using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
-	public class Putio : TorrentClientBase<PutioSettings>
+    public class Putio : TorrentClientBase<PutioSettings>
     {
         private readonly IPutioProxy _proxy;
 
@@ -72,49 +72,49 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     continue;
 
                 var item = new DownloadClientItem();
-				item.DownloadId = "putio-" + torrent.Id;
+                item.DownloadId = "putio-" + torrent.Id;
                 item.Category = Settings.SaveParentId;
                 item.Title = torrent.Name;
 
                 item.DownloadClient = Definition.Name;
 
                 item.TotalSize = torrent.Size;
-				item.RemainingSize = torrent.Size - torrent.Downloaded;
+                item.RemainingSize = torrent.Size - torrent.Downloaded;
 
-				try
-				{
-					if (torrent.FileId != 0)
-					{
-						var file = _proxy.GetFile(torrent.FileId, Settings);
-						var torrentPath = "/completed/" + file.Name;
-
-						var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(torrentPath));
-
-						if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
-						{
-							var directories = outputPath.FullPath.Split('\\', '/');
-							if (!directories.Contains(string.Format("{0}", Settings.SaveParentId))) continue;
-						}
-
-						item.OutputPath = outputPath; // + torrent.Name;
-					}
-				}
-				catch (DownloadClientException ex)
-				{
-					_logger.Error(ex, ex.Message);
-				}
-
-				if (torrent.EstimatedTime >= 0)
+                try
                 {
-					item.RemainingTime = TimeSpan.FromSeconds(torrent.EstimatedTime);
+                    if (torrent.FileId != 0)
+                    {
+                        var file = _proxy.GetFile(torrent.FileId, Settings);
+                        var torrentPath = "/completed/" + file.Name;
+
+                        var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(torrentPath));
+
+                        if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
+                        {
+                            var directories = outputPath.FullPath.Split('\\', '/');
+                            if (!directories.Contains(string.Format("{0}", Settings.SaveParentId))) continue;
+                        }
+
+                        item.OutputPath = outputPath; // + torrent.Name;
+                    }
+                }
+                catch (DownloadClientException ex)
+                {
+                    _logger.Error(ex, ex.Message);
                 }
 
-				if (!torrent.ErrorMessage.IsNullOrWhiteSpace())
+                if (torrent.EstimatedTime >= 0)
+                {
+                    item.RemainingTime = TimeSpan.FromSeconds(torrent.EstimatedTime);
+                }
+
+                if (!torrent.ErrorMessage.IsNullOrWhiteSpace())
                 {
                     item.Status = DownloadItemStatus.Warning;
-					item.Message = torrent.ErrorMessage;
+                    item.Message = torrent.ErrorMessage;
                 }
-				else if (torrent.Status == "COMPLETED")
+                else if (torrent.Status == "COMPLETED")
                 {
                     item.Status = DownloadItemStatus.Completed;
                 }
