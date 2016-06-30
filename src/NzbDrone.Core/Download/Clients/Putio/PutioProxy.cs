@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Net;
-using System.Linq;
 using System.Collections.Generic;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Rest;
 using NLog;
 using RestSharp;
-using Newtonsoft.Json.Linq;
 using RestSharp.Deserializers;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
-    public interface IPutioProxy
+	public interface IPutioProxy
     {
         List<PutioTorrent> GetTorrents(PutioSettings settings);
+		PutioFile GetFile(long fileId, PutioSettings settings);
         void AddTorrentFromUrl(string torrentUrl, PutioSettings settings);
         void AddTorrentFromData(byte[] torrentData, PutioSettings settings);
         void RemoveTorrent(string hash, PutioSettings settings);
-        Dictionary<String, Object> GetAccountSettings(PutioSettings settings);
+        void GetAccountSettings(PutioSettings settings);
     }
 
     public class PutioProxy: IPutioProxy
@@ -32,46 +29,43 @@ namespace NzbDrone.Core.Download.Clients.Putio
         
         public List<PutioTorrent> GetTorrents(PutioSettings settings)
         {
-            var result = GetTorrentStatus(settings);
-            var json = result["transfers"].ToString();
-            List<PutioTorrent> transfers = JsonConvert.DeserializeObject<List<PutioTorrent>>(json);            
-            return transfers;
+			var result = ProcessRequest<PutioTransfersResponse>(Method.GET, "transfers/list", null, settings);
+			return result.Transfers;
         }
+
+		public PutioFile GetFile(long fileId, PutioSettings settings)
+		{
+			var result = ProcessRequest<PutioFileResponse>(Method.GET, "files/" + fileId, null, settings);
+			return result.File;
+		}
 
         public void AddTorrentFromUrl(string torrentUrl, PutioSettings settings)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("url", torrentUrl);
-            ProcessRequest(Method.POST, "transfers/add", arguments, settings);
+            ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
         }
 
         public void AddTorrentFromData(byte[] torrentData, PutioSettings settings)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("metainfo", Convert.ToBase64String(torrentData));
-            ProcessRequest(Method.POST, "transfers/add", arguments, settings);
+            ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
         }
 
         public void RemoveTorrent(string hashString, PutioSettings settings)
         {
             var arguments = new Dictionary<string, object>();
             arguments.Add("transfer_ids", new string[] { hashString });
-            ProcessRequest(Method.POST, "torrents/cancel", arguments, settings);
+            ProcessRequest<PutioGenericResponse>(Method.POST, "torrents/cancel", arguments, settings);
         }
 
-        public Dictionary<String, Object> GetAccountSettings(PutioSettings settings)
+        public void GetAccountSettings(PutioSettings settings)
         {
-            var result = ProcessRequest(Method.GET, "account/settings", null, settings);
-            return result;
+			ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
         }
 
-        private Dictionary<String, Object> GetTorrentStatus(PutioSettings settings)
-        {
-            var result = ProcessRequest(Method.GET, "transfers/list", null, settings);
-            return result;
-        }
-
-        public Dictionary<String, Object> ProcessRequest(Method method, string resource, Dictionary<String, Object> arguments, PutioSettings settings)
+		public TResponseType ProcessRequest<TResponseType>(Method method, string resource, Dictionary<string, object> arguments, PutioSettings settings) where TResponseType : PutioGenericResponse
         {
             var client = BuildClient(settings);
 
@@ -89,19 +83,15 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
             _logger.Debug("Method: {0} Url: {1}", method, client.BuildUri(request));
 
-            var json = new JsonDeserializer();
             var restResponse = client.Execute(request);
 
-            Dictionary<string, object> output =
-                json.Deserialize<Dictionary<string, object>>(restResponse);
+			var json = new JsonDeserializer();
 
-            if (output == null)
+			TResponseType output = json.Deserialize<TResponseType>(restResponse);
+
+			if (output.Status != "OK") 
             {
-                throw new PutioException("Unexpected response");
-            }
-            else if ((string) output["status"] != "OK")
-            {
-                throw new PutioException((string) output["error_message"]);
+				throw new PutioException(output.ErrorMessage);
             }
 
             return output;

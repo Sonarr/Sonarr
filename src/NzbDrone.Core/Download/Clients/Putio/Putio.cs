@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -10,13 +9,12 @@ using NLog;
 using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Validation;
-using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
-    public class Putio : TorrentClientBase<PutioSettings>
+	public class Putio : TorrentClientBase<PutioSettings>
     {
         private readonly IPutioProxy _proxy;
 
@@ -61,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
             }
             catch (DownloadClientException ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return Enumerable.Empty<DownloadClientItem>();
             }
 
@@ -70,46 +68,57 @@ namespace NzbDrone.Core.Download.Clients.Putio
             foreach (var torrent in torrents)
             {
                 // If totalsize == 0 the torrent is a magnet downloading metadata
-                if (torrent.TotalSize == 0)
+                if (torrent.Size == 0)
                     continue;
 
-                var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(torrent.DownloadDir));
-
-                if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
-                {
-                    var directories = outputPath.FullPath.Split('\\', '/');
-                    if (!directories.Contains(string.Format("{0}", Settings.SaveParentId))) continue;
-                }
-
                 var item = new DownloadClientItem();
-                item.DownloadId = torrent.HashString.ToUpper();
+				item.DownloadId = "putio-" + torrent.Id;
                 item.Category = Settings.SaveParentId;
                 item.Title = torrent.Name;
 
                 item.DownloadClient = Definition.Name;
 
-                item.OutputPath = outputPath + torrent.Name;
-                item.TotalSize = torrent.TotalSize;
-                item.RemainingSize = torrent.LeftUntilDone;
-                if (torrent.Eta >= 0)
+                item.TotalSize = torrent.Size;
+				item.RemainingSize = torrent.Size - torrent.Downloaded;
+
+				try
+				{
+					if (torrent.FileId != 0)
+					{
+						var file = _proxy.GetFile(torrent.FileId, Settings);
+						var torrentPath = "/completed/" + file.Name;
+
+						var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(torrentPath));
+
+						if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
+						{
+							var directories = outputPath.FullPath.Split('\\', '/');
+							if (!directories.Contains(string.Format("{0}", Settings.SaveParentId))) continue;
+						}
+
+						item.OutputPath = outputPath; // + torrent.Name;
+					}
+				}
+				catch (DownloadClientException ex)
+				{
+					_logger.Error(ex, ex.Message);
+				}
+
+				if (torrent.EstimatedTime >= 0)
                 {
-                    item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
+					item.RemainingTime = TimeSpan.FromSeconds(torrent.EstimatedTime);
                 }
 
-                if (!torrent.ErrorString.IsNullOrWhiteSpace())
+				if (!torrent.ErrorMessage.IsNullOrWhiteSpace())
                 {
                     item.Status = DownloadItemStatus.Warning;
-                    item.Message = torrent.ErrorString;
+					item.Message = torrent.ErrorMessage;
                 }
-                else if (torrent.Status == PutioTorrentStatus.Seeding || torrent.Status == PutioTorrentStatus.SeedingWait)
+				else if (torrent.Status == "COMPLETED")
                 {
                     item.Status = DownloadItemStatus.Completed;
                 }
-                else if (torrent.IsFinished && torrent.Status != PutioTorrentStatus.Check && torrent.Status != PutioTorrentStatus.CheckWait)
-                {
-                    item.Status = DownloadItemStatus.Completed;
-                }
-                else if (torrent.Status == PutioTorrentStatus.Queued)
+                else if (torrent.Status == "IN_QUEUE")
                 {
                     item.Status = DownloadItemStatus.Queued;
                 }
@@ -118,7 +127,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.IsReadOnly = torrent.Status != PutioTorrentStatus.Stopped;
+                // item.IsReadOnly = torrent.Status != PutioTorrentStatus.Stopped;
 
                 items.Add(item);
             }
@@ -157,7 +166,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
             }
             catch (Exception ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
             }
 
@@ -172,7 +181,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
             }
             catch (Exception ex)
             {
-                _logger.ErrorException(ex.Message, ex);
+                _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
             }
 

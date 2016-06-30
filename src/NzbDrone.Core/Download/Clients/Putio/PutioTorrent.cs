@@ -1,29 +1,32 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
-    public class PutioTorrent
+	public class PutioTorrent
     {
-        public int Id { get; set; }
+		public long Downloaded { get; set; }
 
-        public string HashString { get; set; }
+		[JsonProperty(PropertyName = "error_message")]
+		public string ErrorMessage { get; set; }
 
-        public string Name { get; set; }
+		[JsonProperty(PropertyName = "estimated_time")]
+		public long EstimatedTime { get; set; }
 
-        public string DownloadDir { get; set; }
+		[JsonProperty(PropertyName = "file_id")]
+		public long FileId { get; set; }
 
-        public long TotalSize { get; set; }
+		public int Id { get; set; }
 
-        public long LeftUntilDone { get; set; }
+		public string Name { get; set; }
 
-        public bool IsFinished { get; set; }
+		[JsonProperty(PropertyName = "percent_done")]
+		public int PercentDone { get; set; }
 
-        public int Eta { get; set; }
+		[JsonProperty(PropertyName = "seconds_seeding")]
+		public long SecondsSeeding { get; set; }
 
-        public PutioTorrentStatus Status { get; set; }
+		public long Size { get; set; }
 
-        public int SecondsDownloading { get; set; }
-
-        public string ErrorString { get; set; }
+		public string Status { get; set; }
     }
 }
