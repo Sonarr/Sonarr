@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Data.SQLite;
 using System.Diagnostics;
 using System.Reflection;
 using FluentMigrator.Runner;
@@ -37,16 +37,27 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             var options = new MigrationOptions { PreviewOnly = false, Timeout = 60 };
             var factory = new NzbDroneSqliteProcessorFactory();
             var processor = factory.Create(connectionString, _announcer, options);
-            var runner = new MigrationRunner(assembly, runnerContext, processor);
 
-            if (migrationContext.DesiredVersion.HasValue)
+            try
             {
-                runner.MigrateUp(migrationContext.DesiredVersion.Value, true);
+                var runner = new MigrationRunner(assembly, runnerContext, processor);
+
+                if (migrationContext.DesiredVersion.HasValue)
+                {
+                    runner.MigrateUp(migrationContext.DesiredVersion.Value, true);
+                }
+                else
+                {
+                    runner.MigrateUp(true);
+                }
             }
-            else
+            catch (SQLiteException)
             {
-                runner.MigrateUp(true);
+                processor.Dispose();
+                SQLiteConnection.ClearAllPools();
+                throw;
             }
+            
 
             sw.Stop();
 

@@ -171,6 +171,7 @@
     <Compile Include="Datastore\Converters\ProviderSettingConverter.cs" />
     <Compile Include="Datastore\Converters\QualityIntConverter.cs" />
     <Compile Include="Datastore\Converters\UtcConverter.cs" />
+    <Compile Include="Datastore\CorruptDatabaseException.cs" />
     <Compile Include="Datastore\Database.cs" />
     <Compile Include="Datastore\DbFactory.cs" />
     <Compile Include="Datastore\Events\ModelEvent.cs" />
