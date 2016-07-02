@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Notifications.Plex
             try
             {
                 var rawVersion = GetVersion(settings);
-                var version = new Version(Regex.Match(rawVersion, @"^(\d+\.){4}").Value.Trim('.'));
+                var version = new Version(Regex.Match(rawVersion, @"^(\d+[.-]){4}").Value.Trim('.', '-'));
 
                 if (version >= new Version(0, 9, 12, 0))
                 {
