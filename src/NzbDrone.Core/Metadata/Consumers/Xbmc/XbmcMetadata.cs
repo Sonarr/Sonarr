@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         {
             get
             {
-                return "Kodi (XBMC)";
+                return "Kodi (XBMC) / Emby";
             }
         }
 

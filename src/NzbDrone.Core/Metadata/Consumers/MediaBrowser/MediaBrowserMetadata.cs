@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Metadata.Consumers.MediaBrowser
         {
             get
             {
-                return "Emby (Media Browser)";
+                return "Emby (Legacy)";
             }
         }
 
