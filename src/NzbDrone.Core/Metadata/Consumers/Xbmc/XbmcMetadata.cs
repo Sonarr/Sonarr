@@ -301,7 +301,7 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
                         var audio = new XElement("audio");
                         audio.Add(new XElement("bitrate", episodeFile.MediaInfo.AudioBitrate));
                         audio.Add(new XElement("channels", episodeFile.MediaInfo.AudioChannels));
-                        audio.Add(new XElement("codec", episodeFile.MediaInfo.AudioFormat));
+                        audio.Add(new XElement("codec", GetAudioCodec(episodeFile.MediaInfo.AudioFormat)));
                         audio.Add(new XElement("language", episodeFile.MediaInfo.AudioLanguages));
                         streamDetails.Add(audio);
 
@@ -415,6 +415,16 @@ namespace NzbDrone.Core.Metadata.Consumers.Xbmc
         private string GetEpisodeImageFilename(string episodeFilePath)
         {
             return Path.ChangeExtension(episodeFilePath, "").Trim('.') + "-thumb.jpg";
+        }
+
+        private string GetAudioCodec(string audioCodec)
+        {
+            if (audioCodec == "AC-3")
+            {
+                return "AC3";
+            }
+
+            return audioCodec;
         }
     }
 }
