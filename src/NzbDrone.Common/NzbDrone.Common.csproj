@@ -82,6 +82,8 @@
     <Compile Include="ConsoleService.cs" />
     <Compile Include="ConvertBase32.cs" />
     <Compile Include="Crypto\HashProvider.cs" />
+    <Compile Include="Disk\Abstractions\FileSystemAbstractions.cs" />
+    <Compile Include="Disk\FileSystemInfoFactory.cs" />
     <Compile Include="Disk\FileSystemLookupService.cs" />
     <Compile Include="Disk\DriveInfoMount.cs" />
     <Compile Include="Disk\IMount.cs" />
@@ -232,7 +234,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EnsureThat\Resources\ExceptionMessages.resx" />
+    <EmbeddedResource Include="EnsureThat\Resources\ExceptionMessages.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Exceptron\fastJSON\license.txt" />

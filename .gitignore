@@ -129,3 +129,4 @@ output/*
 
 _start
 _temp_*/**/*
+.vs
