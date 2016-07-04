@@ -12,10 +12,8 @@ using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.MetadataSource.SkyHook.Resource;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
@@ -126,13 +124,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 folder = new FileInfo(file).Directory.FullName;
             }
 
-            Series series = null;
-
-            var parsedEpisodeInfo = Parser.Parser.ParsePath(folder.GetRelativePath(file));
-            if (parsedEpisodeInfo != null)
-            {
-                series = _parsingService.GetSeries(parsedEpisodeInfo.SeriesTitle);
-            }
+            var series = _parsingService.GetSeries(folder.GetRelativePath(file));
 
             if (series == null && downloadId.IsNotNullOrWhiteSpace())
             {
