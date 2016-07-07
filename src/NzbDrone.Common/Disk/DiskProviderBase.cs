@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
+using NzbDrone.Common.Disk.Abstractions;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -451,6 +452,15 @@ namespace NzbDrone.Common.Disk
                     DeleteFolder(subfolder, false);
                 }
             }
+        }
+
+        public IDirectoryInfo GetDirectoryInfo(string path) {
+            var di = new DirectoryInfo(path);
+            return FileSystemInfoFactory.CreateFrom(di);
+        }
+        public IFileInfo GetFileInfo(string path) {
+            var fi = new FileInfo(path);
+            return FileSystemInfoFactory.CreateFrom(fi);
         }
     }
 }

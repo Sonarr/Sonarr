@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using NzbDrone.Common.Disk.Abstractions;
 
 namespace NzbDrone.Common.Disk
 {
@@ -48,5 +49,8 @@ namespace NzbDrone.Common.Disk
         List<DirectoryInfo> GetDirectoryInfos(string path);
         List<FileInfo> GetFileInfos(string path);
         void RemoveEmptySubfolders(string path);
+
+        IDirectoryInfo GetDirectoryInfo(string path);
+        IFileInfo GetFileInfo(string path);
     }
 }
