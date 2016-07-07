@@ -1,14 +1,14 @@
-## Database Migration
+#### Database Migration
 YES | NO
 
-## Description
+#### Description
 A few sentences describing the overall goals of the pull request's commits.
 
-## Todos
+#### Todos
 - [ ] Tests
 - [ ] Documentation
 
 
-## Issues Fixed or Closed by this PR
+#### Issues Fixed or Closed by this PR
 
 * 
