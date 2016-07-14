@@ -13,8 +13,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingService
     {
-        List<string> GetSceneNamesBySeasonNumbers(int tvdbId, IEnumerable<int> seasonNumbers);
-        List<string> GetSceneNamesBySceneSeasonNumbers(int tvdbId, IEnumerable<int> sceneSeasonNumbers);
+        List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers);
         int? FindTvdbId(string title);
         List<SceneMapping> FindByTvdbId(int tvdbId);
         SceneMapping FindSceneMapping(string title);
@@ -49,32 +48,21 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             _findByTvdbIdCache = cacheManager.GetCacheDictionary<List<SceneMapping>>(GetType(), "find_tvdb_id");
         }
 
-        public List<string> GetSceneNamesBySeasonNumbers(int tvdbId, IEnumerable<int> seasonNumbers)
+        public List<string> GetSceneNames(int tvdbId, List<int> seasonNumbers, List<int> sceneSeasonNumbers)
         {
-            var names = FindByTvdbId(tvdbId);
+            var mappings = FindByTvdbId(tvdbId);
 
-            if (names == null)
+            if (mappings == null)
             {
                 return new List<string>();
             }
 
-            return FilterNonEnglish(names.Where(s => s.SeasonNumber.HasValue && seasonNumbers.Contains(s.SeasonNumber.Value) ||
-                                                     s.SeasonNumber == -1)
-                                         .Select(m => m.SearchTerm).Distinct().ToList());
-        }
+            var names = mappings.Where(n => n.SeasonNumber.HasValue && seasonNumbers.Contains(n.SeasonNumber.Value) ||
+                                            n.SceneSeasonNumber.HasValue && sceneSeasonNumbers.Contains(n.SceneSeasonNumber.Value) ||
+                                            (n.SeasonNumber ?? -1) == -1 && (n.SceneSeasonNumber ?? -1) == -1)
+                                .Select(n => n.SearchTerm).Distinct().ToList();
 
-        public List<string> GetSceneNamesBySceneSeasonNumbers(int tvdbId, IEnumerable<int> sceneSeasonNumbers)
-        {
-            var names = FindByTvdbId(tvdbId);
-
-            if (names == null)
-            {
-                return new List<string>();
-            }
-
-            return FilterNonEnglish(names.Where(s => s.SceneSeasonNumber.HasValue && sceneSeasonNumbers.Contains(s.SceneSeasonNumber.Value) ||
-                                                     s.SceneSeasonNumber == -1)
-                                         .Select(m => m.SearchTerm).Distinct().ToList());
+            return FilterNonEnglish(names);
         }
 
         public int? FindTvdbId(string title)

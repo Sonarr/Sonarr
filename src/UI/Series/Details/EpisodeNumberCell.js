@@ -20,14 +20,7 @@ module.exports = NzbDroneCell.extend({
         var alternateTitles = [];
 
         if (reqres.hasHandler(reqres.Requests.GetAlternateNameBySeasonNumber)) {
-
-            if (this.model.get('sceneSeasonNumber') > 0) {
-                alternateTitles = reqres.request(reqres.Requests.GetAlternateNameBySceneSeasonNumber, this.model.get('seriesId'), this.model.get('sceneSeasonNumber'));
-            }
-
-            if (alternateTitles.length === 0) {
-                alternateTitles = reqres.request(reqres.Requests.GetAlternateNameBySeasonNumber, this.model.get('seriesId'), this.model.get('seasonNumber'));
-            }
+            alternateTitles = reqres.request(reqres.Requests.GetAlternateNameBySeasonNumber, this.model.get('seriesId'), this.model.get('seasonNumber'), this.model.get('sceneSeasonNumber'));
         }
 
         if (this.model.get('sceneSeasonNumber') > 0 || this.model.get('sceneEpisodeNumber') > 0 || this.model.has('sceneAbsoluteEpisodeNumber') || alternateTitles.length > 0) {
