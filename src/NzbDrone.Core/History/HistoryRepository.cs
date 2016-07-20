@@ -15,6 +15,7 @@ namespace NzbDrone.Core.History
         History MostRecentForDownloadId(string downloadId);
         List<History> FindByDownloadId(string downloadId);
         List<History> FindDownloadHistory(int idSeriesId, QualityModel quality);
+        void DeleteForSeries(int seriesId);
     }
 
     public class HistoryRepository : BasicRepository<History>, IHistoryRepository
@@ -61,6 +62,11 @@ namespace NzbDrone.Core.History
                  h.EventType == HistoryEventType.DownloadFailed ||
                  h.EventType == HistoryEventType.DownloadFolderImported)
                  ).ToList();
+        }
+
+        public void DeleteForSeries(int seriesId)
+        {
+            Delete(c => c.SeriesId == seriesId);
         }
 
         protected override SortBuilder<History> GetPagedQuery(QueryBuilder<History> query, PagingSpec<History> pagingSpec)

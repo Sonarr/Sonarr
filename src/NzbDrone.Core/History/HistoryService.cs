@@ -13,6 +13,7 @@ using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.History
 {
@@ -31,7 +32,8 @@ namespace NzbDrone.Core.History
                                   IHandle<EpisodeGrabbedEvent>,
                                   IHandle<EpisodeImportedEvent>,
                                   IHandle<DownloadFailedEvent>,
-                                  IHandle<EpisodeFileDeletedEvent>
+                                  IHandle<EpisodeFileDeletedEvent>,
+                                  IHandle<SeriesDeletedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -254,6 +256,11 @@ namespace NzbDrone.Core.History
 
                 _historyRepository.Insert(history);
             }
+        }
+
+        public void Handle(SeriesDeletedEvent message)
+        {
+            _historyRepository.DeleteForSeries(message.Series.Id);
         }
     }
 }
