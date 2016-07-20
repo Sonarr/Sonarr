@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Datastore
     {
         string MainDbConnectionString { get; }
         string LogDbConnectionString { get; }
+        string GetDatabasePath(string connectionString);
     }
 
     public class ConnectionStringFactory : IConnectionStringFactory
@@ -21,6 +22,13 @@ namespace NzbDrone.Core.Datastore
 
         public string MainDbConnectionString { get; private set; }
         public string LogDbConnectionString { get; private set; }
+
+        public string GetDatabasePath(string connectionString)
+        {
+            var connectionBuilder = new SQLiteConnectionStringBuilder(connectionString);
+
+            return connectionBuilder.DataSource;
+        }
 
         private static string GetConnectionString(string dbPath)
         {
