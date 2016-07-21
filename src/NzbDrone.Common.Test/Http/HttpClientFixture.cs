@@ -336,8 +336,8 @@ namespace NzbDrone.Common.Test.Http
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(culture);
             try
             {
-                // the date is bad in the below - should be 13-Jul-2016
-                string malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Wed, 13-Jul-16 16:19:50 GMT; path=/; HttpOnly";
+                // the date is bad in the below - should be 13-Jul-2026
+                string malformedCookie = @"__cfduid=d29e686a9d65800021c66faca0a29b4261436890790; expires=Mon, 13-Jul-26 16:19:50 GMT; path=/; HttpOnly";
                 var requestSet = new HttpRequestBuilder(string.Format("http://{0}/response-headers", _httpBinHost))
                     .AddQueryParam("Set-Cookie", malformedCookie)
                     .Build();
@@ -366,12 +366,11 @@ namespace NzbDrone.Common.Test.Http
             }
         }
 
-        [TestCase("lang_code=en; expires=Fri, 23-Dec-2016 18:09:14 GMT; Max-Age=31536000; path=/; domain=.abc.com")]
+        [TestCase("lang_code=en; expires=Wed, 23-Dec-2026 18:09:14 GMT; Max-Age=31536000; path=/; domain=.abc.com")]
         public void should_reject_malformed_domain_cookie(string malformedCookie)
         {
             try
             {
-                // the date is bad in the below - should be 13-Jul-2016
                 string url = string.Format("http://{0}/response-headers?Set-Cookie={1}", _httpBinHost, Uri.EscapeUriString(malformedCookie));
 
                 var requestSet = new HttpRequest(url);
