@@ -39,13 +39,20 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("True.Detective.S01E01.1080p.WEB-DL.Rus.Eng.TVKlondike", Language.Russian)]
         [TestCase("The.Trip.To.Italy.S02E01.720p.HDTV.x264-TLA", Language.English)]
         [TestCase("Revolution S01E03 No Quarter 2012 WEB-DL 720p Nordic-philipo mkv", Language.Norwegian)]
-        [TestCase("Extant.S01E01.VOSTFR.HDTV.x264-RiDERS", Language.French)]
+        [TestCase("Extant.S01E01.VOSTFR.HDTV.x264-RiDERS", Language.English)]
         [TestCase("Constantine.2014.S01E01.WEBRiP.H264.AAC.5.1-NL.SUBS", Language.Dutch)]
         [TestCase("Elementary - S02E16 - Kampfhaehne - mkv - by Videomann", Language.German)]
         [TestCase("Two.Greedy.Italians.S01E01.The.Family.720p.HDTV.x264-FTP", Language.English)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUNDUB-LOL", Language.Hungarian)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.ENG.HUN-LOL", Language.Hungarian)]
         [TestCase("Castle.2009.S01E14.HDTV.XviD.HUN-LOL", Language.Hungarian)]
+        [TestCase("Quantico.S01E12.FASTSUB.VOSTFR.TVRip.XviD-ZT", Language.English)]
+        [TestCase("Quantico.S01E12.FASTSUB.fr.TVRip.XviD-ZT", Language.French)]
+        [TestCase("Quantico.S01E12.FASTSUB.French.TVRip.XviD-ZT", Language.French)]
+        [TestCase("Quantico.S01E12.FASTSUB.VFQ.TVRip.XviD-ZT", Language.French)]
+        [TestCase("Quantico.S01E12.FASTSUB.TrueFrench.TVRip.XviD-ZT", Language.French)]
+        [TestCase("Quantico.S01E12.FASTSUB.vf.TVRip.XviD-ZT", Language.French)]
+        [TestCase("Quantico.S01E12.FASTSUB.VFF.TVRip.XviD-ZT", Language.French)]
         public void should_parse_language(string postTitle, Language language)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
