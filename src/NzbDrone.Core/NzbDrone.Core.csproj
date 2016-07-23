@@ -333,6 +333,7 @@
     <Compile Include="DecisionEngine\Specifications\Search\SingleEpisodeSearchMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\TorrentSeedingSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\SameEpisodesGrabSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\DvdSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\UpgradeDiskSpecification.cs" />
     <Compile Include="DiskSpace\DiskSpace.cs" />
     <Compile Include="DiskSpace\DiskSpaceService.cs" />

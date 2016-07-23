@@ -56,6 +56,12 @@ namespace NzbDrone.Core.Test.IndexerTests.BroadcastheNetTests
             torrentInfo.MagnetUrl.Should().BeNullOrEmpty();
             torrentInfo.Peers.Should().Be(40+9);
             torrentInfo.Seeders.Should().Be(40);
+
+            torrentInfo.Origin.Should().Be("Scene");
+            torrentInfo.Source.Should().Be("HDTV");
+            torrentInfo.Container.Should().Be("MP4");
+            torrentInfo.Codec.Should().Be("x264");
+            torrentInfo.Resolution.Should().Be("SD");
         }
 
         private void VerifyBackOff()

@@ -76,6 +76,12 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 torrentInfo.Seeders = torrent.Seeders;
                 torrentInfo.Peers = torrent.Leechers + torrent.Seeders;
 
+                torrentInfo.Origin = torrent.Origin;
+                torrentInfo.Source = torrent.Source;
+                torrentInfo.Container = torrent.Container;
+                torrentInfo.Codec = torrent.Codec;
+                torrentInfo.Resolution = torrent.Resolution;
+
                 results.Add(torrentInfo);
             }
 
