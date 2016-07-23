@@ -14,6 +14,8 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         private static int _requestSequenceID;
 
+        public int Order { get { return 100; } }
+
         public void Register(IPipelines pipelines)
         {
             pipelines.BeforeRequest.AddItemToStartOfPipeline(LogStart);

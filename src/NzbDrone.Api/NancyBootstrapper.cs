@@ -1,8 +1,9 @@
 ﻿using System;
-using NLog;
+using System.Linq;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Diagnostics;
+using NLog;
 using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Api.Extensions.Pipelines;
 using NzbDrone.Common.EnvironmentInfo;
@@ -43,7 +44,7 @@ namespace NzbDrone.Api
 
         private void RegisterPipelines(IPipelines pipelines)
         {
-            var pipelineRegistrars = _tinyIoCContainer.ResolveAll<IRegisterNancyPipeline>();
+            var pipelineRegistrars = _tinyIoCContainer.ResolveAll<IRegisterNancyPipeline>().OrderBy(v => v.Order).ToList();
 
             foreach (var registerNancyPipeline in pipelineRegistrars)
             {

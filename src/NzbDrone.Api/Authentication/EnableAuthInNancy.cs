@@ -27,6 +27,8 @@ namespace NzbDrone.Api.Authentication
             _configFileProvider = configFileProvider;
         }
 
+        public int Order { get { return 10; } }
+
         public void Register(IPipelines pipelines)
         {
             if (_configFileProvider.AuthenticationMethod == AuthenticationType.Forms)
