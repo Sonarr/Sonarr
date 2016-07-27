@@ -63,8 +63,8 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiskProvider.cs" />
-    <Compile Include="DotNetRuntimeProvider.cs" />
+    <Compile Include="Disk\DiskProvider.cs" />
+    <Compile Include="EnvironmentInfo\DotNetRuntimeProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -103,8 +103,8 @@ namespace NzbDrone.Mono.Disk
             var type = split[2];
             var options = ParseOptions(split[3]);
 
-            var driveType = DriveType.Unknown;
-            
+            var driveType = FindDriveType.Find(type);
+
             if (name.StartsWith("/dev/") || GetFileSystems().GetValueOrDefault(type, false))
             {
                 // Not always fixed, but lets assume it.
@@ -114,11 +114,6 @@ namespace NzbDrone.Mono.Disk
             if (_networkDriveTypes.Contains(type))
             {
                 driveType = DriveType.Network;
-            }
-
-            if (type == "zfs")
-            {
-                driveType = DriveType.Fixed;
             }
 
             return new ProcMount(driveType, name, mount, type, options);

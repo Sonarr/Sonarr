@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Disk
@@ -9,10 +6,12 @@ namespace NzbDrone.Common.Disk
     public class DriveInfoMount : IMount
     {
         private readonly DriveInfo _driveInfo;
+        private readonly DriveType _driveType;
 
-        public DriveInfoMount(DriveInfo driveInfo)
+        public DriveInfoMount(DriveInfo driveInfo, DriveType driveType = DriveType.Unknown)
         {
             _driveInfo = driveInfo;
+            _driveType = driveType;
         }
 
         public long AvailableFreeSpace
@@ -27,7 +26,15 @@ namespace NzbDrone.Common.Disk
 
         public DriveType DriveType
         {
-            get { return _driveInfo.DriveType; }
+            get
+            {
+                if (_driveType != DriveType.Unknown)
+                {
+                    return _driveType;
+                }
+
+                return _driveInfo.DriveType;
+            }
         }
 
         public bool IsReady
