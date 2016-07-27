@@ -189,7 +189,8 @@ var view = Marionette.ItemView.extend({
             rootFolderPath : rootFolderPath,
             seasonFolder   : seasonFolder,
             seriesType     : seriesType,
-            addOptions     : options
+            addOptions     : options,
+            monitored      : true
         }, { silent : true });
 
         var self = this;
