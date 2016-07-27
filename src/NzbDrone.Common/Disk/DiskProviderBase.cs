@@ -9,13 +9,14 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Instrumentation.Extensions;
 
 namespace NzbDrone.Common.Disk
 {
     public abstract class DiskProviderBase : IDiskProvider
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProviderBase));
+
+        private static readonly HashSet<string> UnknownDriveTypes = new HashSet<string>{ "afpfs" };
 
         public abstract long? GetAvailableSpace(string path);
         public abstract void InheritFolderPermissions(string filename);
@@ -414,7 +415,7 @@ namespace NzbDrone.Common.Disk
         protected List<IMount> GetDriveInfoMounts()
         {
             return DriveInfo.GetDrives()
-                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
+                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable || (d.DriveType == DriveType.Unknown && UnknownDriveTypes.Contains(d.DriveFormat) ))
                             .Where(d => d.IsReady)
                             .Select(d => new DriveInfoMount(d))
                             .Cast<IMount>()
