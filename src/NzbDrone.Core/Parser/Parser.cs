@@ -319,11 +319,16 @@ namespace NzbDrone.Core.Parser
                 var sixDigitAirDateMatch = SixDigitAirDateRegex.Match(simpleTitle);
                 if (sixDigitAirDateMatch.Success)
                 {
-                    var fixedDate = string.Format("20{0}.{1}.{2}", sixDigitAirDateMatch.Groups["airyear"].Value,
-                                                                   sixDigitAirDateMatch.Groups["airmonth"].Value,
-                                                                   sixDigitAirDateMatch.Groups["airday"].Value);
+                    var airYear = sixDigitAirDateMatch.Groups["airyear"].Value;
+                    var airMonth = sixDigitAirDateMatch.Groups["airmonth"].Value;
+                    var airDay = sixDigitAirDateMatch.Groups["airday"].Value;
 
-                    simpleTitle = simpleTitle.Replace(sixDigitAirDateMatch.Groups["airdate"].Value, fixedDate);
+                    if (airMonth != "00" || airDay != "00")
+                    {
+                        var fixedDate = string.Format("20{0}.{1}.{2}", airYear, airMonth, airDay);
+
+                        simpleTitle = simpleTitle.Replace(sixDigitAirDateMatch.Groups["airdate"].Value, fixedDate);
+                    }
                 }
 
                 foreach (var regex in ReportTitleRegex)

@@ -122,6 +122,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Judge Judy 2016 02 25 S20E143", "Judge Judy", 20, 143)]
         [TestCase("Red Dwarf - S02 - E06 - Parallel Universe", "Red Dwarf", 2, 6)]
         [TestCase("O.J.Simpson.Made.in.America.Part.Two.720p.HDTV.x264-2HD", "O J Simpson Made in America", 1, 2)]
+        [TestCase("The.100000.Dollar.Pyramid.2016.S01E05.720p.HDTV.x264-W4F", "The 100000 Dollar Pyramid 2016", 1, 5)]
         //[TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
