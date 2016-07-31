@@ -38,8 +38,6 @@ namespace NzbDrone.Api
 
             container.Resolve<DatabaseTarget>().Register();
             container.Resolve<IEventAggregator>().PublishEvent(new ApplicationStartedEvent());
-
-            ApplicationPipelines.OnError.AddItemToEndOfPipeline((Func<NancyContext, Exception, Response>) container.Resolve<NzbDroneErrorPipeline>().HandleException);
         }
 
         private void RegisterPipelines(IPipelines pipelines)

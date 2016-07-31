@@ -124,6 +124,7 @@
     <Compile Include="ApiTests\EpisodeFixture.cs" />
     <Compile Include="ApiTests\HistoryFixture.cs" />
     <Compile Include="ApiTests\IndexerFixture.cs" />
+    <Compile Include="HttpLogFixture.cs" />
     <Compile Include="IndexHtmlFixture.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="IntegrationTestBase.cs" />

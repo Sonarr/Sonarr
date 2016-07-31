@@ -9,7 +9,7 @@ namespace NzbDrone.Integration.Test
 {
     public abstract class IntegrationTest : IntegrationTestBase
     {
-        private NzbDroneRunner _runner;
+        protected NzbDroneRunner _runner;
 
         public override string SeriesRootFolder
         {

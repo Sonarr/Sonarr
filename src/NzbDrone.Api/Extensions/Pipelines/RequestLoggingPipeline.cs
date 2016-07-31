@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using Nancy;
 using Nancy.Bootstrapper;
 using NLog;
+using NzbDrone.Api.ErrorManagement;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Api.Extensions.Pipelines
@@ -14,12 +16,20 @@ namespace NzbDrone.Api.Extensions.Pipelines
 
         private static int _requestSequenceID;
 
+        private readonly NzbDroneErrorPipeline _errorPipeline;
+
+        public RequestLoggingPipeline(NzbDroneErrorPipeline errorPipeline)
+        {
+            _errorPipeline = errorPipeline;
+        }
+
         public int Order { get { return 100; } }
 
         public void Register(IPipelines pipelines)
         {
             pipelines.BeforeRequest.AddItemToStartOfPipeline(LogStart);
             pipelines.AfterRequest.AddItemToEndOfPipeline(LogEnd);
+            pipelines.OnError.AddItemToEndOfPipeline(LogError);
         }
 
         private Response LogStart(NancyContext context)
@@ -54,11 +64,24 @@ namespace NzbDrone.Api.Extensions.Pipelines
             }
         }
 
+        private Response LogError(NancyContext context, Exception exception)
+        {
+            var response = _errorPipeline.HandleException(context, exception);
+
+            context.Response = response;
+
+            LogEnd(context);
+
+            context.Response = null;
+
+            return response;
+        }
+
         private static string GetRequestPathAndQuery(Request request)
         {
             if (request.Url.Query.IsNotNullOrWhiteSpace())
             {
-                return string.Concat(request.Url.Path, "?", request.Url.Query);
+                return string.Concat(request.Url.Path, request.Url.Query);
             }
             else
             {

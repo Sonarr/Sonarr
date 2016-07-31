@@ -44,6 +44,7 @@ namespace NzbDrone.Integration.Test
         public DownloadClientClient DownloadClients;
         public EpisodeClient Episodes;
         public ClientBase<HistoryResource> History;
+        public ClientBase<HostConfigResource> HostConfig;
         public IndexerClient Indexers;
         public ClientBase<NamingConfigResource> NamingConfig;
         public NotificationClient Notifications;
@@ -109,6 +110,7 @@ namespace NzbDrone.Integration.Test
             DownloadClients = new DownloadClientClient(RestClient, ApiKey);
             Episodes = new EpisodeClient(RestClient, ApiKey);
             History = new ClientBase<HistoryResource>(RestClient, ApiKey);
+            HostConfig = new ClientBase<HostConfigResource>(RestClient, ApiKey, "config/host");
             Indexers = new IndexerClient(RestClient, ApiKey);
             NamingConfig = new ClientBase<NamingConfigResource>(RestClient, ApiKey, "config/naming");
             Notifications = new NotificationClient(RestClient, ApiKey);
