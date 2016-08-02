@@ -426,6 +426,9 @@
     <Content Include="Files\Indexers\relative_urls.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Files\Indexers\TorrentRss\AnimeTosho_NoSize.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\Indexers\TorrentRss\ExtraTorrents.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

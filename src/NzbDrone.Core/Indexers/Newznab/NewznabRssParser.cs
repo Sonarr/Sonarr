@@ -11,6 +11,11 @@ namespace NzbDrone.Core.Indexers.Newznab
     {
         public const string ns = "{http://www.newznab.com/DTD/2010/feeds/attributes/}";
 
+        public NewznabRssParser()
+        {
+            PreferredEnclosureMimeType = "application/x-nzb";
+        }
+
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
             var xdoc = LoadXmlDocument(indexerResponse);
@@ -52,7 +57,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         protected override ReleaseInfo PostProcess(XElement item, ReleaseInfo releaseInfo)
         {
-            var enclosureType = item.Element("enclosure").Attribute("type").Value;
+            var enclosureType = GetEnclosure(item).Attribute("type").Value;
             if (enclosureType.Contains("application/x-bittorrent"))
             {
                 throw new UnsupportedFeedException("Feed contains {0}, did you intend to add a Torznab indexer?", enclosureType);

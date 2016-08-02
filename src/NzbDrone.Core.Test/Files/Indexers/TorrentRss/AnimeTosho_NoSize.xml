@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <!--  xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" -->
+  <channel>
+    <atom:link href="https://animetosho.org/feed/rss2" rel="self" type="application/rss+xml" />
+    <title>Anime Tosho</title>
+    <link>https://animetosho.org/</link>
+    <description>Latest releases feed</description>
+
+    <language>en-us</language>
+    <ttl>30</ttl>
+    <lastBuildDate>Tue, 02 Aug 2016 13:48:04 +0000</lastBuildDate>
+
+    <item>
+      <title>[FFF] Ore Monogatari!! - Vol.01 [BD][720p-AAC]</title>
+      <!-- <category></category> -->
+      <description><![CDATA[<strong>Total Size</strong>: 1.366 GB<br /><strong>Download Links</strong>: <a href="https://animetosho.org/view/fff-ore-monogatari-vol-01-bd-720p-aac.1009077">6 file(s)</a>]]></description>
+      <link>https://animetosho.org/view/fff-ore-monogatari-vol-01-bd-720p-aac.1009077</link>
+      <comments>https://animetosho.org/view/fff-ore-monogatari-vol-01-bd-720p-aac.1009077</comments>
+      <enclosure url="http://storage.animetosho.org/torrents/85a570f25067f69b3c83b901ce6c00c491345288/%5BFFF%5D%20Ore%20Monogatari%21%21%20-%20Vol.01%20%5BBD%5D%5B720p-AAC%5D.torrent" type="application/x-bittorrent" length="0" />
+      <enclosure url="http://storage.animetosho.org/nzb/0002ae5b/%5BFFF%5D%20Ore%20Monogatari%21%21%20-%20Vol.01%20%5BBD%5D%5B720p-AAC%5D.nzb" type="application/x-nzb" length="0" />
+      <source url="http://www.tokyotosho.info/details.php?id=1009077">TokyoTosho</source>
+      <pubDate>Tue, 02 Aug 2016 13:48:04 +0000</pubDate>
+      <guid>https://animetosho.org/view/1009077</guid>
+    </item>
+    <item>
+      <title>DAYS - 05 (1280x720 HEVC2 AAC).mkv</title>
+      <!-- <category></category> -->
+      <description><![CDATA[<strong>Total Size</strong>: 158.1 MB<br /><strong>Download Links</strong>: <a href="http://go4up.com/dl/3296dcd8cbd458">Go4Up</a> | <a href="http://jheberg.net/download/days-05-1280x720-hevc2-aac/">Jheberg</a> | <a href="http://www.multiup.org/download/0cde8680f9e9449b0c11be3621872e63/DAYS_-_05__1280x720_HEVC2_AAC_.mkv">MultiUp</a> | <a href="http://openload.co/f/OHnuQ-APk9w/file_334464.7z">OpenLoad</a> | <a href="https://www.sendspace.com/file/ni9s83">Sendspace</a> | <a href="https://www.solidfiles.com/v/53d26VqjmVk6N">SolidFiles</a> | <a href="http://userscloud.com/h3firag6dah6">UsersCloud</a>]]></description>
+      <link>https://animetosho.org/view/days-05-1280x720-hevc2-aac-mkv.1009055</link>
+      <comments>https://animetosho.org/view/days-05-1280x720-hevc2-aac-mkv.1009055</comments>
+      <enclosure url="http://storage.animetosho.org/nzb/0002ae58/DAYS%20-%2005%20%281280x720%20HEVC2%20AAC%29.nzb" type="application/x-nzb" length="0" />
+      <enclosure url="http://storage.animetosho.org/torrents/4b58360143d59a55cbd922397a3eaa378165f3ff/DAYS%20-%2005%20%281280x720%20HEVC2%20AAC%29.torrent" type="application/x-bittorrent" length="0" />
+      <source url="http://www.tokyotosho.info/details.php?id=1009055">TokyoTosho</source>
+      <pubDate>Tue, 02 Aug 2016 12:50:06 +0000</pubDate>
+      <guid>https://animetosho.org/view/1009055</guid>
+    </item>
+
+  </channel>
+</rss>

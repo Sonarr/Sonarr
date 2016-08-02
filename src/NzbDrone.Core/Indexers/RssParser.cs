@@ -32,6 +32,8 @@ namespace NzbDrone.Core.Indexers
         // Parse "Size: 1.3 GB" or "1.3 GB" parts in the description element and use that as Size.
         public bool ParseSizeInDescription { get; set; }
 
+        public string PreferredEnclosureMimeType { get; set; }
+
         private IndexerResponse _indexerResponse;
 
         public RssParser()
@@ -192,7 +194,7 @@ namespace NzbDrone.Core.Indexers
         {
             if (UseEnclosureUrl)
             {
-                return ParseUrl((string)item.Element("enclosure").Attribute("url"));
+                return ParseUrl((string)GetEnclosure(item).Attribute("url"));
             }
 
             return ParseUrl((string)item.Element("link"));
@@ -229,7 +231,7 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual long GetEnclosureLength(XElement item)
         {
-            var enclosure = item.Element("enclosure");
+            var enclosure = GetEnclosure(item);
 
             if (enclosure != null)
             {
@@ -237,6 +239,33 @@ namespace NzbDrone.Core.Indexers
             }
 
             return 0;
+        }
+
+        protected virtual XElement GetEnclosure(XElement item)
+        {
+            var enclosures = item.Elements("enclosure").ToArray();
+
+            if (enclosures.Length == 0)
+            {
+                return null;
+            }
+
+            if (enclosures.Length == 1)
+            {
+                return enclosures.First();
+            }
+
+            if (PreferredEnclosureMimeType != null)
+            {
+                var preferredEnclosure = enclosures.FirstOrDefault(v => v.Attribute("type").Value == PreferredEnclosureMimeType);
+
+                if (preferredEnclosure != null)
+                {
+                    return preferredEnclosure;
+                }
+            }
+
+            return item.Elements("enclosure").SingleOrDefault();
         }
 
         protected IEnumerable<XElement> GetItems(XDocument document)
@@ -278,7 +307,7 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>(?:\d+,)*\d+(?:\.\d{1,2})?)\W?(?<unit>[KMG]i?B)(?![\w/])",
+        private static readonly Regex ParseSizeRegex = new Regex(@"(?<value>(?<!\.\d*)(?:\d+,)*\d+(?:\.\d{1,3})?)\W?(?<unit>[KMG]i?B)(?![\w/])",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static long ParseSize(string sizeString, bool defaultToBinaryPrefix)

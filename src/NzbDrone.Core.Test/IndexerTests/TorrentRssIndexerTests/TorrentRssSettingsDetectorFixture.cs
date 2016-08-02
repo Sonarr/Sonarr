@@ -196,6 +196,26 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
             settings.Should().BeNull();
         }
 
+        [Test]
+        public void should_detect_rss_settings_for_AnimeTosho_without_size()
+        {
+            _indexerSettings.AllowZeroSize = true;
+
+            GivenRecentFeedResponse("TorrentRss/AnimeTosho_NoSize.xml");
+
+            var settings = Subject.Detect(_indexerSettings);
+
+            settings.ShouldBeEquivalentTo(new TorrentRssIndexerParserSettings
+            {
+                UseEZTVFormat = false,
+                UseEnclosureUrl = true,
+                UseEnclosureLength = false,
+                ParseSizeInDescription = true,
+                ParseSeedersInDescription = false,
+                SizeElementName = null
+            });
+        }
+
         [TestCase("BitMeTv/BitMeTv.xml")]
         [TestCase("Fanzub/fanzub.xml")]
         [TestCase("KickassTorrents/KickassTorrents.xml")]
