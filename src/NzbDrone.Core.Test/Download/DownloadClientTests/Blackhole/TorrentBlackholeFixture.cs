@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         protected string _completedDownloadFolder;
         protected string _blackholeFolder;
         protected string _filePath;
+        protected string _magnetFilePath;
 
         [SetUp]
         public void Setup()
@@ -29,6 +30,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             _completedDownloadFolder = @"c:\blackhole\completed".AsOsAgnostic();
             _blackholeFolder = @"c:\blackhole\torrent".AsOsAgnostic();
             _filePath = (@"c:\blackhole\torrent\" + _title + ".torrent").AsOsAgnostic();
+            _magnetFilePath = Path.ChangeExtension(_filePath, ".magnet");
 
             Mocker.SetConstant<IScanWatchFolder>(Mocker.Resolve<ScanWatchFolder>());
 
@@ -129,6 +131,51 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void Download_should_save_magnet_if_enabled()
+        {
+            Subject.Definition.Settings.As<TorrentBlackholeSettings>().SaveMagnetFiles = true;
+
+            var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.DownloadUrl = null;
+
+            Subject.Download(remoteEpisode);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_magnetFilePath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void Download_should_not_save_magnet_if_disabled()
+        {
+            var remoteEpisode = CreateRemoteEpisode();
+            remoteEpisode.Release.DownloadUrl = null;
+
+            Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode));
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Never());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_magnetFilePath), Times.Never());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void Download_should_prefer_torrent_over_magnet()
+        {
+            Subject.Definition.Settings.As<TorrentBlackholeSettings>().SaveMagnetFiles = true;
+
+            var remoteEpisode = CreateRemoteEpisode();
+
+            Subject.Download(remoteEpisode);
+
+            Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Once());
+            Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_magnetFilePath), Times.Never());
             Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 

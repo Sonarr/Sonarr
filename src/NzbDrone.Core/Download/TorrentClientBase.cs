@@ -42,6 +42,14 @@ namespace NzbDrone.Core.Download
             }
         }
 
+        public virtual bool PreferTorrentFile
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         protected abstract string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink);
         protected abstract string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent);
 
@@ -65,32 +73,64 @@ namespace NzbDrone.Core.Download
             {
                 magnetUrl = torrentInfo.MagnetUrl;
             }
-
-            string hash = null;
-
-            if (magnetUrl.IsNotNullOrWhiteSpace())
+            
+            if (PreferTorrentFile)
             {
-                try
+                if (torrentUrl.IsNotNullOrWhiteSpace())
                 {
-                    hash = DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                    try
+                    {
+                        return DownloadFromWebUrl(remoteEpisode, torrentUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!magnetUrl.IsNullOrWhiteSpace())
+                        {
+                            throw;
+                        }
+
+                        _logger.Debug("Torrent download failed, trying magnet. ({0})", ex.Message);
+                    }
                 }
-                catch (NotSupportedException ex)
+
+                if (magnetUrl.IsNotNullOrWhiteSpace())
                 {
-                    if (torrentUrl.IsNullOrWhiteSpace())
+                    try
+                    {
+                        return DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                    }
+                    catch (NotSupportedException ex)
                     {
                         throw new ReleaseDownloadException(remoteEpisode.Release, "Magnet not supported by download client. ({0})", ex.Message);
                     }
+                }
+            }
+            else
+            {
+                if (magnetUrl.IsNotNullOrWhiteSpace())
+                {
+                    try
+                    {
+                        return DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        if (torrentUrl.IsNullOrWhiteSpace())
+                        {
+                            throw new ReleaseDownloadException(remoteEpisode.Release, "Magnet not supported by download client. ({0})", ex.Message);
+                        }
 
-                    _logger.Debug("Magnet not supported by download client, trying torrent. ({0})", ex.Message);
+                        _logger.Debug("Magnet not supported by download client, trying torrent. ({0})", ex.Message);
+                    }
+                }
+
+                if (torrentUrl.IsNotNullOrWhiteSpace())
+                {
+                    return DownloadFromWebUrl(remoteEpisode, torrentUrl);
                 }
             }
 
-            if (hash == null && torrentUrl.IsNotNullOrWhiteSpace())
-            {
-                hash = DownloadFromWebUrl(remoteEpisode, torrentUrl);
-            }
-
-            return hash;
+            return null;
         }
 
         private string DownloadFromWebUrl(RemoteEpisode remoteEpisode, string torrentUrl)
