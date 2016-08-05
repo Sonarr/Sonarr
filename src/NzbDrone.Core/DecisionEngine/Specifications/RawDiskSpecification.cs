@@ -6,13 +6,15 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class DvdSpecification : IDecisionEngineSpecification
+    public class RawDiskSpecification : IDecisionEngineSpecification
     {
         private static readonly string[] _dvdContainerTypes = new[] { "vob", "iso" };
 
+        private static readonly string[] _blurayContainerTypes = new[] { "m2ts" };
+
         private readonly Logger _logger;
 
-        public DvdSpecification(Logger logger)
+        public RawDiskSpecification(Logger logger)
         {
             _logger = logger;
         }
@@ -30,6 +32,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 _logger.Debug("Release contains raw DVD, rejecting.");
                 return Decision.Reject("Raw DVD release");
+            }
+
+            if (_blurayContainerTypes.Contains(subject.Release.Container.ToLower()))
+            {
+                _logger.Debug("Release contains raw Bluray, rejecting.");
+                return Decision.Reject("Raw Bluray release");
             }
 
             return Decision.Accept();

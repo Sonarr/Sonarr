@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 {
     [TestFixture]
 
-    public class DvdSpecificationFixture : CoreTest<DvdSpecification>
+    public class RawDiskSpecificationFixture : CoreTest<RawDiskSpecification>
     {
         private RemoteEpisode _remoteEpisode;
 
@@ -60,6 +60,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_iso()
         {
             WithContainer("ISO");
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_m2ts()
+        {
+            WithContainer("M2TS");
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
