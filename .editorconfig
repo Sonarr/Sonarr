@@ -2,13 +2,21 @@
 # editorconfig.org
 root = true
 
-[*]
-end_of_line = lf
+[*{.cs,.html,.js,.hbs}]
+end_of_line = crlf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 indent_style = space
 indent_size = 4
+
+[*.less]
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
 
 # They have troubles with TABS. Use 2 spaces
 [{package.json,.travis.yml}]
