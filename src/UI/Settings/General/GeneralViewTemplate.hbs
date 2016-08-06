@@ -2,6 +2,7 @@
     <fieldset>
         <legend>Start-Up</legend>
 
+<!-- build:general-bindAddress -->
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Bind Address</label>
 
@@ -14,7 +15,9 @@
                 <input type="text" name="bindAddress" class="form-control" />
             </div>
         </div>
+<!-- endbuild -->
 
+<!-- build:general-port -->
         <div class="form-group">
             <label class="col-sm-3 control-label">Port Number</label>
 
@@ -26,7 +29,9 @@
                 <input type="number" placeholder="8989" name="port" class="form-control"/>
             </div>
         </div>
+<!-- endbuild -->
 
+<!-- build:general-urlBase -->
         <div class="form-group">
             <label class="col-sm-3 control-label">URL Base</label>
 
@@ -39,7 +44,9 @@
                 <input type="text" name="urlBase" class="form-control"/>
             </div>
         </div>
+<!-- endbuild -->
 
+<!-- build:general-enableSsl -->
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Enable SSL</label>
 
@@ -62,8 +69,10 @@
                 </div>
             </div>
         </div>
+<!-- endbuild -->
 
         <div class="x-ssl-options">
+<!-- build:general-sslPort -->
             <div class="form-group advanced-setting">
                 <label class="col-sm-3 control-label">SSL Port Number</label>
 
@@ -71,7 +80,9 @@
                     <input type="number" placeholder="8989" name="sslPort" class="form-control"/>
                 </div>
             </div>
+<!-- endbuild -->
 
+<!-- build:general-sslCertHash -->
             {{#if_windows}}
             <div class="form-group advanced-setting">
                 <label class="col-sm-3 control-label">SSL Cert Hash</label>
@@ -81,6 +92,7 @@
                 </div>
             </div>
             {{/if_windows}}
+<!-- endbuild -->
         </div>
 
         <div class="form-group">
@@ -162,13 +174,13 @@
             </div>
         </div>
     </fieldset>
-    
+
     <fieldset>
         <legend>Proxy Settings</legend>
-        
+
         <div class="form-group">
             <label class="col-sm-3 control-label">Use Proxy</label>
-            
+
             <div class="col-sm-8">
                 <div class="input-group">
                     <label class="checkbox toggle well">
@@ -237,22 +249,22 @@
                     <input type="password" name="proxyPassword" class="form-control"/>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">Addresses for the proxy to ignore</label>
 
                 <div class="col-sm-1 col-sm-push-4 help-inline">
                     <i class="icon-sonarr-form-info" title="Use ',' as a separator, and '*.' as a wildcard for subdomains"/>
                 </div>
-                
+
                 <div class="col-sm-4 col-sm-pull-1">
                     <input type="text" name="proxyBypassFilter" class="form-control"/>
                 </div>
             </div>
-            
+
             <div class="form-group">
             <label class="col-sm-3 control-label">Bypass Proxy for Local Addresses</label>
-            
+
             <div class="col-sm-8">
                 <div class="input-group">
                     <label class="checkbox toggle well">

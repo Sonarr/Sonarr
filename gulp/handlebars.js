@@ -7,8 +7,11 @@ var livereload = require('gulp-livereload');
 var path = require('path');
 var streamqueue = require('streamqueue');
 var stripbom = require('gulp-stripbom');
+var htmlreplace = require('gulp-html-replace');
 
 var paths = require('./paths.js');
+
+var hiddenOptionsMeta = require('./hidden-option-meta');
 
 gulp.task('handlebars', function() {
 
@@ -17,6 +20,9 @@ gulp.task('handlebars', function() {
         '!*/**/*Partial.*'
     ])
         .pipe(stripbom({ showLog : false }))
+        .pipe(htmlreplace(hiddenOptionsMeta(), {
+            keepUnassigned: true
+        }))
         .pipe(handlebars())
         .pipe(declare({
             namespace   : 'T',

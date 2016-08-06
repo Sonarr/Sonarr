@@ -42,5 +42,8 @@
     "tar.gz": "0.1.1",
     "webpack": "1.12.0",
     "webpack-stream": "2.1.0"
+  },
+  "devDependencies": {
+    "gulp-html-replace": "^1.6.1"
   }
 }
