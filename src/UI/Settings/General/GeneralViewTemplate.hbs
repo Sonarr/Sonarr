@@ -17,7 +17,7 @@
         </div>
 <!-- endbuild -->
 
-<!-- build:general-port -->
+        {{#meta-option-show "general.port"}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Port Number</label>
 
@@ -26,10 +26,10 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="number" placeholder="8989" name="port" class="form-control"/>
+                <input type="number" placeholder="8989" name="port" class="form-control" {{meta-option-ro "general.port"}}readonly="readonly"{{/meta-option-ro}} />
             </div>
         </div>
-<!-- endbuild -->
+        {{/meta-option-show}}
 
 <!-- build:general-urlBase -->
         <div class="form-group">
@@ -95,6 +95,7 @@
 <!-- endbuild -->
         </div>
 
+<!-- build:general-launchBrowser -->
         <div class="form-group">
             <label class="col-sm-3 control-label">Open browser on start</label>
 
@@ -118,9 +119,12 @@
             </div>
         </div>
     </fieldset>
+<!-- endbuild -->
 
+<!-- build:general-authentication -->
     <fieldset>
         <legend>Security</legend>
+<!-- build:general-authenticationMethod -->
         <div class="form-group">
             <label class="col-sm-3 control-label">Authentication</label>
 
@@ -137,8 +141,10 @@
                 </select>
             </div>
         </div>
+<!-- endbuild -->
 
         <div class="x-auth-options">
+<!-- build:general-username -->
             <div class="form-group">
                 <label class="col-sm-3 control-label">Username</label>
 
@@ -146,7 +152,9 @@
                     <input type="text" placeholder="Username" name="username" class="form-control"/>
                 </div>
             </div>
+<!-- endbuild -->
 
+<!-- build:general-password -->
             <div class="form-group">
                 <label class="col-sm-3 control-label">Password</label>
 
@@ -154,8 +162,10 @@
                     <input type="password" name="password" class="form-control"/>
                 </div>
             </div>
+<!-- endbuild -->
         </div>
 
+<!-- build:general-apiKey -->
         <div class="form-group api-key">
             <label class="col-sm-3 control-label">API Key</label>
 
@@ -173,7 +183,10 @@
                 </div>
             </div>
         </div>
+<!-- endbuild -->
+
     </fieldset>
+<!-- endbuild -->
 
     <fieldset>
         <legend>Proxy Settings</legend>

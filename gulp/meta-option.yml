@@ -1,0 +1,31 @@
+# Meta options config
+#
+# Allow to hide some options from the UI, and disable changing its values.
+#
+# FILE FORMAT
+#
+# Top level : tab names
+# Second level: option name
+# Values on second level should be a collection with meta-settings.
+# Available terms for the meta-settings:
+#   - 'show', 'visible' - option is visible
+#   - 'hide', 'hidden' - option is hidden
+#   - 'ro', 'readonly', 'read-only' - option is read-only
+#   - 'rw', 'read-write' - option is editable
+
+general:
+  # bindAddress: ['show', 'rw']
+  # port: ['show', 'rw']
+  # urlBase: ['show', 'rw']
+  # enableSsl: ['show', 'rw']
+  # sslPort: ['show', 'rw']
+  # sslCertHash: ['show', 'rw']
+  # launchBrowser: ['show', 'rw']
+
+  # entire section
+  authentication: ['hidden']
+
+  # authenticationMethod: ['show', 'rw']
+  username: ['hide']
+  # password: ['show', 'rw']
+  # apiKey: ['show', 'rw']
