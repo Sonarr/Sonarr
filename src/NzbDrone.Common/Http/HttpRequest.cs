@@ -34,6 +34,7 @@ namespace NzbDrone.Common.Http
         public byte[] ContentData { get; set; }
         public string ContentSummary { get; set; }
         public bool SuppressHttpError { get; set; }
+        public bool UseSimplifiedUserAgent { get; set; }
         public bool AllowAutoRedirect { get; set; }
         public bool ConnectionKeepAlive { get; set; }
         public bool LogResponseContent { get; set; }

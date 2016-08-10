@@ -20,6 +20,6 @@ namespace NzbDrone.Core.ThingiProvider
         void SetProviderCharacteristics(TProvider provider, TProviderDefinition definition);
         TProvider GetInstance(TProviderDefinition definition);
         ValidationResult Test(TProviderDefinition definition);
-        object ConnectData(TProviderDefinition definition, string stage, IDictionary<string, object> query );
+        object RequestAction(TProviderDefinition definition, string action, IDictionary<string, string> query);
     }
 }

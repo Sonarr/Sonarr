@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Indexers.Rarbg
@@ -28,9 +29,17 @@ namespace NzbDrone.Core.Indexers.Rarbg
         {
             return _tokenCache.Get(settings.BaseUrl, () =>
                 {
-                    var url = settings.BaseUrl.Trim('/') + "/pubapi_v2.php?get_token=get_token";
+                    var requestBuilder = new HttpRequestBuilder(settings.BaseUrl.Trim('/'))
+                        .Resource("/pubapi_v2.php?get_token=get_token")
+                        .Accept(HttpAccept.Json);
 
-                    var response = _httpClient.Get<JObject>(new HttpRequest(url, HttpAccept.Json));
+                    if (settings.CaptchaToken.IsNotNullOrWhiteSpace())
+                    {
+                        requestBuilder.UseSimplifiedUserAgent = true;
+                        requestBuilder.SetCookie("cf_clearance", settings.CaptchaToken);
+                    }
+
+                    var response = _httpClient.Get<JObject>(requestBuilder.Build());
 
                     return response.Resource["token"].ToString();
                 }, TimeSpan.FromMinutes(14.0));

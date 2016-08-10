@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -19,6 +20,10 @@ namespace NzbDrone.Core.Notifications.Twitter
             RuleFor(c => c.DirectMessage).Equal(true)
                                          .WithMessage("Using Direct Messaging is recommended, or use a private account.")
                                          .AsWarning();
+
+            RuleFor(c => c.AuthorizeNotification).Empty()
+                                                 .When(c => c.AccessToken.IsNullOrWhiteSpace() || c.AccessTokenSecret.IsNullOrWhiteSpace())
+                                                 .WithMessage("Authenticate app.");
         }
     }
 

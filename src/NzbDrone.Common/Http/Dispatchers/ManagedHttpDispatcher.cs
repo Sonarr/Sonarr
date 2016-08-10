@@ -26,7 +26,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             webRequest.AutomaticDecompression = DecompressionMethods.GZip;
 
             webRequest.Method = request.Method.ToString();
-            webRequest.UserAgent = UserAgentBuilder.UserAgent;
+            webRequest.UserAgent = request.UseSimplifiedUserAgent ? UserAgentBuilder.UserAgentSimplified : UserAgentBuilder.UserAgent;
             webRequest.KeepAlive = request.ConnectionKeepAlive;
             webRequest.AllowAutoRedirect = request.AllowAutoRedirect;
             webRequest.CookieContainer = cookies;

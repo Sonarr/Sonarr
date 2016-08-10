@@ -4,93 +4,38 @@ var DeepModel = require('backbone.deepmodel');
 var Messenger = require('../Shared/Messenger');
 
 module.exports = DeepModel.extend({
-    connectData : function(action, initialQueryParams) {
+
+    getFieldValue : function(name) {
+        var index = _.indexOf(_.pluck(this.get('fields'), 'name'), name);
+        return this.get('fields.' + index + '.value');
+    },
+
+    setFieldValue : function(name, value) {
+        var index = _.indexOf(_.pluck(this.get('fields'), 'name'), name);
+        return this.set('fields.' + index + '.value', value);
+    },
+
+    requestAction : function(action, queryParams) {
         var self = this;
 
-        this.trigger('connect:sync');
+        this.trigger('validation:sync');
 
-        var promise = $.Deferred();
-
-        var callAction = function(action, queryParams) {
-
-            if (queryParams) {
-                action = action + '?' + $.param(queryParams, true);
-            }
-
-            var params = {
-                url             : self.collection.url + '/connectData/' + action,
-                contentType     : 'application/json',
-                data            : JSON.stringify(self.toJSON()),
-                type            : 'POST',
-                isValidatedCall : true
-            };
-
-            var ajaxPromise = $.ajax(params);
-            ajaxPromise.fail(promise.reject);
-
-            ajaxPromise.success(function(response) {
-                if (response.action)
-                {
-                    if (response.action === 'openWindow')
-                    {
-                        window.open(response.url);
-                        var selfWindow = window;
-
-                        selfWindow.onCompleteOauth = function(query, callback) {
-                            delete selfWindow.onCompleteOauth;
-
-                            if (response.nextStep) {
-                                var queryParams = {};
-                                var splitQuery = query.substring(1).split('&');
-
-                                _.each(splitQuery, function (param) {
-                                    var paramSplit = param.split('=');
-                                    queryParams[paramSplit[0]] = paramSplit[1];
-                                });
-
-                                callAction(response.nextStep, _.extend(initialQueryParams, queryParams));
-                            }
-                            else {
-                                promise.resolve(response);
-                            }
-
-                            callback();
-                        };
-
-                        return;
-                    }
-                    else if (response.action === 'updateFields')
-                    {
-                        _.each(self.get('fields'), function (value, index) {
-                            var fieldValue = _.find(response.fields, function (field, key) {
-                                return key === value.name;
-                            });
-
-                            if (fieldValue) {
-                                self.set('fields.' + index + '.value', fieldValue);
-                            }
-                        });
-                    }
-                }
-                if (response.nextStep) {
-                    callAction(response.nextStep, initialQueryParams);
-                }
-                else {
-                    promise.resolve(response);
-                }
-            });
+        var params = {
+            url             : this.collection.url + '/action/' + action,
+            contentType     : 'application/json',
+            data            : JSON.stringify(this.toJSON()),
+            type            : 'POST',
+            isValidatedCall : true
         };
 
-        callAction(action, initialQueryParams);
+        if (queryParams) {
+            params.url += '?' + $.param(queryParams, true);
+        }
 
-        Messenger.monitor({
-            promise        : promise,
-            successMessage : 'Connecting for \'{0}\' succeeded'.format(this.get('name')),
-            errorMessage   : 'Connecting for \'{0}\' failed'.format(this.get('name'))
-        });
+        var promise = $.ajax(params);
 
         promise.fail(function(response) {
-            self.trigger('connect:failed', response);
+            self.trigger('validation:failed', response);
         });
 
         return promise;

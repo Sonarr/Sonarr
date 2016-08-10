@@ -49,6 +49,10 @@ var _fieldBuilder = function(field) {
         return _templateRenderer.call(field, 'Form/ActionTemplate');
     }
 
+    if (field.type === 'captcha') {
+        return _templateRenderer.call(field, 'Form/CaptchaTemplate');
+    }
+
     return _templateRenderer.call(field, 'Form/TextboxTemplate');
 };
 

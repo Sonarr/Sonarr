@@ -81,7 +81,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
         {
             if (request.Url.Query.IsNotNullOrWhiteSpace())
             {
-                return string.Concat(request.Url.Path, request.Url.Query);
+                return string.Concat(request.Url.Path, "?", request.Url.Query);
             }
             else
             {

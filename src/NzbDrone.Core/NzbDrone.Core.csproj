@@ -527,6 +527,9 @@
     <Compile Include="Housekeeping\HousekeepingCommand.cs" />
     <Compile Include="Housekeeping\HousekeepingService.cs" />
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
+    <Compile Include="Http\CloudFlare\CloudFlareCaptchaException.cs" />
+    <Compile Include="Http\CloudFlare\CloudFlareCaptchaRequest.cs" />
+    <Compile Include="Http\CloudFlare\CloudFlareHttpInterceptor.cs" />
     <Compile Include="Http\HttpProxySettingsProvider.cs" />
     <Compile Include="Http\TorcacheHttpInterceptor.cs" />
     <Compile Include="Indexers\BitMeTv\BitMeTv.cs" />
@@ -810,6 +813,7 @@
     <Compile Include="Notifications\Synology\SynologyIndexer.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerProxy.cs" />
     <Compile Include="Notifications\Synology\SynologyIndexerSettings.cs" />
+    <Compile Include="Notifications\Twitter\OAuthToken.cs" />
     <Compile Include="Notifications\Twitter\TwitterException.cs" />
     <Compile Include="Notifications\Webhook\WebhookEpisode.cs" />
     <Compile Include="Notifications\Webhook\WebhookException.cs" />
@@ -1054,6 +1058,7 @@
     <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\IpValidation.cs" />
     <Compile Include="Validation\LanguageValidator.cs" />
+    <Compile Include="Validation\NzbDroneValidationExtensions.cs" />
     <Compile Include="Validation\NzbDroneValidationFailure.cs" />
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
     <Compile Include="Validation\NzbDroneValidationState.cs" />

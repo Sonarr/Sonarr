@@ -8,6 +8,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
@@ -21,7 +22,7 @@ namespace NzbDrone.Core.Indexers
     {
         protected const int MaxNumResultsPerQuery = 1000;
 
-        private readonly IHttpClient _httpClient;
+        protected readonly IHttpClient _httpClient;
 
         public override bool SupportsRss { get { return true; } }
         public override bool SupportsSearch { get { return true; } }
@@ -312,6 +313,10 @@ namespace NzbDrone.Core.Indexers
             catch (RequestLimitReachedException)
             {
                 _logger.Warn("Request limit reached");
+            }
+            catch (CloudFlareCaptchaException)
+            {
+                return new ValidationFailure("CaptchaToken", "Site protected by CloudFlare CAPTCHA. Valid CAPTCHA token required.");
             }
             catch (UnsupportedFeedException ex)
             {

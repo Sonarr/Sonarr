@@ -75,6 +75,8 @@ module.exports = function() {
     };
 
     $.fn.removeAllErrors = function() {
+        this.removeClass('has-error');
+        this.removeClass('has-warning');
         this.find('.has-error').removeClass('has-error');
         this.find('.has-warning').removeClass('has-warning');
         this.find('.error').removeClass('error');

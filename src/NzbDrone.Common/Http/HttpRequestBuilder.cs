@@ -19,6 +19,7 @@ namespace NzbDrone.Common.Http
         public Dictionary<string, string> Segments { get; private set; }
         public HttpHeader Headers { get; private set; }
         public bool SuppressHttpError { get; set; }
+        public bool UseSimplifiedUserAgent { get; set; }
         public bool AllowAutoRedirect { get; set; }
         public bool ConnectionKeepAlive { get; set; }
         public bool LogResponseContent { get; set; }
@@ -99,6 +100,7 @@ namespace NzbDrone.Common.Http
         {
             request.Method = Method;
             request.SuppressHttpError = SuppressHttpError;
+            request.UseSimplifiedUserAgent = UseSimplifiedUserAgent;
             request.AllowAutoRedirect = AllowAutoRedirect;
             request.ConnectionKeepAlive = ConnectionKeepAlive;
             request.LogResponseContent = LogResponseContent;
