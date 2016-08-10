@@ -42,9 +42,9 @@ namespace NzbDrone.Core.Notifications.Join
 
         public ValidationFailure Test(JoinSettings settings)
         {
-
             const string title = "Test Notification";
             const string body = "This is a test message from Sonarr.";
+
             try
             {
                 SendNotification(title, body, settings);
@@ -78,11 +78,13 @@ namespace NzbDrone.Core.Notifications.Join
                 {
                     throw new JoinException(res.errorMessage);
                 }
+
                 if (res.userAuthError)
                 {
-                    throw new JoinException("Authentication failed.");
+                    throw new JoinAuthException("Authentication failed.");
                 }
-                throw new JoinException("Unknown error.  Join message failed to send.");      
+
+                throw new JoinException("Unknown error. Join message failed to send.");      
             }
             catch(Exception e)
             {

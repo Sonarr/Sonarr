@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications.Join
     {
         private static readonly JoinSettingsValidator Validator = new JoinSettingsValidator();
 
-        [FieldDefinition(0, Label = "API Key", HelpText = "The API Key from your Join account settings (click Join API button): https://joinjoaomgcd.appspot.com/", HelpLink = "https://joinjoaomgcd.appspot.com/")]
+        [FieldDefinition(0, Label = "API Key", HelpText = "The API Key from your Join account settings (click Join API button).", HelpLink = "https://joinjoaomgcd.appspot.com/")]
         public string APIKey { get; set; }
 
         public NzbDroneValidationResult Validate()
