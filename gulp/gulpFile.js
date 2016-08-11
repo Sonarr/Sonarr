@@ -2,6 +2,9 @@ require('./watch.js');
 require('./build.js');
 require('./clean.js');
 require('./jshint.js');
+
+require('./meta-option');
+
 require('./handlebars.js');
 require('./copy.js');
 require('./less.js');

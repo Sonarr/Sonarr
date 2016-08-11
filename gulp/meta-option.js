@@ -1,52 +1,89 @@
 "use strict";
 
-var fs = require('fs');
-var path = require('path');
-
+var gulp = require('gulp');
+var rename = require("gulp-rename");
 var yaml = require('js-yaml');
-var htmlreplace = require('gulp-html-replace');
-//var _ = require('lodash');
+var through2 = require('through2');
 
-var configFileName = 'meta-option.yml';
-var configPath = path.join(__dirname, configFileName);
+var paths = require('./paths.js');
 
-var main = function hiddenOptionMeta_main() {
-    var rawConfig = {};
+gulp.task('metaOption', function() {
+    through2
+    return gulp.src('gulp/meta-option.yml')
+        .pipe(through2.obj(function (file, enc, callback) {
+            var data = parseConfig(String(file.contents));
+            file.contents = new Buffer(JSON.stringify(data));
+            this.push(file);
+            callback();
+        }))
 
-    try {
-        rawConfig = yaml.safeLoad(
-            fs.readFileSync(configPath, 'utf8')
-        );
-    } catch (e) {
+        .pipe(rename({
+            dirname: "",
+            basename: "metaOption",
+            extname: ".json"
+        }))
+        .pipe(gulp.dest(paths.dest.content));
+});
 
-        if ('ENOENT' === e.code) {
-            // no config file, nothing to do...
-            console.log('Meta options file NOT FOUND: [', configFileName, ']');
-        } else {
-            throw e;
-        }
-    }
+var parseConfig = function parseConfig(content) {
 
+    var rawConfig = yaml.safeLoad(content);
     var config = {};
 
     if (rawConfig) {
         for (var tabName in rawConfig) {
+
+            if (! (tabName in config)) {
+                config[tabName] = {};
+            }
+
             for (var optName in rawConfig[tabName]) {
-                if (rawConfig[tabName][optName]) {
-                    // there is truthy value, so currently
-                    // we could just skip this key
+
+                var o = rawConfig[tabName][optName];
+                var optarray = [];
+                if ("string" === typeof(o)) {
+                    optarray.push(o);
+                } else if( Object.prototype.toString.call( o ) === '[object Array]') {
+                    optarray = o;
                 } else {
-                    config[tabName + '-' + optName] = '';
+                    console.error('Unknown format of the option: [' + tabName + '][' + optName + ']');
                 }
+
+                var optobj = {
+                    'readonly': false,
+                    'visible': true
+                };
+
+                // parse options:
+                for (var opt in optarray) {
+                    var s = (opt || '').toString().toLowerCase();
+                    switch(s) {
+                        case 'ro':
+                        case 'readonly':
+                        case 'read-only':
+                            optobj.readonly = true;
+                            break;
+                        case 'rw':
+                        case 'read-write':
+                        case 'readwrite':
+                            optobj.readonly = false;
+                            break;
+                        case 'show':
+                        case 'visible':
+                            optobj.visible = true;
+                            break;
+                        case 'hide':
+                        case 'hidden':
+                            optobj.visible = false;
+                            break;
+                    }
+                }
+
+                config[tabName][optName] = optobj;
+
             }
         }
-
-        //console.log(config);
     }
 
-    return htmlreplace(config, {
-        keepUnassigned: true
-    });
+    return config;
 }
-
-exports = module.exports = main;

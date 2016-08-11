@@ -2,7 +2,8 @@
     <fieldset>
         <legend>Start-Up</legend>
 
-<!-- build:general-bindAddress -->
+        {{#meta-with this tab="general" option="bindAddress"}}
+        {{#meta-show this}}
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Bind Address</label>
 
@@ -12,12 +13,14 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="text" name="bindAddress" class="form-control" />
+                <input type="text" name="bindAddress" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}}/>
             </div>
         </div>
-<!-- endbuild -->
+        {{/meta-show}}
+        {{/meta-with}}
 
-        {{#meta-option-show "general.port"}}
+        {{#meta-with this tab="general" option="port"}}
+        {{#meta-show this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Port Number</label>
 
@@ -26,10 +29,11 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="number" placeholder="8989" name="port" class="form-control" {{meta-option-ro "general.port"}}readonly="readonly"{{/meta-option-ro}} />
+                <input type="number" placeholder="8989" name="port" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}} />
             </div>
         </div>
-        {{/meta-option-show}}
+        {{/meta-show}}
+        {{/meta-with}}
 
 <!-- build:general-urlBase -->
         <div class="form-group">

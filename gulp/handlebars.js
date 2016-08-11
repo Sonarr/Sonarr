@@ -9,7 +9,6 @@ var streamqueue = require('streamqueue');
 var stripbom = require('gulp-stripbom');
 
 var paths = require('./paths.js');
-var metaOption = require('./meta-option');
 
 gulp.task('handlebars', function() {
 
@@ -18,7 +17,6 @@ gulp.task('handlebars', function() {
         '!*/**/*Partial.*'
     ])
         .pipe(stripbom({ showLog : false }))
-        .pipe(metaOption())
         .pipe(handlebars())
         .pipe(declare({
             namespace   : 'T',

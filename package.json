@@ -44,6 +44,7 @@
     "webpack-stream": "2.1.0"
   },
   "devDependencies": {
-    "gulp-html-replace": "^1.6.1"
+    "gulp-rename": "^1.2.2",
+    "through2": "^2.0.1"
   }
 }

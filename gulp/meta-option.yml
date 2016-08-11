@@ -14,7 +14,7 @@
 #   - 'rw', 'read-write' - option is editable
 
 general:
-  # bindAddress: ['show', 'rw']
+  bindAddress: ['show', 'rw']
   # port: ['show', 'rw']
   # urlBase: ['show', 'rw']
   # enableSsl: ['show', 'rw']
