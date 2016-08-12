@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "gulp-rename": "^1.2.2",
+    "json-loader": "^0.5.4",
     "through2": "^2.0.1"
   }
 }

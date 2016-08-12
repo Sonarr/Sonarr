@@ -6,36 +6,32 @@ var yaml = require('js-yaml');
 var through2 = require('through2');
 
 var paths = require('./paths.js');
+var MetaOptionConfig = require('../src/UI/MetaOptionConfig');
 
 gulp.task('metaOption', function() {
-    through2
-    return gulp.src('gulp/meta-option.yml')
+    return gulp.src('gulp/metaOption.yml')
         .pipe(through2.obj(function (file, enc, callback) {
-            var data = parseConfig(String(file.contents));
+            var data = parseConfigYml(String(file.contents));
             file.contents = new Buffer(JSON.stringify(data));
             this.push(file);
             callback();
         }))
 
         .pipe(rename({
-            dirname: "",
-            basename: "metaOption",
-            extname: ".json"
+            dirname: '',
+            basename: 'metaOption',
+            extname: '.json'
         }))
         .pipe(gulp.dest(paths.dest.content));
 });
 
-var parseConfig = function parseConfig(content) {
+var parseConfigYml = function parseConfigYml(content) {
 
     var rawConfig = yaml.safeLoad(content);
     var config = {};
 
     if (rawConfig) {
         for (var tabName in rawConfig) {
-
-            if (! (tabName in config)) {
-                config[tabName] = {};
-            }
 
             for (var optName in rawConfig[tabName]) {
 
@@ -49,14 +45,11 @@ var parseConfig = function parseConfig(content) {
                     console.error('Unknown format of the option: [' + tabName + '][' + optName + ']');
                 }
 
-                var optobj = {
-                    'readonly': false,
-                    'visible': true
-                };
+                var optobj = new MetaOptionConfig();
 
                 // parse options:
                 for (var opt in optarray) {
-                    var s = (opt || '').toString().toLowerCase();
+                    var s = (optarray[opt] || '').toString().toLowerCase();
                     switch(s) {
                         case 'ro':
                         case 'readonly':
@@ -76,10 +69,13 @@ var parseConfig = function parseConfig(content) {
                         case 'hidden':
                             optobj.visible = false;
                             break;
+                        default:
+                            console.warn('Unrecognized value for the option: [' + tabName + '][' + optName + '] : ' + s);
+                            break;
                     }
                 }
 
-                config[tabName][optName] = optobj;
+                config[optName] = optobj;
 
             }
         }

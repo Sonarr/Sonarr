@@ -1,51 +1,63 @@
 var Handlebars = require('handlebars');
+var MetaOptionConfig = require('../../MetaOptionConfig');
 
-Handlebars.registerHelper('meta-with', function(context, options) {
+var metaOptionCurrentConfig = {};
 
-    if (!options)
-        return '';
+metaOptionCurrentConfig = require('../../../../_output/UI/Content/metaOption.json');
 
-    context.metaOption = context.metaOption || {};
-    context.metaOption.tab = options.hash.tab;
-    context.metaOption.option = options.hash.option;
+(function _registerMetaHelpers(config) {
 
-    return options.fn(context);
-});
+    Handlebars.registerHelper('meta-with', function(context, options) {
 
-Handlebars.registerHelper('meta-ro', function(context, options) {
+        if (!options) {
+            return '';
+        }
 
-    if (!options) {
-        return '';
-    }
+        var optName = options.hash['option'];
+        var opt = new MetaOptionConfig();
 
-    if (context.metaOption) {
-        var tab = context.metaOption.tab;
-        var opt = context.metaOption.option;
+        if (config && (optName in config)) {
+            opt = config[optName];
+        }
 
-console.log('meta-ro context', context);
-console.log(tab, opt);
+        context.metaOption = opt;
 
         return options.fn(context);
-    } else {
-        return options.fn(context);
-    }
-});
+    });
 
-Handlebars.registerHelper('meta-show', function(context, options) {
+    Handlebars.registerHelper('meta-ro', function(context, options) {
 
-    if (!options) {
-        return '';
-    }
+        if (!options) {
+            return '';
+        }
 
-    if (context.metaOption) {
-        var tab = context.metaOption.tab;
-        var opt = context.metaOption.option;
+        var opt = context.metaOption;
+        if (opt) {
+            if(opt.readonly) {
+                return options.fn(context);
+            } else {
+                return options.inverse(context);
+            }
+        } else {
+            return options.inverse(context);
+        }
+    });
 
-console.log('meta-show context', context);
-console.log(tab, opt);
+    Handlebars.registerHelper('meta-show', function(context, options) {
 
-        return options.fn(context);
-    } else {
-        return options.fn(context);
-    }
-});
+        if (!options) {
+            return '';
+        }
+
+        var opt = context.metaOption;
+        if (opt) {
+            if(opt.visible) {
+                return options.fn(context);
+            } else {
+                return options.inverse(context);
+            }
+        } else {
+            return options.fn(context);
+        }
+    });
+})(metaOptionCurrentConfig);

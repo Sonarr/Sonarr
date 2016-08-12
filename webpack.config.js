@@ -60,7 +60,9 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' })
   ],
   module: {
-
+    loaders: [
+      { test: /\.json$/, loader: "json" }
+    ]
     //this doesn't work yet. waiting for https://github.com/spenceralger/rcloader/issues/5
     /*preLoaders: [
         {

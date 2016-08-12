@@ -10,7 +10,7 @@ var stripbom = require('gulp-stripbom');
 
 var paths = require('./paths.js');
 
-gulp.task('handlebars', function() {
+gulp.task('handlebars', ['metaOption'], function() {
 
     var coreStream = gulp.src([
         paths.src.templates,

@@ -15,17 +15,17 @@
 
 general:
   bindAddress: ['show', 'rw']
-  # port: ['show', 'rw']
+  port: ['show', 'ro']
   # urlBase: ['show', 'rw']
   # enableSsl: ['show', 'rw']
   # sslPort: ['show', 'rw']
   # sslCertHash: ['show', 'rw']
-  # launchBrowser: ['show', 'rw']
+  launchBrowser: ['show', 'ro']
 
   # entire section
-  authentication: ['hidden']
+  authentication: ['visible']
 
   # authenticationMethod: ['show', 'rw']
   username: ['hide']
-  # password: ['show', 'rw']
-  # apiKey: ['show', 'rw']
+  password: ['show', 'ro']
+  apiKey: ['show', 'rw']

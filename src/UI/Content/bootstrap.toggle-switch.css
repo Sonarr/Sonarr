@@ -38,7 +38,9 @@ https://github.com/ghinda/css-toggle-switch
 
 	/* Don't hide the input from screen-readers and keyboard access
 	 */
-	.toggle input {
+	.toggle input,
+	.toggle input[disabled],
+	.toggle input[readonly] {
 		position: absolute;
 		opacity: 0;
 		z-index: 5;

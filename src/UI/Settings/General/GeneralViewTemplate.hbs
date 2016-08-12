@@ -2,7 +2,7 @@
     <fieldset>
         <legend>Start-Up</legend>
 
-        {{#meta-with this tab="general" option="bindAddress"}}
+        {{#meta-with this option="bindAddress"}}
         {{#meta-show this}}
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Bind Address</label>
@@ -19,7 +19,7 @@
         {{/meta-show}}
         {{/meta-with}}
 
-        {{#meta-with this tab="general" option="port"}}
+        {{#meta-with this option="port"}}
         {{#meta-show this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Port Number</label>
@@ -35,29 +35,34 @@
         {{/meta-show}}
         {{/meta-with}}
 
-<!-- build:general-urlBase -->
+        {{#meta-with this option="urlBase"}}
+        {{#meta-show this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">URL Base</label>
 
             <div class="col-sm-1 col-sm-push-4 help-inline">
+                {{#meta-ro this}}
                 <i class="icon-sonarr-form-warning" title="Requires restart to take effect"/>
                 <i class="icon-sonarr-form-info" title="For reverse proxy support, default is empty"/>
+                {{/meta-ro}}
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="text" name="urlBase" class="form-control"/>
+                <input type="text" name="urlBase" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}} />
             </div>
         </div>
-<!-- endbuild -->
+        {{/meta-show}}
+        {{/meta-with}}
 
-<!-- build:general-enableSsl -->
+        {{#meta-with this option="enableSsl"}}
+        {{#meta-show this}}
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Enable SSL</label>
 
             <div class="col-sm-8">
                 <div class="input-group">
-                    <label class="checkbox toggle well">
-                        <input type="checkbox" name="enableSsl" class="x-ssl"/>
+                    <label class="checkbox toggle well {{#meta-ro this}}readonly{{/meta-ro}}">
+                        <input type="checkbox" name="enableSsl" class="x-ssl" {{#meta-ro this}}disabled="disabled"{{/meta-ro}} />
 
                         <p>
                             <span>Yes</span>
@@ -68,45 +73,53 @@
                     </label>
 
                     <span class="help-inline-checkbox">
+                        {{#meta-ro this}}
                         <i class="icon-sonarr-form-warning" title="Requires restart running as administrator to take effect"/>
+                        {{/meta-ro}}
                     </span>
                 </div>
             </div>
         </div>
-<!-- endbuild -->
+        {{/meta-show}}
+        {{/meta-with}}
 
         <div class="x-ssl-options">
-<!-- build:general-sslPort -->
+            {{#meta-with this option="enableSsl"}}
+            {{#meta-show this}}
             <div class="form-group advanced-setting">
                 <label class="col-sm-3 control-label">SSL Port Number</label>
 
                 <div class="col-sm-4">
-                    <input type="number" placeholder="8989" name="sslPort" class="form-control"/>
+                    <input type="number" placeholder="8989" name="sslPort" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}}/>
                 </div>
             </div>
-<!-- endbuild -->
+            {{/meta-show}}
+            {{/meta-with}}
 
-<!-- build:general-sslCertHash -->
             {{#if_windows}}
+            {{#meta-with this option="enableSsl"}}
+            {{#meta-show this}}
             <div class="form-group advanced-setting">
                 <label class="col-sm-3 control-label">SSL Cert Hash</label>
 
                 <div class="col-sm-4">
-                    <input type="text" name="sslCertHash" class="form-control"/>
+                    <input type="text" name="sslCertHash" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}}/>
                 </div>
             </div>
+            {{/meta-show}}
+            {{/meta-with}}
             {{/if_windows}}
-<!-- endbuild -->
         </div>
 
-<!-- build:general-launchBrowser -->
+        {{#meta-with this option="launchBrowser"}}
+        {{#meta-show this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Open browser on start</label>
 
             <div class="col-sm-8">
                 <div class="input-group">
-                    <label class="checkbox toggle well">
-                        <input type="checkbox" name="launchBrowser" class="form-control"/>
+                    <label class="checkbox toggle well {{#meta-ro this}}readonly{{/meta-ro}}">
+                        <input type="checkbox" name="launchBrowser" class="form-control" {{#meta-ro this}}disabled="disabled"{{/meta-ro}} />
 
                         <p>
                             <span>Yes</span>
@@ -122,13 +135,17 @@
                 </div>
             </div>
         </div>
+        {{/meta-show}}
+        {{/meta-with}}
     </fieldset>
-<!-- endbuild -->
 
-<!-- build:general-authentication -->
+    {{#meta-with this option="authentication"}}
+    {{#meta-show this}}
     <fieldset>
         <legend>Security</legend>
-<!-- build:general-authenticationMethod -->
+
+        {{#meta-with this option="username"}}
+        {{#meta-show this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Authentication</label>
 
@@ -138,43 +155,52 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <select name="authenticationMethod" class="form-control x-auth">
+                <select name="authenticationMethod" class="form-control x-auth" {{#meta-ro this}}readonly="readonly"{{/meta-ro}}>
                     <option value="none">None</option>
                     <option value="basic">Basic (Browser popup)</option>
                     <option value="forms">Forms (Login page)</option>
                 </select>
             </div>
         </div>
-<!-- endbuild -->
+        {{/meta-show}}
+        {{/meta-with}}
 
         <div class="x-auth-options">
-<!-- build:general-username -->
+            {{#meta-with this option="username"}}
+            {{#meta-show this}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Username</label>
 
                 <div class="col-sm-4">
-                    <input type="text" placeholder="Username" name="username" class="form-control"/>
+                    <input type="text" placeholder="Username" name="username" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}}/>
                 </div>
             </div>
-<!-- endbuild -->
+            {{/meta-show}}
+            {{/meta-with}}
 
-<!-- build:general-password -->
+            {{#meta-with this option="password"}}
+            {{#meta-show this}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Password</label>
 
                 <div class="col-sm-4">
-                    <input type="password" name="password" class="form-control"/>
+                    <input type="password" name="password" class="form-control" {{#meta-ro this}}readonly="readonly"{{/meta-ro}}/>
                 </div>
             </div>
-<!-- endbuild -->
+            {{/meta-show}}
+            {{/meta-with}}
         </div>
 
-<!-- build:general-apiKey -->
+        {{#meta-with this option="apiKey"}}
+        {{#meta-show this}}
         <div class="form-group api-key">
             <label class="col-sm-3 control-label">API Key</label>
 
             <div class="col-sm-1 col-sm-push-4 help-inline">
+                {{#meta-ro this}}
+                {{^}}
                 <i class="icon-sonarr-form-warning" title="Requires restart to take effect"/>
+                {{/meta-ro}}
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
@@ -182,15 +208,20 @@
                     <input type="text" name="apiKey" readonly="readonly" class="form-control x-api-key"/>
                     <div class="input-group-btn">
                         <button class="btn btn-icon-only x-copy-api-key hidden-xs"><i class="icon-sonarr-copy"></i></button>
+                        {{#meta-ro this}}
+                        {{^}}
                         <button class="btn btn-danger btn-icon-only x-reset-api-key" title="Reset API Key"><i class="icon-sonarr-refresh"></i></button>
+                        {{/meta-ro}}
                     </div>
                 </div>
             </div>
         </div>
-<!-- endbuild -->
+        {{/meta-show}}
+        {{/meta-with}}
 
     </fieldset>
-<!-- endbuild -->
+    {{/meta-show}}
+    {{/meta-with}}
 
     <fieldset>
         <legend>Proxy Settings</legend>
