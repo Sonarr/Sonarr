@@ -7,7 +7,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 
-namespace NzbDrone.Mono
+namespace NzbDrone.Mono.Disk
 {
     public interface IProcMountProvider
     {

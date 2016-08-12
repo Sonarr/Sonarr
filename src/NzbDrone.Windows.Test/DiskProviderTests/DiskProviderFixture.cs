@@ -3,6 +3,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using NUnit.Framework;
 using NzbDrone.Common.Test.DiskTests;
+using NzbDrone.Windows.Disk;
 
 namespace NzbDrone.Windows.Test.DiskProviderTests
 {

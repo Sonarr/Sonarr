@@ -1,6 +1,6 @@
 ﻿using NzbDrone.Common.Exceptions;
 
-namespace NzbDrone.Mono
+namespace NzbDrone.Mono.Disk
 {
     public class LinuxPermissionsException : NzbDroneException
     {

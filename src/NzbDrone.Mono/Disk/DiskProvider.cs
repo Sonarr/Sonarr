@@ -10,7 +10,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 
-namespace NzbDrone.Mono
+namespace NzbDrone.Mono.Disk
 {
     public class DiskProvider : DiskProviderBase
     {

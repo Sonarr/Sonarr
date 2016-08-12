@@ -3,7 +3,7 @@ using System.Reflection;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 
-namespace NzbDrone.Mono
+namespace NzbDrone.Mono.EnvironmentInfo
 {
     public class MonoRuntimeProvider : RuntimeInfoBase
     {

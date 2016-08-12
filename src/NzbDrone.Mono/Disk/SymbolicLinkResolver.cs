@@ -4,7 +4,7 @@ using Mono.Unix;
 using Mono.Unix.Native;
 using NLog;
 
-namespace NzbDrone.Mono
+namespace NzbDrone.Mono.Disk
 {
     public interface ISymbolicLinkResolver
     {

@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using Mono.Unix;
+using NzbDrone.Common.Disk;
 
-namespace NzbDrone.Mono
+namespace NzbDrone.Mono.Disk
 {
     public class ProcMount : IMount
     {

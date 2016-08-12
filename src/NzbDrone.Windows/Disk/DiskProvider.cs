@@ -6,7 +6,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Instrumentation;
 
-namespace NzbDrone.Windows
+namespace NzbDrone.Windows.Disk
 {
     public class DiskProvider : DiskProviderBase
     {

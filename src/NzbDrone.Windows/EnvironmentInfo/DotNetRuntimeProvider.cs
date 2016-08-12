@@ -2,7 +2,7 @@
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 
-namespace NzbDrone.Windows
+namespace NzbDrone.Windows.EnvironmentInfo
 {
     public class DotNetRuntimeProvider : RuntimeInfoBase
     {
