@@ -521,7 +521,7 @@ namespace NzbDrone.Core.Organizer
 
             var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : string.Empty;
             var audioChannels = episodeFile.MediaInfo.FormattedAudioChannels > 0 ?
-                                episodeFile.MediaInfo.FormattedAudioChannels.ToString(CultureInfo.InvariantCulture) :
+                                episodeFile.MediaInfo.FormattedAudioChannels.ToString("F1", CultureInfo.InvariantCulture) :
                                 string.Empty;
 
             tokenHandlers["{MediaInfo Video}"] = m => videoCodec;
