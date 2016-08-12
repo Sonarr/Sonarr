@@ -68,13 +68,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiskProvider.cs" />
-    <Compile Include="LinuxPermissionsException.cs" />
-    <Compile Include="MonoRuntimeProvider.cs" />
-    <Compile Include="ProcMount.cs" />
-    <Compile Include="ProcMountProvider.cs" />
+    <Compile Include="Disk\DiskProvider.cs" />
+    <Compile Include="Disk\FindDriveType.cs" />
+    <Compile Include="Disk\LinuxPermissionsException.cs" />
+    <Compile Include="EnvironmentInfo\MonoRuntimeProvider.cs" />
+    <Compile Include="Disk\ProcMount.cs" />
+    <Compile Include="Disk\ProcMountProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SymbolicLinkResolver.cs" />
+    <Compile Include="Disk\SymbolicLinkResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\NzbDrone.Common.csproj">

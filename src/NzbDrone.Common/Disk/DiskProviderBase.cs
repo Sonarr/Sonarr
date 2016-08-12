@@ -16,8 +16,6 @@ namespace NzbDrone.Common.Disk
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProviderBase));
 
-        private static readonly HashSet<string> UnknownDriveTypes = new HashSet<string>{ "afpfs" };
-
         public abstract long? GetAvailableSpace(string path);
         public abstract void InheritFolderPermissions(string filename);
         public abstract void SetPermissions(string path, string mask, string user, string group);
@@ -391,7 +389,10 @@ namespace NzbDrone.Common.Disk
 
         public virtual List<IMount> GetMounts()
         {
-            return GetDriveInfoMounts();
+            return GetDriveInfoMounts().Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable)
+                                       .Select(d => new DriveInfoMount(d))
+                                       .Cast<IMount>()
+                                       .ToList();
         }
 
         public virtual IMount GetMount(string path)
@@ -412,13 +413,10 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        protected List<IMount> GetDriveInfoMounts()
+        protected List<DriveInfo> GetDriveInfoMounts()
         {
             return DriveInfo.GetDrives()
-                            .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network || d.DriveType == DriveType.Removable || (d.DriveType == DriveType.Unknown && UnknownDriveTypes.Contains(d.DriveFormat) ))
                             .Where(d => d.IsReady)
-                            .Select(d => new DriveInfoMount(d))
-                            .Cast<IMount>()
                             .ToList();
         }
 
