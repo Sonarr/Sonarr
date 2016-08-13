@@ -1,0 +1,25 @@
+# This file is for unifying the coding style for different editors and IDEs
+# editorconfig.org
+root = true
+
+[*.{cs,html,js,hbs}]
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.less]
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+# They have troubles with TABS. Use 2 spaces
+[{package.json,.travis.yml}]
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
