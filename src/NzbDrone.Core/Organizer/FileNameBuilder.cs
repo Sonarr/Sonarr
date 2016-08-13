@@ -482,6 +482,10 @@ namespace NzbDrone.Core.Organizer
                     audioCodec = "AC3";
                     break;
 
+                case "E-AC-3":
+                    audioCodec = "EAC3";
+                    break;
+
                 case "MPEG Audio":
                     if (episodeFile.MediaInfo.AudioProfile == "Layer 3")
                     {
