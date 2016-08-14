@@ -88,7 +88,10 @@ namespace NzbDrone.Core.Organizer
             var mediaInfo = new MediaInfoModel()
             {
                 VideoCodec = "AVC",
+                VideoBitDepth = 8,
                 AudioFormat = "DTS",
+                AudioChannels = 6,
+                AudioChannelPositions = "3/2/0.1",
                 AudioLanguages = "English",
                 Subtitles = "English/German"
             };
@@ -96,7 +99,10 @@ namespace NzbDrone.Core.Organizer
             var mediaInfoAnime = new MediaInfoModel()
             {
                 VideoCodec = "AVC",
+                VideoBitDepth = 8,
                 AudioFormat = "DTS",
+                AudioChannels = 6,
+                AudioChannelPositions = "3/2/0.1",
                 AudioLanguages = "Japanese",
                 Subtitles = "Japanese/English"
             };
