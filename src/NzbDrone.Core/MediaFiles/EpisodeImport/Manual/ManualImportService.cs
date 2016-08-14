@@ -124,7 +124,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 folder = new FileInfo(file).Directory.FullName;
             }
 
-            var series = _parsingService.GetSeries(folder.GetRelativePath(file));
+            var relativeFile = folder.GetRelativePath(file);
+
+            var series = _parsingService.GetSeries(relativeFile.Split('\\', '/')[0]);
+
+            if (series == null)
+            {
+                series = _parsingService.GetSeries(relativeFile);
+            }
 
             if (series == null && downloadId.IsNotNullOrWhiteSpace())
             {
@@ -190,7 +197,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             for (int i = 0; i < message.Files.Count; i++)
             {
                 _logger.ProgressTrace("Processing file {0} of {1}", i + 1, message.Files.Count);
-                
+
                 var file = message.Files[i];
                 var series = _seriesService.GetSeries(file.SeriesId);
                 var episodes = _episodeService.GetEpisodes(file.EpisodeIds);
@@ -217,7 +224,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (file.DownloadId.IsNullOrWhiteSpace())
                 {
-                    imported.AddRange(_importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile));                    
+                    imported.AddRange(_importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile));
                 }
 
                 else
