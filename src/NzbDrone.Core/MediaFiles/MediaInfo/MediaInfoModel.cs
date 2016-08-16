@@ -20,6 +20,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public int AudioStreamCount { get; set; }
         public int AudioChannels { get; set; }
         public string AudioChannelPositions { get; set; }
+        public string AudioChannelPositionsText { get; set; }
         public string AudioProfile { get; set; }
         public decimal VideoFps { get; set; }
         public string AudioLanguages { get; set; }
@@ -34,7 +35,17 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             {
                 if (AudioChannelPositions.IsNullOrWhiteSpace())
                 {
-                    return 0;
+                    if (AudioChannelPositionsText.IsNullOrWhiteSpace())
+                    {
+                        if (SchemaRevision >= 3)
+                        {
+                            return AudioChannels;
+                        }
+
+                        return 0;
+                    }
+
+                    return AudioChannelPositionsText.ContainsIgnoreCase("LFE") ? AudioChannels - 1 + 0.1m : AudioChannels;
                 }
 
                 return AudioChannelPositions.Split('/').Sum(s => decimal.Parse(s, CultureInfo.InvariantCulture));

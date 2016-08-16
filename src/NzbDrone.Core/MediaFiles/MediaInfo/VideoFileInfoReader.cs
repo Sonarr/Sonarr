@@ -30,7 +30,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public MediaInfoModel GetMediaInfo(string filename)
         {
             if (!_diskProvider.FileExists(filename))
+            {
                 throw new FileNotFoundException("Media file does not exist: " + filename);
+            }
 
             MediaInfo mediaInfo = null;
 
@@ -124,6 +126,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     }
 
                     var audioChannelPositions = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions/String2");
+                    var audioChannelPositionsText = mediaInfo.Get(StreamKind.Audio, 0, "ChannelPositions");
 
                     string audioLanguages = mediaInfo.Get(StreamKind.General, 0, "Audio_Language_List");
                     string audioProfile = mediaInfo.Get(StreamKind.Audio, 0, "Format_Profile");
@@ -149,6 +152,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                                                     AudioStreamCount = streamCount,
                                                     AudioChannels = audioChannels,
                                                     AudioChannelPositions = audioChannelPositions,
+                                                    AudioChannelPositionsText = audioChannelPositionsText,
                                                     AudioProfile = audioProfile.Trim(),
                                                     VideoFps = videoFrameRate,
                                                     AudioLanguages = audioLanguages,

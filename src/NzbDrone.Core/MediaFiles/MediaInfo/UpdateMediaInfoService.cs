@@ -18,7 +18,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        private const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 2;
+        private const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 3;
 
         public UpdateMediaInfoService(IDiskProvider diskProvider,
                                 IMediaFileService mediaFileService,
