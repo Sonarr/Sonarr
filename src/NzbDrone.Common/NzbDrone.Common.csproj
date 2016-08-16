@@ -208,6 +208,7 @@
     <Compile Include="Properties\SharedAssemblyInfo.cs" />
     <Compile Include="Reflection\ReflectionExtensions.cs" />
     <Compile Include="Extensions\ResourceExtensions.cs" />
+    <Compile Include="Security\SecurityProtocolPolicy.cs" />
     <Compile Include="Security\X509CertificateValidationPolicy.cs" />
     <Compile Include="Serializer\HttpUriConverter.cs" />
     <Compile Include="Serializer\IntConverter.cs" />

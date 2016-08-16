@@ -34,8 +34,6 @@ namespace NzbDrone.Host.Owin
 
         public void StartServer()
         {
-            X509CertificateValidationPolicy.Register();
-
             if (OsInfo.IsWindows)
             {
                 if (_runtimeInfo.IsAdmin)

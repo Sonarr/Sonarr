@@ -36,6 +36,7 @@ namespace NzbDrone.Update
                 Logger.Info("Starting Sonarr Update Client");
 
                 X509CertificateValidationPolicy.Register();
+                SecurityProtocolPolicy.Register();
 
                 _container = UpdateContainerBuilder.Build(startupArgument);
 
