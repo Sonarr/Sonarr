@@ -1,9 +1,9 @@
 var Handlebars = require('handlebars');
-var MetaOptionConfig = require('../../MetaOptionConfig');
 
 var metaOptionCurrentConfig = {};
 
 metaOptionCurrentConfig = require('../../../../_output/UI/Content/metaOption.json');
+
 
 (function _registerMetaHelpers(config) {
 
@@ -13,51 +13,64 @@ metaOptionCurrentConfig = require('../../../../_output/UI/Content/metaOption.jso
             return '';
         }
 
-        var optName = options.hash['option'];
-        var opt = new MetaOptionConfig();
+        var optName = options.hash.option;
 
         if (config && (optName in config)) {
-            opt = config[optName];
+            context.metaOption = config[optName];
+        } else {
+            context.metaOption = undefined;
         }
-
-        context.metaOption = opt;
 
         return options.fn(context);
     });
 
-    Handlebars.registerHelper('meta-ro', function(context, options) {
-
-        if (!options) {
-            return '';
-        }
-
-        var opt = context.metaOption;
-        if (opt) {
-            if(opt.readonly) {
-                return options.fn(context);
-            } else {
-                return options.inverse(context);
+    var handlerFactory = function handlerFactory(decideFun, inverseDecision) {
+        return function _metaHelperGenerated (context, options) {
+            if (!options) {
+                return '';
             }
-        } else {
-            return options.inverse(context);
-        }
-    });
 
-    Handlebars.registerHelper('meta-show', function(context, options) {
+            // ((Boolean(inverseDecision)) !== decideFun(context));
 
-        if (!options) {
-            return '';
-        }
+            var dec1 = decideFun(context);
+            var dec2 = ((Boolean(inverseDecision)) !== dec1);
 
-        var opt = context.metaOption;
-        if (opt) {
-            if(opt.visible) {
-                return options.fn(context);
-            } else {
-                return options.inverse(context);
-            }
-        } else {
-            return options.fn(context);
+            // inverseDecision XOR decideFun
+            return dec2 ? options.fn(context) : options.inverse(context);
+        };
+    };
+
+    // just an understandable constant:
+    var INVERSE = 1;
+
+    var decideByFieldName = function decideByFieldName(context, fieldName, defaultValue) {
+        if (!context) {
+            return defaultValue;
         }
-    });
+        if (!context.metaOption) {
+            return defaultValue;
+        }
+        if (!(fieldName in context.metaOption)) {
+            return defaultValue;
+        }
+        return Boolean(context.metaOption[fieldName]);
+    };
+
+    var decideWrite = function decideWrite(context) {
+        return decideByFieldName(context, 'writable', true);
+    };
+
+    Handlebars.registerHelper('meta-writable', handlerFactory(decideWrite));
+    Handlebars.registerHelper('meta-not-writable', handlerFactory(decideWrite, INVERSE));
+
+    var decideRead = function decideRead(context) {
+        return decideByFieldName(context, 'readable', true);
+    };
+
+    Handlebars.registerHelper('meta-readable', handlerFactory(decideRead));
+    Handlebars.registerHelper('meta-not-readable', handlerFactory(decideRead, INVERSE));
+
+    Handlebars.registerHelper('meta-visible', handlerFactory(decideRead));
+    Handlebars.registerHelper('meta-not-visible', handlerFactory(decideRead, INVERSE));
+
 })(metaOptionCurrentConfig);

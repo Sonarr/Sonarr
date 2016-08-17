@@ -6,10 +6,9 @@ var yaml = require('js-yaml');
 var through2 = require('through2');
 
 var paths = require('./paths.js');
-var MetaOptionConfig = require('../src/UI/MetaOptionConfig');
 
 gulp.task('metaOption', function() {
-    return gulp.src('gulp/metaOption.yml')
+    return gulp.src('meta.option.yml')
         .pipe(through2.obj(function (file, enc, callback) {
             var data = parseConfigYml(String(file.contents));
             file.contents = new Buffer(JSON.stringify(data));
@@ -45,29 +44,54 @@ var parseConfigYml = function parseConfigYml(content) {
                     console.error('Unknown format of the option: [' + tabName + '][' + optName + ']');
                 }
 
-                var optobj = new MetaOptionConfig();
+                var optobj = {
+                    name: optName,
+                    writable: true,
+                    readable: true
+                };
 
                 // parse options:
                 for (var opt in optarray) {
                     var s = (optarray[opt] || '').toString().toLowerCase();
                     switch(s) {
+                        // --------------------------
+                        // PURE:
+                        case 'readable':
+                        case 'r+':
+                            optobj.readable = true;
+                            break;
+                        case 'not-readable':
+                        case 'r-':
+                            optobj.readable = false;
+                            break;
+                        case 'writable':
+                        case 'w+':
+                            optobj.writable = true;
+                            break;
+                        case 'not-writable':
+                        case 'w-':
+                            optobj.writable = false;
+                            break;
+
+                        // --------------------------
+                        // PRESETS:
                         case 'ro':
                         case 'readonly':
                         case 'read-only':
-                            optobj.readonly = true;
+                            optobj.readable = true;
+                            optobj.writable = false;
                             break;
                         case 'rw':
+                        case 'show':
                         case 'read-write':
                         case 'readwrite':
-                            optobj.readonly = false;
-                            break;
-                        case 'show':
-                        case 'visible':
-                            optobj.visible = true;
+                            optobj.readable = true;
+                            optobj.writable = true;
                             break;
                         case 'hide':
                         case 'hidden':
-                            optobj.visible = false;
+                            optobj.readable = false;
+                            optobj.writable = false;
                             break;
                         default:
                             console.warn('Unrecognized value for the option: [' + tabName + '][' + optName + '] : ' + s);
