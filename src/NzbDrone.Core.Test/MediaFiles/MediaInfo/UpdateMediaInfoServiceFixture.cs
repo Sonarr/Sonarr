@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
                 .All()
                 .With(v => v.RelativePath = "media.mkv")
                 .TheFirst(1)
-                .With(v => v.MediaInfo = new MediaInfoModel { SchemaRevision = 2 })
+                .With(v => v.MediaInfo = new MediaInfoModel { SchemaRevision = 3 })
                 .BuildList();
 
             Mocker.GetMock<IMediaFileService>()
