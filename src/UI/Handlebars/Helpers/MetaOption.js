@@ -30,13 +30,10 @@ metaOptionCurrentConfig = require('../../../../_output/UI/Content/metaOption.jso
                 return '';
             }
 
-            // ((Boolean(inverseDecision)) !== decideFun(context));
-
-            var dec1 = decideFun(context);
-            var dec2 = ((Boolean(inverseDecision)) !== dec1);
-
             // inverseDecision XOR decideFun
-            return dec2 ? options.fn(context) : options.inverse(context);
+            return ((Boolean(inverseDecision)) !== decideFun(context)) ?
+                options.fn(context) :
+                options.inverse(context);
         };
     };
 

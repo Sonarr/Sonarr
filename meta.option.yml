@@ -16,7 +16,7 @@
 general:
   bindAddress: ['show', 'rw']
   port: readonly
-  # urlBase: rw
+  urlBase: readonly
   # enableSsl: rw
   # sslPort: rw
   # sslCertHash: ['show', 'rw']
