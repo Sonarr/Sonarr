@@ -139,7 +139,7 @@
         {{/meta-with}}
     </fieldset>
 
-    {{#meta-with this option="authentication"}}
+    {{#meta-with this option="authentication-section"}}
     {{#meta-visible this}}
     <fieldset>
         <legend>Security</legend>
@@ -221,6 +221,8 @@
     {{/meta-visible}}
     {{/meta-with}}
 
+    {{#meta-with this option="proxy-section"}}
+    {{#meta-visible this}}
     <fieldset>
         <legend>Proxy Settings</legend>
 
@@ -328,6 +330,8 @@
         </div>
         </div>
     </fieldset>
+    {{/meta-visible}}
+    {{/meta-with}}
 
     <fieldset>
         <legend>Logging</legend>
