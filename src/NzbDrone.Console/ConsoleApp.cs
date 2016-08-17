@@ -25,7 +25,7 @@ namespace NzbDrone.Console
                 System.Console.WriteLine("");
                 Logger.Fatal(exception.Message + ". This can happen if another instance of Sonarr is already running another application is using the same port (default: 8989) or the user has insufficient permissions");
                 System.Console.WriteLine("Press any key to exit...");
-                System.Console.ReadLine();
+                System.Console.ReadKey();
                 Environment.Exit(1);
             }
             catch (Exception e)
@@ -34,7 +34,7 @@ namespace NzbDrone.Console
                 System.Console.WriteLine("");
                 Logger.Fatal(e, "EPIC FAIL!");
                 System.Console.WriteLine("Press any key to exit...");
-                System.Console.ReadLine();
+                System.Console.ReadKey();
                 Environment.Exit(1);
             }
 
