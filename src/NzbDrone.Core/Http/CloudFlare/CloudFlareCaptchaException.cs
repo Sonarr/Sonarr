@@ -15,5 +15,10 @@ namespace NzbDrone.Core.Http.CloudFlare
             Response = response;
             CaptchaRequest = captchaRequest;
         }
+
+        public bool IsExpired
+        {
+            get { return Response.Request.Cookies.ContainsKey("cf_clearance"); }
+        }
     }
 }
