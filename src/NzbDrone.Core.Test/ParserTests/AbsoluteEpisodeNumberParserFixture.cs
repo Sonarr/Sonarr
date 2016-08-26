@@ -117,6 +117,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title (2010) - 01-02-03 - Episode Title (1) HDTV-720p", "Series Title (2010)", new [] { 1, 2, 3 })]
         [TestCase("[RlsGrp] Series Title (2010) - S01E01-02-03 - 001-002-003 - Episode Title HDTV-720p v2", "Series Title (2010)", new[] { 1, 2, 3 })]
         [TestCase("[RlsGrp] Series Title (2010) - S01E01-02 - 001-002 - Episode Title HDTV-720p v2", "Series Title (2010)", new[] { 1, 2 })]
+        [TestCase("Series Title (2010) - S01E01-02 (001-002) - Episode Title (1) HDTV-720p v2 [RlsGrp]", "Series Title (2010)", new[] { 1, 2 })]
         public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int[] absoluteEpisodeNumbers)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

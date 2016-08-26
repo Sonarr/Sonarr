@@ -54,6 +54,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+(?:[-_. ]?(?<absoluteepisode>\d{2,3}(?!\d+)))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[\w{8}\])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Anime - Title Season EpisodeNumber + Absolute Episode Number [SubGroup]
+                new Regex(@"^(?<title>.+?)(?:[-_\W](?<![()\[!]))+(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:[ex]|\W[ex]){1,2}(?<episode>\d{2}(?!\d+)))+).+?(?:[-_. ]?(?<absoluteepisode>\d{3}(?!\d+)))+.+?\[(?<subgroup>.+?)\](?:$|\.mkv)",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Anime - Title Absolute Episode Number [SubGroup]
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{3}(?!\d+)))+(?:.+?)\[(?<subgroup>.+?)\].*?(?<hash>\[\w{8}\])?(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
