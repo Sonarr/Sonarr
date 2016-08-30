@@ -153,7 +153,7 @@ namespace NzbDrone.Core.MediaFiles
             var episodeFolder = Path.GetDirectoryName(filePath);
             var seasonFolder = _buildFileNames.BuildSeasonPath(series, seasonNumber);
             var seriesFolder = series.Path;
-            var rootFolder = Path.GetDirectoryName(seriesFolder);
+            var rootFolder = new OsPath(seriesFolder).Directory.FullPath;
 
             if (!_diskProvider.FolderExists(rootFolder))
             {
