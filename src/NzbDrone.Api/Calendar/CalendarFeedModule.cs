@@ -26,12 +26,14 @@ namespace NzbDrone.Api.Calendar
             var futureDays = 28;            
             var start = DateTime.Today.AddDays(-pastDays);
             var end = DateTime.Today.AddDays(futureDays);
+            var unmonitored = false;
 
             // TODO: Remove start/end parameters in v3, they don't work well for iCal
             var queryStart = Request.Query.Start;
             var queryEnd = Request.Query.End;
             var queryPastDays = Request.Query.PastDays;
             var queryFutureDays = Request.Query.FutureDays;
+            var queryUnmonitored = Request.Query.Unmonitored;
 
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
             if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
@@ -48,7 +50,12 @@ namespace NzbDrone.Api.Calendar
                 end = DateTime.Today.AddDays(futureDays);
             }
 
-            var episodes = _episodeService.EpisodesBetweenDates(start, end, false);
+            if (queryUnmonitored.HasValue)
+            {
+                unmonitored = bool.Parse(queryUnmonitored.Value);
+            }
+
+            var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored);
             var icalCalendar = new iCalendar();
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
