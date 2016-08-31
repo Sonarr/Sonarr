@@ -14,6 +14,11 @@ namespace NzbDrone.Mono.Disk
 
         public static DriveType Find(string driveFormat)
         {
+            if (driveFormat.IsNullOrWhiteSpace())
+            {
+                return DriveType.Unknown;
+            }
+
             return DriveTypeMap.GetValueOrDefault(driveFormat);
         }
     }
