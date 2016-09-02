@@ -373,6 +373,9 @@
     <Compile Include="UpdateTests\UpdatePackageProviderFixture.cs" />
     <Compile Include="UpdateTests\UpdateServiceFixture.cs" />
     <Compile Include="XbmcVersionTests.cs" />
+    <None Include="Files\Indexers\HdBits\RecentFeedStringIDs.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
@@ -408,7 +411,7 @@
     <None Include="Files\Indexers\BroadcastheNet\RecentFeed.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Files\Indexers\HdBits\RecentFeed.json">
+    <None Include="Files\Indexers\HdBits\RecentFeedLongIDs.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Files\html_image.jpg">
