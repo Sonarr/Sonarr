@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                   .Setup(s => s.BuildSeasonPath(It.IsAny<Series>(), It.IsAny<int>()))
                   .Returns(@"C:\Test\TV\Series\Season 01".AsOsAgnostic());
 
-            var rootFolder = @"C:\Test\TV".AsOsAgnostic();
+            var rootFolder = @"C:\Test\TV\".AsOsAgnostic();
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(rootFolder))
                   .Returns(true);

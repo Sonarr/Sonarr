@@ -194,7 +194,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             Ensure.That(directoryName, () => directoryName).IsNotNullOrWhiteSpace();
 
-            var parentFolder = Path.GetDirectoryName(directoryName);
+            var parentFolder = new OsPath(directoryName).Directory.FullPath;
             if (!_diskProvider.FolderExists(parentFolder))
             {
                 CreateFolder(parentFolder);
