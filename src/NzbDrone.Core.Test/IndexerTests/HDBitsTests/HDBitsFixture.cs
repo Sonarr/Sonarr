@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
         }
 
         [TestCase("Files/Indexers/HdBits/RecentFeedLongIDs.json")]
-		[TestCase("Files/Indexers/HdBits/RecentFeedStringIDs.json")]
+        [TestCase("Files/Indexers/HdBits/RecentFeedStringIDs.json")]
         public void should_parse_recent_feed_from_HDBits(string fileName)
         {
             var responseJson = ReadAllText(fileName);
