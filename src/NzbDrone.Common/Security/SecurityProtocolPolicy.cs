@@ -21,12 +21,12 @@ namespace NzbDrone.Common.Security
 
                 if (Enum.IsDefined(typeof(SecurityProtocolType), Tls11))
                 {
-                    ServicePointManager.SecurityProtocol |= Tls11;
+                    protocol |= Tls11;
                 }
 
                 if (Enum.IsDefined(typeof(SecurityProtocolType), Tls12))
                 {
-                    ServicePointManager.SecurityProtocol |= Tls12;
+                    protocol |= Tls12;
                 }
 
                 ServicePointManager.SecurityProtocol = protocol;
