@@ -14,17 +14,17 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var split = reader.Value.ToString().Split(':');
+            var split = reader.Value.ToString().Split(':').Select(int.Parse).ToArray();
 
-            if (split.Count() != 3)
+            switch (split.Count())
             {
-                throw new ArgumentException("Expected 0:0:0 format, but received: " + reader.Value);
+                case 4:
+                    return new TimeSpan(split[0] * 24 + split[1], split[2], split[3]);
+                case 3:
+                    return new TimeSpan(split[0], split[1], split[2]);
+                default:
+                    throw new ArgumentException("Expected either 0:0:0:0 or 0:0:0 format, but received: " + reader.Value);
             }
-            
-            return new TimeSpan(int.Parse(split[0]), // hours
-                                    int.Parse(split[1]), // minutes
-                                    int.Parse(split[2])  // seconds
-                                    );
         }
 
         public override bool CanConvert(Type objectType)
