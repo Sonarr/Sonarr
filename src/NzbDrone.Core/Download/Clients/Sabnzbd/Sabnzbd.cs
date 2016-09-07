@@ -273,6 +273,64 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             failures.AddIfNotNull(TestCategory());
         }
 
+        private bool HasVersion(int major, int minor, int patch = 0, string candidate = null)
+        {
+            candidate = candidate ?? string.Empty;
+
+            var version = _proxy.GetVersion(Settings);
+            var parsed = VersionRegex.Match(version);
+
+            if (!parsed.Success)
+            {
+                return false;
+            }
+
+            var actualMajor = Convert.ToInt32(parsed.Groups["major"].Value);
+            var actualMinor = Convert.ToInt32(parsed.Groups["minor"].Value);
+            var actualPatch = Convert.ToInt32(parsed.Groups["patch"].Value.Replace("x", ""));
+            var actualCandidate = parsed.Groups["candidate"].Value.ToUpper();
+
+            if (actualMajor > major)
+            {
+                return true;
+            }
+            else if (actualMajor < major)
+            {
+                return false;
+            }
+
+            if (actualMinor > minor)
+            {
+                return true;
+            }
+            else if (actualMinor < minor)
+            {
+                return false;
+            }
+
+            if (actualPatch > patch)
+            {
+                return true;
+            }
+            else if (actualPatch < patch)
+            {
+                return false;
+            }
+
+            if (actualCandidate.IsNullOrWhiteSpace())
+            {
+                return true;
+            }
+            else if (candidate.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+            else
+            {
+                return actualCandidate.CompareTo(candidate) > 0;
+            }
+        }
+
         private ValidationFailure TestConnectionAndVersion()
         {
             try
@@ -332,7 +390,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         private ValidationFailure TestGlobalConfig()
         {
             var config = _proxy.GetConfig(Settings);
-            if (config.Misc.pre_check)
+            if (config.Misc.pre_check && !HasVersion(1, 1))
             {
                 return new NzbDroneValidationFailure("", "Disable 'Check before download' option in Sabnbzd")
                 {
