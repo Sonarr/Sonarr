@@ -40,7 +40,6 @@ namespace NzbDrone.Update
 
                 _container = UpdateContainerBuilder.Build(startupArgument);
 
-                Logger.Info("Updating Sonarr to version {0}", BuildInfo.Version);
                 _container.Resolve<UpdateApp>().Start(args);
 
                 Logger.Info("Update completed successfully");
@@ -56,7 +55,6 @@ namespace NzbDrone.Update
             var startupContext = ParseArgs(args);
             var targetFolder = GetInstallationDirectory(startupContext);
 
-            Logger.Info("Starting update process. Target Path:{0}", targetFolder);
             _installUpdateService.Start(targetFolder, startupContext.ProcessId);
         }
 

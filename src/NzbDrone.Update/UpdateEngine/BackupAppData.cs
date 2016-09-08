@@ -34,7 +34,15 @@ namespace NzbDrone.Update.UpdateEngine
             _logger.Info("Backing up appdata (database/config)");
             var backupFolderAppData = _appFolderInfo.GetUpdateBackUpAppDataFolder();
 
-            _diskProvider.CreateFolder(backupFolderAppData);
+            if (_diskProvider.FolderExists(backupFolderAppData))
+            {
+                _diskProvider.EmptyFolder(backupFolderAppData);
+            }
+            else
+            {
+                _diskProvider.CreateFolder(backupFolderAppData);
+            }
+
 
             try
             {

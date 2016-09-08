@@ -307,7 +307,7 @@ namespace NzbDrone.Common.Test.DiskTests
             Subject.VerificationMode = DiskTransferVerificationMode.VerifyOnly;
 
             Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Move);
-            
+
             Mocker.GetMock<IDiskProvider>()
                 .Verify(v => v.GetFileSize(_sourcePath), Times.Once());
 
@@ -688,6 +688,60 @@ namespace NzbDrone.Common.Test.DiskTests
             Assert.Throws<IOException>(() => Subject.TransferFile(_sourcePath, _targetPath, TransferMode.Copy));
         }
 
+        [Test]
+        public void MirrorFolder_should_remove_additional_files()
+        {
+            WithRealDiskProvider();
+
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            source.Create();
+            Subject.TransferFolder(original.FullName, destination.FullName, TransferMode.Copy);
+
+            var count = Subject.MirrorFolder(source.FullName, destination.FullName);
+
+            count.Should().Equals(0);
+            destination.GetFileSystemInfos().Should().BeEmpty();
+        }
+
+        [Test]
+        public void MirrorFolder_should_add_new_files()
+        {
+            WithRealDiskProvider();
+
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.TransferFolder(original.FullName, source.FullName, TransferMode.Copy);
+
+            var count = Subject.MirrorFolder(source.FullName, destination.FullName);
+
+            count.Should().Equals(3);
+            VerifyCopyFolder(original.FullName, destination.FullName);
+        }
+
+        [Test]
+        public void MirrorFolder_should_not_touch_equivalent_files()
+        {
+            WithRealDiskProvider();
+
+            var original = GetFilledTempFolder();
+            var source = new DirectoryInfo(GetTempFilePath());
+            var destination = new DirectoryInfo(GetTempFilePath());
+
+            Subject.TransferFolder(original.FullName, source.FullName, TransferMode.Copy);
+
+            Subject.TransferFolder(original.FullName, destination.FullName, TransferMode.Copy);
+
+            var count = Subject.MirrorFolder(source.FullName, destination.FullName);
+
+            count.Should().Equals(0);
+            VerifyCopyFolder(original.FullName, destination.FullName);
+        }
+
         public DirectoryInfo GetFilledTempFolder()
         {
             var tempFolder = GetTempFilePath();
@@ -807,7 +861,10 @@ namespace NzbDrone.Common.Test.DiskTests
                     if (File.Exists(d) && o) File.Delete(d);
                     File.Move(s, d);
                 });
-            
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(v => v.OpenReadStream(It.IsAny<string>()))
+                .Returns<string>(s => new FileStream(s, FileMode.Open, FileAccess.Read));
         }
 
         private void VerifyCopyFolder(string source, string destination)

@@ -18,6 +18,7 @@ namespace NzbDrone.Update.UpdateEngine
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDetectApplicationType _detectApplicationType;
+        private readonly IDetectExistingVersion _detectExistingVersion;
         private readonly ITerminateNzbDrone _terminateNzbDrone;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IBackupAndRestore _backupAndRestore;
@@ -29,6 +30,7 @@ namespace NzbDrone.Update.UpdateEngine
         public InstallUpdateService(IDiskProvider diskProvider,
                                     IDiskTransferService diskTransferService,
                                     IDetectApplicationType detectApplicationType,
+                                    IDetectExistingVersion detectExistingVersion,
                                     ITerminateNzbDrone terminateNzbDrone,
                                     IAppFolderInfo appFolderInfo,
                                     IBackupAndRestore backupAndRestore,
@@ -40,6 +42,7 @@ namespace NzbDrone.Update.UpdateEngine
             _diskProvider = diskProvider;
             _diskTransferService = diskTransferService;
             _detectApplicationType = detectApplicationType;
+            _detectExistingVersion = detectExistingVersion;
             _terminateNzbDrone = terminateNzbDrone;
             _appFolderInfo = appFolderInfo;
             _backupAndRestore = backupAndRestore;
@@ -76,22 +79,34 @@ namespace NzbDrone.Update.UpdateEngine
 
         public void Start(string installationFolder, int processId)
         {
+            _logger.Info("Installation Folder: {0}", installationFolder);
+            _logger.Info("Updating Sonarr from version {0} to version {1}", _detectExistingVersion.GetExistingVersion(installationFolder), BuildInfo.Version);
+
             Verify(installationFolder, processId);
 
             var appType = _detectApplicationType.GetAppType();
 
+            _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
+            _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+
+            if (OsInfo.IsWindows)
+            {
+                _terminateNzbDrone.Terminate(processId);
+            }
+
             try
             {
-                _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME);
-                _processProvider.FindProcessByName(ProcessProvider.NZB_DRONE_PROCESS_NAME);
+                _backupAndRestore.Backup(installationFolder);
+                _backupAppData.Backup();
 
                 if (OsInfo.IsWindows)
                 {
-                    _terminateNzbDrone.Terminate(processId);
+                    if (_processProvider.Exists(ProcessProvider.NZB_DRONE_CONSOLE_PROCESS_NAME) || _processProvider.Exists(ProcessProvider.NZB_DRONE_PROCESS_NAME))
+                    {
+                        _logger.Error("Sonarr was restarted prematurely by external process.");
+                        return;
+                    }
                 }
-
-                _backupAndRestore.Backup(installationFolder);
-                _backupAppData.Backup();
 
                 try
                 {
@@ -99,7 +114,7 @@ namespace NzbDrone.Update.UpdateEngine
                     _diskProvider.EmptyFolder(installationFolder);
 
                     _logger.Info("Copying new files to target folder");
-                    _diskTransferService.TransferFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder, TransferMode.Copy, false);
+                    _diskTransferService.MirrorFolder(_appFolderInfo.GetUpdatePackageFolder(), installationFolder);
 
                     // Set executable flag on Sonarr app
                     if (OsInfo.IsOsx)
@@ -109,8 +124,9 @@ namespace NzbDrone.Update.UpdateEngine
                 }
                 catch (Exception e)
                 {
-                    _logger.Fatal(e, "Failed to copy upgrade package to target folder.");
+                    _logger.Error(e, "Failed to copy upgrade package to target folder.");
                     _backupAndRestore.Restore(installationFolder);
+                    throw;
                 }
             }
             finally
