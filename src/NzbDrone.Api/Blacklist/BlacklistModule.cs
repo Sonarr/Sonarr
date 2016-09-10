@@ -17,13 +17,7 @@ namespace NzbDrone.Api.Blacklist
 
         private PagingResource<BlacklistResource> GetBlacklist(PagingResource<BlacklistResource> pagingResource)
         {
-            var pagingSpec = new PagingSpec<Core.Blacklisting.Blacklist>
-                                 {
-                                     Page = pagingResource.Page,
-                                     PageSize = pagingResource.PageSize,
-                                     SortKey = pagingResource.SortKey,
-                                     SortDirection = pagingResource.SortDirection
-                                 };
+            var pagingSpec = pagingResource.MapToPagingSpec<BlacklistResource, Core.Blacklisting.Blacklist>("id", SortDirection.Ascending);
 
             return ApplyToPage(_blacklistService.Paged, pagingSpec, BlacklistResourceMapper.MapToResource);
         }

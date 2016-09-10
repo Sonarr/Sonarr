@@ -23,13 +23,7 @@ namespace NzbDrone.Api.Wanted
 
         private PagingResource<EpisodeResource> GetCutoffUnmetEpisodes(PagingResource<EpisodeResource> pagingResource)
         {
-            var pagingSpec = new PagingSpec<Episode>
-            {
-                Page = pagingResource.Page,
-                PageSize = pagingResource.PageSize,
-                SortKey = pagingResource.SortKey,
-                SortDirection = pagingResource.SortDirection
-            };
+            var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>("airDateUtc", SortDirection.Descending);
 
             if (pagingResource.FilterKey == "monitored" && pagingResource.FilterValue == "false")
             {

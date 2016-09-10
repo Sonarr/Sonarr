@@ -47,13 +47,7 @@ namespace NzbDrone.Api.History
         {
             var episodeId = Request.Query.EpisodeId;
 
-            var pagingSpec = new PagingSpec<Core.History.History>
-                                 {
-                                     Page = pagingResource.Page,
-                                     PageSize = pagingResource.PageSize,
-                                     SortKey = pagingResource.SortKey,
-                                     SortDirection = pagingResource.SortDirection
-                                 };
+            var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, Core.History.History>("date", SortDirection.Descending);
 
             if (pagingResource.FilterKey == "eventType")
             {

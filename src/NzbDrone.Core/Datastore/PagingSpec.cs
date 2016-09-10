@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Datastore
 
     public enum SortDirection
     {
+        Default,
         Ascending,
         Descending
     }

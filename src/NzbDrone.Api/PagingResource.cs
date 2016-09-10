@@ -17,15 +17,26 @@ namespace NzbDrone.Api
 
     public static class PagingResourceMapper
     {
-        public static PagingSpec<TModel> MapToPagingSpec<TResource, TModel>(this PagingResource<TResource> pagingSpec)
+        public static PagingSpec<TModel> MapToPagingSpec<TResource, TModel>(this PagingResource<TResource> pagingResource, string defaultSortKey = "Id", SortDirection defaultSortDirection = SortDirection.Ascending)
         {
-            return new PagingSpec<TModel>
+            var pagingSpec = new PagingSpec<TModel>
             {
-                Page = pagingSpec.Page,
-                PageSize = pagingSpec.PageSize,
-                SortKey = pagingSpec.SortKey,
-                SortDirection = pagingSpec.SortDirection,
+                Page = pagingResource.Page,
+                PageSize = pagingResource.PageSize,
+                SortKey = pagingResource.SortKey,
+                SortDirection = pagingResource.SortDirection,
             };
+
+            if (pagingResource.SortKey == null)
+            {
+                pagingSpec.SortKey = defaultSortKey;
+                if(pagingResource.SortDirection == SortDirection.Default)
+                {
+                    pagingSpec.SortDirection = defaultSortDirection;
+                }
+            }
+
+            return pagingSpec;
         }
     }
 }
