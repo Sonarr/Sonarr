@@ -30,13 +30,13 @@ namespace NzbDrone.Update
         {
             try
             {
+                SecurityProtocolPolicy.Register();
+                X509CertificateValidationPolicy.Register();
+
                 var startupArgument = new StartupContext(args);
                 NzbDroneLogger.Register(startupArgument, true, true);
 
                 Logger.Info("Starting Sonarr Update Client");
-
-                X509CertificateValidationPolicy.Register();
-                SecurityProtocolPolicy.Register();
 
                 _container = UpdateContainerBuilder.Build(startupArgument);
 

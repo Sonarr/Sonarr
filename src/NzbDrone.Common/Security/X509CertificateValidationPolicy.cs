@@ -24,6 +24,13 @@ namespace NzbDrone.Common.Security
                 return true;
             }
 
+            var req = sender as HttpWebRequest;
+            var cert2 = certificate as X509Certificate2;
+            if (cert2 != null && req != null && cert2.SignatureAlgorithm.FriendlyName == "md5RSA")
+            {
+                Logger.Error("https://{0} uses the obsolete md5 hash in it's https certificate, if that is your certificate, please (re)create certificate with better algorithm as soon as possible.", req.RequestUri.Authority);
+            }
+
             if (sslPolicyErrors == SslPolicyErrors.None)
             {
                 return true;

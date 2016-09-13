@@ -24,6 +24,7 @@ namespace NzbDrone.Common.Security
                     protocol |= Tls11;
                 }
 
+                // Enabling Tls1.2 invalidates certificates using md5, so we disable Tls12 on the fly if that happens.
                 if (Enum.IsDefined(typeof(SecurityProtocolType), Tls12))
                 {
                     protocol |= Tls12;
@@ -34,6 +35,24 @@ namespace NzbDrone.Common.Security
             catch (Exception ex)
             {
                 Logger.Debug(ex, "Failed to set TLS security protocol.");
+            }
+        }
+
+        public static void DisableTls12()
+        {
+            try
+            {
+                var protocol = ServicePointManager.SecurityProtocol;
+                if (protocol.HasFlag(Tls12))
+                {
+                    Logger.Warn("Disabled Tls1.2 due to remote certificate error.");
+
+                    ServicePointManager.SecurityProtocol = protocol & ~Tls12;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, "Failed to disable TLS 1.2 security protocol.");
             }
         }
     }
