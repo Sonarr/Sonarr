@@ -10,7 +10,8 @@ namespace NzbDrone.Core.Notifications.Join
     {
         public JoinSettingsValidator()
         {
-            RuleFor(c => c.APIKey).NotEmpty();
+            RuleFor(s => s.ApiKey).NotEmpty();
+            RuleFor(s => s.DeviceIds).Matches(@"\A\S+\z").When(s => !string.IsNullOrEmpty(s.DeviceIds));
         }
     }
 
@@ -19,7 +20,10 @@ namespace NzbDrone.Core.Notifications.Join
         private static readonly JoinSettingsValidator Validator = new JoinSettingsValidator();
 
         [FieldDefinition(0, Label = "API Key", HelpText = "The API Key from your Join account settings (click Join API button).", HelpLink = "https://joinjoaomgcd.appspot.com/")]
-        public string APIKey { get; set; }
+        public string ApiKey { get; set; }
+
+        [FieldDefinition(1, Label = "Device IDs", HelpText = "Comma separated list of Device IDs you'd like to send notifications to. If unset, all devices will receive notifications.", HelpLink = "https://joinjoaomgcd.appspot.com/")]
+        public string DeviceIds { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
