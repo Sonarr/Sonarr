@@ -75,6 +75,8 @@
       <xs:enumeration value="seedtype" /> <!-- TBD, which criteria must be met. was going for 'ratio,seedtime,both' but afaik it's always 'either' -->
       <xs:enumeration value="minimumratio" />
       <xs:enumeration value="minimumseedtime" />
+      <xs:enumeration value="downloadvolumefactor" /> <!-- factor for the download volume, in most cases it should be set to 1, if a torrent is set to freeleech set it to 0, if only 50% is counted set it to 0.5 -->
+      <xs:enumeration value="uploadvolumefactor" /> <!-- factor for the upload volume, in most cases it should be set to 1, if a torrent is set to neutral leech (upload is not counted) set it to 0, if it's set to double upload set it to 2 -->
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="attr">
