@@ -49,11 +49,6 @@ namespace NzbDrone.Core.Extras.Others
 
         public override IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles)
         {
-            // TODO: Remove
-            // We don't want to move files after rename yet.
-
-            return Enumerable.Empty<ExtraFile>();
-
             var extraFiles = _otherExtraFileService.GetFilesBySeries(series.Id);
             var movedFiles = new List<OtherExtraFile>();
 
