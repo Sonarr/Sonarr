@@ -51,11 +51,6 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         public override IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles)
         {
-            // TODO: Remove
-            // We don't want to move files after rename yet.
-
-            return Enumerable.Empty<ExtraFile>();
-
             var subtitleFiles = _subtitleFileService.GetFilesBySeries(series.Id);
 
             var movedFiles = new List<SubtitleFile>();
