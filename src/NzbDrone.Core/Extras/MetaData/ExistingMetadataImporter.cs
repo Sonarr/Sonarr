@@ -88,8 +88,9 @@ namespace NzbDrone.Core.Extras.Metadata
 
                         metadata.SeasonNumber = localEpisode.SeasonNumber;
                         metadata.EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId;
-                        metadata.Extension = Path.GetExtension(possibleMetadataFile);
                     }
+
+                    metadata.Extension = Path.GetExtension(possibleMetadataFile);
 
                     metadataFiles.Add(metadata);
                 }

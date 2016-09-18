@@ -225,6 +225,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
             metadata.Hash = hash;
             metadata.RelativePath = seriesMetadata.RelativePath;
+            metadata.Extension = Path.GetExtension(fullPath);
 
             return metadata;
         }
@@ -263,7 +264,8 @@ namespace NzbDrone.Core.Extras.Metadata
                                EpisodeFileId = episodeFile.Id,
                                Consumer = consumer.GetType().Name,
                                Type = MetadataType.EpisodeMetadata,
-                               RelativePath = episodeMetadata.RelativePath
+                               RelativePath = episodeMetadata.RelativePath,
+                               Extension = Path.GetExtension(fullPath)
                            };
 
             if (hash == metadata.Hash)
@@ -300,7 +302,8 @@ namespace NzbDrone.Core.Extras.Metadata
                                    SeriesId = series.Id,
                                    Consumer = consumer.GetType().Name,
                                    Type = MetadataType.SeriesImage,
-                                   RelativePath = image.RelativePath
+                                   RelativePath = image.RelativePath,
+                                   Extension = Path.GetExtension(fullPath)
                                };
 
                 DownloadImage(series, image);
@@ -336,7 +339,8 @@ namespace NzbDrone.Core.Extras.Metadata
                                     SeasonNumber = season.SeasonNumber,
                                     Consumer = consumer.GetType().Name,
                                     Type = MetadataType.SeasonImage,
-                                    RelativePath = image.RelativePath
+                                    RelativePath = image.RelativePath,
+                                    Extension = Path.GetExtension(fullPath)
                                 };
 
                     DownloadImage(series, image);
@@ -385,7 +389,8 @@ namespace NzbDrone.Core.Extras.Metadata
                                    EpisodeFileId = episodeFile.Id,
                                    Consumer = consumer.GetType().Name,
                                    Type = MetadataType.EpisodeImage,
-                                   RelativePath = image.RelativePath
+                                   RelativePath = image.RelativePath,
+                                   Extension = Path.GetExtension(fullPath)
                                };
 
                 DownloadImage(series, image);
