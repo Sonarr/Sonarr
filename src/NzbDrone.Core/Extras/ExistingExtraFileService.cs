@@ -14,18 +14,18 @@ namespace NzbDrone.Core.Extras
     public class ExistingExtraFileService : IHandle<SeriesScannedEvent>
     {
         private readonly IDiskProvider _diskProvider;
+        private readonly IDiskScanService _diskScanService;
         private readonly List<IImportExistingExtraFiles> _existingExtraFileImporters;
-        private readonly List<IManageExtraFiles> _extraFileManagers;
         private readonly Logger _logger;
 
         public ExistingExtraFileService(IDiskProvider diskProvider,
+                                        IDiskScanService diskScanService,
                                         List<IImportExistingExtraFiles> existingExtraFileImporters,
-                                        List<IManageExtraFiles> extraFileManagers,
                                         Logger logger)
         {
             _diskProvider = diskProvider;
+            _diskScanService = diskScanService;
             _existingExtraFileImporters = existingExtraFileImporters.OrderBy(e => e.Order).ToList();
-            _extraFileManagers = extraFileManagers.OrderBy(e => e.Order).ToList();
             _logger = logger;
         }
 
@@ -41,9 +41,8 @@ namespace NzbDrone.Core.Extras
 
             _logger.Debug("Looking for existing extra files in {0}", series.Path);
 
-            var filesOnDisk = _diskProvider.GetFiles(series.Path, SearchOption.AllDirectories);
-            var possibleExtraFiles = filesOnDisk.Where(c => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(c).ToLower()) &&
-                                                            !c.StartsWith(Path.Combine(series.Path, "EXTRAS"))).ToList();
+            var filesOnDisk = _diskScanService.GetNonVideoFiles(series.Path);
+            var possibleExtraFiles = _diskScanService.FilterFiles(series, filesOnDisk);
 
             var filteredFiles = possibleExtraFiles;
             var importedFiles = new List<string>();
@@ -55,7 +54,7 @@ namespace NzbDrone.Core.Extras
                 importedFiles.AddRange(imported.Select(f => Path.Combine(series.Path, f.RelativePath)));
             }
 
-            _logger.Info("Found {0} extra files", extraFiles);
+            _logger.Info("Found {0} extra files", extraFiles.Count);
         }
     }
 }

@@ -38,9 +38,9 @@ namespace NzbDrone.Core.Extras.Subtitles
             _logger.Debug("Looking for existing subtitle files in {0}", series.Path);
 
             var subtitleFiles = new List<SubtitleFile>();
-            var filteredFiles = FilterAndClean(series, filesOnDisk, importedFiles);
+            var filterResult = FilterAndClean(series, filesOnDisk, importedFiles);
 
-            foreach (var possibleSubtitleFile in filteredFiles)
+            foreach (var possibleSubtitleFile in filterResult.FilesOnDisk)
             {
                 var extension = Path.GetExtension(possibleSubtitleFile);
 
@@ -83,7 +83,10 @@ namespace NzbDrone.Core.Extras.Subtitles
             _logger.Info("Found {0} existing subtitle files", subtitleFiles.Count);
             _subtitleFileService.Upsert(subtitleFiles);
 
-            return subtitleFiles;
+            // Return files that were just imported along with files that were
+            // previously imported so previously imported files aren't imported twice
+
+            return subtitleFiles.Concat(filterResult.PreviouslyImported);
         }
     }
 }

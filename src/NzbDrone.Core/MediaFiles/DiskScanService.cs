@@ -23,6 +23,8 @@ namespace NzbDrone.Core.MediaFiles
     {
         void Scan(Series series);
         string[] GetVideoFiles(string path, bool allDirectories = true);
+        string[] GetNonVideoFiles(string path, bool allDirectories = true);
+        List<string> FilterFiles(Series series, IEnumerable<string> files);
     }
 
     public class DiskScanService :
@@ -59,7 +61,7 @@ namespace NzbDrone.Core.MediaFiles
         }
 
         private static readonly Regex ExcludedSubFoldersRegex = new Regex(@"(?:\\|\/|^)(extras|@eadir|\..+)(?:\\|\/)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ExcludedFilesRegex = new Regex(@"^\._|Thumbs\.db", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public void Scan(Series series)
         {
@@ -133,10 +135,25 @@ namespace NzbDrone.Core.MediaFiles
             return mediaFileList.ToArray();
         }
 
-        private IEnumerable<string> FilterFiles(Series series, IEnumerable<string> videoFiles)
+        public string[] GetNonVideoFiles(string path, bool allDirectories = true)
         {
-            return videoFiles.Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file)))
-                             .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)));
+            _logger.Debug("Scanning '{0}' for non-video files", path);
+
+            var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+            var filesOnDisk = _diskProvider.GetFiles(path, searchOption);
+
+            var mediaFileList = filesOnDisk.Where(file => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(file).ToLower()))
+                                           .ToList();
+
+            _logger.Debug("{0} non-video files were found in {1}", mediaFileList.Count, path);
+            return mediaFileList.ToArray();
+        }
+
+        public List<string> FilterFiles(Series series, IEnumerable<string> files)
+        {
+            return files.Where(file => !ExcludedSubFoldersRegex.IsMatch(series.Path.GetRelativePath(file)))
+                        .Where(file => !ExcludedFilesRegex.IsMatch(Path.GetFileName(file)))
+                        .ToList();
         }
 
         private void SetPermissions(string path)

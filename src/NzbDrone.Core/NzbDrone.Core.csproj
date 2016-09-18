@@ -495,6 +495,7 @@
     <Compile Include="Extras\Files\ExtraFileRepository.cs" />
     <Compile Include="Extras\ExtraService.cs" />
     <Compile Include="Extras\IImportExistingExtraFiles.cs" />
+    <Compile Include="Extras\ImportExistingExtraFileFilterResult.cs" />
     <Compile Include="Extras\ImportExistingExtraFilesBase.cs" />
     <Compile Include="Extras\Metadata\Files\MetadataFile.cs" />
     <Compile Include="Extras\Metadata\Files\MetadataFileRepository.cs" />

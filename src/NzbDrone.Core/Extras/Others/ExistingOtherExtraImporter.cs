@@ -38,9 +38,9 @@ namespace NzbDrone.Core.Extras.Others
             _logger.Debug("Looking for existing extra files in {0}", series.Path);
 
             var extraFiles = new List<OtherExtraFile>();
-            var filteredFiles = FilterAndClean(series, filesOnDisk, importedFiles);
+            var filterResult = FilterAndClean(series, filesOnDisk, importedFiles);
 
-            foreach (var possibleExtraFile in filteredFiles)
+            foreach (var possibleExtraFile in filterResult.FilesOnDisk)
             {
                 var localEpisode = _parsingService.GetLocalEpisode(possibleExtraFile, series);
 
@@ -77,7 +77,10 @@ namespace NzbDrone.Core.Extras.Others
             _logger.Info("Found {0} existing other extra files", extraFiles.Count);
             _otherExtraFileService.Upsert(extraFiles);
 
-            return extraFiles;
+            // Return files that were just imported along with files that were
+            // previously imported so previously imported files aren't imported twice
+
+            return extraFiles.Concat(filterResult.PreviouslyImported);
         }
     }
 }

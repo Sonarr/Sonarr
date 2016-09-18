@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Extras
         public abstract int Order { get; }
         public abstract IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles);
 
-        public virtual List<string> FilterAndClean(Series series, List<string> filesOnDisk, List<string> importedFiles)
+        public virtual ImportExistingExtraFileFilterResult<TExtraFile> FilterAndClean(Series series, List<string> filesOnDisk, List<string> importedFiles)
         {
             var seriesFiles = _extraFileService.GetFilesBySeries(series.Id);
 
@@ -30,12 +30,16 @@ namespace NzbDrone.Core.Extras
             return Filter(series, filesOnDisk, importedFiles, seriesFiles);
         }
 
-        private List<string> Filter(Series series, List<string> filesOnDisk, List<string> importedFiles, List<TExtraFile> seriesFiles)
+        private ImportExistingExtraFileFilterResult<TExtraFile> Filter(Series series, List<string> filesOnDisk, List<string> importedFiles, List<TExtraFile> seriesFiles)
         {
-            var filteredFiles = filesOnDisk;
+            var previouslyImported = seriesFiles.IntersectBy(s => Path.Combine(series.Path, s.RelativePath), filesOnDisk, f => f, PathEqualityComparer.Instance).ToList();
+            var filteredFiles = filesOnDisk.Except(previouslyImported.Select(f => Path.Combine(series.Path, f.RelativePath)).ToList(), PathEqualityComparer.Instance)
+                                           .Except(importedFiles, PathEqualityComparer.Instance)
+                                           .ToList();
 
-            filteredFiles = filteredFiles.Except(seriesFiles.Select(f => Path.Combine(series.Path, f.RelativePath)).ToList(), PathEqualityComparer.Instance).ToList();
-            return filteredFiles.Except(importedFiles, PathEqualityComparer.Instance).ToList();
+            // Return files that are already imported so they aren't imported again by other importers.
+            // Filter out files that were previously imported and as well as ones imported by other importers.
+            return new ImportExistingExtraFileFilterResult<TExtraFile>(previouslyImported, filteredFiles);
         }
 
         private void Clean(Series series, List<string> filesOnDisk, List<string> importedFiles, List<TExtraFile> seriesFiles)

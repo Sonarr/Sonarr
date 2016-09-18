@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.Extras.Metadata.Files;
+using NzbDrone.Core.Extras.Subtitles;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv;
 
@@ -42,10 +43,17 @@ namespace NzbDrone.Core.Extras.Metadata
             _logger.Debug("Looking for existing metadata in {0}", series.Path);
 
             var metadataFiles = new List<MetadataFile>();
-            var filteredFiles = FilterAndClean(series, filesOnDisk, importedFiles);
+            var filterResult = FilterAndClean(series, filesOnDisk, importedFiles);
 
-            foreach (var possibleMetadataFile in filteredFiles)
+            foreach (var possibleMetadataFile in filterResult.FilesOnDisk)
             {
+                // Don't process files that have known Subtitle file extensions (saves a bit of unecessary processing)
+
+                if (SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(possibleMetadataFile)))
+                {
+                    continue;
+                }
+
                 foreach (var consumer in _consumers)
                 {
                     var metadata = consumer.FindMetadataFile(series, possibleMetadataFile);
@@ -90,7 +98,10 @@ namespace NzbDrone.Core.Extras.Metadata
             _logger.Info("Found {0} existing metadata files", metadataFiles.Count);
             _metadataFileService.Upsert(metadataFiles);
 
-            return metadataFiles;
+            // Return files that were just imported along with files that were
+            // previously imported so previously imported files aren't imported twice
+
+            return metadataFiles.Concat(filterResult.PreviouslyImported);
         }
     }
 }
