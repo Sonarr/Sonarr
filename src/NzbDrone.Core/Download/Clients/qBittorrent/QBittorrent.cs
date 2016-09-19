@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             var config = _proxy.GetConfig(Settings);
 
-            var destDir = new OsPath((string)config.GetValueOrDefault("save_path"));
+            var destDir = new OsPath(config.SavePath);
 
             return new DownloadClientStatus
             {
