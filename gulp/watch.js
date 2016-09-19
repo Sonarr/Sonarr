@@ -13,7 +13,7 @@ gulp.task('watch', ['jshint', 'handlebars', 'less', 'copyHtml', 'copyContent', '
   livereload.listen();
   gulp.start('webpackWatch');
   gulp.watch([paths.src.scripts, paths.src.exclude.libs], ['jshint', 'copyJs']);
-  gulp.watch(paths.src.templates, ['handlebars']);
+  gulp.watch([paths.src.templates, 'meta.option.*'], ['handlebars']);
   gulp.watch([paths.src.less, paths.src.exclude.libs], ['less']);
   gulp.watch([paths.src.html], ['copyHtml']);
   gulp.watch([paths.src.content + '**/*.*', '!**/*.less'], ['copyContent']);

@@ -2,6 +2,8 @@
     <fieldset>
         <legend>Start-Up</legend>
 
+        {{#meta-with this option="bindAddress"}}
+        {{#meta-visible this}}
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Bind Address</label>
 
@@ -11,10 +13,14 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="text" name="bindAddress" class="form-control" />
+                <input type="text" name="bindAddress" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}}/>
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
 
+        {{#meta-with this option="port"}}
+        {{#meta-visible this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Port Number</label>
 
@@ -23,30 +29,40 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="number" placeholder="8989" name="port" class="form-control"/>
+                <input type="number" placeholder="8989" name="port" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}} />
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
 
+        {{#meta-with this option="urlBase"}}
+        {{#meta-visible this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">URL Base</label>
 
             <div class="col-sm-1 col-sm-push-4 help-inline">
+                {{#meta-not-writable this}}
                 <i class="icon-sonarr-form-warning" title="Requires restart to take effect"/>
                 <i class="icon-sonarr-form-info" title="For reverse proxy support, default is empty"/>
+                {{/meta-not-writable}}
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <input type="text" name="urlBase" class="form-control"/>
+                <input type="text" name="urlBase" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}} />
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
 
+        {{#meta-with this option="enableSsl"}}
+        {{#meta-visible this}}
         <div class="form-group advanced-setting">
             <label class="col-sm-3 control-label">Enable SSL</label>
 
             <div class="col-sm-8">
                 <div class="input-group">
-                    <label class="checkbox toggle well">
-                        <input type="checkbox" name="enableSsl" class="x-ssl"/>
+                    <label class="checkbox toggle well {{#meta-not-writable this}}readonly{{/meta-not-writable}}">
+                        <input type="checkbox" name="enableSsl" class="x-ssl" {{#meta-not-writable this}}disabled="disabled"{{/meta-not-writable}} />
 
                         <p>
                             <span>Yes</span>
@@ -57,39 +73,53 @@
                     </label>
 
                     <span class="help-inline-checkbox">
+                        {{#meta-not-writable this}}
                         <i class="icon-sonarr-form-warning" title="Requires restart running as administrator to take effect"/>
+                        {{/meta-not-writable}}
                     </span>
                 </div>
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
 
         <div class="x-ssl-options">
+            {{#meta-with this option="enableSsl"}}
+            {{#meta-visible this}}
             <div class="form-group advanced-setting">
                 <label class="col-sm-3 control-label">SSL Port Number</label>
 
                 <div class="col-sm-4">
-                    <input type="number" placeholder="8989" name="sslPort" class="form-control"/>
+                    <input type="number" placeholder="8989" name="sslPort" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}}/>
                 </div>
             </div>
+            {{/meta-visible}}
+            {{/meta-with}}
 
             {{#if_windows}}
+            {{#meta-with this option="enableSsl"}}
+            {{#meta-visible this}}
             <div class="form-group advanced-setting">
                 <label class="col-sm-3 control-label">SSL Cert Hash</label>
 
                 <div class="col-sm-4">
-                    <input type="text" name="sslCertHash" class="form-control"/>
+                    <input type="text" name="sslCertHash" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}}/>
                 </div>
             </div>
+            {{/meta-visible}}
+            {{/meta-with}}
             {{/if_windows}}
         </div>
 
+        {{#meta-with this option="launchBrowser"}}
+        {{#meta-visible this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Open browser on start</label>
 
             <div class="col-sm-8">
                 <div class="input-group">
-                    <label class="checkbox toggle well">
-                        <input type="checkbox" name="launchBrowser" class="form-control"/>
+                    <label class="checkbox toggle well {{#meta-not-writable this}}readonly{{/meta-not-writable}}">
+                        <input type="checkbox" name="launchBrowser" class="form-control" {{#meta-not-writable this}}disabled="disabled"{{/meta-not-writable}} />
 
                         <p>
                             <span>Yes</span>
@@ -105,10 +135,17 @@
                 </div>
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
     </fieldset>
 
+    {{#meta-with this option="authentication-section"}}
+    {{#meta-visible this}}
     <fieldset>
         <legend>Security</legend>
+
+        {{#meta-with this option="username"}}
+        {{#meta-visible this}}
         <div class="form-group">
             <label class="col-sm-3 control-label">Authentication</label>
 
@@ -118,37 +155,51 @@
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
-                <select name="authenticationMethod" class="form-control x-auth">
+                <select name="authenticationMethod" class="form-control x-auth" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}}>
                     <option value="none">None</option>
                     <option value="basic">Basic (Browser popup)</option>
                     <option value="forms">Forms (Login page)</option>
                 </select>
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
 
         <div class="x-auth-options">
+            {{#meta-with this option="username"}}
+            {{#meta-visible this}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Username</label>
 
                 <div class="col-sm-4">
-                    <input type="text" placeholder="Username" name="username" class="form-control"/>
+                    <input type="text" placeholder="Username" name="username" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}}/>
                 </div>
             </div>
+            {{/meta-visible}}
+            {{/meta-with}}
 
+            {{#meta-with this option="password"}}
+            {{#meta-visible this}}
             <div class="form-group">
                 <label class="col-sm-3 control-label">Password</label>
 
                 <div class="col-sm-4">
-                    <input type="password" name="password" class="form-control"/>
+                    <input type="password" name="password" class="form-control" {{#meta-not-writable this}}readonly="readonly"{{/meta-not-writable}}/>
                 </div>
             </div>
+            {{/meta-visible}}
+            {{/meta-with}}
         </div>
 
+        {{#meta-with this option="apiKey"}}
+        {{#meta-visible this}}
         <div class="form-group api-key">
             <label class="col-sm-3 control-label">API Key</label>
 
             <div class="col-sm-1 col-sm-push-4 help-inline">
+                {{#meta-writable this}}
                 <i class="icon-sonarr-form-warning" title="Requires restart to take effect"/>
+                {{/meta-writable}}
             </div>
 
             <div class="col-sm-4 col-sm-pull-1">
@@ -156,19 +207,28 @@
                     <input type="text" name="apiKey" readonly="readonly" class="form-control x-api-key"/>
                     <div class="input-group-btn">
                         <button class="btn btn-icon-only x-copy-api-key hidden-xs"><i class="icon-sonarr-copy"></i></button>
+                        {{#meta-writable this}}
                         <button class="btn btn-danger btn-icon-only x-reset-api-key" title="Reset API Key"><i class="icon-sonarr-refresh"></i></button>
+                        {{/meta-writable}}
                     </div>
                 </div>
             </div>
         </div>
+        {{/meta-visible}}
+        {{/meta-with}}
+
     </fieldset>
-    
+    {{/meta-visible}}
+    {{/meta-with}}
+
+    {{#meta-with this option="proxy-section"}}
+    {{#meta-visible this}}
     <fieldset>
         <legend>Proxy Settings</legend>
-        
+
         <div class="form-group">
             <label class="col-sm-3 control-label">Use Proxy</label>
-            
+
             <div class="col-sm-8">
                 <div class="input-group">
                     <label class="checkbox toggle well">
@@ -237,22 +297,22 @@
                     <input type="password" name="proxyPassword" class="form-control"/>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">Addresses for the proxy to ignore</label>
 
                 <div class="col-sm-1 col-sm-push-4 help-inline">
                     <i class="icon-sonarr-form-info" title="Use ',' as a separator, and '*.' as a wildcard for subdomains"/>
                 </div>
-                
+
                 <div class="col-sm-4 col-sm-pull-1">
                     <input type="text" name="proxyBypassFilter" class="form-control"/>
                 </div>
             </div>
-            
+
             <div class="form-group">
             <label class="col-sm-3 control-label">Bypass Proxy for Local Addresses</label>
-            
+
             <div class="col-sm-8">
                 <div class="input-group">
                     <label class="checkbox toggle well">
@@ -270,6 +330,8 @@
         </div>
         </div>
     </fieldset>
+    {{/meta-visible}}
+    {{/meta-with}}
 
     <fieldset>
         <legend>Logging</legend>
