@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -33,9 +34,38 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("Extension").AsString().Nullable();
 
             // Set Extension using the extension from RelativePath
-            Execute.Sql("UPDATE MetadataFiles SET Extension = substr(RelativePath, instr(RelativePath, '.'));");
+            Execute.WithConnection(SetMetadataFileExtension);
 
             Alter.Table("MetadataFiles").AlterColumn("Extension").AsString().NotNullable();
+        }
+
+        private void SetMetadataFileExtension(IDbConnection conn, IDbTransaction tran)
+        {
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.Transaction = tran;
+                cmd.CommandText = "SELECT Id, RelativePath FROM MetadataFiles";
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var id = reader.GetInt32(0);
+                        var relativePath = reader.GetString(1);
+                        var extension = relativePath.Substring(relativePath.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase));
+
+                        using (var updateCmd = conn.CreateCommand())
+                        {
+                            updateCmd.Transaction = tran;
+                            updateCmd.CommandText = "UPDATE MetadataFiles SET Extension = ? WHERE Id = ?";
+                            updateCmd.AddParameter(extension);
+                            updateCmd.AddParameter(id);
+
+                            updateCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
         }
     }
 
