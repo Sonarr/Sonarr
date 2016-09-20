@@ -270,7 +270,7 @@ namespace NzbDrone.Core.Parser
             if (result == null)
             {
                 Logger.Debug("Attempting to parse episode info using directory and file names. {0}", fileInfo.Directory.Name);
-                result = ParseTitle(fileInfo.Directory.Name + " " + fileInfo.Name + fileInfo.Extension);
+                result = ParseTitle(fileInfo.Directory.Name + " " + fileInfo.Name);
             }
 
             if (result == null)
