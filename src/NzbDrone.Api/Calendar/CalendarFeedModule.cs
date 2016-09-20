@@ -23,10 +23,11 @@ namespace NzbDrone.Api.Calendar
         private Response GetCalendarFeed()
         {
             var pastDays = 7;
-            var futureDays = 28;            
+            var futureDays = 28;
             var start = DateTime.Today.AddDays(-pastDays);
             var end = DateTime.Today.AddDays(futureDays);
             var unmonitored = false;
+            var premiersOnly = false;
 
             // TODO: Remove start/end parameters in v3, they don't work well for iCal
             var queryStart = Request.Query.Start;
@@ -34,6 +35,7 @@ namespace NzbDrone.Api.Calendar
             var queryPastDays = Request.Query.PastDays;
             var queryFutureDays = Request.Query.FutureDays;
             var queryUnmonitored = Request.Query.Unmonitored;
+            var queryPremiersOnly = Request.Query.PremiersOnly;
 
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
             if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
@@ -55,11 +57,21 @@ namespace NzbDrone.Api.Calendar
                 unmonitored = bool.Parse(queryUnmonitored.Value);
             }
 
+            if (queryPremiersOnly.HasValue)
+            {
+                premiersOnly = bool.Parse(queryPremiersOnly.Value);
+            }
+
             var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored);
             var icalCalendar = new iCalendar();
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
+                if (premiersOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
+                {
+                    continue;
+                }
+
                 var occurrence = icalCalendar.Create<Event>();
                 occurrence.UID = "NzbDrone_episode_" + episode.Id.ToString();
                 occurrence.Status = episode.HasFile ? EventStatus.Confirmed : EventStatus.Tentative;

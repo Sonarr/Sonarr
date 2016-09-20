@@ -6,16 +6,52 @@
     <div class="modal-body edit-series-modal">
         <div class="form-horizontal">
             <div class="form-group">
-                <label class="col-sm-2 control-label">iCal feed</label>
-                <div class="col-sm-1 col-sm-push-9 help-inline">
+                <label class="col-sm-3 control-label">Include Unmonitored</label>
+
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <label class="checkbox toggle well">
+                            <input type="checkbox" name="includeUnmonitored" class="form-control x-includeUnmonitored"/>
+
+                            <p>
+                                <span>Yes</span>
+                                <span>No</span>
+                            </p>
+
+                            <div class="btn btn-primary slide-button"/>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Season Premiers Only</label>
+
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <label class="checkbox toggle well">
+                            <input type="checkbox" name="premiersOnly" class="form-control x-premiersOnly"/>
+
+                            <p>
+                                <span>Yes</span>
+                                <span>No</span>
+                            </p>
+
+                            <div class="btn btn-primary slide-button"/>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">iCal feed</label>
+                <div class="col-sm-1 col-sm-push-8 help-inline">
                     <i class="icon-sonarr-form-info" title="Copy this url into your clients subscription form or use the subscribe button if your browser support webcal" />
                 </div>
-                <div class="col-sm-9 col-sm-pull-1">
+                <div class="col-sm-8 col-sm-pull-1">
                     <div class="input-group ical-url">
-                        <input type="text" class="form-control x-ical-url" value="{{icalHttpUrl}}" readonly="readonly" />
+                        <input type="text" class="form-control x-ical-url" readonly="readonly" />
                         <div class="input-group-btn">
                             <button class="btn btn-icon-only x-ical-copy"><i class="icon-sonarr-copy"></i></button>
-                            <button class="btn btn-icon-only no-router" title="Subscribe" href="{{icalWebCalUrl}}" target="_blank"><i class="icon-sonarr-calendar-o"></i></button>
+                            <button class="btn btn-icon-only no-router x-ical-webcal" title="Subscribe" target="_blank"><i class="icon-sonarr-calendar-o"></i></button>
                         </div>
                     </div>
                 </div>
