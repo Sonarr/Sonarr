@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -73,6 +74,11 @@ namespace NzbDrone.Core.Parser
 
             if (parsedEpisodeInfo == null)
             {
+                if (MediaFileExtensions.Extensions.Contains(Path.GetExtension(filename)))
+                {
+                    _logger.Warn("Unable to parse episode info from path {0}", filename);
+                }
+
                 return null;
             }
 

@@ -279,12 +279,6 @@ namespace NzbDrone.Core.Parser
                 result = ParseTitle(fileInfo.Directory.Name + fileInfo.Extension);
             }
 
-            if (result == null)
-            {
-                Logger.Warn("Unable to parse episode info from path {0}", path);
-                return null;
-            }
-
             return result;
         }
 
