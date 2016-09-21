@@ -4,10 +4,11 @@ var TagCollection = require('../Tags/TagCollection');
 var TagModel = require('../Tags/TagModel');
 require('bootstrap.tagsinput');
 
-var substringMatcher = function() {
+var substringMatcher = function(tagCollection) {
     return function findMatches (q, cb) {
-        var matches = _.select(TagCollection.toJSON(), function(tag) {
-            return tag.label.toLowerCase().indexOf(q.toLowerCase()) > -1;
+        q = q.replace(/[^-_a-z0-9]/gi, '').toLowerCase();
+        var matches = _.select(tagCollection.toJSON(), function(tag) {
+            return tag.label.toLowerCase().indexOf(q) > -1;
         });
         cb(matches);
     };
@@ -33,22 +34,27 @@ var originalRemove = $.fn.tagsinput.Constructor.prototype.remove;
 var originalBuild = $.fn.tagsinput.Constructor.prototype.build;
 
 $.fn.tagsinput.Constructor.prototype.add = function(item, dontPushVal) {
+    var tagCollection = this.options.tagCollection;
+
+    if (!tagCollection) {
+        originalAdd.call(this, item, dontPushVal);
+        return;
+    }
     var self = this;
 
-    if (typeof item === 'string' && this.options.tag) {
-        var test = testTag(item);
-        if (item === null || item === '' || !testTag(item)) {
-            return;
-        }
-
-        var existing = _.find(TagCollection.toJSON(), { label : item });
+    if (typeof item === 'string') {
+        var existing = _.find(tagCollection.toJSON(), { label : item });
 
         if (existing) {
             originalAdd.call(this, existing, dontPushVal);
-        } else {
+        } else if (this.options.allowNew) {
+            if (item === null || item === '' || !testTag(item)) {
+                return;
+            }
+
             var newTag = new TagModel();
             newTag.set({ label : item.toLowerCase() });
-            TagCollection.add(newTag);
+            tagCollection.add(newTag);
 
             newTag.save().done(function() {
                 item = newTag.toJSON();
@@ -56,12 +62,10 @@ $.fn.tagsinput.Constructor.prototype.add = function(item, dontPushVal) {
             });
         }
     } else {
-        originalAdd.call(this, item, dontPushVal);
+        originalAdd.call(self, item, dontPushVal);
     }
 
-    if (this.options.tag) {
-        self.$input.typeahead('val', '');
-    }
+    self.$input.typeahead('val', '');
 };
 
 $.fn.tagsinput.Constructor.prototype.remove = function(item, dontPushVal) {
@@ -104,43 +108,49 @@ $.fn.tagsinput.Constructor.prototype.build = function(options) {
 };
 
 $.fn.tagInput = function(options) {
+    options = $.extend({}, { allowNew : true }, options);
+
     var input = this;
     var model = options.model;
     var property = options.property;
-    var tags = getExistingTags(model.get(property));
 
     var tagInput = $(this).tagsinput({
-        tag         : true,
-        freeInput   : true,
-        itemValue   : 'id',
-        itemText    : 'label',
-        trimValue   : true,
-        typeaheadjs : {
+        tagCollection : TagCollection,
+        freeInput     : true,
+        allowNew      : options.allowNew,
+        itemValue     : 'id',
+        itemText      : 'label',
+        trimValue     : true,
+        typeaheadjs   : {
             name       : 'tags',
             displayKey : 'label',
-            source     : substringMatcher()
+            source     : substringMatcher(TagCollection)
         }
     });
 
     //Override the free input being set to false because we're using objects
     $(tagInput)[0].options.freeInput = true;
 
-    //Remove any existing tags and re-add them
-    $(this).tagsinput('removeAll');
-    _.each(tags, function(tag) {
-        $(input).tagsinput('add', tag);
-    });
-    $(this).tagsinput('refresh');
-    $(this).on('itemAdded', function(event) {
-        var tags = model.get(property);
-        tags.push(event.item.id);
-        model.set(property, tags);
-    });
-    $(this).on('itemRemoved', function(event) {
-        if (!event.item) {
-            return;
-        }
-        var tags = _.without(model.get(property), event.item.id);
-        model.set(property, tags);
-    });
+    if (model) {
+        var tags = getExistingTags(model.get(property));
+
+        //Remove any existing tags and re-add them
+        $(this).tagsinput('removeAll');
+        _.each(tags, function(tag) {
+            $(input).tagsinput('add', tag);
+        });
+        $(this).tagsinput('refresh');
+        $(this).on('itemAdded', function(event) {
+            var tags = model.get(property);
+            tags.push(event.item.id);
+            model.set(property, tags);
+        });
+        $(this).on('itemRemoved', function(event) {
+            if (!event.item) {
+                return;
+            }
+            var tags = _.without(model.get(property), event.item.id);
+            model.set(property, tags);
+        });
+    }
 };

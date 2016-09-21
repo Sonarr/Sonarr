@@ -1,6 +1,7 @@
 var Marionette = require('marionette');
 var StatusModel = require('../System/StatusModel');
 require('../Mixins/CopyToClipboard');
+require('../Mixins/TagInput');
 
 module.exports = Marionette.Layout.extend({
     template : 'Calendar/CalendarFeedViewTemplate',
@@ -8,6 +9,7 @@ module.exports = Marionette.Layout.extend({
     ui : {
         includeUnmonitored : '.x-includeUnmonitored',
         premiersOnly       : '.x-premiersOnly',
+        tags               : '.x-tags',
         icalUrl            : '.x-ical-url',
         icalCopy           : '.x-ical-copy',
         icalWebCal         : '.x-ical-webcal'
@@ -15,12 +17,15 @@ module.exports = Marionette.Layout.extend({
 
     events : {
         'click .x-includeUnmonitored' : '_updateUrl',
-        'click .x-premiersOnly'       : '_updateUrl'
+        'click .x-premiersOnly'       : '_updateUrl',
+        'itemAdded .x-tags'           : '_updateUrl',
+        'itemRemoved .x-tags'         : '_updateUrl'
     },
 
     onShow : function() {
         this._updateUrl();
         this.ui.icalCopy.copyToClipboard(this.ui.icalUrl);
+        this.ui.tags.tagInput({ allowNew: false });
     },
 
     _updateUrl : function() {
@@ -32,6 +37,10 @@ module.exports = Marionette.Layout.extend({
 
         if (this.ui.premiersOnly.prop('checked')) {
             icalUrl += 'premiersOnly=true&';
+        }
+
+        if (this.ui.tags.val()) {
+            icalUrl += 'tags=' + this.ui.tags.val() + '&';
         }
 
         icalUrl += 'apikey=' + window.NzbDrone.ApiKey;

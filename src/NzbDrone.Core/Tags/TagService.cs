@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Tags
     public interface ITagService
     {
         Tag GetTag(int tagId);
+        Tag GetTag(string tag);
         List<Tag> All();
         Tag Add(Tag tag);
         Tag Update(Tag tag);
@@ -28,6 +29,18 @@ namespace NzbDrone.Core.Tags
         public Tag GetTag(int tagId)
         {
             return _repo.Get(tagId);
+        }
+
+        public Tag GetTag(string tag)
+        {
+            if (tag.All(char.IsDigit))
+            {
+                return _repo.Get(int.Parse(tag));
+            }
+            else
+            {
+                return _repo.GetByLabel(tag);
+            }
         }
 
         public List<Tag> All()

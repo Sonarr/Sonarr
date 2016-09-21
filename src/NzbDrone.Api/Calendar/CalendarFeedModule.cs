@@ -5,17 +5,21 @@ using System.Linq;
 using DDay.iCal;
 using NzbDrone.Core.Tv;
 using Nancy.Responses;
+using NzbDrone.Core.Tags;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Api.Calendar
 {
     public class CalendarFeedModule : NzbDroneFeedModule
     {
         private readonly IEpisodeService _episodeService;
+        private readonly ITagService _tagService;
 
-        public CalendarFeedModule(IEpisodeService episodeService)
+        public CalendarFeedModule(IEpisodeService episodeService, ITagService tagService)
             : base("calendar")
         {
             _episodeService = episodeService;
+            _tagService = tagService;
 
             Get["/NzbDrone.ics"] = options => GetCalendarFeed();
         }
@@ -28,6 +32,7 @@ namespace NzbDrone.Api.Calendar
             var end = DateTime.Today.AddDays(futureDays);
             var unmonitored = false;
             var premiersOnly = false;
+            var tags = new List<int>();
 
             // TODO: Remove start/end parameters in v3, they don't work well for iCal
             var queryStart = Request.Query.Start;
@@ -36,6 +41,7 @@ namespace NzbDrone.Api.Calendar
             var queryFutureDays = Request.Query.FutureDays;
             var queryUnmonitored = Request.Query.Unmonitored;
             var queryPremiersOnly = Request.Query.PremiersOnly;
+            var queryTags = Request.Query.Tags;
 
             if (queryStart.HasValue) start = DateTime.Parse(queryStart.Value);
             if (queryEnd.HasValue) end = DateTime.Parse(queryEnd.Value);
@@ -62,12 +68,23 @@ namespace NzbDrone.Api.Calendar
                 premiersOnly = bool.Parse(queryPremiersOnly.Value);
             }
 
+            if (queryTags.HasValue)
+            {
+                var tagInput = (string)queryTags.Value.ToString();
+                tags.AddRange(tagInput.Split(',').Select(_tagService.GetTag).Select(t => t.Id));
+            }
+
             var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored);
             var icalCalendar = new iCalendar();
 
             foreach (var episode in episodes.OrderBy(v => v.AirDateUtc.Value))
             {
                 if (premiersOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
+                {
+                    continue;
+                }
+
+                if (tags.Any() && tags.None(episode.Series.Tags.Contains))
                 {
                     continue;
                 }
