@@ -12,6 +12,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 {
@@ -435,6 +436,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             var error = Subject.Test();
 
             error.IsValid.Should().Be(expected);
+        }
+
+        [Test]
+        public void should_test_develop_version_successfully()
+        {
+            Mocker.GetMock<ISabnzbdProxy>()
+                  .Setup(v => v.GetVersion(It.IsAny<SabnzbdSettings>()))
+                  .Returns("develop");
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeTrue();
+            result.HasWarnings.Should().BeTrue();
         }
     }
 }

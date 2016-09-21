@@ -280,15 +280,31 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var version = _proxy.GetVersion(Settings);
             var parsed = VersionRegex.Match(version);
 
+            int actualMajor;
+            int actualMinor;
+            int actualPatch;
+            string actualCandidate;
+
             if (!parsed.Success)
             {
-                return false;
+                if (!version.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return false;
+                }
+
+                actualMajor = 1;
+                actualMinor = 1;
+                actualPatch = 0;
+                actualCandidate = null;
             }
 
-            var actualMajor = Convert.ToInt32(parsed.Groups["major"].Value);
-            var actualMinor = Convert.ToInt32(parsed.Groups["minor"].Value);
-            var actualPatch = Convert.ToInt32(parsed.Groups["patch"].Value.Replace("x", ""));
-            var actualCandidate = parsed.Groups["candidate"].Value.ToUpper();
+            else
+            {
+                actualMajor = Convert.ToInt32(parsed.Groups["major"].Value);
+                actualMinor = Convert.ToInt32(parsed.Groups["minor"].Value);
+                actualPatch = Convert.ToInt32(parsed.Groups["patch"].Value.Replace("x", ""));
+                actualCandidate = parsed.Groups["candidate"].Value.ToUpper();
+            }
 
             if (actualMajor > major)
             {
@@ -340,6 +356,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (!parsed.Success)
                 {
+                    if (version.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return new NzbDroneValidationFailure("Version", "Sabnzbd develop version, assuming version 1.1.0 or higher.")
+                        {
+                            IsWarning = true,
+                            DetailedDescription = "Sonarr may not be able to support new features added to SABnzbd when running develop versions."
+                        };
+                    }
+
                     return new ValidationFailure("Version", "Unknown Version: " + version);
                 }
 
