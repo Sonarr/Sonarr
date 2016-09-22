@@ -545,6 +545,7 @@
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedIndexerStatus.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
+    <Compile Include="Housekeeping\Housekeepers\CleanupUnusedTags.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedPendingReleases.cs" />
     <Compile Include="Housekeeping\Housekeepers\DeleteBadMediaCovers.cs" />
     <Compile Include="Housekeeping\Housekeepers\FixFutureRunScheduledTasks.cs" />
