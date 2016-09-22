@@ -53,8 +53,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 //If the parsed size is smaller than minSize we don't want it
                 if (subject.Release.Size < minSize)
                 {
-                    _logger.Debug("Item: {0}, Size: {1:0n} is smaller than minimum allowed size ({2:0}), rejecting.", subject, subject.Release.Size, minSize);
-                    return Decision.Reject("{0} is smaller than minimum allowed: {1}", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix());
+                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
+
+                    _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2} bytes for {3}), rejecting.", subject, subject.Release.Size, minSize, runtimeMessage);
+                    return Decision.Reject("{0} is smaller than minimum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix(), runtimeMessage);
                 }
             }
             if (!qualityDefinition.MaxSize.HasValue || qualityDefinition.MaxSize.Value == 0)
@@ -95,8 +97,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 //If the parsed size is greater than maxSize we don't want it
                 if (subject.Release.Size > maxSize)
                 {
-                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2}), rejecting.", subject, subject.Release.Size, maxSize);
-                    return Decision.Reject("{0} is larger than maximum allowed: {1}", subject.Release.Size.SizeSuffix(), maxSize.SizeSuffix());
+                    var runtimeMessage = subject.Episodes.Count == 1 ? $"{subject.Series.Runtime}min" : $"{subject.Episodes.Count}x {subject.Series.Runtime}min";
+
+                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2} for {3}), rejecting.", subject, subject.Release.Size, maxSize, runtimeMessage);
+                    return Decision.Reject("{0} is larger than maximum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), maxSize.SizeSuffix(), runtimeMessage);
                 }
             }
 
