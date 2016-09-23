@@ -58,7 +58,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         public List<QBittorrentTorrent> GetTorrents(QBittorrentSettings settings)
         {
             var request = BuildRequest(settings).Resource("/query/torrents")
-                                                .AddQueryParam("label", settings.TvCategory);
+                                                .AddQueryParam("label", settings.TvCategory)
+                                                .AddQueryParam("category", settings.TvCategory);
 
             var response = ProcessRequest<List<QBittorrentTorrent>>(request, settings);
 
@@ -99,7 +100,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                                                         .AddFormParameter("hashes", hash)
                                                         .AddFormParameter("category", label);
             try
-            { 
+            {
                 ProcessRequest<object>(setCategoryRequest, settings);
             }
             catch(DownloadClientException ex)
