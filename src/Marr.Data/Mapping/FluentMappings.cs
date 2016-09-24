@@ -198,7 +198,8 @@ namespace Marr.Data.Mapping
             {
                 return AutoMapPropertiesWhere(m =>
                     m.MemberType == MemberTypes.Property &&
-                    !DataHelper.IsSimpleType((m as PropertyInfo).PropertyType));
+                    !DataHelper.IsSimpleType((m as PropertyInfo).PropertyType) &&
+                    !MapRepository.Instance.TypeConverters.ContainsKey((m as PropertyInfo).PropertyType));
             }
 
             /// <summary>
