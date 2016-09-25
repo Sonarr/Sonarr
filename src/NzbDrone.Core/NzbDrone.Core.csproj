@@ -1131,7 +1131,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="NzbDrone.Core.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
