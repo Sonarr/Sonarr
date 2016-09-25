@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(ChatID);
+                return !string.IsNullOrWhiteSpace(ChatID) && !string.IsNullOrWhiteSpace(BotToken);
             }
         }
 

@@ -16,20 +16,21 @@ namespace NzbDrone.Core.Notifications.Telegram
     public class TelegramProxy : ITelegramProxy
     {
         private readonly Logger _logger;
-        private const string URL = "https://api.telegram.org/bot";
-
+        private const string URL = "https://api.telegram.org";
         public TelegramProxy(Logger logger)
         {
             _logger = logger;
         }
 
-        public void SendNotification(string title, string text, TelegramSettings settings)
+        public void SendNotification(string title, string message, TelegramSettings settings)
         {
+            //Format text to add the title before and bold using markdown
+            string text = string.Concat("*", title, "*\n", message);
             var client = RestClientFactory.BuildClient(URL);
-            var request = new RestRequest(Method.POST);
-            request.AddParameter("token", settings.BotToken);
+            var request = new RestRequest("bot{token}/sendmessage", Method.POST);
+            request.AddUrlSegment("token", settings.BotToken);
             request.AddParameter("chat_id", settings.ChatID);
-            ///request.AddParameter("title", title);
+            request.AddParameter("parse_mode", "Markdown");
             request.AddParameter("text", text);
 
             client.ExecuteAndValidate(request);
