@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Api.REST;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Profiles;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Api.Profiles
@@ -33,8 +34,7 @@ namespace NzbDrone.Api.Profiles
 
                 Name = model.Name,
                 Cutoff = model.Cutoff,
-                Items = model.Items.ConvertAll(ToResource),
-                Language = model.Language
+                Items = model.Items.ConvertAll(ToResource)
             };
         }
 
@@ -59,8 +59,7 @@ namespace NzbDrone.Api.Profiles
 
                 Name = resource.Name,
                 Cutoff = (Quality)resource.Cutoff.Id,
-                Items = resource.Items.ConvertAll(ToModel),
-                Language = resource.Language
+                Items = resource.Items.ConvertAll(ToModel)
             };
         }
 

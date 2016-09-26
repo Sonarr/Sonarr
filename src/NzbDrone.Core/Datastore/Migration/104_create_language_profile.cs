@@ -10,7 +10,7 @@ using NzbDrone.Core.Profiles.Languages;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(102)]
+    [Migration(104)]
     public class create_language_profile : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()

@@ -15,19 +15,19 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Castle.2009.S01E14.HDTV.XviD-LOL")]
         [TestCase("Two.Greedy.Italians.S01E01.The.Family.720p.HDTV.x264-FTP")]
         [TestCase("The.Trip.To.Italy.S02E01.720p.HDTV.x264-TLA")]
+        [TestCase("2 Broke Girls - S01E01 - Pilot.en.sub")]
+        [TestCase("2 Broke Girls - S01E01 - Pilot.eng.sub")]
         public void should_parse_language_english(string postTitle)
         {
             var result = LanguageParser.ParseLanguage(postTitle);
-            result.Should().Be(language);
+            result.Should().Be(Language.English);
         }
 
-        [TestCase("2 Broke Girls - S01E01 - Pilot.en.sub", Language.English)]
-        [TestCase("2 Broke Girls - S01E01 - Pilot.eng.sub", Language.English)]
-        [TestCase("2 Broke Girls - S01E01 - Pilot.sub", Language.Unknown)]
-        public void should_parse_subtitle_language(string fileName, Language language)
+        [TestCase("2 Broke Girls - S01E01 - Pilot.sub")]
+        public void should_parse_subtitle_language_unknown(string fileName)
         {
             var result = LanguageParser.ParseSubtitleLanguage(fileName);
-            result.Should().Be(language);
+            result.Should().Be(Language.Unknown);
         }
 
         [TestCase("Castle.2009.S01E14.French.HDTV.XviD-LOL")]

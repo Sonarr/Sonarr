@@ -7,7 +7,7 @@ using System;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(95)]
+    [Migration(102)]
     public class add_language_to_episodeFiles_history_and_blacklist : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()

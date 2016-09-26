@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
@@ -27,7 +26,7 @@ namespace NzbDrone.Api.LanguageProfiles
 
         private int Create(LanguageProfileResource resource)
         {
-            var model = resource.InjectTo<LanguageProfile>();
+            var model = resource.ToModel();
             model = _profileService.Add(model);
             return model.Id;
         }
@@ -39,23 +38,19 @@ namespace NzbDrone.Api.LanguageProfiles
 
         private void Update(LanguageProfileResource resource)
         {
-            var model = _profileService.Get(resource.Id);
-            
-            model.Name = resource.Name;
-            model.Cutoff = (Language)resource.Cutoff.Id;
-            model.Languages = resource.Languages.InjectTo<List<ProfileLanguageItem>>();
+            var model = resource.ToModel();
 
             _profileService.Update(model);
         }
 
         private LanguageProfileResource GetById(int id)
         {
-            return _profileService.Get(id).InjectTo<LanguageProfileResource>();
+            return _profileService.Get(id).ToResource();
         }
 
         private List<LanguageProfileResource> GetAll()
         {
-            var profiles = _profileService.All().InjectTo<List<LanguageProfileResource>>();
+            var profiles = _profileService.All().ToResource();
 
             return profiles;
         }

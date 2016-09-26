@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Api.Mapping;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Languages;
 
@@ -26,7 +25,7 @@ namespace NzbDrone.Api.LanguageProfiles
             profile.Cutoff = Language.Unknown;
             profile.Languages = languages;
 
-            return new List<LanguageProfileResource> { profile.InjectTo<LanguageProfileResource>() };
+            return new List<LanguageProfileResource> { profile.ToResource() };
         }
     }
 }

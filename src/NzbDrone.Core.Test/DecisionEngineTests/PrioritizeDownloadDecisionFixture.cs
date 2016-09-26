@@ -216,8 +216,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_prefer_season_pack_above_single_episode()
         {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1), GivenEpisode(2) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1), GivenEpisode(2) }, new QualityModel(Quality.HDTV720p), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
 
             remoteEpisode1.ParsedEpisodeInfo.FullSeason = true;
 
@@ -232,8 +232,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_prefer_releases_with_more_seeders()
         {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
 
             var torrentInfo1 = new TorrentInfo();
             torrentInfo1.PublishDate = DateTime.Now;
@@ -258,8 +258,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_prefer_releases_with_more_peers_given_equal_number_of_seeds()
         {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
 
             var torrentInfo1 = new TorrentInfo();
             torrentInfo1.PublishDate = DateTime.Now;
@@ -286,8 +286,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_prefer_releases_with_more_peers_no_seeds()
         {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
 
             var torrentInfo1 = new TorrentInfo();
             torrentInfo1.PublishDate = DateTime.Now;
@@ -315,8 +315,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_prefer_first_release_if_peers_and_size_are_too_similar()
         {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
 
             var torrentInfo1 = new TorrentInfo();
             torrentInfo1.PublishDate = DateTime.Now;
@@ -344,8 +344,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_prefer_first_release_if_age_and_size_are_too_similar()
         {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p));
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
 
             remoteEpisode1.Release.PublishDate = DateTime.UtcNow.AddDays(-100);
             remoteEpisode1.Release.Size = 200.Megabytes();
@@ -377,6 +377,20 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Language.Should().Be(Language.French);
             qualifiedReports.Last().RemoteEpisode.ParsedEpisodeInfo.Language.Should().Be(Language.German);
-        }    
+        }
+
+        [Test]
+        public void should_put_higher_quality_before_lower_allways()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.SDTV), Language.French);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.German);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Quality.Quality.Should().Be(Quality.HDTV720p);
+        }
     }
 }

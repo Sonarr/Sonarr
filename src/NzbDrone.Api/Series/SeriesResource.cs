@@ -127,6 +127,7 @@ namespace NzbDrone.Api.Series
                 
                 Path = model.Path,
                 ProfileId = model.ProfileId,
+                LanguageProfileId = model.LanguageProfileId,
                 
                 SeasonFolder = model.SeasonFolder,
                 Monitored = model.Monitored,
@@ -181,6 +182,7 @@ namespace NzbDrone.Api.Series
 
                 Path = resource.Path,
                 ProfileId = resource.ProfileId,
+                LanguageProfileId = resource.LanguageProfileId,
 
                 SeasonFolder = resource.SeasonFolder,
                 Monitored = resource.Monitored,
@@ -213,6 +215,7 @@ namespace NzbDrone.Api.Series
             series.Seasons = resource.Seasons.ToModel();
             series.Path = resource.Path;
             series.ProfileId = resource.ProfileId;
+            series.LanguageProfileId = resource.LanguageProfileId;
 
             series.SeasonFolder = resource.SeasonFolder;
             series.Monitored = resource.Monitored;

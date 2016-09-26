@@ -282,8 +282,8 @@
     <Compile Include="Datastore\Migration\098_remove_titans_of_tv.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Datastore\Migration\095_add_language_to_episodeFiles_history_and_blacklist.cs" />
-    <Compile Include="Datastore\Migration\102_create_language_profile.cs" />
+    <Compile Include="Datastore\Migration\102_add_language_to_episodeFiles_history_and_blacklist.cs" />
+    <Compile Include="Datastore\Migration\104_create_language_profile.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationDbFactory.cs" />
@@ -1095,7 +1095,6 @@
     <Compile Include="Update\UpdateVerificationFailedException.cs" />
     <Compile Include="Validation\FolderValidator.cs" />
     <Compile Include="Validation\IpValidation.cs" />
-    <Compile Include="Validation\LanguageValidator.cs" />
     <Compile Include="Validation\NzbDroneValidationExtensions.cs" />
     <Compile Include="Validation\NzbDroneValidationFailure.cs" />
     <Compile Include="Validation\NzbDroneValidationResult.cs" />
