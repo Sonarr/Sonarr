@@ -39,14 +39,20 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     return new HealthCheck(GetType(), HealthCheckResult.Error, "your mono version 3.4.0 has a critical bug, you should upgrade to a higher version");
                 }
 
-                if (version >= new Version(3, 2))
+                if (version >= new Version(4, 4, 0) && version < new Version(4, 5))
                 {
-                    _logger.Debug("mono version is 3.2 or better: {0}", version.ToString());
+                    _logger.Debug("mono version {0}", version);
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"your mono version {version} has a bug that causes issues connecting to indexers/download clients");
+                }
+
+                if (version >= new Version(3, 10))
+                {
+                    _logger.Debug("mono version is 3.10 or better: {0}", version.ToString());
                     return new HealthCheck(GetType());
                 }
             }
 
-            return new HealthCheck(GetType(), HealthCheckResult.Warning, "mono version is less than 3.2, upgrade for improved stability");
+            return new HealthCheck(GetType(), HealthCheckResult.Warning, "mono version is less than 3.10, upgrade for improved stability");
         }
 
         public override bool CheckOnConfigChange
