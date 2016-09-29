@@ -22,6 +22,7 @@ namespace NzbDrone.Common.Http
         public bool UseSimplifiedUserAgent { get; set; }
         public bool AllowAutoRedirect { get; set; }
         public bool ConnectionKeepAlive { get; set; }
+        public TimeSpan RateLimit { get; set; }
         public bool LogResponseContent { get; set; }
         public NetworkCredential NetworkCredential { get; set; }
         public Dictionary<string, string> Cookies { get; private set; }
@@ -75,7 +76,7 @@ namespace NzbDrone.Common.Http
         protected virtual HttpUri CreateUri()
         {
             var url = BaseUrl.CombinePath(ResourceUrl).AddQueryParams(QueryParams.Concat(SuffixQueryParams));
-            
+
             if (Segments.Any())
             {
                 var fullUri = url.FullUri;
@@ -103,6 +104,7 @@ namespace NzbDrone.Common.Http
             request.UseSimplifiedUserAgent = UseSimplifiedUserAgent;
             request.AllowAutoRedirect = AllowAutoRedirect;
             request.ConnectionKeepAlive = ConnectionKeepAlive;
+            request.RateLimit = RateLimit;
             request.LogResponseContent = LogResponseContent;
 
             if (NetworkCredential != null)
@@ -241,6 +243,13 @@ namespace NzbDrone.Common.Http
         public virtual HttpRequestBuilder KeepAlive(bool keepAlive = true)
         {
             ConnectionKeepAlive = keepAlive;
+
+            return this;
+        }
+
+        public virtual HttpRequestBuilder WithRateLimit(double seconds)
+        {
+            RateLimit = TimeSpan.FromSeconds(seconds);
 
             return this;
         }

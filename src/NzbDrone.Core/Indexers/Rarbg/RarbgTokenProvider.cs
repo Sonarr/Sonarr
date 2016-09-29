@@ -30,7 +30,8 @@ namespace NzbDrone.Core.Indexers.Rarbg
             return _tokenCache.Get(settings.BaseUrl, () =>
                 {
                     var requestBuilder = new HttpRequestBuilder(settings.BaseUrl.Trim('/'))
-                        .Resource("/pubapi_v2.php?get_token=get_token")
+                        .WithRateLimit(3.0)
+                        .Resource("/pubapi_v2.php?get_token=get_token&app_id=Sonarr")
                         .Accept(HttpAccept.Json);
 
                     if (settings.CaptchaToken.IsNotNullOrWhiteSpace())
