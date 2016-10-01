@@ -80,20 +80,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
         }
 
-        public override ProviderMessage Message
-        {
-            get
-            {
-                return new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using qBittorrent", ProviderMessageType.Warning);
-            }
-        }
-
         public override IEnumerable<DownloadClientItem> GetItems()
         {
+            QBittorrentPreferences config;
             List<QBittorrentTorrent> torrents;
 
             try
             {
+                config = _proxy.GetConfig(Settings);
                 torrents = _proxy.GetTorrents(Settings);
             }
             catch (DownloadClientException ex)
@@ -116,11 +110,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
 
                 item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
-                
-                // At the moment there isn't an easy way to detect if the torrent has
-                // reached the seeding limit, We would need to check the preferences 
-                // and still not be completely sure if that torrent has a limit set for it
-                item.IsReadOnly = true;
+
+                // Avoid removing torrents that haven't reached the global max ratio.
+                // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
+                item.IsReadOnly = (config.MaxRatioEnabled && config.MaxRatio > torrent.Ratio) || torrent.State != "pausedUP";
 
                 if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
                 {
