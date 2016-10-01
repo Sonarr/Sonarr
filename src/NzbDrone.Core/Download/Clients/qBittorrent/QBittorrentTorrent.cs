@@ -21,5 +21,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         [JsonProperty(PropertyName = "save_path")]
         public string SavePath { get; set; } // Torrent save path
+
+        public float Ratio { get; set; } // Torrent share ratio
     }
 }
