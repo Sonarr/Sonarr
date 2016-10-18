@@ -18,7 +18,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
     public interface IImportApprovedEpisodes
     {
-        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null);
+        List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null, ImportMode importMode = ImportMode.Auto);
     }
 
     public class ImportApprovedEpisodes : IImportApprovedEpisodes
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null)
+        public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null, ImportMode importMode = ImportMode.Auto)
         {
             var qualifiedImports = decisions.Where(c => c.Approved)
                .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
@@ -85,10 +85,23 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.Episodes = localEpisode.Episodes;
                     episodeFile.ReleaseGroup = localEpisode.ParsedEpisodeInfo.ReleaseGroup;
 
+                    bool copyOnly;
+                    switch (importMode)
+                    {
+                        default:
+                        case ImportMode.Auto:
+                            copyOnly = downloadClientItem != null && downloadClientItem.IsReadOnly;
+                            break;
+                        case ImportMode.Move:
+                            copyOnly = false;
+                            break;
+                        case ImportMode.Copy:
+                            copyOnly = true;
+                            break;
+                    }
+
                     if (newDownload)
                     {
-                        bool copyOnly = downloadClientItem != null && downloadClientItem.IsReadOnly;
-
                         episodeFile.SceneName = GetSceneName(downloadClientItem, localEpisode);
 
                         var moveResult = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly);
@@ -104,7 +117,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        _extraService.ImportExtraFiles(localEpisode, episodeFile, downloadClientItem != null && downloadClientItem.IsReadOnly);
+                        _extraService.ImportExtraFiles(localEpisode, episodeFile, copyOnly);
                     }
 
                     if (downloadClientItem != null)

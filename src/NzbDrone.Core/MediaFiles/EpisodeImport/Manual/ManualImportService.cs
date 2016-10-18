@@ -189,7 +189,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
         public void Execute(ManualImportCommand message)
         {
-            _logger.ProgressTrace("Manually importing {0} files", message.Files.Count);
+            _logger.ProgressTrace("Manually importing {0} files using mode {1}", message.Files.Count, message.ImportMode);
 
             var imported = new List<ImportResult>();
             var importedTrackedDownload = new List<ManuallyImportedFile>();
@@ -217,20 +217,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     Size = 0
                 };
 
-                //TODO: Option to copy instead of import
                 //TODO: Cleanup non-tracked downloads
 
                 var importDecision = new ImportDecision(localEpisode);
 
                 if (file.DownloadId.IsNullOrWhiteSpace())
                 {
-                    imported.AddRange(_importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile));
+                    imported.AddRange(_importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile, null, message.ImportMode));
                 }
 
                 else
                 {
                     var trackedDownload = _trackedDownloadService.Find(file.DownloadId);
-                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, true, trackedDownload.DownloadItem).First();
+                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, true, trackedDownload.DownloadItem, message.ImportMode).First();
 
                     imported.Add(importResult);
 
