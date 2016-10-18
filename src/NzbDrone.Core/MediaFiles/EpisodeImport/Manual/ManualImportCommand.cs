@@ -14,5 +14,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 return true;
             }
         }
+
+        public ImportMode ImportMode { get; set; }
     }
 }
