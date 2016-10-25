@@ -42,3 +42,11 @@ for i in `find $TEST_DIR -name "$TEST_PATTERN"`;
 done
 
 $NUNIT_COMMAND --where "$WHERE" $NUNIT_PARAMS $ASSEMBLIES;
+EXIT_CODE=$?
+
+if [ "$EXIT_CODE" -ge 0 ]; then
+  echo "Failed tests: $EXIT_CODE"
+  exit 0
+else
+  exit $EXIT_CODE
+fi
