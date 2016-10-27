@@ -85,7 +85,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                     queueItem.RemainingTime = null;
                 }
-                else if (sabQueueItem.Status == SabnzbdDownloadStatus.Queued || sabQueueItem.Status == SabnzbdDownloadStatus.Grabbing)
+                else if (sabQueueItem.Status == SabnzbdDownloadStatus.Queued ||
+                         sabQueueItem.Status == SabnzbdDownloadStatus.Grabbing ||
+                         sabQueueItem.Status == SabnzbdDownloadStatus.Propagating)
                 {
                     queueItem.Status = DownloadItemStatus.Queued;
                 }

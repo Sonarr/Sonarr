@@ -17,6 +17,7 @@
         Running,        // Running PP Script
         Completed,
         Failed,
-        Deleted
+        Deleted,
+        Propagating
     }
 }
