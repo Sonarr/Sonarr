@@ -33,6 +33,15 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Type = 5,
                     Consumer = "XbmcMetadata"
                 });
+
+                c.Insert.IntoTable("MetadataFiles").Row(new
+                {
+                    SeriesId = 1,
+                    RelativePath = "Series Title",
+                    LastUpdated = "2016-05-30 20:23:02.3725923",
+                    Type = 3,
+                    Consumer = "RoksboxMetadata"
+                });
             });
 
             var items = db.Query<MetadataFile99>("SELECT * FROM MetadataFiles");
