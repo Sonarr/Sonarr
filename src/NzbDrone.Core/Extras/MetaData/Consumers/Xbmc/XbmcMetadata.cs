@@ -20,15 +20,12 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
     public class XbmcMetadata : MetadataBase<XbmcMetadataSettings>
     {
         private readonly IMapCoversToLocal _mediaCoverService;
-        private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public XbmcMetadata(IMapCoversToLocal mediaCoverService,
-                            IDiskProvider diskProvider,
                             Logger logger)
         {
             _mediaCoverService = mediaCoverService;
-            _diskProvider = diskProvider;
             _logger = logger;
         }
 
