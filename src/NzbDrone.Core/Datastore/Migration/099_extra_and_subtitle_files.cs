@@ -33,6 +33,9 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("Added").AsDateTime().Nullable()
                  .AddColumn("Extension").AsString().Nullable();
 
+            // Remove Metadata files that don't have an extension
+            Execute.Sql("DELETE FROM MetadataFiles WHERE RelativePath NOT LIKE '%.%'");
+
             // Set Extension using the extension from RelativePath
             Execute.WithConnection(SetMetadataFileExtension);
 

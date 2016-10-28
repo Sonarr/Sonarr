@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             }
 
             var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
-            var destination = Path.Combine(series.Path, Path.GetFileName(series.Path) + Path.GetExtension(source));
+            var destination = Path.GetFileName(series.Path) + Path.GetExtension(source);
 
             return new List<ImageFileResult>{ new ImageFileResult(destination, source) };
         }
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             }
 
             var filename = Path.GetFileName(seasonFolder) + ".jpg";
-            var path = Path.Combine(series.Path, seasonFolder, filename);
+            var path = series.Path.GetRelativePath(Path.Combine(series.Path, seasonFolder, filename));
 
             return new List<ImageFileResult> { new ImageFileResult(path, image.Url) };
         }
