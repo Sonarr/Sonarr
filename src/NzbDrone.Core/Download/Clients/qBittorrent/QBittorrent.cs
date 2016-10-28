@@ -80,20 +80,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
         }
 
-        public override ProviderMessage Message
-        {
-            get
-            {
-                return new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using qBittorrent", ProviderMessageType.Warning);
-            }
-        }
-
         public override IEnumerable<DownloadClientItem> GetItems()
         {
+            QBittorrentPreferences config;
             List<QBittorrentTorrent> torrents;
 
             try
             {
+                config = _proxy.GetConfig(Settings);
                 torrents = _proxy.GetTorrents(Settings);
             }
             catch (DownloadClientException ex)
@@ -116,11 +110,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 item.RemainingTime = TimeSpan.FromSeconds(torrent.Eta);
 
                 item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
-                
-                // At the moment there isn't an easy way to detect if the torrent has
-                // reached the seeding limit, We would need to check the preferences 
-                // and still not be completely sure if that torrent has a limit set for it
-                item.IsReadOnly = true;
+
+                // Avoid removing torrents that haven't reached the global max ratio.
+                // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
+                item.IsReadOnly = (config.MaxRatioEnabled && config.MaxRatio > torrent.Ratio) || torrent.State != "pausedUP";
 
                 if (!item.OutputPath.IsEmpty && item.OutputPath.FileName != torrent.Name)
                 {
@@ -178,7 +171,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             var config = _proxy.GetConfig(Settings);
 
-            var destDir = new OsPath((string)config.GetValueOrDefault("save_path"));
+            var destDir = new OsPath(config.SavePath);
 
             return new DownloadClientStatus
             {
@@ -225,6 +218,16 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     {
                         IsWarning = true,
                         DetailedDescription = "Sonarr will not attempt to import completed downloads without a category."
+                    };
+                }
+
+                // Complain if qBittorrent is configured to remove torrents on max ratio
+                var config = _proxy.GetConfig(Settings);
+                if (config.MaxRatioEnabled && config.RemoveOnMaxRatio)
+                {
+                    return new NzbDroneValidationFailure(String.Empty, "QBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
+                    {
+                        DetailedDescription = "Sonarr will be unable to perform Completed Download Handling as configured. You can fix this in qBittorrent ('Tools -> Options...' in the menu) by changing 'Options -> BitTorrent -> Share Ratio Limiting' from 'Remove them' to 'Pause them'."
                     };
                 }
             }

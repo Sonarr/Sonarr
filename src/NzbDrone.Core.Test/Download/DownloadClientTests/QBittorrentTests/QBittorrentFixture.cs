@@ -253,13 +253,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [Test]
         public void should_return_status_with_outputdirs()
         {
-            var configItems = new Dictionary<string, Object>();
-
-            configItems.Add("save_path", @"C:\Downloads\Finished\QBittorrent".AsOsAgnostic());
+            var config = new QBittorrentPreferences
+            {
+                SavePath = @"C:\Downloads\Finished\QBittorrent".AsOsAgnostic()
+            };
 
             Mocker.GetMock<IQBittorrentProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<QBittorrentSettings>()))
-                .Returns(configItems);
+                .Returns(config);
 
             var result = Subject.GetStatus();
 
