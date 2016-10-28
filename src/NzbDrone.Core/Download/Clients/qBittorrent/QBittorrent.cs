@@ -12,7 +12,6 @@ using FluentValidation.Results;
 using System.Net;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
-using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
 {

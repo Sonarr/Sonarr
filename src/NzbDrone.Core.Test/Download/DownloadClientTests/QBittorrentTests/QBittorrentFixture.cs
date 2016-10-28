@@ -35,6 +35,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             Mocker.GetMock<IHttpClient>()
                   .Setup(s => s.Get(It.IsAny<HttpRequest>()))
                   .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new Byte[0]));
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                .Returns(new QBittorrentPreferences());
         }
 
         protected void GivenRedirectToMagnet()
@@ -83,6 +87,17 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                     };
                     GivenTorrents(new List<QBittorrentTorrent> { torrent });
                 });
+        }
+
+        protected void GivenMaxRatio(float maxRatio, bool removeOnMaxRatio = true)
+        {
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
+                .Returns(new QBittorrentPreferences
+                         {
+                             RemoveOnMaxRatio = removeOnMaxRatio,
+                             MaxRatio = maxRatio
+                         });
         }
 
         protected virtual void GivenTorrents(List<QBittorrentTorrent> torrents)
@@ -293,6 +308,98 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             var id = Subject.Download(remoteEpisode);
 
             id.Should().NotBeNullOrEmpty();
+        }
+
+        [Test]
+        public void should_be_read_only_if_max_ratio_not_reached()
+        {
+            GivenMaxRatio(1.0f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "uploading",
+                Label = "",
+                SavePath = "",
+                Ratio = 0.5f
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.IsReadOnly.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_read_only_if_max_ratio_reached_and_not_paused()
+        {
+            GivenMaxRatio(1.0f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "uploading",
+                Label = "",
+                SavePath = "",
+                Ratio = 1.0f
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.IsReadOnly.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_read_only_if_max_ratio_is_not_set()
+        {
+            GivenMaxRatio(1.0f, false);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "uploading",
+                Label = "",
+                SavePath = "",
+                Ratio = 1.0f
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.IsReadOnly.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_be_read_only_if_max_ratio_reached_and_paused()
+        {
+            GivenMaxRatio(1.0f);
+
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 1.0,
+                Eta = 8640000,
+                State = "pausedUP",
+                Label = "",
+                SavePath = "",
+                Ratio = 1.0f
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            item.IsReadOnly.Should().BeFalse();
         }
     }
 }
