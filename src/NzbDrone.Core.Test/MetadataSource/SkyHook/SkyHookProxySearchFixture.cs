@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -54,8 +51,27 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         {
             var result = Subject.SearchForNewSeries(term);
             result.Should().BeEmpty();
-            
+
             ExceptionVerification.IgnoreWarns();
+        }
+
+        [TestCase("tvdbid:78804")]
+        [TestCase("Doctor Who")]
+        public void should_return_existing_series_if_found(string term)
+        {
+            const int tvdbId = 78804;
+            var existingSeries = new Series
+            {
+                TvdbId = tvdbId
+            };
+            
+            Mocker.GetMock<ISeriesService>().Setup(c => c.FindByTvdbId(tvdbId)).Returns(existingSeries);
+
+            var result = Subject.SearchForNewSeries("tvdbid: " + tvdbId);
+
+            result.Should().Contain(existingSeries);
+            result.Should().ContainSingle(c => c.TvdbId == tvdbId);
+
         }
     }
 }

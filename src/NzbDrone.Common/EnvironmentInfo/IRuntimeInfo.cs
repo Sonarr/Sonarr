@@ -4,6 +4,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 {
     public interface IRuntimeInfo
     {
+        DateTime StartTime { get; }
         bool IsUserInteractive { get; }
         bool IsAdmin { get; }
         bool IsWindowsService { get; }
