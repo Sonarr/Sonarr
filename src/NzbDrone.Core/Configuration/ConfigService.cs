@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Configuration
             {
                 object currentValue;
                 allWithDefaults.TryGetValue(configValue.Key, out currentValue);
-                if (currentValue == null) continue;
+                if (currentValue == null || configValue.Value == null) continue;
 
                 var equal = configValue.Value.ToString().Equals(currentValue.ToString());
 

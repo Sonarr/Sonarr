@@ -44,7 +44,8 @@ namespace NzbDrone.Api.Config
 
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,
                 CopyUsingHardlinks = model.CopyUsingHardlinks,
-                EnableMediaInfo = model.EnableMediaInfo,
+                ExtraFileExtensions = model.ExtraFileExtensions,
+                EnableMediaInfo = model.EnableMediaInfo
             };
         }
     }
