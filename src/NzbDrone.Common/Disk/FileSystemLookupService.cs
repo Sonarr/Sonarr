@@ -113,7 +113,7 @@ namespace NzbDrone.Common.Disk
                                 .Select(d => new FileSystemModel
                                              {
                                                  Type = FileSystemEntityType.Drive,
-                                                 Name = d.VolumeLabel,
+                                                 Name = d.VolumeName,
                                                  Path = d.RootDirectory,
                                                  LastModified = null
                                              })
@@ -163,7 +163,7 @@ namespace NzbDrone.Common.Disk
 
             return path;
         }
-        
+
         private string GetParent(string path)
         {
             var di = new DirectoryInfo(path);
