@@ -74,7 +74,7 @@ namespace NzbDrone.Mono.Disk
                 {
                     _logger.Debug(ex, "Failed to get filesystem types from {0}, using default set.", PROC_FILESYSTEMS_FILENAME);
                 }
-                
+
                 if (result.Empty())
                 {
                     foreach (var type in _fixedTypes)
@@ -96,12 +96,20 @@ namespace NzbDrone.Mono.Disk
             if (split.Length != 6)
             {
                 _logger.Debug("Unable to parse {0} line: {1}", PROC_MOUNTS_FILENAME, line);
+                return null;
             }
 
             var name = split[0];
             var mount = split[1];
             var type = split[2];
             var options = ParseOptions(split[3]);
+
+            if (!mount.StartsWith("/"))
+            {
+                // Possible a namespace like 'net:[1234]'.
+                // But we just filter anything not starting with /, we're not interested in anything that isn't mounted somewhere.
+                return null;
+            }
 
             var driveType = FindDriveType.Find(type);
 
