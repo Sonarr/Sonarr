@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Mono.Unix;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Mono.Disk
 {
@@ -50,6 +51,19 @@ namespace NzbDrone.Mono.Disk
         public string VolumeLabel
         {
             get { return _unixDriveInfo.VolumeLabel; }
+        }
+
+        public string VolumeName
+        {
+            get
+            {
+                if (VolumeLabel.IsNullOrWhiteSpace())
+                {
+                    return Name;
+                }
+
+                return string.Format("{0} ({1})", Name, VolumeLabel);
+            }
         }
     }
 }
