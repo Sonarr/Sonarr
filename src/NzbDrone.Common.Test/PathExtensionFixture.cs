@@ -243,7 +243,7 @@ namespace NzbDrone.Common.Test
         }
 
         [Test]
-        public void Sanbox()
+        public void Sandbox()
         {
             GetIAppDirectoryInfo().GetUpdateSandboxFolder().Should().BeEquivalentTo(@"C:\Temp\nzbdrone_update\".AsOsAgnostic());
         }
@@ -270,6 +270,34 @@ namespace NzbDrone.Common.Test
         public void GetUpdateLogFolder()
         {
             GetIAppDirectoryInfo().GetUpdateLogFolder().Should().BeEquivalentTo(@"C:\NzbDrone\UpdateLogs\".AsOsAgnostic());
+        }
+
+        [Test]
+        public void GetAncestorFolders_should_return_all_ancestors_in_path_Windows()
+        {
+            WindowsOnly();
+            var path = @"C:\Test\TV\Series Title";
+            var result = path.GetAncestorFolders();
+
+            result.Count.Should().Be(4);
+            result[0].Should().Be(@"C:\");
+            result[1].Should().Be(@"Test");
+            result[2].Should().Be(@"TV");
+            result[3].Should().Be(@"Series Title");
+        }
+
+        [Test]
+        public void GetAncestorFolders_should_return_all_ancestors_in_path_Linux()
+        {
+            MonoOnly();
+            var path = @"/Test/TV/Series Title";
+            var result = path.GetAncestorFolders();
+
+            result.Count.Should().Be(4);
+            result[0].Should().Be(@"/");
+            result[1].Should().Be(@"Test");
+            result[2].Should().Be(@"TV");
+            result[3].Should().Be(@"Series Title");
         }
     }
 }
