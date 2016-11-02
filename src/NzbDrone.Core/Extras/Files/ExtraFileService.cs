@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
@@ -31,17 +32,28 @@ namespace NzbDrone.Core.Extras.Files
         private readonly IExtraFileRepository<TExtraFile> _repository;
         private readonly ISeriesService _seriesService;
         private readonly IDiskProvider _diskProvider;
+        private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly Logger _logger;
 
         public ExtraFileService(IExtraFileRepository<TExtraFile> repository,
                                 ISeriesService seriesService,
                                 IDiskProvider diskProvider,
+                                IRecycleBinProvider recycleBinProvider,
                                 Logger logger)
         {
             _repository = repository;
             _seriesService = seriesService;
             _diskProvider = diskProvider;
+            _recycleBinProvider = recycleBinProvider;
             _logger = logger;
+        }
+
+        public virtual bool PermanentlyDelete
+        {
+            get
+            {
+                return false;
+            }
         }
 
         public List<TExtraFile> GetFilesBySeries(int seriesId)
@@ -107,7 +119,16 @@ namespace NzbDrone.Core.Extras.Files
 
                 if (_diskProvider.FileExists(path))
                 {
-                    _diskProvider.DeleteFile(path);
+                    if (PermanentlyDelete)
+                    {
+                        _diskProvider.DeleteFile(path);
+                    }
+
+                    else
+                    {
+                        // Send extra files to the recycling bin so they can be recovered if necessary
+                        _recycleBinProvider.DeleteFile(path);
+                    }
                 }
             }
 
