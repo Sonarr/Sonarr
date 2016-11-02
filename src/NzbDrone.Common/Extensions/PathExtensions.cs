@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
@@ -172,6 +173,21 @@ namespace NzbDrone.Common.Extensions
             }
 
             return Path.Combine(GetProperCapitalization(dirInfo), fileName);
+        }
+
+        public static List<string> GetAncestorFolders(this string path)
+        {
+            var directory = new DirectoryInfo(path);
+            var directories = new List<string>();
+
+            while (directory != null)
+            {
+                directories.Insert(0, directory.Name);
+
+                directory = directory.Parent;
+            }
+
+            return directories;
         }
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)

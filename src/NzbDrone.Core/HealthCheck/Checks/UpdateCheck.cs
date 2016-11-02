@@ -2,6 +2,7 @@
 using System.IO;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 
@@ -33,6 +34,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
             if ((OsInfo.IsWindows || _configFileProvider.UpdateAutomatically) &&
                 _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn)
             {
+                if (OsInfo.IsOsx && startupFolder.GetAncestorFolders().Contains("AppTranslocation"))
+                {
+                    return new HealthCheck(GetType(), HealthCheckResult.Error,
+                        string.Format("Cannot install update because startup folder '{0}' is in an App Translocation folder.", startupFolder),
+                        "Cannot install update because startup folder is in an App Translocation folder.");
+                }
+
                 if (!_diskProvider.FolderWritable(startupFolder))
                 {
                     return new HealthCheck(GetType(), HealthCheckResult.Error,
