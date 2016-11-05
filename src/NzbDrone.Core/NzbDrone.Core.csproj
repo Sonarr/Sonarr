@@ -686,6 +686,7 @@
     <Compile Include="Lifecycle\Commands\ShutdownCommand.cs" />
     <Compile Include="Lifecycle\LifecycleService.cs" />
     <Compile Include="MediaCover\CoverAlreadyExistsSpecification.cs" />
+    <Compile Include="MediaCover\GdiPlusInterop.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
     <Compile Include="MediaCover\ImageResizer.cs" />
     <Compile Include="MediaCover\MediaCoverService.cs" />

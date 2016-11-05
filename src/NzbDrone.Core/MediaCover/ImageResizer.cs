@@ -24,6 +24,8 @@ namespace NzbDrone.Core.MediaCover
         {
             try
             {
+                GdiPlusInterop.CheckGdiPlus();
+
                 using (var sourceStream = _diskProvider.OpenReadStream(source))
                 {
                     using (var outputStream = _diskProvider.OpenWriteStream(destination))
