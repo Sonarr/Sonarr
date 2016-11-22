@@ -470,6 +470,10 @@ namespace NzbDrone.Core.Organizer
                     }
                     break;
 
+                case "MPEG-2 Video":
+                    videoCodec = "MPEG2";
+                    break;
+
                 default:
                     videoCodec = episodeFile.MediaInfo.VideoCodec;
                     break;
