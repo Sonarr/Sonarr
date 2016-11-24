@@ -13,6 +13,11 @@ namespace NzbDrone.Core.Notifications.Plex.Models
 
     public class PlexSectionResponse
     {
+        public List<PlexSectionItem> Items { get; set; }
+    }
+
+    public class PlexSectionResponseLegacy
+    {
         [JsonProperty("_children")]
         public List<PlexSectionItem> Items { get; set; }
     }

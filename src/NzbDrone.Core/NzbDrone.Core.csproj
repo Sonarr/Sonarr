@@ -822,6 +822,7 @@
     <Compile Include="Notifications\Boxcar\BoxcarSettings.cs" />
     <Compile Include="Notifications\GrabMessage.cs" />
     <Compile Include="Notifications\Plex\Models\PlexIdentity.cs" />
+    <Compile Include="Notifications\Plex\Models\PlexResponse.cs" />
     <Compile Include="Notifications\Plex\Models\PlexPreferences.cs" />
     <Compile Include="Notifications\Plex\Models\PlexSectionItem.cs" />
     <Compile Include="Notifications\Plex\Models\PlexSection.cs" />
