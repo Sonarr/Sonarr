@@ -111,23 +111,32 @@ namespace NzbDrone.Core.Extras.Files
         public void HandleAsync(EpisodeFileDeletedEvent message)
         {
             var episodeFile = message.EpisodeFile;
-            var series = _seriesService.GetSeries(message.EpisodeFile.SeriesId);
 
-            foreach (var extra in _repository.GetFilesByEpisodeFile(episodeFile.Id))
+            if (message.Reason == DeleteMediaFileReason.NoLinkedEpisodes)
             {
-                var path = Path.Combine(series.Path, extra.RelativePath);
+                _logger.Debug("Removing episode file from DB as part of cleanup routine, not deleting extra files from disk.");
+            }
 
-                if (_diskProvider.FileExists(path))
+            else
+            {
+                var series = _seriesService.GetSeries(message.EpisodeFile.SeriesId);
+
+                foreach (var extra in _repository.GetFilesByEpisodeFile(episodeFile.Id))
                 {
-                    if (PermanentlyDelete)
-                    {
-                        _diskProvider.DeleteFile(path);
-                    }
+                    var path = Path.Combine(series.Path, extra.RelativePath);
 
-                    else
+                    if (_diskProvider.FileExists(path))
                     {
-                        // Send extra files to the recycling bin so they can be recovered if necessary
-                        _recycleBinProvider.DeleteFile(path);
+                        if (PermanentlyDelete)
+                        {
+                            _diskProvider.DeleteFile(path);
+                        }
+
+                        else
+                        {
+                            // Send extra files to the recycling bin so they can be recovered if necessary
+                            _recycleBinProvider.DeleteFile(path);
+                        }
                     }
                 }
             }

@@ -236,7 +236,7 @@ namespace NzbDrone.Core.History
         {
             if (message.Reason == DeleteMediaFileReason.NoLinkedEpisodes)
             {
-                _logger.Debug("Removing episode file from DB as part of cleanup routine.");
+                _logger.Debug("Removing episode file from DB as part of cleanup routine, not creating history event.");
                 return;
             }
 
