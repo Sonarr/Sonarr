@@ -48,11 +48,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Org.Mentalis, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNet4.SocksProxy.1.1.0.0\lib\net40\Org.Mentalis.dll</HintPath>
+      <HintPath>..\packages\DotNet4.SocksProxy.1.3.2.0\lib\net40\Org.Mentalis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SocksWebProxy, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNet4.SocksProxy.1.1.0.0\lib\net40\SocksWebProxy.dll</HintPath>
+    <Reference Include="SocksWebProxy, Version=1.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNet4.SocksProxy.1.3.2.0\lib\net40\SocksWebProxy.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
