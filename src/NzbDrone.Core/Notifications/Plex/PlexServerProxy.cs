@@ -240,6 +240,11 @@ namespace NzbDrone.Core.Notifications.Plex
                 throw new PlexAuthenticationException("Unauthorized - Username or password is incorrect");
             }
 
+            if (response.Content.IsNullOrWhiteSpace())
+            {
+                _logger.Trace("No response body returned, no error detected");
+            }
+
             var error = response.Content.Contains("_children") ?
                         Json.Deserialize<PlexError>(response.Content) : 
                         Json.Deserialize<PlexResponse<PlexError>>(response.Content).MediaContainer;
