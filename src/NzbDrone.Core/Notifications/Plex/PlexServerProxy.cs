@@ -243,6 +243,7 @@ namespace NzbDrone.Core.Notifications.Plex
             if (response.Content.IsNullOrWhiteSpace())
             {
                 _logger.Trace("No response body returned, no error detected");
+                return;
             }
 
             var error = response.Content.Contains("_children") ?
