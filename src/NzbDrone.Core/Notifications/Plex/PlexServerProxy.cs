@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.Plex
                                  {
                                      Id = s.Id,
                                      Language = s.Language,
-                                     Location = s.Locations.FirstOrDefault(),
+                                     Locations = s.Locations,
                                      Type = s.Type
                                  })
                     .ToList();
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Notifications.Plex
             {
                 items = Json.Deserialize<PlexResponse<PlexSectionResponse>>(response.Content)
                             .MediaContainer
-                            .Metadata;
+                            .Items;
             }
 
             if (items == null || items.Empty())
