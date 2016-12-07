@@ -99,10 +99,13 @@ namespace NzbDrone.Core.Notifications.Plex
 
             if (response.Content.Contains("_children"))
             {
-                return Json.Deserialize<PlexIdentity>(response.Content).Version;
+                return Json.Deserialize<PlexIdentity>(response.Content)
+                           .Version;
             }
 
-            return Json.Deserialize<PlexResponse<PlexIdentity>>(response.Content).MediaContainer.Version;
+            return Json.Deserialize<PlexResponse<PlexIdentity>>(response.Content)
+                       .MediaContainer
+                       .Version;
         }
 
         public List<PlexPreference> Preferences(PlexServerSettings settings)
@@ -116,10 +119,13 @@ namespace NzbDrone.Core.Notifications.Plex
 
             if (response.Content.Contains("_children"))
             {
-                return Json.Deserialize<PlexPreferencesLegacy>(response.Content).Preferences;
+                return Json.Deserialize<PlexPreferencesLegacy>(response.Content)
+                           .Preferences;
             }
 
-            return Json.Deserialize<PlexResponse<PlexPreferences>>(response.Content).MediaContainer.Preferences;
+            return Json.Deserialize<PlexResponse<PlexPreferences>>(response.Content)
+                       .MediaContainer
+                       .Preferences;
         }
 
         public int? GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings)
@@ -143,8 +149,9 @@ namespace NzbDrone.Core.Notifications.Plex
 
             else
             {
-                items = Json.Deserialize<PlexSectionResponse>(response.Content)
-                            .Items;
+                items = Json.Deserialize<PlexResponse<PlexSectionResponse>>(response.Content)
+                            .MediaContainer
+                            .Metadata;
             }
 
             if (items == null || items.Empty())
