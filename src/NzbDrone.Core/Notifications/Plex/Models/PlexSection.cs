@@ -17,12 +17,13 @@ namespace NzbDrone.Core.Notifications.Plex.Models
         public string Type { get; set; }
         public string Language { get; set; }
 
-        public PlexSectionLocation Location { get; set; }
+        [JsonProperty("Location")]
+        public List<PlexSectionLocation> Locations { get; set; }
     }
 
     public class PlexSectionsContainer
     {
-        [JsonProperty("Metadata")]
+        [JsonProperty("Directory")]
         public List<PlexSection> Sections { get; set; }
     }
 
