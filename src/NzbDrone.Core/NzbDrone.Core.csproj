@@ -829,6 +829,7 @@
     <Compile Include="Notifications\Plex\PlexAuthenticationException.cs" />
     <Compile Include="Notifications\CustomScript\CustomScript.cs" />
     <Compile Include="Notifications\CustomScript\CustomScriptSettings.cs" />
+    <Compile Include="Notifications\Plex\PlexVersionException.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheater.cs" />
     <Compile Include="Notifications\Plex\PlexHomeTheaterSettings.cs" />
     <Compile Include="Notifications\Plex\PlexClientService.cs" />

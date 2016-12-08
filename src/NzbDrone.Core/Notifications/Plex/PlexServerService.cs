@@ -19,12 +19,14 @@ namespace NzbDrone.Core.Notifications.Plex
 
     public class PlexServerService : IPlexServerService
     {
+        private readonly ICached<Version> _versionCache;
         private readonly ICached<bool> _partialUpdateCache;
         private readonly IPlexServerProxy _plexServerProxy;
         private readonly Logger _logger;
 
         public PlexServerService(ICacheManager cacheManager, IPlexServerProxy plexServerProxy, Logger logger)
         {
+            _versionCache = cacheManager.GetCache<Version>(GetType(), "versionCache");
             _partialUpdateCache = cacheManager.GetCache<bool>(GetType(), "partialUpdateCache");
             _plexServerProxy = plexServerProxy;
             _logger = logger;
@@ -35,9 +37,12 @@ namespace NzbDrone.Core.Notifications.Plex
             try
             {
                 _logger.Debug("Sending Update Request to Plex Server");
-                
+
+                var version = _versionCache.Get(settings.Host, () => GetVersion(settings), TimeSpan.FromHours(2));
+                ValidateVersion(version);
+
                 var sections = GetSections(settings);
-                var partialUpdates = _partialUpdateCache.Get(settings.Host, () => PartialUpdatesAllowed(settings), TimeSpan.FromHours(2));
+                var partialUpdates = _partialUpdateCache.Get(settings.Host, () => PartialUpdatesAllowed(settings, version), TimeSpan.FromHours(2));
 
                 if (partialUpdates)
                 {
@@ -64,13 +69,10 @@ namespace NzbDrone.Core.Notifications.Plex
             return _plexServerProxy.GetTvSections(settings).ToList();
         }
 
-        private bool PartialUpdatesAllowed(PlexServerSettings settings)
+        private bool PartialUpdatesAllowed(PlexServerSettings settings, Version version)
         {
             try
             {
-                var rawVersion = GetVersion(settings);
-                var version = new Version(Regex.Match(rawVersion, @"^(\d+[.-]){4}").Value.Trim('.', '-'));
-
                 if (version >= new Version(0, 9, 12, 0))
                 {
                     var preferences = GetPreferences(settings);
@@ -92,12 +94,27 @@ namespace NzbDrone.Core.Notifications.Plex
             return false;
         }
 
-        private string GetVersion(PlexServerSettings settings)
+        private void ValidateVersion(Version version)
+        {
+            if (version >= new Version(1, 3, 0) && version < new Version(1, 3, 1))
+            {
+                throw new PlexVersionException("Found version {0}, upgrade to PMS 1.3.1 to fix library updating and then restart Sonarr", version);
+            }
+        }
+
+        private Version GetVersion(PlexServerSettings settings)
         {
             _logger.Debug("Getting version from Plex host: {0}", settings.Host);
 
-            return _plexServerProxy.Version(settings);
+            var rawVersion = _plexServerProxy.Version(settings);
+            var version = new Version(Regex.Match(rawVersion, @"^(\d+[.-]){4}").Value.Trim('.', '-'));
+
+            
+
+            return version;
         }
+
+        
 
         private List<PlexPreference> GetPreferences(PlexServerSettings settings)
         {
