@@ -55,6 +55,7 @@
     <Compile Include="Serializer.cs" />
     <Compile Include="SignalrDependencyResolver.cs" />
     <Compile Include="SignalRMessage.cs" />
+    <Compile Include="SonarrPerformanceCounterManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.AspNet.SignalR.Core\Microsoft.AspNet.SignalR.Core.csproj">
