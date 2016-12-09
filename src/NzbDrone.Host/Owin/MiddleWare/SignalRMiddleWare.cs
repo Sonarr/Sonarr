@@ -8,7 +8,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
 {
     public class SignalRMiddleWare : IOwinMiddleWare
     {
-        public int Order { get { return 1; } }
+        public int Order => 1;
 
         public SignalRMiddleWare(IContainer container)
         {

@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.Boxcar
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://boxcar.io/client"; }
-        }
+        public override string Link => "https://boxcar.io/client";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -37,21 +34,9 @@ namespace NzbDrone.Core.Notifications.Boxcar
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Boxcar";
-            }
-        }
+        public override string Name => "Boxcar";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

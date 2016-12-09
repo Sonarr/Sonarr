@@ -18,9 +18,6 @@ namespace NzbDrone.Core.Indexers.Exceptions
             _indexerResponse = response;
         }
 
-        public IndexerResponse Response
-        {
-            get { return _indexerResponse; }
-        }
+        public IndexerResponse Response => _indexerResponse;
     }
 }

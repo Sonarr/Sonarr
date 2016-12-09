@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             _service = service;
         }
 
-        public override string Link
-        {
-            get { return "https://github.com/Sonarr/Sonarr/wiki/Webhook"; }
-        }
+        public override string Link => "https://github.com/Sonarr/Sonarr/wiki/Webhook";
 
         public override void OnGrab(GrabMessage message)
         {
@@ -35,13 +32,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             _service.OnRename(series, Settings);
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Webhook";
-            }
-        }
+        public override string Name => "Webhook";
 
         public override ValidationResult Test()
         {

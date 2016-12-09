@@ -34,21 +34,9 @@ namespace NzbDrone.Core.Download
             _torrentFileInfoReader = torrentFileInfoReader;
         }
         
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Torrent;
-            }
-        }
+        public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
 
-        public virtual bool PreferTorrentFile
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public virtual bool PreferTorrentFile => false;
 
         protected abstract string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink);
         protected abstract string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent);

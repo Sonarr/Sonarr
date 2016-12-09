@@ -7,15 +7,9 @@ namespace NzbDrone.Core.Indexers.Fanzub
 {
     public class Fanzub : HttpIndexerBase<FanzubSettings>
     {
-        public override string Name
-        {
-            get
-            {
-                return "Fanzub";
-            }
-        }
+        public override string Name => "Fanzub";
 
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
 
         public Fanzub(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)

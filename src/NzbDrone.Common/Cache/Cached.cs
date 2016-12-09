@@ -67,13 +67,7 @@ namespace NzbDrone.Common.Cache
             _store.TryRemove(key, out value);
         }
 
-        public int Count
-        {
-            get
-            {
-                return _store.Count;
-            }
-        }
+        public int Count => _store.Count;
 
         public T Get(string key, Func<T> function, TimeSpan? lifeTime = null)
         {

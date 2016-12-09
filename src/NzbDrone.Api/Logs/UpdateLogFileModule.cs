@@ -38,12 +38,6 @@ namespace NzbDrone.Api.Logs
             return Path.Combine(_appFolderInfo.GetUpdateLogFolder(), filename);
         }
 
-        protected override string DownloadUrlRoot
-        {
-            get
-            {
-                return "updatelogfile";
-            }
-        }
+        protected override string DownloadUrlRoot => "updatelogfile";
     }
 }

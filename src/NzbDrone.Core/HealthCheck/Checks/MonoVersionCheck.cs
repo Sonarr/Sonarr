@@ -55,21 +55,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
             return new HealthCheck(GetType(), HealthCheckResult.Warning, "mono version is less than 3.10, upgrade for improved stability");
         }
 
-        public override bool CheckOnConfigChange
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CheckOnConfigChange => false;
 
-        public override bool CheckOnSchedule
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CheckOnSchedule => false;
 
         private bool HasMonoBug18599()
         {

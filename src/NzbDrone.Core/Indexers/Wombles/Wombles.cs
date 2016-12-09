@@ -8,16 +8,10 @@ namespace NzbDrone.Core.Indexers.Wombles
 {
     public class Wombles : HttpIndexerBase<NullConfig>
     {
-        public override string Name
-        {
-            get
-            {
-                return "Womble's";
-            }
-        }
+        public override string Name => "Womble's";
 
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
-        public override bool SupportsSearch { get { return false; } }
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+        public override bool SupportsSearch => false;
 
         public override IParseIndexerResponse GetParser()
         {

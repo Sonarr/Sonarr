@@ -19,7 +19,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             _episodeService = episodeService;
         }
 
-        public RejectionType Type { get { return RejectionType.Permanent; } }
+        public RejectionType Type => RejectionType.Permanent;
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {

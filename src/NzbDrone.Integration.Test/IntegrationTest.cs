@@ -11,20 +11,11 @@ namespace NzbDrone.Integration.Test
     {
         protected NzbDroneRunner _runner;
 
-        public override string SeriesRootFolder
-        {
-            get { return GetTempDirectory("SeriesRootFolder") ; }
-        }
+        public override string SeriesRootFolder => GetTempDirectory("SeriesRootFolder");
 
-        protected override string RootUrl
-        {
-            get { return "http://localhost:8989/"; }
-        }
+        protected override string RootUrl => "http://localhost:8989/";
 
-        protected override string ApiKey
-        {
-            get { return _runner.ApiKey; }
-        }
+        protected override string ApiKey => _runner.ApiKey;
 
         protected override void StartTestTarget()
         {

@@ -38,13 +38,7 @@ namespace NzbDrone.Core.Datastore.Converters
             return (int)quality;
         }
 
-        public Type DbType
-        {
-            get
-            {
-                return typeof(int);
-            }
-        }
+        public Type DbType => typeof(int);
 
         public override bool CanConvert(Type objectType)
         {

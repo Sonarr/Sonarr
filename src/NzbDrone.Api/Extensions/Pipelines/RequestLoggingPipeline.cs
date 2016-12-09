@@ -23,7 +23,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
             _errorPipeline = errorPipeline;
         }
 
-        public int Order { get { return 100; } }
+        public int Order => 100;
 
         public void Register(IPipelines pipelines)
         {

@@ -28,7 +28,7 @@ namespace NzbDrone.Common.Cache
             _cache.Clear();
         }
 
-        public ICollection<ICached> Caches { get { return _cache.Values; } }
+        public ICollection<ICached> Caches => _cache.Values;
 
         public ICached<T> GetCache<T>(Type host)
         {

@@ -111,7 +111,7 @@ namespace NzbDrone.Common.TPL
         }
 
         /// <summary>Gets the maximum concurrency level supported by this scheduler.</summary> 
-        public sealed override int MaximumConcurrencyLevel { get { return _maxDegreeOfParallelism; } }
+        public sealed override int MaximumConcurrencyLevel => _maxDegreeOfParallelism;
 
         /// <summary>Gets an enumerable of the tasks currently scheduled on this scheduler.</summary> 
         /// <returns>An enumerable of the tasks currently scheduled.</returns> 

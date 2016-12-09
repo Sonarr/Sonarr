@@ -9,13 +9,7 @@ namespace NzbDrone.Core.DecisionEngine
         public RemoteEpisode RemoteEpisode { get; private set; }
         public IEnumerable<Rejection> Rejections { get; private set; }
 
-        public bool Approved
-        {
-            get
-            {
-                return !Rejections.Any();
-            }
-        }
+        public bool Approved => !Rejections.Any();
 
         public bool TemporarilyRejected
         {

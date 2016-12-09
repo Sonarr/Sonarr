@@ -8,7 +8,7 @@ namespace NzbDrone.Host.Owin.MiddleWare
 {
     public class NzbDroneVersionMiddleWare : IOwinMiddleWare
     {
-        public int Order { get { return 0; } }
+        public int Order => 0;
 
         public void Attach(IAppBuilder appBuilder)
         {

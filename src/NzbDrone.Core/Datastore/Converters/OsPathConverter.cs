@@ -31,9 +31,6 @@ namespace NzbDrone.Core.Datastore.Converters
             return value.FullPath;
         }
 
-        public Type DbType
-        {
-            get { return typeof(string); }
-        }
+        public Type DbType => typeof(string);
     }
 }

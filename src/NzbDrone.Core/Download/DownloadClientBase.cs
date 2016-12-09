@@ -24,41 +24,17 @@ namespace NzbDrone.Core.Download
 
         public abstract string Name { get; }
 
-        public Type ConfigContract
-        {
-            get
-            {
-                return typeof(TSettings);
-            }
-        }
+        public Type ConfigContract => typeof(TSettings);
 
-        public virtual ProviderMessage Message
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public virtual ProviderMessage Message => null;
 
-        public IEnumerable<ProviderDefinition> DefaultDefinitions
-        {
-            get
-            {
-                return new List<ProviderDefinition>();
-            }
-        }
+        public IEnumerable<ProviderDefinition> DefaultDefinitions => new List<ProviderDefinition>();
 
         public ProviderDefinition Definition { get; set; }
 
         public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
 
-        protected TSettings Settings
-        {
-            get
-            {
-                return (TSettings)Definition.Settings;
-            }
-        }
+        protected TSettings Settings => (TSettings)Definition.Settings;
 
         protected DownloadClientBase(IConfigService configService, 
             IDiskProvider diskProvider, 

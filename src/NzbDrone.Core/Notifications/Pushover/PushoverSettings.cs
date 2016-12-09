@@ -43,13 +43,7 @@ namespace NzbDrone.Core.Notifications.Pushover
         [FieldDefinition(5, Label = "Sound", Type = FieldType.Textbox, HelpText = "Notification sound, leave blank to use the default", HelpLink = "https://pushover.net/api#sounds")]
         public string Sound { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(UserKey) && Priority >= -1 && Priority <= 2;
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(UserKey) && Priority >= -1 && Priority <= 2;
 
         public NzbDroneValidationResult Validate()
         {

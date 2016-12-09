@@ -25,13 +25,7 @@ namespace NzbDrone.Core.Extras.Others
             _logger = logger;
         }
 
-        public override int Order
-        {
-            get
-            {
-                return 2;
-            }
-        }
+        public override int Order => 2;
 
         public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles)
         {

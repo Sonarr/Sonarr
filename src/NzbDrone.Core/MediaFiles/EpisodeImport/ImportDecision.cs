@@ -11,13 +11,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         public LocalEpisode LocalEpisode { get; private set; }
         public IEnumerable<Rejection> Rejections { get; private set; }
 
-        public bool Approved
-        {
-            get
-            {
-                return Rejections.Empty();
-            }
-        }
+        public bool Approved => Rejections.Empty();
 
         public ImportDecision(LocalEpisode localEpisode, params Rejection[] rejections)
         {

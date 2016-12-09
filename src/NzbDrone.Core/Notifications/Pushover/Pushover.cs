@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://pushover.net/"; }
-        }
+        public override string Link => "https://pushover.net/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -37,21 +34,9 @@ namespace NzbDrone.Core.Notifications.Pushover
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Pushover";
-            }
-        }
+        public override string Name => "Pushover";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

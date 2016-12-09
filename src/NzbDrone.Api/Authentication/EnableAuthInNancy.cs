@@ -27,7 +27,7 @@ namespace NzbDrone.Api.Authentication
             _configFileProvider = configFileProvider;
         }
 
-        public int Order { get { return 10; } }
+        public int Order => 10;
 
         public void Register(IPipelines pipelines)
         {

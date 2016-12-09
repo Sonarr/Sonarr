@@ -21,18 +21,9 @@ namespace NzbDrone.Core.Notifications.Slack
             _logger = logger;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Slack";
-            }
-        }
+        public override string Name => "Slack";
 
-        public override string Link
-        {
-            get { return "https://my.slack.com/services/new/incoming-webhook/"; }
-        }
+        public override string Link => "https://my.slack.com/services/new/incoming-webhook/";
 
         public override void OnGrab(GrabMessage message)
         {

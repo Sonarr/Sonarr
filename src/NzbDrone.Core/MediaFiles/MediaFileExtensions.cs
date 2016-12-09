@@ -71,10 +71,7 @@ namespace NzbDrone.Core.MediaFiles
             };
         }
 
-        public static HashSet<string> Extensions
-        {
-            get { return new HashSet<string>(_fileExtensions.Keys); }
-        }
+        public static HashSet<string> Extensions => new HashSet<string>(_fileExtensions.Keys);
 
         public static Quality GetQualityForExtension(string extension)
         {

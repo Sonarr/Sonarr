@@ -14,13 +14,7 @@ namespace NzbDrone.Common.Exceptron.Message
         /// <summary>
         /// Was the report successfully processed on the server
         /// </summary>
-        public bool Successful
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(RefId);
-            }
-        }
+        public bool Successful => !string.IsNullOrEmpty(RefId);
 
         /// <summary>
         /// Exception that caused the message to fail. 

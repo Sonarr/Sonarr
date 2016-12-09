@@ -55,17 +55,8 @@ namespace NzbDrone.Api
             return _tinyIoCContainer;
         }
 
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration
-        {
-            get { return new DiagnosticsConfiguration { Password = @"password" }; }
-        }
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"password" };
 
-        protected override byte[] FavIcon
-        {
-            get
-            {
-                return null;
-            }
-        }
+        protected override byte[] FavIcon => null;
     }
 }

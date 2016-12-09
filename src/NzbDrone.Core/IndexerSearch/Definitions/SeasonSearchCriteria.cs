@@ -4,13 +4,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
     {
         public int SeasonNumber { get; set; }
 
-        public override bool MonitoredEpisodesOnly
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool MonitoredEpisodesOnly => true;
 
         public override string ToString()
         {

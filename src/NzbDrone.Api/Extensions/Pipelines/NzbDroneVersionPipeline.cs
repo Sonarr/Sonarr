@@ -7,7 +7,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
 {
     public class NzbDroneVersionPipeline : IRegisterNancyPipeline
     {
-        public int Order { get { return 0; } }
+        public int Order => 0;
 
         public void Register(IPipelines pipelines)
         {

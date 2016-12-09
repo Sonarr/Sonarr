@@ -4,20 +4,8 @@ namespace NzbDrone.Core.Update.Commands
 {
     public class ApplicationUpdateCommand : Command
     {
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
 
-        public override string CompletionMessage
-        {
-            get
-            {
-                return "Restarting Sonarr to apply updates";
-            }
-        }
+        public override string CompletionMessage => "Restarting Sonarr to apply updates";
     }
 }

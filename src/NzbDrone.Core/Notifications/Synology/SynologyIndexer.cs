@@ -16,10 +16,7 @@ namespace NzbDrone.Core.Notifications.Synology
             _indexerProxy = indexerProxy;
         }
 
-        public override string Link
-        {
-            get { return "http://www.synology.com"; }
-        }
+        public override string Link => "http://www.synology.com";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -53,13 +50,7 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Synology Indexer";
-            }
-        }
+        public override string Name => "Synology Indexer";
 
         public override ValidationResult Test()
         {

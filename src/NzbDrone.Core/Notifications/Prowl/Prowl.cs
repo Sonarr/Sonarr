@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlService = prowlService;
         }
 
-        public override string Link
-        {
-            get { return "http://www.prowlapp.com/"; }
-        }
+        public override string Link => "http://www.prowlapp.com/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -38,21 +35,9 @@ namespace NzbDrone.Core.Notifications.Prowl
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Prowl";
-            }
-        }
+        public override string Name => "Prowl";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

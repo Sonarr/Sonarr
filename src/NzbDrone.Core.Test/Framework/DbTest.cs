@@ -23,21 +23,9 @@ namespace NzbDrone.Core.Test.Framework
 
         protected BasicRepository<TModel> Storage { get; private set; }
 
-        protected IList<TModel> AllStoredModels
-        {
-            get
-            {
-                return Storage.All().ToList();
-            }
-        }
+        protected IList<TModel> AllStoredModels => Storage.All().ToList();
 
-        protected TModel StoredModel
-        {
-            get
-            {
-                return Storage.All().Single();
-            }
-        }
+        protected TModel StoredModel => Storage.All().Single();
 
         [SetUp]
         public void CoreTestSetup()
@@ -66,13 +54,7 @@ namespace NzbDrone.Core.Test.Framework
     {
         private ITestDatabase _db;
 
-        protected virtual MigrationType MigrationType
-        {
-            get
-            {
-                return MigrationType.Main;
-            }
-        }
+        protected virtual MigrationType MigrationType => MigrationType.Main;
 
         protected ITestDatabase Db
         {

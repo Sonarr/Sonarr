@@ -194,13 +194,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             return historyItems;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "NZBGet";
-            }
-        }
+        public override string Name => "NZBGet";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

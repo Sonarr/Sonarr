@@ -328,9 +328,6 @@ namespace NzbDrone.Common.Http.Dispatchers
             return true;
         }
 
-        public override bool IsInvalid
-        {
-            get { return !_initialized || !_available; }
-        }
+        public override bool IsInvalid => !_initialized || !_available;
     }
 }

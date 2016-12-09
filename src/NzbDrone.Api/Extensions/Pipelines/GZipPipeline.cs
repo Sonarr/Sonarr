@@ -13,7 +13,7 @@ namespace NzbDrone.Api.Extensions.Pipelines
     {
         private readonly Logger _logger;
 
-        public int Order { get { return 0; } }
+        public int Order => 0;
 
         public GzipCompressionPipeline(Logger logger)
         {

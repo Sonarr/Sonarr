@@ -15,19 +15,11 @@ namespace NzbDrone.Core.Indexers.Newznab
     {
         private readonly INewznabCapabilitiesProvider _capabilitiesProvider;
 
-        public override string Name
-        {
-            get
-            {
-                return "Newznab";
-            }
-        }
+        public override string Name => "Newznab";
 
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Usenet; } }
-        public override int PageSize
-        {
-            get { return _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize; }
-        }
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
+
+        public override int PageSize => _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize;
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {

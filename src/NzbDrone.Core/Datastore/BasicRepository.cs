@@ -40,10 +40,7 @@ namespace NzbDrone.Core.Datastore
         private readonly IDatabase _database;
         private readonly IEventAggregator _eventAggregator;
 
-        protected IDataMapper DataMapper
-        {
-            get { return _database.GetDataMapper(); }
-        }
+        protected IDataMapper DataMapper => _database.GetDataMapper();
 
         public BasicRepository(IDatabase database, IEventAggregator eventAggregator)
         {
@@ -51,10 +48,7 @@ namespace NzbDrone.Core.Datastore
             _eventAggregator = eventAggregator;
         }
 
-        protected QueryBuilder<TModel> Query
-        {
-            get { return DataMapper.Query<TModel>(); }
-        }
+        protected QueryBuilder<TModel> Query => DataMapper.Query<TModel>();
 
         protected void Delete(Expression<Func<TModel, bool>> filter)
         {
@@ -289,9 +283,6 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        protected virtual bool PublishModelEvents
-        {
-            get { return false; }
-        }
+        protected virtual bool PublishModelEvents => false;
     }
 }

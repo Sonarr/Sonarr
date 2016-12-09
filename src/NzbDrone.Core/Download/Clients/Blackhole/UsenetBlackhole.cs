@@ -52,13 +52,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return null;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Usenet Blackhole";
-            }
-        }
+        public override string Name => "Usenet Blackhole";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

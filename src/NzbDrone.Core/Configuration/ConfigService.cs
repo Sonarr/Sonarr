@@ -300,65 +300,29 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("CleanupMetadataImages", value); }
         }
 
-        public string RijndaelPassphrase
-        {
-            get { return GetValue("RijndaelPassphrase", Guid.NewGuid().ToString(), true); }
-        }
+        public string RijndaelPassphrase => GetValue("RijndaelPassphrase", Guid.NewGuid().ToString(), true);
 
-        public string HmacPassphrase
-        {
-            get { return GetValue("HmacPassphrase", Guid.NewGuid().ToString(), true); }
-        }
+        public string HmacPassphrase => GetValue("HmacPassphrase", Guid.NewGuid().ToString(), true);
 
-        public string RijndaelSalt
-        {
-            get { return GetValue("RijndaelSalt", Guid.NewGuid().ToString(), true); }
-        }
+        public string RijndaelSalt => GetValue("RijndaelSalt", Guid.NewGuid().ToString(), true);
 
-        public string HmacSalt
-        {
-            get { return GetValue("HmacSalt", Guid.NewGuid().ToString(), true); }
-        }
+        public string HmacSalt => GetValue("HmacSalt", Guid.NewGuid().ToString(), true);
 
-        public bool ProxyEnabled
-        {
-            get { return GetValueBoolean("ProxyEnabled", false); }
-        }
+        public bool ProxyEnabled => GetValueBoolean("ProxyEnabled", false);
 
-        public ProxyType ProxyType
-        {
-            get { return GetValueEnum<ProxyType>("ProxyType", ProxyType.Http); }
-        }
+        public ProxyType ProxyType => GetValueEnum<ProxyType>("ProxyType", ProxyType.Http);
 
-        public string ProxyHostname
-        {
-            get { return GetValue("ProxyHostname", string.Empty); }
-        }
+        public string ProxyHostname => GetValue("ProxyHostname", string.Empty);
 
-        public int ProxyPort
-        {
-            get { return GetValueInt("ProxyPort", 8080); }
-        }
+        public int ProxyPort => GetValueInt("ProxyPort", 8080);
 
-        public string ProxyUsername
-        {
-            get { return GetValue("ProxyUsername", string.Empty); }
-        }
+        public string ProxyUsername => GetValue("ProxyUsername", string.Empty);
 
-        public string ProxyPassword
-        {
-            get { return GetValue("ProxyPassword", string.Empty); }
-        }
+        public string ProxyPassword => GetValue("ProxyPassword", string.Empty);
 
-        public string ProxyBypassFilter
-        {
-            get { return GetValue("ProxyBypassFilter", string.Empty); }
-        }
+        public string ProxyBypassFilter => GetValue("ProxyBypassFilter", string.Empty);
 
-        public bool ProxyBypassLocalAddresses
-        {
-            get { return GetValueBoolean("ProxyBypassLocalAddresses", true); }
-        }
+        public bool ProxyBypassLocalAddresses => GetValueBoolean("ProxyBypassLocalAddresses", true);
 
         private string GetValue(string key)
         {

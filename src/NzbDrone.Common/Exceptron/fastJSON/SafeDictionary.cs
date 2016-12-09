@@ -16,13 +16,7 @@ namespace NzbDrone.Common.Exceptron.fastJSON
             return _Dictionary.TryGetValue(key, out value);
         }
 
-        internal TValue this[TKey key]
-        {
-            get
-            {
-                return _Dictionary[key];
-            }
-        }
+        internal TValue this[TKey key] => _Dictionary[key];
 
         internal void Add(TKey key, TValue value)
         {

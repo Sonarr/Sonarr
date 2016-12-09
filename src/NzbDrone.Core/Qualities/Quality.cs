@@ -56,27 +56,27 @@ namespace NzbDrone.Core.Qualities
             return !Equals(left, right);
         }
 
-        public static Quality Unknown     { get { return new Quality(0,  "Unknown"); } }
-        public static Quality SDTV        { get { return new Quality(1,  "SDTV"); } }
-        public static Quality DVD         { get { return new Quality(2,  "DVD"); } }
-        public static Quality WEBDL1080p  { get { return new Quality(3,  "WEBDL-1080p"); } }
-        public static Quality HDTV720p    { get { return new Quality(4,  "HDTV-720p"); } }
-        public static Quality WEBDL720p   { get { return new Quality(5,  "WEBDL-720p"); } }
-        public static Quality Bluray720p  { get { return new Quality(6,  "Bluray-720p"); } }
-        public static Quality Bluray1080p { get { return new Quality(7,  "Bluray-1080p"); } }
-        public static Quality WEBDL480p   { get { return new Quality(8,  "WEBDL-480p"); } }
-        public static Quality HDTV1080p   { get { return new Quality(9,  "HDTV-1080p"); } }
-        public static Quality RAWHD       { get { return new Quality(10, "Raw-HD"); } }
+        public static Quality Unknown => new Quality(0,  "Unknown");
+        public static Quality SDTV => new Quality(1,  "SDTV");
+        public static Quality DVD => new Quality(2,  "DVD");
+        public static Quality WEBDL1080p => new Quality(3,  "WEBDL-1080p");
+        public static Quality HDTV720p => new Quality(4,  "HDTV-720p");
+        public static Quality WEBDL720p => new Quality(5,  "WEBDL-720p");
+        public static Quality Bluray720p => new Quality(6,  "Bluray-720p");
+        public static Quality Bluray1080p => new Quality(7,  "Bluray-1080p");
+        public static Quality WEBDL480p => new Quality(8,  "WEBDL-480p");
+        public static Quality HDTV1080p => new Quality(9,  "HDTV-1080p");
+        public static Quality RAWHD => new Quality(10, "Raw-HD");
         //public static Quality HDTV480p    { get { return new Quality(11, "HDTV-480p"); } }
         //public static Quality WEBRip480p  { get { return new Quality(12, "WEBRip-480p"); } }
         //public static Quality Bluray480p  { get { return new Quality(13, "Bluray-480p"); } }
         //public static Quality WEBRip720p  { get { return new Quality(14, "WEBRip-720p"); } }
         //public static Quality WEBRip1080p { get { return new Quality(15, "WEBRip-1080p"); } }
-        public static Quality HDTV2160p   { get { return new Quality(16, "HDTV-2160p"); } }
+        public static Quality HDTV2160p => new Quality(16, "HDTV-2160p");
         //public static Quality WEBRip2160p { get { return new Quality(17, "WEBRip-2160p"); } }
-        public static Quality WEBDL2160p  { get { return new Quality(18, "WEBDL-2160p"); } }
-        public static Quality Bluray2160p { get { return new Quality(19, "Bluray-2160p"); } }
-        
+        public static Quality WEBDL2160p => new Quality(18, "WEBDL-2160p");
+        public static Quality Bluray2160p => new Quality(19, "Bluray-2160p");
+
         static Quality()
         {
             All = new List<Quality>

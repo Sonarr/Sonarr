@@ -6,21 +6,9 @@ namespace NzbDrone.Core.Backup
     {
         public BackupType Type { get; set; }
 
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
 
-        public override bool UpdateScheduledTask
-        {
-            get
-            {
-                return Type == BackupType.Scheduled;
-            }
-        }
+        public override bool UpdateScheduledTask => Type == BackupType.Scheduled;
     }
 
     public enum BackupType

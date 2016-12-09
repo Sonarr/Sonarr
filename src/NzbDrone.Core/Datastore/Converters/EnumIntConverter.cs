@@ -6,13 +6,7 @@ namespace NzbDrone.Core.Datastore.Converters
 {
     public class EnumIntConverter : IConverter
     {
-        public Type DbType
-        {
-            get
-            {
-                return typeof(int);
-            }
-        }
+        public Type DbType => typeof(int);
 
         public object FromDB(ConverterContext context)
         {

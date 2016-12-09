@@ -7,13 +7,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string Status { get; set; }
         public string Error { get; set; }
 
-        public bool Failed
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Status) &&
-                       Status.Equals("false", StringComparison.InvariantCultureIgnoreCase);
-            }
-        }
+        public bool Failed => !string.IsNullOrWhiteSpace(Status) &&
+                              Status.Equals("false", StringComparison.InvariantCultureIgnoreCase);
     }
 }

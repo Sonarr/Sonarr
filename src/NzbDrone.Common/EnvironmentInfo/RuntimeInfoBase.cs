@@ -36,18 +36,9 @@ namespace NzbDrone.Common.EnvironmentInfo
             IsProduction = InternalIsProduction();
         }
 
-        public static bool IsUserInteractive
-        {
-            get { return Environment.UserInteractive; }
-        }
+        public static bool IsUserInteractive => Environment.UserInteractive;
 
-        bool IRuntimeInfo.IsUserInteractive
-        {
-            get
-            {
-                return IsUserInteractive;
-            }
-        }
+        bool IRuntimeInfo.IsUserInteractive => IsUserInteractive;
 
         public bool IsAdmin
         {

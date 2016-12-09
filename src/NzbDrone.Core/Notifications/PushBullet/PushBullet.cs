@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://www.pushbullet.com/"; }
-        }
+        public override string Link => "https://www.pushbullet.com/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -37,21 +34,9 @@ namespace NzbDrone.Core.Notifications.PushBullet
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Pushbullet";
-            }
-        }
+        public override string Name => "Pushbullet";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

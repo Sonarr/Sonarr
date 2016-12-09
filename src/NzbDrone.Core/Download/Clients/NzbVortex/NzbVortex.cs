@@ -43,13 +43,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
             return response;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "NZBVortex";
-            }
-        }
+        public override string Name => "NZBVortex";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public bool AlwaysUpdate { get; set; }
 
         [JsonIgnore]
-        public string Address { get { return string.Format("{0}:{1}", Host, Port); } }
+        public string Address => string.Format("{0}:{1}", Host, Port);
 
         public NzbDroneValidationResult Validate()
         {

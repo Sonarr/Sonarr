@@ -16,12 +16,6 @@ namespace NzbDrone.Core.RootFolders
         {
         }
 
-        protected override bool PublishModelEvents
-        {
-            get
-            {
-                return true;
-            }
-        }
+        protected override bool PublishModelEvents => true;
     }
 }

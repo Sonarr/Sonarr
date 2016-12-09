@@ -25,13 +25,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             _logger = logger;
         }
 
-        public override int Order
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int Order => 1;
 
         public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles)
         {

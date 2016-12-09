@@ -14,24 +14,12 @@ namespace NzbDrone.Core.Indexers
             _httpResponse = httpResponse;
         }
 
-        public IndexerRequest Request
-        {
-            get { return _indexerRequest; }
-        }
+        public IndexerRequest Request => _indexerRequest;
 
-        public HttpRequest HttpRequest
-        {
-            get { return _httpResponse.Request; }
-        }
+        public HttpRequest HttpRequest => _httpResponse.Request;
 
-        public HttpResponse HttpResponse
-        {
-            get { return _httpResponse; }
-        }
+        public HttpResponse HttpResponse => _httpResponse;
 
-        public string Content
-        {
-            get { return _httpResponse.Content; }
-        }
+        public string Content => _httpResponse.Content;
     }
 }

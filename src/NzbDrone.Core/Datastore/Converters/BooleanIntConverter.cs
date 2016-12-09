@@ -46,12 +46,6 @@ namespace NzbDrone.Core.Datastore.Converters
             }
         }
 
-        public Type DbType
-        {
-            get
-            {
-                return typeof(int);
-            }
-        }
+        public Type DbType => typeof(int);
     }
 }

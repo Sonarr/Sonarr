@@ -27,9 +27,6 @@ namespace NzbDrone.Core.Extras.Subtitles
                               };
         }
 
-        public static HashSet<string> Extensions
-        {
-            get { return _fileExtensions; }
-        }
+        public static HashSet<string> Extensions => _fileExtensions;
     }
 }

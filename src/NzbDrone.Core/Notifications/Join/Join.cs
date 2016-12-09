@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.Join
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://joinjoaomgcd.appspot.com/"; }
-        }
+        public override string Link => "https://joinjoaomgcd.appspot.com/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -37,21 +34,9 @@ namespace NzbDrone.Core.Notifications.Join
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Join";
-            }
-        }
+        public override string Name => "Join";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

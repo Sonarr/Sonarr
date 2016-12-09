@@ -30,13 +30,7 @@ namespace NzbDrone.Core.Extras.Metadata
             _consumers = consumers.ToList();
         }
 
-        public override int Order
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public override int Order => 0;
 
         public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles)
         {
