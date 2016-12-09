@@ -196,7 +196,7 @@ namespace NzbDrone.Common.Test
         public void get_actual_casing_should_return_actual_casing_for_local_file_in_windows()
         {
             WindowsOnly();
-            var path = Environment.ExpandEnvironmentVariables("%SystemRoot%\\System32");
+            var path = Directory.GetDirectories("C:\\")[3];
             path.ToUpper().GetActualCasing().Should().Be(path);
             path.ToLower().GetActualCasing().Should().Be(path);
         }
