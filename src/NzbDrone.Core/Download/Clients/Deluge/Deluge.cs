@@ -75,13 +75,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             return actualHash.ToUpper();
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Deluge";
-            }
-        }
+        public override string Name => "Deluge";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

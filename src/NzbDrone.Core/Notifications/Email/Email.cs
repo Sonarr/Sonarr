@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Notifications.Email
             _emailService = emailService;
         }
 
-        public override string Link
-        {
-            get { return null; }
-        }
+        public override string Link => null;
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -40,21 +37,9 @@ namespace NzbDrone.Core.Notifications.Email
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Email";
-            }
-        }
+        public override string Name => "Email";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

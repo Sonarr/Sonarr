@@ -14,10 +14,7 @@ namespace NzbDrone.Common
 
     public class ConsoleService : IConsoleService
     {
-        public static bool IsConsoleAvailable
-        {
-            get { return Console.In != StreamReader.Null; }
-        }
+        public static bool IsConsoleAvailable => Console.In != StreamReader.Null;
 
         public void PrintHelp()
         {

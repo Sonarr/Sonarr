@@ -6,12 +6,6 @@ namespace NzbDrone.Core.IndexerSearch
     {
         public int SeriesId { get; set; }
 
-        public override bool SendUpdatesToClient
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SendUpdatesToClient => true;
     }
 }

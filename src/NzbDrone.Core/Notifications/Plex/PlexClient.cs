@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.Plex
             _plexClientService = plexClientService;
         }
 
-        public override string Link
-        {
-            get { return "http://www.plexapp.com/"; }
-        }
+        public override string Link => "http://www.plexapp.com/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -35,21 +32,9 @@ namespace NzbDrone.Core.Notifications.Plex
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Plex Media Center";
-            }
-        }
+        public override string Name => "Plex Media Center";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

@@ -36,13 +36,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
         [FieldDefinition(3, Label = "Episode Images", Type = FieldType.Checkbox)]
         public bool EpisodeImages { get; set; }
         
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsValid => true;
 
         public NzbDroneValidationResult Validate()
         {

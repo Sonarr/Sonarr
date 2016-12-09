@@ -17,12 +17,6 @@ namespace NzbDrone.Core.Extras.Metadata.Files
         {
         }
 
-        public override bool PermanentlyDelete
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool PermanentlyDelete => true;
     }
 }

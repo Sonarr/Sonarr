@@ -16,19 +16,10 @@ namespace NzbDrone.Core.Indexers.Torznab
     {
         private readonly INewznabCapabilitiesProvider _capabilitiesProvider;
 
-        public override string Name
-        {
-            get
-            {
-                return "Torznab";
-            }
-        }
+        public override string Name => "Torznab";
 
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
-        public override int PageSize
-        {
-            get { return _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize; }
-        }
+        public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
+        public override int PageSize => _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize;
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {

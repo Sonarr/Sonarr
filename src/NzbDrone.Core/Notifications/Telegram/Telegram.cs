@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.Telegram
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://telegram.org/"; }
-        }
+        public override string Link => "https://telegram.org/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -37,21 +34,9 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Telegram";
-            }
-        }
+        public override string Name => "Telegram";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

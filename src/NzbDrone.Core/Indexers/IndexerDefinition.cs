@@ -11,13 +11,7 @@ namespace NzbDrone.Core.Indexers
         public bool SupportsRss { get; set; }
         public bool SupportsSearch { get; set; }
 
-        public override bool Enable
-        {
-            get
-            {
-                return EnableRss || EnableSearch;
-            }
-        }
+        public override bool Enable => EnableRss || EnableSearch;
 
         public IndexerStatus Status { get; set; }
     }

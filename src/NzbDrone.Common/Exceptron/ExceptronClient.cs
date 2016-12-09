@@ -15,19 +15,13 @@ namespace NzbDrone.Common.Exceptron
         /// <summary>
         /// Version of Client
         /// </summary>
-        public string ClientVersion
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
-        }
+        public string ClientVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
 
         /// <summary>
         /// Name of Client
         /// </summary>
-        public string ClientName
-        {
-            get { return "Official .NET"; }
-        }
+        public string ClientName => "Official .NET";
 
         /// <summary>
         /// Client Configuration

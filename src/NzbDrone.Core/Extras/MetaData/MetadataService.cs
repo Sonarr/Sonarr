@@ -47,13 +47,7 @@ namespace NzbDrone.Core.Extras.Metadata
             _logger = logger;
         }
 
-        public override int Order
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public override int Order => 0;
 
         public override IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles)
         {

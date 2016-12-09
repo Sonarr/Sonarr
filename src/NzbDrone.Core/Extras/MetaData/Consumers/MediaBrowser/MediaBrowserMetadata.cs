@@ -23,13 +23,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.MediaBrowser
             _logger = logger;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Emby (Legacy)";
-            }
-        }
+        public override string Name => "Emby (Legacy)";
 
         public override MetadataFile FindMetadataFile(Series series, string path)
         {

@@ -51,17 +51,8 @@ namespace NzbDrone.Core.Validation
         public new IList<NzbDroneValidationFailure> Errors { get; private set; }
         public IList<NzbDroneValidationFailure> Warnings { get; private set; }
 
-        public virtual bool HasWarnings
-        {
-            get { return Warnings.Any(); }
-        }
+        public virtual bool HasWarnings => Warnings.Any();
 
-        public override bool IsValid
-        {
-            get
-            {
-                return Errors.Empty();
-            }
-        }
+        public override bool IsValid => Errors.Empty();
     }
 }

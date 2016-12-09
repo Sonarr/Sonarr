@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             _mediaBrowserService = mediaBrowserService;
         }
 
-        public override string Link
-        {
-            get { return "http://mediabrowser.tv/"; }
-        }
+        public override string Link => "http://mediabrowser.tv/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -53,13 +50,7 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Emby (Media Browser)";
-            }
-        }
+        public override string Name => "Emby (Media Browser)";
 
         public override ValidationResult Test()
         {

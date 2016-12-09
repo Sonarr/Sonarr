@@ -59,13 +59,7 @@ namespace NzbDrone.Integration.Test
         private List<SignalRMessage> _signalRReceived;
         private Connection _signalrConnection;
 
-        protected IEnumerable<SignalRMessage> SignalRMessages
-        {
-            get
-            {
-                return _signalRReceived;
-            }
-        }
+        protected IEnumerable<SignalRMessage> SignalRMessages => _signalRReceived;
 
         public IntegrationTestBase()
         {

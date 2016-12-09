@@ -44,13 +44,7 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(5, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
         public bool UseSsl { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host);
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host);
 
         public NzbDroneValidationResult Validate()
         {

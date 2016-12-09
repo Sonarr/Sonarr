@@ -24,12 +24,12 @@ namespace NzbDrone.Core.Indexers
 
         protected readonly IHttpClient _httpClient;
 
-        public override bool SupportsRss { get { return true; } }
-        public override bool SupportsSearch { get { return true; } }
-        public bool SupportsPaging { get { return PageSize > 0; } }
+        public override bool SupportsRss => true;
+        public override bool SupportsSearch => true;
+        public bool SupportsPaging => PageSize > 0;
 
-        public virtual int PageSize { get { return 0; } }
-        public virtual TimeSpan RateLimit { get { return TimeSpan.FromSeconds(2); } }
+        public virtual int PageSize => 0;
+        public virtual TimeSpan RateLimit => TimeSpan.FromSeconds(2);
 
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();

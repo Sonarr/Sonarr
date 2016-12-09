@@ -9,12 +9,6 @@ namespace NzbDrone.Host.AccessControl
         public int Port { get; set; }
         public string UrlBase { get; set; }
 
-        public string Url
-        {
-            get
-            {
-                return string.Format("{0}://{1}:{2}/{3}", Scheme, Address, Port, UrlBase);
-            }
-        }
+        public string Url => string.Format("{0}://{1}:{2}/{3}", Scheme, Address, Port, UrlBase);
     }
 }

@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "http://www.notifymyandroid.com/"; }
-        }
+        public override string Link => "http://www.notifymyandroid.com/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -38,21 +35,9 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Notify My Android";
-            }
-        }
+        public override string Name => "Notify My Android";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

@@ -17,12 +17,6 @@ namespace NzbDrone.Core.Analytics
             _configFileProvider = configFileProvider;
         }
 
-        public bool IsEnabled
-        {
-            get
-            {
-                return _configFileProvider.AnalyticsEnabled && RuntimeInfoBase.IsProduction;
-            }
-        }
+        public bool IsEnabled => _configFileProvider.AnalyticsEnabled && RuntimeInfoBase.IsProduction;
     }
 }

@@ -40,13 +40,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
         [FieldDefinition(4, Label = "Episode Images", Type = FieldType.Checkbox)]
         public bool EpisodeImages { get; set; }
         
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsValid => true;
 
         public NzbDroneValidationResult Validate()
         {

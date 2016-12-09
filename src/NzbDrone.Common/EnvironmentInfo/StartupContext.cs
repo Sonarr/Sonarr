@@ -47,21 +47,9 @@ namespace NzbDrone.Common.EnvironmentInfo
         public HashSet<string> Flags { get; private set; }
         public Dictionary<string, string> Args { get; private set; }
 
-        public bool InstallService
-        {
-            get
-            {
-                return Flags.Contains(INSTALL_SERVICE);
-            }
-        }
+        public bool InstallService => Flags.Contains(INSTALL_SERVICE);
 
-        public bool UninstallService
-        {
-            get
-            {
-                return Flags.Contains(UNINSTALL_SERVICE);
-            }
-        }
+        public bool UninstallService => Flags.Contains(UNINSTALL_SERVICE);
 
         public string PreservedArguments
         {

@@ -24,13 +24,7 @@ namespace NzbDrone.Core.Notifications.NotifyMyAndroid
         [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(NotifyMyAndroidPriority))]
         public int Priority { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(ApiKey) && Priority >= -1 && Priority <= 2;
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(ApiKey) && Priority >= -1 && Priority <= 2;
 
         public NzbDroneValidationResult Validate()
         {

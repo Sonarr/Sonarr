@@ -13,13 +13,7 @@ namespace NzbDrone.Host.Owin
             _logger = logger;
         }
 
-        public override Encoding Encoding
-        {
-            get
-            {
-                return Encoding.Default;
-            }
-        }
+        public override Encoding Encoding => Encoding.Default;
 
         public override void Write(char[] buffer, int index, int count)
         {

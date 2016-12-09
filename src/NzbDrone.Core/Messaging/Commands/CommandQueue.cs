@@ -42,29 +42,11 @@ namespace NzbDrone.Core.Messaging.Commands
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                return _items.Count;
-            }
-        }
+        public int Count => _items.Count;
 
-        public object SyncRoot
-        {
-            get
-            {
-                return Mutex;
-            }
-        }
+        public object SyncRoot => Mutex;
 
-        public bool IsSynchronized
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsSynchronized => true;
 
         public void CopyTo(CommandModel[] array, int index)
         {

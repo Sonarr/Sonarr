@@ -48,13 +48,7 @@ namespace NzbDrone.Core.Extras.Files
             _logger = logger;
         }
 
-        public virtual bool PermanentlyDelete
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public virtual bool PermanentlyDelete => false;
 
         public List<TExtraFile> GetFilesBySeries(int seriesId)
         {

@@ -41,15 +41,9 @@ namespace NzbDrone.Core.Notifications.MediaBrowser
         public bool UpdateLibrary { get; set; }
 
         [JsonIgnore]
-        public string Address { get { return string.Format("{0}:{1}", Host, Port); } }
-        
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host) && Port > 0;
-            }
-        }
+        public string Address => string.Format("{0}:{1}", Host, Port);
+
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host) && Port > 0;
 
         public NzbDroneValidationResult Validate()
         {

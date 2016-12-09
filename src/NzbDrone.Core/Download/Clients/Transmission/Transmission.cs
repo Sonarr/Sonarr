@@ -40,12 +40,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             return null;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Transmission";
-            }
-        }
+        public override string Name => "Transmission";
     }
 }

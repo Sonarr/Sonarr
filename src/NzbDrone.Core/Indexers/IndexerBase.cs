@@ -34,18 +34,9 @@ namespace NzbDrone.Core.Indexers
             _logger = logger;
         }
 
-        public Type ConfigContract
-        {
-            get { return typeof(TSettings); }
-        }
+        public Type ConfigContract => typeof(TSettings);
 
-        public virtual ProviderMessage Message
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public virtual ProviderMessage Message => null;
 
         public virtual IEnumerable<ProviderDefinition> DefaultDefinitions
         {
@@ -68,13 +59,7 @@ namespace NzbDrone.Core.Indexers
 
         public virtual object RequestAction(string action, IDictionary<string, string> query) { return null; }
 
-        protected TSettings Settings
-        {
-            get
-            {
-                return (TSettings)Definition.Settings;
-            }
-        }
+        protected TSettings Settings => (TSettings)Definition.Settings;
 
         public abstract IList<ReleaseInfo> FetchRecent();
         public abstract IList<ReleaseInfo> Fetch(SeasonSearchCriteria searchCriteria);

@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Notifications.Pushalot
             _proxy = proxy;
         }
 
-        public override string Link
-        {
-            get { return "https://www.Pushalot.com/"; }
-        }
+        public override string Link => "https://www.Pushalot.com/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -38,21 +35,9 @@ namespace NzbDrone.Core.Notifications.Pushalot
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Pushalot";
-            }
-        }
+        public override string Name => "Pushalot";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

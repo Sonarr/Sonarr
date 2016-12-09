@@ -13,10 +13,7 @@ namespace NzbDrone.Core.Indexers
             _chains.Add(new List<IndexerPageableRequest>());
         }
 
-        public int Tiers
-        {
-            get { return _chains.Count; }
-        }
+        public int Tiers => _chains.Count;
 
         public IEnumerable<IndexerPageableRequest> GetAllTiers()
         {

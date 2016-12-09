@@ -10,13 +10,7 @@ namespace NzbDrone.SignalR
 
     public sealed class NzbDronePersistentConnection : PersistentConnection, IBroadcastSignalRMessage
     {
-        private IPersistentConnectionContext Context
-        {
-            get
-            {
-                return ((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
-            }
-        }
+        private IPersistentConnectionContext Context => ((ConnectionManager)GlobalHost.ConnectionManager).GetConnection(GetType());
 
         public void BroadcastMessage(SignalRMessage message)
         {

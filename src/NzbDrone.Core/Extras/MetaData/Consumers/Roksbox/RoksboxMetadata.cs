@@ -35,13 +35,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
         private static List<string> ValidCertification = new List<string> { "G", "NC-17", "PG", "PG-13", "R", "UR", "UNRATED", "NR", "TV-Y", "TV-Y7", "TV-Y7-FV", "TV-G", "TV-PG", "TV-14", "TV-MA" };
         private static readonly Regex SeasonImagesRegex = new Regex(@"^(season (?<season>\d+))|(?<specials>specials)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public override string Name
-        {
-            get
-            {
-                return "Roksbox";
-            }
-        }
+        public override string Name => "Roksbox";
 
         public override string GetFilenameAfterMove(Series series, EpisodeFile episodeFile, MetadataFile metadataFile)
         {

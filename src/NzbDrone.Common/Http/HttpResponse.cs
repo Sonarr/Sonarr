@@ -49,13 +49,7 @@ namespace NzbDrone.Common.Http
         }
 
 
-        public bool HasHttpError
-        {
-            get
-            {
-                return (int)StatusCode >= 400;
-            }
-        }
+        public bool HasHttpError => (int)StatusCode >= 400;
 
         public Dictionary<string, string> GetCookies()
         {

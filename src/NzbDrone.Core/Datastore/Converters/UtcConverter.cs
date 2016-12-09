@@ -27,12 +27,6 @@ namespace NzbDrone.Core.Datastore.Converters
             return dateTime.ToUniversalTime();
         }
 
-        public Type DbType
-        {
-            get
-            {
-                return typeof(DateTime);
-            }
-        }
+        public Type DbType => typeof(DateTime);
     }
 }

@@ -13,7 +13,7 @@ namespace NzbDrone.Common.Http
         private static readonly Regex RegexUri = new Regex(@"^(?:(?<scheme>[a-z]+):)?(?://(?<host>[-A-Z0-9.]+)(?::(?<port>[0-9]{1,5}))?)?(?<path>(?:(?:(?<=^)|/)[^/?#\r\n]+)+/?|/)?(?:\?(?<query>[^#\r\n]*))?(?:\#(?<fragment>.*))?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly string _uri;
-        public string FullUri { get { return _uri; } }
+        public string FullUri => _uri;
 
         public HttpUri(string uri)
         {

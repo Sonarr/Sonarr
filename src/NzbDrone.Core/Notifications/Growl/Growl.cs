@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Notifications.Growl
             _growlService = growlService;
         }
 
-        public override string Link
-        {
-            get { return "http://growl.info/"; }
-        }
+        public override string Link => "http://growl.info/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -37,21 +34,9 @@ namespace NzbDrone.Core.Notifications.Growl
         {
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Growl";
-            }
-        }
+        public override string Name => "Growl";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

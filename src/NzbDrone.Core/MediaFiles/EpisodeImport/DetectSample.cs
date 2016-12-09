@@ -26,13 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _logger = logger;
         }
 
-        public static long SampleSizeLimit
-        {
-            get
-            {
-                return 70.Megabytes();
-            }
-        }
+        public static long SampleSizeLimit => 70.Megabytes();
 
         public bool IsSample(Series series, QualityModel quality, string path, long size, bool isSpecial)
         {

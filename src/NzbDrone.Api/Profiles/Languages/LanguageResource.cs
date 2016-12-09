@@ -9,6 +9,6 @@ namespace NzbDrone.Api.Profiles.Languages
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Include)]
         public new int Id { get; set; }
         public string Name { get; set; }
-        public string NameLower { get { return Name.ToLowerInvariant(); } }
+        public string NameLower => Name.ToLowerInvariant();
     }
 }

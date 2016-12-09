@@ -47,52 +47,16 @@ namespace NzbDrone.Automation.Test.PageModel
             });
         }
 
-        public IWebElement SeriesNavIcon
-        {
-            get
-            {
-                return FindByClass("x-series-nav");
-            }
-        }
+        public IWebElement SeriesNavIcon => FindByClass("x-series-nav");
 
-        public IWebElement CalendarNavIcon
-        {
-            get
-            {
-                return FindByClass("x-calendar-nav");
-            }
-        }
+        public IWebElement CalendarNavIcon => FindByClass("x-calendar-nav");
 
-        public IWebElement ActivityNavIcon
-        {
-            get
-            {
-                return FindByClass("x-activity-nav");
-            }
-        }
+        public IWebElement ActivityNavIcon => FindByClass("x-activity-nav");
 
-        public IWebElement WantedNavIcon
-        {
-            get
-            {
-                return FindByClass("x-wanted-nav");
-            }
-        }
+        public IWebElement WantedNavIcon => FindByClass("x-wanted-nav");
 
-        public IWebElement SettingNavIcon
-        {
-            get
-            {
-                return FindByClass("x-settings-nav");
-            }
-        }
+        public IWebElement SettingNavIcon => FindByClass("x-settings-nav");
 
-        public IWebElement SystemNavIcon
-        {
-            get
-            {
-                return FindByClass("x-system-nav");
-            }
-        }
+        public IWebElement SystemNavIcon => FindByClass("x-system-nav");
     }
 }

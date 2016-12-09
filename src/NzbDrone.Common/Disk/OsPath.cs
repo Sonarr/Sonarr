@@ -77,28 +77,13 @@ namespace NzbDrone.Common.Disk
             return path;
         }
 
-        public OsPathKind Kind
-        {
-            get { return _kind; }
-        }
+        public OsPathKind Kind => _kind;
 
-        public bool IsWindowsPath
-        {
-            get { return _kind == OsPathKind.Windows; }
-        }
+        public bool IsWindowsPath => _kind == OsPathKind.Windows;
 
-        public bool IsUnixPath
-        {
-            get { return _kind == OsPathKind.Unix; }
-        }
+        public bool IsUnixPath => _kind == OsPathKind.Unix;
 
-        public bool IsEmpty
-        {
-            get
-            {
-                return _path.IsNullOrWhiteSpace();
-            }
-        }
+        public bool IsEmpty => _path.IsNullOrWhiteSpace();
 
         public bool IsRooted
         {
@@ -132,13 +117,7 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        public string FullPath
-        {
-            get
-            {
-                return _path;
-            }
-        }
+        public string FullPath => _path;
 
         public string FileName
         {
@@ -162,13 +141,7 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        public bool IsValid
-        {
-            get
-            {
-                return _path.IsPathValid();
-            }
-        }
+        public bool IsValid => _path.IsPathValid();
 
         private int GetFileNameIndex()
         {

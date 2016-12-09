@@ -189,13 +189,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return historyItems;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "SABnzbd";
-            }
-        }
+        public override string Name => "SABnzbd";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

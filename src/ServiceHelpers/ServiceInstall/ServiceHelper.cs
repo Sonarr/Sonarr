@@ -8,13 +8,7 @@ namespace ServiceInstall
 {
     public static class ServiceHelper
     {
-        private static string NzbDroneExe
-        {
-            get
-            {
-                return Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName, "NzbDrone.Console.exe");
-            }
-        }
+        private static string NzbDroneExe => Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName, "NzbDrone.Console.exe");
 
         private static bool IsAnAdministrator()
         {

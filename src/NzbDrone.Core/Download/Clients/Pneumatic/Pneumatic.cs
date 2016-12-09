@@ -28,21 +28,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             _httpClient = httpClient;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Pneumatic";
-            }
-        }
+        public override string Name => "Pneumatic";
 
-        public override DownloadProtocol Protocol
-        {
-            get
-            {
-                return DownloadProtocol.Usenet;
-            }
-        }
+        public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
 
         public override string Download(RemoteEpisode remoteEpisode)
         {
@@ -70,13 +58,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return GetDownloadClientId(strmFile);
         }
 
-        public bool IsConfigured
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Settings.NzbFolder);
-            }
-        }
+        public bool IsConfigured => !string.IsNullOrWhiteSpace(Settings.NzbFolder);
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

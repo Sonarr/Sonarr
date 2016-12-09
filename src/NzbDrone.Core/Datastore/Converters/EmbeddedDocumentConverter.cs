@@ -60,12 +60,6 @@ namespace NzbDrone.Core.Datastore.Converters
             return JsonConvert.SerializeObject(clrValue, SerializerSetting);
         }
 
-        public Type DbType
-        {
-            get
-            {
-                return typeof(string);
-            }
-        }
+        public Type DbType => typeof(string);
     }
 }

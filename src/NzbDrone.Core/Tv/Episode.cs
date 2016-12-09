@@ -39,10 +39,7 @@ namespace NzbDrone.Core.Tv
 
         public Series Series { get; set; }
 
-        public bool HasFile
-        {
-            get { return EpisodeFileId > 0; }
-        }
+        public bool HasFile => EpisodeFileId > 0;
 
         public override string ToString()
         {

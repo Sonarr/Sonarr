@@ -94,21 +94,9 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             }
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "rTorrent";
-            }
-        }
+        public override string Name => "rTorrent";
 
-        public override ProviderMessage Message
-        {
-            get
-            {
-                return new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using rTorrent", ProviderMessageType.Warning);
-            }
-        }
+        public override ProviderMessage Message => new ProviderMessage("Sonarr is unable to remove torrents that have finished seeding when using rTorrent", ProviderMessageType.Warning);
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

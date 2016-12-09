@@ -6,10 +6,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 {
     public static class BuildInfo
     {
-        public static Version Version
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Version; }
-        }
+        public static Version Version => Assembly.GetExecutingAssembly().GetName().Version;
 
         public static DateTime BuildDateTime
         {

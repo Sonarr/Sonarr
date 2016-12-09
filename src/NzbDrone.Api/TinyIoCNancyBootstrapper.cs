@@ -31,10 +31,7 @@ namespace NzbDrone.Api
         /// does not mean the assembly *will* be included, a true from another delegate will
         /// take precedence.
         /// </summary>
-        protected virtual IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies
-        {
-            get { return DefaultAutoRegisterIgnoredAssemblies; }
-        }
+        protected virtual IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies => DefaultAutoRegisterIgnoredAssemblies;
 
         /// <summary>
         /// Configures the container using AutoRegister followed by registration

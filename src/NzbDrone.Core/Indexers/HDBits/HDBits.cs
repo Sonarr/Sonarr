@@ -8,11 +8,11 @@ namespace NzbDrone.Core.Indexers.HDBits
 {
     public class HDBits : HttpIndexerBase<HDBitsSettings>
     {
-        public override string Name { get { return "HDBits"; } }
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
-        public override bool SupportsRss { get { return true; } }
-        public override bool SupportsSearch { get { return true; } }
-        public override int PageSize { get { return 30; } }
+        public override string Name => "HDBits";
+        public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
+        public override bool SupportsRss => true;
+        public override bool SupportsSearch => true;
+        public override int PageSize => 30;
 
         public HDBits(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)

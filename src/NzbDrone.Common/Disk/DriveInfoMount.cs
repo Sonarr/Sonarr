@@ -14,15 +14,9 @@ namespace NzbDrone.Common.Disk
             _driveType = driveType;
         }
 
-        public long AvailableFreeSpace
-        {
-            get { return _driveInfo.AvailableFreeSpace; }
-        }
+        public long AvailableFreeSpace => _driveInfo.AvailableFreeSpace;
 
-        public string DriveFormat
-        {
-            get { return _driveInfo.DriveFormat; }
-        }
+        public string DriveFormat => _driveInfo.DriveFormat;
 
         public DriveType DriveType
         {
@@ -37,35 +31,17 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        public bool IsReady
-        {
-            get { return _driveInfo.IsReady; }
-        }
+        public bool IsReady => _driveInfo.IsReady;
 
-        public string Name
-        {
-            get { return _driveInfo.Name; }
-        }
+        public string Name => _driveInfo.Name;
 
-        public string RootDirectory
-        {
-            get { return _driveInfo.RootDirectory.FullName; }
-        }
+        public string RootDirectory => _driveInfo.RootDirectory.FullName;
 
-        public long TotalFreeSpace
-        {
-            get { return _driveInfo.TotalFreeSpace; }
-        }
+        public long TotalFreeSpace => _driveInfo.TotalFreeSpace;
 
-        public long TotalSize
-        {
-            get { return _driveInfo.TotalSize; }
-        }
+        public long TotalSize => _driveInfo.TotalSize;
 
-        public string VolumeLabel
-        {
-            get { return _driveInfo.VolumeLabel; }
-        }
+        public string VolumeLabel => _driveInfo.VolumeLabel;
 
         public string VolumeName
         {

@@ -16,12 +16,6 @@ namespace NzbDrone.Core.RemotePathMappings
         {
         }
 
-        protected override bool PublishModelEvents
-        {
-            get
-            {
-                return true;
-            }
-        }
+        protected override bool PublishModelEvents => true;
     }
 }

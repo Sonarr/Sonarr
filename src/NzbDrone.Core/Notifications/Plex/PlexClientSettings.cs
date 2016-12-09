@@ -36,13 +36,7 @@ namespace NzbDrone.Core.Notifications.Plex
         [FieldDefinition(3, Label = "Password")]
         public string Password { get; set; }
 
-        public bool IsValid
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Host);
-            }
-        }
+        public bool IsValid => !string.IsNullOrWhiteSpace(Host);
 
         public NzbDroneValidationResult Validate()
         {

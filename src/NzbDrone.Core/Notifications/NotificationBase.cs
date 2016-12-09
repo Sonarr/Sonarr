@@ -10,29 +10,11 @@ namespace NzbDrone.Core.Notifications
     {
         public abstract string Name { get; }
 
-        public Type ConfigContract
-        {
-            get
-            {
-                return typeof(TSettings);
-            }
-        }
+        public Type ConfigContract => typeof(TSettings);
 
-        public virtual ProviderMessage Message
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public virtual ProviderMessage Message => null;
 
-        public IEnumerable<ProviderDefinition> DefaultDefinitions
-        {
-            get
-            {
-                return new List<ProviderDefinition>();
-            }
-        }
+        public IEnumerable<ProviderDefinition> DefaultDefinitions => new List<ProviderDefinition>();
 
         public ProviderDefinition Definition { get; set; }
         public abstract ValidationResult Test();
@@ -43,18 +25,12 @@ namespace NzbDrone.Core.Notifications
         public abstract void OnDownload(DownloadMessage message); 
         public abstract void OnRename(Series series);
 
-        public virtual bool SupportsOnGrab { get { return true; } }
-        public virtual bool SupportsOnDownload { get { return true; } }
-        public virtual bool SupportsOnUpgrade { get { return true; } }
-        public virtual bool SupportsOnRename { get { return true; } }
+        public virtual bool SupportsOnGrab => true;
+        public virtual bool SupportsOnDownload => true;
+        public virtual bool SupportsOnUpgrade => true;
+        public virtual bool SupportsOnRename => true;
 
-        protected TSettings Settings
-        {
-            get
-            {
-                return (TSettings)Definition.Settings;
-            }
-        }
+        protected TSettings Settings => (TSettings)Definition.Settings;
 
         public override string ToString()
         {

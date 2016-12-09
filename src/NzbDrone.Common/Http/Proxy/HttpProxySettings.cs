@@ -45,19 +45,13 @@ namespace NzbDrone.Common.Http.Proxy
             }
         }
 
-        public string Key
-        {
-            get
-            {
-                return string.Join("_",
-                    Type,
-                    Host,
-                    Port,
-                    Username,
-                    Password,
-                    BypassFilter,
-                    BypassLocalAddress);
-            }
-        }
+        public string Key => string.Join("_",
+            Type,
+            Host,
+            Port,
+            Username,
+            Password,
+            BypassFilter,
+            BypassLocalAddress);
     }
 }

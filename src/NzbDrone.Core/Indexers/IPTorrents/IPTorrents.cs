@@ -8,17 +8,11 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 {
     public class IPTorrents : HttpIndexerBase<IPTorrentsSettings>
     {
-        public override string Name
-        {
-            get
-            {
-                return "IP Torrents";
-            }
-        }
+        public override string Name => "IP Torrents";
 
-        public override DownloadProtocol Protocol { get { return DownloadProtocol.Torrent; } }
-        public override bool SupportsSearch { get { return false; } }
-        public override int PageSize { get { return 0; } }
+        public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
+        public override bool SupportsSearch => false;
+        public override int PageSize => 0;
 
         public IPTorrents(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, indexerStatusService, configService, parsingService, logger)

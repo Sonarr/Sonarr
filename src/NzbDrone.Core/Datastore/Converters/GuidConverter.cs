@@ -30,9 +30,6 @@ namespace NzbDrone.Core.Datastore.Converters
             return value.ToString();
         }
 
-        public Type DbType
-        {
-            get { return typeof(string); }
-        }
+        public Type DbType => typeof(string);
     }
 }

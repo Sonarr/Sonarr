@@ -25,10 +25,7 @@ namespace NzbDrone.Core.Datastore
             return _database.GetDataMapper();
         }
 
-        public Version Version
-        {
-            get { return _database.Version; }
-        }
+        public Version Version => _database.Version;
 
         public void Vacuum()
         {

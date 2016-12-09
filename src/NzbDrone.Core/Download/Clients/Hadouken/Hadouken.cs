@@ -31,10 +31,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             _proxy = proxy;
         }
 
-        public override string Name
-        {
-            get { return "Hadouken"; }
-        }
+        public override string Name => "Hadouken";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

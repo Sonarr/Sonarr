@@ -20,38 +20,23 @@ namespace NzbDrone.Mono.Disk
             _unixDriveInfo = new UnixDriveInfo(mount);
         }
 
-        public long AvailableFreeSpace
-        {
-            get { return _unixDriveInfo.AvailableFreeSpace; }
-        }
+        public long AvailableFreeSpace => _unixDriveInfo.AvailableFreeSpace;
 
         public string DriveFormat { get; private set; }
 
         public DriveType DriveType { get; private set; }
 
-        public bool IsReady
-        {
-            get { return _unixDriveInfo.IsReady; }
-        }
+        public bool IsReady => _unixDriveInfo.IsReady;
 
         public string Name { get; private set; }
 
         public string RootDirectory { get; private set; }
 
-        public long TotalFreeSpace
-        {
-            get { return _unixDriveInfo.TotalFreeSpace; }
-        }
+        public long TotalFreeSpace => _unixDriveInfo.TotalFreeSpace;
 
-        public long TotalSize
-        {
-            get { return _unixDriveInfo.TotalSize; }
-        }
+        public long TotalSize => _unixDriveInfo.TotalSize;
 
-        public string VolumeLabel
-        {
-            get { return _unixDriveInfo.VolumeLabel; }
-        }
+        public string VolumeLabel => _unixDriveInfo.VolumeLabel;
 
         public string VolumeName
         {

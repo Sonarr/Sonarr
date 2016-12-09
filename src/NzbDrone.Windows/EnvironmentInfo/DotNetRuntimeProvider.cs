@@ -11,12 +11,6 @@ namespace NzbDrone.Windows.EnvironmentInfo
         {
         }
 
-        public override string RuntimeVersion
-        {
-            get
-            {
-                return Environment.Version.ToString();
-            }
-        }
+        public override string RuntimeVersion => Environment.Version.ToString();
     }
 }

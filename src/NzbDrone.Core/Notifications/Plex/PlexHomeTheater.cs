@@ -20,10 +20,7 @@ namespace NzbDrone.Core.Notifications.Plex
             _logger = logger;
         }
 
-        public override string Link
-        {
-            get { return "https://plex.tv/"; }
-        }
+        public override string Link => "https://plex.tv/";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
@@ -44,21 +41,9 @@ namespace NzbDrone.Core.Notifications.Plex
             
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Plex Home Theater";
-            }
-        }
+        public override string Name => "Plex Home Theater";
 
-        public override bool SupportsOnRename
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool SupportsOnRename => false;
 
         public override ValidationResult Test()
         {

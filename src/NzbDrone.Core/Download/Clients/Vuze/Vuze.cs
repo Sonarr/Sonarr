@@ -49,12 +49,6 @@ namespace NzbDrone.Core.Download.Clients.Vuze
             return null;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Vuze";
-            }
-        }
+        public override string Name => "Vuze";
     }
 }

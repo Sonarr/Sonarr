@@ -45,9 +45,6 @@ namespace NzbDrone.Core.Test.Framework
         }
 
         [Obsolete("Don't use Mocker/Repositories in MigrationTests, query the DB.", true)]
-        public new AutoMoqer Mocker
-        {
-            get { return base.Mocker; }
-        }
+        public new AutoMoqer Mocker => base.Mocker;
     }
 }

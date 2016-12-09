@@ -71,13 +71,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             return hash;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "qBittorrent";
-            }
-        }
+        public override string Name => "qBittorrent";
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

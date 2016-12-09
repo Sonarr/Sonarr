@@ -24,13 +24,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
 
         public TimeSpan ScanGracePeriod { get; set; }
 
-        public override bool PreferTorrentFile
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool PreferTorrentFile => true;
 
         public TorrentBlackhole(IScanWatchFolder scanWatchFolder,
                                 ITorrentFileInfoReader torrentFileInfoReader,
@@ -88,22 +82,9 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return null;
         }
 
-        public override string Name
-        {
-            get
-            {
-                return "Torrent Blackhole";
-            }
-        }
+        public override string Name => "Torrent Blackhole";
 
-        public override ProviderMessage Message
-        {
-            get
-            {
-                return new ProviderMessage("Magnet links are not supported.", ProviderMessageType.Warning);
-            }
-        }
-
+        public override ProviderMessage Message => new ProviderMessage("Magnet links are not supported.", ProviderMessageType.Warning);
 
 
         public override IEnumerable<DownloadClientItem> GetItems()

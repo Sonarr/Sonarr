@@ -20,14 +20,8 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         private static string _uniqueMessage;
         Logger _logger;
 
-        protected override MigrationType MigrationType
-        {
-            get
-            {
-                return MigrationType.Log;
+        protected override MigrationType MigrationType => MigrationType.Log;
 
-            }
-        }
         [SetUp]
         public void Setup()
         {

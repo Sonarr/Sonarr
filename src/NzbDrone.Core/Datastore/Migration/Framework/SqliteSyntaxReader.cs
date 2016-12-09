@@ -16,15 +16,9 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         public TokenType Type { get; private set; }
         public string Value { get; private set; }
 
-        public string ValueToUpper
-        {
-            get { return Value.ToUpperInvariant(); }
-        }
+        public string ValueToUpper => Value.ToUpperInvariant();
 
-        public bool IsEndOfFile
-        {
-            get { return Index >= Buffer.Length; }
-        }
+        public bool IsEndOfFile => Index >= Buffer.Length;
 
         public enum TokenType
         {
