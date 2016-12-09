@@ -81,19 +81,19 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.4\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.11\lib\net40\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="OAuth">
       <HintPath>..\packages\OAuth.1.0.3\lib\net40\OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RestSharp.105.0.1\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="CookComputing.XmlRpc, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net4\RestSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
