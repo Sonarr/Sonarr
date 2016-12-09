@@ -6,6 +6,7 @@ using NLog;
 using RestSharp;
 using NzbDrone.Core.Rest;
 using NzbDrone.Common.Extensions;
+using RestSharp.Authenticators;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
