@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Microsoft.AspNet.SignalR.Infrastructure
 {
-    internal class NoOpPerformanceCounter : IPerformanceCounter
+    public class NoOpPerformanceCounter : IPerformanceCounter
     {
         public string CounterName
         {

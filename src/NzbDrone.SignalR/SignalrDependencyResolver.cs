@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Infrastructure;
 using NzbDrone.Common.Composition;
 
 namespace NzbDrone.SignalR
@@ -16,6 +17,8 @@ namespace NzbDrone.SignalR
         private SignalrDependencyResolver(IContainer container)
         {
             _container = container;
+            var performanceCounterManager = new SonarrPerformanceCounterManager();
+            Register(typeof(IPerformanceCounterManager), () => performanceCounterManager);
         }
 
         public override object GetService(Type serviceType)
