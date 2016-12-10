@@ -10,6 +10,7 @@ src/**/[Oo]bj/
 *.suo
 *.user
 *.sln.docstates
+.vs/
 
 # Build results
 *_i.c
